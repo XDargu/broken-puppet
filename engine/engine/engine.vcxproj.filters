@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="mcv_platform.h" />
+    <ClInclude Include="app.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="render\render.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\shaders.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\vertex_declarations.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\mesh.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ctes\shader_ctes.h">
+      <Filter>render\ctes</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ctes\shader_platform.h">
+      <Filter>render\ctes</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="render\render_utils.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="doom_controller.h" />
+    <ClInclude Include="font\font.h">
+      <Filter>font</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\data_provider.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="items_by_name.h" />
+    <ClInclude Include="render\texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="winmain.cpp" />
+    <ClCompile Include="mcv_platform.cpp" />
+    <ClCompile Include="app.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="render\render.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\shaders.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\vertex_declarations.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\mesh.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="render\render_utils.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="doom_controller.cpp" />
+    <ClCompile Include="font\font.cpp">
+      <Filter>font</Filter>
+    </ClCompile>
+    <ClCompile Include="render\texture.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DDSTextureLoader.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="render">
+      <UniqueIdentifier>{9a4bd7ef-63a4-4938-be0a-3be6be56534e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\ctes">
+      <UniqueIdentifier>{891f6c5a-ba74-4e02-992b-12d04b1149dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="font">
+      <UniqueIdentifier>{cf68130b-bc31-4883-84dd-e943d19c8c73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="memory">
+      <UniqueIdentifier>{b81c8c00-8f12-4c22-821d-86139dca9f0e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="render\notes.txt" />
+  </ItemGroup>
+</Project>

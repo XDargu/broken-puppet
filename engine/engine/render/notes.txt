@@ -1,0 +1,26 @@
+- Cargar una textura
+- Aplicarla al shader
+- TextureManager
+  y MeshManager
+  ... 
+
+
+
+
++ Entidades con posicion
+
++ Controladores de entidades
+
++ Pintar texto con fuente
++ Camaras en entidades
+
++ Importador de mallas molonas
+  + Crear las vtx declaration
+    + Pos, UV, Normal
+  + Crear un shader q use esa vtx declaration
+    + Que use las UV o el Normal como color
+  + Optimizar el exportador
+
++ Activar ZBuffer
++ Cargarse lo del transpose de las matrices
++ Simplificar lo del vertex declation
