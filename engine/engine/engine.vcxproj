@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ai\aicontroller.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="doom_controller.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ai\aicontroller.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="doom_controller.cpp" />

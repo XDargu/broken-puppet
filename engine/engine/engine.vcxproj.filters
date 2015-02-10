@@ -39,6 +39,9 @@
     <ClInclude Include="render\texture.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="ai\aicontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -72,6 +75,9 @@
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="ai\aicontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -85,6 +91,9 @@
     </Filter>
     <Filter Include="memory">
       <UniqueIdentifier>{b81c8c00-8f12-4c22-821d-86139dca9f0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai">
+      <UniqueIdentifier>{714602e1-066e-41c7-b14d-7e2836d4d855}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

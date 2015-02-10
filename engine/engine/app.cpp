@@ -482,10 +482,14 @@ void CApp::renderEntities() {
 
 
 void CApp::destroy() {
+	gScene->release();
+	gPhysicsSDK->release();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
 	axis.destroy();
 	grid.destroy();
+	cube.destroy();
+	cubeMini.destroy();
 	renderUtilsDestroy();
 	vs_basic.destroy();
 	vs_basic2.destroy();
