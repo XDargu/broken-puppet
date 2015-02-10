@@ -30,6 +30,7 @@ PxScene* gScene = NULL;
 static PxDefaultErrorCallback gDefaultErrorCallback;
 static PxDefaultAllocator gDefaultAllocatorCallback;
 static PxSimulationFilterShader gDefaultFilterShader = PxDefaultSimulationFilterShader;
+float a = 2.f;
 
 // Ahora mismo el mundo avanza a 16,6666 ms cada tick ( esto deberia ser variable o fijo ya lo veremos )
 PxReal myTimestep = 1.0f / 60.0f;
@@ -86,6 +87,8 @@ PxRigidStatic*	 staticBox1;
 CShaderCte<TCtesGlobal> ctes_global;
 
 std::vector<CEntity*>	balls;
+
+int b = 3;
 
 
 // Copy paste mas o menos de la docu
