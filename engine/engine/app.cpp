@@ -7,6 +7,7 @@
 #include "font/font.h"
 #include "render/texture.h"
 #include <string>
+#include <vector>
 
 
 #include <PxPhysicsAPI.h>
@@ -61,6 +62,7 @@ CPixelShader ps_textured;
 CMesh        grid;
 CMesh        axis;
 CMesh		 cube;
+CMesh		 cubeMini;
 
 CCamera       camera;
 CCamera       camera2;
@@ -78,7 +80,12 @@ PxRigidDynamic*  dynamicBox1;
 CEntity*		 box2;
 PxRigidDynamic*  dynamicBox2;
 
+CEntity*		 box3;
+PxRigidStatic*	 staticBox1;
+
 CShaderCte<TCtesGlobal> ctes_global;
+
+std::vector<CEntity*>	balls;
 
 
 // Copy paste mas o menos de la docu
@@ -93,8 +100,25 @@ void InitializePhysX()
 	else
 		OutputDebugString("YOSH!!\n");
 
-
 	gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, PxTolerancesScale());
+	
+	// ------------------------------------
+	physx::PxVisualDebuggerConnectionFlags flags =
+		physx::PxVisualDebuggerConnectionFlag::eDEBUG
+		| physx::PxVisualDebuggerConnectionFlag::ePROFILE
+		| physx::PxVisualDebuggerConnectionFlag::eMEMORY;
+
+	if (gPhysicsSDK->getPvdConnectionManager())
+	{
+		PxVisualDebuggerConnection* gConnection = PxVisualDebuggerExt::createConnection(gPhysicsSDK->getPvdConnectionManager(), "127.0.0.1", 5425, 1000, flags);
+	}
+
+	
+	gPhysicsSDK->getVisualDebugger()->setVisualizeConstraints(true);
+	gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS, true);
+	gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS, true);
+	gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_SCENEQUERIES, true);
+	// ------------------------------------
 
 	PxInitExtensions(*gPhysicsSDK);
 
@@ -115,6 +139,38 @@ void InitializePhysX()
 
 }
 
+void throwBall()
+{
+	CEntity* ball = entity_manager.create("Ball");
+
+	PxMaterial* mMaterial;
+	mMaterial = gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
+
+
+	PxVec3 pos = PxVec3(
+		XMVectorGetX(camera.getPosition()),
+		XMVectorGetY(camera.getPosition()),
+		XMVectorGetZ(camera.getPosition())
+		);
+
+	PxVec3 delta = PxVec3(
+		XMVectorGetX(camera.getFront()),
+		XMVectorGetY(camera.getFront()),
+		XMVectorGetZ(camera.getFront())
+		);
+
+	PxRigidDynamic* ballActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(pos), PxSphereGeometry(0.1f),
+		*mMaterial, 1000.0f);
+	
+	gScene->addActor(*ballActor);
+	ballActor->addForce(delta * 100, PxForceMode::eIMPULSE, true);
+
+	ball->rigid = ballActor;
+	balls.push_back(ball);
+}
+
+
+PxDistanceJoint* j;
 
 void CreateActors(){
 
@@ -130,17 +186,20 @@ void CreateActors(){
 	//gScene->addActor(*aSphereActor);
 
 	// añadir cajas
-	PxRigidDynamic* aBoxActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0.5f, 10, 0)), PxBoxGeometry(1, 1, 1),
-		*mMaterial, 100.0f);
+	PxRigidDynamic* aBoxActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 2, 0)), PxBoxGeometry(1, 1, 1),
+		*mMaterial, 2.0f);
 
 	gScene->addActor(*aBoxActor);
 	dynamicBox1 = aBoxActor;
 
-	PxRigidDynamic* aBoxActor2 = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 2, 0)), PxBoxGeometry(1, 1, 1),
+	PxRigidDynamic* aBoxActor2 = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 10, 5)), PxBoxGeometry(1, 1, 1),
 		*mMaterial, 100.0f);
 
 	gScene->addActor(*aBoxActor2);
 	dynamicBox2 = aBoxActor2;
+
+	staticBox1 = PxCreateStatic(*gPhysicsSDK, PxTransform(PxVec3(0, 10, 5)), PxBoxGeometry(1, 1, 1), *mMaterial);
+	gScene->addActor(*staticBox1);
 
 	// Creamos un suelo para que la esfera no caiga al vacio
 	PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
@@ -149,17 +208,34 @@ void CreateActors(){
 
 	// Por ahora me guardo el objeto esfera en un puntero global para verlo despues
 	//object = aSphereActor;
+	//create a joint  
+	j = PxDistanceJointCreate(*gPhysicsSDK, dynamicBox2, PxTransform::createIdentity(), staticBox1, PxTransform::createIdentity());
+	j->setDamping(5);
+	j->setMaxDistance(5);
+	j->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, true);
+	j->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);	
 
 }
 
 
 // Que haga cosas
+float throwCounter = 0.0f;
+
 float physxCounter = 0.0f;
 const float physxStep = 1.f / 60.f;
 void StepPhysX(float delta){
 	physxCounter += delta;
+	throwCounter += delta;
 	if (physxCounter >= physxStep)
 	{
+		if (isKeyPressed(' '))
+		{
+			if (throwCounter >= .5f)
+			{
+				throwBall();
+				throwCounter = 0;
+			}
+		}
 		physxCounter = 0;
 		gScene->simulate(physxStep);
 		gScene->fetchResults(true);
@@ -219,10 +295,12 @@ bool CApp::create() {
   e3 = entity_manager.create("camera");
   e3->setPosition(XMVectorSet(-5, 4, -3, 1));
 
-  createCube(cube, 10);
+  createCube(cube, 1);
+  createCube(cubeMini, 0.1f);
 
   box1 = entity_manager.create("Box001");
   box2 = entity_manager.create("Box002");
+  box3 = entity_manager.create("Box003");
 
   InitializePhysX();
   CreateActors(); 
@@ -258,14 +336,9 @@ void CApp::doFrame() {
   update(delta_secs);
   render();
   
-  PxVec3 a = dynamicBox1->getGlobalPose().p;
-
   if (gScene){	  
 	  StepPhysX(delta_secs);
   }
-
-  a = dynamicBox1->getGlobalPose().p;
-  dbg("Sphere Y: %.2f\n", dynamicBox1->getGlobalPose().p.y);// Pintamos la posicion Y de nuestra magnifica esfera
 
 }
 
@@ -354,6 +427,41 @@ void CApp::render() {
   setWorldMatrix(box2->getWorld());
   ctes_global.uploadToGPU();
   cube.activateAndRender();
+
+  box3->setPosition(XMVectorSet(
+	  staticBox1->getGlobalPose().p.x,
+	  staticBox1->getGlobalPose().p.y,
+	  staticBox1->getGlobalPose().p.z,
+	  1
+	  ));
+  box3->setRotation(XMVectorSet(
+	  staticBox1->getGlobalPose().q.x,
+	  staticBox1->getGlobalPose().q.y,
+	  staticBox1->getGlobalPose().q.z,
+	  staticBox1->getGlobalPose().q.w
+	  ));
+  setWorldMatrix(box3->getWorld());
+  ctes_global.uploadToGPU();
+  cube.activateAndRender();
+
+  for (CEntity* e : balls)
+  {
+	  e->setPosition(XMVectorSet(
+		  e->rigid->getGlobalPose().p.x,
+		  e->rigid->getGlobalPose().p.y,
+		  e->rigid->getGlobalPose().p.z,
+		  1
+		  ));
+	  e->setRotation(XMVectorSet(
+		  e->rigid->getGlobalPose().q.x,
+		  e->rigid->getGlobalPose().q.y,
+		  e->rigid->getGlobalPose().q.z,
+		  e->rigid->getGlobalPose().q.w
+		  ));
+	  setWorldMatrix(e->getWorld());
+	  ctes_global.uploadToGPU();
+	  cubeMini.activateAndRender();
+  }
 
   renderEntities();
 

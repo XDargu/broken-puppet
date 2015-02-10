@@ -156,16 +156,16 @@ bool createCube(CMesh& mesh, float size) {
 	CVertexPosColor *v = &vtxs[0];
 
 	// Top
-	v->Pos = XMFLOAT3(-1.0f, 1.0f, -1.0f); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
-	v->Pos = XMFLOAT3(1.0f, 1.0f, -1.0f); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
-	v->Pos = XMFLOAT3(1.0f, 1.0f, 1.0f); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
-	v->Pos = XMFLOAT3(-1.0f, 1.0f, 1.0f); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-1.0f * size, 1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(1.0f * size, 1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(1.0f * size, 1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-1.0f * size, 1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
 
 	// Bottom
-	v->Pos = XMFLOAT3(-1.0f, -1.0f, -1.0f); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
-	v->Pos = XMFLOAT3(1.0f, -1.0f, -1.0f); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
-	v->Pos = XMFLOAT3(1.0f, -1.0f, 1.0f); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
-	v->Pos = XMFLOAT3(-1.0f, -1.0f, 1.0f); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-1.0f * size, -1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(1.0f * size, -1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(1.0f * size, -1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-1.0f * size, -1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
 
 	// Indices
 	CMesh::TIndex indices[] =

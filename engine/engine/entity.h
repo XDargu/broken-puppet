@@ -3,6 +3,9 @@
 
 #include "mcv_platform.h"
 
+#include <PxPhysicsAPI.h>// BORRAR, POR EL AMOR DE DIOS --TODO
+using namespace physx;// BORRAR, POR EL AMOR DE DIOS --TODO
+
 class CEntity {
   XMVECTOR rotation;
   XMVECTOR position;
@@ -11,7 +14,7 @@ class CEntity {
 public:
 
   char     name[32];
-
+  PxRigidDynamic*	rigid;	// BORRAR, POR EL AMOR DE DIOS --TODO
   XMMATRIX getWorld() const;
   XMVECTOR getFront() const;
   XMVECTOR getLeft() const;
