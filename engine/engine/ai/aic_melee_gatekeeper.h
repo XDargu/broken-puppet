@@ -19,10 +19,10 @@ public:
 	float follow_rotation_velocity;
 	float chase_speed;
 
-	void IdleState();
-	void ChaseState();
-	void AttackState();
-	void ReturnGateState();
+	void IdleState(float deltaTime);
+	void ChaseState(float deltaTime);
+	void AttackState(float deltaTime);
+	void ReturnGateState(float deltaTime);
 
 	void Init();
 };

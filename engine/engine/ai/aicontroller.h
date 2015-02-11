@@ -15,7 +15,7 @@ using namespace std;
 // be defined on a derived class. 
 class aicontroller;
 
-typedef void (aicontroller::*statehandler)();
+typedef void (aicontroller::*statehandler)(float deltaTime);
 
 class aicontroller
 {
@@ -30,7 +30,7 @@ public:
 	void ChangeState(string);	// state we wish to go to
 	string GetState();	// returns state name
 	virtual void Init();	// resets the controller
-	void Recalc();	// recompute behaviour
+	void Recalc(float deltaTime);	// recompute behaviour
 	void AddState(string, statehandler);
 };
 

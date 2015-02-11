@@ -23,12 +23,12 @@ void aic_melee_gatekeeper::Init()
 	forget_gate_distance = 30.0f;
 	attack_distance = 2.0f;
 	out_of_reach_distance = 3.0f;
-	follow_rotation_velocity = .3f;
-	chase_speed = 0.1f;
+	follow_rotation_velocity = 1.5f;
+	chase_speed = 1.0f;
 }
 
 
-void aic_melee_gatekeeper::IdleState()
+void aic_melee_gatekeeper::IdleState(float deltaTime)
 {
 	XMVECTOR a = player->getPosition();
 
@@ -39,10 +39,8 @@ void aic_melee_gatekeeper::IdleState()
 	//if (GetAsyncKeyState('V') != 0) { ChangeState("chase"); MessageBox(NULL, TEXT("view: idle->chase"), TEXT("change state"), MB_ICONASTERISK | MB_YESNOCANCEL); }
 }
 
-void aic_melee_gatekeeper::ChaseState()
+void aic_melee_gatekeeper::ChaseState(float deltaTime)
 {
-	float delta_time = 1.0f / 60.0f;
-
 	// Follow
 	XMVECTOR delta_vector = player->getPosition() - entity->getPosition();
 	XMVECTOR efront = entity->getFront();
@@ -54,14 +52,14 @@ void aic_melee_gatekeeper::ChaseState()
 	if (dot < 0)
 		angle = -angle;
 
-	float max_angle = follow_rotation_velocity * delta_time;
+	float max_angle = follow_rotation_velocity * deltaTime;
 	if (angle > max_angle)
 		angle = max_angle;
 
 	XMVECTOR q = XMQuaternionRotationAxis(entity->getUp(), angle);
 	entity->setRotation(XMQuaternionMultiply(entity->getRotation(), q));
 
-	entity->setPosition(entity->getPosition() + entity->getFront() * chase_speed * delta_time);
+	entity->setPosition(entity->getPosition() + entity->getFront() * chase_speed * deltaTime);
 
 	if (XMVectorGetX(XMVector3Length(player->getPosition() - entity->getPosition())) < attack_distance)
 	{
@@ -82,7 +80,7 @@ void aic_melee_gatekeeper::ChaseState()
 	//if (GetAsyncKeyState('F') != 0) { ChangeState("return_gate"); MessageBox(NULL, TEXT("forget: chase->return_gate"), TEXT("change state"), MB_ICONASTERISK | MB_YESNOCANCEL); }
 }
 
-void aic_melee_gatekeeper::AttackState()
+void aic_melee_gatekeeper::AttackState(float deltaTime)
 {
 	if (XMVectorGetX(XMVector3Length(player->getPosition() - entity->getPosition())) > out_of_reach_distance)
 	{
@@ -93,10 +91,8 @@ void aic_melee_gatekeeper::AttackState()
 	//if (GetAsyncKeyState('D') != 0) { ChangeState("idle"); MessageBox(NULL, TEXT("dead: attack->idle"), TEXT("change state"), MB_ICONASTERISK | MB_YESNOCANCEL); }
 }
 
-void aic_melee_gatekeeper::ReturnGateState()
+void aic_melee_gatekeeper::ReturnGateState(float deltaTime)
 {
-	float delta_time = 1.0f / 60.0f;
-
 	// Follow
 	XMVECTOR delta_vector = gate->getPosition() - entity->getPosition();
 	XMVECTOR efront = entity->getFront();
@@ -108,7 +104,7 @@ void aic_melee_gatekeeper::ReturnGateState()
 	if (dot < 0)
 		angle = -angle;
 
-	float max_angle = follow_rotation_velocity * delta_time;
+	float max_angle = follow_rotation_velocity * deltaTime;
 	if (angle > max_angle)
 		angle = max_angle;
 	if (angle < -max_angle)
@@ -117,7 +113,7 @@ void aic_melee_gatekeeper::ReturnGateState()
 	XMVECTOR q = XMQuaternionRotationAxis(entity->getUp(), angle);
 	entity->setRotation(XMQuaternionMultiply(entity->getRotation(), q));
 
-	entity->setPosition(entity->getPosition() + entity->getFront() * chase_speed * delta_time);
+	entity->setPosition(entity->getPosition() + entity->getFront() * chase_speed * deltaTime);
 
 	if (XMVectorGetX(XMVector3Length(player->getPosition() - entity->getPosition())) < view_distance)
 	{

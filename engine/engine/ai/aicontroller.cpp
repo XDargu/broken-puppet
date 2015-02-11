@@ -6,10 +6,10 @@ void aicontroller::Init()
 }
 
 
-void aicontroller::Recalc()
+void aicontroller::Recalc(float deltaTime)
 {
 	// this is a trusted jump as we've tested for coherence in ChangeState
-	(this->*statemap[state])();
+	(this->*statemap[state])(deltaTime);
 }
 
 void aicontroller::SetEntity(CEntity* the_entity)

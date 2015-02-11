@@ -366,7 +366,7 @@ void CApp::update(float elapsed) {
   moveCameraOnEntity(camera, e1);
 
   // AI
-  aimg.Recalc();
+  aimg.Recalc(elapsed);
 }
 
 void CApp::render() {
