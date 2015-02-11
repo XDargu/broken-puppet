@@ -90,6 +90,8 @@ PxRigidDynamic*  dynamicBox2;
 CEntity*		 box3;
 PxRigidStatic*	 staticBox1;
 
+PxRigidDynamic*	 playerRigid;
+
 CShaderCte<TCtesGlobal> ctes_global;
 
 std::vector<CEntity*>	balls;
@@ -170,7 +172,7 @@ void throwBall()
 		XMVectorGetZ(player->getFront())
 		);
 
-	PxRigidDynamic* ballActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(pos), PxSphereGeometry(0.1f),
+	PxRigidDynamic* ballActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(pos + delta * 1.5f), PxSphereGeometry(0.1f),
 		*mMaterial, 1000.0f);
 	
 	gScene->addActor(*ballActor);
@@ -224,7 +226,17 @@ void CreateActors(){
 	j->setDamping(5);
 	j->setMaxDistance(5);
 	j->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, true);
-	j->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);	
+	j->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+
+	// Player kinemático
+	playerRigid = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(1, 1, 1),
+		*mMaterial, 100.0f);
+
+	playerRigid->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+
+	gScene->addActor(*playerRigid);
+
+	
 
 }
 
@@ -356,6 +368,8 @@ bool CApp::create() {
 
   InitializePhysX();
   CreateActors(); 
+
+  playerRigid->setGlobalPose(PxTransform(PxVec3(-3, 1, -3), PxQuat(deg2rad(30), PxVec3(0, 1, 0))), true);
   
   return true;
 }
@@ -463,6 +477,24 @@ void CApp::render() {
   ctes_global.activateInVS(2);
   teapot->activateAndRender();*/
 
+  // Player kinemático
+  playerRigid->setKinematicTarget(PxTransform(
+	  PxVec3(
+		XMVectorGetX(player->getPosition()),
+		XMVectorGetY(player->getPosition()),
+		XMVectorGetZ(player->getPosition())
+	  ),
+	  PxQuat(
+		XMVectorGetX(player->getRotation()),
+		XMVectorGetY(player->getRotation()),
+		XMVectorGetZ(player->getRotation()),
+		XMVectorGetW(player->getRotation())
+	  )
+	  ));
+
+  setWorldMatrix(player->getWorld());
+  ctes_global.uploadToGPU();
+  cube.activateAndRender();
 
   // Cajas con físicas
   box1->setPosition(XMVectorSet(
