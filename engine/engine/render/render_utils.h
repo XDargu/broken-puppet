@@ -22,6 +22,7 @@ bool createGrid(CMesh& mesh, int nsamples);
 bool createAxis(CMesh& mesh);
 bool createCube(CMesh& mesh, float size);
 bool createWiredCube(CMesh& mesh);
+bool createCamera(CMesh& mesh);
 
 void drawViewVolume(const CCamera& camera);
 

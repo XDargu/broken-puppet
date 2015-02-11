@@ -222,6 +222,89 @@ bool createWiredCube(CMesh& mesh) {
 }
 
 // -----------------------------------------------------
+
+bool createCamera(CMesh& mesh)
+{
+	std::vector< CVertexPosColor > vtxs;
+	vtxs.resize(16);
+	CVertexPosColor *v = &vtxs[0];
+
+	// Set the color to white
+	for (auto& it : vtxs)
+		it.Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+
+	// Top
+	v->Pos = XMFLOAT3(-.25f, .25f, -1.0f); v->Color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f); ++v;
+	v->Pos = XMFLOAT3(.25f, .25f, -1.0f); v->Color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f); ++v;
+	v->Pos = XMFLOAT3(.25f, .25f, .7f); v->Color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-.25f, .25f, .7f); v->Color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.f); ++v;
+
+	// Bottom
+	v->Pos = XMFLOAT3(-.25f, -0.25f, -1.0f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(.25f, -0.25f, -1.0f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(.25f, -0.25f, .7f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-.25f, -0.25f, .7f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+
+	// Camera front
+	v->Pos = XMFLOAT3(.2f, 0.2f, .7f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-.2f, 0.2f, .7f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(.2f, -0.2f, .7f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-.2f, -0.2f, .7f); v->Color = XMFLOAT4(0.f, 0.f, 0.f, 1.f); ++v;
+
+	v->Pos = XMFLOAT3(.5f, .5f, 1.f); v->Color = XMFLOAT4(0.f, 0.5f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-.5f, .5f, 1.f); v->Color = XMFLOAT4(0.f, 0.5f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(.5f, -0.5f, 1.f); v->Color = XMFLOAT4(0.f, 0.5f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-.5f, -0.5f, 1.f); v->Color = XMFLOAT4(0.f, 0.5f, 1.f, 1.f); ++v;
+
+
+	const CMesh::TIndex idxs[] = {
+		3, 0, 1,
+		2, 3, 1,
+
+		0, 4, 5,
+		1, 0, 5,
+
+		3, 7, 4,
+		0, 3, 4,
+
+		1, 5, 6,
+		2, 1, 6,
+
+		6, 5, 4,
+		7, 6, 4,
+
+		9, 7, 3,
+		9, 11, 7,
+
+		2, 8, 9,
+		2, 9, 3,
+
+		2, 6, 10,
+		2, 10, 8,
+
+		6, 7, 10,
+		10, 7, 11,
+
+		8, 10, 14,
+		8, 14, 12,
+
+		8, 12, 9,
+		9, 12, 13,
+
+		9, 13, 11,
+		11, 13, 15,
+
+		14, 10, 15,
+		15, 10, 11,
+
+		12, 14, 13,
+		13, 14, 15
+
+	};
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], ARRAYSIZE(idxs), idxs, CMesh::TRIANGLE_LIST);
+}
+
+// -----------------------------------------------------
 void drawViewVolume(const CCamera& camera) {
   XMVECTOR det;
   for (int i = 0; i < 10; ++i) {

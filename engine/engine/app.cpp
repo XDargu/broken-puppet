@@ -18,6 +18,7 @@ using namespace physx;
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "ai\aic_melee_gatekeeper.h"
+#include "ai\ai_basic_patroller.h"
 
 
 using namespace physx;
@@ -60,6 +61,8 @@ CVertexShader vs_basic;
 CVertexShader vs_basic2;
 CPixelShader ps_basic;
 CPixelShader ps_textured;
+
+CMesh		 camera_mesh;
 CMesh        grid;
 CMesh        axis;
 CMesh		 cube;
@@ -72,9 +75,12 @@ CFont         font;
 CDoomController   doom_controller;
 CAimToController  aim_controller;
 CLookAtController lookat_controller;
-CEntity*         e1;
-CEntity*         e2;
+
+CEntity*         player;
 CEntity*         e3;
+
+CEntity*		 cameraPivot;
+CEntity*		 cameraEntity;
 
 CEntity*		 box1;
 PxRigidDynamic*  dynamicBox1;
@@ -89,7 +95,8 @@ CShaderCte<TCtesGlobal> ctes_global;
 std::vector<CEntity*>	balls;
 
 // AI
-aic_melee_gatekeeper aimg;
+aic_melee_gatekeeper	aimg;
+ai_basic_patroller		aibp;
 
 
 // Copy paste mas o menos de la docu
@@ -152,15 +159,15 @@ void throwBall()
 
 
 	PxVec3 pos = PxVec3(
-		XMVectorGetX(camera.getPosition()),
-		XMVectorGetY(camera.getPosition()),
-		XMVectorGetZ(camera.getPosition())
+		XMVectorGetX(player->getPosition()),
+		XMVectorGetY(player->getPosition()),
+		XMVectorGetZ(player->getPosition())
 		);
 
 	PxVec3 delta = PxVec3(
-		XMVectorGetX(camera.getFront()),
-		XMVectorGetY(camera.getFront()),
-		XMVectorGetZ(camera.getFront())
+		XMVectorGetX(player->getFront()),
+		XMVectorGetY(player->getFront()),
+		XMVectorGetZ(player->getFront())
 		);
 
 	PxRigidDynamic* ballActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(pos), PxSphereGeometry(0.1f),
@@ -272,12 +279,13 @@ bool CApp::create() {
   camera.lookAt(XMVectorSet(10.f, 8.f, 2.f, 1.f)
     , XMVectorSet(0.f, 0.f, 0.f, 1.f)
     , XMVectorSet(0, 1, 0, 0));
+  camera.setPerspective(deg2rad(60.f), 1.f, 1000.f);
   camera.setViewport(0.f, 0.f, (float)xres, (float)yres);
 
   camera2.lookAt(XMVectorSet(10.f, 0.f, 0.f, 1.f)
-    , XMVectorSet(0.f, 0.f, 0.f, 1.f)
-    , XMVectorSet(0, 1, 0, 0));
-  camera2.setPerspective(deg2rad(210.f), 0.1f, 1000.f);
+	  , XMVectorSet(0.f, 0.f, 0.f, 1.f)
+	  , XMVectorSet(0, 1, 0, 0));
+  camera2.setPerspective(deg2rad(50.f), 1.f, 500.f);
   camera2.setViewport(0.f, 0.f, (float)xres, (float)yres);
 
 
@@ -291,27 +299,60 @@ bool CApp::create() {
 
   assert(is_ok);
 
-  e1 = entity_manager.create("john");
-  e1->setPosition( XMVectorSet(-3, 1, -3, 1) );
-  e1->setRotation( XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(30.f)) );
-  e2 = entity_manager.create("peter");
-  e2->setPosition(XMVectorSet(0, 0, 2, 1));
+  player = entity_manager.create("Player");
+  player->setPosition(XMVectorSet(-3, 1, -3, 1));
+  player->setRotation(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(30.f)));
+
+  cameraEntity = entity_manager.create("Third person camera");
+  cameraPivot = entity_manager.create("Third person camera pivot");
+
   e3 = entity_manager.create("camera");
   e3->setPosition(XMVectorSet(-5, 4, -3, 1));
 
   createCube(cube, 1);
   createCube(cubeMini, 0.1f);
 
+  createCamera(camera_mesh);
+
   box1 = entity_manager.create("Box001");
   box2 = entity_manager.create("Box002");
   box3 = entity_manager.create("Box003");
 
-  CEntity* eee = entity_manager.create("Gatekeeper");
-  aimg.player = e1;
-  aimg.gate = e2;
+  // Gatekeeper
+  CEntity* gate = entity_manager.create("Gate");
+  gate->setPosition(XMVectorSet(10, 1, 10, 0));
+  aimg.player = player;
+  aimg.gate = gate;
   aimg.Init();
-  aimg.SetEntity(eee);
-  aimg.entity->setPosition(XMVectorSet(0, 1, 10, 0));
+  aimg.SetEntity(entity_manager.create("Gatekeeper"));
+  aimg.entity->setPosition(XMVectorSet(10, 1, 10, 0));
+
+  // Patroller
+  // Waypoints
+  CEntity* e;
+  vector<CEntity*>	 waypoints;
+  e = entity_manager.create("Waypoint 1");
+  e->setPosition(XMVectorSet(-20, 1, -14, 1));
+  waypoints.push_back(e);
+  e = entity_manager.create("Waypoint 2");
+  e->setPosition(XMVectorSet(-16, 1, 22, 1));
+  waypoints.push_back(e);
+  e = entity_manager.create("Waypoint 3");
+  e->setPosition(XMVectorSet(19, 1, -17, 1));
+  waypoints.push_back(e);
+  e = entity_manager.create("Waypoint 4");
+  e->setPosition(XMVectorSet(14, 1, 27, 1));
+  waypoints.push_back(e);
+  e = entity_manager.create("Waypoint 5");
+  e->setPosition(XMVectorSet(-10, 1, -23, 1));
+  waypoints.push_back(e);
+
+  // Basic patroller
+  aibp.entity = entity_manager.create("Patroller");
+  aibp.entity->setPosition(XMVectorSet(-20, 1, -14, 1));
+  aibp.waypoints = waypoints;
+
+  aibp.Init();
 
   InitializePhysX();
   CreateActors(); 
@@ -356,17 +397,24 @@ void CApp::doFrame() {
 void CApp::update(float elapsed) {
 	
   // Update ---------------------
-  doom_controller.update(e1, elapsed);
-  if (isKeyPressed('R'))
-    aim_controller.update(e2, e1, elapsed);
-  lookat_controller.update(e3, e1, elapsed);
-  //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
+  doom_controller.update(player, elapsed);
+  
+  lookat_controller.update(e3, aibp.entity, elapsed);
   ctes_global.get()->world_time += elapsed;
 
-  moveCameraOnEntity(camera, e1);
+  cameraPivot->setPosition(player->getPosition() + player->getUp());
+  cameraPivot->setRotation(player->getRotation());
+
+  cameraEntity->setPosition(cameraPivot->getPosition() - cameraPivot->getFront() * 8 + cameraPivot->getUp() * 3);
+  cameraEntity->setRotation(cameraPivot->getRotation());
+  lookat_controller.update(cameraEntity, cameraPivot, elapsed);
+
+  moveCameraOnEntity(camera, cameraEntity);
+  moveCameraOnEntity(camera2, e3);
 
   // AI
   aimg.Recalc(elapsed);
+  aibp.Recalc(elapsed);
 }
 
 void CApp::render() {
@@ -388,11 +436,18 @@ void CApp::render() {
   grid.activateAndRender();
   axis.activateAndRender();
 
+  setWorldMatrix(e3->getWorld());
+  camera_mesh.activateAndRender();
+  setWorldMatrix(cameraEntity->getWorld());
+
+  camera_mesh.activateAndRender();
+  drawViewVolume(camera);
   drawViewVolume(camera2);
+
   setWorldMatrix(XMMatrixIdentity());
 
   static int nframe = 0;
-  font.printf(10, 10, "Yaw Is %f", rad2deg( getYawFromVector( e1->getFront())));
+  font.printf(10, 10, "Yaw Is %f", rad2deg(getYawFromVector(player->getFront())));
 
   ctes_global.uploadToGPU();
 
@@ -409,7 +464,7 @@ void CApp::render() {
   teapot->activateAndRender();*/
 
 
-  // Cajas
+  // Cajas con físicas
   box1->setPosition(XMVectorSet(
 	  dynamicBox1->getGlobalPose().p.x,
 	  dynamicBox1->getGlobalPose().p.y,
@@ -479,6 +534,10 @@ void CApp::render() {
 
   // AI
   setWorldMatrix(aimg.entity->getWorld());
+  ctes_global.uploadToGPU();
+  cube.activateAndRender();
+
+  setWorldMatrix(aibp.entity->getWorld());
   ctes_global.uploadToGPU();
   cube.activateAndRender();
 
