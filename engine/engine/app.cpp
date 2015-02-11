@@ -17,6 +17,7 @@ using namespace physx;
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
+#include "ai\aic_melee_gatekeeper.h"
 
 
 using namespace physx;
@@ -86,6 +87,9 @@ PxRigidStatic*	 staticBox1;
 CShaderCte<TCtesGlobal> ctes_global;
 
 std::vector<CEntity*>	balls;
+
+// AI
+aic_melee_gatekeeper aimg;
 
 
 // Copy paste mas o menos de la docu
@@ -302,6 +306,13 @@ bool CApp::create() {
   box2 = entity_manager.create("Box002");
   box3 = entity_manager.create("Box003");
 
+  CEntity* eee = entity_manager.create("Gatekeeper");
+  aimg.player = e1;
+  aimg.gate = e2;
+  aimg.Init();
+  aimg.SetEntity(eee);
+  aimg.entity->setPosition(XMVectorSet(0, 1, 10, 0));
+
   InitializePhysX();
   CreateActors(); 
   
@@ -353,6 +364,9 @@ void CApp::update(float elapsed) {
   ctes_global.get()->world_time += elapsed;
 
   moveCameraOnEntity(camera, e1);
+
+  // AI
+  aimg.Recalc();
 }
 
 void CApp::render() {
@@ -462,6 +476,11 @@ void CApp::render() {
 	  ctes_global.uploadToGPU();
 	  cubeMini.activateAndRender();
   }
+
+  // AI
+  setWorldMatrix(aimg.entity->getWorld());
+  ctes_global.uploadToGPU();
+  cube.activateAndRender();
 
   renderEntities();
 

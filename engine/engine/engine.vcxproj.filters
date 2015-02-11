@@ -42,6 +42,9 @@
     <ClInclude Include="ai\aicontroller.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="ai\aic_melee_gatekeeper.h">
+      <Filter>ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -76,6 +79,9 @@
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="ai\aicontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aic_melee_gatekeeper.cpp">
       <Filter>ai</Filter>
     </ClCompile>
   </ItemGroup>

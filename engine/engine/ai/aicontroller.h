@@ -28,6 +28,7 @@ public:
 	CEntity* entity;
 	void SetEntity(CEntity* the_entity);
 	void ChangeState(string);	// state we wish to go to
+	string GetState();	// returns state name
 	virtual void Init();	// resets the controller
 	void Recalc();	// recompute behaviour
 	void AddState(string, statehandler);

@@ -28,6 +28,10 @@ void aicontroller::ChangeState(std::string newstate)
 	state = newstate;
 }
 
+std::string aicontroller::GetState()
+{
+	return state;
+}
 
 void aicontroller::AddState(std::string name, statehandler sh)
 {
