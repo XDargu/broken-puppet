@@ -67,6 +67,7 @@ CMesh        grid;
 CMesh        axis;
 CMesh		 cube;
 CMesh		 cubeMini;
+const CMesh*		 prota;
 
 CCamera       camera;
 CCamera       camera2;
@@ -217,7 +218,7 @@ void CreateActors(){
 	// Creamos un suelo para que la esfera no caiga al vacio
 	PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	gScene->addActor(*plane);
-
+	
 
 	// Por ahora me guardo el objeto esfera en un puntero global para verlo despues
 	//object = aSphereActor;
@@ -229,7 +230,7 @@ void CreateActors(){
 	j->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
 
 	// Player kinemático
-	playerRigid = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 0, 0)), PxBoxGeometry(1, 1, 1),
+	playerRigid = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 0, 0)), /*PxBoxGeometry(1, 1, 1)*/PxCapsuleGeometry(0.2f, 0.5f),
 		*mMaterial, 100.0f);
 
 	playerRigid->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
@@ -291,7 +292,7 @@ bool CApp::create() {
   camera.lookAt(XMVectorSet(10.f, 8.f, 2.f, 1.f)
     , XMVectorSet(0.f, 0.f, 0.f, 1.f)
     , XMVectorSet(0, 1, 0, 0));
-  camera.setPerspective(deg2rad(60.f), 1.f, 1000.f);
+  camera.setPerspective(deg2rad(75.f), 1.f, 1000.f);
   camera.setViewport(0.f, 0.f, (float)xres, (float)yres);
 
   camera2.lookAt(XMVectorSet(10.f, 0.f, 0.f, 1.f)
@@ -312,7 +313,7 @@ bool CApp::create() {
   assert(is_ok);
 
   player = entity_manager.create("Player");
-  player->setPosition(XMVectorSet(-3, 1, -3, 1));
+  player->setPosition(XMVectorSet(-3, 0, -3, 1));
   player->setRotation(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(30.f)));
 
   cameraEntity = entity_manager.create("Third person camera");
@@ -330,14 +331,16 @@ bool CApp::create() {
   box2 = entity_manager.create("Box002");
   box3 = entity_manager.create("Box003");
 
+  prota = mesh_manager.getByName("prota");
+
   // Gatekeeper
   CEntity* gate = entity_manager.create("Gate");
-  gate->setPosition(XMVectorSet(10, 1, 10, 0));
+  gate->setPosition(XMVectorSet(10, 0, 10, 0));
   aimg.player = player;
   aimg.gate = gate;
   aimg.Init();
   aimg.SetEntity(entity_manager.create("Gatekeeper"));
-  aimg.entity->setPosition(XMVectorSet(10, 1, 10, 0));
+  aimg.entity->setPosition(XMVectorSet(10, 0, 10, 0));
 
   // Patroller
   // Waypoints
@@ -419,7 +422,7 @@ void CApp::update(float elapsed) {
   cameraPivot->setPosition(player->getPosition() + player->getUp());
   cameraPivot->setRotation(player->getRotation());
 
-  cameraEntity->setPosition(cameraPivot->getPosition() - cameraPivot->getFront() * 8 + cameraPivot->getUp() * 3);
+  cameraEntity->setPosition(cameraPivot->getPosition() - cameraPivot->getFront() * 3 + cameraPivot->getUp() * 2);
   cameraEntity->setRotation(cameraPivot->getRotation());
   lookat_controller.update(cameraEntity, cameraPivot, elapsed);
 
@@ -478,23 +481,26 @@ void CApp::render() {
   teapot->activateAndRender();*/
 
   // Player kinemático
+  PxQuat rotationPlayer = PxQuat(
+	  XMVectorGetX(player->getRotation()),
+	  XMVectorGetY(player->getRotation()),
+	  XMVectorGetZ(player->getRotation()),
+	  XMVectorGetW(player->getRotation()));
+
+  rotationPlayer *= PxQuat(deg2rad(90), PxVec3(0, 0, 1));
+
   playerRigid->setKinematicTarget(PxTransform(
 	  PxVec3(
-		XMVectorGetX(player->getPosition()),
-		XMVectorGetY(player->getPosition()),
-		XMVectorGetZ(player->getPosition())
+		XMVectorGetX(player->getPosition() + player->getUp() * 0.5f),
+		XMVectorGetY(player->getPosition() + player->getUp() * 0.5f),
+		XMVectorGetZ(player->getPosition() + player->getUp() * 0.5f)
 	  ),
-	  PxQuat(
-		XMVectorGetX(player->getRotation()),
-		XMVectorGetY(player->getRotation()),
-		XMVectorGetZ(player->getRotation()),
-		XMVectorGetW(player->getRotation())
-	  )
+		rotationPlayer	  
 	  ));
 
   setWorldMatrix(player->getWorld());
   ctes_global.uploadToGPU();
-  cube.activateAndRender();
+  prota->activateAndRender();
 
   // Cajas con físicas
   box1->setPosition(XMVectorSet(
