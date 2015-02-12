@@ -247,11 +247,18 @@ float throwCounter = 0.0f;
 
 float physxCounter = 0.0f;
 const float physxStep = 1.f / 60.f;
+bool released = false;
 void StepPhysX(float delta){
 	physxCounter += delta;
 	throwCounter += delta;
 	if (physxCounter >= physxStep)
 	{
+		if (isKeyPressed('C'))
+		{
+			if (!released)
+				j->release();
+			released = true;
+		}
 		if (isKeyPressed(' '))
 		{
 			if (throwCounter >= .5f)
