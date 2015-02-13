@@ -1,13 +1,66 @@
 clearlistener()
+-- hacer: dar formato correcto a la exportación y sacar la generación de texto a una funcion
+-- todo: añadir datos físicos básicos a la exportación
+-- todo: añadir datos fisicos complejos, joints
+
+
+-- Creamos los datos ID
+objectDataID = attributes objectData
+(
+parameters main rollout:params
+(
+id type:#float ui:ID default:0
+)
+ 
+rollout params "Object Custom ID"
+(
+spinner ID "ID" type: #float
+)
+)
+
+fn removeObjectsID = (
+	local allObjects = $*
+	for o in allObjects do(
+			if (isProperty o.baseObject #id == true) then
+			(
+				print "borrando"
+				custAttributes.delete o objectDataID
+			)	
+		)
+)
+
+-- Método para añadir las IDs a todos los elementos
+fn addObjectsID = (
+	local allObjects = $*
+	local contID = 0;
+	for o in allObjects do
+	(	
+		contID +=1
+		if (isProperty o.baseObject #id != true) then
+		(
+			custAttributes.add o objectDataID		
+		)	
+		o.id = contID
+	)
+)
 
 fn exportXMLScene = (	
-	local allObjects = $*
+	local allObjects = $*	
+	local expNames = #()
+	
 	local miString = "<scene>\n"
+	
 	for o in allObjects do(
 		local mPath = getObjectPath o
-		-- if have mesh to export then: not repeat, have mesh, etc...
- 		exportMesh o
-		----------------------------------
+		
+		-- if mesh have been exported, not export
+		if((findItem expNames o.name) == 0) then(
+			exportMesh o		
+			print "export"
+			print o.name
+			insertItem o.name expNames 1
+		)
+		
 		miString += "<obj name=\"" + o.name + "\" path=\"" + mPath + "\" pos=\"" + o.pos as string + "\" rotation=\"" + o.rotation as string + "\"/>\n"	
 		)
 	miString += "</scene>\n"
@@ -15,7 +68,7 @@ fn exportXMLScene = (
 	saveXMLArchive miString
 
 	print miString	
-	)
+)
 
 fn findIndexOfVertex vtxs v = (
 	
@@ -187,5 +240,9 @@ fn openCloseFile = (
 	fclose fs	
 	)
 	
+addObjectsID()
 exportXMLScene()
+
+-- funcion que habre y cierra una última cosa para poder trabajar, a depurar	
 openCloseFile()
+removeObjectsID()
