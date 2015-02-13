@@ -19,6 +19,4 @@ for o in allObjects do
 	print  "------------------------"
 )	
 
-
-
 -- <objPhysx>
