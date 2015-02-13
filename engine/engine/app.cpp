@@ -56,8 +56,8 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-  xres = 800;
-  yres = 600;
+  xres = 1366;
+  yres = 768;
 }
 
 CVertexShader vs_basic;
@@ -70,6 +70,7 @@ CMesh        grid;
 CMesh        axis;
 CMesh		 cube;
 CMesh		 cubeMini;
+const CMesh*		 level;
 const CMesh*		 prota;
 
 CCamera       camera;
@@ -356,6 +357,7 @@ bool CApp::create() {
   box3 = entity_manager.create("Box003");
 
   prota = mesh_manager.getByName("prota");
+  level = mesh_manager.getByName("Level");
 
   // Gatekeeper
   CEntity* gate = entity_manager.create("Gate");
@@ -441,7 +443,7 @@ void CApp::update(float elapsed) {
 	third_person_controller.update(player, CPC.getPlayerPivot(), elapsed);
   
   lookat_controller.update(e3, aibp.entity, elapsed);
-  ctes_global.get()->world_time += elapsed;
+  //ctes_global.get()->world_time += elapsed;
 
   /*cameraPivot->setPosition(player->getPosition() + player->getUp());
   cameraPivot->setRotation(player->getRotation());
@@ -613,6 +615,14 @@ void CApp::render() {
   cube.activateAndRender();
 
   renderEntities();
+
+  vs_basic2.activate();
+  ps_textured.activate();
+  const CTexture *t = texture_manager.getByName("wood_d");
+  t->activate(0);  
+  setWorldMatrix(XMMatrixScaling(.01f, .01f, .01f));
+  ctes_global.activateInVS(2);
+  level->activateAndRender();
 
   ::render.swap_chain->Present(0, 0);
 
