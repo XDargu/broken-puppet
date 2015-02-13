@@ -12,6 +12,8 @@ CCamera::CCamera()
   projection = XMMatrixIdentity();
   lookAt(XMVectorSet(0, 0, 0, 1), XMVectorSet(0, 0, 1, 1), XMVectorSet(0, 1, 0, 0));
   setViewport(0, 0, 512, 512);    // Will update projection matrix
+  overlapY = 0;
+  overlapZ = 0;
 }
 
 // -----------------------------------------------
@@ -76,4 +78,9 @@ bool CCamera::getScreenCoords(XMVECTOR world_coord, float *x, float *y) const {
   *y = viewport.TopLeftY + (-sy * 0.5f + 0.5f) * viewport.Height;
 
   return true;
+}
+
+void CCamera::setOverlap(float z, float y){
+	overlapY = y;
+	overlapZ = z;
 }

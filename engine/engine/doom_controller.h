@@ -4,13 +4,13 @@
 class CEntity;
 
 // -------------------------------
-class CDoomController {
+class CThirdPersonController {
   float movement_velocity;
   float rotation_velocity;
 
 public:
-  CDoomController();
-  void update(CEntity* e, float delta_time);
+	CThirdPersonController();
+  void update(CEntity* e, CEntity* pivot, float delta_time);
 };
 
 // -------------------------------
