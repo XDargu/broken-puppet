@@ -20,6 +20,12 @@ XMVECTOR getVectorFromYaw(float yaw) {
   return XMVectorSet(sinf( yaw ), 0.f, cosf( yaw ), 0.f );
 }
 
+float getPitchFromVector(XMVECTOR v) {
+	float y = XMVectorGetY(v);
+	float distance = XMVectorGetX(XMVector3Length(v));
+	return atan2(y, distance);
+}
+
 // -----------------------------------------
 bool isKeyPressed(int key) {
   return ( ::GetAsyncKeyState(key) & 0x8000 ) != 0;

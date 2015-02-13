@@ -8,8 +8,8 @@ void dbg(const char* fmt, ...);
 float deg2rad(float deg);
 float rad2deg(float rad);
 float getYawFromVector(XMVECTOR front);
+float getPitchFromVector(XMVECTOR front);
 XMVECTOR getVectorFromYaw(float yaw);
-
 
 bool isKeyPressed(int key);
 
