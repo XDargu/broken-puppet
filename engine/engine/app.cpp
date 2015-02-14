@@ -4,8 +4,11 @@
 #include "render/render_utils.h"
 #include "entity.h"
 #include "doom_controller.h"
+#include "camera_pivot_controller.h"
 #include "font/font.h"
 #include "render/texture.h"
+#include "camera_pivot_controller.h"
+#include "camera_controller.h"
 #include <string>
 #include <vector>
 
@@ -53,8 +56,8 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-  xres = 800;
-  yres = 600;
+  xres = 1366;
+  yres = 768;
 }
 
 CVertexShader vs_basic;
@@ -67,15 +70,23 @@ CMesh        grid;
 CMesh        axis;
 CMesh		 cube;
 CMesh		 cubeMini;
+const CMesh*		 level;
 const CMesh*		 prota;
 
 CCamera       camera;
 CCamera       camera2;
 CFont         font;
 
-CDoomController   doom_controller;
+CThirdPersonController   third_person_controller;
+camera_pivot_controller CPC;
+CCamera_controller camera_controller;
 CAimToController  aim_controller;
 CLookAtController lookat_controller;
+
+//Punteros ---------------------------------
+CCamera* cam_pointer;
+camera_pivot_controller* cam_pivot_pointer;
+//------------------------------------------
 
 CEntity*         player;
 CEntity*         e3;
@@ -295,7 +306,7 @@ bool CApp::create() {
   is_ok &= renderUtilsCreate();
 
   // Initialize the world matrix
-
+  camera.setOverlap(1.5f, 2.f);
   camera.lookAt(XMVectorSet(10.f, 8.f, 2.f, 1.f)
     , XMVectorSet(0.f, 0.f, 0.f, 1.f)
     , XMVectorSet(0, 1, 0, 0));
@@ -326,6 +337,13 @@ bool CApp::create() {
   cameraEntity = entity_manager.create("Third person camera");
   cameraPivot = entity_manager.create("Third person camera pivot");
 
+  //---------- Inicializando controladores ----------
+  XMVECTOR offset = { -2.f, 1.5f, -2.f, 0.f };
+  CPC.init(offset, player);
+  cam_pointer = &camera;
+  cam_pivot_pointer = &CPC;
+  //--------------------------------------------------
+
   e3 = entity_manager.create("camera");
   e3->setPosition(XMVectorSet(-5, 4, -3, 1));
 
@@ -339,6 +357,7 @@ bool CApp::create() {
   box3 = entity_manager.create("Box003");
 
   prota = mesh_manager.getByName("prota");
+  level = mesh_manager.getByName("Level");
 
   // Gatekeeper
   CEntity* gate = entity_manager.create("Gate");
@@ -385,7 +404,7 @@ bool CApp::create() {
 }
 
 void moveCameraOnEntity(CCamera& camera, CEntity *e) {
-  camera.lookAt(e->getPosition(), e->getPosition() + e->getFront(), e->getUp());
+	camera.lookAt(e->getPosition() + e->getUp()*camera.overlapY - e->getFront()*camera.overlapZ, e->getPosition() + e->getFront() / 2, e->getUp());
 }
 
 // -------------------------------------
@@ -421,24 +440,33 @@ void CApp::doFrame() {
 void CApp::update(float elapsed) {
 	
   // Update ---------------------
-  doom_controller.update(player, elapsed);
+	third_person_controller.update(player, CPC.getPlayerPivot(), elapsed);
   
   lookat_controller.update(e3, aibp.entity, elapsed);
-  ctes_global.get()->world_time += elapsed;
+  //ctes_global.get()->world_time += elapsed;
 
-  cameraPivot->setPosition(player->getPosition() + player->getUp());
+  /*cameraPivot->setPosition(player->getPosition() + player->getUp());
   cameraPivot->setRotation(player->getRotation());
 
   cameraEntity->setPosition(cameraPivot->getPosition() - cameraPivot->getFront() * 3 + cameraPivot->getUp() * 2);
   cameraEntity->setRotation(cameraPivot->getRotation());
-  lookat_controller.update(cameraEntity, cameraPivot, elapsed);
+  lookat_controller.update(cameraEntity, cameraPivot, elapsed);*/
 
-  moveCameraOnEntity(camera, cameraEntity);
+  moveCameraOnEntity(camera, CPC.getCamPivot());
   moveCameraOnEntity(camera2, e3);
 
   // AI
   aimg.Recalc(elapsed);
   aibp.Recalc(elapsed);
+
+  //-------- actualizando controladores camara -----------
+  if (isKeyPressed('Z')){
+	  exit(-1);
+  }
+
+  CPC.update();
+  camera_controller.update(cam_pointer, cam_pivot_pointer, elapsed);
+  //--------------------------------------------------------------------------------------------
 }
 
 void CApp::render() {
@@ -587,6 +615,14 @@ void CApp::render() {
   cube.activateAndRender();
 
   renderEntities();
+
+  vs_basic2.activate();
+  ps_textured.activate();
+  const CTexture *t = texture_manager.getByName("checker-floor");
+  t->activate(0);  
+  setWorldMatrix(XMMatrixScaling(.01f, .01f, .01f));
+  ctes_global.activateInVS(2);
+  level->activateAndRender();
 
   ::render.swap_chain->Present(0, 0);
 

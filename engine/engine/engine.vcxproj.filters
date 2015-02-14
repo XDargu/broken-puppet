@@ -48,6 +48,9 @@
     <ClInclude Include="ai\ai_basic_patroller.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="camera_controller.h" />
+    <ClInclude Include="camera_pivot_controller.h" />
+    <ClInclude Include="iostatus.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -90,6 +93,9 @@
     <ClCompile Include="ai\ai_basic_patroller.cpp">
       <Filter>ai</Filter>
     </ClCompile>
+    <ClCompile Include="camera_controller.cpp" />
+    <ClCompile Include="camera_pivot_controller.cpp" />
+    <ClCompile Include="iostatus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

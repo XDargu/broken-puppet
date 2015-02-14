@@ -1,37 +1,42 @@
 #include "mcv_platform.h"
 #include "doom_controller.h"
 #include "entity.h"
+#include "iostatus.h"
 
 using namespace DirectX;
 
-CDoomController::CDoomController()
+float angle_x = 0.f;
+float angle_y=0.f;
+
+CThirdPersonController::CThirdPersonController()
 : movement_velocity(5.0f)
 , rotation_velocity(deg2rad( 90.f ))
 { }
 
-void CDoomController::update(CEntity* e, float delta_time) {
+void CThirdPersonController::update(CEntity* e, CEntity* pivot, float delta_time) {
 
-  XMVECTOR delta_pos = XMVectorZero();
-  XMVECTOR delta_q = XMQuaternionIdentity();
-
-  // Que teclas se pulsan -> que cambios hacer
-  if (isKeyPressed('W'))
-    delta_pos += delta_time * movement_velocity * e->getFront();
-  else if (isKeyPressed('S'))
-    delta_pos -= delta_time * movement_velocity * e->getFront();
-  if (isKeyPressed('A'))
-    delta_pos += delta_time * movement_velocity * e->getLeft();
-  else if (isKeyPressed('D'))
-    delta_pos -= delta_time * movement_velocity * e->getLeft();
-
-  if (isKeyPressed('Q'))
-    delta_q = XMQuaternionRotationAxis(e->getUp(), delta_time * rotation_velocity);
-  else if (isKeyPressed('E'))
-    delta_q = XMQuaternionRotationAxis(e->getUp(), -delta_time * rotation_velocity);
-
-  // Actualizar la posicion/rotacion
-  e->setPosition( e->getPosition() + delta_pos );
-  e->setRotation( XMQuaternionMultiply(e->getRotation(), delta_q) );
+	assert(e != nullptr);
+	assert(pivot != nullptr);
+	XMVECTOR delta_pos = XMVectorZero();
+	XMVECTOR delta_q = XMQuaternionIdentity();
+	// Que teclas se pulsan -> que cambios hacer
+	if (isKeyPressed('W')){
+		e->setRotation(pivot->getRotation());
+		delta_pos += delta_time * movement_velocity * e->getFront();
+	}
+	else if (isKeyPressed('S')){
+		e->setRotation(pivot->getRotation());
+		delta_pos -= delta_time * movement_velocity * e->getFront();
+	}
+	if (isKeyPressed('A')){
+		e->setRotation(pivot->getRotation());
+		delta_pos += delta_time * movement_velocity * e->getLeft();
+	}else if (isKeyPressed('D')){
+		e->setRotation(pivot->getRotation());
+		delta_pos -= delta_time * movement_velocity * e->getLeft();
+	}
+    e->setPosition( e->getPosition() + delta_pos );
+    e->setRotation(XMQuaternionMultiply(e->getRotation(), delta_q));
 }
 
 

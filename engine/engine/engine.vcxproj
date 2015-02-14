@@ -163,9 +163,12 @@
     <ClInclude Include="ai\ai_basic_patroller.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="camera_controller.h" />
+    <ClInclude Include="camera_pivot_controller.h" />
     <ClInclude Include="doom_controller.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="font\font.h" />
+    <ClInclude Include="iostatus.h" />
     <ClInclude Include="items_by_name.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
@@ -186,9 +189,12 @@
     <ClCompile Include="ai\ai_basic_patroller.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="camera_controller.cpp" />
+    <ClCompile Include="camera_pivot_controller.cpp" />
     <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="font\font.cpp" />
+    <ClCompile Include="iostatus.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />
