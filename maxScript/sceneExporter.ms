@@ -308,10 +308,10 @@ fn addTransform obj = (
 fn addMesh obj expNames = (
 
 	miString = ""
-
+	-- Se comprueba si tiene Mesh (por defecto si)
 	if((findItem NotMesh (classof obj)) == 0) then
 	(
-	-- Se comprueba si tiene Mesh (por defecto si)
+
 	local mPath = getObjectPath obj true
 	
 	-- If mesh have been exported, not export
@@ -342,21 +342,21 @@ fn addTargetCamera obj = (
 													+ obj.target.pos.z as string+" " \
 								+ "\" fov=\""   \ 
 													+ obj.fov as string +"\""	\												
-								+ "\" znear=\""   \ 
+								+ " znear=\""   \ 
 													+ obj.nearrange as string+"\""\
-								+ "\" zfar=\""   \ 
-													+ obj.farrange as string +"\""	\
+								+ " zfar=\""   \ 
+													+ obj.farrange as string +""	\
 	+"\"/>\n"
 	)
 	if((classof obj) == freecamera) then (
 	-- Se añaden los atributos necesarios
 			miString = "<camera " \										
-								+ "\" fov=\""   \ 
+								+ " fov=\""   \ 
 													+ obj.fov as string +"\""	\												
-								+ "\" znear=\""   \ 
+								+ " znear=\""   \ 
 													+ obj.nearrange as string+"\""\
-								+ "\" zfar=\""   \ 
-													+ obj.farrange as string +"\""	\
+								+ " zfar=\""   \ 
+													+ obj.farrange as string +""	\
 	+"\"/>\n"
 	)
 -- fov target.pos znear zfar
