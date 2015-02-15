@@ -52,12 +52,10 @@ public:
 
   // helpers
   bool getScreenCoords(XMVECTOR world_coord, float *x, float *y) const;
+  CEntity* getCamEntity();
 
-  // OVERLAP A QUITAR EN UN FUTURO -----------------------------------------
-  float			overlapZ;
-  float			overlapY;
-  void setOverlap(float z, float y);
-  //-----------------------------------------------------------------------
+private:
+	CEntity* cam_entity;
 };
 
 #endif

@@ -306,7 +306,7 @@ bool CApp::create() {
   is_ok &= renderUtilsCreate();
 
   // Initialize the world matrix
-  camera.setOverlap(1.5f, 2.f);
+  //camera.setOverlap(1.5f, 2.f);
   camera.lookAt(XMVectorSet(10.f, 8.f, 2.f, 1.f)
     , XMVectorSet(0.f, 0.f, 0.f, 1.f)
     , XMVectorSet(0, 1, 0, 0));
@@ -404,7 +404,11 @@ bool CApp::create() {
 }
 
 void moveCameraOnEntity(CCamera& camera, CEntity *e) {
-	camera.lookAt(e->getPosition() + e->getUp()*camera.overlapY - e->getFront()*camera.overlapZ, e->getPosition() + e->getFront() / 2, e->getUp());
+	camera.lookAt(
+		//e->getPosition() + e->getUp()*camera.overlapY - e->getFront()*camera.overlapZ
+		camera.getCamEntity()->getPosition()
+		, e->getPosition() + e->getFront() / 2
+		, e->getUp());
 }
 
 // -------------------------------------
@@ -440,7 +444,6 @@ void CApp::doFrame() {
 void CApp::update(float elapsed) {
 	
   // Update ---------------------
-	third_person_controller.update(player, CPC.getPlayerPivot(), elapsed);
   
   lookat_controller.update(e3, aibp.entity, elapsed);
   //ctes_global.get()->world_time += elapsed;
@@ -452,7 +455,7 @@ void CApp::update(float elapsed) {
   cameraEntity->setRotation(cameraPivot->getRotation());
   lookat_controller.update(cameraEntity, cameraPivot, elapsed);*/
 
-  moveCameraOnEntity(camera, CPC.getCamPivot());
+  //moveCameraOnEntity(camera, CPC.getCamPivot());
   moveCameraOnEntity(camera2, e3);
 
   // AI

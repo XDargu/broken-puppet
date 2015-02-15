@@ -5,6 +5,51 @@ class CIOStatus {
 
 public:
 
+	struct TButton {
+		bool  is_pressed;
+		bool  was_pressed;
+		float time_pressed;
+		float time_released;
+		int   key;
+		TButton() : is_pressed(false)
+			, was_pressed(false)
+			, time_pressed(0.f)
+			, time_released(0.f)
+		{ }
+		void setPressed(bool how, float elapsed);
+	};
+
+	enum TButtonID {
+		CROSS
+		, CIRCLE
+		, TRIANGLE
+		, SQUARE
+		, DIGITAL_LEFT
+		, DIGITAL_RIGHT
+		, DIGITAL_UP
+		, DIGITAL_DOWN
+		, START
+		, MOUSE_LEFT
+		, MOUSE_RIGHT
+		, MOUSE_MIDDLE
+		, MOUSE_WHEEL_UP
+		, MOUSE_WHEEL_DOWN
+		, BUTTONS_COUNT
+	};
+
+	bool isPressed(TButtonID button_id) const { return buttons[button_id].is_pressed; }
+	bool isReleased(TButtonID button_id) const { return !buttons[button_id].is_pressed; }
+	bool becomesPressed(TButtonID button_id) const {
+		return buttons[button_id].is_pressed && !buttons[button_id].was_pressed;
+	}
+	bool becomesReleased(TButtonID button_id) const {
+		return !buttons[button_id].is_pressed && buttons[button_id].was_pressed;
+	}
+	float getTimePressed(TButtonID button_id) const { return buttons[button_id].time_pressed; }
+	float getTimeReleased(TButtonID button_id) const { return buttons[button_id].time_released; }
+
+	TButton* getButtons(){ return buttons; }
+
   struct TMouse {
     int   screen_x;     
     int   screen_y;
@@ -25,6 +70,7 @@ public:
   void update( float elapsed );
 
 protected:
+  TButton   buttons[BUTTONS_COUNT];
   TMouse    mouse;
 };
 

@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "camera.h"
+#include "entity.h"
 
 using namespace DirectX;
 
@@ -12,8 +13,7 @@ CCamera::CCamera()
   projection = XMMatrixIdentity();
   lookAt(XMVectorSet(0, 0, 0, 1), XMVectorSet(0, 0, 1, 1), XMVectorSet(0, 1, 0, 0));
   setViewport(0, 0, 512, 512);    // Will update projection matrix
-  overlapY = 0;
-  overlapZ = 0;
+  cam_entity = entity_manager.create("camera_entity");
 }
 
 // -----------------------------------------------
@@ -80,7 +80,6 @@ bool CCamera::getScreenCoords(XMVECTOR world_coord, float *x, float *y) const {
   return true;
 }
 
-void CCamera::setOverlap(float z, float y){
-	overlapY = y;
-	overlapZ = z;
+CEntity* CCamera::getCamEntity(){
+	return cam_entity;
 }

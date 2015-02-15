@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "doom_controller.h"
+#include "camera_pivot_controller.h"
 #include "entity.h"
 #include "iostatus.h"
 
@@ -13,32 +14,38 @@ CThirdPersonController::CThirdPersonController()
 , rotation_velocity(deg2rad( 90.f ))
 { }
 
-void CThirdPersonController::update(CEntity* e, CEntity* pivot, float delta_time) {
+void CThirdPersonController::update(CEntity* e, camera_pivot_controller* CPC, float delta_time) {
 
 	assert(e != nullptr);
-	assert(pivot != nullptr);
+	assert(CPC->getPlayerPivot() != nullptr);
 	XMVECTOR delta_pos = XMVectorZero();
 	XMVECTOR delta_q = XMQuaternionIdentity();
 	// Que teclas se pulsan -> que cambios hacer
-	if (isKeyPressed('W')){
-		e->setRotation(pivot->getRotation());
+	if (io.isPressed(io.DIGITAL_UP)){
+		e->setRotation(CPC->getPlayerPivot()->getRotation());
 		delta_pos += delta_time * movement_velocity * e->getFront();
 	}
-	else if (isKeyPressed('S')){
-		e->setRotation(pivot->getRotation());
+	else if (io.isPressed(io.DIGITAL_DOWN)){
+		e->setRotation(CPC->getPlayerPivot()->getRotation());
 		delta_pos -= delta_time * movement_velocity * e->getFront();
 	}
-	if (isKeyPressed('A')){
-		e->setRotation(pivot->getRotation());
+	if (io.isPressed(io.DIGITAL_LEFT)){
+		e->setRotation(CPC->getPlayerPivot()->getRotation());
 		delta_pos += delta_time * movement_velocity * e->getLeft();
-	}else if (isKeyPressed('D')){
-		e->setRotation(pivot->getRotation());
+	}
+	else if (io.isPressed(io.DIGITAL_RIGHT)){
+		e->setRotation(CPC->getPlayerPivot()->getRotation());
 		delta_pos -= delta_time * movement_velocity * e->getLeft();
 	}
     e->setPosition( e->getPosition() + delta_pos );
     e->setRotation(XMQuaternionMultiply(e->getRotation(), delta_q));
-}
 
+	if (io.isPressed(io.MOUSE_MIDDLE)){
+		XMVECTOR rotCamPivot = CPC->getCamPivot()->getRotation();
+		XMVECTOR rotPlayerPivot = CPC->getPlayerPivot()->getRotation();
+		CPC->getCamPivot()->setRotation(rotCamPivot*rotPlayerPivot);
+	}
+}
 
 // -------------------------------
 void CLookAtController::update(CEntity* who, CEntity* target, float delta_time) {

@@ -2,6 +2,7 @@
 #define INC_DOOM_CONTROLLER_H_
 
 class CEntity;
+class camera_pivot_controller;
 
 // -------------------------------
 class CThirdPersonController {
@@ -10,7 +11,7 @@ class CThirdPersonController {
 
 public:
 	CThirdPersonController();
-  void update(CEntity* e, CEntity* pivot, float delta_time);
+	void update(CEntity* e, camera_pivot_controller* CPC, float delta_time);
 };
 
 // -------------------------------

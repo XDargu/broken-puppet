@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "camera_pivot_controller.h"
+#include "iostatus.h"
 //#include "Player.h"
 
 using namespace DirectX;
@@ -46,6 +47,12 @@ void camera_pivot_controller::update(){
 	float x_dif = XMVectorGetX(pos_ref);
 	float y_dif = XMVectorGetY(pos_ref);
 	float z_dif = XMVectorGetZ(pos_ref);
-	camera_pivot->setPosition(player_pivot->getPosition() + (player_pivot->getLeft()*x_dif + player_pivot->getUp()*y_dif + player_pivot->getFront()*z_dif));
+
+	camera_pivot->setPosition(
+		player_pivot->getPosition() 
+			+ player_pivot->getUp() * y_dif 
+			+ player_pivot->getLeft() * x_dif 
+			+ player_pivot->getFront()*z_dif
+		);
 	player_pivot->setPosition(player->getPosition());
 }
