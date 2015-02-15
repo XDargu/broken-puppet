@@ -621,7 +621,7 @@ void CApp::render() {
 
   vs_basic2.activate();
   ps_textured.activate();
-  const CTexture *t = texture_manager.getByName("wood_d");
+  const CTexture *t = texture_manager.getByName("checker-floor");
   t->activate(0);  
   setWorldMatrix(XMMatrixScaling(.01f, .01f, .01f));
   ctes_global.activateInVS(2);

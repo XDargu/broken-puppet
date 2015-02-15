@@ -1,21 +1,90 @@
 clearlistener()
+-- hacer: dar formato correcto a la exportación y sacar la generación de texto a una funcion
+-- todo: añadir datos físicos básicos a la exportación
+-- todo: añadir datos fisicos complejos, joints
+
+NotEval = #(targetobject)
+NotMesh = #(targetcamera, freecamera)
 
 fn exportXMLScene = (	
-	local allObjects = $*
+	local allObjects = $*	
+	local expNames = #()
+	
 	local miString = "<scene>\n"
-	for o in allObjects do(
-		local mPath = getObjectPath o
-		-- if have mesh to export then: not repeat, have mesh, etc...
- 		exportMesh o
-		----------------------------------
-		miString += "<obj name=\"" + o.name + "\" path=\"" + mPath + "\" pos=\"" + o.pos as string + "\" rotation=\"" + o.rotation as string + "\"/>\n"	
+	
+	for obj in allObjects do(	
+	
+		-- first check if the  object needs to be evaluated
+	if((findItem NotEval (classof obj)) == 0) then
+	(		
+		miString += "<entity>\n"
+		
+		-- Añadimos nombre
+		miString += addName obj
+		-- Añadimos transform
+		miString += addTransform obj
+		-- Añadimos Mesh
+		miString += addMesh obj expNames	
+		-- Añadimos Camera
+		miString += addTargetCamera obj			
+		
+		miString += "</entity>\n"
 		)
+	)
+	
 	miString += "</scene>\n"
 	
 	saveXMLArchive miString
 
 	print miString	
+)
+
+
+-- Creamos los datos ID
+objectDataID = attributes objectData
+(
+	parameters main rollout:params
+	(
+		id type:#float ui:ID default:0
 	)
+	 
+	rollout params "Object Custom ID"
+	(
+		spinner ID "ID" type: #float
+	)
+)
+
+fn removeObjectsID = (
+	local allObjects = $*
+	for o in allObjects do(
+			if (isProperty o.baseObject #id == true) then
+			(
+				print "borrando"
+				custAttributes.delete o objectDataID
+			)	
+		)
+)
+
+-- Método para añadir las IDs a todos los elementos
+fn addObjectsID = (
+	local allObjects = $*
+	local contID = 0;
+	for o in allObjects do
+	(	
+		contID +=1
+		if (isProperty o.baseObject #id != true) then
+		(
+			custAttributes.add o objectDataID		
+		)	
+		o.id = contID
+	)
+)
+
+
+
+-- Buscar qué componentes tiene
+-- Que atributos necesita cada componente
+-- Transform, name, mesh
 
 fn findIndexOfVertex vtxs v = (
 	
@@ -38,7 +107,7 @@ fn findIndexOfVertex vtxs v = (
 )
 
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
-	local filename = getObjectPath obj
+	local filename = getObjectPath obj false
 	
 	--local prueba = "saving binary" +filename+ "."
 	--print prueba
@@ -152,12 +221,18 @@ fn exportMesh obj_to_export = (
 	if obj != obj_to_export then delete obj
 )
 
-fn getObjectPath object_to_path = (
-	local data_path = "C:\\Code\\MCV\\engine\\engine\\data\\"
-	local filename = data_path + "meshes\\"
-	filename += object_to_path.name + ".mesh"	
-	return filename
+fn getObjectPath object_to_path isRelative = (
+	local data_path = "C:\\Code\\MCV\\engine\\engine\\data\\meshes\\"
+	local relative_path = ""
+	local filename = object_to_path.name
+	local extension = ".mesh"
+	
+	if (isRelative) then
+	return relative_path + filename
+	
+	return data_path + relative_path + filename + extension
 	)
+	
 fn getXMLPath = (
 	local data_path = "C:\\Code\\MCV\\engine\\engine\\data\\"
 	local filename = data_path + "xml\\"
@@ -187,5 +262,111 @@ fn openCloseFile = (
 	fclose fs	
 	)
 	
+	
+------------------------ Métodos de obtención de componentes ------------------------
+	
+fn addName obj = (
+	-- Se comprueba si tiene name
+	-- Se añaden los atributos necesarios
+	local miString = "<name  name=\"" + obj.name + "_" + obj.id as string + "\" />\n"
+	return miString
+	)	
+	
+fn addTransform obj = (
+	
+	local miString = ""
+	-- Se comprueba si tiene transform, (por defecto si)
+	-- Se añaden los atributos necesarios
+	if ((classof obj) != targetcamera) then
+	(
+			miString = "<transform position=\"" \
+													+ obj.pos.x as string+" " \
+													+ obj.pos.y as string+" " \
+													+ obj.pos.z as string+" " \
+								+ "\" rotation=\"" \
+													+ obj.rotation.x as string+" "\
+													+ obj.rotation.y as string+" "\
+													+ obj.rotation.z as string+" "\
+													+ obj.rotation.w as string+" "\
+								+"\" scale=\""\
+													+ obj.scale.x as string+ " "\
+													+ obj.scale.y as string+ " "\
+													+ obj.scale.z as string+ " "\
+	+"\"/>\n"
+	)
+	else
+	(
+					miString = "<transform position=\"" \
+													+ obj.pos.x as string+" " \
+													+ obj.pos.y as string+" " \
+													+ obj.pos.z as string+" " \
+					+"\"/>\n"
+	)
+	return miString
+	)
+	
+fn addMesh obj expNames = (
+
+	miString = ""
+	-- Se comprueba si tiene Mesh (por defecto si)
+	if((findItem NotMesh (classof obj)) == 0) then
+	(
+
+	local mPath = getObjectPath obj true
+	
+	-- If mesh have been exported, not export
+	if((findItem expNames obj.name) == 0) then(
+		-- exportamos la mesh
+		exportMesh obj				
+		-- añadimos en nombre de la exportada a la lista de exportadas
+		insertItem obj.name expNames 1
+	)
+	
+	-- Se añaden los atributos necesarios
+	local miString = "<mesh path=\"" + mPath + "\"/>\n"
+	)
+	return miString
+)	
+	
+	
+	
+fn addTargetCamera obj = (
+	local miString = ""
+	-- Se comprueba si es de clase camara
+	if((classof obj) == targetcamera) then (
+	-- Se añaden los atributos necesarios
+	
+			miString = "<camera target=\"" \
+													+ obj.target.pos.x as string+" " \
+													+ obj.target.pos.y as string+" " \
+													+ obj.target.pos.z as string+" " \
+								+ "\" fov=\""   \ 
+													+ obj.fov as string +"\""	\												
+								+ " znear=\""   \ 
+													+ obj.nearrange as string+"\""\
+								+ " zfar=\""   \ 
+													+ obj.farrange as string +""	\
+	+"\"/>\n"
+	)
+	if((classof obj) == freecamera) then (
+	-- Se añaden los atributos necesarios
+			miString = "<camera " \										
+								+ " fov=\""   \ 
+													+ obj.fov as string +"\""	\												
+								+ " znear=\""   \ 
+													+ obj.nearrange as string+"\""\
+								+ " zfar=\""   \ 
+													+ obj.farrange as string +""	\
+	+"\"/>\n"
+	)
+-- fov target.pos znear zfar
+	return miString
+	)	
+-------------------------------------------------------------------------------------------
+	
+addObjectsID()
 exportXMLScene()
+
+-- funcion que habre y cierra una última cosa para poder trabajar, a depurar	
 openCloseFile()
+removeObjectsID()

@@ -1,18 +1,19 @@
-clearlistener()
-
-allObjects = $*
-
-objectDataCA = attributes objectData
+clearListener();
+plugin modifier miModificador
+name:"Identificador"
+classID:#(685325,452281)
+version:2
 (
 parameters main rollout:params
 (
-
+id type:#float ui:ID default:0
 cost type:#float ui:cost default:100
 sound type:#string
 )
  
 rollout params "Object Custom Parameters"
 (
+spinner ID "ID" type: #float
 spinner cost "Cost" type: #float
 dropdownlist sound_dd "Sound" items:# ("wood","iron","mud","water")
  
@@ -20,15 +21,11 @@ on sound_dd selected i do sound = sound_dd.items [i]
 )
 )
 
+/*
 
-for o in allObjects do
-(
-	print  "------------------------"		
-	
-	if (isProperty o.baseObject #id != true) then
-	(
-		print o.baseObject
-		custAttributes.add o objectDataCA		
-	)	
-	print  "------------------------"
-)	
+allObjects  = $*
+
+for o in allObjects do (
+		addmodifier o 
+	)
+*/
