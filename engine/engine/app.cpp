@@ -18,6 +18,8 @@ using namespace DirectX;
 
 using namespace physx;
 
+#include <AntTweakBar.h>
+
 static CApp the_app;
 
 CEntityManager &entity_manager = CEntityManager::get();
@@ -128,6 +130,41 @@ bool CApp::create() {
 
   assert(is_ok);
 
+  // Init AntTweakBar
+  TwInit(TW_DIRECT3D11, ::render.device);
+  TwWindowSize(xres, yres);
+  
+  // Inspector de entidades
+  CEntity* e = entity_manager.getByName("EstaCajaNoSeMueve");
+  TTransform* e_transform = e->get<TTransform>();
+  TCompName* e_name = e->get<TCompName>();
+  TAABB* e_aabb = e->get<TAABB>();
+  TCollider* e_collider = e->get<TCollider>();
+
+  // Create a tewak bar
+  TwBar *bar = TwNewBar("Test bar");
+  
+  int barSize[2] = { 224, 320 };
+  TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+
+  if (e_name) {
+	  TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name ");
+  }
+  if (e_transform) {
+	  TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform ");
+	  TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform ");
+	  TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform ");
+  }
+  if (e_aabb) {
+	  TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->min, " group=AABB ");
+	  TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB ");
+  }
+  if (e_collider) {
+	  
+	  //TwAddVarRO(bar, "Material", TW_TYPE_DIR3F, &e_collider->getMaterialProperties(), " group=Collider ");
+  }
+  
+
   return true;
 }
 
@@ -234,6 +271,8 @@ void CApp::render() {
   renderDebugEntities(true);
   renderEntityDebugList();
 
+  TwDraw();
+
   ::render.swap_chain->Present(0, 0);
 
 }
@@ -312,6 +351,7 @@ void CApp::renderEntityDebugList() {
 	TTransform* player_t = entity_manager.getByName("Player")->get<TTransform>();
 
 	font.printf(10, 45, "Player position: (%f, %f, %f)", XMVectorGetX(player_t->position), XMVectorGetY(player_t->position), XMVectorGetZ(player_t->position));
+	font.printf(10, 60, "Player rotation: (%f, %f, %f, %f)", XMVectorGetX(player_t->rotation), XMVectorGetY(player_t->rotation), XMVectorGetZ(player_t->rotation), XMVectorGetW(player_t->rotation));
 
 	bool debug_all_entities = isKeyPressed('L');
 	bool debug_front_entities = isKeyPressed('K');
@@ -370,15 +410,16 @@ void CApp::renderEntityDebugList() {
 			if (!s.empty() || !s_name.empty()) {
 				draw_counter++;
 				font.color = 0xffff00ff;
-				font.printf(20, 50 + (line_jump_count - current_jump_count + draw_counter) * 20, s_name.c_str());
+				font.printf(20, 80 + (line_jump_count - current_jump_count + draw_counter) * 20, s_name.c_str());
 				font.color = 0xffffffff;
-				font.printf(30, 50 + (line_jump_count - current_jump_count + draw_counter + 1) * 20, s.c_str());
+				font.printf(30, 80 + (line_jump_count - current_jump_count + draw_counter + 1) * 20, s.c_str());
 			}
 		}
 	}
 }
 
 void CApp::destroy() {
+  TwTerminate();
   mesh_manager.destroyAll();
   texture_manager.destroyAll();
   axis.destroy();

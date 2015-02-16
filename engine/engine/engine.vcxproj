@@ -106,14 +106,14 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>.;./physx/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>./physx/Lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3CommonDEBUG_x64.lib PhysX3DEBUG_x64.lib PhysX3CookingDEBUG_x64.lib PhysX3CharacterKinematicDEBUG_x64.lib PhysX3ExtensionsDEBUG.lib PhysX3VehicleDEBUG.lib PhysXProfileSDKDEBUG.lib PhysXVisualDebuggerSDKDEBUG.lib PxTaskDEBUG.lib /DEBUG</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

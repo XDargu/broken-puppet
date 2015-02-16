@@ -809,6 +809,17 @@ struct TCollider {
 			return mat;
 	}
 
+	XMVECTOR getMaterialProperties() {
+		physx::PxMaterial* mat;
+		collider->getMaterials(&mat, 1);
+		return XMVectorSet(
+			mat->getStaticFriction(),
+			mat->getDynamicFriction(),
+			mat->getRestitution(),
+			0
+			);
+	}
+
 	std::string toString() {
 		return "Static friction: " + std::to_string(getMaterial()->getStaticFriction()) +
 			"\nDynamic friction: " + std::to_string(getMaterial()->getDynamicFriction()) +
@@ -1049,8 +1060,11 @@ public:
 struct TAABB {
 private:
 	TTransform*		transform;
-	XMVECTOR		last_position;	// Used to check if the transform has moved since the last frame
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
+
+	XMVECTOR prev_position;
+	XMVECTOR prev_rotation;
+	XMVECTOR prev_scale;
 
 	void recalcMinMax() {
 		// Recalcultate AABB:
@@ -1063,7 +1077,7 @@ private:
 		XMVECTOR minValue = XMVectorSet(D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, 1);
 		XMVECTOR maxValue = -minValue;
 		for (int i = 0; i < 8; ++i) {
-			rotatePoint = XMVector3Rotate(bbpoints[i], transform->rotation);
+			rotatePoint = XMVector3Rotate(bbpoints[i] * transform->scale, transform->rotation);
 
 			if (XMVectorGetX(rotatePoint) < XMVectorGetX(minValue))
 				minValue = XMVectorSetX(minValue, XMVectorGetX(rotatePoint));
@@ -1115,13 +1129,33 @@ public:
 
 		assert(transform || fatal("TAABB requieres a TTransform component"));
 
-		last_position = transform->position;
+		prev_position = transform->position;
+		prev_rotation = transform->rotation;
+		prev_scale = transform->scale;
 		recalcMinMax();
 	}
 
 	void update(float elapsed) {
-		if (!XMVectorGetX(XMVectorEqual(last_position, transform->position)))
+		CHandleManager* hm = CHandleManager::the_register.getByName("aabb");
+		CEntity* e = hm->getOwner(this);
+		TCompName* name = e->get<TCompName>();
+
+		if (name) {
+			if (name->name == "Peter la tetera") {
+				float a = 2;
+			}
+		}
+
+		bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, transform->position)) && XMVectorGetY(XMVectorEqual(prev_position, transform->position)) && XMVectorGetZ(XMVectorEqual(prev_position, transform->position));
+		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, transform->rotation));
+		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, transform->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, transform->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, transform->scale));
+		
+		if (!(posEqual && rotEqual && sclEqual))
 			recalcMinMax();
+
+		prev_position = transform->position;
+		prev_rotation = transform->rotation;
+		prev_scale = transform->scale;
 	}
 
 	float sqrDistance(XMVECTOR point) {
