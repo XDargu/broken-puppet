@@ -115,6 +115,7 @@ fn findIndexOfVertex vtxs v = (
 )
 
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
+	
 	local filename = getObjectPath obj false
 	
 	if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
@@ -159,7 +160,7 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	WriteLong fs idxs_magic
 	WriteLong fs (bytes_per_index*idxs.count)
 	for v in idxs do (
-		WriteShort fs v #unsigned
+		WriteShort fs (v-1) #unsigned		-- Pasar a base 0
 	)
 	
 	-- Other chunks...
@@ -172,20 +173,26 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 )
 
 fn exportMesh obj_to_export = (
+	
 	-- Confirm obj is valid
 	if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
-	local obj = obj_to_export	
+	local obj = obj_to_export
 	if classof obj_to_export  != Editable_mesh then (
 		obj = copy obj_to_export
 		obj.name = obj_to_export.name
 		convertToMesh obj
 	)
+
 	-- Collect all unique vertexs
 	local all_vtxs = #()
 	local all_idxs = #()
 	local nfaces = getNumFaces obj
 		
 	local channelA = 1
+	
+	local world2local = inverse obj.transform
+	local max2mcv = rotateXMatrix -90
+	local world2mcv = world2local * max2mcv
 	
 	-- For each face
 	local face_id
@@ -200,13 +207,16 @@ fn exportMesh obj_to_export = (
 		
 		-- For the 3 vtxs of each face
 		local vid
-		for vid in #(1,2,3) do (
-			local pos = meshop.getVert obj face_pos[ vid ]
+		for vid in #(1,3,2) do (
+			local wpos = meshop.getVert obj face_pos[ vid ]
 			local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
-			local n = face_normals[ vid ]
+			local wn = face_normals[ vid ]
+			
+			local mpos = wpos * world2mcv 
+			local n = wn * world2mcv.rotationpart 
 			
 			-- Collect all data associated to this vtx
-			local v = #( pos.x, pos.y, pos.z, uvA.x, uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
+			local v = #( mpos.x, mpos.y, mpos.z, uvA.x, uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
 			
 			-- Index the vtx or get the index if the vtx has already been defined
 			local idx_of_v = findIndexOfVertex all_vtxs v
@@ -217,7 +227,7 @@ fn exportMesh obj_to_export = (
 		
 	)
 	
-	-- Save in binary form to file	
+	-- Save in binary form to file
 	saveBinaryMesh obj all_vtxs all_idxs 1004		-- Positions+UV2 only
 	
 	-- Delete the temp mesh
@@ -225,7 +235,7 @@ fn exportMesh obj_to_export = (
 )
 
 fn getObjectPath object_to_path isRelative = (
-	local data_path = "C:\\Code\\MCV\\engine\\engine\\data\\meshes\\"
+	local data_path = "C:\\Code\\"
 	local relative_path = ""
 	local filename = object_to_path.name
 	local extension = ".mesh"
@@ -237,7 +247,7 @@ fn getObjectPath object_to_path isRelative = (
 	)
 	
 fn getXMLPath = (
-	local data_path = "C:\\Code\\MCV\\engine\\engine\\data\\"
+	local data_path = "C:\\Code\\"
 	local filename = data_path + "xml\\"
 	filename += "scene.xml"	
 	return filename
@@ -592,6 +602,6 @@ local miString = ""
 	
 addObjectsID()
 exportXMLScene()
--- funcion que habre y cierra una última cosa para poder trabajar, a depurar
+ --funcion que habre y cierra una última cosa para poder trabajar, a depurar
 openCloseFile()
 removeObjectsID()
