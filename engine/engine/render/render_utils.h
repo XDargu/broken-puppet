@@ -20,8 +20,10 @@ void renderUtilsDestroy();
 
 bool createGrid(CMesh& mesh, int nsamples);
 bool createAxis(CMesh& mesh);
-bool createCube(CMesh& mesh, float size);
 bool createWiredCube(CMesh& mesh);
+bool createUnitWiredCube(CMesh& mesh);
+
+bool createCube(CMesh& mesh, float size);
 bool createCamera(CMesh& mesh);
 
 void drawViewVolume(const CCamera& camera);
@@ -30,6 +32,9 @@ void drawViewVolume(const CCamera& camera);
 void setWorldMatrix(XMMATRIX world);
 void activateWorldMatrix(int slot);
 void activateCamera(const CCamera& camera, int slot);
+
+// Provisional
+void activateCamera(const XMMATRIX viewProjection, int slot);
 
 void activateTextureSamplers();
 

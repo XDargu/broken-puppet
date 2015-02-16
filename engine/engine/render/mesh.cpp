@@ -191,6 +191,3 @@ bool CMesh::load(const char* name) {
   CFileDataProvider fdp(full_name);
   return load(fdp);
 }
-
-
-

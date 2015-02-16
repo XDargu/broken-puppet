@@ -1,16 +1,16 @@
 #ifndef INC_DOOM_CONTROLLER_H_
 #define INC_DOOM_CONTROLLER_H_
 
-class CEntity;
+class CEntityOld;
 
 // -------------------------------
-class CThirdPersonController {
+class CDoomController {
   float movement_velocity;
   float rotation_velocity;
 
 public:
-	CThirdPersonController();
-  void update(CEntity* e, CEntity* pivot, float delta_time);
+  CDoomController();
+  void update(CEntityOld* e, float delta_time);
 };
 
 // -------------------------------
@@ -19,13 +19,13 @@ class CAimToController {
 
 public:
   CAimToController();
-  void update(CEntity* who, CEntity* target, float delta_time);
+  void update(CEntityOld* who, CEntityOld* target, float delta_time);
 };
 
 // -------------------------------
 class CLookAtController {
 public:
-  void update(CEntity* who, CEntity* target, float delta_time);
+  void update(CEntityOld* who, CEntityOld* target, float delta_time);
 };
 
 #endif

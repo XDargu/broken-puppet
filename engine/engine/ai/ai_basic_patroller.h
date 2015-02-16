@@ -7,8 +7,8 @@ class ai_basic_patroller : public aicontroller
 {
 public:
 
-	CEntity* player;
-	vector<CEntity*> waypoints;
+	CEntityOld* player;
+	vector<CEntityOld*> waypoints;
 	
 	float speed;
 	float in_waypoint_distance;

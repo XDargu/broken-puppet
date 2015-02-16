@@ -20,19 +20,13 @@ XMVECTOR getVectorFromYaw(float yaw) {
   return XMVectorSet(sinf( yaw ), 0.f, cosf( yaw ), 0.f );
 }
 
-float getPitchFromVector(XMVECTOR v) {
-	float y = XMVectorGetY(v);
-	float distance = XMVectorGetX(XMVector3Length(v));
-	return atan2(y, distance);
-}
-
 // -----------------------------------------
 bool isKeyPressed(int key) {
   return ( ::GetAsyncKeyState(key) & 0x8000 ) != 0;
 }
 
 // -----------------------------------------
-void fatal(const char* fmt, ...) {
+int fatal(const char* fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   char buf[512];
@@ -40,6 +34,7 @@ void fatal(const char* fmt, ...) {
   va_end(ap);
   ::OutputDebugString(buf);
   assert(!printf("%s", buf));
+  return 0;
 }
 
 // -----------------------------------------

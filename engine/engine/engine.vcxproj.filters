@@ -39,18 +39,21 @@
     <ClInclude Include="render\texture.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="ai\aicontroller.h">
+    <ClInclude Include="ai\ai_basic_patroller.h">
       <Filter>ai</Filter>
     </ClInclude>
     <ClInclude Include="ai\aic_melee_gatekeeper.h">
       <Filter>ai</Filter>
     </ClInclude>
-    <ClInclude Include="ai\ai_basic_patroller.h">
+    <ClInclude Include="ai\aicontroller.h">
       <Filter>ai</Filter>
     </ClInclude>
-    <ClInclude Include="camera_controller.h" />
-    <ClInclude Include="camera_pivot_controller.h" />
-    <ClInclude Include="iostatus.h" />
+    <ClInclude Include="handle.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLParser.h" />
+    <ClInclude Include="importer_parser.h" />
+    <ClInclude Include="physics_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -84,18 +87,36 @@
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="ai\aicontroller.cpp">
+    <ClCompile Include="ai\ai_basic_patroller.cpp">
       <Filter>ai</Filter>
     </ClCompile>
     <ClCompile Include="ai\aic_melee_gatekeeper.cpp">
       <Filter>ai</Filter>
     </ClCompile>
-    <ClCompile Include="ai\ai_basic_patroller.cpp">
+    <ClCompile Include="ai\aicontroller.cpp">
       <Filter>ai</Filter>
     </ClCompile>
-    <ClCompile Include="camera_controller.cpp" />
-    <ClCompile Include="camera_pivot_controller.cpp" />
-    <ClCompile Include="iostatus.cpp" />
+    <ClCompile Include="handle\handle.cpp">
+      <Filter>handle</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLParser.cpp" />
+    <ClCompile Include="importer_parser.cpp" />
+    <ClCompile Include="expat\xmlparse.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmlrole.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok_impl.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok_ns.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="physics_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -110,11 +131,20 @@
     <Filter Include="memory">
       <UniqueIdentifier>{b81c8c00-8f12-4c22-821d-86139dca9f0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="handle">
+      <UniqueIdentifier>{3784e6e4-20d1-4a7f-b127-88b6c56f9384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="expat">
+      <UniqueIdentifier>{53c315d5-b637-43c9-b255-5955106c6230}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ai">
-      <UniqueIdentifier>{714602e1-066e-41c7-b14d-7e2836d4d855}</UniqueIdentifier>
+      <UniqueIdentifier>{fbceda24-3914-46d4-b638-015953a730f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="render\notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="my_file.xml" />
   </ItemGroup>
 </Project>

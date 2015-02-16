@@ -52,12 +52,6 @@ public:
 
   // helpers
   bool getScreenCoords(XMVECTOR world_coord, float *x, float *y) const;
-
-  // OVERLAP A QUITAR EN UN FUTURO -----------------------------------------
-  float			overlapZ;
-  float			overlapY;
-  void setOverlap(float z, float y);
-  //-----------------------------------------------------------------------
 };
 
 #endif

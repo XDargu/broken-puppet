@@ -1,0 +1,58 @@
+<scene>
+  <entity>
+    <name name="Player"/>
+    <transform position="0 1.8 -5" rotation="0 0 0 1"  scale="1 1 1"/>
+    <playerDoomController movementVelocity="6" rotationVelocity="90"/>
+  </entity>
+  <entity>
+    <name name="John"/>
+    <transform position="8 0 3" rotation="0 0 0 1" scale="1 1 1"/>
+  </entity>
+  <entity>
+    <name name="Peter la tetera"/>
+    <transform position="-15 0 3" rotation="0 0 0 1" scale="1 1 1"/>
+    <aabb min="-4.5 0 -3" max="5.14219 4.725 3"/>
+    <mesh path="teapot"/>
+  </entity>
+  <entity>
+    <name name="Sin transform"/>
+  </entity>
+  <entity>
+    <name name="Cubito"/>
+    <transform position="0.5 13 0" rotation="0 0 0 1" scale="1 1 1"/>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <mesh path="primitive_box"/>
+    <collider staticFriction="0.5" dynamicFriction="0.5" restitution="0.1" boxX="0.5" boxY="0.5" boxZ="0.5"/>
+    <rigidbody density="10"/>
+  </entity>
+  <entity>
+    <name name="Cubito2"/>
+    <transform position="0 1 0" rotation="0.9659258262890683 0.25881904510252074 0 0" scale="1 2 1"/>
+    <aabb min="-0.5 -1 -0.5" max="0.5 1 0.5"/>
+    <mesh path="primitive_box"/>
+    <collider staticFriction="0.5" dynamicFriction="0.5" restitution="0.5" boxX="0.5" boxY="1" boxZ="0.5"/>
+    <staticbody />
+  </entity>
+  <entity>
+    <name name="Cubito3"/>
+    <transform position="1 7 0" rotation="0 0 0 1" scale="2 2 1"/>
+    <aabb min="-1 -1 -0.5" max="1 1 0.5"/>
+    <mesh path="primitive_box"/>
+    <collider staticFriction="0.5" dynamicFriction="0.2" restitution="1" boxX="1" boxY="1" boxZ="0.5"/>
+    <rigidbody density="10"/>
+  </entity>
+  <entity>
+    <name name="Cubito4"/>
+    <transform position="2 0.5 0.5" rotation="0 0 0 1" scale="1.6 1 1.4"/>
+    <aabb min="-0.8 -0.5 -0.7" max="0.8 0.5 0.7"/>
+    <mesh path="primitive_box"/>
+    <collider staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" boxX="0.8" boxY="0.5" boxZ="0.7"/>
+    <rigidbody density="1"/>
+  </entity>
+  <entity>
+    <name name="Camera"/>
+    <transform position="0 2 -9" rotation="0 0 0 1"  scale="1 1 1"/>
+    <camera target="0 2 0" fov="60" znear="0.5" zfar="1000"/>
+    <firstPersonCameraController />
+  </entity>
+</scene>

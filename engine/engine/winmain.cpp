@@ -17,13 +17,12 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-
-	OutputDebugString("Program Start");
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	CApp &app = CApp::get();
 	app.loadConfig();
+
 
 	// Initialize global strings
 	MyRegisterClass(hInstance);
@@ -47,8 +46,6 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
     }
 		app.doFrame();
 	}
-
-  //sin(30);
 	app.destroy();
 	return (int) msg.wParam;
 }

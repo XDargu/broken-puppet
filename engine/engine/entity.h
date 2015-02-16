@@ -3,10 +3,7 @@
 
 #include "mcv_platform.h"
 
-#include <PxPhysicsAPI.h>// BORRAR, POR EL AMOR DE DIOS --TODO
-using namespace physx;// BORRAR, POR EL AMOR DE DIOS --TODO
-
-class CEntity {
+class CEntityOld {
   XMVECTOR rotation;
   XMVECTOR position;
   XMVECTOR scale;
@@ -14,7 +11,7 @@ class CEntity {
 public:
 
   char     name[32];
-  PxRigidDynamic*	rigid;	// BORRAR, POR EL AMOR DE DIOS --TODO
+
   XMMATRIX getWorld() const;
   XMVECTOR getFront() const;
   XMVECTOR getLeft() const;
@@ -29,30 +26,46 @@ public:
   bool isInLeft(XMVECTOR loc) const;
   bool isInFov(XMVECTOR loc, float fov_in_rad ) const;
 
-  CEntity();
-  ~CEntity();
+  CEntityOld();
+  ~CEntityOld();
 };
 
-class CEntityManager {
+class COldEntityManager {
 
 public:
 
-  typedef std::vector< CEntity* > VEntities;
+  typedef std::vector< CEntityOld* > VOldEntities;
 
-  CEntity* create(const char *name);
-  bool destroy(CEntity* e);
-  CEntity* getByName(const char *name);
+  CEntityOld* create(const char *name);
+  bool destroy(CEntityOld* e);
+  CEntityOld* getByName(const char *name);
   
   void renderDebug() const; 
 
-  const VEntities& getEntities() const { return entities; }
+  const VOldEntities& getEntities() const { return old_entities; }
 
 protected:
-  VEntities entities;
+	VOldEntities old_entities;
 
 };
 
-extern CEntityManager entity_manager;
+extern COldEntityManager old_entity_manager;
+
+class CEntityManager {
+	typedef std::vector< CEntity* > VEntities;
+
+public:
+	static CEntityManager& get();
+
+	void add(CEntity* the_entity);
+	bool remove(CEntity* the_entity);
+	CEntity* getByName(const char *name);
+	const VEntities& getEntities() const { return entities; }
+
+protected:
+	// General entity vector
+	VEntities entities;
+};
 
 
 #endif

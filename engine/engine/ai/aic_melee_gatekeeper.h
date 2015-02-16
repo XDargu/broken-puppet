@@ -7,8 +7,8 @@ class aic_melee_gatekeeper : public aicontroller
 {
 public:
 
-	CEntity* player;
-	CEntity* gate;
+	CEntityOld* player;
+	CEntityOld* gate;
 
 	float view_distance;
 	float forget_distance;
