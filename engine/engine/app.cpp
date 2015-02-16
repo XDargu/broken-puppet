@@ -7,7 +7,6 @@
 #include "camera_pivot_controller.h"
 #include "font/font.h"
 #include "render/texture.h"
-#include "camera_pivot_controller.h"
 #include "camera_controller.h"
 #include <string>
 #include <vector>
@@ -446,6 +445,7 @@ void CApp::update(float elapsed) {
   // Update ---------------------
   
   lookat_controller.update(e3, aibp.entity, elapsed);
+  third_person_controller.update(player, cam_pivot_pointer, elapsed);
   //ctes_global.get()->world_time += elapsed;
 
   /*cameraPivot->setPosition(player->getPosition() + player->getUp());

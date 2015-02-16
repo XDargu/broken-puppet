@@ -1,7 +1,6 @@
 #include "mcv_platform.h"
 #include "camera_controller.h"
 #include "camera.h"
-#include "entity.h"
 #include "camera_pivot_controller.h"
 #include "iostatus.h"
 
@@ -10,6 +9,8 @@ using namespace DirectX;
 float anglex;
 float angley;
 float old_pitch;
+float top_angle_x = 0.5f;
+float down_angle_x = -1.5f;
 
 CCamera_controller::CCamera_controller()
 	: mouse_sensivity(0.01f),
@@ -42,10 +43,10 @@ void CCamera_controller::update(CCamera* cam, camera_pivot_controller* CPC, floa
 	angley = angley + io.getMouse().dy*mouse_sensivity;
 	yaw = yaw + anglex;
 
+
 	if (clapAngleY(angley)){
 		old_pitch = pitch + angley;
-	}
-	else{
+	}else{
 		rangeAngles();
 	}
 
@@ -62,15 +63,15 @@ void CCamera_controller::update(CCamera* cam, camera_pivot_controller* CPC, floa
 
 bool CCamera_controller::clapAngleY(float angley){
 	bool result = false;
-	if ((angley < 0.5f) && (angley > -1.5f)){
+	if ((angley < top_angle_x) && (angley > down_angle_x)){
 		result = true;
 	}
 	return result;
 }
 
 void CCamera_controller::rangeAngles(){
-	if (angley > 0.5f)
-		angley = 0.5f;
-	if (angley < -1.5f)
-		angley = -1.5f;
+	if (angley > top_angle_x)
+		angley = top_angle_x;
+	if (angley < down_angle_x)
+		angley = down_angle_x;
 }

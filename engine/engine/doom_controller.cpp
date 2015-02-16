@@ -39,14 +39,7 @@ void CThirdPersonController::update(CEntity* e, camera_pivot_controller* CPC, fl
 	}
     e->setPosition( e->getPosition() + delta_pos );
     e->setRotation(XMQuaternionMultiply(e->getRotation(), delta_q));
-
-	if (io.isPressed(io.MOUSE_MIDDLE)){
-		XMVECTOR rotCamPivot = CPC->getCamPivot()->getRotation();
-		XMVECTOR rotPlayerPivot = CPC->getPlayerPivot()->getRotation();
-		CPC->getCamPivot()->setRotation(rotCamPivot*rotPlayerPivot);
-	}
 }
-
 // -------------------------------
 void CLookAtController::update(CEntity* who, CEntity* target, float delta_time) {
   // MatrixLookAt is used for the camera view matrix

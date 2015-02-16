@@ -1,11 +1,9 @@
 #include "mcv_platform.h"
 #include "camera_pivot_controller.h"
 #include "iostatus.h"
-//#include "Player.h"
 
 using namespace DirectX;
 
-//Player			&player_ref = Player::get();
 
 camera_pivot_controller::camera_pivot_controller()
 {
@@ -56,3 +54,4 @@ void camera_pivot_controller::update(){
 		);
 	player_pivot->setPosition(player->getPosition());
 }
+
