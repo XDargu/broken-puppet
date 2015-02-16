@@ -185,7 +185,7 @@ bool createWiredCube(CMesh& mesh) {
 }
 
 // -----------------------------------------------------
-bool createUnitWiredCube(CMesh& mesh) {
+bool createUnitWiredCube(CMesh& mesh, XMFLOAT4 color) {
 
 	std::vector< CVertexPosColor > vtxs;
 	vtxs.resize(8);
@@ -193,7 +193,7 @@ bool createUnitWiredCube(CMesh& mesh) {
 
 	// Set the color to white
 	for (auto& it : vtxs)
-		it.Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+		it.Color = color;
 
 	// Axis X
 	v->Pos = XMFLOAT3(-.5f, -.5f, -.5f); ++v;

@@ -87,7 +87,7 @@ DECL_OBJ_MANAGER(TCollider, "collider");
 DECL_OBJ_MANAGER(TRigidBody, "rigidbody");
 DECL_OBJ_MANAGER(TStaticBody, "staticbody");
 DECL_OBJ_MANAGER(TPlayerDoomController, "playerDoomController");
-DECL_OBJ_MANAGER(TFirstPersonCameraController, "firstPersonCameraController");
+DECL_OBJ_MANAGER(TThirdPersonCameraController, "thirdPersonCameraController");
 DECL_OBJ_MANAGER(TAABB, "aabb");
 
 /*

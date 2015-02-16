@@ -21,7 +21,7 @@ void renderUtilsDestroy();
 bool createGrid(CMesh& mesh, int nsamples);
 bool createAxis(CMesh& mesh);
 bool createWiredCube(CMesh& mesh);
-bool createUnitWiredCube(CMesh& mesh);
+bool createUnitWiredCube(CMesh& mesh, XMFLOAT4 color);
 
 bool createCube(CMesh& mesh, float size);
 bool createCamera(CMesh& mesh);

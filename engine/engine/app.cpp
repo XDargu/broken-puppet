@@ -45,6 +45,7 @@ CPixelShader ps_textured;
 CMesh        grid;
 CMesh        axis;
 CMesh		 wiredCube;
+CMesh		 intersectsWiredCube;
 
 TCamera*      camera;
 CCamera*	  oldCamera;
@@ -67,7 +68,7 @@ void createManagers() {
 	getObjManager<TStaticBody>()->init(512);
 	getObjManager<TAABB>()->init(1024);
 	getObjManager<TPlayerDoomController>()->init(1);
-	getObjManager<TFirstPersonCameraController>()->init(8);
+	getObjManager<TThirdPersonCameraController>()->init(8);
 }
 
 void initManagers() {
@@ -77,7 +78,7 @@ void initManagers() {
 	getObjManager<TStaticBody>()->initHandlers();
 	getObjManager<TAABB>()->initHandlers();
 	getObjManager<TPlayerDoomController>()->initHandlers();
-	getObjManager<TFirstPersonCameraController>()->initHandlers();
+	getObjManager<TThirdPersonCameraController>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -122,7 +123,8 @@ bool CApp::create() {
   // Create debug meshes
   is_ok &= createGrid(grid, 10);
   is_ok &= createAxis(axis);
-  is_ok &= createUnitWiredCube(wiredCube);
+  is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
+  is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
   assert(is_ok);
 
@@ -174,7 +176,7 @@ void CApp::update(float elapsed) {
 
   getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TPlayerDoomController>()->update(elapsed); // Update player transform
-  getObjManager<TFirstPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+  getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 }
 
@@ -278,11 +280,22 @@ void CApp::renderDebugEntities(bool draw_names) {
 
 		// If the entity has an AABB, draw it
 		if (aabb) {
+			bool intersects = false;
+			for (int j = 0; j < entity_manager.getEntities().size(); ++j) {
+				TAABB* aabb2 = entity_manager.getEntities()[j]->get<TAABB>();
+				if (aabb2 && i != j && aabb->intersects(aabb2)) {
+					intersects = true;
+					break;
+				}
+			}
 
 			// Draw AABB
 			XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
 			setWorldMatrix(XMMatrixAffineTransformation(aabb->getSize(), zero, zero, aabb->getCenter()));
-			wiredCube.activateAndRender();
+			if (intersects)
+				intersectsWiredCube.activateAndRender();
+			else
+				wiredCube.activateAndRender();
 
 			// Draw max and min
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->min));
@@ -290,7 +303,6 @@ void CApp::renderDebugEntities(bool draw_names) {
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
 			wiredCube.activateAndRender();
 		}
-			
 	}
 }
 
@@ -331,7 +343,7 @@ void CApp::renderEntityDebugList() {
 			}
 			else if (debug_front_entities)
 			{
-				if (t && XMVectorGetX(XMVector3Dot(XMVector3Normalize(t->position - player_t->position), player_t->getFront())) > 0.33f)
+				if (t && XMVectorGetX(XMVector3Dot(XMVector3Normalize(t->position - player_t->position), player_t->getFront())) > 0.8f)
 				{
 					if (name)
 						s_name = name->toString() + "\n";

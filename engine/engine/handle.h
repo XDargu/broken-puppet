@@ -944,7 +944,7 @@ public:
 		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 
 		// Kinematic player creation
-		playerRigid = physx::PxCreateDynamic(*Physics.gPhysicsSDK, physx::PxTransform(physx::PxVec3(0, 0, 0)), physx::PxCapsuleGeometry(0.5f, 0.5f),
+		playerRigid = physx::PxCreateDynamic(*Physics.gPhysicsSDK, physx::PxTransform(physx::PxVec3(0, 0, 0)), physx::PxCapsuleGeometry(0.5f, 1.0f),
 			*Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f), 100.0f);
 		playerRigid->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 		Physics.gScene->addActor(*playerRigid);
@@ -1009,13 +1009,13 @@ public:
 	}
 };
 
-struct TFirstPersonCameraController {
+struct TThirdPersonCameraController {
 private:
 	TTransform* transform;
 public:
 	TTransform*	player;
 
-	TFirstPersonCameraController() {}
+	TThirdPersonCameraController() {}
 
 	void loadFromAtts(MKeyValue &atts) {
 	}
@@ -1028,7 +1028,7 @@ public:
 		player = e_player->get<TTransform>();
 		assert(player || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
 
-		CHandleManager* hm = CHandleManager::the_register.getByName("firstPersonCameraController");
+		CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
 		CEntity* e = hm->getOwner(this);
 		transform = e->get<TTransform>();
 
@@ -1036,8 +1036,9 @@ public:
 	}
 
 	void update(float elapsed) {
-		transform->position = player->position;
+		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;
 		transform->rotation = player->rotation;
+		transform->lookAt(player->position + player->getUp() * 2, player->getUp());
 	}
 
 	std::string toString() {
@@ -1121,6 +1122,28 @@ public:
 	void update(float elapsed) {
 		if (!XMVectorGetX(XMVectorEqual(last_position, transform->position)))
 			recalcMinMax();
+	}
+
+	float sqrDistance(XMVECTOR point) {
+		XMVECTOR nearestPoint = XMVectorZero();
+		nearestPoint = XMVectorSetX(nearestPoint, (XMVectorGetX(point) <  XMVectorGetX(min)) ? XMVectorGetX(min) : (XMVectorGetX(point) > XMVectorGetX(max)) ? XMVectorGetX(max) : XMVectorGetX(point));
+		nearestPoint = XMVectorSetY(nearestPoint, (XMVectorGetY(point) <  XMVectorGetY(min)) ? XMVectorGetY(min) : (XMVectorGetY(point) > XMVectorGetY(max)) ? XMVectorGetY(max) : XMVectorGetY(point));
+		nearestPoint = XMVectorSetZ(nearestPoint, (XMVectorGetZ(point) <  XMVectorGetZ(min)) ? XMVectorGetZ(min) : (XMVectorGetZ(point) > XMVectorGetZ(max)) ? XMVectorGetZ(max) : XMVectorGetZ(point));
+
+		return XMVectorGetX(XMVector3LengthSq(nearestPoint - point));
+	}
+
+	void setMinMax(XMVECTOR n_min, XMVECTOR n_max) {
+		min = n_min;
+		max = n_max;
+	}
+
+	bool containts(XMVECTOR point) {
+		return XMVector3InBounds(point - getCenter(), getExtents());
+	}
+
+	bool intersects(TAABB* aabb) {
+		return XMVector3Greater(max, aabb->min) && XMVector3Greater(aabb->max, min);
 	}
 
 	std::string toString() {
