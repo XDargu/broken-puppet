@@ -3,7 +3,7 @@ clearlistener()
 allObjects = $*
 
 for o in allObjects do
-	if (o.modifiers[#PhysX_Rigid_Body] != undefined) then
+if (o.modifiers[#PhysX_Rigid_Body] != undefined) then
 (
 	print  "------------------------"
 	print o.name
