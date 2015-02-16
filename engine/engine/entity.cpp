@@ -93,7 +93,6 @@ CEntityManager& CEntityManager::get() {
 	return entity_manager;
 }
 
-
 void CEntityManager::add(CEntity* the_entity) {
 	entities.push_back(the_entity);
 }
@@ -114,4 +113,10 @@ CEntity* CEntityManager::getByName(const char *name) {
 			return it;
 	};
 	return nullptr;
+}
+
+CEntity* CEntityManager::createEmptyEntity() {
+	CEntity* the_entity = getObjManager<CEntity>()->createObj();
+	entities.push_back(the_entity);
+	return the_entity;
 }

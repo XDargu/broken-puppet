@@ -527,6 +527,7 @@ public:
 		return new_h;
 	}
 
+	// Handler initialization
 	void initHandlers() {
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
@@ -534,6 +535,7 @@ public:
 			obj->init();
 	}
 
+	// Handler update
 	void update(float elapsed) {
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
@@ -541,6 +543,7 @@ public:
 			obj->update(elapsed);
 	}
 
+	// Fixed time update, used for physx
 	void fixedUpdate(float elapsed) {
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
@@ -602,12 +605,14 @@ struct TTransform {     // 1
 		return(cos_angle < cos(fov_in_rad * 0.5f));
 	}
 
+	// Aim the transform to a position instantly
 	void lookAt(XMVECTOR new_target, XMVECTOR new_up_aux) {
 
 		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
 		rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 	}
 
+	// Aim the transform to a position with SLerp
 	void aimAt(XMVECTOR new_target, XMVECTOR new_up_aux, float t) {
 		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
 		rotation = XMQuaternionSlerp(rotation, XMQuaternionInverse(XMQuaternionRotationMatrix(view)), t);
@@ -809,6 +814,7 @@ struct TCollider {
 			return mat;
 	}
 
+	// Returns the material properties as a vector
 	XMVECTOR getMaterialProperties() {
 		physx::PxMaterial* mat;
 		collider->getMaterials(&mat, 1);
@@ -1047,8 +1053,7 @@ public:
 	}
 
 	void update(float elapsed) {
-		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;
-		transform->rotation = player->rotation;
+		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;		
 		transform->lookAt(player->position + player->getUp() * 2, player->getUp());
 	}
 
@@ -1062,6 +1067,7 @@ private:
 	TTransform*		transform;
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
 
+	// Used to check if the transform has been moved since the last frame, should be moved to transform component
 	XMVECTOR prev_position;
 	XMVECTOR prev_rotation;
 	XMVECTOR prev_scale;
@@ -1111,15 +1117,7 @@ public:
 		XMVECTOR identity_min = atts.getPoint("min");
 		XMVECTOR identity_max = atts.getPoint("max");
 
-		// Initialize bbpoints		
-		bbpoints[0] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_min), XMVectorGetZ(identity_min), 1);
-		bbpoints[1] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_min), XMVectorGetZ(identity_max), 1);
-		bbpoints[2] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_max), XMVectorGetZ(identity_min), 1);
-		bbpoints[3] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_max), XMVectorGetZ(identity_max), 1);
-		bbpoints[4] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_min), XMVectorGetZ(identity_min), 1);
-		bbpoints[5] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_min), XMVectorGetZ(identity_max), 1);
-		bbpoints[6] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_min), 1);
-		bbpoints[7] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_max), 1);
+		setIdentityMinMax(identity_min, identity_max);
 	}
 
 	void init() {
@@ -1135,16 +1133,11 @@ public:
 		recalcMinMax();
 	}
 
+	// Updates the min and max variables, if needed
 	void update(float elapsed) {
 		CHandleManager* hm = CHandleManager::the_register.getByName("aabb");
 		CEntity* e = hm->getOwner(this);
 		TCompName* name = e->get<TCompName>();
-
-		if (name) {
-			if (name->name == "Peter la tetera") {
-				float a = 2;
-			}
-		}
 
 		bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, transform->position)) && XMVectorGetY(XMVectorEqual(prev_position, transform->position)) && XMVectorGetZ(XMVectorEqual(prev_position, transform->position));
 		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, transform->rotation));
@@ -1158,6 +1151,7 @@ public:
 		prev_scale = transform->scale;
 	}
 
+	// Squared distance from a point to the AABB
 	float sqrDistance(XMVECTOR point) {
 		XMVECTOR nearestPoint = XMVectorZero();
 		nearestPoint = XMVectorSetX(nearestPoint, (XMVectorGetX(point) <  XMVectorGetX(min)) ? XMVectorGetX(min) : (XMVectorGetX(point) > XMVectorGetX(max)) ? XMVectorGetX(max) : XMVectorGetX(point));
@@ -1167,15 +1161,26 @@ public:
 		return XMVectorGetX(XMVector3LengthSq(nearestPoint - point));
 	}
 
-	void setMinMax(XMVECTOR n_min, XMVECTOR n_max) {
-		min = n_min;
-		max = n_max;
+	// Sets the identity rotation AABB points
+	void setIdentityMinMax(XMVECTOR identity_min, XMVECTOR identity_max) {
+
+		// Initialize bbpoints		
+		bbpoints[0] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_min), XMVectorGetZ(identity_min), 1);
+		bbpoints[1] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_min), XMVectorGetZ(identity_max), 1);
+		bbpoints[2] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_max), XMVectorGetZ(identity_min), 1);
+		bbpoints[3] = XMVectorSet(XMVectorGetX(identity_min), XMVectorGetY(identity_max), XMVectorGetZ(identity_max), 1);
+		bbpoints[4] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_min), XMVectorGetZ(identity_min), 1);
+		bbpoints[5] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_min), XMVectorGetZ(identity_max), 1);
+		bbpoints[6] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_min), 1);
+		bbpoints[7] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_max), 1);
 	}
 
+	// Check if the AABB contains a point
 	bool containts(XMVECTOR point) {
 		return XMVector3InBounds(point - getCenter(), getExtents());
 	}
 
+	// Checks if the aabb intersects with another one
 	bool intersects(TAABB* aabb) {
 		return XMVector3Greater(max, aabb->min) && XMVector3Greater(aabb->max, min);
 	}

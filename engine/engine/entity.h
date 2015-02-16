@@ -62,6 +62,8 @@ public:
 	CEntity* getByName(const char *name);
 	const VEntities& getEntities() const { return entities; }
 
+	CEntity* createEmptyEntity();
+
 protected:
 	// General entity vector
 	VEntities entities;

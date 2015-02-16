@@ -83,6 +83,32 @@ void initManagers() {
 	getObjManager<TThirdPersonCameraController>()->initHandlers();
 }
 
+// AntTweakBar button test
+void TW_CALL CallbackCreateEntity(void *clientData)
+{
+	// Create a new entity with some components
+	CEntity* e = entity_manager.createEmptyEntity();
+
+	TCompName* n = getObjManager<TCompName>()->createObj();
+	std::strcpy(n->name, "Nueva entidad");
+	e->add(n);
+
+	TTransform* t = getObjManager<TTransform>()->createObj();
+	t->position = XMVectorSet(0, 0, 10, 1);
+	t->rotation = XMVectorSet(0, 0, 0, 1);
+	t->scale = XMVectorSet(0.5f, 0.5f, 0.5f, 1);
+	e->add(t);
+
+	TAABB* aabb = getObjManager<TAABB>()->createObj();
+	aabb->setIdentityMinMax(XMVectorSet(-4.5f, 0, -3, 0), XMVectorSet(5.14219f, 4.725f, 3, 0));
+	e->add(aabb);
+	aabb->init();
+
+	TMesh* m = getObjManager<TMesh>()->createObj();
+	m->mesh = mesh_manager.getByName("Teapot");
+	e->add(m);
+}
+
 bool CApp::create() {
 
   if (!::render.createDevice())
@@ -135,36 +161,40 @@ bool CApp::create() {
   TwWindowSize(xres, yres);
   
   // Inspector de entidades
-  CEntity* e = entity_manager.getByName("EstaCajaNoSeMueve");
+  CEntity* e = entity_manager.getByName("Peter la tetera");
   TTransform* e_transform = e->get<TTransform>();
   TCompName* e_name = e->get<TCompName>();
   TAABB* e_aabb = e->get<TAABB>();
   TCollider* e_collider = e->get<TCollider>();
+  TRigidBody* e_rigidbody = e->get<TRigidBody>();
 
   // Create a tewak bar
   TwBar *bar = TwNewBar("Test bar");
   
+  // AntTweakBar test
   int barSize[2] = { 224, 320 };
   TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+  TwAddButton(bar, "Create Entity", CallbackCreateEntity, NULL, "");
 
   if (e_name) {
-	  TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name ");
+	  TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name" );
+	  TwAddSeparator(bar, "Name", "");
   }
   if (e_transform) {
-	  TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform ");
-	  TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform ");
-	  TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform ");
+	  TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform" );
+	  TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform" );
+	  TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform" );
+	  TwAddSeparator(bar, "Transform", "");
   }
   if (e_aabb) {
-	  TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->min, " group=AABB ");
-	  TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB ");
+	  TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->min, " group=AABB" );
+	  TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB" );
+	  TwAddSeparator(bar, "AABB", "");
   }
   if (e_collider) {
 	  
 	  //TwAddVarRO(bar, "Material", TW_TYPE_DIR3F, &e_collider->getMaterialProperties(), " group=Collider ");
   }
-  
-
   return true;
 }
 
