@@ -9,6 +9,7 @@ NotMesh = #(targetcamera, freecamera)
 fn exportXMLScene = (	
 	local allObjects = $*	
 	local expNames = #()
+	--exportMesh $
 	
 	local miString = "<scene>\n"
 	
@@ -19,6 +20,8 @@ fn exportXMLScene = (
 	(		
 		miString += "<entity>\n"
 		
+		
+		
 		-- Añadimos nombre
 		miString += addName obj
 		-- Añadimos transform
@@ -26,17 +29,23 @@ fn exportXMLScene = (
 		-- Añadimos Mesh
 		miString += addMesh obj expNames	
 		-- Añadimos Camera
-		miString += addTargetCamera obj			
+		miString += addTargetCamera obj	
+		-- Añadimos AABB
+		--miString += addAABB obj	
+		-- Añadimos OOB
+		miString += addOOB obj	
+		-- Añadimos Rigidbody
+		miString += addRigidbody obj
+		-- Añadimos Collider
+		miString += addCollider obj
+		
 		
 		miString += "</entity>\n"
 		)
 	)
 	
-	miString += "</scene>\n"
-	
+	miString += "</scene>\n"	
 	saveXMLArchive miString
-
-	print miString	
 )
 
 
@@ -59,7 +68,6 @@ fn removeObjectsID = (
 	for o in allObjects do(
 			if (isProperty o.baseObject #id == true) then
 			(
-				print "borrando"
 				custAttributes.delete o objectDataID
 			)	
 		)
@@ -108,9 +116,6 @@ fn findIndexOfVertex vtxs v = (
 
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	local filename = getObjectPath obj false
-	
-	--local prueba = "saving binary" +filename+ "."
-	--print prueba
 	
 	if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
 	
@@ -212,9 +217,7 @@ fn exportMesh obj_to_export = (
 		
 	)
 	
-	-- Save in binary form to file
-	print obj.name
-	
+	-- Save in binary form to file	
 	saveBinaryMesh obj all_vtxs all_idxs 1004		-- Positions+UV2 only
 	
 	-- Delete the temp mesh
@@ -244,8 +247,6 @@ fn saveXMLArchive mString = (
 	local filename = getXMLPath()
 	print "saving"
 	print filename
-	print "data"
-	print mString
 	local f = openFile filename mode:"wt"
         if f == undefined do
           f = createFile filename 
@@ -261,6 +262,38 @@ fn openCloseFile = (
 	if fs == undefined then throw ( "Can't open and close file " + filename )	
 	fclose fs	
 	)
+	fn getMin obj = (
+	local num_verts = obj.numverts
+	local mMin = getVert obj 1
+	for v = 1 to num_verts do
+	(
+		if (mMin.x >  (getVert obj v).x) then
+		mMin.x = (getVert obj v).x
+		if (mMin.y >  (getVert obj v).y) then
+		mMin.y = (getVert obj v).y		
+		if (mMin.z >  (getVert obj v).z) then
+		mMin.z = (getVert obj v).z	
+		print mMin as string
+	)	
+	return mMin
+)
+
+fn getMax obj = (
+	local num_verts = obj.numverts
+	local mMax = getVert obj 1
+	for v = 1 to num_verts do
+	(
+		if (mMax.x <  (getVert obj v).x) then
+		mMax.x = (getVert obj v).x
+		if (mMax.y <  (getVert obj v).y) then
+		mMax.y = (getVert obj v).y		
+		if (mMax.z <  (getVert obj v).z) then
+		mMax.z = (getVert obj v).z	
+		print mMax as string
+
+	)	
+	return mMax
+)
 	
 	
 ------------------------ Métodos de obtención de componentes ------------------------
@@ -307,7 +340,7 @@ fn addTransform obj = (
 	
 fn addMesh obj expNames = (
 
-	miString = ""
+	local miString = ""
 	-- Se comprueba si tiene Mesh (por defecto si)
 	if((findItem NotMesh (classof obj)) == 0) then
 	(
@@ -362,11 +395,203 @@ fn addTargetCamera obj = (
 -- fov target.pos znear zfar
 	return miString
 	)	
+	
+fn addAABB obj_AABB = (
+	local miString = ""
+	-- Se comprueba si tiene Mesh (por defecto si)
+	if((findItem NotMesh (classof obj_AABB)) == 0) then
+	(
+	
+		local mMin
+		local mMax
+		
+		-- Confirm obj is valid
+		if obj_AABB == undefined then throw "export_mesh: Obj is not valid" 
+		local obj = obj_AABB	
+		if classof obj_AABB  != Editable_mesh then (
+			obj = copy obj_AABB
+			convertToMesh obj
+		)
+		local num_verts = obj.numverts
+		
+		for v = 1 to num_verts do
+		(
+			if(v == 1) then (
+			mMin = (getVert obj v)
+			mMax = (getVert obj v)
+			)
+			if (mMin.x >  (getVert obj v).x) then
+			mMin.x = (getVert obj v).x
+			if (mMin.y >  (getVert obj v).y) then
+			mMin.y = (getVert obj v).y		
+			if (mMin.z >  (getVert obj v).z) then
+			mMin.z = (getVert obj v).z	
+			
+			if (mMax.x <  (getVert obj v).x) then
+			mMax.x = (getVert obj v).x
+			if (mMax.y <  (getVert obj v).y) then
+			mMax.y = (getVert obj v).y
+			if (mMax.z <  (getVert obj v).z) then
+			mMax.z = (getVert obj v).z
+
+		)
+
+		-- Delete the temp mesh
+		if obj != obj_AABB then delete obj		
+		miString = "<aabb min=\"" \
+										+ mMin.x as string + " "\
+										+ mMin.y as string + " "\
+										+ mMin.z as string + ""\
+										+"\"" \					
+								+" max=\"" \
+										+ mMax.x as string + " "\
+										+ mMax.y as string + " "\
+										+ mMax.z as string + ""\
+										+"\"" \	
+								+ "/>\n"
+		-- Añadimos los datos
+	)
+	return miString
+	)	
+	
+	
+fn addOOB obj_OOB = (
+	local miString = ""
+	-- Se comprueba si tiene Mesh (por defecto si)
+	 if((findItem NotMesh (classof obj_OOB)) == 0) then
+	(
+		local mMin
+		local mMax
+		-- Confirm obj is valid
+		if obj_OOB == undefined then throw "export_mesh: Obj is not valid" 
+		
+		-- Obtenemos rotación actual
+		local rotX = obj_OOB.rotation.x_rotation
+		local rotY = obj_OOB.rotation.y_rotation
+		local rotZ = obj_OOB.rotation.z_rotation
+		
+		--alinear obj_OOB #(0,0,0)
+		obj_OOB.rotation.x_rotation = 0
+		obj_OOB.rotation.y_rotation = 0
+		obj_OOB.rotation.z_rotation = 0
+		
+		if classof obj_OOB  != Editable_mesh then (
+			obj = copy obj_OOB
+			convertToMesh obj
+			mMin = getMin obj
+			mMax = getMax obj
+			-- Delete the temp mesh
+			delete obj
+		)
+		else(
+			mMin = getMin obj_OOB
+			mMax = getMax obj_OOB
+		)
+			
+		-- Devolvemos rotación inicial
+	
+		obj_OOB.rotation.x_rotation = rotX
+		obj_OOB.rotation.y_rotation = rotY
+		obj_OOB.rotation.z_rotation = rotZ
+		
+		
+		miString = "<aabb min=\"" \
+										+ mMin.x as string + " "\
+										+ mMin.y as string + " "\
+										+ mMin.z as string + ""\
+										+"\"" \					
+								+" max=\"" \
+										+ mMax.x as string + " "\
+										+ mMax.y as string + " "\
+										+ mMax.z as string + ""\
+										+"\"" \	
+								+ "/>\n"
+		-- Añadimos los datos
+	)
+	return miString
+)
+
+fn addRigidbody obj = (
+local miString = ""
+	if (obj.modifiers[#PhysX_Rigid_Body] != undefined) then
+	(
+		miString = "<rigidbody density=\"" + obj.modifiers[#PhysX_Rigid_Body].density as string+ "\"/>\n"
+	)
+	return miString	
+)
+
+fn addCollider obj_Collider = (
+local miString = ""
+	if (obj_Collider.modifiers[#PhysX_Rigid_Body] != undefined) then
+	(
+		if((findItem NotMesh (classof obj_Collider)) == 0) then
+		(
+		-------------------------------- Obtenemos el OOB ------------------------------------
+				local mMin
+				local mMax
+				-- Confirm obj is valid
+				if obj_Collider == undefined then throw "export_mesh: Obj is not valid" 
+				
+				-- Obtenemos rotación actual
+				local rotX = obj_Collider.rotation.x_rotation
+				local rotY = obj_Collider.rotation.y_rotation
+				local rotZ = obj_Collider.rotation.z_rotation
+				
+				--alinear obj_OOB #(0,0,0)
+				obj_Collider.rotation.x_rotation = 0
+				obj_Collider.rotation.y_rotation = 0
+				obj_Collider.rotation.z_rotation = 0
+				
+				if classof obj_Collider  != Editable_mesh then (
+					obj = copy obj_Collider
+					convertToMesh obj
+					mMin = getMin obj
+					mMax = getMax obj
+					-- Delete the temp mesh
+					delete obj
+				)
+				else(
+					mMin = getMin obj_Collider
+					mMax = getMax obj_Collider
+				)
+					
+				-- Devolvemos rotación inicial
+			
+				obj_Collider.rotation.x_rotation = rotX
+				obj_Collider.rotation.y_rotation = rotY
+				obj_Collider.rotation.z_rotation = rotZ
+			
+			------------------------ Calculamos el x, y z anchor-------------------------------
+			
+			local anchorX = mMax.x - obj_Collider.pos.x
+			local anchorY = mMax.y - obj_Collider.pos.y
+			local anchorZ = mMax.z - obj_Collider.pos.z
+			
+			-------------------------------------------------------------------------------------			
+			
+			miString = "<collider staticFriction=\""  \
+														+ obj_Collider.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
+									 + " dynamicFriction=\"" \
+														+ obj_Collider.modifiers[#PhysX_Rigid_Body].DynamicFriction as string + "\"" \
+									 + " restitution=\"" \
+														+ obj_Collider.modifiers[#PhysX_Rigid_Body].Bounciness as string + "\"" \
+									 + " boxX=\"" \
+														+ anchorX as string + "\"" \
+									 + " boxY=\"" \
+														+ anchorY as string + "\"" \
+									 + " boxZ=\"" \
+														+ anchorZ as string + "\"" \													
+			+ "/>\n"
+		)
+	)
+	return miString	
+)
+
+	
 -------------------------------------------------------------------------------------------
 	
 addObjectsID()
 exportXMLScene()
-
--- funcion que habre y cierra una última cosa para poder trabajar, a depurar	
+-- funcion que habre y cierra una última cosa para poder trabajar, a depurar
 openCloseFile()
 removeObjectsID()
