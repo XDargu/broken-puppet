@@ -7,44 +7,49 @@ NotEval = #(targetobject)
 NotMesh = #(targetcamera, freecamera)
 
 fn exportXMLScene = (	
-	local allObjects = $*	
+	local allObjects = $*
 	local expNames = #()
 	--exportMesh $
-	
+
 	local miString = "<scene>\n"
-	
-	for obj in allObjects do(	
-	
+
+	for obj in allObjects do
+	(
 		-- first check if the  object needs to be evaluated
-	if((findItem NotEval (classof obj)) == 0) then
-	(		
-		miString += "<entity>\n"
-		
-		
-		
-		-- Añadimos nombre
-		miString += addName obj
-		-- Añadimos transform
-		miString += addTransform obj
-		-- Añadimos Mesh
-		miString += addMesh obj expNames	
-		-- Añadimos Camera
-		miString += addTargetCamera obj	
-		-- Añadimos AABB
-		--miString += addAABB obj	
-		-- Añadimos OOB
-		miString += addOOB obj	
-		-- Añadimos Rigidbody
-		miString += addRigidbody obj
-		-- Añadimos Collider
-		miString += addCollider obj
-		
-		
-		miString += "</entity>\n"
+		if((findItem NotEval (classof obj)) == 0) then
+		(
+			miString += "<entity>\n"
+			
+			-- Pasamos a coordenadas de mcv
+			world2mcv obj
+			
+			-- Añadimos nombre
+			miString += addName obj
+			-- Añadimos transform
+			miString += addTransform obj
+			-- Añadimos Camera
+			miString += addTargetCamera obj
+			-- Añadimos AABB
+			--miString += addAABB obj
+
+			-- Añadimos Rigidbody
+			miString += addRigidbody obj
+			-- Añadimos Collider
+			miString += addCollider obj
+			
+			-- Pasamos a coordenadas de max
+			mcv2world obj
+			
+			-- Añadimos OOB
+			miString += addOOB obj
+			-- Añadimos Mesh
+			miString += addMesh obj expNames
+
+			miString += "</entity>\n"
 		)
 	)
-	
-	miString += "</scene>\n"	
+
+	miString += "</scene>\n"
 	saveXMLArchive miString
 )
 
@@ -172,6 +177,24 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	fclose fs
 )
 
+fn world2mcv obj = (
+	local world2local = inverse obj.transform
+	local max2mcv = rotateXMatrix -90
+	local world2mcv = max2mcv
+	
+	--obj.rotation.x_rotation = obj.rotation.x_rotation-90
+	obj.pos = obj.pos * world2mcv
+)
+
+fn mcv2world obj = (
+	local local2world = inverse obj.transform
+	local mcv2max = rotateXMatrix 90
+	local mcv2world = mcv2max
+	
+	--obj.rotation.x_rotation = obj.rotation.x_rotation+90
+	obj.pos = obj.pos * mcv2world
+)
+
 fn exportMesh obj_to_export = (
 	
 	-- Confirm obj is valid
@@ -272,7 +295,68 @@ fn openCloseFile = (
 	if fs == undefined then throw ( "Can't open and close file " + filename )	
 	fclose fs	
 	)
-	fn getMin obj = (
+	
+fn getMin obj = (
+	
+	local world2local = inverse obj.transform
+	local max2mcv = rotateXMatrix -90
+	local world2mcv = world2local * max2mcv
+	
+	local num_verts = obj.numverts
+	local mMin = getVert obj 1
+	mMin = mMin * world2mcv
+	local aux
+	
+	for v = 1 to num_verts do
+	(
+		aux = (getVert obj v)
+		aux = aux * world2mcv
+		if (mMin.x >  (aux.x) ) then
+		(mMin.x = (aux.x) )
+		if (mMin.y >  (aux.y) ) then
+		(mMin.y = (aux.y) )		
+		if (mMin.z >  (aux.z) ) then
+		(mMin.z = (aux.z) )
+		
+		print mMin as string
+	)	
+	return mMin
+)
+
+fn getMax obj = (
+	
+	local world2local = inverse obj.transform
+	local max2mcv = rotateXMatrix -90
+	local world2mcv = world2local * max2mcv
+	
+	local num_verts = obj.numverts
+	local mMax = getVert obj 1
+	mMax = mMax * world2mcv
+	local aux
+	
+	for v = 1 to num_verts do
+	(
+		aux = (getVert obj v)
+		aux = aux * world2mcv
+		if (mMax.x <  (aux.x) ) then
+		(mMax.x = (aux.x))
+		if (mMax.y <  (aux.y) ) then
+		(mMax.y = (aux.y) )		
+		if (mMax.z <  (aux.z)) then
+		(mMax.z = (aux.z))
+		
+		print mMax as string
+	)	
+	return mMax
+)	
+	/*
+	
+fn getMin obj = (
+	
+	local world2local = inverse obj.transform
+	local max2mcv = rotateXMatrix -90
+	local world2mcv = world2local * max2mcv
+	
 	local num_verts = obj.numverts
 	local mMin = getVert obj 1
 	for v = 1 to num_verts do
@@ -282,7 +366,8 @@ fn openCloseFile = (
 		if (mMin.y >  (getVert obj v).y) then
 		mMin.y = (getVert obj v).y		
 		if (mMin.z >  (getVert obj v).z) then
-		mMin.z = (getVert obj v).z	
+		mMin.z = (getVert obj v).z
+		
 		print mMin as string
 	)	
 	return mMin
@@ -298,13 +383,14 @@ fn getMax obj = (
 		if (mMax.y <  (getVert obj v).y) then
 		mMax.y = (getVert obj v).y		
 		if (mMax.z <  (getVert obj v).z) then
-		mMax.z = (getVert obj v).z	
+		mMax.z = (getVert obj v).z
+		
 		print mMax as string
 
 	)	
 	return mMax
 )
-	
+	*/
 	
 ------------------------ Métodos de obtención de componentes ------------------------
 	
