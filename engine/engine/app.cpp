@@ -89,6 +89,7 @@ void initManagers() {
 // AntTweakBar button test
 void TW_CALL CallbackCreateEntity(void *clientData)
 {
+
 	// Create a new entity with some components
 	CEntity* e = entity_manager.createEmptyEntity();
 
@@ -248,7 +249,9 @@ void CApp::render() {
   ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
+  ctes_global.get()->lightDirection = XMVectorSet(0, 1, 1, 0);
   ctes_global.uploadToGPU();
+  ctes_global.activateInPS(2);
 
   //ctes_global.activateInVS(2);
 

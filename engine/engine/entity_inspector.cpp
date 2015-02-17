@@ -23,7 +23,8 @@ PxVec3 angularVelocity;
 void CEntityInspector::init() {
 	// Create a tewak bar
 	bar = TwNewBar("Inspector");
-	
+	CApp::get();
+
 	// AntTweakBar test
 	int barSize[2] = { 224, 320 };
 	int varPosition[2] = { 30, 80 };
@@ -147,7 +148,8 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddSeparator(bar, "Transform", "");
 	}
 	if (e_mesh) {
-		TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
+		//TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
+		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh");
 	}
 	if (e_collider) {
 		TwAddVarCB(bar, "Static friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider, " min=0 max=1 step=0.1 group=Collider");

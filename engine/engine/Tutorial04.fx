@@ -78,11 +78,24 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	const float lXZ = (dot(input.Normal, XAXIS) + 1) / 2;
 	const float lYZ = (dot(input.Normal, YAXIS) + 1) / 2;
 
+	float3 lightDir = { Tint.x, -Tint.y, Tint.z };
+
+	//float3 local_lightDirection = mul(lightDirection, World);
+
+	float lightIntensity = dot(input.Normal, -lightDir);
+
+	//float Gamma = 2;
+	//float Regions = 3;
+
+	//lightIntensity = pow(lightIntensity, Gamma);
+	//lightIntensity = floor(lightIntensity * Regions) / Regions;
+	//lightIntensity = pow(lightIntensity, 1.0 / Gamma);
+
 	float light = lXZ / 2 + lYZ / 2;
 	float4 lv = { light, light, light, 1.f };
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 	color = lv;
-	return color * Tint;
+	return color * lightIntensity;
 
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }
