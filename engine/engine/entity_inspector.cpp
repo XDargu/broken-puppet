@@ -97,7 +97,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 
 	if (e_name) {
-		TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name");
+		TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(name)), name, " group=Name");
 		TwAddSeparator(bar, "Name", "");
 	}
 	if (e_transform) {

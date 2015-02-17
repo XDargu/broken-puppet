@@ -13,4 +13,6 @@ XMVECTOR getVectorFromYaw(float yaw);
 
 bool isKeyPressed(int key);
 
+bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
+
 #endif

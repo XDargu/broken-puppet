@@ -46,3 +46,7 @@ void dbg(const char* fmt, ...) {
   ::OutputDebugString(buf);
   va_end(ap);
 }
+
+bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {
+	return XMVectorGetX(XMVectorEqual(v1, v2)) && XMVectorGetY(XMVectorEqual(v1, v2)) && XMVectorGetZ(XMVectorEqual(v2, v2));
+}

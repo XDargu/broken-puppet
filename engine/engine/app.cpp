@@ -37,8 +37,8 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-  xres = 800;
-  yres = 600;
+  xres = 1024;
+  yres = 768;
 }
 
 CVertexShader vs_basic;
@@ -397,6 +397,7 @@ void CApp::renderEntityDebugList() {
 			{
 				if (t && XMVectorGetX(XMVector3Dot(XMVector3Normalize(t->position - player_t->position), player_t->getFront())) > 0.8f)
 				{
+					entity_inspector.inspectEntity(entity_manager.getEntities()[i]);
 					if (name)
 						s_name = name->toString() + "\n";
 					if (t)
