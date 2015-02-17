@@ -11,25 +11,9 @@ CEntityInspector::~CEntityInspector() { }
 
 TwBar *bar;
 
-// Transform
-XMVECTOR position;
-XMVECTOR rotation;
-XMVECTOR scale;
-
-// Name
-char name[32];
-
-// AABB
-XMVECTOR min;
-XMVECTOR max;
 XMVECTOR center;
 XMVECTOR extents;
 XMVECTOR size;
-
-// Collider
-float static_friction;
-float dynamic_friction;
-float restitution;
 
 // Rigidbody
 PxVec3 linearVelocity;
@@ -46,6 +30,7 @@ void CEntityInspector::init() {
 	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
 	TwDefine(" Inspector label='Entity inspector' ");
+	TwDefine(" Inspector refresh='0.1' ");
 	TwDefine(" TW_HELP visible=false ");
 
 }
@@ -125,36 +110,14 @@ void TW_CALL GetAngularDamping(void *value, void *clientData)
 }
 
 void CEntityInspector::update() {
-	TTransform* e_transform = target_entity->get<TTransform>();
-	TCompName* e_name = target_entity->get<TCompName>();
 	TAABB* e_aabb = target_entity->get<TAABB>();
-	TCollider* e_collider = target_entity->get<TCollider>();
 	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
 
-	if (e_transform) {
-		position = e_transform->position;
-		rotation = e_transform->rotation;		
-		scale = e_transform->scale;
-	}
-
-	if (e_name) {
-		std::strcpy(name, e_name->name);
-	}
-
 	if (e_aabb) {
-		min = e_aabb->min;
-		max = e_aabb->max;
 		center = e_aabb->getCenter();
 		extents = e_aabb->getExtents();
 		size = e_aabb->getSize();
 	}
-
-	if (e_collider) {
-		static_friction = e_collider->getMaterial()->getStaticFriction();
-		dynamic_friction = e_collider->getMaterial()->getDynamicFriction();
-		restitution = e_collider->getMaterial()->getRestitution();
-	}
-
 	if (e_rigidbody) {
 		linearVelocity = e_rigidbody->rigidBody->getLinearVelocity();
 		angularVelocity = e_rigidbody->rigidBody->getAngularVelocity();
