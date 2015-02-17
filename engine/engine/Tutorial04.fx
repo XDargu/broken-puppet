@@ -82,7 +82,6 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float4 lv = { light, light, light, 1.f };
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 	color = lv;
-	float4 Tint = { 0.9, 0.9, 0.9, 1};
 	return color * Tint;
 
   //return txDiffuse.Sample(samWrapLinear, input.UV);

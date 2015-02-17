@@ -3,6 +3,7 @@
 cbuffer TCtesObject SHADER_REGISTER(b0)
 {
   matrix World;
+  float4 Tint;
 };
 
 cbuffer TCtesCamera SHADER_REGISTER(b1)

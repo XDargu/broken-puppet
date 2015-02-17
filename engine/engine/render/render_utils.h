@@ -35,6 +35,8 @@ void activateCamera(const CCamera& camera, int slot);
 
 // Provisional
 void activateCamera(const XMMATRIX viewProjection, int slot);
+void setTint(XMVECTOR tint);
+void activateTint(int slot);
 
 void activateTextureSamplers();
 

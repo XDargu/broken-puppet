@@ -38,7 +38,7 @@ CApp::CApp()
 void CApp::loadConfig() {
   // Parse xml file...
   xres = 1024;
-  yres = 768;
+  yres = 640;
 }
 
 CVertexShader vs_basic;
@@ -248,9 +248,13 @@ void CApp::render() {
   ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
+  ctes_global.uploadToGPU();
+
   //ctes_global.activateInVS(2);
 
   activateWorldMatrix(0);
+  activateTint(0);
+  
   //activateCamera(*camera, 1);
   // TODO: Make activate TCamera
   activateCamera(camera->view_projection, 1);
@@ -296,8 +300,10 @@ void CApp::renderEntities() {
 	  if (!t)
 		  continue;
 
+	  if (mesh)
+		setTint(mesh->color);
+
 	  setWorldMatrix(t->getWorld());
-	  ctes_global.uploadToGPU();
 
 	  if (mesh)
 		mesh->mesh->activateAndRender();
@@ -322,7 +328,6 @@ void CApp::renderDebugEntities(bool draw_names) {
 			continue;
 
 		setWorldMatrix(t->getWorld());
-		ctes_global.uploadToGPU();
 		axis.activateAndRender();
 
 		// If the entity has name, print it

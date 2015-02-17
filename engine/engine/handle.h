@@ -665,14 +665,16 @@ struct TCompName {     // 1
 struct TMesh {
 	const CMesh* mesh;
 	char path[32];
+	XMVECTOR color;
 
-	TMesh() { mesh = nullptr; }
-	TMesh(const CMesh* the_mesh) { mesh = the_mesh; strcpy(path, "unknown"); }
-	TMesh(const char* the_name) { mesh = mesh_manager.getByName(the_name); strcpy(path, the_name); }
+	TMesh() { mesh = nullptr; color = XMVectorSet(1, 1, 1, 1); }
+	TMesh(const CMesh* the_mesh) { mesh = the_mesh; strcpy(path, "unknown"); color = XMVectorSet(1, 1, 1, 1); }
+	TMesh(const char* the_name) { mesh = mesh_manager.getByName(the_name); strcpy(path, the_name); color = XMVectorSet(1, 1, 1, 1); }
 
 	void loadFromAtts(MKeyValue &atts) {
 		strcpy(path, atts.getString("path", "missing_mesh").c_str());
 		mesh = mesh_manager.getByName(path);
+		color = atts.getQuat("color");
 	}
 
 	std::string toString() {
@@ -898,7 +900,7 @@ public:
 	}
 
 	bool isUsingGravity() {
-		return rigidBody->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
+		return !rigidBody->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
 	}
 
 	std::string toString() {
