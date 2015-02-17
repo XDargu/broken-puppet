@@ -165,6 +165,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="doom_controller.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="entity_inspector.h" />
     <ClInclude Include="font\font.h" />
     <ClInclude Include="handle.h" />
     <ClInclude Include="importer_parser.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="expat\xmlparse.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

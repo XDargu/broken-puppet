@@ -54,6 +54,7 @@
     <ClInclude Include="XMLParser.h" />
     <ClInclude Include="importer_parser.h" />
     <ClInclude Include="physics_manager.h" />
+    <ClInclude Include="entity_inspector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -117,6 +118,7 @@
       <Filter>expat</Filter>
     </ClCompile>
     <ClCompile Include="physics_manager.cpp" />
+    <ClCompile Include="entity_inspector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

@@ -19,6 +19,7 @@ using namespace DirectX;
 using namespace physx;
 
 #include <AntTweakBar.h>
+#include "entity_inspector.h"
 
 static CApp the_app;
 
@@ -54,6 +55,8 @@ CCamera*	  oldCamera;
 CFont         font;
 
 CShaderCte<TCtesGlobal> ctes_global;
+
+CEntityInspector entity_inspector;
 
 float fixedUpdateCounter;
 
@@ -159,42 +162,10 @@ bool CApp::create() {
   // Init AntTweakBar
   TwInit(TW_DIRECT3D11, ::render.device);
   TwWindowSize(xres, yres);
-  
-  // Inspector de entidades
-  CEntity* e = entity_manager.getByName("Peter la tetera");
-  TTransform* e_transform = e->get<TTransform>();
-  TCompName* e_name = e->get<TCompName>();
-  TAABB* e_aabb = e->get<TAABB>();
-  TCollider* e_collider = e->get<TCollider>();
-  TRigidBody* e_rigidbody = e->get<TRigidBody>();
 
-  // Create a tewak bar
-  TwBar *bar = TwNewBar("Test bar");
-  
-  // AntTweakBar test
-  int barSize[2] = { 224, 320 };
-  TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
-  TwAddButton(bar, "Create Entity", CallbackCreateEntity, NULL, "");
+  entity_inspector.init();
+  entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
 
-  if (e_name) {
-	  TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name" );
-	  TwAddSeparator(bar, "Name", "");
-  }
-  if (e_transform) {
-	  TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform" );
-	  TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform" );
-	  TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform" );
-	  TwAddSeparator(bar, "Transform", "");
-  }
-  if (e_aabb) {
-	  TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->min, " group=AABB" );
-	  TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB" );
-	  TwAddSeparator(bar, "AABB", "");
-  }
-  if (e_collider) {
-	  
-	  //TwAddVarRO(bar, "Material", TW_TYPE_DIR3F, &e_collider->getMaterialProperties(), " group=Collider ");
-  }
   return true;
 }
 
@@ -237,14 +208,20 @@ void CApp::doFrame() {
 
 void CApp::update(float elapsed) {
 
+	if (isKeyPressed('I')) {
+		entity_inspector.inspectEntity(entity_manager.getByName("Caja"));
+	}
+
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
 
-  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TPlayerDoomController>()->update(elapsed); // Update player transform
   getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
+
+  entity_inspector.update();
 }
 
 // Physics update
@@ -265,20 +242,18 @@ void CApp::render() {
 
   activateTextureSamplers();
 
-  vs_basic.activate();
-  ps_basic.activate();  
-  //ps_textured.activate();
+  //vs_basic.activate();
+  //ps_basic.activate();  
+  vs_basic2.activate();
+  ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
+  //ctes_global.activateInVS(2);
 
   activateWorldMatrix(0);
   //activateCamera(*camera, 1);
   // TODO: Make activate TCamera
   activateCamera(camera->view_projection, 1);
-
-  setWorldMatrix(XMMatrixIdentity());
-  grid.activateAndRender();
-  axis.activateAndRender();
 
   /*drawViewVolume(camera2);
   setWorldMatrix(XMMatrixIdentity());
@@ -298,6 +273,8 @@ void CApp::render() {
   teapot->activateAndRender();*/
 
   renderEntities();
+  vs_basic.activate();
+  ps_basic.activate();
   renderDebugEntities(true);
   renderEntityDebugList();
 
@@ -328,6 +305,11 @@ void CApp::renderEntities() {
 }
 
 void CApp::renderDebugEntities(bool draw_names) {
+
+	setWorldMatrix(XMMatrixIdentity());
+	grid.activateAndRender();
+	axis.activateAndRender();
+
 	// Render entities
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
