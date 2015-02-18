@@ -27,7 +27,7 @@ void CEntityInspector::init() {
 
 	// AntTweakBar test
 	int barSize[2] = { 224, 320 };
-	int varPosition[2] = { 30, 80 };
+	int varPosition[2] = { 30, 100 };
 	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
 	TwDefine(" Inspector label='Entity inspector' ");
@@ -172,4 +172,82 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarRO(bar, "Extents", TW_TYPE_DIR3F, &extents, " group=AABB");
 		TwAddVarRO(bar, "Size", TW_TYPE_DIR3F, &size, " group=AABB");
 	}
+}
+
+
+// ----------------------------
+
+TwBar *lister_bar;
+
+CEntityLister::CEntityLister() {}
+
+CEntityLister::~CEntityLister() { }
+
+// AntTweakBar button test
+int entityCounter = 0;
+void TW_CALL CallbackCreateEntity(void *clientData)
+{
+
+	// Create a new entity with some components
+	CEntity* e = CEntityManager::get().createEmptyEntity();
+
+	TCompName* n = getObjManager<TCompName>()->createObj();
+	std::strcpy(n->name, ("Nueva entidad" + std::to_string(entityCounter)).c_str());
+	e->add(n);
+
+	TTransform* t = getObjManager<TTransform>()->createObj();
+	t->position = XMVectorSet(0, 0, 10, 1);
+	t->rotation = XMVectorSet(0, 0, 0, 1);
+	t->scale = XMVectorSet(0.5f, 0.5f, 0.5f, 1);
+	e->add(t);
+
+	TAABB* aabb = getObjManager<TAABB>()->createObj();
+	aabb->setIdentityMinMax(XMVectorSet(-4.5f, 0, -3, 0), XMVectorSet(5.14219f, 4.725f, 3, 0));
+	e->add(aabb);
+	aabb->init();
+
+	TMesh* m = getObjManager<TMesh>()->createObj();
+	m->mesh = mesh_manager.getByName("Teapot");
+	e->add(m);
+
+	entityCounter++;
+}
+
+void TW_CALL CallbackInspectEntity(void *clientData) {
+	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+}
+
+void CEntityLister::init() {
+	// Create a tewak bar
+	lister_bar = TwNewBar("Lister");
+
+	// AntTweakBar test
+	int barSize[2] = { 224, 320 };
+	int varPosition[2] = { CApp::get().xres - 260, 100 };
+	TwSetParam(lister_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	TwSetParam(lister_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
+	TwDefine(" Lister label='Entity list' ");
+	TwDefine(" Lister refresh='0.3' ");
+	TwDefine(" TW_HELP visible=false ");
+}
+
+void CEntityLister::update() {
+
+	TwRemoveAllVars(lister_bar);	
+
+	std::vector< CEntity* > entities = CEntityManager::get().getEntities();
+
+	TwAddButton(lister_bar, "New entity", CallbackCreateEntity, NULL, "");
+	TwAddSeparator(lister_bar, "", "");
+
+	for (int i = 0; i < entities.size(); ++i) {
+		TCompName* e_name = entities[i]->get<TCompName>();
+		if (e_name) {
+			TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, entities[i], "");
+			//TwAddVarRW(lister_bar, e_name->name, TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, "");
+			//TwAddSeparator(lister_bar, "Name", "");
+		}
+	}
+
+	
 }

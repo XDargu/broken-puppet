@@ -81,6 +81,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float3 lightDir = { Tint.x, -Tint.y, Tint.z };
 
 	//float3 local_lightDirection = mul(lightDirection, World);
+	//local_lightDirection = mul(local_lightDirection, ViewProjection);
 
 	float lightIntensity = dot(input.Normal, -lightDir);
 

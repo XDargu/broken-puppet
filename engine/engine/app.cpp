@@ -26,6 +26,10 @@ static CApp the_app;
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
 
+#include "ai\ai_basic_patroller.h"
+
+ai_basic_patroller aibp;
+
 CApp& CApp::get() {
   return the_app;
 }
@@ -56,8 +60,6 @@ CFont         font;
 
 CShaderCte<TCtesGlobal> ctes_global;
 
-CEntityInspector entity_inspector;
-
 float fixedUpdateCounter;
 
 void createManagers() {
@@ -74,6 +76,8 @@ void createManagers() {
 	getObjManager<TAABB>()->init(1024);
 	getObjManager<TPlayerDoomController>()->init(1);
 	getObjManager<TThirdPersonCameraController>()->init(8);
+
+	getObjManager<TEnemyWithPhysics>()->init(8);
 }
 
 void initManagers() {
@@ -84,33 +88,7 @@ void initManagers() {
 	getObjManager<TAABB>()->initHandlers();
 	getObjManager<TPlayerDoomController>()->initHandlers();
 	getObjManager<TThirdPersonCameraController>()->initHandlers();
-}
-
-// AntTweakBar button test
-void TW_CALL CallbackCreateEntity(void *clientData)
-{
-
-	// Create a new entity with some components
-	CEntity* e = entity_manager.createEmptyEntity();
-
-	TCompName* n = getObjManager<TCompName>()->createObj();
-	std::strcpy(n->name, "Nueva entidad");
-	e->add(n);
-
-	TTransform* t = getObjManager<TTransform>()->createObj();
-	t->position = XMVectorSet(0, 0, 10, 1);
-	t->rotation = XMVectorSet(0, 0, 0, 1);
-	t->scale = XMVectorSet(0.5f, 0.5f, 0.5f, 1);
-	e->add(t);
-
-	TAABB* aabb = getObjManager<TAABB>()->createObj();
-	aabb->setIdentityMinMax(XMVectorSet(-4.5f, 0, -3, 0), XMVectorSet(5.14219f, 4.725f, 3, 0));
-	e->add(aabb);
-	aabb->init();
-
-	TMesh* m = getObjManager<TMesh>()->createObj();
-	m->mesh = mesh_manager.getByName("Teapot");
-	e->add(m);
+	getObjManager<TEnemyWithPhysics>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -167,6 +145,26 @@ bool CApp::create() {
   entity_inspector.init();
   entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
 
+  entity_lister.init();
+
+  // Enemigo SIN componentes
+  aibp.entity = old_entity_manager.create("Enemy");
+  aibp.entity->setPosition(((TTransform*)entity_manager.getByName("Enemigo")->get<TTransform>())->position);
+  CEntityOld* wp1 = old_entity_manager.create("EnemyWp1");
+  wp1->setPosition(XMVectorSet(10, 0, 10, 0));
+  CEntityOld* wp2 = old_entity_manager.create("EnemyWp2");
+  wp2->setPosition(XMVectorSet(-10, 0, 10, 0));
+  CEntityOld* wp3 = old_entity_manager.create("EnemyWp3");
+  wp3->setPosition(XMVectorSet(10, 0, -10, 0));
+
+  vector<CEntityOld*> waypoints;
+  waypoints.push_back(wp1);
+  waypoints.push_back(wp2);
+  waypoints.push_back(wp3);
+
+  aibp.waypoints = waypoints;
+  aibp.Init();
+
   return true;
 }
 
@@ -217,12 +215,18 @@ void CApp::update(float elapsed) {
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
 
+  aibp.Recalc(elapsed);
+
   getObjManager<TPlayerDoomController>()->update(elapsed); // Update player transform
   getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
 
   entity_inspector.update();
+  entity_lister.update();
+
+  ((TTransform*)entity_manager.getByName("Enemigo")->get<TTransform>())->position = aibp.entity->getPosition();
+  ((TTransform*)entity_manager.getByName("Enemigo")->get<TTransform>())->rotation = aibp.entity->getRotation();
 }
 
 // Physics update
@@ -232,6 +236,7 @@ void CApp::fixedUpdate(float elapsed) {
 
   getObjManager<TPlayerDoomController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+  getObjManager<TEnemyWithPhysics>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {

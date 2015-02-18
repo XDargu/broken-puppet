@@ -1193,6 +1193,59 @@ public:
 	}
 };
 
+struct TEnemyWithPhysics {
+private:
+	TTransform* transform;
+public:
+	physx::PxRigidDynamic*	 playerRigid; // Kinematic player. Should be changed to Physx Character Controller
+
+	TEnemyWithPhysics()
+	{}
+
+	void loadFromAtts(MKeyValue &atts) {
+
+		// Kinematic player creation
+		playerRigid = physx::PxCreateDynamic(*Physics.gPhysicsSDK, physx::PxTransform(physx::PxVec3(0, 0, 0)), physx::PxCapsuleGeometry(0.5f, 1.0f),
+			*Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f), 100.0f);
+		playerRigid->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+		Physics.gScene->addActor(*playerRigid);
+	}
+
+	void init() {
+		CHandleManager* hm = CHandleManager::the_register.getByName("enemyWithPhysics");
+		CEntity* e = hm->getOwner(this);
+		transform = e->get<TTransform>();
+
+		assert(transform || fatal("TEnemyWithPhysics requieres a TTransform component"));
+
+		// Teleport the kinematic player to the player position
+		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(transform->position);
+		position_player.y *= 0.5f;
+
+		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(transform->rotation);
+		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
+
+		playerRigid->setGlobalPose(physx::PxTransform(position_player, rotation_player), true);
+	}
+
+	void fixedUpdate(float elapsed) {
+		// Kinematic player update
+		// Rotate the capsule
+		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(transform->position);
+		position_player.y *= 0.5f;
+
+		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(transform->rotation);
+		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
+
+		playerRigid->setKinematicTarget(physx::PxTransform(position_player, rotation_player));
+	}
+
+
+	std::string toString() {
+		return "Enemy with physics controller";
+	}
+};
+
 // ----------------------------------------
 // Declaracion que dado un tipo de c++
 // hay una funcion que devuelve un manager de ese tipo
