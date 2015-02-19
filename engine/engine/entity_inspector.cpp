@@ -1,7 +1,7 @@
 #include "mcv_platform.h"
 #include "entity_inspector.h"
 #include <AntTweakBar.h>
-#include "handle.h"
+#include "handle\handle.h"
 
 using namespace physx;
 
@@ -23,11 +23,11 @@ PxVec3 angularVelocity;
 void CEntityInspector::init() {
 	// Create a tewak bar
 	bar = TwNewBar("Inspector");
-	CApp::get();
-
+	CApp &app = CApp::get();
+	
 	// AntTweakBar test
-	int barSize[2] = { 224, 320 };
-	int varPosition[2] = { 30, 100 };
+	int barSize[2] = { 224, app.yres };
+	int varPosition[2] = { app.xres - barSize[0], 0 };
 	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
 	TwDefine(" Inspector label='Entity inspector' ");
@@ -221,9 +221,11 @@ void CEntityLister::init() {
 	// Create a tewak bar
 	lister_bar = TwNewBar("Lister");
 
+	CApp &app = CApp::get();
+
 	// AntTweakBar test
-	int barSize[2] = { 224, 320 };
-	int varPosition[2] = { CApp::get().xres - 260, 100 };
+	int barSize[2] = { 224, app.yres };
+	int varPosition[2] = { 0, 0 };
 	TwSetParam(lister_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(lister_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
 	TwDefine(" Lister label='Entity list' ");

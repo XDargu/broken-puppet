@@ -1,6 +1,6 @@
 #include "mcv_platform.h"
-#include "entity.h"
-#include "handle.h"
+#include "entity_manager.h"
+#include "handle\handle.h"
 
 using namespace DirectX;
 

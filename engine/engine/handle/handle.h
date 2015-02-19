@@ -3,13 +3,13 @@
 
 #include "mcv_platform.h"
 #include "XMLParser.h"
-#include "render\render_utils.h"
-#include "entity.h"
+#include "render/render_utils.h"
 #include "physics_manager.h"
 
 using namespace DirectX;
 
 class MKeyValue;
+struct TMsg;
 
 #define Physics CPhysicsManager::get()
 
@@ -85,474 +85,14 @@ private:
 	uint32_t external_index : num_bits_index;
 	uint32_t type : num_bits_type;
 	uint32_t age : num_bits_age;
-
 };
-
-
-
-// -------------------------------------
-class CHandleManager {
-
-protected:
-	static const uint32_t max_instances = 1 << CHandle::num_bits_index;
-	static const uint32_t max_types = CHandle::max_types;
-	static const uint32_t invalid_index = ~0;
-
-	// This table saves is accessed using an external id
-	struct TExternData {
-		uint32_t internal_index;        // The index in the internal array of real objects
-		uint32_t current_age;           // To check if a handle is the current valid handle with that index
-		uint32_t next_external_index;   // To link external_data in this array
-		CHandle  current_owner;
-
-		TExternData()
-			: internal_index(invalid_index)
-			, current_age(0)
-			, next_external_index(invalid_index)
-		{}
-	};
-
-	TExternData* external_to_internal;
-
-	// Given an internal index, sometimes we need to get the external_id
-	uint32_t*    internal_to_external;
-
-	// Keep track of the number of valid objects by the manager, and 
-	// the maximum number of objects allowed. Maybe we don't want to 
-	// allocate the full 1<<max_instances objects
-	uint32_t     num_objects_in_use;
-	uint32_t     max_objects_in_use;
-
-	// Id and name associated to this handle manager
-	uint32_t     type;
-	const char*  obj_type_name;
-
-	// To quickly find the next free handle when creating objects
-	uint32_t     next_free_handle_ext_index;
-	uint32_t     last_free_handle_ext_index;
-
-	// Allocate the internal structures
-	void init(uint32_t max_objects_allowed) {
-
-		assert(max_objects_allowed > 0);            // Given number should make sense
-		assert(external_to_internal == nullptr);    // Do not enter twice here
-
-		// At this point we should have a name
-		assert(obj_type_name);
-		max_objects_in_use = max_objects_allowed;
-		the_register.registerManager(this);
-
-		// Alloc memory for lookup tables
-		external_to_internal = new TExternData[max_objects_allowed];
-		internal_to_external = new uint32_t[max_objects_allowed];
-
-		// init table contents
-		for (uint32_t i = 0; i < max_objects_allowed; ++i) {
-			TExternData* ed = external_to_internal + i;
-			ed->current_age = 1;
-			ed->internal_index = invalid_index;
-			// Each handle is linked to the next, except the last one
-			if (i != max_objects_allowed - 1)
-				ed->next_external_index = i + 1;
-			else
-				ed->next_external_index = invalid_index;
-
-			internal_to_external[i] = invalid_index;
-		}
-
-		next_free_handle_ext_index = 0;
-		last_free_handle_ext_index = max_objects_allowed - 1;
-	}
-
-public:
-
-	// Everything is invalid at the ctor
-	CHandleManager()
-		: external_to_internal(nullptr)
-		, internal_to_external(nullptr)
-		, num_objects_in_use(0)
-		, max_objects_in_use(0)
-		, type(0)
-		, obj_type_name(nullptr)
-	{}
-
-	const char* getObjTypeName() const { return obj_type_name; }
-	uint32_t    getType() const { return type; }
-	void        dumpInternals() const;
-	uint32_t    size() const { return num_objects_in_use; }
-	uint32_t    capacity() const { return max_objects_in_use; }
-
-	// 
-	bool        isValid(CHandle h) const {
-		assert(h.getType() == getType());
-		if (h.getExternalIndex() >= max_objects_in_use)
-			return false;
-		TExternData* ed = external_to_internal + h.getExternalIndex();
-		return ed->current_age == h.getAge();
-	}
-
-	// Owners
-	CHandle getOwner(CHandle h) {
-		assert(h.getType() == getType());
-		uint32_t external_idx = h.getExternalIndex();
-
-		// Comprobar que el external_id is potencialmente valido
-		if (external_idx >= max_objects_in_use)
-			return CHandle();
-
-		// Acceder a los datos que yo tengo para ese handle
-		const TExternData* ed = external_to_internal + external_idx;
-		return ed->current_owner;
-	}
-
-	bool setOwner(CHandle h, CHandle new_owner) {
-		assert(h.getType() == getType());
-		uint32_t external_idx = h.getExternalIndex();
-
-		// Comprobar que el external_id is potencialmente valido
-		if (external_idx >= max_objects_in_use)
-			return false;
-
-		// Acceder a los datos que yo tengo para ese handle
-		// Y guardar el nuevo dato que me piden
-		TExternData* ed = external_to_internal + external_idx;
-		ed->current_owner = new_owner;
-		return true;
-	}
-
-	// ---------------------------
-	// Virtual methods. Can't implement these methods here
-	// because I don't know the exact type of objects we are dealing with
-	virtual ~CHandleManager() { }
-	virtual bool destroyObj(CHandle h) = 0;
-	virtual CHandle createEmptyObj(MKeyValue &atts) = 0;
-	virtual CHandle clone(CHandle h) = 0;
-
-	// ---------------------------
-	class CRegister {
-
-		struct TNameComparator {
-			bool operator() (const char* name1, const char * name2) const {
-				return strcmp(name1, name2) < 0;
-			}
-		};
-		typedef std::map< const char*, CHandleManager*, TNameComparator > MHandlesByName;
-
-		CHandleManager* all_managers[max_types];
-		MHandlesByName  all_managers_by_name;
-		// The type 0 is invalid, that's why we start in the 1
-		uint32_t        next_type_id;
-
-	public:
-
-		CRegister() : next_type_id(1) { }
-
-		CHandleManager* getByName(const char* name) {
-			auto it = all_managers_by_name.find(name);
-			if (it != all_managers_by_name.end())
-				return it->second;
-			//fatal("No manager of objs of type %s is registered\n", name);
-			return nullptr;
-		}
-
-		CHandleManager* getByType(uint32_t type) {
-			assert(type < max_types);
-			return all_managers[type];
-		}
-
-		void registerManager(CHandleManager* manager) {
-			assert(manager->getType() == 0);      // Should not be already registered
-			assert(next_type_id < max_types);
-			manager->type = next_type_id;
-
-			// Manager should have a name at this point
-			const char* name = manager->getObjTypeName();
-			assert(name != nullptr);
-
-			// Check if anoter manager already exists with the same name
-			assert(all_managers_by_name.find(name) == all_managers_by_name.end());
-			all_managers[next_type_id] = manager;   // Register by id
-			all_managers_by_name[name] = manager;   // Register by name
-			++next_type_id;
-		}
-
-	};
-
-	static CRegister the_register;
-};
-
-// ----------------------------------------
-class CEntity {
-	CHandle components[CHandle::max_types];
-public:
-
-	~CEntity() {
-		for (uint32_t i = 0; i < CHandle::max_types; i++)
-			components[i].destroy();
-	}
-
-	// Add a handle to this entity
-	CHandle add(CHandle h) {
-		assert(h.isValid() || fatal("Handle must be valid\n"));
-		uint32_t h_type = h.getType();
-		assert(!components[h_type].isValid() || fatal("Entity has already a handle of type %d\n", h.getType()));
-		assert(!h.getOwner().isValid() || fatal("Handle %08x has already an owner: %08x\n", h.asUnsigned(), h.getOwner().asUnsigned()));
-		components[h_type] = h;
-		h.setOwner(CHandle(this));
-		assert(h.getOwner() == CHandle(this));
-		return h;
-	}
-
-	// Return true if the entity has a valid component of that type
-	template< class TObj>
-	bool has() const {
-		return get<TObj>().isValid();
-	}
-
-	// Get the index given the obj type, and return whatever handle we
-	// are storing now
-	template< class TObj >
-	CHandle get() const {
-		uint32_t h_type = getObjManager<TObj>()->getType();
-		return components[h_type];
-	}
-
-	// Destroy the handle of that type
-	template< class TObj >
-	bool del() {
-		uint32_t h_type = getObjManager<TObj>()->getType();
-		return components[h_type].destroy();
-	}
-
-	// Helpers
-	const char* getName() const;
-	void loadFromAtts(MKeyValue& atts) {}
-
-};
-
 
 // -----------------------------------------
-// Handle manager storing objects of type TObj
-template< class TObj >
-class CObjManager : public CHandleManager {
-	// The real objects...
-	TObj* objs;
-public:
-
-	CObjManager(const char* the_obj_name) : objs(nullptr) {
-		obj_type_name = the_obj_name;
-	}
-
-	void init(uint32_t max_objects_allowed) {
-		CHandleManager::init(max_objects_allowed);
-		objs = new TObj[max_objects_allowed];
-	}
-
-	// Given an object, return the Handle that represents it
-	CHandle getHandleFromObjAddr(TObj* obj) {
-		// As we have the objects in linear array, subtracting pointers
-		// gives the index in the array
-		uintptr_t internal_idx = obj - objs;
-
-		// If the array is invalid, return an invalid handle
-		if (internal_idx >= max_objects_in_use)
-			return CHandle();
-
-		// Use the int2ext table to get the external index
-		uint32_t external_idx = internal_to_external[internal_idx];
-
-		// Get the table to read the current age of that handle
-		TExternData* ed = external_to_internal + external_idx;
-
-		// Build the handle
-		return CHandle(getType(), external_idx, ed->current_age);
-	}
-
-
-	TObj* getObjByHandle(CHandle h) const {
-		assert(h.getType() == getType());
-		uint32_t external_idx = h.getExternalIndex();
-
-		// Comprobar que el external_id is potencialmente valido
-		if (external_idx >= max_objects_in_use)
-			return nullptr;
-
-		// Acceder a los datos que yo tengo para ese handle
-		const TExternData* ed = external_to_internal + external_idx;
-
-		// Es un handle antiguo?
-		if (ed->current_age != h.getAge())
-			return nullptr;
-
-		assert(ed->internal_index != invalid_index);
-		return objs + ed->internal_index;
-	}
-
-	CHandle createEmptyObj(MKeyValue& atts) {
-		CHandle h = createObj();
-		TObj* obj = h;
-		obj->loadFromAtts(atts);
-		return h;
-	}
-
-	// ------------------
-	// Contruct a new object, using the given args
-	CHandle createObj() {
-
-		// Do we have space?
-		assert(num_objects_in_use < max_objects_in_use || fatal("No more space for components of type %s\n", getObjTypeName()));
-
-		// The real object goes at the end of the array of real objects
-		uint32_t internal_idx = num_objects_in_use;
-		++num_objects_in_use;
-
-		// The final object address
-		TObj* obj = objs + internal_idx;
-
-		// Call the original ctor using the pointer given by use (obj)
-		// and using the given args
-		obj = ::new(obj)TObj;
-
-		// Find a free handle to use
-		uint32_t external_idx = next_free_handle_ext_index;
-
-		// Update the next_free_handle_ext_index for the next createObj call
-		next_free_handle_ext_index = external_to_internal[external_idx].next_external_index;
-		if (next_free_handle_ext_index == invalid_index) {
-			last_free_handle_ext_index = invalid_index;
-			assert(size() == capacity());
-		}
-
-		// Update the external data to link to the created object
-		TExternData* ed = external_to_internal + external_idx;
-		ed->next_external_index = invalid_index;    // Not linked to next anymore
-		ed->internal_index = internal_idx;
-		ed->current_owner = CHandle();
-
-		// Update the internal to external table
-		internal_to_external[internal_idx] = external_idx;
-
-		return CHandle(getType(), external_idx, ed->current_age);
-	}
-
-	// --------------------------------------------
-	bool destroyObj(CHandle h) {
-		// Confirm the handle is mine
-		assert(h.getType() == getType());
-
-		// The index is garbage
-		if (h.getExternalIndex() >= max_objects_in_use)
-			return false;
-
-		uint32_t external_index_removed = h.getExternalIndex();
-
-		TExternData* ed = external_to_internal + external_index_removed;
-
-		// The handle is too old
-		if (h.getAge() != ed->current_age)
-			return false;
-
-		// Access to the real object to be deleted
-		TObj *obj = objs + ed->internal_index;
-
-		// Call the dtor directly
-		obj->~TObj();
-
-		// If it's not the last object in the linear array of objects...
-		if (ed->internal_index != size() - 1) {
-
-			// Move the last object in the array to replace the deleted object
-			// So all objects are still packed
-			TObj* last_obj = objs + size() - 1;
-
-			// Do the real copy
-			*obj = std::move(*last_obj);
-
-			uint32_t external_idx_of_last_obj = internal_to_external[size() - 1];
-
-			// Update the external table, so we updated the new location of the last object
-			external_to_internal[external_idx_of_last_obj].internal_index = ed->internal_index;
-
-			// Update the internal table of the last object, because now it's on the deleted
-			// position
-			internal_to_external[ed->internal_index] = external_idx_of_last_obj;
-		}
-
-		// Delete the internal_to_external of the last valid object, it has been moved
-		internal_to_external[size() - 1] = invalid_index;
-
-		// We now have one less object
-		assert(num_objects_in_use > 0);
-		num_objects_in_use--;
-
-		// Update the linked list of free handles
-		if (next_free_handle_ext_index != invalid_index) {
-			TExternData* ed = external_to_internal + last_free_handle_ext_index;
-			ed->next_external_index = external_index_removed;
-			// This is the new tail 
-			last_free_handle_ext_index = external_index_removed;
-		}
-		else {
-			// Only when all objects have been used, and we free one object
-			next_free_handle_ext_index = last_free_handle_ext_index = external_index_removed;
-		}
-
-		// Update the external table, because there is no real object associated at this index
-		// anymore
-		ed->internal_index = invalid_index;
-
-		// This invalidates all existing handles at that index
-		ed->current_age++;
-
-		return true;
-	}
-
-	// -----------------------------------------
-	CHandle clone(CHandle h) {
-		// Get access to the real object given the handle
-		TObj* orig_obj = getObjByHandle(h);
-		// Confirm the handle is valid
-		if (orig_obj == nullptr)
-			return CHandle();
-
-		// Create a new empty object
-		CHandle new_h = createObj();
-
-		// Get the real object
-		TObj* new_obj = getObjByHandle(new_h);
-
-		// Copy the old object in the new object
-		*new_obj = *orig_obj;
-
-		return new_h;
-	}
-
-	// Handler initialization
-	void initHandlers() {
-		TObj* obj = objs;
-		uint32_t num = num_objects_in_use;
-		for (; num--; obj++)
-			obj->init();
-	}
-
-	// Handler update
-	void update(float elapsed) {
-		TObj* obj = objs;
-		uint32_t num = num_objects_in_use;
-		for (; num--; obj++)
-			obj->update(elapsed);
-	}
-
-	// Fixed time update, used for physx
-	void fixedUpdate(float elapsed) {
-		TObj* obj = objs;
-		uint32_t num = num_objects_in_use;
-		for (; num--; obj++)
-			obj->fixedUpdate(elapsed);
-	}
-
-
-};
+#include "handle/handle_manager.h"
+#include "handle/objs_manager.h"
+#include "handle/msgs.h"
+#include "handle/entity.h"
+#include "../entity_manager.h"
 
 // ----------------------------------------
 struct TTransform {     // 1
@@ -644,6 +184,16 @@ struct TLife {    // 2 ...
 
 	void loadFromAtts(MKeyValue &atts) {
 		life = atts.getFloat("life", 0.f);
+	}
+
+	void onExplosion(const TMsgExplosion& msg) {
+		dbg("Life recv explosion of %f points when my life is %f\n", msg.damage, life);
+		life -= msg.damage;
+		if (life < 0)
+			life = 0;
+	}
+	void onDied(const TMsgDied& msg) {
+		dbg("Life recv died from %d when my life is %f\n", msg.who, life);
 	}
 
 	std::string toString() {
@@ -795,14 +345,14 @@ struct TCollider {
 
 		collider = Physics.gPhysicsSDK->createShape(
 			physx::PxBoxGeometry(
-				physx::PxReal(atts.getFloat("boxX", 0.5))
-				, physx::PxReal(atts.getFloat("boxY", 0.5))
-				, physx::PxReal(atts.getFloat("boxZ", 0.5))
+			physx::PxReal(atts.getFloat("boxX", 0.5))
+			, physx::PxReal(atts.getFloat("boxY", 0.5))
+			, physx::PxReal(atts.getFloat("boxZ", 0.5))
 			),
 			*Physics.gPhysicsSDK->createMaterial(
-				atts.getFloat("staticFriction", 0.5)
-				, atts.getFloat("dynamicFriction", 0.5)
-				, atts.getFloat("restitution", 0.5))
+			atts.getFloat("staticFriction", 0.5)
+			, atts.getFloat("dynamicFriction", 0.5)
+			, atts.getFloat("restitution", 0.5))
 			,
 			true);
 	}
@@ -813,7 +363,7 @@ struct TCollider {
 	physx::PxMaterial* getMaterial() {
 		physx::PxMaterial* mat;
 		collider->getMaterials(&mat, 1);
-			return mat;
+		return mat;
 	}
 
 	// Returns the material properties as a vector
@@ -838,17 +388,17 @@ struct TCollider {
 struct TRigidBody {
 private:
 	// Just for rigidbody creation
-	float temp_density; 
+	float temp_density;
 	bool temp_is_kinematic;
 	bool temp_use_gravity;
 public:
 	physx::PxRigidDynamic* rigidBody;
 
-	TRigidBody() : 
+	TRigidBody() :
 		rigidBody(nullptr)
 		, temp_density(1)
-		, temp_is_kinematic( false )
-		, temp_use_gravity( true ) 
+		, temp_is_kinematic(false)
+		, temp_use_gravity(true)
 	{}
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -869,8 +419,8 @@ public:
 		rigidBody = physx::PxCreateDynamic(
 			*Physics.gPhysicsSDK
 			, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(t->position),
-				Physics.XMVECTORToPxQuat(t->rotation))
+			Physics.XMVECTORToPxVec3(t->position),
+			Physics.XMVECTORToPxQuat(t->rotation))
 			, *c->collider
 			, temp_density);
 		Physics.gScene->addActor(*rigidBody);
@@ -884,7 +434,7 @@ public:
 		TTransform* t = e->get<TTransform>();
 
 		t->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
-		t->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);		
+		t->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
 	}
 
 	void setKinematic(bool is_kinematic) {
@@ -931,11 +481,11 @@ public:
 		staticBody = physx::PxCreateStatic(
 			*Physics.gPhysicsSDK
 			, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(t->position),
-				Physics.XMVECTORToPxQuat(t->rotation))
+			Physics.XMVECTORToPxVec3(t->position),
+			Physics.XMVECTORToPxQuat(t->rotation))
 			, *c->collider
 			);
-		
+
 		Physics.gScene->addActor(*staticBody);
 	}
 
@@ -1017,7 +567,7 @@ public:
 		position_player.y *= 0.5f;
 
 		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(transform->rotation);
-		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));		
+		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
 
 		playerRigid->setKinematicTarget(physx::PxTransform(position_player, rotation_player));
 	}
@@ -1055,7 +605,7 @@ public:
 	}
 
 	void update(float elapsed) {
-		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;		
+		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;
 		transform->lookAt(player->position + player->getUp() * 2, player->getUp());
 	}
 
@@ -1144,7 +694,7 @@ public:
 		bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, transform->position)) && XMVectorGetY(XMVectorEqual(prev_position, transform->position)) && XMVectorGetZ(XMVectorEqual(prev_position, transform->position));
 		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, transform->rotation));
 		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, transform->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, transform->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, transform->scale));
-		
+
 		if (!(posEqual && rotEqual && sclEqual))
 			recalcMinMax();
 
@@ -1189,7 +739,7 @@ public:
 
 	std::string toString() {
 		return "AABB Min: (" + std::to_string(XMVectorGetX(min)) + ", " + std::to_string(XMVectorGetY(min)) + ", " + std::to_string(XMVectorGetZ(min)) + ")" +
-			   "\nAABB Max: (" + std::to_string(XMVectorGetX(max)) + ", " + std::to_string(XMVectorGetY(max)) + ", " + std::to_string(XMVectorGetZ(max)) + ")";
+			"\nAABB Max: (" + std::to_string(XMVectorGetX(max)) + ", " + std::to_string(XMVectorGetY(max)) + ", " + std::to_string(XMVectorGetZ(max)) + ")";
 	}
 };
 
@@ -1245,12 +795,6 @@ public:
 		return "Enemy with physics controller";
 	}
 };
-
-// ----------------------------------------
-// Declaracion que dado un tipo de c++
-// hay una funcion que devuelve un manager de ese tipo
-template< class TObj >
-CObjManager<TObj>* getObjManager();
 
 #endif
 

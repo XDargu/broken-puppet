@@ -27,7 +27,6 @@
     <ClInclude Include="render\render_utils.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="entity.h" />
     <ClInclude Include="doom_controller.h" />
     <ClInclude Include="font\font.h">
       <Filter>font</Filter>
@@ -48,13 +47,26 @@
     <ClInclude Include="ai\aicontroller.h">
       <Filter>ai</Filter>
     </ClInclude>
-    <ClInclude Include="handle.h">
-      <Filter>handle</Filter>
-    </ClInclude>
     <ClInclude Include="XMLParser.h" />
     <ClInclude Include="importer_parser.h" />
     <ClInclude Include="physics_manager.h" />
     <ClInclude Include="entity_inspector.h" />
+    <ClInclude Include="handle\entity.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\handle.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\handle_manager.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\msgs.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\objs_manager.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -77,7 +89,6 @@
     <ClCompile Include="render\render_utils.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="entity.cpp" />
     <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="font\font.cpp">
       <Filter>font</Filter>
@@ -119,6 +130,7 @@
     </ClCompile>
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
+    <ClCompile Include="entity_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

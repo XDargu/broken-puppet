@@ -1,5 +1,5 @@
-#ifndef INC_ENTITY_H_
-#define INC_ENTITY_H_
+#ifndef INC_ENTITY_MANAGER_H_
+#define INC_ENTITY_MANAGER_H_
 
 #include "mcv_platform.h"
 

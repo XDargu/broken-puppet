@@ -2,13 +2,13 @@
 #include "app.h"
 #include "camera.h"
 #include "render/render_utils.h"
-#include "entity.h"
+#include "entity_manager.h"
 #include "doom_controller.h"
 #include "font/font.h"
 #include "render/texture.h"
 #include "importer_parser.h"
 #include "physics_manager.h"
-#include "handle.h"
+#include "handle\handle.h"
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
@@ -62,6 +62,11 @@ CShaderCte<TCtesGlobal> ctes_global;
 
 float fixedUpdateCounter;
 
+void registerAllComponentMsgs() {
+	SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TLife, TMsgDied, onDied);
+}
+
 void createManagers() {
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TTransform>()->init(1024);
@@ -76,8 +81,9 @@ void createManagers() {
 	getObjManager<TAABB>()->init(1024);
 	getObjManager<TPlayerDoomController>()->init(1);
 	getObjManager<TThirdPersonCameraController>()->init(8);
-
 	getObjManager<TEnemyWithPhysics>()->init(8);
+
+	registerAllComponentMsgs();
 }
 
 void initManagers() {
@@ -146,6 +152,26 @@ bool CApp::create() {
   entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
 
   entity_lister.init();
+
+  CEntity* e2 = CHandle::create< CEntity >();
+  TLife *life = e2->add(CHandle::create<TLife>());
+  life->life = 20.f;
+  TCompName* cname = e2->add(CHandle::create<TCompName>());
+  strcpy(cname->name, "pep");
+
+  CHandle h2(e2);
+  CHandle h3 = h2.clone();
+  CEntity* e3 = h3;
+  TLife *life3 = e3->get<TLife>();
+
+
+  TMsgExplosion msg1;
+  msg1.damage = 3.3f;
+  e2->sendMsg(msg1);
+  e2->sendMsg(TMsgDied(2));
+
+  // Create a tewak bar
+  TwBar *bar = TwNewBar("Test bar");
 
   // Enemigo SIN componentes
   aibp.entity = old_entity_manager.create("Enemy");
@@ -288,7 +314,7 @@ void CApp::render() {
   vs_basic.activate();
   ps_basic.activate();
   renderDebugEntities(true);
-  renderEntityDebugList();
+  //renderEntityDebugList();
 
   TwDraw();
 

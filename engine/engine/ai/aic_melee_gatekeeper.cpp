@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "mcv_platform.h"
 #include "aic_melee_gatekeeper.h"
-#include "entity.h"
+#include "../entity_manager.h"
 
 using namespace DirectX;
 
