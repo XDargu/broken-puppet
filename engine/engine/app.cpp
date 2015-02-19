@@ -153,6 +153,7 @@ bool CApp::create() {
   entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
 
   entity_lister.init();
+  entity_actioner.init();
 
   CEntity* e2 = CHandle::create< CEntity >();
   TLife *life = e2->add(CHandle::create<TLife>());
@@ -244,7 +245,7 @@ void CApp::update(float elapsed) {
 
   entity_inspector.update();
   entity_lister.update();
-
+  entity_actioner.update();
   
   ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position = aibp.entity->getPosition();
   ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->rotation = aibp.entity->getRotation();

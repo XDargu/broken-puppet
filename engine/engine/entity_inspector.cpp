@@ -117,16 +117,29 @@ void TW_CALL GetAngularDamping(void *value, void *clientData)
 void TW_CALL ReloadMesh(const void *value, void *clientData)
 {
 	(static_cast<TMesh *>(clientData))->mesh = mesh_manager.getByName((*(const std::string *)value).c_str());
+	TMesh* mesh = static_cast<TMesh *>(clientData);
+	std::strcpy(mesh->path, (*(const std::string *)value).c_str());
 }
 void TW_CALL GetMeshPath(void *value, void *clientData)
-{
-	*static_cast<std::string *>(value) = static_cast<TMesh *>(clientData)->path;
+{	
+	std::string *destPtr = static_cast<std::string *>(value);	
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TMesh *>(clientData)->path);
+	
 }
 // ---------------------------- ADD COMPONENT CALLBACKS --------------------------
 void TW_CALL AddTransform(void *clientData) {
 
 	TTransform* t = CHandle::create<TTransform>();
 	static_cast<CEntity *>(clientData)->add(t);
+	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+}
+
+void TW_CALL AddMesh(void *clientData) {
+
+	TMesh* m = CHandle::create<TMesh>();
+	std::strcpy(m->path, "teapot");
+	m->mesh = mesh_manager.getByName("teapot");
+	static_cast<CEntity *>(clientData)->add(m);
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
@@ -199,6 +212,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (!e_transform) {
 		TwAddButton(bar, "Transform", AddTransform, target_entity, "");
 	}
+	if (!e_mesh) {
+		TwAddButton(bar, "Mesh", AddMesh, target_entity, "");
+	}
 }
 
 
@@ -209,36 +225,6 @@ TwBar *lister_bar;
 CEntityLister::CEntityLister() {}
 
 CEntityLister::~CEntityLister() { }
-
-// AntTweakBar button test
-int entityCounter = 0;
-void TW_CALL CallbackCreateEntity(void *clientData)
-{
-
-	// Create a new entity with some components
-	CEntity* e = CEntityManager::get().createEmptyEntity();
-
-	TCompName* n = getObjManager<TCompName>()->createObj();
-	std::strcpy(n->name, ("Nueva entidad" + std::to_string(entityCounter)).c_str());
-	e->add(n);
-
-	TTransform* t = getObjManager<TTransform>()->createObj();
-	t->position = XMVectorSet(0, 0, 10, 1);
-	t->rotation = XMVectorSet(0, 0, 0, 1);
-	t->scale = XMVectorSet(0.5f, 0.5f, 0.5f, 1);
-	e->add(t);
-
-	TAABB* aabb = getObjManager<TAABB>()->createObj();
-	aabb->setIdentityMinMax(XMVectorSet(-4.5f, 0, -3, 0), XMVectorSet(5.14219f, 4.725f, 3, 0));
-	e->add(aabb);
-	aabb->init();
-
-	TMesh* m = getObjManager<TMesh>()->createObj();
-	m->mesh = mesh_manager.getByName("Teapot");
-	e->add(m);
-
-	entityCounter++;
-}
 
 void TW_CALL CallbackInspectEntity(void *clientData) {
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
@@ -251,7 +237,7 @@ void CEntityLister::init() {
 	CApp &app = CApp::get();
 
 	// AntTweakBar test
-	int barSize[2] = { 224, app.yres };
+	int barSize[2] = { 224, app.yres - 120 };
 	int varPosition[2] = { 0, 0 };
 	TwSetParam(lister_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(lister_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
@@ -266,8 +252,6 @@ void CEntityLister::update() {
 
 	std::vector< CHandle > entities = CEntityManager::get().getEntities();
 
-	TwAddButton(lister_bar, "Actions", NULL, NULL, "");
-	TwAddButton(lister_bar, "New entity", CallbackCreateEntity, NULL, "");
 	TwAddSeparator(lister_bar, "", "");
 	TwAddButton(lister_bar, "Entities", NULL, NULL, "");
 
@@ -281,4 +265,53 @@ void CEntityLister::update() {
 	}
 
 	
+}
+
+// ----------------------------
+
+TwBar *actioner_bar;
+
+CEntityActioner::CEntityActioner() {}
+
+CEntityActioner::~CEntityActioner() { }
+
+// AntTweakBar button test
+int entityCounter = 0;
+void TW_CALL CallbackCreateEntity(void *clientData)
+{
+
+	// Create a new entity with some components
+	CEntity* e = CEntityManager::get().createEmptyEntity();
+
+	TCompName* n = getObjManager<TCompName>()->createObj();
+	std::strcpy(n->name, ("Nueva entidad" + std::to_string(entityCounter)).c_str());
+	e->add(n);
+
+	entityCounter++;
+}
+
+void CEntityActioner::init() {
+	// Create a tewak bar
+	actioner_bar = TwNewBar("Actioner");
+
+	CApp &app = CApp::get();
+
+	// AntTweakBar test
+	int barSize[2] = { 224, 224 };
+	int varPosition[2] = { 0, app.yres - 120 };
+	TwSetParam(actioner_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	TwSetParam(actioner_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
+	TwDefine(" Lister label='Entity actions' ");
+	TwDefine(" Lister refresh='0.3' ");
+}
+
+void CEntityActioner::update() {
+
+	TwRemoveAllVars(actioner_bar);
+
+	std::vector< CHandle > entities = CEntityManager::get().getEntities();
+
+	TwAddButton(actioner_bar, "New entity", CallbackCreateEntity, NULL, "");
+
+
 }

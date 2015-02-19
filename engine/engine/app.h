@@ -21,6 +21,7 @@ public:
 	HWND hWnd;
 	CEntityInspector entity_inspector;
 	CEntityLister	 entity_lister;
+	CEntityActioner	 entity_actioner;
 
 	CApp();
 	void loadConfig();

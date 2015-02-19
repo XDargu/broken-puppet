@@ -26,4 +26,13 @@ public:
 	void update();
 };
 
+class CEntityActioner
+{
+public:
+	CEntityActioner();
+	~CEntityActioner();
+	void init();
+	void update();
+};
+
 #endif
