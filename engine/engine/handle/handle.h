@@ -93,6 +93,7 @@ private:
 #include "handle/msgs.h"
 #include "handle/entity.h"
 #include "../entity_manager.h"
+#include "../io/iostatus.h"
 
 // ----------------------------------------
 struct TTransform {     // 1
@@ -498,7 +499,7 @@ public:
 	}
 };
 
-struct TPlayerDoomController {
+struct TPlayerController {
 private:
 	CHandle transform;
 public:
@@ -507,7 +508,7 @@ public:
 	float movement_velocity;
 	float rotation_velocity;
 
-	TPlayerDoomController()
+	TPlayerController()
 		: movement_velocity(5.0f)
 		, rotation_velocity(deg2rad(90.f))
 	{}
@@ -524,12 +525,12 @@ public:
 	}
 
 	void init() {
-		CHandleManager* hm = CHandleManager::the_register.getByName("playerDoomController");
+		CHandleManager* hm = CHandleManager::the_register.getByName("playerController");
 		CEntity* e = hm->getOwner(this);
 		transform = e->get<TTransform>();
 		TTransform* trans = (TTransform*)transform;
 
-		assert(trans || fatal("TPlayerDoomController requieres a TTransform component"));
+		assert(trans || fatal("TPlayerController requieres a TTransform component"));
 
 		// Teleport the kinematic player to the player position
 		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(trans->position);
@@ -587,40 +588,187 @@ public:
 	}
 };
 
-struct TThirdPersonCameraController {
+struct TPlayerPivotController {
 private:
-	CHandle transform;
+	CHandle m_transform;
+	CHandle player_transform;
 public:
-	CHandle	player;
 
-	TThirdPersonCameraController() {}
+	float rotation_velocity;
+
+	TPlayerPivotController() : rotation_velocity(deg2rad(90.0f)) {}
 
 	void loadFromAtts(MKeyValue &atts) {
+		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 	}
 
 	void init() {
 		CEntity* e_player = CEntityManager::get().getByName("Player");
 
-		assert(e_player || fatal("TFirstPersonCameraController requieres a player entity"));
+		assert(e_player || fatal("TPlayerPivotController requieres a player entity"));
 
-		player = e_player->get<TTransform>();
-		TTransform* player_trans = (TTransform*)player;
+		player_transform = e_player->get<TTransform>();
+		TTransform* player_trans = (TTransform*)player_transform;
 
-		assert(player_trans || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
+		assert(player_trans || fatal("TPlayerPivotController requieres a player entity with a TTransform component"));
 
-		CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
+		CHandleManager* hm = CHandleManager::the_register.getByName("playerPivotController");
 		CEntity* e = hm->getOwner(this);
-		transform = e->get<TTransform>();
-		TTransform* trans = (TTransform*)transform;
+		m_transform = e->get<TTransform>();
+		TTransform* transform = (TTransform*)m_transform;
 
-		assert(trans || fatal("TFirstPersonCameraController requieres a TTransform component"));
+		// Move the pivot to the player position
+		transform->position = player_trans->position;
+
+		assert(transform || fatal("TPlayerPivotController requieres a TTransform component"));
 	}
 
 	void update(float elapsed) {
-		TTransform* trans = (TTransform*)transform;
-		TTransform* player_trans = (TTransform*)player;
-		trans->position = player_trans->position - player_trans->getFront() * 3 + player_trans->getUp() * 3;
-		trans->lookAt(player_trans->position + player_trans->getUp() * 2, player_trans->getUp());
+		TTransform* player_trans = (TTransform*)player_transform;
+		TTransform* transform = (TTransform*)m_transform;
+
+		// Move the pivot to the player position
+		transform->position = player_trans->position;
+		
+		CIOStatus &io = CIOStatus::get();
+
+		CIOStatus::TMouse mouse = io.getMouse();
+		XMVECTOR rot = XMQuaternionRotationAxis(transform->getUp(), -rotation_velocity * mouse.dx * elapsed);
+		transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
+	}
+
+	
+	std::string toString() {
+		return "Player pivot controller";
+	}
+};
+
+struct TCameraPivotController {
+private:
+	CHandle m_transform;
+	CHandle player_pivot_transform;
+public:
+
+	float tilt_velocity;
+	float min_tilt;
+	float max_tilt;
+
+	physx::PxVec3 offset;
+
+	TCameraPivotController() : tilt_velocity(deg2rad(90.0f)), min_tilt(deg2rad(-35)), max_tilt(deg2rad(35)) {}
+
+	void loadFromAtts(MKeyValue &atts) {
+		tilt_velocity = deg2rad(atts.getFloat("tiltVelocity", 90));
+		offset = physx::PxVec3(0.5, 2, 0.5);
+	}
+
+	void init() {
+		CEntity* e_player = CEntityManager::get().getByName("PlayerPivot");
+
+		assert(e_player || fatal("TCameraPivotController requieres a player pivot entity"));
+
+		player_pivot_transform = e_player->get<TTransform>();
+		TTransform* player_pivot_trans = (TTransform*)player_pivot_transform;
+
+		assert(player_pivot_trans || fatal("TCameraPivotController requieres a player pivot entity with a TTransform component"));
+
+		CHandleManager* hm = CHandleManager::the_register.getByName("cameraPivotController");
+		CEntity* e = hm->getOwner(this);
+		m_transform = e->get<TTransform>();
+		TTransform* transform = (TTransform*)m_transform;
+
+		transform->position = player_pivot_trans->position + player_pivot_trans->getLeft() * -offset.x + player_pivot_trans->getUp() * offset.y + player_pivot_trans->getFront() * -offset.z;
+		transform->rotation = XMVectorSet(0, 0, 0, 1);
+
+		assert(transform || fatal("TCameraPivotController requieres a TTransform component"));
+	}
+
+	void update(float elapsed) {
+		TTransform* player_pivot_trans = (TTransform*)player_pivot_transform;
+		TTransform* transform = (TTransform*)m_transform;
+
+		transform->position = player_pivot_trans->position + player_pivot_trans->getLeft() * -offset.x + player_pivot_trans->getUp() * offset.y + player_pivot_trans->getFront() * -offset.z;
+
+		// Get player pivot Y rotation
+		float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());
+		float m_yaw = getYawFromVector(transform->getFront());
+		XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw - m_yaw);
+
+		CIOStatus &io = CIOStatus::get();
+
+		CIOStatus::TMouse mouse = io.getMouse();
+		XMVECTOR rot = XMQuaternionRotationAxis(transform->getLeft(), -tilt_velocity * mouse.dy * elapsed);
+		transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
+		transform->rotation = XMQuaternionMultiply(transform->rotation, player_pivot_rot);
+
+		// Clamp max and min camera Tilt
+		float m_pitch = getPitchFromVector(transform->getFront());
+		if (m_pitch > max_tilt)
+			m_pitch = max_tilt;
+		if (m_pitch < min_tilt)
+			m_pitch = min_tilt;
+
+		m_yaw = getYawFromVector(transform->getFront());		
+
+		XMVECTOR m_rotation = XMQuaternionRotationRollPitchYaw(m_pitch, m_yaw, 0);
+		transform->rotation = m_rotation;
+
+		// Clamp values with quaternion multiplication fails, why?????!!!
+		//XMVECTOR max_pitch_correction = XMQuaternionRotationAxis(player_pivot_trans->getLeft(), max_tilt - m_pitch);
+		//XMVECTOR min_pitch_correction = XMQuaternionRotationAxis(player_pivot_trans->getLeft(), m_pitch - min_tilt);
+		//XMVECTOR max_pitch_correction = XMQuaternionRotationRollPitchYaw(m_pitch - max_tilt, 0, 0);
+		//XMVECTOR min_pitch_correction = XMQuaternionRotationRollPitchYaw(m_pitch - min_tilt, 0, 0);
+
+		/*if (m_pitch > max_tilt)
+		transform->rotation = XMQuaternionMultiply(transform->rotation, max_pitch_correction);*/
+		/*if (m_pitch > min_tilt)
+		transform->rotation = XMQuaternionMultiply(transform->rotation, min_pitch_correction);*/
+		
+	}
+
+	std::string toString() {
+		return "Camera pivot controller";
+	}
+};
+
+struct TThirdPersonCameraController {
+private:
+	CHandle m_transform;
+	CHandle	camera_pivot_transform;
+public:
+
+	physx::PxVec3 offset;
+
+	TThirdPersonCameraController() {}
+
+	void loadFromAtts(MKeyValue &atts) {
+		offset = physx::PxVec3(0, 0, 2);
+	}
+
+	void init() {
+		CEntity* e_camera_pivot = CEntityManager::get().getByName("CameraPivot");
+
+		assert(e_camera_pivot || fatal("TThirdPersonCameraController requieres a camera pivot entity"));
+
+		camera_pivot_transform = e_camera_pivot->get<TTransform>();
+		TTransform* camera_pivot_trans = (TTransform*)e_camera_pivot;
+
+		assert(camera_pivot_trans || fatal("TThirdPersonCameraController requieres a camera pivot entity with a TTransform component"));
+
+		CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
+		CEntity* e = hm->getOwner(this);
+		m_transform = e->get<TTransform>();
+		TTransform* trans = (TTransform*)m_transform;
+
+		assert(trans || fatal("TThirdPersonCameraController requieres a TTransform component"));
+	}
+
+	void update(float elapsed) {
+		TTransform* camera_pivot_trans = (TTransform*)camera_pivot_transform;
+		TTransform* transform = (TTransform*)m_transform;
+
+		transform->position = camera_pivot_trans->position + camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * -offset.z;
+		transform->rotation = camera_pivot_trans->rotation;
 	}
 
 	std::string toString() {

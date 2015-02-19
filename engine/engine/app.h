@@ -12,7 +12,6 @@ class CApp {
   void render();
   void renderEntities();
   void renderDebugEntities(bool draw_names);
-  void CApp::renderEntityDebugList();
 
 public:
 

@@ -10,6 +10,8 @@ float rad2deg(float rad);
 float getYawFromVector(XMVECTOR front);
 XMVECTOR getVectorFromYaw(float yaw);
 
+float getPitchFromVector(XMVECTOR front);
+
 
 bool isKeyPressed(int key);
 

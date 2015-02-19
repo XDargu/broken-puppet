@@ -4,7 +4,7 @@
     <transform position="0 0 -5" rotation="0 0 0 1"  scale="1 1 1"/>
     <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
     <mesh path="Prota" color="1 1 1 1"/>
-    <playerDoomController movementVelocity="6" rotationVelocity="90"/>
+    <playerController movementVelocity="6" rotationVelocity="90"/>
   </entity>
   <entity>
     <name name="John"/>
@@ -58,6 +58,16 @@
     <collider staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" boxX="0.8" boxY="0.5" boxZ="0.7"/>
     <rigidbody density="1"/>
   </entity>
+  <entity>
+    <name name="PlayerPivot"/>
+    <transform position="0 0 0" rotation="0 0 0 1"  scale="1 1 1"/>
+    <playerPivotController rotationVelocity="270" />
+  </entity>
+  <entity>
+    <name name="CameraPivot"/>
+    <transform position="0 0 0" rotation="0 0 0 1"  scale="1 1 1"/>
+    <cameraPivotController tiltVelocity="270"/>
+  </entity>  
   <entity>
     <name name="Camera"/>
     <transform position="0 2 -9" rotation="0 0 0 1"  scale="1 1 1"/>

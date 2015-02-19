@@ -38,6 +38,12 @@ void CEntityInspector::init() {
 
 // ---------------------------- GET AND SET COMPONENTS --------------------------
 
+// TRANSFORM
+void TW_CALL GetPitch(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = rad2deg( getPitchFromVector(static_cast<TTransform *>(clientData)->getFront()) );
+}
+
 // COLLIDER
 void TW_CALL SetStaticFriction(const void *value, void *clientData)
 {
@@ -176,6 +182,8 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (e_transform) {
 		TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform");
 		TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform");
+		// Yaw Pitch Roll
+		TwAddVarCB(bar, "Pich", TW_TYPE_FLOAT, NULL, GetPitch, e_transform, " group=Transform");
 		TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform");
 		TwAddSeparator(bar, "Transform", "");
 	}

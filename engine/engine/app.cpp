@@ -80,8 +80,10 @@ void createManagers() {
 	getObjManager<TRigidBody>()->init(512);
 	getObjManager<TStaticBody>()->init(512);
 	getObjManager<TAABB>()->init(1024);
-	getObjManager<TPlayerDoomController>()->init(1);
-	getObjManager<TThirdPersonCameraController>()->init(8);
+	getObjManager<TPlayerController>()->init(1);
+	getObjManager<TThirdPersonCameraController>()->init(1);
+	getObjManager<TCameraPivotController>()->init(1);
+	getObjManager<TPlayerPivotController>()->init(1);
 	getObjManager<TEnemyWithPhysics>()->init(64);
 
 	registerAllComponentMsgs();
@@ -93,9 +95,11 @@ void initManagers() {
 	getObjManager<TRigidBody>()->initHandlers();
 	getObjManager<TStaticBody>()->initHandlers();
 	getObjManager<TAABB>()->initHandlers();
-	getObjManager<TPlayerDoomController>()->initHandlers();
+	getObjManager<TPlayerController>()->initHandlers();
+	getObjManager<TPlayerPivotController>()->initHandlers();
+	getObjManager<TCameraPivotController>()->initHandlers();	
 	getObjManager<TThirdPersonCameraController>()->initHandlers();
-	getObjManager<TEnemyWithPhysics>()->initHandlers();
+	getObjManager<TEnemyWithPhysics>()->initHandlers();	
 }
 
 bool CApp::create() {
@@ -250,7 +254,9 @@ void CApp::update(float elapsed) {
 
   aibp.Recalc(elapsed);
 
-  getObjManager<TPlayerDoomController>()->update(elapsed); // Update player transform
+  getObjManager<TPlayerController>()->update(elapsed); // Update player transform
+  getObjManager<TPlayerPivotController>()->update(elapsed);
+  getObjManager<TCameraPivotController>()->update(elapsed);
   getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
@@ -268,7 +274,7 @@ void CApp::fixedUpdate(float elapsed) {
   physics_manager.gScene->simulate(physics_manager.timeStep);
   physics_manager.gScene->fetchResults(true);
 
-  getObjManager<TPlayerDoomController>()->fixedUpdate(elapsed); // Update kinematic player
+  getObjManager<TPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
   getObjManager<TEnemyWithPhysics>()->fixedUpdate(elapsed);
 }
@@ -402,81 +408,6 @@ void CApp::renderDebugEntities(bool draw_names) {
 			wiredCube.activateAndRender();
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
 			wiredCube.activateAndRender();
-		}
-	}
-}
-
-void CApp::renderEntityDebugList() {
-	font.printf(10, 10, "Entities: %i\nPress <L> to list entities, press <K> to inspect entities in front of you", entity_manager.getEntities().size());	
-
-	TTransform* player_t = ((CEntity*)entity_manager.getByName("Player"))->get<TTransform>();
-
-	font.printf(10, 45, "Player position: (%f, %f, %f)", XMVectorGetX(player_t->position), XMVectorGetY(player_t->position), XMVectorGetZ(player_t->position));
-	font.printf(10, 60, "Player rotation: (%f, %f, %f, %f)", XMVectorGetX(player_t->rotation), XMVectorGetY(player_t->rotation), XMVectorGetZ(player_t->rotation), XMVectorGetW(player_t->rotation));
-
-	bool debug_all_entities = isKeyPressed('L');
-	bool debug_front_entities = isKeyPressed('K');
-	bool entity_in_front = false;
-	int line_jump_count = 0;
-	int current_jump_count = 0;
-	int draw_counter = 0;
-
-	if (debug_all_entities || debug_front_entities)
-	{
-		std::string s;
-		std::string s_name;
-		for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-			s = "";
-			s_name = "";
-			current_jump_count = 0;
-			CEntity* e = entity_manager.getEntities()[i];
-			TCompName* name = e->get<TCompName>();
-			TTransform* t = e->get<TTransform>();
-			TMesh* mesh = e->get<TMesh>();
-			TCamera* cam = e->get<TCamera>();
-			TCollider* collider = e->get<TCollider>();
-			TRigidBody* rigid = e->get<TRigidBody>();			
-			TAABB* aabb = e->get<TAABB>();
-
-			if (debug_all_entities)
-			{
-				if (name)
-					s_name = name->toString() + "\n";
-			}
-			else if (debug_front_entities)
-			{
-				if (t && XMVectorGetX(XMVector3Dot(XMVector3Normalize(t->position - player_t->position), player_t->getFront())) > 0.8f)
-				{
-					entity_inspector.inspectEntity(entity_manager.getEntities()[i]);
-					if (name)
-						s_name = name->toString() + "\n";
-					if (t)
-						s += "" + t->toString() + "\n";
-					if (aabb)
-						s += "" + aabb->toString() + "\n";
-					if (mesh)
-						s += "" + mesh->toString() + "\n";
-					if (cam)
-						s += "" + cam->toString() + "\n";
-					if (collider)
-						s += "" + collider->toString() + "\n";
-					if (rigid)
-						s += "" + rigid->toString() + "\n";
-				}
-			}
-
-			for (int j = 0; j < s.size(); j++) {
-				if (s[j] == '\n') { current_jump_count++; }
-			}
-			line_jump_count += current_jump_count;
-
-			if (!s.empty() || !s_name.empty()) {
-				draw_counter++;
-				font.color = 0xffff00ff;
-				font.printf(20, 80 + (line_jump_count - current_jump_count + draw_counter) * 20, s_name.c_str());
-				font.color = 0xffffffff;
-				font.printf(30, 80 + (line_jump_count - current_jump_count + draw_counter + 1) * 20, s.c_str());
-			}
 		}
 	}
 }

@@ -96,15 +96,19 @@ void CIOStatus::setMousePointer(bool mode){
 	// Set delta values if centered (add offset)
 	if (mode) {
 		POINT mid_screen = { App.xres / 2, App.yres / 2 };
-		::ClientToScreen(App.hWnd, &mid_screen);
+		::ClientToScreen(App.hWnd, &mid_screen);		
 
 		POINT cursor_screen;
 		::GetCursorPos(&cursor_screen);
 		::ScreenToClient(App.hWnd, &cursor_screen);
 
+		float del_x = cursor_screen.x - mouse.prev_x;
+		float del_y = cursor_screen.y - mouse.prev_y;
+
 		::SetCursorPos(mid_screen.x, mid_screen.y);
-		mouse.prev_x += cursor_screen.x - mid_screen.x;
-		mouse.prev_y += cursor_screen.y - mid_screen.y;
+
+		mouse.prev_x = (App.xres / 2) + del_x;
+		mouse.prev_y = (App.yres / 2) + del_y;
 	}
 }
 
