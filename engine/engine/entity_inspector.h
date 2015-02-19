@@ -35,4 +35,13 @@ public:
 	void update();
 };
 
+class CDebugOptioner
+{
+public:
+
+	CDebugOptioner();
+	~CDebugOptioner();
+	void init();
+};
+
 #endif

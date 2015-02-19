@@ -11,9 +11,14 @@ class CApp {
   void fixedUpdate(float elapsed); // Physx update
   void render();
   void renderEntities();
-  void renderDebugEntities(bool draw_names);
+  void renderDebugEntities();
 
 public:
+
+	bool renderAABB;
+	bool renderAxis;
+	bool renderGrid;
+	bool renderNames;
 
 	int  xres;
 	int  yres;
@@ -21,6 +26,7 @@ public:
 	CEntityInspector entity_inspector;
 	CEntityLister	 entity_lister;
 	CEntityActioner	 entity_actioner;
+	CDebugOptioner	 debug_optioner;
 
 	CApp();
 	void loadConfig();

@@ -201,8 +201,8 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarCB(bar, "Mass", TW_TYPE_FLOAT, SetMass, GetMass, e_rigidbody, " min=0.1 group=Rigidbody");
 		TwAddVarCB(bar, "Damping", TW_TYPE_FLOAT, SetLinearDamping, GetLinearDamping, e_rigidbody, " min=0 group=Rigidbody");
 		TwAddVarCB(bar, "Angular Damping", TW_TYPE_FLOAT, SetAngularDamping, GetAngularDamping, e_rigidbody, " min=0 group=Rigidbody");
-		TwAddVarCB(bar, "Use Gravity", TW_TYPE_BOOL32, SetGravity, GetGravity, e_rigidbody, " group=Rigidbody");
-		TwAddVarCB(bar, "Is Kinematic", TW_TYPE_BOOL32, SetKinematic, GetKinematic, e_rigidbody, " group=Rigidbody");		
+		TwAddVarCB(bar, "Use Gravity", TW_TYPE_BOOL8, SetGravity, GetGravity, e_rigidbody, " group=Rigidbody");
+		TwAddVarCB(bar, "Is Kinematic", TW_TYPE_BOOL8, SetKinematic, GetKinematic, e_rigidbody, " group=Rigidbody");
 		TwAddVarRO(bar, "Linear velocity", TW_TYPE_DIR3F, &linearVelocity, " group=Rigidbody");
 		TwAddVarRO(bar, "Angular velocity", TW_TYPE_DIR3F, &angularVelocity, " group=Rigidbody");
 	}	
@@ -322,4 +322,33 @@ void CEntityActioner::update() {
 	TwAddButton(actioner_bar, "New entity", CallbackCreateEntity, NULL, "");
 
 
+}
+
+
+// ------------------------------------------------------
+TwBar *debug_bar;
+
+CDebugOptioner::CDebugOptioner()
+{}
+
+CDebugOptioner::~CDebugOptioner() { }
+
+void CDebugOptioner::init() {
+	// Create a tewak bar
+	debug_bar = TwNewBar("DebugOptioner");
+
+	CApp &app = CApp::get();
+
+	// AntTweakBar test
+	int barSize[2] = { 224, 120 };
+	int varPosition[2] = { 240, 20 };
+	TwSetParam(debug_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	TwSetParam(debug_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
+	TwDefine(" DebugOptioner label='Debug options' ");
+	TwDefine(" DebugOptioner refresh='2' ");
+
+	TwAddVarRW(debug_bar, "Draw grid", TW_TYPE_BOOL8, &app.renderGrid, "");
+	TwAddVarRW(debug_bar, "Draw axis", TW_TYPE_BOOL8, &app.renderAxis, "");
+	TwAddVarRW(debug_bar, "Draw names", TW_TYPE_BOOL8, &app.renderNames, "");
+	TwAddVarRW(debug_bar, "Draw AABBs", TW_TYPE_BOOL8, &app.renderAABB, "");
 }

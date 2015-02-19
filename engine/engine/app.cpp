@@ -107,6 +107,11 @@ bool CApp::create() {
   if (!::render.createDevice())
     return false;
 
+  renderAABB = false;
+  renderAxis = false;
+  renderGrid = false;
+  renderNames = false;
+
   createManagers();
 
   physics_manager.init();
@@ -159,6 +164,7 @@ bool CApp::create() {
 
   entity_lister.init();
   entity_actioner.init();
+  debug_optioner.init();
 
   CEntity* e2 = CHandle::create< CEntity >();
   TLife *life = e2->add(CHandle::create<TLife>());
@@ -327,7 +333,7 @@ void CApp::render() {
   renderEntities();
   vs_basic.activate();
   ps_basic.activate();
-  renderDebugEntities(true);
+  renderDebugEntities();
   //renderEntityDebugList();
 
   TwDraw();
@@ -358,11 +364,13 @@ void CApp::renderEntities() {
   }
 }
 
-void CApp::renderDebugEntities(bool draw_names) {
+void CApp::renderDebugEntities() {
 
 	setWorldMatrix(XMMatrixIdentity());
-	grid.activateAndRender();
-	axis.activateAndRender();
+	if (renderGrid)
+		grid.activateAndRender();
+	if (renderAxis)
+		axis.activateAndRender();
 
 	// Render entities
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
@@ -377,14 +385,15 @@ void CApp::renderDebugEntities(bool draw_names) {
 			continue;
 
 		setWorldMatrix(t->getWorld());
-		axis.activateAndRender();
+		if (renderAxis)
+			axis.activateAndRender();
 
 		// If the entity has name, print it
-		if (name && draw_names)
+		if (name && renderNames)
 			font.print3D(t->position, name->name);
 
 		// If the entity has an AABB, draw it
-		if (aabb) {
+		if (aabb && renderAABB) {
 			bool intersects = false;
 			for (int j = 0; j < entity_manager.getEntities().size(); ++j) {
 				CEntity* e2 = (CEntity*)entity_manager.getEntities()[j];

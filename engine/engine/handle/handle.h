@@ -501,7 +501,8 @@ public:
 
 struct TPlayerController {
 private:
-	CHandle transform;
+	CHandle m_transform;
+	CHandle player_pivot_transform;
 public:
 
 	physx::PxRigidDynamic*	 playerRigid; // Kinematic player. Should be changed to Physx Character Controller
@@ -525,10 +526,19 @@ public:
 	}
 
 	void init() {
+		CEntity* e_player = CEntityManager::get().getByName("PlayerPivot");
+
+		assert(e_player || fatal("TPlayerController requieres a player pivot entity"));
+
+		player_pivot_transform = e_player->get<TTransform>();
+		TTransform* player_pivot_trans = (TTransform*)player_pivot_transform;
+
+		assert(player_pivot_trans || fatal("TPlayerController requieres a player pivot entity with a TTransform component"));
+
 		CHandleManager* hm = CHandleManager::the_register.getByName("playerController");
 		CEntity* e = hm->getOwner(this);
-		transform = e->get<TTransform>();
-		TTransform* trans = (TTransform*)transform;
+		m_transform = e->get<TTransform>();
+		TTransform* trans = (TTransform*)m_transform;
 
 		assert(trans || fatal("TPlayerController requieres a TTransform component"));
 
@@ -543,33 +553,44 @@ public:
 	}
 
 	void update(float elapsed) {
-		TTransform* trans = (TTransform*)transform;
+		TTransform* transform = (TTransform*)m_transform;
+		TTransform* player_pivot_trans = (TTransform*)player_pivot_transform;
 
 		XMVECTOR delta_pos = XMVectorZero();
-		XMVECTOR delta_q = XMQuaternionIdentity();
+		bool re_rotate = false;
 
 		// Que teclas se pulsan -> que cambios hacer
-		if (isKeyPressed('W'))
-			delta_pos += elapsed * movement_velocity * trans->getFront();
-		else if (isKeyPressed('S'))
-			delta_pos -= elapsed * movement_velocity * trans->getFront();
-		if (isKeyPressed('A'))
-			delta_pos += elapsed * movement_velocity * trans->getLeft();
-		else if (isKeyPressed('D'))
-			delta_pos -= elapsed * movement_velocity * trans->getLeft();
-
-		if (isKeyPressed('Q'))
-			delta_q = XMQuaternionRotationAxis(trans->getUp(), elapsed * rotation_velocity);
-		else if (isKeyPressed('E'))
-			delta_q = XMQuaternionRotationAxis(trans->getUp(), -elapsed * rotation_velocity);
+		if (isKeyPressed('W')) {
+			delta_pos += elapsed * movement_velocity * transform->getFront();
+			re_rotate = true;
+		}
+		else if (isKeyPressed('S')) {
+			delta_pos -= elapsed * movement_velocity * transform->getFront();
+			re_rotate = true;
+		}
+		if (isKeyPressed('A')) {
+			delta_pos += elapsed * movement_velocity * transform->getLeft();
+			re_rotate = true;
+		}
+		else if (isKeyPressed('D')) {
+			delta_pos -= elapsed * movement_velocity * transform->getLeft();
+			re_rotate = true;
+		}
 
 		// Actualizar la posicion/rotacion
-		trans->position += delta_pos;
-		trans->rotation = XMQuaternionMultiply(trans->rotation, delta_q);
+		transform->position += delta_pos;
+
+		if (re_rotate) {
+			// Get player pivot Y rotation
+			float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());
+			float m_yaw = getYawFromVector(transform->getFront());
+			XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw - m_yaw);
+			transform->rotation = XMQuaternionSlerp(transform->rotation, XMQuaternionMultiply(transform->rotation, player_pivot_rot), 0.05f);
+		}
 	}
 
 	void fixedUpdate(float elapsed) {
-		TTransform* trans = (TTransform*)transform;
+		TTransform* trans = (TTransform*)m_transform;
 
 		// Kinematic player update
 		// Rotate the capsule
