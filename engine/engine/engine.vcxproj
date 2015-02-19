@@ -173,6 +173,7 @@
     <ClInclude Include="handle\msgs.h" />
     <ClInclude Include="handle\objs_manager.h" />
     <ClInclude Include="importer_parser.h" />
+    <ClInclude Include="io\iostatus.h" />
     <ClInclude Include="items_by_name.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="font\font.cpp" />
     <ClCompile Include="handle\handle.cpp" />
     <ClCompile Include="importer_parser.cpp" />
+    <ClCompile Include="io\iostatus.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\mesh.cpp" />

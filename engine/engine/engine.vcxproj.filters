@@ -67,6 +67,9 @@
       <Filter>handle</Filter>
     </ClInclude>
     <ClInclude Include="entity_manager.h" />
+    <ClInclude Include="io\iostatus.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -131,6 +134,9 @@
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="entity_manager.cpp" />
+    <ClCompile Include="io\iostatus.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -153,6 +159,9 @@
     </Filter>
     <Filter Include="ai">
       <UniqueIdentifier>{fbceda24-3914-46d4-b638-015953a730f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{b70b3f42-c6cb-4070-ab96-e5e2079108e9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,7 @@ CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
 
 #include "ai\ai_basic_patroller.h"
+#include "io\iostatus.h"
 
 ai_basic_patroller aibp;
 
@@ -231,7 +232,18 @@ void CApp::doFrame() {
 }
 
 void CApp::update(float elapsed) {
+
+  CIOStatus& io = CIOStatus::get();
+  // Update input
+  io.update(elapsed);
+
+  if (isKeyPressed('I')) {
+	  io.setMousePointer(true);
+  }
 	
+  if (isKeyPressed('O')) {
+	  io.setMousePointer(false);
+  }
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
@@ -321,7 +333,7 @@ void CApp::render() {
 void CApp::renderEntities() {
   
   // Render entities
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
   {
 	  TTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TTransform>();
 	  TMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TMesh>();
