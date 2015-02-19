@@ -55,7 +55,7 @@ class CHandle;
 
 class CEntityManager {
 	typedef std::vector< CHandle > VEntities;
-
+	unsigned int entity_event_count;
 public:
 	static CEntityManager& get();
 
@@ -65,6 +65,8 @@ public:
 	const VEntities& getEntities() const { return entities; }
 
 	CHandle createEmptyEntity();
+
+	unsigned int getEntityEventCount();
 
 protected:
 	// General entity vector

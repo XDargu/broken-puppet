@@ -215,8 +215,10 @@ public:
 		updating_objs = true;
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
-		for (; num--; obj++)
-			obj->update(elapsed);
+		for (; num--; obj++) {
+			if (obj->active)
+				obj->update(elapsed);
+		}
 		updating_objs = false;
 	}
 
@@ -225,9 +227,20 @@ public:
 		updating_objs = true;
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
-		for (; num--; obj++)
-			obj->fixedUpdate(elapsed);
+		for (; num--; obj++) {
+			if (obj->active)
+				obj->fixedUpdate(elapsed);
+		}
 		updating_objs = false;
+	}
+
+	// Set activation
+	void setActiveComponents(bool active) {
+		TObj* obj = objs;
+		uint32_t num = num_objects_in_use;
+		for (; num--; obj++) {
+			obj->active = active;
+		}
 	}
 };
 

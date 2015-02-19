@@ -94,6 +94,7 @@ CEntityManager& CEntityManager::get() {
 }
 
 void CEntityManager::add(CHandle the_entity) {
+	entity_event_count++;
 	entities.push_back(the_entity);
 }
 
@@ -102,6 +103,7 @@ bool CEntityManager::remove(CHandle the_entity) {
 	if (it == entities.end())
 		return false;
 
+	entity_event_count++;
 	entities.erase(it);
 	return true;
 }
@@ -118,5 +120,10 @@ CHandle CEntityManager::getByName(const char *name) {
 CHandle CEntityManager::createEmptyEntity() {
 	CHandle the_entity = getObjManager<CEntity>()->createObj();
 	entities.push_back(the_entity);
+	entity_event_count++;
 	return the_entity;
+}
+
+unsigned int CEntityManager::getEntityEventCount() {
+	return entity_event_count;
 }

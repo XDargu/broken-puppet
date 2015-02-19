@@ -20,6 +20,8 @@ CIOStatus::CIOStatus( ) {
 	buttons[DIGITAL_UP].key = 'W';
 	buttons[DIGITAL_DOWN].key = 'S';
 
+	buttons[INSPECTOR_MODE].key = 'I';
+
 	mouse.dx = 0;
 	mouse.dy = 0;
 
@@ -88,6 +90,10 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 		prev_x = mid_screen.x;
 		prev_y = mid_screen.y;
 	}
+}
+
+bool CIOStatus::getMousePointer() {
+	return mouse_pointer;
 }
 
 void CIOStatus::setMousePointer(bool mode){

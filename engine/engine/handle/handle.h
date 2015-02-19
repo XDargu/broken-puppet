@@ -96,7 +96,15 @@ private:
 #include "../io/iostatus.h"
 
 // ----------------------------------------
-struct TTransform {     // 1
+
+struct TBaseComponent {
+public:
+	bool active;
+
+	TBaseComponent() : active(true) {}
+};
+
+struct TTransform : TBaseComponent {     // 1
 	XMVECTOR position;
 	XMVECTOR rotation;
 	XMVECTOR scale;
@@ -177,7 +185,7 @@ struct TController {    // 2 ...
 		return "Velocity: " + std::to_string(velocity) + "Acceleration: " + std::to_string(acc);
 	}
 };
-struct TLife {    // 2 ...
+struct TLife : TBaseComponent {    // 2 ...
 	float life;
 
 	TLife() : life(1.0f) { }
@@ -201,7 +209,7 @@ struct TLife {    // 2 ...
 		return "Life: " + std::to_string(life);
 	}
 };
-struct TCompName {     // 1
+struct TCompName : TBaseComponent {     // 1
 	char name[32];
 	TCompName() { name[0] = 0x00; }
 	TCompName(const char *aname) { strcpy(name, aname); }
@@ -213,7 +221,7 @@ struct TCompName {     // 1
 		return name;
 	}
 };
-struct TMesh {
+struct TMesh : TBaseComponent {
 	const CMesh* mesh;
 	char path[32];
 	XMVECTOR color;
@@ -232,7 +240,7 @@ struct TMesh {
 		return "Mesh: " + std::string(path);
 	}
 };
-struct TCamera {
+struct TCamera : TBaseComponent {
 private:
 	CHandle transform;
 public:
@@ -339,7 +347,7 @@ public:
 	}
 };
 
-struct TCollider {
+struct TCollider : TBaseComponent {
 
 	physx::PxShape* collider;
 
@@ -389,7 +397,7 @@ struct TCollider {
 	}
 };
 
-struct TRigidBody {
+struct TRigidBody : TBaseComponent {
 private:
 	CHandle transform;
 	// Just for rigidbody creation
@@ -465,7 +473,7 @@ public:
 	}
 };
 
-struct TStaticBody {
+struct TStaticBody : TBaseComponent {
 public:
 	physx::PxRigidStatic* staticBody;
 
@@ -499,7 +507,7 @@ public:
 	}
 };
 
-struct TPlayerController {
+struct TPlayerController : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle player_pivot_transform;
@@ -609,7 +617,7 @@ public:
 	}
 };
 
-struct TPlayerPivotController {
+struct TPlayerPivotController : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle player_transform;
@@ -664,7 +672,7 @@ public:
 	}
 };
 
-struct TCameraPivotController {
+struct TCameraPivotController : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle player_pivot_transform;
@@ -752,7 +760,7 @@ public:
 	}
 };
 
-struct TThirdPersonCameraController {
+struct TThirdPersonCameraController : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle	camera_pivot_transform;
@@ -797,7 +805,7 @@ public:
 	}
 };
 
-struct TAABB {
+struct TAABB : TBaseComponent {
 private:
 	CHandle		transform;
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
@@ -929,7 +937,7 @@ public:
 	}
 };
 
-struct TEnemyWithPhysics {
+struct TEnemyWithPhysics : TBaseComponent {
 private:
 	TTransform* transform;
 public:
@@ -979,6 +987,32 @@ public:
 
 	std::string toString() {
 		return "Enemy with physics controller";
+	}
+};
+
+struct  TDistanceJoint : TBaseComponent {
+
+	physx::PxDistanceJoint* joint;
+	physx::PxRigidActor* a1;
+	physx::PxRigidActor* a2;
+
+	TDistanceJoint() {}
+
+	void loadFromAtts(MKeyValue &atts) {
+
+	}
+
+	void init() {
+		//create a joint  	
+		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, a1, physx::PxTransform(0.5f, 0.5f, 0.5f), a2, physx::PxTransform(0.0f, -0.5f, 0.0f));
+		joint->setDamping(5);
+		joint->setMaxDistance(5);
+		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
+		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+	}
+
+	void fixedUpdate(float elapsed) {
+
 	}
 };
 

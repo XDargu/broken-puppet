@@ -19,7 +19,12 @@ public:
 
 class CEntityLister
 {
+private:
+	unsigned int	m_entity_event_count;
+	std::string		prevSearch;
 public:
+	std::string		searchIn;
+
 	CEntityLister();
 	~CEntityLister();
 	void init();

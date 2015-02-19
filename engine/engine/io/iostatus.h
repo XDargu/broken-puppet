@@ -36,6 +36,7 @@ public:
 		, MOUSE_MIDDLE
 		, MOUSE_WHEEL_UP
 		, MOUSE_WHEEL_DOWN
+		, INSPECTOR_MODE
 		, BUTTONS_COUNT
 	};
 
@@ -71,6 +72,7 @@ public:
   CIOStatus();
   void update( float elapsed );
   void setMousePointer(bool mode);
+  bool getMousePointer();
 
 protected:
   TButton   buttons[BUTTONS_COUNT];

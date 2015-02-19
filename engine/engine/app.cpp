@@ -107,10 +107,10 @@ bool CApp::create() {
   if (!::render.createDevice())
     return false;
 
-  renderAABB = false;
-  renderAxis = false;
-  renderGrid = false;
-  renderNames = false;
+  renderAABB = true;
+  renderAxis = true;
+  renderGrid = true;
+  renderNames = true;
 
   createManagers();
 
@@ -247,13 +247,39 @@ void CApp::update(float elapsed) {
   // Update input
   io.update(elapsed);
 
-  if (isKeyPressed('I')) {
-	  io.setMousePointer(true);
+  if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
+	  if (io.getMousePointer()) {
+		  io.setMousePointer(false);
+
+		  // Activa el modo debug
+		  renderAxis = true;
+		  renderAABB = true;
+		  renderGrid = true;
+		  renderNames = true;
+
+		  // Desactivar los componentes
+		  getObjManager<TPlayerController>()->setActiveComponents(false);
+		  getObjManager<TPlayerPivotController>()->setActiveComponents(false);
+		  getObjManager<TCameraPivotController>()->setActiveComponents(false);
+		  getObjManager<TThirdPersonCameraController>()->setActiveComponents(false);
+	  }
+	  else {
+		  io.setMousePointer(true);
+
+		  // Desactiva el modo debug
+		  renderAxis = false;
+		  renderAABB = false;
+		  renderGrid = false;
+		  renderNames = false;
+
+		  // Activar los componentes
+		  getObjManager<TPlayerController>()->setActiveComponents(true);
+		  getObjManager<TPlayerPivotController>()->setActiveComponents(true);
+		  getObjManager<TCameraPivotController>()->setActiveComponents(true);
+		  getObjManager<TThirdPersonCameraController>()->setActiveComponents(true);
+	  }
   }
 	
-  if (isKeyPressed('O')) {
-	  io.setMousePointer(false);
-  }
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
@@ -359,7 +385,7 @@ void CApp::renderEntities() {
 
 	  setWorldMatrix(t->getWorld());
 
-	  if (mesh)
+	  if (mesh && mesh->active)
 		mesh->mesh->activateAndRender();
   }
 }

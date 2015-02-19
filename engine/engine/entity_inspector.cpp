@@ -2,6 +2,8 @@
 #include "entity_inspector.h"
 #include <AntTweakBar.h>
 #include "handle\handle.h"
+#include <locale>
+#include <algorithm>
 
 using namespace physx;
 
@@ -173,13 +175,19 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TAABB* e_aabb = target_entity->get<TAABB>();
 	TCollider* e_collider = target_entity->get<TCollider>();
 	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
+	TCamera* e_camera = target_entity->get<TCamera>();
+	TPlayerController* e_player_controller = target_entity->get<TPlayerController>();
+	TPlayerPivotController* e_player_pivot_controller = target_entity->get<TPlayerPivotController>();
+	TCameraPivotController* e_camera_pivot_controller = target_entity->get<TCameraPivotController>();
 
 	TwRemoveAllVars(bar);
 	if (e_name) {
-		TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name");
+		TwAddVarRW(bar, "NActive", TW_TYPE_BOOL8, &e_name->active, " group=Name label='Active'");
+		TwAddVarRW(bar, "CName", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name label='Name'");
 		TwAddSeparator(bar, "Name", "");
 	}
 	if (e_transform) {
+		TwAddVarRW(bar, "TActive", TW_TYPE_BOOL8, &e_transform->active, " group=Transform label='Active'");
 		TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform");
 		TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform");
 		// Yaw Pitch Roll
@@ -188,16 +196,19 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddSeparator(bar, "Transform", "");
 	}
 	if (e_mesh) {
+		TwAddVarRW(bar, "MActive", TW_TYPE_BOOL8, &e_mesh->active, " group=Mesh label='Active'");
 		//TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
 		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh");
 		TwAddVarCB(bar, "Path", TW_TYPE_STDSTRING, ReloadMesh, GetMeshPath, e_mesh, " group=Mesh");
 	}
 	if (e_collider) {
+		TwAddVarRW(bar, "CActive", TW_TYPE_BOOL8, &e_collider->active, " group=Collider label='Active'");
 		TwAddVarCB(bar, "Static friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider, " min=0 max=1 step=0.1 group=Collider");
 		TwAddVarCB(bar, "Dynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider, " min=0 max=1 step=0.1 group=Collider");
 		TwAddVarCB(bar, "Restitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider, " min=0 max=1 step=0.1 group=Collider");
 	}
 	if (e_rigidbody) {
+		TwAddVarRW(bar, "RActive", TW_TYPE_BOOL8, &e_rigidbody->active, " group=Rigidbody label='Active'");
 		TwAddVarCB(bar, "Mass", TW_TYPE_FLOAT, SetMass, GetMass, e_rigidbody, " min=0.1 group=Rigidbody");
 		TwAddVarCB(bar, "Damping", TW_TYPE_FLOAT, SetLinearDamping, GetLinearDamping, e_rigidbody, " min=0 group=Rigidbody");
 		TwAddVarCB(bar, "Angular Damping", TW_TYPE_FLOAT, SetAngularDamping, GetAngularDamping, e_rigidbody, " min=0 group=Rigidbody");
@@ -207,11 +218,39 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarRO(bar, "Angular velocity", TW_TYPE_DIR3F, &angularVelocity, " group=Rigidbody");
 	}	
 	if (e_aabb) {
+		TwAddVarRW(bar, "AABBActive", TW_TYPE_BOOL8, &e_aabb->active, " group=AABB label='Active'");
 		TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB");
 		TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB");
 		TwAddVarRO(bar, "Center", TW_TYPE_DIR3F, &center, " group=AABB");
 		TwAddVarRO(bar, "Extents", TW_TYPE_DIR3F, &extents, " group=AABB");
 		TwAddVarRO(bar, "Size", TW_TYPE_DIR3F, &size, " group=AABB");
+	}
+
+	if (e_camera) {
+		TwAddVarRW(bar, "CameraActive", TW_TYPE_BOOL8, &e_camera->active, " group=Camera label='Active'");
+		TwAddVarRW(bar, "Fov", TW_TYPE_FLOAT, &e_camera->fov_in_radians, " group=Camera");
+		TwAddVarRW(bar, "Aspect ratio", TW_TYPE_FLOAT, &e_camera->aspect_ratio, " group=Camera");	
+		TwAddVarRW(bar, "Znear", TW_TYPE_FLOAT, &e_camera->znear, " group=Camera");
+		TwAddVarRW(bar, "Zfar", TW_TYPE_FLOAT, &e_camera->zfar, " group=Camera");
+	}
+
+	if (e_player_controller) {
+		TwAddVarRW(bar, "PlayerControllerActive", TW_TYPE_BOOL8, &e_player_controller->active, " group='Player Controller' label='Active'");
+		TwAddVarRW(bar, "PlayerControllerMovement velocity", TW_TYPE_FLOAT, &e_player_controller->movement_velocity, " group='Player Controller' label='Movement velocity'");
+		TwAddVarRW(bar, "PlayerControllerRotation velocity", TW_TYPE_FLOAT, &e_player_controller->rotation_velocity, " group='Player Controller' label='Rotation velocity'");
+	}
+
+	if (e_player_pivot_controller) {
+		TwAddVarRW(bar, "PlayerPivotControllerActive", TW_TYPE_BOOL8, &e_player_pivot_controller->active, " group='Player Pivot Controller' label='Active' ");
+		TwAddVarRW(bar, "PlayerPivotRotation velocity", TW_TYPE_FLOAT, &e_player_pivot_controller->rotation_velocity, " group='Player Pivot Controller' label='Rotation velocity'");
+	}
+
+	if (e_camera_pivot_controller) {
+		TwAddVarRW(bar, "CameraPivotControllerActive", TW_TYPE_BOOL8, &e_camera_pivot_controller->active, " group='Camera Pivot Controller' label='Active' ");
+		TwAddVarRW(bar, "CameraPivotControllerOffset", TW_TYPE_DIR3F, &e_camera_pivot_controller->offset, " group='Camera Pivot Controller' label='Offset'");
+		TwAddVarRW(bar, "Tilt velocity", TW_TYPE_FLOAT, &e_camera_pivot_controller->tilt_velocity, " group='Camera Pivot Controller' label='Tilt velocity'");
+		TwAddVarRW(bar, "Min tilt", TW_TYPE_FLOAT, &e_camera_pivot_controller->min_tilt, " group='Camera Pivot Controller' label='Min tilt'");
+		TwAddVarRW(bar, "Max tilt", TW_TYPE_FLOAT, &e_camera_pivot_controller->max_tilt, " group='Camera Pivot Controller' label='Max tilt'");
 	}
 
 	TwAddSeparator(bar, "", "");
@@ -229,8 +268,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 // ----------------------------
 
 TwBar *lister_bar;
+std::vector<std::string> entity_names;
 
-CEntityLister::CEntityLister() {}
+CEntityLister::CEntityLister() { searchIn = ""; }
 
 CEntityLister::~CEntityLister() { }
 
@@ -238,10 +278,78 @@ void TW_CALL CallbackInspectEntity(void *clientData) {
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
+void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
+{
+	destinationClientString = sourceLibraryString;
+}
+
+size_t LevenshteinDistance(std::string s1, std::string s2)
+{
+	const size_t m(s1.size());
+	const size_t n(s2.size());
+
+	if (m == 0) return n;
+	if (n == 0) return m;
+
+	size_t *costs = new size_t[n + 1];
+
+	for (size_t k = 0; k <= n; k++) costs[k] = k;
+
+	size_t i = 0;
+	for (std::string::const_iterator it1 = s1.begin(); it1 != s1.end(); ++it1, ++i)
+	{
+		costs[0] = i + 1;
+		size_t corner = i;
+
+		size_t j = 0;
+		for (std::string::const_iterator it2 = s2.begin(); it2 != s2.end(); ++it2, ++j)
+		{
+			size_t upper = costs[j + 1];
+			if (*it1 == *it2)
+			{
+				costs[j + 1] = corner;
+			}
+			else
+			{
+				size_t t(upper<corner ? upper : corner);
+				costs[j + 1] = (costs[j]<t ? costs[j] : t) + 1;
+			}
+
+			corner = upper;
+		}
+	}
+
+	size_t result = costs[n];
+	delete[] costs;
+
+	return result;
+}
+
+bool searchCompare(std::string s1, std::string s2) {
+	
+	std::transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+	std::transform(s2.begin(), s2.end(), s2.begin(), ::tolower);
+
+	if (s1 == s2)
+		return true;
+
+	bool contains1 = s1.find(s2) != std::string::npos;
+	bool contains2 = s2.find(s1) != std::string::npos;
+
+	if (contains1 || contains2)
+		return true;
+
+	int l_dist = LevenshteinDistance(s1, s2);
+	if (l_dist < 4)
+		return true;
+	return false;
+}
+
 void CEntityLister::init() {
 	// Create a tewak bar
 	lister_bar = TwNewBar("Lister");
-
+	TwCopyStdStringToClientFunc(CopyStdStringToClient);
+	
 	CApp &app = CApp::get();
 
 	// AntTweakBar test
@@ -252,27 +360,46 @@ void CEntityLister::init() {
 	TwDefine(" Lister label='Entity list' ");
 	TwDefine(" Lister refresh='0.3' ");
 	TwDefine(" TW_HELP visible=false ");
+
+	TwAddButton(lister_bar, "Search", NULL, NULL, "");
+	TwAddVarRW(lister_bar, "EntitySearchInput", TW_TYPE_STDSTRING, &searchIn, "label='Search entities'");
+	TwAddSeparator(lister_bar, "", "");
+	TwAddButton(lister_bar, "Entities", NULL, NULL, "");
+
+	m_entity_event_count = -1;
+	prevSearch = "";
 }
 
 void CEntityLister::update() {
 
-	TwRemoveAllVars(lister_bar);	
+	// if the entities has changed
+	if ((m_entity_event_count != CEntityManager::get().getEntityEventCount()) || (prevSearch != searchIn)) {
+		m_entity_event_count = CEntityManager::get().getEntityEventCount();
+		// Get the entities currently alive
+		std::vector< CHandle > entities = CEntityManager::get().getEntities();
 
-	std::vector< CHandle > entities = CEntityManager::get().getEntities();
-
-	TwAddSeparator(lister_bar, "", "");
-	TwAddButton(lister_bar, "Entities", NULL, NULL, "");
-
-	for (int i = 0; i < entities.size(); ++i) {
-		TCompName* e_name = ((CEntity*)entities[i])->get<TCompName>();
-		if (e_name) {
-			TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
-			//TwAddVarRW(lister_bar, e_name->name, TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, "");
-			//TwAddSeparator(lister_bar, "Name", "");
+		// Loop the current listed entities vector and remove the bars with those names
+		for (int n = 0; n < entity_names.size(); ++n) {
+			// Remove the var
+			TwRemoveVar(lister_bar, entity_names[n].c_str());
 		}
-	}
 
-	
+		for (int i = 0; i < entities.size(); ++i) {
+			// Get the entity names
+			TCompName* e_name = ((CEntity*)entities[i])->get<TCompName>();
+			if (e_name) {
+				std::string a = std::string(searchIn);
+				if (a.empty() || searchCompare(a, e_name->name)) {
+					// Add to the listed entities vector
+					entity_names.push_back(e_name->name);
+					TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
+					
+				}
+			}
+		}
+
+		prevSearch = searchIn;
+	}	
 }
 
 // ----------------------------

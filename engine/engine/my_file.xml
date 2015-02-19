@@ -67,7 +67,12 @@
     <name name="CameraPivot"/>
     <transform position="0 0 0" rotation="0 0 0 1"  scale="1 1 1"/>
     <cameraPivotController tiltVelocity="270"/>
-  </entity>  
+  </entity>
+  <entity>
+    <name name="Level"/>
+    <transform position="0 0 0" rotation="0 0 0 1"  scale="0.01 0.01 0.01"/>
+    <mesh path="Level" color="1 1 1 1"/>
+  </entity>
   <entity>
     <name name="Camera"/>
     <transform position="0 2 -9" rotation="0 0 0 1"  scale="1 1 1"/>
