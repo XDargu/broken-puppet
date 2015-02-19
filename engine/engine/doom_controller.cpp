@@ -1,6 +1,6 @@
 #include "mcv_platform.h"
 #include "doom_controller.h"
-#include "entity.h"
+#include "entity_manager.h"
 
 using namespace DirectX;
 

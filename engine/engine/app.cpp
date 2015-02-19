@@ -81,7 +81,7 @@ void createManagers() {
 	getObjManager<TAABB>()->init(1024);
 	getObjManager<TPlayerDoomController>()->init(1);
 	getObjManager<TThirdPersonCameraController>()->init(8);
-	getObjManager<TEnemyWithPhysics>()->init(8);
+	getObjManager<TEnemyWithPhysics>()->init(64);
 
 	registerAllComponentMsgs();
 }
@@ -119,7 +119,8 @@ bool CApp::create() {
   ;
   assert(is_ok);
 
-  camera = entity_manager.getByName("Camera")->get<TCamera>();
+  CEntity* e = entity_manager.getByName("Camera");
+  camera = e->get<TCamera>();
 
   is_ok = font.create();
   font.camera = camera;
@@ -170,12 +171,9 @@ bool CApp::create() {
   e2->sendMsg(msg1);
   e2->sendMsg(TMsgDied(2));
 
-  // Create a tewak bar
-  TwBar *bar = TwNewBar("Test bar");
-
   // Enemigo SIN componentes
   aibp.entity = old_entity_manager.create("Enemy");
-  aibp.entity->setPosition(((TTransform*)entity_manager.getByName("Enemigo")->get<TTransform>())->position);
+  aibp.entity->setPosition(((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position);
   CEntityOld* wp1 = old_entity_manager.create("EnemyWp1");
   wp1->setPosition(XMVectorSet(10, 0, 10, 0));
   CEntityOld* wp2 = old_entity_manager.create("EnemyWp2");
@@ -232,11 +230,7 @@ void CApp::doFrame() {
 }
 
 void CApp::update(float elapsed) {
-
-	if (isKeyPressed('I')) {
-		entity_inspector.inspectEntity(entity_manager.getByName("Caja"));
-	}
-
+	
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
@@ -251,8 +245,9 @@ void CApp::update(float elapsed) {
   entity_inspector.update();
   entity_lister.update();
 
-  ((TTransform*)entity_manager.getByName("Enemigo")->get<TTransform>())->position = aibp.entity->getPosition();
-  ((TTransform*)entity_manager.getByName("Enemigo")->get<TTransform>())->rotation = aibp.entity->getRotation();
+  
+  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position = aibp.entity->getPosition();
+  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->rotation = aibp.entity->getRotation();
 }
 
 // Physics update
@@ -327,8 +322,8 @@ void CApp::renderEntities() {
   // Render entities
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
   {
-	  TTransform* t = entity_manager.getEntities()[i]->get<TTransform>();
-	  TMesh* mesh = entity_manager.getEntities()[i]->get<TMesh>();
+	  TTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TTransform>();
+	  TMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TMesh>();
 
 	  // If the component has no transform it can't be rendered
 	  if (!t)
@@ -353,9 +348,10 @@ void CApp::renderDebugEntities(bool draw_names) {
 	// Render entities
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
-		TTransform* t = entity_manager.getEntities()[i]->get<TTransform>();
-		TCompName* name = entity_manager.getEntities()[i]->get<TCompName>();
-		TAABB* aabb = entity_manager.getEntities()[i]->get<TAABB>();
+		CEntity* e = (CEntity*)entity_manager.getEntities()[i];
+		TTransform* t = e->get<TTransform>();
+		TCompName* name = e->get<TCompName>();
+		TAABB* aabb = e->get<TAABB>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
@@ -372,7 +368,8 @@ void CApp::renderDebugEntities(bool draw_names) {
 		if (aabb) {
 			bool intersects = false;
 			for (int j = 0; j < entity_manager.getEntities().size(); ++j) {
-				TAABB* aabb2 = entity_manager.getEntities()[j]->get<TAABB>();
+				CEntity* e2 = (CEntity*)entity_manager.getEntities()[j];
+				TAABB* aabb2 = e2->get<TAABB>();
 				if (aabb2 && i != j && aabb->intersects(aabb2)) {
 					intersects = true;
 					break;
@@ -399,7 +396,7 @@ void CApp::renderDebugEntities(bool draw_names) {
 void CApp::renderEntityDebugList() {
 	font.printf(10, 10, "Entities: %i\nPress <L> to list entities, press <K> to inspect entities in front of you", entity_manager.getEntities().size());	
 
-	TTransform* player_t = entity_manager.getByName("Player")->get<TTransform>();
+	TTransform* player_t = ((CEntity*)entity_manager.getByName("Player"))->get<TTransform>();
 
 	font.printf(10, 45, "Player position: (%f, %f, %f)", XMVectorGetX(player_t->position), XMVectorGetY(player_t->position), XMVectorGetZ(player_t->position));
 	font.printf(10, 60, "Player rotation: (%f, %f, %f, %f)", XMVectorGetX(player_t->rotation), XMVectorGetY(player_t->rotation), XMVectorGetZ(player_t->rotation), XMVectorGetW(player_t->rotation));
@@ -419,13 +416,14 @@ void CApp::renderEntityDebugList() {
 			s = "";
 			s_name = "";
 			current_jump_count = 0;
-			TCompName* name = entity_manager.getEntities()[i]->get<TCompName>();
-			TTransform* t = entity_manager.getEntities()[i]->get<TTransform>();
-			TMesh* mesh = entity_manager.getEntities()[i]->get<TMesh>();
-			TCamera* cam = entity_manager.getEntities()[i]->get<TCamera>();
-			TCollider* collider = entity_manager.getEntities()[i]->get<TCollider>();
-			TRigidBody* rigid = entity_manager.getEntities()[i]->get<TRigidBody>();			
-			TAABB* aabb = entity_manager.getEntities()[i]->get<TAABB>();
+			CEntity* e = entity_manager.getEntities()[i];
+			TCompName* name = e->get<TCompName>();
+			TTransform* t = e->get<TTransform>();
+			TMesh* mesh = e->get<TMesh>();
+			TCamera* cam = e->get<TCamera>();
+			TCollider* collider = e->get<TCollider>();
+			TRigidBody* rigid = e->get<TRigidBody>();			
+			TAABB* aabb = e->get<TAABB>();
 
 			if (debug_all_entities)
 			{

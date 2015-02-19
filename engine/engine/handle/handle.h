@@ -233,7 +233,7 @@ struct TMesh {
 };
 struct TCamera {
 private:
-	TTransform* transform;
+	CHandle transform;
 public:
 
 	XMMATRIX       view;            // Where is and where is looking at
@@ -268,9 +268,11 @@ public:
 		CEntity* e = hm->getOwner(this);
 		transform = e->get<TTransform>();
 
-		assert(transform || fatal("TCamera requieres a TTransform component"));
+		TTransform* trans = (TTransform*)transform;
 
-		transform->lookAt(target, transform->getUp());
+		assert(trans || fatal("TCamera requieres a TTransform component"));
+
+		trans->lookAt(target, trans->getUp());
 		setViewport(0, 0, 512, 512);    // Will update projection matrix
 	}
 
@@ -293,8 +295,9 @@ public:
 
 	// -----------------------------------------------
 	void updateViewProjection() {
+		TTransform* trans = (TTransform*)transform;
 
-		view = XMMatrixLookAtRH(transform->position, transform->position + transform->getFront(), XMVectorSet(0, 1, 0, 1));
+		view = XMMatrixLookAtRH(trans->position, trans->position + trans->getFront(), XMVectorSet(0, 1, 0, 1));
 		view_projection = view * projection;
 	}
 
@@ -387,6 +390,7 @@ struct TCollider {
 
 struct TRigidBody {
 private:
+	CHandle transform;
 	// Just for rigidbody creation
 	float temp_density;
 	bool temp_is_kinematic;
@@ -410,17 +414,19 @@ public:
 	void init() {
 		CHandleManager* hm = CHandleManager::the_register.getByName("rigidbody");
 		CEntity* e = hm->getOwner(this);
-		TTransform* t = e->get<TTransform>();
+		transform = e->get<TTransform>();
 		TCollider* c = e->get<TCollider>();
 
-		assert(t || fatal("TRigidBody requieres a TTransform component"));
+		TTransform* trans = (TTransform*)transform;
+
+		assert(trans || fatal("TRigidBody requieres a TTransform component"));
 		assert(c || fatal("TRigidBody requieres a TCollider component"));
 
 		rigidBody = physx::PxCreateDynamic(
 			*Physics.gPhysicsSDK
 			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(t->position),
-			Physics.XMVECTORToPxQuat(t->rotation))
+			Physics.XMVECTORToPxVec3(trans->position),
+			Physics.XMVECTORToPxQuat(trans->rotation))
 			, *c->collider
 			, temp_density);
 		Physics.gScene->addActor(*rigidBody);
@@ -429,12 +435,10 @@ public:
 	}
 
 	void fixedUpdate(float elapsed) {
-		CHandleManager* hm = CHandleManager::the_register.getByName("rigidbody");
-		CEntity* e = hm->getOwner(this);
-		TTransform* t = e->get<TTransform>();
+		TTransform* trans = (TTransform*)transform;
 
-		t->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
-		t->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
+		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
+		trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
 	}
 
 	void setKinematic(bool is_kinematic) {
@@ -496,7 +500,7 @@ public:
 
 struct TPlayerDoomController {
 private:
-	TTransform* transform;
+	CHandle transform;
 public:
 
 	physx::PxRigidDynamic*	 playerRigid; // Kinematic player. Should be changed to Physx Character Controller
@@ -523,50 +527,55 @@ public:
 		CHandleManager* hm = CHandleManager::the_register.getByName("playerDoomController");
 		CEntity* e = hm->getOwner(this);
 		transform = e->get<TTransform>();
+		TTransform* trans = (TTransform*)transform;
 
-		assert(transform || fatal("TPlayerDoomController requieres a TTransform component"));
+		assert(trans || fatal("TPlayerDoomController requieres a TTransform component"));
 
 		// Teleport the kinematic player to the player position
-		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(transform->position);
+		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(trans->position);
 		position_player.y *= 0.5f;
 
-		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(transform->rotation);
+		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(trans->rotation);
 		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
 
 		playerRigid->setGlobalPose(physx::PxTransform(position_player, rotation_player), true);
 	}
 
 	void update(float elapsed) {
+		TTransform* trans = (TTransform*)transform;
+
 		XMVECTOR delta_pos = XMVectorZero();
 		XMVECTOR delta_q = XMQuaternionIdentity();
 
 		// Que teclas se pulsan -> que cambios hacer
 		if (isKeyPressed('W'))
-			delta_pos += elapsed * movement_velocity * transform->getFront();
+			delta_pos += elapsed * movement_velocity * trans->getFront();
 		else if (isKeyPressed('S'))
-			delta_pos -= elapsed * movement_velocity * transform->getFront();
+			delta_pos -= elapsed * movement_velocity * trans->getFront();
 		if (isKeyPressed('A'))
-			delta_pos += elapsed * movement_velocity * transform->getLeft();
+			delta_pos += elapsed * movement_velocity * trans->getLeft();
 		else if (isKeyPressed('D'))
-			delta_pos -= elapsed * movement_velocity * transform->getLeft();
+			delta_pos -= elapsed * movement_velocity * trans->getLeft();
 
 		if (isKeyPressed('Q'))
-			delta_q = XMQuaternionRotationAxis(transform->getUp(), elapsed * rotation_velocity);
+			delta_q = XMQuaternionRotationAxis(trans->getUp(), elapsed * rotation_velocity);
 		else if (isKeyPressed('E'))
-			delta_q = XMQuaternionRotationAxis(transform->getUp(), -elapsed * rotation_velocity);
+			delta_q = XMQuaternionRotationAxis(trans->getUp(), -elapsed * rotation_velocity);
 
 		// Actualizar la posicion/rotacion
-		transform->position += delta_pos;
-		transform->rotation = XMQuaternionMultiply(transform->rotation, delta_q);
+		trans->position += delta_pos;
+		trans->rotation = XMQuaternionMultiply(trans->rotation, delta_q);
 	}
 
 	void fixedUpdate(float elapsed) {
+		TTransform* trans = (TTransform*)transform;
+
 		// Kinematic player update
 		// Rotate the capsule
-		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(transform->position);
+		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(trans->position);
 		position_player.y *= 0.5f;
 
-		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(transform->rotation);
+		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(trans->rotation);
 		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
 
 		playerRigid->setKinematicTarget(physx::PxTransform(position_player, rotation_player));
@@ -580,9 +589,9 @@ public:
 
 struct TThirdPersonCameraController {
 private:
-	TTransform* transform;
+	CHandle transform;
 public:
-	TTransform*	player;
+	CHandle	player;
 
 	TThirdPersonCameraController() {}
 
@@ -595,18 +604,23 @@ public:
 		assert(e_player || fatal("TFirstPersonCameraController requieres a player entity"));
 
 		player = e_player->get<TTransform>();
-		assert(player || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
+		TTransform* player_trans = (TTransform*)player;
+
+		assert(player_trans || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
 
 		CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
 		CEntity* e = hm->getOwner(this);
 		transform = e->get<TTransform>();
+		TTransform* trans = (TTransform*)transform;
 
-		assert(transform || fatal("TFirstPersonCameraController requieres a TTransform component"));
+		assert(trans || fatal("TFirstPersonCameraController requieres a TTransform component"));
 	}
 
 	void update(float elapsed) {
-		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;
-		transform->lookAt(player->position + player->getUp() * 2, player->getUp());
+		TTransform* trans = (TTransform*)transform;
+		TTransform* player_trans = (TTransform*)player;
+		trans->position = player_trans->position - player_trans->getFront() * 3 + player_trans->getUp() * 3;
+		trans->lookAt(player_trans->position + player_trans->getUp() * 2, player_trans->getUp());
 	}
 
 	std::string toString() {
@@ -616,7 +630,7 @@ public:
 
 struct TAABB {
 private:
-	TTransform*		transform;
+	CHandle		transform;
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
 
 	// Used to check if the transform has been moved since the last frame, should be moved to transform component
@@ -635,7 +649,7 @@ private:
 		XMVECTOR minValue = XMVectorSet(D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, 1);
 		XMVECTOR maxValue = -minValue;
 		for (int i = 0; i < 8; ++i) {
-			rotatePoint = XMVector3Rotate(bbpoints[i] * transform->scale, transform->rotation);
+			rotatePoint = XMVector3Rotate(bbpoints[i] * ((TTransform*)transform)->scale, ((TTransform*)transform)->rotation);
 
 			if (XMVectorGetX(rotatePoint) < XMVectorGetX(minValue))
 				minValue = XMVectorSetX(minValue, XMVectorGetX(rotatePoint));
@@ -652,8 +666,8 @@ private:
 				maxValue = XMVectorSetZ(maxValue, XMVectorGetZ(rotatePoint));
 		}
 
-		min = transform->position + minValue;
-		max = transform->position + maxValue;
+		min = ((TTransform*)transform)->position + minValue;
+		max = ((TTransform*)transform)->position + maxValue;
 	}
 public:
 
@@ -676,12 +690,13 @@ public:
 		CHandleManager* hm = CHandleManager::the_register.getByName("aabb");
 		CEntity* e = hm->getOwner(this);
 		transform = e->get<TTransform>();
+		TTransform* trans = (TTransform*)transform;
 
-		assert(transform || fatal("TAABB requieres a TTransform component"));
+		assert(trans || fatal("TAABB requieres a TTransform component"));
 
-		prev_position = transform->position;
-		prev_rotation = transform->rotation;
-		prev_scale = transform->scale;
+		prev_position = trans->position;
+		prev_rotation = trans->rotation;
+		prev_scale = trans->scale;
 		recalcMinMax();
 	}
 
@@ -691,16 +706,18 @@ public:
 		CEntity* e = hm->getOwner(this);
 		TCompName* name = e->get<TCompName>();
 
-		bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, transform->position)) && XMVectorGetY(XMVectorEqual(prev_position, transform->position)) && XMVectorGetZ(XMVectorEqual(prev_position, transform->position));
-		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, transform->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, transform->rotation));
-		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, transform->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, transform->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, transform->scale));
+		TTransform* trans = (TTransform*)transform;
+
+		bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, trans->position)) && XMVectorGetY(XMVectorEqual(prev_position, trans->position)) && XMVectorGetZ(XMVectorEqual(prev_position, trans->position));
+		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, trans->rotation));
+		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, trans->scale));
 
 		if (!(posEqual && rotEqual && sclEqual))
 			recalcMinMax();
 
-		prev_position = transform->position;
-		prev_rotation = transform->rotation;
-		prev_scale = transform->scale;
+		prev_position = trans->position;
+		prev_rotation = trans->rotation;
+		prev_scale = trans->scale;
 	}
 
 	// Squared distance from a point to the AABB

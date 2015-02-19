@@ -1,6 +1,8 @@
 #ifndef INC_ENTITY_INSPECTOR_H_
 #define INC_ENTITY_INSPECTOR_H_
 
+#include <AntTweakBar.h>
+
 class CEntity;
 
 class CEntityInspector

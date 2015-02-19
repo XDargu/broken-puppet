@@ -36,6 +36,8 @@ void CEntityInspector::init() {
 
 }
 
+// ---------------------------- GET AND SET COMPONENTS --------------------------
+
 // COLLIDER
 void TW_CALL SetStaticFriction(const void *value, void *clientData)
 {
@@ -110,6 +112,24 @@ void TW_CALL GetAngularDamping(void *value, void *clientData)
 	*static_cast<float *>(value) = static_cast<TRigidBody *>(clientData)->rigidBody->getAngularDamping();
 }
 
+
+// MESH
+void TW_CALL ReloadMesh(const void *value, void *clientData)
+{
+	(static_cast<TMesh *>(clientData))->mesh = mesh_manager.getByName((*(const std::string *)value).c_str());
+}
+void TW_CALL GetMeshPath(void *value, void *clientData)
+{
+	*static_cast<std::string *>(value) = static_cast<TMesh *>(clientData)->path;
+}
+// ---------------------------- ADD COMPONENT CALLBACKS --------------------------
+void TW_CALL AddTransform(void *clientData) {
+
+	TTransform* t = CHandle::create<TTransform>();
+	static_cast<CEntity *>(clientData)->add(t);
+	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+}
+
 void CEntityInspector::update() {
 	TAABB* e_aabb = target_entity->get<TAABB>();
 	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
@@ -135,7 +155,6 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCollider* e_collider = target_entity->get<TCollider>();
 	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
 
-
 	TwRemoveAllVars(bar);
 	if (e_name) {
 		TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name");
@@ -150,6 +169,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (e_mesh) {
 		//TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
 		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh");
+		TwAddVarCB(bar, "Path", TW_TYPE_STDSTRING, ReloadMesh, GetMeshPath, e_mesh, " group=Mesh");
 	}
 	if (e_collider) {
 		TwAddVarCB(bar, "Static friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider, " min=0 max=1 step=0.1 group=Collider");
@@ -171,6 +191,13 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarRO(bar, "Center", TW_TYPE_DIR3F, &center, " group=AABB");
 		TwAddVarRO(bar, "Extents", TW_TYPE_DIR3F, &extents, " group=AABB");
 		TwAddVarRO(bar, "Size", TW_TYPE_DIR3F, &size, " group=AABB");
+	}
+
+	TwAddSeparator(bar, "", "");
+	TwAddButton(bar, "Add components", NULL, NULL, "");
+
+	if (!e_transform) {
+		TwAddButton(bar, "Transform", AddTransform, target_entity, "");
 	}
 }
 
@@ -237,15 +264,17 @@ void CEntityLister::update() {
 
 	TwRemoveAllVars(lister_bar);	
 
-	std::vector< CEntity* > entities = CEntityManager::get().getEntities();
+	std::vector< CHandle > entities = CEntityManager::get().getEntities();
 
+	TwAddButton(lister_bar, "Actions", NULL, NULL, "");
 	TwAddButton(lister_bar, "New entity", CallbackCreateEntity, NULL, "");
 	TwAddSeparator(lister_bar, "", "");
+	TwAddButton(lister_bar, "Entities", NULL, NULL, "");
 
 	for (int i = 0; i < entities.size(); ++i) {
-		TCompName* e_name = entities[i]->get<TCompName>();
+		TCompName* e_name = ((CEntity*)entities[i])->get<TCompName>();
 		if (e_name) {
-			TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, entities[i], "");
+			TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
 			//TwAddVarRW(lister_bar, e_name->name, TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, "");
 			//TwAddSeparator(lister_bar, "Name", "");
 		}

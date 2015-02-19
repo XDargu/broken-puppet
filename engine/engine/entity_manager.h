@@ -51,18 +51,20 @@ protected:
 
 extern COldEntityManager old_entity_manager;
 
+class CHandle;
+
 class CEntityManager {
-	typedef std::vector< CEntity* > VEntities;
+	typedef std::vector< CHandle > VEntities;
 
 public:
 	static CEntityManager& get();
 
-	void add(CEntity* the_entity);
-	bool remove(CEntity* the_entity);
-	CEntity* getByName(const char *name);
+	void add(CHandle the_entity);
+	bool remove(CHandle the_entity);
+	CHandle getByName(const char *name);
 	const VEntities& getEntities() const { return entities; }
 
-	CEntity* createEmptyEntity();
+	CHandle createEmptyEntity();
 
 protected:
 	// General entity vector

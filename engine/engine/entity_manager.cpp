@@ -93,11 +93,11 @@ CEntityManager& CEntityManager::get() {
 	return entity_manager;
 }
 
-void CEntityManager::add(CEntity* the_entity) {
+void CEntityManager::add(CHandle the_entity) {
 	entities.push_back(the_entity);
 }
 
-bool CEntityManager::remove(CEntity* the_entity) {
+bool CEntityManager::remove(CHandle the_entity) {
 	auto it = std::find(entities.begin(), entities.end(), the_entity);
 	if (it == entities.end())
 		return false;
@@ -106,17 +106,17 @@ bool CEntityManager::remove(CEntity* the_entity) {
 	return true;
 }
 
-CEntity* CEntityManager::getByName(const char *name) {
+CHandle CEntityManager::getByName(const char *name) {
 
 	for (auto& it : entities) {
-		if (strcmp(it->getName(), name) == 0)
+		if (strcmp(((CEntity*)it)->getName(), name) == 0)
 			return it;
 	};
-	return nullptr;
+	return CHandle();
 }
 
-CEntity* CEntityManager::createEmptyEntity() {
-	CEntity* the_entity = getObjManager<CEntity>()->createObj();
+CHandle CEntityManager::createEmptyEntity() {
+	CHandle the_entity = getObjManager<CEntity>()->createObj();
 	entities.push_back(the_entity);
 	return the_entity;
 }
