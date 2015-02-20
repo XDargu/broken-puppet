@@ -88,6 +88,10 @@ void activateWorldMatrix( int slot ) {
   ctes_object.activateInVS(slot);
 }
 
+void activateTint(int slot) {
+	ctes_object.activateInPS(slot);
+}
+
 void activateCamera(const CCamera& camera, int slot) {
   ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
   ctes_camera.get()->ViewProjection = camera.getViewProjection();
@@ -355,4 +359,9 @@ void drawViewVolume(const CCamera& camera) {
 void setWorldMatrix(XMMATRIX world) {
   ctes_object.get()->World = world;
   ctes_object.uploadToGPU();
+}
+
+void setTint(XMVECTOR tint) {
+	ctes_object.get()->Tint = tint;
+	ctes_object.uploadToGPU();
 }

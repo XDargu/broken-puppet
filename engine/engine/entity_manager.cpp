@@ -1,6 +1,6 @@
 #include "mcv_platform.h"
-#include "entity.h"
-#include "handle.h"
+#include "entity_manager.h"
+#include "handle\handle.h"
 
 using namespace DirectX;
 
@@ -93,30 +93,37 @@ CEntityManager& CEntityManager::get() {
 	return entity_manager;
 }
 
-void CEntityManager::add(CEntity* the_entity) {
+void CEntityManager::add(CHandle the_entity) {
+	entity_event_count++;
 	entities.push_back(the_entity);
 }
 
-bool CEntityManager::remove(CEntity* the_entity) {
+bool CEntityManager::remove(CHandle the_entity) {
 	auto it = std::find(entities.begin(), entities.end(), the_entity);
 	if (it == entities.end())
 		return false;
 
+	entity_event_count++;
 	entities.erase(it);
 	return true;
 }
 
-CEntity* CEntityManager::getByName(const char *name) {
+CHandle CEntityManager::getByName(const char *name) {
 
 	for (auto& it : entities) {
-		if (strcmp(it->getName(), name) == 0)
+		if (strcmp(((CEntity*)it)->getName(), name) == 0)
 			return it;
 	};
-	return nullptr;
+	return CHandle();
 }
 
-CEntity* CEntityManager::createEmptyEntity() {
-	CEntity* the_entity = getObjManager<CEntity>()->createObj();
+CHandle CEntityManager::createEmptyEntity() {
+	CHandle the_entity = getObjManager<CEntity>()->createObj();
 	entities.push_back(the_entity);
+	entity_event_count++;
 	return the_entity;
+}
+
+unsigned int CEntityManager::getEntityEventCount() {
+	return entity_event_count;
 }

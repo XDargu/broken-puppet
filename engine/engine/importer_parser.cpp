@@ -1,6 +1,6 @@
 #include "mcv_platform.h"
 #include "importer_parser.h"
-#include "entity.h"
+#include "handle\entity.h"
 
 CHandle current_entity;
 

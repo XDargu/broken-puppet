@@ -68,11 +68,28 @@ CHandleManager::CRegister CHandleManager::the_register;
   CObjManager<TObj> om_##TObj( obj_name ); \
   template<> CObjManager<TObj>* getObjManager<TObj>() { return &om_##TObj; }
 
-
-
 const char* CEntity::getName() const {
 	const TCompName* cn = get<TCompName>();
 	return cn ? cn->name : "<unnamed>";
+}
+
+CEntity::CEntity( const CEntity& e ) {
+
+	// Clone each of the components
+	for( int i=0; i<CHandle::max_types; ++i ) {
+		if( e.components[i].isValid() )
+			components[i] = e.components[i].clone();
+	}
+}
+
+
+
+MMsgSubscriptions msg_subscriptions;
+
+TMsgID generateUniqueMsgID() {
+	static TMsgID global_id = 1;
+	global_id++;
+	return global_id;
 }
 
 
@@ -86,9 +103,13 @@ DECL_OBJ_MANAGER(TCamera, "camera");
 DECL_OBJ_MANAGER(TCollider, "collider");
 DECL_OBJ_MANAGER(TRigidBody, "rigidbody");
 DECL_OBJ_MANAGER(TStaticBody, "staticbody");
-DECL_OBJ_MANAGER(TPlayerDoomController, "playerDoomController");
+DECL_OBJ_MANAGER(TPlayerController, "playerController");
+DECL_OBJ_MANAGER(TCameraPivotController, "cameraPivotController");
+DECL_OBJ_MANAGER(TPlayerPivotController, "playerPivotController");
 DECL_OBJ_MANAGER(TThirdPersonCameraController, "thirdPersonCameraController");
+DECL_OBJ_MANAGER(TEnemyWithPhysics, "enemyWithPhysics");
 DECL_OBJ_MANAGER(TAABB, "aabb");
+
 
 /*
 void createManagers() {

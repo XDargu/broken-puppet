@@ -7,7 +7,7 @@
 #include <assert.h>	
 #include <string>
 #include <map>
-#include "entity.h"
+#include "entity_manager.h"
 
 using namespace std;
 

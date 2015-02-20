@@ -3,6 +3,7 @@
 
 #include "mcv_platform.h"
 #include "app.h"
+#include "io\iostatus.h"
 #include <AntTweakBar.h>
 
 // Global Variables:
@@ -144,6 +145,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return 0; // event has been handled by AntTweakBar
 	// else process the event message
 	// ...
+
+	CIOStatus &io = CIOStatus::get();
 	
 
 	switch (message)
@@ -155,6 +158,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	case WM_LBUTTONUP:
+		//::ReleaseCapture( );
+		io.getButtons()[io.MOUSE_LEFT].setPressed(false, 0.f);
+		break;
+	case WM_LBUTTONDOWN:
+		// Capturar el raton para que los eventos vengan a mi ventana
+		// incluso cuando el raton esta fuera del area cliente
+		//::SetCapture( hWnd );
+		io.getButtons()[io.MOUSE_LEFT].setPressed(true, 0.f);
+		break;
+	case WM_RBUTTONUP:
+		io.getButtons()[io.MOUSE_RIGHT].setPressed(false, 0.f);
+		break;
+	case WM_RBUTTONDOWN:
+		io.getButtons()[io.MOUSE_RIGHT].setPressed(true, 0.f);
+		break;
+	case WM_MBUTTONUP:
+		io.getButtons()[io.MOUSE_MIDDLE].setPressed(false, 0.f);
+		break;
+	case WM_MBUTTONDOWN:
+		io.getButtons()[io.MOUSE_MIDDLE].setPressed(true, 0.f);
+		break;
+		/*case WM_KILLFOCUS:
+		app.has_focus = false;
+		break;
+		case WM_SETFOCUS:
+		app.has_focus = true;
+		break;*/
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

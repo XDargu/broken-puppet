@@ -17,7 +17,7 @@ CPhysicsManager& CPhysicsManager::get() {
 	return physics_manager;
 }
 
-CPhysicsManager::CPhysicsManager() : gScene(NULL), timeStep( 1.f / 50.f ) // 50 Hz
+CPhysicsManager::CPhysicsManager() : gScene(NULL), timeStep( 1.f / 60.f ) // 60 Hz
 {
 }
 

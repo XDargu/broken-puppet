@@ -2,13 +2,13 @@
 #include "app.h"
 #include "camera.h"
 #include "render/render_utils.h"
-#include "entity.h"
+#include "entity_manager.h"
 #include "doom_controller.h"
 #include "font/font.h"
 #include "render/texture.h"
 #include "importer_parser.h"
 #include "physics_manager.h"
-#include "handle.h"
+#include "handle\handle.h"
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
@@ -19,11 +19,17 @@ using namespace DirectX;
 using namespace physx;
 
 #include <AntTweakBar.h>
+#include "entity_inspector.h"
 
 static CApp the_app;
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
+
+#include "ai\ai_basic_patroller.h"
+#include "io\iostatus.h"
+
+ai_basic_patroller aibp;
 
 CApp& CApp::get() {
   return the_app;
@@ -36,8 +42,8 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-  xres = 800;
-  yres = 600;
+  xres = 1024;
+  yres = 640;
 }
 
 CVertexShader vs_basic;
@@ -57,6 +63,11 @@ CShaderCte<TCtesGlobal> ctes_global;
 
 float fixedUpdateCounter;
 
+void registerAllComponentMsgs() {
+	SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TLife, TMsgDied, onDied);
+}
+
 void createManagers() {
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TTransform>()->init(1024);
@@ -69,8 +80,13 @@ void createManagers() {
 	getObjManager<TRigidBody>()->init(512);
 	getObjManager<TStaticBody>()->init(512);
 	getObjManager<TAABB>()->init(1024);
-	getObjManager<TPlayerDoomController>()->init(1);
-	getObjManager<TThirdPersonCameraController>()->init(8);
+	getObjManager<TPlayerController>()->init(1);
+	getObjManager<TThirdPersonCameraController>()->init(1);
+	getObjManager<TCameraPivotController>()->init(1);
+	getObjManager<TPlayerPivotController>()->init(1);
+	getObjManager<TEnemyWithPhysics>()->init(64);
+
+	registerAllComponentMsgs();
 }
 
 void initManagers() {
@@ -79,40 +95,22 @@ void initManagers() {
 	getObjManager<TRigidBody>()->initHandlers();
 	getObjManager<TStaticBody>()->initHandlers();
 	getObjManager<TAABB>()->initHandlers();
-	getObjManager<TPlayerDoomController>()->initHandlers();
+	getObjManager<TPlayerController>()->initHandlers();
+	getObjManager<TPlayerPivotController>()->initHandlers();
+	getObjManager<TCameraPivotController>()->initHandlers();	
 	getObjManager<TThirdPersonCameraController>()->initHandlers();
-}
-
-// AntTweakBar button test
-void TW_CALL CallbackCreateEntity(void *clientData)
-{
-	// Create a new entity with some components
-	CEntity* e = entity_manager.createEmptyEntity();
-
-	TCompName* n = getObjManager<TCompName>()->createObj();
-	std::strcpy(n->name, "Nueva entidad");
-	e->add(n);
-
-	TTransform* t = getObjManager<TTransform>()->createObj();
-	t->position = XMVectorSet(0, 0, 10, 1);
-	t->rotation = XMVectorSet(0, 0, 0, 1);
-	t->scale = XMVectorSet(0.5f, 0.5f, 0.5f, 1);
-	e->add(t);
-
-	TAABB* aabb = getObjManager<TAABB>()->createObj();
-	aabb->setIdentityMinMax(XMVectorSet(-4.5f, 0, -3, 0), XMVectorSet(5.14219f, 4.725f, 3, 0));
-	e->add(aabb);
-	aabb->init();
-
-	TMesh* m = getObjManager<TMesh>()->createObj();
-	m->mesh = mesh_manager.getByName("Teapot");
-	e->add(m);
+	getObjManager<TEnemyWithPhysics>()->initHandlers();	
 }
 
 bool CApp::create() {
 
   if (!::render.createDevice())
     return false;
+
+  renderAABB = true;
+  renderAxis = true;
+  renderGrid = true;
+  renderNames = true;
 
   createManagers();
 
@@ -131,7 +129,8 @@ bool CApp::create() {
   ;
   assert(is_ok);
 
-  camera = entity_manager.getByName("Camera")->get<TCamera>();
+  CEntity* e = entity_manager.getByName("Camera");
+  camera = e->get<TCamera>();
 
   is_ok = font.create();
   font.camera = camera;
@@ -159,42 +158,49 @@ bool CApp::create() {
   // Init AntTweakBar
   TwInit(TW_DIRECT3D11, ::render.device);
   TwWindowSize(xres, yres);
-  
-  // Inspector de entidades
-  CEntity* e = entity_manager.getByName("Peter la tetera");
-  TTransform* e_transform = e->get<TTransform>();
-  TCompName* e_name = e->get<TCompName>();
-  TAABB* e_aabb = e->get<TAABB>();
-  TCollider* e_collider = e->get<TCollider>();
-  TRigidBody* e_rigidbody = e->get<TRigidBody>();
 
-  // Create a tewak bar
-  TwBar *bar = TwNewBar("Test bar");
-  
-  // AntTweakBar test
-  int barSize[2] = { 224, 320 };
-  TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
-  TwAddButton(bar, "Create Entity", CallbackCreateEntity, NULL, "");
+  entity_inspector.init();
+  entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
 
-  if (e_name) {
-	  TwAddVarRW(bar, "Name", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name" );
-	  TwAddSeparator(bar, "Name", "");
-  }
-  if (e_transform) {
-	  TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform" );
-	  TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform" );
-	  TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform" );
-	  TwAddSeparator(bar, "Transform", "");
-  }
-  if (e_aabb) {
-	  TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->min, " group=AABB" );
-	  TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB" );
-	  TwAddSeparator(bar, "AABB", "");
-  }
-  if (e_collider) {
-	  
-	  //TwAddVarRO(bar, "Material", TW_TYPE_DIR3F, &e_collider->getMaterialProperties(), " group=Collider ");
-  }
+  entity_lister.init();
+  entity_actioner.init();
+  debug_optioner.init();
+
+  CEntity* e2 = CHandle::create< CEntity >();
+  TLife *life = e2->add(CHandle::create<TLife>());
+  life->life = 20.f;
+  TCompName* cname = e2->add(CHandle::create<TCompName>());
+  strcpy(cname->name, "pep");
+
+  CHandle h2(e2);
+  CHandle h3 = h2.clone();
+  CEntity* e3 = h3;
+  TLife *life3 = e3->get<TLife>();
+
+
+  TMsgExplosion msg1;
+  msg1.damage = 3.3f;
+  e2->sendMsg(msg1);
+  e2->sendMsg(TMsgDied(2));
+
+  // Enemigo SIN componentes
+  aibp.entity = old_entity_manager.create("Enemy");
+  aibp.entity->setPosition(((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position);
+  CEntityOld* wp1 = old_entity_manager.create("EnemyWp1");
+  wp1->setPosition(XMVectorSet(10, 0, 10, 0));
+  CEntityOld* wp2 = old_entity_manager.create("EnemyWp2");
+  wp2->setPosition(XMVectorSet(-10, 0, 10, 0));
+  CEntityOld* wp3 = old_entity_manager.create("EnemyWp3");
+  wp3->setPosition(XMVectorSet(10, 0, -10, 0));
+
+  vector<CEntityOld*> waypoints;
+  waypoints.push_back(wp1);
+  waypoints.push_back(wp2);
+  waypoints.push_back(wp3);
+
+  aibp.waypoints = waypoints;
+  aibp.Init();
+
   return true;
 }
 
@@ -237,14 +243,62 @@ void CApp::doFrame() {
 
 void CApp::update(float elapsed) {
 
+  CIOStatus& io = CIOStatus::get();
+  // Update input
+  io.update(elapsed);
+
+  if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
+	  if (io.getMousePointer()) {
+		  io.setMousePointer(false);
+
+		  // Activa el modo debug
+		  renderAxis = true;
+		  renderAABB = true;
+		  renderGrid = true;
+		  renderNames = true;
+
+		  // Desactivar los componentes
+		  getObjManager<TPlayerController>()->setActiveComponents(false);
+		  getObjManager<TPlayerPivotController>()->setActiveComponents(false);
+		  getObjManager<TCameraPivotController>()->setActiveComponents(false);
+		  getObjManager<TThirdPersonCameraController>()->setActiveComponents(false);
+	  }
+	  else {
+		  io.setMousePointer(true);
+
+		  // Desactiva el modo debug
+		  renderAxis = false;
+		  renderAABB = false;
+		  renderGrid = false;
+		  renderNames = false;
+
+		  // Activar los componentes
+		  getObjManager<TPlayerController>()->setActiveComponents(true);
+		  getObjManager<TPlayerPivotController>()->setActiveComponents(true);
+		  getObjManager<TCameraPivotController>()->setActiveComponents(true);
+		  getObjManager<TThirdPersonCameraController>()->setActiveComponents(true);
+	  }
+  }
+	
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
 
-  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
-  getObjManager<TPlayerDoomController>()->update(elapsed); // Update player transform
+  aibp.Recalc(elapsed);
+
+  getObjManager<TPlayerController>()->update(elapsed); // Update player transform
+  getObjManager<TPlayerPivotController>()->update(elapsed);
+  getObjManager<TCameraPivotController>()->update(elapsed);
   getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
+
+  entity_inspector.update();
+  entity_lister.update();
+  entity_actioner.update();
+  
+  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position = aibp.entity->getPosition();
+  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->rotation = aibp.entity->getRotation();
 }
 
 // Physics update
@@ -252,8 +306,9 @@ void CApp::fixedUpdate(float elapsed) {
   physics_manager.gScene->simulate(physics_manager.timeStep);
   physics_manager.gScene->fetchResults(true);
 
-  getObjManager<TPlayerDoomController>()->fixedUpdate(elapsed); // Update kinematic player
+  getObjManager<TPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+  getObjManager<TEnemyWithPhysics>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -265,20 +320,24 @@ void CApp::render() {
 
   activateTextureSamplers();
 
-  vs_basic.activate();
-  ps_basic.activate();  
-  //ps_textured.activate();
+  //vs_basic.activate();
+  //ps_basic.activate();  
+  vs_basic2.activate();
+  ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
+  ctes_global.get()->lightDirection = XMVectorSet(0, 1, 1, 0);
+  ctes_global.uploadToGPU();
+  ctes_global.activateInPS(2);
+
+  //ctes_global.activateInVS(2);
 
   activateWorldMatrix(0);
+  activateTint(0);
+  
   //activateCamera(*camera, 1);
   // TODO: Make activate TCamera
   activateCamera(camera->view_projection, 1);
-
-  setWorldMatrix(XMMatrixIdentity());
-  grid.activateAndRender();
-  axis.activateAndRender();
 
   /*drawViewVolume(camera2);
   setWorldMatrix(XMMatrixIdentity());
@@ -298,8 +357,10 @@ void CApp::render() {
   teapot->activateAndRender();*/
 
   renderEntities();
-  renderDebugEntities(true);
-  renderEntityDebugList();
+  vs_basic.activate();
+  ps_basic.activate();
+  renderDebugEntities();
+  //renderEntityDebugList();
 
   TwDraw();
 
@@ -310,48 +371,59 @@ void CApp::render() {
 void CApp::renderEntities() {
   
   // Render entities
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
   {
-	  TTransform* t = entity_manager.getEntities()[i]->get<TTransform>();
-	  TMesh* mesh = entity_manager.getEntities()[i]->get<TMesh>();
+	  TTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TTransform>();
+	  TMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TMesh>();
 
 	  // If the component has no transform it can't be rendered
 	  if (!t)
 		  continue;
 
-	  setWorldMatrix(t->getWorld());
-	  ctes_global.uploadToGPU();
-
 	  if (mesh)
+		setTint(mesh->color);
+
+	  setWorldMatrix(t->getWorld());
+
+	  if (mesh && mesh->active)
 		mesh->mesh->activateAndRender();
   }
 }
 
-void CApp::renderDebugEntities(bool draw_names) {
+void CApp::renderDebugEntities() {
+
+	setWorldMatrix(XMMatrixIdentity());
+	if (renderGrid)
+		grid.activateAndRender();
+	if (renderAxis)
+		axis.activateAndRender();
+
 	// Render entities
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
-		TTransform* t = entity_manager.getEntities()[i]->get<TTransform>();
-		TCompName* name = entity_manager.getEntities()[i]->get<TCompName>();
-		TAABB* aabb = entity_manager.getEntities()[i]->get<TAABB>();
+		CEntity* e = (CEntity*)entity_manager.getEntities()[i];
+		TTransform* t = e->get<TTransform>();
+		TCompName* name = e->get<TCompName>();
+		TAABB* aabb = e->get<TAABB>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
 			continue;
 
 		setWorldMatrix(t->getWorld());
-		ctes_global.uploadToGPU();
-		axis.activateAndRender();
+		if (renderAxis)
+			axis.activateAndRender();
 
 		// If the entity has name, print it
-		if (name && draw_names)
+		if (name && renderNames)
 			font.print3D(t->position, name->name);
 
 		// If the entity has an AABB, draw it
-		if (aabb) {
+		if (aabb && renderAABB) {
 			bool intersects = false;
 			for (int j = 0; j < entity_manager.getEntities().size(); ++j) {
-				TAABB* aabb2 = entity_manager.getEntities()[j]->get<TAABB>();
+				CEntity* e2 = (CEntity*)entity_manager.getEntities()[j];
+				TAABB* aabb2 = e2->get<TAABB>();
 				if (aabb2 && i != j && aabb->intersects(aabb2)) {
 					intersects = true;
 					break;
@@ -371,79 +443,6 @@ void CApp::renderDebugEntities(bool draw_names) {
 			wiredCube.activateAndRender();
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
 			wiredCube.activateAndRender();
-		}
-	}
-}
-
-void CApp::renderEntityDebugList() {
-	font.printf(10, 10, "Entities: %i\nPress <L> to list entities, press <K> to inspect entities in front of you", entity_manager.getEntities().size());	
-
-	TTransform* player_t = entity_manager.getByName("Player")->get<TTransform>();
-
-	font.printf(10, 45, "Player position: (%f, %f, %f)", XMVectorGetX(player_t->position), XMVectorGetY(player_t->position), XMVectorGetZ(player_t->position));
-	font.printf(10, 60, "Player rotation: (%f, %f, %f, %f)", XMVectorGetX(player_t->rotation), XMVectorGetY(player_t->rotation), XMVectorGetZ(player_t->rotation), XMVectorGetW(player_t->rotation));
-
-	bool debug_all_entities = isKeyPressed('L');
-	bool debug_front_entities = isKeyPressed('K');
-	bool entity_in_front = false;
-	int line_jump_count = 0;
-	int current_jump_count = 0;
-	int draw_counter = 0;
-
-	if (debug_all_entities || debug_front_entities)
-	{
-		std::string s;
-		std::string s_name;
-		for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-			s = "";
-			s_name = "";
-			current_jump_count = 0;
-			TCompName* name = entity_manager.getEntities()[i]->get<TCompName>();
-			TTransform* t = entity_manager.getEntities()[i]->get<TTransform>();
-			TMesh* mesh = entity_manager.getEntities()[i]->get<TMesh>();
-			TCamera* cam = entity_manager.getEntities()[i]->get<TCamera>();
-			TCollider* collider = entity_manager.getEntities()[i]->get<TCollider>();
-			TRigidBody* rigid = entity_manager.getEntities()[i]->get<TRigidBody>();			
-			TAABB* aabb = entity_manager.getEntities()[i]->get<TAABB>();
-
-			if (debug_all_entities)
-			{
-				if (name)
-					s_name = name->toString() + "\n";
-			}
-			else if (debug_front_entities)
-			{
-				if (t && XMVectorGetX(XMVector3Dot(XMVector3Normalize(t->position - player_t->position), player_t->getFront())) > 0.8f)
-				{
-					if (name)
-						s_name = name->toString() + "\n";
-					if (t)
-						s += "" + t->toString() + "\n";
-					if (aabb)
-						s += "" + aabb->toString() + "\n";
-					if (mesh)
-						s += "" + mesh->toString() + "\n";
-					if (cam)
-						s += "" + cam->toString() + "\n";
-					if (collider)
-						s += "" + collider->toString() + "\n";
-					if (rigid)
-						s += "" + rigid->toString() + "\n";
-				}
-			}
-
-			for (int j = 0; j < s.size(); j++) {
-				if (s[j] == '\n') { current_jump_count++; }
-			}
-			line_jump_count += current_jump_count;
-
-			if (!s.empty() || !s_name.empty()) {
-				draw_counter++;
-				font.color = 0xffff00ff;
-				font.printf(20, 80 + (line_jump_count - current_jump_count + draw_counter) * 20, s_name.c_str());
-				font.color = 0xffffffff;
-				font.printf(30, 80 + (line_jump_count - current_jump_count + draw_counter + 1) * 20, s.c_str());
-			}
 		}
 	}
 }

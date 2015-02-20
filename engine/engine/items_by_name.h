@@ -18,7 +18,7 @@ public:
   }
 
   const TItem* getByName(const char* name) {
-
+	 
     // Search ...
     auto it = all_items.find(name);
 
