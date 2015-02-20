@@ -996,23 +996,46 @@ struct  TDistanceJoint : TBaseComponent {
 	physx::PxRigidActor* a1;
 	physx::PxRigidActor* a2;
 
+	std::string actor1;
+	std::string actor2;
+
 	TDistanceJoint() {}
 
 	void loadFromAtts(MKeyValue &atts) {
-
+		actor1 = atts.getString("actor1", "");
+		actor2 = atts.getString("actor2", "");
 	}
 
 	void init() {
-		//create a joint  	
-		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, a1, physx::PxTransform(0.5f, 0.5f, 0.5f), a2, physx::PxTransform(0.0f, -0.5f, 0.0f));
+		CEntity* a1 = CEntityManager::get().getByName(actor1.c_str());
+		CEntity* a2 = CEntityManager::get().getByName(actor2.c_str());
+
+		TRigidBody* r1 = a1->get<TRigidBody>();
+		TRigidBody* r2 = a2->get<TRigidBody>();
+
+		TStaticBody* s1 = a1->get<TStaticBody>();
+		TStaticBody* s2 = a2->get<TStaticBody>();
+
+		
+
+		//create a joint
+		if (r1) {
+			if (r2)
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, r1->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), r2->rigidBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+			else
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, r1->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), s2->staticBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+		}
+		else {
+			if (s1)
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, s1->staticBody, physx::PxTransform(0.5f, 0.5f, 0.5f), r2->rigidBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+			else
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, s1->staticBody, physx::PxTransform(0.5f, 0.5f, 0.5f), s2->staticBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+		}
+		
 		joint->setDamping(5);
-		joint->setMaxDistance(5);
+		joint->setMaxDistance(2.5f);
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
-	}
-
-	void fixedUpdate(float elapsed) {
-
 	}
 };
 

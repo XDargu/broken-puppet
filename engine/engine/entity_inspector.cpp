@@ -179,6 +179,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TPlayerController* e_player_controller = target_entity->get<TPlayerController>();
 	TPlayerPivotController* e_player_pivot_controller = target_entity->get<TPlayerPivotController>();
 	TCameraPivotController* e_camera_pivot_controller = target_entity->get<TCameraPivotController>();
+	TThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TThirdPersonCameraController>();
 
 	TwRemoveAllVars(bar);
 	if (e_name) {
@@ -251,6 +252,11 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarRW(bar, "Tilt velocity", TW_TYPE_FLOAT, &e_camera_pivot_controller->tilt_velocity, " group='Camera Pivot Controller' label='Tilt velocity'");
 		TwAddVarRW(bar, "Min tilt", TW_TYPE_FLOAT, &e_camera_pivot_controller->min_tilt, " group='Camera Pivot Controller' label='Min tilt'");
 		TwAddVarRW(bar, "Max tilt", TW_TYPE_FLOAT, &e_camera_pivot_controller->max_tilt, " group='Camera Pivot Controller' label='Max tilt'");
+	}
+
+	if (e_third_person_camera_controller) {
+		TwAddVarRW(bar, "ThirdPersonCameraControllerActive", TW_TYPE_BOOL8, &e_third_person_camera_controller->active, " group='Third Person Camera Controller' label='Active' ");
+		TwAddVarRW(bar, "ThirdPersonCameraControllerOffset", TW_TYPE_DIR3F, &e_third_person_camera_controller->offset, " group='Third Person Camera Controller' label='Offset'");
 	}
 
 	TwAddSeparator(bar, "", "");

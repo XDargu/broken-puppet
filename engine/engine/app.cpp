@@ -85,7 +85,8 @@ void createManagers() {
 	getObjManager<TCameraPivotController>()->init(1);
 	getObjManager<TPlayerPivotController>()->init(1);
 	getObjManager<TEnemyWithPhysics>()->init(64);
-
+	getObjManager<TDistanceJoint>()->init(32);
+	
 	registerAllComponentMsgs();
 }
 
@@ -100,6 +101,7 @@ void initManagers() {
 	getObjManager<TCameraPivotController>()->initHandlers();	
 	getObjManager<TThirdPersonCameraController>()->initHandlers();
 	getObjManager<TEnemyWithPhysics>()->initHandlers();	
+	getObjManager<TDistanceJoint>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -165,6 +167,8 @@ bool CApp::create() {
   entity_lister.init();
   entity_actioner.init();
   debug_optioner.init();
+
+  activateInspectorMode(false);
 
   CEntity* e2 = CHandle::create< CEntity >();
   TLife *life = e2->add(CHandle::create<TLife>());
@@ -248,36 +252,10 @@ void CApp::update(float elapsed) {
   io.update(elapsed);
 
   if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
-	  if (io.getMousePointer()) {
-		  io.setMousePointer(false);
-
-		  // Activa el modo debug
-		  renderAxis = true;
-		  renderAABB = true;
-		  renderGrid = true;
-		  renderNames = true;
-
-		  // Desactivar los componentes
-		  getObjManager<TPlayerController>()->setActiveComponents(false);
-		  getObjManager<TPlayerPivotController>()->setActiveComponents(false);
-		  getObjManager<TCameraPivotController>()->setActiveComponents(false);
-		  getObjManager<TThirdPersonCameraController>()->setActiveComponents(false);
-	  }
-	  else {
-		  io.setMousePointer(true);
-
-		  // Desactiva el modo debug
-		  renderAxis = false;
-		  renderAABB = false;
-		  renderGrid = false;
-		  renderNames = false;
-
-		  // Activar los componentes
-		  getObjManager<TPlayerController>()->setActiveComponents(true);
-		  getObjManager<TPlayerPivotController>()->setActiveComponents(true);
-		  getObjManager<TCameraPivotController>()->setActiveComponents(true);
-		  getObjManager<TThirdPersonCameraController>()->setActiveComponents(true);
-	  }
+	  if (io.getMousePointer())
+		  activateInspectorMode(true);
+	  else
+		  activateInspectorMode(false);
   }
 	
   // Update ---------------------
@@ -445,6 +423,24 @@ void CApp::renderDebugEntities() {
 			wiredCube.activateAndRender();
 		}
 	}
+}
+
+void CApp::activateInspectorMode(bool active) {
+	CIOStatus& io = CIOStatus::get();
+	// Update input
+	io.setMousePointer(!active);
+
+	// Activa el modo debug
+	renderAxis = active;
+	renderAABB = active;
+	renderGrid = active;
+	renderNames = active;
+
+	// Desactivar los componentes
+	getObjManager<TPlayerController>()->setActiveComponents(!active);
+	getObjManager<TPlayerPivotController>()->setActiveComponents(!active);
+	getObjManager<TCameraPivotController>()->setActiveComponents(!active);
+	getObjManager<TThirdPersonCameraController>()->setActiveComponents(!active);
 }
 
 void CApp::destroy() {
