@@ -189,17 +189,17 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	}
 	if (e_transform) {
 		TwAddVarRW(bar, "TActive", TW_TYPE_BOOL8, &e_transform->active, " group=Transform label='Active'");
-		TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform");
+		TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform axisx=-x axisz=-z");
 		TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform");
 		// Yaw Pitch Roll
 		TwAddVarCB(bar, "Pich", TW_TYPE_FLOAT, NULL, GetPitch, e_transform, " group=Transform");
-		TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform");
+		TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform axisx=-x axisz=-z");
 		TwAddSeparator(bar, "Transform", "");
 	}
 	if (e_mesh) {
 		TwAddVarRW(bar, "MActive", TW_TYPE_BOOL8, &e_mesh->active, " group=Mesh label='Active'");
 		//TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
-		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh");
+		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh axisx=-x axisz=-z");
 		TwAddVarCB(bar, "Path", TW_TYPE_STDSTRING, ReloadMesh, GetMeshPath, e_mesh, " group=Mesh");
 	}
 	if (e_collider) {
@@ -215,16 +215,16 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarCB(bar, "Angular Damping", TW_TYPE_FLOAT, SetAngularDamping, GetAngularDamping, e_rigidbody, " min=0 group=Rigidbody");
 		TwAddVarCB(bar, "Use Gravity", TW_TYPE_BOOL8, SetGravity, GetGravity, e_rigidbody, " group=Rigidbody");
 		TwAddVarCB(bar, "Is Kinematic", TW_TYPE_BOOL8, SetKinematic, GetKinematic, e_rigidbody, " group=Rigidbody");
-		TwAddVarRO(bar, "Linear velocity", TW_TYPE_DIR3F, &linearVelocity, " group=Rigidbody");
-		TwAddVarRO(bar, "Angular velocity", TW_TYPE_DIR3F, &angularVelocity, " group=Rigidbody");
+		TwAddVarRO(bar, "Linear velocity", TW_TYPE_DIR3F, &linearVelocity, " group=Rigidbody axisx=-x axisz=-z");
+		TwAddVarRO(bar, "Angular velocity", TW_TYPE_DIR3F, &angularVelocity, " group=Rigidbody axisx=-x axisz=-z");
 	}	
 	if (e_aabb) {
 		TwAddVarRW(bar, "AABBActive", TW_TYPE_BOOL8, &e_aabb->active, " group=AABB label='Active'");
-		TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB");
-		TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB");
-		TwAddVarRO(bar, "Center", TW_TYPE_DIR3F, &center, " group=AABB");
-		TwAddVarRO(bar, "Extents", TW_TYPE_DIR3F, &extents, " group=AABB");
-		TwAddVarRO(bar, "Size", TW_TYPE_DIR3F, &size, " group=AABB");
+		TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB axisx=-x axisz=-z");
+		TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB axisx=-x axisz=-z");
+		TwAddVarRO(bar, "Center", TW_TYPE_DIR3F, &center, " group=AABB axisx=-x axisz=-z");
+		TwAddVarRO(bar, "Extents", TW_TYPE_DIR3F, &extents, " group=AABB axisx=-x axisz=-z");
+		TwAddVarRO(bar, "Size", TW_TYPE_DIR3F, &size, " group=AABB axisx=-x axisz=-z");
 	}
 
 	if (e_camera) {
@@ -248,7 +248,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 
 	if (e_camera_pivot_controller) {
 		TwAddVarRW(bar, "CameraPivotControllerActive", TW_TYPE_BOOL8, &e_camera_pivot_controller->active, " group='Camera Pivot Controller' label='Active' ");
-		TwAddVarRW(bar, "CameraPivotControllerOffset", TW_TYPE_DIR3F, &e_camera_pivot_controller->offset, " group='Camera Pivot Controller' label='Offset'");
+		TwAddVarRW(bar, "CameraPivotControllerOffset", TW_TYPE_DIR3F, &e_camera_pivot_controller->offset, " group='Camera Pivot Controller' label='Offset' axisx=-x axisz=-z");
 		TwAddVarRW(bar, "Tilt velocity", TW_TYPE_FLOAT, &e_camera_pivot_controller->tilt_velocity, " group='Camera Pivot Controller' label='Tilt velocity'");
 		TwAddVarRW(bar, "Min tilt", TW_TYPE_FLOAT, &e_camera_pivot_controller->min_tilt, " group='Camera Pivot Controller' label='Min tilt'");
 		TwAddVarRW(bar, "Max tilt", TW_TYPE_FLOAT, &e_camera_pivot_controller->max_tilt, " group='Camera Pivot Controller' label='Max tilt'");
@@ -256,7 +256,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 
 	if (e_third_person_camera_controller) {
 		TwAddVarRW(bar, "ThirdPersonCameraControllerActive", TW_TYPE_BOOL8, &e_third_person_camera_controller->active, " group='Third Person Camera Controller' label='Active' ");
-		TwAddVarRW(bar, "ThirdPersonCameraControllerOffset", TW_TYPE_DIR3F, &e_third_person_camera_controller->offset, " group='Third Person Camera Controller' label='Offset'");
+		TwAddVarRW(bar, "ThirdPersonCameraControllerOffset", TW_TYPE_DIR3F, &e_third_person_camera_controller->offset, " group='Third Person Camera Controller' label='Offset' axisx=-x axisz=-z");
 	}
 
 	TwAddSeparator(bar, "", "");

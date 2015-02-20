@@ -78,7 +78,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	const float lXZ = (dot(input.Normal, XAXIS) + 1) / 2;
 	const float lYZ = (dot(input.Normal, YAXIS) + 1) / 2;
 
-	float3 lightDir = { Tint.x, -Tint.y, Tint.z };
+	float3 lightDir = { Tint.x, Tint.y, Tint.z };
 
 	//float3 local_lightDirection = mul(lightDirection, World);
 	//local_lightDirection = mul(local_lightDirection, ViewProjection);
