@@ -2,6 +2,7 @@
 #define INC_FONT_H_
 
 #include "FW1FontWrapper.h"
+#include "../handle/handle.h"
 class CCamera;
 
 struct CFont {
@@ -9,7 +10,7 @@ struct CFont {
   IFW1Factory*     FW1Factory;
   unsigned         color;
   float            size;
-  const CCamera*   camera;
+  const TCamera*   camera;
   CFont();
   bool create();
   void destroy();

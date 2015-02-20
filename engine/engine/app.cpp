@@ -2,47 +2,34 @@
 #include "app.h"
 #include "camera.h"
 #include "render/render_utils.h"
-#include "entity.h"
+#include "entity_manager.h"
 #include "doom_controller.h"
-#include "camera_pivot_controller.h"
 #include "font/font.h"
 #include "render/texture.h"
-#include "camera_controller.h"
-#include <string>
-#include <vector>
+#include "importer_parser.h"
+#include "physics_manager.h"
+#include "handle\handle.h"
 
+using namespace DirectX;
+#include "render/ctes/shader_ctes.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
 
 using namespace physx;
 
-using namespace DirectX;
-#include "render/ctes/shader_ctes.h"
-#include "ai\aic_melee_gatekeeper.h"
-#include "ai\ai_basic_patroller.h"
-
-
-using namespace physx;
-
-// Variables de Escena y SDK
-PxPhysics *gPhysicsSDK;
-PxScene* gScene = NULL;
-
-
-// Estos calbacks aun me los he de estudiar
-static PxDefaultErrorCallback gDefaultErrorCallback;
-static PxDefaultAllocator gDefaultAllocatorCallback;
-static PxSimulationFilterShader gDefaultFilterShader = PxDefaultSimulationFilterShader;
-
-// Ahora mismo el mundo avanza a 16,6666 ms cada tick ( esto deberia ser variable o fijo ya lo veremos )
-PxReal myTimestep = 1.0f / 60.0f;
-
-
-// Por ahora me guardo uno de los objectos pero mas adelante ya usaremos manager
-PxRigidDynamic* object;
+#include <AntTweakBar.h>
+#include "entity_inspector.h"
 
 static CApp the_app;
+
+CEntityManager &entity_manager = CEntityManager::get();
+CPhysicsManager &physics_manager = CPhysicsManager::get();
+
+#include "ai\ai_basic_patroller.h"
+#include "io\iostatus.h"
+
+ai_basic_patroller aibp;
 
 CApp& CApp::get() {
   return the_app;
@@ -55,240 +42,87 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-  xres = 1366;
-  yres = 768;
+  xres = 1024;
+  yres = 640;
 }
 
 CVertexShader vs_basic;
 CVertexShader vs_basic2;
 CPixelShader ps_basic;
 CPixelShader ps_textured;
-
-CMesh		 camera_mesh;
 CMesh        grid;
 CMesh        axis;
-CMesh		 cube;
-CMesh		 cubeMini;
-const CMesh*		 level;
-const CMesh*		 prota;
+CMesh		 wiredCube;
+CMesh		 intersectsWiredCube;
 
-CCamera       camera;
-CCamera       camera2;
+TCamera*      camera;
+CCamera*	  oldCamera;
 CFont         font;
-
-CThirdPersonController   third_person_controller;
-camera_pivot_controller CPC;
-CCamera_controller camera_controller;
-CAimToController  aim_controller;
-CLookAtController lookat_controller;
-
-//Punteros ---------------------------------
-CCamera* cam_pointer;
-camera_pivot_controller* cam_pivot_pointer;
-//------------------------------------------
-
-CEntity*         player;
-CEntity*         e3;
-
-CEntity*		 cameraPivot;
-CEntity*		 cameraEntity;
-
-CEntity*		 box1;
-PxRigidDynamic*  dynamicBox1;
-CEntity*		 box2;
-PxRigidDynamic*  dynamicBox2;
-
-CEntity*		 box3;
-PxRigidStatic*	 staticBox1;
-
-PxRigidDynamic*	 playerRigid;
 
 CShaderCte<TCtesGlobal> ctes_global;
 
-std::vector<CEntity*>	balls;
+float fixedUpdateCounter;
 
-// AI
-aic_melee_gatekeeper	aimg;
-ai_basic_patroller		aibp;
-
-
-// Copy paste mas o menos de la docu
-void InitializePhysX()
-{
-
-	auto i = 10;
-	PxFoundation* foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-
-	if (!foundation)
-		OutputDebugString("ERROR FOUNDATION!\n");
-	else
-		OutputDebugString("YOSH!!\n");
-
-	gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, PxTolerancesScale());
-	
-	// ------------------------------------
-	physx::PxVisualDebuggerConnectionFlags flags =
-		physx::PxVisualDebuggerConnectionFlag::eDEBUG
-		| physx::PxVisualDebuggerConnectionFlag::ePROFILE
-		| physx::PxVisualDebuggerConnectionFlag::eMEMORY;
-
-	if (gPhysicsSDK->getPvdConnectionManager())
-	{
-		PxVisualDebuggerConnection* gConnection = PxVisualDebuggerExt::createConnection(gPhysicsSDK->getPvdConnectionManager(), "127.0.0.1", 5425, 1000, flags);
-	}
-
-	
-	gPhysicsSDK->getVisualDebugger()->setVisualizeConstraints(true);
-	gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS, true);
-	gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS, true);
-	gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_SCENEQUERIES, true);
-	// ------------------------------------
-
-	PxInitExtensions(*gPhysicsSDK);
-
-	PxSceneDesc sceneDesc(gPhysicsSDK->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);	//Ponemos gravedad terrestre ( Para PhysX Y es vertical )
-
-	if (!sceneDesc.cpuDispatcher){
-		PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1);
-		sceneDesc.cpuDispatcher = mCpuDispatcher;
-	}
-
-	// Ni idea de lo que es esto
-	if (!sceneDesc.filterShader)
-		sceneDesc.filterShader = gDefaultFilterShader;
-
-	gScene = gPhysicsSDK->createScene(sceneDesc);
-
-
+void registerAllComponentMsgs() {
+	SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TLife, TMsgDied, onDied);
 }
 
-void throwBall()
-{
-	CEntity* ball = entity_manager.create("Ball");
-
-	PxMaterial* mMaterial;
-	mMaterial = gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
-
-
-	PxVec3 pos = PxVec3(
-		XMVectorGetX(player->getPosition()),
-		XMVectorGetY(player->getPosition()),
-		XMVectorGetZ(player->getPosition())
-		);
-
-	PxVec3 delta = PxVec3(
-		XMVectorGetX(player->getFront()),
-		XMVectorGetY(player->getFront()),
-		XMVectorGetZ(player->getFront())
-		);
-
-	PxRigidDynamic* ballActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(pos + delta * 1.5f), PxSphereGeometry(0.1f),
-		*mMaterial, 1000.0f);
+void createManagers() {
+	getObjManager<CEntity>()->init(1024);
+	getObjManager<TTransform>()->init(1024);
+	getObjManager<TController>()->init(32);
+	getObjManager<TLife>()->init(32);
+	getObjManager<TCompName>()->init(1024);
+	getObjManager<TMesh>()->init(1024);
+	getObjManager<TCamera>()->init(4);
+	getObjManager<TCollider>()->init(512);
+	getObjManager<TRigidBody>()->init(512);
+	getObjManager<TStaticBody>()->init(512);
+	getObjManager<TAABB>()->init(1024);
+	getObjManager<TPlayerController>()->init(1);
+	getObjManager<TThirdPersonCameraController>()->init(1);
+	getObjManager<TCameraPivotController>()->init(1);
+	getObjManager<TPlayerPivotController>()->init(1);
+	getObjManager<TEnemyWithPhysics>()->init(64);
+	getObjManager<TDistanceJoint>()->init(32);
 	
-	gScene->addActor(*ballActor);
-	ballActor->addForce(delta * 100, PxForceMode::eIMPULSE, true);
-
-	ball->rigid = ballActor;
-	balls.push_back(ball);
+	registerAllComponentMsgs();
 }
 
-
-PxDistanceJoint* j;
-
-void CreateActors(){
-
-	// Declaramos un material fisico a usar
-	PxMaterial* mMaterial;
-	mMaterial = gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f);    //static friction, dynamic friction, restitution
-
-	// Creamos un rigidbody dinamico que sera una esfera de radio 10 i lo ponemos en posicion 100 en Y
-	/*PxRigidDynamic* aSphereActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 400, 0)), PxSphereGeometry(1),
-		*mMaterial, 1.0f);*/
-	//Aplicamos velocidad vertical y anyadimos objeto a la escena
-	//aSphereActor->setLinearVelocity(PxVec3(0, -10, 0));
-	//gScene->addActor(*aSphereActor);
-
-	// añadir cajas
-	PxRigidDynamic* aBoxActor = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 2, 0)), PxBoxGeometry(1, 1, 1),
-		*mMaterial, 2.0f);
-
-	gScene->addActor(*aBoxActor);
-	dynamicBox1 = aBoxActor;
-
-	PxRigidDynamic* aBoxActor2 = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 10, 5)), PxBoxGeometry(1, 1, 1),
-		*mMaterial, 100.0f);
-
-	gScene->addActor(*aBoxActor2);
-	dynamicBox2 = aBoxActor2;
-
-	staticBox1 = PxCreateStatic(*gPhysicsSDK, PxTransform(PxVec3(0, 10, 5)), PxBoxGeometry(1, 1, 1), *mMaterial);
-	gScene->addActor(*staticBox1);
-
-	// Creamos un suelo para que la esfera no caiga al vacio
-	PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
-	gScene->addActor(*plane);
-	
-
-	// Por ahora me guardo el objeto esfera en un puntero global para verlo despues
-	//object = aSphereActor;
-	//create a joint  
-	j = PxDistanceJointCreate(*gPhysicsSDK, dynamicBox2, PxTransform::createIdentity(), staticBox1, PxTransform::createIdentity());
-	j->setDamping(5);
-	j->setMaxDistance(5);
-	j->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, true);
-	j->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
-
-	// Player kinemático
-	playerRigid = PxCreateDynamic(*gPhysicsSDK, PxTransform(PxVec3(0, 0, 0)), /*PxBoxGeometry(1, 1, 1)*/PxCapsuleGeometry(0.2f, 0.5f),
-		*mMaterial, 100.0f);
-
-	playerRigid->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
-
-	gScene->addActor(*playerRigid);
-
-	
-
+void initManagers() {
+	getObjManager<TCamera>()->initHandlers();
+	getObjManager<TCollider>()->initHandlers();
+	getObjManager<TRigidBody>()->initHandlers();
+	getObjManager<TStaticBody>()->initHandlers();
+	getObjManager<TAABB>()->initHandlers();
+	getObjManager<TPlayerController>()->initHandlers();
+	getObjManager<TPlayerPivotController>()->initHandlers();
+	getObjManager<TCameraPivotController>()->initHandlers();	
+	getObjManager<TThirdPersonCameraController>()->initHandlers();
+	getObjManager<TEnemyWithPhysics>()->initHandlers();	
+	getObjManager<TDistanceJoint>()->initHandlers();
 }
 
+bool CApp::create() {
 
-// Que haga cosas
-float throwCounter = 0.0f;
-
-float physxCounter = 0.0f;
-const float physxStep = 1.f / 60.f;
-bool released = false;
-void StepPhysX(float delta){
-	physxCounter += delta;
-	throwCounter += delta;
-	if (physxCounter >= physxStep)
-	{
-		if (isKeyPressed('C'))
-		{
-			if (!released)
-				j->release();
-			released = true;
-		}
-		if (isKeyPressed(' '))
-		{
-			if (throwCounter >= .5f)
-			{
-				throwBall();
-				throwCounter = 0;
-			}
-		}
-		physxCounter = 0;
-		gScene->simulate(physxStep);
-		gScene->fetchResults(true);
-	}
-	
-}
-
-
-bool CApp::create() {	
-	
   if (!::render.createDevice())
     return false;
+
+  renderAABB = true;
+  renderAxis = true;
+  renderGrid = true;
+  renderNames = true;
+
+  createManagers();
+
+  physics_manager.init();
+
+  CImporterParser p;
+  p.xmlParseFile("my_file.xml");
+
+  initManagers();
+  fixedUpdateCounter = 0.0f;
 
   bool is_ok = vs_basic.compile("Tutorial04.fx", "VS", vdcl_position_color)
     && ps_basic.compile("Tutorial04.fx", "PS")
@@ -297,122 +131,90 @@ bool CApp::create() {
   ;
   assert(is_ok);
 
+  CEntity* e = entity_manager.getByName("Camera");
+  camera = e->get<TCamera>();
+
   is_ok = font.create();
-  font.camera = &camera;
+  font.camera = camera;
   assert(is_ok);
 
   // Ctes ---------------------------
   is_ok &= renderUtilsCreate();
 
-  // Initialize the world matrix
-  //camera.setOverlap(1.5f, 2.f);
-  camera.lookAt(XMVectorSet(10.f, 8.f, 2.f, 1.f)
-    , XMVectorSet(0.f, 0.f, 0.f, 1.f)
-    , XMVectorSet(0, 1, 0, 0));
-  camera.setPerspective(deg2rad(75.f), 1.f, 1000.f);
-  camera.setViewport(0.f, 0.f, (float)xres, (float)yres);
-
-  camera2.lookAt(XMVectorSet(10.f, 0.f, 0.f, 1.f)
-	  , XMVectorSet(0.f, 0.f, 0.f, 1.f)
-	  , XMVectorSet(0, 1, 0, 0));
-  camera2.setPerspective(deg2rad(50.f), 1.f, 500.f);
-  camera2.setViewport(0.f, 0.f, (float)xres, (float)yres);
-
+  // Initialize the camera
+  camera->setViewport(0.f, 0.f, (float)xres, (float)yres);
 
   //ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-  ctes_global.get()->world_time = 0.f;// XMVectorSet(0, 0, 0, 0);
+  ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
   is_ok &= ctes_global.create();
   assert(is_ok);
 
+  // Create debug meshes
   is_ok &= createGrid(grid, 10);
   is_ok &= createAxis(axis);
+  is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
+  is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
   assert(is_ok);
 
-  player = entity_manager.create("Player");
-  player->setPosition(XMVectorSet(-3, 0, -3, 1));
-  player->setRotation(XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(30.f)));
+  // Init AntTweakBar
+  TwInit(TW_DIRECT3D11, ::render.device);
+  TwWindowSize(xres, yres);
 
-  cameraEntity = entity_manager.create("Third person camera");
-  cameraPivot = entity_manager.create("Third person camera pivot");
+  entity_inspector.init();
+  entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
 
-  //---------- Inicializando controladores ----------
-  XMVECTOR offset = { -2.f, 1.5f, -2.f, 0.f };
-  CPC.init(offset, player);
-  cam_pointer = &camera;
-  cam_pivot_pointer = &CPC;
-  //--------------------------------------------------
+  entity_lister.init();
+  entity_actioner.init();
+  debug_optioner.init();
 
-  e3 = entity_manager.create("camera");
-  e3->setPosition(XMVectorSet(-5, 4, -3, 1));
+  activateInspectorMode(false);
 
-  createCube(cube, 1);
-  createCube(cubeMini, 0.1f);
+  CEntity* e2 = CHandle::create< CEntity >();
+  TLife *life = e2->add(CHandle::create<TLife>());
+  life->life = 20.f;
+  TCompName* cname = e2->add(CHandle::create<TCompName>());
+  strcpy(cname->name, "pep");
 
-  createCamera(camera_mesh);
+  CHandle h2(e2);
+  CHandle h3 = h2.clone();
+  CEntity* e3 = h3;
+  TLife *life3 = e3->get<TLife>();
 
-  box1 = entity_manager.create("Box001");
-  box2 = entity_manager.create("Box002");
-  box3 = entity_manager.create("Box003");
 
-  prota = mesh_manager.getByName("prota");
-  level = mesh_manager.getByName("Level");
+  TMsgExplosion msg1;
+  msg1.damage = 3.3f;
+  e2->sendMsg(msg1);
+  e2->sendMsg(TMsgDied(2));
 
-  // Gatekeeper
-  CEntity* gate = entity_manager.create("Gate");
-  gate->setPosition(XMVectorSet(10, 0, 10, 0));
-  aimg.player = player;
-  aimg.gate = gate;
-  aimg.Init();
-  aimg.SetEntity(entity_manager.create("Gatekeeper"));
-  aimg.entity->setPosition(XMVectorSet(10, 0, 10, 0));
+  // Enemigo SIN componentes
+  aibp.entity = old_entity_manager.create("Enemy");
+  aibp.entity->setPosition(((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position);
+  CEntityOld* wp1 = old_entity_manager.create("EnemyWp1");
+  wp1->setPosition(XMVectorSet(10, 0, 10, 0));
+  CEntityOld* wp2 = old_entity_manager.create("EnemyWp2");
+  wp2->setPosition(XMVectorSet(-10, 0, 10, 0));
+  CEntityOld* wp3 = old_entity_manager.create("EnemyWp3");
+  wp3->setPosition(XMVectorSet(10, 0, -10, 0));
 
-  // Patroller
-  // Waypoints
-  CEntity* e;
-  vector<CEntity*>	 waypoints;
-  e = entity_manager.create("Waypoint 1");
-  e->setPosition(XMVectorSet(-20, 1, -14, 1));
-  waypoints.push_back(e);
-  e = entity_manager.create("Waypoint 2");
-  e->setPosition(XMVectorSet(-16, 1, 22, 1));
-  waypoints.push_back(e);
-  e = entity_manager.create("Waypoint 3");
-  e->setPosition(XMVectorSet(19, 1, -17, 1));
-  waypoints.push_back(e);
-  e = entity_manager.create("Waypoint 4");
-  e->setPosition(XMVectorSet(14, 1, 27, 1));
-  waypoints.push_back(e);
-  e = entity_manager.create("Waypoint 5");
-  e->setPosition(XMVectorSet(-10, 1, -23, 1));
-  waypoints.push_back(e);
+  vector<CEntityOld*> waypoints;
+  waypoints.push_back(wp1);
+  waypoints.push_back(wp2);
+  waypoints.push_back(wp3);
 
-  // Basic patroller
-  aibp.entity = entity_manager.create("Patroller");
-  aibp.entity->setPosition(XMVectorSet(-20, 1, -14, 1));
   aibp.waypoints = waypoints;
-
   aibp.Init();
 
-  InitializePhysX();
-  CreateActors(); 
-
-  playerRigid->setGlobalPose(PxTransform(PxVec3(-3, 1, -3), PxQuat(deg2rad(30), PxVec3(0, 1, 0))), true);
-  
   return true;
 }
 
-void moveCameraOnEntity(CCamera& camera, CEntity *e) {
-	camera.lookAt(
-		//e->getPosition() + e->getUp()*camera.overlapY - e->getFront()*camera.overlapZ
-		camera.getCamEntity()->getPosition()
-		, e->getPosition() + e->getFront() / 2
-		, e->getUp());
+void moveCameraOnEntity(CCamera& camera, CEntityOld *e) {
+  camera.lookAt(e->getPosition(), e->getPosition() + e->getFront(), e->getUp());
 }
 
 // -------------------------------------
 void CApp::doFrame() {
-	
+
   static LARGE_INTEGER before;
   LARGE_INTEGER freq;
   QueryPerformanceFrequency(&freq);
@@ -429,47 +231,62 @@ void CApp::doFrame() {
   float fps = 1.0f / delta_secs;
 
   before = now;
-  //dbg("delta is %f fps = %f\n", delta_secs, fps);
 
-  update(delta_secs);
-  render();
-  
-  if (gScene){	  
-	  StepPhysX(delta_secs);
+  // To avoid the fist huge delta time
+  if (delta_secs < 0.5) {
+	  update(delta_secs);
+	  // Fixed update
+	  fixedUpdateCounter += delta_secs;
+	  if (fixedUpdateCounter >= physics_manager.timeStep) {
+		  fixedUpdate(fixedUpdateCounter);
+		  fixedUpdateCounter = 0.0f;
+	  }
   }
-
+  render();
 }
 
 void CApp::update(float elapsed) {
+
+  CIOStatus& io = CIOStatus::get();
+  // Update input
+  io.update(elapsed);
+
+  if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
+	  if (io.getMousePointer())
+		  activateInspectorMode(true);
+	  else
+		  activateInspectorMode(false);
+  }
 	
   // Update ---------------------
-  
-  lookat_controller.update(e3, aibp.entity, elapsed);
-  third_person_controller.update(player, cam_pivot_pointer, elapsed);
-  //ctes_global.get()->world_time += elapsed;
+  //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
+  ctes_global.get()->world_time += elapsed;
 
-  /*cameraPivot->setPosition(player->getPosition() + player->getUp());
-  cameraPivot->setRotation(player->getRotation());
-
-  cameraEntity->setPosition(cameraPivot->getPosition() - cameraPivot->getFront() * 3 + cameraPivot->getUp() * 2);
-  cameraEntity->setRotation(cameraPivot->getRotation());
-  lookat_controller.update(cameraEntity, cameraPivot, elapsed);*/
-
-  //moveCameraOnEntity(camera, CPC.getCamPivot());
-  moveCameraOnEntity(camera2, e3);
-
-  // AI
-  aimg.Recalc(elapsed);
   aibp.Recalc(elapsed);
 
-  //-------- actualizando controladores camara -----------
-  if (isKeyPressed('Z')){
-	  exit(-1);
-  }
+  getObjManager<TPlayerController>()->update(elapsed); // Update player transform
+  getObjManager<TPlayerPivotController>()->update(elapsed);
+  getObjManager<TCameraPivotController>()->update(elapsed);
+  getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+  getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
 
-  CPC.update();
-  camera_controller.update(cam_pointer, cam_pivot_pointer, elapsed);
-  //--------------------------------------------------------------------------------------------
+  entity_inspector.update();
+  entity_lister.update();
+  entity_actioner.update();
+  
+  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position = aibp.entity->getPosition();
+  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->rotation = aibp.entity->getRotation();
+}
+
+// Physics update
+void CApp::fixedUpdate(float elapsed) {
+  physics_manager.gScene->simulate(physics_manager.timeStep);
+  physics_manager.gScene->fetchResults(true);
+
+  getObjManager<TPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
+  getObjManager<TRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+  getObjManager<TEnemyWithPhysics>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -481,183 +298,162 @@ void CApp::render() {
 
   activateTextureSamplers();
 
-  vs_basic.activate();
-  ps_basic.activate();
+  //vs_basic.activate();
+  //ps_basic.activate();  
+  vs_basic2.activate();
+  ps_textured.activate();
+  const CTexture *t = texture_manager.getByName("wood_d");
+  t->activate(0);
+  ctes_global.get()->lightDirection = XMVectorSet(0, 1, 1, 0);
+  ctes_global.uploadToGPU();
+  ctes_global.activateInPS(2);
+
+  //ctes_global.activateInVS(2);
 
   activateWorldMatrix(0);
-  activateCamera(camera, 1);
+  activateTint(0);
+  
+  //activateCamera(*camera, 1);
+  // TODO: Make activate TCamera
+  activateCamera(camera->view_projection, 1);
 
-  setWorldMatrix(XMMatrixIdentity());
-  grid.activateAndRender();
-  axis.activateAndRender();
-
-  setWorldMatrix(e3->getWorld());
-  camera_mesh.activateAndRender();
-  setWorldMatrix(cameraEntity->getWorld());
-
-  camera_mesh.activateAndRender();
-  drawViewVolume(camera);
-  drawViewVolume(camera2);
-
+  /*drawViewVolume(camera2);
   setWorldMatrix(XMMatrixIdentity());
 
   static int nframe = 0;
-  font.printf(10, 10, "Yaw Is %f", rad2deg(getYawFromVector(player->getFront())));
+  font.printf(10, 10, "Yaw Is %f", rad2deg( getYawFromVector( e1->getFront())));
 
   ctes_global.uploadToGPU();
 
   // Tech con textura
-  /*vs_basic2.activate();
+  vs_basic2.activate();
   ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
-  
-
-  setWorldMatrix(XMMatrixTranslation(0, object->getGlobalPose().p.y, 0));
   const CMesh* teapot = mesh_manager.getByName("Box001");
   ctes_global.activateInVS(2);
   teapot->activateAndRender();*/
 
-  // Player kinemático
-  PxQuat rotationPlayer = PxQuat(
-	  XMVectorGetX(player->getRotation()),
-	  XMVectorGetY(player->getRotation()),
-	  XMVectorGetZ(player->getRotation()),
-	  XMVectorGetW(player->getRotation()));
-
-  rotationPlayer *= PxQuat(deg2rad(90), PxVec3(0, 0, 1));
-
-  playerRigid->setKinematicTarget(PxTransform(
-	  PxVec3(
-		XMVectorGetX(player->getPosition() + player->getUp() * 0.5f),
-		XMVectorGetY(player->getPosition() + player->getUp() * 0.5f),
-		XMVectorGetZ(player->getPosition() + player->getUp() * 0.5f)
-	  ),
-		rotationPlayer	  
-	  ));
-
-  setWorldMatrix(player->getWorld());
-  ctes_global.uploadToGPU();
-  prota->activateAndRender();
-
-  // Cajas con físicas
-  box1->setPosition(XMVectorSet(
-	  dynamicBox1->getGlobalPose().p.x,
-	  dynamicBox1->getGlobalPose().p.y,
-	  dynamicBox1->getGlobalPose().p.z,
-	  1
-	  ));
-  box1->setRotation(XMVectorSet(
-	  dynamicBox1->getGlobalPose().q.x,
-	  dynamicBox1->getGlobalPose().q.y,
-	  dynamicBox1->getGlobalPose().q.z,
-	  dynamicBox1->getGlobalPose().q.w
-	  ));
-  setWorldMatrix(box1->getWorld());
-  ctes_global.uploadToGPU();
-  cube.activateAndRender();
-
-  box2->setPosition(XMVectorSet(
-	  dynamicBox2->getGlobalPose().p.x,
-	  dynamicBox2->getGlobalPose().p.y,
-	  dynamicBox2->getGlobalPose().p.z,
-	  1
-	  ));
-  box2->setRotation(XMVectorSet(
-	  dynamicBox2->getGlobalPose().q.x,
-	  dynamicBox2->getGlobalPose().q.y,
-	  dynamicBox2->getGlobalPose().q.z,
-	  dynamicBox2->getGlobalPose().q.w
-	  ));
-  setWorldMatrix(box2->getWorld());
-  ctes_global.uploadToGPU();
-  cube.activateAndRender();
-
-  box3->setPosition(XMVectorSet(
-	  staticBox1->getGlobalPose().p.x,
-	  staticBox1->getGlobalPose().p.y,
-	  staticBox1->getGlobalPose().p.z,
-	  1
-	  ));
-  box3->setRotation(XMVectorSet(
-	  staticBox1->getGlobalPose().q.x,
-	  staticBox1->getGlobalPose().q.y,
-	  staticBox1->getGlobalPose().q.z,
-	  staticBox1->getGlobalPose().q.w
-	  ));
-  setWorldMatrix(box3->getWorld());
-  ctes_global.uploadToGPU();
-  cube.activateAndRender();
-
-  for (CEntity* e : balls)
-  {
-	  e->setPosition(XMVectorSet(
-		  e->rigid->getGlobalPose().p.x,
-		  e->rigid->getGlobalPose().p.y,
-		  e->rigid->getGlobalPose().p.z,
-		  1
-		  ));
-	  e->setRotation(XMVectorSet(
-		  e->rigid->getGlobalPose().q.x,
-		  e->rigid->getGlobalPose().q.y,
-		  e->rigid->getGlobalPose().q.z,
-		  e->rigid->getGlobalPose().q.w
-		  ));
-	  setWorldMatrix(e->getWorld());
-	  ctes_global.uploadToGPU();
-	  cubeMini.activateAndRender();
-  }
-
-  // AI
-  setWorldMatrix(aimg.entity->getWorld());
-  ctes_global.uploadToGPU();
-  cube.activateAndRender();
-
-  setWorldMatrix(aibp.entity->getWorld());
-  ctes_global.uploadToGPU();
-  cube.activateAndRender();
-
   renderEntities();
+  vs_basic.activate();
+  ps_basic.activate();
+  renderDebugEntities();
+  //renderEntityDebugList();
 
-  vs_basic2.activate();
-  ps_textured.activate();
-  const CTexture *t = texture_manager.getByName("checker-floor");
-  t->activate(0);  
-  setWorldMatrix(XMMatrixScaling(.01f, .01f, .01f));
-  ctes_global.activateInVS(2);
-  level->activateAndRender();
+  TwDraw();
 
   ::render.swap_chain->Present(0, 0);
 
 }
 
 void CApp::renderEntities() {
+  
   // Render entities
-  auto& entities = entity_manager.getEntities();
-  axis.activate();
-  for (auto& e : entities) {
-    setWorldMatrix(e->getWorld());
-    axis.render();
-    font.print3D(e->getPosition(), e->name);
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+  {
+	  TTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TTransform>();
+	  TMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TMesh>();
+
+	  // If the component has no transform it can't be rendered
+	  if (!t)
+		  continue;
+
+	  if (mesh)
+		setTint(mesh->color);
+
+	  setWorldMatrix(t->getWorld());
+
+	  if (mesh && mesh->active)
+		mesh->mesh->activateAndRender();
   }
 }
 
+void CApp::renderDebugEntities() {
 
-void CApp::destroy() {
-	gScene->release();
-	gPhysicsSDK->release();
-	mesh_manager.destroyAll();
-	texture_manager.destroyAll();
-	axis.destroy();
-	grid.destroy();
-	cube.destroy();
-	cubeMini.destroy();
-	renderUtilsDestroy();
-	vs_basic.destroy();
-	vs_basic2.destroy();
-	ps_basic.destroy();
-	ps_textured.destroy();
-	font.destroy();
-	::render.destroyDevice();
+	setWorldMatrix(XMMatrixIdentity());
+	if (renderGrid)
+		grid.activateAndRender();
+	if (renderAxis)
+		axis.activateAndRender();
+
+	// Render entities
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+	{
+		CEntity* e = (CEntity*)entity_manager.getEntities()[i];
+		TTransform* t = e->get<TTransform>();
+		TCompName* name = e->get<TCompName>();
+		TAABB* aabb = e->get<TAABB>();
+
+		// If the component has no transform it can't be rendered
+		if (!t)
+			continue;
+
+		setWorldMatrix(t->getWorld());
+		if (renderAxis)
+			axis.activateAndRender();
+
+		// If the entity has name, print it
+		if (name && renderNames)
+			font.print3D(t->position, name->name);
+
+		// If the entity has an AABB, draw it
+		if (aabb && renderAABB) {
+			bool intersects = false;
+			for (int j = 0; j < entity_manager.getEntities().size(); ++j) {
+				CEntity* e2 = (CEntity*)entity_manager.getEntities()[j];
+				TAABB* aabb2 = e2->get<TAABB>();
+				if (aabb2 && i != j && aabb->intersects(aabb2)) {
+					intersects = true;
+					break;
+				}
+			}
+
+			// Draw AABB
+			XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+			setWorldMatrix(XMMatrixAffineTransformation(aabb->getSize(), zero, zero, aabb->getCenter()));
+			if (intersects)
+				intersectsWiredCube.activateAndRender();
+			else
+				wiredCube.activateAndRender();
+
+			// Draw max and min
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->min));
+			wiredCube.activateAndRender();
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
+			wiredCube.activateAndRender();
+		}
+	}
 }
 
+void CApp::activateInspectorMode(bool active) {
+	CIOStatus& io = CIOStatus::get();
+	// Update input
+	io.setMousePointer(!active);
+
+	// Activa el modo debug
+	renderAxis = active;
+	renderAABB = active;
+	renderGrid = active;
+	renderNames = active;
+
+	// Desactivar los componentes
+	getObjManager<TPlayerController>()->setActiveComponents(!active);
+	getObjManager<TPlayerPivotController>()->setActiveComponents(!active);
+	getObjManager<TCameraPivotController>()->setActiveComponents(!active);
+	getObjManager<TThirdPersonCameraController>()->setActiveComponents(!active);
+}
+
+void CApp::destroy() {
+  TwTerminate();
+  mesh_manager.destroyAll();
+  texture_manager.destroyAll();
+  axis.destroy();
+  grid.destroy();
+  renderUtilsDestroy();
+  vs_basic.destroy();
+  vs_basic2.destroy();
+  ps_basic.destroy();
+  ps_textured.destroy();
+  font.destroy();
+  ::render.destroyDevice();
+}

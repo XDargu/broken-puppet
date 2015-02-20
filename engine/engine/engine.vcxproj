@@ -106,14 +106,14 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>.;./physx/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>./physx/Lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3CommonDEBUG_x64.lib PhysX3DEBUG_x64.lib PhysX3CookingDEBUG_x64.lib PhysX3CharacterKinematicDEBUG_x64.lib PhysX3ExtensionsDEBUG.lib PhysX3VehicleDEBUG.lib PhysXProfileSDKDEBUG.lib PhysXVisualDebuggerSDKDEBUG.lib PxTaskDEBUG.lib /DEBUG</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -163,15 +163,21 @@
     <ClInclude Include="ai\ai_basic_patroller.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="camera.h" />
-    <ClInclude Include="camera_controller.h" />
-    <ClInclude Include="camera_pivot_controller.h" />
     <ClInclude Include="doom_controller.h" />
-    <ClInclude Include="entity.h" />
+    <ClInclude Include="entity_manager.h" />
+    <ClInclude Include="entity_inspector.h" />
     <ClInclude Include="font\font.h" />
-    <ClInclude Include="iostatus.h" />
+    <ClInclude Include="handle\entity.h" />
+    <ClInclude Include="handle\handle.h" />
+    <ClInclude Include="handle\handle_manager.h" />
+    <ClInclude Include="handle\msgs.h" />
+    <ClInclude Include="handle\objs_manager.h" />
+    <ClInclude Include="importer_parser.h" />
+    <ClInclude Include="io\iostatus.h" />
     <ClInclude Include="items_by_name.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
+    <ClInclude Include="physics_manager.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
     <ClInclude Include="render\mesh.h" />
@@ -182,6 +188,7 @@
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="XMLParser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ai\aicontroller.cpp" />
@@ -189,12 +196,29 @@
     <ClCompile Include="ai\ai_basic_patroller.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="camera_controller.cpp" />
-    <ClCompile Include="camera_pivot_controller.cpp" />
     <ClCompile Include="doom_controller.cpp" />
-    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="entity_manager.cpp" />
+    <ClCompile Include="entity_inspector.cpp" />
+    <ClCompile Include="expat\xmlparse.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="expat\xmlrole.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok_impl.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok_ns.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="font\font.cpp" />
-    <ClCompile Include="iostatus.cpp" />
+    <ClCompile Include="handle\handle.cpp" />
+    <ClCompile Include="importer_parser.cpp" />
+    <ClCompile Include="io\iostatus.cpp" />
+    <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />
@@ -212,9 +236,15 @@
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</MultiProcessorCompilation>
       <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</MinimalRebuild>
     </ClCompile>
+    <ClCompile Include="XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="render\notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="my_file.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

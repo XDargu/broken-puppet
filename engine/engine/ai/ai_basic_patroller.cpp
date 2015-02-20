@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "mcv_platform.h"
 #include "ai_basic_patroller.h"
-#include "entity.h"
+#include "../entity_manager.h"
 
 using namespace DirectX;
 

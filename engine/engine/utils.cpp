@@ -21,8 +21,8 @@ XMVECTOR getVectorFromYaw(float yaw) {
 }
 
 float getPitchFromVector(XMVECTOR v) {
-	float y = XMVectorGetY(v);
-	float distance = XMVectorGetX(XMVector3Length(v));
+	float y = -XMVectorGetY(v);
+	float distance = sqrt(XMVectorGetZ(v) * XMVectorGetZ(v) + XMVectorGetX(v) * XMVectorGetX(v));
 	return atan2(y, distance);
 }
 
@@ -32,7 +32,7 @@ bool isKeyPressed(int key) {
 }
 
 // -----------------------------------------
-void fatal(const char* fmt, ...) {
+int fatal(const char* fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   char buf[512];
@@ -40,6 +40,7 @@ void fatal(const char* fmt, ...) {
   va_end(ap);
   ::OutputDebugString(buf);
   assert(!printf("%s", buf));
+  return 0;
 }
 
 // -----------------------------------------
@@ -50,4 +51,8 @@ void dbg(const char* fmt, ...) {
   size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
   ::OutputDebugString(buf);
   va_end(ap);
+}
+
+bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {
+	return XMVectorGetX(XMVectorEqual(v1, v2)) && XMVectorGetY(XMVectorEqual(v1, v2)) && XMVectorGetZ(XMVectorEqual(v2, v2));
 }

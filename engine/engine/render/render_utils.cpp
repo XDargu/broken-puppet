@@ -88,10 +88,20 @@ void activateWorldMatrix( int slot ) {
   ctes_object.activateInVS(slot);
 }
 
+void activateTint(int slot) {
+	ctes_object.activateInPS(slot);
+}
+
 void activateCamera(const CCamera& camera, int slot) {
   ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
   ctes_camera.get()->ViewProjection = camera.getViewProjection();
   ctes_camera.uploadToGPU();
+}
+
+void activateCamera(const XMMATRIX viewProjection, int slot) {
+	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
+	ctes_camera.get()->ViewProjection = viewProjection;
+	ctes_camera.uploadToGPU();
 }
 
 // -----------------------------------------------------
@@ -148,6 +158,65 @@ bool createAxis(CMesh& mesh) {
   return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::LINE_LIST);
 }
 
+
+// -----------------------------------------------------
+bool createWiredCube(CMesh& mesh) {
+
+  std::vector< CVertexPosColor > vtxs;
+  vtxs.resize(8);
+  CVertexPosColor *v = &vtxs[0];
+
+  // Set the color to white
+  for (auto& it : vtxs)
+    it.Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+
+  // Axis X
+  v->Pos = XMFLOAT3(-1.f, -1.f, 0.f); ++v;
+  v->Pos = XMFLOAT3( 1.f, -1.f, 0.f); ++v;
+  v->Pos = XMFLOAT3(-1.f,  1.f, 0.f); ++v;
+  v->Pos = XMFLOAT3( 1.f,  1.f, 0.f); ++v;
+  v->Pos = XMFLOAT3(-1.f, -1.f, 1.f); ++v;
+  v->Pos = XMFLOAT3( 1.f, -1.f, 1.f); ++v;
+  v->Pos = XMFLOAT3(-1.f,  1.f, 1.f); ++v;
+  v->Pos = XMFLOAT3( 1.f,  1.f, 1.f); ++v;
+
+  const CMesh::TIndex idxs[] = {
+    0, 1, 2, 3, 4, 5, 6, 7
+    , 0, 2, 1, 3, 4, 6, 5, 7
+    , 0, 4, 1, 5, 2, 6, 3, 7
+  };
+  return mesh.create((unsigned)vtxs.size(), &vtxs[0], 24, idxs, CMesh::LINE_LIST);
+}
+
+// -----------------------------------------------------
+bool createUnitWiredCube(CMesh& mesh, XMFLOAT4 color) {
+
+	std::vector< CVertexPosColor > vtxs;
+	vtxs.resize(8);
+	CVertexPosColor *v = &vtxs[0];
+
+	// Set the color to white
+	for (auto& it : vtxs)
+		it.Color = color;
+
+	// Axis X
+	v->Pos = XMFLOAT3(-.5f, -.5f, -.5f); ++v;
+	v->Pos = XMFLOAT3(.5f, -.5f, -.5f); ++v;
+	v->Pos = XMFLOAT3(-.5f, .5f, -.5f); ++v;
+	v->Pos = XMFLOAT3(.5f, .5f, -.5f); ++v;
+	v->Pos = XMFLOAT3(-.5f, -.5f, .5f); ++v;
+	v->Pos = XMFLOAT3(.5f, -.5f, .5f); ++v;
+	v->Pos = XMFLOAT3(-.5f, .5f, .5f); ++v;
+	v->Pos = XMFLOAT3(.5f, .5f, .5f); ++v;
+
+	const CMesh::TIndex idxs[] = {
+		0, 1, 2, 3, 4, 5, 6, 7
+		, 0, 2, 1, 3, 4, 6, 5, 7
+		, 0, 4, 1, 5, 2, 6, 3, 7
+	};
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 24, idxs, CMesh::LINE_LIST);
+}
+
 // -----------------------------------------------------
 bool createCube(CMesh& mesh, float size) {
 
@@ -193,36 +262,6 @@ bool createCube(CMesh& mesh, float size) {
 }
 
 // -----------------------------------------------------
-bool createWiredCube(CMesh& mesh) {
-
-  std::vector< CVertexPosColor > vtxs;
-  vtxs.resize(8);
-  CVertexPosColor *v = &vtxs[0];
-
-  // Set the color to white
-  for (auto& it : vtxs)
-    it.Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
-
-  // Axis X
-  v->Pos = XMFLOAT3(-1.f, -1.f, 0.f); ++v;
-  v->Pos = XMFLOAT3( 1.f, -1.f, 0.f); ++v;
-  v->Pos = XMFLOAT3(-1.f,  1.f, 0.f); ++v;
-  v->Pos = XMFLOAT3( 1.f,  1.f, 0.f); ++v;
-  v->Pos = XMFLOAT3(-1.f, -1.f, 1.f); ++v;
-  v->Pos = XMFLOAT3( 1.f, -1.f, 1.f); ++v;
-  v->Pos = XMFLOAT3(-1.f,  1.f, 1.f); ++v;
-  v->Pos = XMFLOAT3( 1.f,  1.f, 1.f); ++v;
-
-  const CMesh::TIndex idxs[] = {
-    0, 1, 2, 3, 4, 5, 6, 7
-    , 0, 2, 1, 3, 4, 6, 5, 7
-    , 0, 4, 1, 5, 2, 6, 3, 7
-  };
-  return mesh.create((unsigned)vtxs.size(), &vtxs[0], 24, idxs, CMesh::LINE_LIST);
-}
-
-// -----------------------------------------------------
-
 bool createCamera(CMesh& mesh)
 {
 	std::vector< CVertexPosColor > vtxs;
@@ -320,4 +359,9 @@ void drawViewVolume(const CCamera& camera) {
 void setWorldMatrix(XMMATRIX world) {
   ctes_object.get()->World = world;
   ctes_object.uploadToGPU();
+}
+
+void setTint(XMVECTOR tint) {
+	ctes_object.get()->Tint = tint;
+	ctes_object.uploadToGPU();
 }

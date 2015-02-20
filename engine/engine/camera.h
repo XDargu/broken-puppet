@@ -52,10 +52,6 @@ public:
 
   // helpers
   bool getScreenCoords(XMVECTOR world_coord, float *x, float *y) const;
-  CEntity* getCamEntity();
-
-private:
-	CEntity* cam_entity;
 };
 
 #endif

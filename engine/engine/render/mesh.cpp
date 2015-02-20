@@ -192,5 +192,12 @@ bool CMesh::load(const char* name) {
   return load(fdp);
 }
 
-
-
+bool CMesh::loadPrimitiveShape(const ePrimitiveShape shape) {
+	switch (shape)
+	{
+	case ePrimitiveShape::CUBE:
+		//
+		break;
+	}
+	return NULL;
+}

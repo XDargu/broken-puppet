@@ -12,7 +12,7 @@ void aicontroller::Recalc(float deltaTime)
 	(this->*statemap[state])(deltaTime);
 }
 
-void aicontroller::SetEntity(CEntity* the_entity)
+void aicontroller::SetEntity(CEntityOld* the_entity)
 {
 	entity = the_entity;
 }

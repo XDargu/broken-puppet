@@ -7,7 +7,7 @@
 #include <assert.h>	
 #include <string>
 #include <map>
-#include "entity.h"
+#include "entity_manager.h"
 
 using namespace std;
 
@@ -25,8 +25,8 @@ class aicontroller
 
 public:
 
-	CEntity* entity;
-	void SetEntity(CEntity* the_entity);
+	CEntityOld* entity;
+	void SetEntity(CEntityOld* the_entity);
 	void ChangeState(string);	// state we wish to go to
 	string GetState();	// returns state name
 	virtual void Init();	// resets the controller

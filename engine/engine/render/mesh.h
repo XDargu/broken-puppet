@@ -72,6 +72,12 @@ public:
   , TRIANGLE_STRIP
   };
 
+  enum ePrimitiveShape {
+	  CUBE = 0
+	, WIRED_CUBE = 1
+	, 
+  };
+
   bool create(
       unsigned anvertexs
       , const void* the_vertexs       // Can't be null
@@ -112,6 +118,7 @@ public:
 
   bool load(CDataProvider& dp);
   bool load(const char* name);
+  bool loadPrimitiveShape(const ePrimitiveShape shape);
   void setName(const char*) {}
 };
 

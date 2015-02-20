@@ -2,8 +2,9 @@
 //
 
 #include "mcv_platform.h"
-#include "iostatus.h"
 #include "app.h"
+#include "io\iostatus.h"
+#include <AntTweakBar.h>
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
@@ -18,13 +19,12 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-
-	OutputDebugString("Program Start");
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	CApp &app = CApp::get();
 	app.loadConfig();
+
 
 	// Initialize global strings
 	MyRegisterClass(hInstance);
@@ -48,8 +48,6 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
     }
 		app.doFrame();
 	}
-
-  //sin(30);
 	app.destroy();
 	return (int) msg.wParam;
 }
@@ -142,6 +140,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	HDC hdc;
 
+	// AntTweakBar
+	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
+		return 0; // event has been handled by AntTweakBar
+	// else process the event message
+	// ...
+
+	CIOStatus &io = CIOStatus::get();
+	
+
 	switch (message)
 	{
 	case WM_PAINT:
@@ -173,10 +180,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MBUTTONDOWN:
 		io.getButtons()[io.MOUSE_MIDDLE].setPressed(true, 0.f);
 		break;
-	/*case WM_KILLFOCUS:
+		/*case WM_KILLFOCUS:
 		app.has_focus = false;
 		break;
-	case WM_SETFOCUS:
+		case WM_SETFOCUS:
 		app.has_focus = true;
 		break;*/
 	default:

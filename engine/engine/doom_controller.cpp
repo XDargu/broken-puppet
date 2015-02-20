@@ -1,47 +1,42 @@
 #include "mcv_platform.h"
 #include "doom_controller.h"
-#include "camera_pivot_controller.h"
-#include "entity.h"
-#include "iostatus.h"
+#include "entity_manager.h"
 
 using namespace DirectX;
 
-float angle_x = 0.f;
-float angle_y=0.f;
-
-CThirdPersonController::CThirdPersonController()
+CDoomController::CDoomController()
 : movement_velocity(5.0f)
 , rotation_velocity(deg2rad( 90.f ))
 { }
 
-void CThirdPersonController::update(CEntity* e, camera_pivot_controller* CPC, float delta_time) {
+void CDoomController::update(CEntityOld* e, float delta_time) {
 
-	assert(e != nullptr);
-	assert(CPC->getPlayerPivot() != nullptr);
-	XMVECTOR delta_pos = XMVectorZero();
-	XMVECTOR delta_q = XMQuaternionIdentity();
-	// Que teclas se pulsan -> que cambios hacer
-	if (io.isPressed(io.DIGITAL_UP)){
-		e->setRotation(CPC->getPlayerPivot()->getRotation());
-		delta_pos += delta_time * movement_velocity * e->getFront();
-	}
-	else if (io.isPressed(io.DIGITAL_DOWN)){
-		e->setRotation(CPC->getPlayerPivot()->getRotation());
-		delta_pos -= delta_time * movement_velocity * e->getFront();
-	}
-	if (io.isPressed(io.DIGITAL_LEFT)){
-		e->setRotation(CPC->getPlayerPivot()->getRotation());
-		delta_pos += delta_time * movement_velocity * e->getLeft();
-	}
-	else if (io.isPressed(io.DIGITAL_RIGHT)){
-		e->setRotation(CPC->getPlayerPivot()->getRotation());
-		delta_pos -= delta_time * movement_velocity * e->getLeft();
-	}
-    e->setPosition( e->getPosition() + delta_pos );
-    e->setRotation(XMQuaternionMultiply(e->getRotation(), delta_q));
+  XMVECTOR delta_pos = XMVectorZero();
+  XMVECTOR delta_q = XMQuaternionIdentity();
+
+  // Que teclas se pulsan -> que cambios hacer
+  if (isKeyPressed('W'))
+    delta_pos += delta_time * movement_velocity * e->getFront();
+  else if (isKeyPressed('S'))
+    delta_pos -= delta_time * movement_velocity * e->getFront();
+  if (isKeyPressed('A'))
+    delta_pos += delta_time * movement_velocity * e->getLeft();
+  else if (isKeyPressed('D'))
+    delta_pos -= delta_time * movement_velocity * e->getLeft();
+
+  if (isKeyPressed('Q'))
+    delta_q = XMQuaternionRotationAxis(e->getUp(), delta_time * rotation_velocity);
+  else if (isKeyPressed('E'))
+    delta_q = XMQuaternionRotationAxis(e->getUp(), -delta_time * rotation_velocity);
+
+  // Actualizar la posicion/rotacion
+  e->setPosition( e->getPosition() + delta_pos );
+  e->setRotation( XMQuaternionMultiply(e->getRotation(), delta_q) );
 }
+
+
 // -------------------------------
-void CLookAtController::update(CEntity* who, CEntity* target, float delta_time) {
+void CLookAtController::update(CEntityOld* who, CEntityOld* target, float delta_time) {
   // MatrixLookAt is used for the camera view matrix
   // converts world coords to camera local coords
   // so, we need to invert the matrix (or invert the quaternion)
@@ -60,7 +55,7 @@ CAimToController::CAimToController()
   : rotation_velocity(deg2rad(90.f))
 {}
 
-void CAimToController::update(CEntity* who, CEntity* target, float delta_time) {
+void CAimToController::update(CEntityOld* who, CEntityOld* target, float delta_time) {
   XMVECTOR delta = target->getPosition() - who->getPosition();
   delta = XMVectorSetY(delta, 0.f);
   XMVECTOR my_front = who->getFront();
