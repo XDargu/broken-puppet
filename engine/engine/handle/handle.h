@@ -771,7 +771,7 @@ public:
 	TThirdPersonCameraController() {}
 
 	void loadFromAtts(MKeyValue &atts) {
-		offset = physx::PxVec3(0, 0, 2);
+		offset = Physics.XMVECTORToPxVec3(atts.getPoint("offset"));
 	}
 
 	void init() {

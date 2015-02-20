@@ -465,6 +465,8 @@ void CApp::destroy() {
   texture_manager.destroyAll();
   axis.destroy();
   grid.destroy();
+  intersectsWiredCube.destroy();
+  wiredCube.destroy();
   renderUtilsDestroy();
   vs_basic.destroy();
   vs_basic2.destroy();
