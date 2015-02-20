@@ -86,6 +86,7 @@ void createManagers() {
 	getObjManager<TPlayerPivotController>()->init(1);
 	getObjManager<TEnemyWithPhysics>()->init(64);
 	getObjManager<TDistanceJoint>()->init(32);
+	getObjManager<TDirectionalLight>()->init(16);
 	
 	registerAllComponentMsgs();
 }
@@ -304,7 +305,22 @@ void CApp::render() {
   ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
-  ctes_global.get()->lightDirection = XMVectorSet(0, 1, 1, 0);
+  ctes_global.get()->lightDirection = XMVectorSet(-1.23, -0.67, -1.02, 0.5f);
+
+  // Ñapa para luces direccionales
+  // Recorrer las luces y añadirlas al array
+  ctes_global.get()->LightCount = 0;
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i)  {
+	  CEntity* e_dirL001 = entity_manager.getEntities()[i];
+	  TDirectionalLight* dirL001 = e_dirL001->get<TDirectionalLight>();
+	  if (dirL001 && dirL001->active) {
+		  ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = dirL001->direction;
+		  ctes_global.get()->LightColors[ctes_global.get()->LightCount] = dirL001->color;
+		  ctes_global.get()->LightCount++;
+	  }
+  }  
+	  
+
   ctes_global.uploadToGPU();
   ctes_global.activateInPS(2);
 

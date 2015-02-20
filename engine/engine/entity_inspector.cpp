@@ -180,6 +180,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TPlayerPivotController* e_player_pivot_controller = target_entity->get<TPlayerPivotController>();
 	TCameraPivotController* e_camera_pivot_controller = target_entity->get<TCameraPivotController>();
 	TThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TThirdPersonCameraController>();
+	TDirectionalLight* e_directional_light = target_entity->get<TDirectionalLight>();
 
 	TwRemoveAllVars(bar);
 	if (e_name) {
@@ -257,6 +258,12 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (e_third_person_camera_controller) {
 		TwAddVarRW(bar, "ThirdPersonCameraControllerActive", TW_TYPE_BOOL8, &e_third_person_camera_controller->active, " group='Third Person Camera Controller' label='Active' ");
 		TwAddVarRW(bar, "ThirdPersonCameraControllerOffset", TW_TYPE_DIR3F, &e_third_person_camera_controller->offset, " group='Third Person Camera Controller' label='Offset' axisx=-x axisz=-z");
+	}
+	if (e_directional_light) {
+		TwAddVarRW(bar, "DirectionalLightActive", TW_TYPE_BOOL8, &e_directional_light->active, " group='Directional Light' label='Active' ");
+		TwAddVarRW(bar, "DirectionalLightDirection", TW_TYPE_DIR3F, &e_directional_light->direction, " group='Directional Light' label='Direction' axisx=-x axisz=-z");
+		TwAddVarRW(bar, "DirectionalLightColor", TW_TYPE_COLOR4F, &e_directional_light->color, " group='Directional Light' label='Color' ");
+		
 	}
 
 	TwAddSeparator(bar, "", "");

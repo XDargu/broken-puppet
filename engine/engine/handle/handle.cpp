@@ -110,6 +110,7 @@ DECL_OBJ_MANAGER(TThirdPersonCameraController, "thirdPersonCameraController");
 DECL_OBJ_MANAGER(TEnemyWithPhysics, "enemyWithPhysics");
 DECL_OBJ_MANAGER(TAABB, "aabb");
 DECL_OBJ_MANAGER(TDistanceJoint, "distanceJoint");
+DECL_OBJ_MANAGER(TDirectionalLight, "directionalLight");
 
 
 /*

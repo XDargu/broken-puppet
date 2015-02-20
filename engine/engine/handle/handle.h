@@ -1039,6 +1039,19 @@ struct  TDistanceJoint : TBaseComponent {
 	}
 };
 
+struct TDirectionalLight : TBaseComponent {
+
+	XMVECTOR color;
+	XMVECTOR direction;
+
+	TDirectionalLight() {}
+
+	void loadFromAtts(MKeyValue &atts) {
+		color = atts.getQuat("color");
+		direction = atts.getQuat("direction");
+	}
+};
+
 #endif
 
 
