@@ -80,19 +80,27 @@
     <mesh path="Level" color="1 1 1 1"/>
   </entity>
   <entity>
-    <name name="testJoint"/>
+    <name name="testJoint1"/>
     <distanceJoint actor1="EstaCajaNoSeMueve" actor2="Caja"/>
   </entity>
   <entity>
+    <name name="testJoint2"/>
+    <distanceJoint actor1="Caja" actor2="OtraCaja"/>
+  </entity>
+  <entity>
+    <name name="testJoint3"/>
+    <distanceJoint actor1="OtraCaja" actor2="OtraCajaMas"/>
+  </entity>
+  <entity>
     <name name="directionalLight001"/>
-    <directionalLight color="1 1 1 0.5" direction="1 1 1 0"/>
+    <directionalLight color="1 1 1 0.05" direction="1 1 1 0"/>
   </entity>
   <entity>
     <name name="directionalLight002"/>
-    <directionalLight color="0.5 0.25 0.5 0.6" direction="-0.28 -0.46 -0.22 0"/>
+    <directionalLight color="0.5 0.25 0.5 0.06" direction="-0.28 -0.46 -0.22 0"/>
   </entity>
   <entity>
     <name name="directionalLight003"/>
-    <directionalLight color="0 1 0.6 0.1" direction="0 -1 0 0"/>
+    <directionalLight color="0 1 0.6 0.01" direction="0 -1 0 0"/>
   </entity>
 </scene>

@@ -305,7 +305,7 @@ void CApp::render() {
   ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
-  ctes_global.get()->lightDirection = XMVectorSet(-1.23, -0.67, -1.02, 0.5f);
+  ctes_global.get()->AmbientLight = XMVectorSet(0.2, 0.2, 0.2, 0.5f);
 
   // Ñapa para luces direccionales
   // Recorrer las luces y añadirlas al array

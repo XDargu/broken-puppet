@@ -81,11 +81,11 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 
 	*/
 
-	float4 lightAccum = 0;
+	float4 lightAccum = AmbientLight * AmbientLight.w;
 
 	for (int i = 0; i < LightCount; i++)
 	{
-		lightAccum += max(dot(input.Normal, -LightDirections[i]), 0) * LightColors[i] * LightColors[i].w;
+		lightAccum += max(dot(input.Normal, -LightDirections[i]), 0) * LightColors[i] * (LightColors[i].w * 10);
 	}
 
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
