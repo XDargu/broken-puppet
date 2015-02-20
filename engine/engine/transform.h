@@ -1,0 +1,66 @@
+#ifndef INC_TRANSFORM_H_
+#define INC_TRANSFORM_H_
+
+#include "mcv_platform.h"
+
+// ----------------------------------------
+struct nnTTransform {     // 1
+	XMVECTOR position;
+	XMVECTOR rotation;
+	XMVECTOR scale;
+
+	nnTTransform() : position(XMVectorSet(0.f, 0.f, 0.f, 1.f)), rotation(XMQuaternionIdentity()), scale(XMVectorSet(1, 1, 1, 1)) {}
+	nnTTransform(XMVECTOR np, XMVECTOR nr, XMVECTOR ns) : position(np), rotation(nr), scale(ns) {}
+
+	XMMATRIX getWorld() const {
+		XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+		XMMATRIX m = XMMatrixAffineTransformation(scale, zero, rotation, position);
+		return m;
+	}
+
+	XMVECTOR getFront() const {
+		XMMATRIX m = XMMatrixRotationQuaternion(rotation);
+		return m.r[2];
+	}
+
+	XMVECTOR getLeft() const {
+		XMMATRIX m = XMMatrixRotationQuaternion(rotation);
+		return m.r[0];
+	}
+
+	XMVECTOR getUp() const {
+		XMMATRIX m = XMMatrixRotationQuaternion(rotation);
+		return m.r[1];
+	}
+
+	// Returns true if the point is in the positive part of my front
+	bool isInFront(XMVECTOR loc) const {
+		return XMVectorGetX(XMVector3Dot(getFront(), loc - position)) > 0.f;
+	}
+
+	bool isInLeft(XMVECTOR loc) const {
+		return XMVectorGetX(XMVector3Dot(getLeft(), loc - position)) > 0.f;
+	}
+
+	bool isInFov(XMVECTOR loc, float fov_in_rad) const {
+		XMVECTOR unit_delta = XMVector3Normalize(loc - position);
+		float cos_angle = XMVectorGetX(XMVector3Dot(getFront(), unit_delta));
+		return(cos_angle < cos(fov_in_rad * 0.5f));
+	}
+
+	// Aim the transform to a position instantly
+	void lookAt(XMVECTOR new_target, XMVECTOR new_up_aux) {
+
+		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
+		rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+	}
+
+	// Aim the transform to a position with SLerp
+	void aimAt(XMVECTOR new_target, XMVECTOR new_up_aux, float t) {
+		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
+		rotation = XMQuaternionSlerp(rotation, XMQuaternionInverse(XMQuaternionRotationMatrix(view)), t);
+	}
+
+};
+
+#endif

@@ -2,6 +2,7 @@
 #include "entity_inspector.h"
 #include <AntTweakBar.h>
 #include "handle\handle.h"
+#include "components\all_components.h"
 #include <locale>
 #include <algorithm>
 
@@ -43,108 +44,108 @@ void CEntityInspector::init() {
 // TRANSFORM
 void TW_CALL GetPitch(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = rad2deg( getPitchFromVector(static_cast<TTransform *>(clientData)->getFront()) );
+	*static_cast<float *>(value) = rad2deg( getPitchFromVector(static_cast<TCompTransform *>(clientData)->getFront()) );
 }
 
 // COLLIDER
 void TW_CALL SetStaticFriction(const void *value, void *clientData)
 {
-	static_cast<TCollider *>(clientData)->getMaterial()->setStaticFriction(*static_cast<const float *>(value));
+	static_cast<TCompCollider *>(clientData)->getMaterial()->setStaticFriction(*static_cast<const float *>(value));
 }
 void TW_CALL GetStaticFriction(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCollider *>(clientData)->getMaterial()->getStaticFriction();
+	*static_cast<float *>(value) = static_cast<TCompCollider *>(clientData)->getMaterial()->getStaticFriction();
 }
 
 void TW_CALL SetDynamicFriction(const void *value, void *clientData)
 {
-	static_cast<TCollider *>(clientData)->getMaterial()->setDynamicFriction(*static_cast<const float *>(value));
+	static_cast<TCompCollider *>(clientData)->getMaterial()->setDynamicFriction(*static_cast<const float *>(value));
 }
 void TW_CALL GetDynamicFriction(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCollider *>(clientData)->getMaterial()->getDynamicFriction();
+	*static_cast<float *>(value) = static_cast<TCompCollider *>(clientData)->getMaterial()->getDynamicFriction();
 }
 
 void TW_CALL SetRestitution(const void *value, void *clientData)
 {
-	static_cast<TCollider *>(clientData)->getMaterial()->setRestitution(*static_cast<const float *>(value));
+	static_cast<TCompCollider *>(clientData)->getMaterial()->setRestitution(*static_cast<const float *>(value));
 }
 void TW_CALL GetRestitution(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCollider *>(clientData)->getMaterial()->getRestitution();
+	*static_cast<float *>(value) = static_cast<TCompCollider *>(clientData)->getMaterial()->getRestitution();
 }
 
 // RIGIDBODY
 void TW_CALL SetMass(const void *value, void *clientData)
 {
-	PxRigidBodyExt::setMassAndUpdateInertia(*static_cast<TRigidBody *>(clientData)->rigidBody, *static_cast<const float *>(value), NULL, false);
+	PxRigidBodyExt::setMassAndUpdateInertia(*static_cast<TCompRigidBody *>(clientData)->rigidBody, *static_cast<const float *>(value), NULL, false);
 }
 void TW_CALL GetMass(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TRigidBody *>(clientData)->rigidBody->getMass();
+	*static_cast<float *>(value) = static_cast<TCompRigidBody *>(clientData)->rigidBody->getMass();
 }
 
 void TW_CALL SetGravity(const void *value, void *clientData)
 {
-	static_cast<TRigidBody *>(clientData)->setUseGravity(*static_cast<const bool *>(value));
+	static_cast<TCompRigidBody *>(clientData)->setUseGravity(*static_cast<const bool *>(value));
 }
 void TW_CALL GetGravity(void *value, void *clientData)
 {
-	*static_cast<bool *>(value) = static_cast<TRigidBody *>(clientData)->isUsingGravity();
+	*static_cast<bool *>(value) = static_cast<TCompRigidBody *>(clientData)->isUsingGravity();
 }
 
 void TW_CALL SetKinematic(const void *value, void *clientData)
 {
-	static_cast<TRigidBody *>(clientData)->setKinematic(*static_cast<const bool *>(value));
+	static_cast<TCompRigidBody *>(clientData)->setKinematic(*static_cast<const bool *>(value));
 }
 void TW_CALL GetKinematic(void *value, void *clientData)
 {
-	*static_cast<bool *>(value) = static_cast<TRigidBody *>(clientData)->isKinematic();
+	*static_cast<bool *>(value) = static_cast<TCompRigidBody *>(clientData)->isKinematic();
 }
 
 void TW_CALL SetLinearDamping(const void *value, void *clientData)
 {
-	static_cast<TRigidBody *>(clientData)->rigidBody->setLinearDamping(*static_cast<const float *>(value));
+	static_cast<TCompRigidBody *>(clientData)->rigidBody->setLinearDamping(*static_cast<const float *>(value));
 }
 void TW_CALL GetLinearDamping(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TRigidBody *>(clientData)->rigidBody->getLinearDamping();
+	*static_cast<float *>(value) = static_cast<TCompRigidBody *>(clientData)->rigidBody->getLinearDamping();
 }
 
 void TW_CALL SetAngularDamping(const void *value, void *clientData)
 {
-	static_cast<TRigidBody *>(clientData)->rigidBody->setAngularDamping(*static_cast<const float *>(value));
+	static_cast<TCompRigidBody *>(clientData)->rigidBody->setAngularDamping(*static_cast<const float *>(value));
 }
 void TW_CALL GetAngularDamping(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TRigidBody *>(clientData)->rigidBody->getAngularDamping();
+	*static_cast<float *>(value) = static_cast<TCompRigidBody *>(clientData)->rigidBody->getAngularDamping();
 }
 
 
 // MESH
 void TW_CALL ReloadMesh(const void *value, void *clientData)
 {
-	(static_cast<TMesh *>(clientData))->mesh = mesh_manager.getByName((*(const std::string *)value).c_str());
-	TMesh* mesh = static_cast<TMesh *>(clientData);
+	(static_cast<TCompMesh *>(clientData))->mesh = mesh_manager.getByName((*(const std::string *)value).c_str());
+	TCompMesh* mesh = static_cast<TCompMesh *>(clientData);
 	std::strcpy(mesh->path, (*(const std::string *)value).c_str());
 }
 void TW_CALL GetMeshPath(void *value, void *clientData)
 {	
 	std::string *destPtr = static_cast<std::string *>(value);	
-	TwCopyStdStringToLibrary(*destPtr, static_cast<TMesh *>(clientData)->path);
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompMesh *>(clientData)->path);
 	
 }
 // ---------------------------- ADD COMPONENT CALLBACKS --------------------------
 void TW_CALL AddTransform(void *clientData) {
 
-	TTransform* t = CHandle::create<TTransform>();
+	TCompTransform* t = CHandle::create<TCompTransform>();
 	static_cast<CEntity *>(clientData)->add(t);
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
 void TW_CALL AddMesh(void *clientData) {
 
-	TMesh* m = CHandle::create<TMesh>();
+	TCompMesh* m = CHandle::create<TCompMesh>();
 	std::strcpy(m->path, "teapot");
 	m->mesh = mesh_manager.getByName("teapot");
 	static_cast<CEntity *>(clientData)->add(m);
@@ -153,7 +154,7 @@ void TW_CALL AddMesh(void *clientData) {
 
 void TW_CALL AddDirectionalLight(void *clientData) {
 
-	TDirectionalLight* l = CHandle::create<TDirectionalLight>();
+	TCompDirectionalLight* l = CHandle::create<TCompDirectionalLight>();
 	l->color = XMVectorSet(1, 1, 1, 0.5f);
 	l->direction = XMVectorSet(1, 1, 1, 0.5f);
 	static_cast<CEntity *>(clientData)->add(l);
@@ -161,8 +162,8 @@ void TW_CALL AddDirectionalLight(void *clientData) {
 }
 
 void CEntityInspector::update() {
-	TAABB* e_aabb = target_entity->get<TAABB>();
-	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
+	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
+	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
 
 	if (e_aabb) {
 		center = e_aabb->getCenter();
@@ -178,18 +179,18 @@ void CEntityInspector::update() {
 void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	target_entity = the_entity;
 
-	TTransform* e_transform = target_entity->get<TTransform>();
+	TCompTransform* e_transform = target_entity->get<TCompTransform>();
 	TCompName* e_name = target_entity->get<TCompName>();
-	TMesh* e_mesh = target_entity->get<TMesh>();
-	TAABB* e_aabb = target_entity->get<TAABB>();
-	TCollider* e_collider = target_entity->get<TCollider>();
-	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
-	TCamera* e_camera = target_entity->get<TCamera>();
-	TPlayerController* e_player_controller = target_entity->get<TPlayerController>();
-	TPlayerPivotController* e_player_pivot_controller = target_entity->get<TPlayerPivotController>();
-	TCameraPivotController* e_camera_pivot_controller = target_entity->get<TCameraPivotController>();
-	TThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TThirdPersonCameraController>();
-	TDirectionalLight* e_directional_light = target_entity->get<TDirectionalLight>();
+	TCompMesh* e_mesh = target_entity->get<TCompMesh>();
+	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
+	TCompCollider* e_collider = target_entity->get<TCompCollider>();
+	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
+	TCompCamera* e_camera = target_entity->get<TCompCamera>();
+	TCompPlayerController* e_player_controller = target_entity->get<TCompPlayerController>();
+	TCompPlayerPivotController* e_player_pivot_controller = target_entity->get<TCompPlayerPivotController>();
+	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
+	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
+	TCompDirectionalLight* e_directional_light = target_entity->get<TCompDirectionalLight>();
 
 	TwRemoveAllVars(bar);
 	if (e_name) {

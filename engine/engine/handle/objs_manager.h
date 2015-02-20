@@ -59,12 +59,14 @@ public:
 		return objs + ed->internal_index;
 	}
 
-	CHandle createEmptyObj(MKeyValue& atts) {
-		CHandle h = createObj();
-		TObj* obj = h;
-		obj->loadFromAtts(atts);
-		return h;
+	CHandle createEmptyObj() {
+		return createObj();
 	}
+
+	void loadFromAtts(CHandle who, MKeyValue &atts) {
+		TObj* obj = who;
+    obj->loadFromAtts( atts );
+  }
 
 	// ------------------
 	// Contruct a new object, using the given args
@@ -234,13 +236,13 @@ public:
 		updating_objs = false;
 	}
 
-	// Set activation
 	void setActiveComponents(bool active) {
+		updating_objs = true;
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
-		for (; num--; obj++) {
+		for (; num--; obj++)
 			obj->active = active;
-		}
+		updating_objs = false;
 	}
 };
 
@@ -251,5 +253,9 @@ public:
 template< class TObj >
 CObjManager<TObj>* getObjManager();
 
+// Macro para declarar el manager de un tpo
+#define DECL_OBJ_MANAGER(TObj,obj_name) \
+  CObjManager<TObj> om_##TObj( obj_name ); \
+  template<> CObjManager<TObj>* getObjManager<TObj>() { return &om_##TObj; }
 
 #endif

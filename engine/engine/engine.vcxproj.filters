@@ -70,6 +70,61 @@
     <ClInclude Include="io\iostatus.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_aabb.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_camera.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_life.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_mesh.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_name.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_rigid_body.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_static_body.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_transform.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\base_component.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\all_components.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h" />
+    <ClInclude Include="components\comp_player_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_pivot_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_camera_pivot_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_third_person_camera_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_distance_joint.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_directional_light.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\app_msgs.h">
+      <Filter>handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -137,6 +192,10 @@
     <ClCompile Include="io\iostatus.cpp">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="components\all_components.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="handle\entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -162,6 +221,9 @@
     </Filter>
     <Filter Include="io">
       <UniqueIdentifier>{b70b3f42-c6cb-4070-ab96-e5e2079108e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components">
+      <UniqueIdentifier>{be0bcca5-bb86-4f0f-8698-4ce9f80f4cc9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

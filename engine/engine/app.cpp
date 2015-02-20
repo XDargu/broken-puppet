@@ -8,7 +8,7 @@
 #include "render/texture.h"
 #include "importer_parser.h"
 #include "physics_manager.h"
-#include "handle\handle.h"
+#include "components\all_components.h"
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
@@ -28,8 +28,6 @@ CPhysicsManager &physics_manager = CPhysicsManager::get();
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
-
-ai_basic_patroller aibp;
 
 CApp& CApp::get() {
   return the_app;
@@ -55,7 +53,7 @@ CMesh        axis;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 
-TCamera*      camera;
+TCompCamera*      camera;
 CCamera*	  oldCamera;
 CFont         font;
 
@@ -64,45 +62,43 @@ CShaderCte<TCtesGlobal> ctes_global;
 float fixedUpdateCounter;
 
 void registerAllComponentMsgs() {
-	SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
-	SUBSCRIBE(TLife, TMsgDied, onDied);
+	//SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
+	//SUBSCRIBE(TLife, TMsgDied, onDied);
 }
 
 void createManagers() {
+
 	getObjManager<CEntity>()->init(1024);
-	getObjManager<TTransform>()->init(1024);
-	getObjManager<TController>()->init(32);
-	getObjManager<TLife>()->init(32);
+	getObjManager<TCompTransform>()->init(1024);
+	getObjManager<TCompLife>()->init(32);
 	getObjManager<TCompName>()->init(1024);
-	getObjManager<TMesh>()->init(1024);
-	getObjManager<TCamera>()->init(4);
-	getObjManager<TCollider>()->init(512);
-	getObjManager<TRigidBody>()->init(512);
-	getObjManager<TStaticBody>()->init(512);
-	getObjManager<TAABB>()->init(1024);
-	getObjManager<TPlayerController>()->init(1);
-	getObjManager<TThirdPersonCameraController>()->init(1);
-	getObjManager<TCameraPivotController>()->init(1);
-	getObjManager<TPlayerPivotController>()->init(1);
-	getObjManager<TEnemyWithPhysics>()->init(64);
-	getObjManager<TDistanceJoint>()->init(32);
-	getObjManager<TDirectionalLight>()->init(16);
+	getObjManager<TCompMesh>()->init(1024);
+	getObjManager<TCompCamera>()->init(4);
+	getObjManager<TCompCollider>()->init(512);
+	getObjManager<TCompRigidBody>()->init(512);
+	getObjManager<TCompStaticBody>()->init(512);
+	getObjManager<TCompAABB>()->init(1024);
+	getObjManager<TCompPlayerController>()->init(1);
+	getObjManager<TCompPlayerPivotController>()->init(1);
+	getObjManager<TCompCameraPivotController>()->init(1);
+	getObjManager<TCompThirdPersonCameraController>()->init(1);
+	getObjManager<TCompDistanceJoint>()->init(32);
+	getObjManager<TCompDirectionalLight>()->init(16);
 	
 	registerAllComponentMsgs();
 }
 
 void initManagers() {
-	getObjManager<TCamera>()->initHandlers();
-	getObjManager<TCollider>()->initHandlers();
-	getObjManager<TRigidBody>()->initHandlers();
-	getObjManager<TStaticBody>()->initHandlers();
-	getObjManager<TAABB>()->initHandlers();
-	getObjManager<TPlayerController>()->initHandlers();
-	getObjManager<TPlayerPivotController>()->initHandlers();
-	getObjManager<TCameraPivotController>()->initHandlers();	
-	getObjManager<TThirdPersonCameraController>()->initHandlers();
-	getObjManager<TEnemyWithPhysics>()->initHandlers();	
-	getObjManager<TDistanceJoint>()->initHandlers();
+	getObjManager<TCompCamera>()->initHandlers();
+	getObjManager<TCompCollider>()->initHandlers();
+	getObjManager<TCompRigidBody>()->initHandlers();
+	getObjManager<TCompStaticBody>()->initHandlers();
+	getObjManager<TCompAABB>()->initHandlers();
+	getObjManager<TCompPlayerController>()->initHandlers();
+	getObjManager<TCompPlayerPivotController>()->initHandlers();
+	getObjManager<TCompCameraPivotController>()->initHandlers();
+	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
+	getObjManager<TCompDistanceJoint>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -133,7 +129,7 @@ bool CApp::create() {
   assert(is_ok);
 
   CEntity* e = entity_manager.getByName("Camera");
-  camera = e->get<TCamera>();
+  camera = e->get<TCompCamera>();
 
   is_ok = font.create();
   font.camera = camera;
@@ -170,41 +166,6 @@ bool CApp::create() {
   debug_optioner.init();
 
   activateInspectorMode(false);
-
-  CEntity* e2 = CHandle::create< CEntity >();
-  TLife *life = e2->add(CHandle::create<TLife>());
-  life->life = 20.f;
-  TCompName* cname = e2->add(CHandle::create<TCompName>());
-  strcpy(cname->name, "pep");
-
-  CHandle h2(e2);
-  CHandle h3 = h2.clone();
-  CEntity* e3 = h3;
-  TLife *life3 = e3->get<TLife>();
-
-
-  TMsgExplosion msg1;
-  msg1.damage = 3.3f;
-  e2->sendMsg(msg1);
-  e2->sendMsg(TMsgDied(2));
-
-  // Enemigo SIN componentes
-  aibp.entity = old_entity_manager.create("Enemy");
-  aibp.entity->setPosition(((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position);
-  CEntityOld* wp1 = old_entity_manager.create("EnemyWp1");
-  wp1->setPosition(XMVectorSet(10, 0, 10, 0));
-  CEntityOld* wp2 = old_entity_manager.create("EnemyWp2");
-  wp2->setPosition(XMVectorSet(-10, 0, 10, 0));
-  CEntityOld* wp3 = old_entity_manager.create("EnemyWp3");
-  wp3->setPosition(XMVectorSet(10, 0, -10, 0));
-
-  vector<CEntityOld*> waypoints;
-  waypoints.push_back(wp1);
-  waypoints.push_back(wp2);
-  waypoints.push_back(wp3);
-
-  aibp.waypoints = waypoints;
-  aibp.Init();
 
   return true;
 }
@@ -263,21 +224,16 @@ void CApp::update(float elapsed) {
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
 
-  aibp.Recalc(elapsed);
-
-  getObjManager<TPlayerController>()->update(elapsed); // Update player transform
-  getObjManager<TPlayerPivotController>()->update(elapsed);
-  getObjManager<TCameraPivotController>()->update(elapsed);
-  getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
-  getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
-  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
+  getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
+  getObjManager<TCompPlayerPivotController>()->update(elapsed);
+  getObjManager<TCompCameraPivotController>()->update(elapsed);
+  getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+  getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+  getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 
   entity_inspector.update();
   entity_lister.update();
   entity_actioner.update();
-  
-  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position = aibp.entity->getPosition();
-  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->rotation = aibp.entity->getRotation();
 }
 
 // Physics update
@@ -285,9 +241,8 @@ void CApp::fixedUpdate(float elapsed) {
   physics_manager.gScene->simulate(physics_manager.timeStep);
   physics_manager.gScene->fetchResults(true);
 
-  getObjManager<TPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
-  getObjManager<TRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
-  getObjManager<TEnemyWithPhysics>()->fixedUpdate(elapsed);
+  getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
+  getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 }
 
 void CApp::render() {
@@ -312,7 +267,7 @@ void CApp::render() {
   ctes_global.get()->LightCount = 0;
   for (int i = 0; i < entity_manager.getEntities().size(); ++i)  {
 	  CEntity* e_dirL001 = entity_manager.getEntities()[i];
-	  TDirectionalLight* dirL001 = e_dirL001->get<TDirectionalLight>();
+	  TCompDirectionalLight* dirL001 = e_dirL001->get<TCompDirectionalLight>();
 	  if (dirL001 && dirL001->active) {
 		  ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = dirL001->direction;
 		  ctes_global.get()->LightColors[ctes_global.get()->LightCount] = dirL001->color;
@@ -367,8 +322,8 @@ void CApp::renderEntities() {
   // Render entities
   for (int i = 0; i < entity_manager.getEntities().size(); ++i)
   {
-	  TTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TTransform>();
-	  TMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TMesh>();
+	  TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
+	  TCompMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TCompMesh>();
 
 	  // If the component has no transform it can't be rendered
 	  if (!t)
@@ -396,9 +351,9 @@ void CApp::renderDebugEntities() {
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
 		CEntity* e = (CEntity*)entity_manager.getEntities()[i];
-		TTransform* t = e->get<TTransform>();
+		TCompTransform* t = e->get<TCompTransform>();
 		TCompName* name = e->get<TCompName>();
-		TAABB* aabb = e->get<TAABB>();
+		TCompAABB* aabb = e->get<TCompAABB>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
@@ -417,7 +372,7 @@ void CApp::renderDebugEntities() {
 			bool intersects = false;
 			for (int j = 0; j < entity_manager.getEntities().size(); ++j) {
 				CEntity* e2 = (CEntity*)entity_manager.getEntities()[j];
-				TAABB* aabb2 = e2->get<TAABB>();
+				TCompAABB* aabb2 = e2->get<TCompAABB>();
 				if (aabb2 && i != j && aabb->intersects(aabb2)) {
 					intersects = true;
 					break;
@@ -453,10 +408,10 @@ void CApp::activateInspectorMode(bool active) {
 	renderNames = active;
 
 	// Desactivar los componentes
-	getObjManager<TPlayerController>()->setActiveComponents(!active);
-	getObjManager<TPlayerPivotController>()->setActiveComponents(!active);
-	getObjManager<TCameraPivotController>()->setActiveComponents(!active);
-	getObjManager<TThirdPersonCameraController>()->setActiveComponents(!active);
+	getObjManager<TCompPlayerController>()->setActiveComponents(!active);
+	getObjManager<TCompPlayerPivotController>()->setActiveComponents(!active);
+	getObjManager<TCompCameraPivotController>()->setActiveComponents(!active);
+	getObjManager<TCompThirdPersonCameraController>()->setActiveComponents(!active);
 }
 
 void CApp::destroy() {

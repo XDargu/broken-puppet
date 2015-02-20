@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "font.h"
-#include "camera.h"
+#include "../handle/handle.h"
+#include "../components/comp_camera.h"
 
 #pragma comment(lib, "font/FW1FontWrapper.lib") 
 

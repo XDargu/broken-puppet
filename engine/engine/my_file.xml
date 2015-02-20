@@ -69,12 +69,6 @@
     <cameraPivotController tiltVelocity="270"/>
   </entity>
   <entity>
-    <name name="Camera"/>
-    <transform position="0 2 -9" rotation="0 0 0 1"  scale="1 1 1"/>
-    <camera target="0 2 0" fov="75" znear="0.5" zfar="1000"/>
-    <thirdPersonCameraController offset="0.2 -0.33 2"/>
-  </entity>
-  <entity>
     <name name="Level"/>
     <transform position="0 0 0" rotation="0 0 0 1" scale="1 1 1"/>
     <mesh path="Level" color="1 1 1 1"/>
@@ -102,5 +96,11 @@
   <entity>
     <name name="directionalLight003"/>
     <directionalLight color="0 1 0.6 0.01" direction="0 -1 0 0"/>
+  </entity>
+  <entity>
+    <name name="Camera"/>
+    <transform position="0 2 -9" rotation="0 0 0 1"  scale="1 1 1"/>
+    <camera target="0 2 0" fov="75" znear="0.5" zfar="1000"/>
+    <thirdPersonCameraController offset="0.2 -0.33 2"/>
   </entity>
 </scene>

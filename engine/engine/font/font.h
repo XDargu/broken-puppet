@@ -3,6 +3,8 @@
 
 #include "FW1FontWrapper.h"
 #include "../handle/handle.h"
+#include "../components/comp_camera.h"
+
 class CCamera;
 
 struct CFont {
@@ -10,7 +12,7 @@ struct CFont {
   IFW1Factory*     FW1Factory;
   unsigned         color;
   float            size;
-  const TCamera*   camera;
+  const TCompCamera*   camera; // TODO: CAMBIARLO A HANDLER
   CFont();
   bool create();
   void destroy();

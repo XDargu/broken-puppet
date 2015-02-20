@@ -1,6 +1,8 @@
 #include "mcv_platform.h"
 #include "importer_parser.h"
 #include "handle\entity.h"
+#include "handle\handle_manager.h"
+#include "entity_manager.h"
 
 CHandle current_entity;
 
@@ -14,12 +16,13 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 		return;
 	}
 
-	CHandle h = hm->createEmptyObj(atts);
+	CHandle h = hm->createEmptyObj();
 
 	if (elem != "entity") {
 		assert(current_entity.isValid());
 		CEntity* e = current_entity;
 		e->add(h);
+		h.loadFromAtts(atts);
 	}
 	else {
 		current_entity = h;
@@ -31,5 +34,6 @@ void CImporterParser::onEndElement(const std::string &elem) {
 	dbg("onEnd %s\n", elem.c_str());
 	if (elem == "entity") {
 		CEntityManager::get().add(current_entity);
+		// current_entity.send(ENTITY_CREATED);
 	}
 }

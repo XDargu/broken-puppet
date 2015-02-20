@@ -136,8 +136,9 @@ public:
 	// because I don't know the exact type of objects we are dealing with
 	virtual ~CHandleManager() { }
 	virtual bool destroyObj(CHandle h) = 0;
-	virtual CHandle createEmptyObj(MKeyValue &atts) = 0;
+	virtual CHandle createEmptyObj() = 0;
 	virtual CHandle clone(CHandle h) = 0;
+	virtual void loadFromAtts(CHandle who, MKeyValue &atts) = 0;
 
 	// ---------------------------
 	class CRegister {

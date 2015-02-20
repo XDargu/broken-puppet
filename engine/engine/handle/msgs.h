@@ -3,25 +3,15 @@
 
 typedef unsigned TMsgID;
 TMsgID generateUniqueMsgID();
-  
+
+// Macro to declare automatically a method that returns an unique id
+// To be inserted as part of each msg type
 #define DECLARE_MSG_ID() \
 	static TMsgID getID() {  \
 		static TMsgID unique_id = generateUniqueMsgID();  \
 		return unique_id;  \
 	}
 
-struct TMsgExplosion {
-	XMVECTOR source;
-	float    radius;
-	float    damage;
-	DECLARE_MSG_ID();
-};
-
-struct TMsgDied {
-	int     who;
-	TMsgDied( int awho ) : who (awho ) { }
-	DECLARE_MSG_ID();
-};
 
 // An interface to call something on a handle
 struct IFunctorBase {
@@ -29,6 +19,10 @@ struct IFunctorBase {
   virtual void execute(CHandle handle, const void* msg) = 0;
 };
 
+// A class implementing the previous interface, which
+// on the execute will call the method 'member' interpreting
+// handle as object of type handle, and interpreting the
+// void* msg as a class of type TMsgData
 template< class TObj, class TMsgData > 
 struct TFunctor : public IFunctorBase {
 
@@ -58,8 +52,8 @@ struct TFunctor : public IFunctorBase {
 
 };
 
-// El registro se compone del tipo de objetos y a que metodo
-// del objeto hay que llamar
+// Each msg registered has the type of object and the method that needs
+// to be called
 struct TComponentMsgHandler {
   uint32_t         comp_type;
   IFunctorBase*    method;
@@ -68,7 +62,7 @@ struct TComponentMsgHandler {
 #include <map>
 typedef std::multimap< TMsgID, TComponentMsgHandler > MMsgSubscriptions;
 
-// The global register of subscriptions
+// The global register of all subscriptions
 extern MMsgSubscriptions msg_subscriptions;
 
 // To subscribe, we give the msg_id and the method to call
@@ -82,6 +76,7 @@ void subscribe(TMsgID msg_id, IFunctorBase* method) {
   msg_subscriptions.insert(e);
 }
 
+// Macro to simplify the subscribe to an msg process
 #define SUBSCRIBE(acomp,amsg_arg,amethod) \
   subscribe<acomp>(amsg_arg::getID(), new TFunctor<acomp,amsg_arg>(&acomp::amethod));
 

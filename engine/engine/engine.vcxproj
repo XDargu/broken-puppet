@@ -163,6 +163,24 @@
     <ClInclude Include="ai\ai_basic_patroller.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="components\all_components.h" />
+    <ClInclude Include="handle\app_msgs.h" />
+    <ClInclude Include="components\base_component.h" />
+    <ClInclude Include="components\comp_aabb.h" />
+    <ClInclude Include="components\comp_camera.h" />
+    <ClInclude Include="components\comp_camera_pivot_controller.h" />
+    <ClInclude Include="components\comp_collider.h" />
+    <ClInclude Include="components\comp_directional_light.h" />
+    <ClInclude Include="components\comp_distance_joint.h" />
+    <ClInclude Include="components\comp_life.h" />
+    <ClInclude Include="components\comp_mesh.h" />
+    <ClInclude Include="components\comp_name.h" />
+    <ClInclude Include="components\comp_player_controller.h" />
+    <ClInclude Include="components\comp_player_pivot_controller.h" />
+    <ClInclude Include="components\comp_rigid_body.h" />
+    <ClInclude Include="components\comp_static_body.h" />
+    <ClInclude Include="components\comp_third_person_camera_controller.h" />
+    <ClInclude Include="components\comp_transform.h" />
     <ClInclude Include="doom_controller.h" />
     <ClInclude Include="entity_manager.h" />
     <ClInclude Include="entity_inspector.h" />
@@ -187,6 +205,7 @@
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="transform.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="XMLParser.h" />
   </ItemGroup>
@@ -196,6 +215,7 @@
     <ClCompile Include="ai\ai_basic_patroller.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
@@ -215,6 +235,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="font\font.cpp" />
+    <ClCompile Include="handle\entity.cpp" />
     <ClCompile Include="handle\handle.cpp" />
     <ClCompile Include="importer_parser.cpp" />
     <ClCompile Include="io\iostatus.cpp" />
