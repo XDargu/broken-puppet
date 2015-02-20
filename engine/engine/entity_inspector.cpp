@@ -151,6 +151,15 @@ void TW_CALL AddMesh(void *clientData) {
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
+void TW_CALL AddDirectionalLight(void *clientData) {
+
+	TDirectionalLight* l = CHandle::create<TDirectionalLight>();
+	l->color = XMVectorSet(1, 1, 1, 0.5f);
+	l->direction = XMVectorSet(1, 1, 1, 0.5f);
+	static_cast<CEntity *>(clientData)->add(l);
+	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+}
+
 void CEntityInspector::update() {
 	TAABB* e_aabb = target_entity->get<TAABB>();
 	TRigidBody* e_rigidbody = target_entity->get<TRigidBody>();
@@ -262,8 +271,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (e_directional_light) {
 		TwAddVarRW(bar, "DirectionalLightActive", TW_TYPE_BOOL8, &e_directional_light->active, " group='Directional Light' label='Active' ");
 		TwAddVarRW(bar, "DirectionalLightDirection", TW_TYPE_DIR3F, &e_directional_light->direction, " group='Directional Light' label='Direction' axisx=-x axisz=-z");
-		TwAddVarRW(bar, "DirectionalLightColor", TW_TYPE_COLOR4F, &e_directional_light->color, " group='Directional Light' label='Color' ");
-		
+		TwAddVarRW(bar, "DirectionalLightColor", TW_TYPE_COLOR4F, &e_directional_light->color, " group='Directional Light' label='Color' ");		
 	}
 
 	TwAddSeparator(bar, "", "");
@@ -274,6 +282,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	}
 	if (!e_mesh) {
 		TwAddButton(bar, "Mesh", AddMesh, target_entity, "");
+	}
+	if (!e_directional_light) {
+		TwAddButton(bar, "Directional Light", AddDirectionalLight, target_entity, "");
 	}
 }
 
