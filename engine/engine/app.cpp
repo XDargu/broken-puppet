@@ -204,8 +204,9 @@ void CApp::doFrame() {
 	  // Fixed update
 	  fixedUpdateCounter += delta_secs;
 	  if (fixedUpdateCounter >= physics_manager.timeStep) {
-		  fixedUpdate(fixedUpdateCounter);
+		  fixedUpdate(physics_manager.timeStep);
 		  fixedUpdateCounter = 0.0f;
+		  
 	  }
   }
   render();

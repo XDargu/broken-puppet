@@ -73,15 +73,6 @@ float4 PS( VS_OUTPUT input ) : SV_Target
 //--------------------------------------------------------------------------------------
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 {
-	/*
-	//float Gamma = 2;
-	//float Regions = 3;
-
-	//lightIntensity = pow(lightIntensity, Gamma);
-	//lightIntensity = floor(lightIntensity * Regions) / Regions;
-	//lightIntensity = pow(lightIntensity, 1.0 / Gamma);
-
-	*/
 
 	// Luz inicial
 	float4 lightAccum = AmbientLight * AmbientLight.w;
@@ -103,6 +94,13 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 		lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
 		
 	}
+
+	/*float Gamma = 1;
+	float Regions = 3;
+
+	lightAccum = pow(lightAccum, Gamma);
+	lightAccum = floor(lightAccum * Regions) / Regions;
+	lightAccum = pow(lightAccum, 1.0 / Gamma);*/
 
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 	return lightAccum * Tint * color;	
