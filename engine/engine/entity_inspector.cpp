@@ -161,6 +161,18 @@ void TW_CALL AddDirectionalLight(void *clientData) {
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
+void TW_CALL AddPointLight(void *clientData) {
+	// Check if the entity has a Transform, then add the light to the position of the entity
+	// Else, create the light in the origin
+	TCompTransform* t = static_cast<CEntity *>(clientData)->get<TCompTransform>();
+	TCompPointLight* l = CHandle::create<TCompPointLight>();
+	l->color = XMVectorSet(1, 1, 1, 0.5f);
+	l->radius = 10;
+	l->position = t ? t->position : XMVectorZero();
+	static_cast<CEntity *>(clientData)->add(l);
+	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+}
+
 void CEntityInspector::update() {
 	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
 	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
@@ -300,6 +312,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (!e_directional_light) {
 		TwAddButton(bar, "Directional Light", AddDirectionalLight, target_entity, "");
 	}
+	if (!e_point_light) {
+		TwAddButton(bar, "Point Light", AddPointLight, target_entity, "");
+	}
 }
 
 
@@ -307,6 +322,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 
 TwBar *lister_bar;
 std::vector<std::string> entity_names;
+std::vector<std::string> component_names;
 
 CEntityLister::CEntityLister() { searchIn = ""; }
 
@@ -363,6 +379,7 @@ size_t LevenshteinDistance(std::string s1, std::string s2)
 	return result;
 }
 
+// Compare strings for search purposes, tests if the strings are equal, are contained or similar (by Levenshtein distance)
 bool searchCompare(std::string s1, std::string s2) {
 	
 	std::transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
@@ -380,6 +397,71 @@ bool searchCompare(std::string s1, std::string s2) {
 	int l_dist = LevenshteinDistance(s1, s2);
 	if (l_dist < 4)
 		return true;
+	return false;
+}
+
+/* 
+Predictive input. Given an string input and a list of strings, returns the string from the list which
+starts with the input script, if there is only one posibility
+*/ 
+std::string predictiveInput(std::string input, std::vector<std::string> list) {
+
+	std::string ret;
+	int count = 0;
+
+	for (int i = 0; i < list.size(); ++i) {
+		if (list[i].find(input) == 0) {
+			ret = list[i];
+			count++;
+		}
+	}
+
+	return count == 1 ? ret : "";
+}
+
+// Entity has componente (by name)
+bool entityHasComponent(CEntity* e, std::string component_name) {
+	// Input string to lower case
+	std::transform(component_name.begin(), component_name.end(), component_name.begin(), ::tolower);
+
+	// Gets the predictive input
+	component_name = predictiveInput(component_name, component_names);
+
+	if (component_name == ":name")
+		return e->has<TCompName>();
+	if (component_name == ":transform")
+		return e->has<TCompTransform>();
+	if (component_name == ":mesh")
+		return e->has<TCompMesh>();
+	if (component_name == ":aabb")
+		return e->has<TCompAABB>();
+	if (component_name == ":camera")
+		return e->has<TCompCamera>();
+	if (component_name == ":collider")
+		return e->has<TCompCollider>();
+	if (component_name == ":rigidbody")
+		return e->has<TCompRigidBody>();
+	if (component_name == ":staticbody")
+		return e->has<TCompStaticBody>();
+	if (component_name == ":ambientlight")
+		return e->has<TCompAmbientLight>();
+	if (component_name == ":directionallight")
+		return e->has<TCompDirectionalLight>();
+	if (component_name == ":pointlight")
+		return e->has<TCompPointLight>();
+	if (component_name == ":playercontroller")
+		return e->has<TCompPlayerController>();
+	if (component_name == ":playerpivotcontroller")
+		return e->has<TCompPlayerController>();
+	if (component_name == ":camerapivotcontroller")
+		return e->has<TCompCameraPivotController>();
+	if (component_name == ":thirdpersoncameracontroller")
+		return e->has<TCompThirdPersonCameraController>();
+
+	if (component_name == ":light") {
+		return e->has<TCompAmbientLight>() || e->has<TCompDirectionalLight>() || e->has<TCompPointLight>();
+	}
+
 	return false;
 }
 
@@ -404,8 +486,31 @@ void CEntityLister::init() {
 	TwAddSeparator(lister_bar, "", "");
 	TwAddButton(lister_bar, "Entities", NULL, NULL, "");
 
+	// Entity event counter
 	m_entity_event_count = -1;
+
+	// Previus search
 	prevSearch = "";
+
+	// Fills the component name vector
+	std::string components[] = { 
+		  ":name"
+		, ":transform"
+		, ":mesh" 
+		, ":aabb"
+		, ":collider"
+		, ":rigidbody"
+		, ":staticbody"
+		, ":ambientlight"
+		, ":directionallight"
+		, ":pointlight"
+		, ":playercontroller"
+		, ":playerpivotcontroller"
+		, ":camerapivotcontroller"
+		, ":thirdpersoncameracontroller"
+		, ":light"
+	};
+	component_names = std::vector<std::string>(std::begin(components), std::end(components));
 }
 
 void CEntityLister::update() {
@@ -422,16 +527,29 @@ void CEntityLister::update() {
 			TwRemoveVar(lister_bar, entity_names[n].c_str());
 		}
 
+		// Save the search script as std string
+		std::string strSearch = std::string(searchIn);
+
+		// If the first character is ':', search by type
+		bool searchByTag = strSearch.size() > 0 && strSearch[0] == ':';
+
 		for (int i = 0; i < entities.size(); ++i) {
 			// Get the entity names
 			TCompName* e_name = ((CEntity*)entities[i])->get<TCompName>();
 			if (e_name) {
-				std::string a = std::string(searchIn);
-				if (a.empty() || searchCompare(a, e_name->name)) {
-					// Add to the listed entities vector
-					entity_names.push_back(e_name->name);
-					TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
-					
+				if (searchByTag) {
+					if (entityHasComponent(((CEntity*)entities[i]), strSearch)) {
+						// Add to the listed entities vector
+						entity_names.push_back(e_name->name);
+						TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
+					}
+				}
+				else {
+					if (strSearch.empty() || searchCompare(strSearch, e_name->name)) {
+						// Add to the listed entities vector
+						entity_names.push_back(e_name->name);
+						TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
+					}
 				}
 			}
 		}
