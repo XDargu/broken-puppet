@@ -12,11 +12,26 @@ NotMesh = #(targetcamera, freecamera)
 -- List of objects exported
 expNames = #()
 
+PlayerName = "Player"
+PlayerPivotName = "PlayerPivot"
+CameraPivotName = "CameraPivot"
+CameraName = "PlayerCamera"
+
+
+-- List of special names
+reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
+
+
+
 
 /*
-addObjectsID()
-exportXMLScene()
-removeObjectsID()
+- StaticBody
+
+- Player
+- PlayerPivot
+- CameraPivot
+- Camera
+
 */
 /**********************************************************************************************
 Export the XML with entities and components
@@ -42,13 +57,19 @@ fn exportXMLScene = (
 		getMesh,
 		getAABB,
 		getCollider,
-		getRigidbody
+		getRigidbody,
+		getCamera,
+		getCameraController,
+		getCameraPivotController,		
+		getPlayerPivotController,
+		getPlayerController
 	)
 
 	-- Initialize XML
 	mXML = "<scene>\n"
 	
 	--Temporal
+	/*
 	mXML += "  <entity>\n"\
    + "<name name=\"Player\"/>\n"\
     +"<transform position=\"0 0 -5\" rotation=\"0 0 0 1\"  scale=\"1 1 1\"/>\n"\
@@ -63,7 +84,13 @@ fn exportXMLScene = (
     +"<camera target=\"0 2 0\" fov=\"60\" znear=\"0.5\" zfar=\"1000\"/>\n"\
     +"<thirdPersonCameraController />\n"\
 	+"</entity>"
-
+	
+	mXML += "  <entity>"
+    + "<name name=\"Level\"/>"
+    + "<transform position=\"0 0 0\" rotation=\"0 0 0 1\" scale=\"1 1 1\"/>"
+    + "<mesh path=\"Level\" color=\"1 1 1 1\"/>"
+	+ "</entity>"
+*/
 	-- Calls every function in the function arrays
 	for obj in allObject do (
 		-- Check if needs to be evaluate
@@ -80,7 +107,7 @@ fn exportXMLScene = (
 	mXML += "</scene>"
 	
 	-- print result XML
-	print mXML
+	--print mXML
 	saveXMLArchive mXML
 )
 
@@ -128,7 +155,6 @@ fn getTransform obj = (
 													+ obj.scale.z as string+ " "\
 													+ obj.scale.y as string+ ""\
 		+"\"/>\n"
-	
 	)
 	else
 	(
@@ -165,7 +191,7 @@ fn getMesh obj = (
 	)
 	
 	-- Se añaden los atributos necesarios
-	local mString = "<mesh path=\"" + mPath + "\"/>\n"
+	local mString = "<mesh color=\"1 1 1 1\" path=\"" + mPath + "\"/>\n"
 	
 	return mString
 )	
@@ -186,8 +212,14 @@ Params:
   - String with the component information
 ***********************************************************************************************/
 fn getName obj = (
-	local mString = "<name " + "name=\"" + obj.name + "_" + obj.id as string + "\" />\n"
-	return mString
+	if (validateName obj) then
+	return "<name " + "name=\"" + obj.name + "\" />\n"
+	
+	return "<name " + "name=\"" + obj.name + "_" + obj.id as string + "\" />\n"
+)
+
+fn validateName obj = (
+	return ((findItem reservedNames (obj.name)) != 0)
 )
 
 /**********************************************************************************************
@@ -295,20 +327,29 @@ fn getAABB obj = (
 	return mString
 )
 
-fn getTargetCamera obj = (
-	
+/**********************************************************************************************
+Gets a Camera component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+
+fn getCamera obj = (
+
 	if((validateCameras obj) == false) then
 	return ""
 	
-	local miString = ""
+	local mString = ""
 	-- Se comprueba si es de clase camara
 	if((classof obj) == targetcamera) then (
 	-- Se añaden los atributos necesarios
+	local mTarget = max2mcvMatrix obj.target
 	
-			miString = "<camera target=\"" \
-													+ obj.target.pos.x as string+" " \
-													+ obj.target.pos.y as string+" " \
-													+ obj.target.pos.z as string+" " \
+			mString = "<camera target=\"" \
+													+ mTarget.row4.x as string+" " \
+													+ mTarget.row4.y as string+" " \
+													+ mTarget.row4.z as string+" " \
 								+ "\" fov=\""   \ 
 													+ obj.fov as string +"\""	\												
 								+ " znear=\""   \ 
@@ -319,7 +360,7 @@ fn getTargetCamera obj = (
 	)
 	if((classof obj) == freecamera) then (
 	-- Se añaden los atributos necesarios
-			miString = "<camera " \										
+			mString = "<camera " \										
 								+ " fov=\""   \ 
 													+ obj.fov as string +"\""	\												
 								+ " znear=\""   \ 
@@ -328,17 +369,119 @@ fn getTargetCamera obj = (
 													+ obj.farrange as string +""	\
 	+"\"/>\n"
 	)
--- fov target.pos znear zfar
-	return miString
+	
+	-- fov target.pos znear zfar
+	return mString
 )	
 
 fn validateCameras obj = (
-		return (((classof obj) == targetcamera))
+		return (((classof obj) == targetcamera)or((classof obj) == freecamera))
 	)
 
+/**********************************************************************************************
+Gets a Player component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+
+fn getPlayerController obj = (
+	
+	if((validatePlayer obj) == false) then
+	return ""
+	
+	local mString = "<playerController " \
+										+ "movementVelocity=\"" + obj.objectPlayerData.movementVelocity as string+  "\" " \
+										+ "rotationVelocity=\"" + obj.objectPlayerData.rotationVelocity as string + "\" " \
+										+ "/>\n"
+	
+	
+	return mString
+)	
+	
+fn validatePlayer obj = (
+	return (((obj.name) == PlayerName)and(isProperty obj.baseObject #objectPlayerData) )
+)
+
+
+/**********************************************************************************************
+Gets a Player Pivot component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+
+fn getPlayerPivotController obj = (
+	
+	if((validatePivotPlayer obj) == false) then
+	return ""
+	
+	local mString = "<playerPivotController " \
+										+ "rotationVelocity=\"" + obj.objectPlayerPivotData.rotationVelocity as string + "\" " \
+										+ "/>\n"
+	return mString
+)	
+	
+fn validatePivotPlayer obj = (
+		return (((obj.name) == PlayerPivotName)and(isProperty obj.baseObject #objectPlayerPivotData) )
+)
 
 
 
+/**********************************************************************************************
+Gets a Camera Pivot component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+
+
+fn getCameraPivotController obj = (
+	
+	if((validateCameraPivot obj) == false) then
+	return ""
+	
+	local mString = "<cameraPivotController " \
+										+ "tiltVelocity=\"" + obj.objectCameraPivotData.tiltVelocity as string + "\" " \
+										+ "/>\n"
+	return mString
+)	
+	
+fn validateCameraPivot obj = (
+		return (((obj.name) == CameraPivotName)and(isProperty obj.baseObject #objectCameraPivotData) )
+)
+
+
+
+/**********************************************************************************************
+Gets a Camera controller component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+
+
+fn getCameraController obj = (
+	
+	if((validateCamera obj) == false) then
+	return ""
+	
+	local mString = "<thirdPersonCameraController " \
+										+ "offset=\"" \
+										+ obj.objectCameraData.offsetX as string + " " \
+										+ obj.objectCameraData.offsetY as string + " " \
+										+ obj.objectCameraData.offsetZ as string + "\"" \
+										+ "/>\n"
+	return mString
+)	
+	
+fn validateCamera obj = (
+		return (((obj.name) == CameraName)and(isProperty obj.baseObject #objectCameraData) )
+)
 
 
 /**********************************************************************************************
@@ -407,38 +550,7 @@ fn mcv2world obj = (
 	obj.rotation = obj.rotation * rotateXMatrix 90
 	obj.pos = obj.pos * mcv2world
 )
-/**********************************************************************************************
-Calculate the path (relative/absolute) of the obj target
- Params:
-  - obj: target object
-  - isRelative: bool return relative path
- Returns:
-  - String: path of the obj
-***********************************************************************************************/
-fn getObjectPath object_to_path isRelative = (
-	
-	local data_path = "C:\\Code\\engine\\engine\\data\\meshes\\"
-	local relative_path = ""
-	local filename = object_to_path.name
-	local extension = ".mesh"
-	
-	if (isRelative) then
-	return relative_path + filename
-	
-	return data_path + relative_path + filename + extension
-	)
 
-/**********************************************************************************************
-Calculate the path  of the xml
- Returns:
-  - String: path of the xml
-***********************************************************************************************/
-	fn getXMLPath = (
-	local data_path = "C:\\Code\\engine\\engine\\"
-	local filename = data_path + ""
-	filename += "my_file.xml"	
-	return filename
-	)
 	
 /**********************************************************************************************
 Create file xml and save it
@@ -663,6 +775,41 @@ fn removeObjectsID = (
 		)
 )
 
+/**********************************************************************************************
+Calculate the path (relative/absolute) of the obj target
+ Params:
+  - obj: target object
+  - isRelative: bool return relative path
+ Returns:
+  - String: path of the obj
+***********************************************************************************************/
+fn getObjectPath object_to_path isRelative = (
+	
+	"D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine"
+	
+	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\data\\meshes\\"
+	local relative_path = ""
+	local filename = object_to_path.name
+	local extension = ".mesh"
+	
+	if (isRelative) then
+	return relative_path + filename
+	
+	return data_path + relative_path + filename + extension
+	)
+
+/**********************************************************************************************
+Calculate the path  of the xml
+ Returns:
+  - String: path of the xml
+***********************************************************************************************/
+	fn getXMLPath = (
+	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\"
+	local filename = data_path + ""
+	filename += "my_file.xml"	
+	return filename
+	)
+
 
 fn max2mcvMatrix obj = (
 	local max_world = obj.transform
@@ -671,12 +818,6 @@ fn max2mcvMatrix obj = (
 	local mcv_world = mcv2max * max_world * max2mcv
 	return mcv_world
 )
-	
-	--fn max2mcvQuat
-		/*
-		- - +
-	*/
-	
 
 
 -- Execution

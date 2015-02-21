@@ -29,8 +29,6 @@ CPhysicsManager &physics_manager = CPhysicsManager::get();
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
 
-ai_basic_patroller aibp;
-
 CApp& CApp::get() {
   return the_app;
 }
@@ -132,7 +130,7 @@ bool CApp::create() {
   ;
   assert(is_ok);
 
-  CEntity* e = entity_manager.getByName("Camera");
+  CEntity* e = entity_manager.getByName("PlayerCamera");
   camera = e->get<TCamera>();
 
   is_ok = font.create();
@@ -187,24 +185,6 @@ bool CApp::create() {
   msg1.damage = 3.3f;
   e2->sendMsg(msg1);
   e2->sendMsg(TMsgDied(2));
-
-  // Enemigo SIN componentes
-  aibp.entity = old_entity_manager.create("Enemy");
-  aibp.entity->setPosition(((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position);
-  CEntityOld* wp1 = old_entity_manager.create("EnemyWp1");
-  wp1->setPosition(XMVectorSet(10, 0, 10, 0));
-  CEntityOld* wp2 = old_entity_manager.create("EnemyWp2");
-  wp2->setPosition(XMVectorSet(-10, 0, 10, 0));
-  CEntityOld* wp3 = old_entity_manager.create("EnemyWp3");
-  wp3->setPosition(XMVectorSet(10, 0, -10, 0));
-
-  vector<CEntityOld*> waypoints;
-  waypoints.push_back(wp1);
-  waypoints.push_back(wp2);
-  waypoints.push_back(wp3);
-
-  aibp.waypoints = waypoints;
-  aibp.Init();
 
   return true;
 }
@@ -263,8 +243,6 @@ void CApp::update(float elapsed) {
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
 
-  aibp.Recalc(elapsed);
-
   getObjManager<TPlayerController>()->update(elapsed); // Update player transform
   getObjManager<TPlayerPivotController>()->update(elapsed);
   getObjManager<TCameraPivotController>()->update(elapsed);
@@ -275,9 +253,6 @@ void CApp::update(float elapsed) {
   entity_inspector.update();
   entity_lister.update();
   entity_actioner.update();
-  
-  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->position = aibp.entity->getPosition();
-  ((TTransform*)((CEntity*)entity_manager.getByName("Enemigo"))->get<TTransform>())->rotation = aibp.entity->getRotation();
 }
 
 // Physics update
