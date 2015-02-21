@@ -3,6 +3,7 @@
 #include <AntTweakBar.h>
 #include "handle\handle.h"
 #include "components\all_components.h"
+#include "importer_parser.h"
 #include <locale>
 #include <algorithm>
 
@@ -174,6 +175,11 @@ void TW_CALL AddPointLight(void *clientData) {
 }
 
 void CEntityInspector::update() {
+	if (!target_entity) {
+		TwRemoveAllVars(bar);
+		return;
+	}
+
 	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
 	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
 
@@ -190,6 +196,10 @@ void CEntityInspector::update() {
 
 void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	target_entity = the_entity;
+	TwRemoveAllVars(bar);
+
+	if (!target_entity)
+		return;
 
 	TCompTransform* e_transform = target_entity->get<TCompTransform>();
 	TCompName* e_name = target_entity->get<TCompName>();
@@ -207,7 +217,6 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompAmbientLight* e_ambient_light = target_entity->get<TCompAmbientLight>();
 	TCompPointLight* e_point_light = target_entity->get<TCompPointLight>();
 
-	TwRemoveAllVars(bar);
 	if (e_name) {
 		TwAddVarRW(bar, "NActive", TW_TYPE_BOOL8, &e_name->active, " group=Name label='Active'");
 		TwAddVarRW(bar, "CName", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name label='Name'");
@@ -581,6 +590,19 @@ void TW_CALL CallbackCreateEntity(void *clientData)
 	entityCounter++;
 }
 
+void TW_CALL CallbackDestroyEntity(void *clientData)
+{
+	CEntityManager::get().remove(CHandle(CApp::get().entity_inspector.getInspectedEntity()));
+	CApp::get().entity_inspector.inspectEntity(nullptr);
+}
+
+void TW_CALL CallbackLoadLevel(void *clientData)
+{	
+	// Remove all entities
+	//CEntityManager::get().clear();
+	
+}
+
 void CEntityActioner::init() {
 	// Create a tewak bar
 	actioner_bar = TwNewBar("Actioner");
@@ -603,6 +625,8 @@ void CEntityActioner::update() {
 	std::vector< CHandle > entities = CEntityManager::get().getEntities();
 
 	TwAddButton(actioner_bar, "New entity", CallbackCreateEntity, NULL, "");
+	TwAddButton(actioner_bar, "Destroy entity", CallbackDestroyEntity, NULL, "");
+	//TwAddButton(actioner_bar, "Load level", CallbackLoadLevel, NULL, "");
 
 
 }

@@ -17,6 +17,8 @@ struct TCompPointLight : TBaseComponent {
 		color = XMVectorSetW(color, intensity * 0.1f);
 		position = atts.getQuat("position");
 		radius = atts.getFloat("radius", 20.0f);
+
+		
 	}
 };
 

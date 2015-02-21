@@ -99,12 +99,26 @@ void CEntityManager::add(CHandle the_entity) {
 }
 
 bool CEntityManager::remove(CHandle the_entity) {
+	((CEntity*)the_entity)->destroyComponents();
+	the_entity.destroy();
 	auto it = std::find(entities.begin(), entities.end(), the_entity);
 	if (it == entities.end())
 		return false;
 
 	entity_event_count++;
-	entities.erase(it);
+	entities.erase(it);	
+	return true;
+}
+
+bool CEntityManager::clear() {
+
+	for (int i = 0; i < entities.size(); ++i) {
+		((CEntity*)entities[i])->destroyComponents();
+		entities[i].destroy();
+		entity_event_count++;
+	}
+
+	entities.clear();
 	return true;
 }
 

@@ -61,6 +61,7 @@ public:
 
 	void add(CHandle the_entity);
 	bool remove(CHandle the_entity);
+	bool clear();
 	CHandle getByName(const char *name);
 	const VEntities& getEntities() const { return entities; }
 

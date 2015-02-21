@@ -87,7 +87,7 @@ void createManagers() {
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
-	getObjManager<TCompPointLight>()->init(64);
+	getObjManager<TCompPointLight>()->init(1);
 	
 	registerAllComponentMsgs();
 }
@@ -163,7 +163,7 @@ bool CApp::create() {
   TwWindowSize(xres, yres);
 
   entity_inspector.init();
-  entity_inspector.inspectEntity(entity_manager.getByName("Player"));  
+  entity_inspector.inspectEntity(nullptr);
 
   entity_lister.init();
   entity_actioner.init();

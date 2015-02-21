@@ -15,6 +15,7 @@ public:
 	void init();
 	void update();
 	void inspectEntity(CEntity* the_entity);
+	CEntity* getInspectedEntity() { return target_entity; }
 };
 
 class CEntityLister

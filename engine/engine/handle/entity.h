@@ -72,6 +72,11 @@ public:
 		}
   }
 
+	void destroyComponents() {
+		for (uint32_t i = 0; i < CHandle::max_types; i++)
+			components[i].destroy();
+	}
+
 	/*
 	template <class TMsgType>
 	void postMsg(const TMsgType& data) {
