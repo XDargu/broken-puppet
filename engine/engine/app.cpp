@@ -87,7 +87,7 @@ void createManagers() {
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
-	getObjManager<TCompPointLight>()->init(1);
+	getObjManager<TCompPointLight>()->init(64);
 	
 	registerAllComponentMsgs();
 }

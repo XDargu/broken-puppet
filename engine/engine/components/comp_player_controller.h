@@ -9,7 +9,8 @@ private:
 	CHandle player_pivot_transform;
 public:
 
-	physx::PxRigidDynamic*	 playerRigid; // Kinematic player. Should be changed to Physx Character Controller
+	physx::PxController* character_controller;
+
 	float movement_velocity;
 	float rotation_velocity;
 
@@ -22,11 +23,34 @@ public:
 		movement_velocity = atts.getFloat("movementVelocity", 5);
 		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 
-		// Kinematic player creation
-		playerRigid = physx::PxCreateDynamic(*Physics.gPhysicsSDK, physx::PxTransform(physx::PxVec3(0, 0, 0)), physx::PxCapsuleGeometry(0.5f, 1.0f),
-			*Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f), 100.0f);
-		playerRigid->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
-		Physics.gScene->addActor(*playerRigid);
+		CEntity* e = CHandle(this).getOwner();
+		m_transform = e->get<TCompTransform>();
+		TCompTransform* trans = (TCompTransform*)m_transform;
+
+		assert(trans || fatal("TPlayerController requieres a TTransform component"));
+
+		// Create player material
+		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.5f);
+
+		// Character controller creation
+		physx::PxCapsuleControllerDesc desc;
+
+		desc.setToDefault();
+		desc.material = pMaterial;
+		desc.radius = 0.5f;
+		desc.height = 2;
+		desc.upDirection = physx::PxVec3(0, 1, 0);
+		desc.slopeLimit = 0;
+		desc.stepOffset = 0.2f;
+		desc.position.x = XMVectorGetX(trans->position);
+		desc.position.y = XMVectorGetY(trans->position) + 1;
+		desc.position.z = XMVectorGetZ(trans->position);
+		desc.callback = NULL;
+		bool r = desc.isValid();
+
+		character_controller = Physics.gManager->createController(desc);
+		physx::PxRigidDynamic* c = character_controller->getActor();
+		float a = 2;
 	}
 
 	void init() {
@@ -39,23 +63,14 @@ public:
 
 		assert(player_pivot_trans || fatal("TPlayerController requieres a player pivot entity with a TTransform component"));
 
-		CEntity* e = CHandle(this).getOwner();
-		m_transform = e->get<TCompTransform>();
-		TCompTransform* trans = (TCompTransform*)m_transform;
-
-		assert(trans || fatal("TPlayerController requieres a TTransform component"));
-
-		// Teleport the kinematic player to the player position
-		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(trans->position);
-		position_player.y *= 0.5f;
-
-		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(trans->rotation);
-		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
-
-		playerRigid->setGlobalPose(physx::PxTransform(position_player, rotation_player), true);
+		
 	}
 
 	void update(float elapsed) {
+		
+	}
+
+	void fixedUpdate(float elapsed) {
 		TCompTransform* transform = (TCompTransform*)m_transform;
 		TCompTransform* player_pivot_trans = (TCompTransform*)player_pivot_transform;
 
@@ -90,20 +105,9 @@ public:
 			XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw - m_yaw);
 			transform->rotation = XMQuaternionSlerp(transform->rotation, XMQuaternionMultiply(transform->rotation, player_pivot_rot), 0.05f);
 		}
-	}
 
-	void fixedUpdate(float elapsed) {
-		TCompTransform* trans = (TCompTransform*)m_transform;
-
-		// Kinematic player update
-		// Rotate the capsule
-		physx::PxVec3 position_player = Physics.XMVECTORToPxVec3(trans->position);
-		position_player.y *= 0.5f;
-
-		physx::PxQuat rotation_player = Physics.XMVECTORToPxQuat(trans->rotation);
-		rotation_player *= physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1));
-
-		playerRigid->setKinematicTarget(physx::PxTransform(position_player, rotation_player));
+		// Move the character controller
+		physx::PxControllerCollisionFlags collisionFlags = character_controller->move(Physics.XMVECTORToPxVec3(delta_pos), 0.1, elapsed, NULL, NULL);
 	}
 
 

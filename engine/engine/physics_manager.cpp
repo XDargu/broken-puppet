@@ -27,7 +27,7 @@ CPhysicsManager::~CPhysicsManager()
 
 void CPhysicsManager::init() {
 	PxFoundation* foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-
+	
 	assert(foundation || fatal("Fatal error creating Physx foundation"));
 
 	gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, PxTolerancesScale());
@@ -51,6 +51,7 @@ void CPhysicsManager::init() {
 	PxInitExtensions(*gPhysicsSDK);
 
 	PxSceneDesc sceneDesc(gPhysicsSDK->getTolerancesScale());
+
 	// Gravedad terrestre
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 
@@ -70,6 +71,9 @@ void CPhysicsManager::init() {
 	// Crear un suelo
 	PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	gScene->addActor(*plane);
+
+	// Crear el controller manager
+	gManager = PxCreateControllerManager(*gScene);
 }
 
 PxVec3 CPhysicsManager::XMVECTORToPxVec3(XMVECTOR vector) {

@@ -11,6 +11,7 @@ public:
 
 	physx::PxPhysics *gPhysicsSDK;
 	physx::PxScene* gScene;
+	physx::PxControllerManager* gManager;
 
 	physx::PxReal timeStep;
 
