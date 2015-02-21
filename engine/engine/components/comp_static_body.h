@@ -9,6 +9,8 @@ public:
 
 	TCompStaticBody() : staticBody(nullptr) {}
 
+	~TCompStaticBody() { Physics.gScene->removeActor(*staticBody); }
+
 	void loadFromAtts(MKeyValue &atts) {
 	}
 

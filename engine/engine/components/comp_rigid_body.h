@@ -13,6 +13,8 @@ public:
 		rigidBody(nullptr)
 	{}
 
+	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
+
 	void loadFromAtts(MKeyValue &atts) {
 		float temp_density = atts.getFloat("density", 1);
 		bool temp_is_kinematic = atts.getBool("kinematic", false);
