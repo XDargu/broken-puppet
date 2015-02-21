@@ -190,7 +190,10 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompPlayerPivotController* e_player_pivot_controller = target_entity->get<TCompPlayerPivotController>();
 	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
 	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
+
 	TCompDirectionalLight* e_directional_light = target_entity->get<TCompDirectionalLight>();
+	TCompAmbientLight* e_ambient_light = target_entity->get<TCompAmbientLight>();
+	TCompPointLight* e_point_light = target_entity->get<TCompPointLight>();
 
 	TwRemoveAllVars(bar);
 	if (e_name) {
@@ -240,9 +243,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 
 	if (e_camera) {
 		TwAddVarRW(bar, "CameraActive", TW_TYPE_BOOL8, &e_camera->active, " group=Camera label='Active'");
-		TwAddVarRW(bar, "Fov", TW_TYPE_FLOAT, &e_camera->fov_in_radians, " group=Camera");
+		TwAddVarRW(bar, "Fov", TW_TYPE_FLOAT, &e_camera->fov_in_radians, " group=Camera min=15 max=180");
 		TwAddVarRW(bar, "Aspect ratio", TW_TYPE_FLOAT, &e_camera->aspect_ratio, " group=Camera");	
-		TwAddVarRW(bar, "Znear", TW_TYPE_FLOAT, &e_camera->znear, " group=Camera");
+		TwAddVarRW(bar, "Znear", TW_TYPE_FLOAT, &e_camera->znear, " group=Camera min=0.1");
 		TwAddVarRW(bar, "Zfar", TW_TYPE_FLOAT, &e_camera->zfar, " group=Camera");
 	}
 
@@ -273,6 +276,16 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarRW(bar, "DirectionalLightActive", TW_TYPE_BOOL8, &e_directional_light->active, " group='Directional Light' label='Active' ");
 		TwAddVarRW(bar, "DirectionalLightDirection", TW_TYPE_DIR3F, &e_directional_light->direction, " group='Directional Light' label='Direction' axisx=-x axisz=-z");
 		TwAddVarRW(bar, "DirectionalLightColor", TW_TYPE_COLOR4F, &e_directional_light->color, " group='Directional Light' label='Color' ");		
+	}
+	if (e_ambient_light) {
+		TwAddVarRW(bar, "AmbientLightActive", TW_TYPE_BOOL8, &e_ambient_light->active, " group='Ambient Light' label='Active' ");
+		TwAddVarRW(bar, "AmbientLightColor", TW_TYPE_COLOR4F, &e_ambient_light->color, " group='Ambient Light' label='Color' ");
+	}
+	if (e_point_light) {
+		TwAddVarRW(bar, "PointLightActive", TW_TYPE_BOOL8, &e_point_light->active, " group='Point Light' label='Active' ");
+		TwAddVarRW(bar, "PointLightPosition", TW_TYPE_DIR3F, &e_point_light->position, " group='Point Light' label='Position' ");
+		TwAddVarRW(bar, "PointLightColor", TW_TYPE_COLOR4F, &e_point_light->color, " group='Point Light' label='Color' ");
+		TwAddVarRW(bar, "PointLightRadius", TW_TYPE_FLOAT, &e_point_light->radius, " group='Point Light' label='Radius' min=0.1");
 	}
 
 	TwAddSeparator(bar, "", "");

@@ -58,7 +58,7 @@ public:
 		CIOStatus &io = CIOStatus::get();
 
 		CIOStatus::TMouse mouse = io.getMouse();
-		XMVECTOR rot = XMQuaternionRotationAxis(transform->getLeft(), -tilt_velocity * mouse.dy * elapsed);
+		XMVECTOR rot = XMQuaternionRotationAxis(transform->getLeft(), tilt_velocity * mouse.dy * elapsed);
 		transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
 		transform->rotation = XMQuaternionMultiply(transform->rotation, player_pivot_rot);
 

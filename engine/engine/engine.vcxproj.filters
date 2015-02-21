@@ -125,6 +125,12 @@
     <ClInclude Include="handle\app_msgs.h">
       <Filter>handle</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_ambient_light.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_point_light.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

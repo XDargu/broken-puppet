@@ -83,7 +83,11 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
+
+	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
+	getObjManager<TCompAmbientLight>()->init(1);
+	getObjManager<TCompPointLight>()->init(64);
 	
 	registerAllComponentMsgs();
 }
@@ -260,12 +264,20 @@ void CApp::render() {
   ps_textured.activate();
   const CTexture *t = texture_manager.getByName("wood_d");
   t->activate(0);
-  ctes_global.get()->AmbientLight = XMVectorSet(0.2, 0.2, 0.2, 0.5f);
+
+  // Ñapa para luz ambiental
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+	  CEntity* e_ambLight = entity_manager.getEntities()[i];
+	  TCompAmbientLight* ambLight = e_ambLight->get<TCompAmbientLight>();
+	  if (ambLight && ambLight->active) {
+		  ctes_global.get()->AmbientLight = ambLight->color;
+	  }
+  }
 
   // Ñapa para luces direccionales
   // Recorrer las luces y añadirlas al array
   ctes_global.get()->LightCount = 0;
-  for (int i = 0; i < entity_manager.getEntities().size(); ++i)  {
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
 	  CEntity* e_dirL001 = entity_manager.getEntities()[i];
 	  TCompDirectionalLight* dirL001 = e_dirL001->get<TCompDirectionalLight>();
 	  if (dirL001 && dirL001->active) {
@@ -275,6 +287,20 @@ void CApp::render() {
 	  }
   }  
 	  
+  // Ñapa para luces puntuales
+  // Recorrer las luces y añadirlas al array
+  ctes_global.get()->OmniLightCount = 0;
+  for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+	  CEntity* e_pointL = entity_manager.getEntities()[i];
+	  TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
+	  if (pointL && pointL->active) {
+		  ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = pointL->color;
+		  ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = pointL->position;
+		  ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
+		  ctes_global.get()->OmniLightCount++;
+	  }
+  }
+  int a = ctes_global.get()->OmniLightCount;
 
   ctes_global.uploadToGPU();
   ctes_global.activateInPS(2);

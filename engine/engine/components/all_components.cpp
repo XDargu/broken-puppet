@@ -17,3 +17,5 @@ DECL_OBJ_MANAGER(TCompThirdPersonCameraController, "thirdPersonCameraController"
 DECL_OBJ_MANAGER(TCompAABB, "aabb");
 DECL_OBJ_MANAGER(TCompDistanceJoint, "distanceJoint");
 DECL_OBJ_MANAGER(TCompDirectionalLight, "directionalLight");
+DECL_OBJ_MANAGER(TCompAmbientLight, "ambientLight");
+DECL_OBJ_MANAGER(TCompPointLight, "pointLight");

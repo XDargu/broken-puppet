@@ -29,5 +29,7 @@
 // Render
 #include "comp_mesh.h"
 #include "comp_directional_light.h"
+#include "comp_ambient_light.h"
+#include "comp_point_light.h"
 
 #endif

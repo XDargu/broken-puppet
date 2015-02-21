@@ -87,15 +87,23 @@
   </entity>
   <entity>
     <name name="directionalLight001"/>
-    <directionalLight color="1 1 1 0.05" direction="1 1 1 0"/>
+    <directionalLight color="1 1 1 0" direction="1 1 1 0" intensity="0.5"/>
   </entity>
   <entity>
     <name name="directionalLight002"/>
-    <directionalLight color="0.5 0.25 0.5 0.06" direction="-0.28 -0.46 -0.22 0"/>
+    <directionalLight color="0.5 0.25 0.5 1" direction="-0.28 -0.46 -0.22 0" intensity="0.6"/>
   </entity>
   <entity>
     <name name="directionalLight003"/>
-    <directionalLight color="0 1 0.6 0.01" direction="0 -1 0 0"/>
+    <directionalLight color="0 1 0.6 1" direction="0 -1 0 0" intensity="0.1"/>
+  </entity>
+  <entity>
+    <name name="ambientLight"/>
+    <ambientLight color="1 1 1 1" intensity="0.5"/>
+  </entity>
+  <entity>
+    <name name="pointLight001"/>
+    <pointLight color="1 0 0 1" intensity="1" position="0 0 0 0" radius="20"/>
   </entity>
   <entity>
     <name name="Camera"/>
