@@ -4,9 +4,6 @@
 
 CMeshCollisionManager mesh_collision_manager;
 
-std::vector<u8> vtxs_copy;
-std::vector<TIndex>idxs_copy;
-
 // Just to check we are not rendering a mesh we have not previously activated
 //const CCollision_Mesh* CCollision_Mesh::current_active_mesh = nullptr;
 
@@ -108,13 +105,13 @@ bool CCollision_Mesh::load(CDataProvider& dp) {
 	}
 	assert(vtx_decl);
 
-	for (int i = 0; i < header.nvertexs; ++i){
+	/*for (int i = 0; i < header.nvertexs; ++i){
 		vtxs_copy.push_back(vtxs[i]);
 	}
 
 	for (int i = 0; i < header.nidxs; ++i){
 		idxs_copy.push_back(idxs[i]);
-	}
+	}*/
 
 	// Use our create mesh function
 	return create(header.nvertexs
@@ -125,7 +122,7 @@ bool CCollision_Mesh::load(CDataProvider& dp) {
 		, vtx_decl);
 }
 
-PxTriangleMesh* CCollision_Mesh::load(const char* name){//, PxCooking* mCooking, PxPhysics* gPhysicsSDK) {
+bool CCollision_Mesh::load(const char* name){//, PxCooking* mCooking, PxPhysics* gPhysicsSDK) {
 	char full_name[MAX_PATH];
 	sprintf(full_name, "data/meshes/%s.mesh", name);
 	CFileDataProvider fdp(full_name);
@@ -147,24 +144,20 @@ PxTriangleMesh* CCollision_Mesh::load(const char* name){//, PxCooking* mCooking,
 		bool sucess = CPhysicsManager().gCooking->cookTriangleMesh(meshDesc, stream);
 		if (sucess){
 			physx::PxDefaultMemoryInputData rb(stream.getData(), stream.getSize());
-			return 	CPhysicsManager().gPhysicsSDK->createTriangleMesh(rb);
-		}else
-			return NULL;
+			collision_mesh=CPhysicsManager().gPhysicsSDK->createTriangleMesh(rb);
+			return true;
+		}else{
+			collision_mesh = nullptr;
+			return false;
+		}
 	}else{
+		collision_mesh = nullptr;
 		return NULL;
 	}
 }
 
 void CCollision_Mesh::destroy() {
-	//SAFE_RELEASE(ib);
-}
-
-std::vector<unsigned char> CCollision_Mesh::getTheVertexs(){
-	return vtxs_copy;
-}
-
-std::vector <unsigned short> CCollision_Mesh::getTheIndices(){
-	return idxs_copy;
+	collision_mesh->release();
 }
 
 unsigned CCollision_Mesh::getNvertexs(){

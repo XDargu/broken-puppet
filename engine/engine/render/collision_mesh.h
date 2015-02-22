@@ -16,6 +16,8 @@ class CCollision_Mesh
 	unsigned               nindices;
 	D3D_PRIMITIVE_TOPOLOGY topology;    // TriangleList, POINTS, LINES...
 	const CVertexDecl*     vtxs_decl;   // The type of vertexs
+	u8* vertexs;
+	TIndex* indices;
 
 	// Just to we don't forget to activate the mesh before rendering
 	//static const CCollision_Mesh*    current_active_mesh;
@@ -63,9 +65,8 @@ public:
 	CCollision_Mesh();
 	~CCollision_Mesh();
 
-	//PRUEBAS-----------------------------------------------------------
-	u8* vertexs;
-	TIndex* indices;
+	//Collision Mesh de acceso publico----------------------------------
+	PxTriangleMesh* collision_mesh;
 	//------------------------------------------------------------------
 
 	enum ePrimitiveType {
@@ -122,7 +123,7 @@ public:
 	void destroy();
 
 	// Leer archivo donde se encuentra almacenado la información del Mesh collider. Necesita punteros al cooking y al Physics de PhysX
-	PxTriangleMesh* load(const char* name);//, PxCooking* mCooking, PxPhysics* gPhysicsSDK);
+	bool load(const char* name);//, PxCooking* mCooking, PxPhysics* gPhysicsSDK);
 
 	void setName(const char*) {}
 };

@@ -5,15 +5,16 @@
 #include "../render/collision_mesh.h"
 
 struct TCompMeshCollider : TBaseComponent {
-	const CCollision_Mesh* mesh_collider;
+	PxTriangleMesh* collision_mesh;
 	char path[32];
 
-	TCompMeshCollider() { mesh_collider = nullptr; }
-	TCompMeshCollider(const CCollision_Mesh* the_mesh_collider) { mesh_collider = the_mesh_collider; strcpy(path, "unknown"); }
+	TCompMeshCollider() { collision_mesh = nullptr; }
+	TCompMeshCollider(PxTriangleMesh* the_mesh_collider) { collision_mesh = the_mesh_collider; strcpy(path, "unknown"); }
 
 	void loadFromAtts(MKeyValue &atts) {
 		strcpy(path, atts.getString("path", "missing_mesh").c_str());
-		mesh_collider = mesh_collision_manager.getByName(path);
+		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
+		collision_mesh = c_m->collision_mesh;
 	}
 
 	std::string toString() {
