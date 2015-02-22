@@ -108,7 +108,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 
 	float3 greyScaleConversion = float3(0.3f, 0.59f, 0.11f);
 
-	float gamma = 2;
+	float gamma = 5;
 	float contrast = 2;
 	float lightCorrection = (pow(sin(normalCamera) * gamma, contrast) / gamma);
 	result = lightCorrection * result;
@@ -121,7 +121,8 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	lightAccum = pow(lightAccum, 1.0 / Gamma);*/
 
 	
-	return result;
+	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
+	return result * checker;
 
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }
