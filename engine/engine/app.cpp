@@ -356,11 +356,13 @@ void CApp::render() {
   // Recorrer las luces y añadirlas al array
   ctes_global.get()->LightCount = 0;
   for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-	  CEntity* e_dirL001 = entity_manager.getEntities()[i];
-	  TCompDirectionalLight* dirL001 = e_dirL001->get<TCompDirectionalLight>();
-	  if (dirL001 && dirL001->active) {
-		  ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = dirL001->direction;
-		  ctes_global.get()->LightColors[ctes_global.get()->LightCount] = dirL001->color;
+	  CEntity* e_dirLD = entity_manager.getEntities()[i];
+	  TCompDirectionalLight* dirLD = e_dirLD->get<TCompDirectionalLight>();
+	  TCompTransform* transLD = e_dirLD->get<TCompTransform>();
+	  if (dirLD && transLD && dirLD->active) {
+		  ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), transLD->rotation);
+		  // La intensidad se pasa en el alfa del color
+		  ctes_global.get()->LightColors[ctes_global.get()->LightCount] = XMVectorSetW(dirLD->color, dirLD->intensity * 0.1f);
 		  ctes_global.get()->LightCount++;
 	  }
   }  
@@ -371,9 +373,10 @@ void CApp::render() {
   for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
 	  CEntity* e_pointL = entity_manager.getEntities()[i];
 	  TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
-	  if (pointL && pointL->active) {
-		  ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = pointL->color;
-		  ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = pointL->position;
+	  TCompTransform* trans_pointL = e_pointL->get<TCompTransform>();
+	  if (pointL && trans_pointL && pointL->active) {
+		  ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = XMVectorSetW(pointL->color, pointL->intensity * 0.1f);;
+		  ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = trans_pointL->position;
 		  ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
 		  ctes_global.get()->OmniLightCount++;
 	  }

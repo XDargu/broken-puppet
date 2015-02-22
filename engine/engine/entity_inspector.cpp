@@ -157,7 +157,7 @@ void TW_CALL AddDirectionalLight(void *clientData) {
 
 	TCompDirectionalLight* l = CHandle::create<TCompDirectionalLight>();
 	l->color = XMVectorSet(1, 1, 1, 0.5f);
-	l->direction = XMVectorSet(1, 1, 1, 0.5f);
+	l->intensity = 1;
 	static_cast<CEntity *>(clientData)->add(l);
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
@@ -165,11 +165,10 @@ void TW_CALL AddDirectionalLight(void *clientData) {
 void TW_CALL AddPointLight(void *clientData) {
 	// Check if the entity has a Transform, then add the light to the position of the entity
 	// Else, create the light in the origin
-	TCompTransform* t = static_cast<CEntity *>(clientData)->get<TCompTransform>();
 	TCompPointLight* l = CHandle::create<TCompPointLight>();
 	l->color = XMVectorSet(1, 1, 1, 0.5f);
 	l->radius = 10;
-	l->position = t ? t->position : XMVectorZero();
+	l->intensity = 1;
 	static_cast<CEntity *>(clientData)->add(l);
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
@@ -225,7 +224,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (e_transform) {
 		TwAddVarRW(bar, "TActive", TW_TYPE_BOOL8, &e_transform->active, " group=Transform label='Active'");
 		TwAddVarRW(bar, "Position", TW_TYPE_DIR3F, &e_transform->position, " group=Transform axisx=-x axisz=-z");
-		TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform");
+		TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &e_transform->rotation, " group=Transform axisx=-x axisz=-z");
 		// Yaw Pitch Roll
 		TwAddVarCB(bar, "Pich", TW_TYPE_FLOAT, NULL, GetPitch, e_transform, " group=Transform");
 		TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform axisx=-x axisz=-z");
@@ -295,8 +294,8 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	}
 	if (e_directional_light) {
 		TwAddVarRW(bar, "DirectionalLightActive", TW_TYPE_BOOL8, &e_directional_light->active, " group='Directional Light' label='Active' ");
-		TwAddVarRW(bar, "DirectionalLightDirection", TW_TYPE_DIR3F, &e_directional_light->direction, " group='Directional Light' label='Direction' axisx=-x axisz=-z");
-		TwAddVarRW(bar, "DirectionalLightColor", TW_TYPE_COLOR4F, &e_directional_light->color, " group='Directional Light' label='Color' ");		
+		TwAddVarRW(bar, "DirectionalLightIntensity", TW_TYPE_FLOAT, &e_directional_light->intensity, " min=0 max=10 group='Directional Light' label='Intensity' ");
+		TwAddVarRW(bar, "DirectionalLightColor", TW_TYPE_COLOR3F, &e_directional_light->color, " group='Directional Light' label='Color' ");		
 	}
 	if (e_ambient_light) {
 		TwAddVarRW(bar, "AmbientLightActive", TW_TYPE_BOOL8, &e_ambient_light->active, " group='Ambient Light' label='Active' ");
@@ -304,8 +303,8 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	}
 	if (e_point_light) {
 		TwAddVarRW(bar, "PointLightActive", TW_TYPE_BOOL8, &e_point_light->active, " group='Point Light' label='Active' ");
-		TwAddVarRW(bar, "PointLightPosition", TW_TYPE_DIR3F, &e_point_light->position, " group='Point Light' label='Position' ");
-		TwAddVarRW(bar, "PointLightColor", TW_TYPE_COLOR4F, &e_point_light->color, " group='Point Light' label='Color' ");
+		TwAddVarRW(bar, "PointLightIntensity", TW_TYPE_FLOAT, &e_point_light->intensity, " min=0 max=10 group='Point Light' label='Intensity' ");
+		TwAddVarRW(bar, "PointLightColor", TW_TYPE_COLOR3F, &e_point_light->color, " group='Point Light' label='Color' ");
 		TwAddVarRW(bar, "PointLightRadius", TW_TYPE_FLOAT, &e_point_light->radius, " group='Point Light' label='Radius' min=0.1");
 	}
 

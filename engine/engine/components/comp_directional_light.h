@@ -4,16 +4,21 @@
 #include "base_component.h"
 
 struct TCompDirectionalLight : TBaseComponent {
-
 	XMVECTOR color;
-	XMVECTOR direction;
+	float intensity;
 
 	TCompDirectionalLight() {}
 
 	void loadFromAtts(MKeyValue &atts) {
-		float intensity = atts.getFloat("intensity", 0.5f);
+		CEntity* e = CHandle(this).getOwner();
+		CHandle transform = e->get<TCompTransform>();
+
+		TCompTransform* trans = (TCompTransform*)transform;
+
+		assert(trans || fatal("TCompDirectionalLight requieres a TCompTransform component"));
+
+		intensity = atts.getFloat("intensity", 0.5f);
 		color = atts.getQuat("color");
-		direction = atts.getQuat("direction");
 		color = XMVectorSetW(color, intensity * 0.1f);
 	}
 };
