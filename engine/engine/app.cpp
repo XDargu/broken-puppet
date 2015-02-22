@@ -225,6 +225,26 @@ void CApp::update(float elapsed) {
 	  else
 		  activateInspectorMode(false);
   }
+
+  if (io.becomesPressed(CIOStatus::THROW_STRING)) {
+
+	  // Get the camera position
+	  CEntity* e = CEntityManager::get().getByName("Camera");
+	  TCompTransform* t = e->get<TCompTransform>();
+
+	  // Raycast detecting the collider the mouse is pointing at
+	  PxRaycastBuffer hit;
+	  physics_manager.raycast(t->position, t->getFront(), 1000, hit);
+
+	  if (hit.hasBlock) {		  
+		  PxRaycastHit blockHit = hit.block;
+		  
+		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
+		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
+		  
+	  }
+
+  }
 	
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
