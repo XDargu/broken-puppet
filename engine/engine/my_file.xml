@@ -4,7 +4,7 @@
     <transform position="0 0 -5" rotation="0 0 0 1"  scale="1 1 1"/>
     <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
     <mesh path="Prota" color="1 1 1 1"/>
-    <playerController movementVelocity="6" rotationVelocity="90"/>
+    <playerController movementVelocity="8" rotationVelocity="90"/>
   </entity>
   <entity>
     <name name="John"/>

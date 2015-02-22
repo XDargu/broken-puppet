@@ -202,13 +202,19 @@ void CApp::doFrame() {
   // To avoid the fist huge delta time
   if (delta_secs < 0.5) {
 	  update(delta_secs);
+	  
 	  // Fixed update
 	  fixedUpdateCounter += delta_secs;
-	  if (fixedUpdateCounter >= physics_manager.timeStep) {
+
+	  while (fixedUpdateCounter > physics_manager.timeStep) {
+		  fixedUpdateCounter -= physics_manager.timeStep;
 		  fixedUpdate(physics_manager.timeStep);
-		  fixedUpdateCounter = 0.0f;
-		  
 	  }
+	  
+	  /*if (fixedUpdateCounter >= physics_manager.timeStep) {
+		  fixedUpdate(fixedUpdateCounter);
+		  fixedUpdateCounter = 0;		  
+	  }*/
   }
   render();
 }
@@ -279,7 +285,7 @@ void CApp::update(float elapsed) {
 
 // Physics update
 void CApp::fixedUpdate(float elapsed) {
-  physics_manager.gScene->simulate(physics_manager.timeStep);
+  physics_manager.gScene->simulate(elapsed);
   physics_manager.gScene->fetchResults(true);
 
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
