@@ -40,8 +40,22 @@ public:
 		TCompTransform* camera_pivot_trans = (TCompTransform*)camera_pivot_transform;
 		TCompTransform* transform = (TCompTransform*)m_transform;
 
-		transform->position = camera_pivot_trans->position + camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * -offset.z;
+		float collision_dist = 0;
+
+		// Raycast camera
+		physx::PxRaycastBuffer hit;
+		XMVECTOR ray_position = camera_pivot_trans->position + camera_pivot_trans->getFront();
+		XMVECTOR ray_dir = XMVector3Normalize(transform->position - ray_position);
+		Physics.raycast(ray_position, ray_dir, offset.z, hit);
+
+		if (hit.hasBlock) {
+			physx::PxRaycastHit blockHit = hit.block;
+			collision_dist = blockHit.distance + 0.2f;
+		}
+
+		transform->position = camera_pivot_trans->position + camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * (-offset.z + collision_dist);
 		transform->rotation = camera_pivot_trans->rotation;
+		
 	}
 
 	std::string toString() {

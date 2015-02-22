@@ -9,6 +9,22 @@ struct TCompCollider : TBaseComponent {
 
 	TCompCollider() { }
 
+	void setShape(float boxX, float boxY, float boxZ, float static_friction, float dynamic_friction, float restitution) {
+		collider = Physics.gPhysicsSDK->createShape(
+			physx::PxBoxGeometry(
+			physx::PxReal(boxX)
+			, physx::PxReal(boxY)
+			, physx::PxReal(boxZ)
+			),
+			*Physics.gPhysicsSDK->createMaterial(
+				static_friction
+				, dynamic_friction
+				, restitution
+			)
+			,
+			true);
+	}
+
 	void loadFromAtts(MKeyValue &atts) {
 
 		collider = Physics.gPhysicsSDK->createShape(

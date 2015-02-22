@@ -88,13 +88,56 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	{
 		float dist = distance(input.WorldPos, OmniLightPositions[i]);
 		float3 normalizedLightDirection = normalize(OmniLightPositions[i] - input.WorldPos);
-		float attenuation = max(0, (OmniLightRadius[i].x - dist) / OmniLightRadius[i].x);
-		//float attenuation = 1;
+		// Atenuación lineal
+		float attenuation = max(0, 1 -(dist / OmniLightRadius[i].x));
+		// Sin atenuación
+		//float attenuation = dist < OmniLightRadius[i].x ? 1 : 0;
 
+		// Luz acumulada por ángulo, atenuación y distancia
 		lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
 	}
 
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
+
+	// Blur
+	float pixelInc = 0.001;
+	/*float4 sum = float4(0, 0, 0, 0);
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y - pixelInc));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y - pixelInc));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y - pixelInc));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y + 0));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y + 0));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y + 0));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y + pixelInc));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y + pixelInc));
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y + pixelInc));
+	color = sum / 9;*/
+
+	// Prewitt
+	/*float4 sum = float4(0, 0, 0, 0);
+	float4 sum2 = float4(0, 0, 0, 0);
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y - pixelInc)) * -1;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y - pixelInc)) * 0;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y - pixelInc)) * 1;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y + 0)) * -1;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y + 0)) * 0;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y + 0)) * 1;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y + pixelInc)) * -1;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y + pixelInc)) * 0;
+	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y + pixelInc)) * 1;
+	
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y - pixelInc)) * -1;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y - pixelInc)) * -1;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y - pixelInc)) * -1;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y + 0)) * 0;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y + 0)) * 0;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y + 0)) * 0;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y + pixelInc)) * 1;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y + pixelInc)) * 1;
+	sum2 += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + pixelInc, input.UV.y + pixelInc)) * 1;
+	
+	color = sum / 9 + sum2 / 9;*/
+
 
 	float4 result = lightAccum * Tint * color;
 
@@ -108,9 +151,9 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 
 	float3 greyScaleConversion = float3(0.3f, 0.59f, 0.11f);
 
-	float gamma = 5;
+	float gamma = 3;
 	float contrast = 2;
-	float lightCorrection = (pow(sin(normalCamera) * gamma, contrast) / gamma);
+	float lightCorrection = (pow(cos(normalCamera) * gamma, contrast) / gamma);
 	result = lightCorrection * result;
 
 	/*float Gamma = 1;
@@ -120,9 +163,14 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	lightAccum = floor(lightAccum * Regions) / Regions;
 	lightAccum = pow(lightAccum, 1.0 / Gamma);*/
 
+	// Iluminación de rim
+	/*float rim = 1 - max(dot(normalizeCameraDirection, input.Normal), 0.0);
+	rim = smoothstep(0.5, 1.0, rim);
+	float4 finalRim = float4(1, 1, 1, 1) * float4(rim, rim, rim, 1);*/
+
 	
 	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
-	return result * checker;
+	return result /* checker /*+ finalRim*/;
 
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }

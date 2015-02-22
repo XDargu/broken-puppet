@@ -15,6 +15,41 @@ public:
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
 
+	void create(float density, float is_kinematic, float use_gravity) {
+
+		CEntity* e = CHandle(this).getOwner();
+		transform = e->get<TCompTransform>();
+		TCompCollider* c = e->get<TCompCollider>();
+		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
+
+		TCompTransform* trans = (TCompTransform*)transform;
+
+		assert(trans || fatal("TRigidBody requieres a TTransform component"));
+		assert((c || mesh_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+
+		if (c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *c->collider
+				, density);
+		}
+		if (mesh_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *mesh_c->collider
+				, density);
+		}
+		Physics.gScene->addActor(*rigidBody);
+		setKinematic(is_kinematic);
+		setUseGravity(use_gravity);
+	}
+
 	void loadFromAtts(MKeyValue &atts) {
 		float temp_density = atts.getFloat("density", 1);
 		bool temp_is_kinematic = atts.getBool("kinematic", false);
