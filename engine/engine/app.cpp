@@ -236,12 +236,27 @@ void CApp::update(float elapsed) {
 	  PxRaycastBuffer hit;
 	  physics_manager.raycast(t->position, t->getFront(), 1000, hit);
 
+	  static int entitycount = 1;
 	  if (hit.hasBlock) {		  
-		  PxRaycastHit blockHit = hit.block;
-		  
+		  PxRaycastHit blockHit = hit.block;		  
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
 		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
-		  
+
+		  CEntity* new_e = entity_manager.createEmptyEntity();
+
+		  TCompName* new_e_name = CHandle::create<TCompName>();
+		  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
+		  new_e->add(new_e_name);
+
+		  TCompTransform* new_e_t = CHandle::create<TCompTransform>();
+		  new_e_t->position = physics_manager.PxVec3ToXMVECTOR(blockHit.position);
+		  new_e->add(new_e_t);
+
+		  TCompMesh* new_e_m = CHandle::create<TCompMesh>();
+		  new_e_m->mesh = mesh_manager.getByName("primitive_box");
+		  strcpy(new_e_m->path, "primitive_box");
+		  new_e->add(new_e_m);
+		  entitycount++;
 	  }
 
   }

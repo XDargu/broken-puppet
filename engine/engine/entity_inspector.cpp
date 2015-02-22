@@ -532,7 +532,7 @@ void CEntityLister::update() {
 
 		// Loop the current listed entities vector and remove the bars with those names
 		for (int n = 0; n < entity_names.size(); ++n) {
-			// Remove the var
+			// Remove the var			
 			TwRemoveVar(lister_bar, entity_names[n].c_str());
 		}
 
