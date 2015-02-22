@@ -52,11 +52,11 @@ public:
 
 		desc.setToDefault();
 		desc.material = pMaterial;
-		desc.radius = 0.5f;
-		desc.height = 2;
+		desc.radius = 0.25f;
+		desc.height = 1;
 		desc.upDirection = physx::PxVec3(0, 1, 0);
 		desc.slopeLimit = 0;
-		desc.stepOffset = 0.5f;
+		desc.stepOffset = 0.2f;
 		desc.position.x = XMVectorGetX(trans->position);
 		desc.position.y = XMVectorGetY(trans->position) + 10;
 		desc.position.z = XMVectorGetZ(trans->position);
@@ -157,8 +157,8 @@ public:
 
 		grounded = collisionFlags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN);
 		
-		physx::PxExtendedVec3 newPos = character_controller->getPosition();
-		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y - 1, newPos.z));
+		physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
+		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
 	}
 
 

@@ -5,16 +5,26 @@
 #include "../render/collision_mesh.h"
 
 struct TCompMeshCollider : TBaseComponent {
-	PxTriangleMesh* collision_mesh;
+	physx::PxShape* collider;
 	char path[32];
 
-	TCompMeshCollider() { collision_mesh = nullptr; }
-	TCompMeshCollider(PxTriangleMesh* the_mesh_collider) { collision_mesh = the_mesh_collider; strcpy(path, "unknown"); }
+	TCompMeshCollider() { collider = nullptr; }
+	TCompMeshCollider(physx::PxShape* the_mesh_collider) { collider = the_mesh_collider; strcpy(path, "unknown"); }
 
 	void loadFromAtts(MKeyValue &atts) {
 		strcpy(path, atts.getString("path", "missing_mesh").c_str());
 		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
-		collision_mesh = c_m->collision_mesh;
+		physx::PxTriangleMesh* triangle_mesh = c_m->collision_mesh;
+
+		physx::PxTriangleMeshGeometry geom(triangle_mesh);
+		
+		collider = Physics.gPhysicsSDK->createShape(geom,
+			*Physics.gPhysicsSDK->createMaterial(
+			atts.getFloat("staticFriction", 0.5)
+			, atts.getFloat("dynamicFriction", 0.5)
+			, atts.getFloat("restitution", 0.5))
+			,
+			true);		
 	}
 
 	std::string toString() {

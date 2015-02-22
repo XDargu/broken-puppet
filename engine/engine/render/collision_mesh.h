@@ -3,7 +3,6 @@
 
 #include "items_by_name.h"
 #include <PxPhysicsAPI.h>
-using namespace physx;
 
 class CDataProvider;
 
@@ -66,12 +65,14 @@ public:
 	~CCollision_Mesh();
 
 	//Collision Mesh de acceso publico----------------------------------
-	PxTriangleMesh* collision_mesh;
+	physx::PxTriangleMesh* collision_mesh;
 	//------------------------------------------------------------------
 
 	enum ePrimitiveType {
 		POINTS = 4000
+		, LINE_LIST
 		, TRIANGLE_LIST
+		, TRIANGLE_STRIP
 	};
 
 	bool create(

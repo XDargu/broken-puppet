@@ -18,17 +18,29 @@ public:
 		CEntity* e = CHandle(this).getOwner();
 		TCompTransform* t = e->get<TCompTransform>();
 		TCompCollider* c = e->get<TCompCollider>();
+		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 
 		assert(t || fatal("TStaticBody requieres a TTransform component"));
-		assert(c || fatal("TStaticBody requieres a TCollider component"));
+		assert((c || mesh_c) || fatal("TStaticBody requieres a TCollider or a TColliderMesh component"));
 
-		staticBody = physx::PxCreateStatic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
+		if (c) {
+			staticBody = physx::PxCreateStatic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
 				Physics.XMVECTORToPxVec3(t->position),
 				Physics.XMVECTORToPxQuat(t->rotation))
-			, *c->collider
-			);
+				, *c->collider
+				);
+		}
+		if (mesh_c) {
+			staticBody = physx::PxCreateStatic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(t->position),
+				Physics.XMVECTORToPxQuat(t->rotation))
+				, *mesh_c->collider
+				);
+		}
 		
 		Physics.gScene->addActor(*staticBody);
 	}

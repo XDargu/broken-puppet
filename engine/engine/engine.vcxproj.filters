@@ -134,7 +134,7 @@
     <ClInclude Include="render\collision_mesh.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_mesh_collider.h">
+    <ClInclude Include="components\comp_collider_mesh.h">
       <Filter>components</Filter>
     </ClInclude>
   </ItemGroup>

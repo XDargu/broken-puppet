@@ -78,8 +78,8 @@ void CPhysicsManager::init() {
 	PxMaterial* mMaterial = gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f);
 
 	// Crear un suelo
-	PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
-	gScene->addActor(*plane);
+	/*PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
+	gScene->addActor(*plane);*/
 
 	// Crear el controller manager
 	gManager = PxCreateControllerManager(*gScene);

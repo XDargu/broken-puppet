@@ -73,7 +73,7 @@ void createManagers() {
 	getObjManager<TCompLife>()->init(32);
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
-	getObjManager<TCompMeshCollider>()->init(32);
+	getObjManager<TCompColliderMesh>()->init(32);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);

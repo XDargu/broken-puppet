@@ -141,10 +141,10 @@ bool CCollision_Mesh::load(const char* name){//, PxCooking* mCooking, PxPhysics*
 
 		physx::PxDefaultMemoryOutputStream stream;
 
-		bool sucess = CPhysicsManager().gCooking->cookTriangleMesh(meshDesc, stream);
+		bool sucess = CPhysicsManager::get().gCooking->cookTriangleMesh(meshDesc, stream);
 		if (sucess){
 			physx::PxDefaultMemoryInputData rb(stream.getData(), stream.getSize());
-			collision_mesh=CPhysicsManager().gPhysicsSDK->createTriangleMesh(rb);
+			collision_mesh = CPhysicsManager::get().gPhysicsSDK->createTriangleMesh(rb);
 			return true;
 		}else{
 			collision_mesh = nullptr;

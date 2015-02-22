@@ -72,6 +72,8 @@
     <name name="Level"/>
     <transform position="0 0 0" rotation="0 0 0 1" scale="1 1 1"/>
     <mesh path="Level" color="1 1 1 1"/>
+    <colliderMesh path="LevelFlip" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody />
   </entity>
   <entity>
     <name name="testJoint1"/>

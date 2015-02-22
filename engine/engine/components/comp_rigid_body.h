@@ -23,19 +23,31 @@ public:
 		CEntity* e = CHandle(this).getOwner();
 		transform = e->get<TCompTransform>();
 		TCompCollider* c = e->get<TCompCollider>();
+		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		assert(trans || fatal("TRigidBody requieres a TTransform component"));
-		assert(c || fatal("TRigidBody requieres a TCollider component"));
+		assert((c || mesh_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
 
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *c->collider
-			, temp_density);
+		if (c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *c->collider
+				, temp_density);
+		}
+		if (mesh_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *mesh_c->collider
+				, temp_density);
+		}
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(temp_is_kinematic);
 		setUseGravity(temp_use_gravity);
