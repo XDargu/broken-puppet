@@ -10,6 +10,7 @@ class CPhysicsManager
 public:
 
 	physx::PxPhysics *gPhysicsSDK;
+	physx::PxCooking *gCooking;
 	physx::PxScene* gScene;
 	physx::PxControllerManager* gManager;
 

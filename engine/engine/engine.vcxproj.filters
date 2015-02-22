@@ -131,6 +131,12 @@
     <ClInclude Include="components\comp_point_light.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="render\collision_mesh.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_mesh_collider.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -202,6 +208,9 @@
       <Filter>components</Filter>
     </ClCompile>
     <ClCompile Include="handle\entity.cpp" />
+    <ClCompile Include="render\collision_mesh.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

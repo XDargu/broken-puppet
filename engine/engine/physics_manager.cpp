@@ -66,6 +66,15 @@ void CPhysicsManager::init() {
 
 	gScene = gPhysicsSDK->createScene(sceneDesc);
 
+	// Inicializar Cooking para colliders
+	PxTolerancesScale toleranceScale;
+	toleranceScale.mass = 1000;
+	toleranceScale.speed = sceneDesc.gravity.y;
+	bool value = toleranceScale.isValid(); // make sure this value is always true
+	gCooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(toleranceScale));
+	if (!gCooking)
+		fatal("PxCreateCooking failed!\n");
+
 	PxMaterial* mMaterial = gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f);
 
 	// Crear un suelo

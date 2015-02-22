@@ -6,6 +6,7 @@ DECL_OBJ_MANAGER(TCompTransform, "transform");
 DECL_OBJ_MANAGER(TCompLife, "life");
 DECL_OBJ_MANAGER(TCompName, "name");
 DECL_OBJ_MANAGER(TCompMesh, "mesh");
+DECL_OBJ_MANAGER(TCompMeshCollider, "meshCollider");
 DECL_OBJ_MANAGER(TCompCamera, "camera");
 DECL_OBJ_MANAGER(TCompCollider, "collider");
 DECL_OBJ_MANAGER(TCompRigidBody, "rigidbody");

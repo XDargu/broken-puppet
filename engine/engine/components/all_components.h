@@ -25,6 +25,7 @@
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"
+#include "comp_mesh_collider.h"
 
 // Render
 #include "comp_mesh.h"
