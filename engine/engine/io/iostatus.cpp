@@ -21,6 +21,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[DIGITAL_UP].key = 'W';
 	buttons[DIGITAL_DOWN].key = 'S';
 
+	buttons[THROW_STRING].key = VK_LCONTROL;
 	buttons[INSPECTOR_MODE].key = VK_F2;
 
 	mouse.dx = 0;
@@ -130,7 +131,7 @@ void CIOStatus::update(float elapsed) {
 
 	// update buttons
 	for (int i = 0; i<BUTTONS_COUNT; ++i) {
-		TButton &b = buttons[i];
+		TButton &b = buttons[i];		
 
 		b.was_pressed = b.is_pressed;
 
@@ -145,6 +146,8 @@ void CIOStatus::update(float elapsed) {
 
 			b.setPressed(now_is_pressed, elapsed);
 		}
+
+		
 	}
 }
 
