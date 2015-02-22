@@ -330,7 +330,6 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 // ----------------------------
 
 TwBar *lister_bar;
-std::vector<std::string> entity_names;
 std::vector<std::string> component_names;
 
 CEntityLister::CEntityLister() { searchIn = ""; }
@@ -530,11 +529,12 @@ void CEntityLister::update() {
 		// Get the entities currently alive
 		std::vector< CHandle > entities = CEntityManager::get().getEntities();
 
-		// Loop the current listed entities vector and remove the bars with those names
-		for (int n = 0; n < entity_names.size(); ++n) {
-			// Remove the var			
-			TwRemoveVar(lister_bar, entity_names[n].c_str());
-		}
+		TwRemoveAllVars(lister_bar);
+
+		TwAddButton(lister_bar, "Search", NULL, NULL, "");
+		TwAddVarRW(lister_bar, "EntitySearchInput", TW_TYPE_STDSTRING, &searchIn, "label='Search entities'");
+		TwAddSeparator(lister_bar, "", "");
+		TwAddButton(lister_bar, "Entities", NULL, NULL, "");
 
 		// Save the search script as std string
 		std::string strSearch = std::string(searchIn);
@@ -548,15 +548,11 @@ void CEntityLister::update() {
 			if (e_name) {
 				if (searchByTag) {
 					if (entityHasComponent(((CEntity*)entities[i]), strSearch)) {
-						// Add to the listed entities vector
-						entity_names.push_back(e_name->name);
 						TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
 					}
 				}
 				else {
-					if (strSearch.empty() || searchCompare(strSearch, e_name->name)) {
-						// Add to the listed entities vector
-						entity_names.push_back(e_name->name);
+					if (strSearch.empty() || searchCompare(strSearch, e_name->name)) {						
 						TwAddButton(lister_bar, e_name->name, CallbackInspectEntity, (CEntity*)entities[i], "");
 					}
 				}

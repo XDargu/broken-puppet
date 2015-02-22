@@ -40,8 +40,8 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-  xres = 1920;
-  yres = 1080;
+  xres = 1024;
+  yres = 768;
 }
 
 CVertexShader vs_basic;
@@ -243,11 +243,36 @@ void CApp::update(float elapsed) {
 	  physics_manager.raycast(t->position, t->getFront(), 1000, hit);
 
 	  static int entitycount = 1;
+	  static PxRigidActor* firstActor = nullptr;
 	  if (hit.hasBlock) {		  
 		  PxRaycastHit blockHit = hit.block;		  
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
 		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
 		  
+		  /*if (firstActor == nullptr) {
+			  firstActor = blockHit.actor;
+			  dbg("Primer actor\n");
+		  }
+		  else {
+			  dbg("Segundo actor\n");
+			  CEntity* new_e = entity_manager.createEmptyEntity();
+
+			  TCompName* new_e_name = CHandle::create<TCompName>();
+			  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
+			  new_e->add(new_e_name);
+
+			  TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
+			  new_e_j->create(firstActor, blockHit.actor, 7, 1);
+			  new_e->add(new_e_j);
+
+			  TCompMesh* new_e_m = CHandle::create<TCompMesh>();
+			  new_e_m->mesh = mesh_manager.getByName("primitive_box");
+			  strcpy(new_e_m->path, "primitive_box");
+			  new_e->add(new_e_m);
+
+			  firstActor = nullptr;
+		  }*/
+
 		  CEntity* new_e = entity_manager.createEmptyEntity();
 
 		  TCompName* new_e_name = CHandle::create<TCompName>();

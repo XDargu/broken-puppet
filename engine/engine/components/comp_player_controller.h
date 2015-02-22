@@ -18,6 +18,7 @@ public:
 	float jumpSpeed;
 
 	physx::PxController* character_controller;
+	physx::PxRigidDynamic* kinematic_capsule;
 
 	float movement_velocity;
 	float rotation_velocity;
@@ -58,15 +59,46 @@ public:
 		desc.slopeLimit = 0;
 		desc.stepOffset = 0.2f;
 		desc.position.x = XMVectorGetX(trans->position);
-		desc.position.y = XMVectorGetY(trans->position) + 10;
+		desc.position.y = XMVectorGetY(trans->position);
 		desc.position.z = XMVectorGetZ(trans->position);
 		desc.callback = NULL;
+		desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
 		bool r = desc.isValid();
 
 		character_controller = Physics.gManager->createController(desc);
 		physx::PxRigidDynamic* c = character_controller->getActor();
 		
 		grounded = true;
+
+		// Kinematic capsule creation
+		/*kinematic_capsule = physx::PxCreateDynamic(
+			  *Physics.gPhysicsSDK
+			, physx::PxTransform(
+				  Physics.XMVECTORToPxVec3(trans->position)
+				  , Physics.XMVECTORToPxQuat(
+						XMQuaternionMultiply(
+							  trans->rotation
+							, XMQuaternionRotationAxis(
+								  XMVectorSet(0, 0, 1, 0)
+								, deg2rad(90)
+							)
+						)
+					)
+				)
+			, physx::PxCapsuleGeometry(0.25f, 0.5f)
+			, *Physics.gPhysicsSDK->createMaterial(
+				0.5f
+				, 0.5f
+				, 0.5f
+			)
+			, 1
+		);
+
+		kinematic_capsule->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+
+		Physics.gScene->addActor(*kinematic_capsule);*/
+
+		
 	}
 
 	void init() {
@@ -159,6 +191,22 @@ public:
 		
 		physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
 		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
+
+		// Kinematic capsule:
+		/*kinematic_capsule->setKinematicTarget(
+			physx::PxTransform(
+				  Physics.XMVECTORToPxVec3(transform->position)
+				, Physics.XMVECTORToPxQuat(
+					XMQuaternionMultiply(
+						  transform->rotation
+						, XMQuaternionRotationAxis(
+							  XMVectorSet(0, 0, 1, 0)
+							, deg2rad(90)
+						)
+					)
+				)
+			)
+		);*/
 	}
 
 

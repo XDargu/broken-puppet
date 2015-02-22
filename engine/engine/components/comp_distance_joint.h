@@ -19,6 +19,15 @@ struct  TCompDistanceJoint : TBaseComponent {
 		actor2 = atts.getString("actor2", "");
 	}
 
+	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, float max_distance) {
+		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, physx::PxTransform(0.5f, 0.5f, 0.5f), actor2, physx::PxTransform(0.0f, -0.5f, 0.0f));
+
+		joint->setDamping(damping);
+		joint->setMaxDistance(max_distance);
+		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
+		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+	}
+
 	void init() {
 		CEntity* a1 = CEntityManager::get().getByName(actor1.c_str());
 		CEntity* a2 = CEntityManager::get().getByName(actor2.c_str());
@@ -28,8 +37,6 @@ struct  TCompDistanceJoint : TBaseComponent {
 
 		TCompStaticBody* s1 = a1->get<TCompStaticBody>();
 		TCompStaticBody* s2 = a2->get<TCompStaticBody>();
-
-
 
 		//create a joint
 		if (r1) {
