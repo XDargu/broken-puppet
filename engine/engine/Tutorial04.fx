@@ -92,8 +92,26 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 		//float attenuation = 1;
 
 		lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
-		
 	}
+
+	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
+
+	float4 result = lightAccum * Tint * color;
+
+	// Pruebas de cámara
+	float3 normalizeCameraDirection = normalize(CameraPosition - input.WorldPos);
+	float distCamera = distance(input.WorldPos, CameraPosition);
+	float normalCamera = max(0, dot(input.Normal, normalizeCameraDirection));
+
+	float lightAttenuation = max(0, (20 - distCamera) / 20);
+	float4 lightChange = float4(1, 1, 1, 1);
+
+	float3 greyScaleConversion = float3(0.3f, 0.59f, 0.11f);
+
+	float gamma = 5;
+	float contrast = 2;
+	float lightCorrection = (pow(sin(normalCamera) * gamma, contrast) / gamma);
+	result = lightCorrection * result;
 
 	/*float Gamma = 1;
 	float Regions = 3;
@@ -102,8 +120,9 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	lightAccum = floor(lightAccum * Regions) / Regions;
 	lightAccum = pow(lightAccum, 1.0 / Gamma);*/
 
-	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
-	return lightAccum * Tint * color;	
+	
+	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
+	return result * checker;
 
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }

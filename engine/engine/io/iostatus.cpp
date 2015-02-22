@@ -15,12 +15,13 @@ CIOStatus::CIOStatus( ) {
 	//shift
 	buttons[CIRCLE].key = 16;
 
+	
 	buttons[DIGITAL_LEFT].key = 'A';
 	buttons[DIGITAL_RIGHT].key = 'D';
 	buttons[DIGITAL_UP].key = 'W';
 	buttons[DIGITAL_DOWN].key = 'S';
 
-	buttons[INSPECTOR_MODE].key = 'I';
+	buttons[INSPECTOR_MODE].key = VK_F2;
 
 	mouse.dx = 0;
 	mouse.dy = 0;

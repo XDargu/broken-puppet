@@ -314,7 +314,11 @@ void CApp::render() {
   
   //activateCamera(*camera, 1);
   // TODO: Make activate TCamera
-  activateCamera(camera->view_projection, 1);
+  activateCamera(
+	  camera->view_projection, 
+	  ((TCompTransform*)((CEntity*)CHandle(camera).getOwner())->get<TCompTransform>())->position,
+	  1
+  );
 
   /*drawViewVolume(camera2);
   setWorldMatrix(XMMatrixIdentity());
