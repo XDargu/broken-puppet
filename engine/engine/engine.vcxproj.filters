@@ -137,6 +137,9 @@
     <ClInclude Include="components\comp_ai_fsm_basic.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_enemy_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

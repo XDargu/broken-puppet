@@ -7,6 +7,7 @@ class ai_basic_wander : public aicontroller
 {
 public:
 
+	CHandle enemyController;
 	CHandle trans;
 
 	float movement_speed;

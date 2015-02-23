@@ -166,6 +166,7 @@
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
+    <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />

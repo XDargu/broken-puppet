@@ -15,6 +15,7 @@ void ai_basic_wander::Init()
 	ChangeState("idle");
 
 	trans = ((CEntity*)entity)->get<TCompTransform>();
+	enemyController = ((CEntity*)entity)->get<TCompEnemyController>();
 	count = 0;
 	wait_time = 3;
 
@@ -32,7 +33,7 @@ void ai_basic_wander::IdleState(float deltaTime)
 
 void ai_basic_wander::WanderState(float deltaTime)
 {
-	((TCompTransform*)trans)->position += ((TCompTransform*)trans)->getFront() * 5 * deltaTime;
+	((TCompEnemyController*)enemyController)->addDeltaPos(-((TCompTransform*)trans)->getFront() * 20 * deltaTime);
 	count += deltaTime;
 	if (count >= wait_time){		
 		ChangeState("idle");

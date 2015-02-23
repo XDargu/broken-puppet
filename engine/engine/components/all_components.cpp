@@ -21,3 +21,4 @@ DECL_OBJ_MANAGER(TCompAmbientLight, "ambientLight");
 DECL_OBJ_MANAGER(TCompPointLight, "pointLight");
 DECL_OBJ_MANAGER(TCompColliderMesh, "colliderMesh");
 DECL_OBJ_MANAGER(TCompAiFsmBasic, "aiFSMBasic");
+DECL_OBJ_MANAGER(TCompEnemyController, "enemyController");

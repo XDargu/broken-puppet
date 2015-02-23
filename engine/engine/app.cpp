@@ -90,6 +90,7 @@ void createManagers() {
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(64);
 	getObjManager<TCompAiFsmBasic>()->init(64);
+	getObjManager<TCompEnemyController>()->init(64);
 	
 	registerAllComponentMsgs();
 }
@@ -106,6 +107,7 @@ void initManagers() {
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
+	getObjManager<TCompEnemyController>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -304,6 +306,7 @@ void CApp::fixedUpdate(float elapsed) {
 
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+  getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
