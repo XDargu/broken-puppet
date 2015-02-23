@@ -465,8 +465,13 @@ void CApp::renderEntities() {
 			  XMVECTOR initialPos = pos1 + offset_pos1 * offset_real_1;
 			  XMVECTOR finalPos = pos2 + offset_pos2 * offset_real_2;
 
+			  float dist = djoint->joint->getDistance();
+			  float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+
+			  float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+
 			  rope.destroy();
-			  createString(rope, initialPos, finalPos);
+			  createString(rope, initialPos, finalPos, tension);
 
 			  setWorldMatrix(XMMatrixIdentity());
 			  rope.activateAndRender();

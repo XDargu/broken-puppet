@@ -346,7 +346,7 @@ bool createCamera(CMesh& mesh)
 }
 
 // -----------------------------------------------------
-bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos)
+bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension)
 {
 	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
 
@@ -373,6 +373,8 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos)
 			y += noise * noise;
 
 		y -= 1;
+
+		y *= tension;
 
 		ropeVertices[i].Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
 		ropeVertices[i].Pos = XMFLOAT3(XMVectorGetX(midPos), XMVectorGetY(midPos) + y, XMVectorGetZ(midPos));

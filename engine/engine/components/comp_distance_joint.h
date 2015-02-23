@@ -24,7 +24,7 @@ struct  TCompDistanceJoint : TBaseComponent {
 
 		joint->setDamping(damping);
 		joint->setMaxDistance(max_distance);
-		joint->setStiffness(200);
+		joint->setStiffness(500);
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
