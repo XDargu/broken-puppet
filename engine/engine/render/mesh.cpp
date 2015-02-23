@@ -45,6 +45,7 @@ bool CMesh::create(
   switch (primitive_type) {
   case POINTS: topology = D3D10_PRIMITIVE_TOPOLOGY_POINTLIST; break;
   case LINE_LIST: topology = D3D10_PRIMITIVE_TOPOLOGY_LINELIST; break;
+  case LINE_LIST_ADJ: topology = D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP; break;
   case TRIANGLE_LIST: topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST; break;
   case TRIANGLE_STRIP: topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; break;
   default:

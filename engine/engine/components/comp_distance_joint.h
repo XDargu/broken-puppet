@@ -6,8 +6,6 @@
 struct  TCompDistanceJoint : TBaseComponent {
 
 	physx::PxDistanceJoint* joint;
-	physx::PxRigidActor* a1;
-	physx::PxRigidActor* a2;
 
 	std::string actor1;
 	std::string actor2;
@@ -20,23 +18,27 @@ struct  TCompDistanceJoint : TBaseComponent {
 	}
 
 	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, float max_distance) {
-		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, physx::PxTransform(0.5f, 0.5f, 0.5f), actor2, physx::PxTransform(0.0f, -0.5f, 0.0f));
+		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, physx::PxTransform(0.5f, 0.5f, 0.5f), actor2, physx::PxTransform(0.0f, 0.0f, 0.0f));
+
+		assert((actor1 != actor2) || fatal("Joint actors must be different"));
 
 		joint->setDamping(damping);
 		joint->setMaxDistance(max_distance);
+		joint->setStiffness(200);
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
 	}
 
 	void init() {
-		CEntity* a1 = CEntityManager::get().getByName(actor1.c_str());
-		CEntity* a2 = CEntityManager::get().getByName(actor2.c_str());
+		CEntity* e_a1 = CEntityManager::get().getByName(actor1.c_str());
+		CEntity* e_a2 = CEntityManager::get().getByName(actor2.c_str());
 
-		TCompRigidBody* r1 = a1->get<TCompRigidBody>();
-		TCompRigidBody* r2 = a2->get<TCompRigidBody>();
+		TCompRigidBody* r1 = e_a1->get<TCompRigidBody>();
+		TCompRigidBody* r2 = e_a2->get<TCompRigidBody>();
 
-		TCompStaticBody* s1 = a1->get<TCompStaticBody>();
-		TCompStaticBody* s2 = a2->get<TCompStaticBody>();
+		TCompStaticBody* s1 = e_a1->get<TCompStaticBody>();
+		TCompStaticBody* s2 = e_a2->get<TCompStaticBody>();
 
 		//create a joint
 		if (r1) {
@@ -53,9 +55,11 @@ struct  TCompDistanceJoint : TBaseComponent {
 		}
 
 		joint->setDamping(5);
+		joint->setStiffness(200);
 		joint->setMaxDistance(2.5f);
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
 	}
 };
 

@@ -52,6 +52,7 @@ CMesh        grid;
 CMesh        axis;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
+CMesh		 rope;
 
 TCompCamera*      camera;
 CCamera*	  oldCamera;
@@ -249,11 +250,12 @@ void CApp::update(float elapsed) {
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
 		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
 		  
-		  /*if (firstActor == nullptr) {
+		  if (firstActor == nullptr) {
 			  firstActor = blockHit.actor;
 			  dbg("Primer actor\n");
 		  }
-		  else {
+		  else if (blockHit.actor != firstActor) {
+			  
 			  dbg("Segundo actor\n");
 			  CEntity* new_e = entity_manager.createEmptyEntity();
 
@@ -271,9 +273,9 @@ void CApp::update(float elapsed) {
 			  new_e->add(new_e_m);
 
 			  firstActor = nullptr;
-		  }*/
+		  }
 
-		  CEntity* new_e = entity_manager.createEmptyEntity();
+		  /*CEntity* new_e = entity_manager.createEmptyEntity();
 
 		  TCompName* new_e_name = CHandle::create<TCompName>();
 		  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
@@ -297,7 +299,7 @@ void CApp::update(float elapsed) {
 		  new_e_r->create(1, false, true);
 		  
 
-		  entitycount++;
+		  entitycount++;*/
 	  }
 
   }
@@ -433,6 +435,43 @@ void CApp::renderEntities() {
   {
 	  TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
 	  TCompMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TCompMesh>();
+
+	  TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+
+	  // Draw the joints
+	  if (djoint) {
+		  PxRigidActor* a1 = nullptr;
+		  PxRigidActor* a2 = nullptr;
+
+		  djoint->joint->getActors(a1, a2);
+		  if (a1 && a2) {
+			  
+			  XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			  XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+
+			  XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
+			  XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+
+			  XMVECTOR rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
+			  XMVECTOR rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+
+			  XMVECTOR offset_real_1 = XMVector3Rotate(XMVectorSet(0, -1, 0, 0), rot1);
+			  XMVECTOR offset_real_2 = XMVector3Rotate(XMVectorSet(0, -1, 0, 0), rot2);
+
+			  XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+
+			  /*   RECREATE ROPE   */
+
+			  XMVECTOR initialPos = pos1 + offset_pos1 * offset_real_1;
+			  XMVECTOR finalPos = pos2 + offset_pos2 * offset_real_2;
+
+			  rope.destroy();
+			  createString(rope, initialPos, finalPos);
+
+			  setWorldMatrix(XMMatrixIdentity());
+			  rope.activateAndRender();
+		  }
+	  }
 
 	  // If the component has no transform it can't be rendered
 	  if (!t)

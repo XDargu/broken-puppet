@@ -346,6 +346,47 @@ bool createCamera(CMesh& mesh)
 }
 
 // -----------------------------------------------------
+bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos)
+{
+	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
+
+	const int epsilon = 25;
+	CVertexPosColor ropeVertices[epsilon];
+	float y = 0;
+	float pow_r = 2;	// Suavidad de la onda
+	int velocity = 10;	// Velocidad de movimiento
+	float wave_freq = 0.9f;	// frecuencia del ruido de la onda
+	float amplitude = 0.05f;	// amplitud del ruido de la onda
+	float elapsed = 1 / 60.0f;
+
+	for (int i = 0; i < epsilon; i++)
+	{
+		XMVECTOR midPos = XMVectorLerp(initialPos, finalPos, (float)i / (epsilon - 1));
+
+		if (i < epsilon / 2)
+			y = pow(epsilon - i, pow_r) / pow(epsilon, pow_r);
+		else
+			y = pow(i, pow_r) / pow(epsilon, pow_r);
+
+		float noise = (sin(elapsed*velocity + i*wave_freq) + 1) * amplitude;
+		if (i != 0 && i != epsilon - 1)
+			y += noise * noise;
+
+		y -= 1;
+
+		ropeVertices[i].Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		ropeVertices[i].Pos = XMFLOAT3(XMVectorGetX(midPos), XMVectorGetY(midPos) + y, XMVectorGetZ(midPos));
+	}
+
+	ropeVertices[0].Pos = XMFLOAT3(XMVectorGetX(initialPos), XMVectorGetY(initialPos), XMVectorGetZ(initialPos));;
+	ropeVertices[epsilon - 1].Pos = XMFLOAT3(XMVectorGetX(finalPos), XMVectorGetY(finalPos), XMVectorGetZ(finalPos));;
+
+	XMFLOAT3 a = ropeVertices[epsilon - 1].Pos;	
+
+	return mesh.create(epsilon, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
+}
+
+// -----------------------------------------------------
 void drawViewVolume(const CCamera& camera) {
   XMVECTOR det;
   for (int i = 0; i < 10; ++i) {

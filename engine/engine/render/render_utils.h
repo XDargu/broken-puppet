@@ -25,6 +25,7 @@ bool createUnitWiredCube(CMesh& mesh, XMFLOAT4 color);
 
 bool createCube(CMesh& mesh, float size);
 bool createCamera(CMesh& mesh);
+bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos);
 
 void drawViewVolume(const CCamera& camera);
 

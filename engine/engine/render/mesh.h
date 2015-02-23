@@ -70,6 +70,7 @@ public:
   , LINE_LIST
   , TRIANGLE_LIST
   , TRIANGLE_STRIP
+  , LINE_LIST_ADJ
   };
 
   enum ePrimitiveShape {
