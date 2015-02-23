@@ -34,4 +34,7 @@
 #include "comp_ambient_light.h"
 #include "comp_point_light.h"
 
+// AI
+#include "comp_ai_fsm_basic.h"
+
 #endif

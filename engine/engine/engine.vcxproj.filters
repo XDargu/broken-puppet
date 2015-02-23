@@ -38,12 +38,6 @@
     <ClInclude Include="render\texture.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="ai\ai_basic_patroller.h">
-      <Filter>ai</Filter>
-    </ClInclude>
-    <ClInclude Include="ai\aic_melee_gatekeeper.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="ai\aicontroller.h">
       <Filter>ai</Filter>
     </ClInclude>
@@ -137,6 +131,12 @@
     <ClInclude Include="components\comp_collider_mesh.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="ai\ai_basic_wander.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_ai_fsm_basic.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -168,12 +168,6 @@
     </ClCompile>
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\ai_basic_patroller.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\aic_melee_gatekeeper.cpp">
-      <Filter>ai</Filter>
     </ClCompile>
     <ClCompile Include="ai\aicontroller.cpp">
       <Filter>ai</Filter>
@@ -210,6 +204,9 @@
     <ClCompile Include="handle\entity.cpp" />
     <ClCompile Include="render\collision_mesh.cpp">
       <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\ai_basic_wander.cpp">
+      <Filter>ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

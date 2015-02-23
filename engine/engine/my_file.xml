@@ -15,6 +15,7 @@
     <transform position="-15 0 3" rotation="0 0 0 1" scale="1 1 1"/>
     <aabb min="-4.5 0 -3" max="5.14219 4.725 3"/>
     <mesh path="teapot" color="0 1 1 1"/>
+    <aiFSMBasic/>
   </entity>
   <entity>
     <name name="Enemigo"/>

@@ -89,6 +89,7 @@ void createManagers() {
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(64);
+	getObjManager<TCompAiFsmBasic>()->init(64);
 	
 	registerAllComponentMsgs();
 }
@@ -104,6 +105,7 @@ void initManagers() {
 	getObjManager<TCompCameraPivotController>()->initHandlers();
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
+	getObjManager<TCompAiFsmBasic>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -251,7 +253,7 @@ void CApp::update(float elapsed) {
 		  CEntity* new_e = entity_manager.createEmptyEntity();
 
 		  TCompName* new_e_name = CHandle::create<TCompName>();
-		  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
+		  strcpy(new_e_name->name, ("RaycastTarget" + std::to_string(entitycount)).c_str());
 		  new_e->add(new_e_name);
 
 		  TCompTransform* new_e_t = CHandle::create<TCompTransform>();
@@ -287,6 +289,8 @@ void CApp::update(float elapsed) {
   getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+  getObjManager<TCompAiFsmBasic>()->update(elapsed);
+  
 
   entity_inspector.update();
   entity_lister.update();

@@ -1,3 +1,5 @@
+/*
+
 #ifndef _AIC_BASICPATROLLER
 #define _AIC_BASICPATROLLER
 
@@ -25,3 +27,5 @@ public:
 };
 
 #endif
+
+*/
