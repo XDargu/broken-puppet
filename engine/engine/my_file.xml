@@ -36,7 +36,7 @@
   </entity>
   <entity>
     <name name="EstaCajaNoSeMueve"/>
-    <transform position="0 8 0" rotation="0.9659258262890683 0.25881904510252074 0 0" scale="1 2 1"/>
+    <transform position="4 3 -8" rotation="0.9659258262890683 0.25881904510252074 0 0" scale="1 2 1"/>
     <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
     <mesh path="primitive_box" color="1 0 0 1"/>
     <collider staticFriction="0.5" dynamicFriction="0.5" restitution="0.5" boxX="0.5" boxY="1" boxZ="0.5"/>
@@ -44,7 +44,7 @@
   </entity>
   <entity>
     <name name="OtraCaja"/>
-    <transform position="1 7 0" rotation="0 0 0 1" scale="2 2 1"/>
+    <transform position="1 -7 0" rotation="0 0 0 1" scale="2 2 1"/>
     <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
     <mesh path="primitive_box" color="1 1 0 1"/>
     <collider staticFriction="0.5" dynamicFriction="0.2" restitution="1" boxX="1" boxY="1" boxZ="0.5"/>
