@@ -335,61 +335,6 @@ void CApp::render() {
   ::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
   activateTextureSamplers();
-
-  //vs_basic.activate();
-  //ps_basic.activate();  
-  vs_basic2.activate();
-  ps_textured.activate();
-  const CTexture *t = texture_manager.getByName("wood_d");
-  t->activate(0);
-
-  // Ñapa para luz ambiental
-  for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-	  CEntity* e_ambLight = entity_manager.getEntities()[i];
-	  TCompAmbientLight* ambLight = e_ambLight->get<TCompAmbientLight>();
-	  if (ambLight && ambLight->active) {
-		  ctes_global.get()->AmbientLight = ambLight->color;
-	  }
-  }
-
-  // Ñapa para luces direccionales
-  // Recorrer las luces y añadirlas al array
-  ctes_global.get()->LightCount = 0;
-  for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-	  CEntity* e_dirLD = entity_manager.getEntities()[i];
-	  TCompDirectionalLight* dirLD = e_dirLD->get<TCompDirectionalLight>();
-	  TCompTransform* transLD = e_dirLD->get<TCompTransform>();
-	  if (dirLD && transLD && dirLD->active) {
-		  ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), transLD->rotation);
-		  // La intensidad se pasa en el alfa del color
-		  ctes_global.get()->LightColors[ctes_global.get()->LightCount] = XMVectorSetW(dirLD->color, dirLD->intensity * 0.1f);
-		  ctes_global.get()->LightCount++;
-	  }
-  }  
-	  
-  // Ñapa para luces puntuales
-  // Recorrer las luces y añadirlas al array
-  ctes_global.get()->OmniLightCount = 0;
-  for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-	  CEntity* e_pointL = entity_manager.getEntities()[i];
-	  TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
-	  TCompTransform* trans_pointL = e_pointL->get<TCompTransform>();
-	  if (pointL && trans_pointL && pointL->active) {
-		  ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = XMVectorSetW(pointL->color, pointL->intensity * 0.1f);;
-		  ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = trans_pointL->position;
-		  ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
-		  ctes_global.get()->OmniLightCount++;
-	  }
-  }
-  int a = ctes_global.get()->OmniLightCount;
-
-  ctes_global.uploadToGPU();
-  ctes_global.activateInPS(2);
-
-  //ctes_global.activateInVS(2);
-
-  activateWorldMatrix(0);
-  activateTint(0);
   
   //activateCamera(*camera, 1);
   // TODO: Make activate TCamera
@@ -430,6 +375,59 @@ void CApp::render() {
 
 void CApp::renderEntities() {
   
+	vs_basic2.activate();
+	ps_textured.activate();
+	const CTexture *t = texture_manager.getByName("wood_d");
+	t->activate(0);
+
+	// Ñapa para luz ambiental
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+		CEntity* e_ambLight = entity_manager.getEntities()[i];
+		TCompAmbientLight* ambLight = e_ambLight->get<TCompAmbientLight>();
+		if (ambLight && ambLight->active) {
+			ctes_global.get()->AmbientLight = ambLight->color;
+		}
+	}
+
+	// Ñapa para luces direccionales
+	// Recorrer las luces y añadirlas al array
+	ctes_global.get()->LightCount = 0;
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+		CEntity* e_dirLD = entity_manager.getEntities()[i];
+		TCompDirectionalLight* dirLD = e_dirLD->get<TCompDirectionalLight>();
+		TCompTransform* transLD = e_dirLD->get<TCompTransform>();
+		if (dirLD && transLD && dirLD->active) {
+			ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), transLD->rotation);
+			// La intensidad se pasa en el alfa del color
+			ctes_global.get()->LightColors[ctes_global.get()->LightCount] = XMVectorSetW(dirLD->color, dirLD->intensity * 0.1f);
+			ctes_global.get()->LightCount++;
+		}
+	}
+
+	// Ñapa para luces puntuales
+	// Recorrer las luces y añadirlas al array
+	ctes_global.get()->OmniLightCount = 0;
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+		CEntity* e_pointL = entity_manager.getEntities()[i];
+		TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
+		TCompTransform* trans_pointL = e_pointL->get<TCompTransform>();
+		if (pointL && trans_pointL && pointL->active) {
+			ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = XMVectorSetW(pointL->color, pointL->intensity * 0.1f);;
+			ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = trans_pointL->position;
+			ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
+			ctes_global.get()->OmniLightCount++;
+		}
+	}
+	int a = ctes_global.get()->OmniLightCount;
+
+	ctes_global.uploadToGPU();
+	ctes_global.activateInPS(2);
+
+	//ctes_global.activateInVS(2);
+
+	activateWorldMatrix(0);
+	activateTint(0);
+
   // Render entities
   for (int i = 0; i < entity_manager.getEntities().size(); ++i)
   {
