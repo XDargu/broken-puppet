@@ -175,6 +175,9 @@ public:
 				falling = false;
 			}
 		}
+
+		physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
+		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
 	}
 
 	void isGrounded() {
@@ -189,8 +192,8 @@ public:
 
 		grounded = collisionFlags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN);
 		
-		physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
-		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
+		//physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
+		//transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
 
 		// Kinematic capsule:
 		/*kinematic_capsule->setKinematicTarget(

@@ -4,11 +4,12 @@
 #include "base_component.h"
 
 struct  TCompDistanceJoint : TBaseComponent {
-
-	physx::PxDistanceJoint* joint;
-
+private:
 	std::string actor1;
 	std::string actor2;
+
+public:
+	physx::PxDistanceJoint* joint;	
 
 	TCompDistanceJoint() {}
 
@@ -17,13 +18,14 @@ struct  TCompDistanceJoint : TBaseComponent {
 		actor2 = atts.getString("actor2", "");
 	}
 
-	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, float max_distance) {
+	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, physx::PxVec3 pos1, physx::PxVec3 pos2) {
 		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, physx::PxTransform(0.5f, 0.5f, 0.5f), actor2, physx::PxTransform(0.0f, 0.0f, 0.0f));
 
 		assert((actor1 != actor2) || fatal("Joint actors must be different"));
 
+		float dist_between_positions = (pos1 - pos2).magnitude();
 		joint->setDamping(damping);
-		joint->setMaxDistance(max_distance);
+		joint->setMaxDistance(dist_between_positions);
 		joint->setStiffness(500);
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);

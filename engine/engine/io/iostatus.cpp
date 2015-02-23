@@ -22,6 +22,8 @@ CIOStatus::CIOStatus( ) {
 	buttons[DIGITAL_DOWN].key = 'S';
 
 	buttons[THROW_STRING].key = VK_LCONTROL;
+	buttons[TENSE_STRING].key = VK_LSHIFT;
+	buttons[CANCEL_STRING].key = 'O';
 	buttons[INSPECTOR_MODE].key = VK_F2;
 
 	mouse.dx = 0;

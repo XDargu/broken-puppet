@@ -233,6 +233,28 @@ void CApp::update(float elapsed) {
 		  activateInspectorMode(false);
   }
 
+  if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
+	  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+	  {
+		  TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+		  
+		  if (djoint) {
+			  djoint->joint->setMaxDistance(0.1f);
+			  PxRigidActor* a1 = nullptr;
+			  PxRigidActor* a2 = nullptr;
+
+			  djoint->joint->getActors(a1, a2);
+			  // Call the addForce method to awake the bodies, if dynamic
+			  if (a1->isRigidDynamic()) {
+				  ((PxRigidDynamic*)a1)->addForce(PxVec3(0,0,0));
+			  }
+			  if (a2->isRigidDynamic()) {
+				  ((PxRigidDynamic*)a2)->addForce(PxVec3(0, 0, 0));
+			  }
+		  }
+	  }
+  }
+
   if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
 	  // Get the camera position
@@ -245,17 +267,19 @@ void CApp::update(float elapsed) {
 
 	  static int entitycount = 1;
 	  static PxRigidActor* firstActor = nullptr;
-	  if (hit.hasBlock) {		  
-		  PxRaycastHit blockHit = hit.block;		  
+	  static PxVec3 firstPosition = PxVec3(0, 0, 0);
+	  if (hit.hasBlock) {
+		  PxRaycastHit blockHit = hit.block;
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
 		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
-		  
+
 		  if (firstActor == nullptr) {
 			  firstActor = blockHit.actor;
+			  firstPosition = blockHit.position;
 			  dbg("Primer actor\n");
 		  }
 		  else if (blockHit.actor != firstActor) {
-			  
+
 			  dbg("Segundo actor\n");
 			  CEntity* new_e = entity_manager.createEmptyEntity();
 
@@ -264,7 +288,15 @@ void CApp::update(float elapsed) {
 			  new_e->add(new_e_name);
 
 			  TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-			  new_e_j->create(firstActor, blockHit.actor, 7, 1);
+			  new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position);
+
+			  // Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
+			  PxVec3 offset_1 = firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
+			  PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
+
+			  new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
+			  new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));
+
 			  new_e->add(new_e_j);
 
 			  TCompMesh* new_e_m = CHandle::create<TCompMesh>();
@@ -274,8 +306,30 @@ void CApp::update(float elapsed) {
 
 			  firstActor = nullptr;
 		  }
+		  // Same actor, action cancelled
+		  else {
+			  firstActor = nullptr;
+			  firstPosition = PxVec3(0, 0, 0);
+			  dbg("Acción ancelada\n");
+		  }
+	  }
+  }
+  if (io.becomesPressed(CIOStatus::CANCEL_STRING)) {
+	  // Get the camera position
+	  CEntity* e = CEntityManager::get().getByName("Camera");
+	  TCompTransform* t = e->get<TCompTransform>();
 
-		  /*CEntity* new_e = entity_manager.createEmptyEntity();
+	  // Raycast detecting the collider the mouse is pointing at
+	  PxRaycastBuffer hit;
+	  physics_manager.raycast(t->position, t->getFront(), 1000, hit);
+
+	  static int entitycount = 1;
+	  static PxRigidActor* firstActor = nullptr;
+	  static PxVec3 firstPosition = PxVec3(0, 0, 0);
+	  if (hit.hasBlock) {
+		  PxRaycastHit blockHit = hit.block;
+
+		  CEntity* new_e = entity_manager.createEmptyEntity();
 
 		  TCompName* new_e_name = CHandle::create<TCompName>();
 		  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
@@ -297,12 +351,12 @@ void CApp::update(float elapsed) {
 		  TCompRigidBody* new_e_r = CHandle::create<TCompRigidBody>();
 		  new_e->add(new_e_r);
 		  new_e_r->create(1, false, true);
-		  
 
-		  entitycount++;*/
+
+		  entitycount++;
 	  }
-
   }
+  
 	
   // Update ---------------------
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
@@ -455,15 +509,13 @@ void CApp::renderEntities() {
 			  XMVECTOR rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
 			  XMVECTOR rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
 
-			  XMVECTOR offset_real_1 = XMVector3Rotate(XMVectorSet(0, -1, 0, 0), rot1);
-			  XMVECTOR offset_real_2 = XMVector3Rotate(XMVectorSet(0, -1, 0, 0), rot2);
-
-			  XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+			  XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+			  XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
 			  /*   RECREATE ROPE   */
-
-			  XMVECTOR initialPos = pos1 + offset_pos1 * offset_real_1;
-			  XMVECTOR finalPos = pos2 + offset_pos2 * offset_real_2;
+			  // Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+			  XMVECTOR initialPos = pos1 + offset_rotado_1;
+			  XMVECTOR finalPos = pos2 + offset_rotado_2;
 
 			  float dist = djoint->joint->getDistance();
 			  float maxDist = pow(djoint->joint->getMaxDistance(), 2);
@@ -472,9 +524,20 @@ void CApp::renderEntities() {
 
 			  rope.destroy();
 			  createString(rope, initialPos, finalPos, tension);
-
+			  
 			  setWorldMatrix(XMMatrixIdentity());
 			  rope.activateAndRender();
+
+			  vs_basic.activate();
+			  ps_basic.activate();
+			  setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+			  wiredCube.activateAndRender();
+
+			  setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
+			  wiredCube.activateAndRender();
+
+			  vs_basic2.activate();
+			  ps_textured.activate();
 		  }
 	  }
 
