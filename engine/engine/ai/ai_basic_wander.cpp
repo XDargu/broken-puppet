@@ -33,7 +33,7 @@ void ai_basic_wander::IdleState(float deltaTime)
 
 void ai_basic_wander::WanderState(float deltaTime)
 {
-	((TCompEnemyController*)enemyController)->addDeltaPos(-((TCompTransform*)trans)->getFront() * 20 * deltaTime);
+	((TCompEnemyController*)enemyController)->addDeltaPos(((TCompTransform*)trans)->getFront() * 5 * deltaTime);
 	count += deltaTime;
 	if (count >= wait_time){		
 		ChangeState("idle");

@@ -9,6 +9,7 @@
 #include "importer_parser.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
+#include <time.h>
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
@@ -68,6 +69,7 @@ void registerAllComponentMsgs() {
 
 void createManagers() {
 
+
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
@@ -114,6 +116,12 @@ bool CApp::create() {
 
   if (!::render.createDevice())
     return false;
+
+  // Start random seed
+  srand(time(NULL));
+
+  // public delta time inicialization
+  delta_time = 0.f;
 
   renderAABB = true;
   renderAxis = true;
@@ -198,6 +206,7 @@ void CApp::doFrame() {
   //delta_ticks.QuadPart /= freq.QuadPart;
   //double delta_secs = delta_ticks.QuadPart * 1e-6;
   float delta_secs = delta_ticks.QuadPart * ( 1.0f / freq.LowPart );
+  delta_time = delta_secs;
   
   float fps = 1.0f / delta_secs;
 

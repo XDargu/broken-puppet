@@ -140,6 +140,9 @@
     <ClInclude Include="components\comp_enemy_controller.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="ai\ai_basic_enemy.h">
+      <Filter>ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -209,6 +212,9 @@
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="ai\ai_basic_wander.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\ai_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
   </ItemGroup>

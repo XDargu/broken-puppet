@@ -42,7 +42,7 @@ public:
 		m_transform = e->get<TCompTransform>();
 		TCompTransform* trans = (TCompTransform*)m_transform;
 
-		assert(trans || fatal("TPlayerController requieres a TTransform component"));
+		assert(trans || fatal("TCompEnemyController requieres a TTransform component"));		
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.5f);
