@@ -56,3 +56,8 @@ void dbg(const char* fmt, ...) {
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {
 	return XMVectorGetX(XMVectorEqual(v1, v2)) && XMVectorGetY(XMVectorEqual(v1, v2)) && XMVectorGetZ(XMVectorEqual(v2, v2));
 }
+
+
+int getRandomNumber(int num1, int num2){
+	return rand() % num2 + num1;
+}

@@ -16,5 +16,6 @@ float getPitchFromVector(XMVECTOR front);
 bool isKeyPressed(int key);
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
+int getRandomNumber(int num1, int num2);
 
 #endif

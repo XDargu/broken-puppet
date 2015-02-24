@@ -136,6 +136,15 @@ void TW_CALL GetMeshPath(void *value, void *clientData)
 	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompMesh *>(clientData)->path);
 	
 }
+
+// AI
+void TW_CALL GetAIFSMState(void *value, void *clientData)
+{
+	std::string *destPtr = static_cast<std::string *>(value);
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller.GetState());
+
+}
+
 // ---------------------------- ADD COMPONENT CALLBACKS --------------------------
 void TW_CALL AddTransform(void *clientData) {
 
@@ -211,6 +220,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompPlayerPivotController* e_player_pivot_controller = target_entity->get<TCompPlayerPivotController>();
 	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
 	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
+
+	// AI
+	TCompAiFsmBasic* e_comp_ai_fsm_basic = target_entity->get<TCompAiFsmBasic>();
 
 	TCompDirectionalLight* e_directional_light = target_entity->get<TCompDirectionalLight>();
 	TCompAmbientLight* e_ambient_light = target_entity->get<TCompAmbientLight>();
@@ -306,6 +318,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarRW(bar, "PointLightIntensity", TW_TYPE_FLOAT, &e_point_light->intensity, " min=0 max=10 group='Point Light' label='Intensity' ");
 		TwAddVarRW(bar, "PointLightColor", TW_TYPE_COLOR3F, &e_point_light->color, " group='Point Light' label='Color' ");
 		TwAddVarRW(bar, "PointLightRadius", TW_TYPE_FLOAT, &e_point_light->radius, " group='Point Light' label='Radius' min=0.1");
+	}
+	if (e_comp_ai_fsm_basic) {
+		TwAddVarCB(bar, "AIFSMBasicState", TW_TYPE_STDSTRING, NULL, GetAIFSMState, e_comp_ai_fsm_basic, " group='AI FSM Basic' label='State'");
 	}
 
 	TwAddSeparator(bar, "", "");
