@@ -62,6 +62,8 @@ CShaderCte<TCtesGlobal> ctes_global;
 
 float fixedUpdateCounter;
 
+bool debug_mode;
+
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
 	//SUBSCRIBE(TLife, TMsgDied, onDied);
@@ -116,6 +118,7 @@ bool CApp::create() {
   renderAxis = true;
   renderGrid = true;
   renderNames = true;
+  debug_mode = false;
 
   createManagers();
 
@@ -231,6 +234,13 @@ void CApp::update(float elapsed) {
 		  activateInspectorMode(true);
 	  else
 		  activateInspectorMode(false);
+  }
+
+  if (io.becomesReleased(CIOStatus::DEBUG_MODE)) {
+	  if (!debug_mode)
+		  activateDebugMode(true);
+	  else
+		  activateDebugMode(false);
   }
 
   if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
@@ -628,6 +638,18 @@ void CApp::activateInspectorMode(bool active) {
 	getObjManager<TCompPlayerPivotController>()->setActiveComponents(!active);
 	getObjManager<TCompCameraPivotController>()->setActiveComponents(!active);
 	getObjManager<TCompThirdPersonCameraController>()->setActiveComponents(!active);
+}
+
+void CApp::activateDebugMode(bool active) {
+	CIOStatus& io = CIOStatus::get();
+
+	// Activa el modo debug
+	renderAxis = active;
+	renderAABB = active;
+	renderGrid = active;
+	renderNames = active;
+
+	debug_mode = active;
 }
 
 void CApp::destroy() {

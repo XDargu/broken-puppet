@@ -13,6 +13,7 @@ class CApp {
   void renderEntities();
   void renderDebugEntities();
   void activateInspectorMode(bool active);
+  void activateDebugMode(bool active);
 
 public:
 
