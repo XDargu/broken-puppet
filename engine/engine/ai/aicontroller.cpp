@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "aicontroller.h"
 
+
 void aicontroller::Init()
 {
 }
@@ -12,7 +13,7 @@ void aicontroller::Recalc(float deltaTime)
 	(this->*statemap[state])(deltaTime);
 }
 
-void aicontroller::SetEntity(CEntityOld* the_entity)
+void aicontroller::SetEntity(CHandle the_entity)
 {
 	entity = the_entity;
 }

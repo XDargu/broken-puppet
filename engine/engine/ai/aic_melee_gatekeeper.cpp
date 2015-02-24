@@ -1,3 +1,4 @@
+/*
 #include <windows.h>
 #include "mcv_platform.h"
 #include "aic_melee_gatekeeper.h"
@@ -128,3 +129,4 @@ void aic_melee_gatekeeper::ReturnGateState(float deltaTime)
 	//if (GetAsyncKeyState('V') != 0) { ChangeState("chase"); MessageBox(NULL, TEXT("view: return_gate->chase"), TEXT("change state"), MB_ICONASTERISK | MB_YESNOCANCEL); }
 	//if (GetAsyncKeyState('A') != 0) { ChangeState("idle"); MessageBox(NULL, TEXT("at gate: return_gate->idle"), TEXT("change state"), MB_ICONASTERISK | MB_YESNOCANCEL); }
 }
+*/

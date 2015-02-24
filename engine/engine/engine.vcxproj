@@ -159,13 +159,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ai\aicontroller.h" />
-    <ClInclude Include="ai\aic_melee_gatekeeper.h" />
-    <ClInclude Include="ai\ai_basic_patroller.h" />
+    <ClInclude Include="ai\ai_basic_enemy.h" />
+    <ClInclude Include="ai\ai_basic_wander.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\all_components.h" />
+    <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
+    <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />
@@ -215,8 +217,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ai\aicontroller.cpp" />
-    <ClCompile Include="ai\aic_melee_gatekeeper.cpp" />
-    <ClCompile Include="ai\ai_basic_patroller.cpp" />
+    <ClCompile Include="ai\ai_basic_enemy.cpp" />
+    <ClCompile Include="ai\ai_basic_wander.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />

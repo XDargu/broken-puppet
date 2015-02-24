@@ -1,3 +1,5 @@
+/*
+
 #include <windows.h>
 #include "mcv_platform.h"
 #include "ai_basic_patroller.h"
@@ -47,7 +49,7 @@ void ai_basic_patroller::ResetWptState(float deltaTime)
 			minIndex = i;
 			minDist = dist;
 		}
-	}*/
+	}
 }
 
 void ai_basic_patroller::FollowWpt(float deltaTime)
@@ -96,3 +98,4 @@ void ai_basic_patroller::Follow(XMVECTOR target, float delta_time) {
 
 	entity->setPosition(entity->getPosition() + entity->getFront() * speed * delta_time);
 }
+*/

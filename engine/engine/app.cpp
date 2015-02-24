@@ -9,6 +9,7 @@
 #include "importer_parser.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
+#include <time.h>
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
@@ -71,6 +72,7 @@ void registerAllComponentMsgs() {
 
 void createManagers() {
 
+
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
@@ -92,6 +94,8 @@ void createManagers() {
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(64);
+	getObjManager<TCompAiFsmBasic>()->init(64);
+	getObjManager<TCompEnemyController>()->init(64);
 	
 	registerAllComponentMsgs();
 }
@@ -107,12 +111,20 @@ void initManagers() {
 	getObjManager<TCompCameraPivotController>()->initHandlers();
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
+	getObjManager<TCompAiFsmBasic>()->initHandlers();
+	getObjManager<TCompEnemyController>()->initHandlers();
 }
 
 bool CApp::create() {
 
   if (!::render.createDevice())
     return false;
+
+  // Start random seed
+  srand(time(NULL));
+
+  // public delta time inicialization
+  delta_time = 0.f;
 
   renderAABB = true;
   renderAxis = true;
@@ -198,6 +210,7 @@ void CApp::doFrame() {
   //delta_ticks.QuadPart /= freq.QuadPart;
   //double delta_secs = delta_ticks.QuadPart * 1e-6;
   float delta_secs = delta_ticks.QuadPart * ( 1.0f / freq.LowPart );
+  delta_time = delta_secs;
   
   float fps = 1.0f / delta_secs;
 
@@ -342,7 +355,7 @@ void CApp::update(float elapsed) {
 		  CEntity* new_e = entity_manager.createEmptyEntity();
 
 		  TCompName* new_e_name = CHandle::create<TCompName>();
-		  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
+		  strcpy(new_e_name->name, ("RaycastTarget" + std::to_string(entitycount)).c_str());
 		  new_e->add(new_e_name);
 
 		  TCompTransform* new_e_t = CHandle::create<TCompTransform>();
@@ -378,6 +391,8 @@ void CApp::update(float elapsed) {
   getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
   getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+  getObjManager<TCompAiFsmBasic>()->update(elapsed);
+  
 
   entity_inspector.update();
   entity_lister.update();
@@ -391,6 +406,7 @@ void CApp::fixedUpdate(float elapsed) {
 
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+  getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {

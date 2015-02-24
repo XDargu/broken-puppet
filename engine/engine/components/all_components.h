@@ -20,6 +20,7 @@
 #include "comp_player_pivot_controller.h"
 #include "comp_camera_pivot_controller.h"
 #include "comp_third_person_camera_controller.h"
+#include "comp_enemy_controller.h"
 
 // Physx
 #include "comp_collider.h"
@@ -33,5 +34,9 @@
 #include "comp_directional_light.h"
 #include "comp_ambient_light.h"
 #include "comp_point_light.h"
+
+// AI
+#include "comp_ai_fsm_basic.h"
+
 
 #endif

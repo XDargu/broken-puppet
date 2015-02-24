@@ -1,3 +1,4 @@
+/*
 #ifndef _AIC_GATEKEEPER
 #define _AIC_GATEKEEPER
 
@@ -28,3 +29,5 @@ public:
 };
 
 #endif
+
+*/
