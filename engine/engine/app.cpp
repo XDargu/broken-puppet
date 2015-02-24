@@ -149,8 +149,13 @@ bool CApp::create() {
   ;
   assert(is_ok);
 
+<<<<<<< HEAD
   CEntity* e = entity_manager.getByName("Camera");
   camera = e->get<TCompCamera>();
+=======
+  CEntity* e = entity_manager.getByName("PlayerCamera");
+  camera = e->get<TCamera>();
+>>>>>>> feature/Exportador
 
   is_ok = font.create();
   font.camera = camera;
@@ -188,6 +193,26 @@ bool CApp::create() {
 
   activateInspectorMode(false);
 
+<<<<<<< HEAD
+=======
+  CEntity* e2 = CHandle::create< CEntity >();
+  TLife *life = e2->add(CHandle::create<TLife>());
+  life->life = 20.f;
+  TCompName* cname = e2->add(CHandle::create<TCompName>());
+  strcpy(cname->name, "pep");
+
+  CHandle h2(e2);
+  CHandle h3 = h2.clone();
+  CEntity* e3 = h3;
+  TLife *life3 = e3->get<TLife>();
+
+
+  TMsgExplosion msg1;
+  msg1.damage = 3.3f;
+  e2->sendMsg(msg1);
+  e2->sendMsg(TMsgDied(2));
+
+>>>>>>> feature/Exportador
   return true;
 }
 
@@ -385,6 +410,7 @@ void CApp::update(float elapsed) {
   //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
   ctes_global.get()->world_time += elapsed;
 
+<<<<<<< HEAD
   getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
   getObjManager<TCompPlayerPivotController>()->update(elapsed);
   getObjManager<TCompCameraPivotController>()->update(elapsed);
@@ -393,6 +419,14 @@ void CApp::update(float elapsed) {
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
   
+=======
+  getObjManager<TPlayerController>()->update(elapsed); // Update player transform
+  getObjManager<TPlayerPivotController>()->update(elapsed);
+  getObjManager<TCameraPivotController>()->update(elapsed);
+  getObjManager<TThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+  getObjManager<TCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+  getObjManager<TAABB>()->update(elapsed); // Update objects AABBs
+>>>>>>> feature/Exportador
 
   entity_inspector.update();
   entity_lister.update();
