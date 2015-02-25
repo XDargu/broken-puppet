@@ -435,7 +435,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 	for (int i = 0; i < epsilon; i++)
 	{
 		// Calcular la normal del punto de referencia
-		// Caso inicial: la normal es el producto vectorial de la dirección del segundo al primero por el vector UP
+		// Caso inicial: la normal es el vector ortogonal a la dirección desde el segundo al primer punto de referencia
 		if (i == 0) {
 			dir = XMVectorSet(
 				ropeReferences[i + 1].x
@@ -448,9 +448,9 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 				, ropeReferences[i].z, 1
 				);
 			dir = XMVector3Normalize(dir);
-			normal = XMVector3Cross(dir, XMVectorSet(0, 1, 0, 0));
+			normal = XMVector3Orthogonal(dir);
 		}
-		// Caso final: la normal es el producto vectorial de la dirección del penúltimo al último por el vector UP
+		// Caso final: la normal es el vector ortogonal a la dirección desde el penúltimo al último punto de referencia
 		else if (i == epsilon - 1) {
 			dir = XMVectorSet(
 				ropeReferences[i - 1].x
@@ -463,7 +463,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 				, ropeReferences[i].z, 1
 				);
 			dir = XMVector3Normalize(dir);
-			normal = XMVector3Cross(dir, XMVectorSet(0, 1, 0, 0));
+			normal = XMVector3Orthogonal(dir);
 		}
 		// Resto de casos: la normal es la media del anterior y el siguiente
 		else
@@ -480,6 +480,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 				);
 			dir1 = XMVector3Normalize(dir1);
 			XMVECTOR normal1 = XMVector3Cross(dir1, XMVectorSet(0, 1, 0, 0));
+			normal1 = XMVector3Orthogonal(dir1);
 			XMVECTOR dir2 = XMVectorSet(
 				ropeReferences[i - 1].x
 				, ropeReferences[i - 1].y
@@ -492,6 +493,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 				);
 			dir2 = XMVector3Normalize(dir2);
 			XMVECTOR normal2 = XMVector3Cross(dir2, XMVectorSet(0, 1, 0, 0));
+			normal2 = XMVector3Orthogonal(dir1);
 			dir = (dir1 + dir2) / 2;
 			normal = (normal1 + normal2) / 2;
 		}
