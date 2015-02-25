@@ -255,6 +255,8 @@ void CApp::doFrame() {
 		  fixedUpdateCounter = 0;		  
 	  }*/
   }
+
+  entity_manager.destroyRemovedHandles();
   render();
 }
 
@@ -414,8 +416,6 @@ void CApp::update(float elapsed) {
   getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
-
-  entity_manager.destroyRemovedHandles();
 
   entity_inspector.update();
   entity_lister.update();
