@@ -604,12 +604,22 @@
     <aiFSMBasic/>
   </entity>
   <entity>
-    <name name="DirLight001"/>
-    <transform position="0 0 0" rotation="0.3 0.19 -0.69 -0.64" scale="1.0 1.0 1.0"/>
-    <directionalLight intensity="1" color="1 1 1 1"/>
+    <name name="directionalLight001"/>
+    <transform position="0 0 0" rotation="0.570941508 0.167518795 0.167518765 0.786066592" scale="1 1 1"/>
+    <directionalLight color="1 1 1 0" intensity="0.5"/>
   </entity>
   <entity>
-    <name name="AmbientLight"/>
-    <ambientLight intensity="0.8" color="1 1 1 1"/>
+    <name name="directionalLight002"/>
+    <transform position="0 0 0" rotation="-0.110265151 -0.239298016 -0.137462080 0.954820514" scale="1 1 1"/>
+    <directionalLight color="0.5 0.25 0.5 1" intensity="0.6"/>
+  </entity>
+  <entity>
+    <name name="directionalLight003"/>
+    <transform position="0 0 0" rotation="0 -0.479425550 0 0.877582550" scale="1 1 1"/>
+    <directionalLight color="0 1 0.6 1" intensity="0.1"/>
+  </entity>
+  <entity>
+    <name name="ambientLight"/>
+    <ambientLight color="1 1 1 1" intensity="0.5"/>
   </entity>
 </scene>
