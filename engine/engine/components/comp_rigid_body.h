@@ -24,7 +24,7 @@ public:
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		assert(trans || fatal("TRigidBody requieres a TTransform component"));
+		assert(transform.isValid() || fatal("TRigidBody requieres a TTransform component"));
 		assert((c || mesh_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
 
 		if (c) {
@@ -48,6 +48,9 @@ public:
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(is_kinematic);
 		setUseGravity(use_gravity);
+
+		// Set the owner entity as the rigidbody user data
+		rigidBody->setName(e->getName());
 	}
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -86,6 +89,9 @@ public:
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(temp_is_kinematic);
 		setUseGravity(temp_use_gravity);
+
+		// Set the owner entity as the rigidbody user data
+		rigidBody->setName(e->getName());
 	}
 
 	void init() {
@@ -96,6 +102,14 @@ public:
 
 		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
 		trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
+	}
+
+	XMVECTOR getPosition() {
+		return Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
+	}
+
+	XMVECTOR getRotation() {
+		return Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
 	}
 
 	void setKinematic(bool is_kinematic) {

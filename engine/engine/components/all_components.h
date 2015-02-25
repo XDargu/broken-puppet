@@ -38,5 +38,8 @@
 // AI
 #include "comp_ai_fsm_basic.h"
 
+// Varios
+#include "comp_needle.h"
+#include "comp_rope.h"
 
 #endif

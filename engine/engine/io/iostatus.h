@@ -41,6 +41,7 @@ public:
 		, THROW_STRING
 		, TENSE_STRING
 		, CANCEL_STRING
+		, EXTRA
 		, BUTTONS_COUNT
 	};
 
