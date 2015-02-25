@@ -392,7 +392,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 {
 	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
 
-	const int epsilon = 25;
+	const int epsilon = 15;
 	const int sizes = 4;
 	//float width = 0.1;
 	XMFLOAT3 ropeReferences[epsilon];

@@ -328,6 +328,7 @@ void CApp::update(float elapsed) {
 	  static PxRigidActor* firstActor = nullptr;
 	  static PxVec3 firstPosition = PxVec3(0, 0, 0);
 	  static PxVec3 firstOffset = PxVec3(0, 0, 0);
+	  static CHandle firstNeedle;
 	  if (hit.hasBlock) {
 		  PxRaycastHit blockHit = hit.block;
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
@@ -338,6 +339,36 @@ void CApp::update(float elapsed) {
 			  firstPosition = blockHit.position;
 			  firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
 			  dbg("Primer actor\n");
+			  
+			  CEntity* new_e = entity_manager.createEmptyEntity();
+			  CEntity* rigidbody_e = entity_manager.getByName(firstActor->getName());
+
+			  TCompName* new_e_name = CHandle::create<TCompName>();
+			  std::strcpy(new_e_name->name, ("Needle" + to_string(entitycount)).c_str());
+			  new_e->add(new_e_name);
+
+			  TCompTransform* new_e_trans = CHandle::create<TCompTransform>();
+			  new_e->add(new_e_trans);
+			  new_e_trans->scale = XMVectorSet(0.1f, 0.1f, 1, 1);
+
+			  TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
+			  std::strcpy(new_e_mesh->path, "primitive_box");
+			  new_e_mesh->mesh = mesh_manager.getByName("primitive_box");
+			  new_e->add(new_e_mesh);
+
+			  TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
+			  new_e->add(new_e_needle);
+			  XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
+			  XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+			  bool a = firstActor->isRigidDynamic();
+			  new_e_needle->create(
+				  firstActor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(firstOffset) : physics_manager.PxVec3ToXMVECTOR(firstPosition)
+				  , XMQuaternionMultiply(rotation, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(firstActor->getGlobalPose().q)))
+				  , rigidbody_e->get<TCompRigidBody>()
+			  );
+
+			  firstNeedle = new_e;
+			  
 		  }
 		  else if (blockHit.actor != firstActor) {
 
@@ -345,7 +376,7 @@ void CApp::update(float elapsed) {
 			  CEntity* new_e = entity_manager.createEmptyEntity();
 
 			  TCompName* new_e_name = CHandle::create<TCompName>();
-			  strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
+			  std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
 			  new_e->add(new_e_name);
 
 			  TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
@@ -365,7 +396,36 @@ void CApp::update(float elapsed) {
 			  new_e->add(new_e_r);
 			  new_e_r->create();
 
+			  // Needle
+			  CEntity* new_e2 = entity_manager.createEmptyEntity();
+			  CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
+
+			  TCompName* new_e_name2 = CHandle::create<TCompName>();
+			  std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
+			  new_e2->add(new_e_name2);
+
+			  TCompTransform* new_e_trans2 = CHandle::create<TCompTransform>();
+			  new_e2->add(new_e_trans2);
+			  new_e_trans2->scale = XMVectorSet(0.05f, 0.05f, 1.5f, 1);
+
+			  TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
+			  std::strcpy(new_e_mesh2->path, "primitive_box");
+			  new_e_mesh2->mesh = mesh_manager.getByName("primitive_box");
+			  new_e2->add(new_e_mesh2);
+
+			  TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
+			  new_e2->add(new_e_needle2);
+			  XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
+			  XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+			  bool a = blockHit.actor->isRigidDynamic();
+			  new_e_needle2->create(
+				  blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
+				  , XMQuaternionMultiply(rotation, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
+				  , rigidbody_e->get<TCompRigidBody>()
+				  );
+
 			  firstActor = nullptr;
+			  firstNeedle = CHandle();
 			  entitycount++;
 		  }
 		  // Same actor, action cancelled
@@ -373,6 +433,8 @@ void CApp::update(float elapsed) {
 			  firstActor = nullptr;
 			  firstPosition = PxVec3(0, 0, 0);
 			  dbg("Acción ancelada\n");
+			  entity_manager.remove(firstNeedle);
+			  firstNeedle = CHandle();
 		  }
 	  }
   }

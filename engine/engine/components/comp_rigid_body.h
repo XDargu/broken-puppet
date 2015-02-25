@@ -48,6 +48,9 @@ public:
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(is_kinematic);
 		setUseGravity(use_gravity);
+
+		// Set the owner entity as the rigidbody user data
+		rigidBody->setName(e->getName());
 	}
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -86,6 +89,9 @@ public:
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(temp_is_kinematic);
 		setUseGravity(temp_use_gravity);
+
+		// Set the owner entity as the rigidbody user data
+		rigidBody->setName(e->getName());
 	}
 
 	void init() {
