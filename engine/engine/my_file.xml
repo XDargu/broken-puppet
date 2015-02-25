@@ -33,8 +33,7 @@
     <transform position="5 -2 -10" rotation="0 0 0 1" scale="1 1 1"/>
     <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
     <mesh path="primitive_box" color="0 1 0 1"/>
-    <!--<collider staticFriction="0.5" dynamicFriction="0.5" restitution="0.1" boxX="0.5" boxY="0.5" boxZ="0.5"/>-->
-    <colliderMesh path="primitive_box" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <collider staticFriction="0.5" dynamicFriction="0.5" restitution="0.1" boxX="0.5" boxY="0.5" boxZ="0.5"/>
     <rigidbody density="10"/>
   </entity>
   <entity>
@@ -59,7 +58,7 @@
     <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
     <mesh path="primitive_box" color="1 0 1 1"/>
     <collider staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" boxX="0.8" boxY="0.5" boxZ="0.7"/>
-    <rigidbody density="1"/>
+    <rigidbody density="15"/>
   </entity>
   <entity>
     <name name="PlayerPivot"/>

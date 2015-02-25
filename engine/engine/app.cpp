@@ -324,6 +324,7 @@ void CApp::update(float elapsed) {
 	  static int entitycount = 1;
 	  static PxRigidActor* firstActor = nullptr;
 	  static PxVec3 firstPosition = PxVec3(0, 0, 0);
+	  static PxVec3 firstOffset = PxVec3(0, 0, 0);
 	  if (hit.hasBlock) {
 		  PxRaycastHit blockHit = hit.block;
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
@@ -332,6 +333,7 @@ void CApp::update(float elapsed) {
 		  if (firstActor == nullptr) {
 			  firstActor = blockHit.actor;
 			  firstPosition = blockHit.position;
+			  firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
 			  dbg("Primer actor\n");
 		  }
 		  else if (blockHit.actor != firstActor) {
@@ -344,10 +346,11 @@ void CApp::update(float elapsed) {
 			  new_e->add(new_e_name);
 
 			  TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
+			  PxVec3 pos = firstActor->getGlobalPose().q.rotate(firstOffset) + firstActor->getGlobalPose().p;
 			  new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position);
 
 			  // Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
-			  PxVec3 offset_1 = firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
+			  PxVec3 offset_1 = firstOffset;//firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
 			  PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
 
 			  new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
