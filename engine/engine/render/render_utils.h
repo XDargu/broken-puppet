@@ -10,9 +10,10 @@ struct CVertexPosColor {
   XMFLOAT4 Color;
 }; 
 
-struct CVertexPosUV {
+struct CVertexPosUVNormal {
   XMFLOAT3 Pos;
   XMFLOAT2 UV;
+  XMFLOAT3 Normal;
 };
 
 bool renderUtilsCreate();
@@ -26,6 +27,7 @@ bool createUnitWiredCube(CMesh& mesh, XMFLOAT4 color);
 bool createCube(CMesh& mesh, float size);
 bool createCamera(CMesh& mesh);
 bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension);
+bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension);
 
 void drawViewVolume(const CCamera& camera);
 

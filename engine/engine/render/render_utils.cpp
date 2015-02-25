@@ -388,6 +388,166 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float ten
 	return mesh.create(epsilon, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
 }
 
+bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension)
+{
+	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
+
+	const int epsilon = 25;
+	const int sizes = 6;
+	float width = 0.03;
+	XMFLOAT3 ropeReferences[epsilon];
+	CVertexPosUVNormal ropeVertices[epsilon * sizes];
+	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * sizes];
+	float y = 0;
+	float pow_r = 2;	// Suavidad de la onda
+	int velocity = 10;	// Velocidad de movimiento
+	float wave_freq = 0.9f;	// frecuencia del ruido de la onda
+	float amplitude = 0.05f;	// amplitud del ruido de la onda
+	float elapsed = 1 / 60.0f;
+
+	for (int i = 0; i < epsilon; i++)
+	{
+		XMVECTOR midPos = XMVectorLerp(initialPos, finalPos, (float)i / (epsilon - 1));
+
+		if (i < epsilon / 2)
+			y = pow(epsilon - i, pow_r) / pow(epsilon, pow_r);
+		else
+			y = pow(i, pow_r) / pow(epsilon, pow_r);
+
+		float noise = (sin(elapsed*velocity + i*wave_freq) + 1) * amplitude;
+		if (i != 0 && i != epsilon - 1)
+			y += noise * noise;
+
+		y -= 1;
+
+		y *= tension;
+		// Guardar la referencia de posición de la cuerda
+		ropeReferences[i] = XMFLOAT3(XMVectorGetX(midPos), XMVectorGetY(midPos) + y, XMVectorGetZ(midPos));
+	}
+
+	ropeReferences[0] = XMFLOAT3(XMVectorGetX(initialPos), XMVectorGetY(initialPos), XMVectorGetZ(initialPos));;
+	ropeReferences[epsilon - 1] = XMFLOAT3(XMVectorGetX(finalPos), XMVectorGetY(finalPos), XMVectorGetZ(finalPos));;
+
+	// Ángulo que hay entre cada lado
+	const float angle = deg2rad( 360 / sizes);
+	XMVECTOR normal;
+	XMVECTOR dir;
+	for (int i = 0; i < epsilon; i++)
+	{
+		// Calcular la normal del punto de referencia
+		// Caso inicial: la normal es el producto vectorial de la dirección del segundo al primero por el vector UP
+		if (i == 0) {
+			dir = XMVectorSet(
+				ropeReferences[i + 1].x
+				, ropeReferences[i + 1].y
+				, ropeReferences[i + 1].z, 1
+				)
+				- XMVectorSet(
+				ropeReferences[i].x
+				, ropeReferences[i].y
+				, ropeReferences[i].z, 1
+				);
+			dir = XMVector3Normalize(dir);
+			normal = XMVector3Cross(dir, XMVectorSet(0, 1, 0, 0));
+		}
+		// Caso final: la normal es el producto vectorial de la dirección del penúltimo al último por el vector UP
+		else if (i == epsilon - 1) {
+			dir = XMVectorSet(
+				ropeReferences[i - 1].x
+				, ropeReferences[i - 1].y
+				, ropeReferences[i - 1].z, 1
+				)
+				- XMVectorSet(
+				ropeReferences[i].x
+				, ropeReferences[i].y
+				, ropeReferences[i].z, 1
+				);
+			dir = XMVector3Normalize(dir);
+			normal = XMVector3Cross(dir, XMVectorSet(0, 1, 0, 0));
+		}
+		// Resto de casos: la normal es la media del anterior y el siguiente
+		else
+		{
+			XMVECTOR dir1 = XMVectorSet(
+				ropeReferences[i - 1].x
+				, ropeReferences[i - 1].y
+				, ropeReferences[i - 1].z, 1
+				)
+				- XMVectorSet(
+				ropeReferences[i].x
+				, ropeReferences[i].y
+				, ropeReferences[i].z, 1
+				);
+			dir1 = XMVector3Normalize(dir1);
+			XMVECTOR normal1 = XMVector3Cross(dir1, XMVectorSet(0, 1, 0, 0));
+			XMVECTOR dir2 = XMVectorSet(
+				ropeReferences[i - 1].x
+				, ropeReferences[i - 1].y
+				, ropeReferences[i - 1].z, 1
+				)
+				- XMVectorSet(
+				ropeReferences[i].x
+				, ropeReferences[i].y
+				, ropeReferences[i].z, 1
+				);
+			dir2 = XMVector3Normalize(dir2);
+			XMVECTOR normal2 = XMVector3Cross(dir2, XMVectorSet(0, 1, 0, 0));
+			dir = (dir1 + dir2) / 2;
+			normal = (normal1 + normal2) / 2;
+		}
+		// Crear los vértices extra, en forma de hexágono
+		for (int j = 0; j < sizes; j++) {
+			// Posiciones extra, siguiendo un círculo
+			// Se rota la normal en el eje de dirección
+			XMVECTOR quat = XMQuaternionRotationAxis(dir, angle * j);
+			XMVECTOR pos = normal * width;
+			pos = XMVector3Rotate(pos, quat);
+
+			ropeVertices[i * sizes + j].Pos = XMFLOAT3(ropeReferences[i].x + XMVectorGetX(pos), ropeReferences[i].y + XMVectorGetY(pos), ropeReferences[i].z + XMVectorGetZ(pos));
+			float uvy = i % 2 ? 0 : 1;
+			float uvx = (1.0f / sizes) * j;
+			ropeVertices[i * sizes + j].UV = XMFLOAT2(uvx, uvy);
+			XMVECTOR realNormal = XMVector3Normalize(pos);
+			ropeVertices[i * sizes + j].Normal = XMFLOAT3(XMVectorGetX(realNormal), XMVectorGetY(realNormal), XMVectorGetZ(realNormal));
+		}		
+	}
+
+	// Índices
+	int aaa = ARRAYSIZE(ropeIndices);
+	int offset = 0;
+	int inner_offset = 0;
+	for (int i = 0; i < epsilon - 1; i++) {
+		for (int j = 0; j < sizes; j++) {
+			offset = i * sizes * sizes + j * sizes;
+			inner_offset = i * sizes;
+			// Último caso (cierre)
+			if (j == sizes - 1) {
+				ropeIndices[offset + 0] = inner_offset + j;
+				ropeIndices[offset + 1] = inner_offset + j + (sizes + 1) - sizes;
+				ropeIndices[offset + 2] = inner_offset + j + sizes;
+
+				ropeIndices[offset + 3] = inner_offset + j;
+				ropeIndices[offset + 4] = inner_offset + j + 1 - sizes;
+				ropeIndices[offset + 5] = inner_offset + j + (sizes + 1) - sizes;
+			}
+			else {
+				ropeIndices[offset + 0] = inner_offset + j;
+				ropeIndices[offset + 1] = inner_offset + j + (sizes + 1);
+				ropeIndices[offset + 2] = inner_offset + j + sizes;
+
+				ropeIndices[offset + 3] = inner_offset + j;
+				ropeIndices[offset + 4] = inner_offset + j + 1;
+				ropeIndices[offset + 5] = inner_offset + j + (sizes + 1);
+			}
+		}
+	}
+
+	XMFLOAT3 a = ropeVertices[epsilon - 1].Pos;
+
+	return mesh.create(epsilon * sizes, ropeVertices, (epsilon - 1) * sizes * sizes, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal);
+	//return mesh.create(epsilon * sizes, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
+}
+
 // -----------------------------------------------------
 void drawViewVolume(const CCamera& camera) {
   XMVECTOR det;
