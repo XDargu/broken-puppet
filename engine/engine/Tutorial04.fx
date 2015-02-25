@@ -170,7 +170,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 
 	
 	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
-	return result * checker /*+ finalRim*/;
+	return result /* checker /*+ finalRim*/;
 
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }

@@ -12,15 +12,19 @@ NotMesh = #(targetcamera, freecamera)
 -- List of objects exported
 expNames = #()
 
+LevelName = "Level"
 PlayerName = "Player"
 PlayerPivotName = "PlayerPivot"
 CameraPivotName = "CameraPivot"
 CameraName = "PlayerCamera"
+BasicEnemyName = "BasicEnemy"
 
 
 -- List of special names
-reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
+reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName, LevelName)
 
+-- List of enemys
+enemyNames = #(BasicEnemyName)
 
 
 
@@ -62,35 +66,16 @@ fn exportXMLScene = (
 		getCameraController,
 		getCameraPivotController,		
 		getPlayerPivotController,
-		getPlayerController
+		getPlayerController,
+		getEnemyController,
+		getAiFsmBasic,
+		getLevelMeshCollider
+		
 	)
 
 	-- Initialize XML
 	mXML = "<scene>\n"
 	
-	--Temporal
-	/*
-	mXML += "  <entity>\n"\
-   + "<name name=\"Player\"/>\n"\
-    +"<transform position=\"0 0 -5\" rotation=\"0 0 0 1\"  scale=\"1 1 1\"/>\n"\
-    +"<aabb min=\"-0.5 0 -0.5\" max=\"0.5 2 0.5\"/>\n"\
-    +"<mesh path=\"Prota\" color=\"1 1 1 1\"/>\n"\
-    +"<playerDoomController movementVelocity=\"6\" rotationVelocity=\"90\"/>\n"\
-	+"</entity>\n"
-	
-	mXML +=  "  <entity>\n"\
-    +"<name name=\"Camera\"/>\n"\
-    +"<transform position=\"0 2 -9\" rotation=\"0 0 0 1\"  scale=\"1 1 1\"/>\n"\
-    +"<camera target=\"0 2 0\" fov=\"60\" znear=\"0.5\" zfar=\"1000\"/>\n"\
-    +"<thirdPersonCameraController />\n"\
-	+"</entity>"
-	
-	mXML += "  <entity>"
-    + "<name name=\"Level\"/>"
-    + "<transform position=\"0 0 0\" rotation=\"0 0 0 1\" scale=\"1 1 1\"/>"
-    + "<mesh path=\"Level\" color=\"1 1 1 1\"/>"
-	+ "</entity>"
-*/
 	-- Calls every function in the function arrays
 	for obj in allObject do (
 		-- Check if needs to be evaluate
@@ -484,6 +469,61 @@ fn validateCamera obj = (
 )
 
 
+
+
+
+/**********************************************************************************************
+										COMPONENTES A SUCIO,  
+											 SIN ATRIBUTOS 
+											NI PULIMIENTOS
+										PARA PRIMERA ITERACIÓN
+***********************************************************************************************/
+
+/*
+	La intención de este get es obtener el mismo enemy controller para todos los tipos de enemigos
+	falta meter los datos propios de cada tipo de enemigo, como velocidad de movimiento y de rotación
+	para eso hay que añadir los datos al addControllers, es decir los datos del componente enemy controller
+*/
+fn getEnemyController obj = (
+	
+	if((validateEnemy obj) == false) then
+	return ""
+	
+	return "<enemyController/>"
+)	
+	
+fn validateEnemy obj = (
+	return ( (obj.name) == BasicEnemyName)
+)
+
+
+
+fn getAiFsmBasic obj = (
+	
+	if((validateAiFsmBasic obj) == false) then
+	return ""
+	
+	return "<aiFSMBasic/>"
+)	
+	
+fn validateAiFsmBasic obj = (
+	return (((obj.name) == BasicEnemyName) == true)
+)
+
+
+
+fn getLevelMeshCollider obj = (
+	
+	if((validateLevelMeshCollider obj) == false) then
+	return ""
+	
+	return "<colliderMesh path=\"LevelFlip\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
+)	
+	
+fn validateLevelMeshCollider obj = (
+	return (((obj.name) == levelName) == true)
+)
+
 /**********************************************************************************************
 												HELPERS
 **********************************************************************************************/
@@ -590,6 +630,7 @@ fn openCloseFile = (
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	
 	local filename = getObjectPath obj false
+	print obj.name
 	
 	if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
 	
@@ -785,8 +826,6 @@ Calculate the path (relative/absolute) of the obj target
 ***********************************************************************************************/
 fn getObjectPath object_to_path isRelative = (
 	
-	"D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine"
-	
 	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\data\\meshes\\"
 	local relative_path = ""
 	local filename = object_to_path.name
@@ -823,7 +862,7 @@ fn max2mcvMatrix obj = (
 -- Execution
 addObjectsID()
 exportXMLScene()
- --funcion que habre y cierra una última cosa para poder trabajar, a depurar
+ --funcion que abre y cierra una última cosa para poder trabajar, a depurar
 openCloseFile()
 removeObjectsID()
 
