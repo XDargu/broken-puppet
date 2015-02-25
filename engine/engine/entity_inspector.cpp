@@ -220,6 +220,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompPlayerPivotController* e_player_pivot_controller = target_entity->get<TCompPlayerPivotController>();
 	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
 	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
+	TCompDistanceJoint* e_distance_joint = target_entity->get<TCompDistanceJoint>();
 
 	// AI
 	TCompAiFsmBasic* e_comp_ai_fsm_basic = target_entity->get<TCompAiFsmBasic>();
@@ -322,7 +323,9 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	if (e_comp_ai_fsm_basic) {
 		TwAddVarCB(bar, "AIFSMBasicState", TW_TYPE_STDSTRING, NULL, GetAIFSMState, e_comp_ai_fsm_basic, " group='AI FSM Basic' label='State'");
 	}
-
+	if (e_distance_joint) {
+		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");
+	}
 	TwAddSeparator(bar, "", "");
 	TwAddButton(bar, "Add components", NULL, NULL, "");
 

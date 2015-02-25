@@ -279,7 +279,16 @@ void CApp::update(float elapsed) {
 	  else
 		  activateDebugMode(false);
   }
+  if (io.becomesPressed(CIOStatus::CANCEL_STRING)) {
+	  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+	  {
+		  TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 
+		  if (djoint) {
+			  entity_manager.remove(CHandle(djoint).getOwner());
+		  }
+	  }
+  }
   if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
 	  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	  {
@@ -291,12 +300,12 @@ void CApp::update(float elapsed) {
 			  PxRigidActor* a2 = nullptr;
 
 			  djoint->joint->getActors(a1, a2);
-			  // Call the addForce method to awake the bodies, if dynamic
+			  // Wake up the actors, if dynamic
 			  if (a1->isRigidDynamic()) {
-				  ((PxRigidDynamic*)a1)->addForce(PxVec3(0,0,0));
+				  ((physx::PxRigidDynamic*)a1)->wakeUp();
 			  }
 			  if (a2->isRigidDynamic()) {
-				  ((PxRigidDynamic*)a2)->addForce(PxVec3(0, 0, 0));
+				  ((physx::PxRigidDynamic*)a2)->wakeUp();
 			  }
 		  }
 	  }
@@ -331,7 +340,7 @@ void CApp::update(float elapsed) {
 			  CEntity* new_e = entity_manager.createEmptyEntity();
 
 			  TCompName* new_e_name = CHandle::create<TCompName>();
-			  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
+			  strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
 			  new_e->add(new_e_name);
 
 			  TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
@@ -346,12 +355,8 @@ void CApp::update(float elapsed) {
 
 			  new_e->add(new_e_j);
 
-			  TCompMesh* new_e_m = CHandle::create<TCompMesh>();
-			  new_e_m->mesh = mesh_manager.getByName("primitive_box");
-			  strcpy(new_e_m->path, "primitive_box");
-			  new_e->add(new_e_m);
-
 			  firstActor = nullptr;
+			  entitycount++;
 		  }
 		  // Same actor, action cancelled
 		  else {
@@ -361,7 +366,7 @@ void CApp::update(float elapsed) {
 		  }
 	  }
   }
-  if (io.becomesPressed(CIOStatus::CANCEL_STRING)) {
+  if (io.becomesPressed(CIOStatus::EXTRA)) {
 	  // Get the camera position
 	  CEntity* e = CEntityManager::get().getByName("Camera");
 	  TCompTransform* t = e->get<TCompTransform>();
@@ -430,6 +435,7 @@ void CApp::fixedUpdate(float elapsed) {
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
   getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
+  getObjManager<TCompDistanceJoint>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
