@@ -115,7 +115,7 @@
     <pointLight color="1 0 0 1" intensity="1" radius="20"/>
   </entity>
   <entity>
-    <name name="Camera"/>
+    <name name="PlayerCamera"/>
     <transform position="0 2 -9" rotation="0 0 0 1"  scale="1 1 1"/>
     <camera target="0 2 0" fov="75" znear="0.1" zfar="1000"/>
     <thirdPersonCameraController offset="0.2 -0.33 2"/>
