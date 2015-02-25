@@ -10,9 +10,8 @@ private:
 
 public:
 	physx::PxDistanceJoint* joint;
-	float width;
 
-	TCompDistanceJoint() : width(0.03f) {}
+	TCompDistanceJoint() {}
 	~TCompDistanceJoint() {
 
 		// Awake the actors
@@ -81,13 +80,6 @@ public:
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
-	}
-
-	void fixedUpdate(float elapsed) {		
-		float dist = joint->getDistance();
-		if (dist > 10*10) {
-			CEntityManager::get().remove(CHandle(this).getOwner());
-		}
 	}
 };
 

@@ -89,11 +89,14 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
+	getObjManager<TCompRope>()->init(32);
+	getObjManager<TCompNeedle>()->init(32);
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(64);
+
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 	
@@ -358,6 +361,10 @@ void CApp::update(float elapsed) {
 
 			  new_e->add(new_e_j);
 
+			  TCompRope* new_e_r = CHandle::create<TCompRope>();
+			  new_e->add(new_e_r);
+			  new_e_r->create();
+
 			  firstActor = nullptr;
 			  entitycount++;
 		  }
@@ -371,7 +378,7 @@ void CApp::update(float elapsed) {
   }
   if (io.becomesPressed(CIOStatus::EXTRA)) {
 	  // Get the camera position
-	  CEntity* e = CEntityManager::get().getByName("Camera");
+	  CEntity* e = CEntityManager::get().getByName("PlayerCamera");
 	  TCompTransform* t = e->get<TCompTransform>();
 
 	  // Raycast detecting the collider the mouse is pointing at
@@ -387,7 +394,7 @@ void CApp::update(float elapsed) {
 		  CEntity* new_e = entity_manager.createEmptyEntity();
 
 		  TCompName* new_e_name = CHandle::create<TCompName>();
-		  strcpy(new_e_name->name, ("RaycastTarget" + std::to_string(entitycount)).c_str());
+		  strcpy(new_e_name->name, ("TestCube" + std::to_string(entitycount)).c_str());
 		  new_e->add(new_e_name);
 
 		  TCompTransform* new_e_t = CHandle::create<TCompTransform>();
@@ -405,7 +412,7 @@ void CApp::update(float elapsed) {
 
 		  TCompRigidBody* new_e_r = CHandle::create<TCompRigidBody>();
 		  new_e->add(new_e_r);
-		  new_e_r->create(1, false, true);
+		  new_e_r->create(10, false, true);
 
 
 		  entitycount++;
@@ -438,7 +445,8 @@ void CApp::fixedUpdate(float elapsed) {
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
   getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
   getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
-  getObjManager<TCompDistanceJoint>()->fixedUpdate(elapsed);
+  getObjManager<TCompRope>()->fixedUpdate(elapsed);
+  getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -549,9 +557,10 @@ void CApp::renderEntities() {
 	  TCompMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TCompMesh>();
 
 	  TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+	  TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
 
 	  // Draw the joints
-	  if (djoint) {
+	  if (c_rope) {
 		  PxRigidActor* a1 = nullptr;
 		  PxRigidActor* a2 = nullptr;
 
@@ -581,7 +590,7 @@ void CApp::renderEntities() {
 			  float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 
 			  rope.destroy();
-			  createFullString(rope, initialPos, finalPos, tension, djoint->width);
+			  createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 			  
 			  setWorldMatrix(XMMatrixIdentity());
 			  rope.activateAndRender();

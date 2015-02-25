@@ -221,6 +221,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
 	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
 	TCompDistanceJoint* e_distance_joint = target_entity->get<TCompDistanceJoint>();
+	TCompRope* e_rope = target_entity->get<TCompRope>();
 
 	// AI
 	TCompAiFsmBasic* e_comp_ai_fsm_basic = target_entity->get<TCompAiFsmBasic>();
@@ -324,9 +325,14 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarCB(bar, "AIFSMBasicState", TW_TYPE_STDSTRING, NULL, GetAIFSMState, e_comp_ai_fsm_basic, " group='AI FSM Basic' label='State'");
 	}
 	if (e_distance_joint) {
-		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");
-		TwAddVarRW(bar, "DistanceJointWidth", TW_TYPE_FLOAT, &e_distance_joint->width, " min=0.01 max=0.5 step=0.01 group='Distance Joint' label='Width' ");
+		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");		
 	}
+	if (e_rope) {
+		TwAddVarRW(bar, "RopeActive", TW_TYPE_BOOL8, &e_rope->active, " group='Rope' label='Active' ");
+		TwAddVarRW(bar, "RopeWidth", TW_TYPE_FLOAT, &e_rope->width, " min=0.01 max=0.5 step=0.01 group='Rope' label='Width' ");
+		TwAddVarRW(bar, "RopeMaxDistance", TW_TYPE_FLOAT, &e_rope->max_distance, " min=1 max=1000 step=0.5 group='Rope' label='Max distance' ");
+	}
+
 	TwAddSeparator(bar, "", "");
 	TwAddButton(bar, "Add components", NULL, NULL, "");
 

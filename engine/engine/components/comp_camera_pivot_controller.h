@@ -2,7 +2,6 @@
 #define INC_COMP_CAMERA_PIVOT_CONTROLLER_H_
 
 #include "base_component.h"
-#include "comp_transform.h"
 #include "../io/iostatus.h"
 
 struct TCompCameraPivotController : TBaseComponent {

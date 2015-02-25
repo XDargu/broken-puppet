@@ -80,6 +80,7 @@
   <entity>
     <name name="testJoint1"/>
     <distanceJoint actor1="EstaCajaNoSeMueve" actor2="Caja"/>
+    <rope width="0.03"/>
   </entity>
   <!--
   <entity>

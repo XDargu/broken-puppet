@@ -143,6 +143,12 @@
     <ClInclude Include="ai\ai_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_rope.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_needle.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
