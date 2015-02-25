@@ -17,7 +17,7 @@ public:
 
 	physx::PxVec3 offset;
 
-	TCompCameraPivotController() : tilt_velocity(deg2rad(90.0f)), min_tilt(deg2rad(-35)), max_tilt(deg2rad(35)) {}
+	TCompCameraPivotController() : tilt_velocity(deg2rad(90.0f)), min_tilt(deg2rad(-55)), max_tilt(deg2rad(55)) {}
 
 	void loadFromAtts(MKeyValue &atts) {
 		tilt_velocity = deg2rad(atts.getFloat("tiltVelocity", 90));
