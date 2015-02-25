@@ -122,7 +122,7 @@
     <transform position="18.5965 11.6852 -12.8217" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Level"/>
     <aabb min="-46.0324 -15.3729 -52.8918" max="46.0324 15.3729 52.8918"/>
-    <colliderMesh path="LevelFlip" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <colliderMesh path="Level" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
   <staticbody/>
   </entity>
   <entity>

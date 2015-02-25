@@ -51,6 +51,8 @@ bool CCollision_Mesh::create(
 	indices = new TIndex[anindices];
 	memcpy(indices, the_indices, anindices * sizeof(TIndex));
 
+	// Change indices
+
 	return true;
 }
 
@@ -136,7 +138,8 @@ bool CCollision_Mesh::load(const char* name){//, PxCooking* mCooking, PxPhysics*
 		meshDesc.triangles.count = getNindices() / 3;
 		meshDesc.triangles.stride = sizeof(TIndex) * 3;
 		meshDesc.triangles.data = indices;
-		meshDesc.flags = physx::PxMeshFlags(physx::PxMeshFlag::e16_BIT_INDICES);
+		meshDesc.flags = physx::PxMeshFlags(physx::PxMeshFlag::e16_BIT_INDICES | physx::PxMeshFlag::eFLIPNORMALS);
+		
 		bool valid = meshDesc.isValid();
 
 		physx::PxDefaultMemoryOutputStream stream;
