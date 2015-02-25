@@ -89,8 +89,8 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
-	getObjManager<TCompRope>()->init(32);
-	getObjManager<TCompNeedle>()->init(32);
+	getObjManager<TCompRope>()->init(64);
+	getObjManager<TCompNeedle>()->init(1024);
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
