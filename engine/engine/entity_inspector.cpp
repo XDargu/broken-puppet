@@ -137,6 +137,30 @@ void TW_CALL GetMeshPath(void *value, void *clientData)
 	
 }
 
+// DISTANCE JINT
+void TW_CALL SetDistanceJointDamping(const void *value, void *clientData)
+{
+	static_cast<TCompDistanceJoint *>(clientData)->joint->setDamping(*static_cast<const float *>(value));
+}
+void TW_CALL GetDistanceJointDamping(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompDistanceJoint *>(clientData)->joint->getDamping();
+}
+
+void TW_CALL SetDistanceJointStiffness(const void *value, void *clientData)
+{
+	static_cast<TCompDistanceJoint *>(clientData)->joint->setStiffness(*static_cast<const float *>(value));
+}
+void TW_CALL GetDistanceJointStiffness(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompDistanceJoint *>(clientData)->joint->getStiffness();
+}
+
+void TW_CALL GetDistanceJointDistance(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = sqrt(static_cast<TCompDistanceJoint *>(clientData)->joint->getDistance());
+}
+
 // AI
 void TW_CALL GetAIFSMState(void *value, void *clientData)
 {
@@ -325,7 +349,10 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		TwAddVarCB(bar, "AIFSMBasicState", TW_TYPE_STDSTRING, NULL, GetAIFSMState, e_comp_ai_fsm_basic, " group='AI FSM Basic' label='State'");
 	}
 	if (e_distance_joint) {
-		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");		
+		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");
+		TwAddVarCB(bar, "DistanceJointDamping", TW_TYPE_FLOAT, SetDistanceJointDamping, GetDistanceJointDamping, e_distance_joint, " group='Distance Joint' label='Damping'");
+		TwAddVarCB(bar, "DistanceJointStiffness", TW_TYPE_FLOAT, SetDistanceJointStiffness, GetDistanceJointStiffness, e_distance_joint, " group='Distance Joint' label='Stiffness'");
+		TwAddVarCB(bar, "DistanceJointDistance", TW_TYPE_FLOAT, NULL, GetDistanceJointDistance, e_distance_joint, " group='Distance Joint' label='Distance'");
 	}
 	if (e_rope) {
 		TwAddVarRW(bar, "RopeActive", TW_TYPE_BOOL8, &e_rope->active, " group='Rope' label='Active' ");
