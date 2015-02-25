@@ -592,6 +592,8 @@ void CApp::renderEntities() {
 			  rope.destroy();
 			  createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 			  
+			  float color_tension = min(dist / maxDist * 0.25f, 1);
+			  setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
 			  setWorldMatrix(XMMatrixIdentity());
 			  rope.activateAndRender();
 

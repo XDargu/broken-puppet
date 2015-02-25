@@ -206,9 +206,10 @@ void TW_CALL AddPointLight(void *clientData) {
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
-void CEntityInspector::update() {
-	if (!target_entity) {
+void CEntityInspector::update() {	
+	if (!CHandle(target_entity).isValid()) {
 		TwRemoveAllVars(bar);
+		inspectEntity(nullptr);		
 		return;
 	}
 
