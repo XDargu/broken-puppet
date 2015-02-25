@@ -302,7 +302,7 @@ void CApp::update(float elapsed) {
   if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
 	  // Get the camera position
-	  CEntity* e = CEntityManager::get().getByName("Camera");
+	  CEntity* e = CEntityManager::get().getByName("PlayerCamera");
 	  TCompTransform* t = e->get<TCompTransform>();
 
 	  // Raycast detecting the collider the mouse is pointing at
