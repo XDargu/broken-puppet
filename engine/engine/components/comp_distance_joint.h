@@ -10,8 +10,9 @@ private:
 
 public:
 	physx::PxDistanceJoint* joint;
+	float width;
 
-	TCompDistanceJoint() {}
+	TCompDistanceJoint() : width(0.03f) {}
 	~TCompDistanceJoint() {
 
 		// Awake the actors

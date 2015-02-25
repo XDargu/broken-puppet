@@ -578,7 +578,7 @@ void CApp::renderEntities() {
 			  float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 
 			  rope.destroy();
-			  createFullString(rope, initialPos, finalPos, tension);
+			  createFullString(rope, initialPos, finalPos, tension, djoint->width);
 			  
 			  setWorldMatrix(XMMatrixIdentity());
 			  rope.activateAndRender();

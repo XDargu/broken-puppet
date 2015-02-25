@@ -388,13 +388,13 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float ten
 	return mesh.create(epsilon, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
 }
 
-bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension)
+bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension, float width)
 {
 	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
 
-	const int epsilon = 15;
-	const int sizes = 3;
-	float width = 0.03;
+	const int epsilon = 25;
+	const int sizes = 4;
+	//float width = 0.1;
 	XMFLOAT3 ropeReferences[epsilon];
 	CVertexPosUVNormal ropeVertices[epsilon * sizes];
 	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * 6];

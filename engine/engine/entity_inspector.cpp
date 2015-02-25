@@ -325,6 +325,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	}
 	if (e_distance_joint) {
 		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");
+		TwAddVarRW(bar, "DistanceJointWidth", TW_TYPE_FLOAT, &e_distance_joint->width, " min=0.01 max=0.5 step=0.01 group='Distance Joint' label='Width' ");
 	}
 	TwAddSeparator(bar, "", "");
 	TwAddButton(bar, "Add components", NULL, NULL, "");
