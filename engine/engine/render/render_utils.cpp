@@ -392,12 +392,12 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 {
 	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
 
-	const int epsilon = 25;
-	const int sizes = 6;
+	const int epsilon = 15;
+	const int sizes = 3;
 	float width = 0.03;
 	XMFLOAT3 ropeReferences[epsilon];
 	CVertexPosUVNormal ropeVertices[epsilon * sizes];
-	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * sizes];
+	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * 6];
 	float y = 0;
 	float pow_r = 2;	// Suavidad de la onda
 	int velocity = 10;	// Velocidad de movimiento
@@ -504,7 +504,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 			pos = XMVector3Rotate(pos, quat);
 
 			ropeVertices[i * sizes + j].Pos = XMFLOAT3(ropeReferences[i].x + XMVectorGetX(pos), ropeReferences[i].y + XMVectorGetY(pos), ropeReferences[i].z + XMVectorGetZ(pos));
-			float uvy = i % 2 ? 0 : 1;
+			float uvy = i % 2 == 0 ? 0 : 1;
 			float uvx = (1.0f / sizes) * j;
 			ropeVertices[i * sizes + j].UV = XMFLOAT2(uvx, uvy);
 			XMVECTOR realNormal = XMVector3Normalize(pos);
@@ -513,12 +513,11 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 	}
 
 	// Índices
-	int aaa = ARRAYSIZE(ropeIndices);
 	int offset = 0;
 	int inner_offset = 0;
 	for (int i = 0; i < epsilon - 1; i++) {
 		for (int j = 0; j < sizes; j++) {
-			offset = i * sizes * sizes + j * sizes;
+			offset = i * sizes * 6 + j * 6;
 			inner_offset = i * sizes;
 			// Último caso (cierre)
 			if (j == sizes - 1) {
@@ -544,7 +543,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 
 	XMFLOAT3 a = ropeVertices[epsilon - 1].Pos;
 
-	return mesh.create(epsilon * sizes, ropeVertices, (epsilon - 1) * sizes * sizes, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal);
+	return mesh.create(epsilon * sizes, ropeVertices, (epsilon - 1) * sizes * 6, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal);
 	//return mesh.create(epsilon * sizes, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
 }
 
