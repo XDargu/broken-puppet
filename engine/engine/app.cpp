@@ -153,6 +153,7 @@ bool CApp::create() {
   CEntity* e = entity_manager.getByName("PlayerCamera");
   camera = e->get<TCompCamera>();
 
+  CHandle pl = entity_manager.getByName("Player");
 
   is_ok = font.create();
   font.camera = camera;
@@ -413,6 +414,8 @@ void CApp::update(float elapsed) {
   getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
+
+  entity_manager.destroyRemovedHandles();
 
   entity_inspector.update();
   entity_lister.update();
