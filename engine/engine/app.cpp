@@ -324,10 +324,6 @@ void CApp::update(float elapsed) {
 
   if ((io.becomesPressed(CIOStatus::THROW_STRING)) && (Ins_comp_player_cotroller->current_num_string<Ins_comp_player_cotroller->max_num_string)) {
 
-	  //Sumamos uno al número de tramas de hilo lanzadas ---------
-	  Ins_comp_player_cotroller->current_num_string++;
-	  //----------------------------------------------------------
-
 	  // Get the camera position
 	  CEntity* e = CEntityManager::get().getByName("PlayerCamera");
 	  TCompTransform* t = e->get<TCompTransform>();
@@ -342,6 +338,9 @@ void CApp::update(float elapsed) {
 	  static PxVec3 firstOffset = PxVec3(0, 0, 0);
 	  static CHandle firstNeedle;
 	  if (hit.hasBlock) {
+		  //Sumamos uno al número de tramas de hilo lanzadas ---------
+		  Ins_comp_player_cotroller->current_num_string++;
+		  //----------------------------------------------------------
 		  PxRaycastHit blockHit = hit.block;
 		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
 		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
@@ -447,6 +446,9 @@ void CApp::update(float elapsed) {
 			  dbg("Acción ancelada\n");
 			  entity_manager.remove(firstNeedle);
 			  firstNeedle = CHandle();
+			  //Se ha cancelado un par de agujas, actualizamos el número de ellas disponibles ---------
+			  Ins_comp_player_cotroller->current_num_string = Ins_comp_player_cotroller->current_num_string-2;
+			  //----------------------------------------------------------
 		  }
 	  }
   }
