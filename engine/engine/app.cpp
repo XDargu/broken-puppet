@@ -269,6 +269,10 @@ void CApp::update(float elapsed) {
   // Update input
   io.update(elapsed);
 
+    //Acceso al componente player controller para mirar el número de tramas de hilo disponible
+  CEntity* e = CEntityManager::get().getByName("Player");
+  TCompPlayerController* Ins_comp_player_cotroller = e->get<TCompPlayerController>();
+
   if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
 	  if (io.getMousePointer())
 		  activateInspectorMode(true);
@@ -291,6 +295,10 @@ void CApp::update(float elapsed) {
 			  entity_manager.remove(CHandle(djoint).getOwner());
 		  }
 	  }
+
+	  //Ponemos a 0 el número de tramas de hilo lanzadas ---------
+	  Ins_comp_player_cotroller->current_num_string=0;
+	  //----------------------------------------------------------
   }
   if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
 	  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
@@ -314,7 +322,11 @@ void CApp::update(float elapsed) {
 	  }
   }
 
-  if (io.becomesPressed(CIOStatus::THROW_STRING)) {
+  if ((io.becomesPressed(CIOStatus::THROW_STRING)) && (Ins_comp_player_cotroller->current_num_string<Ins_comp_player_cotroller->max_num_string)) {
+
+	  //Sumamos uno al número de tramas de hilo lanzadas ---------
+	  Ins_comp_player_cotroller->current_num_string++;
+	  //----------------------------------------------------------
 
 	  // Get the camera position
 	  CEntity* e = CEntityManager::get().getByName("PlayerCamera");

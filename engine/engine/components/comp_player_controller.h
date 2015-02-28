@@ -9,6 +9,7 @@ private:
 	CHandle player_pivot_transform;
 	XMVECTOR delta_pos;
 	XMVECTOR delta_jump;
+
 public:
 
 	bool jumping;
@@ -16,6 +17,10 @@ public:
 	bool falling;
 	float jumpHeight;
 	float jumpSpeed;
+
+	//Variables usadas para limitar el número de tramas de hilo disponibles
+	static const unsigned int max_num_string = 8;
+	unsigned int current_num_string;
 
 	physx::PxController* character_controller;
 	physx::PxRigidDynamic* kinematic_capsule;
@@ -33,6 +38,7 @@ public:
 		, grounded(false)
 		, falling(false)
 		, delta_jump(XMVectorZero())
+		, current_num_string(0)
 	{}
 
 	void loadFromAtts(MKeyValue &atts) {

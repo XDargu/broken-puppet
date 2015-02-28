@@ -38,6 +38,7 @@ public:
 	void doFrame();
 	void destroy();
 
+
 	static CApp& get();
 };
 
