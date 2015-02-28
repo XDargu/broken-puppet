@@ -149,6 +149,8 @@
     <ClInclude Include="components\comp_needle.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="callback_controllers.h" />
+    <ClInclude Include="callback_physics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -223,6 +225,8 @@
     <ClCompile Include="ai\ai_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
+    <ClCompile Include="callback_physics.cpp" />
+    <ClCompile Include="callback_controllers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

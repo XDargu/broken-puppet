@@ -162,6 +162,8 @@
     <ClInclude Include="ai\ai_basic_enemy.h" />
     <ClInclude Include="ai\ai_basic_wander.h" />
     <ClInclude Include="app.h" />
+    <ClInclude Include="callback_controllers.h" />
+    <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
@@ -222,6 +224,8 @@
     <ClCompile Include="ai\ai_basic_enemy.cpp" />
     <ClCompile Include="ai\ai_basic_wander.cpp" />
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="callback_controllers.cpp" />
+    <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="doom_controller.cpp" />

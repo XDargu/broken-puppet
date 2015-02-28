@@ -5,6 +5,17 @@
 #include <foundation\PxFoundation.h>
 #include "mcv_platform.h"
 
+struct FilterGroup
+{
+	enum Enum
+	{
+		ePROTA = (1 << 0),
+		eENEMY = (1 << 1),
+		eACTOR = (1 << 2),
+		eLEVEL = (1 << 3),
+	};
+};
+
 class CPhysicsManager
 {
 public:
@@ -36,5 +47,8 @@ public:
 	bool CPhysicsManager::raycast(XMVECTOR origin, XMVECTOR unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
 
 };
+
+void setupFiltering(physx::PxRigidActor* actor, physx::PxU32 filterGroup, physx::PxU32 filterMask);
+void setupFiltering(physx::PxShape* shape, physx::PxU32 filterGroup, physx::PxU32 filterMask);
 
 #endif

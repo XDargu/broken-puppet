@@ -26,6 +26,14 @@ struct TCompColliderMesh : TBaseComponent {
 			, atts.getFloat("restitution", 0.5))
 			,
 			true);
+
+		//Asignación de mascara al Shape para el filtrado de colisiones
+		setupFiltering(collider, FilterGroup::eLEVEL, FilterGroup::eLEVEL);
+
+		//Una vez creado el shape, no necesitamos el triangleMesh
+		triangle_mesh->release();
+
+		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
 	void init() {

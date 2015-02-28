@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "physics_manager.h"
+#include "callback_physics.h"
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
 #include <string>
@@ -9,9 +10,10 @@ using namespace DirectX;
 
 static CPhysicsManager physics_manager;
 
+CCallbacks_physx gContactReportCallBack;
 static PxDefaultErrorCallback gDefaultErrorCallback;
 static PxDefaultAllocator gDefaultAllocatorCallback;
-static PxSimulationFilterShader gDefaultFilterShader = PxDefaultSimulationFilterShader;
+static PxSimulationFilterShader gDefaultFilterShader = FilterShader;
 
 CPhysicsManager& CPhysicsManager::get() {
 	return physics_manager;
@@ -63,6 +65,9 @@ void CPhysicsManager::init() {
 	// Filtro de colisiones
 	if (!sceneDesc.filterShader)
 		sceneDesc.filterShader = gDefaultFilterShader;
+
+	// Asignación de callback de colisiones
+	sceneDesc.simulationEventCallback = &gContactReportCallBack;
 
 	gScene = gPhysicsSDK->createScene(sceneDesc);
 
@@ -124,4 +129,30 @@ bool CPhysicsManager::raycast(PxVec3 origin, PxVec3 unit_dir, PxReal max_distanc
 
 bool CPhysicsManager::raycast(XMVECTOR origin, XMVECTOR unit_dir, PxReal max_distance, PxRaycastBuffer &hit) {
 	return gScene->raycast(XMVECTORToPxVec3(origin), XMVECTORToPxVec3(unit_dir), max_distance, hit);
+}
+
+//Asignación de mascaras para filtrar las colisiones por Actores
+void setupFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask)
+{
+	PxFilterData filterData;
+	filterData.word0 = filterGroup;
+	filterData.word1 = filterMask;
+	const PxU32 numShapes = actor->getNbShapes();
+	PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
+	actor->getShapes(shapes, numShapes);
+	for (PxU32 i = 0; i < numShapes; i++)
+	{
+		PxShape* shape = shapes[i];
+		shape->setSimulationFilterData(filterData);
+	}
+	free(shapes);
+}
+
+//Asignación de mascaras para filtrar las colisiones por Shapes
+void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask)
+{
+	PxFilterData filterData;
+	filterData.word0 = filterGroup;
+	filterData.word1 = filterMask;
+	shape->setSimulationFilterData(filterData);
 }

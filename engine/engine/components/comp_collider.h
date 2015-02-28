@@ -23,6 +23,7 @@ struct TCompCollider : TBaseComponent {
 			)
 			,
 			true);
+		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -39,6 +40,7 @@ struct TCompCollider : TBaseComponent {
 				, atts.getFloat("restitution", 0.5))
 			,
 			true);
+		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
 	void init() {
