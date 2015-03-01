@@ -24,6 +24,10 @@ public:
 	bool renderGrid;
 	bool renderNames;
 
+	//Variables usadas para limitar el número de tramas de hilo disponibles
+	static const unsigned int max_num_string = 4;
+	unsigned int current_num_string;
+
 	int  xres;
 	int  yres;
 	HWND hWnd;
@@ -37,6 +41,7 @@ public:
 	bool create();
 	void doFrame();
 	void destroy();
+	unsigned int numStrings();
 
 
 	static CApp& get();
