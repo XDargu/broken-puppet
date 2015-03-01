@@ -146,15 +146,19 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/MP10 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include</AdditionalIncludeDirectories>
       <CallingConvention>VectorCall</CallingConvention>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

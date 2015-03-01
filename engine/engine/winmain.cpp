@@ -158,7 +158,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-	case WM_LBUTTONUP:
+	/*case WM_LBUTTONUP:
 		//::ReleaseCapture( );
 		io.getButtons()[io.MOUSE_LEFT].setPressed(false, 0.f);
 		break;
@@ -179,7 +179,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_MBUTTONDOWN:
 		io.getButtons()[io.MOUSE_MIDDLE].setPressed(true, 0.f);
-		break;
+		break;*/
 		/*case WM_KILLFOCUS:
 		app.has_focus = false;
 		break;
