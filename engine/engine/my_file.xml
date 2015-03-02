@@ -549,7 +549,7 @@
   </entity>
   <entity>
     <name name="Player" />
-    <transform position="-2.94038 1.44456e-007 3.30477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="63.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="prota"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <playerController movementVelocity="8.0" rotationVelocity="90.0" />
@@ -573,12 +573,14 @@
   </entity>
   <entity>
     <name name="BasicEnemy_76.0" />
-    <transform position="61.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="BasicEnemy"/>
+    <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <mesh color="1 1 1 1" path="prota"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
-    <enemyController/>
-    <aiFSMBasic/>
+    <unityCharacterController/>
+    
   </entity>
+  
+  <!--
   <entity>
     <name name="BasicEnemy_77.0" />
     <transform position="46.0786 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -603,6 +605,7 @@
     <enemyController/>
     <aiFSMBasic/>
   </entity>
+  -->
   <entity>
     <name name="directionalLight001"/>
     <transform position="0 0 0" rotation="0.570941508 0.167518795 0.167518765 0.786066592" scale="1 1 1"/>

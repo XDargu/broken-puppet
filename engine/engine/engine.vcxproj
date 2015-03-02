@@ -177,6 +177,7 @@
     <ClInclude Include="components\comp_needle.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_rope.h" />
+    <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />
     <ClInclude Include="components\comp_aabb.h" />

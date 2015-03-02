@@ -18,6 +18,7 @@ class CApp {
 public:
 
 	float delta_time;
+	double total_time;
 
 	bool renderAABB;
 	bool renderAxis;
