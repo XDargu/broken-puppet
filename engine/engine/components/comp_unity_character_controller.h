@@ -88,10 +88,13 @@ public:
 
 		// Create player capsule collider
 		enemy_collider = Physics.gPhysicsSDK->createShape(
-			physx::PxBoxGeometry(enemy_width / 2, enemy_height / 2, enemy_width / 2),
+			physx::PxCapsuleGeometry(enemy_width / 2, enemy_height / 2 - enemy_width / 2),
 			&pMaterial
 			,
 			true);
+
+		physx::PxTransform relativePose(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
+		enemy_collider->setLocalPose(relativePose);
 
 		// Create player rigidbody
 		const physx::PxTransform &mPxTrans = physx::PxTransform(

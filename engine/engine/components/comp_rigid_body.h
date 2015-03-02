@@ -110,6 +110,7 @@ public:
 
 		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
 		trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
+
 	}
 
 	XMVECTOR getPosition() {
