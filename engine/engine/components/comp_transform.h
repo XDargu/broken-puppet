@@ -69,6 +69,12 @@ struct TCompTransform : TBaseComponent {     // 1
 		rotation = XMQuaternionSlerp(rotation, XMQuaternionInverse(XMQuaternionRotationMatrix(view)), t);
 	}
 
+	// Transforms a direction from World space to Local space
+	XMVECTOR inverseTransformDirection(XMVECTOR dir) {
+		// Formula: (World direction - position) * inverse(rotation)
+		return XMVector3Rotate((dir - position), XMQuaternionInverse(rotation));
+	}
+
 	std::string toString() {
 		return "Position: (" + std::to_string(XMVectorGetX(position)) + ", " + std::to_string(XMVectorGetY(position)) + ", " + std::to_string(XMVectorGetZ(position)) + ")\n" +
 			"Rotation: (" + std::to_string(XMVectorGetX(rotation)) + ", " + std::to_string(XMVectorGetY(rotation)) + ", " + std::to_string(XMVectorGetZ(rotation)) + ", " + std::to_string(XMVectorGetW(rotation)) + ")\n" +
