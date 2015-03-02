@@ -81,7 +81,7 @@ public:
 
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
-		enemy_density = 50;
+		enemy_density = 25;
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
@@ -144,7 +144,7 @@ public:
 		airSpeed = 6;
 		airControl = 2; 
 		gravityMultiplier = 2;
-		moveSpeedMultiplier = 4;
+		moveSpeedMultiplier = 3;
 		animSpeedMultiplier = 1;
 
 		
@@ -152,10 +152,10 @@ public:
 		zeroFrictionMaterial = Physics.gPhysicsSDK->createMaterial(0.f, 0.f, 0.f);
 
 		zeroFrictionMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
-		zeroFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMIN);
+		zeroFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
 
 		highFrictionMaterial->setFrictionCombineMode(physx::PxCombineMode::eMAX);
-		highFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eAVERAGE);
+		highFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMIN);
 
 		half = 0.5f;
 
@@ -190,7 +190,8 @@ public:
 		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
 		// Punto destino en mudo:
 
-		physx::PxVec3 world_point = Physics.XMVECTORToPxVec3(player_trans->position);
+		//physx::PxVec3 world_point = Physics.XMVECTORToPxVec3(player_trans->position - XMVector3Normalize(player_trans->position - ((TCompTransform*)transform)->position) * 1.5f);
+		physx::PxVec3 world_point = physx::PxVec3(51, 14, -46);
 
 		// Diferencia
 		physx::PxVec3 diff = world_point - px_trans.p;
@@ -246,6 +247,7 @@ public:
 
 		// grab current velocity, we will be changing it.
 		velocity = enemy_rigidbody->getLinearVelocity();
+		physx::PxVec3 prev_velocity = enemy_rigidbody->getLinearVelocity();
 
 		ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
 
@@ -255,11 +257,13 @@ public:
 
 		//ScaleCapsuleForCrouching(); // so you can fit under low areas when crouching
 
-		ApplyExtraTurnRotation(); // this is in addition to root rotation in the animations
+		//ApplyExtraTurnRotation(); // this is in addition to root rotation in the animations
 
 		GroundCheck(); // detect and stick to ground
 
 		SetFriction(); // use low or high friction values depending on the current state
+
+		moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
 
 		// control and velocity handling is different when grounded and airborne:
 		if (onGround)
@@ -274,13 +278,8 @@ public:
 		// TODO no tenemos animation aún
 		//UpdateAnimator(); // send input and other state parameters to the animator
 
-		// reassign velocity, since it will have been modified by the above functions.
-
-		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-		physx::PxVec3 deltaPos = oldPos - px_trans.p;
-		deltaPos.y = 0;
-		
-		enemy_rigidbody->setLinearVelocity(velocity);		
+		// reassign velocity, since it will have been modified by the above functions.		
+		enemy_rigidbody->setLinearVelocity(velocity);
 	}
 
 	void ConvertMoveInput()
@@ -320,7 +319,7 @@ public:
 		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
 
 		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), 0.15f);
-		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
+		enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
 
 	/* TODO cuando tengamos agachado lo pondremos 
@@ -459,8 +458,7 @@ public:
 
 	void HandleGroundedVelocities()
 	{
-
-		physx::PxVec3 groundMove = physx::PxVec3(moveInput.x * moveSpeedMultiplier, velocity.y, moveInput.z * moveSpeedMultiplier);
+		physx::PxVec3 groundMove = physx::PxVec3(moveInput.x, velocity.y, moveInput.z) * moveSpeedMultiplier;
 		velocity = groundMove;
 
 		velocity.y = 0;
