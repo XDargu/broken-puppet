@@ -79,8 +79,8 @@ public:
 		TCompTransform* trans = (TCompTransform*)transform;
 		direction = XMVectorZero();
 
-		float enemy_width = 0.5;
-		float enemy_height = 1;
+		enemy_width = 0.5;
+		enemy_height = 1.5f;
 		enemy_density = 50;
 
 		// Create player material
@@ -88,10 +88,7 @@ public:
 
 		// Create player capsule collider
 		enemy_collider = Physics.gPhysicsSDK->createShape(
-			physx::PxCapsuleGeometry(
-				physx::PxReal(enemy_width / 2)
-				, physx::PxReal(enemy_height / 2)
-			),
+			physx::PxBoxGeometry(enemy_width / 2, enemy_height / 2, enemy_width / 2),
 			&pMaterial
 			,
 			true);
@@ -109,6 +106,8 @@ public:
 
 		enemy_rigidbody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
 		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+		TCompName* name = assertRequiredComponent<TCompName>(this);
+		enemy_rigidbody->setName(name->name);
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
 
@@ -204,8 +203,8 @@ public:
 		Move(final_po, false, false, final_po);
 		//Move(physx::PxVec3(0,0,1), false, false, physx::PxVec3(0, 0, 1));
 		
-		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p);
-		((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
+		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f  + 0.1f), 0));
+		//((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
 
 		oldPos = px_trans.p;
 	}
@@ -291,8 +290,6 @@ public:
 		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
 		physx::PxVec3 localMove = px_trans.transformInv(moveInput);
 
-
-
 		turnAmount = atan2(localMove.x, localMove.z);
 		forwardAmount = localMove.z;
 		
@@ -302,7 +299,7 @@ public:
 	{
 		// automatically turn to face camera direction,
 		// when not moving, and beyond the specified angle threshold
-		if (abs(forwardAmount) < .01f)
+		/*if (abs(forwardAmount) < .01f)
 		{
 			physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
 
@@ -314,7 +311,13 @@ public:
 			{
 				turnAmount += lookAngle*autoTurnSpeed*.001f;
 			}
-		}
+		}*/
+
+		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(moveInput) + enemy_rigidbody->getGlobalPose().p;
+		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
+
+		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), 0.15f);
+		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
 
 	/* TODO cuando tengamos agachado lo pondremos 
@@ -368,7 +371,7 @@ public:
 
 		physx::PxRaycastBuffer buf;
 
-		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1.0f, buf);	
+		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), (enemy_height / 2.f) + 0.25f, buf);
 
 		if (velocity.y < jumpPower*.5f)
 		{
@@ -391,7 +394,7 @@ public:
 
 						// Colocamos en el ground a pelo
 						physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-						px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.75f, 0);
+						px_trans.p = buf.touches[i].position + physx::PxVec3(0, (enemy_height / 2.f) + 0.1f, 0);
 						enemy_rigidbody->setGlobalPose(px_trans);
 					}
 

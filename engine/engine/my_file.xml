@@ -574,7 +574,7 @@
   <entity>
     <name name="BasicEnemy_76.0" />
     <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="BasicEnemy"/>
+    <mesh color="1 1 1 1" path="prota"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <unityCharacterController/>
     
