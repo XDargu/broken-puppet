@@ -28,18 +28,49 @@ struct TCompCollider : TBaseComponent {
 
 	void loadFromAtts(MKeyValue &atts) {
 
+		physx::PxMaterial* mat = Physics.gPhysicsSDK->createMaterial(
+			atts.getFloat("staticFriction", 0.5)
+			, atts.getFloat("dynamicFriction", 0.5)
+			, atts.getFloat("restitution", 0.5)
+		);
+		std::string frictionCombineMode = atts.getString("frictionCombineMode", "None");
+		std::string restitutionCombineMode = atts.getString("restitutionCombineMode", "None");
+
+		if (frictionCombineMode == "Min") {
+			mat->setFrictionCombineMode(physx::PxCombineMode::eMIN);
+		}
+		if (frictionCombineMode == "Max") {
+			mat->setFrictionCombineMode(physx::PxCombineMode::eMAX);
+		}
+		if (frictionCombineMode == "Average") {
+			mat->setFrictionCombineMode(physx::PxCombineMode::eAVERAGE);
+		}
+		if (frictionCombineMode == "Multiply") {
+			mat->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
+		}
+
+		if (restitutionCombineMode == "Min") {
+			mat->setRestitutionCombineMode(physx::PxCombineMode::eMIN);
+		}
+		if (restitutionCombineMode == "Max") {
+			mat->setRestitutionCombineMode(physx::PxCombineMode::eMAX);
+		}
+		if (restitutionCombineMode == "Average") {
+			mat->setRestitutionCombineMode(physx::PxCombineMode::eAVERAGE);
+		}
+		if (restitutionCombineMode == "Multiply") {
+			mat->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
+		}
+
 		collider = Physics.gPhysicsSDK->createShape(
 			physx::PxBoxGeometry(
 				physx::PxReal(atts.getFloat("boxX", 0.5))
 				, physx::PxReal(atts.getFloat("boxY", 0.5))
 				, physx::PxReal(atts.getFloat("boxZ", 0.5))
 			),
-			*Physics.gPhysicsSDK->createMaterial(
-				atts.getFloat("staticFriction", 0.5)
-				, atts.getFloat("dynamicFriction", 0.5)
-				, atts.getFloat("restitution", 0.5))
+			*mat
 			,
-			true);
+			true);		
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 

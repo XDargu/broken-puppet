@@ -55,7 +55,7 @@ CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
 
-TCompCamera*      camera;
+TCompCamera*  camera;
 CCamera*	  oldCamera;
 CFont         font;
 
@@ -99,6 +99,8 @@ void createManagers() {
 
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
+
+	getObjManager<TCompUnityCharacterController>()->init(64);
 	
 	registerAllComponentMsgs();
 }
@@ -116,6 +118,7 @@ void initManagers() {
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
+	getObjManager<TCompUnityCharacterController>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -128,6 +131,7 @@ bool CApp::create() {
 
   // public delta time inicialization
   delta_time = 0.f;
+  total_time = delta_time;
 
   // String number initialization
   current_num_string = 0;
@@ -239,6 +243,7 @@ void CApp::doFrame() {
   //double delta_secs = delta_ticks.QuadPart * 1e-6;
   float delta_secs = delta_ticks.QuadPart * ( 1.0f / freq.LowPart );
   delta_time = delta_secs;
+  total_time += delta_secs;
   
   float fps = 1.0f / delta_secs;
 
@@ -506,6 +511,7 @@ void CApp::update(float elapsed) {
   getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
+  getObjManager<TCompUnityCharacterController>()->update(elapsed);
 
   entity_inspector.update();
   entity_lister.update();
@@ -522,6 +528,7 @@ void CApp::fixedUpdate(float elapsed) {
   getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
   getObjManager<TCompRope>()->fixedUpdate(elapsed);
   getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
+  getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {

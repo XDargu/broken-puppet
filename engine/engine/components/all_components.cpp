@@ -24,3 +24,4 @@ DECL_OBJ_MANAGER(TCompAiFsmBasic, "aiFSMBasic");
 DECL_OBJ_MANAGER(TCompEnemyController, "enemyController");
 DECL_OBJ_MANAGER(TCompNeedle, "needle");
 DECL_OBJ_MANAGER(TCompRope, "rope");
+DECL_OBJ_MANAGER(TCompUnityCharacterController, "unityCharacterController");

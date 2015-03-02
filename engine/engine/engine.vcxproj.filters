@@ -151,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
+    <ClInclude Include="components\comp_unity_character_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
