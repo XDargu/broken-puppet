@@ -335,11 +335,11 @@ public:
 		// help the character turn faster (this is in addition to root rotation in the animation)
 		float turnSpeed = lerp(stationaryTurnSpeed, movingTurnSpeed, forwardAmount);
 
-		XMVECTOR rotation = XMQuaternionRotationRollPitchYaw(0, turnAmount*turnSpeed*(CApp::get().delta_time), 0);
+		/*XMVECTOR rotation = XMQuaternionRotationRollPitchYaw(0, turnAmount*turnSpeed*(CApp::get().delta_time), 0);
 		XMVECTOR m_rotation = Physics.PxQuatToXMVECTOR(px_trans.q);
-		XMVECTOR final_rotation = XMQuaternionMultiply(rotation, m_rotation);
+		XMVECTOR final_rotation = XMQuaternionMultiply(rotation, m_rotation);*/
 
-		px_trans.q = Physics.XMVECTORToPxQuat(final_rotation);
+		//px_trans.q = Physics.XMVECTORToPxQuat(final_rotation);
 
 		//px_trans.q = px_trans.q.rotate(physx::PxVec3(0, turnAmount*turnSpeed*(CApp::get().delta_time), 0));		
 
@@ -358,14 +358,17 @@ public:
 		//physx::PxRaycastBuffer hit;
 		//Physics.raycast(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1000, hit);
 
-		const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+		/*const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
 		physx::PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
 		physx::PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
 
 		// Raycast against all static & dynamic objects (no filtering)
 		// The main result from this call are all hits along the ray, stored in 'hitBuffer'
-		Physics.gScene->raycast(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1.0f, buf);
-	
+		Physics.gScene->raycast(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1.0f, buf);*/
+
+		physx::PxRaycastBuffer buf;
+
+		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1.0f, buf);	
 
 		if (velocity.y < jumpPower*.5f)
 		{
