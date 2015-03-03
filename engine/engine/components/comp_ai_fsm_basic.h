@@ -21,8 +21,6 @@ struct TCompAiFsmBasic : TBaseComponent {
 		assert(trans || fatal("TCompAiFsmBasic requieres a TCompTransform component"));
 		assert(enemy_controller || fatal("TCompAiFsmBasic requieres a TCompEnemyController component"));
 
-		ai_basic_enemy ai;
-		m_ai_controller = ai;
 		m_ai_controller.SetEntity(CHandle(this).getOwner());
 	}
 

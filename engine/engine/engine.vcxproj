@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -147,18 +147,17 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/MP10 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include</AdditionalIncludeDirectories>
-      <CallingConvention>VectorCall</CallingConvention>
+      <CallingConvention>Cdecl</CallingConvention>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
-      <AdditionalOptions>
-      </AdditionalOptions>
+      <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3Common_x64.lib PhysX3_x64.lib PhysX3Cooking_x64.lib PhysX3CharacterKinematic_x64.lib PhysX3Extensions.lib PhysX3Vehicle.lib PhysXProfileSDK.lib PhysXVisualDebuggerSDK.lib PxTask.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -238,18 +237,28 @@
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="expat\xmlparse.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmlrole.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmltok.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmltok_impl.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmltok_ns.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="font\font.cpp" />
     <ClCompile Include="handle\entity.cpp" />

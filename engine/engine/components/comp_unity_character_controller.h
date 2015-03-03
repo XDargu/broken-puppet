@@ -72,6 +72,8 @@ public:
 		CHandle transform;
 		XMVECTOR direction;
 
+		TCompUnityCharacterController() : enemy_collider(nullptr), pMaterial(nullptr), enemy_rigidbody(nullptr) {}
+
 	//CApp &app;
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -457,14 +459,13 @@ public:
 	}
 
 	void ChangeMaterial(physx::PxShape* collider, physx::PxMaterial* m_material){
-
 		const physx::PxU16 n_materials = collider->getNbMaterials();
 		assert(n_materials < 16 || fatal("enemy_collider no puede tener más de 16 materiales"));
 		physx::PxMaterial* buffer[16];
 		physx::PxU16 first_material = 0;
 		enemy_collider->getMaterials(buffer, 16);
 		buffer[first_material] = m_material;
-		collider->setMaterials(buffer, 16);
+		collider->setMaterials(buffer, first_material+1);
 		
 	}
 

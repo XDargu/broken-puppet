@@ -21,9 +21,12 @@ class aicontroller
 {
 	string state;
 	// the states, as maps to functions
-	map<string, statehandler>statemap;
+	map<string, statehandler>* statemap;
 
 public:
+
+	aicontroller();
+	~aicontroller();
 
 	CHandle entity;
 	void SetEntity(CHandle the_entity);
