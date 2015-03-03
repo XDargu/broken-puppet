@@ -105,9 +105,24 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    // so the rect is bigger
    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
+   //Initializando parametros de ventana a Fullscreen
+   DEVMODE screen;
+   DWORD dwStyle, dwExStyle;
+   memset(&screen, 0, sizeof(screen));
+   screen.dmSize = sizeof(screen);
+   screen.dmPelsWidth = app.xres;
+   screen.dmPelsHeight = app.yres;
+   screen.dmBitsPerPel = 32;
+   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
+	   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
+	   dwStyle = WS_POPUP;
+	   ShowCursor(FALSE);
+   }
+
    // Create the actual window
    hWnd = CreateWindow("MCVClass", "MCV Engine 2014"
-	   , WS_OVERLAPPEDWINDOW
+	   , WS_POPUP
 	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
 	   , rc.right - rc.left					// Width
 	   , rc.bottom - rc.top					// Height
@@ -121,7 +136,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    app.hWnd = hWnd;
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
-
+ 
    return TRUE;
 }
 
@@ -139,7 +154,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
-
+	bool prueba;
 	// AntTweakBar
 	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
 		return 0; // event has been handled by AntTweakBar

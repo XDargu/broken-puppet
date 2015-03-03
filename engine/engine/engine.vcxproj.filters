@@ -265,5 +265,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="my_file.xml" />
+    <Xml Include="resolution.xml" />
   </ItemGroup>
 </Project>

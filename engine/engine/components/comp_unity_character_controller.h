@@ -38,6 +38,7 @@ private:
 	bool jumpInput;
 	float turnAmount;
 	float forwardAmount;
+	float max_vel_y;          // constante de velocidad maxima en y para muerte por caida
 	physx::PxVec3 velocity;
 	//IComparer rayHitComparer;
 
@@ -82,6 +83,7 @@ public:
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
 		enemy_density = 25;
+		max_vel_y = -10.f;
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
@@ -93,13 +95,11 @@ public:
 			,
 			true);
 
-<<<<<<< HEAD
+
 		//Asignacíon de mascara para colisiones al shape de los enemigos
 		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
-=======
 		physx::PxTransform relativePose(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 		enemy_collider->setLocalPose(relativePose);
->>>>>>> 56bb4a6f6d3d5acc98fca8b4f181b728c20613ef
 
 		// Create player rigidbody
 
@@ -408,6 +408,11 @@ public:
 						enemy_rigidbody->setGlobalPose(px_trans);
 					}
 
+					// Comprobar velocidad aculumada en caida
+					if (velocity.y < max_vel_y){
+						//TO DO: usar el metodo para eliminar enemigo
+						bool muerte = true;
+					}
 					onGround = true;
 					//rigidbody.useGravity = false;
 					break;

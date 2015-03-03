@@ -41,8 +41,15 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
+	CImporterParser p;
+	bool success=p.xmlParseFile("resolution.xml");
+	//if (success){
+		//MKeyValue xRes;
+		//p.getXRes("options", xRes);
+	//}
   xres = 1024;
   yres = 768;
+
 }
 
 CVertexShader vs_basic;
@@ -323,6 +330,11 @@ void CApp::update(float elapsed) {
 	  }
   }
 
+  //	QUITAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  if (io.becomesPressed(CIOStatus::EXIT)) {
+	  exit(-1);
+  }
+  //--------------------------------------------
 
   if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 

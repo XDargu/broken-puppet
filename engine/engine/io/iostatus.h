@@ -42,6 +42,7 @@ public:
 		, TENSE_STRING
 		, CANCEL_STRING
 		, EXTRA
+		, EXIT
 		, BUTTONS_COUNT
 	};
 

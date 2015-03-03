@@ -5,7 +5,7 @@
 #include "components\all_components.h"
 #include <PxSimulationEventCallback.h>
 
-CCallbacks_physx::CCallbacks_physx(){
+CCallbacks_physx::CCallbacks_physx() : forceLargeImpact (10000) {
 }
 
 void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
@@ -31,7 +31,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		//Colision entre actor y enemigo
 		if ((second_rigid) && ((first_controller))){
 			PxReal force = getForce(second_rigid->getMass(), pairs, i);
-			if (force > 20000){
+			if (force > forceLargeImpact){
 				firstActorEntity->destroyComponents();
 			}
 		}
@@ -39,7 +39,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		//Colision entre enemigo y actor
 		if ((first_rigid) && ((second_controller))){
 			PxReal force = getForce(second_controller->getMass(), pairs, i);
-			if (force > 20000){
+			if (force > forceLargeImpact){
 				//TO DO: Cambiar por el metodo de destruccion de enemigos pertinente
 				secondActorEntity->destroyComponents();
 			}
@@ -48,7 +48,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		//Colision entre enemigo y escenario
 		if ((first_controller) && ((!second_rigid))){
 			PxReal force = getForce(first_controller->getMass(), pairs, i);
-			if (force > 20000){
+			if (force > forceLargeImpact){
 				bool prueba = true;
 			}
 		}
@@ -90,9 +90,9 @@ PxFilterFlags FilterShader(
 
 	//Activación de flags cuando actores entran en contacto o el contactor persiste
 	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
-	//| PxPairFlag::eNOTIFY_TOUCH_FOUND;
-	//| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
-	//| PxPairFlag::eNOTIFY_CONTACT_POINTS;
+	//| PxPairFlag::eNOTIFY_TOUCH_FOUND; --> cuando impacto
+	//| PxPairFlag::eNOTIFY_TOUCH_PERSISTS --> cuando impacto persiste
+	//| PxPairFlag::eNOTIFY_CONTACT_POINTS; --> necesaria para calculos de impacto por punto
 
 	//Colisiones entre actores (cajas) y enemigos
 	if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eENEMY))
