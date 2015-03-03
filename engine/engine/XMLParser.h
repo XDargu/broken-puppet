@@ -2,6 +2,7 @@
 #define INC_XMLPARSER_
 
 #pragma warning (disable : 4786 )
+#define XMLCALL __cdecl
 
 #include <string>
 #include <map>
@@ -29,9 +30,9 @@ public:
 class CXMLParser {
 
 	// Static for interface with XML
-	static void xmlStartElement(void *userData, const char *elem, const char **atts);
-	static void xmlData(void *userData, const char *data, int length);
-	static void xmlEndElement(void *userData, const char *elem);
+	static void XMLCALL xmlStartElement(void *userData, const char *elem, const char **atts);
+	static void XMLCALL xmlData(void *userData, const char *data, int length);
+	static void XMLCALL xmlEndElement(void *userData, const char *elem);
 
 protected:
 	std::string  xml_error;
