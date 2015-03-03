@@ -133,9 +133,6 @@ bool CApp::create() {
   delta_time = 0.f;
   total_time = delta_time;
 
-  // String number initialization
-  current_num_string = 0;
-
   renderAABB = true;
   renderAxis = true;
   renderGrid = true;

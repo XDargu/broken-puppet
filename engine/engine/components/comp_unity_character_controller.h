@@ -93,7 +93,11 @@ public:
 			,
 			true);
 
+		//Asignacíon de mascara para colisiones al shape de los enemigos
+		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
+
 		// Create player rigidbody
+
 		const physx::PxTransform &mPxTrans = physx::PxTransform(
 			Physics.XMVECTORToPxVec3(trans->position),
 			Physics.XMVECTORToPxQuat(trans->rotation/*XMQuaternionMultiply(trans->rotation, XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), deg2rad(90))))*/));
@@ -111,6 +115,8 @@ public:
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
 
+		physx::PxReal threshold = 5800.f;
+		enemy_rigidbody->setContactReportThreshold(threshold);
 
 		// Set it as a CCD (Continiuous Collision Detection)
 		//player_rigidbody->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
@@ -516,6 +522,10 @@ public:
 	void OnDisable()
 	{
 		lookWeight = 0.f;
+	}
+
+	physx::PxReal getMass(){
+		return enemy_rigidbody->getMass();
 	}
 };
 

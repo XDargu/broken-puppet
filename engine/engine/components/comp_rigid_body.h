@@ -48,9 +48,8 @@ public:
 
 		//Asignación de mascara al actor para el filtrado de colisiones
 		setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
-
 		//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
-		physx::PxReal threshold = 1500.f;
+		physx::PxReal threshold = 15000.f;
 		rigidBody->setContactReportThreshold(threshold);
 
 		Physics.gScene->addActor(*rigidBody);
@@ -94,6 +93,14 @@ public:
 				, *mesh_c->collider
 				, temp_density);
 		}
+
+		//Asignación de mascara al actor para el filtrado de colisiones
+		setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
+		//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
+		physx::PxReal threshold = 15000.f;
+		rigidBody->setContactReportThreshold(threshold);
+
+
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(temp_is_kinematic);
 		setUseGravity(temp_use_gravity);
@@ -140,6 +147,10 @@ public:
 		return "Mass: " + std::to_string(rigidBody->getMass()) +
 			"\nLinear velocity: " + Physics.toString(rigidBody->getLinearVelocity()) +
 			"\nAngular velocity: " + Physics.toString(rigidBody->getAngularVelocity());
+	}
+
+	physx::PxReal getMass(){
+		return rigidBody->getMass();
 	}
 };
 

@@ -17,6 +17,8 @@ public:
 
 	CCallbacks_physx();
 
+	physx::PxReal getForce(physx::PxReal mass, const physx::PxContactPair* pairs, PxU32 index);
+
 	// Implements PxSimulationEventCallback
 	virtual void							onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs);
 	virtual void							onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count);
@@ -33,7 +35,6 @@ PxFilterFlags FilterShader(
 	PxPairFlags& pairFlags,
 	const void* constantBlock,
 	PxU32 constantBlockSize);
-
 #endif
 
 
