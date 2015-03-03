@@ -5,7 +5,7 @@
     <mesh color="1 1 1 1" path="Object003"/>
     <aabb min="-1.52533 -1.34312 -0.295084" max="1.52533 1.34312 0.295084"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.52533" boxY="1.34312" boxZ="0.295084"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_2.0" />
@@ -13,7 +13,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.753303 -0.753303 -0.753303" max="0.753303 0.753303 0.753303"/>
     <collider staticFriction="0.1" dynamicFriction="0.1" restitution="0" boxX="0.753303" boxY="0.753303" boxZ="0.753303" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_3.0" />
@@ -21,7 +21,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-1.025 -0.811608 -1.025" max="1.025 0.811608 1.025"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.025" boxY="0.811608" boxZ="1.025"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_4.0" />
@@ -29,7 +29,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-1.03815 -0.811608 -1.03815" max="1.03815 0.811608 1.03815"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.03815" boxY="0.811608" boxZ="1.03815"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_5.0" />
@@ -37,7 +37,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.863536 -0.811608 -0.863536" max="0.863536 0.811608 0.863536"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.863536" boxY="0.811608" boxZ="0.863536"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_6.0" />
@@ -45,7 +45,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.863536 -0.811608 -0.863536" max="0.863536 0.811608 0.863536"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.863536" boxY="0.811608" boxZ="0.863536"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_7.0" />
@@ -53,7 +53,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-1.00672 -0.811608 -1.00672" max="1.00672 0.811608 1.00672"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.00672" boxY="0.811608" boxZ="1.00672"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Caja_8.0" />
@@ -61,7 +61,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.814636 -0.811608 -0.814636" max="0.814636 0.811608 0.814636"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.814636" boxY="0.811608" boxZ="0.814636"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Object006_9.0" />
@@ -69,7 +69,7 @@
     <mesh color="1 1 1 1" path="Object006"/>
     <aabb min="-1.72156 -3.59515 -1.72156" max="1.72156 3.59515 1.72156"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.72156" boxY="3.59515" boxZ="1.72156"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Object007_10.0" />
@@ -77,7 +77,7 @@
     <mesh color="1 1 1 1" path="Object007"/>
     <aabb min="-2.08385 -3.59515 -2.08385" max="2.08385 3.59515 2.08385"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.08385" boxY="3.59515" boxZ="2.08385"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="PlataformaElevar_11.0" />
@@ -85,7 +85,7 @@
     <mesh color="1 1 1 1" path="PlataformaElevar"/>
     <aabb min="-1.23283 -0.159043 -1.26518" max="1.23283 0.159043 1.26518"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.23283" boxY="0.159043" boxZ="1.26518"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Tabla_12.0" />
@@ -93,7 +93,7 @@
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.12075 -0.147339 -2.02436" max="2.12075 0.147337 2.02436"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.12075" boxY="0.147338" boxZ="2.02436"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Tabla_13.0" />
@@ -101,7 +101,7 @@
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.15456 -0.147337 -1.98504" max="2.15456 0.147339 1.98504"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.15456" boxY="0.147338" boxZ="1.98504"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Tabla_14.0" />
@@ -109,7 +109,7 @@
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.18334 -0.147337 -1.94873" max="2.18334 0.147339 1.94873"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.18334" boxY="0.147338" boxZ="1.94873"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="BloquesFijos_15.0" />
@@ -137,7 +137,7 @@
     <mesh color="1 1 1 1" path="Columna1"/>
     <aabb min="-0.787243 -3.0 -0.787242" max="0.787241 3.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="3.0" boxZ="0.787242"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna2_19.0" />
@@ -145,7 +145,7 @@
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna2_20.0" />
@@ -153,7 +153,7 @@
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna2_21.0" />
@@ -161,7 +161,7 @@
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_22.0" />
@@ -169,7 +169,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_23.0" />
@@ -177,7 +177,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_24.0" />
@@ -185,7 +185,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_25.0" />
@@ -193,7 +193,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_26.0" />
@@ -201,7 +201,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_27.0" />
@@ -209,7 +209,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_28.0" />
@@ -217,7 +217,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_29.0" />
@@ -225,7 +225,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_30.0" />
@@ -233,7 +233,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_31.0" />
@@ -241,7 +241,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_32.0" />
@@ -249,7 +249,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_33.0" />
@@ -257,7 +257,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_34.0" />
@@ -265,7 +265,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_35.0" />
@@ -273,7 +273,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_36.0" />
@@ -281,7 +281,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_37.0" />
@@ -289,7 +289,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_38.0" />
@@ -297,7 +297,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_39.0" />
@@ -305,7 +305,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_40.0" />
@@ -313,7 +313,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_41.0" />
@@ -321,7 +321,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_42.0" />
@@ -329,7 +329,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_43.0" />
@@ -337,7 +337,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_44.0" />
@@ -345,7 +345,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_45.0" />
@@ -353,7 +353,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_46.0" />
@@ -361,7 +361,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_47.0" />
@@ -369,7 +369,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_48.0" />
@@ -377,7 +377,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_49.0" />
@@ -385,7 +385,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_50.0" />
@@ -393,7 +393,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_51.0" />
@@ -401,7 +401,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_52.0" />
@@ -409,7 +409,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_53.0" />
@@ -417,7 +417,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_54.0" />
@@ -425,7 +425,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_55.0" />
@@ -433,7 +433,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_56.0" />
@@ -441,7 +441,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_57.0" />
@@ -449,7 +449,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_58.0" />
@@ -457,7 +457,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_59.0" />
@@ -465,7 +465,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_60.0" />
@@ -473,7 +473,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_61.0" />
@@ -481,7 +481,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_62.0" />
@@ -489,7 +489,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_63.0" />
@@ -497,7 +497,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_64.0" />
@@ -505,7 +505,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Columna3_65.0" />
@@ -513,7 +513,7 @@
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Button_66.0" />
@@ -545,7 +545,7 @@
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.18334 -0.147337 -1.94873" max="2.18334 0.147339 1.94873"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.18334" boxY="0.147338" boxZ="1.94873"/>
-    <rigidbody density="10" />
+    <rigidbody density="200" />
   </entity>
   <entity>
     <name name="Player" />
@@ -574,7 +574,7 @@
   <entity>
     <name name="BasicEnemy_76.0" />
     <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="prota"/>
+    <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <unityCharacterController/>
     
