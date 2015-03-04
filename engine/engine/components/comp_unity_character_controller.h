@@ -2,6 +2,7 @@
 #define INC_COMP_UNITY_CHARACTER_CONTROLLER_H_
 
 #include "base_component.h"
+#include "entity_manager.h"
 
 struct TCompUnityCharacterController : TBaseComponent {
 
@@ -85,7 +86,7 @@ public:
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
 		enemy_density = 25;
-		max_vel_y = -10.f;
+		max_vel_y = -8.f;
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
@@ -122,6 +123,7 @@ public:
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
 
+		//Umbral para colisiones
 		physx::PxReal threshold = 5800.f;
 		enemy_rigidbody->setContactReportThreshold(threshold);
 
@@ -413,7 +415,8 @@ public:
 					// Comprobar velocidad aculumada en caida
 					if (velocity.y < max_vel_y){
 						//TO DO: usar el metodo para eliminar enemigo
-						bool muerte = true;
+						CEntity* e = CHandle(this).getOwner();
+						CEntityManager::get().remove(e);
 					}
 					onGround = true;
 					//rigidbody.useGravity = false;
