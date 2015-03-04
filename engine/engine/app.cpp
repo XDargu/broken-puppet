@@ -527,12 +527,12 @@ void CApp::fixedUpdate(float elapsed) {
   physics_manager.gScene->fetchResults(true);
 
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
-  getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
   getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
   getObjManager<TCompRope>()->fixedUpdate(elapsed);
   getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
   getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
   getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+  getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 }
 
 void CApp::render() {

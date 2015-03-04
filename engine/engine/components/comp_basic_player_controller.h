@@ -39,7 +39,8 @@ public:
 
 
 	void update(float elapsed) {
-		
+		if (isKeyPressed('E'))m_fsm_basic_player.last_hit = 2;
+		if (isKeyPressed('Q'))m_fsm_basic_player.last_hit = 10;
 	}
 
 	void fixedUpdate(float elapsed) {

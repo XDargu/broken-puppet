@@ -72,6 +72,7 @@ public:
 		CHandle transform;
 		XMVECTOR direction;
 
+
 	//CApp &app;
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -86,6 +87,8 @@ public:
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
+		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
+		pMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
 
 		// Create player capsule collider
 		enemy_collider = Physics.gPhysicsSDK->createShape(
@@ -141,11 +144,11 @@ public:
 		runCycleLegOffset = 0.2f;
 		groundStickyEffect = 5.f;
 
-		jumpPower = 6; 
+		jumpPower = 8; 
 		airSpeed = 6;
-		airControl = 2; 
-		gravityMultiplier = 2;
-		moveSpeedMultiplier = 3;
+		airControl = 10; 
+		gravityMultiplier = 4;
+		moveSpeedMultiplier = 7;
 		animSpeedMultiplier = 1;
 
 		
@@ -239,7 +242,7 @@ public:
 
 		SetFriction(); // use low or high friction values depending on the current states
 
-		moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
+		//moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
 
 		// control and velocity handling is different when grounded and airborne:
 		if (onGround)
@@ -295,7 +298,8 @@ public:
 		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
 
 		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), 0.15f);
-		enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
+
+		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
 
 	/* TODO cuando tengamos agachado lo pondremos 
@@ -427,7 +431,7 @@ public:
 		physx::PxU16 first_material = 0;
 		enemy_collider->getMaterials(buffer, 16);
 		buffer[first_material] = m_material;
-		collider->setMaterials(buffer, first_material + 1);
+		//collider->setMaterials(buffer, first_material + 1);
 		
 	}
 
@@ -503,7 +507,7 @@ public:
 	}
 
 	bool IsJumping(){
-		return (onAir&&(velocity.y > 0));
+		return (onAir&&(velocity.y > 0)&&(!onGround));
 	}
 };
 

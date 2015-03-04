@@ -51,10 +51,9 @@ void fsm_basic_player::Init()
 void fsm_basic_player::Idle(){	
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
-		ChangeState("fbp_Jump");
-		return;
+		ChangeState("fbp_Jump");		
 	}
-	if (EvaluateMovement()){
+	else if (EvaluateMovement()){
 		ChangeState("fbp_Walk");
 	}	
 }
@@ -94,7 +93,7 @@ void fsm_basic_player::ProcessHit(){}
 void fsm_basic_player::Hurt(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 	state_time += CApp::get().delta_time;
-	if (state_time >= 1){
+	if (state_time >= .01f){
 		state_time = 0;
 		ChangeState("fbp_ReevaluatePriorities");
 	}
@@ -103,7 +102,7 @@ void fsm_basic_player::Hurt(){
 void fsm_basic_player::Ragdoll(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
 	state_time += CApp::get().delta_time;
-	if (state_time >= 3){// TODO AND is in ground
+	if (state_time >= 0.09){// TODO AND is in ground
 		state_time = 0;
 		ChangeState("fbp_WakeUp");
 	}
@@ -126,7 +125,7 @@ void fsm_basic_player::ReevaluatePriorities(){
 
 void fsm_basic_player::WakeUp(){
 	state_time += CApp::get().delta_time;
-	if (state_time >= 0.3f){
+	if (state_time >= 0.01f){
 		state_time = 0;
 		ChangeState("fbp_Idle");
 	}
@@ -136,7 +135,11 @@ void fsm_basic_player::WakeUp(){
 
 bool fsm_basic_player::EvaluateMovement(){
 
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
 	physx::PxVec3 movement_vector = physx::PxVec3(0, 0, 0);
+	physx::PxQuat rotation = Physics.XMVECTORToPxQuat(m_transform->rotation);
 	bool is_moving = false;
 	bool jump = false;
 
@@ -157,15 +160,14 @@ bool fsm_basic_player::EvaluateMovement(){
 		is_moving = true;
 	}
 	if (isKeyPressed(' ')){
-		is_moving = true;
 		jump = true;
 	}
 
-	physx::PxVec3 dir = Physics.XMVECTORToPxVec3((((TCompTransform*)((CEntity*)entity_camera)->get<TCompTransform>())->getFront()));
-	dir.y = 0;
-	dir.normalize();
-	if (is_moving)
-		((TCompUnityCharacterController*)comp_unity_controller)->Move(dir, false, jump, dir);
+	movement_vector = rotation.rotate(movement_vector);
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	//dir.y = 0;
+	dir.normalize();	
+	((TCompUnityCharacterController*)comp_unity_controller)->Move(movement_vector, false, jump, dir);
 
 	return is_moving;
 }
@@ -180,7 +182,7 @@ void fsm_basic_player::EvaluateHit(){
 	if (last_hit >= 10){ //ragdoll force
 		ChangeState("fbp_Ragdoll");
 	}
-	else{
+	else if(GetState() != "fbp_Ragdoll" ){
 		ChangeState("fbp_Hurt");
 	}
 	// Evaluate live to lose
