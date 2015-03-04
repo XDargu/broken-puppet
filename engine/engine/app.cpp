@@ -101,6 +101,7 @@ void createManagers() {
 	getObjManager<TCompEnemyController>()->init(64);
 
 	getObjManager<TCompUnityCharacterController>()->init(64);
+	getObjManager<TCompBasicPlayerController>()->init(1);
 	
 	registerAllComponentMsgs();
 }
@@ -119,6 +120,7 @@ void initManagers() {
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 	getObjManager<TCompUnityCharacterController>()->initHandlers();
+	getObjManager<TCompBasicPlayerController>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -512,6 +514,7 @@ void CApp::update(float elapsed) {
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
   getObjManager<TCompUnityCharacterController>()->update(elapsed);
+  getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
   entity_inspector.update();
   entity_lister.update();
@@ -529,6 +532,7 @@ void CApp::fixedUpdate(float elapsed) {
   getObjManager<TCompRope>()->fixedUpdate(elapsed);
   getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
   getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
+  getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {

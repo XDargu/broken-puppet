@@ -22,6 +22,7 @@
 #include "comp_third_person_camera_controller.h"
 #include "comp_enemy_controller.h"
 #include "comp_unity_character_controller.h"
+#include "comp_basic_player_controller.h"
 
 // Physx
 #include "comp_collider.h"

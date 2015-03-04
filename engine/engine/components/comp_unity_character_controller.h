@@ -26,6 +26,7 @@ private:
 	Other settings
 	***********************************/
 
+	bool onAir;
 	bool onGround;							// Is the character on the ground
 	physx::PxVec3 currentLookPos;			// The current position where the character is looking
 	float originalHeight;					// Used for tracking the original height of the characters capsule collider
@@ -70,8 +71,6 @@ public:
 		physx::PxRigidDynamic* enemy_rigidbody;
 		CHandle transform;
 		XMVECTOR direction;
-
-		TCompUnityCharacterController() : enemy_collider(nullptr), pMaterial(nullptr), enemy_rigidbody(nullptr) {}
 
 	//CApp &app;
 
@@ -163,6 +162,8 @@ public:
 
 		originalHeight = enemy_height;
 
+		onAir = false;
+
 		physx::PxRaycastBuffer;
 
 		// give the look position a default in case the character is not under control
@@ -173,46 +174,19 @@ public:
 	}
 
 	void update(float elapsed){
-		
+
 		
 }
 
 	void fixedUpdate(float elapsed) {
 
-
-		CEntity* player = CEntityManager::get().getByName("Player");
-		TCompTransform* player_trans = player->get<TCompTransform>();
-
-		XMVECTOR dir = player_trans->position - ((TCompTransform*)transform)->position;
-
-		dir = XMVectorSetY(dir, 0);
-		dir = XMVector3Normalize(dir);
+		// remember when we were last in air, for jump delay
+		if (!onGround) lastAirTime = CApp::get().total_time;
 
 
-		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-		// Punto destino en mudo:
 
-		//physx::PxVec3 world_point = Physics.XMVECTORToPxVec3(player_trans->position - XMVector3Normalize(player_trans->position - ((TCompTransform*)transform)->position) * 1.5f);
-		physx::PxVec3 world_point = physx::PxVec3(51, 14, -46);
-
-		// Diferencia
-		physx::PxVec3 diff = world_point - px_trans.p;
-
-		// Final
-		physx::PxVec3 final_po = px_trans.q.rotateInv(diff);
-
-		float dist = final_po.magnitude();
-		float dist_world = diff.magnitude();
-
-		physx::PxVec3 ada = px_trans.transformInv(world_point);
-
-		Move(final_po, false, false, final_po);
-		//Move(physx::PxVec3(0,0,1), false, false, physx::PxVec3(0, 0, 1));
-		
-		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f  + 0.1f), 0));
+		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0));
 		//((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
-
-		oldPos = px_trans.p;
 	}
 
 	void BlendLookWeight()
@@ -263,7 +237,7 @@ public:
 
 		GroundCheck(); // detect and stick to ground
 
-		SetFriction(); // use low or high friction values depending on the current state
+		SetFriction(); // use low or high friction values depending on the current states
 
 		moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
 
@@ -317,7 +291,7 @@ public:
 			}
 		}*/
 
-		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(moveInput) + enemy_rigidbody->getGlobalPose().p;
+		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(currentLookPos) + enemy_rigidbody->getGlobalPose().p;
 		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
 
 		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), 0.15f);
@@ -446,19 +420,21 @@ public:
 	}
 
 	void ChangeMaterial(physx::PxShape* collider, physx::PxMaterial* m_material){
+
 		const physx::PxU16 n_materials = collider->getNbMaterials();
 		assert(n_materials < 16 || fatal("enemy_collider no puede tener más de 16 materiales"));
 		physx::PxMaterial* buffer[16];
 		physx::PxU16 first_material = 0;
 		enemy_collider->getMaterials(buffer, 16);
 		buffer[first_material] = m_material;
-		collider->setMaterials(buffer, first_material+1);
+		collider->setMaterials(buffer, first_material + 1);
 		
 	}
 
 
 	void HandleGroundedVelocities()
 	{
+		onAir = false;
 		physx::PxVec3 groundMove = physx::PxVec3(moveInput.x, velocity.y, moveInput.z) * moveSpeedMultiplier;
 		velocity = groundMove;
 
@@ -486,7 +462,9 @@ public:
 	}
 
 	void HandleAirborneVelocities()
-	{
+	{		
+		onAir = true;
+
 		// we allow some movement in air, but it's very different to when on ground
 		// (typically allowing a small change in trajectory)
 		physx::PxVec3 airMove = physx::PxVec3(moveInput.x*airSpeed, velocity.y, moveInput.z*airSpeed);
@@ -519,6 +497,50 @@ public:
 	{
 		lookWeight = 0.f;
 	}
+
+	bool OnGround(){
+		return onGround;
+	}
+
+	bool IsJumping(){
+		return (onAir&&(velocity.y > 0));
+	}
 };
 
 #endif
+
+
+/*
+
+CEntity* player = CEntityManager::get().getByName("Player");
+TCompTransform* player_trans = player->get<TCompTransform>();
+
+XMVECTOR dir = player_trans->position - ((TCompTransform*)transform)->position;
+
+dir = XMVectorSetY(dir, 0);
+dir = XMVector3Normalize(dir);
+
+
+physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
+// Punto destino en mudo:
+
+//physx::PxVec3 world_point = Physics.XMVECTORToPxVec3(player_trans->position - XMVector3Normalize(player_trans->position - ((TCompTransform*)transform)->position) * 1.5f);
+physx::PxVec3 world_point = physx::PxVec3(51, 14, -46);
+
+// Diferencia
+physx::PxVec3 diff = world_point - px_trans.p;
+
+// Final
+physx::PxVec3 final_po = px_trans.q.rotateInv(diff);
+
+float dist = final_po.magnitude();
+float dist_world = diff.magnitude();
+
+physx::PxVec3 ada = px_trans.transformInv(world_point);
+
+Move(final_po, false, false, final_po);
+//Move(physx::PxVec3(0,0,1), false, false, physx::PxVec3(0, 0, 1));
+
+oldPos = px_trans.p;
+
+*/
