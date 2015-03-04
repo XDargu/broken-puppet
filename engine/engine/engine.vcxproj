@@ -177,6 +177,7 @@
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
+    <ClInclude Include="comp_trigger.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />
     <ClInclude Include="components\comp_aabb.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="items_by_name.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
+    <ClInclude Include="options_parser.h" />
     <ClInclude Include="physics_manager.h" />
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
@@ -265,6 +267,7 @@
     <ClCompile Include="handle\handle.cpp" />
     <ClCompile Include="importer_parser.cpp" />
     <ClCompile Include="io\iostatus.cpp" />
+    <ClCompile Include="options_parser.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
@@ -293,7 +296,9 @@
     <Xml Include="my_file.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="resolution.xml" />
+    <Xml Include="resolution.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

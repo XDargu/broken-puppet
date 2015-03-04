@@ -30,6 +30,7 @@ public:
 
 	int  xres;
 	int  yres;
+	bool fullscreen;
 	HWND hWnd;
 	CEntityInspector entity_inspector;
 	CEntityLister	 entity_lister;
@@ -42,6 +43,7 @@ public:
 	void doFrame();
 	void destroy();
 	unsigned int numStrings();
+	void activateVictory();
 
 
 	static CApp& get();

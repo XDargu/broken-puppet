@@ -42,5 +42,6 @@
 // Varios
 #include "comp_needle.h"
 #include "comp_rope.h"
+#include "comp_trigger.h"
 
 #endif

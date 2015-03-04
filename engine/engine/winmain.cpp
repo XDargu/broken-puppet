@@ -105,24 +105,29 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    // so the rect is bigger
    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-   //Initializando parametros de ventana a Fullscreen
-   DEVMODE screen;
-   DWORD dwStyle, dwExStyle;
-   memset(&screen, 0, sizeof(screen));
-   screen.dmSize = sizeof(screen);
-   screen.dmPelsWidth = app.xres;
-   screen.dmPelsHeight = app.yres;
-   screen.dmBitsPerPel = 32;
-   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
-	   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
+   DWORD dwStyle = WS_OVERLAPPEDWINDOW;
+   
+   if (app.fullscreen){
+	   //Initializando parametros de ventana a Fullscreen
+	   DEVMODE screen;
+	   DWORD dwExStyle;
 	   dwStyle = WS_POPUP;
-	   ShowCursor(FALSE);
+	   memset(&screen, 0, sizeof(screen));
+	   screen.dmSize = sizeof(screen);
+	   screen.dmPelsWidth = app.xres;
+	   screen.dmPelsHeight = app.yres;
+	   screen.dmBitsPerPel = 32;
+	   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+	   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
+		   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
+		   dwStyle = WS_OVERLAPPEDWINDOW;
+		   ShowCursor(FALSE);
+	   }
    }
 
    // Create the actual window
    hWnd = CreateWindow("MCVClass", "MCV Engine 2014"
-	   , WS_POPUP
+	   , dwStyle
 	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
 	   , rc.right - rc.left					// Width
 	   , rc.bottom - rc.top					// Height
@@ -140,6 +145,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+void fullscreenMode(){
+
+}
+
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -154,7 +163,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
-	bool prueba;
 	// AntTweakBar
 	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
 		return 0; // event has been handled by AntTweakBar

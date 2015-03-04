@@ -9,6 +9,7 @@
 #include "importer_parser.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
+#include "options_parser.h"
 #include <time.h>
 
 using namespace DirectX;
@@ -41,14 +42,20 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-	CImporterParser p;
+	COptionsParser p;
 	bool success=p.xmlParseFile("resolution.xml");
-	//if (success){
-		//MKeyValue xRes;
-		//p.getXRes("options", xRes);
-	//}
-  xres = 1024;
-  yres = 768;
+	if (success){
+		int x_res;
+		int y_res;
+		bool mode;
+		p.getResolution(x_res, y_res, mode);
+		xres = x_res;
+		yres = y_res;
+		fullscreen = mode;
+	}else{
+		xres = 1024;
+		yres = 768;
+	}
 
 }
 
@@ -98,6 +105,9 @@ void createManagers() {
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompRope>()->init(64);
 	getObjManager<TCompNeedle>()->init(1024);
+	//PRUEBA TRIGGER
+	getObjManager<TCompTrigger>()->init(1024);
+	//
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -126,6 +136,9 @@ void initManagers() {
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 	getObjManager<TCompUnityCharacterController>()->initHandlers();
+
+	//PRUEBA TRIGGER
+	getObjManager<TCompTrigger>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -522,6 +535,9 @@ void CApp::update(float elapsed) {
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
   getObjManager<TCompUnityCharacterController>()->update(elapsed);
 
+  //PRUEBA TRIGGER
+  getObjManager<TCompTrigger>()->update(elapsed);
+
   entity_inspector.update();
   entity_lister.update();
   entity_actioner.update();
@@ -828,4 +844,8 @@ unsigned int CApp::numStrings(){
 		}
 	}
 	return num_strings;
+}
+
+void CApp::activateVictory(){
+	//font.print3D(pos, prueba);
 }

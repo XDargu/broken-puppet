@@ -614,6 +614,12 @@
   </entity>
   -->
   <entity>
+    <name name="trigger01" />
+    <transform position="57.0713 14.2500 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
+    <trigger/>
+  </entity>
+  <entity>
     <name name="directionalLight001"/>
     <transform position="0 0 0" rotation="0.570941508 0.167518795 0.167518765 0.786066592" scale="1 1 1"/>
     <directionalLight color="1 1 1 0" intensity="0.5"/>

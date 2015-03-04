@@ -5,6 +5,8 @@
 #include "components\all_components.h"
 #include <PxSimulationEventCallback.h>
 
+CEntityManager entity_manager = CEntityManager::get();
+
 CCallbacks_physx::CCallbacks_physx() : forceLargeImpact (1000) {
 }
 
@@ -32,7 +34,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		if ((second_rigid) && ((first_controller))){
 			PxReal force = getForce(second_rigid->getMass(), pairs, i);
 			if (force > forceLargeImpact){
-				firstActorEntity->destroyComponents();
+				entity_manager.remove(firstActorEntity);
 			}
 		}
 
@@ -43,7 +45,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				//TO DO: Cambiar por el metodo de destruccion de enemigos pertinente
 				//secondActorEntity->~CEntity();
 				//secondActorEntity->destroyComponents();
-				CEntityManager::get().remove(secondActorEntity);
+				entity_manager.remove(secondActorEntity);
 			}
 		}
 
@@ -53,7 +55,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			if (force > forceLargeImpact){
 				bool prueba = true; 
 				//firstActorEntity->~CEntity();
-				CEntityManager::get().remove(firstActorEntity);
+				entity_manager.remove(firstActorEntity);
 			}
 		}
 

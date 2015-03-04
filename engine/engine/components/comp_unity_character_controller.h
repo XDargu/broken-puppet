@@ -416,6 +416,7 @@ public:
 					if (velocity.y < max_vel_y){
 						//TO DO: usar el metodo para eliminar enemigo
 						CEntity* e = CHandle(this).getOwner();
+						//e->sendMsg()
 						CEntityManager::get().remove(e);
 					}
 					onGround = true;

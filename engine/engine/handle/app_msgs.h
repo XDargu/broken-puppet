@@ -16,4 +16,10 @@ struct TMsgDied {
 	DECLARE_MSG_ID();
 };
 
+struct TMsgImpact {
+	int     who;
+	TMsgImpact(int awho) : who(awho) { }
+	DECLARE_MSG_ID();
+};
+
 #endif
