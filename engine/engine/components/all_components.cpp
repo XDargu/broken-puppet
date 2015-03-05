@@ -26,4 +26,5 @@ DECL_OBJ_MANAGER(TCompNeedle, "needle");
 DECL_OBJ_MANAGER(TCompRope, "rope");
 DECL_OBJ_MANAGER(TCompUnityCharacterController, "unityCharacterController");
 DECL_OBJ_MANAGER(TCompTrigger, "trigger");
+DECL_OBJ_MANAGER(TCompTag, "tag");
 DECL_OBJ_MANAGER(TCompBasicPlayerController, "basicPlayerController");

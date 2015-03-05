@@ -180,6 +180,7 @@
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
+    <ClInclude Include="comp_tag.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />
     <ClInclude Include="components\comp_aabb.h" />

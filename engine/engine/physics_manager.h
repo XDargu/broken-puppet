@@ -9,10 +9,10 @@ struct FilterGroup
 {
 	enum Enum
 	{
-		ePROTA = (1 << 0),
-		eENEMY = (1 << 1),
-		eACTOR = (1 << 2),
-		eLEVEL = (1 << 3),
+		ePROTA = (1 << 1),
+		eENEMY = (1 << 2),
+		eACTOR = (1 << 3),
+		eLEVEL = (1 << 4),
 	};
 };
 

@@ -26,12 +26,15 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		CEntity* secondActorEntity=CEntityManager::get().getByName(name2);
 
 		TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+		TCompTag* first_tag = firstActorEntity->get<TCompTag>();
 		TCompUnityCharacterController* first_controller = firstActorEntity->get<TCompUnityCharacterController>();
+
 		TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+		TCompTag* second_tag = secondActorEntity->get<TCompTag>();
 		TCompUnityCharacterController* second_controller = secondActorEntity->get<TCompUnityCharacterController>();
 
 		//Colision entre actor y enemigo
-		if ((second_rigid) && ((first_controller))){
+		if ((second_tag->getTag() == "actor") && ((first_tag->getTag() == "enemy"))){
 			PxReal force = getForce(second_rigid->getMass(), pairs, i);
 			if (force > forceLargeImpact){
 				entity_manager.remove(firstActorEntity);
@@ -81,19 +84,11 @@ PxReal CCallbacks_physx::getForce(PxReal mass, const PxContactPair* pairs, PxU32
 	return forceMagnitude;
 }
 
-void CCallbacks_physx::onTrigger(PxTriggerPair* pairs, PxU32 count)
-{
-	dbg("onTrigger");
-}
-
 PxFilterFlags FilterShader(
 	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
 	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
 	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
 {
-
-	CCallbacks_physx prueba1;
-
 	//Activación de flags cuando actores entran en contacto o el contactor persiste
 	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 	//| PxPairFlag::eNOTIFY_TOUCH_FOUND; --> cuando impacto

@@ -87,10 +87,7 @@ public:
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
 		enemy_density = 25;
-<<<<<<< HEAD
-		max_vel_y = -10.f;
-=======
->>>>>>> e2911ed1856cbf08d073c85aacf2c272bbd062b7
+		max_vel_y = -1.f;
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
@@ -119,9 +116,13 @@ public:
 			enemy_density);
 
 		enemy_rigidbody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
-		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+	    enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 		TCompName* name = assertRequiredComponent<TCompName>(this);
 		enemy_rigidbody->setName(name->name);
+
+		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
+		physx::PxReal threshold = 1500.f;
+		enemy_rigidbody->setContactReportThreshold(threshold);
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
 
@@ -150,7 +151,7 @@ public:
 		jumpRepeatDelayTime = 0.25f;
 		runCycleLegOffset = 0.2f;
 		groundStickyEffect = 5.f;
-		max_vel_y = -8.0f;
+		max_vel_y = -1.0f;
 
 		jumpPower = 8;
 		airSpeed = 6;
@@ -396,9 +397,9 @@ public:
 					// Comprobar velocidad aculumada en caida
 					if (velocity.y < max_vel_y){
 						//TO DO: usar el metodo para eliminar enemigo
-						//CEntity* e = CHandle(this).getOwner();
+						CEntity* e = CHandle(this).getOwner();
 						//e->sendMsg()
-						//CEntityManager::get().remove(e);
+						CEntityManager::get().remove(e);
 					}
 					onGround = true;
 					//rigidbody.useGravity = false;

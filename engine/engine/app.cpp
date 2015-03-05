@@ -82,7 +82,7 @@ float fixedUpdateCounter;
 bool debug_mode;
 
 void registerAllComponentMsgs() {
-	//SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
+	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	//SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 }
 
@@ -92,6 +92,7 @@ void createManagers() {
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
+	getObjManager<TCompTag>()->init(1024);
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(32);
