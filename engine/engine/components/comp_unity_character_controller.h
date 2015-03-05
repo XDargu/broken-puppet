@@ -100,6 +100,7 @@ public:
 			,
 			true);
 
+		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
 		physx::PxTransform relativePose(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 		enemy_collider->setLocalPose(relativePose);
 
@@ -114,10 +115,11 @@ public:
 			*enemy_collider,
 			enemy_density);
 
+		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 		enemy_rigidbody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
 		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 		TCompName* name = assertRequiredComponent<TCompName>(this);
-		enemy_rigidbody->setName(name->name);
+		enemy_rigidbody->setName(name->name);		
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
 

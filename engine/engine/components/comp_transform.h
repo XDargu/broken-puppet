@@ -58,7 +58,6 @@ struct TCompTransform : TBaseComponent {     // 1
 
 	// Aim the transform to a position instantly
 	void lookAt(XMVECTOR new_target, XMVECTOR new_up_aux) {
-
 		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
 		rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 	}
