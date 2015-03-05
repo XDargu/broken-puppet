@@ -101,7 +101,6 @@ void fsm_basic_player::Hurt(){
 
 void fsm_basic_player::Ragdoll(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
-	EvaluateMovement();
 	state_time += CApp::get().delta_time;
 	if (state_time >= 0.09 && ((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){// TODO AND is in ground ((TCompUnityCharacterController*)comp_unity_controller)->OnGround()
 		state_time = 0;
@@ -169,7 +168,7 @@ bool fsm_basic_player::EvaluateMovement(){
 	//dir.y = 0;
 	dir.normalize();	
 	bool ragdoll = (GetState() == "fbp_Ragdoll");
-	((TCompUnityCharacterController*)comp_unity_controller)->Move(movement_vector, false, jump, dir, ragdoll);
+	((TCompUnityCharacterController*)comp_unity_controller)->Move(movement_vector, false, jump, dir);
 
 	return is_moving;
 }

@@ -87,8 +87,8 @@ public:
 		enemy_density = 25;
 
 		// Create player material
-		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(1, 1, 0);
-		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMAX);
+		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
+		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
 		pMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
 
 		// Create player capsule collider
@@ -215,57 +215,52 @@ public:
 		}
 	}
 
-	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos, bool ragdoll)
+	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos)
 	{
 
-		if (!ragdoll){
-			if (move.magnitude() > 1) move.normalize();
+		if (move.magnitude() > 1) move.normalize();
 
-			// transfer input parameters to member variables.
-			moveInput = move;
-			crouchInput = crouch;
-			jumpInput = jump;
-			currentLookPos = lookPos;
+		// transfer input parameters to member variables.
+		moveInput = move;
+		crouchInput = crouch;
+		jumpInput = jump;
+		currentLookPos = lookPos;
 
-			// grab current velocity, we will be changing it.
-			velocity = enemy_rigidbody->getLinearVelocity();
-			physx::PxVec3 prev_velocity = enemy_rigidbody->getLinearVelocity();
+		// grab current velocity, we will be changing it.
+		velocity = enemy_rigidbody->getLinearVelocity();
+		physx::PxVec3 prev_velocity = enemy_rigidbody->getLinearVelocity();
 
-			ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
+		ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
 
-			TurnTowardsCameraForward(); // makes the character face the way the camera is looking
+		TurnTowardsCameraForward(); // makes the character face the way the camera is looking
 
-			//PreventStandingInLowHeadroom(); // so the character's head doesn't penetrate a low ceiling
+		//PreventStandingInLowHeadroom(); // so the character's head doesn't penetrate a low ceiling
 
-			//ScaleCapsuleForCrouching(); // so you can fit under low areas when crouching
+		//ScaleCapsuleForCrouching(); // so you can fit under low areas when crouching
 
-			//ApplyExtraTurnRotation(); // this is in addition to root rotation in the animations
+		//ApplyExtraTurnRotation(); // this is in addition to root rotation in the animations
 
-			GroundCheck(); // detect and stick to ground
+		GroundCheck(); // detect and stick to ground
 
-			SetFriction(); // use low or high friction values depending on the current states
+		SetFriction(); // use low or high friction values depending on the current states
 
-			//moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
+		//moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
 
-			// control and velocity handling is different when grounded and airborne:
-			if (onGround)
-			{
-				HandleGroundedVelocities();
-			}
-			else
-			{
-				HandleAirborneVelocities();
-			}
-
-			// TODO no tenemos animation aún
-			//UpdateAnimator(); // send input and other state parameters to the animator
-
-			// reassign velocity, since it will have been modified by the above functions.		
-			enemy_rigidbody->setLinearVelocity(velocity);
+		// control and velocity handling is different when grounded and airborne:
+		if (onGround)
+		{
+			HandleGroundedVelocities();
 		}
-		else{
-			GroundCheck();
+		else
+		{
+			HandleAirborneVelocities();
 		}
+
+		// TODO no tenemos animation aún
+		//UpdateAnimator(); // send input and other state parameters to the animator
+
+		// reassign velocity, since it will have been modified by the above functions.		
+		enemy_rigidbody->setLinearVelocity(velocity);
 
 
 	}
@@ -392,9 +387,9 @@ public:
 					// Comprobar velocidad aculumada en caida
 					if (velocity.y < max_vel_y){
 						//TO DO: usar el metodo para eliminar enemigo
-						CEntity* e = CHandle(this).getOwner();
+						//CEntity* e = CHandle(this).getOwner();
 						//e->sendMsg()
-						CEntityManager::get().remove(e);
+						//CEntityManager::get().remove(e);
 					}
 					onGround = true;
 					//rigidbody.useGravity = false;

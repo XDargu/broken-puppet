@@ -301,7 +301,6 @@ void CApp::update(float elapsed) {
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
-	TCompPlayerController* Ins_comp_player_cotroller = e->get<TCompPlayerController>();
 
 	if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
 		if (io.getMousePointer())
