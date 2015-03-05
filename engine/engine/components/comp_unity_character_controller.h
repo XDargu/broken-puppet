@@ -86,8 +86,8 @@ public:
 		enemy_density = 25;
 
 		// Create player material
-		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
-		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
+		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(1, 1, 0);
+		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMAX);
 		pMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
 
 		// Create player capsule collider
@@ -378,12 +378,13 @@ public:
 
 					// stick to surface - helps character stick to ground - specially when running down slopes
 					if (velocity.y <= 0)
+
 					{
 						//TODO hacer el movimiento fluido;
 
 						// Colocamos en el ground a pelo
 						physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-						px_trans.p = buf.touches[i].position + physx::PxVec3(0, (enemy_height / 2.f) + 0.1f, 0);
+						px_trans.p = buf.touches[i].position + physx::PxVec3(0, (enemy_height / 2.f) /*+ 0.1f*/, 0);
 						enemy_rigidbody->setGlobalPose(px_trans);
 					}
 
