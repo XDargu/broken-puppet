@@ -86,7 +86,7 @@ public:
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
 		enemy_density = 25;
-		max_vel_y = -8.f;
+		max_vel_y = -10.f;
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);

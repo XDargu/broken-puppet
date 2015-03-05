@@ -32,7 +32,5 @@ struct TCompAiFsmBasic : TBaseComponent {
 	void update(float elapsed){
 		m_ai_controller.Recalc(elapsed);
 	}
-
-
 };
 #endif

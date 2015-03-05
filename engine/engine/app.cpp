@@ -81,7 +81,7 @@ bool debug_mode;
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
-	//SUBSCRIBE(TLife, TMsgDied, onDied);
+	//SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 }
 
 void createManagers() {

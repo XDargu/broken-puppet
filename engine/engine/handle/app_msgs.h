@@ -22,4 +22,18 @@ struct TMsgImpact {
 	DECLARE_MSG_ID();
 };
 
+struct TGroundHit {
+	CEntity* who;
+	float vel;
+	TGroundHit(CEntity* awho, float velocity):who(awho), vel(velocity) { }
+	DECLARE_MSG_ID();
+};
+
+struct TActorHit {
+	CEntity* who;
+	float damage;
+	TActorHit(CEntity* awho, float hurt) :who(awho), damage(hurt) { }
+	DECLARE_MSG_ID();
+};
+
 #endif
