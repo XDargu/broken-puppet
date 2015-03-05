@@ -70,6 +70,7 @@ void CPhysicsManager::init() {
 	sceneDesc.simulationEventCallback = &gContactReportCallBack;
 
 	gScene = gPhysicsSDK->createScene(sceneDesc);
+	gScene->setFlag(PxSceneFlag::eENABLE_CCD, true);
 
 	// Inicializar Cooking para colliders
 	PxTolerancesScale toleranceScale;

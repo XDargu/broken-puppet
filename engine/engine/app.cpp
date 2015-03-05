@@ -397,8 +397,15 @@ void CApp::update(float elapsed) {
 
 					TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
 					new_e->add(new_e_needle);
-					XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					XMVECTOR rotation;
+					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
+					else {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
 					bool a = firstActor->isRigidDynamic();
 					new_e_needle->create(
 						firstActor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(firstOffset) : physics_manager.PxVec3ToXMVECTOR(firstPosition)
