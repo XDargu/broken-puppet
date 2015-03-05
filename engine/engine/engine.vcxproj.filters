@@ -154,10 +154,12 @@
     <ClInclude Include="components\comp_unity_character_controller.h">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="comp_trigger.h">
+    <ClInclude Include="ai\fsm_basic_player.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_basic_player_controller.h">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="options_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -234,7 +236,9 @@
     </ClCompile>
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
-    <ClCompile Include="options_parser.cpp" />
+    <ClCompile Include="ai\fsm_basic_player.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -270,6 +274,5 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="my_file.xml" />
-    <Xml Include="resolution.xml" />
   </ItemGroup>
 </Project>

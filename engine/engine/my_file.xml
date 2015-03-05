@@ -552,7 +552,9 @@
     <transform position="63.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="prota"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
-    <playerController movementVelocity="8.0" rotationVelocity="90.0" />
+    <!--<playerController movementVelocity="8.0" rotationVelocity="90.0" />-->
+    <unityCharacterController/>
+    <basicPlayerController/>
   </entity>
   <entity>
     <name name="PlayerPivot" />
@@ -576,15 +578,7 @@
     <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
-    <unityCharacterController/>
-  </entity>
-  
-   <entity>
-    <name name="BasicEnemy_77.0" />
-    <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
-    <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
-    <unityCharacterController/>
+    <unityCharacterController/>    
   </entity>
   
   <!--
@@ -613,12 +607,6 @@
     <aiFSMBasic/>
   </entity>
   -->
-  <entity>
-    <name name="trigger01" />
-    <transform position="57.0713 14.2500 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
-    <trigger/>
-  </entity>
   <entity>
     <name name="directionalLight001"/>
     <transform position="0 0 0" rotation="0.570941508 0.167518795 0.167518765 0.786066592" scale="1 1 1"/>

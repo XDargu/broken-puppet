@@ -9,7 +9,6 @@
 #include "importer_parser.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
-#include "options_parser.h"
 #include <time.h>
 
 using namespace DirectX;
@@ -42,21 +41,8 @@ CApp::CApp()
 
 void CApp::loadConfig() {
   // Parse xml file...
-	COptionsParser p;
-	bool success=p.xmlParseFile("resolution.xml");
-	if (success){
-		int x_res;
-		int y_res;
-		bool mode;
-		p.getResolution(x_res, y_res, mode);
-		xres = x_res;
-		yres = y_res;
-		fullscreen = mode;
-	}else{
-		xres = 1024;
-		yres = 768;
-	}
-
+  xres = 1024;
+  yres = 768;
 }
 
 CVertexShader vs_basic;
@@ -105,9 +91,6 @@ void createManagers() {
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompRope>()->init(64);
 	getObjManager<TCompNeedle>()->init(1024);
-	//PRUEBA TRIGGER
-	getObjManager<TCompTrigger>()->init(1024);
-	//
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -118,6 +101,7 @@ void createManagers() {
 	getObjManager<TCompEnemyController>()->init(64);
 
 	getObjManager<TCompUnityCharacterController>()->init(64);
+	getObjManager<TCompBasicPlayerController>()->init(1);
 	
 	registerAllComponentMsgs();
 }
@@ -136,9 +120,7 @@ void initManagers() {
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 	getObjManager<TCompUnityCharacterController>()->initHandlers();
-
-	//PRUEBA TRIGGER
-	getObjManager<TCompTrigger>()->initHandlers();
+	getObjManager<TCompBasicPlayerController>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -152,6 +134,9 @@ bool CApp::create() {
   // public delta time inicialization
   delta_time = 0.f;
   total_time = delta_time;
+
+  // String number initialization
+  current_num_string = 0;
 
   renderAABB = true;
   renderAxis = true;
@@ -343,11 +328,6 @@ void CApp::update(float elapsed) {
 	  }
   }
 
-  //	QUITAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  if (io.becomesPressed(CIOStatus::EXIT)) {
-	  exit(-1);
-  }
-  //--------------------------------------------
 
   if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
@@ -534,9 +514,7 @@ void CApp::update(float elapsed) {
   getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
   getObjManager<TCompAiFsmBasic>()->update(elapsed);
   getObjManager<TCompUnityCharacterController>()->update(elapsed);
-
-  //PRUEBA TRIGGER
-  getObjManager<TCompTrigger>()->update(elapsed);
+  getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
   entity_inspector.update();
   entity_lister.update();
@@ -549,11 +527,12 @@ void CApp::fixedUpdate(float elapsed) {
   physics_manager.gScene->fetchResults(true);
 
   getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
-  getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
   getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
   getObjManager<TCompRope>()->fixedUpdate(elapsed);
   getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
   getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
+  getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+  getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 }
 
 void CApp::render() {
@@ -844,8 +823,4 @@ unsigned int CApp::numStrings(){
 		}
 	}
 	return num_strings;
-}
-
-void CApp::activateVictory(){
-	//font.print3D(pos, prueba);
 }
