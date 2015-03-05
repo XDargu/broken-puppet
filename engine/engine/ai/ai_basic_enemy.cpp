@@ -39,7 +39,7 @@ void ai_basic_enemy::Init()
 
 	// Values
 	player = CEntityManager::get().getByName("Player");
-	enemy_controller = ((CEntity*)entity)->get<TCompEnemyController>();
+	character_controller = ((CEntity*)entity)->get<TCompUnityCharacterController>();
 
 	probability_wander = 40;
 	probability_idle = 20;
@@ -55,12 +55,12 @@ void ai_basic_enemy::Init()
 	view_distance = 10;
 	forget_distance = 13;
 
-	attack_distance = 3;
-	out_of_reach_distance = 5;
+	attack_distance = 1.5f;
+	out_of_reach_distance = 3;
 
-	angular_velocity = 4;
-	velocity = 20;
-	orbit_velocity = 10;
+	angular_velocity = 0.15f;
+	velocity = 3;
+	orbit_velocity = 20;
 
 	orbit_angle = deg2rad(120);
 
@@ -76,6 +76,9 @@ void ai_basic_enemy::Idle() {
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
+	XMVECTOR mFront = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront();
+
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(mFront));
 
 	// Check probability to wander
 	if (trueEverySecond())
@@ -96,18 +99,37 @@ void ai_basic_enemy::Idle() {
 
 void ai_basic_enemy::Wander() {
 
-	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 
 	// Go to the wander_target
-	LookAt(wander_target);
-	Advance();
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(wander_target - m_transform->position));
 
 	// If wander target reached, set other target
-	if (V3DISTANCE(mPosition, wander_target) < 1)
+	if (V3DISTANCE(m_transform->position, wander_target) < 1)
 	{
-		int x = getRandomNumber(-10, 10);
-		int z = getRandomNumber(-10, 10);
-		wander_target = XMVectorSet(x, 0, z, 1);
+		bool can_go = false;
+		int count_exit = 0;
+		while (!can_go)
+		{
+			int x = getRandomNumber(-10, 10);
+			int z = getRandomNumber(-10, 10);
+			wander_target = m_transform->position + XMVectorSet(x, 1, z, 0);
+			physx::PxRaycastBuffer hit;
+			Physics.raycast(m_transform->position + m_transform->getFront(), m_transform->getFront(), V3DISTANCE(m_transform->position, wander_target), hit);
+			if (!hit.hasBlock) {
+				can_go = true;
+			}
+			count_exit++;
+
+			if (count_exit > 100)
+			{
+				can_go = true;
+				ChangeState("aibe_Idle");
+			}
+		}
+		
 	}
 
 	// Check probability to wander
@@ -120,9 +142,7 @@ void ai_basic_enemy::Wander() {
 	}
 
 	// Check if player viewed
-	//if (V3DISTANCE(entity->getPosition(), player->getPosition()) < view_distance)
-	
-	if (true)
+	if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
 	{
 		ChangeState("aibe_View");
 	}
@@ -130,9 +150,10 @@ void ai_basic_enemy::Wander() {
 
 void ai_basic_enemy::View() {
 
-	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
-
-	LookAt(pPosition);
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
+		
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(p_transform->position - m_transform->position));
 
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
@@ -142,6 +163,10 @@ void ai_basic_enemy::View() {
 }
 
 void ai_basic_enemy::Lost() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Stay until next Second
 	if (trueEveryXSeconds(3))
@@ -152,28 +177,32 @@ void ai_basic_enemy::Lost() {
 
 void ai_basic_enemy::Chase() {
 
-	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
-	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 
-	// Go to the player
-	LookAt(pPosition);
-	Advance();
+	// Go to the wander_target
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(p_transform->position - m_transform->position));
 
 	// Check if player reached
-	if (V3DISTANCE(mPosition, pPosition) < attack_distance)
+	if (V3DISTANCE(m_transform->position, p_transform->position) < attack_distance)
 	{
 		ChangeState("aibe_InitialAttack");
 	}
 
 	// Check if player forgeted
-	if (V3DISTANCE(mPosition, pPosition) > forget_distance)
+	if (V3DISTANCE(m_transform->position, p_transform->position) > forget_distance)
 	{
 		ChangeState("aibe_Lost");
 	}
 }
 
 void ai_basic_enemy::InitialAttack() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
+	// Go to the wander_target
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
@@ -186,7 +215,8 @@ void ai_basic_enemy::IdleWar() {
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
-	LookAt(pPosition);
+
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(pPosition - mPosition));
 
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
@@ -202,6 +232,10 @@ void ai_basic_enemy::IdleWar() {
 }
 
 void ai_basic_enemy::AttackSelect() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Check if attack, orbit or wait
 	int prob = getRandomNumber(1, 100);
@@ -226,6 +260,10 @@ void ai_basic_enemy::AttackSelect() {
 }
 
 void ai_basic_enemy::SelectAttack() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Select attack
 	int prob = getRandomNumber(1, 100);
@@ -241,7 +279,10 @@ void ai_basic_enemy::SelectAttack() {
 }
 
 void ai_basic_enemy::Attacking1() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
@@ -251,7 +292,10 @@ void ai_basic_enemy::Attacking1() {
 }
 
 void ai_basic_enemy::Attacking2() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Stay until next Second
 	if (trueEveryXSeconds(1))
@@ -261,6 +305,10 @@ void ai_basic_enemy::Attacking2() {
 }
 
 void ai_basic_enemy::SelectSide() {
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
 	// Select side
 	int prob = getRandomNumber(1, 100);
@@ -281,7 +329,6 @@ void ai_basic_enemy::OrbitRight() {
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
 
 	Orbit(false);
-	LookAt(pPosition);
 
 	if (initial_yaw == 1000)
 		initial_yaw = getYawFromVector(pPosition - mPosition);
@@ -301,7 +348,6 @@ void ai_basic_enemy::OrbitLeft() {
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
 
 	Orbit(true);
-	LookAt(pPosition);
 
 	if (initial_yaw == 1000)
 		initial_yaw = getYawFromVector(pPosition - mPosition);
@@ -337,39 +383,26 @@ bool ai_basic_enemy::trueEveryXSeconds(float time)
 	return false;
 }
 
-void ai_basic_enemy::Advance() {
-
-	XMVECTOR m_front = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront();
-	float delta_time = CApp::get().delta_time;
-
-	((TCompEnemyController*)enemy_controller)->addDeltaPos(m_front *velocity * delta_time);
-}
-
-void ai_basic_enemy::LookAt(XMVECTOR target) {
-
-	XMVECTOR m_up = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getUp();
-	((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->lookAt(target, m_up);
-}
-
 void ai_basic_enemy::Orbit(bool left)
 {
-	XMVECTOR m_position = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
-	XMVECTOR p_position = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 
 	float delta_time = CApp::get().delta_time;
 
 	float radius = 4;
-	XMVECTOR dif = p_position - m_position;
+	XMVECTOR dif = p_transform->position - m_transform->position;
 	float yaw = getYawFromVector(dif);
 	if (left)
 		yaw -= orbit_velocity * delta_time;
 	else
 		yaw += orbit_velocity * delta_time;
 	XMVECTOR desiredPos = -getVectorFromYaw(yaw) * attack_distance;
-	desiredPos = p_position + desiredPos;
+	desiredPos = p_transform->position + desiredPos;
 
-	XMVECTOR speed = desiredPos - m_position;
+	XMVECTOR speed = desiredPos - m_transform->position;
 	speed = XMVector3Normalize(speed);
 
-	((TCompEnemyController*)enemy_controller)->addDeltaPos(speed * orbit_velocity * delta_time);
+	physx::PxVec3 player_pos = Physics.XMVECTORToPxVec3(p_transform->position - m_transform->position);
+	((TCompUnityCharacterController*)character_controller)->Move(Physics.XMVECTORToPxVec3(speed), false, false, player_pos);
 }

@@ -18,7 +18,7 @@ private:
 	float airSpeed;							// determines the max speed of the character while airborne
 	float airControl;						// determines the response speed of controlling the character while airborne;
 	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters
-	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
+	
 	float animSpeedMultiplier;				// how much the animation of the character will be multiplied by
 	//AdvancedSettings advancedSettings;		// Container for the advanced settings class , thiss allows the advanced settings to be in a foldout in the inspector
 
@@ -72,7 +72,7 @@ public:
 	physx::PxRigidDynamic* enemy_rigidbody;
 	CHandle transform;
 	XMVECTOR direction;
-
+	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
 	physx::PxD6Joint* mJoint;
 
 
@@ -120,7 +120,7 @@ public:
 		enemy_rigidbody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
 	    enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 		TCompName* name = assertRequiredComponent<TCompName>(this);
-		enemy_rigidbody->setName(name->name);		
+		enemy_rigidbody->setName(name->name);
 
 		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
 		physx::PxReal threshold = 3500.f;

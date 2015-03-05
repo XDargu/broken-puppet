@@ -99,7 +99,11 @@ void CEntityManager::add(CHandle the_entity) {
 }
 
 bool CEntityManager::remove(CHandle the_handle) {
-	handles_to_destroy.push_back(the_handle);
+	// If the entity is already in the destroy list, do not add it
+	auto it = std::find(handles_to_destroy.begin(), handles_to_destroy.end(), the_handle);
+	if (it == handles_to_destroy.end()) {
+		handles_to_destroy.push_back(the_handle);
+	}
 	return true;
 }
 
@@ -107,7 +111,7 @@ void CEntityManager::destroyRemovedHandles() {
 
 	for (auto& it : handles_to_destroy) {
 		if (getObjManager<CEntity>()->getType() == it.getType()) {
-			// The handle is an entity
+			// The handle is an entity			
 			auto it2 = std::find(entities.begin(), entities.end(), it);
 			if (it2 == entities.end()) { fatal(" Trying to destroy an entity not registered in the entity manager");  }
 			entities.erase(it2);

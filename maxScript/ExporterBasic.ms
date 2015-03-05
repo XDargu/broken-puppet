@@ -11,7 +11,7 @@ fn findIndexOfVertex vtxs str_vtxs v = (
 	
 	if idx > 0 then return idx
 	
-	-- Si no esta, añadirlo y devolver el indice (count)
+	-- Si no esta, añadirlo y devolver el indice (count)w
 	append vtxs v
 	append str_vtxs sv
 	return vtxs.count
@@ -19,7 +19,7 @@ fn findIndexOfVertex vtxs str_vtxs v = (
 )
 
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
-	local data_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\data\\"
+	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\data\\"
 	local filename = data_path + "meshes\\"
 	filename += obj.name + ".mesh"
 	

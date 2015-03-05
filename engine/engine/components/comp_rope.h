@@ -35,6 +35,54 @@ public:
 		if (dist > max_distance * max_distance) {
 			CEntityManager::get().remove(CHandle(this).getOwner());
 		}
+
+		// Raycast
+		TCompDistanceJoint* m_joint = (TCompDistanceJoint*)joint;
+		physx::PxRigidActor* a1 = nullptr;
+		physx::PxRigidActor* a2 = nullptr;
+
+		m_joint->joint->getActors(a1, a2);
+
+		XMVECTOR offset_pos1 = Physics.PxVec3ToXMVECTOR(m_joint->joint->getLocalPose(physx::PxJointActorIndex::eACTOR0).p);
+		XMVECTOR offset_pos2 = Physics.PxVec3ToXMVECTOR(m_joint->joint->getLocalPose(physx::PxJointActorIndex::eACTOR1).p);
+
+		XMVECTOR pos1 = Physics.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
+		XMVECTOR pos2 = Physics.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+
+		XMVECTOR rot1 = Physics.PxQuatToXMVECTOR(a1->getGlobalPose().q);
+		XMVECTOR rot2 = Physics.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+
+		XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+		XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
+
+		/*   RECREATE ROPE   */
+		// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+		XMVECTOR initialPos = pos1 + offset_rotado_1;
+		XMVECTOR finalPos = pos2 + offset_rotado_2;
+		
+		physx::PxVec3 dir = Physics.XMVECTORToPxVec3(finalPos - initialPos).getNormalized();
+
+		physx::PxRaycastBuffer buf;
+
+		Physics.raycastAll(Physics.XMVECTORToPxVec3(initialPos), dir, sqrt(dist), buf);
+		float force_s = 100;
+
+		for (int i = 0; i < buf.nbTouches; i++)
+		{
+			if (buf.touches[i].actor != a1 && buf.touches[i].actor != a2) {
+				if (buf.touches[i].actor->isRigidBody()) {
+					if (((physx::PxRigidBody*)buf.touches[i].actor)->getMass() < 100) {
+						physx::PxVec3 force = (buf.touches[i].actor->getGlobalPose().p - buf.touches[i].position).getNormalized();
+						((physx::PxRigidBody*)buf.touches[i].actor)->addForce(force * force_s, physx::PxForceMode::eIMPULSE);
+					}
+					else
+					{
+						CEntityManager::get().remove(CHandle(this).getOwner());
+					}
+				}
+			}
+		}
+
 	}
 };
 
