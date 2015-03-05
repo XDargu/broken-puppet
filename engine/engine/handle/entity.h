@@ -79,6 +79,10 @@ public:
 			components[i].destroy();
 	}
 
+	bool hasTag(char* the_tag) {
+		return std::strcmp(tag, the_tag) == 0;
+	}
+
 	/*
 	template <class TMsgType>
 	void postMsg(const TMsgType& data) {

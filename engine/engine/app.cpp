@@ -351,8 +351,7 @@ void CApp::update(float elapsed) {
 	if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
 		CEntity* e_p = CEntityManager::get().getByName("Player");
-		bool a = std::strcmp(e_p->tag, "player") == 0;
-		bool b = std::strcmp(e_p->tag, "asd") == 0;
+		bool a = e_p->hasTag("player");
 
 		//Calculate the current number of strings
 		unsigned int num_strings = numStrings();
