@@ -1,627 +1,556 @@
 <scene>
-  <entity>
+  <entity  tag="actor">
     <name name="Object003_1.0" />
     <transform position="-4.45731 1.36685 -1.33077" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Object003"/>
     <aabb min="-1.52533 -1.34312 -0.295084" max="1.52533 1.34312 0.295084"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.52533" boxY="1.34312" boxZ="0.295084"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_2.0" />
     <transform position="1.04183 0.786598 -9.13439" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.753303 -0.753303 -0.753303" max="0.753303 0.753303 0.753303"/>
     <collider staticFriction="0.1" dynamicFriction="0.1" restitution="0" boxX="0.753303" boxY="0.753303" boxZ="0.753303" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_3.0" />
     <transform position="14.5767 -0.318895 12.6653" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-1.025 -0.811608 -1.025" max="1.025 0.811608 1.025"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.025" boxY="0.811608" boxZ="1.025"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_4.0" />
     <transform position="16.2747 -0.318895 11.5064" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-1.03815 -0.811608 -1.03815" max="1.03815 0.811608 1.03815"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.03815" boxY="0.811608" boxZ="1.03815"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_5.0" />
     <transform position="16.3653 -0.318895 13.7327" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.863536 -0.811608 -0.863536" max="0.863536 0.811608 0.863536"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.863536" boxY="0.811608" boxZ="0.863536"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_6.0" />
     <transform position="14.6949 -0.318895 14.7696" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.863536 -0.811608 -0.863536" max="0.863536 0.811608 0.863536"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.863536" boxY="0.811608" boxZ="0.863536"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_7.0" />
     <transform position="16.3653 1.37951 13.2867" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-1.00672 -0.811608 -1.00672" max="1.00672 0.811608 1.00672"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.00672" boxY="0.811608" boxZ="1.00672"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Caja_8.0" />
     <transform position="-9.89401 6.66582 36.9771" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.814636 -0.811608 -0.814636" max="0.814636 0.811608 0.814636"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.814636" boxY="0.811608" boxZ="0.814636"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Object006_9.0" />
     <transform position="13.2722 17.1311 -12.0457" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Object006"/>
     <aabb min="-1.72156 -3.59515 -1.72156" max="1.72156 3.59515 1.72156"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.72156" boxY="3.59515" boxZ="1.72156"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Object007_10.0" />
     <transform position="24.3565 17.1311 -0.961448" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Object007"/>
     <aabb min="-2.08385 -3.59515 -2.08385" max="2.08385 3.59515 2.08385"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.08385" boxY="3.59515" boxZ="2.08385"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="PlataformaElevar_11.0" />
     <transform position="44.2038 12.4661 -27.9814" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="PlataformaElevar"/>
     <aabb min="-1.23283 -0.159043 -1.26518" max="1.23283 0.159043 1.26518"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.23283" boxY="0.159043" boxZ="1.26518"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Tabla_12.0" />
     <transform position="26.9896 18.563 -16.0012" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.12075 -0.147339 -2.02436" max="2.12075 0.147337 2.02436"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.12075" boxY="0.147338" boxZ="2.02436"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Tabla_13.0" />
     <transform position="27.8828 18.5292 -15.0652" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.15456 -0.147337 -1.98504" max="2.15456 0.147339 1.98504"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.15456" boxY="0.147338" boxZ="1.98504"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Tabla_14.0" />
     <transform position="28.6963 18.5292 -14.2084" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.18334 -0.147337 -1.94873" max="2.18334 0.147339 1.94873"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.18334" boxY="0.147338" boxZ="1.94873"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="BloquesFijos_15.0" />
     <transform position="18.4235 20.2568 -11.2615" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="BloquesFijos"/>
-    <tag tagName="actor"/>
     <aabb min="-2.72052 -2.04761 -2.68819" max="2.72052 2.04761 2.68819"/>
   </entity>
-  <entity>
+  <entity  tag="level">
     <name name="Level" />
     <transform position="18.5965 11.6852 -12.8217" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Level"/>
     <aabb min="-46.0324 -15.3729 -52.8918" max="46.0324 15.3729 52.8918"/>
-    <tag tagName="level"/>
     <colliderMesh path="Level" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
   <staticbody/>
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="PlataformaMovil_17.0" />
     <transform position="44.522 18.8503 -63.255" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="PlataformaMovil"/>
-    <tag tagName="actor"/>
     <aabb min="-1.23169 -0.301409 -1.2242" max="1.23169 0.301409 1.22421"/>
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna1_18.0" />
     <transform position="57.551 17.2902 -50.2329" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna1"/>
     <aabb min="-0.787243 -3.0 -0.787242" max="0.787241 3.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="3.0" boxZ="0.787242"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna2_19.0" />
     <transform position="51.0212 15.2832 -50.2329" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna2_20.0" />
     <transform position="51.0212 17.3411 -50.2329" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna2_21.0" />
     <transform position="51.0212 19.399 -50.2329" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_22.0" />
     <transform position="44.4613 14.5722 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_23.0" />
     <transform position="45.3021 14.5722 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_24.0" />
     <transform position="45.3021 14.5722 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_25.0" />
     <transform position="44.4613 14.5722 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_26.0" />
     <transform position="45.3021 15.1185 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_27.0" />
     <transform position="44.4613 15.1185 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_28.0" />
     <transform position="45.3021 15.1185 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_29.0" />
     <transform position="44.4613 15.1185 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_30.0" />
     <transform position="45.3021 15.6649 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_31.0" />
     <transform position="44.4613 15.6649 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_32.0" />
     <transform position="45.3021 15.6649 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_33.0" />
     <transform position="44.4613 15.6649 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_34.0" />
     <transform position="45.3021 16.2113 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_35.0" />
     <transform position="44.4613 16.2113 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_36.0" />
     <transform position="45.3021 16.2113 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_37.0" />
     <transform position="44.4613 16.2113 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_38.0" />
     <transform position="45.3021 16.7576 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_39.0" />
     <transform position="44.4613 16.7576 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_40.0" />
     <transform position="45.3021 16.7576 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_41.0" />
     <transform position="44.4613 16.7576 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_42.0" />
     <transform position="45.3021 17.304 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_43.0" />
     <transform position="44.4613 17.304 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_44.0" />
     <transform position="45.3021 17.304 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_45.0" />
     <transform position="44.4613 17.304 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_46.0" />
     <transform position="45.3021 17.8504 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_47.0" />
     <transform position="44.4613 17.8504 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_48.0" />
     <transform position="45.3021 17.8504 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_49.0" />
     <transform position="44.4613 17.8504 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_50.0" />
     <transform position="45.3021 18.3967 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_51.0" />
     <transform position="44.4613 18.3967 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_52.0" />
     <transform position="45.3021 18.3967 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_53.0" />
     <transform position="44.4613 18.3967 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_54.0" />
     <transform position="45.3021 18.9431 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_55.0" />
     <transform position="44.4613 18.9431 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_56.0" />
     <transform position="45.3021 18.9431 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_57.0" />
     <transform position="44.4613 18.9431 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_58.0" />
     <transform position="45.3021 19.4895 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_59.0" />
     <transform position="44.4613 19.4895 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_60.0" />
     <transform position="45.3021 19.4895 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_61.0" />
     <transform position="44.4613 19.4895 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_62.0" />
     <transform position="45.3021 20.0358 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_63.0" />
     <transform position="44.4613 20.0358 -50.7546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_64.0" />
     <transform position="45.3021 20.0358 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Columna3_65.0" />
     <transform position="44.4613 20.0358 -49.9173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna3"/>
     <aabb min="-0.393621 -0.25 -0.393621" max="0.393621 0.25 0.393621"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Button_66.0" />
     <transform position="2.86759 15.3275 10.8642" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Button"/>
-    <tag tagName="actor"/>
     <aabb min="-1.76825 -0.183539 -1.74139" max="1.76825 0.18354 1.74139"/>
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Button_67.0" />
     <transform position="41.1488 14.3555 -51.3843" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Button"/>
-    <tag tagName="actor"/>
     <aabb min="-1.21735 -0.183539 -1.19885" max="1.21735 0.18354 1.19885"/>
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="GuiaPlataforma_68.0" />
     <transform position="46.7214 18.9676 -63.3192" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="GuiaPlataforma"/>
-    <tag tagName="actor"/>
     <aabb min="-3.70333 -0.0810773 -0.0936211" max="3.70333 0.0810785 0.0936199"/>
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Puerta_69.0" />
     <transform position="7.9033 16.8621 -2.12972" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Puerta"/>
-    <tag tagName="actor"/>
     <aabb min="-1.3137 -1.71736 -1.3137" max="1.3137 1.71736 1.3137"/>
   </entity>
-  <entity>
+  <entity  tag="actor">
     <name name="Tabla_70.0" />
     <transform position="29.5535 18.5292 -13.3284" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Tabla"/>
     <aabb min="-2.18334 -0.147337 -1.94873" max="2.18334 0.147339 1.94873"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.18334" boxY="0.147338" boxZ="1.94873"/>
-    <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
   <entity tag="player">
     <name name="Player" />
     <transform position="63.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="prota"/>
-    <tag tagName="player"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <!--<playerController movementVelocity="8.0" rotationVelocity="90.0" />-->
     <unityCharacterController/>
@@ -648,11 +577,10 @@
     <name name="BasicEnemy_76.0" />
     <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
-    <tag tagName="enemy"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <unityCharacterController/>    
   </entity>
-  <entity>
+  <entity tag="enemy">
     <name name="BasicEnemy_77.0" />
     <transform position="59.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
