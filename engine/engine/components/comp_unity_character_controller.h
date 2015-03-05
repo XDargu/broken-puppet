@@ -123,7 +123,7 @@ public:
 		enemy_rigidbody->setName(name->name);		
 
 		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
-		physx::PxReal threshold = 1500.f;
+		physx::PxReal threshold = 3500.f;
 		enemy_rigidbody->setContactReportThreshold(threshold);
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
@@ -401,7 +401,7 @@ public:
 						//TO DO: usar el metodo para eliminar enemigo
 						CEntity* e = CHandle(this).getOwner();
 						//e->sendMsg()
-						CEntityManager::get().remove(e);
+						//CEntityManager::get().remove(e);
 					}
 					onGround = true;
 					//rigidbody.useGravity = false;

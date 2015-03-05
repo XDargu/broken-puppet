@@ -26,6 +26,7 @@ public:
 private:
 	physx::PxReal getForce(physx::PxReal mass, const physx::PxContactPair* pairs, PxU32 index);
 	const physx::PxReal forceLargeImpact;
+	const physx::PxReal forceMediumImpact;
 };
 
 PxFilterFlags FilterShader(

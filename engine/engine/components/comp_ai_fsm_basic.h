@@ -32,5 +32,9 @@ struct TCompAiFsmBasic : TBaseComponent {
 	void update(float elapsed){
 		m_ai_controller.Recalc(elapsed);
 	}
+
+	void actorHit(const TActorHit& msg) {
+		dbg("Force recieved is  %f\n", msg.damage);
+	}
 };
 #endif

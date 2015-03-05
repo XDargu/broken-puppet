@@ -83,7 +83,8 @@ bool debug_mode;
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
-	//SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
+	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
 }
 
 void createManagers() {
@@ -352,7 +353,7 @@ void CApp::update(float elapsed) {
 	if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
 		CEntity* e_p = CEntityManager::get().getByName("Player");
-		bool a = e_p->hasTag("player");
+		//bool a = e_p->hasTag("player");
 
 		//Calculate the current number of strings
 		unsigned int num_strings = numStrings();

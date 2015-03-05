@@ -47,6 +47,15 @@ public:
 		m_fsm_basic_player.EvaluateHit();
 		m_fsm_basic_player.Recalc(elapsed);
 	}
+
+	void actorHit(const TActorHit& msg) {
+		dbg("Force recieved is  %f\n", msg.damage);
+		if (msg.damage <= 10000.f){
+			m_fsm_basic_player.last_hit = 2;
+		}else{
+			m_fsm_basic_player.last_hit = 10;
+		}
+	}
 };
 
 #endif

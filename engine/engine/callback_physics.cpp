@@ -7,7 +7,7 @@
 
 CEntityManager entity_manager = CEntityManager::get();
 
-CCallbacks_physx::CCallbacks_physx() : forceLargeImpact (1000) {
+CCallbacks_physx::CCallbacks_physx() : forceLargeImpact (6000), forceMediumImpact(1000) {
 }
 
 void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
@@ -25,41 +25,52 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		CEntity* firstActorEntity=CEntityManager::get().getByName(name1);
 		CEntity* secondActorEntity=CEntityManager::get().getByName(name2);
 
-		TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+		/*TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
 		TCompTag* first_tag = firstActorEntity->get<TCompTag>();
 		TCompUnityCharacterController* first_controller = firstActorEntity->get<TCompUnityCharacterController>();
 
 		TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
 		TCompTag* second_tag = secondActorEntity->get<TCompTag>();
-		TCompUnityCharacterController* second_controller = secondActorEntity->get<TCompUnityCharacterController>();
+		TCompUnityCharacterController* second_controller = secondActorEntity->get<TCompUnityCharacterController>();*/
+
+		//Colision entre actor y player
+		if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("player"))){
+			TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+			PxReal force = getForce(second_rigid->getMass(), pairs, i);
+			float force_float = force;
+			firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
+		}
+
+		//Colision entre player y actor
+		if ((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
+			TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+			PxReal force = getForce(first_rigid->getMass(), pairs, i);
+			float force_float = force;
+			secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
+		}
 
 		//Colision entre actor y enemigo
-		if ((second_tag->getTag() == "actor") && ((first_tag->getTag() == "enemy"))){
+		if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
+			TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
 			PxReal force = getForce(second_rigid->getMass(), pairs, i);
-			if (force > forceLargeImpact){
-				entity_manager.remove(firstActorEntity);
-			}
+			float force_float = force;
+			firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 		}
 
 		//Colision entre enemigo y actor
-		if ((first_rigid) && ((second_controller))){
-			PxReal force = getForce(second_controller->getMass(), pairs, i);
-			if (force > forceLargeImpact){
-				//TO DO: Cambiar por el metodo de destruccion de enemigos pertinente
-				//secondActorEntity->~CEntity();
-				//secondActorEntity->destroyComponents();
-				entity_manager.remove(secondActorEntity);
-			}
+		if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))){
+			TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
+			PxReal force = getForce(firstActorEntity->getMass(), pairs, i);
+			float force_float = force;
+			secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 		}
 
 		//Colision entre enemigo y escenario
-		if ((first_controller) && ((!second_rigid))){
+		if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))){
+			TCompUnityCharacterController* first_controller = firstActorEntity->get<TCompUnityCharacterController>();
 			PxReal force = getForce(first_controller->getMass(), pairs, i);
-			if (force > forceLargeImpact){
-				bool prueba = true; 
-				//firstActorEntity->~CEntity();
-				entity_manager.remove(firstActorEntity);
-			}
+			float force_float = force;
+			firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 		}
 
 	}

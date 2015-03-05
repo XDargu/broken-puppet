@@ -242,3 +242,10 @@ void fsm_basic_player::Rerotate(){
 	transform->rotation = XMQuaternionSlerp(transform->rotation, XMQuaternionMultiply(transform->rotation, player_pivot_rot), 0.05f);
 }
 
+/*void onExplosion(const TMsgExplosion& msg) {
+	dbg("Life recv explosion of %f points when my life is %f\n", msg.damage, life);
+	life -= msg.damage;
+	if (life < 0)
+		life = 0;
+}*/
+
