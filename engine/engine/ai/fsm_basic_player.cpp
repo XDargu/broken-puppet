@@ -49,7 +49,7 @@ void fsm_basic_player::Init()
 }
 
 void fsm_basic_player::Idle(){	
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
 		ChangeState("fbp_Jump");		
 	}
@@ -59,7 +59,7 @@ void fsm_basic_player::Idle(){
 }
 
 void fsm_basic_player::Walk(){
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Run");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_walk");
 	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
 		ChangeState("fbp_Jump");
@@ -73,7 +73,7 @@ void fsm_basic_player::Walk(){
 }
 
 void fsm_basic_player::Jump(){
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
 	EvaluateMovement();
 	if (((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){
 		ChangeState("fbp_Idle");
@@ -91,7 +91,7 @@ void fsm_basic_player::WrongLand(){}
 void fsm_basic_player::ProcessHit(){}
 
 void fsm_basic_player::Hurt(){
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_hurt");
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
 	dir.normalize();
@@ -104,7 +104,7 @@ void fsm_basic_player::Hurt(){
 }
 
 void fsm_basic_player::Ragdoll(float elapsed){
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_ragdoll");
 	state_time += elapsed;
 
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
@@ -135,7 +135,7 @@ void fsm_basic_player::Ragdoll(float elapsed){
 }
 
 void fsm_basic_player::Dead(){
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_dead");
 	state_time += CApp::get().delta_time;
 }
 

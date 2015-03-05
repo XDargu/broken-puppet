@@ -460,8 +460,15 @@ void CApp::update(float elapsed) {
 
 					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
 					new_e2->add(new_e_needle2);
-					XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					XMVECTOR rotation;
+					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
+					else {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
 					bool a = blockHit.actor->isRigidDynamic();
 					new_e_needle2->create(
 						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
