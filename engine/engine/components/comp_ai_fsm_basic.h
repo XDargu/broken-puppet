@@ -14,19 +14,17 @@ struct TCompAiFsmBasic : TBaseComponent {
 
 	void loadFromAtts(MKeyValue &atts) {
 
-		CEntity* e = CHandle(this).getOwner();
-		TCompTransform* trans = e->get<TCompTransform>();
-		TCompEnemyController* enemy_controller = e->get<TCompEnemyController>();
-
-		assert(trans || fatal("TCompAiFsmBasic requieres a TCompTransform component"));
-		assert(enemy_controller || fatal("TCompAiFsmBasic requieres a TCompEnemyController component"));
+		assertRequiredComponent<TCompTransform>(this);
+		assertRequiredComponent<TCompUnityCharacterController>(this);
+		
 
 		m_ai_controller.SetEntity(CHandle(this).getOwner());
 	}
 
-	void init(){
-		
+	void init(){		
 		m_ai_controller.Init();
+		TCompUnityCharacterController* controller = getSibling<TCompUnityCharacterController>(this);
+		controller->moveSpeedMultiplier = 3;
 	}
 
 	void update(float elapsed){

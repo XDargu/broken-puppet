@@ -17,8 +17,8 @@ public:
 
 	template< class TObj >
 	CHandle getSibling(CHandle who){
-		CEntity* e = who_requires.getOwner();
-		return  e->get<TObj>()			
+		CEntity* e = who.getOwner();
+		return  e->get<TObj>();
 	}
 };
 
