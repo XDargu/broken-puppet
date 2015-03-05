@@ -118,7 +118,7 @@ void fsm_basic_player::Ragdoll(float elapsed){
 		);	
 
 	if (((state_time >= 1 && ((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getLinearVelocity().magnitude() < 0.1f))
-		|| (state_time >= 10))
+		|| (state_time >= 5))
 	{
 		state_time = 0;
 		((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eLOCKED);
@@ -126,7 +126,7 @@ void fsm_basic_player::Ragdoll(float elapsed){
 		((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eTWIST, physx::PxD6Motion::eLOCKED);
 		((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->setGlobalPose(
 			physx::PxTransform(
-				((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, 2, 0),
+				((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, 1, 0),
 				((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().q
 			)
 			);
