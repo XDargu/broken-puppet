@@ -26,6 +26,7 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 	}
 	else {
 		current_entity = h;
+		h.loadFromAtts(atts);
 	}
 }
 
