@@ -49,13 +49,16 @@ void fsm_basic_player::Init()
 }
 
 void fsm_basic_player::Idle(){	
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
 		ChangeState("fbp_Jump");		
 	}
-	else if (EvaluateMovement()){
+	if (EvaluateMovement()){
 		ChangeState("fbp_Walk");
 	}	
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		ChangeState("fbp_ThrowString");
+	}
 }
 
 void fsm_basic_player::Walk(){
@@ -69,7 +72,9 @@ void fsm_basic_player::Walk(){
 		ChangeState("fbp_Idle");
 		return;
 	}
-
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		ChangeState("fbp_ThrowString");
+	}
 }
 
 void fsm_basic_player::Jump(){
@@ -79,11 +84,25 @@ void fsm_basic_player::Jump(){
 		ChangeState("fbp_Idle");
 		return;
 	}
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		ChangeState("fbp_ThrowString");
+	}
 }
 
 void fsm_basic_player::Run(){}
 
-void fsm_basic_player::ThrowString(){}
+void fsm_basic_player::ThrowString(float elapsed){
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0,0,0), false, false, dir);
+	state_time += elapsed;
+	if (state_time >= 0.1f && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
+		state_time = 0;
+		ChangeState("fbp_Idle");
+	}	
+}
+
 void fsm_basic_player::Fall(){}
 void fsm_basic_player::Land(){}
 void fsm_basic_player::WrongFall(){}

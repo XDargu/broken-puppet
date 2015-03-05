@@ -16,7 +16,7 @@ public:
 	void Walk();
 	void Jump();
 	void Run();
-	void ThrowString();
+	void ThrowString(float elapsed);
 	void Fall();
 	void Land();
 	void WrongFall();
