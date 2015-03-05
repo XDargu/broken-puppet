@@ -617,7 +617,7 @@
     <tag tagName="actor"/>
     <rigidbody density="200" />
   </entity>
-  <entity>
+  <entity tag="player">
     <name name="Player" />
     <transform position="63.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="prota"/>
@@ -644,7 +644,7 @@
     <camera target="-5.68239 1.40664e-007 3.21802 " fov="75.0" znear="0.1" zfar="1000.0"/>
     <thirdPersonCameraController offset="0.2 -0.33 2.0"/>
   </entity>
-  <entity>
+  <entity tag="enemy">
     <name name="BasicEnemy_76.0" />
     <transform position="57.0713 16.3007 -55.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
