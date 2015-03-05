@@ -73,6 +73,8 @@ public:
 	CHandle transform;
 	XMVECTOR direction;
 
+	physx::PxD6Joint* mJoint;
+
 
 	//CApp &app;
 
@@ -125,7 +127,7 @@ public:
 
 		// Freeze rotation in axis x, z
 
-		physx::PxD6Joint* mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, enemy_rigidbody, physx::PxTransform::createIdentity(), NULL, enemy_rigidbody->getGlobalPose());
+		mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, enemy_rigidbody, physx::PxTransform::createIdentity(), NULL, enemy_rigidbody->getGlobalPose());
 		mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eFREE);
 		mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eFREE);
 		mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
@@ -190,7 +192,10 @@ public:
 
 
 
-		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0));
+		//((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0));
+		physx::PxVec3 rot = physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0);
+		rot = enemy_rigidbody->getGlobalPose().q.rotate(rot);
+		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + rot);
 		//((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
 	}
 

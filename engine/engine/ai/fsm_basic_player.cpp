@@ -92,6 +92,10 @@ void fsm_basic_player::ProcessHit(){}
 
 void fsm_basic_player::Hurt(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	dir.normalize();
+	((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0,0,0), false, false, dir);
 	state_time += CApp::get().delta_time;
 	if (state_time >= .01f){
 		state_time = 0;
@@ -99,11 +103,33 @@ void fsm_basic_player::Hurt(){
 	}
 }
 
-void fsm_basic_player::Ragdoll(){
+void fsm_basic_player::Ragdoll(float elapsed){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
-	state_time += CApp::get().delta_time;
-	if (state_time >= 0.09 && ((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){// TODO AND is in ground ((TCompUnityCharacterController*)comp_unity_controller)->OnGround()
+	state_time += elapsed;
+
+	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
+	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);
+	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eTWIST, physx::PxD6Motion::eFREE);
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	m_transform->rotation =
+		Physics.PxQuatToXMVECTOR(
+			((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().q
+		);	
+
+	if (((state_time >= 1 && ((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getLinearVelocity().magnitude() < 0.1f))
+		|| (state_time >= 10))
+	{
 		state_time = 0;
+		((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eLOCKED);
+		((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eLOCKED);
+		((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eTWIST, physx::PxD6Motion::eLOCKED);
+		((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->setGlobalPose(
+			physx::PxTransform(
+				((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, 2, 0),
+				((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().q
+			)
+			);
 		ChangeState("fbp_WakeUp");
 	}
 }

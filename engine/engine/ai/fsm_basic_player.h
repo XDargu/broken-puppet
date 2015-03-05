@@ -23,7 +23,7 @@ public:
 	void WrongLand();
 	void ProcessHit();
 	void Hurt();
-	void Ragdoll();
+	void Ragdoll(float elapsed);
 	void Dead();
 	void ReevaluatePriorities();
 	void WakeUp();
