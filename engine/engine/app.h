@@ -7,13 +7,13 @@ class CEntity;
 
 class CApp {
 
-  void update(float elapsed);
-  void fixedUpdate(float elapsed); // Physx update
-  void render();
-  void renderEntities();
-  void renderDebugEntities();
-  void activateInspectorMode(bool active);
-  void activateDebugMode(bool active);
+	void update(float elapsed);
+	void fixedUpdate(float elapsed); // Physx update
+	void render();
+	void renderEntities();
+	void renderDebugEntities();
+	void activateInspectorMode(bool active);
+	void activateDebugMode(bool active);
 
 public:
 

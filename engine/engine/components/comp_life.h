@@ -6,11 +6,11 @@
 struct TCompLife : TBaseComponent {    // 2 ...
   float life;
 
-  TCompLife() : life(1.0f) { }
+  TCompLife() : life(100.0f) { }
   TCompLife(float alife) : life(alife) { }
 
   void loadFromAtts(MKeyValue &atts) {
-    life = atts.getFloat("life", 0.f);
+    life = atts.getFloat("life", 100.f);
   }
 
   std::string toString() {

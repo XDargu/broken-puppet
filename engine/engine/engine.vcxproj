@@ -164,6 +164,7 @@
     <ClInclude Include="ai\aicontroller.h" />
     <ClInclude Include="ai\ai_basic_enemy.h" />
     <ClInclude Include="ai\ai_basic_wander.h" />
+    <ClInclude Include="ai\fsm_basic_player.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
@@ -171,13 +172,14 @@
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
+    <ClInclude Include="components\comp_basic_player_controller.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
     <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_needle.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
-    <ClInclude Include="comp_trigger.h" />
+    <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />
     <ClInclude Include="components\comp_aabb.h" />
@@ -229,6 +231,7 @@
     <ClCompile Include="ai\aicontroller.cpp" />
     <ClCompile Include="ai\ai_basic_enemy.cpp" />
     <ClCompile Include="ai\ai_basic_wander.cpp" />
+    <ClCompile Include="ai\fsm_basic_player.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />

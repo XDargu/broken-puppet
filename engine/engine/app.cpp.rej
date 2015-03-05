@@ -1,0 +1,23 @@
+diff a/engine/engine/app.cpp b/engine/engine/app.cpp	(rejected hunks)
+@@ -41,21 +41,6 @@
+ 
+ void CApp::loadConfig() {
+   // Parse xml file...
+-	COptionsParser p;
+-	bool success=p.xmlParseFile("resolution.xml");
+-	if (success){
+-		int x_res;
+-		int y_res;
+-		bool mode;
+-		p.getResolution(x_res, y_res, mode);
+-		xres = x_res;
+-		yres = y_res;
+-		fullscreen = mode;
+-	}else{
+-		xres = 1024;
+-		yres = 768;
+-	}
+-
+   xres = 1024;
+   yres = 768;
+ }
