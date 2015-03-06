@@ -83,6 +83,7 @@ void ai_basic_enemy::Init()
 
 void ai_basic_enemy::Idle() {
 
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
 	if (!already_animated) {
 		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
 		already_animated = true;
@@ -128,6 +129,7 @@ void ai_basic_enemy::Idle() {
 
 void ai_basic_enemy::Wander() {
 
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 	if (!already_animated) {
 		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 		already_animated = true;
