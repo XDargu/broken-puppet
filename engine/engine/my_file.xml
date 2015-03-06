@@ -553,6 +553,7 @@
     <mesh color="1 1 1 1" path="prota"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <!--<playerController movementVelocity="8.0" rotationVelocity="90.0" />-->
+   <life life="100" />
     <unityCharacterController/>
     <basicPlayerController/>
   </entity>
@@ -579,7 +580,7 @@
     <mesh color="1 1 1 1" path="Soldado_MS1_Walk"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <unityCharacterController/>
-    <aiFSMBasic/>
+    aiFSMBasic/>
   </entity>
   <entity tag="enemy">
     <name name="BasicEnemy_77.0" />

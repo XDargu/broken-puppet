@@ -45,11 +45,15 @@ void fsm_basic_player::Init()
 
 	last_hit = 0.f;
 	state_time = 0.f;
+	falling = false;
+
+	life = ((CEntity*)entity)->get<TCompLife>();
 	
 }
 
 void fsm_basic_player::Idle(){	
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
+
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
 		ChangeState("fbp_Jump");		
 	}
@@ -58,6 +62,9 @@ void fsm_basic_player::Idle(){
 	}	
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 		ChangeState("fbp_ThrowString");
+	}
+	if (falling){
+		ChangeState("fbp_Fall");
 	}
 }
 
@@ -75,17 +82,24 @@ void fsm_basic_player::Walk(){
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 		ChangeState("fbp_ThrowString");
 	}
+	if (falling){
+		ChangeState("fbp_Fall");
+	}
 }
 
 void fsm_basic_player::Jump(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
 	EvaluateMovement();
+
 	if (((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){
 		ChangeState("fbp_Idle");
 		return;
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 		ChangeState("fbp_ThrowString");
+	}
+	if (falling){
+		ChangeState("fbp_Fall");
 	}
 }
 
@@ -103,10 +117,51 @@ void fsm_basic_player::ThrowString(float elapsed){
 	}	
 }
 
-void fsm_basic_player::Fall(){}
-void fsm_basic_player::Land(){}
-void fsm_basic_player::WrongFall(){}
-void fsm_basic_player::WrongLand(){}
+void fsm_basic_player::Fall(float elapsed){
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_falling");
+	EvaluateMovement();
+	state_time += elapsed;
+
+	if (state_time >= 0.7f){
+		ChangeState("fbp_WrongFall");
+		state_time = 0;
+	}else
+	if (((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){
+		ChangeState("fbp_Land");
+		state_time = 0;
+	}
+
+}
+
+void fsm_basic_player::Land(float elapsed){
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
+	state_time += elapsed;
+	if (state_time >= 0.2){
+		state_time = 0;
+		ChangeState("fbp_Idle");		
+	}
+}
+
+void fsm_basic_player::WrongFall(){
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	dir.normalize();
+	((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir);
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
+	if (((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){
+		ChangeState("fbp_WrongLand");
+	}
+}
+
+void fsm_basic_player::WrongLand(float elapsed){
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_landing");
+	state_time += elapsed;
+	if (state_time >= 0.2){
+		state_time = 0;
+		ChangeState("fbp_Idle");
+	}
+}
+
 void fsm_basic_player::ProcessHit(){}
 
 void fsm_basic_player::Hurt(){
@@ -116,7 +171,7 @@ void fsm_basic_player::Hurt(){
 	dir.normalize();
 	((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0,0,0), false, false, dir);
 	state_time += CApp::get().delta_time;
-	if (state_time >= .01f){
+	if (state_time >= .2f){
 		state_time = 0;
 		ChangeState("fbp_ReevaluatePriorities");
 	}
@@ -125,6 +180,10 @@ void fsm_basic_player::Hurt(){
 void fsm_basic_player::Ragdoll(float elapsed){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_ragdoll");
 	state_time += elapsed;
+
+	physx::PxMaterial* mat;
+	((TCompUnityCharacterController*)comp_unity_controller)->enemy_collider->getMaterials(&mat, 1);
+	mat->setRestitution(1);
 
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);
@@ -149,23 +208,37 @@ void fsm_basic_player::Ragdoll(float elapsed){
 				((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getGlobalPose().q
 			)
 			);
-		ChangeState("fbp_WakeUp");
+		mat->setRestitution(0);
+		
+
+		if (((TCompLife*)life)->life <= 0){
+			ChangeState("fbp_Dead");
+		}
+		else{
+			ChangeState("fbp_WakeUp");
+		}
+		
 	}
 }
 
 void fsm_basic_player::Dead(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_dead");
 	state_time += CApp::get().delta_time;
+	if(state_time >= 6){
+		ChangeState("fbp_Idle");
+	}
+	
+
 }
 
 void fsm_basic_player::ReevaluatePriorities(){
-	// TODO Check if is on air 
-	if (false){ // if not on ground
-		ChangeState("fbp_WrongFall");
-		return;
-	}
 	
-	ChangeState("fbp_Idle");
+	if (!((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){ 
+		ChangeState("fbp_WrongFall");
+	}
+	else{
+		ChangeState("fbp_Idle");
+	}
 }
 
 void fsm_basic_player::WakeUp(){
@@ -215,33 +288,43 @@ bool fsm_basic_player::EvaluateMovement(){
 	bool ragdoll = (GetState() == "fbp_Ragdoll");
 	((TCompUnityCharacterController*)comp_unity_controller)->Move(movement_vector, false, jump, dir);
 
+	// Evaluate falling
+	physx::PxVec3 velocity = ((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getLinearVelocity();
+	falling = velocity.y <= 0 && !((TCompUnityCharacterController*)comp_unity_controller)->OnGround();
+
 	return is_moving;
 }
 
 bool fsm_basic_player::EvaluateFall(){
-	return false;
+	EvaluateMovement();	
+	physx::PxVec3 velocity = ((TCompRigidBody*)((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody)->rigidBody->getLinearVelocity();
+	return velocity.y <= 0 && !((TCompUnityCharacterController*)comp_unity_controller)->OnGround();
 }
 
 void fsm_basic_player::EvaluateHit(){
+
 	if (last_hit == 0)
 		return;
+	float damage = 0;
 	if (last_hit >= 10){ //ragdoll force
+		damage = 20;
 		ChangeState("fbp_Ragdoll");
 	}
-	else if(GetState() != "fbp_Ragdoll" ){
+	else if (GetState() != "fbp_Ragdoll"){
+		damage = 10;
 		ChangeState("fbp_Hurt");
 	}
 	// Evaluate live to lose
-	EvaluateLiveToLose();
-
+	EvaluateLiveToLose(damage);	
 	last_hit = 0.f;
+
 }
 
-void fsm_basic_player::EvaluateLiveToLose(){
+void fsm_basic_player::EvaluateLiveToLose(float damage){
 	// Call to component live and 
-	if (false)// live under or equal 0
+	if (((TCompLife*)life)->Hurt(damage))// live under or equal 0
 	{
-		ChangeState("fbp_Dead");
+		ChangeState("fbp_Ragdoll");
 	}
 }
 
@@ -249,22 +332,3 @@ void fsm_basic_player::localCameraFront(){
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3((((TCompTransform*)((CEntity*)entity_camera)->get<TCompTransform>())->getFront()));
 	dir.y = 0;
 }
-
-
-void fsm_basic_player::Rerotate(){
-	TCompTransform* player_pivot_trans = (TCompTransform*)comp_player_pivot_transform;
-
-	TCompTransform* transform = (TCompTransform*)((CEntity*)entity)->get<TCompTransform>();
-	float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());
-	float m_yaw = getYawFromVector(transform->getFront());
-	XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw - m_yaw);
-	transform->rotation = XMQuaternionSlerp(transform->rotation, XMQuaternionMultiply(transform->rotation, player_pivot_rot), 0.05f);
-}
-
-/*void onExplosion(const TMsgExplosion& msg) {
-	dbg("Life recv explosion of %f points when my life is %f\n", msg.damage, life);
-	life -= msg.damage;
-	if (life < 0)
-		life = 0;
-}*/
-

@@ -13,6 +13,13 @@ struct TCompLife : TBaseComponent {    // 2 ...
     life = atts.getFloat("life", 100.f);
   }
 
+  bool Hurt(float damage){
+	  life -= damage;
+	  if (life <= 0)
+		  life = 0;
+	  return life <= 0;
+  }
+
   std::string toString() {
     return "Life: " + std::to_string(life);
   }

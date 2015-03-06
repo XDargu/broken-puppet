@@ -25,37 +25,53 @@ public:
 	CHandle m_comp_mesh;
 	CHandle m_comp_unity_c_controller;
 	CHandle m_entity_player_pivot;
+
+	float hit_cold_down;
+	float last_hit;
 	
 
 	void loadFromAtts(MKeyValue &atts) {
 	
 		m_fsm_basic_player.SetEntity(CHandle(this).getOwner());
+		assertRequiredComponent<TCompLife>(this);
 
 	}
 
 	void init() {	
 		m_fsm_basic_player.Init();
+		hit_cold_down = 1;
+		last_hit = 0;
 	}
 
 
 	void update(float elapsed) {
-		if (isKeyPressed('E'))m_fsm_basic_player.last_hit = 2;
-		if (isKeyPressed('Q'))m_fsm_basic_player.last_hit = 10;
+		//if (isKeyPressed('E'))m_fsm_basic_player.Dead();
+		//if (isKeyPressed('Q'))m_fsm_basic_player.last_hit = 10;
+		last_hit += elapsed;
+		
+		
+
 	}
 
-	void fixedUpdate(float elapsed) {
-		m_fsm_basic_player.EvaluateHit();
+	void fixedUpdate(float elapsed) {	
 		m_fsm_basic_player.Recalc(elapsed);
 	}
 
 	void actorHit(const TActorHit& msg) {
-		dbg("Force recieved is  %f\n", msg.damage);
-		if (msg.damage <= 10000.f){
-			m_fsm_basic_player.last_hit = 2;
-		}else{
-			m_fsm_basic_player.last_hit = 10;
+
+		if (last_hit >= hit_cold_down){
+			dbg("Force recieved is  %f\n", msg.damage);
+			if (msg.damage <= 10000.f){
+				m_fsm_basic_player.last_hit = 2;
+			}
+			else{
+				m_fsm_basic_player.last_hit = 10;
+			}
+			m_fsm_basic_player.EvaluateHit();
+			last_hit = 0;
 		}
 	}
+
 };
 
 #endif

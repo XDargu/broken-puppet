@@ -17,10 +17,10 @@ public:
 	void Jump();
 	void Run();
 	void ThrowString(float elapsed);
-	void Fall();
-	void Land();
+	void Fall(float elapsed);
+	void Land(float elapsed);
 	void WrongFall();
-	void WrongLand();
+	void WrongLand(float elapsed);
 	void ProcessHit();
 	void Hurt();
 	void Ragdoll(float elapsed);
@@ -33,25 +33,21 @@ public:
 	CHandle comp_basic_player_controller;
 	CHandle comp_player_pivot_transform;
 	CHandle entity_camera;
-	
+
+	CHandle life;
+
+
+	bool falling;
 	float state_time;
 	float last_hit;
 	void EvaluateHit();
-	void EvaluateLiveToLose();
+	void EvaluateLiveToLose(float damage);
 
 	void localCameraFront();
 	bool EvaluateMovement();
 	bool EvaluateFall();
 
-	bool trueEverySecond();
 	bool trueEveryXSeconds(float time);
-
-
-	void Rerotate();
-	void Advance();
-	void Orbit(bool right);
-	void LookAt(XMVECTOR target);
-	void Twist(float freq, float power);
 };
 
 #endif

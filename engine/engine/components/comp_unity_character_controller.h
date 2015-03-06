@@ -90,7 +90,7 @@ public:
 		max_vel_y = -1.f;
 
 		// Create player material
-		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
+		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.8, 0.5, 0);
 		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
 		pMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
 
@@ -139,6 +139,7 @@ public:
 		mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eFREE);
 		mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
 		Physics.gScene->addActor(*enemy_rigidbody);
+
 
 	}
 
