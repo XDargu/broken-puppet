@@ -376,7 +376,7 @@ public:
 		if (velocity.y < jumpPower*.5f)
 		{
 			onGround = false;
-			/* Dejo el rigidbody usando la gravity todo el tiempo */
+			// Dejo el rigidbody usando la gravity todo el tiempo
 			//rigidbody.useGravity = true;				
 
 
@@ -409,14 +409,38 @@ public:
 					//rigidbody.useGravity = false;
 					break;
 				}
-				/*
-				}
-				*/
-
-
 			}
 
 		}
+
+		// Sweeptest para saber si, aunque el raycast no encuentre nada, estamos sobre algo
+		/*if (velocity.y < 0)
+		{
+			physx::PxSweepBuffer hit;              // [out] Sweep results
+			physx::PxSphereGeometry sweepShape = physx::PxSphereGeometry(enemy_width / 2);    // [in] swept shape
+			physx::PxTransform initialPose = physx::PxTransform(px_trans.p, px_trans.q);  // [in] initial shape pose (at distance=0)
+			physx::PxVec3 sweepDirection = physx::PxVec3(0, -1, 0);    // [in] normalized sweep direction
+
+			const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+			physx::PxSweepHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+			physx::PxSweepBuffer s_buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+
+			Physics.gScene->sweep(sweepShape, initialPose, sweepDirection, (enemy_height / 2.f) + 0.5f - enemy_width, s_buf);
+
+			for (int i = 0; i < s_buf.nbTouches; i++)
+			{
+				if (s_buf.touches[i].actor != enemy_rigidbody) {
+					onGround = true;
+					//rigidbody.useGravity = false;
+
+					// Colocamos en el ground a pelo
+					physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
+					px_trans.p.y = buf.touches[i].position.y + ((enemy_height / 2.f) + 0.1f);
+					enemy_rigidbody->setGlobalPose(px_trans);
+					break;
+				}				
+			}
+		}*/
 
 		// remember when we were last in air, for jump delay
 		if (!onGround) lastAirTime = CApp::get().total_time;
