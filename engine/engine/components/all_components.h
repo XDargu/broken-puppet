@@ -45,5 +45,7 @@
 #include "comp_needle.h"
 #include "comp_rope.h"
 #include "comp_trigger.h"
+#include "comp_victory_cond.h"
+#include "comp_distance_text.h"
 
 #endif

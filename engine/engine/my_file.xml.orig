@@ -4,7 +4,6 @@
     <transform position="63.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="prota"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
-    <life life="100" />
     <!--<playerController movementVelocity="8.0" rotationVelocity="90.0" />-->
     <unityCharacterController/>
     <basicPlayerController/>
@@ -557,8 +556,20 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.18334" boxY="0.147338" boxZ="1.94873"/>
     <rigidbody density="200" />
   </entity>
+<<<<<<< HEAD
+  <entity tag="player">
+    <name name="Player" />
+    <transform position="63.0713 14.3007 -47.3797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <mesh color="1 1 1 1" path="prota"/>
+    <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
+    <!--<playerController movementVelocity="8.0" rotationVelocity="90.0" />-->
+   <life life="100" />
+    <unityCharacterController/>
+    <basicPlayerController/>
+  </entity>
+=======
   
-
+>>>>>>> fb2dba2dcc60384c77622602313215e791e68ed7
   <entity>
     <name name="PlayerPivot" />
     <transform position="-4.82026 2.36778 4.69138" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>

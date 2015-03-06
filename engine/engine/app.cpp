@@ -85,8 +85,11 @@ bool debug_mode;
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
+	SUBSCRIBE(TCompBasicPlayerController, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
+	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
 }
 
 void createManagers() {
@@ -113,6 +116,8 @@ void createManagers() {
 	getObjManager<TCompNeedle>()->init(1024);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
+	getObjManager<TCompDistanceText>()->init(32);
+	getObjManager<TCompVictoryCond>()->init(1);
 	//
 
 
@@ -147,6 +152,9 @@ void initManagers() {
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->initHandlers();
+	getObjManager<TCompDistanceText>()->initHandlers();
+	getObjManager<TCompVictoryCond>()->initHandlers();
+
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 }
 
@@ -278,7 +286,7 @@ void CApp::doFrame() {
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
 		
-
+		
 		// Fixed update
 		fixedUpdateCounter += delta_secs;
 
@@ -551,6 +559,7 @@ void CApp::update(float elapsed) {
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
+	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
 	entity_inspector.update();
@@ -737,6 +746,18 @@ void CApp::renderEntities() {
 			}
 		}
 
+		// Draw texts
+		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
+		if (c_text && t) {
+			float old_size = font.size;
+			font.size = c_text->size;
+			unsigned int old_col = font.color;
+			font.color = c_text->color;
+			font.print3D(t->position, c_text->text);
+			font.size = old_size;
+			font.color = old_col;
+		}
+
 		// If the component has no transform it can't be rendered
 		if (!t)
 			continue;
@@ -867,5 +888,5 @@ unsigned int CApp::numStrings(){
 }
 
 void CApp::activateVictory(){
-	//font.print3D(pos, prueba);
+	getObjManager<TCompThirdPersonCameraController>()->setActiveComponents(false);
 }

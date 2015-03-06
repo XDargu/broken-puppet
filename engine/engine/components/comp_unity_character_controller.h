@@ -87,7 +87,7 @@ public:
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
 		enemy_density = 25;
-		max_vel_y = -1.f;
+		max_vel_y = -10.f;
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.8, 0.5, 0);
@@ -154,7 +154,7 @@ public:
 		jumpRepeatDelayTime = 0.25f;
 		runCycleLegOffset = 0.2f;
 		groundStickyEffect = 5.f;
-		max_vel_y = -1.0f;
+		max_vel_y = -10.0f;
 
 		jumpPower = 8;
 		airSpeed = 6;
@@ -197,8 +197,6 @@ public:
 
 		// remember when we were last in air, for jump delay
 		if (!onGround) lastAirTime = CApp::get().total_time;
-
-
 
 		//((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0));
 		physx::PxVec3 rot = physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0);
@@ -401,9 +399,9 @@ public:
 					if (velocity.y < max_vel_y){
 						//TO DO: usar el metodo para eliminar enemigo
 						CEntity* e = CHandle(this).getOwner();
-						//e->sendMsg()
-						//CEntityManager::get().remove(e);
+						e->sendMsg(TGroundHit(e, velocity.y));
 					}
+
 					onGround = true;
 					//rigidbody.useGravity = false;
 					break;
