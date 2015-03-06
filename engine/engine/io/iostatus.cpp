@@ -31,6 +31,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[INSPECTOR_MODE].key = VK_F2;
 	buttons[DEBUG_MODE].key = VK_F3;
 	buttons[EXIT].key = VK_ESCAPE;
+	buttons[RUN].key = VK_LSHIFT;
 
 	mouse.dx = 0;
 	mouse.dy = 0;

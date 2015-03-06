@@ -24,7 +24,7 @@ public:
 	void ProcessHit();
 	void Hurt();
 	void Ragdoll(float elapsed);
-	void Dead();
+	void Dead(float elapsed);
 	void ReevaluatePriorities();
 	void WakeUp();
 
@@ -40,6 +40,9 @@ public:
 	bool falling;
 	float state_time;
 	float last_hit;
+	float walk_speed;
+	float run_speed;
+	
 	void EvaluateHit();
 	void EvaluateLiveToLose(float damage);
 

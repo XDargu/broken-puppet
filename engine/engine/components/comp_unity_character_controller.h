@@ -160,7 +160,7 @@ public:
 		airSpeed = 6;
 		airControl = 10;
 		gravityMultiplier = 4;
-		moveSpeedMultiplier = 7;
+		moveSpeedMultiplier = 8;
 		animSpeedMultiplier = 1;
 
 

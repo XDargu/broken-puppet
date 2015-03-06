@@ -43,7 +43,9 @@ public:
 		, CANCEL_STRING
 		, EXTRA
 		, EXIT
+		, RUN
 		, BUTTONS_COUNT
+		
 	};
 
 	bool isPressed(TButtonID button_id) const { return buttons[button_id].is_pressed; }

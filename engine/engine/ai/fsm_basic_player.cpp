@@ -47,6 +47,9 @@ void fsm_basic_player::Init()
 	state_time = 0.f;
 	falling = false;
 
+	run_speed = ((TCompUnityCharacterController*)comp_unity_controller)->moveSpeedMultiplier;;
+	walk_speed = run_speed / 2;
+
 	life = ((CEntity*)entity)->get<TCompLife>();
 	
 }
@@ -71,20 +74,52 @@ void fsm_basic_player::Idle(){
 void fsm_basic_player::Walk(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_walk");
 	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
-	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
-		ChangeState("fbp_Jump");
-		return;
+	((TCompUnityCharacterController*)comp_unity_controller)->moveSpeedMultiplier = walk_speed;
+	if (!CIOStatus::get().isPressed(CIOStatus::RUN)){
+		if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
+			ChangeState("fbp_Jump");
+			return;
+		}
+		if (!EvaluateMovement()){
+			ChangeState("fbp_Idle");
+			return;
+		}
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+			ChangeState("fbp_ThrowString");
+		}
+		if (falling){
+			ChangeState("fbp_Fall");
+		}
 	}
-	if (!EvaluateMovement()){
-		ChangeState("fbp_Idle");
-		return;
+	else{		
+		ChangeState("fbp_Run");
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
-		ChangeState("fbp_ThrowString");
+}
+
+void fsm_basic_player::Run(){
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_run");
+	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
+	((TCompUnityCharacterController*)comp_unity_controller)->moveSpeedMultiplier = run_speed;
+	if (CIOStatus::get().isPressed(CIOStatus::RUN)){
+		if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
+			ChangeState("fbp_Jump");
+			return;
+		}
+		if (!EvaluateMovement()){
+			ChangeState("fbp_Idle");
+			return;
+		}
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+			ChangeState("fbp_ThrowString");
+		}
+		if (falling){
+			ChangeState("fbp_Fall");
+		}
 	}
-	if (falling){
-		ChangeState("fbp_Fall");
+	else{
+		ChangeState("fbp_Walk");
 	}
+
 }
 
 void fsm_basic_player::Jump(){
@@ -103,7 +138,7 @@ void fsm_basic_player::Jump(){
 	}
 }
 
-void fsm_basic_player::Run(){}
+
 
 void fsm_basic_player::ThrowString(float elapsed){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -225,9 +260,12 @@ void fsm_basic_player::Ragdoll(float elapsed){
 	}
 }
 
-void fsm_basic_player::Dead(){
+void fsm_basic_player::Dead(float elapsed){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_dead");
-	state_time += CApp::get().delta_time;
+	
+	((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()));
+
+	state_time += elapsed;
 	if(state_time >= 6){
 		ChangeState("fbp_Idle");
 	}
