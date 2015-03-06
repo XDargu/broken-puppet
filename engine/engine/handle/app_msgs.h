@@ -36,4 +36,10 @@ struct TActorHit {
 	DECLARE_MSG_ID();
 };
 
+struct TVictoryCondition {
+	CEntity* whoEnter;
+	TVictoryCondition(CEntity* awho):whoEnter(awho) { }
+	DECLARE_MSG_ID();
+};
+
 #endif

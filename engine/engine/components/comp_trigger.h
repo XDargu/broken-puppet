@@ -10,11 +10,8 @@ struct TCompTrigger : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle m_aabb;
-	CHandle player_aabb;
 	vector<CEntity*> inside;
 public:
-
-	float height, width;
 
     TCompTrigger(){}
 
@@ -37,16 +34,9 @@ public:
 
 	void update(float elapsed) {
 		TCompAABB* aabb = (TCompAABB*)m_aabb;
-		aabb->active=true;
 		TCompTransform* transform = (TCompTransform*)m_transform;
 
-		if (onEnter()){
-			CEntity* e_player = CEntityManager::get().getByName("Player");
-			if (checkIfInside(e_player)){
-				CApp::get().activateVictory();
-			}
-		}
-		onExit();
+		onEnter();
 	}
 
 
@@ -65,6 +55,8 @@ public:
 					CEntity* own = CHandle(this).getOwner();
 					if ((aabb->intersects(i_aabb) && (nameOther != "Level") && (e != own))){
 						inside.push_back(e);
+						CEntity* own = CHandle(this).getOwner();
+						own->sendMsg(TVictoryCondition(e));
 						return true;
 					}
 				}

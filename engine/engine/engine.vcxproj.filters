@@ -167,6 +167,12 @@
     <ClInclude Include="comp_tag.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="comp_victory_cond.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_distance_text.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

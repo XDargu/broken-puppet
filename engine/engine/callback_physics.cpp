@@ -23,15 +23,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		const char* name2 = otherActor->getName();
 
 		CEntity* firstActorEntity=CEntityManager::get().getByName(name1);
-		CEntity* secondActorEntity=CEntityManager::get().getByName(name2);
-
-		/*TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-		TCompTag* first_tag = firstActorEntity->get<TCompTag>();
-		TCompUnityCharacterController* first_controller = firstActorEntity->get<TCompUnityCharacterController>();
-
-		TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-		TCompTag* second_tag = secondActorEntity->get<TCompTag>();
-		TCompUnityCharacterController* second_controller = secondActorEntity->get<TCompUnityCharacterController>();*/
+		CEntity* secondActorEntity = CEntityManager::get().getByName(name2);
 
 		//Colision entre actor y player
 		if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("player"))){
@@ -70,6 +62,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			TCompUnityCharacterController* first_controller = firstActorEntity->get<TCompUnityCharacterController>();
 			PxReal force = getForce(first_controller->getMass(), pairs, i);
 			float force_float = force;
+			if (force_float>3500.f)
 			firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 		}
 
