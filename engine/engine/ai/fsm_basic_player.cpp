@@ -122,7 +122,11 @@ void fsm_basic_player::Fall(float elapsed){
 	EvaluateMovement();
 	state_time += elapsed;
 
-	if (state_time >= 0.7f){
+	if (((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getLinearVelocity().y > 0){
+		ChangeState("fbp_Jump");
+		state_time = 0;
+	}
+	else if (state_time >= 0.7f){
 		ChangeState("fbp_WrongFall");
 		state_time = 0;
 	}else

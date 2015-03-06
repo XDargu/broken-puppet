@@ -86,7 +86,6 @@ bool debug_mode;
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
-	SUBSCRIBE(TCompBasicPlayerController, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
 	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
