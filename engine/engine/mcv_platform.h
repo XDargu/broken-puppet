@@ -35,6 +35,6 @@ using DirectX::XMFLOAT4;
 #include "utils.h"
 #include "memory/data_provider.h"
 #include "items_by_name.h"
-
+#include <queue>
 
 #endif
