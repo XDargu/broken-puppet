@@ -112,7 +112,7 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
-	getObjManager<TCompRope>()->init(64);
+	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
@@ -412,11 +412,11 @@ void CApp::update(float elapsed) {
 
 					TCompTransform* new_e_trans = CHandle::create<TCompTransform>();
 					new_e->add(new_e_trans);
-					new_e_trans->scale = XMVectorSet(0.1f, 0.1f, 1, 1);
+					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
 
 					TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
-					std::strcpy(new_e_mesh->path, "primitive_box");
-					new_e_mesh->mesh = mesh_manager.getByName("primitive_box");
+					std::strcpy(new_e_mesh->path, "aguja");
+					new_e_mesh->mesh = mesh_manager.getByName("aguja");
 					new_e->add(new_e_mesh);
 
 					TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
@@ -481,11 +481,11 @@ void CApp::update(float elapsed) {
 
 					TCompTransform* new_e_trans2 = CHandle::create<TCompTransform>();
 					new_e2->add(new_e_trans2);
-					new_e_trans2->scale = XMVectorSet(0.05f, 0.05f, 1.5f, 1);
+					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
 
 					TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
-					std::strcpy(new_e_mesh2->path, "primitive_box");
-					new_e_mesh2->mesh = mesh_manager.getByName("primitive_box");
+					std::strcpy(new_e_mesh2->path, "aguja");
+					new_e_mesh2->mesh = mesh_manager.getByName("aguja");
 					new_e2->add(new_e_mesh2);
 
 					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();

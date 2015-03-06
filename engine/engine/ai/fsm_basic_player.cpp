@@ -60,7 +60,7 @@ void fsm_basic_player::Idle(){
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){
 		ChangeState("fbp_Jump");		
 	}
-	if (EvaluateMovement()){
+	if (EvaluateMovement(false)){
 		ChangeState("fbp_Walk");
 	}	
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
@@ -80,7 +80,7 @@ void fsm_basic_player::Walk(){
 			ChangeState("fbp_Jump");
 			return;
 		}
-		if (!EvaluateMovement()){
+		if (!EvaluateMovement(true)){
 			ChangeState("fbp_Idle");
 			return;
 		}
@@ -105,7 +105,7 @@ void fsm_basic_player::Run(){
 			ChangeState("fbp_Jump");
 			return;
 		}
-		if (!EvaluateMovement()){
+		if (!EvaluateMovement(true)){
 			ChangeState("fbp_Idle");
 			return;
 		}
@@ -124,7 +124,7 @@ void fsm_basic_player::Run(){
 
 void fsm_basic_player::Jump(){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
-	EvaluateMovement();
+	EvaluateMovement(true);
 
 	if (((TCompUnityCharacterController*)comp_unity_controller)->OnGround()){
 		ChangeState("fbp_Idle");
@@ -154,7 +154,7 @@ void fsm_basic_player::ThrowString(float elapsed){
 
 void fsm_basic_player::Fall(float elapsed){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_falling");
-	EvaluateMovement();
+	EvaluateMovement(true);
 	state_time += elapsed;
 
 	if (((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody->getLinearVelocity().y > 0){
@@ -293,7 +293,7 @@ void fsm_basic_player::WakeUp(){
 
 // NO FSM FUNCTIONS
 
-bool fsm_basic_player::EvaluateMovement(){
+bool fsm_basic_player::EvaluateMovement(bool lookAtCamera){
 
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
@@ -325,7 +325,9 @@ bool fsm_basic_player::EvaluateMovement(){
 
 	movement_vector = rotation.rotate(movement_vector);
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
-	//dir.y = 0;
+	if (!lookAtCamera)
+		dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	
 	dir.normalize();	
 	bool ragdoll = (GetState() == "fbp_Ragdoll");
 	((TCompUnityCharacterController*)comp_unity_controller)->Move(movement_vector, false, jump, dir);
@@ -338,7 +340,7 @@ bool fsm_basic_player::EvaluateMovement(){
 }
 
 bool fsm_basic_player::EvaluateFall(){
-	EvaluateMovement();	
+	EvaluateMovement(true);
 	physx::PxVec3 velocity = ((TCompRigidBody*)((TCompUnityCharacterController*)comp_unity_controller)->enemy_rigidbody)->rigidBody->getLinearVelocity();
 	return velocity.y <= 0 && !((TCompUnityCharacterController*)comp_unity_controller)->OnGround();
 }

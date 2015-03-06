@@ -47,7 +47,7 @@ public:
 	void EvaluateLiveToLose(float damage);
 
 	void localCameraFront();
-	bool EvaluateMovement();
+	bool EvaluateMovement(bool lookAtCamera);
 	bool EvaluateFall();
 
 	bool trueEveryXSeconds(float time);

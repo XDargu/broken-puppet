@@ -133,7 +133,7 @@
     <mesh color="1 1 1 1" path="Level"/>
     <aabb min="-46.0324 -15.3729 -52.8918" max="46.0324 15.3729 52.8918"/>
     <colliderMesh path="Level" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-  <staticbody/>
+    <staticbody/>
   </entity>
   <entity  tag="actor">
     <name name="PlataformaMovil_17.0" />
@@ -146,7 +146,7 @@
     <transform position="57.551 17.2902 -50.2329" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna1"/>
     <aabb min="-0.787243 -3.0 -0.787242" max="0.787241 3.0 0.787242"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="3.0" boxZ="0.787242"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="3.0" boxZ="0.787242"/>    
     <rigidbody density="200" />
   </entity>
   <entity  tag="actor">
@@ -170,7 +170,7 @@
     <transform position="51.0212 19.399 -50.2329" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Columna2"/>
     <aabb min="-0.787241 -1.0 -0.787242" max="0.787242 1.0 0.787242"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.787242" boxY="1.0" boxZ="0.787242"/>    
     <rigidbody density="200" />
   </entity>
   <entity  tag="actor">
@@ -568,7 +568,6 @@
     <name name="CameraPivot" />
     <transform position="-8.21749 2.36778 4.69138" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <cameraPivotController tiltVelocity="270.0" />
-    <pointLight radius="10" intensity="1" color="1 1 1 1"/>
   </entity>
   <entity>
     <name name="PlayerCamera" />

@@ -74,6 +74,7 @@ public:
 	XMVECTOR direction;
 	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
 	physx::PxD6Joint* mJoint;
+	float lerpRotation;
 
 
 	//CApp &app;
@@ -162,6 +163,8 @@ public:
 		gravityMultiplier = 4;
 		moveSpeedMultiplier = 8;
 		animSpeedMultiplier = 1;
+
+		lerpRotation = 0.35f;
 
 
 		highFrictionMaterial = Physics.gPhysicsSDK->createMaterial(1.f, 1.f, 0.f);
@@ -312,7 +315,7 @@ public:
 		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(currentLookPos) + enemy_rigidbody->getGlobalPose().p;
 		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
 
-		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), 0.15f);
+		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
 
 		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
