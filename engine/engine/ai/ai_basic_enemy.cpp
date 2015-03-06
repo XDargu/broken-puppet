@@ -18,6 +18,7 @@ ai_basic_enemy::~ai_basic_enemy()
 
 bool already_attacked;
 bool already_animated;
+bool initial_attack_done;
 
 void ai_basic_enemy::Init()
 {
@@ -47,8 +48,8 @@ void ai_basic_enemy::Init()
 	probability_wander = 40;
 	probability_idle = 20;
 
-	probability_aggresive = 30;
-	probability_mobile = 50;
+	probability_aggresive = 50;
+	probability_mobile = 30;
 
 	probability_attack1 = 30;
 	probability_attack2 = 70;
@@ -56,7 +57,7 @@ void ai_basic_enemy::Init()
 	assert(probability_attack1 + probability_attack2 == 100);
 
 	view_distance = 5;
-	forget_distance = 13;
+	forget_distance = 8;
 
 	attack_distance = 1.5f;
 	out_of_reach_distance = 3;
@@ -77,6 +78,7 @@ void ai_basic_enemy::Init()
 
 	already_attacked = false;
 	already_animated = false;
+	initial_attack_done = false;
 }
 
 void ai_basic_enemy::Idle() {
@@ -86,8 +88,8 @@ void ai_basic_enemy::Idle() {
 		already_animated = true;
 	}
 
-	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
-	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 	XMVECTOR mFront = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront();
 
 	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(mFront));
@@ -104,10 +106,23 @@ void ai_basic_enemy::Idle() {
 
 	// Check if player viewed
 
-	if (V3DISTANCE(pPosition, mPosition) < view_distance)
+	if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
 	{
-		already_animated = false;
-		ChangeState("aibe_View");
+
+		// Check if player is visible
+		physx::PxRaycastBuffer buf;
+		Physics.raycastAll(m_transform->position + XMVectorSet(0, 1.5f, 0, 0), XMVector3Normalize(p_transform->position - m_transform->position), view_distance, buf);
+
+		bool player_visible = false;
+		if (buf.nbTouches > 1)
+			if (std::strcmp(buf.touches[1].actor->getName(), "Player") == 0) {
+				player_visible = true;
+			}
+
+		if (player_visible) {
+			already_animated = false;
+			ChangeState("aibe_View");
+		}
 	}
 }
 
@@ -165,8 +180,26 @@ void ai_basic_enemy::Wander() {
 	// Check if player viewed
 	if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
 	{
-		already_animated = false;
-		ChangeState("aibe_View");
+		// Check if player is visible
+		physx::PxRaycastBuffer buf;
+		Physics.raycastAll(m_transform->position + XMVectorSet(0, 1.5f, 0, 0), XMVector3Normalize(p_transform->position - m_transform->position), view_distance, buf);
+
+		bool player_visible = false;
+		if (buf.nbTouches > 1)
+		if (std::strcmp(buf.touches[1].actor->getName(), "Player") == 0) {
+			player_visible = true;
+		}
+		/*for (int i = 0; i < buf.nbTouches; i++) {
+			if (std::strcmp(buf.touches[i].actor->getName(), "Player") == 0) {
+				player_visible = true;
+				break;
+			}
+		}*/
+
+		if (player_visible) {
+			already_animated = false;
+			ChangeState("aibe_View");
+		}
 	}
 }
 
@@ -191,6 +224,8 @@ void ai_basic_enemy::View() {
 }
 
 void ai_basic_enemy::Lost() {
+
+	initial_attack_done = false;
 
 	if (!already_animated) {
 		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
@@ -228,7 +263,12 @@ void ai_basic_enemy::Chase() {
 	if (V3DISTANCE(m_transform->position, p_transform->position) < attack_distance)
 	{
 		already_animated = false;
-		ChangeState("aibe_InitialAttack");
+		if (initial_attack_done) {
+			ChangeState("aibe_IdleWar");
+		}
+		else {
+			ChangeState("aibe_InitialAttack");
+		}
 	}
 
 	// Check if player forgeted
@@ -240,6 +280,9 @@ void ai_basic_enemy::Chase() {
 }
 
 void ai_basic_enemy::InitialAttack() {
+
+	initial_attack_done = true;
+
 	if (!already_animated) {
 		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 		already_animated = true;
