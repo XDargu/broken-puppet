@@ -45,5 +45,9 @@ struct TCompAiFsmBasic : TBaseComponent {
 			//m_fsm_basic_player.last_hit = 10;
 		}
 	}
+
+	void onRopeTensed(const TMsgRopeTensed& msg) {		
+		m_ai_controller.ChangeState("aibe_Ragdoll");		
+	}
 };
 #endif

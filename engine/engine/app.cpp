@@ -90,6 +90,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
+	SUBSCRIBE(TCompAiFsmBasic, TMsgRopeTensed, onRopeTensed);
 	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
 }
 
@@ -349,9 +350,11 @@ void CApp::update(float elapsed) {
 				// Wake up the actors, if dynamic
 				if (a1->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a1)->wakeUp();
+					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
 				if (a2->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a2)->wakeUp();
+					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
 			}
 		}

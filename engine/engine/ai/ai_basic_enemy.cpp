@@ -494,8 +494,22 @@ void ai_basic_enemy::Ragdoll(float elapsed){
 		((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getGlobalPose().q
 		);
 
-	if (((state_time >= 1 && ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getLinearVelocity().magnitude() < 0.1f))
-		|| (state_time >= 5))
+	// Check if I'm in the ground
+	physx::PxRaycastBuffer buf;
+	physx::PxTransform px_trans = ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getGlobalPose();
+
+	Physics.raycastAll(px_trans.p, -physx::PxVec3(0, 1, 0), (((TCompUnityCharacterController*)character_controller)->enemy_height / 2.f) + 0.25f, buf);
+	
+	bool onGround = false;
+	for (int i = 0; i < buf.nbTouches; i++)
+	{
+		if (buf.touches[i].actor != ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody) {
+			onGround = true;
+			break;
+		}
+	}	
+
+	if (state_time >= 1 && ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getLinearVelocity().magnitude() < 0.1f && onGround)
 	{
 		state_time = 0;
 		((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eLOCKED);

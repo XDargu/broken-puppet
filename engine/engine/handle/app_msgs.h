@@ -43,6 +43,12 @@ struct TMsgAttackDamage {
 	DECLARE_MSG_ID();
 };
 
+struct TMsgRopeTensed {
+	float sqrRopeDistance;
+	TMsgRopeTensed(float adistance) : sqrRopeDistance(adistance) { }
+	DECLARE_MSG_ID();
+};
+
 struct TVictoryCondition {
 	CEntity* whoEnter;
 	TVictoryCondition(CEntity* awho):whoEnter(awho) { }
