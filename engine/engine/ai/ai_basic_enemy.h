@@ -7,6 +7,7 @@ class ai_basic_enemy : public aicontroller
 {
 	CHandle player;
 	CHandle character_controller;
+	CHandle comp_mesh;
 
 	int probability_wander;
 	int probability_idle;

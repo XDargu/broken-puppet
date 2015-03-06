@@ -36,6 +36,13 @@ struct TActorHit {
 	DECLARE_MSG_ID();
 };
 
+struct TMsgAttackDamage {
+	CEntity* who;
+	float damage;
+	TMsgAttackDamage(CEntity* awho, float hurt) :who(awho), damage(hurt) { }
+	DECLARE_MSG_ID();
+};
+
 struct TVictoryCondition {
 	CEntity* whoEnter;
 	TVictoryCondition(CEntity* awho):whoEnter(awho) { }

@@ -88,6 +88,7 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
 	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
 }
@@ -141,14 +142,13 @@ void initManagers() {
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
+	getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
 	getObjManager<TCompCameraPivotController>()->initHandlers();
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
-	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
-	getObjManager<TCompUnityCharacterController>()->initHandlers();
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->initHandlers();
@@ -156,6 +156,7 @@ void initManagers() {
 	getObjManager<TCompVictoryCond>()->initHandlers();
 
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
+	getObjManager<TCompAiFsmBasic>()->initHandlers();
 }
 
 bool CApp::create() {

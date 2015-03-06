@@ -16,6 +16,9 @@ ai_basic_enemy::~ai_basic_enemy()
 {
 }
 
+bool already_attacked;
+bool already_animated;
+
 void ai_basic_enemy::Init()
 {
 	// insert all states in the map
@@ -52,7 +55,7 @@ void ai_basic_enemy::Init()
 
 	assert(probability_attack1 + probability_attack2 == 100);
 
-	view_distance = 10;
+	view_distance = 5;
 	forget_distance = 13;
 
 	attack_distance = 1.5f;
@@ -67,12 +70,21 @@ void ai_basic_enemy::Init()
 	assert(orbit_angle < 180);
 
 	wander_target = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
+	comp_mesh = ((CEntity*)entity)->get<TCompMesh>();
 
 	// For orbit check purpose
 	initial_yaw = 1000;
+
+	already_attacked = false;
+	already_animated = false;
 }
 
 void ai_basic_enemy::Idle() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
+		already_animated = true;
+	}
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -85,6 +97,7 @@ void ai_basic_enemy::Idle() {
 	{
 		int prob = getRandomNumber(1, 100);
 		if (prob < probability_wander) {
+			already_animated = false;
 			ChangeState("aibe_Wander");
 		}
 	}
@@ -93,12 +106,18 @@ void ai_basic_enemy::Idle() {
 
 	if (V3DISTANCE(pPosition, mPosition) < view_distance)
 	{
+		already_animated = false;
 		ChangeState("aibe_View");
 	}
 }
 
 void ai_basic_enemy::Wander() {
 
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
+		already_animated = true;
+
+	}
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 
@@ -106,30 +125,31 @@ void ai_basic_enemy::Wander() {
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	((TCompUnityCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(wander_target - m_transform->position));
 
-	// If wander target reached, set other target
-	if (V3DISTANCE(m_transform->position, wander_target) < 1)
-	{
-		bool can_go = false;
-		int count_exit = 0;
-		while (!can_go)
-		{
-			int x = getRandomNumber(-10, 10);
-			int z = getRandomNumber(-10, 10);
-			wander_target = m_transform->position + XMVectorSet(x, 1, z, 0);
-			physx::PxRaycastBuffer hit;
-			Physics.raycast(m_transform->position + m_transform->getFront(), m_transform->getFront(), V3DISTANCE(m_transform->position, wander_target), hit);
-			if (!hit.hasBlock) {
-				can_go = true;
-			}
-			count_exit++;
+	// Check if wall in front of me, then set other target
+	physx::PxRaycastBuffer buf;
+	Physics.raycastAll(m_transform->position + XMVectorSet(0, 0.1f, 0, 0), XMVector3Normalize(wander_target - m_transform->position), 1.f, buf);
 
-			if (count_exit > 100)
-			{
-				can_go = true;
-				ChangeState("aibe_Idle");
-			}
+	bool can_go = true;
+
+	for (int i = 0; i < buf.nbTouches; i++)
+	{		
+		if (buf.touches[i].actor != ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody) {
+			can_go = false;
 		}
-		
+	}
+
+	if (!can_go) {
+		int x = getRandomNumber(0, 20) - 10;
+		int z = getRandomNumber(0, 20) - 10;
+		wander_target = m_transform->position + XMVectorSet(x * 2, 0, z * 2, 0);
+	}
+
+	// If wander target reached, set other target
+	if (V3DISTANCE(m_transform->position, wander_target) < 3)
+	{
+		int x = getRandomNumber(0, 20) - 10;
+		int z = getRandomNumber(0, 20) - 10;
+		wander_target = m_transform->position + XMVectorSet(x * 2, 0, z * 2, 0);		
 	}
 
 	// Check probability to wander
@@ -137,6 +157,7 @@ void ai_basic_enemy::Wander() {
 	{
 		int prob = getRandomNumber(1, 100);
 		if (prob < probability_idle) {
+			already_animated = false;
 			ChangeState("aibe_Idle");
 		}
 	}
@@ -144,11 +165,17 @@ void ai_basic_enemy::Wander() {
 	// Check if player viewed
 	if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
 	{
+		already_animated = false;
 		ChangeState("aibe_View");
 	}
 }
 
 void ai_basic_enemy::View() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
+		already_animated = true;
+	}
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -159,10 +186,17 @@ void ai_basic_enemy::View() {
 	if (trueEveryXSeconds(2))
 	{
 		ChangeState("aibe_Chase");
+		already_animated = false;
 	}
 }
 
 void ai_basic_enemy::Lost() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
+		already_animated = true;
+	}
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
@@ -172,10 +206,16 @@ void ai_basic_enemy::Lost() {
 	if (trueEveryXSeconds(3))
 	{
 		ChangeState("aibe_Idle");
+		already_animated = false;
 	}
 }
 
 void ai_basic_enemy::Chase() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Run");
+		already_animated = true;
+	}
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -187,31 +227,50 @@ void ai_basic_enemy::Chase() {
 	// Check if player reached
 	if (V3DISTANCE(m_transform->position, p_transform->position) < attack_distance)
 	{
+		already_animated = false;
 		ChangeState("aibe_InitialAttack");
 	}
 
 	// Check if player forgeted
 	if (V3DISTANCE(m_transform->position, p_transform->position) > forget_distance)
 	{
+		already_animated = false;
 		ChangeState("aibe_Lost");
 	}
 }
 
 void ai_basic_enemy::InitialAttack() {
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
+		already_animated = true;
+	}
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	// Go to the wander_target
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
+	if (!already_attacked) {
+		((CEntity*)player)->sendMsg(TMsgAttackDamage(entity, 10));
+		already_attacked = true;
+	}
+
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
 	{
+		already_attacked = false;
+		already_animated = false;
 		ChangeState("aibe_IdleWar");
 	}
 }
 
 void ai_basic_enemy::IdleWar() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
+		already_animated = true;
+	}
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -221,17 +280,20 @@ void ai_basic_enemy::IdleWar() {
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
 	{
+		already_animated = false;
 		ChangeState("aibe_AttackSelect");
 	}
 
 	// Check if player out of reach
 	if (V3DISTANCE(mPosition, pPosition) > out_of_reach_distance)
 	{
+		already_animated = false;
 		ChangeState("aibe_Chase");
 	}
 }
 
 void ai_basic_enemy::AttackSelect() {
+	
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
@@ -279,27 +341,53 @@ void ai_basic_enemy::SelectAttack() {
 }
 
 void ai_basic_enemy::Attacking1() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
+		already_animated = true;
+	}
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
+	if (!already_attacked) {
+		((CEntity*)player)->sendMsg(TMsgAttackDamage(entity, 10));
+		already_attacked = true;
+	}
+
 	// Stay until next Second
 	if (trueEveryXSeconds(2))
 	{
+		already_attacked = false;
+		already_animated = false;
 		ChangeState("aibe_IdleWar");
 	}
 }
 
 void ai_basic_enemy::Attacking2() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
+		already_animated = true;
+	}
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	((TCompUnityCharacterController*)character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, front);
 
+	if (!already_attacked) {
+		((CEntity*)player)->sendMsg(TMsgAttackDamage(entity, 10));
+		already_attacked = true;
+	}
+
 	// Stay until next Second
 	if (trueEveryXSeconds(1))
 	{
+		already_attacked = false;
+		already_animated = false;
 		ChangeState("aibe_IdleWar");
 	}
 }
@@ -325,6 +413,11 @@ void ai_basic_enemy::SelectSide() {
 
 void ai_basic_enemy::OrbitRight() {
 
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
+		already_animated = true;
+	}
+
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
 
@@ -338,11 +431,17 @@ void ai_basic_enemy::OrbitRight() {
 	if (angle >= orbit_angle)
 	{
 		initial_yaw = 1000;
+		already_animated = false;
 		ChangeState("aibe_IdleWar");
 	}
 }
 
 void ai_basic_enemy::OrbitLeft() {
+
+	if (!already_animated) {
+		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
+		already_animated = true;
+	}
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -356,6 +455,7 @@ void ai_basic_enemy::OrbitLeft() {
 	float angle = XMVectorGetX(XMVector3AngleBetweenVectors(getVectorFromYaw(currentYaw), getVectorFromYaw(initial_yaw)));
 	if (angle >= orbit_angle)
 	{
+		already_animated = false;
 		initial_yaw = 1000;
 		ChangeState("aibe_IdleWar");
 	}

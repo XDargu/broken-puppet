@@ -27,7 +27,7 @@ public:
 	CHandle m_entity_player_pivot;
 
 	float hit_cold_down;
-	float last_hit;
+	float time_since_last_hit;
 	
 
 	void loadFromAtts(MKeyValue &atts) {
@@ -40,17 +40,14 @@ public:
 	void init() {	
 		m_fsm_basic_player.Init();
 		hit_cold_down = 1;
-		last_hit = 0;
+		time_since_last_hit = 0;
 	}
 
 
 	void update(float elapsed) {
 		//if (isKeyPressed('E'))m_fsm_basic_player.Dead();
 		//if (isKeyPressed('Q'))m_fsm_basic_player.last_hit = 10;
-		last_hit += elapsed;
-		
-		
-
+		time_since_last_hit += elapsed;
 	}
 
 	void fixedUpdate(float elapsed) {	
@@ -59,7 +56,7 @@ public:
 
 	void actorHit(const TActorHit& msg) {
 
-		if (last_hit >= hit_cold_down){
+		if (time_since_last_hit >= hit_cold_down){
 			dbg("Force recieved is  %f\n", msg.damage);
 			if (msg.damage <= 10000.f){
 				m_fsm_basic_player.last_hit = 2;
@@ -68,7 +65,16 @@ public:
 				m_fsm_basic_player.last_hit = 10;
 			}
 			m_fsm_basic_player.EvaluateHit();
-			last_hit = 0;
+			time_since_last_hit = 0;
+		}
+	}
+
+	void onAttackDamage(const TMsgAttackDamage& msg) {
+		if (time_since_last_hit >= hit_cold_down){
+			dbg("Damage recieved is  %f\n", msg.damage);
+			m_fsm_basic_player.last_hit = 2;
+			m_fsm_basic_player.EvaluateHit();
+			time_since_last_hit = 0;
 		}
 	}
 

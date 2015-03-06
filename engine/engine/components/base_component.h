@@ -15,6 +15,7 @@ public:
 		return handle;
 	}
 
+	// Return component sibling
 	template< class TObj >
 	CHandle getSibling(CHandle who){
 		CEntity* e = who.getOwner();
