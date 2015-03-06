@@ -33,12 +33,7 @@ struct TCompAiFsmBasic : TBaseComponent {
 
 	void actorHit(const TActorHit& msg) {
 		dbg("Force recieved is  %f\n", msg.damage);
-		if (msg.damage <= 10000.f){
-			//m_fsm_basic_player.last_hit = 2;
-		}
-		else{
-			//m_fsm_basic_player.last_hit = 10;
-		}
+		m_ai_controller.EvaluateHit(msg.damage);
 	}
 
 	void groundHit(const TGroundHit& msg) {

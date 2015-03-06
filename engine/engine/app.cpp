@@ -171,10 +171,10 @@ bool CApp::create() {
 	delta_time = 0.f;
 	total_time = delta_time;
 
-	renderAABB = true;
-	renderAxis = true;
-	renderGrid = true;
-	renderNames = true;
+	renderAABB = false;
+	renderAxis = false;
+	renderGrid = false;
+	renderNames = false;
 	debug_mode = false;
 
 	createManagers();
@@ -223,6 +223,7 @@ bool CApp::create() {
 
 	assert(is_ok);
 
+#ifdef _DEBUG
 	// Init AntTweakBar
 	TwInit(TW_DIRECT3D11, ::render.device);
 	TwWindowSize(xres, yres);
@@ -233,27 +234,9 @@ bool CApp::create() {
 	entity_lister.init();
 	entity_actioner.init();
 	debug_optioner.init();
+#endif
 
 	activateInspectorMode(false);
-
-	/*
-	CEntity* e2 = CHandle::create< CEntity >();
-	TLife *life = e2->add(CHandle::create<TLife>());
-	life->life = 20.f;
-	TCompName* cname = e2->add(CHandle::create<TCompName>());
-	strcpy(cname->name, "pep");
-
-	CHandle h2(e2);
-	CHandle h3 = h2.clone();
-	CEntity* e3 = h3;
-	TLife *life3 = e3->get<TLife>();
-
-
-	TMsgExplosion msg1;
-	msg1.damage = 3.3f;
-	e2->sendMsg(msg1);
-	e2->sendMsg(TMsgDied(2));
-	*/
 
 	return true;
 }
@@ -311,7 +294,7 @@ void CApp::update(float elapsed) {
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
-
+#ifdef _DEBUG
 	if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
 		if (io.getMousePointer())
 			activateInspectorMode(true);
@@ -325,7 +308,7 @@ void CApp::update(float elapsed) {
 		else
 			activateDebugMode(false);
 	}
-
+#endif
 	//Calculate the current number of strings
 	unsigned int num_strings = numStrings();
 
@@ -658,8 +641,9 @@ void CApp::render() {
 	ps_basic.activate();
 	renderDebugEntities();
 	//renderEntityDebugList();
-
+#ifdef _DEBUG
 	TwDraw();
+#endif
 
 	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
 	font.print(15, 15, life_text.c_str());

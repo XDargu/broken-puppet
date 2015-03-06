@@ -251,6 +251,7 @@ void fsm_basic_player::Ragdoll(float elapsed){
 		
 
 		if (((TCompLife*)life)->life <= 0){
+			m_transform->rotation = XMQuaternionIdentity();
 			ChangeState("fbp_Dead");
 		}
 		else{
@@ -267,6 +268,7 @@ void fsm_basic_player::Dead(float elapsed){
 
 	state_time += elapsed;
 	if(state_time >= 6){
+		((TCompLife*)life)->life = 100;
 		ChangeState("fbp_Idle");
 	}
 	
@@ -347,21 +349,22 @@ bool fsm_basic_player::EvaluateFall(){
 
 void fsm_basic_player::EvaluateHit(){
 
-	if (last_hit == 0)
-		return;
-	float damage = 0;
-	if (last_hit >= 10){ //ragdoll force
-		damage = 20;
-		ChangeState("fbp_Ragdoll");
+	if (GetState() != "fbp_Dead") {
+		if (last_hit == 0)
+			return;
+		float damage = 0;
+		if (last_hit >= 10){ //ragdoll force
+			damage = 20;
+			ChangeState("fbp_Ragdoll");
+		}
+		else if (GetState() != "fbp_Ragdoll"){
+			damage = 10;
+			ChangeState("fbp_Hurt");
+		}
+		// Evaluate live to lose
+		EvaluateLiveToLose(damage);
+		last_hit = 0.f;
 	}
-	else if (GetState() != "fbp_Ragdoll"){
-		damage = 10;
-		ChangeState("fbp_Hurt");
-	}
-	// Evaluate live to lose
-	EvaluateLiveToLose(damage);	
-	last_hit = 0.f;
-
 }
 
 void fsm_basic_player::EvaluateLiveToLose(float damage){

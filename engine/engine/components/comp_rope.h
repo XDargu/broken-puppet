@@ -73,7 +73,7 @@ public:
 				if (buf.touches[i].actor->isRigidBody()) {
 					if (((physx::PxRigidBody*)buf.touches[i].actor)->getMass() < 100) {
 						physx::PxVec3 force = (buf.touches[i].actor->getGlobalPose().p - buf.touches[i].position).getNormalized();
-						((physx::PxRigidBody*)buf.touches[i].actor)->addForce(force * force_s, physx::PxForceMode::eIMPULSE);
+						//((physx::PxRigidBody*)buf.touches[i].actor)->addForce(force * force_s, physx::PxForceMode::eIMPULSE);
 					}
 					else
 					{

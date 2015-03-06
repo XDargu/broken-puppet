@@ -71,11 +71,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.cbWndExtra		= 0;
 	wcex.hInstance		= hInstance;
 	wcex.hIcon = 0; // LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ENGINE));
-	wcex.hCursor = 0; //; LoadCursor(NULL, IDC_ARROW);
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
 	wcex.lpszMenuName = 0; // MAKEINTRESOURCE(IDC_ENGINE);
 	wcex.lpszClassName	= "MCVClass";
 	wcex.hIconSm = 0; // LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
 
 	return RegisterClassEx(&wcex);
 }
@@ -121,7 +122,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
 		   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
 		   dwStyle = WS_OVERLAPPEDWINDOW;
-		   ShowCursor(FALSE);
+		   ShowCursor(TRUE);
 	   }
    }
 
@@ -163,11 +164,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
+#ifdef _DEBUG
 	// AntTweakBar
 	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
 		return 0; // event has been handled by AntTweakBar
-	// else process the event message
-	// ...
+#endif
 
 	CIOStatus &io = CIOStatus::get();
 	

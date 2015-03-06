@@ -37,6 +37,8 @@ void ai_basic_enemy::Init()
 	AddState("aibe_SelectSide", (statehandler)&ai_basic_enemy::SelectSide);
 	AddState("aibe_OrbitRight", (statehandler)&ai_basic_enemy::OrbitRight);
 	AddState("aibe_OrbitLeft", (statehandler)&ai_basic_enemy::OrbitLeft);
+	AddState("aibe_Ragdoll", (statehandler)&ai_basic_enemy::Ragdoll);
+	AddState("aibe_Dead", (statehandler)&ai_basic_enemy::Dead);
 
 	// reset the state
 	ChangeState("aibe_Idle");
@@ -72,6 +74,7 @@ void ai_basic_enemy::Init()
 
 	wander_target = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	comp_mesh = ((CEntity*)entity)->get<TCompMesh>();
+	comp_life = ((CEntity*)entity)->get<TCompLife>();
 
 	// For orbit check purpose
 	initial_yaw = 1000;
@@ -84,10 +87,6 @@ void ai_basic_enemy::Init()
 void ai_basic_enemy::Idle() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
-		already_animated = true;
-	}
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -130,11 +129,6 @@ void ai_basic_enemy::Idle() {
 void ai_basic_enemy::Wander() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
-		already_animated = true;
-
-	}
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 
@@ -207,10 +201,7 @@ void ai_basic_enemy::Wander() {
 
 void ai_basic_enemy::View() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -229,10 +220,7 @@ void ai_basic_enemy::Lost() {
 
 	initial_attack_done = false;
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -249,10 +237,7 @@ void ai_basic_enemy::Lost() {
 
 void ai_basic_enemy::Chase() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Run");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Run");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -285,10 +270,7 @@ void ai_basic_enemy::InitialAttack() {
 
 	initial_attack_done = true;
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -312,10 +294,7 @@ void ai_basic_enemy::InitialAttack() {
 
 void ai_basic_enemy::IdleWar() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -387,10 +366,7 @@ void ai_basic_enemy::SelectAttack() {
 
 void ai_basic_enemy::Attacking1() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -413,10 +389,7 @@ void ai_basic_enemy::Attacking1() {
 
 void ai_basic_enemy::Attacking2() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -458,10 +431,7 @@ void ai_basic_enemy::SelectSide() {
 
 void ai_basic_enemy::OrbitRight() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -483,10 +453,7 @@ void ai_basic_enemy::OrbitRight() {
 
 void ai_basic_enemy::OrbitLeft() {
 
-	if (!already_animated) {
-		((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
-		already_animated = true;
-	}
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -503,6 +470,69 @@ void ai_basic_enemy::OrbitLeft() {
 		already_animated = false;
 		initial_yaw = 1000;
 		ChangeState("aibe_IdleWar");
+	}
+}
+
+float state_time = 0.f;
+
+void ai_basic_enemy::Ragdoll(float elapsed){
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
+
+	state_time += elapsed;
+
+	physx::PxMaterial* mat;
+	((TCompUnityCharacterController*)character_controller)->enemy_collider->getMaterials(&mat, 1);
+	mat->setRestitution(1);
+
+	((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
+	((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);
+	((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eTWIST, physx::PxD6Motion::eFREE);
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	m_transform->rotation =
+		Physics.PxQuatToXMVECTOR(
+		((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getGlobalPose().q
+		);
+
+	if (((state_time >= 1 && ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getLinearVelocity().magnitude() < 0.1f))
+		|| (state_time >= 5))
+	{
+		state_time = 0;
+		((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eLOCKED);
+		((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eLOCKED);
+		((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eTWIST, physx::PxD6Motion::eLOCKED);
+		((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->setGlobalPose(
+			physx::PxTransform(
+			((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, 1, 0),
+			((TCompUnityCharacterController*)character_controller)->enemy_rigidbody->getGlobalPose().q
+			)
+			);
+		mat->setRestitution(0);
+
+
+		if (((TCompLife*)comp_life)->life <= 0){
+			m_transform->rotation = XMQuaternionIdentity();
+			ChangeState("aibe_Dead");
+		}
+		else{
+			ChangeState("aibe_Idle");
+		}
+
+	}
+}
+
+void ai_basic_enemy::Dead(float elapsed){
+	// --TODO: MUERTE
+	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Dead");
+}
+
+void ai_basic_enemy::EvaluateHit(float damage) {
+	if (damage <= 10000.f){
+		ChangeState("aibe_Ragdoll");
+	}
+	else{
+		((TCompLife*)comp_life)->life = 0;
+		ChangeState("aibe_Ragdoll");
 	}
 }
 
