@@ -334,7 +334,6 @@ void CApp::update(float elapsed) {
 			CHandle c_rope = strings.back();
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());
-			dbg("Cancelar la última");
 		}		
 	}
 
@@ -401,7 +400,6 @@ void CApp::update(float elapsed) {
 					firstActor = blockHit.actor;
 					firstPosition = blockHit.position;
 					firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
-					dbg("Primer actor\n");
 
 					CEntity* new_e = entity_manager.createEmptyEntity();
 					CEntity* rigidbody_e = entity_manager.getByName(firstActor->getName());
@@ -452,7 +450,6 @@ void CApp::update(float elapsed) {
 						entity_manager.remove(c_rope.getOwner());
 					}
 
-					dbg("Segundo actor\n");
 					CEntity* new_e = entity_manager.createEmptyEntity();
 
 					TCompName* new_e_name = CHandle::create<TCompName>();
@@ -527,7 +524,6 @@ void CApp::update(float elapsed) {
 				else {
 					firstActor = nullptr;
 					firstPosition = PxVec3(0, 0, 0);
-					dbg("Acción ancelada\n");
 					entity_manager.remove(firstNeedle);
 					firstNeedle = CHandle();
 				}
