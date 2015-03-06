@@ -27,6 +27,7 @@ static CApp the_app;
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
+deque<CHandle> strings;
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
@@ -323,16 +324,34 @@ void CApp::update(float elapsed) {
 		else
 			activateDebugMode(false);
 	}
-	if (io.becomesPressed(CIOStatus::CANCEL_STRING)) {
-		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-		{
-			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 
-			if (djoint) {
-				entity_manager.remove(CHandle(djoint).getOwner());
+	//Calculate the current number of strings
+	unsigned int num_strings = numStrings();
+
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f  && num_strings > 0) {
+			CHandle c_rope = strings.back();
+			strings.pop_back();
+			entity_manager.remove(c_rope.getOwner());
+			dbg("Cancelar la última");
+		}		
+	}
+
+	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && num_strings > 0) {
+			strings.clear();
+			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+			{
+				TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+
+				if (djoint) {
+					entity_manager.remove(CHandle(djoint).getOwner());
+				}
 			}
 		}
 	}
+
 	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 		{
@@ -358,10 +377,8 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
-		//Calculate the current number of strings
-		unsigned int num_strings = numStrings();
+		
 
-		if (num_strings < max_num_string){
 			// Get the camera position
 			CEntity* e = CEntityManager::get().getByName("PlayerCamera");
 			TCompTransform* t = e->get<TCompTransform>();
@@ -424,6 +441,11 @@ void CApp::update(float elapsed) {
 
 				}
 				else if (blockHit.actor != firstActor) {
+					if (num_strings >= max_num_string){
+						CHandle c_rope = strings.front();
+						strings.pop_front();
+						entity_manager.remove(c_rope.getOwner());
+					}
 
 					dbg("Segundo actor\n");
 					CEntity* new_e = entity_manager.createEmptyEntity();
@@ -484,9 +506,12 @@ void CApp::update(float elapsed) {
 						, rigidbody_e->get<TCompRigidBody>()
 						);
 
+
+					strings.push_back(CHandle(new_e_r));
 					firstActor = nullptr;
 					firstNeedle = CHandle();
 					entitycount++;
+					
 				}
 				// Same actor, action cancelled
 				else {
@@ -497,8 +522,14 @@ void CApp::update(float elapsed) {
 					firstNeedle = CHandle();
 				}
 			}
-		}
+		/*}else{
+			TCompRope* c_rope = strings.front();
+			strings.pop();
+			entity_manager.remove(CHandle(c_rope).getOwner());
+		}*/
 	}
+
+
 	if (io.becomesPressed(CIOStatus::EXTRA)) {
 		// Get the camera position
 		CEntity* e = CEntityManager::get().getByName("PlayerCamera");
@@ -879,7 +910,7 @@ unsigned int CApp::numStrings(){
 	int num_strings = 0;
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i){
 		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
-		if (c_rope){
+		if (c_rope){			
 			num_strings++;
 		}
 	}

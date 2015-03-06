@@ -623,7 +623,7 @@
     <name name="condicion_victoria" />
     <trigger/>
     <transform position="41.028 19.27 -63.12" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
+    <aabb min="-0.5 0.0 -0.866025" max="1.0 0.1 0.866025"/>
     <victoryCondition/>
   </entity>
   <entity>
