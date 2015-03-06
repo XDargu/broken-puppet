@@ -72,6 +72,8 @@ CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
 
+CHandle		 life;
+
 TCompCamera*  camera;
 CCamera*	  oldCamera;
 CFont         font;
@@ -85,7 +87,6 @@ bool debug_mode;
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
-	SUBSCRIBE(TCompBasicPlayerController, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
 	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
@@ -284,6 +285,7 @@ void CApp::doFrame() {
 
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
+		
 		
 		// Fixed update
 		fixedUpdateCounter += delta_secs;
@@ -643,6 +645,7 @@ void CApp::render() {
 	ctes_global.activateInVS(2);
 	teapot->activateAndRender();*/
 
+
 	renderEntities();
 	vs_basic.activate();
 	ps_basic.activate();
@@ -650,6 +653,9 @@ void CApp::render() {
 	//renderEntityDebugList();
 
 	TwDraw();
+
+	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
+	font.print(15, 15, life_text.c_str());
 
 	::render.swap_chain->Present(0, 0);
 
