@@ -431,9 +431,14 @@ void CApp::update(float elapsed) {
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
 					bool a = firstActor->isRigidDynamic();
+
+					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
+					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
+					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+
 					new_e_needle->create(
 						firstActor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(firstOffset) : physics_manager.PxVec3ToXMVECTOR(firstPosition)
-						, XMQuaternionMultiply(rotation, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(firstActor->getGlobalPose().q)))
+						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(firstActor->getGlobalPose().q)))
 						, rigidbody_e->get<TCompRigidBody>()
 						);
 
@@ -491,18 +496,23 @@ void CApp::update(float elapsed) {
 					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
 					new_e2->add(new_e_needle2);
 					XMVECTOR rotation;
-					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
+					if (blockHit.position == physics_manager.XMVECTORToPxVec3(t->position)) {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
 					else {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
 					bool a = blockHit.actor->isRigidDynamic();
+
+					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
+					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
+					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+
 					new_e_needle2->create(
 						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
-						, XMQuaternionMultiply(rotation, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
+						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
 						, rigidbody_e->get<TCompRigidBody>()
 						);
 
