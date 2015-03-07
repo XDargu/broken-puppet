@@ -143,6 +143,39 @@
     <ClInclude Include="ai\ai_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_rope.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_needle.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="callback_controllers.h" />
+    <ClInclude Include="callback_physics.h" />
+    <ClInclude Include="components\comp_unity_character_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\fsm_basic_player.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_basic_player_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="options_parser.h" />
+    <ClInclude Include="components\comp_trigger.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="comp_tag.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="comp_victory_cond.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_distance_text.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_sphere.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -217,6 +250,12 @@
     <ClCompile Include="ai\ai_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
+    <ClCompile Include="callback_physics.cpp" />
+    <ClCompile Include="callback_controllers.cpp" />
+    <ClCompile Include="ai\fsm_basic_player.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="options_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -252,5 +291,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="my_file.xml" />
+    <Xml Include="resolution.xml" />
   </ItemGroup>
 </Project>

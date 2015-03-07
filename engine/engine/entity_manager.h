@@ -60,7 +60,8 @@ public:
 	static CEntityManager& get();
 
 	void add(CHandle the_entity);
-	bool remove(CHandle the_entity);
+	bool remove(CHandle the_handle);
+	void destroyRemovedHandles();
 	bool clear();
 	CHandle getByName(const char *name);
 	const VEntities& getEntities() const { return entities; }
@@ -72,6 +73,7 @@ public:
 protected:
 	// General entity vector
 	VEntities entities;
+	VEntities handles_to_destroy;
 };
 
 

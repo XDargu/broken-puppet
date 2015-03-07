@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "physics_manager.h"
+#include "callback_physics.h"
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
 #include <string>
@@ -9,9 +10,10 @@ using namespace DirectX;
 
 static CPhysicsManager physics_manager;
 
+CCallbacks_physx gContactReportCallBack;
 static PxDefaultErrorCallback gDefaultErrorCallback;
 static PxDefaultAllocator gDefaultAllocatorCallback;
-static PxSimulationFilterShader gDefaultFilterShader = PxDefaultSimulationFilterShader;
+static PxSimulationFilterShader gDefaultFilterShader = FilterShader;
 
 CPhysicsManager& CPhysicsManager::get() {
 	return physics_manager;
@@ -64,7 +66,11 @@ void CPhysicsManager::init() {
 	if (!sceneDesc.filterShader)
 		sceneDesc.filterShader = gDefaultFilterShader;
 
+	// Asignación de callback de colisiones
+	sceneDesc.simulationEventCallback = &gContactReportCallBack;
+
 	gScene = gPhysicsSDK->createScene(sceneDesc);
+	gScene->setFlag(PxSceneFlag::eENABLE_CCD, true);
 
 	// Inicializar Cooking para colliders
 	PxTolerancesScale toleranceScale;
@@ -124,4 +130,52 @@ bool CPhysicsManager::raycast(PxVec3 origin, PxVec3 unit_dir, PxReal max_distanc
 
 bool CPhysicsManager::raycast(XMVECTOR origin, XMVECTOR unit_dir, PxReal max_distance, PxRaycastBuffer &hit) {
 	return gScene->raycast(XMVECTORToPxVec3(origin), XMVECTORToPxVec3(unit_dir), max_distance, hit);
+}
+
+void CPhysicsManager::raycastAll(physx::PxVec3 origin, physx::PxVec3 unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit) {
+	const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+	physx::PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+	physx::PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call are all hits along the ray, stored in 'hitBuffer'
+	gScene->raycast(origin, unit_dir, max_distance, buf);	
+	hit = buf;
+}
+
+void CPhysicsManager::raycastAll(XMVECTOR origin, XMVECTOR unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit) {
+	const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+	physx::PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+	physx::PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call are all hits along the ray, stored in 'hitBuffer'
+	gScene->raycast(XMVECTORToPxVec3(origin), XMVECTORToPxVec3(unit_dir), max_distance, buf);
+	hit = buf;
+}
+
+//Asignación de mascaras para filtrar las colisiones por Actores
+void setupFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask)
+{
+	PxFilterData filterData;
+	filterData.word0 = filterGroup;
+	filterData.word1 = filterMask;
+	const PxU32 numShapes = actor->getNbShapes();
+	PxShape** shapes = (PxShape**)malloc(sizeof(PxShape*)*numShapes);
+	actor->getShapes(shapes, numShapes);
+	for (PxU32 i = 0; i < numShapes; i++)
+	{
+		PxShape* shape = shapes[i];
+		shape->setSimulationFilterData(filterData);
+	}
+	free(shapes);
+}
+
+//Asignación de mascaras para filtrar las colisiones por Shapes
+void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask)
+{
+	PxFilterData filterData;
+	filterData.word0 = filterGroup;
+	filterData.word1 = filterMask;
+	shape->setSimulationFilterData(filterData);
 }

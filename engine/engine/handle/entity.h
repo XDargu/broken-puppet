@@ -5,7 +5,7 @@
 class CEntity {
 	CHandle components[CHandle::max_types];
 public:
-
+	char tag[32];
 	~CEntity() {
 		for (uint32_t i = 0; i < CHandle::max_types; i++)
 			components[i].destroy();
@@ -50,7 +50,9 @@ public:
 
 	// Helpers
 	const char* getName() const;
-	void loadFromAtts(MKeyValue& atts) {}
+	void loadFromAtts(MKeyValue& atts) {
+		std::strcpy(tag, atts.getString("tag", "untagged").c_str());
+	}
 
   // Mandar un msg a todos los componentes de esta entidad que se 
   // hayan registrado a dicho mensage
@@ -75,6 +77,10 @@ public:
 	void destroyComponents() {
 		for (uint32_t i = 0; i < CHandle::max_types; i++)
 			components[i].destroy();
+	}
+
+	bool hasTag(char* the_tag) {
+		return std::strcmp(tag, the_tag) == 0;
 	}
 
 	/*

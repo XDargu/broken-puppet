@@ -15,17 +15,23 @@ CIOStatus::CIOStatus( ) {
 	//shift
 	buttons[CIRCLE].key = 16;
 
-	
+	buttons[MOUSE_LEFT].key = VK_LBUTTON;
+	buttons[MOUSE_RIGHT].key = VK_RBUTTON;
+	buttons[MOUSE_MIDDLE].key = VK_MBUTTON;	
+
 	buttons[DIGITAL_LEFT].key = 'A';
 	buttons[DIGITAL_RIGHT].key = 'D';
 	buttons[DIGITAL_UP].key = 'W';
 	buttons[DIGITAL_DOWN].key = 'S';
 
-	buttons[THROW_STRING].key = VK_LCONTROL;
-	buttons[TENSE_STRING].key = VK_LSHIFT;
-	buttons[CANCEL_STRING].key = 'O';
+	buttons[THROW_STRING].key = VK_LBUTTON;
+	buttons[TENSE_STRING].key = VK_RBUTTON;
+	buttons[CANCEL_STRING].key = VK_MBUTTON;
+	buttons[EXTRA].key = 'O';	
 	buttons[INSPECTOR_MODE].key = VK_F2;
 	buttons[DEBUG_MODE].key = VK_F3;
+	buttons[EXIT].key = VK_ESCAPE;
+	buttons[RUN].key = VK_LSHIFT;
 
 	mouse.dx = 0;
 	mouse.dy = 0;
@@ -134,8 +140,9 @@ void CIOStatus::update(float elapsed) {
 
 	// update buttons
 	for (int i = 0; i<BUTTONS_COUNT; ++i) {
-		TButton &b = buttons[i];		
+		TButton &b = buttons[i];
 
+		
 		b.was_pressed = b.is_pressed;
 
 		bool now_is_pressed = false;
@@ -145,12 +152,7 @@ void CIOStatus::update(float elapsed) {
 			now_is_pressed = (::GetAsyncKeyState(b.key) & 0x8000) != 0;
 		}
 
-		if (!(i == MOUSE_LEFT || i == MOUSE_RIGHT || i == MOUSE_MIDDLE)){
-
-			b.setPressed(now_is_pressed, elapsed);
-		}
-
-		
+		b.setPressed(now_is_pressed, elapsed);		
 	}
 }
 

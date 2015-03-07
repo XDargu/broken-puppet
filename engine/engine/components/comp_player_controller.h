@@ -9,6 +9,7 @@ private:
 	CHandle player_pivot_transform;
 	XMVECTOR delta_pos;
 	XMVECTOR delta_jump;
+
 public:
 
 	bool jumping;
@@ -69,35 +70,6 @@ public:
 		physx::PxRigidDynamic* c = character_controller->getActor();
 		
 		grounded = true;
-
-		// Kinematic capsule creation
-		/*kinematic_capsule = physx::PxCreateDynamic(
-			  *Physics.gPhysicsSDK
-			, physx::PxTransform(
-				  Physics.XMVECTORToPxVec3(trans->position)
-				  , Physics.XMVECTORToPxQuat(
-						XMQuaternionMultiply(
-							  trans->rotation
-							, XMQuaternionRotationAxis(
-								  XMVectorSet(0, 0, 1, 0)
-								, deg2rad(90)
-							)
-						)
-					)
-				)
-			, physx::PxCapsuleGeometry(0.25f, 0.5f)
-			, *Physics.gPhysicsSDK->createMaterial(
-				0.5f
-				, 0.5f
-				, 0.5f
-			)
-			, 1
-		);
-
-		kinematic_capsule->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
-
-		Physics.gScene->addActor(*kinematic_capsule);*/
-
 		
 	}
 
@@ -191,25 +163,6 @@ public:
 		delta_pos = XMVectorZero();
 
 		grounded = collisionFlags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN);
-		
-		//physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
-		//transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
-
-		// Kinematic capsule:
-		/*kinematic_capsule->setKinematicTarget(
-			physx::PxTransform(
-				  Physics.XMVECTORToPxVec3(transform->position)
-				, Physics.XMVECTORToPxQuat(
-					XMQuaternionMultiply(
-						  transform->rotation
-						, XMQuaternionRotationAxis(
-							  XMVectorSet(0, 0, 1, 0)
-							, deg2rad(90)
-						)
-					)
-				)
-			)
-		);*/
 	}
 
 

@@ -71,11 +71,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.cbWndExtra		= 0;
 	wcex.hInstance		= hInstance;
 	wcex.hIcon = 0; // LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ENGINE));
-	wcex.hCursor = 0; //; LoadCursor(NULL, IDC_ARROW);
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
 	wcex.lpszMenuName = 0; // MAKEINTRESOURCE(IDC_ENGINE);
 	wcex.lpszClassName	= "MCVClass";
 	wcex.hIconSm = 0; // LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
 
 	return RegisterClassEx(&wcex);
 }
@@ -105,9 +106,29 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    // so the rect is bigger
    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
+   DWORD dwStyle = WS_OVERLAPPEDWINDOW;
+   
+   if (app.fullscreen){
+	   //Initializando parametros de ventana a Fullscreen
+	   DEVMODE screen;
+	   DWORD dwExStyle;
+	   dwStyle = WS_POPUP;
+	   memset(&screen, 0, sizeof(screen));
+	   screen.dmSize = sizeof(screen);
+	   screen.dmPelsWidth = app.xres;
+	   screen.dmPelsHeight = app.yres;
+	   screen.dmBitsPerPel = 32;
+	   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+	   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
+		   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
+		   dwStyle = WS_OVERLAPPEDWINDOW;
+		   ShowCursor(TRUE);
+	   }
+   }
+
    // Create the actual window
    hWnd = CreateWindow("MCVClass", "MCV Engine 2014"
-	   , WS_OVERLAPPEDWINDOW
+	   , dwStyle
 	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
 	   , rc.right - rc.left					// Width
 	   , rc.bottom - rc.top					// Height
@@ -121,8 +142,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    app.hWnd = hWnd;
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
-
+ 
    return TRUE;
+}
+
+void fullscreenMode(){
+
 }
 
 //
@@ -139,12 +164,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
-
+#ifdef _DEBUG
 	// AntTweakBar
 	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
 		return 0; // event has been handled by AntTweakBar
-	// else process the event message
-	// ...
+#endif
 
 	CIOStatus &io = CIOStatus::get();
 	
@@ -158,7 +182,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-	case WM_LBUTTONUP:
+	/*case WM_LBUTTONUP:
 		//::ReleaseCapture( );
 		io.getButtons()[io.MOUSE_LEFT].setPressed(false, 0.f);
 		break;
@@ -179,7 +203,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_MBUTTONDOWN:
 		io.getButtons()[io.MOUSE_MIDDLE].setPressed(true, 0.f);
-		break;
+		break;*/
 		/*case WM_KILLFOCUS:
 		app.has_focus = false;
 		break;

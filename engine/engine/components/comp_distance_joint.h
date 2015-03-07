@@ -9,9 +9,27 @@ private:
 	std::string actor2;
 
 public:
-	physx::PxDistanceJoint* joint;	
+	physx::PxDistanceJoint* joint;
 
 	TCompDistanceJoint() {}
+	~TCompDistanceJoint() {
+
+		// Awake the actors
+		physx::PxRigidActor* a1 = nullptr;
+		physx::PxRigidActor* a2 = nullptr;
+		
+		joint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a1)->wakeUp();
+		}
+		if (a2->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a2)->wakeUp();
+		}
+
+		// Release the joint
+		joint->release();
+	}
 
 	void loadFromAtts(MKeyValue &atts) {
 		actor1 = atts.getString("actor1", "");
@@ -40,7 +58,7 @@ public:
 		TCompRigidBody* r2 = e_a2->get<TCompRigidBody>();
 
 		TCompStaticBody* s1 = e_a1->get<TCompStaticBody>();
-		TCompStaticBody* s2 = e_a2->get<TCompStaticBody>();
+		TCompStaticBody* s2 = e_a2->get<TCompStaticBody>();		
 
 		//create a joint
 		if (r1) {

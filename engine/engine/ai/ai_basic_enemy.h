@@ -6,7 +6,9 @@
 class ai_basic_enemy : public aicontroller
 {
 	CHandle player;
-	CHandle enemy_controller;
+	CHandle character_controller;
+	CHandle comp_mesh;
+	CHandle comp_life;
 
 	int probability_wander;
 	int probability_idle;
@@ -50,14 +52,14 @@ public:
 	void SelectSide();
 	void OrbitRight();
 	void OrbitLeft();
+	void Ragdoll(float elapsed);
+	void Dead(float elapsed);
+	void EvaluateHit(float damage);
 
 	bool trueEverySecond();
 	bool trueEveryXSeconds(float time);
 
-	void Advance();
 	void Orbit(bool right);
-	void LookAt(XMVECTOR target);
-	void Twist(float freq, float power);
 
 	void setTarget(CHandle target) { player = target; };
 };

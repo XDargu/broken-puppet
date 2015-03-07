@@ -43,6 +43,8 @@ public:
 		}
 		
 		Physics.gScene->addActor(*staticBody);
+
+		staticBody->setName(e->getName());
 	}
 
 	std::string toString() {

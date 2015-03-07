@@ -14,27 +14,40 @@ struct TCompAiFsmBasic : TBaseComponent {
 
 	void loadFromAtts(MKeyValue &atts) {
 
-		CEntity* e = CHandle(this).getOwner();
-		TCompTransform* trans = e->get<TCompTransform>();
-		TCompEnemyController* enemy_controller = e->get<TCompEnemyController>();
+		assertRequiredComponent<TCompTransform>(this);
+		assertRequiredComponent<TCompUnityCharacterController>(this);
+		
 
-		assert(trans || fatal("TCompAiFsmBasic requieres a TCompTransform component"));
-		assert(enemy_controller || fatal("TCompAiFsmBasic requieres a TCompEnemyController component"));
-
-		ai_basic_enemy ai;
-		m_ai_controller = ai;
 		m_ai_controller.SetEntity(CHandle(this).getOwner());
 	}
 
-	void init(){
-		
+	void init(){		
 		m_ai_controller.Init();
+		TCompUnityCharacterController* controller = getSibling<TCompUnityCharacterController>(this);
+		controller->moveSpeedMultiplier = 3;
 	}
 
 	void update(float elapsed){
 		m_ai_controller.Recalc(elapsed);
 	}
 
+	void actorHit(const TActorHit& msg) {
+		dbg("Force recieved is  %f\n", msg.damage);
+		m_ai_controller.EvaluateHit(msg.damage);
+	}
 
+	void groundHit(const TGroundHit& msg) {
+		dbg("ground hit recieved is  %f\n", msg.vel);
+		if (msg.vel > -15.f){
+			//m_fsm_basic_player.last_hit = 2;
+		}
+		else{
+			//m_fsm_basic_player.last_hit = 10;
+		}
+	}
+
+	void onRopeTensed(const TMsgRopeTensed& msg) {		
+		m_ai_controller.ChangeState("aibe_Ragdoll");		
+	}
 };
 #endif

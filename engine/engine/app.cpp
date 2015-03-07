@@ -7,6 +7,7 @@
 #include "font/font.h"
 #include "render/texture.h"
 #include "importer_parser.h"
+#include "options_parser.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
 #include <time.h>
@@ -26,23 +27,39 @@ static CApp the_app;
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
+deque<CHandle> strings;
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
 
 CApp& CApp::get() {
-  return the_app;
+	return the_app;
 }
 
 CApp::CApp()
-  : xres(640)
-  , yres(480)
+	: xres(640)
+	, yres(480)
 { }
 
 void CApp::loadConfig() {
-  // Parse xml file...
-  xres = 1024;
-  yres = 768;
+	// Parse xml file...
+	COptionsParser p;
+	bool success = p.xmlParseFile("resolution.xml");
+	if (success){
+		int x_res;
+		int y_res;
+		bool mode;
+		p.getResolution(x_res, y_res, mode);
+		xres = x_res;
+		yres = y_res;
+		fullscreen = mode;
+	}
+	else{
+		xres = 1024;
+		yres = 768;
+	}
+
+
 }
 
 CVertexShader vs_basic;
@@ -55,7 +72,9 @@ CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
 
-TCompCamera*      camera;
+CHandle		 life;
+
+TCompCamera*  camera;
 CCamera*	  oldCamera;
 CFont         font;
 
@@ -66,21 +85,26 @@ float fixedUpdateCounter;
 bool debug_mode;
 
 void registerAllComponentMsgs() {
-	//SUBSCRIBE(TLife, TMsgExplosion, onExplosion);
-	//SUBSCRIBE(TLife, TMsgDied, onDied);
+	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
+	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
+	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
+	SUBSCRIBE(TCompAiFsmBasic, TMsgRopeTensed, onRopeTensed);
+	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
 }
 
 void createManagers() {
-
-
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
+	getObjManager<TCompTag>()->init(1024);
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(32);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
+	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
@@ -89,374 +113,553 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
+	getObjManager<TCompRope>()->init(32);
+	getObjManager<TCompNeedle>()->init(1024);
+	//PRUEBA TRIGGER
+	getObjManager<TCompTrigger>()->init(1024);
+	getObjManager<TCompDistanceText>()->init(32);
+	getObjManager<TCompVictoryCond>()->init(1);
+	//
+
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(64);
+
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
-	
+
+	getObjManager<TCompUnityCharacterController>()->init(64);
+	getObjManager<TCompBasicPlayerController>()->init(1);
+
 	registerAllComponentMsgs();
 }
 
 void initManagers() {
 	getObjManager<TCompCamera>()->initHandlers();
 	getObjManager<TCompCollider>()->initHandlers();
+	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
+	getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
 	getObjManager<TCompCameraPivotController>()->initHandlers();
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
-	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
+
+	//PRUEBA TRIGGER
+	getObjManager<TCompTrigger>()->initHandlers();
+	getObjManager<TCompDistanceText>()->initHandlers();
+	getObjManager<TCompVictoryCond>()->initHandlers();
+
+	getObjManager<TCompBasicPlayerController>()->initHandlers();
+	getObjManager<TCompAiFsmBasic>()->initHandlers();
 }
 
 bool CApp::create() {
 
-  if (!::render.createDevice())
-    return false;
+	if (!::render.createDevice())
+		return false;
 
-  // Start random seed
-  srand(time(NULL));
+	// Start random seed
+	srand(time(NULL));
 
-  // public delta time inicialization
-  delta_time = 0.f;
+	// public delta time inicialization
+	delta_time = 0.f;
+	total_time = delta_time;
 
-  renderAABB = true;
-  renderAxis = true;
-  renderGrid = true;
-  renderNames = true;
-  debug_mode = false;
+	renderAABB = false;
+	renderAxis = false;
+	renderGrid = false;
+	renderNames = false;
+	debug_mode = false;
 
-  createManagers();
+	createManagers();
 
-  physics_manager.init();
+	physics_manager.init();
 
-  CImporterParser p;
-  p.xmlParseFile("my_file.xml");
+	CImporterParser p;
+	p.xmlParseFile("my_file.xml");
 
-  initManagers();
-  fixedUpdateCounter = 0.0f;
+	initManagers();
+	fixedUpdateCounter = 0.0f;
 
-  bool is_ok = vs_basic.compile("Tutorial04.fx", "VS", vdcl_position_color)
-    && ps_basic.compile("Tutorial04.fx", "PS")
-    && vs_basic2.compile("Tutorial04.fx", "VSNormal", vdcl_position_uv_normal)
-    && ps_textured.compile("Tutorial04.fx", "PSTextured")
-  ;
-  assert(is_ok);
+	bool is_ok = vs_basic.compile("Tutorial04.fx", "VS", vdcl_position_color)
+		&& ps_basic.compile("Tutorial04.fx", "PS")
+		&& vs_basic2.compile("Tutorial04.fx", "VSNormal", vdcl_position_uv_normal)
+		&& ps_textured.compile("Tutorial04.fx", "PSTextured")
+		;
+	assert(is_ok);
 
-  CEntity* e = entity_manager.getByName("Camera");
-  camera = e->get<TCompCamera>();
 
-  is_ok = font.create();
-  font.camera = camera;
-  assert(is_ok);
+	CEntity* e = entity_manager.getByName("PlayerCamera");
+	camera = e->get<TCompCamera>();
 
-  // Ctes ---------------------------
-  is_ok &= renderUtilsCreate();
+	CHandle pl = entity_manager.getByName("Player");
 
-  // Initialize the camera
-  camera->setViewport(0.f, 0.f, (float)xres, (float)yres);
+	is_ok = font.create();
+	font.camera = camera;
+	assert(is_ok);
 
-  //ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-  ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
-  is_ok &= ctes_global.create();
-  assert(is_ok);
+	// Ctes ---------------------------
+	is_ok &= renderUtilsCreate();
 
-  // Create debug meshes
-  is_ok &= createGrid(grid, 10);
-  is_ok &= createAxis(axis);
-  is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
-  is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
+	// Initialize the camera
+	camera->setViewport(0.f, 0.f, (float)xres, (float)yres);
 
-  assert(is_ok);
+	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
+	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
+	is_ok &= ctes_global.create();
+	assert(is_ok);
 
-  // Init AntTweakBar
-  TwInit(TW_DIRECT3D11, ::render.device);
-  TwWindowSize(xres, yres);
+	// Create debug meshes
+	is_ok &= createGrid(grid, 10);
+	is_ok &= createAxis(axis);
+	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
+	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
-  entity_inspector.init();
-  entity_inspector.inspectEntity(nullptr);
+	assert(is_ok);
 
-  entity_lister.init();
-  entity_actioner.init();
-  debug_optioner.init();
+#ifdef _DEBUG
+	// Init AntTweakBar
+	TwInit(TW_DIRECT3D11, ::render.device);
+	TwWindowSize(xres, yres);
 
-  activateInspectorMode(false);
+	entity_inspector.init();
+	entity_inspector.inspectEntity(nullptr);
 
-  return true;
+	entity_lister.init();
+	entity_actioner.init();
+	debug_optioner.init();
+#endif
+
+	activateInspectorMode(false);
+
+	return true;
 }
 
 void moveCameraOnEntity(CCamera& camera, CEntityOld *e) {
-  camera.lookAt(e->getPosition(), e->getPosition() + e->getFront(), e->getUp());
+	camera.lookAt(e->getPosition(), e->getPosition() + e->getFront(), e->getUp());
 }
 
 // -------------------------------------
 void CApp::doFrame() {
 
-  static LARGE_INTEGER before;
-  LARGE_INTEGER freq;
-  QueryPerformanceFrequency(&freq);
-  LARGE_INTEGER now;
-  QueryPerformanceCounter(&now);
-  LARGE_INTEGER delta_ticks;
-  delta_ticks.QuadPart = now.QuadPart - before.QuadPart;
-  
-  //delta_ticks.QuadPart *= 1000000;
-  //delta_ticks.QuadPart /= freq.QuadPart;
-  //double delta_secs = delta_ticks.QuadPart * 1e-6;
-  float delta_secs = delta_ticks.QuadPart * ( 1.0f / freq.LowPart );
-  delta_time = delta_secs;
-  
-  float fps = 1.0f / delta_secs;
+	static LARGE_INTEGER before;
+	LARGE_INTEGER freq;
+	QueryPerformanceFrequency(&freq);
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+	LARGE_INTEGER delta_ticks;
+	delta_ticks.QuadPart = now.QuadPart - before.QuadPart;
 
-  before = now;
+	//delta_ticks.QuadPart *= 1000000;
+	//delta_ticks.QuadPart /= freq.QuadPart;
+	//double delta_secs = delta_ticks.QuadPart * 1e-6;
+	float delta_secs = delta_ticks.QuadPart * (1.0f / freq.LowPart);
+	delta_time = delta_secs;
+	total_time += delta_secs;
 
-  // To avoid the fist huge delta time
-  if (delta_secs < 0.5) {
-	  update(delta_secs);
-	  
-	  // Fixed update
-	  fixedUpdateCounter += delta_secs;
+	float fps = 1.0f / delta_secs;
 
-	  while (fixedUpdateCounter > physics_manager.timeStep) {
-		  fixedUpdateCounter -= physics_manager.timeStep;
-		  fixedUpdate(physics_manager.timeStep);
-	  }
-	  
-	  /*if (fixedUpdateCounter >= physics_manager.timeStep) {
-		  fixedUpdate(fixedUpdateCounter);
-		  fixedUpdateCounter = 0;		  
-	  }*/
-  }
-  render();
+	before = now;
+
+	// To avoid the fist huge delta time
+	if (delta_secs < 0.5) {
+		
+		
+		// Fixed update
+		fixedUpdateCounter += delta_secs;
+
+		while (fixedUpdateCounter > physics_manager.timeStep) {
+			fixedUpdateCounter -= physics_manager.timeStep;
+			fixedUpdate(physics_manager.timeStep);
+		}
+
+		update(delta_secs);
+	}
+
+	entity_manager.destroyRemovedHandles();
+	render();
 }
 
 void CApp::update(float elapsed) {
 
-  CIOStatus& io = CIOStatus::get();
-  // Update input
-  io.update(elapsed);
+	CIOStatus& io = CIOStatus::get();
+	// Update input
+	io.update(elapsed);
 
-  if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
-	  if (io.getMousePointer())
-		  activateInspectorMode(true);
-	  else
-		  activateInspectorMode(false);
-  }
+	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
+	CEntity* e = CEntityManager::get().getByName("Player");
+#ifdef _DEBUG
+	if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
+		if (io.getMousePointer())
+			activateInspectorMode(true);
+		else
+			activateInspectorMode(false);
+	}
 
-  if (io.becomesReleased(CIOStatus::DEBUG_MODE)) {
-	  if (!debug_mode)
-		  activateDebugMode(true);
-	  else
-		  activateDebugMode(false);
-  }
+	if (io.becomesReleased(CIOStatus::DEBUG_MODE)) {
+		if (!debug_mode)
+			activateDebugMode(true);
+		else
+			activateDebugMode(false);
+	}
+#endif
+	//Calculate the current number of strings
+	unsigned int num_strings = numStrings();
 
-  if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
-	  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-	  {
-		  TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-		  
-		  if (djoint) {
-			  djoint->joint->setMaxDistance(0.1f);
-			  PxRigidActor* a1 = nullptr;
-			  PxRigidActor* a2 = nullptr;
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
-			  djoint->joint->getActors(a1, a2);
-			  // Call the addForce method to awake the bodies, if dynamic
-			  if (a1->isRigidDynamic()) {
-				  ((PxRigidDynamic*)a1)->addForce(PxVec3(0,0,0));
-			  }
-			  if (a2->isRigidDynamic()) {
-				  ((PxRigidDynamic*)a2)->addForce(PxVec3(0, 0, 0));
-			  }
-		  }
-	  }
-  }
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f  && num_strings > 0) {
+			CHandle c_rope = strings.back();
+			strings.pop_back();
+			entity_manager.remove(c_rope.getOwner());
+		}		
+	}
 
-  if (io.becomesPressed(CIOStatus::THROW_STRING)) {
+	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && num_strings > 0) {
+			strings.clear();
+			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+			{
+				TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 
-	  // Get the camera position
-	  CEntity* e = CEntityManager::get().getByName("Camera");
-	  TCompTransform* t = e->get<TCompTransform>();
+				if (djoint) {
+					entity_manager.remove(CHandle(djoint).getOwner());
+				}
+			}
+		}
+	}
 
-	  // Raycast detecting the collider the mouse is pointing at
-	  PxRaycastBuffer hit;
-	  physics_manager.raycast(t->position, t->getFront(), 1000, hit);
+	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
+		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+		{
+			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 
-	  static int entitycount = 1;
-	  static PxRigidActor* firstActor = nullptr;
-	  static PxVec3 firstPosition = PxVec3(0, 0, 0);
-	  if (hit.hasBlock) {
-		  PxRaycastHit blockHit = hit.block;
-		  dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
-		  dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
+			if (djoint) {
+				djoint->joint->setMaxDistance(0.1f);
+				PxRigidActor* a1 = nullptr;
+				PxRigidActor* a2 = nullptr;
 
-		  if (firstActor == nullptr) {
-			  firstActor = blockHit.actor;
-			  firstPosition = blockHit.position;
-			  dbg("Primer actor\n");
-		  }
-		  else if (blockHit.actor != firstActor) {
-
-			  dbg("Segundo actor\n");
-			  CEntity* new_e = entity_manager.createEmptyEntity();
-
-			  TCompName* new_e_name = CHandle::create<TCompName>();
-			  strcpy(new_e_name->name, ("RaycastTarget" + to_string(entitycount)).c_str());
-			  new_e->add(new_e_name);
-
-			  TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-			  new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position);
-
-			  // Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
-			  PxVec3 offset_1 = firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
-			  PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
-
-			  new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
-			  new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));
-
-			  new_e->add(new_e_j);
-
-			  TCompMesh* new_e_m = CHandle::create<TCompMesh>();
-			  new_e_m->mesh = mesh_manager.getByName("primitive_box");
-			  strcpy(new_e_m->path, "primitive_box");
-			  new_e->add(new_e_m);
-
-			  firstActor = nullptr;
-		  }
-		  // Same actor, action cancelled
-		  else {
-			  firstActor = nullptr;
-			  firstPosition = PxVec3(0, 0, 0);
-			  dbg("Acción ancelada\n");
-		  }
-	  }
-  }
-  if (io.becomesPressed(CIOStatus::CANCEL_STRING)) {
-	  // Get the camera position
-	  CEntity* e = CEntityManager::get().getByName("Camera");
-	  TCompTransform* t = e->get<TCompTransform>();
-
-	  // Raycast detecting the collider the mouse is pointing at
-	  PxRaycastBuffer hit;
-	  physics_manager.raycast(t->position, t->getFront(), 1000, hit);
-
-	  static int entitycount = 1;
-	  static PxRigidActor* firstActor = nullptr;
-	  static PxVec3 firstPosition = PxVec3(0, 0, 0);
-	  if (hit.hasBlock) {
-		  PxRaycastHit blockHit = hit.block;
-
-		  CEntity* new_e = entity_manager.createEmptyEntity();
-
-		  TCompName* new_e_name = CHandle::create<TCompName>();
-		  strcpy(new_e_name->name, ("RaycastTarget" + std::to_string(entitycount)).c_str());
-		  new_e->add(new_e_name);
-
-		  TCompTransform* new_e_t = CHandle::create<TCompTransform>();
-		  new_e_t->position = physics_manager.PxVec3ToXMVECTOR(blockHit.position + blockHit.normal * 1);
-		  new_e->add(new_e_t);
-
-		  TCompMesh* new_e_m = CHandle::create<TCompMesh>();
-		  new_e_m->mesh = mesh_manager.getByName("primitive_box");
-		  strcpy(new_e_m->path, "primitive_box");
-		  new_e->add(new_e_m);
-
-		  TCompCollider* new_e_c = CHandle::create<TCompCollider>();
-		  new_e_c->setShape(0.5f, 0.5f, 0.5f, 0.5f, 0.2f, 0.6f);
-		  new_e->add(new_e_c);
-
-		  TCompRigidBody* new_e_r = CHandle::create<TCompRigidBody>();
-		  new_e->add(new_e_r);
-		  new_e_r->create(1, false, true);
+				djoint->joint->getActors(a1, a2);
+				// Wake up the actors, if dynamic
+				if (a1->isRigidDynamic()) {
+					((physx::PxRigidDynamic*)a1)->wakeUp();
+					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+				}
+				if (a2->isRigidDynamic()) {
+					((physx::PxRigidDynamic*)a2)->wakeUp();
+					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+				}
+			}
+		}
+	}
 
 
-		  entitycount++;
-	  }
-  }
-  
-	
-  // Update ---------------------
-  //  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
-  ctes_global.get()->world_time += elapsed;
+	if (io.becomesPressed(CIOStatus::THROW_STRING)) {
 
-  getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
-  getObjManager<TCompPlayerPivotController>()->update(elapsed);
-  getObjManager<TCompCameraPivotController>()->update(elapsed);
-  getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
-  getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
-  getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
-  getObjManager<TCompAiFsmBasic>()->update(elapsed);
-  
+		
 
-  entity_inspector.update();
-  entity_lister.update();
-  entity_actioner.update();
+			// Get the camera position
+			CEntity* e = CEntityManager::get().getByName("PlayerCamera");
+			TCompTransform* t = e->get<TCompTransform>();
+
+			// Raycast detecting the collider the mouse is pointing at
+			PxRaycastBuffer hit;
+			physics_manager.raycast(t->position, t->getFront(), 1000, hit);
+
+			static int entitycount = 1;
+			static PxRigidActor* firstActor = nullptr;
+			static PxVec3 firstPosition = PxVec3(0, 0, 0);
+			static PxVec3 firstOffset = PxVec3(0, 0, 0);
+			static CHandle firstNeedle;
+			if (hit.hasBlock) {
+				PxRaycastHit blockHit = hit.block;
+				dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
+				dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
+
+				if (firstActor == nullptr) {
+					firstActor = blockHit.actor;
+					firstPosition = blockHit.position;
+					firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
+
+					CEntity* new_e = entity_manager.createEmptyEntity();
+					CEntity* rigidbody_e = entity_manager.getByName(firstActor->getName());
+
+					TCompName* new_e_name = CHandle::create<TCompName>();
+					std::strcpy(new_e_name->name, ("Needle" + to_string(entitycount)).c_str());
+					new_e->add(new_e_name);
+
+					TCompTransform* new_e_trans = CHandle::create<TCompTransform>();
+					new_e->add(new_e_trans);
+					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
+
+					TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
+					std::strcpy(new_e_mesh->path, "aguja");
+					new_e_mesh->mesh = mesh_manager.getByName("aguja");
+					new_e->add(new_e_mesh);
+
+					TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
+					new_e->add(new_e_needle);
+					XMVECTOR rotation;
+					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
+					else {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
+					bool a = firstActor->isRigidDynamic();
+
+					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
+					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
+					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+
+					new_e_needle->create(
+						firstActor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(firstOffset) : physics_manager.PxVec3ToXMVECTOR(firstPosition)
+						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(firstActor->getGlobalPose().q)))
+						, rigidbody_e->get<TCompRigidBody>()
+						);
+
+					firstNeedle = new_e;
+
+				}
+				else if (blockHit.actor != firstActor) {
+					if (num_strings >= max_num_string){
+						CHandle c_rope = strings.front();
+						strings.pop_front();
+						entity_manager.remove(c_rope.getOwner());
+					}
+
+					CEntity* new_e = entity_manager.createEmptyEntity();
+
+					TCompName* new_e_name = CHandle::create<TCompName>();
+					std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
+					new_e->add(new_e_name);
+
+					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
+					PxVec3 pos = firstActor->getGlobalPose().q.rotate(firstOffset) + firstActor->getGlobalPose().p;
+					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position);
+
+					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
+					PxVec3 offset_1 = firstOffset;//firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
+					PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
+
+					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
+					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));
+
+					new_e->add(new_e_j);
+
+					TCompRope* new_e_r = CHandle::create<TCompRope>();
+					new_e->add(new_e_r);
+					new_e_r->create();
+
+					// Needle
+					CEntity* new_e2 = entity_manager.createEmptyEntity();
+					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
+
+					TCompName* new_e_name2 = CHandle::create<TCompName>();
+					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
+					new_e2->add(new_e_name2);
+
+					TCompTransform* new_e_trans2 = CHandle::create<TCompTransform>();
+					new_e2->add(new_e_trans2);
+					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
+
+					TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
+					std::strcpy(new_e_mesh2->path, "aguja");
+					new_e_mesh2->mesh = mesh_manager.getByName("aguja");
+					new_e2->add(new_e_mesh2);
+
+					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
+					new_e2->add(new_e_needle2);
+					XMVECTOR rotation;
+					if (blockHit.position == physics_manager.XMVECTORToPxVec3(t->position)) {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
+					else {
+						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
+						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+					}
+					bool a = blockHit.actor->isRigidDynamic();
+
+					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
+					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
+					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+
+					new_e_needle2->create(
+						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
+						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
+						, rigidbody_e->get<TCompRigidBody>()
+						);
+
+
+					strings.push_back(CHandle(new_e_r));
+					firstActor = nullptr;
+					firstNeedle = CHandle();
+					entitycount++;
+					
+				}
+				// Same actor, action cancelled
+				else {
+					firstActor = nullptr;
+					firstPosition = PxVec3(0, 0, 0);
+					entity_manager.remove(firstNeedle);
+					firstNeedle = CHandle();
+				}
+			}
+		/*}else{
+			TCompRope* c_rope = strings.front();
+			strings.pop();
+			entity_manager.remove(CHandle(c_rope).getOwner());
+		}*/
+	}
+
+
+	if (io.becomesPressed(CIOStatus::EXTRA)) {
+		// Get the camera position
+		CEntity* e = CEntityManager::get().getByName("PlayerCamera");
+		TCompTransform* t = e->get<TCompTransform>();
+
+		// Raycast detecting the collider the mouse is pointing at
+		PxRaycastBuffer hit;
+		physics_manager.raycast(t->position, t->getFront(), 1000, hit);
+
+		static int entitycount = 1;
+		static PxRigidActor* firstActor = nullptr;
+		static PxVec3 firstPosition = PxVec3(0, 0, 0);
+		if (hit.hasBlock) {
+			PxRaycastHit blockHit = hit.block;
+
+			CEntity* new_e = entity_manager.createEmptyEntity();
+
+			TCompName* new_e_name = CHandle::create<TCompName>();
+			strcpy(new_e_name->name, ("TestCube" + std::to_string(entitycount)).c_str());
+			new_e->add(new_e_name);
+
+			TCompTransform* new_e_t = CHandle::create<TCompTransform>();
+			new_e_t->position = physics_manager.PxVec3ToXMVECTOR(blockHit.position + blockHit.normal * 1);
+			new_e->add(new_e_t);
+
+			TCompMesh* new_e_m = CHandle::create<TCompMesh>();
+			new_e_m->mesh = mesh_manager.getByName("primitive_box");
+			strcpy(new_e_m->path, "primitive_box");
+			new_e->add(new_e_m);
+
+			TCompCollider* new_e_c = CHandle::create<TCompCollider>();
+			new_e_c->setShape(0.5f, 0.5f, 0.5f, 0.5f, 0.2f, 0.6f);
+			new_e->add(new_e_c);
+
+			TCompRigidBody* new_e_r = CHandle::create<TCompRigidBody>();
+			new_e->add(new_e_r);
+			new_e_r->create(10, false, true);
+
+
+			entitycount++;
+		}
+	}
+
+
+	// Update ---------------------
+	//  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
+	ctes_global.get()->world_time += elapsed;
+
+	getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
+	getObjManager<TCompPlayerPivotController>()->update(elapsed);
+	getObjManager<TCompCameraPivotController>()->update(elapsed);
+	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	getObjManager<TCompAiFsmBasic>()->update(elapsed);
+	getObjManager<TCompUnityCharacterController>()->update(elapsed);
+
+	//PRUEBA TRIGGER
+	getObjManager<TCompTrigger>()->update(elapsed);
+	getObjManager<TCompDistanceText>()->update(elapsed);
+	getObjManager<TCompBasicPlayerController>()->update(elapsed);
+
+	entity_inspector.update();
+	entity_lister.update();
+	entity_actioner.update();
 }
 
 // Physics update
 void CApp::fixedUpdate(float elapsed) {
-  physics_manager.gScene->simulate(elapsed);
-  physics_manager.gScene->fetchResults(true);
+	physics_manager.gScene->simulate(elapsed);
+	physics_manager.gScene->fetchResults(true);
 
-  getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
-  getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
-  getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
+	getObjManager<TCompPlayerController>()->fixedUpdate(elapsed); // Update kinematic player
+	getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
+	getObjManager<TCompRope>()->fixedUpdate(elapsed);
+	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
+	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
+	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 }
 
 void CApp::render() {
 
-  // Render ---------------------
-  float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
-  ::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
-  ::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	// Render ---------------------
+	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
+	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-  activateTextureSamplers();
-  
-  //activateCamera(*camera, 1);
-  // TODO: Make activate TCamera
-  activateCamera(
-	  camera->view_projection, 
-	  ((TCompTransform*)((CEntity*)CHandle(camera).getOwner())->get<TCompTransform>())->position,
-	  1
-  );
+	activateTextureSamplers();
 
-  /*drawViewVolume(camera2);
-  setWorldMatrix(XMMatrixIdentity());
+	//activateCamera(*camera, 1);
+	// TODO: Make activate TCamera
+	activateCamera(
+		camera->view_projection,
+		((TCompTransform*)((CEntity*)CHandle(camera).getOwner())->get<TCompTransform>())->position,
+		1
+		);
 
-  static int nframe = 0;
-  font.printf(10, 10, "Yaw Is %f", rad2deg( getYawFromVector( e1->getFront())));
+	/*drawViewVolume(camera2);
+	setWorldMatrix(XMMatrixIdentity());
 
-  ctes_global.uploadToGPU();
+	static int nframe = 0;
+	font.printf(10, 10, "Yaw Is %f", rad2deg( getYawFromVector( e1->getFront())));
 
-  // Tech con textura
-  vs_basic2.activate();
-  ps_textured.activate();
-  const CTexture *t = texture_manager.getByName("wood_d");
-  t->activate(0);
-  const CMesh* teapot = mesh_manager.getByName("Box001");
-  ctes_global.activateInVS(2);
-  teapot->activateAndRender();*/
+	ctes_global.uploadToGPU();
 
-  renderEntities();
-  vs_basic.activate();
-  ps_basic.activate();
-  renderDebugEntities();
-  //renderEntityDebugList();
+	// Tech con textura
+	vs_basic2.activate();
+	ps_textured.activate();
+	const CTexture *t = texture_manager.getByName("wood_d");
+	t->activate(0);
+	const CMesh* teapot = mesh_manager.getByName("Box001");
+	ctes_global.activateInVS(2);
+	teapot->activateAndRender();*/
 
-  TwDraw();
 
-  ::render.swap_chain->Present(0, 0);
+	renderEntities();
+	vs_basic.activate();
+	ps_basic.activate();
+	renderDebugEntities();
+	//renderEntityDebugList();
+#ifdef _DEBUG
+	TwDraw();
+#endif
+
+	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
+	font.print(15, 15, life_text.c_str());
+
+	std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
+	font.print(15, 35, strings_text.c_str());
+
+	::render.swap_chain->Present(0, 0);
 
 }
 
 void CApp::renderEntities() {
-  
+
 	vs_basic2.activate();
 	ps_textured.activate();
 	const CTexture *t = texture_manager.getByName("wood_d");
@@ -510,75 +713,90 @@ void CApp::renderEntities() {
 	activateWorldMatrix(0);
 	activateTint(0);
 
-  // Render entities
-  for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-  {
-	  TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
-	  TCompMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TCompMesh>();
+	// Render entities
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+	{
+		TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
+		TCompMesh* mesh = ((CEntity*)entity_manager.getEntities()[i])->get<TCompMesh>();
 
-	  TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+		TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
 
-	  // Draw the joints
-	  if (djoint) {
-		  PxRigidActor* a1 = nullptr;
-		  PxRigidActor* a2 = nullptr;
+		// Draw the joints
+		if (c_rope) {
+			PxRigidActor* a1 = nullptr;
+			PxRigidActor* a2 = nullptr;
 
-		  djoint->joint->getActors(a1, a2);
-		  if (a1 && a2) {
-			  
-			  XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
-			  XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			djoint->joint->getActors(a1, a2);
+			if (a1 && a2) {
 
-			  XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
-			  XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+				XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 
-			  XMVECTOR rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
-			  XMVECTOR rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+				XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
+				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
 
-			  XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
-			  XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
+				XMVECTOR rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
+				XMVECTOR rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
 
-			  /*   RECREATE ROPE   */
-			  // Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-			  XMVECTOR initialPos = pos1 + offset_rotado_1;
-			  XMVECTOR finalPos = pos2 + offset_rotado_2;
+				XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+				XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
-			  float dist = djoint->joint->getDistance();
-			  float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+				/*   RECREATE ROPE   */
+				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+				XMVECTOR initialPos = pos1 + offset_rotado_1;
+				XMVECTOR finalPos = pos2 + offset_rotado_2;
 
-			  float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+				float dist = djoint->joint->getDistance();
+				float maxDist = pow(djoint->joint->getMaxDistance(), 2);
 
-			  rope.destroy();
-			  createString(rope, initialPos, finalPos, tension);
-			  
-			  setWorldMatrix(XMMatrixIdentity());
-			  rope.activateAndRender();
+				float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 
-			  vs_basic.activate();
-			  ps_basic.activate();
-			  setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
-			  wiredCube.activateAndRender();
+				rope.destroy();
+				createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
-			  setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
-			  wiredCube.activateAndRender();
+				float color_tension = min(dist / maxDist * 0.25f, 1);
+				setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
+				setWorldMatrix(XMMatrixIdentity());
+				rope.activateAndRender();
 
-			  vs_basic2.activate();
-			  ps_textured.activate();
-		  }
-	  }
+				vs_basic.activate();
+				ps_basic.activate();
+				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+				wiredCube.activateAndRender();
 
-	  // If the component has no transform it can't be rendered
-	  if (!t)
-		  continue;
+				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
+				wiredCube.activateAndRender();
 
-	  if (mesh)
-		setTint(mesh->color);
+				vs_basic2.activate();
+				ps_textured.activate();
+			}
+		}
 
-	  setWorldMatrix(t->getWorld());
+		// If the component has no transform it can't be rendered
+		if (!t)
+			continue;
 
-	  if (mesh && mesh->active)
-		mesh->mesh->activateAndRender();
-  }
+		if (mesh)
+			setTint(mesh->color);
+
+		setWorldMatrix(t->getWorld());
+
+		if (mesh && mesh->active)
+			mesh->mesh->activateAndRender();
+
+		// Draw texts
+		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
+		if (c_text && t) {
+			float old_size = font.size;
+			font.size = c_text->size;
+			unsigned int old_col = font.color;
+			font.color = c_text->color;
+			font.print3D(t->position, c_text->text);
+			font.size = old_size;
+			font.color = old_col;
+		}
+	}
 }
 
 void CApp::renderDebugEntities() {
@@ -669,18 +887,33 @@ void CApp::activateDebugMode(bool active) {
 }
 
 void CApp::destroy() {
-  TwTerminate();
-  mesh_manager.destroyAll();
-  texture_manager.destroyAll();
-  axis.destroy();
-  grid.destroy();
-  intersectsWiredCube.destroy();
-  wiredCube.destroy();
-  renderUtilsDestroy();
-  vs_basic.destroy();
-  vs_basic2.destroy();
-  ps_basic.destroy();
-  ps_textured.destroy();
-  font.destroy();
-  ::render.destroyDevice();
+	TwTerminate();
+	mesh_manager.destroyAll();
+	texture_manager.destroyAll();
+	axis.destroy();
+	grid.destroy();
+	intersectsWiredCube.destroy();
+	wiredCube.destroy();
+	renderUtilsDestroy();
+	vs_basic.destroy();
+	vs_basic2.destroy();
+	ps_basic.destroy();
+	ps_textured.destroy();
+	font.destroy();
+	::render.destroyDevice();
+}
+
+unsigned int CApp::numStrings(){
+	int num_strings = 0;
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i){
+		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
+		if (c_rope){			
+			num_strings++;
+		}
+	}
+	return num_strings;
+}
+
+void CApp::activateVictory(){
+	getObjManager<TCompThirdPersonCameraController>()->setActiveComponents(false);
 }

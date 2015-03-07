@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -146,29 +146,44 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/MP10 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.</AdditionalIncludeDirectories>
-      <CallingConvention>VectorCall</CallingConvention>
+      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include</AdditionalIncludeDirectories>
+      <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
+      <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3Common_x64.lib PhysX3_x64.lib PhysX3Cooking_x64.lib PhysX3CharacterKinematic_x64.lib PhysX3Extensions.lib PhysX3Vehicle.lib PhysXProfileSDK.lib PhysXVisualDebuggerSDK.lib PxTask.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ai\aicontroller.h" />
     <ClInclude Include="ai\ai_basic_enemy.h" />
     <ClInclude Include="ai\ai_basic_wander.h" />
+    <ClInclude Include="ai\fsm_basic_player.h" />
     <ClInclude Include="app.h" />
+    <ClInclude Include="callback_controllers.h" />
+    <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
+    <ClInclude Include="components\comp_basic_player_controller.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
     <ClInclude Include="components\comp_enemy_controller.h" />
+    <ClInclude Include="components\comp_needle.h" />
     <ClInclude Include="components\comp_point_light.h" />
+    <ClInclude Include="components\comp_rope.h" />
+    <ClInclude Include="components\comp_collider_sphere.h" />
+    <ClInclude Include="components\comp_unity_character_controller.h" />
+    <ClInclude Include="components\comp_trigger.h" />
+    <ClInclude Include="components\comp_distance_text.h" />
+    <ClInclude Include="comp_tag.h" />
+    <ClInclude Include="comp_victory_cond.h" />
     <ClInclude Include="handle\app_msgs.h" />
     <ClInclude Include="components\base_component.h" />
     <ClInclude Include="components\comp_aabb.h" />
@@ -200,6 +215,7 @@
     <ClInclude Include="items_by_name.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
+    <ClInclude Include="options_parser.h" />
     <ClInclude Include="physics_manager.h" />
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
@@ -219,7 +235,10 @@
     <ClCompile Include="ai\aicontroller.cpp" />
     <ClCompile Include="ai\ai_basic_enemy.cpp" />
     <ClCompile Include="ai\ai_basic_wander.cpp" />
+    <ClCompile Include="ai\fsm_basic_player.cpp" />
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="callback_controllers.cpp" />
+    <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="doom_controller.cpp" />
@@ -227,24 +246,35 @@
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="expat\xmlparse.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmlrole.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmltok.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmltok_impl.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="expat\xmltok_ns.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Cdecl</CallingConvention>
     </ClCompile>
     <ClCompile Include="font\font.cpp" />
     <ClCompile Include="handle\entity.cpp" />
     <ClCompile Include="handle\handle.cpp" />
     <ClCompile Include="importer_parser.cpp" />
     <ClCompile Include="io\iostatus.cpp" />
+    <ClCompile Include="options_parser.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
@@ -271,6 +301,9 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="my_file.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="resolution.xml">
       <SubType>Designer</SubType>
     </Xml>
   </ItemGroup>

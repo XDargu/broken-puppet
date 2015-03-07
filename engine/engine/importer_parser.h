@@ -10,6 +10,7 @@ public:
 
 	// Cuando se acaba el tag de xml
 	void onEndElement(const std::string &elem);
+
 };
 
 #endif

@@ -137,6 +137,30 @@ void TW_CALL GetMeshPath(void *value, void *clientData)
 	
 }
 
+// DISTANCE JINT
+void TW_CALL SetDistanceJointDamping(const void *value, void *clientData)
+{
+	static_cast<TCompDistanceJoint *>(clientData)->joint->setDamping(*static_cast<const float *>(value));
+}
+void TW_CALL GetDistanceJointDamping(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompDistanceJoint *>(clientData)->joint->getDamping();
+}
+
+void TW_CALL SetDistanceJointStiffness(const void *value, void *clientData)
+{
+	static_cast<TCompDistanceJoint *>(clientData)->joint->setStiffness(*static_cast<const float *>(value));
+}
+void TW_CALL GetDistanceJointStiffness(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompDistanceJoint *>(clientData)->joint->getStiffness();
+}
+
+void TW_CALL GetDistanceJointDistance(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = sqrt(static_cast<TCompDistanceJoint *>(clientData)->joint->getDistance());
+}
+
 // AI
 void TW_CALL GetAIFSMState(void *value, void *clientData)
 {
@@ -182,9 +206,10 @@ void TW_CALL AddPointLight(void *clientData) {
 	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
-void CEntityInspector::update() {
-	if (!target_entity) {
+void CEntityInspector::update() {	
+	if (!CHandle(target_entity).isValid()) {
 		TwRemoveAllVars(bar);
+		inspectEntity(nullptr);		
 		return;
 	}
 
@@ -220,6 +245,8 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompPlayerPivotController* e_player_pivot_controller = target_entity->get<TCompPlayerPivotController>();
 	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
 	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
+	TCompDistanceJoint* e_distance_joint = target_entity->get<TCompDistanceJoint>();
+	TCompRope* e_rope = target_entity->get<TCompRope>();
 
 	// AI
 	TCompAiFsmBasic* e_comp_ai_fsm_basic = target_entity->get<TCompAiFsmBasic>();
@@ -321,6 +348,17 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	}
 	if (e_comp_ai_fsm_basic) {
 		TwAddVarCB(bar, "AIFSMBasicState", TW_TYPE_STDSTRING, NULL, GetAIFSMState, e_comp_ai_fsm_basic, " group='AI FSM Basic' label='State'");
+	}
+	if (e_distance_joint) {
+		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");
+		TwAddVarCB(bar, "DistanceJointDamping", TW_TYPE_FLOAT, SetDistanceJointDamping, GetDistanceJointDamping, e_distance_joint, " group='Distance Joint' label='Damping'");
+		TwAddVarCB(bar, "DistanceJointStiffness", TW_TYPE_FLOAT, SetDistanceJointStiffness, GetDistanceJointStiffness, e_distance_joint, " group='Distance Joint' label='Stiffness'");
+		TwAddVarCB(bar, "DistanceJointDistance", TW_TYPE_FLOAT, NULL, GetDistanceJointDistance, e_distance_joint, " group='Distance Joint' label='Distance'");
+	}
+	if (e_rope) {
+		TwAddVarRW(bar, "RopeActive", TW_TYPE_BOOL8, &e_rope->active, " group='Rope' label='Active' ");
+		TwAddVarRW(bar, "RopeWidth", TW_TYPE_FLOAT, &e_rope->width, " min=0.01 max=0.5 step=0.01 group='Rope' label='Width' ");
+		TwAddVarRW(bar, "RopeMaxDistance", TW_TYPE_FLOAT, &e_rope->max_distance, " min=1 max=1000 step=0.5 group='Rope' label='Max distance' ");
 	}
 
 	TwAddSeparator(bar, "", "");

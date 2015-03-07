@@ -2,7 +2,6 @@
 #define INC_COMP_AABB_H_
 
 #include "base_component.h"
-#include "comp_transform.h"
 
 struct TCompAABB : TBaseComponent{
 private:
