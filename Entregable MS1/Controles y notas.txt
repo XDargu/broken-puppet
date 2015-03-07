@@ -1,0 +1,46 @@
+***********************************************************
+			SISTEMA
+***********************************************************
+
+Para cambiar la resolución y el modo pantalla completa hay que modificar el fichero resolution.xml
+
+***********************************************************
+			CONTROLES
+***********************************************************
+
+WASD: Movimiento
+Espacio: Saltar
+Shift: Correr
+
+click izquierdo:
+ - Primer click: lanzar cuerda
+ - Segundo click: unir con la primera cuerda
+
+Click derecho:
+ - Tensar cuerdas
+
+Click central:
+ - Pulsación rápida: cancelar última cuerda
+ - Pulsación larga: cancelar todas las cuerdas
+
+Al crear nuevas cuerdas, las antiguas se cancelan en orden de creación.
+
+
+***********************************************************
+			  NOTAS
+***********************************************************
+
+Player:
+ - Se comienza el juego con 100 puntos de vida.
+ - Se pierde vida siendo atacado por enemigos o al recibir impactos de objetos físicos.
+ - Si el impacto es muy fuerte, el jugador entra en modo ragdoll, perdiendo el control.
+ - Cuando la vida llega a 0 el player muere. A los 6 segundos resucita con 100 puntos de vida.
+
+Enemigos:
+ - Entran en modo ragdoll al recibir impactos físicos o al tensar cuerdas atados a ellos.
+ - Mueren al recibir un impacto fuerte.
+ - Los enemigos pueden estar activos (moverse, atacar...) aun atados.
+
+Cuerdas:
+ - No se puede atar una misma cuerda a un mismo objeto.
+ - Las cuerdas se parten al cruzarse con objetos grandes.
