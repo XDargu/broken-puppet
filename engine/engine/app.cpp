@@ -95,8 +95,6 @@ void registerAllComponentMsgs() {
 }
 
 void createManagers() {
-
-
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
@@ -106,6 +104,7 @@ void createManagers() {
 	getObjManager<TCompColliderMesh>()->init(32);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
+	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
@@ -140,6 +139,7 @@ void createManagers() {
 void initManagers() {
 	getObjManager<TCompCamera>()->initHandlers();
 	getObjManager<TCompCollider>()->initHandlers();
+	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -773,18 +773,6 @@ void CApp::renderEntities() {
 			}
 		}
 
-		// Draw texts
-		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
-		if (c_text && t) {
-			float old_size = font.size;
-			font.size = c_text->size;
-			unsigned int old_col = font.color;
-			font.color = c_text->color;
-			font.print3D(t->position, c_text->text);
-			font.size = old_size;
-			font.color = old_col;
-		}
-
 		// If the component has no transform it can't be rendered
 		if (!t)
 			continue;
@@ -796,6 +784,18 @@ void CApp::renderEntities() {
 
 		if (mesh && mesh->active)
 			mesh->mesh->activateAndRender();
+
+		// Draw texts
+		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
+		if (c_text && t) {
+			float old_size = font.size;
+			font.size = c_text->size;
+			unsigned int old_col = font.color;
+			font.color = c_text->color;
+			font.print3D(t->position, c_text->text);
+			font.size = old_size;
+			font.color = old_col;
+		}
 	}
 }
 

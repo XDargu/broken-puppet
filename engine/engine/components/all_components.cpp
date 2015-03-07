@@ -8,6 +8,7 @@ DECL_OBJ_MANAGER(TCompName, "name");
 DECL_OBJ_MANAGER(TCompMesh, "mesh");
 DECL_OBJ_MANAGER(TCompCamera, "camera");
 DECL_OBJ_MANAGER(TCompCollider, "collider");
+DECL_OBJ_MANAGER(TCompColliderSphere, "colliderSphere");
 DECL_OBJ_MANAGER(TCompRigidBody, "rigidbody");
 DECL_OBJ_MANAGER(TCompStaticBody, "staticbody");
 DECL_OBJ_MANAGER(TCompPlayerController, "playerController");

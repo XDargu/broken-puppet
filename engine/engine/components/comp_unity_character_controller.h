@@ -14,7 +14,7 @@ private:
 	Serializable settings
 	***********************************/
 
-	float jumpPower;						// determines the jump force applied when jumping (and therefore the jump height)
+	
 	float airSpeed;							// determines the max speed of the character while airborne
 	float airControl;						// determines the response speed of controlling the character while airborne;
 	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters
@@ -75,7 +75,7 @@ public:
 	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
 	physx::PxD6Joint* mJoint;
 	float lerpRotation;
-
+	float jumpPower;						// determines the jump force applied when jumping (and therefore the jump height)
 
 	//CApp &app;
 

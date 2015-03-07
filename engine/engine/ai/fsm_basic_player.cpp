@@ -48,6 +48,7 @@ void fsm_basic_player::Init()
 	falling = false;
 
 	run_speed = ((TCompUnityCharacterController*)comp_unity_controller)->moveSpeedMultiplier;;
+	((TCompUnityCharacterController*)comp_unity_controller)->jumpPower = 7;
 	walk_speed = run_speed / 2;
 
 	life = ((CEntity*)entity)->get<TCompLife>();

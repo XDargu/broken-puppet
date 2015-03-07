@@ -27,6 +27,7 @@
 
 // Physx
 #include "comp_collider.h"
+#include "comp_collider_sphere.h"
 #include "comp_collider_mesh.h"
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"

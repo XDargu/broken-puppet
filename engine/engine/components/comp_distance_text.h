@@ -37,7 +37,7 @@ public:
 		TCompTransform* p_transform = (TCompTransform*)player_transform;
 		
 		float p_distance = XMVectorGetX(XMVector3Length(transform->position - p_transform->position));
-		
+
 		if (p_distance < distance) {
 			std::strcpy(text, initial_text);
 		}

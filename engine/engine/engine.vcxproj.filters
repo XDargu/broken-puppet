@@ -173,6 +173,9 @@
     <ClInclude Include="components\comp_distance_text.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_collider_sphere.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
