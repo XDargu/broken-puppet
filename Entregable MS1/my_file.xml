@@ -21,7 +21,7 @@
     <transform position="1.04183 0.786598 -9.13439" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja2"/>
     <aabb min="-0.753303 -0.753303 -0.753303" max="0.753303 0.753303 0.753303"/>
-    <collider staticFriction="0.1" dynamicFriction="0.1" restitution="0.5" boxX="0.753303" boxY="0.753303" boxZ="0.753303" frictionCombineMode="Multiply"/>
+    <collider staticFriction="0.0" dynamicFriction="0.0" restitution="0.5" boxX="0.753303" boxY="0.753303" boxZ="0.753303" frictionCombineMode="Multiply"/>
     <rigidbody density="146.208"  />
     <distanceText text="Puedes saltar encima" distance="10.0" size="20.0" color="0xffffffff" />
   </entity>
@@ -31,7 +31,7 @@
     <mesh color="1 1 1 1" path="Object006"/>
     <aabb min="-0.838484 -3.59515 -1.59617" max="0.838485 3.59515 1.59617"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.838484" boxY="3.59515" boxZ="1.59617"/>
-    <rigidbody density="84.4313"  />
+    <rigidbody density="110.4313"  />
   </entity>
   <entity tag = "actor">
     <name name="Object007_4.0" />
@@ -39,7 +39,8 @@
     <mesh color="1 1 1 1" path="Object007"/>
     <aabb min="-1.35085 -3.59515 -1.59617" max="1.35085 3.59515 1.59617"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.35085" boxY="3.59515" boxZ="1.59617"/>
-    <rigidbody density="96.7519"  />
+    <rigidbody density="52.7519"  />
+    <distanceText text="Si con una cuerda no es suficiente, prueba con varias" distance="10.0" size="20.0" color="0xffffffff" />
   </entity>
   <entity tag = "actor">
     <name name="PlataformaElevar_5.0" />
@@ -47,7 +48,7 @@
     <mesh color="1 1 1 1" path="PlataformaElevar"/>
     <aabb min="-1.23283 -0.159043 -1.26518" max="1.23283 0.159043 1.26518"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.23283" boxY="0.159043" boxZ="1.26518"/>
-    <rigidbody density="303.922" lockXPos="true" lockZPos="true" lockXRot="true" lockYRot="true" lockZRot="true"  />
+    <rigidbody density="453.922" lockXPos="true" lockZPos="true" lockXRot="true" lockYRot="true" lockZRot="true"  />
   </entity>
   <entity tag = "level">
     <name name="BloquesFijos_6.0" />
@@ -441,18 +442,6 @@
     <collider staticFriction="1.0" dynamicFriction="1.0" restitution="0.0" boxX="0.393621" boxY="0.25" boxZ="0.393621"/>
     <rigidbody density="200.0"  />
   </entity>
-  <entity >
-    <name name="Button_56.0" />
-    <transform position="2.86759 15.3275 10.8642" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="Button"/>
-    <aabb min="-1.76825 -0.183539 -1.74139" max="1.76825 0.18354 1.74139"/>
-  </entity>
-  <entity >
-    <name name="Button_57.0" />
-    <transform position="41.1488 14.3555 -51.3843" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="Button"/>
-    <aabb min="-1.21735 -0.183539 -1.19885" max="1.21735 0.18354 1.19885"/>
-  </entity>
   <entity tag = "player">
     <name name="Player" />
     <transform position="-2.94038 1.44456e-007 3.30477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -547,20 +536,12 @@
     <rigidbody density="114.286"  />
   </entity>
   <entity tag = "actor">
-    <name name="Caja_71.0" />
-    <transform position="-6.0928 6.66592 37.522" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <mesh color="1 1 1 1" path="Caja"/>
-    <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
-  </entity>
-  <entity tag = "actor">
     <name name="Caja_72.0" />
     <transform position="14.6163 -0.311561 14.8013" rotation="0.0 0.0500965 0.0 0.998744" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
+    <rigidbody density="80.07"  />
   </entity>
   <entity tag = "actor">
     <name name="Caja_73.0" />
@@ -568,7 +549,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
+    <rigidbody density="80.07"  />
   </entity>
   <entity tag = "actor">
     <name name="Caja_74.0" />
@@ -576,7 +557,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
+    <rigidbody density="80.07"  />
   </entity>
   <entity tag = "actor">
     <name name="Caja_75.0" />
@@ -584,7 +565,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
+    <rigidbody density="80.07"  />
   </entity>
   <entity tag = "actor">
     <name name="Caja_76.0" />
@@ -592,7 +573,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
+    <rigidbody density="80.07"  />
   </entity>
   <entity tag = "actor">
     <name name="Caja_77.0" />
@@ -600,7 +581,7 @@
     <mesh color="1 1 1 1" path="Caja"/>
     <aabb min="-0.8 -0.8 -0.8" max="0.8 0.8 0.8"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8" boxY="0.8" boxZ="0.8"/>
-    <rigidbody density="122.07"  />
+    <rigidbody density="80.07"  />
   </entity>
   <entity >
     <name name="Omni001_78.0" />
@@ -714,18 +695,28 @@
   </entity>
   <entity >
     <name name="DistanceText002_95.0" />
-    <transform position="3.31708 6.57214 -9.2175" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="3.31708 5.57214 -9.2175" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <distanceText text="O puedes colgarla del techo" distance="10.0" size="20.0" color="0xffffffff" />
+  </entity>
+  <entity >
+    <name name="DistanceText050_96.0" />
+    <transform position="9.6011 -1.5752 -12.2175" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="Haz click central para cancelar una cuerda, mantén para cancelar todas" distance="8.0" size="20.0" color="0xffffffff" />
   </entity>
   <entity >
     <name name="DistanceText003_96.0" />
     <transform position="17.6011 -3.5752 -9.2175" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <distanceText text="A veces un viejo obstáculo puede ayudarte" distance="10.0" size="20.0" color="0xffffffff" />
+    <distanceText text="A veces un viejo obstáculo puede ayudarte" distance="5.0" size="20.0" color="0xffffffff" />
   </entity>
   <entity >
     <name name="DistanceText004_97.0" />
-    <transform position="16.426 -1.22229 14.1716" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <distanceText text="Ábrete paso" distance="10.0" size="20.0" color="0xffffffff" />
+    <transform position="18.426 -1.22229 14.1716" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="Ábrete paso. Cuanto más larga sea la cuerda, más fuerza hará." distance="10.0" size="20.0" color="0xffffffff" />
+  </entity>
+  <entity >
+    <name name="DistanceText051_97.0" />
+    <transform position="-3.1 7.8 31" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="Mantén pulsado shift para correr" distance="10.0" size="20.0" color="0xffffffff" />
   </entity>
   <entity >
     <name name="DistanceText005_98.0" />
@@ -755,7 +746,7 @@
   <entity >
     <name name="DistanceText010_103.0" />
     <transform position="41.0183 20.217 -63.5707" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <distanceText text="Meta. Hay más de un camino." distance="20.0" size="20.0" color="0xffffffff" />
+    <distanceText text="Meta. Hay varias formas de llegar." distance="20.0" size="20.0" color="0xffffffff" />
   </entity>
   <entity>
     <name name="condicion_victoria" />

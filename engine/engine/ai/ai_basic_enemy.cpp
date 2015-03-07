@@ -50,7 +50,7 @@ void ai_basic_enemy::Init()
 	probability_wander = 40;
 	probability_idle = 20;
 
-	probability_aggresive = 50;
+	probability_aggresive = 60;
 	probability_mobile = 30;
 
 	probability_attack1 = 30;
@@ -483,6 +483,8 @@ void ai_basic_enemy::Ragdoll(float elapsed){
 	physx::PxMaterial* mat;
 	((TCompUnityCharacterController*)character_controller)->enemy_collider->getMaterials(&mat, 1);
 	mat->setRestitution(1);
+	mat->setStaticFriction(0.5);
+	mat->setDynamicFriction(0.5);
 
 	((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
 	((TCompUnityCharacterController*)character_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);
@@ -522,6 +524,8 @@ void ai_basic_enemy::Ragdoll(float elapsed){
 			)
 			);
 		mat->setRestitution(0);
+		mat->setStaticFriction(0);
+		mat->setDynamicFriction(0);
 
 
 		if (((TCompLife*)comp_life)->life <= 0){
