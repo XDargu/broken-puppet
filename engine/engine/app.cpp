@@ -651,7 +651,7 @@ void CApp::render() {
 	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
 	font.print(15, 15, life_text.c_str());
 
-	std::string strings_text = "Ropes left: " + std::to_string(4 - numStrings());
+	std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());
 
 	::render.swap_chain->Present(0, 0);

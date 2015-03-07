@@ -7,7 +7,15 @@ allObject = $*
 NotEval = #(targetobject)
 
 -- List of object without mesh
-NotMesh = #(targetcamera, freecamera)
+NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight)
+
+DistanceTextAttributes = "distanceTextData"
+CameraAttribute = "objectCameraData"
+CameraPivotAttribute = "objectCameraPivotData"
+PlayerPivotAttribute = "objectPlayerPivotData"
+PlayerAttribute = "objectPlayerData"
+
+NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute)
 
 -- List of objects exported
 expNames = #()
@@ -62,15 +70,19 @@ fn exportXMLScene = (
 		getAABB,
 		getCollider,
 		getRigidbody,
+		getStaticbody,
 		getCamera,
 		getCameraController,
 		getCameraPivotController,		
 		getPlayerPivotController,
+		getCharacterController,
 		getPlayerController,
-		getEnemyController,
 		getAiFsmBasic,
-		getLevelMeshCollider
-		
+		getLevelMeshCollider,
+		getPointLight,
+		getAmbientLight,
+		getDirectionalLight,
+		getDistanceText
 	)
 
 	-- Initialize XML
@@ -81,13 +93,33 @@ fn exportXMLScene = (
 		-- Check if needs to be evaluate
 		if(validateEntity obj) then
 		(		
-			mXML += "\t<entity>\n"
+			local tag = "";
+			if(obj.name == PlayerName) then
+			(
+				tag = "tag = \"player\""
+			)
+			if(validateEnemy obj) then
+			(
+				tag = "tag = \"enemy\""
+			)
+			if(validateRigidbody obj) then
+			(
+				tag = "tag = \"actor\""
+			)
+			if(validateStaticbody obj) then
+			(
+				tag = "tag = \"level\""
+			)				
+			
+			mXML += "\t<entity " + tag + ">\n"
 			for func in functions do (
-				mXML += "\t\t" + func obj
+				mXML += "" + func obj
 			)
 			mXML += "\t</entity>\n"		
 		)
 	)
+	
+	mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
 	
 	mXML += "</scene>"
 	
@@ -182,7 +214,13 @@ fn getMesh obj = (
 )	
 
 fn validateMesh obj = (
-	return ((findItem NotMesh (classof obj)) == 0)
+	local validAttributes = true
+	for atr in NotMeshAttributes do (
+		if (isProperty obj.baseObject atr) then (
+			validAttributes = false;
+		)		
+	)	
+	return (((findItem NotMesh (classof obj)) == 0) and validAttributes)
 )
 
 fn validateExportedNames obj = (
@@ -216,11 +254,57 @@ Params:
 ***********************************************************************************************/
 fn getRigidbody obj = (
 	
-	if ((validateCollider obj) == false) then
+	if ((validateRigidbody obj) == false) then
 		return "";
-	return "<rigidbody " + "density=\"" + (obj.modifiers[#PhysX_Rigid_Body].density as string) + "\" />\n"
+	
+	params = ""
+	if (validateRigidbodyParams obj) then (
+		if (obj.objectRigidBodyData.lockXPos) then
+			params += "lockXPos=\"" + (obj.objectRigidBodyData.lockXPos as string) + "\" ";
+		if (obj.objectRigidBodyData.lockYPos) then
+			params += "lockYPos=\"" + (obj.objectRigidBodyData.lockYPos as string) + "\" ";
+		if (obj.objectRigidBodyData.lockZPos) then
+			params += "lockZPos=\"" + (obj.objectRigidBodyData.lockZPos as string) + "\" ";
+		
+		if (obj.objectRigidBodyData.lockXRot) then
+			params += "lockXRot=\"" + (obj.objectRigidBodyData.lockXRot as string) + "\" ";
+		if (obj.objectRigidBodyData.lockYRot) then
+			params += "lockYRot=\"" + (obj.objectRigidBodyData.lockYRot as string) + "\" ";
+		if (obj.objectRigidBodyData.lockZRot) then
+			params += "lockZRot=\"" + (obj.objectRigidBodyData.lockZRot as string) + "\" ";
+	)
+	
+	return "<rigidbody " + "density=\"" + ((obj.modifiers[#PhysX_Rigid_Body].density * 1000) as string) + "\" " + params + " />\n"
 	
 )
+
+fn validateRigidbody obj = (
+	return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1))
+)
+
+fn validateRigidbodyParams obj = (
+	return isProperty obj.baseObject #objectRigidBodyData == true
+)
+
+/**********************************************************************************************
+Gets the object Staticbody
+Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getStaticbody obj = (
+	
+	if ((validateStaticbody obj) == false) then
+		return "";
+	return "<staticbody/>\n"
+	
+)
+
+fn validateStaticbody obj = (
+	return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 3))
+)
+
 
 /**********************************************************************************************
 Gets the Collider bounding box and material properties
@@ -319,7 +403,6 @@ Gets a Camera component
  Returns:
   - String with the component information
 ***********************************************************************************************/
-
 fn getCamera obj = (
 
 	if((validateCameras obj) == false) then
@@ -370,13 +453,12 @@ Gets a Player component
  Returns:
   - String with the component information
 ***********************************************************************************************/
-
 fn getPlayerController obj = (
 	
 	if((validatePlayer obj) == false) then
 	return ""
 	
-	local mString = "<playerController " \
+	local mString = "<basicPlayerController " \
 										+ "movementVelocity=\"" + obj.objectPlayerData.movementVelocity as string+  "\" " \
 										+ "rotationVelocity=\"" + obj.objectPlayerData.rotationVelocity as string + "\" " \
 										+ "/>\n"
@@ -389,6 +471,26 @@ fn validatePlayer obj = (
 	return (((obj.name) == PlayerName)and(isProperty obj.baseObject #objectPlayerData) )
 )
 
+/**********************************************************************************************
+Gets a Character component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getCharacterController obj = (
+	
+	local mString = ""
+	
+	if((validatePlayer obj) or (validateEnemy obj)) then
+	(
+		local mString = "<life life=\"100\" /><unityCharacterController " \
+										+ "/>\n"
+	)
+	
+	return mString
+)	
+
 
 /**********************************************************************************************
 Gets a Player Pivot component
@@ -397,7 +499,6 @@ Gets a Player Pivot component
  Returns:
   - String with the component information
 ***********************************************************************************************/
-
 fn getPlayerPivotController obj = (
 	
 	if((validatePivotPlayer obj) == false) then
@@ -422,8 +523,6 @@ Gets a Camera Pivot component
  Returns:
   - String with the component information
 ***********************************************************************************************/
-
-
 fn getCameraPivotController obj = (
 	
 	if((validateCameraPivot obj) == false) then
@@ -448,8 +547,6 @@ Gets a Camera controller component
  Returns:
   - String with the component information
 ***********************************************************************************************/
-
-
 fn getCameraController obj = (
 	
 	if((validateCamera obj) == false) then
@@ -467,6 +564,118 @@ fn getCameraController obj = (
 fn validateCamera obj = (
 		return (((obj.name) == CameraName)and(isProperty obj.baseObject #objectCameraData) )
 )
+
+
+/**********************************************************************************************
+Gets a Point Light component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getPointLight obj = (
+	
+	if((validatePointLight obj) == false) then
+	return ""
+	
+	local mString = "<pointLight " \
+										+ "radius=\"" + obj.farAttenEnd as string + "\" " \
+										+ "intensity=\"" + obj.multiplier as string + "\" " \
+										+ "color=\"" \
+													+ (obj.rgb.r/255) as string + " "\
+													+ (obj.rgb.g/255) as string + " "\
+													+ (obj.rgb.b/255) as string + " "\
+													+ 1 as string + "\""\
+										+ "/>\n"
+	return mString
+)	
+	
+fn validatePointLight obj = (
+		return ((classof obj) == Omnilight)
+)
+
+/**********************************************************************************************
+Gets a Ambient Light component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getAmbientLight obj = (
+	
+	if((validateAmbientLight obj) == false) then
+	return ""
+	
+	local mString = "<ambientLight " \
+										+ "intensity=\"" + obj.multiplier as string + "\" " \
+										+ "color=\"" \
+													+ (obj.rgb.r/255) as string + " "\
+													+ (obj.rgb.g/255) as string + " "\
+													+ (obj.rgb.b/255) as string + " "\
+													+ 1 as string + "\""\
+										+ "/>\n"
+	return mString
+)	
+	
+fn validateAmbientLight obj = (
+		return ((classof obj) == Skylight)
+)
+
+/**********************************************************************************************
+Gets a Directional Light component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getDirectionalLight obj = (
+	
+	if((validateDirectionalLight obj) == false) then
+	return ""
+	
+	local mString = "<directionalLight " \
+										+ "intensity=\"" + obj.multiplier as string + "\" " \
+										+ "color=\"" \
+													+ (obj.rgb.r/255) as string + " "\
+													+ (obj.rgb.g/255) as string + " "\
+													+ (obj.rgb.b/255) as string + " "\
+													+ 1 as string + "\""\
+										+ "/>\n"
+	return mString
+)	
+	
+fn validateDirectionalLight obj = (
+		return ((classof obj) == Directionallight)
+)
+
+/**********************************************************************************************
+Gets a Directional Light component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getDistanceText obj = (
+	
+	if((validateDistanceText obj) == false) then
+	return ""
+	
+	local mString = "<distanceText " \
+										+ "text=\"" + obj.textData as string + "\" " \
+										+ "distance=\"" + obj.distanceData as string + "\" " \
+										+ "size=\"" + obj.sizeData as string + "\" " \
+										+ "color=\"" + obj.colorData as string + "\" " \										
+										+ "/>\n"
+	return mString
+)	
+	
+fn validateDistanceText obj = (
+		return isProperty obj.baseObject #distanceTextData == true
+)
+
+
+
+
 
 
 
@@ -517,7 +726,7 @@ fn getLevelMeshCollider obj = (
 	if((validateLevelMeshCollider obj) == false) then
 	return ""
 	
-	return "<colliderMesh path=\"LevelFlip\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
+	return "<colliderMesh path=\"Level\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
 )	
 	
 fn validateLevelMeshCollider obj = (
@@ -627,6 +836,23 @@ fn openCloseFile = (
 
 ***********************************************************************************************/	
 	
+	fn findIndexOfVertex vtxs str_vtxs v = (
+
+	-- Convert my array of floats to a single string
+	local sv = with printAllElements off v as string
+	
+	-- Look for the string in the array
+	local idx = findItem str_vtxs sv
+	
+	if idx > 0 then return idx
+	
+	-- Si no esta, añadirlo y devolver el indice (count)w
+	append vtxs v
+	append str_vtxs sv
+	return vtxs.count
+	
+)
+
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	
 	local filename = getObjectPath obj false
@@ -683,6 +909,8 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	WriteLong fs end_magic
 	WriteLong fs 0
 	
+	format "Exported mesh with % vtxs and % idxs\n" vtxs.count idxs.count
+	
 	fclose fs
 )
 
@@ -699,6 +927,7 @@ fn exportMesh obj_to_export = (
 
 	-- Collect all unique vertexs
 	local all_vtxs = #()
+	local all_str_vtxs = #()			-- To keep the string version of the vertexs
 	local all_idxs = #()
 	local nfaces = getNumFaces obj
 		
@@ -733,7 +962,7 @@ fn exportMesh obj_to_export = (
 			local v = #( mpos.x, mpos.y, mpos.z, uvA.x, uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
 			
 			-- Index the vtx or get the index if the vtx has already been defined
-			local idx_of_v = findIndexOfVertex all_vtxs v
+			local idx_of_v = findIndexOfVertex all_vtxs all_str_vtxs v
 			append all_idxs idx_of_v
 			
 			--format "idx is %\n" idx_of_v
@@ -746,25 +975,6 @@ fn exportMesh obj_to_export = (
 	
 	-- Delete the temp mesh
 	if obj != obj_to_export then delete obj
-)
-fn findIndexOfVertex vtxs v = (
-	
-	-- Busca en vtxs a ver si esta v
-	local idx = 1
-	for idx = 1 to vtxs.count do (
-		-- Si esta, devolver el indice
-		local j = 1
-		while( j <= v.count ) do (
-			if vtxs[ idx ][ j ] != v[ j ] then exit
-			j = j + 1
-		)
-		if( j > v.count ) then return idx
-	)
-	
-	-- Si no esta, añadirlo y devolver el indice (count)
-	append vtxs v
-	return vtxs.count
-	
 )
 	
 

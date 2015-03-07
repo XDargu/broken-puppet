@@ -13,7 +13,7 @@ cbuffer TCtesCamera SHADER_REGISTER(b1)
 };
 
 #define MaxDirLights 10
-#define MaxOmniLights 10
+#define MaxOmniLights 25
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {

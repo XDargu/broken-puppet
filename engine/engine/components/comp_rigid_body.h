@@ -6,6 +6,7 @@
 struct TCompRigidBody : TBaseComponent {
 private:
 	CHandle transform;
+	physx::PxD6Joint* block_joint;
 public:
 	physx::PxRigidDynamic* rigidBody;
 
@@ -104,6 +105,25 @@ public:
 		Physics.gScene->addActor(*rigidBody);
 		setKinematic(temp_is_kinematic);
 		setUseGravity(temp_use_gravity);
+
+		// Block the rigidbody, if needed
+		block_joint = PxD6JointCreate(*Physics.gPhysicsSDK, rigidBody, physx::PxTransform::createIdentity(), NULL, rigidBody->getGlobalPose());
+
+		bool lock_x_pos = atts.getBool("lockXPos", false);
+		bool lock_y_pos = atts.getBool("lockYPos", false);
+		bool lock_z_pos = atts.getBool("lockZPos", false);
+
+		bool lock_x_rot = atts.getBool("lockXRot", false);
+		bool lock_y_rot = atts.getBool("lockYRot", false);
+		bool lock_z_rot = atts.getBool("lockZRot", false);
+
+		block_joint->setMotion(physx::PxD6Axis::eX, lock_x_pos ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+		block_joint->setMotion(physx::PxD6Axis::eY, lock_y_pos ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+		block_joint->setMotion(physx::PxD6Axis::eZ, lock_z_pos ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+
+		block_joint->setMotion(physx::PxD6Axis::eTWIST, lock_x_rot ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+		block_joint->setMotion(physx::PxD6Axis::eSWING1, lock_y_rot ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+		block_joint->setMotion(physx::PxD6Axis::eSWING2, lock_z_rot ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);		
 
 		// Set the owner entity as the rigidbody user data
 		rigidBody->setName(e->getName());

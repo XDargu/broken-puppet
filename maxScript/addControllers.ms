@@ -4,11 +4,14 @@ PlayerName = "Player"
 PlayerPivotName = "PlayerPivot"
 CameraPivotName = "CameraPivot"
 CameraName = "PlayerCamera"
+DistanceTextName = "objectDistanceText"
 
 addPlayerController ()
 addPlayerPivotController ()
 addCameraPivotController ()
 addCameraController ()
+addRigidBodyController()
+addDistanceText()
 
 /**********************************************************************************************
 Object Data Player Controller structure
@@ -160,6 +163,100 @@ fn addCameraController = (
 			if (isProperty obj.baseObject #objectCameraData != true) then
 			(
 				custAttributes.add obj objectDataCamera		
+			)	
+		)
+	)
+)
+
+/**********************************************************************************************
+Object Data RigidBody Controller structure
+ Params:
+  - lockXPos
+  - lockYPos
+  - lockZPos
+  - lockXRot
+  - lockYRot
+  - lockZRot
+***********************************************************************************************/
+objectRigidBody = attributes objectRigidBodyData
+(
+	parameters main rollout:params
+	(
+		lockXPos type:#boolean ui:lockXPos default: false
+		lockYPos type:#boolean ui:lockYPos default: false
+		lockZPos type:#boolean ui:lockZPos default: false
+		
+		lockXRot type:#boolean ui:lockXRot default: false
+		lockYRot type:#boolean ui:lockYRot default: false
+		lockZRot type:#boolean ui:lockZRot default: false
+	)
+	 
+	rollout params "RigidBody Data"
+	(		
+		checkbox lockXPos "lockXPos" type: #boolean
+		checkbox lockYPos "lockYPos" type: #boolean
+		checkbox lockZPos "lockZPos" type: #boolean
+		
+		checkbox lockXRot "lockXRot" type: #boolean
+		checkbox lockYRot "lockYRot" type: #boolean
+		checkbox lockZRot "lockZRot" type: #boolean
+	)
+)
+
+/**********************************************************************************************
+Set the RigidBody Controller
+***********************************************************************************************/
+fn addRigidBodyController = (
+	local allObjects = $*
+	 
+	for obj in allObjects do
+	(	
+		if ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1)) then
+		(
+			if (isProperty obj.baseObject #lockXPos != true) then (
+				custAttributes.add obj objectRigidBody
+			)
+		)
+	)
+)
+
+/**********************************************************************************************
+Object Object distance text structure
+ Params:
+  - mevementVelocity
+  - rotationVelocity
+***********************************************************************************************/
+objectDistanceText = attributes distanceTextData
+(
+	parameters main rollout:params
+	(
+		textData type:#string ui:textData default:""
+		distanceData type:#float ui:distanceData default:0
+		sizeData type:#float ui:sizeData default:1
+		colorData type:#string ui:colorData default:""
+	)	 
+	rollout params "Distance Text"
+	(
+		edittext textData "text"  type: #string
+		spinner distanceData "distance" range:[0,500,0]  type: #float
+		spinner sizeData "size" range:[1,512,0]  type: #float	
+		edittext colorData "color"  type: #string default:"0xffffffff"
+	)
+)
+
+/**********************************************************************************************
+Set the Player Controller to the player
+***********************************************************************************************/
+fn addDistanceText = (
+	local allObjects = $*
+	
+	for obj in allObjects do
+	(	
+		if (obj.name == DistanceTextName) then
+		(
+			if (isProperty obj.baseObject #distanceTextData != true) then
+			(
+				custAttributes.add obj objectDistanceText		
 			)	
 		)
 	)
