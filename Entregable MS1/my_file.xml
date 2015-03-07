@@ -21,7 +21,7 @@
     <transform position="1.04183 0.786598 -9.13439" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Caja2"/>
     <aabb min="-0.753303 -0.753303 -0.753303" max="0.753303 0.753303 0.753303"/>
-    <collider staticFriction="0.0" dynamicFriction="0.0" restitution="0.5" boxX="0.753303" boxY="0.753303" boxZ="0.753303"/>
+    <collider staticFriction="0.1" dynamicFriction="0.1" restitution="0.5" boxX="0.753303" boxY="0.753303" boxZ="0.753303" frictionCombineMode="Multiply"/>
     <rigidbody density="146.208"  />
     <distanceText text="Puedes saltar encima" distance="10.0" size="20.0" color="0xffffffff" />
   </entity>
