@@ -1,0 +1,79 @@
+***********************************************************
+			SALA 1
+***********************************************************
+
+ - Ata el obstáculo que bloquea la salida al suelo, techo o una pared y tensa la cuerda.
+
+***********************************************************
+			SALA 2
+*********************************************************** 
+
+ - Ata el cubo al techo de la sala de la rampa o sáltalo y pasa a la siguiente sala.
+
+***********************************************************
+			SALA 3
+*********************************************************** 
+
+ - Si el cubo está atado, cancela la cuerda.
+ - En caso de el cubo no caiga hasta el final, acercalo con cuerdas.
+ - Salta sobre el cubo para llegar a la plataforma superior.
+
+***********************************************************
+			SALA 4
+*********************************************************** 
+ 
+ - Aparta las cajas que bloquean el camino con cuerdas.
+ - Salta los huecos.
+ - Sube la rampa que se encuentra a la derecha.
+
+***********************************************************
+			SALA 5
+*********************************************************** 
+
+ - Llega al final del pasillo.
+ - Tira con cuerdas de la bola gigante.
+ - Retrocede hasta la habitación del inicio del pasillo y deja pasar la bola.
+ - Vuelve a subir hasta el final del pasillo.
+
+***********************************************************
+			SALA 6
+*********************************************************** 
+
+ - Une la parte superior de los dos bloques (izquierdo y derecho).
+ - Tensa la cuerda para que formen una escalera.
+ - Salta sobre ellos y llega a la plataforma superior.
+ - Aparta los tablones con cuerdas.
+ - Salta al agujero.
+
+***********************************************************
+			SALA 7
+*********************************************************** 
+
+ - Llega al final del pasillo.
+ - Une la plataforma al techo.
+ - Sube a la plataforma.
+ - Tensa las cuerdas.
+ - Salta hasta el nivel superior.
+
+***********************************************************
+			SALA 8
+*********************************************************** 
+
+ - Sala de juegos: juega con las físicas, las cuerdas y los enemigos.
+ - Hay muchas formas de matar enemigos:
+  + Lánzales bloques pesados.
+  + Tira columnas encima de ellos.
+  + Átalos a un punto y aplástalos.
+  + Átalos a una columna y tira la columna al suelo, aplastándolos.
+  + Ata un bloque pesado y haz que pendulée.
+  + Etc.
+
+ - Para terminar el nivel hay que subir a la plataforma del fondo de la sala.
+ - Hay varias formas de solucionar el nivel:
+  + Haz una escalera de bloques.
+  + Usa la columna grande como rampa para llegar.
+  + Usa un bloque como puente desde la plataforma de la rampa.
+  + Usa un bloque como plataforma y átalo al techo, como en la sala anterior.
+  + Usa a un enemigo como puente desde la plataforma de la rampa.
+  + Recibe un golpe que te haga llegar hasta allí en modo ragdoll.
+  + Etc.

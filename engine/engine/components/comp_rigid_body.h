@@ -22,11 +22,12 @@ public:
 		transform = e->get<TCompTransform>();
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
+		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		assert(transform.isValid() || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		assert((c || mesh_c || sphere_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -44,6 +45,15 @@ public:
 				Physics.XMVECTORToPxVec3(trans->position),
 				Physics.XMVECTORToPxQuat(trans->rotation))
 				, *mesh_c->collider
+				, density);
+		}
+		if (sphere_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *sphere_c->collider
 				, density);
 		}
 
@@ -70,11 +80,12 @@ public:
 		transform = e->get<TCompTransform>();
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
+		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		assert(trans || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		assert((c || mesh_c || sphere_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -92,6 +103,15 @@ public:
 				Physics.XMVECTORToPxVec3(trans->position),
 				Physics.XMVECTORToPxQuat(trans->rotation))
 				, *mesh_c->collider
+				, temp_density);
+		}
+		if (sphere_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *sphere_c->collider
 				, temp_density);
 		}
 

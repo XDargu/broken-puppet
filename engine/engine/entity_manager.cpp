@@ -111,7 +111,7 @@ void CEntityManager::destroyRemovedHandles() {
 
 	for (auto& it : handles_to_destroy) {
 		if (getObjManager<CEntity>()->getType() == it.getType()) { 
-			// The handle is an entity 
+			// The handle is an entity
 			auto it2 = std::find(entities.begin(), entities.end(), it);			
 			if (it2 == entities.end()) { fatal(" Trying to destroy an entity %s not registered in the entity manager", ((CEntity*)it)->getName());  }
 			entities.erase(it2);

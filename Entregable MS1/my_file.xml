@@ -444,7 +444,7 @@
   </entity>
   <entity tag = "player">
     <name name="Player" />
-    <transform position="-2.94038 1.44456e-007 3.30477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/> 
+    <transform position="-2.94038 1.44456e-007 3.30477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <mesh color="1 1 1 1" path="Player"/>
     <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
     <life life="100" />
@@ -715,7 +715,7 @@
   </entity>
   <entity >
     <name name="DistanceText051_97.0" />
-    <transform position="7 -1 26" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="-3.1 7.8 31" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <distanceText text="Mantén pulsado shift para correr" distance="10.0" size="20.0" color="0xffffffff" />
   </entity>
   <entity >

@@ -91,7 +91,7 @@ public:
 		max_vel_y = -10.f;
 
 		// Create player material
-		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.8, 0.5, 0);
+		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
 		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
 		pMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
 

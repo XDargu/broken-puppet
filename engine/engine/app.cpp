@@ -361,9 +361,7 @@ void CApp::update(float elapsed) {
 	}
 
 
-	if (io.becomesPressed(CIOStatus::THROW_STRING)) {
-
-		
+	if (io.becomesPressed(CIOStatus::THROW_STRING)) {	
 
 			// Get the camera position
 			CEntity* e = CEntityManager::get().getByName("PlayerCamera");
@@ -380,8 +378,8 @@ void CApp::update(float elapsed) {
 			static CHandle firstNeedle;
 			if (hit.hasBlock) {
 				PxRaycastHit blockHit = hit.block;
-				dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
-				dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
+				//dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
+				//dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
 
 				if (firstActor == nullptr) {
 					firstActor = blockHit.actor;
@@ -585,9 +583,11 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
+#ifdef _DEBUG
 	entity_inspector.update();
 	entity_lister.update();
 	entity_actioner.update();
+#endif
 }
 
 // Physics update
