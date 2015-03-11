@@ -2,6 +2,12 @@ clearlistener()
 
 /********************** CONFIG ************************/
 ExportMeshes = true
+export_meshes = true
+export_materials = true
+
+out_path = "C:\\Code\\engine\\data\\"
+tools_path = "C:\\Code\\engine\\tools\\"
+engine_path = "C:\\Code\\engine\\"
 
 -- Gets all the objects of the scene
 allObject = $*
@@ -56,9 +62,9 @@ Export the XML with entities and components
 ***********************************************************************************************/
 fn exportXMLScene progress:undefined = (
 	
-	if (validateScene true == false) then (
+	/*if (validateScene true == false) then (
 		return false;
-	)
+	)*/
 	
 	-- Array with all the component functions
 	/* Order:
@@ -76,7 +82,8 @@ fn exportXMLScene progress:undefined = (
 	functions = #(
 		getName, 
 		getTransform,
-		getMesh,
+		--getMesh,
+		getRender,
 		getAABB,
 		getCollider,
 		getRigidbody,
@@ -231,11 +238,14 @@ fn getTransform obj = (
 )
 
 /**********************************************************************************************
+ ---------------------------------------------------- DEPRECATED --------------------------------------------
+
 Gets the object name
 Params:
   - obj: target object
  Returns:
   - String with the component information
+ ---------------------------------------------------- DEPRECATED --------------------------------------------
 ***********************************************************************************************/
 fn getMesh obj = (
 
@@ -271,6 +281,51 @@ fn validateMesh obj = (
 fn validateExportedNames obj = (
 	return ((findItem expNames obj.name) == 0)
 )
+
+
+/**********************************************************************************************
+Gets the object render component
+Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+	
+fn getRender obj= (
+	if(validateCompRender obj == false) then 
+	return ""
+	
+	local mString = ""	
+	exportMesh obj
+	local groups = getFacesGroups obj
+	local sub_mesh = 0
+	local mat_id = 1
+	mString += "<render>\n"
+	
+	for g in groups do (
+		if g != undefined then (
+			local m = getMaterialOfObject obj mat_id
+			importMaterial m
+			mString += "<draw mesh=\"" + obj.name + "\" sub_mesh=\"" + sub_mesh as string +  "\" mat=\"" + m.name + "\">\n"
+			sub_mesh = sub_mesh + 1
+		)
+		mat_id = mat_id + 1
+	)
+		
+	mString += "</render>\n"
+)	
+
+fn validateCompRender obj = (
+	
+		local validAttributes = true
+	for atr in NotMeshAttributes do (
+		if (isProperty obj.baseObject atr) then (
+			validAttributes = false;
+		)		
+	)	
+	return (((findItem NotMesh (classof obj)) == 0) and validAttributes) and ExportMeshes
+)
+	
 
 /**********************************************************************************************
 Gets the object name
@@ -725,13 +780,6 @@ fn validateDistanceText obj = (
 )
 
 
-
-
-
-
-
-
-
 /**********************************************************************************************
 										COMPONENTES A SUCIO,  
 											 SIN ATRIBUTOS 
@@ -851,6 +899,9 @@ fn mcv2world obj = (
 	obj.pos = obj.pos * mcv2world
 )
 
+fn max2mcvQuat q = (
+	return quat -q.x -q.y -q.z q.w
+)
 	
 /**********************************************************************************************
 Create file xml and save it
@@ -858,7 +909,7 @@ Create file xml and save it
   - mString: String with the xml data
 ***********************************************************************************************/
 fn saveXMLArchive mString = (
-	local filename = getXMLPath()
+	local filename = engine_path + "my_File.xml"
 	print "saving"
 	print filename
 	local f = openFile filename mode:"wt"
@@ -883,31 +934,94 @@ fn openCloseFile = (
 	)
 
 /**********************************************************************************************
-	ABADIA ISLAND
+	ABADIA ISLAND 
 
 ***********************************************************************************************/	
+	fn exportMesh obj_to_export = (
 	
-	fn findIndexOfVertex vtxs str_vtxs v = (
+	-- Confirm obj is valid
+	if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
+	local obj = obj_to_export
+	if classof obj_to_export  != Editable_mesh then (
+		obj = copy obj_to_export
+		obj.name = obj_to_export.name
+		convertToMesh obj
+	)
 
-	-- Convert my array of floats to a single string
-	local sv = with printAllElements off v as string
+	-- Collect all unique vertexs
+	local all_vtxs = #()
+	local all_str_vtxs = #()			-- To keep the string version of the vertexs
+	local all_idxs = #()
+	local all_groups = #()
+	local nfaces = getNumFaces obj
+		
+	local channelA = 1
 	
-	-- Look for the string in the array
-	local idx = findItem str_vtxs sv
+	local world2local = inverse obj.transform
+	local max2mcv = rotateXMatrix -90
+	local world2mcv = world2local * max2mcv
 	
-	if idx > 0 then return idx
+	local face_groups = getFacesGroups obj
+
+	-- For each group of faces (per material id)
+	local group_of_faces
+	for group_of_faces in face_groups do (
+
+		-- Skip mat_id without faces
+		if group_of_faces == undefined then continue
+			
+		-- This group starts at this index
+		local first_index = all_idxs.count
+		
+		-- For each face in this material
+		local face_id
+		for face_id in group_of_faces do (
+			
+			-- Position
+			local face_pos = getFace obj face_id
+			local face_mapA = meshop.getMapFace obj channelA face_id
+			local face_normals = meshop.getFaceRNormals obj face_id
+			
+			--format "face_pos[%] = %\n" face_id face_pos
+			
+			-- For the 3 vtxs of each face
+			local vid
+			for vid in #(1,3,2) do (
+				local wpos = meshop.getVert obj face_pos[ vid ]
+				local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+				local wn = face_normals[ vid ]
+				
+				local mpos = wpos * world2mcv 
+				local n = wn * world2mcv.rotationpart 
+				
+				-- Collect all data associated to this vtx
+				local v = #( mpos.x, mpos.y, mpos.z, uvA.x, 1-uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
+				
+				-- Index the vtx or get the index if the vtx has already been defined
+				local idx_of_v = findIndexOfVertex all_vtxs all_str_vtxs v
+				append all_idxs idx_of_v
+				
+				--format "idx is %\n" idx_of_v
+			)
+		)
+		
+		-- First index & number of indices
+		local g = #( first_index, group_of_faces.count * 3 )
+		append all_groups g
+	)
 	
-	-- Si no esta, añadirlo y devolver el indice (count)w
-	append vtxs v
-	append str_vtxs sv
-	return vtxs.count
+	-- Save in binary form to file
+	saveBinaryMesh obj all_vtxs all_idxs all_groups 1004		-- Positions+UV2 only
 	
+	-- Delete the temp mesh
+	if obj != obj_to_export then delete obj
 )
 
-fn saveBinaryMesh obj vtxs idxs vertex_type = (
-	
-	local filename = getObjectPath obj false
-	print obj.name
+
+fn saveBinaryMesh obj vtxs idxs groups vertex_type = (
+	local data_path = out_path
+	local filename = data_path + "meshes\\"
+	filename += obj.name + ".mesh"
 	
 	if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
 	
@@ -916,9 +1030,10 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	if fs == undefined then throw ( "Can't create mesh output file " + filename )
 	
 	local mesh_magic = 0x44776655
-	local version_number = 1
+	local version_number = 2
 	local vtxs_magic = 0x44774444
 	local idxs_magic = 0x44773333
+	local groups_magic = 0x44772222
 	local end_magic = 0x44444444
 	
 	local bytes_per_index = 2
@@ -954,7 +1069,13 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 		WriteShort fs (v-1) #unsigned		-- Pasar a base 0
 	)
 	
-	-- Other chunks...
+	-- Other chunks
+	WriteLong fs groups_magic
+	WriteLong fs (groups.count*2*4)
+	for g in groups do (
+		WriteLong fs g[1]		-- First index (already in base0)
+		WriteLong fs g[2]		-- Number of indices
+	)
 	
 	-- Final chunk
 	WriteLong fs end_magic
@@ -964,71 +1085,94 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	
 	fclose fs
 )
-
-fn exportMesh obj_to_export = (
 	
-	-- Confirm obj is valid
-	if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
-	local obj = obj_to_export
+fn findIndexOfVertex vtxs str_vtxs v = (
+
+	-- Convert my array of floats to a single string
+	local sv = with printAllElements off v as string
+	
+	-- Look for the string in the array
+	local idx = findItem str_vtxs sv
+	
+	if idx > 0 then return idx
+	
+	-- Si no esta, añadirlo y devolver el indice (count)
+	append vtxs v
+	append str_vtxs sv
+	return vtxs.count
+)
+
+-- Returns a list of list of 
+fn getFacesGroups obj = (
+	local obj_to_export
 	if classof obj_to_export  != Editable_mesh then (
-		obj = copy obj_to_export
-		obj.name = obj_to_export.name
-		convertToMesh obj
+		obj_to_export = copy obj
+		obj_to_export.name = obj.name
+		convertToMesh obj_to_export
 	)
-
-	-- Collect all unique vertexs
-	local all_vtxs = #()
-	local all_str_vtxs = #()			-- To keep the string version of the vertexs
-	local all_idxs = #()
-	local nfaces = getNumFaces obj
-		
-	local channelA = 1
 	
-	local world2local = inverse obj.transform
-	local max2mcv = rotateXMatrix -90
-	local world2mcv = world2local * max2mcv
-	
-	-- For each face
+	local nfaces = getNumFaces obj_to_export
+	local f = #()
 	local face_id
 	for face_id = 1 to nfaces do (
-		
-		-- Position
-		local face_pos = getFace obj face_id
-		local face_mapA = meshop.getMapFace obj channelA face_id
-		local face_normals = meshop.getFaceRNormals obj face_id
-		
-		--format "face_pos[%] = %\n" face_id face_pos
-		
-		-- For the 3 vtxs of each face
-		local vid
-		for vid in #(1,3,2) do (
-			local wpos = meshop.getVert obj face_pos[ vid ]
-			local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
-			local wn = face_normals[ vid ]
-			
-			local mpos = wpos * world2mcv 
-			local n = wn * world2mcv.rotationpart 
-			
-			-- Collect all data associated to this vtx
-			local v = #( mpos.x, mpos.y, mpos.z, uvA.x, uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
-			
-			-- Index the vtx or get the index if the vtx has already been defined
-			local idx_of_v = findIndexOfVertex all_vtxs all_str_vtxs v
-			append all_idxs idx_of_v
-			
-			--format "idx is %\n" idx_of_v
+		local mat_id = getFaceMatID obj_to_export face_id
+		-- If no face has been assigned to this material_id
+		if f[ mat_id ] == undefined then (
+			f[ mat_id ] = #()
 		)
-		
+		append f[ mat_id ] face_id
 	)
 	
-	-- Save in binary form to file
-	if (ExportMeshes == true) then
-		saveBinaryMesh obj all_vtxs all_idxs 1004		-- Positions+UV2 only
+	delete obj_to_export
 	
-	-- Delete the temp mesh
-	if obj != obj_to_export then delete obj
+	return f
 )
 	
+fn importTexture infile = (
+	local base_name = getFilenameFile infile
+	local full_target = out_path + "textures/" + base_name + ".dds"
+	
+	-- Convert to dds using texconv.exe por ejemplo
+	--copyFile infile full_target
+	local cmd = tools_path + "texconv.exe -f DXT5 \"" + infile + "\" -o " + out_path + "textures\\"
+	format "Executing: --%--\n" cmd
+	local log_file = out_path + "log\\" + base_name + ".log"
+	local rc = DOSCommand (cmd + " > " + log_file)
+	format "  rc = %\n" rc
+	return base_name
+)
+	
+fn importMaterial m = (
+	if export_materials == false then return 0
+	if classof m != Standardmaterial then throw( "No se importar materiales que no sean std" )
+	local diff_name = importTexture m.diffusemap.filename
+--	importTexture m.normalmap.filename
+	
+	-- Exportar la definicion del material a un xml
+	local out_filename = out_path + "materials\\" + m.name + ".xml"
+	local mfs = createfile out_filename
+	if mfs == undefined then throw ("Can't create material filename" + out_filename )
+	format "<std_material name=\"%\" diffuse=\"%\"/>\n" m.name diff_name to:mfs
+	close mfs
+)
+	
+fn getMaterialOfObject obj submesh = ( 
+	local m = obj.material
+	--format "getMaterialOfObject of % % = %\n" obj.name submesh m
+	if m == undefined then throw ( "Necesitamos un material para el objeto " + obj.name )
+	if classof m == Standardmaterial then 
+		return m
+	end
+	if classof m == Multimaterial then 
+		local sm = m[ submesh ]
+		if classof sm == Standardmaterial then return sm
+		if classof sm == Multimaterial then throw( "El objeto " + obj.name + " submaterial " + (submesh as string) + " es a la vez un multimaterial!")
+		throw ("No se exportar materiales de tipo " + ( classof(  sm )  as string ))
+	end
+	throw ("No se exportar materiales de tipo " + ( classof(  sm )  as string ))
+	return m
+)
+
 
 /**********************************************************************************************
 Object ID structure
@@ -1088,7 +1232,7 @@ Calculate the path (relative/absolute) of the obj target
 ***********************************************************************************************/
 fn getObjectPath object_to_path isRelative = (
 	
-	local data_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\data\\meshes\\"
+	local data_path = out_path  + "meshes\\"
 	local relative_path = ""
 	local filename = object_to_path.name
 	local extension = ".mesh"
@@ -1105,7 +1249,7 @@ Calculate the path  of the xml
   - String: path of the xml
 ***********************************************************************************************/
 fn getXMLPath = (
-	local data_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
+	local data_path = engine_path
 	local filename = data_path + ""
 	filename += "my_file.xml"	
 	return filename
@@ -1122,8 +1266,8 @@ fn max2mcvMatrix obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
+addObjectsID()
+exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
---openCloseFile()
---removeObjectsID()
+openCloseFile()
+removeObjectsID()
