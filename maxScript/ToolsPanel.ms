@@ -1,0 +1,217 @@
+filein("Exporter.ms")
+
+clearListener()
+
+fn exportSelectedModule dir progress = (
+	
+	progress.value = 0	
+	local typ=".max"	-- change this to the filetype you want
+
+	local sel=selection as array
+	
+	local count = 1
+	for s in sel do
+	(
+		local f = dir+s.name+typ
+		if typ==".max" then
+		(
+			saveNodes s f quiet:true
+		) else
+		(
+			select s
+			exportfile f selectedOnly:true --#noprompt
+		)
+		progress.value = (100.0 / sel.count) * count
+		count += 1
+	)
+)
+
+fn loadModules dir = (	
+	local modules = #()
+	for f in ( getFiles (dir + "*.max") ) do
+	(
+		append modules (getFilenameFile f)
+	)
+	return modules	
+)
+
+fn searchInList list search = (
+	local items = #()
+	for item in list do (
+		if (findString item search != undefined) then
+			append items item
+	)
+	return items
+)
+
+fn createModuleInPoint dir p = (
+	mergeMaxFile (dir) #mergeDups  #select
+	if activeGrid == $45degGrid then (
+		selection.rotation = (quat 0 0 0.382683 0.92388)
+	)
+	selection.position = p
+)
+
+fn createModuleSelectionPoint dir = (
+	local p = pickPoint() 
+	if (classOf p == Point3) then (
+		createModuleInPoint dir p		
+		--createModuleSelectionPoint dir
+	)
+)
+
+(
+    -- Window name
+	WindowName = "Tools"
+	
+	-- Module path
+	ModulePath = "C:\\Users\\Daniel\\Documents\\Modules\\"
+	
+	-- Modules
+	ModuleList = loadModules ModulePath
+	
+	-- Rollouts defined before the Main window
+
+		-- Rollout A	
+		rollout ARollout "Exportador"
+		(
+			checkbox exportMesh "Exportar meshes" checked: ExportMeshes
+			button exportAll "Exportar todo" width:135 height:25 toolTip:""
+			button exportSel "Exportar selección" width:135 height:25 toolTip:""
+			button validScn "Validar escena" width:135 height:25 toolTip:""
+			button exportMod "Exportar módulos" width:135 height:25 toolTip:""
+			progressbar progress
+			--button boton1 "EXP that" pos:[75,3] width:67 height:25 toolTip:""
+			--button boton3 "EXP these" pos:[5,31] width:67 height:25 toolTip:""
+			--button boton4 "EXP those" pos:[75,31] width:67 height:25 toolTip:""
+	        -- These buttons won't do anything when clicked
+			on exportAll pressed do (
+				addObjectsID()
+				exportXMLScene progress: progress
+				 --funcion que abre y cierra una última cosa para poder trabajar, a depurar
+				openCloseFile()
+				removeObjectsID()
+				/*try (filein "Exporter.ms")
+				catch ( messageBox "No se ha podido exportar correctamente" )*/
+			)
+			on exportSel pressed do (
+				filein "ExporterBasic.ms"
+				/*try (filein "ExporterBasic.ms")
+				catch ( messageBox "No se ha podido exportar correctamente" )*/
+			)
+			on exportMod pressed do (
+				exportSelectedModule ModulePath progress
+			)
+			on validScn pressed do (
+				if (validateScene false == true) then ( messageBox "La escena es correcta" )
+				
+			)
+			on exportMesh changed theState do (
+				ExportMeshes = theState
+			)			
+		)
+		
+		-- Rollout B 
+		rollout BRollout "Módulos"
+		(
+			edittext searchText "" pos: [12, 8] width: 120
+			button searchButton "Buscar" pos: [140, 6]
+			listbox theListbox "" items:ModuleList height: 6
+			button create "Crear" 
+			button reload "Actualizar" 
+			/*button boton "dvn_arqui_suelo_esqui2_ex_01" pos:[5,3] width:67 height:25 toolTip:""
+			button boton1 "EXP_2" pos:[75,3] width:67 height:25 toolTip:""
+			button boton3 "EXP_3" pos:[5,31] width:67 height:25 toolTip:""
+			button boton4 "EXP_4" pos:[75,31] width:67 height:25 toolTip:""
+	        -- These buttons won't do anything when clicked
+			*/
+			on create pressed do (
+				if (theListbox.selected != undefined) then
+					createModuleSelectionPoint (ModulePath + theListbox.selected + ".max")
+			)
+			
+			on reload pressed do (
+				ModuleList = loadModules ModulePath
+				theListbox.items = ModuleList
+			)
+			
+			on searchButton pressed do (
+				ModuleList = loadModules ModulePath
+				theListbox.items = searchInList ModuleList searchText.text
+			)
+		)
+
+
+    -- Main window
+	rollout main WindowName width:220 height:173
+	(				
+	    -- Container for the Rollouts named MyRollouts
+		subRollout MyRollouts "" pos:[4,68] width:220
+		
+		-- Buttons placed at the top
+		button botonA "Subir" pos:[5,3] width:75 height:25 toolTip:""
+		button botonB "Bajar" pos:[87,3] width:75 height:25 toolTip:""
+		button botonC "Backface cull" pos:[5,34] width:75 height:25 toolTip:""
+		button botonD "Cambiar grid" pos: [87,34] width:75 height:25 toolTip:""
+			
+		on botonA pressed do	( 
+			objs = $*
+			for o in objs do (
+				o.pos.z += 8
+			)
+		) -- A message pop up when you click the button
+		on botonB pressed do	(
+			objs = $*
+			for o in objs do (
+				o.pos.z -= 8
+			)
+			--filein "box.ms"
+		)	-- box.ms is the name of an external Script we execute when the button is clicked	
+		on botonC pressed do (
+			objs = $*
+			for o in objs do (
+				if (o.backfaceCull == true) then (
+					o.backfaceCull = false
+				)
+				else (
+					o.backfaceCull = true
+				)
+			)
+		)
+		on botonD pressed do (
+			if activeGrid == $45degGrid then (
+				activeGrid = undefined
+			)
+			else (
+				activeGrid = $45degGrid
+			)
+		)
+		
+		-- Inizialitations
+		on main open do
+		(
+			setGridSpacing 8
+			-- 45 degrees grid
+			if ($45degGrid == undefined) then (
+				oGrid = grid()
+				oGrid.name = "45degGrid"
+			)
+			$45degGrid.rotation = (quat 0 0 0.382683 0.92388)
+			$45degGrid.grid = 8
+			$45degGrid.length = 200
+			$45degGrid.width = 200
+			
+		    main.height = 480
+			MyRollouts.height  = 400
+			
+			-- We add the Rollouts into MyRollouts
+		    AddSubRollout main.MyRollouts ARollout
+		    AddSubRollout main.MyRollouts BRollout
+		)
+		
+
+	)
+
+	-- Creates the window with a specific look
+	CreateDialog main style:#(#style_titlebar, #style_toolwindow, #style_sysmenu )
+)

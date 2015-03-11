@@ -1,5 +1,8 @@
 clearlistener()
 
+/********************** CONFIG ************************/
+ExportMeshes = true
+
 -- Gets all the objects of the scene
 allObject = $*
 
@@ -7,7 +10,7 @@ allObject = $*
 NotEval = #(targetobject)
 
 -- List of object without mesh
-NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight)
+NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight,grid)
 
 DistanceTextAttributes = "distanceTextData"
 CameraAttribute = "objectCameraData"
@@ -31,6 +34,9 @@ BasicEnemyName = "BasicEnemy"
 -- List of special names
 reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName, LevelName)
 
+-- List of mandatory names
+mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
+
 -- List of enemys
 enemyNames = #(BasicEnemyName)
 
@@ -48,7 +54,11 @@ enemyNames = #(BasicEnemyName)
 /**********************************************************************************************
 Export the XML with entities and components
 ***********************************************************************************************/
-fn exportXMLScene = (
+fn exportXMLScene progress:undefined = (
+	
+	if (validateScene true == false) then (
+		return false;
+	)
 	
 	-- Array with all the component functions
 	/* Order:
@@ -88,6 +98,9 @@ fn exportXMLScene = (
 	-- Initialize XML
 	mXML = "<scene>\n"
 	
+	if (progress != undefined) then
+		progress.value = 0
+	count = 1
 	-- Calls every function in the function arrays
 	for obj in allObject do (
 		-- Check if needs to be evaluate
@@ -117,9 +130,13 @@ fn exportXMLScene = (
 			)
 			mXML += "\t</entity>\n"		
 		)
+		
+		if (progress != undefined) then
+			progress.value = (100.0 / allObject.count) * count
+		count +=1
 	)
 	
-	mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
+	--mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
 	
 	mXML += "</scene>"
 	
@@ -130,6 +147,34 @@ fn exportXMLScene = (
 
 fn validateEntity obj = (
 	return ((findItem NotEval (classof obj)) == 0)
+)
+
+fn validateScene exporting = (
+	valid = true
+	
+	-- Errors
+	for obj in mandatoryNames do (
+		if (getNodeByName obj == undefined) then (
+			messageBox (" Falta el objeto: " + obj)
+			valid = false
+		)
+	)
+	
+	-- Warnings
+	if (lights.count == 0) then (
+		if exporting then
+		(
+			if not(queryBox "AVISO: No hay luces en la escena, ¿seguro que quieres exportar?" beep:false) then (
+				valid = false
+			)
+		)
+		else
+		(
+			messageBox ("AVISO: No hay luces en la escena")
+		)
+	)
+	
+	return valid
 )
 	
 	
@@ -332,6 +377,8 @@ fn getCollider obj = (
 	changeTransform obj originalTransform
 	
 	-- Make the return string
+	mString = ""
+	if (obj.modifiers[#PhysX_Rigid_Body].meshType == 2) then (
 	mString = "<collider staticFriction=\""  \
 														+ obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
 									 + " dynamicFriction=\"" \
@@ -345,6 +392,10 @@ fn getCollider obj = (
 									 + " boxZ=\"" \
 														+ extents.z as string + "\"" \													
 			+ "/>\n"
+	)
+	if (obj.modifiers[#PhysX_Rigid_Body].meshType == 5) then (
+		mString = "<colliderMesh path=\"" + obj.name + "\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
+	)
 	return mString
 )
 
@@ -971,7 +1022,8 @@ fn exportMesh obj_to_export = (
 	)
 	
 	-- Save in binary form to file
-	saveBinaryMesh obj all_vtxs all_idxs 1004		-- Positions+UV2 only
+	if (ExportMeshes == true) then
+		saveBinaryMesh obj all_vtxs all_idxs 1004		-- Positions+UV2 only
 	
 	-- Delete the temp mesh
 	if obj != obj_to_export then delete obj
@@ -1036,7 +1088,7 @@ Calculate the path (relative/absolute) of the obj target
 ***********************************************************************************************/
 fn getObjectPath object_to_path isRelative = (
 	
-	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\data\\meshes\\"
+	local data_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\data\\meshes\\"
 	local relative_path = ""
 	local filename = object_to_path.name
 	local extension = ".mesh"
@@ -1052,12 +1104,12 @@ Calculate the path  of the xml
  Returns:
   - String: path of the xml
 ***********************************************************************************************/
-	fn getXMLPath = (
-	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\"
+fn getXMLPath = (
+	local data_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
 	local filename = data_path + ""
 	filename += "my_file.xml"	
 	return filename
-	)
+)
 
 
 fn max2mcvMatrix obj = (
@@ -1070,11 +1122,8 @@ fn max2mcvMatrix obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
+--addObjectsID()
+--exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
-openCloseFile()
-removeObjectsID()
-
-
-
+--openCloseFile()
+--removeObjectsID()

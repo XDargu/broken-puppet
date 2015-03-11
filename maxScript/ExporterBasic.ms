@@ -19,7 +19,7 @@ fn findIndexOfVertex vtxs str_vtxs v = (
 )
 
 fn saveBinaryMesh obj vtxs idxs vertex_type = (
-	local data_path = "D:\\T Usuarios\\T Daniel\\Documents\\universidad\\UPF Master\\proyecto\\GitHub\\engine\\engine\\data\\"
+	local data_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\data\\"
 	local filename = data_path + "meshes\\"
 	filename += obj.name + ".mesh"
 	
