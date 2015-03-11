@@ -11,7 +11,7 @@ struct TCompColliderMesh : TBaseComponent {
 	TCompColliderMesh() { collider = nullptr; }
 	TCompColliderMesh(physx::PxShape* the_mesh_collider) { collider = the_mesh_collider; strcpy(path, "unknown"); }
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		strcpy(path, atts.getString("path", "missing_mesh").c_str());
 		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);

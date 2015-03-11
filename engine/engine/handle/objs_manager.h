@@ -10,7 +10,7 @@ class CObjManager : public CHandleManager {
 	bool  updating_objs;
 public:
 
-	CObjManager(const char* the_obj_name) : objs(nullptr), updating_objs( false ) {
+	CObjManager(const char* the_obj_name) : objs(nullptr), updating_objs(false) {
 		obj_type_name = the_obj_name;
 	}
 
@@ -63,10 +63,10 @@ public:
 		return createObj();
 	}
 
-	void loadFromAtts(CHandle who, MKeyValue &atts) {
+	void loadFromAtts(CHandle who, const std::string& elem, MKeyValue &atts) {
 		TObj* obj = who;
-    obj->loadFromAtts( atts );
-  }
+		obj->loadFromAtts(elem, atts);
+	}
 
 	// ------------------
 	// Contruct a new object, using the given args
@@ -110,7 +110,7 @@ public:
 
 	// --------------------------------------------
 	bool destroyObj(CHandle h) {
-		assert( !updating_objs || fatal( "No puedes borrar componentes de este tipo mientras estas actualizandolos"));
+		assert(!updating_objs || fatal("No puedes borrar componentes de este tipo mientras estas actualizandolos"));
 		// Confirm the handle is mine
 		assert(h.getType() == getType());
 
@@ -199,7 +199,7 @@ public:
 		// the original object, but the memory to call the ctor
 		// is in the new object
 		// Warning!!, we are calling twice to the ctor!!!
-		::new(new_obj)TObj(*orig_obj) ;
+		::new(new_obj)TObj(*orig_obj);
 
 		return new_h;
 	}

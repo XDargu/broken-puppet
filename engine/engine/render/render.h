@@ -28,5 +28,6 @@ extern CRender render;
 
 #include "shaders.h"
 #include "mesh.h"
+#include "material.h"
 
 #endif

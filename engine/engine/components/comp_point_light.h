@@ -10,7 +10,7 @@ struct TCompPointLight : TBaseComponent {
 
 	TCompPointLight() {}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		CEntity* e = CHandle(this).getOwner();
 		CHandle transform = e->get<TCompTransform>();
 

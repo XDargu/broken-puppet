@@ -9,7 +9,7 @@ struct TCompName : TBaseComponent {     // 1
 	char name[32];
 	TCompName() { name[0] = 0x00; }
 	TCompName(const char *aname) { strcpy(name, aname); }
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		strcpy(name, atts["name"].c_str());
 	}
 

@@ -14,7 +14,7 @@ struct TCompTransform : TBaseComponent {     // 1
 	TCompTransform() : position(XMVectorSet(0.f, 0.f, 0.f, 1.f)), rotation(XMQuaternionIdentity()), scale(XMVectorSet(1, 1, 1, 1)) {}
 	TCompTransform(XMVECTOR np, XMVECTOR nr, XMVECTOR ns) : position(np), rotation(nr), scale(ns) {}
 
-	void loadFromAtts(MKeyValue& atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue& atts) {
 		position = atts.getPoint("position");
 		rotation = atts.getQuat("rotation");
 		scale = atts.getPoint("scale");

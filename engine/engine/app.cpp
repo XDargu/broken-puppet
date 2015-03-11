@@ -14,6 +14,7 @@
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
+#include "render/render_manager.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -62,10 +63,8 @@ void CApp::loadConfig() {
 
 }
 
-CVertexShader vs_basic;
-CVertexShader vs_basic2;
-CPixelShader ps_basic;
-CPixelShader ps_textured;
+// Debug 
+CRenderTechnique debugTech;
 CMesh        grid;
 CMesh        axis;
 CMesh		 wiredCube;
@@ -74,8 +73,7 @@ CMesh		 rope;
 
 CHandle		 life;
 
-TCompCamera*  camera;
-CCamera*	  oldCamera;
+CHandle		  activeCamera;
 CFont         font;
 
 CShaderCte<TCtesGlobal> ctes_global;
@@ -98,9 +96,9 @@ void createManagers() {
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
-	getObjManager<TCompTag>()->init(1024);
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
+	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(32);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
@@ -183,33 +181,29 @@ bool CApp::create() {
 	physics_manager.init();
 
 	CImporterParser p;
-	p.xmlParseFile("my_file.xml");
+	//p.xmlParseFile("my_file.xml");
+	bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
 	initManagers();
 	fixedUpdateCounter = 0.0f;
 
-	bool is_ok = vs_basic.compile("Tutorial04.fx", "VS", vdcl_position_color)
-		&& ps_basic.compile("Tutorial04.fx", "PS")
-		&& vs_basic2.compile("Tutorial04.fx", "VSNormal", vdcl_position_uv_normal)
-		&& ps_textured.compile("Tutorial04.fx", "PSTextured")
-		;
+	assert(is_ok);
+
+	// Create Debug Technique
+	is_ok &= debugTech.load("basic");
+
 	assert(is_ok);
 
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");
-	camera = e->get<TCompCamera>();
-
-	CHandle pl = entity_manager.getByName("Player");
+	activeCamera = e->get<TCompCamera>();
 
 	is_ok = font.create();
-	font.camera = camera;
+	font.camera = (TCompCamera*)activeCamera;
 	assert(is_ok);
 
 	// Ctes ---------------------------
 	is_ok &= renderUtilsCreate();
-
-	// Initialize the camera
-	camera->setViewport(0.f, 0.f, (float)xres, (float)yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
@@ -242,10 +236,6 @@ bool CApp::create() {
 	return true;
 }
 
-void moveCameraOnEntity(CCamera& camera, CEntityOld *e) {
-	camera.lookAt(e->getPosition(), e->getPosition() + e->getFront(), e->getUp());
-}
-
 // -------------------------------------
 void CApp::doFrame() {
 
@@ -269,8 +259,7 @@ void CApp::doFrame() {
 	before = now;
 
 	// To avoid the fist huge delta time
-	if (delta_secs < 0.5) {
-		
+	if (delta_secs < 0.5) {		
 		
 		// Fixed update
 		fixedUpdateCounter += delta_secs;
@@ -311,7 +300,7 @@ void CApp::update(float elapsed) {
 	}
 #endif
 	//Calculate the current number of strings
-	unsigned int num_strings = numStrings();
+	/*unsigned int num_strings = numStrings();
 
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
@@ -513,11 +502,6 @@ void CApp::update(float elapsed) {
 					firstNeedle = CHandle();
 				}
 			}
-		/*}else{
-			TCompRope* c_rope = strings.front();
-			strings.pop();
-			entity_manager.remove(CHandle(c_rope).getOwner());
-		}*/
 	}
 
 
@@ -563,10 +547,54 @@ void CApp::update(float elapsed) {
 			entitycount++;
 		}
 	}
-
+	*/
 
 	// Update ---------------------
 	//  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
+	
+	// Ñapa para luz ambiental
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+		CEntity* e_ambLight = entity_manager.getEntities()[i];
+		TCompAmbientLight* ambLight = e_ambLight->get<TCompAmbientLight>();
+		if (ambLight && ambLight->active) {
+			ctes_global.get()->AmbientLight = ambLight->color;
+		}
+	}
+
+	// Ñapa para luces direccionales
+	// Recorrer las luces y añadirlas al array
+	ctes_global.get()->LightCount = 0;
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+		CEntity* e_dirLD = entity_manager.getEntities()[i];
+		TCompDirectionalLight* dirLD = e_dirLD->get<TCompDirectionalLight>();
+		TCompTransform* transLD = e_dirLD->get<TCompTransform>();
+		if (dirLD && transLD && dirLD->active) {
+			ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), transLD->rotation);
+			// La intensidad se pasa en el alfa del color
+			ctes_global.get()->LightColors[ctes_global.get()->LightCount] = XMVectorSetW(dirLD->color, dirLD->intensity * 0.1f);
+			ctes_global.get()->LightCount++;
+		}
+	}
+
+	// Ñapa para luces puntuales
+	// Recorrer las luces y añadirlas al array
+	ctes_global.get()->OmniLightCount = 0;
+	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
+		CEntity* e_pointL = entity_manager.getEntities()[i];
+		TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
+		TCompTransform* trans_pointL = e_pointL->get<TCompTransform>();
+		if (pointL && trans_pointL && pointL->active) {
+			ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = XMVectorSetW(pointL->color, pointL->intensity * 0.1f);;
+			ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = trans_pointL->position;
+			ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
+			ctes_global.get()->OmniLightCount++;
+		}
+	}
+	int a = ctes_global.get()->OmniLightCount;
+
+	ctes_global.uploadToGPU();
+	ctes_global.activateInPS(2);
+
 	ctes_global.get()->world_time += elapsed;
 
 	getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
@@ -611,48 +639,26 @@ void CApp::render() {
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	activateWorldMatrix(0);
+	activateTint(0);
+
 	activateTextureSamplers();
 
-	//activateCamera(*camera, 1);
-	// TODO: Make activate TCamera
-	activateCamera(
-		camera->view_projection,
-		((TCompTransform*)((CEntity*)CHandle(camera).getOwner())->get<TCompTransform>())->position,
-		1
-		);
+	render_techniques_manager.getByName("basic")->activate();
+	activateWorldMatrix(0);
 
-	/*drawViewVolume(camera2);
-	setWorldMatrix(XMMatrixIdentity());
-
-	static int nframe = 0;
-	font.printf(10, 10, "Yaw Is %f", rad2deg( getYawFromVector( e1->getFront())));
-
-	ctes_global.uploadToGPU();
-
-	// Tech con textura
-	vs_basic2.activate();
-	ps_textured.activate();
-	const CTexture *t = texture_manager.getByName("wood_d");
-	t->activate(0);
-	const CMesh* teapot = mesh_manager.getByName("Box001");
-	ctes_global.activateInVS(2);
-	teapot->activateAndRender();*/
-
-
-	renderEntities();
-	vs_basic.activate();
-	ps_basic.activate();
+	render_manager.renderAll(((TCompCamera*)activeCamera)->view_projection);
 	renderDebugEntities();
-	//renderEntityDebugList();
+
 #ifdef _DEBUG
 	TwDraw();
 #endif
 
-	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
+	/*std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
 	font.print(15, 15, life_text.c_str());
 
 	std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
-	font.print(15, 35, strings_text.c_str());
+	font.print(15, 35, strings_text.c_str());*/
 
 	::render.swap_chain->Present(0, 0);
 
@@ -660,53 +666,12 @@ void CApp::render() {
 
 void CApp::renderEntities() {
 
-	vs_basic2.activate();
+	/*vs_basic2.activate();
 	ps_textured.activate();
 	const CTexture *t = texture_manager.getByName("wood_d");
 	t->activate(0);
 
-	// Ñapa para luz ambiental
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-		CEntity* e_ambLight = entity_manager.getEntities()[i];
-		TCompAmbientLight* ambLight = e_ambLight->get<TCompAmbientLight>();
-		if (ambLight && ambLight->active) {
-			ctes_global.get()->AmbientLight = ambLight->color;
-		}
-	}
-
-	// Ñapa para luces direccionales
-	// Recorrer las luces y añadirlas al array
-	ctes_global.get()->LightCount = 0;
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-		CEntity* e_dirLD = entity_manager.getEntities()[i];
-		TCompDirectionalLight* dirLD = e_dirLD->get<TCompDirectionalLight>();
-		TCompTransform* transLD = e_dirLD->get<TCompTransform>();
-		if (dirLD && transLD && dirLD->active) {
-			ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), transLD->rotation);
-			// La intensidad se pasa en el alfa del color
-			ctes_global.get()->LightColors[ctes_global.get()->LightCount] = XMVectorSetW(dirLD->color, dirLD->intensity * 0.1f);
-			ctes_global.get()->LightCount++;
-		}
-	}
-
-	// Ñapa para luces puntuales
-	// Recorrer las luces y añadirlas al array
-	ctes_global.get()->OmniLightCount = 0;
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-		CEntity* e_pointL = entity_manager.getEntities()[i];
-		TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
-		TCompTransform* trans_pointL = e_pointL->get<TCompTransform>();
-		if (pointL && trans_pointL && pointL->active) {
-			ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = XMVectorSetW(pointL->color, pointL->intensity * 0.1f);;
-			ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = trans_pointL->position;
-			ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
-			ctes_global.get()->OmniLightCount++;
-		}
-	}
-	int a = ctes_global.get()->OmniLightCount;
-
-	ctes_global.uploadToGPU();
-	ctes_global.activateInPS(2);
+	
 
 	//ctes_global.activateInVS(2);
 
@@ -742,7 +707,7 @@ void CApp::renderEntities() {
 				XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
 				XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
-				/*   RECREATE ROPE   */
+				//   RECREATE ROPE   
 				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
 				XMVECTOR initialPos = pos1 + offset_rotado_1;
 				XMVECTOR finalPos = pos2 + offset_rotado_2;
@@ -796,11 +761,12 @@ void CApp::renderEntities() {
 			font.size = old_size;
 			font.color = old_col;
 		}
-	}
+	}*/
 }
 
 void CApp::renderDebugEntities() {
 
+	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
 		grid.activateAndRender();
@@ -895,10 +861,7 @@ void CApp::destroy() {
 	intersectsWiredCube.destroy();
 	wiredCube.destroy();
 	renderUtilsDestroy();
-	vs_basic.destroy();
-	vs_basic2.destroy();
-	ps_basic.destroy();
-	ps_textured.destroy();
+	debugTech.destroy();
 	font.destroy();
 	::render.destroyDevice();
 }

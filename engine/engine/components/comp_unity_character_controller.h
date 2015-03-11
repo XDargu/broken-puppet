@@ -79,7 +79,7 @@ public:
 
 	//CApp &app;
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;

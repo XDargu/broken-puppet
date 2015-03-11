@@ -30,7 +30,7 @@ public:
 		projection = XMMatrixIdentity();
 	}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		target = atts.getPoint("target");
 		zfar = atts.getFloat("zfar", 1000);
 		znear = atts.getFloat("znear", 1);
@@ -46,7 +46,7 @@ public:
 		assert(trans || fatal("TCamera requieres a TTransform component"));
 
 		trans->lookAt(target, trans->getUp());
-		setViewport(0, 0, 512, 512);    // Will update projection matrix
+		setViewport(0, 0, CApp::get().xres, CApp::get().yres);
 	}
 
 	void update(float elapsed) {

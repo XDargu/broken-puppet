@@ -30,7 +30,7 @@ public:
 	float time_since_last_hit;
 	
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 		m_fsm_basic_player.SetEntity(CHandle(this).getOwner());
 		assertRequiredComponent<TCompLife>(this);

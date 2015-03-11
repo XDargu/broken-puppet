@@ -9,7 +9,7 @@ struct TCompLife : TBaseComponent {    // 2 ...
   TCompLife() : life(100.0f) { }
   TCompLife(float alife) : life(alife) { }
 
-  void loadFromAtts(MKeyValue &atts) {
+  void loadFromAtts(const std::string& elem, MKeyValue &atts) {
     life = atts.getFloat("life", 100.f);
   }
 

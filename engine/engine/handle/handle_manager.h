@@ -138,7 +138,7 @@ public:
 	virtual bool destroyObj(CHandle h) = 0;
 	virtual CHandle createEmptyObj() = 0;
 	virtual CHandle clone(CHandle h) = 0;
-	virtual void loadFromAtts(CHandle who, MKeyValue &atts) = 0;
+	virtual void loadFromAtts(CHandle who, const std::string& elem, MKeyValue &atts) = 0;
 
 	// ---------------------------
 	class CRegister {

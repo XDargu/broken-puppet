@@ -12,7 +12,7 @@ struct TCompMesh : TBaseComponent {
 	TCompMesh(const CMesh* the_mesh) { mesh = the_mesh; strcpy(path, "unknown"); color = XMVectorSet(1, 1, 1, 1); }
 	TCompMesh(const char* the_name) { mesh = mesh_manager.getByName(the_name); strcpy(path, the_name); color = XMVectorSet(1, 1, 1, 1); }
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		strcpy(path, atts.getString("path", "missing_mesh").c_str());
 		mesh = mesh_manager.getByName(path);
 		color = atts.getQuat("color");

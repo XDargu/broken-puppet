@@ -22,7 +22,7 @@ public:
 		needle_2 = the_needle_2;*/
 	}
 
-	void loadFromAtts(MKeyValue& atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue& atts) {
 		joint = assertRequiredComponent<TCompDistanceJoint>(this);
 
 		width = atts.getFloat("width", 0.02f);

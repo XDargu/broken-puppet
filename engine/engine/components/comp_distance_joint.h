@@ -31,7 +31,7 @@ public:
 		joint->release();
 	}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		actor1 = atts.getString("actor1", "");
 		actor2 = atts.getString("actor2", "");
 	}

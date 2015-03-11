@@ -18,6 +18,7 @@ public:
 	void   writeStartElement( std::ostream &os, const char *what) const;
 	void   writeEndElement( std::ostream &os, const char *what) const;
 
+	bool   has(const char *what) const;
 	int    getInt (const char *what, int default_value) const;
 	float  getFloat (const char *what, float default_value) const;
 	bool   getBool (const char *what, bool default_value) const;

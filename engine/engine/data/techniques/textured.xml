@@ -1,0 +1,6 @@
+<technique 
+	fx="Tutorial04.fx"
+	vs="VSNormal"
+	vs_decl="vdcl_position_uv_normal"
+	ps="PSTextured"
+	/>

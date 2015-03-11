@@ -1,0 +1,47 @@
+<scene>
+<entity>
+<name name="Torus001"/>
+<transform q="0.0 0.0 0.0 1.0" t="0.0 0.0 0.0"/>
+<render>
+<draw mesh="Torus001" sub_mesh="0" mat="Ladrillo"/>
+<draw mesh="Torus001" sub_mesh="1" mat="Azul"/>
+</render>
+</entity>
+<entity>
+<name name="Torus002"/>
+<transform q="0.0 0.0 0.0 1.0" t="24.0354 0.0 0.0"/>
+<render>
+<draw mesh="Torus002" sub_mesh="0" mat="Ladrillo"/>
+<draw mesh="Torus002" sub_mesh="1" mat="Azul"/>
+</render>
+</entity>
+<entity>
+<name name="Torus003"/>
+<transform q="0.0 0.0 0.0 1.0" t="48.0708 0.0 0.0"/>
+<render>
+<draw mesh="Torus003" sub_mesh="0" mat="Ladrillo"/>
+<draw mesh="Torus003" sub_mesh="1" mat="Azul"/>
+</render>
+</entity>
+<entity>
+<name name="Teapot001"/>
+<transform q="0.0 0.0 0.0 1.0" t="11.2558 9.87598e-007 22.5936"/>
+<render>
+<draw mesh="Teapot001" sub_mesh="0" mat="02 - Default"/>
+</render>
+</entity>
+<entity>
+<name name="GeoSphere001"/>
+<transform q="0.0 0.0 0.0 1.0" t="-11.7779 7.22345e-007 16.5253"/>
+<render>
+<draw mesh="GeoSphere001" sub_mesh="0" mat="Ladrillo"/>
+</render>
+</entity>
+<entity>
+<name name="pep"/>
+<transform q="0.0 0.0 0.0 1.0" t="19.1537 2.64645e-007 6.05438"/>
+<render>
+<draw mesh="pep" sub_mesh="0" mat="Ladrillo"/>
+</render>
+</entity>
+</scene>

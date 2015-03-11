@@ -92,10 +92,10 @@ void activateTint(int slot) {
 	ctes_object.activateInPS(slot);
 }
 
-void activateCamera(const CCamera& camera, int slot) {
-  ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
-  ctes_camera.get()->ViewProjection = camera.getViewProjection();  
-  ctes_camera.uploadToGPU();
+void activateCamera(const XMMATRIX viewProjection, int slot) {
+	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
+	ctes_camera.get()->ViewProjection = viewProjection;
+	ctes_camera.uploadToGPU();
 }
 
 void activateCamera(const XMMATRIX viewProjection, const XMVECTOR position, int slot) {

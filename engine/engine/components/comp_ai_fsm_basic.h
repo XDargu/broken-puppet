@@ -12,7 +12,7 @@ struct TCompAiFsmBasic : TBaseComponent {
 	TCompAiFsmBasic(){ }
 	TCompAiFsmBasic(ai_basic_enemy ai_controller) : m_ai_controller(ai_controller) { }
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		assertRequiredComponent<TCompTransform>(this);
 		assertRequiredComponent<TCompUnityCharacterController>(this);
