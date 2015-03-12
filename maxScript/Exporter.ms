@@ -5,9 +5,10 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
-out_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\data\\"
-tools_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\tools\\"
-engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
+scene_path = out_path + "scene\\"
+out_path = engine_path + "data\\"
+tools_path = engine_path  "tools\\"
+engine_path = "C:\\Code\\engine\\"
 
 -- Gets all the objects of the scene
 allObject = $*
@@ -31,6 +32,9 @@ expNames = #()
 
 -- List of objects exported
 expObjects = #()
+
+-- List of diffuses exported
+expDiff = #()
 
 LevelName = "Level"
 PlayerName = "Player"
@@ -960,7 +964,7 @@ Create file xml and save it
   - mString: String with the xml data
 ***********************************************************************************************/
 fn saveXMLArchive mString = (
-	local filename = engine_path + "my_file.xml"
+	local filename = scene_path + "my_file.xml"
 	print "saving"
 	print filename
 	local f = openFile filename mode:"wt"
@@ -1195,10 +1199,14 @@ fn importTexture infile = (
 	
 fn importMaterial m = (
 	if export_materials == false then return 0
+	-- if is exported
+	if (findItem expDiff m.diffusemap.filename) != 0 then return 0
+	
+	append expDiff m.diffusemap.filename
+	 
 	if classof m != Standardmaterial then throw( "No se importar materiales que no sean std" )
 	local diff_name = importTexture m.diffusemap.filename
---	importTexture m.normalmap.filename
-	
+	--	importTexture m.normalmap.filename	
 	-- Exportar la definicion del material a un xml
 	local out_filename = out_path + "materials\\" + m.name + ".xml"
 	local mfs = createfile out_filename
@@ -1317,8 +1325,8 @@ fn max2mcvMatrix obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
+addObjectsID()
+exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
---openCloseFile()
---removeObjectsID()
+openCloseFile()
+removeObjectsID()
