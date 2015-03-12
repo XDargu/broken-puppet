@@ -1,9 +1,10 @@
 #ifndef INC_COMP_RENDER_H_
 #define INC_COMP_RENDER_H_
 
+#include "base_component.h"
 class CMaterial;
 
-struct TCompRender {
+struct TCompRender : TBaseComponent{
 
 	struct RKey {
 		std::string meshName;

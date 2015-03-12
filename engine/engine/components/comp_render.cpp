@@ -1,6 +1,6 @@
 #include "mcv_platform.h"
-#include "comp_render.h"
 #include "render/render_manager.h"
+#include "comp_render.h"
 
 void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (elem == "draw") {
