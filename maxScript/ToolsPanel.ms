@@ -12,6 +12,8 @@ fn exportSelectedModule dir progress = (
 	local count = 1
 	for s in sel do
 	(
+		--s.pos = [0,0,0]
+		--s.rotation = (quat 0 0 0 1)
 		local f = dir+s.name+typ
 		if typ==".max" then
 		(
@@ -46,10 +48,12 @@ fn searchInList list search = (
 
 fn createModuleInPoint dir p = (
 	mergeMaxFile (dir) #mergeDups  #select
-	if activeGrid == $45degGrid then (
-		selection.rotation = (quat 0 0 0.382683 0.92388)
+	for obj in selection do (
+		if activeGrid == $45degGrid then (
+			obj.rotation *= (quat 0 0 0.382683 0.92388)
+		)
+		obj.position += p
 	)
-	selection.position = p
 )
 
 fn createModuleSelectionPoint dir = (
@@ -64,11 +68,13 @@ fn createModuleSelectionPoint dir = (
     -- Window name
 	WindowName = "Tools"
 	
-	-- Module path
-	ModulePath = "C:\\Users\\Daniel\\Documents\\Modules\\"
-	
-	-- Modules
+	-- Module path and list
+	ModulePath = "C:\\Users\\Daniel\\Documents\\Assets\\Modules\\"	
 	ModuleList = loadModules ModulePath
+	
+	-- Prefabs
+	PrefabPath = "C:\\Users\\Daniel\\Documents\\Assets\\Prefabs\\"	
+	PrefabList = loadModules PrefabPath
 	
 	-- Rollouts defined before the Main window
 
@@ -111,7 +117,7 @@ fn createModuleSelectionPoint dir = (
 			)			
 		)
 		
-		-- Rollout B 
+		-- Módulos
 		rollout BRollout "Módulos"
 		(
 			edittext searchText "" pos: [12, 8] width: 120
@@ -138,6 +144,36 @@ fn createModuleSelectionPoint dir = (
 			on searchButton pressed do (
 				ModuleList = loadModules ModulePath
 				theListbox.items = searchInList ModuleList searchText.text
+			)
+		)
+		
+		-- Prefabs
+		rollout CRollout "Prefabs"
+		(
+			edittext searchText "" pos: [12, 8] width: 120
+			button searchButton "Buscar" pos: [140, 6]
+			listbox theListbox "" items:PrefabList height: 6
+			button create "Crear" 
+			button reload "Actualizar" 
+			/*button boton "dvn_arqui_suelo_esqui2_ex_01" pos:[5,3] width:67 height:25 toolTip:""
+			button boton1 "EXP_2" pos:[75,3] width:67 height:25 toolTip:""
+			button boton3 "EXP_3" pos:[5,31] width:67 height:25 toolTip:""
+			button boton4 "EXP_4" pos:[75,31] width:67 height:25 toolTip:""
+	        -- These buttons won't do anything when clicked
+			*/
+			on create pressed do (
+				if (theListbox.selected != undefined) then
+					createModuleSelectionPoint (PrefabPath + theListbox.selected + ".max")
+			)
+			
+			on reload pressed do (
+				PrefabList = loadModules PrefabPath
+				theListbox.items = PrefabList
+			)
+			
+			on searchButton pressed do (
+				ModuleList = loadModules PrefabPath
+				theListbox.items = searchInList PrefabList searchText.text
 			)
 		)
 
@@ -207,6 +243,7 @@ fn createModuleSelectionPoint dir = (
 			-- We add the Rollouts into MyRollouts
 		    AddSubRollout main.MyRollouts ARollout
 		    AddSubRollout main.MyRollouts BRollout
+			AddSubRollout main.MyRollouts CRollout
 		)
 		
 
