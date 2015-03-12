@@ -5,9 +5,9 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
-out_path = "C:\\Code\\engine\\data\\"
-tools_path = "C:\\Code\\engine\\tools\\"
-engine_path = "C:\\Code\\engine\\"
+out_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\data\\"
+tools_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\tools\\"
+engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
 
 -- Gets all the objects of the scene
 allObject = $*

@@ -1,4 +1,5 @@
 #include "mcv_platform.h"
+#include "error\log.h"
 
 using namespace DirectX;
 
@@ -33,24 +34,54 @@ bool isKeyPressed(int key) {
 
 // -----------------------------------------
 int fatal(const char* fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  char buf[512];
-  size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
-  va_end(ap);
-  ::OutputDebugString(buf);
-  assert(!printf("%s", buf));
-  return 0;
+	va_list ap;
+	va_start(ap, fmt);
+	char buf[512];
+	size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
+	va_end(ap);
+	::OutputDebugString(buf);
+	FILE_LOG(logERROR) << buf;;
+	assert(!printf("%s", buf));
+	return 0;
 }
 
 // -----------------------------------------
 void dbg(const char* fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  char buf[512];
-  size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
-  ::OutputDebugString(buf);
-  va_end(ap);
+	va_list ap;
+	va_start(ap, fmt);
+	char buf[512];
+	size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
+	::OutputDebugString(buf);
+	FILE_LOG(logDEBUG) << buf;;
+	va_end(ap);
+}
+
+void error(int line, char* file, char* method, char* msg, ...) {
+	va_list ap;
+	va_start(ap, msg);
+	char buf[512];
+	size_t n = vsnprintf(buf, sizeof(buf) - 1, msg, ap);
+
+	std::string error_context = "";
+	for (int i = 0; i < _error_context_name.size(); ++i) {
+		error_context += "When " + std::string(_error_context_name[i]) + ": " + std::string(_error_context_data[i]) + "\n";
+	}
+
+	fatal("%s%s\n\t%s\n\tLine: %i\n\tFile: %s\n", error_context.c_str(), method, buf, line, file);
+}
+
+void debug(int line, char* file, char* method, char* msg, ...) {
+	va_list ap;
+	va_start(ap, msg);
+	char buf[512];
+	size_t n = vsnprintf(buf, sizeof(buf) - 1, msg, ap);
+
+	std::string error_context = "";
+	for (int i = 0; i < _error_context_name.size(); ++i) {
+		error_context += "When " + std::string(_error_context_name[i]) + ": " + std::string(_error_context_data[i]) + "\n";
+	}
+
+	dbg("%s%s\n\t%s\n\tLine: %i\n\tFile: %s\n", error_context.c_str(), method, buf, line, file);
 }
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {

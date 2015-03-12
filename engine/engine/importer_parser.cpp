@@ -19,7 +19,8 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 	// If not, check if it's a new component type
 	CHandleManager* hm = CHandleManager::the_register.getByName(elem.c_str());
 	if (!hm) {
-		dbg("unknown tag %s\n", elem.c_str());
+		if (elem != "scene")
+			dbg("unknown tag %s\n", elem.c_str());
 		return;
 	}
 

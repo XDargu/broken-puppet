@@ -10,6 +10,7 @@
 #include "options_parser.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
+#include "error\log.h"
 #include <time.h>
 
 using namespace DirectX;
@@ -94,6 +95,8 @@ void registerAllComponentMsgs() {
 }
 
 void createManagers() {
+	CErrorContext ec("Creating", "managers");
+
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
 	getObjManager<TCompLife>()->init(32);
@@ -136,6 +139,8 @@ void createManagers() {
 }
 
 void initManagers() {
+	CErrorContext ec("Initializing", "managers");
+
 	getObjManager<TCompCamera>()->initHandlers();
 	getObjManager<TCompCollider>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
@@ -160,6 +165,13 @@ void initManagers() {
 }
 
 bool CApp::create() {
+	CErrorContext ec("Creating", "app");
+
+	// Log file configuration
+	FILE* log = fopen("log.txt", "w");
+	FILELog::ReportingLevel() = logERROR;
+	FILELog::ReportingLevel() = logDEBUG;
+	Output2FILE::Stream() = log;
 
 	if (!::render.createDevice())
 		return false;
@@ -170,6 +182,7 @@ bool CApp::create() {
 	// public delta time inicialization
 	delta_time = 0.f;
 	total_time = delta_time;
+	fixedUpdateCounter = 0.0f;
 
 	renderAABB = false;
 	renderAxis = false;
@@ -182,34 +195,27 @@ bool CApp::create() {
 	physics_manager.init();
 
 	CImporterParser p;
-	//p.xmlParseFile("my_file.xml");
-	bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
+	XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
+	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
-	initManagers();
-	fixedUpdateCounter = 0.0f;
-
-	assert(is_ok);
+	initManagers();	
 
 	// Create Debug Technique
-	is_ok &= debugTech.load("basic");
-
-	assert(is_ok);
-
+	XASSERT(debugTech.load("basic"), "Error loading basic technique");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");
 	activeCamera = e->get<TCompCamera>();
 
-	is_ok = font.create();
+	XASSERT(font.create(), "Error creating the font");
 	font.camera = (TCompCamera*)activeCamera;
-	assert(is_ok);
 
 	// Ctes ---------------------------
-	is_ok &= renderUtilsCreate();
+	bool is_ok = renderUtilsCreate();
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
-	assert(is_ok);
+	XASSERT(is_ok, "Error creating global constants");
 
 	// Create debug meshes
 	is_ok &= createGrid(grid, 10);
@@ -217,7 +223,7 @@ bool CApp::create() {
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
-	assert(is_ok);
+	XASSERT(is_ok, "Error creating debug meshes");
 
 #ifdef _DEBUG
 	// Init AntTweakBar
