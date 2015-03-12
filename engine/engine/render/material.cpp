@@ -12,7 +12,8 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 			tech_name = "textured";
 		diffuse = texture_manager.getByName(diffuse_name.c_str());
 		tech = render_techniques_manager.getByName(tech_name.c_str());
-		assert(diffuse && tech);
+		XASSERT(diffuse->isValid(), "Texture not loaded: %s", diffuse_name.c_str());
+		XASSERT(tech, "Technique not loaded: %s", tech_name.c_str());
 	}
 }
 
@@ -24,9 +25,11 @@ void CMaterial::activateTextures() const {
 
 
 bool CMaterial::load(const char* name) {
-
+	CErrorContext ce("Loading material", name);
 	char full_name[MAX_PATH];
 	sprintf(full_name, "%s/%s.xml", "data/materials", name);
 
+	bool mat_load = xmlParseFile(full_name);
+	XASSERT(mat_load, "Material: %s not found", name);
 	return xmlParseFile(full_name);
 }
