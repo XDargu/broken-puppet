@@ -34,7 +34,7 @@ public:
 		, delta_jump(DirectX::XMVectorZero())
 	{}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		movement_velocity = atts.getFloat("movementVelocity", 5);
 		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 

@@ -41,6 +41,10 @@ public:
 		return components[h_type];
 	}
 
+	CHandle getByType(uint32_t atype) const {
+		return components[atype];
+	}
+
 	// Destroy the handle of that type
 	template< class TObj >
 	bool del() {
@@ -50,7 +54,7 @@ public:
 
 	// Helpers
 	const char* getName() const;
-	void loadFromAtts(MKeyValue& atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue& atts) {
 		std::strcpy(tag, atts.getString("tag", "untagged").c_str());
 	}
 
@@ -67,12 +71,12 @@ public:
 			CHandle comp = components[it->second.comp_type];
 
 			// Mandarle el msg
-			if (comp.isValid()) 
+			if (comp.isValid())
 				it->second.method->execute(comp, &data);
 
 			++it;
 		}
-  }
+	}
 
 	void destroyComponents() {
 		for (uint32_t i = 0; i < CHandle::max_types; i++)

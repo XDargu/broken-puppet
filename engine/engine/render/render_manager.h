@@ -1,0 +1,40 @@
+#ifndef INC_RENDER_MANAGER_H_
+#define INC_RENDER_MANAGER_H_
+
+#include "handle/handle.h"
+
+class CMaterial;
+class CMesh;
+
+class CRenderManager {
+
+	struct TKey {
+		const CMaterial*   material;
+		const CMesh*       mesh;
+		int                mesh_id;
+		CHandle            owner;
+		CHandle            transform;
+	};
+
+	typedef std::vector< TKey > VKeys;
+	VKeys keys;
+	bool  sort_required;
+
+	static bool sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2);
+
+public:
+
+	void addKey(const CMesh*      mesh
+		, const CMaterial*  material
+		, int  mesh_id
+		, CHandle owner
+		);
+
+	void renderAll(const XMMATRIX view_projection);
+
+};
+
+extern CRenderManager render_manager;
+
+
+#endif

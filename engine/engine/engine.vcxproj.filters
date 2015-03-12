@@ -164,9 +164,6 @@
     <ClInclude Include="components\comp_trigger.h">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="comp_tag.h">
-      <Filter>components</Filter>
-    </ClInclude>
     <ClInclude Include="comp_victory_cond.h">
       <Filter>components</Filter>
     </ClInclude>
@@ -175,6 +172,18 @@
     </ClInclude>
     <ClInclude Include="components\comp_collider_sphere.h">
       <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_render.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\render_manager.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\prefabs_manager.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\material.h">
+      <Filter>render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +265,18 @@
       <Filter>ai</Filter>
     </ClCompile>
     <ClCompile Include="options_parser.cpp" />
+    <ClCompile Include="components\comp_render.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\render_manager.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="handle\prefabs_manager.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\material.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

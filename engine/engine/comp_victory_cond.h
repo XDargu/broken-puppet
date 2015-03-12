@@ -8,7 +8,7 @@ public:
 
 	TCompVictoryCond(){}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	}
 
 	void init() {

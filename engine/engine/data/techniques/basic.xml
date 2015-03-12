@@ -1,0 +1,6 @@
+<technique 
+	fx="Tutorial04.fx"
+	vs="VS"
+	vs_decl="vdcl_position_color"
+	ps="PS"
+	/>

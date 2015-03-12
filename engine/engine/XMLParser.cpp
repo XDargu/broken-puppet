@@ -140,6 +140,10 @@ void MKeyValue::put( const char *what, float value ) {
 	putKey ( *this, what, value);
 }
 
+bool MKeyValue::has(const char *what) const {
+	return find(what) != end();
+}
+
 float MKeyValue::getFloat (const char *what, float default_value) const {
 	const_iterator it = find (what);
 

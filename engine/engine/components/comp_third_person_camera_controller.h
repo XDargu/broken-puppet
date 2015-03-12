@@ -15,7 +15,7 @@ public:
 
 	TCompThirdPersonCameraController() {}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		offset = Physics.XMVECTORToPxVec3(atts.getPoint("offset"));
 	}
 
