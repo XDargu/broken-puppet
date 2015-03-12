@@ -237,6 +237,7 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TCompTransform* e_transform = target_entity->get<TCompTransform>();
 	TCompName* e_name = target_entity->get<TCompName>();
 	TCompMesh* e_mesh = target_entity->get<TCompMesh>();
+	TCompRender* e_render = target_entity->get<TCompRender>();
 	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
 	TCompCollider* e_collider = target_entity->get<TCompCollider>();
 	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
@@ -274,6 +275,21 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 		//TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
 		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh axisx=-x axisz=-z");
 		TwAddVarCB(bar, "Path", TW_TYPE_STDSTRING, ReloadMesh, GetMeshPath, e_mesh, " group=Mesh");
+	}
+	if (e_render) {
+		//TwAddVarRW(bar, "RenderActive", TW_TYPE_BOOL8, &e_render->active, " group=Render label='Active'");
+		std::string aux = "";
+		for (int i = 0; i < e_render->keys.size(); ++i) {
+			aux = "RenderMesh" + i;
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_STDSTRING, &e_render->keys[i].meshName, " group=Render label='Mesh'");
+			aux = "RenderMat" + i;
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_STDSTRING, &e_render->keys[i].matName, " group=Render label='Material'");
+			aux = "RenderGroupID" + i;
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_render->keys[i].subMeshId, " group=Render label='Subgroup ID'");
+
+			if (i < e_render->keys.size() - 1)
+				TwAddSeparator(bar, "", "group=Render");
+		}
 	}
 	if (e_collider) {
 		TwAddVarRW(bar, "CActive", TW_TYPE_BOOL8, &e_collider->active, " group=Collider label='Active'");
