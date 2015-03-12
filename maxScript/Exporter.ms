@@ -29,6 +29,9 @@ NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttrib
 -- List of objects exported
 expNames = #()
 
+-- List of objects exported
+expObjects = #()
+
 LevelName = "Level"
 PlayerName = "Player"
 PlayerPivotName = "PlayerPivot"
@@ -46,6 +49,11 @@ mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
 -- List of enemys
 enemyNames = #(BasicEnemyName)
 
+struct objRender (
+	obj_name
+	,obj_sub_mesh = #()
+	,mat_name = #()
+)
 
 
 /*
@@ -294,36 +302,79 @@ Params:
 fn getRender obj= (
 	if(validateCompRender obj == false) then 
 	return ""
+	local mString = "<render>\n"
 	
-	local mString = ""	
-	exportMesh obj
-	local groups = getFacesGroups obj
-	local sub_mesh = 0
-	local mat_id = 1
-	mString += "<render>\n"
+	-- Get the position of an array
+	local arrayPos = validateObjExported obj
 	
-	for g in groups do (
-		if g != undefined then (
-			local m = getMaterialOfObject obj mat_id
-			importMaterial m
-			mString += "<draw mesh=\"" + obj.name + "\" sub_mesh=\"" + sub_mesh as string +  "\" mat=\"" + m.name + "\">\n"
-			sub_mesh = sub_mesh + 1
-		)
-		mat_id = mat_id + 1
-	)
+	-- Si no está en la lista, se crea un nuevo struct a rellenar y se ejecuta todo el proceso
+	if(arrayPos == 0) then
+	(
+		local objRend = objRender()
+				
+		exportMesh obj
+		local groups = getFacesGroups obj
+		local sub_mesh = 0
+		local mat_id = 1
+				
+		objRend.obj_name = obj.name
 		
+		for g in groups do (
+			if g != undefined then (
+				local m = getMaterialOfObject obj mat_id
+				importMaterial m
+				
+				-- Add data to structRender
+				append  objRend.obj_sub_mesh sub_mesh
+				append  objRend.mat_name m.name
+				
+				mString += "<draw mesh=\"" + obj.name + "\" sub_mesh=\"" + sub_mesh as string +  "\" mat=\"" + m.name + "\"/>\n"
+				sub_mesh = sub_mesh + 1
+			)
+			mat_id = mat_id + 1
+		)
+		
+		append expObjects objRend 	
+	)
+	-- Si está en la lista, no se ejecuta, y se vuelve a crear el texto
+	else
+	(
+		local objRend = expObjects[arrayPos]
+		local count = 1
+		for o in objRend.mat_name do (
+			mString += "<draw mesh=\"" + objRend.obj_name + "\" sub_mesh=\"" + objRend.obj_sub_mesh[count] as string +  "\" mat=\"" + objRend.mat_name[count] + "\"/>\n"	
+			count += 1
+		)
+	)
 	mString += "</render>\n"
+	
 )	
 
 fn validateCompRender obj = (
+	if (ExportMeshes == false) then
+	return false
+	-- Si ha sido exportado, devolvemos la posición dentro del array de
 	
-		local validAttributes = true
+	local validAttributes = true
 	for atr in NotMeshAttributes do (
 		if (isProperty obj.baseObject atr) then (
 			validAttributes = false;
 		)		
 	)	
-	return (((findItem NotMesh (classof obj)) == 0) and validAttributes) and ExportMeshes
+	return (((findItem NotMesh (classof obj)) == 0) and validAttributes)
+)
+
+fn validateObjExported obj = (
+	local count = 1
+	for o in expObjects do (
+		if (o.obj_name == obj.name) then
+		(
+			return count
+		)
+		count +=1
+		
+	)
+	return 0
 )
 	
 
@@ -909,7 +960,7 @@ Create file xml and save it
   - mString: String with the xml data
 ***********************************************************************************************/
 fn saveXMLArchive mString = (
-	local filename = engine_path + "my_File.xml"
+	local filename = engine_path + "my_file.xml"
 	print "saving"
 	print filename
 	local f = openFile filename mode:"wt"
@@ -1266,8 +1317,8 @@ fn max2mcvMatrix obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
+--addObjectsID()
+--exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
-openCloseFile()
-removeObjectsID()
+--openCloseFile()
+--removeObjectsID()
