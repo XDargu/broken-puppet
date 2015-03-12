@@ -23,6 +23,7 @@ using namespace physx;
 #include <AntTweakBar.h>
 #include "entity_inspector.h"
 
+
 static CApp the_app;
 
 CEntityManager &entity_manager = CEntityManager::get();
