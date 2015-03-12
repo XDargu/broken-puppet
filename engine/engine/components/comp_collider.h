@@ -26,7 +26,7 @@ struct TCompCollider : TBaseComponent {
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		physx::PxMaterial* mat = Physics.gPhysicsSDK->createMaterial(
 			atts.getFloat("staticFriction", 0.5)

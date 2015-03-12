@@ -141,7 +141,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	color = sum / 9 + sum2 / 9;*/
 
 
-	float4 result = lightAccum * Tint * color;
+	float4 result = lightAccum * color /* Tint*/;
 
 	// Pruebas de cámara
 	float3 normalizeCameraDirection = normalize(CameraPosition - input.WorldPos);

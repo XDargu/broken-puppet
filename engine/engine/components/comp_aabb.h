@@ -54,7 +54,7 @@ public:
 
 	TCompAABB() {}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		XMVECTOR identity_min = atts.getPoint("min");
 		XMVECTOR identity_max = atts.getPoint("max");
 

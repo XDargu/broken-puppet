@@ -38,10 +38,17 @@ bool CHandle::setOwner(CHandle new_owner) {
 	return false;
 }
 
-void CHandle::loadFromAtts(MKeyValue &atts) {
+void CHandle::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	CHandleManager* hm = CHandleManager::the_register.getByType(type);
 	if (hm)
-		hm->loadFromAtts(*this, atts);
+		hm->loadFromAtts(*this, elem, atts);
+}
+
+const char* CHandle::getTypeName() const {
+	CHandleManager* hm = CHandleManager::the_register.getByType(type);
+	if (hm && isValid())
+		return hm->getObjTypeName();
+	return "<invalid>";
 }
 
 // -----------------------------------------

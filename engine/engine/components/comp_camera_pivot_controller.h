@@ -18,7 +18,7 @@ public:
 
 	TCompCameraPivotController() : tilt_velocity(deg2rad(90.0f)), min_tilt(deg2rad(-75)), max_tilt(deg2rad(75)) {}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		tilt_velocity = deg2rad(atts.getFloat("tiltVelocity", 90));
 		offset = physx::PxVec3(0.5, 2, 0.5);
 	}

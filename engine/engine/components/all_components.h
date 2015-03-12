@@ -14,7 +14,6 @@
 #include "comp_life.h"
 #include "comp_aabb.h"
 #include "comp_camera.h"
-#include "comp_tag.h"
 
 // Controllers
 #include "comp_player_controller.h"
@@ -34,6 +33,7 @@
 #include "comp_distance_joint.h"
 
 // Render
+#include "comp_render.h"
 #include "comp_mesh.h"
 #include "comp_directional_light.h"
 #include "comp_ambient_light.h"

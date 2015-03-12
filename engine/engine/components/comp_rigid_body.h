@@ -71,7 +71,7 @@ public:
 		rigidBody->setName(e->getName());
 	}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		float temp_density = atts.getFloat("density", 1);
 		bool temp_is_kinematic = atts.getBool("kinematic", false);
 		bool temp_use_gravity = atts.getBool("gravity", true);

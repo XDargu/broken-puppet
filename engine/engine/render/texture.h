@@ -19,6 +19,7 @@ public:
   }
   void destroy();
   void activate(int slot) const;
+  bool isValid() const { return resource != nullptr; }
 };
 
 typedef CItemsByName< CTexture > CTextureManager;

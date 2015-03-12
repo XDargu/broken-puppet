@@ -15,7 +15,7 @@ public:
 
 	TCompPlayerPivotController() : rotation_velocity(deg2rad(90.0f)) {}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 	}
 

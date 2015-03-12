@@ -9,7 +9,7 @@ struct TCompAmbientLight : TBaseComponent {
 
 	TCompAmbientLight() {}
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		float intensity = atts.getFloat("intensity", 0.5f);
 		color = atts.getQuat("color");
 		color = XMVectorSetW(color, intensity * 0.1f);

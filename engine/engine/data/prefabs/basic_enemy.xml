@@ -1,0 +1,9 @@
+<prefab>
+<entity>
+<name name="enemy"/>
+    <transform rotation="0.0 0.0 0.0 1.0" position="0.0 0.0 0.0"/>
+<render>
+<draw mesh="Torus001" sub_mesh="0" mat="Ladrillo"/>
+</render>
+</entity>
+</prefab>

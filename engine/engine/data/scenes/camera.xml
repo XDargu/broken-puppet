@@ -1,0 +1,7 @@
+<scene>
+<entity>
+<name name="the_camera"/>
+<transform t="20 20 0" look_at="0 0 0"/>
+<camera/>
+</entity>
+</scene>

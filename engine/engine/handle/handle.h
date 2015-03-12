@@ -76,7 +76,8 @@ public:
 	CHandle getOwner() const;
 	bool    setOwner(CHandle new_owner);
 
-  void    loadFromAtts( MKeyValue &atts );
+	void    loadFromAtts(const std::string& elem, MKeyValue &atts);
+	const char* getTypeName() const;
 
 	// Read only 
 	uint32_t getType() const { return type; }
@@ -101,53 +102,53 @@ private:
 
 /*
 struct TController {    // 2 ...
-	float velocity, acc;
-	void update(float elapsed) {
-		CEntity* e = CHandle(this).getOwner();
-		dbg("Updating controller of %s\n", e->getName());
-	}
-	void loadFromAtts(MKeyValue& atts) {}
+float velocity, acc;
+void update(float elapsed) {
+CEntity* e = CHandle(this).getOwner();
+dbg("Updating controller of %s\n", e->getName());
+}
+void loadFromAtts(MKeyValue& atts) {}
 
-	std::string toString() {
-		return "Velocity: " + std::to_string(velocity) + "Acceleration: " + std::to_string(acc);
-	}
+std::string toString() {
+return "Velocity: " + std::to_string(velocity) + "Acceleration: " + std::to_string(acc);
+}
 };
 
 
 struct TThirdPersonCameraController {
 private:
-	TTransform* transform;
+TTransform* transform;
 public:
-	TTransform*	player;
+TTransform*	player;
 
-	TThirdPersonCameraController() {}
+TThirdPersonCameraController() {}
 
-	void loadFromAtts(MKeyValue &atts) {
-	}
+void loadFromAtts(MKeyValue &atts) {
+}
 
-	void init() {
-		CEntity* e_player = CEntityManager::get().getByName("Player");
+void init() {
+CEntity* e_player = CEntityManager::get().getByName("Player");
 
-		assert(e_player || fatal("TFirstPersonCameraController requieres a player entity"));
+assert(e_player || fatal("TFirstPersonCameraController requieres a player entity"));
 
-		player = e_player->get<TTransform>();
-		assert(player || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
+player = e_player->get<TTransform>();
+assert(player || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
 
-		CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
-		CEntity* e = hm->getOwner(this);
-		transform = e->get<TTransform>();
+CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
+CEntity* e = hm->getOwner(this);
+transform = e->get<TTransform>();
 
-		assert(transform || fatal("TFirstPersonCameraController requieres a TTransform component"));
-	}
+assert(transform || fatal("TFirstPersonCameraController requieres a TTransform component"));
+}
 
-	void update(float elapsed) {
-		transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;		
-		transform->lookAt(player->position + player->getUp() * 2, player->getUp());
-	}
+void update(float elapsed) {
+transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;
+transform->lookAt(player->position + player->getUp() * 2, player->getUp());
+}
 
-	std::string toString() {
-		return "Camera controller";
-	}
+std::string toString() {
+return "Camera controller";
+}
 };
 */
 

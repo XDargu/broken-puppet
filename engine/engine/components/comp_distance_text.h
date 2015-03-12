@@ -18,7 +18,7 @@ public:
 
 	TCompDistanceText() : size(0), color(0) { text[0] = 0x00; }
 
-	void loadFromAtts(MKeyValue &atts) {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		std::strcpy(initial_text, atts.getString("text", "no text").c_str());
 		distance = atts.getFloat("distance", 1);
 		size = atts.getFloat("size", 16);

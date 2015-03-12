@@ -140,6 +140,10 @@ void MKeyValue::put( const char *what, float value ) {
 	putKey ( *this, what, value);
 }
 
+bool MKeyValue::has(const char *what) const {
+	return find(what) != end();
+}
+
 float MKeyValue::getFloat (const char *what, float default_value) const {
 	const_iterator it = find (what);
 
@@ -288,6 +292,7 @@ void CXMLParser::xmlEndElement (void *userData, const char *element) {
 | 
 \------------------------------------------------------------------*/
 bool CXMLParser::xmlParseFile (const std::string &filename) {
+	CErrorContext ec("Loading file", filename.c_str());
 	std::ifstream is( filename.c_str() );
 	if ( !is.is_open() ) {
 		xml_error = "XML File " + filename + " not found";
