@@ -14,8 +14,6 @@ PrefabList = #()
 
 clearListener()
 
-
-	-- SOLO FUNCIONA CON UN OBJETO --TODO: QUE FUNCIONE CON VARIOS
 	fn saveModulePicture dir assetName m = (
 		
 		if (classof $ == ObjectSet) then (			
@@ -42,7 +40,7 @@ clearListener()
 			f_name = dir + "icons\\" + assetName as string + ".png" 
 			Render outputfile:f_name camera: rendercam outputSize: [120, 120] vfb: false forcew2sided: true renderType: #selection
 			
-			--delete rendercam
+			delete rendercam
 
 		)
 		else ( 		
@@ -67,24 +65,47 @@ clearListener()
 		)
 	)
 	
+	-- Find the better candidate to be the prefab pivot
 	fn getParentCandidate sel = (		
 		local cand	= undefined
 		local maxCount = -1
 		local count = 0
+		
+		select sel
+		
+		local p_max = $.max
+		local p_min = $.min
+		local p_center = (p_min + p_max) / 2
+		local p_size = p_max - p_min
+		
 		for o in sel do (
 			count = 0
+			
+			-- If it is snapped to the grid
 			if ((mod o.pos.x 2 == 0) and (mod o.pos.z 2 == 0)) then
 			(
 				count += 1
 			)
+			
+			-- If it is laying on the grid
 			if (o.pos.z == 0) then
 			(
 				count += 1
 			)
+			
+			-- If it is in the  center of the scene
 			if (o.pos == [0,0,0]) then
 			(
 				count += 1
 			)
+			
+			-- The nearests objects to the center are better candidates
+			local distanceToCenter = p_center - o.pos
+			distanceToCenter = distanceToCenter / p_size -- Normalize distance
+			distanceToCenter = length distanceToCenter
+			
+			-- The weigth of the distance to center is 2 because almost never is going to reach values near 1
+			count += distanceToCenter * 2
 			
 			if (count > maxCount) then ( 
 				maxCount = count
@@ -385,12 +406,13 @@ clearListener()
 				--rci.addControl #button (item as string) (item as string) 
 				--rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (ModulePath as string) + (item as string) + ".max@)" as string) filter:on
 				--labelText = substring item 1 20
-				space = "  "
-				labelText = item
+				local space = "  "
+				local labelText = item
 				for s = 0  to ((21 - item.count) / 2) do (
 					labelText = space + labelText
 				)
-				rci.addControl #button (item as string) (item as string) paramStr: ("offset: [30, 0] across: 4 images: #(\"" + (ModulePath as string) + "icons\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
+				local fName = substituteString ModulePath "\\" "\\\\"
+				rci.addControl #button (item as string) (item as string) paramStr: ("offset: [30, 0] across: 4 images: #(\"" + (fName as string) + "icons\\\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
 				rci.addControl #label ((item + "name") as string) (labelText as string) paramStr: "align: #left height: 20 width:125 offset: [-65, 130]"
 				rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (ModulePath as string) + (item as string) + ".max@)" as string) filter:on
 			)
@@ -559,9 +581,10 @@ clearListener()
 				for s = 0  to ((21 - item.count) / 2) do (
 					labelText = space + labelText
 				)
-				rci.addControl #button (item as string) (item as string) paramStr: ("offset: [30, 0] across: 4 images: #(\"" + (PrefabPath as string) + "icons\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
+				local fName = substituteString PrefabPath "\\" "\\\\"
+				rci.addControl #button (item as string) (item as string) paramStr: ("offset: [30, 0] across: 4 images: #(\"" + (fName as string) + "icons\\\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
 				rci.addControl #label ((item + "name") as string) (labelText as string) paramStr: "align: #left height: 20 width:125 offset: [-65, 130]"
-				rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (PrefabPath as string) + (item as string) + ".max@)" as string) filter:on
+				rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (fName as string) + (item as string) + ".max@)" as string) filter:on
 			)
 			
 			rci.end()
@@ -612,8 +635,8 @@ clearListener()
 
 	try (closerolloutfloater TestFloaster) catch ()
 	
-	TestFloater = NewRolloutFloater "Tools" 340 675
-	--cui.RegisterDialogBar TestFloater style: #(#cui_handles, #cui_dock_left , #cui_dock_right, #cui_floatable)
+	TestFloater = NewRolloutFloater "Tools" 340 825
+	cui.RegisterDialogBar TestFloater style: #(#cui_handles, #cui_dock_left , #cui_dock_right, #cui_floatable)
 	
 	AddRollout LevelEdition TestFloater rolledUp:on
 	AddRollout Exporter TestFloater rolledUp:on
