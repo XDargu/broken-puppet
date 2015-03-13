@@ -2,6 +2,26 @@ filein("Exporter.ms")
 
 clearListener()
 
+-- SOLO FUNCIONA CON UN OBJETO --TODO: QUE FUNCIONE CON VARIOS
+fn saveModulePicture dir m = (
+	
+	obj = m
+	select m
+	
+	rendercam = Targetcamera fov:60 nearclip:1 farclip:1000 \ 
+	nearrange:0 farrange:1000 mpassEnabled:off mpassRenderPerPass:off \
+	/*pos: (obj.max * [2.5, 2.5, 1.3])*/  pos: (obj.pos + [10, 10, 10]) \
+	isSelected:off \
+	target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, 3])))
+	
+	
+	select obj
+	f_name = dir + "icons\\" + obj.name as string + ".png" 
+	Render outputfile:f_name camera: rendercam outputSize: [120, 120] vfb: false forcew2sided: true renderType: #selection
+	
+	delete rendercam
+)
+
 fn exportSelectedModule dir progress = (
 	
 	progress.value = 0	
@@ -9,11 +29,16 @@ fn exportSelectedModule dir progress = (
 
 	local sel=selection as array
 	
+	local origPositions = #()
+	local origRotations = #()
+	
 	local count = 1
 	for s in sel do
 	(
-		--s.pos = [0,0,0]
-		--s.rotation = (quat 0 0 0 1)
+		append origPositions s.pos
+		append origRotations s.rotation
+		s.pos = [0,0,0]
+		s.rotation = (quat 0 0 0 1)
 		local f = dir+s.name+typ
 		if typ==".max" then
 		(
@@ -24,6 +49,15 @@ fn exportSelectedModule dir progress = (
 			exportfile f selectedOnly:true --#noprompt
 		)
 		progress.value = (100.0 / sel.count) * count
+		count += 1
+		
+		saveModulePicture dir s
+	)
+	
+	count = 1
+	for s in sel do (
+		s.rotation = origRotations[count]
+		s.pos = origPositions[count]		
 		count += 1
 	)
 )
@@ -47,7 +81,7 @@ fn searchInList list search = (
 )
 
 fn createModuleInPoint dir p = (
-	mergeMaxFile (dir) #mergeDups  #select
+	mergeMaxFile (dir) #mergeDups #useSceneMtlDups #select
 	for obj in selection do (
 		if activeGrid == $45degGrid then (
 			obj.rotation *= (quat 0 0 0.382683 0.92388)
@@ -122,8 +156,10 @@ fn createModuleSelectionPoint dir = (
 		(
 			edittext searchText "" pos: [12, 8] width: 120
 			button searchButton "Buscar" pos: [140, 6]
+			bitmap image width: 120
 			listbox theListbox "" items:ModuleList height: 6
-			button create "Crear" 
+			button create "Crear"
+			button goToLocation "Abrir ubicación"
 			button reload "Actualizar" 
 			/*button boton "dvn_arqui_suelo_esqui2_ex_01" pos:[5,3] width:67 height:25 toolTip:""
 			button boton1 "EXP_2" pos:[75,3] width:67 height:25 toolTip:""
@@ -145,6 +181,14 @@ fn createModuleSelectionPoint dir = (
 				ModuleList = loadModules ModulePath
 				theListbox.items = searchInList ModuleList searchText.text
 			)
+			
+			on goToLocation pressed do (
+				shellLaunch "explorer.exe" ModulePath
+			)
+			
+			on theListbox selected sel do (
+				image.fileName = ModulePath + "icons\\" + theListbox.selected + ".png"
+			)
 		)
 		
 		-- Prefabs
@@ -153,7 +197,7 @@ fn createModuleSelectionPoint dir = (
 			edittext searchText "" pos: [12, 8] width: 120
 			button searchButton "Buscar" pos: [140, 6]
 			listbox theListbox "" items:PrefabList height: 6
-			button create "Crear" 
+			button create "Crear"
 			button reload "Actualizar" 
 			/*button boton "dvn_arqui_suelo_esqui2_ex_01" pos:[5,3] width:67 height:25 toolTip:""
 			button boton1 "EXP_2" pos:[75,3] width:67 height:25 toolTip:""

@@ -202,8 +202,10 @@ bool CApp::create() {
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
-
+	
 	CEntity* e = entity_manager.getByName("PlayerCamera");
+	XASSERT(CHandle(e).isValid(), "Camera not valid");
+
 	activeCamera = e->get<TCompCamera>();
 
 	XASSERT(font.create(), "Error creating the font");
