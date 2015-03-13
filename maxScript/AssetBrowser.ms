@@ -142,6 +142,22 @@ clearListener()
 			--createModuleSelectionPoint dir
 		)
 	)
+	
+	-- Reloads all the instances of the asset with the given path
+	fn updateAsset dir assetName = (
+		amount = 0
+		objs = $* as array
+		for obj in objs do (
+			if (obj.name == assetName) then (
+				-- Reimport the module
+				newMod = createModuleInPoint (dir + ".max" as string) obj.pos
+				newMod.transform = obj.transform
+				delete obj
+				amount += 1
+			)
+		)
+		return amount
+	)
 
 (
 	filein("Exporter.ms")
@@ -249,7 +265,14 @@ clearListener()
 			for item in list do (
 				--rci.addControl #button (item as string) (item as string) 
 				--rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (ModulePath as string) + (item as string) + ".max@)" as string) filter:on
-				rci.addControl #button (item as string) (item as string) paramStr: ("across: 2 images: #(\"" + (ModulePath as string) + "icons\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
+				--labelText = substring item 1 20
+				space = "  "
+				labelText = item
+				for s = 0  to ((21 - item.count) / 2) do (
+					labelText = space + labelText
+				)
+				rci.addControl #button (item as string) (item as string) paramStr: ("offset: [30, 0] across: 4 images: #(\"" + (ModulePath as string) + "icons\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
+				rci.addControl #label ((item + "name") as string) (labelText as string) paramStr: "align: #left height: 20 width:125 offset: [-65, 130]"
 				rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (ModulePath as string) + (item as string) + ".max@)" as string) filter:on
 			)
 			
@@ -268,16 +291,33 @@ clearListener()
 			checkbox searchPrd "Pared" align: #left
 			checkbox searchAmb "Suelo/techo" align: #left
 			
-			checkbox searchEsq "Esquinas" align: #left across: 3
+			checkbox searchEsq "Esquinas" align: #left across: 2
 			checkbox searchPas "Pasillos" align: #left
 			checkbox searchPar "Parches" align: #left
 			
 		)
-		button searchButton "Buscar" 
+		button searchButton "Buscar"  across: 2
+		pickbutton searchPickButton "Seleccionar y buscar" 
 		subRollout moduleSubRollout "test1" height:400
-		button goToLocation "Abrir ubicación" across: 2
+		progressbar progress
+		button goToLocation "Abrir ubicación" across: 3
 		button reload "Actualizar"
+		button rebake "Recargar"
 		button autoCeiling "Auto-techar escena"
+		
+		on rebake pressed do (
+			ModuleList = loadModules ModulePath
+			progress.value = 0
+			
+			countTotal = 0
+			count = 0
+			for module in ModuleList do (
+				countTotal += updateAsset (ModulePath + module as string) module
+				count += 1
+				progress.value = (100.0 / ModuleList.count) * count
+			)
+			messagebox ("Se han recargado " + (count as string) + " módulos")
+		)
 		
 		on reload pressed do (
 			ModuleList = loadModules ModulePath
@@ -286,6 +326,19 @@ clearListener()
 				removeSubRollout moduleSubRollout ro
 			
 			addSubRollout moduleSubRollout (loadDynamicModules ModuleList)
+		)
+		
+		on searchPickButton picked obj do
+		(
+			ModuleList = loadModules ModulePath
+			local searchValues = #(obj.name)
+			
+			local searchList = searchInList ModuleList searchValues
+			
+			for ro in moduleSubRollout.rollouts do
+				removeSubRollout moduleSubRollout ro
+			
+			addSubRollout moduleSubRollout (loadDynamicModules searchList)
 		)
 		
 		on searchButton pressed do (
@@ -325,6 +378,8 @@ clearListener()
 		
 		on autoCeiling pressed do (
 			-- Auto create ceiling modules
+			progress.value = 0
+			count = 0
 			
 			objs = $* as array
 			clearSelection()
@@ -354,6 +409,9 @@ clearListener()
 						)
 					)
 				)
+				
+				count += 1
+				progress.value = (100.0 / objs.count) * count
 			)
 		)
 		
@@ -377,7 +435,13 @@ clearListener()
 			for item in list do (
 				--rci.addControl #button (item as string) (item as string) 
 				--rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (ModulePath as string) + (item as string) + ".max@)" as string) filter:on
-				rci.addControl #button (item as string) (item as string) paramStr: ("across: 2 images: #(\"" + (PrefabPath as string) + "icons\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
+				space = "  "
+				labelText = item
+				for s = 0  to ((21 - item.count) / 2) do (
+					labelText = space + labelText
+				)
+				rci.addControl #button (item as string) (item as string) paramStr: ("offset: [30, 0] across: 4 images: #(\"" + (PrefabPath as string) + "icons\\" + (item as string) + ".png\", undefined, 1,1,1,1,1) " as string)
+				rci.addControl #label ((item + "name") as string) (labelText as string) paramStr: "align: #left height: 20 width:125 offset: [-65, 130]"
 				rci.addHandler (item as string) #pressed codeStr: ("createModuleSelectionPoint(@" + (PrefabPath as string) + (item as string) + ".max@)" as string) filter:on
 			)
 			
@@ -429,7 +493,7 @@ clearListener()
 
 	try (closerolloutfloater TestFloaster) catch ()
 	
-	TestFloater = NewRolloutFloater "Tools" 340 675	
+	TestFloater = NewRolloutFloater "Tools" 340 675
 	--cui.RegisterDialogBar TestFloater style: #(#cui_handles, #cui_dock_left , #cui_dock_right, #cui_floatable)
 	
 	AddRollout LevelEdition TestFloater rolledUp:on

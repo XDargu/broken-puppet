@@ -5,11 +5,11 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
+engine_path = "C:\\Code\\engine\\"
 out_path = engine_path + "data\\"
 prefab_path = out_path + "prefab\\"
 scene_path = out_path + "scene\\"
 tools_path = engine_path + "tools\\"
-engine_path = "C:\\Code\\engine\\"
 
 -- Gets all the objects of the scene
 allObject = $*
