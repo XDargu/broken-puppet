@@ -5,9 +5,10 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
+prefab_path = out_path + "prefab\\"
 scene_path = out_path + "scene\\"
 out_path = engine_path + "data\\"
-tools_path = engine_path  "tools\\"
+tools_path = engine_path + "tools\\"
 engine_path = "C:\\Code\\engine\\"
 
 -- Gets all the objects of the scene
@@ -52,6 +53,33 @@ mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
 
 -- List of enemys
 enemyNames = #(BasicEnemyName)
+
+
+/********************** PREFAB ************************/
+
+struct objPrefab (
+	obj_name
+	,components = #()
+)
+
+-- Create Player prefab
+
+playerPrefab = objPrefab()
+playerPrefab.obj_name = PlayerName
+append playerPrefab.components getTransform
+append playerPrefab.components getPlayerController
+
+
+-- Create BasicEnemy prefab
+basicEnemyPrefab = objPrefab()
+basicEnemyPrefab.obj_name = BasicEnemyName
+append basicEnemyPrefab.components getTransform
+append basicEnemyPrefab.components getAiFsmBasic
+
+-- Adding prefabs to the prefabs list
+prefabList = #(playerPrefab, basicEnemyPrefab)
+
+
 
 struct objRender (
 	obj_name
@@ -105,8 +133,8 @@ fn exportXMLScene progress:undefined = (
 		getCameraPivotController,		
 		getPlayerPivotController,
 		getCharacterController,
-		getPlayerController,
-		getAiFsmBasic,
+		--getPlayerController,
+		--getAiFsmBasic,
 		getLevelMeshCollider,
 		getPointLight,
 		getAmbientLight,
@@ -125,29 +153,26 @@ fn exportXMLScene progress:undefined = (
 		-- Check if needs to be evaluate
 		if(validateEntity obj) then
 		(		
-			local tag = "";
-			if(obj.name == PlayerName) then
-			(
-				tag = "tag = \"player\""
-			)
-			if(validateEnemy obj) then
-			(
-				tag = "tag = \"enemy\""
-			)
-			if(validateRigidbody obj) then
-			(
-				tag = "tag = \"actor\""
-			)
-			if(validateStaticbody obj) then
-			(
-				tag = "tag = \"level\""
-			)				
+			local mPrefab = validatePrefabList obj
 			
-			mXML += "\t<entity " + tag + ">\n"
-			for func in functions do (
-				mXML += "" + func obj
+			if (mPrefab == false) then 
+			(
+				local tag = getEntityTag obj
+				mXML += "\t<entity " + tag + ">\n"
+				for func in functions do (
+					mXML += "" + func obj
+				)
+				mXML += "\t</entity>\n"		
 			)
-			mXML += "\t</entity>\n"		
+			else
+			(
+				local tag = getEntityTag obj
+				mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+				for func in mPrefab.components do (
+					mXML += "" + func obj
+				)
+				mXML += "\t</entity>\n"		
+			)
 		)
 		
 		if (progress != undefined) then
@@ -162,6 +187,37 @@ fn exportXMLScene progress:undefined = (
 	-- print result XML
 	--print mXML
 	saveXMLArchive mXML
+)
+
+fn validatePrefabList obj = (
+	for pref in prefabList do (
+		if (pref.obj_name == obj.name) then
+		(
+			return pref
+		)
+	)
+	return false
+)
+
+fn getEntityTag obj = (
+	local tag = "";
+	if(obj.name == PlayerName) then
+	(
+		tag = "tag = \"player\""
+	)
+	if(validateEnemy obj) then
+	(
+		tag = "tag = \"enemy\""
+	)
+	if(validateRigidbody obj) then
+	(
+		tag = "tag = \"actor\""
+	)
+	if(validateStaticbody obj) then
+	(
+		tag = "tag = \"level\""
+	)	
+	return tag
 )
 
 fn validateEntity obj = (
@@ -195,6 +251,7 @@ fn validateScene exporting = (
 	
 	return valid
 )
+
 	
 	
 /**********************************************************************************************
@@ -629,6 +686,8 @@ fn getPlayerController obj = (
 )	
 	
 fn validatePlayer obj = (
+	if (isProperty obj.baseObject #objectPlayerData) == false then
+	messageBox ("El Player necesita los player data")
 	return (((obj.name) == PlayerName)and(isProperty obj.baseObject #objectPlayerData) )
 )
 
