@@ -1,3 +1,5 @@
+filein("Exporter.ms")
+
 -- AssetPath
 AssetPath = "D:\\Users\\Daniel\\Documents\\Assets\\"
 
@@ -14,24 +16,123 @@ clearListener()
 
 
 	-- SOLO FUNCIONA CON UN OBJETO --TODO: QUE FUNCIONE CON VARIOS
-	fn saveModulePicture dir m = (
+	fn saveModulePicture dir assetName m = (
 		
-		obj = m
-		select m
+		if (classof $ == ObjectSet) then (			
+			obj = m as array
+			
+			p_max = $.max
+			p_min = $.min
+
+			p_center = (p_min + p_max) / 2
+			p_final = [p_center.x, p_center.y, p_min.z]
+			
+			dist = (p_max.z - p_final.z)
+			
+			if (dist < 0.0001) then ( dist = 8)
+			print dist
+			rendercam = Targetcamera fov:60 nearclip:1 farclip:1000 \ 
+			nearrange:0 farrange:1000 mpassEnabled:off mpassRenderPerPass:off \
+			/*pos: (obj.pos + [10, 10, 10])*/ pos: (p_final + [-1,-1,1.4] * dist) \
+			isSelected:off \
+			target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (p_final + [0, 0, dist * 0.475  ])))
+			--target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, 3])))
+			
+			select obj
+			f_name = dir + "icons\\" + assetName as string + ".png" 
+			Render outputfile:f_name camera: rendercam outputSize: [120, 120] vfb: false forcew2sided: true renderType: #selection
+			
+			--delete rendercam
+
+		)
+		else ( 		
+			obj = m[1]
+			select m
+			
+			dist = (obj.max.z - obj.pos.z)
+			if (dist < 0.0001) then ( dist = 8)
+			print dist
+			rendercam = Targetcamera fov:60 nearclip:1 farclip:1000 \ 
+			nearrange:0 farrange:1000 mpassEnabled:off mpassRenderPerPass:off \
+			/*pos: (obj.pos + [10, 10, 10])*/ pos: (obj.pos + [-1,-1,1.4] * dist) \
+			isSelected:off \
+			target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, dist * 0.475  ])))
+			--target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, 3])))
+			
+			select obj
+			f_name = dir + "icons\\" + assetName as string + ".png" 
+			Render outputfile:f_name camera: rendercam outputSize: [120, 120] vfb: false forcew2sided: true renderType: #selection
+			
+			delete rendercam
+		)
+	)
+	
+	fn getParentCandidate sel = (		
+		local cand	= undefined
+		local maxCount = -1
+		local count = 0
+		for o in sel do (
+			count = 0
+			if ((mod o.pos.x 2 == 0) and (mod o.pos.z 2 == 0)) then
+			(
+				count += 1
+			)
+			if (o.pos.z == 0) then
+			(
+				count += 1
+			)
+			if (o.pos == [0,0,0]) then
+			(
+				count += 1
+			)
+			
+			if (count > maxCount) then ( 
+				maxCount = count
+				cand = o
+			)
+		)
+
+		return cand
+	)
+	
+	fn exportSelectedAsset dir assetName progress = (
+		progress.value = 0	
+		local typ=".max"	-- change this to the filetype you want
+
+		local sel=selection as array
+		local parentPos = (getParentCandidate sel).pos
+		local parentRot = (getParentCandidate sel).rotation
+		print parent
 		
-		rendercam = Targetcamera fov:60 nearclip:1 farclip:1000 \ 
-		nearrange:0 farrange:1000 mpassEnabled:off mpassRenderPerPass:off \
-		/*pos: (obj.pos + [10, 10, 10])*/ pos: (obj.pos + [-1,-1,1.4] * (obj.max.z - obj.pos.z)) \
-		isSelected:off \
-		target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, (obj.max.z - obj.pos.z) * 0.475  ])))
-		--target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, 3])))
+		local origTransforms = #()
 		
+		local count = 1
+		for s in sel do
+		(
+			append origTransforms s.transform
+			s.pos -= parentPos
+			--s.rotation = (quat 0 0 0 1)
+			
+			progress.value = (100.0 / sel.count) * count
+			count += 1
+		)
 		
-		select obj
-		f_name = dir + "icons\\" + obj.name as string + ".png" 
-		Render outputfile:f_name camera: rendercam outputSize: [120, 120] vfb: false forcew2sided: true renderType: #selection
+		local f = dir+assetName+typ
+		if typ==".max" then
+		(
+			saveNodes sel f quiet:true
+		) else
+		(
+			select sel
+			exportfile f selectedOnly:true --#noprompt
+		)
 		
-		delete rendercam
+		saveModulePicture dir assetName sel		
+		count = 1
+		for s in sel do (
+			s.transform = origTransforms[count]
+			count += 1
+		)
 	)
 
 	fn exportSelectedModule dir progress = (
@@ -63,7 +164,7 @@ clearListener()
 			progress.value = (100.0 / sel.count) * count
 			count += 1
 			
-			saveModulePicture dir s
+			saveModulePicture dir s.name s
 		)
 		
 		count = 1
@@ -159,9 +260,7 @@ clearListener()
 		return amount
 	)
 
-(
-	filein("Exporter.ms")
-	
+(	
 	global TestFloater
 	
 	-- Main window
@@ -216,6 +315,7 @@ clearListener()
 			button exportSel "Exportar selección" width:110 height:25 toolTip:"" 
 			button validScn "Validar escena" width:135 height:25 toolTip:""
 			button exportMod "Exportar módulos" width:135 height:25 toolTip:""
+			button exportPref "Exportar prefabs" width:135 height:25 toolTip:""
 			progressbar progress					
 		)
 		
@@ -245,6 +345,25 @@ clearListener()
 			on exportMod pressed do (
 				if ($ == undefined) then ( messageBox "No hay nada seleccionado" )
 				else ( exportSelectedModule ModulePath progress )
+			)
+			on exportPref pressed do (
+				if ($ == undefined) then ( messageBox "No hay nada seleccionado" )
+				else (
+					defName = "Escribe un nombre"
+					if (classof $ == ObjectSet) then (defName =  $[1].name)
+					else ( defName = $.name )
+					-- instantiate the object
+					theObj = dotNetObject "MaxCustomControls.RenameInstanceDialog" defName
+					theobj.text ="New prefab"
+					DialogResult = theObj.Showmodal()
+
+					--test if the ok button was pressed
+					dotnet.compareenums TheObj.DialogResult ((dotnetclass "System.Windows.Forms.DialogResult").OK)
+					--get the new text string
+					assetName = theobj.InstanceName
+					
+					exportSelectedAsset PrefabPath assetName progress
+				)
 			)
 			on validScn pressed do (
 				if (validateScene false == true) then ( messageBox "La escena es correcta" )
@@ -457,12 +576,12 @@ clearListener()
 		button reload "Actualizar"		
 		
 		on reload pressed do (
-			ModuleList = loadModules ModulePath
+			PrefabList = loadModules PrefabPath
 			
 			for ro in moduleSubRollout.rollouts do
 				removeSubRollout moduleSubRollout ro
 			
-			addSubRollout moduleSubRollout (loadDynamicPrefabs ModuleList)
+			addSubRollout moduleSubRollout (loadDynamicPrefabs PrefabList)
 		)
 		
 		on searchButton pressed do (
