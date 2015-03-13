@@ -5,9 +5,9 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
+out_path = engine_path + "data\\"
 prefab_path = out_path + "prefab\\"
 scene_path = out_path + "scene\\"
-out_path = engine_path + "data\\"
 tools_path = engine_path + "tools\\"
 engine_path = "C:\\Code\\engine\\"
 
@@ -1384,8 +1384,8 @@ fn max2mcvMatrix obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
+--addObjectsID()
+--exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
-openCloseFile()
-removeObjectsID()
+--openCloseFile()
+--removeObjectsID()

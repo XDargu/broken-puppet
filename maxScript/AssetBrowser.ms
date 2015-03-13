@@ -1,5 +1,3 @@
---filein("Exporter.ms")
-
 -- AssetPath
 AssetPath = "D:\\Users\\Daniel\\Documents\\Assets\\"
 
@@ -13,8 +11,8 @@ PrefabList = #()
 
 
 clearListener()
-(	
-	
+
+
 	-- SOLO FUNCIONA CON UN OBJETO --TODO: QUE FUNCIONE CON VARIOS
 	fn saveModulePicture dir m = (
 		
@@ -84,6 +82,21 @@ clearListener()
 		)
 		return modules	
 	)
+	
+	fn isModule o = (		
+		ModuleList = loadModules ModulePath
+		
+		ret = false
+		-- Quick check: Modules have at least 24 characters
+		if (o.name.count > 23) then (			
+			-- Third check: is a module
+			if (findItem ModuleList o.name != 0) then (
+				ret = true
+			)
+		)		
+		
+		return ret
+	)
 
 	fn searchInList list search = (
 		local items = #()
@@ -110,8 +123,7 @@ clearListener()
 				obj.rotation *= (quat 0 0 0.382683 0.92388)
 			)
 			obj.position += p
-		)
-		
+		)		
 		-- If the imported max is a Prefab, group it
 		-- Grouping alters the pivot!!!!
 		
@@ -120,6 +132,7 @@ clearListener()
 			group selection name: prefName
 			select (getnodebyname prefName)
 		)*/
+		return selection
 	)
 
 	fn createModuleSelectionPoint dir = (
@@ -129,6 +142,9 @@ clearListener()
 			--createModuleSelectionPoint dir
 		)
 	)
+
+(
+	filein("Exporter.ms")
 	
 	global TestFloater
 	
@@ -139,7 +155,7 @@ clearListener()
 		button botonA "Subir" pos:[5,3] width:75 height:25 toolTip:""
 		button botonB "Bajar" pos:[87,3] width:75 height:25 toolTip:""
 		button botonC "Backface cull" pos:[5,34] width:75 height:25 toolTip:""
-		button botonD "Cambiar grid" pos: [87,34] width:75 height:25 toolTip:""
+		button botonD "Grid 45/90º" pos: [87,34] width:75 height:25 toolTip:""
 			
 		on botonA pressed do	( 
 			objs = $*
@@ -188,21 +204,31 @@ clearListener()
 		)
 		
 		on exportAll pressed do (
-				addObjectsID()
-				exportXMLScene progress: progress
-				 --funcion que abre y cierra una última cosa para poder trabajar, a depurar
-				openCloseFile()
-				removeObjectsID()
-				/*try (filein "Exporter.ms")
-				catch ( messageBox "No se ha podido exportar correctamente" )*/
+				try (
+					addObjectsID()
+					exportXMLScene progress: progress
+					--funcion que abre y cierra una última cosa para poder trabajar, a depurar
+					openCloseFile()
+					removeObjectsID()
+				)
+				catch ( 
+					format "*** % ***\n" (getCurrentException())
+					messageBox ("No se ha podido exportar correctamente:\n " + getCurrentException() as string) 
+				)
 			)
 			on exportSel pressed do (
-				filein "ExporterBasic.ms"
-				/*try (filein "ExporterBasic.ms")
-				catch ( messageBox "No se ha podido exportar correctamente" )*/
+				if ($ == undefined) then ( messageBox "No hay nada seleccionado" )
+				else (
+					try (filein "ExporterBasic.ms")
+					catch ( 
+						format "*** % ***\n" (getCurrentException())
+						messageBox ("No se ha podido exportar correctamente:\n " + getCurrentException() as string) 
+					)
+				)
 			)
 			on exportMod pressed do (
-				exportSelectedModule ModulePath progress
+				if ($ == undefined) then ( messageBox "No hay nada seleccionado" )
+				else ( exportSelectedModule ModulePath progress )
 			)
 			on validScn pressed do (
 				if (validateScene false == true) then ( messageBox "La escena es correcta" )
@@ -217,7 +243,7 @@ clearListener()
 	rollout Modules "Módulos"
 	(	
 		fn loadDynamicModules list = (		
-			local rci = rolloutCreator "RModules" "Arquitectónicos" width:400 height:400
+			local rci = rolloutCreator "RModules" "Lista de módulos" width:400 height:400
 			rci.begin()
 			
 			for item in list do (
@@ -241,11 +267,17 @@ clearListener()
 			checkbox searchTch "Techo" align: #left
 			checkbox searchPrd "Pared" align: #left
 			checkbox searchAmb "Suelo/techo" align: #left
+			
+			checkbox searchEsq "Esquinas" align: #left across: 3
+			checkbox searchPas "Pasillos" align: #left
+			checkbox searchPar "Parches" align: #left
+			
 		)
 		button searchButton "Buscar" 
 		subRollout moduleSubRollout "test1" height:400
 		button goToLocation "Abrir ubicación" across: 2
-		button reload "Actualizar"		
+		button reload "Actualizar"
+		button autoCeiling "Auto-techar escena"
 		
 		on reload pressed do (
 			ModuleList = loadModules ModulePath
@@ -262,6 +294,7 @@ clearListener()
 			-- Advanced search
 			if (searchArq.state == true) then
 				append searchValues "arqui"
+			
 			if (searchSlo.state == true) then
 				append searchValues "suelo"
 			if (searchTch.state == true) then
@@ -270,6 +303,13 @@ clearListener()
 				append searchValues "pared"
 			if (searchAmb.state == true) then
 				append searchValues "ambos"
+			
+			if (searchEsq.state == true) then
+				append searchValues "esqui"
+			if (searchPas.state == true) then
+				append searchValues "pasil"
+			if (searchPar.state == true) then
+				append searchValues "parche"
 			
 			local searchList = searchInList ModuleList searchValues
 			
@@ -283,6 +323,40 @@ clearListener()
 			shellLaunch "explorer.exe" ModulePath
 		)
 		
+		on autoCeiling pressed do (
+			-- Auto create ceiling modules
+			
+			objs = $* as array
+			clearSelection()
+			for o in objs do (
+				if (isModule o == true) then (
+					if ((substring o.name 11 5) == "suelo") or ((substring o.name 11 5) == "pared") then (
+						-- Is there a module over it?
+						module_over = false
+						for o2 in objs do (
+							if (o2.pos == (o.pos + [0, 0, 8])) then (								
+								if (isModule o) then (
+									if ((substring o2.name 11 5) == "techo") then (
+										module_over = true
+										break
+									)
+								)
+							)
+						)
+						
+						if (module_over == false) then (
+							-- Up module check
+							moduleUp = replace o.name 11 5 "techo"
+							--print moduleUp
+							newMod = createModuleInPoint (ModulePath + moduleUp + ".max") (o.pos + [0, 0, 8])
+							newMod.rotation = o.rotation
+							newMod.pos = o.pos + [0,0,8]
+						)
+					)
+				)
+			)
+		)
+		
 		on Modules open do (
 			ModuleList = loadModules ModulePath
 			
@@ -290,7 +364,7 @@ clearListener()
 				removeSubRollout moduleSubRollout ro
 			
 			addSubRollout moduleSubRollout (loadDynamicModules ModuleList)
-		)		
+		)
 	)
 	
 	-- Módulos
@@ -373,5 +447,4 @@ clearListener()
 	$45degGrid.grid = 8
 	$45degGrid.length = 200
 	$45degGrid.width = 200
-
 )
