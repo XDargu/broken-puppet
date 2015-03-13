@@ -1,8 +1,18 @@
 #ifndef INC_UTILS_H_
 #define INC_UTILS_H_
 
+// Error
+
+#define XASSERT(test, msg, ...) do {if (!(test)) error(__LINE__, __FILE__, "Assertion failed: " #test,\
+        msg, __VA_ARGS__);} while (0)
+#define XERROR(msg, ...) do { error(__LINE__, __FILE__, "Error thrown: ", msg, __VA_ARGS__);} while (0)
+#define XDEBUG(msg, ...) do { debug(__LINE__, __FILE__, "Debug message: ", msg, __VA_ARGS__);} while (0)
+
 int fatal(const char* fmt, ...);
 void dbg(const char* fmt, ...);
+
+void error(int line, char* file, char* method, char* msg, ...);
+void debug(int line, char* file, char* method, char* msg, ...);
 
 // Angle utils
 float deg2rad(float deg);

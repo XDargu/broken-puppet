@@ -87,14 +87,16 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	for (int i = 0; i < OmniLightCount; i++)
 	{
 		float dist = distance(input.WorldPos, OmniLightPositions[i]);
-		float3 normalizedLightDirection = normalize(OmniLightPositions[i] - input.WorldPos);
-		// Atenuación lineal
-		float attenuation = max(0, 1 -(dist / OmniLightRadius[i].x));
-		// Sin atenuación
-		//float attenuation = dist < OmniLightRadius[i].x ? 1 : 0;
+		if (dist < OmniLightRadius[i].x) {
+			float3 normalizedLightDirection = normalize(OmniLightPositions[i] - input.WorldPos);
+				// Atenuación lineal
+				float attenuation = max(0, 1 - (dist / OmniLightRadius[i].x));
+			// Sin atenuación
+			//float attenuation = dist < OmniLightRadius[i].x ? 1 : 0;
 
-		// Luz acumulada por ángulo, atenuación y distancia
-		lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
+			// Luz acumulada por ángulo, atenuación y distancia
+			lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
+		}
 	}
 
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);

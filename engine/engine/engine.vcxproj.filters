@@ -185,6 +185,12 @@
     <ClInclude Include="render\material.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="error\error_context.h">
+      <Filter>error</Filter>
+    </ClInclude>
+    <ClInclude Include="error\log.h">
+      <Filter>error</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -277,6 +283,9 @@
     <ClCompile Include="render\material.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="error\error_context.cpp">
+      <Filter>error</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -305,6 +314,9 @@
     </Filter>
     <Filter Include="components">
       <UniqueIdentifier>{be0bcca5-bb86-4f0f-8698-4ce9f80f4cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="error">
+      <UniqueIdentifier>{52232cff-61bd-4257-a901-c03ebae54dd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
