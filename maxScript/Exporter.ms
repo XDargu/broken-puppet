@@ -1,5 +1,5 @@
 clearlistener()
-
+(
 /********************** CONFIG ************************/
 ExportMeshes = true
 export_meshes = true
@@ -687,7 +687,7 @@ fn getPlayerController obj = (
 	
 fn validatePlayer obj = (
 	if (isProperty obj.baseObject #objectPlayerData) == false then
-	messageBox ("El Player necesita los player data")
+	--messageBox ("El Player necesita los player data")
 	return (((obj.name) == PlayerName)and(isProperty obj.baseObject #objectPlayerData) )
 )
 
@@ -1259,6 +1259,7 @@ fn importTexture infile = (
 fn importMaterial m = (
 	if export_materials == false then return 0
 	-- if is exported
+	if (obj.material.diffusemap == undefined) then return 0
 	if (findItem expDiff m.diffusemap.filename) != 0 then return 0
 	
 	append expDiff m.diffusemap.filename
@@ -1275,9 +1276,10 @@ fn importMaterial m = (
 )
 	
 fn getMaterialOfObject obj submesh = ( 
+	
+	if obj.material == undefined then( obj.material = Standardmaterial())
 	local m = obj.material
-	--format "getMaterialOfObject of % % = %\n" obj.name submesh m
-	if m == undefined then throw ( "Necesitamos un material para el objeto " + obj.name )
+	
 	if classof m == Standardmaterial then 
 		return m
 	end
@@ -1389,3 +1391,4 @@ exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
 openCloseFile()
 removeObjectsID()
+)
