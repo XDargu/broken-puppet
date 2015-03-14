@@ -5,11 +5,11 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
-engine_path = "C:\\Code\\engine\\"
-out_path = engine_path + "data\\"
 prefab_path = out_path + "prefab\\"
 scene_path = out_path + "scene\\"
+out_path = engine_path + "data\\"
 tools_path = engine_path + "tools\\"
+engine_path = "C:\\Code\\engine\\"
 
 -- Gets all the objects of the scene
 allObject = $*
@@ -1259,7 +1259,7 @@ fn importTexture infile = (
 fn importMaterial m = (
 	if export_materials == false then return 0
 	-- if is exported
-	if (obj.material.diffusemap == undefined) then return 0
+	if (m.diffusemap == undefined) then return 0
 	if (findItem expDiff m.diffusemap.filename) != 0 then return 0
 	
 	append expDiff m.diffusemap.filename
@@ -1386,9 +1386,9 @@ fn max2mcvMatrix obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
+addObjectsID()
+exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
---openCloseFile()
---removeObjectsID()
+openCloseFile()
+removeObjectsID()
 )
