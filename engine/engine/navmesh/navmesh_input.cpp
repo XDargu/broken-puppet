@@ -42,14 +42,14 @@ void CNavmeshInput::prepareInput( const TInput& input ) {
   memset( tris, 0, ntris * 3 * sizeof( int ) );
 
   XMVECTOR v[ 8 ] = {
-      DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetY(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetY(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetY(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetY(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetY(input.pmax), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetY(input.pmax), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetY(input.pmax), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetY(input.pmax), 0)
+      DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmin), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmin), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmin), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmin), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmax), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmax), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmax), 0)
+	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmax), 0)
   };
 
   static const int idxs[ 6 ][ 4 ] = {
