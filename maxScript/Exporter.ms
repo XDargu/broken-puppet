@@ -5,10 +5,10 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
-engine_path = "C:\\Code\\engine\\"
+engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
 out_path = engine_path + "data\\"
-prefab_path = out_path + "prefab\\"
-scene_path = out_path + "scene\\"
+prefab_path = out_path + "prefabs\\"
+scene_path = out_path + "scenes\\"
 tools_path = engine_path + "tools\\"
 
 -- Gets all the objects of the scene
@@ -1258,8 +1258,8 @@ fn importTexture infile = (
 	
 fn importMaterial m = (
 	if export_materials == false then return 0
-	-- if is exported
-	if (obj.material.diffusemap == undefined) then return 0
+	-- if is exported	
+	if (m.diffusemap == undefined) then return 0
 	if (findItem expDiff m.diffusemap.filename) != 0 then return 0
 	
 	append expDiff m.diffusemap.filename
