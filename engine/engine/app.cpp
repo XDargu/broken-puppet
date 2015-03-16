@@ -103,7 +103,7 @@ void createManagers() {
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
-	getObjManager<TCompColliderMesh>()->init(32);
+	getObjManager<TCompColliderMesh>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
@@ -195,7 +195,8 @@ bool CApp::create() {
 	physics_manager.init();
 
 	CImporterParser p;
-	XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
+	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
+	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
 	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
 	initManagers();	

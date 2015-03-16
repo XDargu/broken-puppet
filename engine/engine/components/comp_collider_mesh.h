@@ -13,7 +13,7 @@ struct TCompColliderMesh : TBaseComponent {
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
-		strcpy(path, atts.getString("path", "missing_mesh").c_str());
+		strcpy(path, ("colliders/" + atts.getString("path", "missing_mesh") + "_collider").c_str());
 		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
 		physx::PxTriangleMesh* triangle_mesh = c_m->collision_mesh;
 

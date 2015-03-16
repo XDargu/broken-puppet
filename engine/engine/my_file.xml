@@ -1,81 +1,102 @@
 <scene>
-	<entity >
-<name name="Torus001_1.0" />
-<transform position="-13.1756 -4.84923e-007 -11.0937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
-<draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
-</render>
-<aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-	</entity>
-	<entity >
-<name name="PlayerCamera" />
-<transform position="48.2918 -7.46728 45.8579"/>
-<camera target="0.593842 -1.42814e-007 -3.26721 " fov="75.0" znear="0.1" zfar="1000.0"/>
-	</entity>
-	<entity >
-<name name="L-Ext001_4.0" />
-<transform position="55.3579 -3.68749e-007 -8.43599" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="L-Ext001" sub_mesh="0" mat="Material #26"/>
-</render>
-<aabb min="-28.0057 0.0 -24.7556" max="0.0 18.3365 0.0"/>
-	</entity>
-	<entity >
-<name name="Spindle001_5.0" />
-<transform position="19.3826 -1.87798e-006 -42.9632" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Spindle001" sub_mesh="0" mat="Material #25"/>
-</render>
-<aabb min="-16.2865 0.0 -16.2865" max="16.2865 34.8588 16.2865"/>
-	</entity>
-	<entity >
-<name name="Torus001_6.0" />
-<transform position="-47.9926 17.302 -48.8494" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
-<draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
-</render>
-<aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-	</entity>
-	<entity >
-<name name="Torus001_7.0" />
-<transform position="-82.8095 34.6041 -86.605" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
-<draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
-</render>
-<aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-	</entity>
-	<entity >
-<name name="Torus001_8.0" />
-<transform position="-117.626 51.9061 -124.361" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
-<draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
-</render>
-<aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-	</entity>
-	<entity >
-<name name="45degGrid_9.0" />
-<transform position="0.0 0.0 0.0" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
-	</entity>
-	<entity >
-<name name="Torus001_10.0" />
-<transform position="-13.1756 -4.84923e-007 -11.0937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
-<draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
-</render>
-<aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-	</entity>
-	<entity >
-<name name="Torus001_11.0" />
-<transform position="-13.1756 -4.84923e-007 -11.0937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
-<draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
-</render>
-<aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-	</entity>
+  <entity >
+    <name name="Torus001_1.0" />
+    <transform position="-13.1756 -4.84923e-007 -11.0937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
+      <draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+  </entity>
+  <entity >
+    <name name="L-Ext001_4.0" />
+    <transform position="55.3579 -3.68749e-007 -8.43599" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="L-Ext001" sub_mesh="0" mat="Material #26"/>
+    </render>
+    <aabb min="-28.0057 0.0 -24.7556" max="0.0 18.3365 0.0"/>
+  </entity>
+  <entity >
+    <name name="Spindle001_5.0" />
+    <transform position="19.3826 -1.87798e-006 -42.9632" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Spindle001" sub_mesh="0" mat="Material #25"/>
+    </render>
+    <aabb min="-16.2865 0.0 -16.2865" max="16.2865 34.8588 16.2865"/>
+  </entity>
+  <entity >
+    <name name="Torus001_6.0" />
+    <transform position="-47.9926 17.302 -48.8494" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
+      <draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+  </entity>
+  <entity >
+    <name name="Torus001_7.0" />
+    <transform position="-82.8095 34.6041 -86.605" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
+      <draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+  </entity>
+  <entity >
+    <name name="Torus001_8.0" />
+    <transform position="-117.626 51.9061 -124.361" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
+      <draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+  </entity>
+  <entity >
+    <name name="45degGrid_9.0" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity >
+    <name name="Torus001_10.0" />
+    <transform position="-13.1756 -4.84923e-007 -11.0937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
+      <draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+  </entity>
+  <entity >
+    <name name="Torus001_11.0" />
+    <transform position="-13.1756 -4.84923e-007 -11.0937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="Torus001" sub_mesh="0" mat="Material #25"/>
+      <draw mesh="Torus001" sub_mesh="1" mat="Material #26"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+  </entity>
+  <entity >
+    <name name="Player" />
+    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="prota_idle" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="4" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+    <life life="100"/>
+    <unityCharacterController/>
+    <basicPlayerController/>
+  </entity>
+  <entity>
+    <name name="PlayerPivot" />
+    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <playerPivotController />
+  </entity>
+  <entity>
+    <name name="CameraPivot" />
+    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <cameraPivotController />
+  </entity>
+  
 </scene>
