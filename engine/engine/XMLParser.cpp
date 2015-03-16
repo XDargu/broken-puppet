@@ -294,6 +294,7 @@ void CXMLParser::xmlEndElement (void *userData, const char *element) {
 bool CXMLParser::xmlParseFile (const std::string &filename) {
 	CErrorContext ec("Loading file", filename.c_str());
 	std::ifstream is( filename.c_str() );
+	XASSERT(is.is_open(), "XML File %s not found", filename.c_str());
 	if ( !is.is_open() ) {
 		xml_error = "XML File " + filename + " not found";
 		return false;

@@ -1,710 +1,379 @@
 <scene>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_ex_01_1.0" />
-    <transform position="-8.00029 -8.00029 3.49704e-007" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_ex_01_2.0" />
-    <transform position="15.9997 -8.00029 3.49704e-007" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_ex_01_3.0" />
-    <transform position="-8.0 -8.0 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_in_01_4.0" />
-    <transform position="-16.0003 -8.00029 -8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_in_01_5.0" />
-    <transform position="-16.0003 -8.00029 3.49704e-007" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_in_01_6.0" />
-    <transform position="15.9997 -8.00029 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_in_01_7.0" />
-    <transform position="23.9997 -8.00029 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui2_in_01_8.0" />
-    <transform position="23.9997 -8.00029 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_ex_01_9.0" />
-    <transform position="-8.00029 -8.00029 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_ex_01_10.0" />
-    <transform position="-8.00029 -8.00029 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_ex_01_11.0" />
-    <transform position="-0.000285625 -8.00029 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_ex_01_12.0" />
-    <transform position="7.99971 -8.00029 -8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_13.0" />
-    <transform position="-16.0003 -8.00029 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_14.0" />
-    <transform position="-16.0003 -8.00029 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_15.0" />
-    <transform position="-0.000285625 -8.00029 16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_16.0" />
-    <transform position="-16.0003 -8.00029 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_17.0" />
-    <transform position="-16.0003 -8.00029 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_18.0" />
-    <transform position="15.9997 -8.00029 -8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_esqui_in_01_19.0" />
-    <transform position="15.9997 -8.00029 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pared_01_20.0" />
-    <transform position="7.99972 -8.00029 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pared_01_21.0" />
-    <transform position="-8.00029 -8.00029 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pared_01_22.0" />
-    <transform position="-8.00029 -8.00029 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pared_01_23.0" />
-    <transform position="7.99971 -8.00029 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pared_01_24.0" />
-    <transform position="0.0 -8.0 -24.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pasil_3dir_01_25.0" />
-    <transform position="23.9997 -8.00029 3.49704e-007" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pasil_3dir_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pasil_3dir_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pasil_3dir_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pasil_3dir_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pasil_col_L_01_26.0" />
-    <transform position="7.99972 -8.00029 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pasil_col_L_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pasil_col_L_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pasil_col_L_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_pasil_curv_01_27.0" />
-    <transform position="15.9997 -8.00029 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 -4.76837e-007 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_suelo_pasil_curv_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_suelo_01_28.0" />
-    <transform position="-0.000285625 -8.00029 3.49704e-007" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
-    <colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_suelo_01_29.0" />
-    <transform position="7.99971 -8.00029 3.49704e-007" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
-    <colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_suelo_01_30.0" />
-    <transform position="0.0 -8.0 -16.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
-    <colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_suelo_suelo_01_31.0" />
-    <transform position="0.0 -8.0 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
-    <colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_ex_01_32.0" />
-    <transform position="-8.00029 -0.000286102 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_ex_01_33.0" />
-    <transform position="15.9997 -0.000286102 0.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_ex_01_34.0" />
-    <transform position="-8.0 -3.49691e-007 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_in_01_35.0" />
-    <transform position="-16.0003 -0.000286452 -8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_in_01_36.0" />
-    <transform position="-16.0003 -0.000286102 0.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_in_01_37.0" />
-    <transform position="15.9997 -0.000286802 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_in_01_38.0" />
-    <transform position="23.9997 -0.000286452 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui2_in_01_39.0" />
-    <transform position="23.9997 -0.000285753 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_ex_01_40.0" />
-    <transform position="-8.00029 -0.000286802 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_ex_01_41.0" />
-    <transform position="-8.00029 -0.000285753 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_ex_01_42.0" />
-    <transform position="-0.000285625 -0.000285753 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_ex_01_43.0" />
-    <transform position="7.99971 -0.000285975 -8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_44.0" />
-    <transform position="-16.0003 -0.000286802 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_45.0" />
-    <transform position="-16.0003 -0.000285753 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_46.0" />
-    <transform position="-0.000285625 -0.000285403 16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_47.0" />
-    <transform position="-16.0003 -0.000285403 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_48.0" />
-    <transform position="-16.0003 -0.000287151 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_49.0" />
-    <transform position="15.9997 -0.000286452 -8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_esqui_in_01_50.0" />
-    <transform position="15.9997 -0.000285753 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pared_01_51.0" />
-    <transform position="7.99972 -0.000286802 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pared_01_52.0" />
-    <transform position="-8.00029 -0.000285403 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pared_01_53.0" />
-    <transform position="-8.00029 -0.000287151 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pared_01_54.0" />
-    <transform position="7.99971 -0.000285753 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pared_01_55.0" />
-    <transform position="0.0 -1.04907e-006 -24.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
-    <colliderMesh path="dvn_arqui_techo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pasil_3dir_01_56.0" />
-    <transform position="24.0 9.53674e-007 -1.90735e-006" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pasil_3dir_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pasil_3dir_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pasil_3dir_01" sub_mesh="2" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-4.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_pasil_3dir_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity tag = "level">
-    <name name="dvn_arqui_techo_pasil_curv_01_57.0" />
-    <transform position="16.0 -5.72236e-007 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="dvn_arqui_techo_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pasil_curv_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arqui_techo_pasil_curv_01" sub_mesh="3" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
-    <colliderMesh path="dvn_arqui_techo_pasil_curv_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-  <entity >
-    <name name="Player" />
-    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="prota_idle" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="prota_idle" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="prota_idle" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="prota_idle" sub_mesh="3" mat="Standardmaterial"/>
-      <draw mesh="prota_idle" sub_mesh="4" mat="Standardmaterial"/>
-    </render>
-    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
-    <life life="100"/>
-    <unityCharacterController/>
-    <basicPlayerController/>
-  </entity>
-  <entity>
-    <name name="PlayerPivot" />
-    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <playerPivotController />
-  </entity>
-  <entity>
-    <name name="CameraPivot" />
-    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <cameraPivotController />
-  </entity>
-  <entity >
-    <name name="PlayerCamera" />
-    <transform position="48.2918 -7.46728 45.8579"/>
-    <camera target="0.593842 -1.42814e-007 -3.26721 " fov="75.0" znear="0.1" zfar="1000.0"/>
-    <thirdPersonCameraController offset="0.2 -0.33 2.0"/>
-  </entity>
+	<entity >
+<name name="45degGrid_1.0" />
+<transform position="0.0 8.0 -3.49691e-007" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity tag = "player" prefab="Player">
+<transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="PlayerPivot">
+<transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="CameraPivot">
+<transform position="1.0 2.0 -1.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="PlayerCamera">
+<transform position="8.0 6.0 -2.62268e-007"/>
+	</entity>
+	<entity >
+<name name="Sky001_7.0" />
+<transform position="72.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<ambientLight intensity="1.0" color="0.95 0.95 1.0 1"/>
+	</entity>
+	<entity >
+<name name="Omni002_8.0" />
+<transform position="-8.0 2.81299 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="20.0" intensity="1.0" color="0.0 0.0980392 0.835294 1"/>
+	</entity>
+	<entity >
+<name name="FDirect001_9.0" />
+<transform position="-8.0 7.6613e-006 88.0" rotation="0.0 0.0 -0.382683 0.92388" scale="1.0 1.0 1.0"/>
+<directionalLight intensity="1.0" color="1.0 1.0 1.0 1"/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_ex_01_10.0" />
+<transform position="-8.00029 -0.000286102 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_ex_01_11.0" />
+<transform position="15.9997 -0.000286102 0.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_ex_01_12.0" />
+<transform position="-8.0 -3.49691e-007 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_ex_01_13.0" />
+<transform position="-8.00029 -0.000286102 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_in_01_14.0" />
+<transform position="-16.0003 -0.000286452 -8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_in_01_15.0" />
+<transform position="-16.0003 -0.000286102 0.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_in_01_16.0" />
+<transform position="15.9997 -0.000286802 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_in_01_17.0" />
+<transform position="23.9997 -0.000286452 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui2_in_01_18.0" />
+<transform position="23.9997 -0.000285753 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui2_in_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="2.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui2_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_ex_01_19.0" />
+<transform position="-8.00029 -0.000286802 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_ex_01_20.0" />
+<transform position="-8.00029 -0.000285753 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_ex_01_21.0" />
+<transform position="-0.000285625 -0.000285753 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_ex_01_22.0" />
+<transform position="7.99971 -0.000286452 -8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_23.0" />
+<transform position="-16.0003 -0.000286802 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_24.0" />
+<transform position="-16.0003 -0.000285753 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_25.0" />
+<transform position="-0.000285625 -0.000285403 16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_26.0" />
+<transform position="-16.0003 -0.000285403 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_27.0" />
+<transform position="-16.0003 -0.000287151 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_28.0" />
+<transform position="15.9997 -0.000286452 -8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_esqui_in_01_29.0" />
+<transform position="15.9997 -0.000285753 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pared_01_30.0" />
+<transform position="7.99972 -0.000286802 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pared_01_31.0" />
+<transform position="-8.00029 -0.000287151 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pared_01_32.0" />
+<transform position="7.99971 -0.000285753 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pared_01_33.0" />
+<transform position="0.0 -1.04907e-006 -24.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_suelo_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pasil_3dir_01_34.0" />
+<transform position="23.9997 -0.000286102 0.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pasil_3dir_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pasil_3dir_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pasil_3dir_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_pasil_3dir_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pasil_col_L_01_35.0" />
+<transform position="7.99972 -0.000287151 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pasil_col_L_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pasil_col_L_01" sub_mesh="1" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_pasil_col_L_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_pasil_curv_01_36.0" />
+<transform position="15.9997 -0.000287151 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_suelo_pasil_curv_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 -4.76837e-007 -4.0" max="4.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_suelo_pasil_curv_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_suelo_01_37.0" />
+<transform position="-0.000285625 -0.000286102 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
+<colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_suelo_01_38.0" />
+<transform position="7.99971 -0.000286102 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
+<colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_suelo_01_39.0" />
+<transform position="0.0 -6.99382e-007 -16.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
+<colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_suelo_suelo_01_40.0" />
+<transform position="0.0 -3.49691e-007 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
+<colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_ambos_esqui2_ex_01_41.0" />
+<transform position="-8.0 6.99382e-007 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.00001 8.0 4.00002"/>
+<colliderMesh path="dvn_arqui_ambos_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
 </scene>

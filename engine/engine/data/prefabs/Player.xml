@@ -1,0 +1,15 @@
+<entity >
+    <name name="Player" />
+    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="prota_idle" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="prota_idle" sub_mesh="4" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-27.0307 -7.59887 -27.0307" max="27.0307 7.59887 27.0307"/>
+    <life life="100"/>
+    <unityCharacterController/>
+	<basicPlayerController/>
+ </entity>

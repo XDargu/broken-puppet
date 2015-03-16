@@ -1,0 +1,6 @@
+- 04:34:29.000 ERROR: When Creating: app
+Assertion failed: p.xmlParseFile("data/scenes/my_file.xml")
+	Error loading the scene
+	Line: 198
+	File: app.cpp
+

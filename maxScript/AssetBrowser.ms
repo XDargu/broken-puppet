@@ -338,7 +338,39 @@ clearListener()
 			button validScn "Validar escena" width:135 height:25 toolTip:""
 			button exportMod "Exportar módulos" width:135 height:25 toolTip:""
 			button exportPref "Exportar prefabs" width:135 height:25 toolTip:""
+			button buildAndPlay "Exportar y ejecutar" width:135 height:25 toolTip:""
+			button play "Ejecutar" width:135 height:25 toolTip:""
 			progressbar progress					
+		)
+		
+		on buildAndPlay pressed do (
+			try (
+				-- Fisicaaas
+				objs = $* as array
+				for o in objs do (
+					if isModule o then (
+						select o
+						macros.run "PhysX" "PxSetSelAsStaticRigidBodyMS"
+						o.modifiers[#PhysX_Rigid_Body].meshType = 5
+					)
+				)
+				
+				addObjectsID()
+				exportXMLScene progress: progress
+				--funcion que abre y cierra una última cosa para poder trabajar, a depurar
+				openCloseFile()
+				removeObjectsID()
+
+				DOSCommand ("cd " + engine_path + " & " + engine_path + "engined.exe")
+			)
+			catch ( 
+				format "*** % ***\n" (getCurrentException())
+				messageBox ("No se ha podido exportar correctamente:\n " + getCurrentException() as string) 
+			)
+		)
+		
+		on play pressed do (
+			DOSCommand ("cd " + engine_path + " & " + engine_path + "engined.exe")
 		)
 		
 		on exportAll pressed do (

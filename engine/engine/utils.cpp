@@ -40,6 +40,10 @@ int fatal(const char* fmt, ...) {
 	size_t n = vsnprintf(buf, sizeof(buf) - 1, fmt, ap);
 	va_end(ap);
 	::OutputDebugString(buf);
+	std::string s = buf;
+	std::wstring stemp = std::wstring(s.begin(), s.end());
+	LPCWSTR sw = stemp.c_str();
+	MessageBoxW(NULL, sw, L"Error", MB_OK | MB_ICONINFORMATION);
 	FILE_LOG(logERROR) << buf;;
 	assert(!printf("%s", buf));
 	return 0;

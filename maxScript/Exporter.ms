@@ -5,7 +5,7 @@ ExportMeshes = true
 export_meshes = true
 export_materials = true
 
-	engine_path = "C:\\Code\\engine\\"
+	engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
 	out_path = engine_path + "data\\"
 	prefab_path = out_path + "prefabs\\"
 	scene_path = out_path + "scenes\\"
@@ -68,12 +68,28 @@ struct objPrefab (
 )
 
 -- Create Player prefab
-
 playerPrefab = objPrefab()
 playerPrefab.obj_name = PlayerName
 append playerPrefab.components getTransform
 append playerPrefab.components getPlayerController
 
+-- Create PlayerPivot prefab
+playerPivotPrefab = objPrefab()
+playerPivotPrefab.obj_name = PlayerPivotName
+append playerPivotPrefab.components getTransform
+append playerPivotPrefab.components getPlayerPivotController
+
+-- Create CameraPivot prefab
+cameraPivotPrefab = objPrefab()
+cameraPivotPrefab.obj_name = CameraPivotName
+append cameraPivotPrefab.components getTransform
+append cameraPivotPrefab.components getCameraPivotController
+
+-- Create PlayerCamera prefab
+playerCameraPrefab = objPrefab()
+playerCameraPrefab.obj_name = CameraName
+append playerCameraPrefab.components getTransform
+append playerCameraPrefab.components getCameraController
 
 -- Create BasicEnemy prefab
 basicEnemyPrefab = objPrefab()
@@ -82,7 +98,7 @@ append basicEnemyPrefab.components getTransform
 append basicEnemyPrefab.components getAiFsmBasic
 
 -- Adding prefabs to the prefabs list
-prefabList = #(playerPrefab, basicEnemyPrefab)
+prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab)
 
 
 
@@ -567,7 +583,10 @@ fn getCollider obj = (
 	)
 	if (obj.modifiers[#PhysX_Rigid_Body].meshType == 5) then (
 		-- if not in expShapesNames export
-		if (findItem expDiff m.diffusemap.filename) != 0 then exportMeshShape obj
+		if (findItem expShapesNames obj.name) == 0 then (
+			exportMeshShape obj
+			append expShapesNames obj.name
+		)
 		mString = "<colliderMesh path=\"" + obj.name + "\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
 	)
 	return mString
@@ -1322,7 +1341,7 @@ fn findIndexOfVertexShape vtxs str_vtxs v = (
 
 fn saveBinaryMeshShape obj vtxs idxs vertex_type = (
 	local filename = collider_path
-	filename += obj.name + ".mesh"
+	filename += obj.name + "_collider.mesh"
 	
 	if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
 	
