@@ -1,11 +1,13 @@
 clearlistener()
-(
-/********************** CONFIG ************************/
+
 ExportMeshes = true
+engine_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
+
+
+/********************** CONFIG ************************/
 export_meshes = true
 export_materials = true
 
-	engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
 	out_path = engine_path + "data\\"
 	prefab_path = out_path + "prefabs\\"
 	scene_path = out_path + "scenes\\"
@@ -98,7 +100,7 @@ append basicEnemyPrefab.components getTransform
 append basicEnemyPrefab.components getAiFsmBasic
 
 -- Adding prefabs to the prefabs list
-prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab)
+ex_prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab)
 
 
 
@@ -211,7 +213,7 @@ fn exportXMLScene progress:undefined = (
 )
 
 fn validatePrefabList obj = (
-	for pref in prefabList do (
+	for pref in ex_prefabList do (
 		if (pref.obj_name == obj.name) then
 		(
 			return pref
@@ -566,7 +568,23 @@ fn getCollider obj = (
 	
 	-- Make the return string
 	mString = ""
+	
+	if (obj.modifiers[#PhysX_Rigid_Body].meshType == 1) then (
+		mString = "<colliderSphere staticFriction=\""  \
+														+ obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
+									 + " dynamicFriction=\"" \
+														+ obj.modifiers[#PhysX_Rigid_Body].DynamicFriction as string + "\"" \
+									 + " restitution=\"" \
+														+ obj.modifiers[#PhysX_Rigid_Body].Bounciness as string + "\"" \
+									 + " radius=\"" \
+														+ obj.modifiers[#PhysX_Rigid_Body].meshRadius as string + "\"" \
+			+ "/>\n"
+	)
+	
 	if (obj.modifiers[#PhysX_Rigid_Body].meshType == 2) then (
+	extents = [obj.modifiers[#PhysX_Rigid_Body].meshLength, obj.modifiers[#PhysX_Rigid_Body].meshWidth, obj.modifiers[#PhysX_Rigid_Body].meshHeight]
+	extents = extents / 2
+		
 	mString = "<collider staticFriction=\""  \
 														+ obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
 									 + " dynamicFriction=\"" \
@@ -1560,4 +1578,3 @@ fn max2mcvMatrix obj = (
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
 --openCloseFile()
 --removeObjectsID()
-)

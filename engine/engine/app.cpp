@@ -310,7 +310,7 @@ void CApp::update(float elapsed) {
 	}
 #endif
 	//Calculate the current number of strings
-	/*unsigned int num_strings = numStrings();
+	unsigned int num_strings = numStrings();
 
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
@@ -396,10 +396,10 @@ void CApp::update(float elapsed) {
 					new_e->add(new_e_trans);
 					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
 
-					TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
+					/*TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
 					std::strcpy(new_e_mesh->path, "aguja");
 					new_e_mesh->mesh = mesh_manager.getByName("aguja");
-					new_e->add(new_e_mesh);
+					new_e->add(new_e_mesh);*/
 
 					TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
 					new_e->add(new_e_needle);
@@ -469,10 +469,10 @@ void CApp::update(float elapsed) {
 					new_e2->add(new_e_trans2);
 					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
 
-					TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
+					/*TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
 					std::strcpy(new_e_mesh2->path, "aguja");
 					new_e_mesh2->mesh = mesh_manager.getByName("aguja");
-					new_e2->add(new_e_mesh2);
+					new_e2->add(new_e_mesh2);*/
 
 					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
 					new_e2->add(new_e_needle2);
@@ -557,7 +557,7 @@ void CApp::update(float elapsed) {
 			entitycount++;
 		}
 	}
-	*/
+	
 
 	// Update ---------------------
 	//  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
@@ -659,6 +659,7 @@ void CApp::render() {
 
 	render_manager.renderAll(((TCompCamera*)activeCamera)->view_projection);
 	renderDebugEntities();
+	renderEntities();
 
 #ifdef _DEBUG
 	TwDraw();
@@ -676,12 +677,9 @@ void CApp::render() {
 
 void CApp::renderEntities() {
 
-	/*vs_basic2.activate();
-	ps_textured.activate();
+	debugTech.activate();
 	const CTexture *t = texture_manager.getByName("wood_d");
-	t->activate(0);
-
-	
+	t->activate(0);	
 
 	//ctes_global.activateInVS(2);
 
@@ -735,16 +733,11 @@ void CApp::renderEntities() {
 				setWorldMatrix(XMMatrixIdentity());
 				rope.activateAndRender();
 
-				vs_basic.activate();
-				ps_basic.activate();
 				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
 				wiredCube.activateAndRender();
 
 				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
 				wiredCube.activateAndRender();
-
-				vs_basic2.activate();
-				ps_textured.activate();
 			}
 		}
 
@@ -771,7 +764,7 @@ void CApp::renderEntities() {
 			font.size = old_size;
 			font.color = old_col;
 		}
-	}*/
+	}
 }
 
 void CApp::renderDebugEntities() {

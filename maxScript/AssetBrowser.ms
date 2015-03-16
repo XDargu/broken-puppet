@@ -1,16 +1,16 @@
-(
+
 filein("Exporter.ms")
 
 -- AssetPath
-local AssetPath = "D:\\Users\\Daniel\\Documents\\Assets\\"
+ AssetPath = "C:\\Users\\Daniel\\Documents\\Assets\\"
 
 -- Module path and list
-local ModulePath = AssetPath + "Modules\\"	
-local ModuleList = #()
+ ModulePath = AssetPath + "Modules\\"	
+ ModuleList = #()
 
 -- Prefabs
-local PrefabPath = AssetPath + "Prefabs\\"
-local PrefabList = #()
+ PrefabPath = AssetPath + "Prefabs\\"
+ PrefabList = #()
 
 
 clearListener()
@@ -347,12 +347,19 @@ clearListener()
 			try (
 				-- Fisicaaas
 				objs = $* as array
+				objs_m = #()
 				for o in objs do (
 					if isModule o then (
-						select o
-						macros.run "PhysX" "PxSetSelAsStaticRigidBodyMS"
-						o.modifiers[#PhysX_Rigid_Body].meshType = 5
+						append objs_m o						
 					)
+				)
+				
+				select objs_m
+				macros.run "PhysX" "PxSetSelAsStaticRigidBodyMS"
+				
+				for o in objs_m do (
+					select o
+					o.modifiers[#PhysX_Rigid_Body].meshType = 5
 				)
 				
 				addObjectsID()
@@ -361,7 +368,7 @@ clearListener()
 				openCloseFile()
 				removeObjectsID()
 
-				DOSCommand ("cd " + engine_path + " & " + engine_path + "engined.exe")
+				DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
 			)
 			catch ( 
 				format "*** % ***\n" (getCurrentException())
@@ -370,7 +377,7 @@ clearListener()
 		)
 		
 		on play pressed do (
-			DOSCommand ("cd " + engine_path + " & " + engine_path + "engined.exe")
+			DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
 		)
 		
 		on exportAll pressed do (
@@ -686,5 +693,4 @@ clearListener()
 	$45degGrid.grid = 8
 	$45degGrid.length = 200
 	$45degGrid.width = 200
-)
 )
