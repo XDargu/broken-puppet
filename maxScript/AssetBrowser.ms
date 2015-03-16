@@ -1,15 +1,16 @@
+(
 filein("Exporter.ms")
 
 -- AssetPath
-AssetPath = "D:\\Users\\Daniel\\Documents\\Assets\\"
+local AssetPath = "D:\\Users\\Daniel\\Documents\\Assets\\"
 
 -- Module path and list
-ModulePath = AssetPath + "Modules\\"	
-ModuleList = #()
+local ModulePath = AssetPath + "Modules\\"	
+local ModuleList = #()
 
 -- Prefabs
-PrefabPath = AssetPath + "Prefabs\\"
-PrefabList = #()
+local PrefabPath = AssetPath + "Prefabs\\"
+local PrefabList = #()
 
 
 clearListener()
@@ -653,4 +654,5 @@ clearListener()
 	$45degGrid.grid = 8
 	$45degGrid.length = 200
 	$45degGrid.width = 200
+)
 )
