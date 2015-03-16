@@ -3,9 +3,12 @@ clearlistener()
 (
 	engine_path = "C:\\Code\\engine\\"
 	out_path = engine_path + "data\\"
-	prefab_path = out_path + "prefab\\"
-	scene_path = out_path + "scene\\"
+	prefab_path = out_path + "prefabs\\"
+	scene_path = out_path + "scenes\\"
+	mesh_path = out_path + "meshes\\"
 	tools_path = engine_path + "tools\\"
+	collider_path = mesh_path + "colliders\\"
+	
 	
 	fn getBoneRigidbody obj = (
 		

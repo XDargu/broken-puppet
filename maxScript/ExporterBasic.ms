@@ -1,7 +1,7 @@
 
 clearListener()
 
-fn findIndexOfVertex vtxs str_vtxs v = (
+fn findIndexOfVertexShape vtxs str_vtxs v = (
 
 	-- Convert my array of floats to a single string
 	local sv = with printAllElements off v as string
@@ -18,9 +18,8 @@ fn findIndexOfVertex vtxs str_vtxs v = (
 	
 )
 
-fn saveBinaryMesh obj vtxs idxs vertex_type = (
-	local data_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\data\\"
-	local filename = data_path + "meshes\\"
+fn saveBinaryMeshShape obj vtxs idxs vertex_type = (
+	local filename = collider_path
 	filename += obj.name + ".mesh"
 	
 	if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
@@ -79,7 +78,7 @@ fn saveBinaryMesh obj vtxs idxs vertex_type = (
 	fclose fs
 )
 
-fn exportMesh obj_to_export = (
+fn exportMeshShape obj_to_export = (
 	
 	-- Confirm obj is valid
 	if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
@@ -127,7 +126,7 @@ fn exportMesh obj_to_export = (
 			local v = #( mpos.x, mpos.y, mpos.z, uvA.x, uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
 			
 			-- Index the vtx or get the index if the vtx has already been defined
-			local idx_of_v = findIndexOfVertex all_vtxs all_str_vtxs v
+			local idx_of_v = findIndexOfVertexShape all_vtxs all_str_vtxs v
 			append all_idxs idx_of_v
 			
 			--format "idx is %\n" idx_of_v
@@ -136,10 +135,10 @@ fn exportMesh obj_to_export = (
 	)
 	
 	-- Save in binary form to file
-	saveBinaryMesh obj all_vtxs all_idxs 1004		-- Positions+UV2 only
+	saveBinaryMeshShape obj all_vtxs all_idxs 1004		-- Positions+UV2 only
 	
 	-- Delete the temp mesh
 	if obj != obj_to_export then delete obj
 )
 
-exportMesh $
+exportMeshShape $
