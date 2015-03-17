@@ -1,5 +1,5 @@
-
 filein("Exporter.ms")
+filein("RenderThumbnail.ms")
 
 -- AssetPath
  AssetPath = "C:\\Users\\Daniel\\Documents\\Assets\\"
@@ -17,7 +17,12 @@ clearListener()
 
 	fn saveModulePicture dir assetName m = (
 		
-		if (classof $ == ObjectSet) then (			
+		vt=vsai_Thumbnails()
+		f_name = dir + "icons\\" + assetName as string 
+		
+		vt.RenderIt objs: m filetype: "png" rSkylight: false rPath: f_name
+		
+		/*if (classof $ == ObjectSet) then (			
 			obj = m as array
 			
 			p_max = $.max
@@ -32,7 +37,7 @@ clearListener()
 			print dist
 			rendercam = Targetcamera fov:60 nearclip:1 farclip:1000 \ 
 			nearrange:0 farrange:1000 mpassEnabled:off mpassRenderPerPass:off \
-			/*pos: (obj.pos + [10, 10, 10])*/ pos: (p_final + [-1,-1,1.4] * dist) \
+			 pos: (p_final + [-1,-1,1.4] * dist) \
 			isSelected:off \
 			target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (p_final + [0, 0, dist * 0.475  ])))
 			--target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, 3])))
@@ -53,7 +58,7 @@ clearListener()
 			print dist
 			rendercam = Targetcamera fov:60 nearclip:1 farclip:1000 \ 
 			nearrange:0 farrange:1000 mpassEnabled:off mpassRenderPerPass:off \
-			/*pos: (obj.pos + [10, 10, 10])*/ pos: (obj.pos + [-1,-1,1.4] * dist) \
+			 pos: (obj.pos + [-1,-1,1.4] * dist) \
 			isSelected:off \
 			target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, dist * 0.475  ])))
 			--target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] (obj.pos + [0, 0, 3])))
@@ -63,7 +68,7 @@ clearListener()
 			Render outputfile:f_name camera: rendercam outputSize: [120, 120] vfb: false forcew2sided: true renderType: #selection
 			
 			delete rendercam
-		)
+		)*/
 	)
 	
 	-- Find the better candidate to be the prefab pivot
@@ -186,7 +191,7 @@ clearListener()
 			progress.value = (100.0 / sel.count) * count
 			count += 1
 			
-			saveModulePicture dir s.name s
+			saveModulePicture dir s.name #(s)
 		)
 		
 		count = 1
@@ -465,7 +470,9 @@ clearListener()
 		edittext searchText "" 
 		group "Búsqueda avanzada" (
 			checkbox searchArq "Arquitectónicos" across: 2 align: #left triState: 1
-			checkbox searchKit "Kits" align: #left
+			checkbox searchRmp "Rampas" align: #left
+			
+			checkbox searchTub "Tuberías" align: #left
 			
 			checkbox searchSlo "Suelo" align: #left across: 4
 			checkbox searchTch "Techo" align: #left
@@ -474,7 +481,10 @@ clearListener()
 			
 			checkbox searchEsq "Esquinas" align: #left across: 2
 			checkbox searchPas "Pasillos" align: #left
-			checkbox searchPar "Parches" align: #left
+			
+			checkbox searchPar "Parches" align: #left across: 3
+			checkbox searchHlf "Mitades" align: #left
+			checkbox search45g "Giros (45º)" align: #left
 			
 		)
 		button searchButton "Buscar"  across: 2
@@ -528,6 +538,11 @@ clearListener()
 			-- Advanced search
 			if (searchArq.state == true) then
 				append searchValues "arqui"
+			if (searchRmp.state == true) then
+				append searchValues "rampa"
+			
+			if (searchTub.state == true) then
+				append searchValues "tuber"
 			
 			if (searchSlo.state == true) then
 				append searchValues "suelo"
@@ -542,8 +557,13 @@ clearListener()
 				append searchValues "esqui"
 			if (searchPas.state == true) then
 				append searchValues "pasil"
+			
 			if (searchPar.state == true) then
 				append searchValues "parche"
+			if (searchHlf.state == true) then
+				append searchValues "half"
+				if (search45g.state == true) then
+				append searchValues "45g"
 			
 			local searchList = searchInList ModuleList searchValues
 			

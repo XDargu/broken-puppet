@@ -125,6 +125,11 @@ Export the XML with entities and components
 ***********************************************************************************************/
 fn exportXMLScene progress:undefined = (
 	
+	expNames = #()
+	expObjects = #()
+	expShapesNames = #()
+	expDiff = #()
+	
 	/*if (validateScene true == false) then (
 		return false;
 	)*/
