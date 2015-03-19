@@ -1,0 +1,133 @@
+{
+    "title": "Enemigo",
+    "description": "",
+    "root": "45e0fa56-5a70-43d3-b3ac-614e74e88cb4",
+    "display": {
+        "camera_x": 641,
+        "camera_y": 322.5,
+        "camera_z": 1,
+        "x": -304,
+        "y": 16
+    },
+    "properties": {},
+    "nodes": {
+        "45e0fa56-5a70-43d3-b3ac-614e74e88cb4": {
+            "id": "45e0fa56-5a70-43d3-b3ac-614e74e88cb4",
+            "name": "Priority",
+            "title": "Enemigo",
+            "description": "",
+            "display": {
+                "x": -224,
+                "y": 16
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "e95e9e05-3bc7-4529-8c41-2117f9eb0aca",
+                "ce966e0d-6454-41ec-bbce-e3f19a564b04"
+            ]
+        },
+        "86373f04-9521-4328-8567-60a3c69d612b": {
+            "id": "86373f04-9521-4328-8567-60a3c69d612b",
+            "name": "Sequence",
+            "title": "Combat",
+            "description": "Combate con el jugador",
+            "display": {
+                "x": 128,
+                "y": -32
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "21e04af0-1a2d-4b76-8e57-b982cb557e20",
+                "a67db944-bc54-452e-8453-5a996ba34cf6"
+            ]
+        },
+        "ce966e0d-6454-41ec-bbce-e3f19a564b04": {
+            "id": "ce966e0d-6454-41ec-bbce-e3f19a564b04",
+            "name": "Sequence",
+            "title": "NonCombat",
+            "description": "Caminar aleatoriamente",
+            "display": {
+                "x": 128,
+                "y": 160
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "c758d8aa-2435-4afe-bc96-910cae8666eb",
+                "3fc8669f-6263-4b32-87ab-fdd011d0a2ff"
+            ]
+        },
+        "21e04af0-1a2d-4b76-8e57-b982cb557e20": {
+            "id": "21e04af0-1a2d-4b76-8e57-b982cb557e20",
+            "name": "Runner",
+            "title": "Chase",
+            "description": "Persigue al jugador",
+            "display": {
+                "x": 320,
+                "y": -80
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "a67db944-bc54-452e-8453-5a996ba34cf6": {
+            "id": "a67db944-bc54-452e-8453-5a996ba34cf6",
+            "name": "Runner",
+            "title": "Attack",
+            "description": "Realiza un ataque",
+            "display": {
+                "x": 320,
+                "y": 16
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "c758d8aa-2435-4afe-bc96-910cae8666eb": {
+            "id": "c758d8aa-2435-4afe-bc96-910cae8666eb",
+            "name": "Runner",
+            "title": "Wander",
+            "description": "Camina aleatoriamente",
+            "display": {
+                "x": 320,
+                "y": 112
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "3fc8669f-6263-4b32-87ab-fdd011d0a2ff": {
+            "id": "3fc8669f-6263-4b32-87ab-fdd011d0a2ff",
+            "name": "Runner",
+            "title": "Idle",
+            "description": "Se queda quieto",
+            "display": {
+                "x": 320,
+                "y": 208
+            },
+            "parameters": {},
+            "properties": {}
+        },
+        "e95e9e05-3bc7-4529-8c41-2117f9eb0aca": {
+            "id": "e95e9e05-3bc7-4529-8c41-2117f9eb0aca",
+            "name": "Condition",
+            "title": "PlayerVisible",
+            "description": "Comprueba si el jugador es visible",
+            "display": {
+                "x": 0,
+                "y": -32
+            },
+            "parameters": {},
+            "properties": {},
+            "children": [
+                "86373f04-9521-4328-8567-60a3c69d612b"
+            ]
+        }
+    },
+    "custom_nodes": [
+        {
+            "name": "Condition",
+            "title": "Condition",
+            "category": "composite"
+        }
+    ]
+}
