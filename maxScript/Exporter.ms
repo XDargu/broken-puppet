@@ -1041,10 +1041,10 @@ Moves an object from the max to the mvc reference system
 fn world2mcv obj = (
 	local world2local = inverse obj.transform
 	local max2mcv = rotateXMatrix -90
-	local world2mcv = max2mcv
+	local _world2mcv = max2mcv
 	
 	obj.rotation = obj.rotation * rotateXMatrix -90
-	obj.pos = obj.pos * world2mcv
+	obj.pos = obj.pos * _world2mcv
 	
 )
 
@@ -1100,7 +1100,7 @@ fn openCloseFile = (
 	ABADIA ISLAND 
 
 ***********************************************************************************************/	
-	fn exportMesh obj_to_export = (
+fn exportMesh obj_to_export = (
 	
 	-- Confirm obj is valid
 	if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
@@ -1122,7 +1122,7 @@ fn openCloseFile = (
 	
 	local world2local = inverse obj.transform
 	local max2mcv = rotateXMatrix -90
-	local world2mcv = world2local * max2mcv
+	local _world2mcv = world2local * max2mcv
 	
 	local face_groups = getFacesGroups obj
 
@@ -1154,8 +1154,8 @@ fn openCloseFile = (
 				local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
 				local wn = face_normals[ vid ]
 				
-				local mpos = wpos * world2mcv 
-				local n = wn * world2mcv.rotationpart 
+				local mpos = wpos * _world2mcv 
+				local n = wn * _world2mcv.rotationpart 
 				
 				-- Collect all data associated to this vtx
 				local v = #( mpos.x, mpos.y, mpos.z, uvA.x, 1-uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
@@ -1443,7 +1443,7 @@ fn exportMeshShape obj_to_export = (
 	
 	local world2local = inverse obj.transform
 	local max2mcv = rotateXMatrix -90
-	local world2mcv = world2local * max2mcv
+	local _world2mcv = world2local * max2mcv
 	
 	-- For each face
 	local face_id
@@ -1463,8 +1463,8 @@ fn exportMeshShape obj_to_export = (
 			local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
 			local wn = face_normals[ vid ]
 			
-			local mpos = wpos * world2mcv 
-			local n = wn * world2mcv.rotationpart 
+			local mpos = wpos * _world2mcv 
+			local n = wn * _world2mcv.rotationpart 
 			
 			-- Collect all data associated to this vtx
 			local v = #( mpos.x, mpos.y, mpos.z, uvA.x, uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...

@@ -106,6 +106,13 @@ void activateCamera(const XMMATRIX viewProjection, const XMVECTOR position, int 
 	ctes_camera.uploadToGPU();
 }
 
+void activateCamera(const XMVECTOR position, int slot) {
+	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
+	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
+	ctes_camera.get()->CameraPosition = position;
+	ctes_camera.uploadToGPU();
+}
+
 // -----------------------------------------------------
 bool createGrid(CMesh& mesh, int nsamples) {
 

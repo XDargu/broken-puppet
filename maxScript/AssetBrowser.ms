@@ -216,7 +216,7 @@ clearListener()
 		
 		ret = false
 		-- Quick check: Modules have at least 24 characters
-		if (o.name.count > 23) then (			
+		if (o.name.count > 22) then (			
 			-- Third check: is a module
 			if (findItem ModuleList o.name != 0) then (
 				ret = true
@@ -350,6 +350,7 @@ clearListener()
 		
 		on buildAndPlay pressed do (
 			try (
+				disableSceneRedraw()
 				-- Fisicaaas
 				objs = $* as array
 				objs_m = #()
@@ -372,12 +373,14 @@ clearListener()
 				--funcion que abre y cierra una última cosa para poder trabajar, a depurar
 				openCloseFile()
 				removeObjectsID()
-
+				enableSceneRedraw()
+				
 				DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
 			)
 			catch ( 
 				format "*** % ***\n" (getCurrentException())
 				messageBox ("No se ha podido exportar correctamente:\n " + getCurrentException() as string) 
+				enableSceneRedraw()
 			)
 		)
 		

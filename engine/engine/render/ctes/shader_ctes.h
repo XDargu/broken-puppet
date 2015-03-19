@@ -26,11 +26,13 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
   float4 OmniLightColors[MaxOmniLights];
   float4 OmniLightRadius[MaxOmniLights];
 
+ 
+ 
+
   int OmniLightCount;  
   int LightCount;
+  float  world_time;
   float  dummy3[3];
   
-  // Aligned to 16 bytes
-  float  world_time;
-  float  dummy[3];
+  // Aligned to 16 bytes  
 };

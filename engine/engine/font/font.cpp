@@ -34,8 +34,8 @@ float CFont::print(float x, float y, const char *text) const {
   if (!font)
     return 0.f;
   assert(font);
-  WCHAR utf16[1024];
-  memset(utf16, 0x80, 1024 * 2);
+  WCHAR utf16[2048];
+  memset(utf16, 0x80, 2048 * 2);
   size_t n = mbstowcs(utf16, text, strlen(text));
   utf16[n] = 0x00;
   font->DrawString(

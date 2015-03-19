@@ -50,10 +50,17 @@ VS_TEXTURED_OUTPUT VSNormal(float4 Pos : POSITION
   )
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+  /*float3 wpos = mul(Pos, World);
+  float3 dir = mul(float3(0, 1, 0), World);
+  float distCamera = distance(wpos, CameraPosition);
+  float3 mPos = Pos.xyz + float3(0, sin(world_time * 0.5), 0) * (pow(max(0, distCamera - 4), 2) * 0.035);
+  Pos = float4(mPos.x, mPos.y, mPos.z, Pos.w);*/
+
+
   output.Pos = mul(Pos, World);
   output.Pos = mul(output.Pos, ViewProjection);
   output.Normal = mul(Normal, (float3x3)World);
-  output.UV = UV + sin(world_time.x) * Normal.xz;
+  output.UV = UV /*+ world_time * Normal.xz*/;
   output.WorldPos = mul(Pos, World);
   return output;
 }
@@ -170,7 +177,6 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	rim = smoothstep(0.5, 1.0, rim);
 	float4 finalRim = float4(1, 1, 1, 1) * float4(rim, rim, rim, 1);*/
 
-	
 	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
 	return result /* checker /*+ finalRim*/;
 

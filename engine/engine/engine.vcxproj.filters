@@ -179,9 +179,6 @@
     <ClInclude Include="render\render_manager.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="handle\prefabs_manager.h">
-      <Filter>render</Filter>
-    </ClInclude>
     <ClInclude Include="render\material.h">
       <Filter>render</Filter>
     </ClInclude>
@@ -281,6 +278,9 @@
     <ClInclude Include="navmesh\navmesh_render.h">
       <Filter>navmesh</Filter>
     </ClInclude>
+    <ClInclude Include="handle\prefabs_manager.h">
+      <Filter>handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -365,9 +365,6 @@
       <Filter>components</Filter>
     </ClCompile>
     <ClCompile Include="render\render_manager.cpp">
-      <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="handle\prefabs_manager.cpp">
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="render\material.cpp">
@@ -477,6 +474,9 @@
     </ClCompile>
     <ClCompile Include="navmesh\navmesh_render.cpp">
       <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="handle\prefabs_manager.cpp">
+      <Filter>handle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

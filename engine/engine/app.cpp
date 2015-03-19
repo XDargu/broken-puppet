@@ -560,7 +560,7 @@ void CApp::update(float elapsed) {
 	
 
 	// Update ---------------------
-	//  ctes_global.world_time += XMVectorSet(elapsed,0,0,0);
+	ctes_global.get()->world_time += elapsed;
 	
 	// Ñapa para luz ambiental
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
@@ -600,12 +600,16 @@ void CApp::update(float elapsed) {
 			ctes_global.get()->OmniLightCount++;
 		}
 	}
-	int a = ctes_global.get()->OmniLightCount;
+	float f = ctes_global.get()->world_time;
+	dbg("time: %f\n", f);
 
 	ctes_global.uploadToGPU();
+	ctes_global.activateInVS(2);
 	ctes_global.activateInPS(2);
 
-	ctes_global.get()->world_time += elapsed;
+	CEntity* cam = entity_manager.getByName("PlayerCamera");
+	TCompTransform* cam_t = cam->get<TCompTransform>();
+	activateCamera(cam_t->position, 1);
 
 	getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);

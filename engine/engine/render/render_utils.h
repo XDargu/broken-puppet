@@ -35,6 +35,7 @@ void drawViewVolume(const CCamera& camera);
 void setWorldMatrix(XMMATRIX world);
 void activateWorldMatrix(int slot);
 void activateCamera(const XMMATRIX viewProjection, const XMVECTOR position, int slot);
+void activateCamera(const XMVECTOR position, int slot);
 
 // Provisional
 void activateCamera(const XMMATRIX viewProjection, int slot);
