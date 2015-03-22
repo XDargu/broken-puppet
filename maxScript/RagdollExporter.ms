@@ -1,13 +1,13 @@
 clearlistener()
 
 (
-	engine_path = "C:\\Code\\engine\\"
-	out_path = engine_path + "data\\"
-	prefab_path = out_path + "prefabs\\"
-	scene_path = out_path + "scenes\\"
-	mesh_path = out_path + "meshes\\"
-	tools_path = engine_path + "tools\\"
-	collider_path = mesh_path + "colliders\\"
+	local engine_path = "C:\\Code\\engine\\"
+   	local out_path = engine_path + "data\\"
+	local prefab_path = out_path + "prefabs\\"
+	local scene_path = out_path + "scenes\\"
+	local mesh_path = out_path + "meshes\\"
+	local tools_path = engine_path + "tools\\"
+	local collider_path = mesh_path + "colliders\\"
 	
 	
 	fn getBoneRigidbody obj = (
@@ -30,23 +30,67 @@ clearlistener()
 	)	
 	
 	
-	fn getConstraint obj = ()
+	fn getConstraint obj = (
+		
+		if (classof obj != UConstraint) then return ""
+		
+		-- translation limits
+		print obj.linearModeX -- 1 lock, 2 limited, 3 free
+		print obj.linearModeY
+		print obj.linearModeZ 
+		
+		-- swing z limits
+		print obj.swing1mode -- 1 lock, 2 limited, 3 free
+		if(obj.swing1mode == 2) then
+		print obj.swing1Angle 
+		
+		-- swing y limits
+		print obj.swing2mode -- 1 lock, 2 limited, 3 free
+		if(obj.swing2mode == 2) then
+		print obj.swing2Angle 
+		
+		-- twist limits (x)
+		print obj.twistMode -- 1 lock, 2 limited, 3 free
+		if(obj.twistMode == 2) then
+		print obj.twistAngleHigh
+		print obj.twistAngleLow 
+		
+		-- spring 
+		print obj.posSpring
+		print obj.posDamping
+		print obj.swingSpring
+		print obj.swingDamping
+		print obj.twistSpring
+		print obj.twistDamping
+		
+		--Advanced
+		print obj.Collision
+		print obj.posSpring
+		
+		print obj.breakable
+		if (obj.breakable) then (
+		print obj.maxForce
+		print obj.maxTorque
+		)
+		
+		
+	)
 	
 	-- Create a file stream....
 	
-	gc()
-	local out_filename = out_path + "RagdollPrueba.xml"
-	fs = createfile out_filename
-	if fs == undefined then throw ("Can't create scene filename" + out_filename )	
+	--gc()
+	--local out_filename = out_path + "RagdollPrueba.xml"
+	--fs = createfile out_filename
+	--if fs == undefined then throw ("Can't create scene filename" + out_filename )	
 	
 	local allObj = $*
 	
 	for obj in allObj do (
 		getBoneRigidbody obj
-		print obj
+		getConstraint obj
+		
 		-- get contraings
 		
-
 	)
 	
 
