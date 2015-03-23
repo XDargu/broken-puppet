@@ -271,6 +271,7 @@ macroScript MCVAssetBrowser
 			return selection
 		)
 
+		global createModuleSelectionPoint
 		fn createModuleSelectionPoint dir = (
 			local p = pickPoint() 
 			if (classOf p == Point3) then (
