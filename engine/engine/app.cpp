@@ -107,6 +107,7 @@ void createManagers() {
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
+	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
@@ -132,6 +133,7 @@ void createManagers() {
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 
+	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
 	getObjManager<TCompBasicPlayerController>()->init(1);
 
@@ -144,10 +146,12 @@ void initManagers() {
 	getObjManager<TCompCamera>()->initHandlers();
 	getObjManager<TCompCollider>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
+	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
 	getObjManager<TCompUnityCharacterController>()->initHandlers();
+	getObjManager<TCompCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
 	getObjManager<TCompCameraPivotController>()->initHandlers();

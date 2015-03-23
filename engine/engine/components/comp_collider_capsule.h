@@ -69,6 +69,10 @@ struct TCompColliderCapsule : TBaseComponent {
 			*mat
 			,
 			true);
+
+		// Rotate the capsule (we want the capsule in a vertical position)
+		physx::PxTransform relativePose(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
+		collider->setLocalPose(relativePose);
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
@@ -79,6 +83,20 @@ struct TCompColliderCapsule : TBaseComponent {
 		physx::PxMaterial* mat;
 		collider->getMaterials(&mat, 1);
 		return mat;
+	}
+
+	// Returns the half height of the capsule
+	float getHalfHeight() {
+		physx::PxCapsuleGeometry geom;
+		collider->getCapsuleGeometry(geom);
+		return geom.halfHeight;
+	}
+
+	// Returns the radius of the capsule
+	float getRadius() {
+		physx::PxCapsuleGeometry geom;
+		collider->getCapsuleGeometry(geom);
+		return geom.radius;
 	}
 
 	// Set the collider static friction, dynamic friction and restitution given by a vector
