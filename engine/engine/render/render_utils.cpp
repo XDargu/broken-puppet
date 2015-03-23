@@ -9,6 +9,7 @@ using namespace DirectX;
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
 CMesh        wire_cube;
+CMesh        mesh_line;
 
 // -----------------------
 template<>
@@ -567,6 +568,19 @@ void drawViewVolume(const CCamera& camera) {
     ctes_object.uploadToGPU();
     wire_cube.activateAndRender();
   }
+}
+
+void drawLine(XMVECTOR src, XMVECTOR target) {
+	XMMATRIX mtx = XMMatrixIdentity();
+	XMVECTOR delta = target - src;
+
+	XMVectorSetW(delta, 0.f);
+	XMVectorSetW(src, 1.f);
+	mtx.r[2] = delta;
+	mtx.r[3] = src;
+	ctes_object.get()->World = mtx;
+	ctes_object.uploadToGPU();
+	mesh_line.activateAndRender();
 }
 
 void setWorldMatrix(XMMATRIX world) {

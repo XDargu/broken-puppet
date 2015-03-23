@@ -183,6 +183,9 @@
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
+    <ClInclude Include="components\comp_skeleton.h" />
+    <ClInclude Include="components\comp_skeleton_ik.h" />
+    <ClInclude Include="components\comp_skeleton_lookat.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />
@@ -221,6 +224,7 @@
     <ClInclude Include="items_by_name.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
+    <ClInclude Include="memory\data_saver.h" />
     <ClInclude Include="navmesh\navmesh.h" />
     <ClInclude Include="navmesh\navmesh_builder.h" />
     <ClInclude Include="navmesh\navmesh_input.h" />
@@ -264,6 +268,8 @@
     <ClInclude Include="render\shaders.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
+    <ClInclude Include="skeletons\ik_handler.h" />
+    <ClInclude Include="skeletons\skeleton_manager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="utils.h" />
@@ -280,6 +286,9 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
+    <ClCompile Include="components\comp_skeleton.cpp" />
+    <ClCompile Include="components\comp_skeleton_ik.cpp" />
+    <ClCompile Include="components\comp_skeleton_lookat.cpp" />
     <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
@@ -445,6 +454,7 @@
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
+    <ClCompile Include="skeletons\skeleton_manager.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="winmain.cpp" />
     <ClCompile Include="mcv_platform.cpp">

@@ -30,6 +30,7 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float ten
 bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension, float width);
 
 void drawViewVolume(const CCamera& camera);
+void drawLine(XMVECTOR src, XMVECTOR target);
 
 // Render world
 void setWorldMatrix(XMMATRIX world);

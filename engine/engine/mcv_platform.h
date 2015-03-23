@@ -34,6 +34,7 @@ using DirectX::XMFLOAT4;
 #include "render/render.h"
 #include "utils.h"
 #include "memory/data_provider.h"
+#include "memory/data_saver.h"
 #include "items_by_name.h"
 #include "error\error_context.h"
 #include <queue>

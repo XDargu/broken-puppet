@@ -290,6 +290,24 @@
     <ClInclude Include="components\comp_character_controller.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="skeletons\ik_handler.h">
+      <Filter>skeletons</Filter>
+    </ClInclude>
+    <ClInclude Include="skeletons\skeleton_manager.h">
+      <Filter>skeletons</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton_ik.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton_lookat.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\data_saver.h">
+      <Filter>memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -487,6 +505,18 @@
     <ClCompile Include="handle\prefabs_manager.cpp">
       <Filter>handle</Filter>
     </ClCompile>
+    <ClCompile Include="skeletons\skeleton_manager.cpp">
+      <Filter>skeletons</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton_ik.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton_lookat.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -524,6 +554,9 @@
     </Filter>
     <Filter Include="navmesh">
       <UniqueIdentifier>{d44573e9-aa4f-48f8-87bc-058d1d61ab96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skeletons">
+      <UniqueIdentifier>{5e819d62-ec0e-4640-94a8-fec8a827963f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

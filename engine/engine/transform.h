@@ -4,13 +4,13 @@
 #include "mcv_platform.h"
 
 // ----------------------------------------
-struct nnTTransform {     // 1
+struct TTransform {     // 1
 	XMVECTOR position;
 	XMVECTOR rotation;
 	XMVECTOR scale;
 
-	nnTTransform() : position(XMVectorSet(0.f, 0.f, 0.f, 1.f)), rotation(XMQuaternionIdentity()), scale(XMVectorSet(1, 1, 1, 1)) {}
-	nnTTransform(XMVECTOR np, XMVECTOR nr, XMVECTOR ns) : position(np), rotation(nr), scale(ns) {}
+	TTransform() : position(XMVectorSet(0.f, 0.f, 0.f, 1.f)), rotation(XMQuaternionIdentity()), scale(XMVectorSet(1, 1, 1, 1)) {}
+	TTransform(XMVECTOR np, XMVECTOR nr, XMVECTOR ns) : position(np), rotation(nr), scale(ns) {}
 
 	XMMATRIX getWorld() const {
 		XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
