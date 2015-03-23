@@ -2,7 +2,7 @@ filein("GeneralConfig.ms")
 clearlistener()
 
 	--ExportMeshes = true
-	--engine_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
+	engine_path = "D:\\GitHub\\engine\\engine\\"
 
 
 	/********************** CONFIG ************************/
@@ -780,7 +780,8 @@ clearlistener()
 				validAttributes = false;
 			)		
 		)	
-		return (((findItem NotMesh (classof obj)) == 0) and validAttributes)
+		print (classof obj)
+		return ((classof obj == Editable_mesh) and ((findItem NotMesh (classof obj)) == 0) and validAttributes)
 	)
 
 	fn validateExportedNames obj = (
@@ -830,7 +831,7 @@ clearlistener()
 				validAttributes = false;
 			)		
 		)	
-		return (((findItem NotMesh (classof obj)) == 0) and validAttributes)
+		return ( (classof obj == Editable_Mesh) and((findItem NotMesh (classof obj)) == 0) and validAttributes)
 	)
 
 	fn validateObjExported obj = (
@@ -1357,26 +1358,48 @@ clearlistener()
 	
 fn validateJointPrismatic obj = (
 	-- Get all the Uconstraints in the scene
-	list = for o in allObj where (classof o == UConstraint) collect o.name
+	list = for o in $* where (classof o == UConstraint) collect o
 	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
-		if (mJoint.body0.name == obj.name) or (mJoint.body1.name == obj.name) then (
+		local body0 = false
+		local body1 = false
+		local undefinedTest = false
+		
+		
+		if( mJoint.body0 != undefined) then (
+			body0 = mJoint.body0 == obj
+		)
+		else(
+			undefinedTest = true
+			)
+
+		if( mJoint.body1 != undefined) then (
+			body1 = mJoint.body1 == obj
+		)
+		else(
+			undefinedTest = true
+			)
+		
+		if (body0) or (body1) then (
 			
 			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mJoint.name) == 0 then (
+			if (findItem expJoints mJoint.name ) == 0 then (
 				-- Add it
 				append expJoints mJoint.name
+				-- If have only one actor
+				if (undefinedTest) then return mJoint
 				-- return false
-				return false
+				return undefined
 			)
+			-- In only have one actor
 			else (
-				return true
+				return mJoint
 			)
 		)
 	)	
 	
-	return false
+	return undefined
 )
 
 
@@ -1387,29 +1410,30 @@ Gets a Distance Text component
  Returns:
   - String with the component information
 ***********************************************************************************************/
-fn getJointPrismaticData obj = (
-	if (validateJointPrismatic obj) == false then return ""
+fn getJointPrismatic obj = (
+	local mJoint = validateJointPrismatic obj
+	if (mJoint == undefined) then return ""
 	
 	mString = "<jointPrismatic "
 	
 	-- Actors
-	if (obj.body0 != undefined) then 
-	mString += "actor0 = \"" + obj.body0.name + "_" + obj.id + "\" "
-	if (obj.body1 != undefined) then 
-	mString += "actor1 = \"" + obj.body1.name + "_" + obj.id + "\" "
+	if (mJoint.body0 != undefined) then 
+	mString += "actor0 = \"" + mJoint.body0.name + "_" + obj.id as string + "\" "
+	if (mJoint.body1 != undefined) then 
+	mString += "actor1 = \"" + mJoint.body1.name + "_" + obj.id as string + "\" "
 	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + obj.linearModeX as string + "\" "
-	mString += "linearModeY=\"" + obj.linearModeZ as string + "\" "
-	mString += "linearModeZ=\"" + obj.linearModeY as string + "\" "
+	mString += "linearModeX=\"" + mJoint.linearModeX as string + "\" "
+	mString += "linearModeY=\"" + mJoint.linearModeZ as string + "\" "
+	mString += "linearModeZ=\"" + mJoint.linearModeY as string + "\" "
 	
-	mString += "linearPosition=\"" + obj.linearPosition as string + "\" "
-	mString += "linearRestitution=\"" + obj.linearRestitution as string + "\" "
+	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
+	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
 	
 	-- Spring
-	mString += "posSpring=\"" + obj.posSpring as string + "\" "
-	mString += "posDamping=\"" + obj.posDamping as string + "\" "
+	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
+	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
 	
 	mString += "/>\n"	
 	
@@ -1597,7 +1621,8 @@ fn getJointPrismaticData obj = (
 			getPointLight,
 			getAmbientLight,
 			getDirectionalLight,
-			getDistanceText
+			getDistanceText,
+			getJointPrismatic
 		)
 
 		-- Initialize XML
