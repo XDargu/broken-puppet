@@ -75,6 +75,12 @@ public:
 		float threshold = 3500.f;
 		rigid->rigidBody->setContactReportThreshold(threshold);
 
+		// Lock rotation
+		rigid->setLockXRot(true);
+		rigid->setLockYRot(true);
+		rigid->setLockZRot(true);
+
+		// Update the transform manually
 		rigid->auto_translate_transform = false;
 		rigid->auto_rotate_transform = false;
 
