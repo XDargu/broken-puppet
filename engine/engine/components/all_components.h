@@ -21,7 +21,6 @@
 #include "comp_camera_pivot_controller.h"
 #include "comp_third_person_camera_controller.h"
 #include "comp_enemy_controller.h"
-#include "comp_character_controller.h"
 #include "comp_unity_character_controller.h"
 #include "comp_basic_player_controller.h"
 
@@ -41,6 +40,9 @@
 #include "comp_directional_light.h"
 #include "comp_ambient_light.h"
 #include "comp_point_light.h"
+
+// Controllers 2
+#include "comp_character_controller.h"
 
 // AI
 #include "comp_ai_fsm_basic.h"

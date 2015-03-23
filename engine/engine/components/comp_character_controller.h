@@ -3,11 +3,13 @@
 
 #include "base_component.h"
 
-struct TCompUnityCharacterController : TBaseComponent {
+struct TCompCharacterController : TBaseComponent {
 
 private:
 
 	CHandle transform;						// Reference to the transform
+	CHandle rigidbody;						// Reference to the rigidbody
+	CHandle collider;						// Reference to the collider
 
 	float airSpeed;							// determines the max speed of the character while airborne
 	float airControl;						// determines the response speed of controlling the character while airborne;
@@ -31,83 +33,56 @@ private:
 public:
 	float crouchHeightFactor;					// collider height is multiplied by this when crouching
 	float crouchChangeSpeed;					// speed at which capsule changes height when crouching/standing
-	physx::PxMaterial* zeroFrictionMaterial;	// used when in motion to enable smooth movement
-	physx::PxMaterial* highFrictionMaterial;	// used when stationary to avoid sliding down slopes
 	float jumpRepeatDelayTime;					// amount of time that must elapse between landing and being able to jump again
 
-	float enemy_width;
-	float enemy_height;
-	float enemy_density;
-	physx::PxShape* enemy_collider;
-	physx::PxRigidDynamic* enemy_rigidbody;
-	physx::PxD6Joint* mJoint;				// Joint used to lock the player
 	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
 	float lerpRotation;
 	float jumpPower;						// determines the jump force applied when jumping (and therefore the jump height)
 
+	XMVECTOR high_friction_material;		// High friction material properties
+	XMVECTOR zero_friction_material;		// Zero friction material properties
+
+	TCompCharacterController() {}
+
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
+		// Required components
 		transform = assertRequiredComponent<TCompTransform>(this);
-		TCompTransform* trans = (TCompTransform*)transform;
-
-		enemy_width = 0.5;
-		enemy_height = 1.5f;
-		enemy_density = 25;
-		max_vel_y = -10.f;
-
-		// Create player material
-		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0, 0, 0);
-		pMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
-		pMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
-
-		// Create player capsule collider
-		enemy_collider = Physics.gPhysicsSDK->createShape(
-			physx::PxCapsuleGeometry(enemy_width / 2, enemy_height / 2 - enemy_width / 2),
-			&pMaterial
-			,
-			true);
-
-		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
-		physx::PxTransform relativePose(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
-		enemy_collider->setLocalPose(relativePose);
-
-		// Create player rigidbody
-		const physx::PxTransform &mPxTrans = physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation/*XMQuaternionMultiply(trans->rotation, XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), deg2rad(90))))*/));
-
-		enemy_rigidbody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK,
-			mPxTrans,
-			*enemy_collider,
-			enemy_density);
-
-		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
-		enemy_rigidbody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
-		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+		rigidbody = assertRequiredComponent<TCompRigidBody>(this);
+		collider = assertRequiredComponent<TCompColliderCapsule>(this);
 		TCompName* name = assertRequiredComponent<TCompName>(this);
-		enemy_rigidbody->setName(name->name);
 
-		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
-		physx::PxReal threshold = 3500.f;
-		enemy_rigidbody->setContactReportThreshold(threshold);
+		TCompTransform* trans = (TCompTransform*)transform;
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+		TCompColliderCapsule* coll = (TCompColliderCapsule*)collider;
 
+		// Death velocity
+		max_vel_y = -10.f;
+		
+		// Set up the collider
+		setupFiltering(coll->collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
 
-		// Set it as a CCD (Continiuous Collision Detection)
-		//player_rigidbody->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
+		physx::PxTransform relativePose(physx::PxVec3(0, (coll->getRadius() + coll->getHalfHeight()), 0), physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
+		coll->collider->setLocalPose(relativePose);
 
-		// Freeze rotation in axis x, z
+		// Set up the rigidbody
+		rigid->rigidBody->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
+		rigid->rigidBody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
+		rigid->rigidBody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+		rigid->rigidBody->setName(name->name);		
 
-		mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, enemy_rigidbody, physx::PxTransform::createIdentity(), NULL, enemy_rigidbody->getGlobalPose());
-		mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eFREE);
-		mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eFREE);
-		mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
-		Physics.gScene->addActor(*enemy_rigidbody);
+		setupFiltering(rigid->rigidBody, FilterGroup::eENEMY, FilterGroup::eENEMY);
+		float threshold = 3500.f;
+		rigid->rigidBody->setContactReportThreshold(threshold);
 
+		rigid->auto_translate_transform = false;
+		rigid->auto_rotate_transform = false;
 
-	}
+		// Material properties
+		high_friction_material = XMVectorSet(1, 1, 1, 0);
+		zero_friction_material = XMVectorSet(0, 0, 0, 0);
 
-	void init(){
+		// Initialize variables
 		crouchHeightFactor = 0.6f;
 		crouchChangeSpeed = 4;
 		jumpRepeatDelayTime = 0.25f;
@@ -119,48 +94,46 @@ public:
 		gravityMultiplier = 4;
 		moveSpeedMultiplier = 8;
 		animSpeedMultiplier = 1;
-
 		lerpRotation = 0.35f;
 
-
-		highFrictionMaterial = Physics.gPhysicsSDK->createMaterial(1.f, 1.f, 0.f);
-		zeroFrictionMaterial = Physics.gPhysicsSDK->createMaterial(0.f, 0.f, 0.f);
-
-		zeroFrictionMaterial->setFrictionCombineMode(physx::PxCombineMode::eMULTIPLY);
-		zeroFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMULTIPLY);
-
-		highFrictionMaterial->setFrictionCombineMode(physx::PxCombineMode::eMAX);
-		highFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMIN);
-
-		originalHeight = enemy_height;
-
+		originalHeight = (coll->getRadius() + coll->getHalfHeight()) * 2;
 		onAir = false;
 
-		physx::PxRaycastBuffer;
+		// Give the look position a default in case the character is not under control
+		currentLookPos = Physics.XMVECTORToPxVec3(trans->position);
+	}
 
-		// give the look position a default in case the character is not under control
-		currentLookPos = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->position);
+	void init(){
+		
 	}
 
 	void update(float elapsed){
+		TCompTransform* trans = (TCompTransform*)transform;
 
-
+		moveSpeedMultiplier = 2;
+		Move(physx::PxVec3(0, 0, 1), false, false, Physics.XMVECTORToPxVec3(trans->getFront()));
 	}
 
 	void fixedUpdate(float elapsed) {
+		TCompTransform* trans = (TCompTransform*)transform;
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
 		// remember when we were last in air, for jump delay
 		if (!onGround) lastAirTime = CApp::get().total_time;
 
-		//((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0));
-		physx::PxVec3 rot = physx::PxVec3(0, -(enemy_height / 2.0f + 0.1f), 0);
-		rot = enemy_rigidbody->getGlobalPose().q.rotate(rot);
-		((TCompTransform*)transform)->position = Physics.PxVec3ToXMVECTOR(enemy_rigidbody->getGlobalPose().p + rot);
+		// Get the rotation
+		physx::PxVec3 rot = physx::PxVec3(0, -0.1f, 0);
+		rot = rigid->rigidBody->getGlobalPose().q.rotate(rot);
+
+		// Move the transform position
+		trans->position = Physics.PxVec3ToXMVECTOR(rigid->rigidBody->getGlobalPose().p + rot);
 		//((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
 	}
 
 	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos)
 	{
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+
 		if (move.magnitude() > 1) move.normalize();
 
 		// transfer input parameters to member variables.
@@ -170,8 +143,8 @@ public:
 		currentLookPos = lookPos;
 
 		// grab current velocity, we will be changing it.
-		velocity = enemy_rigidbody->getLinearVelocity();
-		physx::PxVec3 prev_velocity = enemy_rigidbody->getLinearVelocity();
+		velocity = rigid->rigidBody->getLinearVelocity();
+		physx::PxVec3 prev_velocity = rigid->rigidBody->getLinearVelocity();
 
 		ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
 
@@ -192,38 +165,44 @@ public:
 		}
 
 		// reassign velocity, since it will have been modified by the above functions.		
-		enemy_rigidbody->setLinearVelocity(velocity);
+		rigid->rigidBody->setLinearVelocity(velocity);
 	}
 
 	void ConvertMoveInput()
 	{
 		// convert the world relative moveInput vector into a local-relative
 		// turn amount and forward amount required to head in the desired
-		// direction. 		
+		// direction.
+
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
 		// TODO Ojo, no está seguro que funcione bien
-		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
+		physx::PxTransform px_trans = rigid->rigidBody->getGlobalPose();
 		physx::PxVec3 localMove = px_trans.transformInv(moveInput);
 
 
 	}
 	void TurnTowardsCameraForward()
 	{
-		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(currentLookPos) + enemy_rigidbody->getGlobalPose().p;
-		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+
+		physx::PxVec3 lookAt = rigid->rigidBody->getGlobalPose().q.rotate(currentLookPos) + rigid->rigidBody->getGlobalPose().p;
+		lookAt.y = rigid->rigidBody->getGlobalPose().p.y - 0.1f;
 
 		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
 
-		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
+		//rigid->rigidBody->setGlobalPose(physx::PxTransform(rigid->rigidBody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
 
 	void GroundCheck()
 	{
-		physx::PxTransform &px_trans = enemy_rigidbody->getGlobalPose();
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+
+		physx::PxTransform &px_trans = rigid->rigidBody->getGlobalPose();
 
 		physx::PxRaycastBuffer buf;
 
-		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), (enemy_height / 2.f) + 0.25f, buf);
+		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 0.25f, buf);
 
 		if (velocity.y < jumpPower*.5f)
 		{
@@ -234,7 +213,7 @@ public:
 
 			for (int i = 0; i < buf.nbTouches; i++)
 			{
-				if (buf.touches[i].actor != enemy_rigidbody) {
+				if (buf.touches[i].actor != rigid->rigidBody) {
 					// check whether we hit a non-trigger collider (and not the character itself)
 
 					// this counts as being on ground.
@@ -245,9 +224,9 @@ public:
 						//TODO hacer el movimiento fluido;
 
 						// Colocamos en el ground a pelo
-						physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-						px_trans.p = buf.touches[i].position + physx::PxVec3(0, (enemy_height / 2.f) + 0.1f, 0);
-						enemy_rigidbody->setGlobalPose(px_trans);
+						physx::PxTransform px_trans = rigid->rigidBody->getGlobalPose();
+						px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.1f, 0);
+						rigid->rigidBody->setGlobalPose(px_trans);
 					}
 
 					// Comprobar velocidad aculumada en caida
@@ -300,7 +279,7 @@ public:
 
 	void SetFriction()
 	{
-		// TODO Hacer el cambio de las propiedades del material, no del material en sí (es mucho más rápido y no da problemas)
+		TCompColliderCapsule* coll = (TCompColliderCapsule*)collider;
 
 		if (onGround)
 		{
@@ -309,30 +288,19 @@ public:
 			if (moveInput.magnitude() == 0)
 			{
 				// when not moving this helps prevent sliding on slopes:
-				ChangeMaterial(enemy_collider, highFrictionMaterial);
+				coll->setMaterialProperties(high_friction_material);
 			}
 			else
 			{
 				// but when moving, we want no friction:
-				ChangeMaterial(enemy_collider, zeroFrictionMaterial);
+				coll->setMaterialProperties(zero_friction_material);
 			}
 		}
 		else
 		{
 			// while in air, we want no friction against surfaces (walls, ceilings, etc)
-			ChangeMaterial(enemy_collider, zeroFrictionMaterial);
+			coll->setMaterialProperties(zero_friction_material);
 		}
-	}
-
-	void ChangeMaterial(physx::PxShape* collider, physx::PxMaterial* m_material){
-
-		const physx::PxU16 n_materials = collider->getNbMaterials();
-		assert(n_materials < 16 || fatal("enemy_collider no puede tener más de 16 materiales"));
-		physx::PxMaterial* buffer[16];
-		physx::PxU16 first_material = 0;
-		enemy_collider->getMaterials(buffer, 16);
-		buffer[first_material] = m_material;
-		//collider->setMaterials(buffer, first_material + 1);
 	}
 
 	void HandleGroundedVelocities()
@@ -366,6 +334,8 @@ public:
 
 	void HandleAirborneVelocities()
 	{
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+
 		onAir = true;
 
 		// we allow some movement in air, but it's very different to when on ground
@@ -378,7 +348,7 @@ public:
 
 		// apply extra gravity from multiplier:		
 		physx::PxVec3 extraGravityForce = (Physics.gScene->getGravity()*gravityMultiplier) - Physics.gScene->getGravity();
-		enemy_rigidbody->addForce(extraGravityForce);
+		rigid->rigidBody->addForce(extraGravityForce);
 
 	}
 
@@ -398,7 +368,7 @@ public:
 	}
 
 	physx::PxReal getMass(){
-		return enemy_rigidbody->getMass();
+		return ((TCompRigidBody*)rigidbody)->rigidBody->getMass();
 	}
 };
 

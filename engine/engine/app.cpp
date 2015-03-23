@@ -151,7 +151,6 @@ void initManagers() {
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
 	getObjManager<TCompUnityCharacterController>()->initHandlers();
-	getObjManager<TCompCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
 	getObjManager<TCompCameraPivotController>()->initHandlers();
@@ -605,7 +604,6 @@ void CApp::update(float elapsed) {
 		}
 	}
 	float f = ctes_global.get()->world_time;
-	dbg("time: %f\n", f);
 
 	ctes_global.uploadToGPU();
 	ctes_global.activateInVS(2);
@@ -623,6 +621,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
+	getObjManager<TCompCharacterController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
@@ -648,6 +647,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {

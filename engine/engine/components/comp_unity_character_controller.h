@@ -3,7 +3,7 @@
 
 #include "base_component.h"
 
-struct TCompCharacterController : TBaseComponent {
+struct TCompUnityCharacterController : TBaseComponent {
 private:
 	// Pruebas
 	physx::PxVec3 oldPos;

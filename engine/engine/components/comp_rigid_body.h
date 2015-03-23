@@ -9,9 +9,13 @@ private:
 	physx::PxD6Joint* block_joint;
 public:
 	physx::PxRigidDynamic* rigidBody;
+	bool auto_translate_transform;
+	bool auto_rotate_transform;
 
 	TCompRigidBody() :
-		rigidBody(nullptr)
+		rigidBody(nullptr),
+		auto_translate_transform(true),
+		auto_rotate_transform(true)
 	{}
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
@@ -175,8 +179,11 @@ public:
 	void fixedUpdate(float elapsed) {
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
-		trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
+		if (auto_translate_transform)
+			trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
+
+		if (auto_rotate_transform)
+			trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
 
 	}
 
