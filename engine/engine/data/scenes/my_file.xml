@@ -1,11 +1,11 @@
 <scene>
 	<entity >
 <name name="45degGrid_1.0" />
-<transform position="0.0 -24.0 1.04907e-006" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
+<transform position="0.0 -16.0 6.99382e-007" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity >
 <name name="Hose001_2.0" />
-<transform position="-48.0 -8.0 3.49691e-007" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-48.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="Hose001" sub_mesh="0" mat="Material #24"/>
 <draw mesh="Hose001" sub_mesh="1" mat="Material #23"/>
@@ -14,7 +14,7 @@
 	</entity>
 	<entity tag = "actor">
 <name name="mBox_3.0" />
-<transform position="-28.2616 -6.74748 28.344" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-28.2616 1.25252 28.344" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="mBox" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="mBox" sub_mesh="1" mat="Standardmaterial"/>
@@ -29,7 +29,7 @@
 	</entity>
 	<entity tag = "actor">
 <name name="mSphere_4.0" />
-<transform position="-34.1575 -6.49742 26.8165" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-34.1575 1.50258 26.8165" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="mSphere" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -39,7 +39,7 @@
 	</entity>
 	<entity >
 <name name="StraightStair002_5.0" />
-<transform position="14.0 -8.0 18.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="14.0 7.86805e-007 18.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="StraightStair002" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="StraightStair002" sub_mesh="1" mat="Standardmaterial"/>
@@ -48,20 +48,20 @@
 <aabb min="-4.0 0.0 -4.0" max="1.66893e-006 4.0 4.0"/>
 	</entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="PlayerPivot">
-<transform position="-8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="CameraPivot">
-<transform position="-7.0 -6.0 23.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-7.0 2.0 23.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="PlayerCamera">
-<transform position="0.0 -2.0 24.0"/>
+<transform position="0.0 6.0 24.0"/>
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_11.0" />
-<transform position="-16.0 -8.0 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -1.04907e-006 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -70,7 +70,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_12.0" />
-<transform position="-24.0 -8.0 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -1.04907e-006 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -79,7 +79,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_13.0" />
-<transform position="-32.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -88,7 +88,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_14.0" />
-<transform position="-24.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -97,7 +97,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_15.0" />
-<transform position="-32.0 -8.0 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 1.74846e-006 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -106,7 +106,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_16.0" />
-<transform position="-24.0 -8.0 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 1.74846e-006 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -115,7 +115,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_ambos_01_17.0" />
-<transform position="-24.0 -16.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -124,7 +124,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_ex_01_18.0" />
-<transform position="-24.0 -8.0 -8.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -3.49691e-007 -8.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -136,7 +136,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_ex_01_19.0" />
-<transform position="-32.0 -8.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 1.04907e-006 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -148,7 +148,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_ex_01_20.0" />
-<transform position="-24.0 -16.0 64.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 64.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -160,7 +160,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_in_01_21.0" />
-<transform position="-32.0 -16.0 -24.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 -24.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -172,7 +172,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_in_01_22.0" />
-<transform position="8.0 -16.0 -48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="8.0 -8.0 -48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -184,7 +184,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_in_01_23.0" />
-<transform position="8.0 -16.0 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="8.0 -8.0 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -196,7 +196,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_in_01_24.0" />
-<transform position="16.0 -16.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="16.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -208,7 +208,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui2_in_01_25.0" />
-<transform position="-8.0 -8.0 32.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -220,7 +220,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui3_ex_01_26.0" />
-<transform position="-32.0 -8.0 5.8811e-007" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 0.0 2.38419e-007" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui3_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui3_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -231,7 +231,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui4_ex_01_27.0" />
-<transform position="8.0 -16.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="8.0 -8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui4_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui4_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -242,7 +242,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui4_ex_01_28.0" />
-<transform position="-8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui4_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui4_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -253,7 +253,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_ex_01_29.0" />
-<transform position="-24.0 -8.0 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -6.99382e-007 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -265,7 +265,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_ex_01_30.0" />
-<transform position="-32.0 -16.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -277,7 +277,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_in_01_31.0" />
-<transform position="-8.0 -8.0 -16.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -6.99382e-007 -16.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -288,7 +288,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_in_01_32.0" />
-<transform position="-24.0 -8.0 3.49691e-007" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 0.0 0.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -299,7 +299,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_in_01_33.0" />
-<transform position="-40.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -310,7 +310,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_in_01_34.0" />
-<transform position="-40.0 -16.0 56.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 -8.0 56.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -321,7 +321,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_in_01_35.0" />
-<transform position="-32.0 -16.0 64.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 64.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -332,7 +332,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_esqui_in_01_36.0" />
-<transform position="-16.0 -16.0 64.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 64.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -343,7 +343,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_parche_centr_01_37.0" />
-<transform position="16.0 1.04907e-006 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="16.0 8.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_parche_centr_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -352,7 +352,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_38.0" />
-<transform position="-16.0 -8.0 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -6.99382e-007 -16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -363,7 +363,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_39.0" />
-<transform position="-8.0 -8.0 -24.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.04907e-006 -24.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -374,7 +374,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_40.0" />
-<transform position="-32.0 -8.0 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -3.49691e-007 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -385,7 +385,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_41.0" />
-<transform position="-24.0 -8.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 1.04907e-006 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -396,7 +396,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_42.0" />
-<transform position="-16.0 -8.0 32.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -407,7 +407,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_43.0" />
-<transform position="-40.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -418,7 +418,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_44.0" />
-<transform position="-40.0 -8.0 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 1.74846e-006 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -429,7 +429,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_45.0" />
-<transform position="-16.0 -8.0 40.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.74846e-006 40.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -440,7 +440,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pared_01_46.0" />
-<transform position="-16.0 -16.0 56.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 56.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -451,7 +451,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_47.0" />
-<transform position="-16.0 -8.0 3.49691e-007" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 0.0 0.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -462,7 +462,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_48.0" />
-<transform position="-8.0 -8.0 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -3.49691e-007 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -473,7 +473,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_49.0" />
-<transform position="0.0 -8.0 3.49691e-007" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="0.0 0.0 0.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -484,7 +484,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_50.0" />
-<transform position="0.0 -16.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="0.0 -8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -495,7 +495,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_51.0" />
-<transform position="-8.0 -8.0 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 6.99382e-007 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -506,7 +506,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_52.0" />
-<transform position="-32.0 -8.0 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 3.49691e-007 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -517,7 +517,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_53.0" />
-<transform position="-32.0 -8.0 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 6.99382e-007 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -528,7 +528,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_54.0" />
-<transform position="-24.0 -16.0 72.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 72.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -539,7 +539,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_2dir_01_55.0" />
-<transform position="24.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="24.0 8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_2dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -550,7 +550,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_3dir_01_56.0" />
-<transform position="-16.0 -8.0 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -3.49691e-007 -8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_3dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_3dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -562,7 +562,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_3dir_01_57.0" />
-<transform position="-8.0 -8.0 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_3dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_3dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -574,7 +574,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_col_L_01_58.0" />
-<transform position="-16.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_col_L_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_col_L_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -585,7 +585,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_curv_01_59.0" />
-<transform position="-16.0 -8.0 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 3.49691e-007 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -598,7 +598,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_curv_01_60.0" />
-<transform position="0.0 -8.0 -8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="0.0 -3.49691e-007 -8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -611,7 +611,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_ambos_pasil_curv_01_61.0" />
-<transform position="0.0 -8.0 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="0.0 3.49691e-007 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -624,7 +624,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_esqui2_ex_01_62.0" />
-<transform position="-16.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_pared_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -635,7 +635,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_esqui2_ex_01_63.0" />
-<transform position="16.0 1.04907e-006 24.0" rotation="0.0 1.0 0.0 3.8902e-006" scale="1.0 1.0 1.0"/>
+<transform position="16.0 8.0 24.0" rotation="0.0 1.0 0.0 3.8902e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_pared_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -646,7 +646,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_esqui_in_01_64.0" />
-<transform position="-8.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_pared_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -656,7 +656,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_esqui_in_01_65.0" />
-<transform position="-32.0 -8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.74846e-006 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_pared_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -666,7 +666,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_esqui_in_01_66.0" />
-<transform position="16.0 6.99382e-007 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="16.0 8.0 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_pared_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -676,7 +676,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_pared_01_67.0" />
-<transform position="-8.0 -8.0 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -685,7 +685,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_pared_01_68.0" />
-<transform position="-32.0 -8.0 -32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.39876e-006 -32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -694,7 +694,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_pared_01_69.0" />
-<transform position="-32.0 -8.0 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.04907e-006 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -703,7 +703,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_pared_pared_01_70.0" />
-<transform position="-24.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_pared_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -712,7 +712,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui2_ex_01_71.0" />
-<transform position="0.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="0.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -723,7 +723,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui4_in_01_72.0" />
-<transform position="-32.0 -16.0 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui4_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui4_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -735,7 +735,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui4_in_01_73.0" />
-<transform position="-16.0 -16.0 -48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 -48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui4_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui4_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -747,7 +747,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_ex_half_01_74.0" />
-<transform position="56.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="56.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_ex_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_ex_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -758,7 +758,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_01_75.0" />
-<transform position="-8.0 -16.0 -32.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -8.0 -32.0" rotation="0.0 1.0 0.0 1.22348e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -769,7 +769,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_01_76.0" />
-<transform position="-32.0 -16.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -780,7 +780,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_01_77.0" />
-<transform position="-40.0 -16.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 -8.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -791,7 +791,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_01_78.0" />
-<transform position="-16.0 -16.0 48.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 48.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -802,7 +802,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_01_79.0" />
-<transform position="-4.76837e-007 -8.0 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-4.76837e-007 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -813,7 +813,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_01_80.0" />
-<transform position="16.0 -8.0 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="16.0 6.99382e-007 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -824,7 +824,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_esqui_in_half_01_81.0" />
-<transform position="56.0 -8.0 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="56.0 1.71878e-006 44.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -835,7 +835,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_centr_01_82.0" />
-<transform position="-8.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_centr_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -844,7 +844,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_centr_01_83.0" />
-<transform position="-32.0 -8.0 -24.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.04907e-006 -24.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_centr_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -853,7 +853,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_centr_01_84.0" />
-<transform position="-32.0 -8.0 -16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -6.99382e-007 -16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_centr_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -862,7 +862,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_centr_01_85.0" />
-<transform position="-16.0 -8.0 -48.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -2.09815e-006 -48.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_centr_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -871,7 +871,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_centr_01_86.0" />
-<transform position="-16.0 -8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -1.74846e-006 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_centr_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -880,7 +880,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_compl_01_87.0" />
-<transform position="-24.0 -8.0 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -889,7 +889,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_compl_01_88.0" />
-<transform position="-16.0 -8.0 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -898,7 +898,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_compl_01_89.0" />
-<transform position="-32.0 -8.0 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.04907e-006 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -907,7 +907,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_compl_01_90.0" />
-<transform position="-24.0 -8.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 2.09815e-006 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -916,7 +916,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_compl_01_91.0" />
-<transform position="-32.0 -8.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 2.09815e-006 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -925,7 +925,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_esqui_01_92.0" />
-<transform position="-32.0 -8.0 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_esqui_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -934,7 +934,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_later_L_01_93.0" />
-<transform position="-32.0 -8.0 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -6.99382e-007 -16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_later_L_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -943,7 +943,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_later_L_01_94.0" />
-<transform position="-16.0 -8.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 2.09815e-006 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_later_L_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -952,7 +952,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_later_R_01_95.0" />
-<transform position="-8.0 -8.0 -32.0" rotation="0.0 1.0 0.0 1.94748e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.63754e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_later_R_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -961,7 +961,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_later_R_01_96.0" />
-<transform position="-32.0 -8.0 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -6.99382e-007 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_later_R_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -970,7 +970,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_later_R_01_97.0" />
-<transform position="-40.0 -8.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 2.09815e-006 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_later_R_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -979,7 +979,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_98.0" />
-<transform position="-16.0 -16.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -989,7 +989,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_99.0" />
-<transform position="-24.0 -16.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -999,7 +999,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_100.0" />
-<transform position="-16.0 -16.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1009,7 +1009,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_101.0" />
-<transform position="-24.0 -16.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1019,7 +1019,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_102.0" />
-<transform position="-32.0 -16.0 48.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 48.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1029,7 +1029,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_103.0" />
-<transform position="-24.0 -16.0 48.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 48.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1039,7 +1039,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_104.0" />
-<transform position="16.0 -8.0 24.0" rotation="0.0 1.0 0.0 4.36703e-006" scale="1.0 1.0 1.0"/>
+<transform position="16.0 1.04907e-006 24.0" rotation="0.0 1.0 0.0 4.36703e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1049,7 +1049,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_105.0" />
-<transform position="0.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="0.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1059,7 +1059,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_01_106.0" />
-<transform position="8.0 -8.0 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="8.0 6.99382e-007 16.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1069,7 +1069,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pared_half_01_107.0" />
-<transform position="56.0 -8.0 48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="56.0 2.09418e-006 52.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1079,7 +1079,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pasil_col_L_01_108.0" />
-<transform position="-8.0 -16.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pasil_col_L_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pasil_col_L_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1089,7 +1089,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_pasil_col_R_01_109.0" />
-<transform position="-32.0 -16.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_pasil_col_R_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_suelo_pasil_col_R_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1099,7 +1099,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_suelo_01_110.0" />
-<transform position="8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="8.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1108,7 +1108,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_suelo_01_111.0" />
-<transform position="14.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="14.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1117,7 +1117,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_suelo_01_112.0" />
-<transform position="6.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="6.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1126,7 +1126,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_suelo_half_01_113.0" />
-<transform position="56.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="56.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1135,7 +1135,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui2_in_01_114.0" />
-<transform position="-32.0 -1.04907e-006 -24.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 8.0 -24.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1147,7 +1147,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui2_in_01_115.0" />
-<transform position="-16.0 -8.0 -48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -2.09815e-006 -48.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui2_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1159,7 +1159,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui_in_01_116.0" />
-<transform position="-32.0 -1.74846e-006 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 8.0 -40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1170,7 +1170,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui_in_01_117.0" />
-<transform position="-8.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1181,7 +1181,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui_in_01_118.0" />
-<transform position="-8.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 8.0 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1192,7 +1192,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui_in_01_119.0" />
-<transform position="-40.0 -8.0 48.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 2.09815e-006 48.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1203,7 +1203,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_esqui_in_01_120.0" />
-<transform position="-16.0 -8.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 2.09815e-006 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1214,7 +1214,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_compl_01_121.0" />
-<transform position="-24.0 -8.0 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1223,7 +1223,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_compl_01_122.0" />
-<transform position="-16.0 -8.0 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1232,7 +1232,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_compl_01_123.0" />
-<transform position="-32.0 -16.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -8.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1241,7 +1241,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_compl_01_124.0" />
-<transform position="-24.0 -16.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 -8.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_compl_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1250,7 +1250,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_esqui_01_125.0" />
-<transform position="-32.0 -8.0 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_esqui_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1259,7 +1259,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_later_L_01_126.0" />
-<transform position="-32.0 -8.0 -24.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.04907e-006 -24.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_later_L_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1268,7 +1268,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_later_L_01_127.0" />
-<transform position="-32.0 -8.0 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -1.04907e-006 -24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_later_L_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1277,7 +1277,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_later_L_01_128.0" />
-<transform position="-40.0 -16.0 48.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-40.0 -8.0 48.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_later_L_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1286,7 +1286,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_later_R_01_129.0" />
-<transform position="-8.0 -8.0 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.16388e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_later_R_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1295,7 +1295,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_parche_later_R_01_130.0" />
-<transform position="-16.0 -16.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 48.0" rotation="0.0 1.0 0.0 8.18173e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_parche_later_R_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -1304,7 +1304,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_131.0" />
-<transform position="-32.0 -8.0 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 -6.99382e-007 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1314,7 +1314,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_132.0" />
-<transform position="-24.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1324,7 +1324,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_133.0" />
-<transform position="-16.0 -1.74846e-006 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 8.0 -40.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1334,7 +1334,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_134.0" />
-<transform position="-16.0 -1.39876e-006 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 8.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1344,7 +1344,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_135.0" />
-<transform position="-24.0 -1.39876e-006 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 8.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1354,7 +1354,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_136.0" />
-<transform position="-32.0 -8.0 48.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 2.09815e-006 48.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1364,7 +1364,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pared_01_137.0" />
-<transform position="-24.0 -8.0 48.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-24.0 2.09815e-006 48.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1374,7 +1374,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_techo_pasil_col_R_01_138.0" />
-<transform position="-32.0 -1.39876e-006 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-32.0 8.0 -32.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_techo_pasil_col_R_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_techo_pasil_col_R_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1384,7 +1384,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_2m_simple_01_139.0" />
-<transform position="4.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="4.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1398,7 +1398,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_2m_simple_01_140.0" />
-<transform position="3.8147e-006 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="3.8147e-006 2.44784e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1412,7 +1412,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_doble_01_141.0" />
-<transform position="14.0 -8.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="14.0 1.04907e-006 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1426,7 +1426,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_doble_01_142.0" />
-<transform position="-8.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 4.35519e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1440,7 +1440,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_doble_01_143.0" />
-<transform position="-16.0 -16.0 50.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 50.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1454,7 +1454,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_doble_01_144.0" />
-<transform position="-14.0 -16.0 -32.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-14.0 -8.0 -32.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1468,7 +1468,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_simple_01_145.0" />
-<transform position="8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="8.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1482,7 +1482,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_simple_01_146.0" />
-<transform position="8.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="8.0 2.44784e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1496,7 +1496,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_simple_01_147.0" />
-<transform position="-16.0 -16.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1510,7 +1510,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_simple_01_148.0" />
-<transform position="-8.0 -12.0 -32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -4.0 -32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1524,7 +1524,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_bloque_4m_simple_01_149.0" />
-<transform position="-8.0 -16.0 -32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -8.0 -32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1538,7 +1538,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_14g_doble_01_150.0" />
-<transform position="4.0 -8.0 30.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="4.0 1.31134e-006 30.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1550,7 +1550,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_14g_doble_01_151.0" />
-<transform position="32.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="32.0 2.44784e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1562,7 +1562,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_152.0" />
-<transform position="8.0 -8.0 30.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="8.0 1.31134e-006 30.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1574,7 +1574,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_153.0" />
-<transform position="14.0 -4.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="14.0 4.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1586,7 +1586,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_154.0" />
-<transform position="24.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="24.0 2.44784e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1598,7 +1598,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_155.0" />
-<transform position="-16.0 -12.0 50.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 -4.0 50.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1610,7 +1610,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_156.0" />
-<transform position="-22.0 -16.0 56.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-22.0 -8.0 56.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1622,7 +1622,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_157.0" />
-<transform position="-14.0 -12.0 -32.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-14.0 -4.0 -32.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1634,7 +1634,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_26g_doble_01_158.0" />
-<transform position="-22.0 -16.0 -32.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-22.0 -8.0 -32.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1646,7 +1646,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_45g_doble_01_159.0" />
-<transform position="14.0 -8.0 20.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="14.0 8.74228e-007 20.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_45g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_45g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1658,7 +1658,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_45g_doble_01_160.0" />
-<transform position="16.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="16.0 2.44784e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_45g_doble_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_45g_doble_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1670,7 +1670,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_45g_simple_01_161.0" />
-<transform position="16.0 -8.0 27.9141" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="16.0 1.22016e-006 27.9141" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_45g_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_45g_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1682,7 +1682,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_rampa_rampa_45g_simple_01_162.0" />
-<transform position="40.0 -8.0 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="40.0 2.44784e-006 56.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_rampa_45g_simple_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_rampa_rampa_45g_simple_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1694,7 +1694,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_esqui_ex_half_01_163.0" />
-<transform position="-26.0 -8.0 30.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
+<transform position="-26.0 1.31134e-006 30.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_esqui_ex_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_esqui_ex_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1705,7 +1705,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_esqui_ex_half_02_164.0" />
-<transform position="-34.0 -8.0 42.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-34.0 1.83588e-006 42.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_esqui_ex_half_02" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_esqui_ex_half_02" sub_mesh="1" mat="Standardmaterial"/>
@@ -1716,7 +1716,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_esqui_ex_half_02_165.0" />
-<transform position="-34.0 -8.0 34.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
+<transform position="-34.0 3.39354e-006 34.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_esqui_ex_half_02" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_esqui_ex_half_02" sub_mesh="1" mat="Standardmaterial"/>
@@ -1727,7 +1727,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_esqui_in_half_01_166.0" />
-<transform position="-26.0 -8.0 34.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-26.0 1.48619e-006 34.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_esqui_in_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_esqui_in_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1741,7 +1741,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_esqui_in_half_01_167.0" />
-<transform position="-22.0 -8.0 42.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+<transform position="-22.0 1.83588e-006 42.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_esqui_in_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_esqui_in_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1755,7 +1755,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_esqui_in_half_02_168.0" />
-<transform position="-26.0 -8.0 42.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-26.0 4.6969e-006 42.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_esqui_in_half_02" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_esqui_in_half_02" sub_mesh="1" mat="Standardmaterial"/>
@@ -1769,7 +1769,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_half_01_169.0" />
-<transform position="-16.0 -8.0 30.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.31134e-006 30.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1781,7 +1781,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_half_01_170.0" />
-<transform position="-16.0 -8.0 44.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.9233e-006 44.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1793,7 +1793,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_half_01_171.0" />
-<transform position="-22.0 -8.0 30.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
+<transform position="-22.0 1.31134e-006 30.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1805,7 +1805,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_half_01_172.0" />
-<transform position="-30.0 -8.0 34.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
+<transform position="-30.0 1.48619e-006 34.0" rotation="0.0 1.0 0.0 3.13916e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1817,7 +1817,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_half_01_173.0" />
-<transform position="-30.0 -8.0 42.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-30.0 1.83588e-006 42.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1829,7 +1829,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_rampa_26g_half_01_174.0" />
-<transform position="-34.0 -8.0 38.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-34.0 1.66103e-006 38.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_rampa_26g_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1841,7 +1841,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_suelo_half_01_175.0" />
-<transform position="-16.0 -8.0 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.74846e-006 40.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1855,7 +1855,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_suelo_half_01_176.0" />
-<transform position="-16.0 -8.0 34.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-16.0 1.48619e-006 34.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1869,7 +1869,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_suelo_half_01_177.0" />
-<transform position="-22.0 -8.0 34.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-22.0 1.48619e-006 34.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1883,7 +1883,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_suelo_half_01_178.0" />
-<transform position="-22.0 -8.0 38.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-22.0 1.66103e-006 38.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1897,7 +1897,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_suelo_half_01_179.0" />
-<transform position="-26.0 -8.0 38.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-26.0 1.66103e-006 38.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1911,7 +1911,7 @@
 	</entity>
 	<entity tag = "level">
 <name name="dvn_selev_suelo_half_01_180.0" />
-<transform position="-30.0 -8.0 38.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-30.0 1.66103e-006 38.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_selev_suelo_half_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1925,7 +1925,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_final_01_181.0" />
-<transform position="25.0 -8.0 38.0" rotation="0.707107 -1.68587e-007 0.707107 2.61313e-007" scale="1.0 1.0 1.0"/>
+<transform position="25.0 7.07358e-007 38.0" rotation="0.707107 -1.68587e-007 0.707107 2.61313e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_final_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_final_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1935,7 +1935,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_final_01_182.0" />
-<transform position="-1.75 -8.0 16.25" rotation="1.0 0.0 0.0 3.25841e-007" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 7.1031e-007 16.25" rotation="1.0 0.0 0.0 3.25841e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_final_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_final_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1945,7 +1945,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_final_01_183.0" />
-<transform position="2.25 -0.999999 14.25" rotation="-0.707107 -1.46111e-007 0.707107 -2.8379e-007" scale="1.0 1.0 1.0"/>
+<transform position="2.25 7.0 14.25" rotation="-0.707107 -1.46111e-007 0.707107 -2.8379e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_final_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_final_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1955,7 +1955,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_final_01_184.0" />
-<transform position="2.25 -6.0 14.25" rotation="0.707107 -2.52881e-007 0.707107 1.7702e-007" scale="1.0 1.0 1.0"/>
+<transform position="2.25 2.0 14.25" rotation="0.707107 -2.52881e-007 0.707107 1.7702e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_final_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_final_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1965,7 +1965,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formL_01_185.0" />
-<transform position="22.0 -7.0 40.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="22.0 1.0 40.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1975,7 +1975,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formL_01_186.0" />
-<transform position="6.25 -2.0 14.25" rotation="0.0 0.0 -0.707107 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="6.25 6.0 14.25" rotation="0.0 0.0 -0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1985,7 +1985,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formL_01_187.0" />
-<transform position="-1.75 -2.0 22.25" rotation="0.0 0.0 -0.707107 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 6.0 22.25" rotation="0.0 0.0 -0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -1995,7 +1995,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formL_01_188.0" />
-<transform position="-5.75 -2.0 22.25" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-5.75 6.0 22.25" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2005,7 +2005,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formL_01_189.0" />
-<transform position="4.25 -7.0 14.25" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="4.25 1.0 14.25" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formL_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2015,7 +2015,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formT_01_190.0" />
-<transform position="24.0 -7.0 40.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="24.0 1.0 40.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2025,7 +2025,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formT_01_191.0" />
-<transform position="-1.75 -2.0 14.25" rotation="-3.37175e-007 -3.06266e-007 0.707107 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 6.0 14.25" rotation="-3.37175e-007 -3.06266e-007 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2035,7 +2035,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formT_01_192.0" />
-<transform position="-1.75 -2.0 16.25" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 6.0 16.25" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2045,7 +2045,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formT_01_193.0" />
-<transform position="2.25 -7.0 14.25" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="2.25 1.0 14.25" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formT_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2055,7 +2055,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formX_01_194.0" />
-<transform position="24.0 -7.0 42.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="24.0 1.0 42.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formX_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formX_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2065,7 +2065,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_formX_01_195.0" />
-<transform position="2.25 -2.0 14.25" rotation="0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
+<transform position="2.25 6.0 14.25" rotation="0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_formX_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_formX_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2075,7 +2075,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_196.0" />
-<transform position="24.0 -8.0 38.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="24.0 1.66103e-006 38.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2085,7 +2085,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_197.0" />
-<transform position="0.25 -2.0 14.25" rotation="0.5 0.5 -0.5 0.5" scale="1.0 1.0 1.0"/>
+<transform position="0.25 6.0 14.25" rotation="0.5 0.5 -0.5 0.5" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2095,7 +2095,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_198.0" />
-<transform position="4.25 -2.0 14.25" rotation="0.5 0.5 -0.5 0.5" scale="1.0 1.0 1.0"/>
+<transform position="4.25 6.0 14.25" rotation="0.5 0.5 -0.5 0.5" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2105,7 +2105,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_199.0" />
-<transform position="-1.75 -2.0 18.25" rotation="-0.5 0.5 -0.5 0.5" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 6.0 18.25" rotation="-0.5 0.5 -0.5 0.5" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2115,7 +2115,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_200.0" />
-<transform position="-1.75 -2.0 20.25" rotation="-0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 6.0 20.25" rotation="-0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2125,7 +2125,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_201.0" />
-<transform position="-3.75 -2.0 22.25" rotation="0.0 0.0 -0.707107 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="-3.75 6.0 22.25" rotation="0.0 0.0 -0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2135,7 +2135,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_202.0" />
-<transform position="-1.75 -4.0 16.25" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 4.0 16.25" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2145,7 +2145,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_203.0" />
-<transform position="-1.75 -6.0 16.25" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-1.75 2.0 16.25" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2155,7 +2155,7 @@
 	</entity>
 	<entity >
 <name name="dvn_tuber_medio_01_204.0" />
-<transform position="2.25 -4.0 14.25" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<transform position="2.25 4.0 14.25" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_tuber_medio_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2163,24 +2163,9 @@
 </render>
 <aabb min="-0.1 -0.999999 -0.0866025" max="0.1 1.0 0.0866025"/>
 	</entity>
-	<entity >
-<name name="Sky001_205.0" />
-<transform position="40.0 -8.0 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<ambientLight intensity="0.5" color="0.95 0.95 1.0 1"/>
-	</entity>
-	<entity >
-<name name="FDirect001_206.0" />
-<transform position="40.0 -8.0 40.0" rotation="0.0 0.0 -0.382683 0.92388" scale="1.0 1.0 1.0"/>
-<directionalLight intensity="0.5" color="0.490196 0.407843 0.788235 1"/>
-	</entity>
-	<entity >
-<name name="FDirect002_207.0" />
-<transform position="32.0 -8.0 32.0" rotation="-0.353553 0.146447 0.353553 0.853553" scale="1.0 1.0 1.0"/>
-<directionalLight intensity="0.5" color="1.0 1.0 1.0 1"/>
-	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_pasil_3dir_01_208.0" />
-<transform position="32.0 1.04907e-006 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_pasil_3dir_01_205.0" />
+<transform position="32.0 8.0 24.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_3dir_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_3dir_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2191,8 +2176,8 @@
 <colliderMesh path="dvn_arqui_ambos_pasil_3dir_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_pasil_curv_01_209.0" />
-<transform position="32.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_pasil_curv_01_206.0" />
+<transform position="32.0 8.0 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pasil_curv_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2204,8 +2189,8 @@
 <colliderMesh path="dvn_arqui_ambos_pasil_curv_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_esqui2_ex_01_210.0" />
-<transform position="40.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_esqui2_ex_01_207.0" />
+<transform position="40.0 8.0 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui2_ex_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2216,8 +2201,8 @@
 <colliderMesh path="dvn_arqui_ambos_esqui2_ex_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_esqui_in_01_211.0" />
-<transform position="40.0 1.04907e-006 24.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_esqui_in_01_208.0" />
+<transform position="40.0 8.0 24.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2227,8 +2212,8 @@
 <colliderMesh path="dvn_arqui_ambos_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_esqui_in_01_212.0" />
-<transform position="40.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_esqui_in_01_209.0" />
+<transform position="40.0 8.0 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_esqui_in_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2238,8 +2223,8 @@
 <colliderMesh path="dvn_arqui_ambos_esqui_in_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_pared_01_213.0" />
-<transform position="48.0 1.04907e-006 24.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_pared_01_210.0" />
+<transform position="48.0 8.0 24.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2249,8 +2234,8 @@
 <colliderMesh path="dvn_arqui_ambos_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_pared_01_214.0" />
-<transform position="48.0 3.49691e-007 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_pared_01_211.0" />
+<transform position="48.0 8.0 8.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="dvn_arqui_ambos_pared_01" sub_mesh="1" mat="Standardmaterial"/>
@@ -2260,12 +2245,111 @@
 <colliderMesh path="dvn_arqui_ambos_pared_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level">
-<name name="dvn_arqui_ambos_ambos_01_215.0" />
-<transform position="48.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<name name="dvn_arqui_ambos_ambos_01_212.0" />
+<transform position="48.0 8.0 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
 <aabb min="-4.00001 -9.88644e-006 -4.00002" max="4.00002 8.00001 4.00001"/>
 <colliderMesh path="dvn_arqui_ambos_ambos_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_techo_esqui_ex_half_01_213.0" />
+<transform position="64.0 1.68934e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_techo_esqui_ex_half_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_techo_esqui_ex_half_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_techo_esqui_ex_half_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="4.76837e-007 8.0 -3.33786e-006"/>
+<colliderMesh path="dvn_arqui_techo_esqui_ex_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_techo_techo_half_01_214.0" />
+<transform position="64.0 6.35566e-007 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_techo_techo_half_01" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 8.0 0.0" max="0.0 8.0 4.0"/>
+<colliderMesh path="dvn_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_techo_pared_half_01_215.0" />
+<transform position="64.0 5.58105e-006 52.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_techo_pared_half_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_techo_pared_half_01" sub_mesh="1" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="4.76837e-007 8.0 0.0"/>
+<colliderMesh path="dvn_arqui_techo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_techo_esqui_in_half_01_216.0" />
+<transform position="64.0 1.38691e-006 44.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_techo_esqui_in_half_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_techo_esqui_in_half_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_techo_esqui_in_half_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.76837e-007" max="0.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_techo_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_ambos_ambos_half_01_217.0" />
+<transform position="72.0 1.04907e-006 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.00001 -9.18706e-006 -1.64509e-005" max="2.12034e-005 8.00001 4.00001"/>
+<colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_ambos_esqui_ex_half_01_218.0" />
+<transform position="72.0 1.41925e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_ambos_esqui_ex_half_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui_ex_half_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui_ex_half_01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui_ex_half_01" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-4.0 0.0 -4.0" max="0.0 8.0 7.62939e-006"/>
+<colliderMesh path="dvn_arqui_ambos_esqui_ex_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_ambos_esqui_in_half_01_219.0" />
+<transform position="72.0 1.9233e-006 44.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_ambos_esqui_in_half_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui_in_half_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_esqui_in_half_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -3.8147e-006" max="0.0 8.0 2.0"/>
+<colliderMesh path="dvn_arqui_ambos_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_ambos_pared_half_01_220.0" />
+<transform position="72.0 2.20035e-006 52.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="dvn_arqui_ambos_pared_half_01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_pared_half_01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="dvn_arqui_ambos_pared_half_01" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-2.0 0.0 -4.0" max="0.0 8.0 -3.8147e-006"/>
+<colliderMesh path="dvn_arqui_ambos_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity >
+<name name="Sky001_221.0" />
+<transform position="44.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<ambientLight intensity="0.5" color="0.95 0.95 1.0 1"/>
+	</entity>
+	<entity >
+<name name="FDirect001_222.0" />
+<transform position="34.936 1.63083e-006 37.309" rotation="-0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
+<directionalLight intensity="0.5" color="1.0 1.0 1.0 1"/>
+	</entity>
+	<entity >
+<name name="FDirect002_223.0" />
+<transform position="39.5895 1.65619e-006 37.8893" rotation="0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
+<directionalLight intensity="0.5" color="1.0 1.0 1.0 1"/>
 	</entity>
 </scene>
