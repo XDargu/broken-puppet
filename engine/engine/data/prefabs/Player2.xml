@@ -13,4 +13,5 @@
     <colliderCapsule radius="0.25" halfHeigth="0.5" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
     <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
     <characterController/>
+    <playerController/>
  </entity>

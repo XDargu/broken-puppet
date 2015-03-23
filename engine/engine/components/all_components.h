@@ -16,7 +16,6 @@
 #include "comp_camera.h"
 
 // Controllers
-#include "comp_player_controller.h"
 #include "comp_player_pivot_controller.h"
 #include "comp_camera_pivot_controller.h"
 #include "comp_third_person_camera_controller.h"
@@ -43,6 +42,7 @@
 
 // Controllers 2
 #include "comp_character_controller.h"
+#include "comp_player_controller.h"
 
 // AI
 #include "comp_ai_fsm_basic.h"

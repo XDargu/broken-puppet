@@ -326,8 +326,6 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 
 	if (e_player_controller) {
 		TwAddVarRW(bar, "PlayerControllerActive", TW_TYPE_BOOL8, &e_player_controller->active, " group='Player Controller' label='Active'");
-		TwAddVarRW(bar, "PlayerControllerMovement velocity", TW_TYPE_FLOAT, &e_player_controller->movement_velocity, " group='Player Controller' label='Movement velocity'");
-		TwAddVarRW(bar, "PlayerControllerRotation velocity", TW_TYPE_FLOAT, &e_player_controller->rotation_velocity, " group='Player Controller' label='Rotation velocity'");
 	}
 
 	if (e_player_pivot_controller) {

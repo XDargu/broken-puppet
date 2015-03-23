@@ -114,10 +114,6 @@ public:
 	}
 
 	void update(float elapsed){
-		TCompTransform* trans = (TCompTransform*)transform;
-
-		moveSpeedMultiplier = 2;
-		Move(physx::PxVec3(0, 0, 1), false, false, Physics.XMVECTORToPxVec3(trans->getFront()));
 	}
 
 	void fixedUpdate(float elapsed) {
