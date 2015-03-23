@@ -42,6 +42,9 @@ clearlistener()
 
 	-- List of diffuses exported
 	expDiff = #()
+	
+	-- List of UConstrait exported
+	expJoints = #()
 
 	LevelName = "Level"
 	PlayerName = "Player"
@@ -1350,6 +1353,74 @@ clearlistener()
 		return mString
 	)	
 
+	
+	
+fn validateJointPrismatic obj = (
+	-- Get all the Uconstraints in the scene
+	list = for o in allObj where (classof o == UConstraint) collect o.name
+	
+	-- check if the obj is an actor in a Uconstraint
+	for mJoint in list do (
+		if (mJoint.body0.name == obj.name) or (mJoint.body1.name == obj.name) then (
+			
+			-- If the mJoint is not in the exp list add it and return false
+			if (findItem expJoints mJoint.name) == 0 then (
+				-- Add it
+				append expJoints mJoint.name
+				-- return false
+				return false
+			)
+			else (
+				return true
+			)
+		)
+	)	
+	
+	return false
+)
+
+
+/**********************************************************************************************
+Gets a Distance Text component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getJointPrismaticData obj = (
+	if (validateJointPrismatic obj) == false then return ""
+	
+	mString = "<jointPrismatic "
+	
+	-- Actors
+	if (obj.body0 != undefined) then 
+	mString += "actor0 = \"" + obj.body0.name + "_" + obj.id + "\" "
+	if (obj.body1 != undefined) then 
+	mString += "actor1 = \"" + obj.body1.name + "_" + obj.id + "\" "
+	
+	-- Translations limits
+	-- mode 1 = Locked, 2 = Limited, 3 = Free
+	mString += "linearModeX=\"" + obj.linearModeX as string + "\" "
+	mString += "linearModeY=\"" + obj.linearModeZ as string + "\" "
+	mString += "linearModeZ=\"" + obj.linearModeY as string + "\" "
+	
+	mString += "linearPosition=\"" + obj.linearPosition as string + "\" "
+	mString += "linearRestitution=\"" + obj.linearRestitution as string + "\" "
+	
+	-- Spring
+	mString += "posSpring=\"" + obj.posSpring as string + "\" "
+	mString += "posDamping=\"" + obj.posDamping as string + "\" "
+	
+	mString += "/>\n"	
+	
+	return mString
+)
+
+	
+	
+	
+	
+	
 
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #distanceTextData == true
