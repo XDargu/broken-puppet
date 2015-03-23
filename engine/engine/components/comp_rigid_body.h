@@ -211,27 +211,27 @@ public:
 		return !rigidBody->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
 	}
 
-	bool setLockXPos(bool locked) {
+	void setLockXPos(bool locked) {
 		block_joint->setMotion(physx::PxD6Axis::eX, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
-	bool setLockYPos(bool locked) {
+	void setLockYPos(bool locked) {
 		block_joint->setMotion(physx::PxD6Axis::eY, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
-	bool setLockZPos(bool locked) {
+	void setLockZPos(bool locked) {
 		block_joint->setMotion(physx::PxD6Axis::eZ, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
-	bool setLockXRot(bool locked) {
+	void setLockXRot(bool locked) {
 		block_joint->setMotion(physx::PxD6Axis::eTWIST, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
-	bool setLockYRot(bool locked) {
+	void setLockYRot(bool locked) {
 		block_joint->setMotion(physx::PxD6Axis::eSWING1, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
-	bool setLockZRot(bool locked) {
+	void setLockZRot(bool locked) {
 		block_joint->setMotion(physx::PxD6Axis::eSWING2, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
