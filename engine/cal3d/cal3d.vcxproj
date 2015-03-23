@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\engine\cal3d\animation.cpp" />
+    <ClCompile Include="..\engine\cal3d\animation_action.cpp" />
+    <ClCompile Include="..\engine\cal3d\animation_cycle.cpp" />
+    <ClCompile Include="..\engine\cal3d\bone.cpp" />
+    <ClCompile Include="..\engine\cal3d\buffersource.cpp" />
+    <ClCompile Include="..\engine\cal3d\cal3d_wrapper.cpp" />
+    <ClCompile Include="..\engine\cal3d\coreanimation.cpp" />
+    <ClCompile Include="..\engine\cal3d\corebone.cpp" />
+    <ClCompile Include="..\engine\cal3d\corekeyframe.cpp" />
+    <ClCompile Include="..\engine\cal3d\corematerial.cpp" />
+    <ClCompile Include="..\engine\cal3d\coremesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\coremodel.cpp" />
+    <ClCompile Include="..\engine\cal3d\coremorphanimation.cpp" />
+    <ClCompile Include="..\engine\cal3d\coreskeleton.cpp" />
+    <ClCompile Include="..\engine\cal3d\coresubmesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\coresubmorphtarget.cpp" />
+    <ClCompile Include="..\engine\cal3d\coretrack.cpp" />
+    <ClCompile Include="..\engine\cal3d\error.cpp" />
+    <ClCompile Include="..\engine\cal3d\global.cpp" />
+    <ClCompile Include="..\engine\cal3d\hardwaremodel.cpp" />
+    <ClCompile Include="..\engine\cal3d\loader.cpp" />
+    <ClCompile Include="..\engine\cal3d\matrix.cpp" />
+    <ClCompile Include="..\engine\cal3d\mesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\mixer.cpp" />
+    <ClCompile Include="..\engine\cal3d\model.cpp" />
+    <ClCompile Include="..\engine\cal3d\morphtargetmixer.cpp" />
+    <ClCompile Include="..\engine\cal3d\physique.cpp" />
+    <ClCompile Include="..\engine\cal3d\platform.cpp" />
+    <ClCompile Include="..\engine\cal3d\quaternion.cpp" />
+    <ClCompile Include="..\engine\cal3d\renderer.cpp" />
+    <ClCompile Include="..\engine\cal3d\saver.cpp" />
+    <ClCompile Include="..\engine\cal3d\skeleton.cpp" />
+    <ClCompile Include="..\engine\cal3d\springsystem.cpp" />
+    <ClCompile Include="..\engine\cal3d\streamsource.cpp" />
+    <ClCompile Include="..\engine\cal3d\submesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\tinyxml.cpp" />
+    <ClCompile Include="..\engine\cal3d\tinyxmlerror.cpp" />
+    <ClCompile Include="..\engine\cal3d\tinyxmlparser.cpp" />
+    <ClCompile Include="..\engine\cal3d\vector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\engine\cal3d\animation.h" />
+    <ClInclude Include="..\engine\cal3d\animation_action.h" />
+    <ClInclude Include="..\engine\cal3d\animation_cycle.h" />
+    <ClInclude Include="..\engine\cal3d\animcallback.h" />
+    <ClInclude Include="..\engine\cal3d\bone.h" />
+    <ClInclude Include="..\engine\cal3d\buffersource.h" />
+    <ClInclude Include="..\engine\cal3d\cal3d.h" />
+    <ClInclude Include="..\engine\cal3d\cal3d_wrapper.h" />
+    <ClInclude Include="..\engine\cal3d\coreanimation.h" />
+    <ClInclude Include="..\engine\cal3d\corebone.h" />
+    <ClInclude Include="..\engine\cal3d\corekeyframe.h" />
+    <ClInclude Include="..\engine\cal3d\corematerial.h" />
+    <ClInclude Include="..\engine\cal3d\coremesh.h" />
+    <ClInclude Include="..\engine\cal3d\coremodel.h" />
+    <ClInclude Include="..\engine\cal3d\coremorphanimation.h" />
+    <ClInclude Include="..\engine\cal3d\coreskeleton.h" />
+    <ClInclude Include="..\engine\cal3d\coresubmesh.h" />
+    <ClInclude Include="..\engine\cal3d\coresubmorphtarget.h" />
+    <ClInclude Include="..\engine\cal3d\coretrack.h" />
+    <ClInclude Include="..\engine\cal3d\datasource.h" />
+    <ClInclude Include="..\engine\cal3d\error.h" />
+    <ClInclude Include="..\engine\cal3d\global.h" />
+    <ClInclude Include="..\engine\cal3d\hardwaremodel.h" />
+    <ClInclude Include="..\engine\cal3d\loader.h" />
+    <ClInclude Include="..\engine\cal3d\matrix.h" />
+    <ClInclude Include="..\engine\cal3d\mesh.h" />
+    <ClInclude Include="..\engine\cal3d\mixer.h" />
+    <ClInclude Include="..\engine\cal3d\model.h" />
+    <ClInclude Include="..\engine\cal3d\morphtargetmixer.h" />
+    <ClInclude Include="..\engine\cal3d\physique.h" />
+    <ClInclude Include="..\engine\cal3d\platform.h" />
+    <ClInclude Include="..\engine\cal3d\quaternion.h" />
+    <ClInclude Include="..\engine\cal3d\refcounted.h" />
+    <ClInclude Include="..\engine\cal3d\refptr.h" />
+    <ClInclude Include="..\engine\cal3d\renderer.h" />
+    <ClInclude Include="..\engine\cal3d\resource.h" />
+    <ClInclude Include="..\engine\cal3d\saver.h" />
+    <ClInclude Include="..\engine\cal3d\skeleton.h" />
+    <ClInclude Include="..\engine\cal3d\springsystem.h" />
+    <ClInclude Include="..\engine\cal3d\streamsource.h" />
+    <ClInclude Include="..\engine\cal3d\submesh.h" />
+    <ClInclude Include="..\engine\cal3d\tinyxml.h" />
+    <ClInclude Include="..\engine\cal3d\transform.h" />
+    <ClInclude Include="..\engine\cal3d\vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\engine\cal3d\Makefile.am" />
+    <None Include="..\engine\cal3d\Makefile.in" />
+    <None Include="..\engine\cal3d\SConscript" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3E64553B-956A-4605-8F72-243C136B9242}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>cal3d</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
