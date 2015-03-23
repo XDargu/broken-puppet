@@ -27,6 +27,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.862267" boxY="0.590108" boxZ="0.711541"/>
 <rigidbody density="10.0"  />
 	</entity>
+<<<<<<< HEAD
 
 <entity tag = "actor">
 	<name name="mSphere_4.0" />
@@ -50,6 +51,18 @@
 	<rigidbody density="500.0"  />
 </entity>
 
+=======
+	<entity tag = "actor">
+<name name="mSphere_4.0" />
+<transform position="-34.1575 -6.49742 26.8165" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="mSphere" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-1.31792 -1.31792 -1.31792" max="1.31792 1.31792 1.31792"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="1.31792"/>
+<rigidbody density="500.0"  />
+	</entity>
+>>>>>>> 2846b048d227d4c46a9d3cb63b6631b1faff45c3
 	<entity >
 <name name="StraightStair002_5.0" />
 <transform position="14.0 -8.0 18.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
@@ -59,6 +72,7 @@
 <draw mesh="StraightStair002" sub_mesh="2" mat="Standardmaterial"/>
 </render>
 <aabb min="-4.0 0.0 -4.0" max="1.66893e-006 4.0 4.0"/>
+<<<<<<< HEAD
 </entity>
 <entity tag = "player" prefab="Player">
 	<transform position="-8.0 1 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -75,6 +89,24 @@
 <entity tag = "level">
 	<name name="dvn_arqui_ambos_ambos_01_11.0" />
 	<transform position="-16.0 -1 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+=======
+	</entity>
+	<entity tag = "player" prefab="Player">
+<transform position="-8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="PlayerPivot">
+<transform position="-8.0 -8.0 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="CameraPivot">
+<transform position="-7.0 -6.0 23.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="PlayerCamera">
+<transform position="0.0 -2.0 24.0"/>
+	</entity>
+	<entity tag = "level">
+<name name="dvn_arqui_ambos_ambos_01_11.0" />
+<transform position="-16.0 -8.0 -24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+>>>>>>> 2846b048d227d4c46a9d3cb63b6631b1faff45c3
 <render>
 <draw mesh="dvn_arqui_ambos_ambos_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>

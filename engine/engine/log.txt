@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 - 01:58:24.059 DEBUG: time: 0.132640
 
 - 01:58:24.106 DEBUG: time: 0.183007
@@ -8771,4 +8772,14 @@
 - 01:58:47.242 DEBUG: time: 22.306131
 
 - 01:58:47.367 DEBUG: time: 22.444818
+=======
+- 05:13:50.688 ERROR: When Creating: app
+When Loading file: data/scenes/my_file.xml
+When Loading material: Material #24
+When Loading file: data/materials/Material #24.xml
+Assertion failed: diffuse->isValid()
+	Texture not loaded: JP_Brick01_Bump
+	Line: 15
+	File: render\material.cpp
+>>>>>>> 2846b048d227d4c46a9d3cb63b6631b1faff45c3
 
