@@ -1362,34 +1362,37 @@ fn validateJointPrismatic obj = (
 	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
-		body0 = false
-		body1 = false
+		local body0 = false
+		local body1 = false
+		local undefinedTest = false
+		
 		
 		if( mJoint.body0 != undefined) then (
 			body0 = mJoint.body0 == obj
 		)
 		else(
-			body0 = true
+			undefinedTest = true
 			)
-		
+
 		if( mJoint.body1 != undefined) then (
 			body1 = mJoint.body1 == obj
 		)
 		else(
-			body1 = true
+			undefinedTest = true
 			)
 		
 		if (body0) or (body1) then (
 			
-			print "entrado"
 			-- If the mJoint is not in the exp list add it and return false
 			if (findItem expJoints mJoint.name ) == 0 then (
 				-- Add it
 				append expJoints mJoint.name
-				print "añadido"
+				-- If have only one actor
+				if (undefinedTest) then return mJoint
 				-- return false
 				return undefined
 			)
+			-- In only have one actor
 			else (
 				return mJoint
 			)
