@@ -31,6 +31,7 @@
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"
+#include "comp_joint_prismatic.h"
 
 // Render
 #include "comp_render.h"
