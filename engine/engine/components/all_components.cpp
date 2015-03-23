@@ -31,3 +31,4 @@ DECL_OBJ_MANAGER(TCompTrigger, "trigger");
 DECL_OBJ_MANAGER(TCompBasicPlayerController, "basicPlayerController");
 DECL_OBJ_MANAGER(TCompVictoryCond, "victoryCondition"); 
 DECL_OBJ_MANAGER(TCompDistanceText, "distanceText");
+DECL_OBJ_MANAGER(TCompJointPrismatic, "jointPrismatic");

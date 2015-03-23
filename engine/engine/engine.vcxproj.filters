@@ -281,6 +281,9 @@
     <ClInclude Include="handle\prefabs_manager.h">
       <Filter>handle</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_joint_prismatic.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
