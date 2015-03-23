@@ -161,9 +161,3 @@ Struct vsai_Thumbnails
 		restore_light_state()
 	)
 )
-
-
-vt=vsai_Thumbnails()
-f_name = "C:\\Temp\\hola" 
-		
-vt.RenderIt objs: $ filetype: "png" rSkylight: false rPath: f_name
