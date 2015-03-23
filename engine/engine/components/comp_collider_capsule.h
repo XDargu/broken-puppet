@@ -1,23 +1,24 @@
-#ifndef INC_COMP_SPHERE_COLLIDER_H_
-#define INC_COMP_SPHERE_COLLIDER_H_
+#ifndef INC_COMP_COLLIDER_CAPSULE_H_
+#define INC_COMP_COLLIDER_CAPSULE_H_
 
 #include "base_component.h"
 
-struct TCompColliderSphere : TBaseComponent {
+struct TCompColliderCapsule : TBaseComponent {
 
 	physx::PxShape* collider;
 
-	TCompColliderSphere() : collider(nullptr) {}
+	TCompColliderCapsule() : collider(nullptr) {}
 
-	void setShape(float radius, float static_friction, float dynamic_friction, float restitution) {
+	void setShape(float radius, float half_height, float static_friction, float dynamic_friction, float restitution) {
 		collider = Physics.gPhysicsSDK->createShape(
-			physx::PxSphereGeometry(
-				physx::PxReal(radius)
+			physx::PxCapsuleGeometry(
+				radius,
+				half_height
 			),
 			*Physics.gPhysicsSDK->createMaterial(
-			static_friction
-			, dynamic_friction
-			, restitution
+				static_friction
+				, dynamic_friction
+				, restitution
 			)
 			,
 			true);
@@ -61,8 +62,9 @@ struct TCompColliderSphere : TBaseComponent {
 		}
 
 		collider = Physics.gPhysicsSDK->createShape(
-			physx::PxSphereGeometry(
-			physx::PxReal(atts.getFloat("radius", 0.5))
+			physx::PxCapsuleGeometry(
+				atts.getFloat("radius", 0.5),
+				atts.getFloat("halfHeight", 0.5)
 			),
 			*mat
 			,
@@ -98,12 +100,6 @@ struct TCompColliderSphere : TBaseComponent {
 			mat->getRestitution(),
 			0
 			);
-	}
-
-	std::string toString() {
-		return "Static friction: " + std::to_string(getMaterial()->getStaticFriction()) +
-			"\nDynamic friction: " + std::to_string(getMaterial()->getDynamicFriction()) +
-			"\nRestitution: " + std::to_string(getMaterial()->getRestitution());
 	}
 };
 

@@ -1,87 +1,54 @@
-#ifndef INC_COMP_UNITY_CHARACTER_CONTROLLER_H_
-#define INC_COMP_UNITY_CHARACTER_CONTROLLER_H_
+#ifndef INC_COMP_CHARACTER_CONTROLLER_H_
+#define INC_COMP_CHARACTER_CONTROLLER_H_
 
 #include "base_component.h"
 
-struct TCompCharacterController : TBaseComponent {
+struct TCompUnityCharacterController : TBaseComponent {
+
 private:
-	// Pruebas
-	physx::PxVec3 oldPos;
 
-	/***********************************
-	Serializable settings
-	***********************************/
-
+	CHandle transform;						// Reference to the transform
 
 	float airSpeed;							// determines the max speed of the character while airborne
 	float airControl;						// determines the response speed of controlling the character while airborne;
 	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters
 
 	float animSpeedMultiplier;				// how much the animation of the character will be multiplied by
-	//AdvancedSettings advancedSettings;		// Container for the advanced settings class , thiss allows the advanced settings to be in a foldout in the inspector
-
-	/***********************************
-	Other settings
-	***********************************/
 
 	bool onAir;
 	bool onGround;							// Is the character on the ground
 	physx::PxVec3 currentLookPos;			// The current position where the character is looking
 	float originalHeight;					// Used for tracking the original height of the characters capsule collider
-	//Animator animator;					// The animator for the character
 	float lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
 	CHandle capsule_collider;				// The collider for the character
-	float half;								// whats it says, it's a constant for a half
 	physx::PxVec3 moveInput;
 	bool crouchInput;
 	bool jumpInput;
-	float turnAmount;
-	float forwardAmount;
-	float max_vel_y;          // constante de velocidad maxima en y para muerte por caida
+	float max_vel_y;						// constante de velocidad maxima en y para muerte por caida
 	physx::PxVec3 velocity;
-	//IComparer rayHitComparer;
-
 	CHandle m_entity;
 
 public:
-	float stationaryTurnSpeed;					// additional turn speed added when the player is stationary (added to animation root rotation)
-	float movingTurnSpeed;						// additional turn speed added when the player is moving (added to animation root rotation)
-	float headLookResponseSpeed;				// speed at which head look follows its target
 	float crouchHeightFactor;					// collider height is multiplied by this when crouching
 	float crouchChangeSpeed;					// speed at which capsule changes height when crouching/standing
-	float autoTurnThresholdAngle;				// character auto turns towards camera direction if facing away by more than this angle
-	float autoTurnSpeed;						// speed at which character auto-turns towards cam direction
 	physx::PxMaterial* zeroFrictionMaterial;	// used when in motion to enable smooth movement
 	physx::PxMaterial* highFrictionMaterial;	// used when stationary to avoid sliding down slopes
 	float jumpRepeatDelayTime;					// amount of time that must elapse between landing and being able to jump again
-	float runCycleLegOffset;					// animation cycle offset (0-1) used for determining correct leg to jump off
-	float groundStickyEffect;					// power of 'stick to ground' effect - prevents bumping down slopes.
 
-	CHandle lookTarget; // The point where the character will be looking at
-	//LayerMask groundCheckMask;
-	//LayerMask crouchCheckMask;
-	float lookBlendTime;
-	float lookWeight;
 	float enemy_width;
 	float enemy_height;
 	float enemy_density;
 	physx::PxShape* enemy_collider;
-	physx::PxMaterial* pMaterial;
 	physx::PxRigidDynamic* enemy_rigidbody;
-	CHandle transform;
-	XMVECTOR direction;
+	physx::PxD6Joint* mJoint;				// Joint used to lock the player
 	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
-	physx::PxD6Joint* mJoint;
 	float lerpRotation;
 	float jumpPower;						// determines the jump force applied when jumping (and therefore the jump height)
-
-	//CApp &app;
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
-		direction = XMVectorZero();
 
 		enemy_width = 0.5;
 		enemy_height = 1.5f;
@@ -125,8 +92,6 @@ public:
 		physx::PxReal threshold = 3500.f;
 		enemy_rigidbody->setContactReportThreshold(threshold);
 
-		oldPos = Physics.XMVECTORToPxVec3(trans->position);
-
 
 		// Set it as a CCD (Continiuous Collision Detection)
 		//player_rigidbody->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
@@ -143,16 +108,9 @@ public:
 	}
 
 	void init(){
-		stationaryTurnSpeed = 180;
-		movingTurnSpeed = 360;
-		headLookResponseSpeed = 2;
 		crouchHeightFactor = 0.6f;
 		crouchChangeSpeed = 4;
-		autoTurnThresholdAngle = 100;
-		autoTurnSpeed = 2;
 		jumpRepeatDelayTime = 0.25f;
-		runCycleLegOffset = 0.2f;
-		groundStickyEffect = 5.f;
 		max_vel_y = -10.0f;
 
 		jumpPower = 8;
@@ -174,8 +132,6 @@ public:
 		highFrictionMaterial->setFrictionCombineMode(physx::PxCombineMode::eMAX);
 		highFrictionMaterial->setRestitutionCombineMode(physx::PxCombineMode::eMIN);
 
-		half = 0.5f;
-
 		originalHeight = enemy_height;
 
 		onAir = false;
@@ -183,10 +139,7 @@ public:
 		physx::PxRaycastBuffer;
 
 		// give the look position a default in case the character is not under control
-		currentLookPos = Physics.XMVECTORToPxVec3(((TCompTransform*)assertRequiredComponent<TCompTransform>(this))->position);
-
-		CApp app = CApp::get();
-
+		currentLookPos = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->position);
 	}
 
 	void update(float elapsed){
@@ -206,30 +159,8 @@ public:
 		//((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
 	}
 
-	void BlendLookWeight()
-	{
-		float t = 0.f;
-		while (t < lookBlendTime)
-		{
-			lookWeight = t / lookBlendTime;
-			t += CApp::get().delta_time;
-			//yield return null;
-		}
-		lookWeight = 1.f;
-	}
-
-	void OnEnable()
-	{
-		if (lookWeight == 0.f)
-		{
-			// TODO Start coroutine
-			//StartCoroutine(BlendLookWeight());
-		}
-	}
-
 	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos)
 	{
-
 		if (move.magnitude() > 1) move.normalize();
 
 		// transfer input parameters to member variables.
@@ -246,17 +177,9 @@ public:
 
 		TurnTowardsCameraForward(); // makes the character face the way the camera is looking
 
-		//PreventStandingInLowHeadroom(); // so the character's head doesn't penetrate a low ceiling
-
-		//ScaleCapsuleForCrouching(); // so you can fit under low areas when crouching
-
-		//ApplyExtraTurnRotation(); // this is in addition to root rotation in the animations
-
 		GroundCheck(); // detect and stick to ground
 
 		SetFriction(); // use low or high friction values depending on the current states
-
-		//moveInput = Physics.XMVECTORToPxVec3(((TCompTransform*)transform)->getFront() * move.magnitude());
 
 		// control and velocity handling is different when grounded and airborne:
 		if (onGround)
@@ -268,13 +191,8 @@ public:
 			HandleAirborneVelocities();
 		}
 
-		// TODO no tenemos animation aún
-		//UpdateAnimator(); // send input and other state parameters to the animator
-
 		// reassign velocity, since it will have been modified by the above functions.		
 		enemy_rigidbody->setLinearVelocity(velocity);
-
-
 	}
 
 	void ConvertMoveInput()
@@ -287,29 +205,10 @@ public:
 		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
 		physx::PxVec3 localMove = px_trans.transformInv(moveInput);
 
-		turnAmount = atan2(localMove.x, localMove.z);
-		forwardAmount = localMove.z;
-
 
 	}
 	void TurnTowardsCameraForward()
 	{
-		// automatically turn to face camera direction,
-		// when not moving, and beyond the specified angle threshold
-		/*if (abs(forwardAmount) < .01f)
-		{
-		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-
-		physx::PxVec3 lookDelta = px_trans.transformInv(currentLookPos - px_trans.p);
-		float lookAngle = rad2deg(atan2(lookDelta.x, lookDelta.z));
-
-		// are we beyond the threshold of where need to turn to face the camera?
-		if (abs(lookAngle) > autoTurnThresholdAngle)
-		{
-		turnAmount += lookAngle*autoTurnSpeed*.001f;
-		}
-		}*/
-
 		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(currentLookPos) + enemy_rigidbody->getGlobalPose().p;
 		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
 
@@ -318,54 +217,9 @@ public:
 		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
 
-	/* TODO cuando tengamos agachado lo pondremos
-	PreventStandingInLowHeadroom()
-	ScaleCapsuleForCrouching()
-	*/
-
-	float lerp(float a, float b, float f)
-	{
-		//TODO Meter lerp donde debe utils por ejemplo
-		return a + f * (b - a);
-	}
-
-	void ApplyExtraTurnRotation()
-	{
-		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-
-		// help the character turn faster (this is in addition to root rotation in the animation)
-		float turnSpeed = lerp(stationaryTurnSpeed, movingTurnSpeed, forwardAmount);
-
-		/*XMVECTOR rotation = XMQuaternionRotationRollPitchYaw(0, turnAmount*turnSpeed*(CApp::get().delta_time), 0);
-		XMVECTOR m_rotation = Physics.PxQuatToXMVECTOR(px_trans.q);
-		XMVECTOR final_rotation = XMQuaternionMultiply(rotation, m_rotation);*/
-
-		//px_trans.q = Physics.XMVECTORToPxQuat(final_rotation);
-
-		//px_trans.q = px_trans.q.rotate(physx::PxVec3(0, turnAmount*turnSpeed*(CApp::get().delta_time), 0));		
-
-		//TODO creo que esto debería quitarse
-		enemy_rigidbody->setGlobalPose(px_trans);
-	}
-
-
 	void GroundCheck()
 	{
 		physx::PxTransform &px_trans = enemy_rigidbody->getGlobalPose();
-
-		//TCompTransform* trans = (TCompTransform*)transform;
-
-		// TODO ground de puta madre
-		//physx::PxRaycastBuffer hit;
-		//Physics.raycast(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1000, hit);
-
-		/*const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
-		physx::PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
-		physx::PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
-
-		// Raycast against all static & dynamic objects (no filtering)
-		// The main result from this call are all hits along the ray, stored in 'hitBuffer'
-		Physics.gScene->raycast(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 1.0f, buf);*/
 
 		physx::PxRaycastBuffer buf;
 
@@ -446,7 +300,7 @@ public:
 
 	void SetFriction()
 	{
-		// TODO cambiar material de puta madre
+		// TODO Hacer el cambio de las propiedades del material, no del material en sí (es mucho más rápido y no da problemas)
 
 		if (onGround)
 		{
@@ -479,9 +333,7 @@ public:
 		enemy_collider->getMaterials(buffer, 16);
 		buffer[first_material] = m_material;
 		//collider->setMaterials(buffer, first_material + 1);
-
 	}
-
 
 	void HandleGroundedVelocities()
 	{
@@ -533,21 +385,9 @@ public:
 	//TODO colocar en utils funcion lerp
 	physx::PxVec3 Vector3Lerp(physx::PxVec3 start, physx::PxVec3 end, float percent)
 	{
-		return (start + percent*(end - start));
+		return (start + percent * (end - start));
 	}
-	// NOTE No tenemos animaciones ni cabeza separada
-	/*
-	void UpdateAnimator()
-	void OnAnimatorIK(int layerIndex)
-	void SetUpAnimator()
-	void OnAnimatorMove()
-	*/
 	// TODO NOTE provisional para rotar objetos
-
-	void OnDisable()
-	{
-		lookWeight = 0.f;
-	}
 
 	bool OnGround(){
 		return onGround;
