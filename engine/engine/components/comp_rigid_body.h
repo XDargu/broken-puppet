@@ -23,11 +23,12 @@ public:
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
+		TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		assert(transform.isValid() || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c || sphere_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		assert((c || mesh_c || sphere_c || capsule_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -54,6 +55,15 @@ public:
 				Physics.XMVECTORToPxVec3(trans->position),
 				Physics.XMVECTORToPxQuat(trans->rotation))
 				, *sphere_c->collider
+				, density);
+		}
+		if (capsule_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *capsule_c->collider
 				, density);
 		}
 
@@ -81,11 +91,12 @@ public:
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
+		TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		assert(trans || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c || sphere_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		assert((c || mesh_c || sphere_c ||capsule_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -112,6 +123,15 @@ public:
 				Physics.XMVECTORToPxVec3(trans->position),
 				Physics.XMVECTORToPxQuat(trans->rotation))
 				, *sphere_c->collider
+				, temp_density);
+		}
+		if (capsule_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *capsule_c->collider
 				, temp_density);
 		}
 
