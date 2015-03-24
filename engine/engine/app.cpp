@@ -207,8 +207,8 @@ bool CApp::create() {
 	physics_manager.init();
 
 	CImporterParser p;
-	//XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
-	XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
+	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
+	//XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
 	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
 	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
@@ -623,6 +623,9 @@ void CApp::update(float elapsed) {
 	TCompTransform* cam_t = cam->get<TCompTransform>();
 	activateCamera(cam_t->position, 1);
 
+	getObjManager<TCompSkeleton>()->update(elapsed);
+	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
+	getObjManager<TCompSkeletonIK>()->update(elapsed);
 	getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);

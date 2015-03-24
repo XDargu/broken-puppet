@@ -4,6 +4,7 @@
 class CalModel;
 class CalBone;
 
+
 struct TCompSkeleton {    // 2 ...
   CalModel*  model;
 
