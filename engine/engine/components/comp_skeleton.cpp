@@ -9,6 +9,7 @@
 
 extern CMesh        axis;
 #include "render/ctes/shader_ctes.h"
+
 extern CShaderCte<TCtesBones> ctes_bones;
 
 CalVector DX2Cal(XMVECTOR v) {

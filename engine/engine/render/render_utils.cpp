@@ -8,6 +8,7 @@ using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
+CShaderCte<TCtesBones>  ctes_bones;
 CMesh        wire_cube;
 CMesh        mesh_line;
 
@@ -73,6 +74,7 @@ void activateTextureSamplers() {
 bool renderUtilsCreate() {
   bool is_ok = ctes_object.create();
   is_ok &= ctes_camera.create();
+  is_ok &= ctes_bones.create();
   is_ok &= createWiredCube(wire_cube);
   is_ok &= createSamplers();
   return is_ok;
@@ -82,6 +84,7 @@ void renderUtilsDestroy() {
   destroySamplers();
   ctes_object.destroy();
   ctes_camera.destroy();
+  ctes_bones.destroy();
   wire_cube.destroy();
 }
 

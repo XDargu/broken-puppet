@@ -478,6 +478,11 @@
       <SubType>Designer</SubType>
     </Xml>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="cal3d\cal3d.vcxproj">
+      <Project>{bb9d0314-c731-4321-a394-767216a4601a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
