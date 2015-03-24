@@ -55,6 +55,19 @@ void TCompSkeletonIK::solveBone(int bone_id_c, XMVECTOR n) {
   // Lo anterior tendria que cachearse o inicializarse solo una vez
 
   float distance_of_c_to_ground = 0; // ground.distanceToGround(ik.C);
+  XMVECTOR normal_to_ground = XMVectorSet(0, 1, 0, 0);
+
+  // Raycast para detectar distancia al suelo
+  physx::PxRaycastBuffer hit;
+  XMVECTOR ray_position = ik.C;
+  XMVECTOR ray_dir = XMVectorSet(0, -1, 0, 0);
+  Physics.raycast(ray_position, ray_dir, 1, hit);
+
+  if (hit.hasBlock) {
+	  physx::PxRaycastHit blockHit = hit.block;
+	  distance_of_c_to_ground = blockHit.distance;
+	  normal_to_ground = Physics.PxVec3ToXMVECTOR(blockHit.normal);
+  }
 
   // Dado que el pie antes de hacer las modificaciones no esta sobre el plano
   // exactamente sino que los artistas lo han subido un poco...
@@ -85,7 +98,7 @@ void TCompSkeletonIK::solveBone(int bone_id_c, XMVECTOR n) {
     
     XMVECTOR q_normal = XMVector3Normalize( XMVector3Cross(default_ground, dir_c2d) );
     XMVECTOR q_angle = XMVector3AngleBetweenVectors(default_ground, dir_c2d);
-    q_correction_of_d = XMQuaternionRotationAxis(q_normal, XMVectorGetX(q_angle));
+    q_correction_of_d = XMQuaternionRotationAxis(q_normal, XMVectorGetX(q_angle) * 1.25f);
   }
 
 
@@ -121,7 +134,7 @@ void TCompSkeletonIK::solveBone(int bone_id_c, XMVECTOR n) {
   bc.local_amount = 1.0f;
   bc.local_dir.set(1, 0, 0);
 
-  XMVECTOR new_normal = XMVectorSet(0, 1, 0, 0);//ground.normal;  // Fix, compute it!
+  XMVECTOR new_normal = normal_to_ground;//ground.normal;  // Fix, compute it!
   XMVECTOR new_dir_of_d = XMVector3Rotate(new_normal, q_correction_of_d);
   XMVECTOR final_d = ik.C + new_dir_of_d;
   bc.apply(model, DX2Cal(final_d), amount);

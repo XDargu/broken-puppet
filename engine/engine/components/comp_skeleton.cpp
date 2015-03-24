@@ -95,15 +95,15 @@ void TCompSkeleton::update(float elapsed) {
     elapsed *= 0.05f;
   }
 
-  /*if (hasKeyBecomedPressed('o') || hasKeyBecomedPressed('O')) {
+  if (isKeyPressed('o') || isKeyPressed('O')) {
     model->getMixer()->executeAction(1, 0.0f, 0.3f, 1.0f, false);
   }
-  if (hasKeyBecomedPressed('P')) {
+  if (isKeyPressed('P')) {
     model->getMixer()->removeAction(1, 0.f);
   }
-  if (hasKeyBecomedPressed('L')) {
+  if (isKeyPressed('L')) {
     model->getMixer()->removeAction(1, 0.3f);
-  }*/
+  }
 
   //if (hasKeyBecomedPressed('o')) {
   //  model->getMixer()->blendCycle(0, 1.0, 0.3);
