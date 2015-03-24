@@ -244,6 +244,14 @@ public:
 			obj->active = active;
 		updating_objs = false;
 	}
+
+	// Debug draw
+	void renderDebug3D() const {
+		TObj* obj = objs;
+		uint32_t num = num_objects_in_use;
+		for (; num--; obj++)
+			obj->renderDebug3D();
+	}
 };
 
 

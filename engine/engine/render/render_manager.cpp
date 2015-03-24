@@ -4,6 +4,8 @@
 #include "camera.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
+#include "components/comp_transform.h"
+#include "components/comp_skeleton.h"
 
 CRenderManager render_manager;
 
@@ -41,6 +43,8 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 
 	const CRenderTechnique* curr_tech = nullptr;
 
+	bool uploading_bones = false;
+
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
@@ -54,6 +58,8 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 				curr_tech->activate();				
 				activateCamera(view_projection, 1);
 				activateWorldMatrix(0);
+
+				uploading_bones = it->material->getTech()->usesBones();
 			}
 
 			// Activar shader y material de it
@@ -62,6 +68,12 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 
 		if (it->mesh != prev_it->mesh || is_first) {
 			it->mesh->activate();
+		}
+
+		if (uploading_bones) {
+			const TCompSkeleton* skel = it->owner;
+			assert(skel);
+			skel->uploadBonesToGPU();
 		}
 
 		// Activar la world del obj

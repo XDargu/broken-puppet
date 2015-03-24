@@ -12,6 +12,8 @@ CShaderCte<TCtesBones>  ctes_bones;
 CMesh        wire_cube;
 CMesh        mesh_line;
 
+bool createLine(CMesh& mesh);
+
 // -----------------------
 template<>
 CVertexDecl* getVertexDecl< CVertexPosColor >() {
@@ -76,6 +78,7 @@ bool renderUtilsCreate() {
   is_ok &= ctes_camera.create();
   is_ok &= ctes_bones.create();
   is_ok &= createWiredCube(wire_cube);
+  is_ok &= createLine(mesh_line);
   is_ok &= createSamplers();
   return is_ok;
 }
@@ -171,6 +174,22 @@ bool createAxis(CMesh& mesh) {
   return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::LINE_LIST);
 }
 
+// -----------------------------------------------------
+bool createLine(CMesh& mesh) {
+
+	std::vector< CVertexPosColor > vtxs;
+	vtxs.resize(2);
+	CVertexPosColor *v = &vtxs[0];
+
+	v->Pos = XMFLOAT3(0, 0, 0.f);
+	v->Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	++v;
+	v->Pos = XMFLOAT3(0, 0, 1.f);
+	v->Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	++v;
+
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::LINE_LIST);
+}
 
 // -----------------------------------------------------
 bool createWiredCube(CMesh& mesh) {

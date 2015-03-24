@@ -96,6 +96,7 @@ class CRenderTechnique : public CXMLParser {
 	CVertexShader    vs;
 	CPixelShader     ps;
 	std::string      name;
+	bool             uses_bones;
 	void onStartElement(const std::string &elem, MKeyValue &atts);
 public:
 	bool load(const char* name);
@@ -105,6 +106,7 @@ public:
 	const std::string& getName() const { return name; }
 	void activate() const;
 	void destroy();
+	bool usesBones() const { return uses_bones; }
 };
 
 typedef CItemsByName< CRenderTechnique > CRenderTechniquesManager;

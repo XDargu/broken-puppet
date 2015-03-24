@@ -207,7 +207,8 @@ bool CApp::create() {
 	physics_manager.init();
 
 	CImporterParser p;
-	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
+	//XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
+	XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
 	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
 	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
@@ -785,6 +786,8 @@ void CApp::renderEntities() {
 }
 
 void CApp::renderDebugEntities() {
+
+	getObjManager<TCompSkeleton>()->renderDebug3D();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
