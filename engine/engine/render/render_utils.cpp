@@ -8,7 +8,11 @@ using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
+CShaderCte<TCtesBones>  ctes_bones;
 CMesh        wire_cube;
+CMesh        mesh_line;
+
+bool createLine(CMesh& mesh);
 
 // -----------------------
 template<>
@@ -72,7 +76,9 @@ void activateTextureSamplers() {
 bool renderUtilsCreate() {
   bool is_ok = ctes_object.create();
   is_ok &= ctes_camera.create();
+  is_ok &= ctes_bones.create();
   is_ok &= createWiredCube(wire_cube);
+  is_ok &= createLine(mesh_line);
   is_ok &= createSamplers();
   return is_ok;
 }
@@ -81,6 +87,7 @@ void renderUtilsDestroy() {
   destroySamplers();
   ctes_object.destroy();
   ctes_camera.destroy();
+  ctes_bones.destroy();
   wire_cube.destroy();
 }
 
@@ -167,6 +174,22 @@ bool createAxis(CMesh& mesh) {
   return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::LINE_LIST);
 }
 
+// -----------------------------------------------------
+bool createLine(CMesh& mesh) {
+
+	std::vector< CVertexPosColor > vtxs;
+	vtxs.resize(2);
+	CVertexPosColor *v = &vtxs[0];
+
+	v->Pos = XMFLOAT3(0, 0, 0.f);
+	v->Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	++v;
+	v->Pos = XMFLOAT3(0, 0, 1.f);
+	v->Color = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+	++v;
+
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::LINE_LIST);
+}
 
 // -----------------------------------------------------
 bool createWiredCube(CMesh& mesh) {
@@ -567,6 +590,19 @@ void drawViewVolume(const CCamera& camera) {
     ctes_object.uploadToGPU();
     wire_cube.activateAndRender();
   }
+}
+
+void drawLine(XMVECTOR src, XMVECTOR target) {
+	XMMATRIX mtx = XMMatrixIdentity();
+	XMVECTOR delta = target - src;
+
+	XMVectorSetW(delta, 0.f);
+	XMVectorSetW(src, 1.f);
+	mtx.r[2] = delta;
+	mtx.r[3] = src;
+	ctes_object.get()->World = mtx;
+	ctes_object.uploadToGPU();
+	mesh_line.activateAndRender();
 }
 
 void setWorldMatrix(XMMATRIX world) {

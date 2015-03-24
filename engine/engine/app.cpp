@@ -9,13 +9,18 @@
 #include "importer_parser.h"
 #include "options_parser.h"
 #include "physics_manager.h"
-#include "components\all_components.h"
 #include "error\log.h"
 #include <time.h>
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
+
+#include "components\all_components.h"
+#include "components/comp_skeleton.h"
+#include "components/comp_skeleton_lookat.h"
+#include "components/comp_skeleton_ik.h"
+#include "skeletons/ik_handler.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -137,6 +142,10 @@ void createManagers() {
 	getObjManager<TCompUnityCharacterController>()->init(64);
 	getObjManager<TCompBasicPlayerController>()->init(1);
 
+	getObjManager<TCompSkeleton>()->init(1024);
+	getObjManager<TCompSkeletonLookAt>()->init(1024);
+	getObjManager<TCompSkeletonIK>()->init(1024);
+
 	registerAllComponentMsgs();
 }
 
@@ -199,6 +208,7 @@ bool CApp::create() {
 
 	CImporterParser p;
 	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
+	//XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
 	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
 	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
@@ -613,6 +623,9 @@ void CApp::update(float elapsed) {
 	TCompTransform* cam_t = cam->get<TCompTransform>();
 	activateCamera(cam_t->position, 1);
 
+	getObjManager<TCompSkeleton>()->update(elapsed);
+	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
+	getObjManager<TCompSkeletonIK>()->update(elapsed);
 	getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);
@@ -776,6 +789,8 @@ void CApp::renderEntities() {
 }
 
 void CApp::renderDebugEntities() {
+
+	getObjManager<TCompSkeleton>()->renderDebug3D();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());

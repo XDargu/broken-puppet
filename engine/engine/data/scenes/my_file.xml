@@ -2355,4 +2355,13 @@
 	<entity tag = "player2" prefab="Player2">
 <transform position="-8.0 1.04907e-006 22.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
+	<entity>
+<name name="Skel00"/>
+<transform q="0 0 0 1" t="2.0 0.0 0.0"/>
+<skeleton name="enemy" />
+skeleton_lookat target="2 2 0" amount="1"/>
+skeleton_ik bone_c0="25" normal_c0="0 1 0"
+             bone_c1="21" normal_c1="0 -1 0"/>
+<playerDoomController/>
+</entity>
 </scene>

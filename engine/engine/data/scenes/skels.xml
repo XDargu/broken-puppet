@@ -1,0 +1,16 @@
+<scene>
+<entity>
+<name name="Skel00"/>
+<transform q="0 0 0 1" t="2.0 0.0 0.0"/>
+<skeleton name="enemy" />
+skeleton_lookat target="2 2 0" amount="1"/>
+skeleton_ik bone_c0="25" normal_c0="0 1 0"
+             bone_c1="21" normal_c1="0 -1 0"/>
+<playerDoomController/>
+</entity>
+<entity>
+  <name name="PlayerCamera" />
+  <transform position="-15 25 30"/>
+  <camera target="0 0 0" fov="75.0" znear="0.1" zfar="1000.0"/>
+</entity>
+</scene>

@@ -1,0 +1,6 @@
+<skeleton>
+    <mesh name="girl"/>
+    <anim name="idle"/>
+    <anim name="attack1" dump="1"/>
+	<dump_anim id="1" bone="0"/>
+</skeleton>

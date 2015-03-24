@@ -1,0 +1,5 @@
+<skeleton scale="0.01">
+    <mesh name="skeleton_chest"/>
+    <anim name="skeleton_idle"/>
+    <anim name="skeleton_jog"/>
+</skeleton>

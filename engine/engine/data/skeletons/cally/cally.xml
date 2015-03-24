@@ -1,0 +1,5 @@
+<skeleton>
+    <mesh name="chest"/>
+    <anim name="idle"/>
+    <anim name="walk"/>
+</skeleton>

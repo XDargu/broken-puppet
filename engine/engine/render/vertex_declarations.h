@@ -11,6 +11,7 @@ public:
 
 extern CVertexDecl vdcl_position_color;
 extern CVertexDecl vdcl_position_uv_normal;
+extern CVertexDecl vdcl_position_uv_normal_skin;
 
 template<class TVertex>
 CVertexDecl* getVertexDecl();
