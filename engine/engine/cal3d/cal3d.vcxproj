@@ -19,94 +19,99 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animation.h" />
-    <ClInclude Include="animation_action.h" />
-    <ClInclude Include="animation_cycle.h" />
-    <ClInclude Include="animcallback.h" />
-    <ClInclude Include="bone.h" />
-    <ClInclude Include="buffersource.h" />
-    <ClInclude Include="cal3d.h" />
-    <ClInclude Include="cal3d_wrapper.h" />
-    <ClInclude Include="coreanimation.h" />
-    <ClInclude Include="corebone.h" />
-    <ClInclude Include="corekeyframe.h" />
-    <ClInclude Include="corematerial.h" />
-    <ClInclude Include="coremesh.h" />
-    <ClInclude Include="coremodel.h" />
-    <ClInclude Include="coremorphanimation.h" />
-    <ClInclude Include="coreskeleton.h" />
-    <ClInclude Include="coresubmesh.h" />
-    <ClInclude Include="coresubmorphtarget.h" />
-    <ClInclude Include="coretrack.h" />
-    <ClInclude Include="datasource.h" />
-    <ClInclude Include="error.h" />
-    <ClInclude Include="global.h" />
-    <ClInclude Include="hardwaremodel.h" />
-    <ClInclude Include="loader.h" />
-    <ClInclude Include="matrix.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="mixer.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="morphtargetmixer.h" />
-    <ClInclude Include="physique.h" />
-    <ClInclude Include="platform.h" />
-    <ClInclude Include="quaternion.h" />
-    <ClInclude Include="refcounted.h" />
-    <ClInclude Include="refptr.h" />
-    <ClInclude Include="renderer.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="saver.h" />
-    <ClInclude Include="skeleton.h" />
-    <ClInclude Include="springsystem.h" />
-    <ClInclude Include="streamsource.h" />
-    <ClInclude Include="submesh.h" />
-    <ClInclude Include="tinyxml.h" />
-    <ClInclude Include="transform.h" />
-    <ClInclude Include="vector.h" />
+    <ClCompile Include="..\engine\cal3d\animation.cpp" />
+    <ClCompile Include="..\engine\cal3d\animation_action.cpp" />
+    <ClCompile Include="..\engine\cal3d\animation_cycle.cpp" />
+    <ClCompile Include="..\engine\cal3d\bone.cpp" />
+    <ClCompile Include="..\engine\cal3d\buffersource.cpp" />
+    <ClCompile Include="..\engine\cal3d\cal3d_wrapper.cpp" />
+    <ClCompile Include="..\engine\cal3d\coreanimation.cpp" />
+    <ClCompile Include="..\engine\cal3d\corebone.cpp" />
+    <ClCompile Include="..\engine\cal3d\corekeyframe.cpp" />
+    <ClCompile Include="..\engine\cal3d\corematerial.cpp" />
+    <ClCompile Include="..\engine\cal3d\coremesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\coremodel.cpp" />
+    <ClCompile Include="..\engine\cal3d\coremorphanimation.cpp" />
+    <ClCompile Include="..\engine\cal3d\coreskeleton.cpp" />
+    <ClCompile Include="..\engine\cal3d\coresubmesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\coresubmorphtarget.cpp" />
+    <ClCompile Include="..\engine\cal3d\coretrack.cpp" />
+    <ClCompile Include="..\engine\cal3d\error.cpp" />
+    <ClCompile Include="..\engine\cal3d\global.cpp" />
+    <ClCompile Include="..\engine\cal3d\hardwaremodel.cpp" />
+    <ClCompile Include="..\engine\cal3d\loader.cpp" />
+    <ClCompile Include="..\engine\cal3d\matrix.cpp" />
+    <ClCompile Include="..\engine\cal3d\mesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\mixer.cpp" />
+    <ClCompile Include="..\engine\cal3d\model.cpp" />
+    <ClCompile Include="..\engine\cal3d\morphtargetmixer.cpp" />
+    <ClCompile Include="..\engine\cal3d\physique.cpp" />
+    <ClCompile Include="..\engine\cal3d\platform.cpp" />
+    <ClCompile Include="..\engine\cal3d\quaternion.cpp" />
+    <ClCompile Include="..\engine\cal3d\renderer.cpp" />
+    <ClCompile Include="..\engine\cal3d\saver.cpp" />
+    <ClCompile Include="..\engine\cal3d\skeleton.cpp" />
+    <ClCompile Include="..\engine\cal3d\springsystem.cpp" />
+    <ClCompile Include="..\engine\cal3d\streamsource.cpp" />
+    <ClCompile Include="..\engine\cal3d\submesh.cpp" />
+    <ClCompile Include="..\engine\cal3d\tinyxml.cpp" />
+    <ClCompile Include="..\engine\cal3d\tinyxmlerror.cpp" />
+    <ClCompile Include="..\engine\cal3d\tinyxmlparser.cpp" />
+    <ClCompile Include="..\engine\cal3d\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="animation.cpp" />
-    <ClCompile Include="animation_action.cpp" />
-    <ClCompile Include="animation_cycle.cpp" />
-    <ClCompile Include="bone.cpp" />
-    <ClCompile Include="buffersource.cpp" />
-    <ClCompile Include="cal3d_wrapper.cpp" />
-    <ClCompile Include="coreanimation.cpp" />
-    <ClCompile Include="corebone.cpp" />
-    <ClCompile Include="corekeyframe.cpp" />
-    <ClCompile Include="corematerial.cpp" />
-    <ClCompile Include="coremesh.cpp" />
-    <ClCompile Include="coremodel.cpp" />
-    <ClCompile Include="coremorphanimation.cpp" />
-    <ClCompile Include="coreskeleton.cpp" />
-    <ClCompile Include="coresubmesh.cpp" />
-    <ClCompile Include="coresubmorphtarget.cpp" />
-    <ClCompile Include="coretrack.cpp" />
-    <ClCompile Include="error.cpp" />
-    <ClCompile Include="global.cpp" />
-    <ClCompile Include="hardwaremodel.cpp" />
-    <ClCompile Include="loader.cpp" />
-    <ClCompile Include="matrix.cpp" />
-    <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="mixer.cpp" />
-    <ClCompile Include="model.cpp" />
-    <ClCompile Include="morphtargetmixer.cpp" />
-    <ClCompile Include="physique.cpp" />
-    <ClCompile Include="platform.cpp" />
-    <ClCompile Include="quaternion.cpp" />
-    <ClCompile Include="renderer.cpp" />
-    <ClCompile Include="saver.cpp" />
-    <ClCompile Include="skeleton.cpp" />
-    <ClCompile Include="springsystem.cpp" />
-    <ClCompile Include="streamsource.cpp" />
-    <ClCompile Include="submesh.cpp" />
-    <ClCompile Include="tinyxml.cpp" />
-    <ClCompile Include="tinyxmlerror.cpp" />
-    <ClCompile Include="tinyxmlparser.cpp" />
-    <ClCompile Include="vector.cpp" />
+    <ClInclude Include="..\engine\cal3d\animation.h" />
+    <ClInclude Include="..\engine\cal3d\animation_action.h" />
+    <ClInclude Include="..\engine\cal3d\animation_cycle.h" />
+    <ClInclude Include="..\engine\cal3d\animcallback.h" />
+    <ClInclude Include="..\engine\cal3d\bone.h" />
+    <ClInclude Include="..\engine\cal3d\buffersource.h" />
+    <ClInclude Include="..\engine\cal3d\cal3d.h" />
+    <ClInclude Include="..\engine\cal3d\cal3d_wrapper.h" />
+    <ClInclude Include="..\engine\cal3d\coreanimation.h" />
+    <ClInclude Include="..\engine\cal3d\corebone.h" />
+    <ClInclude Include="..\engine\cal3d\corekeyframe.h" />
+    <ClInclude Include="..\engine\cal3d\corematerial.h" />
+    <ClInclude Include="..\engine\cal3d\coremesh.h" />
+    <ClInclude Include="..\engine\cal3d\coremodel.h" />
+    <ClInclude Include="..\engine\cal3d\coremorphanimation.h" />
+    <ClInclude Include="..\engine\cal3d\coreskeleton.h" />
+    <ClInclude Include="..\engine\cal3d\coresubmesh.h" />
+    <ClInclude Include="..\engine\cal3d\coresubmorphtarget.h" />
+    <ClInclude Include="..\engine\cal3d\coretrack.h" />
+    <ClInclude Include="..\engine\cal3d\datasource.h" />
+    <ClInclude Include="..\engine\cal3d\error.h" />
+    <ClInclude Include="..\engine\cal3d\global.h" />
+    <ClInclude Include="..\engine\cal3d\hardwaremodel.h" />
+    <ClInclude Include="..\engine\cal3d\loader.h" />
+    <ClInclude Include="..\engine\cal3d\matrix.h" />
+    <ClInclude Include="..\engine\cal3d\mesh.h" />
+    <ClInclude Include="..\engine\cal3d\mixer.h" />
+    <ClInclude Include="..\engine\cal3d\model.h" />
+    <ClInclude Include="..\engine\cal3d\morphtargetmixer.h" />
+    <ClInclude Include="..\engine\cal3d\physique.h" />
+    <ClInclude Include="..\engine\cal3d\platform.h" />
+    <ClInclude Include="..\engine\cal3d\quaternion.h" />
+    <ClInclude Include="..\engine\cal3d\refcounted.h" />
+    <ClInclude Include="..\engine\cal3d\refptr.h" />
+    <ClInclude Include="..\engine\cal3d\renderer.h" />
+    <ClInclude Include="..\engine\cal3d\resource.h" />
+    <ClInclude Include="..\engine\cal3d\saver.h" />
+    <ClInclude Include="..\engine\cal3d\skeleton.h" />
+    <ClInclude Include="..\engine\cal3d\springsystem.h" />
+    <ClInclude Include="..\engine\cal3d\streamsource.h" />
+    <ClInclude Include="..\engine\cal3d\submesh.h" />
+    <ClInclude Include="..\engine\cal3d\tinyxml.h" />
+    <ClInclude Include="..\engine\cal3d\transform.h" />
+    <ClInclude Include="..\engine\cal3d\vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\engine\cal3d\Makefile.am" />
+    <None Include="..\engine\cal3d\Makefile.in" />
+    <None Include="..\engine\cal3d\SConscript" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BB9D0314-C731-4321-A394-767216A4601A}</ProjectGuid>
+    <ProjectGuid>{3E64553B-956A-4605-8F72-243C136B9242}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cal3d</RootNamespace>
   </PropertyGroup>
@@ -153,20 +158,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(SolutionDir)$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -180,8 +180,6 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -192,7 +190,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -215,8 +214,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
