@@ -1,5 +1,8 @@
 #include "mcv_platform.h"
 #include "all_components.h"
+#include "comp_skeleton.h"
+#include "comp_skeleton_lookat.h"
+#include "comp_skeleton_ik.h"
 
 DECL_OBJ_MANAGER(CEntity, "entity");
 DECL_OBJ_MANAGER(TCompTransform, "transform");
@@ -34,3 +37,6 @@ DECL_OBJ_MANAGER(TCompBasicPlayerController, "basicPlayerController");
 DECL_OBJ_MANAGER(TCompVictoryCond, "victoryCondition"); 
 DECL_OBJ_MANAGER(TCompDistanceText, "distanceText");
 DECL_OBJ_MANAGER(TCompJointPrismatic, "jointPrismatic");
+DECL_OBJ_MANAGER(TCompSkeleton, "skeleton");
+DECL_OBJ_MANAGER(TCompSkeletonLookAt, "skeleton_lookat");
+DECL_OBJ_MANAGER(TCompSkeletonIK, "skeleton_ik");

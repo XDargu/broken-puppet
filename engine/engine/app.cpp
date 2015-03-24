@@ -9,13 +9,18 @@
 #include "importer_parser.h"
 #include "options_parser.h"
 #include "physics_manager.h"
-#include "components\all_components.h"
 #include "error\log.h"
 #include <time.h>
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
+
+#include "components\all_components.h"
+#include "components/comp_skeleton.h"
+#include "components/comp_skeleton_lookat.h"
+#include "components/comp_skeleton_ik.h"
+#include "skeletons/ik_handler.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -136,6 +141,10 @@ void createManagers() {
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
 	getObjManager<TCompBasicPlayerController>()->init(1);
+
+	getObjManager<TCompSkeleton>()->init(1024);
+	getObjManager<TCompSkeletonLookAt>()->init(1024);
+	getObjManager<TCompSkeletonIK>()->init(1024);
 
 	registerAllComponentMsgs();
 }
