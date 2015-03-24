@@ -123,6 +123,8 @@ void createManagers() {
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
+	getObjManager<TCompPlayerPosSensor>()->init(64);
+	getObjManager<TCompSensorNeedles>()->init(64);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
@@ -166,6 +168,9 @@ void initManagers() {
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
+
+	getObjManager<TCompPlayerPosSensor>()->initHandlers();
+	getObjManager<TCompSensorNeedles>()->initHandlers();
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->initHandlers();

@@ -40,3 +40,5 @@ DECL_OBJ_MANAGER(TCompJointPrismatic, "jointPrismatic");
 DECL_OBJ_MANAGER(TCompSkeleton, "skeleton");
 DECL_OBJ_MANAGER(TCompSkeletonLookAt, "skeleton_lookat");
 DECL_OBJ_MANAGER(TCompSkeletonIK, "skeleton_ik");
+DECL_OBJ_MANAGER(TCompPlayerPosSensor, "sensorPlayerPos");
+DECL_OBJ_MANAGER(TCompSensorNeedles, "sensorNeedles");

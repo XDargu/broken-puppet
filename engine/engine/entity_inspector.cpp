@@ -165,7 +165,8 @@ void TW_CALL GetDistanceJointDistance(void *value, void *clientData)
 void TW_CALL GetAIFSMState(void *value, void *clientData)
 {
 	std::string *destPtr = static_cast<std::string *>(value);
-	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller.GetState());
+	//TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller.GetState());
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller->getCurrentNode());
 
 }
 

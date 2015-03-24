@@ -1,9 +1,9 @@
 #ifndef _FSM_BASIC_PLAYER_H_
 #define _FSM_BASIC_PLAYER_H_
 
-#include "aicontroller.h"
+#include "aifsmcontroller.h"
 
-class fsm_basic_player : public aicontroller
+class fsm_basic_player : public aifsmcontroller
 {
 
 public:

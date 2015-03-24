@@ -1,5 +1,5 @@
 #include "mcv_platform.h"
-#include "ai_basic_enemy.h"
+#include "fsm_basic_enemy.h"
 #include "../entity_manager.h"
 #include "../components/all_components.h"
 
@@ -7,12 +7,12 @@ using namespace DirectX;
 
 #define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
 
-ai_basic_enemy::ai_basic_enemy()
+fsm_basic_enemy::fsm_basic_enemy()
 {
 }
 
 
-ai_basic_enemy::~ai_basic_enemy()
+fsm_basic_enemy::~fsm_basic_enemy()
 {
 }
 
@@ -20,25 +20,25 @@ bool already_attacked;
 bool already_animated;
 bool initial_attack_done;
 
-void ai_basic_enemy::Init()
+void fsm_basic_enemy::create(string)
 {
 	// insert all states in the map
-	AddState("aibe_Idle", (statehandler)&ai_basic_enemy::Idle);
-	AddState("aibe_Wander", (statehandler)&ai_basic_enemy::Wander);
-	AddState("aibe_View", (statehandler)&ai_basic_enemy::View);
-	AddState("aibe_Lost", (statehandler)&ai_basic_enemy::Lost);
-	AddState("aibe_Chase", (statehandler)&ai_basic_enemy::Chase);
-	AddState("aibe_InitialAttack", (statehandler)&ai_basic_enemy::InitialAttack);
-	AddState("aibe_IdleWar", (statehandler)&ai_basic_enemy::IdleWar);
-	AddState("aibe_AttackSelect", (statehandler)&ai_basic_enemy::AttackSelect);
-	AddState("aibe_SelectAttack", (statehandler)&ai_basic_enemy::SelectAttack);
-	AddState("aibe_Attacking1", (statehandler)&ai_basic_enemy::Attacking1);
-	AddState("aibe_Attacking2", (statehandler)&ai_basic_enemy::Attacking2);
-	AddState("aibe_SelectSide", (statehandler)&ai_basic_enemy::SelectSide);
-	AddState("aibe_OrbitRight", (statehandler)&ai_basic_enemy::OrbitRight);
-	AddState("aibe_OrbitLeft", (statehandler)&ai_basic_enemy::OrbitLeft);
-	AddState("aibe_Ragdoll", (statehandler)&ai_basic_enemy::Ragdoll);
-	AddState("aibe_Dead", (statehandler)&ai_basic_enemy::Dead);
+	AddState("aibe_Idle", (statehandler)&fsm_basic_enemy::Idle);
+	AddState("aibe_Wander", (statehandler)&fsm_basic_enemy::Wander);
+	AddState("aibe_View", (statehandler)&fsm_basic_enemy::View);
+	AddState("aibe_Lost", (statehandler)&fsm_basic_enemy::Lost);
+	AddState("aibe_Chase", (statehandler)&fsm_basic_enemy::Chase);
+	AddState("aibe_InitialAttack", (statehandler)&fsm_basic_enemy::InitialAttack);
+	AddState("aibe_IdleWar", (statehandler)&fsm_basic_enemy::IdleWar);
+	AddState("aibe_AttackSelect", (statehandler)&fsm_basic_enemy::AttackSelect);
+	AddState("aibe_SelectAttack", (statehandler)&fsm_basic_enemy::SelectAttack);
+	AddState("aibe_Attacking1", (statehandler)&fsm_basic_enemy::Attacking1);
+	AddState("aibe_Attacking2", (statehandler)&fsm_basic_enemy::Attacking2);
+	AddState("aibe_SelectSide", (statehandler)&fsm_basic_enemy::SelectSide);
+	AddState("aibe_OrbitRight", (statehandler)&fsm_basic_enemy::OrbitRight);
+	AddState("aibe_OrbitLeft", (statehandler)&fsm_basic_enemy::OrbitLeft);
+	AddState("aibe_Ragdoll", (statehandler)&fsm_basic_enemy::Ragdoll);
+	AddState("aibe_Dead", (statehandler)&fsm_basic_enemy::Dead);
 
 	// reset the state
 	ChangeState("aibe_Idle");
@@ -84,7 +84,7 @@ void ai_basic_enemy::Init()
 	initial_attack_done = false;
 }
 
-void ai_basic_enemy::Idle() {
+void fsm_basic_enemy::Idle() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
 
@@ -126,7 +126,7 @@ void ai_basic_enemy::Idle() {
 	}
 }
 
-void ai_basic_enemy::Wander() {
+void fsm_basic_enemy::Wander() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
@@ -199,7 +199,7 @@ void ai_basic_enemy::Wander() {
 	}
 }
 
-void ai_basic_enemy::View() {
+void fsm_basic_enemy::View() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
@@ -216,7 +216,7 @@ void ai_basic_enemy::View() {
 	}
 }
 
-void ai_basic_enemy::Lost() {
+void fsm_basic_enemy::Lost() {
 
 	initial_attack_done = false;
 
@@ -235,7 +235,7 @@ void ai_basic_enemy::Lost() {
 	}
 }
 
-void ai_basic_enemy::Chase() {
+void fsm_basic_enemy::Chase() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Run");
 
@@ -266,7 +266,7 @@ void ai_basic_enemy::Chase() {
 	}
 }
 
-void ai_basic_enemy::InitialAttack() {
+void fsm_basic_enemy::InitialAttack() {
 
 	initial_attack_done = true;
 
@@ -292,7 +292,7 @@ void ai_basic_enemy::InitialAttack() {
 	}
 }
 
-void ai_basic_enemy::IdleWar() {
+void fsm_basic_enemy::IdleWar() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
@@ -316,7 +316,7 @@ void ai_basic_enemy::IdleWar() {
 	}
 }
 
-void ai_basic_enemy::AttackSelect() {
+void fsm_basic_enemy::AttackSelect() {
 	
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -345,7 +345,7 @@ void ai_basic_enemy::AttackSelect() {
 	}
 }
 
-void ai_basic_enemy::SelectAttack() {
+void fsm_basic_enemy::SelectAttack() {
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
@@ -364,7 +364,7 @@ void ai_basic_enemy::SelectAttack() {
 	}
 }
 
-void ai_basic_enemy::Attacking1() {
+void fsm_basic_enemy::Attacking1() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
@@ -387,7 +387,7 @@ void ai_basic_enemy::Attacking1() {
 	}
 }
 
-void ai_basic_enemy::Attacking2() {
+void fsm_basic_enemy::Attacking2() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
@@ -410,7 +410,7 @@ void ai_basic_enemy::Attacking2() {
 	}
 }
 
-void ai_basic_enemy::SelectSide() {
+void fsm_basic_enemy::SelectSide() {
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
@@ -429,7 +429,7 @@ void ai_basic_enemy::SelectSide() {
 	}
 }
 
-void ai_basic_enemy::OrbitRight() {
+void fsm_basic_enemy::OrbitRight() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 
@@ -451,7 +451,7 @@ void ai_basic_enemy::OrbitRight() {
 	}
 }
 
-void ai_basic_enemy::OrbitLeft() {
+void fsm_basic_enemy::OrbitLeft() {
 
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 
@@ -475,7 +475,7 @@ void ai_basic_enemy::OrbitLeft() {
 
 float state_time = 0.f;
 
-void ai_basic_enemy::Ragdoll(float elapsed){
+void fsm_basic_enemy::Ragdoll(float elapsed){
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
 
 	state_time += elapsed;
@@ -539,12 +539,12 @@ void ai_basic_enemy::Ragdoll(float elapsed){
 	}
 }
 
-void ai_basic_enemy::Dead(float elapsed){
+void fsm_basic_enemy::Dead(float elapsed){
 	// --TODO: MUERTE
 	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Dead");
 }
 
-void ai_basic_enemy::EvaluateHit(float damage) {
+void fsm_basic_enemy::EvaluateHit(float damage) {
 	if (damage <= 10000.f){
 		ChangeState("aibe_Ragdoll");
 	}
@@ -554,7 +554,7 @@ void ai_basic_enemy::EvaluateHit(float damage) {
 	}
 }
 
-bool ai_basic_enemy::trueEverySecond()
+bool fsm_basic_enemy::trueEverySecond()
 {
 	static float counter = 0;
 	counter += CApp::get().delta_time;
@@ -565,7 +565,7 @@ bool ai_basic_enemy::trueEverySecond()
 	return false;
 }
 
-bool ai_basic_enemy::trueEveryXSeconds(float time)
+bool fsm_basic_enemy::trueEveryXSeconds(float time)
 {
 	static float counter = 0;
 	counter += CApp::get().delta_time;
@@ -576,7 +576,7 @@ bool ai_basic_enemy::trueEveryXSeconds(float time)
 	return false;
 }
 
-void ai_basic_enemy::Orbit(bool left)
+void fsm_basic_enemy::Orbit(bool left)
 {
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -598,4 +598,17 @@ void ai_basic_enemy::Orbit(bool left)
 
 	physx::PxVec3 player_pos = Physics.XMVECTORToPxVec3(p_transform->position - m_transform->position);
 	((TCompUnityCharacterController*)character_controller)->Move(Physics.XMVECTORToPxVec3(speed), false, false, player_pos);
+}
+
+void fsm_basic_enemy::setId(unsigned int id){
+	my_id = id;
+}
+
+unsigned int fsm_basic_enemy::getInt(){
+	return my_id;
+}
+
+CHandle fsm_basic_enemy::getTransform(){
+	CHandle transform = ((CEntity*)entity)->get<TCompTransform>();
+	return transform;
 }

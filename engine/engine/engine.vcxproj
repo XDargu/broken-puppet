@@ -161,9 +161,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ai\aifsmcontroller.h" />
     <ClInclude Include="ai\aicontroller.h" />
-    <ClInclude Include="ai\ai_basic_enemy.h" />
-    <ClInclude Include="ai\ai_basic_wander.h" />
+    <ClInclude Include="ai\aimanager.h" />
+    <ClInclude Include="ai\behaviour_trees.h" />
+    <ClInclude Include="ai\bt_basic_enemy.h" />
+    <ClInclude Include="ai\bt_node.h" />
+    <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="callback_controllers.h" />
@@ -179,10 +183,12 @@
     <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
+    <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
+    <ClInclude Include="components\comp_sensor_needles.h" />
     <ClInclude Include="components\comp_skeleton.h" />
     <ClInclude Include="components\comp_skeleton_ik.h" />
     <ClInclude Include="components\comp_skeleton_lookat.h" />
@@ -222,6 +228,7 @@
     <ClInclude Include="importer_parser.h" />
     <ClInclude Include="io\iostatus.h" />
     <ClInclude Include="items_by_name.h" />
+    <ClInclude Include="item_manager.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
     <ClInclude Include="memory\data_saver.h" />
@@ -276,9 +283,13 @@
     <ClInclude Include="XMLParser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ai\aifsmcontroller.cpp" />
     <ClCompile Include="ai\aicontroller.cpp" />
-    <ClCompile Include="ai\ai_basic_enemy.cpp" />
-    <ClCompile Include="ai\ai_basic_wander.cpp" />
+    <ClCompile Include="ai\aimanager.cpp" />
+    <ClCompile Include="ai\behaviour_trees.cpp" />
+    <ClCompile Include="ai\bt_basic_enemy.cpp" />
+    <ClCompile Include="ai\bt_node.cpp" />
+    <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
@@ -324,6 +335,7 @@
     <ClCompile Include="handle\prefabs_manager.cpp" />
     <ClCompile Include="importer_parser.cpp" />
     <ClCompile Include="io\iostatus.cpp" />
+    <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="navmesh\navmesh.cpp" />
     <ClCompile Include="navmesh\navmesh_builder.cpp" />
     <ClCompile Include="navmesh\navmesh_input.cpp" />

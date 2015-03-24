@@ -38,9 +38,6 @@
     <ClInclude Include="render\texture.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="ai\aicontroller.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="XMLParser.h" />
     <ClInclude Include="importer_parser.h" />
     <ClInclude Include="physics_manager.h" />
@@ -131,17 +128,11 @@
     <ClInclude Include="components\comp_collider_mesh.h">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="ai\ai_basic_wander.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_ai_fsm_basic.h">
       <Filter>components</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_enemy_controller.h">
       <Filter>components</Filter>
-    </ClInclude>
-    <ClInclude Include="ai\ai_basic_enemy.h">
-      <Filter>ai</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_rope.h">
       <Filter>components</Filter>
@@ -308,6 +299,34 @@
     <ClInclude Include="memory\data_saver.h">
       <Filter>memory</Filter>
     </ClInclude>
+    <ClInclude Include="ai\aimanager.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aicontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aifsmcontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\behaviour_trees.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_basic_enemy.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_node.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="item_manager.h" />
+    <ClInclude Include="components\comp_sensor_needles.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_position_sensor.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\fsm_basic_enemy.h">
+      <Filter>ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -339,9 +358,6 @@
     </ClCompile>
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\aicontroller.cpp">
-      <Filter>ai</Filter>
     </ClCompile>
     <ClCompile Include="handle\handle.cpp">
       <Filter>handle</Filter>
@@ -375,12 +391,6 @@
     <ClCompile Include="handle\entity.cpp" />
     <ClCompile Include="render\collision_mesh.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\ai_basic_wander.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\ai_basic_enemy.cpp">
-      <Filter>ai</Filter>
     </ClCompile>
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
@@ -516,6 +526,28 @@
     </ClCompile>
     <ClCompile Include="components\comp_skeleton_lookat.cpp">
       <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aimanager.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aicontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aifsmcontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\behaviour_trees.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_basic_enemy.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_node.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="ai\fsm_basic_enemy.cpp">
+      <Filter>ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

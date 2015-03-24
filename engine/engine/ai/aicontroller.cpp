@@ -4,55 +4,9 @@
 
 aicontroller::aicontroller()
 {
-	statemap = new map<string, statehandler>();
 }
 
 aicontroller::~aicontroller()
 {
-	delete statemap;
-	statemap = nullptr;
 }
 
-void aicontroller::Init()
-{
-}
-
-
-void aicontroller::Recalc(float deltaTime)
-{
-	// this is a trusted jump as we've tested for coherence in ChangeState
-	(this->*(*statemap)[state])(deltaTime);
-}
-
-void aicontroller::SetEntity(CHandle the_entity)
-{
-	entity = the_entity;
-}
-
-void aicontroller::ChangeState(std::string newstate)
-{
-	// try to find a state with the suitable name
-	if (statemap->find(newstate) == statemap->end())
-	{
-		// the state we wish to jump to does not exist. we abort
-		exit(-1);
-	}
-	state = newstate;
-}
-
-std::string aicontroller::GetState()
-{
-	return state;
-}
-
-void aicontroller::AddState(std::string name, statehandler sh)
-{
-
-	// try to find a state with the suitable name
-	if (statemap->find(name) != statemap->end())
-	{
-		// the state we wish to jump to does exist. we abort
-		exit(-1);
-	}
-	(*statemap)[name] = sh;
-}
