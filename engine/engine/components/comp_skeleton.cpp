@@ -81,7 +81,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   model->getMixer()->blendCycle(0, 1.0, 0.f);
 
   // Register a key to render the mesh
-  const CMaterial* mat = material_manager.getByName("skin_basic");
+  const CMaterial* mat = material_manager.getByName("skin_ipa");
   const CMesh* mesh = core_model->getMesh();
 
   for (int i = 0; i < mesh->getNGroups(); ++i )
