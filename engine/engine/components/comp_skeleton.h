@@ -1,11 +1,13 @@
 #ifndef INC_COMP_SKELETON_H_
 #define INC_COMP_SKELETON_H_
 
+#include "base_component.h"
+
 class CalModel;
 class CalBone;
 
 
-struct TCompSkeleton {    // 2 ...
+struct TCompSkeleton : TBaseComponent {    // 2 ...
   CalModel*  model;
 
   TCompSkeleton() : model(nullptr) { }

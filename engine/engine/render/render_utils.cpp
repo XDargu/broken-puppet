@@ -394,9 +394,9 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float ten
 		XMVECTOR midPos = XMVectorLerp(initialPos, finalPos, (float)i / (epsilon - 1));
 
 		if (i < epsilon / 2)
-			y = pow(epsilon - i, pow_r) / pow(epsilon, pow_r);
+			y = (float) (pow(epsilon - i, pow_r) / pow(epsilon, pow_r));
 		else
-			y = pow(i, pow_r) / pow(epsilon, pow_r);
+			y = (float) (pow(i, pow_r) / pow(epsilon, pow_r));
 
 		float noise = (sin(elapsed*velocity + i*wave_freq) + 1) * amplitude;
 		if (i != 0 && i != epsilon - 1)
@@ -440,9 +440,9 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 		XMVECTOR midPos = XMVectorLerp(initialPos, finalPos, (float)i / (epsilon - 1));
 
 		if (i < epsilon / 2)
-			y = pow(epsilon - i, pow_r) / pow(epsilon, pow_r);
+			y = (float) (pow(epsilon - i, pow_r) / pow(epsilon, pow_r));
 		else
-			y = pow(i, pow_r) / pow(epsilon, pow_r);
+			y = (float) (pow(i, pow_r) / pow(epsilon, pow_r));
 
 		float noise = (sin(elapsed*velocity + i*wave_freq) + 1) * amplitude;
 		if (i != 0 && i != epsilon - 1)

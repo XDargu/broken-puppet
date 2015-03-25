@@ -33,6 +33,11 @@ using namespace physx;
 
 static CApp the_app;
 
+CEntityInspector &entity_inspector = CEntityInspector::get();
+CEntityLister	 &entity_lister = CEntityLister::get();
+CEntityActioner	 &entity_actioner = CEntityActioner::get();
+CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
+
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
 deque<CHandle> strings;
@@ -194,7 +199,7 @@ bool CApp::create() {
 		return false;
 
 	// Start random seed
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -252,7 +257,7 @@ bool CApp::create() {
 	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
-	entity_inspector.inspectEntity(nullptr);
+	entity_inspector.inspectEntity(CHandle());
 
 	entity_lister.init();
 	entity_actioner.init();
@@ -365,11 +370,11 @@ void CApp::update(float elapsed) {
 
 				djoint->joint->getActors(a1, a2);
 				// Wake up the actors, if dynamic
-				if (a1->isRigidDynamic()) {
+				if (a1 && a1->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a1)->wakeUp();
 					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
-				if (a2->isRigidDynamic()) {
+				if (a2 && a2->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a2)->wakeUp();
 					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
@@ -430,7 +435,6 @@ void CApp::update(float elapsed) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
-					bool a = firstActor->isRigidDynamic();
 
 					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
 					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
@@ -445,7 +449,7 @@ void CApp::update(float elapsed) {
 					firstNeedle = new_e;
 
 				}
-				else if (blockHit.actor != firstActor) {
+				else if ((blockHit.actor != firstActor) && !(blockHit.actor->isRigidStatic() && firstActor->isRigidStatic())) {
 					if (num_strings >= max_num_string){
 						CHandle c_rope = strings.front();
 						strings.pop_front();
@@ -460,14 +464,14 @@ void CApp::update(float elapsed) {
 
 					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
 					PxVec3 pos = firstActor->getGlobalPose().q.rotate(firstOffset) + firstActor->getGlobalPose().p;
-					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position);
-
 					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
 					PxVec3 offset_1 = firstOffset;//firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
 					PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
 
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));
+					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
+					
+					/*new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
+					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));*/
 
 					new_e->add(new_e_j);
 
@@ -503,7 +507,6 @@ void CApp::update(float elapsed) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
-					bool a = blockHit.actor->isRigidDynamic();
 
 					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
 					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
@@ -727,44 +730,62 @@ void CApp::renderEntities() {
 			PxRigidActor* a2 = nullptr;
 
 			djoint->joint->getActors(a1, a2);
-			if (a1 && a2) {
 
+			XMVECTOR initialPos = XMVectorZero();
+			XMVECTOR finalPos = XMVectorZero();
+
+			XMVECTOR rot1 = XMQuaternionIdentity();
+			XMVECTOR rot2 = XMQuaternionIdentity();
+
+			if (a1) {
 				XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
-				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 
 				XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
-				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
-
-				XMVECTOR rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
-				XMVECTOR rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+				rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
 
 				XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+
+				//   RECREATE ROPE   
+				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+				initialPos = pos1 + offset_rotado_1;
+			}
+			else {
+				initialPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			}
+			if (a2) {
+				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+
+				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+				rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+
 				XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
 				//   RECREATE ROPE   
 				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-				XMVECTOR initialPos = pos1 + offset_rotado_1;
-				XMVECTOR finalPos = pos2 + offset_rotado_2;
-
-				float dist = djoint->joint->getDistance();
-				float maxDist = pow(djoint->joint->getMaxDistance(), 2);
-
-				float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
-
-				rope.destroy();
-				createFullString(rope, initialPos, finalPos, tension, c_rope->width);
-
-				float color_tension = min(dist / maxDist * 0.25f, 1);
-				setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
-				setWorldMatrix(XMMatrixIdentity());
-				rope.activateAndRender();
-
-				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
-				wiredCube.activateAndRender();
-
-				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
-				wiredCube.activateAndRender();
+				finalPos = pos2 + offset_rotado_2;
 			}
+			else {
+				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			}
+
+			float dist = djoint->joint->getDistance();
+			float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+
+			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+
+			rope.destroy();
+			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
+
+			float color_tension = min(dist / maxDist * 0.25f, 1);
+			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
+			setWorldMatrix(XMMatrixIdentity());
+			rope.activateAndRender();
+
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+			wiredCube.activateAndRender();
+
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
+			wiredCube.activateAndRender();
 		}
 
 		// If the component has no transform it can't be rendered
@@ -845,9 +866,9 @@ void CApp::renderDebugEntities() {
 				wiredCube.activateAndRender();
 
 			// Draw max and min
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->min));
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05f, 0.05f, 0.05f, 0), zero, zero, aabb->min));
 			wiredCube.activateAndRender();
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05f, 0.05f, 0.05f, 0), zero, zero, aabb->max));
 			wiredCube.activateAndRender();
 		}
 	}
@@ -862,7 +883,7 @@ void CApp::activateInspectorMode(bool active) {
 	renderAxis = active;
 	renderAABB = active;
 	renderGrid = active;
-	renderNames = active;
+	//renderNames = active;
 
 	// Desactivar los componentes
 	getObjManager<TCompPlayerController>()->setActiveComponents(!active);
@@ -878,7 +899,7 @@ void CApp::activateDebugMode(bool active) {
 	renderAxis = active;
 	renderAABB = active;
 	renderGrid = active;
-	renderNames = active;
+	//renderNames = active;
 
 	debug_mode = active;
 }

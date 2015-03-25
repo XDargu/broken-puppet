@@ -20,10 +20,10 @@ public:
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
 
-	void create(float density, float is_kinematic, float use_gravity) {
+	void create(float density, bool is_kinematic, bool use_gravity) {
 
 		CEntity* e = CHandle(this).getOwner();
-		transform = e->get<TCompTransform>();
+		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
@@ -31,8 +31,7 @@ public:
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		assert(transform.isValid() || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c || sphere_c || capsule_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -91,7 +90,7 @@ public:
 		bool temp_use_gravity = atts.getBool("gravity", true);
 
 		CEntity* e = CHandle(this).getOwner();
-		transform = e->get<TCompTransform>();
+		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
@@ -99,8 +98,7 @@ public:
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		assert(trans || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c || sphere_c ||capsule_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(

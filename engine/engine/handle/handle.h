@@ -3,15 +3,9 @@
 
 #include "mcv_platform.h"
 #include "XMLParser.h"
-#include "render/render_utils.h"
-#include "physics_manager.h"
-
-using namespace DirectX;
 
 class MKeyValue;
 struct TMsg;
-
-#define Physics CPhysicsManager::get()
 
 class CHandle {
 public:
@@ -53,13 +47,14 @@ public:
 		// Used when TObj is const*. We want the manager of <TLife> objs
 		// not the manager of <const TLife>, so we use the remove_const
 		auto om = getObjManager<std::remove_const<TObj>::type>();
-		assert(om);
+		XASSERT(om, "Invalid object manager");
 		if (type == 0)
 			return nullptr;
-		assert(this->type == om->getType()
-			|| fatal("Can't convert handle of type %s to %s\n"
+		XASSERT(this->type == om->getType()
+			, "Can't convert handle of type %s to %s"
 			, CHandleManager::the_register.getByType(getType())->getObjTypeName()
-			, om->getObjTypeName()));
+			, om->getObjTypeName()
+			);
 		return om->getObjByHandle(*this);
 	}
 
@@ -95,62 +90,6 @@ private:
 #include "handle/objs_manager.h"
 #include "handle/msgs.h"
 #include "handle/entity.h"
-
-
-
-
-
-/*
-struct TController {    // 2 ...
-float velocity, acc;
-void update(float elapsed) {
-CEntity* e = CHandle(this).getOwner();
-dbg("Updating controller of %s\n", e->getName());
-}
-void loadFromAtts(MKeyValue& atts) {}
-
-std::string toString() {
-return "Velocity: " + std::to_string(velocity) + "Acceleration: " + std::to_string(acc);
-}
-};
-
-
-struct TThirdPersonCameraController {
-private:
-TTransform* transform;
-public:
-TTransform*	player;
-
-TThirdPersonCameraController() {}
-
-void loadFromAtts(MKeyValue &atts) {
-}
-
-void init() {
-CEntity* e_player = CEntityManager::get().getByName("Player");
-
-assert(e_player || fatal("TFirstPersonCameraController requieres a player entity"));
-
-player = e_player->get<TTransform>();
-assert(player || fatal("TFirstPersonCameraController requieres a player entity with a TTransform component"));
-
-CHandleManager* hm = CHandleManager::the_register.getByName("thirdPersonCameraController");
-CEntity* e = hm->getOwner(this);
-transform = e->get<TTransform>();
-
-assert(transform || fatal("TFirstPersonCameraController requieres a TTransform component"));
-}
-
-void update(float elapsed) {
-transform->position = player->position - player->getFront() * 3 + player->getUp() * 3;
-transform->lookAt(player->position + player->getUp() * 2, player->getUp());
-}
-
-std::string toString() {
-return "Camera controller";
-}
-};
-*/
 
 #endif
 

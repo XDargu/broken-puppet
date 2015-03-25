@@ -1,6 +1,8 @@
 #ifndef INC_BASE_COMPONENT_H_
 #define INC_BASE_COMPONENT_H_
 
+#include "handle\handle.h"
+
 struct TBaseComponent {
 public:
 	bool active;
@@ -8,10 +10,11 @@ public:
 	TBaseComponent() : active(true) {}
 
 	template< class TObj >
-	CHandle assertRequiredComponent(CHandle who_requires){		
+	CHandle assertRequiredComponent(CHandle who_requires){
+		SET_ERROR_CONTEXT("Getting a required component", getObjManager<TObj>()->getObjTypeName());
 		CEntity* e = who_requires.getOwner();
 		CHandle handle = e->get<TObj>();
-		assert(handle.isValid() || fatal("%s %s component requires a %s component\n", e->getName(), CHandleManager::the_register.getByType(who_requires.getType())->getObjTypeName(), getObjManager<TObj>()->getObjTypeName()));
+		XASSERT(handle.isValid(), "%s %s component requires a %s component", e->getName(), CHandleManager::the_register.getByType(who_requires.getType())->getObjTypeName(), getObjManager<TObj>()->getObjTypeName());
 		return handle;
 	}
 

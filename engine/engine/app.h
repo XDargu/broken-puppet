@@ -1,8 +1,6 @@
 #ifndef INC_APP_H_
 #define INC_APP_H_
 
-#include "entity_inspector.h"
-
 class CEntity;
 
 class CApp {
@@ -32,10 +30,6 @@ public:
 	int  yres;
 	bool fullscreen;
 	HWND hWnd;
-	CEntityInspector entity_inspector;
-	CEntityLister	 entity_lister;
-	CEntityActioner	 entity_actioner;
-	CDebugOptioner	 debug_optioner;
 
 	CApp();
 	void loadConfig();

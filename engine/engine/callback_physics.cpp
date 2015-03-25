@@ -82,7 +82,7 @@ PxReal CCallbacks_physx::getForce(PxReal mass, const PxContactPair* pairs, PxU32
 		XMVECTOR normal = Physics.PxVec3ToXMVECTOR(contacts[j].normal);
 		force = force+(XMVector3Dot(normal, impulse)*mass);
 	}
-	force = force / nbContacts;
+	force = force / (float)nbContacts;
 	PxVec3 forcePhysics = Physics.XMVECTORToPxVec3(force);
 	PxReal forceMagnitude = forcePhysics.magnitude();
 	return forceMagnitude;

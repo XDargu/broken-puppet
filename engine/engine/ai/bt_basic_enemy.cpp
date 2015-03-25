@@ -175,6 +175,8 @@ int bt_basic_enemy::actionInitialAttack(){
 	}else{
 		return LEAVE;
 	}
+
+	return STAY;
 }
 
 int bt_basic_enemy::actionChasePlayer(){
@@ -207,7 +209,7 @@ int bt_basic_enemy::actionSearchPoint(){
 
 	int x = getRandomNumber(0, 20) - 10;
 	int z = getRandomNumber(0, 20) - 10;
-	wander_target = m_transform->position + XMVectorSet(x * 2, 0, z * 2, 0);
+	wander_target = m_transform->position + XMVectorSet(x * 2.0f, 0, z * 2.0f, 0);
 
 	return LEAVE;
 }
@@ -224,7 +226,7 @@ int bt_basic_enemy::actionChasePoint(){
 
 	bool can_go = true;
 
-	for (int i = 0; i < buf.nbTouches; i++)
+	for (int i = 0; i < (int)buf.nbTouches; i++)
 	{
 		if (buf.touches[i].actor != ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody) {
 			can_go = false;
@@ -310,7 +312,7 @@ void bt_basic_enemy::needleViewedSensor(){
 	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
 	m_sensor->getNeedlesInRange();
 	//almacenamos el numero de agujas en rango para comprobar variaciones
-	currentNumNeedlesViewed = m_sensor->needlesInRange.size();//list_needles.size();
+	currentNumNeedlesViewed = (unsigned int)m_sensor->needlesInRange.size();//list_needles.size();
 	if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción

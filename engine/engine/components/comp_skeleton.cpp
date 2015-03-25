@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_skeleton.h"
 #include "skeletons/skeleton_manager.h"
+#include "physics_manager.h"
 #include "render/render_utils.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
