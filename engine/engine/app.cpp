@@ -33,6 +33,11 @@ using namespace physx;
 
 static CApp the_app;
 
+CEntityInspector &entity_inspector = CEntityInspector::get();
+CEntityLister	 &entity_lister = CEntityLister::get();
+CEntityActioner	 &entity_actioner = CEntityActioner::get();
+CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
+
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
 deque<CHandle> strings;
@@ -194,7 +199,7 @@ bool CApp::create() {
 		return false;
 
 	// Start random seed
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -252,7 +257,7 @@ bool CApp::create() {
 	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
-	entity_inspector.inspectEntity(nullptr);
+	entity_inspector.inspectEntity(CHandle());
 
 	entity_lister.init();
 	entity_actioner.init();
@@ -430,7 +435,6 @@ void CApp::update(float elapsed) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
-					bool a = firstActor->isRigidDynamic();
 
 					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
 					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
@@ -503,7 +507,6 @@ void CApp::update(float elapsed) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
-					bool a = blockHit.actor->isRigidDynamic();
 
 					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
 					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
@@ -863,9 +866,9 @@ void CApp::renderDebugEntities() {
 				wiredCube.activateAndRender();
 
 			// Draw max and min
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->min));
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05f, 0.05f, 0.05f, 0), zero, zero, aabb->min));
 			wiredCube.activateAndRender();
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05f, 0.05f, 0.05f, 0), zero, zero, aabb->max));
 			wiredCube.activateAndRender();
 		}
 	}
@@ -880,7 +883,7 @@ void CApp::activateInspectorMode(bool active) {
 	renderAxis = active;
 	renderAABB = active;
 	renderGrid = active;
-	renderNames = active;
+	//renderNames = active;
 
 	// Desactivar los componentes
 	getObjManager<TCompPlayerController>()->setActiveComponents(!active);
@@ -896,7 +899,7 @@ void CApp::activateDebugMode(bool active) {
 	renderAxis = active;
 	renderAABB = active;
 	renderGrid = active;
-	renderNames = active;
+	//renderNames = active;
 
 	debug_mode = active;
 }

@@ -21,7 +21,7 @@ private:
 	bool onGround;							// Is the character on the ground
 	physx::PxVec3 currentLookPos;			// The current position where the character is looking
 	float originalHeight;					// Used for tracking the original height of the characters capsule collider
-	float lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
+	double lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
 	CHandle capsule_collider;				// The collider for the character
 	physx::PxVec3 moveInput;
 	bool crouchInput;
@@ -213,7 +213,7 @@ public:
 			//rigidbody.useGravity = true;				
 
 
-			for (int i = 0; i < buf.nbTouches; i++)
+			for (int i = 0; i < (int)buf.nbTouches; i++)
 			{
 				if (buf.touches[i].actor != rigid->rigidBody) {
 					// check whether we hit a non-trigger collider (and not the character itself)

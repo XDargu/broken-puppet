@@ -1,7 +1,9 @@
 #ifndef INC_COMP_SKELETON_LOOKAT_H_
 #define INC_COMP_SKELETON_LOOKAT_H_
 
-struct TCompSkeletonLookAt { 
+#include "base_component.h"
+
+struct TCompSkeletonLookAt : TBaseComponent { 
   XMVECTOR target;
   float    amount;
   TCompSkeletonLookAt() { }

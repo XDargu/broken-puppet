@@ -23,6 +23,11 @@ XMVECTOR size;
 PxVec3 linearVelocity;
 PxVec3 angularVelocity;
 
+static CEntityInspector entity_inspector;
+
+CEntityInspector& CEntityInspector::get() {
+	return entity_inspector;
+}
 
 void CEntityInspector::init() {
 	// Create a tewak bar
@@ -175,7 +180,7 @@ void TW_CALL AddTransform(void *clientData) {
 
 	TCompTransform* t = CHandle::create<TCompTransform>();
 	static_cast<CEntity *>(clientData)->add(t);
-	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
 void TW_CALL AddMesh(void *clientData) {
@@ -184,7 +189,7 @@ void TW_CALL AddMesh(void *clientData) {
 	std::strcpy(m->path, "teapot");
 	m->mesh = mesh_manager.getByName("teapot");
 	static_cast<CEntity *>(clientData)->add(m);
-	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
 void TW_CALL AddDirectionalLight(void *clientData) {
@@ -193,7 +198,7 @@ void TW_CALL AddDirectionalLight(void *clientData) {
 	l->color = XMVectorSet(1, 1, 1, 0.5f);
 	l->intensity = 1;
 	static_cast<CEntity *>(clientData)->add(l);
-	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
 void TW_CALL AddPointLight(void *clientData) {
@@ -204,18 +209,18 @@ void TW_CALL AddPointLight(void *clientData) {
 	l->radius = 10;
 	l->intensity = 1;
 	static_cast<CEntity *>(clientData)->add(l);
-	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
 void CEntityInspector::update() {	
 	if (!CHandle(target_entity).isValid()) {
 		TwRemoveAllVars(bar);
-		inspectEntity(nullptr);		
+		inspectEntity(CHandle());		
 		return;
 	}
 
-	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
-	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
+	TCompAABB* e_aabb = ((CEntity*)target_entity)->get<TCompAABB>();
+	TCompRigidBody* e_rigidbody = ((CEntity*)target_entity)->get<TCompRigidBody>();
 
 	if (e_aabb) {
 		center = e_aabb->getCenter();
@@ -228,34 +233,36 @@ void CEntityInspector::update() {
 	}
 }
 
-void CEntityInspector::inspectEntity(CEntity* the_entity) {
+void CEntityInspector::inspectEntity(CHandle the_entity) {
 	target_entity = the_entity;
 	TwRemoveAllVars(bar);
 
-	if (!target_entity)
+	if (!target_entity.isValid())
 		return;
 
-	TCompTransform* e_transform = target_entity->get<TCompTransform>();
-	TCompName* e_name = target_entity->get<TCompName>();
-	TCompMesh* e_mesh = target_entity->get<TCompMesh>();
-	TCompRender* e_render = target_entity->get<TCompRender>();
-	TCompAABB* e_aabb = target_entity->get<TCompAABB>();
-	TCompCollider* e_collider = target_entity->get<TCompCollider>();
-	TCompRigidBody* e_rigidbody = target_entity->get<TCompRigidBody>();
-	TCompCamera* e_camera = target_entity->get<TCompCamera>();
-	TCompPlayerController* e_player_controller = target_entity->get<TCompPlayerController>();
-	TCompPlayerPivotController* e_player_pivot_controller = target_entity->get<TCompPlayerPivotController>();
-	TCompCameraPivotController* e_camera_pivot_controller = target_entity->get<TCompCameraPivotController>();
-	TCompThirdPersonCameraController* e_third_person_camera_controller = target_entity->get<TCompThirdPersonCameraController>();
-	TCompDistanceJoint* e_distance_joint = target_entity->get<TCompDistanceJoint>();
-	TCompRope* e_rope = target_entity->get<TCompRope>();
+	CEntity* inspectedEntity = target_entity;
+
+	TCompTransform* e_transform = inspectedEntity->get<TCompTransform>();
+	TCompName* e_name = inspectedEntity->get<TCompName>();
+	TCompMesh* e_mesh = inspectedEntity->get<TCompMesh>();
+	TCompRender* e_render = inspectedEntity->get<TCompRender>();
+	TCompAABB* e_aabb = inspectedEntity->get<TCompAABB>();
+	TCompCollider* e_collider = inspectedEntity->get<TCompCollider>();
+	TCompRigidBody* e_rigidbody = inspectedEntity->get<TCompRigidBody>();
+	TCompCamera* e_camera = inspectedEntity->get<TCompCamera>();
+	TCompPlayerController* e_player_controller = inspectedEntity->get<TCompPlayerController>();
+	TCompPlayerPivotController* e_player_pivot_controller = inspectedEntity->get<TCompPlayerPivotController>();
+	TCompCameraPivotController* e_camera_pivot_controller = inspectedEntity->get<TCompCameraPivotController>();
+	TCompThirdPersonCameraController* e_third_person_camera_controller = inspectedEntity->get<TCompThirdPersonCameraController>();
+	TCompDistanceJoint* e_distance_joint = inspectedEntity->get<TCompDistanceJoint>();
+	TCompRope* e_rope = inspectedEntity->get<TCompRope>();
 
 	// AI
-	TCompAiFsmBasic* e_comp_ai_fsm_basic = target_entity->get<TCompAiFsmBasic>();
+	TCompAiFsmBasic* e_comp_ai_fsm_basic = inspectedEntity->get<TCompAiFsmBasic>();
 
-	TCompDirectionalLight* e_directional_light = target_entity->get<TCompDirectionalLight>();
-	TCompAmbientLight* e_ambient_light = target_entity->get<TCompAmbientLight>();
-	TCompPointLight* e_point_light = target_entity->get<TCompPointLight>();
+	TCompDirectionalLight* e_directional_light = inspectedEntity->get<TCompDirectionalLight>();
+	TCompAmbientLight* e_ambient_light = inspectedEntity->get<TCompAmbientLight>();
+	TCompPointLight* e_point_light = inspectedEntity->get<TCompPointLight>();
 
 	if (e_name) {
 		TwAddVarRW(bar, "NActive", TW_TYPE_BOOL8, &e_name->active, " group=Name label='Active'");
@@ -380,16 +387,16 @@ void CEntityInspector::inspectEntity(CEntity* the_entity) {
 	TwAddButton(bar, "Add components", NULL, NULL, "");
 
 	if (!e_transform) {
-		TwAddButton(bar, "Transform", AddTransform, target_entity, "");
+		TwAddButton(bar, "Transform", AddTransform, inspectedEntity, "");
 	}
 	if (!e_mesh) {
-		TwAddButton(bar, "Mesh", AddMesh, target_entity, "");
+		TwAddButton(bar, "Mesh", AddMesh, inspectedEntity, "");
 	}
 	if (!e_directional_light) {
-		TwAddButton(bar, "Directional Light", AddDirectionalLight, target_entity, "");
+		TwAddButton(bar, "Directional Light", AddDirectionalLight, inspectedEntity, "");
 	}
 	if (!e_point_light) {
-		TwAddButton(bar, "Point Light", AddPointLight, target_entity, "");
+		TwAddButton(bar, "Point Light", AddPointLight, inspectedEntity, "");
 	}
 }
 
@@ -403,8 +410,14 @@ CEntityLister::CEntityLister() { searchIn = ""; }
 
 CEntityLister::~CEntityLister() { }
 
+static CEntityLister entity_lister;
+
+CEntityLister& CEntityLister::get() {
+	return entity_lister;
+}
+
 void TW_CALL CallbackInspectEntity(void *clientData) {
-	CApp::get().entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
+	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
 void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
@@ -469,7 +482,7 @@ bool searchCompare(std::string s1, std::string s2) {
 	if (contains1 || contains2)
 		return true;
 
-	int l_dist = LevenshteinDistance(s1, s2);
+	size_t l_dist = LevenshteinDistance(s1, s2);
 	if (l_dist < 4)
 		return true;
 	return false;
@@ -638,6 +651,12 @@ CEntityActioner::CEntityActioner() {}
 
 CEntityActioner::~CEntityActioner() { }
 
+static CEntityActioner entity_actioner;
+
+CEntityActioner& CEntityActioner::get() {
+	return entity_actioner;
+}
+
 // AntTweakBar button test
 int entityCounter = 0;
 void TW_CALL CallbackCreateEntity(void *clientData)
@@ -655,8 +674,8 @@ void TW_CALL CallbackCreateEntity(void *clientData)
 
 void TW_CALL CallbackDestroyEntity(void *clientData)
 {
-	CEntityManager::get().remove(CHandle(CApp::get().entity_inspector.getInspectedEntity()));
-	CApp::get().entity_inspector.inspectEntity(nullptr);
+	CEntityManager::get().remove(CHandle(entity_inspector.getInspectedEntity()));
+	entity_inspector.inspectEntity(CHandle());
 }
 
 void TW_CALL CallbackLoadLevel(void *clientData)
@@ -702,6 +721,12 @@ CDebugOptioner::CDebugOptioner()
 {}
 
 CDebugOptioner::~CDebugOptioner() { }
+
+static CDebugOptioner debug_optioner;
+
+CDebugOptioner& CDebugOptioner::get() {
+	return debug_optioner;
+}
 
 void CDebugOptioner::init() {
 	// Create a tewak bar

@@ -23,9 +23,9 @@ void CNavmesh::build( ) {
   rcVcopy(config.bmin, &x_min);
   rcVcopy(config.bmax, &x_max);
   config.tileSize = 32;
-  config.cs = 0.05;
-  config.ch = 0.05;
-  config.walkableHeight = 2.0;
+  config.cs = 0.05f;
+  config.ch = 0.05f;
+  config.walkableHeight = 2;
   config.walkableRadius = 0;
   config.walkableClimb = 0.1;
   config.walkableSlopeAngle = 45.0f;
