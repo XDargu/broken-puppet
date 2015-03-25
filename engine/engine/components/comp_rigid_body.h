@@ -20,7 +20,7 @@ public:
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
 
-	void create(float density, float is_kinematic, float use_gravity) {
+	void create(float density, bool is_kinematic, bool use_gravity) {
 
 		CEntity* e = CHandle(this).getOwner();
 		transform = e->get<TCompTransform>();

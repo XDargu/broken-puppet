@@ -142,7 +142,7 @@ void fsm_basic_enemy::Wander() {
 
 	bool can_go = true;
 
-	for (int i = 0; i < buf.nbTouches; i++)
+	for (int i = 0; i < (int)buf.nbTouches; i++)
 	{		
 		if (buf.touches[i].actor != ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody) {
 			can_go = false;
@@ -152,7 +152,7 @@ void fsm_basic_enemy::Wander() {
 	if (!can_go) {
 		int x = getRandomNumber(0, 20) - 10;
 		int z = getRandomNumber(0, 20) - 10;
-		wander_target = m_transform->position + XMVectorSet(x * 2, 0, z * 2, 0);
+		wander_target = m_transform->position + XMVectorSet(x * 2.f, 0, z * 2.f, 0);
 	}
 
 	// If wander target reached, set other target
@@ -160,7 +160,7 @@ void fsm_basic_enemy::Wander() {
 	{
 		int x = getRandomNumber(0, 20) - 10;
 		int z = getRandomNumber(0, 20) - 10;
-		wander_target = m_transform->position + XMVectorSet(x * 2, 0, z * 2, 0);		
+		wander_target = m_transform->position + XMVectorSet(x * 2.f, 0, z * 2.f, 0);
 	}
 
 	// Check probability to wander
@@ -503,7 +503,7 @@ void fsm_basic_enemy::Ragdoll(float elapsed){
 	Physics.raycastAll(px_trans.p, -physx::PxVec3(0, 1, 0), (((TCompUnityCharacterController*)character_controller)->enemy_height / 2.f) + 0.25f, buf);
 	
 	bool onGround = false;
-	for (int i = 0; i < buf.nbTouches; i++)
+	for (int i = 0; i < (int)buf.nbTouches; i++)
 	{
 		if (buf.touches[i].actor != ((TCompUnityCharacterController*)character_controller)->enemy_rigidbody) {
 			onGround = true;

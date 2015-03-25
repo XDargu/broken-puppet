@@ -224,8 +224,8 @@ void fsm_basic_player::Ragdoll(float elapsed){
 	physx::PxMaterial* mat;
 	((TCompUnityCharacterController*)comp_unity_controller)->enemy_collider->getMaterials(&mat, 1);
 	mat->setRestitution(1);
-	mat->setStaticFriction(0.7);
-	mat->setDynamicFriction(0.7);
+	mat->setStaticFriction(0.7f);
+	mat->setDynamicFriction(0.7f);
 
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);

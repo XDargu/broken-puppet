@@ -88,13 +88,13 @@ public:
 		delta_pos +=  Physics.PxVec3ToXMVECTOR( gravity ) * elapsed;
 
 		// Move the character controller
-		physx::PxControllerCollisionFlags collisionFlags = character_controller->move(Physics.XMVECTORToPxVec3(delta_pos), 0.1, elapsed, NULL, NULL);
+		PxControllerCollisionFlags collisionFlags = character_controller->move(Physics.XMVECTORToPxVec3(delta_pos), 0.1f, elapsed, NULL, NULL);
 		delta_pos = XMVectorZero();
 
 		grounded = collisionFlags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN);
 
-		physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
-		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
+		PxExtendedVec3 newPos = character_controller->getFootPosition();
+		transform->position = Physics.PxVec3ToXMVECTOR(PxVec3((PxReal)newPos.x, (PxReal)newPos.y, (PxReal)newPos.z));
 	}
 
 

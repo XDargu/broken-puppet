@@ -482,7 +482,7 @@ bool searchCompare(std::string s1, std::string s2) {
 	if (contains1 || contains2)
 		return true;
 
-	int l_dist = LevenshteinDistance(s1, s2);
+	size_t l_dist = LevenshteinDistance(s1, s2);
 	if (l_dist < 4)
 		return true;
 	return false;
