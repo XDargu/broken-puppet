@@ -30,6 +30,7 @@ aicontroller* aimanager::getAI(unsigned int id){
 			return element;
 	}
 	//Meter un xassert
+	CErrorContext ec("Getting bot", "aimanager");
 	XASSERT(id, "bot doesn't exists");
 	return nullptr;
 }
