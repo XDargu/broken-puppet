@@ -28,6 +28,7 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 	CHandle h;
 	if (elem == "entity" && atts.has("prefab")) {
+		SET_ERROR_CONTEXT("Adding prefab", atts["prefab"].c_str());
 		h = prefabs_manager.getInstanceByName(atts["prefab"].c_str());
 	}
 	else {
@@ -47,7 +48,8 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 	}
 
 	if (elem != "entity") {
-		assert(current_entity.isValid());
+		SET_ERROR_CONTEXT("Adding component", elem.c_str());
+		XASSERT(current_entity.isValid(), "Entity not valid");
 		CEntity* e = current_entity;
 		if (!reusing_component)
 			e->add(h);

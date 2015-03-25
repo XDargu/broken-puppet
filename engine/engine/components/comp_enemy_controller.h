@@ -38,11 +38,8 @@ public:
 		movement_velocity = atts.getFloat("movementVelocity", 5);
 		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 
-		CEntity* e = CHandle(this).getOwner();
-		m_transform = e->get<TCompTransform>();
+		m_transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)m_transform;
-
-		assert(trans || fatal("TCompEnemyController requieres a TTransform component"));		
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.5f);

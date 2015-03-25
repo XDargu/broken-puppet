@@ -41,7 +41,7 @@ public:
 
 
 	TObj* getObjByHandle(CHandle h) const {
-		assert(h.getType() == getType());
+		XASSERT(h.getType() == getType(), "Type mismatch");
 		uint32_t external_idx = h.getExternalIndex();
 
 		// Comprobar que el external_id is potencialmente valido
@@ -55,7 +55,7 @@ public:
 		if (ed->current_age != h.getAge())
 			return nullptr;
 
-		assert(ed->internal_index != invalid_index);
+		XASSERT(ed->internal_index != invalid_index, "Invalid index");
 		return objs + ed->internal_index;
 	}
 
@@ -73,7 +73,7 @@ public:
 	CHandle createObj() {
 
 		// Do we have space?
-		assert(num_objects_in_use < max_objects_in_use || fatal("No more space for components of type %s\n", getObjTypeName()));
+		XASSERT(num_objects_in_use < max_objects_in_use,"No more space for components of type %s\n", getObjTypeName());
 
 		// The real object goes at the end of the array of real objects
 		uint32_t internal_idx = num_objects_in_use;
@@ -110,9 +110,10 @@ public:
 
 	// --------------------------------------------
 	bool destroyObj(CHandle h) {
-		assert(!updating_objs || fatal("No puedes borrar componentes de este tipo mientras estas actualizandolos"));
+		SET_ERROR_CONTEXT("Destroying a handle", "");
+		XASSERT(!updating_objs, "Trying to destroy a handle while updating");
 		// Confirm the handle is mine
-		assert(h.getType() == getType());
+		XASSERT(h.getType() == getType(), "Type mismatch");
 
 		// The index is garbage
 		if (h.getExternalIndex() >= max_objects_in_use)
@@ -156,7 +157,7 @@ public:
 		internal_to_external[size() - 1] = invalid_index;
 
 		// We now have one less object
-		assert(num_objects_in_use > 0);
+		XASSERT(num_objects_in_use > 0, "Objects in use can't be 0 or less");
 		num_objects_in_use--;
 
 		// Update the linked list of free handles

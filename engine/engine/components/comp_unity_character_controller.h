@@ -473,7 +473,7 @@ public:
 	void ChangeMaterial(physx::PxShape* collider, physx::PxMaterial* m_material){
 
 		const physx::PxU16 n_materials = collider->getNbMaterials();
-		assert(n_materials < 16 || fatal("enemy_collider no puede tener más de 16 materiales"));
+		XASSERT(n_materials < 16 , "enemy_collider no puede tener más de 16 materiales");
 		physx::PxMaterial* buffer[16];
 		physx::PxU16 first_material = 0;
 		enemy_collider->getMaterials(buffer, 16);

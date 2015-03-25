@@ -38,6 +38,7 @@ public:
 
 	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, physx::PxVec3 pos1, physx::PxVec3 pos2, physx::PxTransform offset1, physx::PxTransform offset2) {
 
+		SET_ERROR_CONTEXT("Creating a distance joint", "");
 		// If any actor is static, then attack the joint to he air instead of the actor
 		if (actor1->isRigidStatic()) {
 			if (actor2->isRigidStatic()) {
@@ -62,7 +63,7 @@ public:
 		}
 		
 		Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
-		assert((actor1 != actor2) || fatal("Joint actors must be different"));
+		XASSERT((actor1 != actor2), "Joint actors must be different");
 
 		float dist_between_positions = (pos1 - pos2).magnitude();
 		joint->setDamping(damping);

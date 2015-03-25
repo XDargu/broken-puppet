@@ -38,12 +38,8 @@ public:
 	}
 
 	void init() {
-		CEntity* e = CHandle(this).getOwner();
-		transform = e->get<TCompTransform>();
-
+		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
-
-		assert(trans || fatal("TCamera requieres a TTransform component"));
 
 		trans->lookAt(target, trans->getUp());
 		setViewport(0, 0, (float)CApp::get().xres, (float)CApp::get().yres);

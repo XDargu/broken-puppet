@@ -23,18 +23,20 @@ void CRenderManager::addKey(const CMesh*      mesh
 	, CHandle owner
 	) {
 
+	SET_ERROR_CONTEXT("Adding a render key", "")
 	TKey k = { material, mesh, mesh_id, owner };
 
 	// Pasar de comp_render a entity
 	CEntity* e = owner.getOwner();
 	k.transform = e->get< TCompTransform >();
-	assert(k.transform.isValid());
+	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
 
 	keys.push_back(k);
 	sort_required = true;
 }
 
 void CRenderManager::renderAll(const XMMATRIX view_projection) {
+	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
 		std::sort(keys.begin(), keys.end(), sort_by_material_then_mesh);
@@ -72,13 +74,13 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 
 		if (uploading_bones) {
 			const TCompSkeleton* skel = it->owner;
-			assert(skel);
+			XASSERT(skel, "Invalid skeleton");
 			skel->uploadBonesToGPU();
 		}
 
 		// Activar la world del obj
 		TCompTransform* tmx = it->transform;
-		assert(tmx);
+		XASSERT(tmx, "Invalid transform");
 		setWorldMatrix(tmx->getWorld());
 
 		// Pintar la mesh:submesh del it
