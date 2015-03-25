@@ -38,11 +38,8 @@ public:
 		movement_velocity = atts.getFloat("movementVelocity", 5);
 		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
 
-		CEntity* e = CHandle(this).getOwner();
-		m_transform = e->get<TCompTransform>();
+		m_transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)m_transform;
-
-		assert(trans || fatal("TCompEnemyController requieres a TTransform component"));		
 
 		// Create player material
 		physx::PxMaterial* pMaterial = Physics.gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.5f);
@@ -88,13 +85,13 @@ public:
 		delta_pos +=  Physics.PxVec3ToXMVECTOR( gravity ) * elapsed;
 
 		// Move the character controller
-		physx::PxControllerCollisionFlags collisionFlags = character_controller->move(Physics.XMVECTORToPxVec3(delta_pos), 0.1, elapsed, NULL, NULL);
+		PxControllerCollisionFlags collisionFlags = character_controller->move(Physics.XMVECTORToPxVec3(delta_pos), 0.1f, elapsed, NULL, NULL);
 		delta_pos = XMVectorZero();
 
 		grounded = collisionFlags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN);
 
-		physx::PxExtendedVec3 newPos = character_controller->getFootPosition();
-		transform->position = Physics.PxVec3ToXMVECTOR(physx::PxVec3(newPos.x, newPos.y, newPos.z));
+		PxExtendedVec3 newPos = character_controller->getFootPosition();
+		transform->position = Physics.PxVec3ToXMVECTOR(PxVec3((PxReal)newPos.x, (PxReal)newPos.y, (PxReal)newPos.z));
 	}
 
 

@@ -62,11 +62,8 @@ public:
 	}
 
 	void init() {
-		CEntity* e = CHandle(this).getOwner();
-		transform = e->get<TCompTransform>();
+		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
-
-		assert(trans || fatal("TAABB requieres a TTransform component"));
 
 		prev_position = trans->position;
 		prev_rotation = trans->rotation;

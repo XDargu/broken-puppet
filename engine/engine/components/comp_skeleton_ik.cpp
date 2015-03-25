@@ -5,6 +5,7 @@
 #include "skeletons/skeleton_manager.h"
 #include "skeletons/ik_handler.h"
 #include "comp_transform.h"
+#include "physics_manager.h"
 
 void TCompSkeletonIK::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   //target = atts.getPoint("target");
@@ -17,6 +18,7 @@ void TCompSkeletonIK::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompSkeletonIK::solveBone(int bone_id_c, XMVECTOR n) {
 
+	SET_ERROR_CONTEXT("Solving IK bone", "");
   // Access to the sibling comp skeleton component
   // where we can access the cal_model instance
   CEntity* e = CHandle(this).getOwner();
@@ -25,15 +27,15 @@ void TCompSkeletonIK::solveBone(int bone_id_c, XMVECTOR n) {
     return;
 
   CalModel* model = comp_skel->model;
-  assert(bone_id_c != -1);
+  XASSERT(bone_id_c != -1, "Invalid C bone from ik");
   CalBone* bone_c = model->getSkeleton()->getBone(bone_id_c);
 
   int bone_id_b = bone_c->getCoreBone()->getParentId();
-  assert(bone_id_b != -1);
+  XASSERT(bone_id_b != -1, "Invalid B bone from ik");
   CalBone* bone_b = model->getSkeleton()->getBone(bone_id_b);
 
   int bone_id_a = bone_b->getCoreBone()->getParentId();
-  assert(bone_id_a != -1);
+  XASSERT(bone_id_a != -1, "Invalid A bone from ik");
   CalBone* bone_a = model->getSkeleton()->getBone(bone_id_a);
 
   TIKHandle ik;

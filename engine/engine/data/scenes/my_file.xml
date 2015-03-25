@@ -956,7 +956,7 @@ skeleton_lookat target="2 2 0" amount="1"/>
 	</entity>
 	<entity tag = "level">
 <name name="dvn_arqui_suelo_parche_later_R_01_95.0" />
-<transform position="-8.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.63754e-005" scale="1.0 1.0 1.0"/>
+<transform position="-8.0 -1.39876e-006 -32.0" rotation="0.0 1.0 0.0 1.66138e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_arqui_suelo_parche_later_R_01" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -2356,16 +2356,9 @@ skeleton_lookat target="2 2 0" amount="1"/>
 <transform position="39.5895 1.65619e-006 37.8893" rotation="0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
 <directionalLight intensity="0.5" color="1.0 1.0 1.0 1"/>
 	</entity>
-	<entity tag = "player2" prefab="Player2">
-		<transform position="-8.0 1.04907e-006 22.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	<entity >
+<name name="Omni001_224.0" />
+<transform position="-24.0 2.44109 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="5.0" intensity="1.0" color="0.72549 0.74902 0.133333 1"/>
 	</entity>
-	<entity>
-<name name="Skel00"/>
-<transform q="0 0 0 1" t="2.0 0.0 0.0"/>
-<skeleton name="ipa" />
-skeleton_lookat target="2 2 0" amount="1"/>
-<skeleton_ik bone_c0="25" normal_c0="0 1 0"
-             bone_c1="21" normal_c1="0 -1 0"/>
-<playerDoomController/>
-</entity>
 </scene>

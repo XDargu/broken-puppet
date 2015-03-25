@@ -1,0 +1,59 @@
+<<<<<<< HEAD
+=======
+- 06:33:21.420 DEBUG: Bone 00 : Bip01
+
+- 06:33:21.420 DEBUG: Bone 01 : Bip01 Pelvis
+
+- 06:33:21.420 DEBUG: Bone 02 : Bip01 Spine
+
+- 06:33:21.420 DEBUG: Bone 03 : Bip01 Spine1
+
+- 06:33:21.420 DEBUG: Bone 04 : Bip01 Neck
+
+- 06:33:21.420 DEBUG: Bone 05 : Bip01 Head
+
+- 06:33:21.420 DEBUG: Bone 06 : Bip01 R Clavicle
+
+- 06:33:21.420 DEBUG: Bone 07 : Bip01 R UpperArm
+
+- 06:33:21.420 DEBUG: Bone 08 : Bip01 R Forearm
+
+- 06:33:21.420 DEBUG: Bone 09 : Bip01 R Hand
+
+- 06:33:21.420 DEBUG: Bone 10 : Bip01 R Hook
+
+- 06:33:21.420 DEBUG: Bone 11 : Bip01 L Clavicle
+
+- 06:33:21.420 DEBUG: Bone 12 : Bip01 L UpperArm
+
+- 06:33:21.420 DEBUG: Bone 13 : Bip01 L Forearm
+
+- 06:33:21.420 DEBUG: Bone 14 : Bip01 L Hand
+
+- 06:33:21.420 DEBUG: Bone 15 : Bip01 L Hook
+
+- 06:33:21.420 DEBUG: Bone 16 : Bip01 Shield
+
+- 06:33:21.420 DEBUG: Bone 17 : Bone04
+
+- 06:33:21.420 DEBUG: Bone 18 : Bone05
+
+- 06:33:21.420 DEBUG: Bone 19 : Bip01 L Thigh
+
+- 06:33:21.420 DEBUG: Bone 20 : Bip01 L Calf
+
+- 06:33:21.420 DEBUG: Bone 21 : Bip01 L Foot
+
+- 06:33:21.420 DEBUG: Bone 22 : Bip01 L Toe0
+
+- 06:33:21.420 DEBUG: Bone 23 : Bip01 R Thigh
+
+- 06:33:21.420 DEBUG: Bone 24 : Bip01 R Calf
+
+- 06:33:21.420 DEBUG: Bone 25 : Bip01 R Foot
+
+- 06:33:21.420 DEBUG: Bone 26 : Bip01 R Toe0
+
+- 06:33:23.214 DEBUG: unknown tag playerDoomController
+
+>>>>>>> e9a65a8bbcbbeca5284314dca09584e42ad1ec81

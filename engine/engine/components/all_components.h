@@ -1,6 +1,10 @@
 #ifndef INC_ALL_COMPONENTS_H_
 #define INC_ALL_COMPONENTS_H_
 
+#include "physics_manager.h"
+
+using namespace DirectX;
+
 #include "mcv_platform.h"
 #include "XMLParser.h"
 #include "handle/handle.h"

@@ -4,7 +4,7 @@
 #include "base_component.h"
 class CMaterial;
 
-struct TCompRender : TBaseComponent{
+struct TCompRender : TBaseComponent {
 
 	struct RKey {
 		std::string meshName;

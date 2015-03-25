@@ -4,6 +4,7 @@
 #include "mcv_platform.h"
 #include "base_component.h"
 #include "transform.h"
+#include "comp_name.h"
 
 // ----------------------------------------
 struct TCompTransform : TBaseComponent {     // 1

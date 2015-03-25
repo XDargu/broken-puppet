@@ -29,7 +29,7 @@ private:
 	physx::PxVec3 currentLookPos;			// The current position where the character is looking
 	float originalHeight;					// Used for tracking the original height of the characters capsule collider
 	//Animator animator;					// The animator for the character
-	float lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
+	double lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
 	CHandle capsule_collider;				// The collider for the character
 	float half;								// whats it says, it's a constant for a half
 	physx::PxVec3 moveInput;
@@ -378,7 +378,7 @@ public:
 			//rigidbody.useGravity = true;				
 
 
-			for (int i = 0; i < buf.nbTouches; i++)
+			for (int i = 0; i < (int)buf.nbTouches; i++)
 			{
 				if (buf.touches[i].actor != enemy_rigidbody) {
 					// check whether we hit a non-trigger collider (and not the character itself)
@@ -473,7 +473,7 @@ public:
 	void ChangeMaterial(physx::PxShape* collider, physx::PxMaterial* m_material){
 
 		const physx::PxU16 n_materials = collider->getNbMaterials();
-		assert(n_materials < 16 || fatal("enemy_collider no puede tener más de 16 materiales"));
+		XASSERT(n_materials < 16 , "enemy_collider no puede tener más de 16 materiales");
 		physx::PxMaterial* buffer[16];
 		physx::PxU16 first_material = 0;
 		enemy_collider->getMaterials(buffer, 16);

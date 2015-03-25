@@ -1,7 +1,9 @@
 #ifndef INC_COMP_SKELETON_IK_H_
 #define INC_COMP_SKELETON_IK_H_
 
-struct TCompSkeletonIK { 
+#include "base_component.h"
+
+struct TCompSkeletonIK : TBaseComponent { 
   float     amount;
   XMVECTOR  normals[2];
   int       bone_ids_to_adapt[2];

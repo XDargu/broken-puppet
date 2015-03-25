@@ -5,6 +5,8 @@
 #include <foundation\PxFoundation.h>
 #include "mcv_platform.h"
 
+using namespace physx;
+
 struct FilterGroup
 {
 	enum Enum
@@ -53,5 +55,7 @@ public:
 
 void setupFiltering(physx::PxRigidActor* actor, physx::PxU32 filterGroup, physx::PxU32 filterMask);
 void setupFiltering(physx::PxShape* shape, physx::PxU32 filterGroup, physx::PxU32 filterMask);
+
+#define Physics CPhysicsManager::get()
 
 #endif
