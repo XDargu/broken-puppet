@@ -16,6 +16,9 @@ using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
 
+#include "item_manager.h"
+#include "navmesh\navmesh.h"
+
 #include "components\all_components.h"
 #include "components/comp_skeleton.h"
 #include "components/comp_skeleton_lookat.h"
@@ -88,6 +91,10 @@ CShaderCte<TCtesGlobal> ctes_global;
 float fixedUpdateCounter;
 
 bool debug_mode;
+
+//---------------------------------------------------
+CNavmesh nav_prueba;
+//---------------------------------------------------
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
@@ -195,6 +202,9 @@ bool CApp::create() {
 
 	// Start random seed
 	srand(time(NULL));
+
+	//navMeshes prueba
+	nav_prueba.build();
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -444,6 +454,9 @@ void CApp::update(float elapsed) {
 
 					firstNeedle = new_e;
 
+					//Insertamos aguja en vector agujas del item manager
+					Citem_manager::get().addNeedle(new_e_needle);
+
 				}
 				else if (blockHit.actor != firstActor) {
 					if (num_strings >= max_num_string){
@@ -515,6 +528,8 @@ void CApp::update(float elapsed) {
 						, rigidbody_e->get<TCompRigidBody>()
 						);
 
+					//Insertamos aguja en vector agujas del item manager					
+					Citem_manager::get().addNeedle(new_e_needle2);
 
 					strings.push_back(CHandle(new_e_r));
 					firstActor = nullptr;
@@ -524,6 +539,12 @@ void CApp::update(float elapsed) {
 				}
 				// Same actor, action cancelled
 				else {
+
+					//borrado de la aguja también del item manager
+					CEntity* e = (CEntity*)firstNeedle;
+					TCompNeedle* needle = e->get<TCompNeedle>();
+					Citem_manager::get().removeNeedle(needle);
+
 					firstActor = nullptr;
 					firstPosition = PxVec3(0, 0, 0);
 					entity_manager.remove(firstNeedle);

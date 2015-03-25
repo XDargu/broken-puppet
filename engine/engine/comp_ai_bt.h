@@ -1,5 +1,5 @@
-#ifndef INC_COMP_AI_FSM_BASIC_H_
-#define INC_COMP_AI_FSM_BASIC_H_
+#ifndef INC_COMP_AI_BT_H_
+#define INC_COMP_AI_BT_H_
 
 #include "base_component.h"
 
@@ -7,13 +7,13 @@
 #include "../ai/fsm_basic_enemy.h"
 #include "../ai/aimanager.h"
 
-struct TCompAiFsmBasic : TBaseComponent {
+struct TCompAiBT : TBaseComponent {
 
 	aicontroller* m_ai_controller;
 
-	TCompAiFsmBasic(){ }
-	TCompAiFsmBasic(fsm_basic_enemy* ai_controller) {
-		m_ai_controller = new fsm_basic_enemy;
+	TCompAiBT(){ }
+	TCompAiBT(bt_basic_enemy* ai_controller) {
+		m_ai_controller = new bt_basic_enemy;
 		m_ai_controller->SetEntity(CHandle(this).getOwner());
 		aimanager::get().addBot(m_ai_controller);
 	}
@@ -24,7 +24,7 @@ struct TCompAiFsmBasic : TBaseComponent {
 		assertRequiredComponent<TCompUnityCharacterController>(this);
 
 		//m_ai_controller = new ai_basic_enemy;
-		m_ai_controller = new fsm_basic_enemy;
+		m_ai_controller = new bt_basic_enemy;
 		m_ai_controller->SetEntity(CHandle(this).getOwner());
 		aimanager::get().addBot(m_ai_controller);
 	}

@@ -195,6 +195,7 @@
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />
+    <ClInclude Include="comp_ai_bt.h" />
     <ClInclude Include="comp_victory_cond.h" />
     <ClInclude Include="error\error_context.h" />
     <ClInclude Include="error\log.h" />

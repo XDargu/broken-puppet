@@ -77,7 +77,8 @@ btnode *bt::addChild(string parent, string son, int type, typeInterrupAllowed ki
 		return s;
 	}else{
 		//METER UN xassert
-		fatal("node not valid\n");
+		//fatal("node not valid\n");
+		XASSERT(validateNode(parent, type), "Child not valid");
 		return nullptr;
 	}
 }
@@ -97,7 +98,8 @@ btnode *bt::addChild(string parent, string son, int type, btcondition btc, btact
 	}
 	else{
 		//METER UN xassert
-		fatal("node not valid\n");
+		//fatal("node not valid\n");
+		XASSERT(validateNode(parent, type), "Child not valid");
 		return nullptr;
 	}
 }
@@ -117,7 +119,8 @@ btnode *bt::addChild(string parent, string son, int type, typeInterrupAllowed ki
 		return s;
 	}else{
 		//METER UN xassert
-		fatal("DECORATION node not valid\n");
+		//fatal("DECORATION node not valid\n");
+		XASSERT(validateNode(parent, type, subType), "Child not valid. Decorator type invalid");
 		return nullptr;
 	}
 }
@@ -138,7 +141,8 @@ btnode *bt::addChild(string parent, string son, int type, subType subType, btcon
 	}
 	else{
 		//METER UN xassert
-		fatal("DECORATION node not valid\n");
+		//fatal("DECORATION node not valid\n");
+		XASSERT(validateNode(parent, type, subType), "Child not valid. Decorator type invalid");
 		return nullptr;
 	}
 }
@@ -244,6 +248,7 @@ void bt::initDecoratorCondition(string name, float t){
 		p->decorator_node->initCondition(t);
 	};
 	//xassert si no existe nodo
+	XASSERT(p == nullptr, "node doesn't exists");
 }
 
 void bt::setDecoratorCondition(string name, bool t){
@@ -252,6 +257,7 @@ void bt::setDecoratorCondition(string name, bool t){
 		p->decorator_node->updateCondition(t);
 	}
 	//xassert si no existe nodo
+	XASSERT(p == nullptr, "node doesn't exists");
 }
 
 bool bt::getDecoratorCondition(string name){
@@ -260,6 +266,7 @@ bool bt::getDecoratorCondition(string name){
 		return p->decorator_node->getCondition();
 	}
 	//xassert si no existe nodo
+	XASSERT(p == nullptr, "node doesn't exists");
 	return NULL;
 }
 

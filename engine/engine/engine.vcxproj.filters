@@ -327,6 +327,9 @@
     <ClInclude Include="ai\fsm_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="comp_ai_bt.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
