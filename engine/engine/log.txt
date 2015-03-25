@@ -1,56 +1,56 @@
-- 16:12:11.468 DEBUG: Bone 00 : Bip01
+- 05:04:19.451 DEBUG: Bone 00 : Bip01
 
-- 16:12:11.468 DEBUG: Bone 01 : Bip01 Pelvis
+- 05:04:19.451 DEBUG: Bone 01 : Bip01 Pelvis
 
-- 16:12:11.468 DEBUG: Bone 02 : Bip01 Spine
+- 05:04:19.451 DEBUG: Bone 02 : Bip01 Spine
 
-- 16:12:11.468 DEBUG: Bone 03 : Bip01 Spine1
+- 05:04:19.451 DEBUG: Bone 03 : Bip01 Spine1
 
-- 16:12:11.468 DEBUG: Bone 04 : Bip01 Neck
+- 05:04:19.451 DEBUG: Bone 04 : Bip01 Neck
 
-- 16:12:11.468 DEBUG: Bone 05 : Bip01 Head
+- 05:04:19.451 DEBUG: Bone 05 : Bip01 Head
 
-- 16:12:11.468 DEBUG: Bone 06 : Bip01 R Clavicle
+- 05:04:19.451 DEBUG: Bone 06 : Bip01 R Clavicle
 
-- 16:12:11.468 DEBUG: Bone 07 : Bip01 R UpperArm
+- 05:04:19.451 DEBUG: Bone 07 : Bip01 R UpperArm
 
-- 16:12:11.468 DEBUG: Bone 08 : Bip01 R Forearm
+- 05:04:19.451 DEBUG: Bone 08 : Bip01 R Forearm
 
-- 16:12:11.468 DEBUG: Bone 09 : Bip01 R Hand
+- 05:04:19.451 DEBUG: Bone 09 : Bip01 R Hand
 
-- 16:12:11.468 DEBUG: Bone 10 : Bip01 R Hook
+- 05:04:19.451 DEBUG: Bone 10 : Bip01 R Hook
 
-- 16:12:11.468 DEBUG: Bone 11 : Bip01 L Clavicle
+- 05:04:19.451 DEBUG: Bone 11 : Bip01 L Clavicle
 
-- 16:12:11.468 DEBUG: Bone 12 : Bip01 L UpperArm
+- 05:04:19.451 DEBUG: Bone 12 : Bip01 L UpperArm
 
-- 16:12:11.468 DEBUG: Bone 13 : Bip01 L Forearm
+- 05:04:19.451 DEBUG: Bone 13 : Bip01 L Forearm
 
-- 16:12:11.468 DEBUG: Bone 14 : Bip01 L Hand
+- 05:04:19.451 DEBUG: Bone 14 : Bip01 L Hand
 
-- 16:12:11.468 DEBUG: Bone 15 : Bip01 L Hook
+- 05:04:19.451 DEBUG: Bone 15 : Bip01 L Hook
 
-- 16:12:11.468 DEBUG: Bone 16 : Bip01 Shield
+- 05:04:19.451 DEBUG: Bone 16 : Bip01 Shield
 
-- 16:12:11.468 DEBUG: Bone 17 : Bone04
+- 05:04:19.451 DEBUG: Bone 17 : Bone04
 
-- 16:12:11.468 DEBUG: Bone 18 : Bone05
+- 05:04:19.451 DEBUG: Bone 18 : Bone05
 
-- 16:12:11.468 DEBUG: Bone 19 : Bip01 L Thigh
+- 05:04:19.451 DEBUG: Bone 19 : Bip01 L Thigh
 
-- 16:12:11.468 DEBUG: Bone 20 : Bip01 L Calf
+- 05:04:19.451 DEBUG: Bone 20 : Bip01 L Calf
 
-- 16:12:11.468 DEBUG: Bone 21 : Bip01 L Foot
+- 05:04:19.451 DEBUG: Bone 21 : Bip01 L Foot
 
-- 16:12:11.468 DEBUG: Bone 22 : Bip01 L Toe0
+- 05:04:19.451 DEBUG: Bone 22 : Bip01 L Toe0
 
-- 16:12:11.468 DEBUG: Bone 23 : Bip01 R Thigh
+- 05:04:19.451 DEBUG: Bone 23 : Bip01 R Thigh
 
-- 16:12:11.468 DEBUG: Bone 24 : Bip01 R Calf
+- 05:04:19.451 DEBUG: Bone 24 : Bip01 R Calf
 
-- 16:12:11.468 DEBUG: Bone 25 : Bip01 R Foot
+- 05:04:19.451 DEBUG: Bone 25 : Bip01 R Foot
 
-- 16:12:11.468 DEBUG: Bone 26 : Bip01 R Toe0
+- 05:04:19.451 DEBUG: Bone 26 : Bip01 R Toe0
 
-- 16:12:12.669 DEBUG: unknown tag playerDoomController
+- 05:04:21.229 DEBUG: unknown tag playerDoomController
 

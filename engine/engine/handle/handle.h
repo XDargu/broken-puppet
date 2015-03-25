@@ -3,15 +3,9 @@
 
 #include "mcv_platform.h"
 #include "XMLParser.h"
-#include "render/render_utils.h"
-#include "physics_manager.h"
-
-using namespace DirectX;
 
 class MKeyValue;
 struct TMsg;
-
-#define Physics CPhysicsManager::get()
 
 class CHandle {
 public:

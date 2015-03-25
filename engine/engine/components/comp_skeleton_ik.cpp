@@ -5,6 +5,7 @@
 #include "skeletons/skeleton_manager.h"
 #include "skeletons/ik_handler.h"
 #include "comp_transform.h"
+#include "physics_manager.h"
 
 void TCompSkeletonIK::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   //target = atts.getPoint("target");

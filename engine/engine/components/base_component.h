@@ -1,6 +1,8 @@
 #ifndef INC_BASE_COMPONENT_H_
 #define INC_BASE_COMPONENT_H_
 
+#include "handle\handle.h"
+
 struct TBaseComponent {
 public:
 	bool active;

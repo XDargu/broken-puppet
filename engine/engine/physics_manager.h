@@ -5,6 +5,8 @@
 #include <foundation\PxFoundation.h>
 #include "mcv_platform.h"
 
+#define Physics CPhysicsManager::get()
+
 struct FilterGroup
 {
 	enum Enum

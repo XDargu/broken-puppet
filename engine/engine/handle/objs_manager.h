@@ -218,7 +218,7 @@ public:
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
 		for (; num--; obj++) {
-			//if (obj->active)
+			if (obj->active)
 				obj->update(elapsed);
 		}
 		updating_objs = false;
@@ -230,7 +230,7 @@ public:
 		TObj* obj = objs;
 		uint32_t num = num_objects_in_use;
 		for (; num--; obj++) {
-			//if (obj->active)
+			if (obj->active)
 				obj->fixedUpdate(elapsed);
 		}
 		updating_objs = false;

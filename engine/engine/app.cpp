@@ -33,6 +33,11 @@ using namespace physx;
 
 static CApp the_app;
 
+CEntityInspector &entity_inspector = CEntityInspector::get();
+CEntityLister	 &entity_lister = CEntityLister::get();
+CEntityActioner	 &entity_actioner = CEntityActioner::get();
+CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
+
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
 deque<CHandle> strings;
@@ -252,7 +257,7 @@ bool CApp::create() {
 	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
-	entity_inspector.inspectEntity(nullptr);
+	entity_inspector.inspectEntity(CHandle());
 
 	entity_lister.init();
 	entity_actioner.init();
