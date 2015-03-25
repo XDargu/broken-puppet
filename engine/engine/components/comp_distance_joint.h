@@ -20,10 +20,10 @@ public:
 		
 		joint->getActors(a1, a2);
 		// Call the addForce method to awake the bodies, if dynamic
-		if (a1->isRigidDynamic()) {
+		if (a1 && a1->isRigidDynamic()) {
 			((physx::PxRigidDynamic*)a1)->wakeUp();
 		}
-		if (a2->isRigidDynamic()) {
+		if (a2 && a2->isRigidDynamic()) {
 			((physx::PxRigidDynamic*)a2)->wakeUp();
 		}
 
@@ -36,9 +36,32 @@ public:
 		actor2 = atts.getString("actor2", "");
 	}
 
-	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, physx::PxVec3 pos1, physx::PxVec3 pos2) {
-		joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, physx::PxTransform(0.5f, 0.5f, 0.5f), actor2, physx::PxTransform(0.0f, 0.0f, 0.0f));
+	void create(physx::PxRigidActor* actor1, physx::PxRigidActor* actor2, float damping, physx::PxVec3 pos1, physx::PxVec3 pos2, physx::PxTransform offset1, physx::PxTransform offset2) {
 
+		// If any actor is static, then attack the joint to he air instead of the actor
+		if (actor1->isRigidStatic()) {
+			if (actor2->isRigidStatic()) {
+				// Static static -- ¡No se puede!
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, NULL, physx::PxTransform(pos1), NULL, physx::PxTransform(pos2));
+			}
+			else {
+				// Static dynamic
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, NULL, physx::PxTransform(pos1), actor2, offset2);
+			}
+		}
+		else {
+			if (actor2->isRigidStatic()) {
+				// Dynamic static
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, offset1, NULL, physx::PxTransform(pos2));
+
+			}
+			else {
+				// Dynamic dynamic
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, offset1, actor2, offset2);
+			}
+		}
+		
+		Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 		assert((actor1 != actor2) || fatal("Joint actors must be different"));
 
 		float dist_between_positions = (pos1 - pos2).magnitude();
@@ -58,7 +81,7 @@ public:
 		TCompRigidBody* r2 = e_a2->get<TCompRigidBody>();
 
 		TCompStaticBody* s1 = e_a1->get<TCompStaticBody>();
-		TCompStaticBody* s2 = e_a2->get<TCompStaticBody>();		
+		TCompStaticBody* s2 = e_a2->get<TCompStaticBody>();
 
 		//create a joint
 		if (r1) {
