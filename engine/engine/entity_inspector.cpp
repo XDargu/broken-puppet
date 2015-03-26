@@ -264,6 +264,11 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	TCompAmbientLight* e_ambient_light = inspectedEntity->get<TCompAmbientLight>();
 	TCompPointLight* e_point_light = inspectedEntity->get<TCompPointLight>();
 
+	// Lógica
+	TCompTrigger* e_trigger = inspectedEntity->get<TCompTrigger>();
+
+	TwAddVarRW(bar, "ETag", TW_TYPE_CSSTRING(sizeof(inspectedEntity->tag)), &inspectedEntity->tag, " label='Tag'");
+
 	if (e_name) {
 		TwAddVarRW(bar, "NActive", TW_TYPE_BOOL8, &e_name->active, " group=Name label='Active'");
 		TwAddVarRW(bar, "CName", TW_TYPE_CSSTRING(sizeof(e_name->name)), e_name->name, " group=Name label='Name'");
@@ -381,6 +386,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarRW(bar, "RopeActive", TW_TYPE_BOOL8, &e_rope->active, " group='Rope' label='Active' ");
 		TwAddVarRW(bar, "RopeWidth", TW_TYPE_FLOAT, &e_rope->width, " min=0.01 max=0.5 step=0.01 group='Rope' label='Width' ");
 		TwAddVarRW(bar, "RopeMaxDistance", TW_TYPE_FLOAT, &e_rope->max_distance, " min=1 max=1000 step=0.5 group='Rope' label='Max distance' ");
+	}
+	if (e_trigger) {
+		TwAddVarRW(bar, "TriggerActive", TW_TYPE_BOOL8, &e_trigger->active, " group='Trigger' label='Active' ");
 	}
 
 	TwAddSeparator(bar, "", "");

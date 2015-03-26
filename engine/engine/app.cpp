@@ -817,6 +817,7 @@ void CApp::renderEntities() {
 void CApp::renderDebugEntities() {
 
 	getObjManager<TCompSkeleton>()->renderDebug3D();
+	getObjManager<TCompTrigger>()->renderDebug3D();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());

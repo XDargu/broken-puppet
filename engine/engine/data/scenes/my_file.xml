@@ -2361,4 +2361,10 @@ skeleton_lookat target="2 2 0" amount="1"/>
 <transform position="-24.0 2.44109 24.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="5.0" intensity="1.0" color="0.72549 0.74902 0.133333 1"/>
 	</entity>
+	<entity>
+		<name name="trigger_test"/>
+		<transform position="-28.2616 1.25252 28.344" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+		<aabb min="-0.862267 -0.711541 -0.590108" max="0.862267 0.711541 0.590108"/>
+		<trigger/>
+	</entity>
 </scene>

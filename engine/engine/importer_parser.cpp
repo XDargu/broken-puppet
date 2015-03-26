@@ -58,6 +58,7 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 	}
 	else {
 		current_entity = h;
+		current_entity.loadFromAtts(elem, atts);
 	}
 
 	// Keep a copy of the root handle
