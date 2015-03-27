@@ -1,10 +1,11 @@
 #include "mcv_platform.h"
 #include "aifsmcontroller.h"
 
-
 aifsmcontroller::aifsmcontroller()
 {
 	statemap = new map<string, statehandler>();
+	on_enter = true;
+	state_changed = true;
 }
 
 aifsmcontroller::~aifsmcontroller()
@@ -21,7 +22,10 @@ void aifsmcontroller::create(string)
 void aifsmcontroller::update(float elapsed)
 {
 	// this is a trusted jump as we've tested for coherence in ChangeState
+	state_changed = false;
 	(this->*(*statemap)[state])(elapsed);
+	if (!state_changed)
+		on_enter = false;
 }
 
 CHandle aifsmcontroller::GetEntity(){
@@ -42,6 +46,8 @@ void aifsmcontroller::ChangeState(std::string newstate)
 		exit(-1);
 	}
 	state = newstate;
+	state_changed = true;
+	on_enter = true;
 }
 
 std::string aifsmcontroller::getCurrentNode()
