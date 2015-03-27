@@ -284,6 +284,9 @@
     <ClInclude Include="components\comp_joint_prismatic.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="comp_joint_d6.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

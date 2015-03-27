@@ -1418,9 +1418,9 @@ fn getJointPrismatic obj = (
 	
 	-- Actors
 	if (mJoint.body0 != undefined) then 
-	mString += "actor0 = \"" + mJoint.body0.name + "_" + obj.id as string + "\" "
+	mString += "actor1 = \"" + mJoint.body0.name + "_" + obj.id as string + "\" "
 	if (mJoint.body1 != undefined) then 
-	mString += "actor1 = \"" + mJoint.body1.name + "_" + obj.id as string + "\" "
+	mString += "actor2 = \"" + mJoint.body1.name + "_" + obj.id as string + "\" "
 	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free

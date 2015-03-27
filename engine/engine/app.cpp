@@ -115,6 +115,7 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
+	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	//PRUEBA TRIGGER
@@ -153,6 +154,7 @@ void initManagers() {
 	getObjManager<TCompCameraPivotController>()->initHandlers();
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
+	getObjManager<TCompJointPrismatic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 
 	//PRUEBA TRIGGER
