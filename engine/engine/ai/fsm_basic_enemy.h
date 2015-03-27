@@ -1,9 +1,9 @@
 #ifndef _AIC_BASICENEMY
 #define _AIC_BASICENEMY
 
-#include "aicontroller.h"
+#include "aifsmcontroller.h"
 
-class ai_basic_enemy : public aicontroller
+class fsm_basic_enemy : public aifsmcontroller
 {
 	CHandle player;
 	CHandle character_controller;
@@ -32,11 +32,13 @@ class ai_basic_enemy : public aicontroller
 	float orbit_angle;
 	float initial_yaw;
 
-public:
-	ai_basic_enemy();
-	~ai_basic_enemy();
+	unsigned int my_id;
 
-	void Init();
+public:
+	fsm_basic_enemy();
+	~fsm_basic_enemy();
+
+	void create(string);
 
 	void Idle();
 	void Wander();
@@ -62,6 +64,10 @@ public:
 	void Orbit(bool right);
 
 	void setTarget(CHandle target) { player = target; };
+
+	void setId(unsigned int id);
+	unsigned int getInt();
+	CHandle getTransform();
 };
 
 #endif

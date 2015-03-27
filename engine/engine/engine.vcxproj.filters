@@ -38,9 +38,6 @@
     <ClInclude Include="render\texture.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="ai\aicontroller.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="XMLParser.h" />
     <ClInclude Include="importer_parser.h" />
     <ClInclude Include="physics_manager.h" />
@@ -131,17 +128,11 @@
     <ClInclude Include="components\comp_collider_mesh.h">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="ai\ai_basic_wander.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_ai_fsm_basic.h">
       <Filter>components</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_enemy_controller.h">
       <Filter>components</Filter>
-    </ClInclude>
-    <ClInclude Include="ai\ai_basic_enemy.h">
-      <Filter>ai</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_rope.h">
       <Filter>components</Filter>
@@ -284,8 +275,57 @@
     <ClInclude Include="components\comp_joint_prismatic.h">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="comp_joint_d6.h">
+    <ClInclude Include="components\comp_collider_capsule.h">
       <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_character_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="skeletons\skeleton_manager.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="skeletons\ik_handler.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton_ik.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton_lookat.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\data_saver.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aimanager.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aicontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aifsmcontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\behaviour_trees.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_basic_enemy.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_node.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="item_manager.h" />
+    <ClInclude Include="components\comp_sensor_needles.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_position_sensor.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\fsm_basic_enemy.h">
+      <Filter>ai</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -319,9 +359,6 @@
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="ai\aicontroller.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
     <ClCompile Include="handle\handle.cpp">
       <Filter>handle</Filter>
     </ClCompile>
@@ -354,12 +391,6 @@
     <ClCompile Include="handle\entity.cpp" />
     <ClCompile Include="render\collision_mesh.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\ai_basic_wander.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\ai_basic_enemy.cpp">
-      <Filter>ai</Filter>
     </ClCompile>
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
@@ -484,6 +515,40 @@
     <ClCompile Include="handle\prefabs_manager.cpp">
       <Filter>handle</Filter>
     </ClCompile>
+    <ClCompile Include="skeletons\skeleton_manager.cpp">
+      <Filter>skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton_ik.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton_lookat.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aimanager.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aicontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aifsmcontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\behaviour_trees.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_basic_enemy.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_node.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="ai\fsm_basic_enemy.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -521,6 +586,9 @@
     </Filter>
     <Filter Include="navmesh">
       <UniqueIdentifier>{d44573e9-aa4f-48f8-87bc-058d1d61ab96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skeleton">
+      <UniqueIdentifier>{5bc314a1-d81c-4849-a985-549c62cb2697}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

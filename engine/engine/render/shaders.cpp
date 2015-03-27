@@ -122,6 +122,8 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 			decl = &vdcl_position_color;
 		else if (vs_decl_name == "vdcl_position_uv_normal")
 			decl = &vdcl_position_uv_normal;
+		else if (vs_decl_name == "vdcl_position_uv_normal_skin")
+			decl = &vdcl_position_uv_normal_skin;
 		else
 			fatal("Unsupported vdcl %s", vs_decl_name.c_str());
 		assert(decl != nullptr);
@@ -134,6 +136,8 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 
 		bool is_ok = vs.compile(fx_name.c_str(), vs_name.c_str(), *decl);
 		is_ok &= ps.compile(fx_name.c_str(), ps_name.c_str());
+
+		uses_bones = atts.getBool("uses_bones", false);
 
 		assert(is_ok);
 	}

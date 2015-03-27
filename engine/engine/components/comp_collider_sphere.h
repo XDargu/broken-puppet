@@ -79,6 +79,15 @@ struct TCompColliderSphere : TBaseComponent {
 		return mat;
 	}
 
+	// Set the collider static friction, dynamic friction and restitution given by a vector
+	void setMaterialProperties(XMVECTOR properties) {
+		physx::PxMaterial* mat;
+		collider->getMaterials(&mat, 1);
+		mat->setStaticFriction(XMVectorGetX(properties));
+		mat->setDynamicFriction(XMVectorGetY(properties));
+		mat->setRestitution(XMVectorGetZ(properties));
+	}
+
 	// Returns the material properties as a vector
 	XMVECTOR getMaterialProperties() {
 		physx::PxMaterial* mat;

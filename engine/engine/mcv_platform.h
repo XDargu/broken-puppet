@@ -24,18 +24,21 @@
 
 #include <DirectXMath.h>
 
-using DirectX::XMMATRIX;
+/*using DirectX::XMMATRIX;
 using DirectX::XMVECTOR;
 using DirectX::XMFLOAT2;
 using DirectX::XMFLOAT3;
-using DirectX::XMFLOAT4;
+using DirectX::XMFLOAT4;*/
+
+using namespace DirectX;
 
 #include "app.h"
 #include "render/render.h"
 #include "utils.h"
 #include "memory/data_provider.h"
+#include "memory/data_saver.h"
 #include "items_by_name.h"
-#include "error\error_context.h"
+#include "error/error_context.h"
 #include <queue>
 
 #endif

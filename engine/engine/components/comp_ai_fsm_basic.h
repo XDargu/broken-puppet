@@ -2,38 +2,53 @@
 #define INC_COMP_AI_FSM_BASIC_H_
 
 #include "base_component.h"
-#include "../ai/aicontroller.h"
-#include "../ai/ai_basic_enemy.h"
+
+#include "../ai/bt_basic_enemy.h"
+#include "../ai/fsm_basic_enemy.h"
+#include "../ai/aimanager.h"
 
 struct TCompAiFsmBasic : TBaseComponent {
 
-	ai_basic_enemy m_ai_controller;
+	aicontroller* m_ai_controller;
 
 	TCompAiFsmBasic(){ }
-	TCompAiFsmBasic(ai_basic_enemy ai_controller) : m_ai_controller(ai_controller) { }
+	TCompAiFsmBasic(bt_basic_enemy* ai_controller) {
+		m_ai_controller = new bt_basic_enemy;
+		m_ai_controller->SetEntity(CHandle(this).getOwner());
+		aimanager::get().addBot(m_ai_controller);
+	}
+
+	TCompAiFsmBasic(fsm_basic_enemy* ai_controller) {
+		m_ai_controller = new fsm_basic_enemy;
+		m_ai_controller->SetEntity(CHandle(this).getOwner());
+		aimanager::get().addBot(m_ai_controller);
+	}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		assertRequiredComponent<TCompTransform>(this);
 		assertRequiredComponent<TCompUnityCharacterController>(this);
-		
 
-		m_ai_controller.SetEntity(CHandle(this).getOwner());
+		//m_ai_controller = new ai_basic_enemy;
+		m_ai_controller = new bt_basic_enemy;
+		m_ai_controller->SetEntity(CHandle(this).getOwner());
+		aimanager::get().addBot(m_ai_controller);
 	}
 
-	void init(){		
-		m_ai_controller.Init();
+	void init(){
+		m_ai_controller->create("enemy");
 		TCompUnityCharacterController* controller = getSibling<TCompUnityCharacterController>(this);
 		controller->moveSpeedMultiplier = 3;
 	}
 
 	void update(float elapsed){
-		m_ai_controller.Recalc(elapsed);
+		m_ai_controller->update(elapsed);
+		//m_ai_controller->recalc(elapsed);
 	}
 
 	void actorHit(const TActorHit& msg) {
 		dbg("Force recieved is  %f\n", msg.damage);
-		m_ai_controller.EvaluateHit(msg.damage);
+		//m_ai_controller.EvaluateHit(msg.damage);
 	}
 
 	void groundHit(const TGroundHit& msg) {
@@ -46,8 +61,10 @@ struct TCompAiFsmBasic : TBaseComponent {
 		}
 	}
 
-	void onRopeTensed(const TMsgRopeTensed& msg) {		
-		m_ai_controller.ChangeState("aibe_Ragdoll");		
+	void onRopeTensed(const TMsgRopeTensed& msg) {
+		//m_ai_controller.ChangeState("aibe_Ragdoll");		
 	}
 };
 #endif
+
+

@@ -4,9 +4,7 @@
 #include "base_component.h"
 
 struct TCompUnityCharacterController : TBaseComponent {
-
 private:
-
 	// Pruebas
 	physx::PxVec3 oldPos;
 
@@ -14,11 +12,11 @@ private:
 	Serializable settings
 	***********************************/
 
-	
+
 	float airSpeed;							// determines the max speed of the character while airborne
 	float airControl;						// determines the response speed of controlling the character while airborne;
 	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters
-	
+
 	float animSpeedMultiplier;				// how much the animation of the character will be multiplied by
 	//AdvancedSettings advancedSettings;		// Container for the advanced settings class , thiss allows the advanced settings to be in a foldout in the inspector
 
@@ -31,7 +29,7 @@ private:
 	physx::PxVec3 currentLookPos;			// The current position where the character is looking
 	float originalHeight;					// Used for tracking the original height of the characters capsule collider
 	//Animator animator;					// The animator for the character
-	float lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
+	double lastAirTime;						// USed for checking when the character was last in the air for controlling jumps
 	CHandle capsule_collider;				// The collider for the character
 	float half;								// whats it says, it's a constant for a half
 	physx::PxVec3 moveInput;
@@ -119,7 +117,7 @@ public:
 
 		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 		enemy_rigidbody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
-	    enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+		enemy_rigidbody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 		TCompName* name = assertRequiredComponent<TCompName>(this);
 		enemy_rigidbody->setName(name->name);
 
@@ -380,7 +378,7 @@ public:
 			//rigidbody.useGravity = true;				
 
 
-			for (int i = 0; i < buf.nbTouches; i++)
+			for (int i = 0; i < (int)buf.nbTouches; i++)
 			{
 				if (buf.touches[i].actor != enemy_rigidbody) {
 					// check whether we hit a non-trigger collider (and not the character itself)
@@ -416,30 +414,30 @@ public:
 		// Sweeptest para saber si, aunque el raycast no encuentre nada, estamos sobre algo
 		/*if (velocity.y < 0)
 		{
-			physx::PxSweepBuffer hit;              // [out] Sweep results
-			physx::PxSphereGeometry sweepShape = physx::PxSphereGeometry(enemy_width / 2);    // [in] swept shape
-			physx::PxTransform initialPose = physx::PxTransform(px_trans.p, px_trans.q);  // [in] initial shape pose (at distance=0)
-			physx::PxVec3 sweepDirection = physx::PxVec3(0, -1, 0);    // [in] normalized sweep direction
+		physx::PxSweepBuffer hit;              // [out] Sweep results
+		physx::PxSphereGeometry sweepShape = physx::PxSphereGeometry(enemy_width / 2);    // [in] swept shape
+		physx::PxTransform initialPose = physx::PxTransform(px_trans.p, px_trans.q);  // [in] initial shape pose (at distance=0)
+		physx::PxVec3 sweepDirection = physx::PxVec3(0, -1, 0);    // [in] normalized sweep direction
 
-			const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
-			physx::PxSweepHit hitBuffer[bufferSize];  // [out] User provided buffer for results
-			physx::PxSweepBuffer s_buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+		const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+		physx::PxSweepHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+		physx::PxSweepBuffer s_buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
 
-			Physics.gScene->sweep(sweepShape, initialPose, sweepDirection, (enemy_height / 2.f) + 0.5f - enemy_width, s_buf);
+		Physics.gScene->sweep(sweepShape, initialPose, sweepDirection, (enemy_height / 2.f) + 0.5f - enemy_width, s_buf);
 
-			for (int i = 0; i < s_buf.nbTouches; i++)
-			{
-				if (s_buf.touches[i].actor != enemy_rigidbody) {
-					onGround = true;
-					//rigidbody.useGravity = false;
+		for (int i = 0; i < s_buf.nbTouches; i++)
+		{
+		if (s_buf.touches[i].actor != enemy_rigidbody) {
+		onGround = true;
+		//rigidbody.useGravity = false;
 
-					// Colocamos en el ground a pelo
-					physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-					px_trans.p.y = buf.touches[i].position.y + ((enemy_height / 2.f) + 0.1f);
-					enemy_rigidbody->setGlobalPose(px_trans);
-					break;
-				}				
-			}
+		// Colocamos en el ground a pelo
+		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
+		px_trans.p.y = buf.touches[i].position.y + ((enemy_height / 2.f) + 0.1f);
+		enemy_rigidbody->setGlobalPose(px_trans);
+		break;
+		}
+		}
 		}*/
 
 		// remember when we were last in air, for jump delay
@@ -475,7 +473,7 @@ public:
 	void ChangeMaterial(physx::PxShape* collider, physx::PxMaterial* m_material){
 
 		const physx::PxU16 n_materials = collider->getNbMaterials();
-		assert(n_materials < 16 || fatal("enemy_collider no puede tener más de 16 materiales"));
+		XASSERT(n_materials < 16 , "enemy_collider no puede tener más de 16 materiales");
 		physx::PxMaterial* buffer[16];
 		physx::PxU16 first_material = 0;
 		enemy_collider->getMaterials(buffer, 16);
@@ -565,39 +563,3 @@ public:
 };
 
 #endif
-
-
-/*
-
-CEntity* player = CEntityManager::get().getByName("Player");
-TCompTransform* player_trans = player->get<TCompTransform>();
-
-XMVECTOR dir = player_trans->position - ((TCompTransform*)transform)->position;
-
-dir = XMVectorSetY(dir, 0);
-dir = XMVector3Normalize(dir);
-
-
-physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-// Punto destino en mudo:
-
-//physx::PxVec3 world_point = Physics.XMVECTORToPxVec3(player_trans->position - XMVector3Normalize(player_trans->position - ((TCompTransform*)transform)->position) * 1.5f);
-physx::PxVec3 world_point = physx::PxVec3(51, 14, -46);
-
-// Diferencia
-physx::PxVec3 diff = world_point - px_trans.p;
-
-// Final
-physx::PxVec3 final_po = px_trans.q.rotateInv(diff);
-
-float dist = final_po.magnitude();
-float dist_world = diff.magnitude();
-
-physx::PxVec3 ada = px_trans.transformInv(world_point);
-
-Move(final_po, false, false, final_po);
-//Move(physx::PxVec3(0,0,1), false, false, physx::PxVec3(0, 0, 1));
-
-oldPos = px_trans.p;
-
-*/

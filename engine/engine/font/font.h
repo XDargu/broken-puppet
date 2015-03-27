@@ -21,4 +21,6 @@ struct CFont {
   float print3D( XMVECTOR p3d, const char *fmt ) const;
 };
 
+extern CFont font;
+
 #endif

@@ -1,6 +1,10 @@
 #ifndef INC_ALL_COMPONENTS_H_
 #define INC_ALL_COMPONENTS_H_
 
+#include "physics_manager.h"
+
+using namespace DirectX;
+
 #include "mcv_platform.h"
 #include "XMLParser.h"
 #include "handle/handle.h"
@@ -16,7 +20,6 @@
 #include "comp_camera.h"
 
 // Controllers
-#include "comp_player_controller.h"
 #include "comp_player_pivot_controller.h"
 #include "comp_camera_pivot_controller.h"
 #include "comp_third_person_camera_controller.h"
@@ -27,6 +30,7 @@
 // Physx
 #include "comp_collider.h"
 #include "comp_collider_sphere.h"
+#include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
@@ -40,8 +44,14 @@
 #include "comp_ambient_light.h"
 #include "comp_point_light.h"
 
+// Controllers 2
+#include "comp_character_controller.h"
+#include "comp_player_controller.h"
+
 // AI
 #include "comp_ai_fsm_basic.h"
+#include "comp_player_position_sensor.h"
+#include "comp_sensor_needles.h"
 
 // Varios
 #include "comp_needle.h"

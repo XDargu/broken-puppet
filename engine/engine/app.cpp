@@ -9,13 +9,18 @@
 #include "importer_parser.h"
 #include "options_parser.h"
 #include "physics_manager.h"
-#include "components\all_components.h"
 #include "error\log.h"
 #include <time.h>
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
+
+#include "components\all_components.h"
+#include "components/comp_skeleton.h"
+#include "components/comp_skeleton_lookat.h"
+#include "components/comp_skeleton_ik.h"
+#include "skeletons/ik_handler.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -27,6 +32,11 @@ using namespace physx;
 
 
 static CApp the_app;
+
+CEntityInspector &entity_inspector = CEntityInspector::get();
+CEntityLister	 &entity_lister = CEntityLister::get();
+CEntityActioner	 &entity_actioner = CEntityActioner::get();
+CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
@@ -107,6 +117,7 @@ void createManagers() {
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompCollider>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
+	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
@@ -118,6 +129,8 @@ void createManagers() {
 	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
+	getObjManager<TCompPlayerPosSensor>()->init(64);
+	getObjManager<TCompSensorNeedles>()->init(64);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
@@ -133,8 +146,13 @@ void createManagers() {
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 
+	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
 	getObjManager<TCompBasicPlayerController>()->init(1);
+
+	getObjManager<TCompSkeleton>()->init(1024);
+	getObjManager<TCompSkeletonLookAt>()->init(1024);
+	getObjManager<TCompSkeletonIK>()->init(1024);
 
 	registerAllComponentMsgs();
 }
@@ -145,6 +163,7 @@ void initManagers() {
 	getObjManager<TCompCamera>()->initHandlers();
 	getObjManager<TCompCollider>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
+	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -156,6 +175,9 @@ void initManagers() {
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompJointPrismatic>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
+
+	getObjManager<TCompPlayerPosSensor>()->initHandlers();
+	getObjManager<TCompSensorNeedles>()->initHandlers();
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->initHandlers();
@@ -179,7 +201,7 @@ bool CApp::create() {
 		return false;
 
 	// Start random seed
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -198,6 +220,7 @@ bool CApp::create() {
 
 	CImporterParser p;
 	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
+	//XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
 	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
 	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
@@ -236,7 +259,7 @@ bool CApp::create() {
 	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
-	entity_inspector.inspectEntity(nullptr);
+	entity_inspector.inspectEntity(CHandle());
 
 	entity_lister.init();
 	entity_actioner.init();
@@ -349,11 +372,11 @@ void CApp::update(float elapsed) {
 
 				djoint->joint->getActors(a1, a2);
 				// Wake up the actors, if dynamic
-				if (a1->isRigidDynamic()) {
+				if (a1 && a1->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a1)->wakeUp();
 					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
-				if (a2->isRigidDynamic()) {
+				if (a2 && a2->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a2)->wakeUp();
 					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
@@ -414,7 +437,6 @@ void CApp::update(float elapsed) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
-					bool a = firstActor->isRigidDynamic();
 
 					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
 					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
@@ -429,7 +451,7 @@ void CApp::update(float elapsed) {
 					firstNeedle = new_e;
 
 				}
-				else if (blockHit.actor != firstActor) {
+				else if ((blockHit.actor != firstActor) && !(blockHit.actor->isRigidStatic() && firstActor->isRigidStatic())) {
 					if (num_strings >= max_num_string){
 						CHandle c_rope = strings.front();
 						strings.pop_front();
@@ -444,14 +466,14 @@ void CApp::update(float elapsed) {
 
 					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
 					PxVec3 pos = firstActor->getGlobalPose().q.rotate(firstOffset) + firstActor->getGlobalPose().p;
-					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position);
-
 					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
 					PxVec3 offset_1 = firstOffset;//firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
 					PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
 
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));
+					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
+					
+					/*new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
+					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));*/
 
 					new_e->add(new_e_j);
 
@@ -487,7 +509,6 @@ void CApp::update(float elapsed) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
 						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 					}
-					bool a = blockHit.actor->isRigidDynamic();
 
 					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
 					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
@@ -603,7 +624,6 @@ void CApp::update(float elapsed) {
 		}
 	}
 	float f = ctes_global.get()->world_time;
-	dbg("time: %f\n", f);
 
 	ctes_global.uploadToGPU();
 	ctes_global.activateInVS(2);
@@ -613,6 +633,9 @@ void CApp::update(float elapsed) {
 	TCompTransform* cam_t = cam->get<TCompTransform>();
 	activateCamera(cam_t->position, 1);
 
+	getObjManager<TCompSkeleton>()->update(elapsed);
+	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
+	getObjManager<TCompSkeletonIK>()->update(elapsed);
 	getObjManager<TCompPlayerController>()->update(elapsed); // Update player transform
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);
@@ -621,6 +644,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
+	getObjManager<TCompCharacterController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
@@ -646,6 +670,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -707,44 +732,62 @@ void CApp::renderEntities() {
 			PxRigidActor* a2 = nullptr;
 
 			djoint->joint->getActors(a1, a2);
-			if (a1 && a2) {
 
+			XMVECTOR initialPos = XMVectorZero();
+			XMVECTOR finalPos = XMVectorZero();
+
+			XMVECTOR rot1 = XMQuaternionIdentity();
+			XMVECTOR rot2 = XMQuaternionIdentity();
+
+			if (a1) {
 				XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
-				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 
 				XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
-				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
-
-				XMVECTOR rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
-				XMVECTOR rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+				rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
 
 				XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+
+				//   RECREATE ROPE   
+				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+				initialPos = pos1 + offset_rotado_1;
+			}
+			else {
+				initialPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			}
+			if (a2) {
+				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+
+				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+				rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+
 				XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
 				//   RECREATE ROPE   
 				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-				XMVECTOR initialPos = pos1 + offset_rotado_1;
-				XMVECTOR finalPos = pos2 + offset_rotado_2;
-
-				float dist = djoint->joint->getDistance();
-				float maxDist = pow(djoint->joint->getMaxDistance(), 2);
-
-				float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
-
-				rope.destroy();
-				createFullString(rope, initialPos, finalPos, tension, c_rope->width);
-
-				float color_tension = min(dist / maxDist * 0.25f, 1);
-				setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
-				setWorldMatrix(XMMatrixIdentity());
-				rope.activateAndRender();
-
-				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
-				wiredCube.activateAndRender();
-
-				setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
-				wiredCube.activateAndRender();
+				finalPos = pos2 + offset_rotado_2;
 			}
+			else {
+				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			}
+
+			float dist = djoint->joint->getDistance();
+			float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+
+			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+
+			rope.destroy();
+			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
+
+			float color_tension = min(dist / maxDist * 0.25f, 1);
+			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
+			setWorldMatrix(XMMatrixIdentity());
+			rope.activateAndRender();
+
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+			wiredCube.activateAndRender();
+
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
+			wiredCube.activateAndRender();
 		}
 
 		// If the component has no transform it can't be rendered
@@ -774,6 +817,9 @@ void CApp::renderEntities() {
 }
 
 void CApp::renderDebugEntities() {
+
+	getObjManager<TCompSkeleton>()->renderDebug3D();
+	getObjManager<TCompTrigger>()->renderDebug3D();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
@@ -823,9 +869,9 @@ void CApp::renderDebugEntities() {
 				wiredCube.activateAndRender();
 
 			// Draw max and min
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->min));
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05f, 0.05f, 0.05f, 0), zero, zero, aabb->min));
 			wiredCube.activateAndRender();
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05, 0.05, 0.05, 0), zero, zero, aabb->max));
+			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.05f, 0.05f, 0.05f, 0), zero, zero, aabb->max));
 			wiredCube.activateAndRender();
 		}
 	}
@@ -840,7 +886,7 @@ void CApp::activateInspectorMode(bool active) {
 	renderAxis = active;
 	renderAABB = active;
 	renderGrid = active;
-	renderNames = active;
+	//renderNames = active;
 
 	// Desactivar los componentes
 	getObjManager<TCompPlayerController>()->setActiveComponents(!active);
@@ -856,7 +902,7 @@ void CApp::activateDebugMode(bool active) {
 	renderAxis = active;
 	renderAABB = active;
 	renderGrid = active;
-	renderNames = active;
+	//renderNames = active;
 
 	debug_mode = active;
 }

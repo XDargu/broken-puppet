@@ -224,8 +224,8 @@ void fsm_basic_player::Ragdoll(float elapsed){
 	physx::PxMaterial* mat;
 	((TCompUnityCharacterController*)comp_unity_controller)->enemy_collider->getMaterials(&mat, 1);
 	mat->setRestitution(1);
-	mat->setStaticFriction(0.7);
-	mat->setDynamicFriction(0.7);
+	mat->setStaticFriction(0.7f);
+	mat->setDynamicFriction(0.7f);
 
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
 	((TCompUnityCharacterController*)comp_unity_controller)->mJoint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);
@@ -336,7 +336,7 @@ bool fsm_basic_player::EvaluateMovement(bool lookAtCamera){
 		dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	
 	dir.normalize();	
-	bool ragdoll = (GetState() == "fbp_Ragdoll");
+	bool ragdoll = (getCurrentNode() == "fbp_Ragdoll");
 	((TCompUnityCharacterController*)comp_unity_controller)->Move(movement_vector, false, jump, dir);
 
 	// Evaluate falling
@@ -354,7 +354,7 @@ bool fsm_basic_player::EvaluateFall(){
 
 void fsm_basic_player::EvaluateHit(){
 
-	if (GetState() != "fbp_Dead") {
+	if (getCurrentNode() != "fbp_Dead") {
 		if (last_hit == 0)
 			return;
 		float damage = 0;
@@ -362,7 +362,7 @@ void fsm_basic_player::EvaluateHit(){
 			damage = 20;
 			ChangeState("fbp_Ragdoll");
 		}
-		else if (GetState() != "fbp_Ragdoll"){
+		else if (getCurrentNode() != "fbp_Ragdoll"){
 			damage = 10;
 			ChangeState("fbp_Hurt");
 		}

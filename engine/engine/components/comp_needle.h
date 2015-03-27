@@ -37,6 +37,10 @@ public:
 		}
 	}
 
+	TCompTransform* getTransform(){
+		return (TCompTransform*)m_transform;
+	}
+
 	void fixedUpdate(float elapsed) {
 		// If the needle is attached to a rigidbody
 		if (rigidbody.isValid()) {

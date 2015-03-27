@@ -5,6 +5,7 @@
 #include "comp_transform.h"
 #include "comp_aabb.h"
 #include "entity_manager.h"
+#include "font\font.h"
 
 struct TCompTrigger : TBaseComponent {
 private:
@@ -37,6 +38,7 @@ public:
 		TCompTransform* transform = (TCompTransform*)m_transform;
 
 		onEnter();
+		onExit();
 	}
 
 
@@ -53,10 +55,11 @@ public:
 				if (!checkIfInside(e)){
 					TCompAABB* i_aabb = e->get<TCompAABB>();
 					CEntity* own = CHandle(this).getOwner();
-					if ((aabb->intersects(i_aabb) && (nameOther != "Level") && (e != own))){
+					if ((aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0) && (e != own))){
 						inside.push_back(e);
 						CEntity* own = CHandle(this).getOwner();
-						own->sendMsg(TVictoryCondition(e));
+						XDEBUG("On enter: %s", e->getName());
+						//own->sendMsg(TVictoryCondition(e));
 						return true;
 					}
 				}
@@ -66,16 +69,16 @@ public:
 	}
 
 	bool onExit(){
-		if (inside.size() != 0){
+		if (inside.size() > 0){
 			for (std::vector<CEntity*>::size_type i = 0; i != inside.size(); i++) {
 				TCompAABB* aabb = (TCompAABB*)m_aabb;
 				CEntity* e = (CEntity*)inside[i];
-				string nameOther = e->getName();
 				if (e->has<TCompAABB>()){
 					TCompAABB* i_aabb = e->get<TCompAABB>();
 					CEntity* own = CHandle(this).getOwner();
-					if ((!aabb->intersects(i_aabb) && (nameOther != "Level") && (e != own))){
+					if ((!aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0) && (e != own))){
 						remove(inside, i);
+						XDEBUG("On exit: %s", e->getName());
 						return true;
 					}
 				}
@@ -98,6 +101,18 @@ public:
 		std::vector<CEntity*>::iterator it = vec.begin();
 		std::advance(it, pos);
 		vec.erase(it);
+	}
+
+	void renderDebug3D() {
+		std::string a = "";
+		for (std::vector<CEntity*>::size_type i = 0; i < inside.size(); i++) {
+			CEntity* e = (CEntity*)inside[i];
+			a += e->getName();
+			a += "\n";
+		}
+
+		TCompTransform* transform = (TCompTransform*)m_transform;
+		font.print3D(transform->position, a.c_str());
 	}
 };
 

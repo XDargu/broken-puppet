@@ -52,11 +52,13 @@ class CMesh
 		unsigned nbytes;
 	};
 
+	// ------------------------------------
 	enum eVertexTypes {
 		POSITIONS = 1001
 		, POSITION_UV
 		, POSITION_COLOR
 		, POSITION_UV_NORMAL
+		, POSITION_UV_NORMAL_SKIN
 	};
 
 	// ------------------------------------
@@ -66,6 +68,8 @@ class CMesh
 	};
 	typedef std::vector< TGroup > VGroups;
 	VGroups groups;
+
+	friend class CCoreModel;
 
 	// ------------------------------------
 public:
@@ -115,6 +119,7 @@ public:
 	void activate() const;
 	void render() const;
 	void renderGroup(int group_id) const;
+	size_t getNGroups() const { return groups.size(); }
 
 	void activateAndRender() const {
 		activate();

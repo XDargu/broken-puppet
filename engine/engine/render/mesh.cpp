@@ -45,7 +45,6 @@ bool CMesh::create(
 	switch (primitive_type) {
 	case POINTS: topology = D3D10_PRIMITIVE_TOPOLOGY_POINTLIST; break;
 	case LINE_LIST: topology = D3D10_PRIMITIVE_TOPOLOGY_LINELIST; break;
-	case LINE_LIST_ADJ: topology = D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP; break;
 	case TRIANGLE_LIST: topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST; break;
 	case TRIANGLE_STRIP: topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; break;
 	default:
@@ -125,6 +124,7 @@ void CMesh::render() const {
 		::render.ctx->Draw(nvertexs, 0);
 }
 
+
 // --------------------------------------
 void CMesh::renderGroup(int group_id) const {
 	assert(group_id < groups.size());
@@ -140,6 +140,8 @@ void CMesh::renderGroup(int group_id) const {
 		//::render.ctx->Draw(nvertexs, 0);
 	}
 }
+
+
 
 // --------------------------------------
 bool CMesh::load(CDataProvider& dp) {
@@ -197,6 +199,7 @@ bool CMesh::load(CDataProvider& dp) {
 	case POSITION_UV: vtx_decl = nullptr; break;
 	case POSITION_COLOR: vtx_decl = &vdcl_position_color; break;
 	case POSITION_UV_NORMAL: vtx_decl = &vdcl_position_uv_normal; break;
+	case POSITION_UV_NORMAL_SKIN: vtx_decl = &vdcl_position_uv_normal_skin; break;
 	}
 	assert(vtx_decl);
 

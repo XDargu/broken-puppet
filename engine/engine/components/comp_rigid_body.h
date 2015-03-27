@@ -9,25 +9,29 @@ private:
 	physx::PxD6Joint* block_joint;
 public:
 	physx::PxRigidDynamic* rigidBody;
+	bool auto_translate_transform;
+	bool auto_rotate_transform;
 
 	TCompRigidBody() :
-		rigidBody(nullptr)
+		rigidBody(nullptr),
+		auto_translate_transform(true),
+		auto_rotate_transform(true)
 	{}
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
 
-	void create(float density, float is_kinematic, float use_gravity) {
+	void create(float density, bool is_kinematic, bool use_gravity) {
 
 		CEntity* e = CHandle(this).getOwner();
-		transform = e->get<TCompTransform>();
+		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
+		TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		assert(transform.isValid() || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c || sphere_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -54,6 +58,15 @@ public:
 				Physics.XMVECTORToPxVec3(trans->position),
 				Physics.XMVECTORToPxQuat(trans->rotation))
 				, *sphere_c->collider
+				, density);
+		}
+		if (capsule_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *capsule_c->collider
 				, density);
 		}
 
@@ -77,15 +90,15 @@ public:
 		bool temp_use_gravity = atts.getBool("gravity", true);
 
 		CEntity* e = CHandle(this).getOwner();
-		transform = e->get<TCompTransform>();
+		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompCollider* c = e->get<TCompCollider>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
+		TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		assert(trans || fatal("TRigidBody requieres a TTransform component"));
-		assert((c || mesh_c || sphere_c) || fatal("TRigidBody requieres a TCollider or TMeshCollider component"));
+		XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
 
 		if (c) {
 			rigidBody = physx::PxCreateDynamic(
@@ -112,6 +125,15 @@ public:
 				Physics.XMVECTORToPxVec3(trans->position),
 				Physics.XMVECTORToPxQuat(trans->rotation))
 				, *sphere_c->collider
+				, temp_density);
+		}
+		if (capsule_c) {
+			rigidBody = physx::PxCreateDynamic(
+				*Physics.gPhysicsSDK
+				, physx::PxTransform(
+				Physics.XMVECTORToPxVec3(trans->position),
+				Physics.XMVECTORToPxQuat(trans->rotation))
+				, *capsule_c->collider
 				, temp_density);
 		}
 
@@ -155,8 +177,11 @@ public:
 	void fixedUpdate(float elapsed) {
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
-		trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
+		if (auto_translate_transform)
+			trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
+
+		if (auto_rotate_transform)
+			trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
 
 	}
 
@@ -182,6 +207,30 @@ public:
 
 	bool isUsingGravity() {
 		return !rigidBody->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
+	}
+
+	void setLockXPos(bool locked) {
+		block_joint->setMotion(physx::PxD6Axis::eX, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+	}
+
+	void setLockYPos(bool locked) {
+		block_joint->setMotion(physx::PxD6Axis::eY, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+	}
+
+	void setLockZPos(bool locked) {
+		block_joint->setMotion(physx::PxD6Axis::eZ, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+	}
+
+	void setLockXRot(bool locked) {
+		block_joint->setMotion(physx::PxD6Axis::eTWIST, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+	}
+
+	void setLockYRot(bool locked) {
+		block_joint->setMotion(physx::PxD6Axis::eSWING1, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
+	}
+
+	void setLockZRot(bool locked) {
+		block_joint->setMotion(physx::PxD6Axis::eSWING2, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
 	}
 
 	std::string toString() {

@@ -51,7 +51,7 @@ public:
 	}
 
 	void fixedUpdate(float elapsed) {	
-		m_fsm_basic_player.Recalc(elapsed);
+		m_fsm_basic_player.update(elapsed);
 	}
 
 	void actorHit(const TActorHit& msg) {

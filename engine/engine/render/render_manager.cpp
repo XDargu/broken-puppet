@@ -4,6 +4,8 @@
 #include "camera.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
+#include "components/comp_transform.h"
+#include "components/comp_skeleton.h"
 
 CRenderManager render_manager;
 
@@ -21,18 +23,20 @@ void CRenderManager::addKey(const CMesh*      mesh
 	, CHandle owner
 	) {
 
+	SET_ERROR_CONTEXT("Adding a render key", "")
 	TKey k = { material, mesh, mesh_id, owner };
 
 	// Pasar de comp_render a entity
 	CEntity* e = owner.getOwner();
 	k.transform = e->get< TCompTransform >();
-	assert(k.transform.isValid());
+	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
 
 	keys.push_back(k);
 	sort_required = true;
 }
 
 void CRenderManager::renderAll(const XMMATRIX view_projection) {
+	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
 		std::sort(keys.begin(), keys.end(), sort_by_material_then_mesh);
@@ -40,6 +44,8 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 	}
 
 	const CRenderTechnique* curr_tech = nullptr;
+
+	bool uploading_bones = false;
 
 	bool is_first = true;
 	auto prev_it = keys.begin();
@@ -54,6 +60,8 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 				curr_tech->activate();				
 				activateCamera(view_projection, 1);
 				activateWorldMatrix(0);
+
+				uploading_bones = it->material->getTech()->usesBones();
 			}
 
 			// Activar shader y material de it
@@ -64,9 +72,15 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 			it->mesh->activate();
 		}
 
+		if (uploading_bones) {
+			const TCompSkeleton* skel = it->owner;
+			XASSERT(skel, "Invalid skeleton");
+			skel->uploadBonesToGPU();
+		}
+
 		// Activar la world del obj
 		TCompTransform* tmx = it->transform;
-		assert(tmx);
+		XASSERT(tmx, "Invalid transform");
 		setWorldMatrix(tmx->getWorld());
 
 		// Pintar la mesh:submesh del it

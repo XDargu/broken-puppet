@@ -26,12 +26,12 @@ bool CPrefabDef::load(const char* name) {
 CHandle CPrefabsManager::getInstanceByName(const char* prefab_name) {
 
 	const CPrefabDef* df = getByName(prefab_name);
-	assert(df);
+	XASSERT(df, "No se encuentra el prefab: %s", prefab_name);
 
 	CImporterParser p;
 	std::istringstream istr(df->xml_as_text);
 	bool is_ok = p.xmlParseStream(istr, prefab_name);
-	assert(is_ok);
+	XASSERT(is_ok, "Error al parsear el prefab: %s", prefab_name);
 
 	return p.getRootHandle();
 }

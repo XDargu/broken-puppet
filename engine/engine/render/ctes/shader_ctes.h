@@ -36,3 +36,8 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
   
   // Aligned to 16 bytes  
 };
+
+cbuffer TCtesBones SHADER_REGISTER(b3)
+{
+	matrix bones[256];
+};

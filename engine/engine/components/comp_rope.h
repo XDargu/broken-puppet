@@ -31,7 +31,7 @@ public:
 
 	void fixedUpdate(float elapsed) {
 		// If the joint distance exceeds the max distance, the destroy the entity
-		float dist = ((TCompDistanceJoint*)joint)->joint->getDistance();
+		/*float dist = ((TCompDistanceJoint*)joint)->joint->getDistance();
 		if (dist > max_distance * max_distance) {
 			CEntityManager::get().remove(CHandle(this).getOwner());
 		}
@@ -55,7 +55,7 @@ public:
 		XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
 		XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
-		/*   RECREATE ROPE   */
+		//   RECREATE ROPE   
 		// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
 		XMVECTOR initialPos = pos1 + offset_rotado_1;
 		XMVECTOR finalPos = pos2 + offset_rotado_2;
@@ -72,7 +72,14 @@ public:
 			if (buf.touches[i].actor != a1 && buf.touches[i].actor != a2) {
 				if (buf.touches[i].actor->isRigidBody()) {
 					if (((physx::PxRigidBody*)buf.touches[i].actor)->getMass() < 100) {
-						physx::PxVec3 force = (buf.touches[i].actor->getGlobalPose().p - buf.touches[i].position).getNormalized();
+
+						physx::PxRigidBody* body = ((physx::PxRigidBody*)buf.touches[i].actor);
+
+						physx::PxVec3 force = (body->getGlobalPose().p - buf.touches[i].position).getNormalized();
+
+						physx::PxVec3 velocity = physx::PxRigidBodyExt::getVelocityAtPos(*body, buf.touches[i].position);
+						
+						physx::PxRigidBodyExt::addForceAtPos(*body, -velocity, buf.touches[i].position, physx::PxForceMode::eVELOCITY_CHANGE);
 						//((physx::PxRigidBody*)buf.touches[i].actor)->addForce(force * force_s, physx::PxForceMode::eIMPULSE);
 					}
 					else
@@ -81,7 +88,7 @@ public:
 					}
 				}
 			}
-		}
+		}*/
 
 	}
 };

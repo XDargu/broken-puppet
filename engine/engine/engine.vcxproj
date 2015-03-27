@@ -161,9 +161,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ai\aifsmcontroller.h" />
     <ClInclude Include="ai\aicontroller.h" />
-    <ClInclude Include="ai\ai_basic_enemy.h" />
-    <ClInclude Include="ai\ai_basic_wander.h" />
+    <ClInclude Include="ai\aimanager.h" />
+    <ClInclude Include="ai\behaviour_trees.h" />
+    <ClInclude Include="ai\bt_basic_enemy.h" />
+    <ClInclude Include="ai\bt_node.h" />
+    <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="callback_controllers.h" />
@@ -173,14 +177,21 @@
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
     <ClInclude Include="components\comp_basic_player_controller.h" />
+    <ClInclude Include="components\comp_character_controller.h" />
+    <ClInclude Include="components\comp_collider_capsule.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
     <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
+    <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
+    <ClInclude Include="components\comp_sensor_needles.h" />
+    <ClInclude Include="components\comp_skeleton.h" />
+    <ClInclude Include="components\comp_skeleton_ik.h" />
+    <ClInclude Include="components\comp_skeleton_lookat.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />
@@ -218,8 +229,10 @@
     <ClInclude Include="importer_parser.h" />
     <ClInclude Include="io\iostatus.h" />
     <ClInclude Include="items_by_name.h" />
+    <ClInclude Include="item_manager.h" />
     <ClInclude Include="mcv_platform.h" />
     <ClInclude Include="memory\data_provider.h" />
+    <ClInclude Include="memory\data_saver.h" />
     <ClInclude Include="navmesh\navmesh.h" />
     <ClInclude Include="navmesh\navmesh_builder.h" />
     <ClInclude Include="navmesh\navmesh_input.h" />
@@ -263,15 +276,21 @@
     <ClInclude Include="render\shaders.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
+    <ClInclude Include="skeletons\ik_handler.h" />
+    <ClInclude Include="skeletons\skeleton_manager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="XMLParser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ai\aifsmcontroller.cpp" />
     <ClCompile Include="ai\aicontroller.cpp" />
-    <ClCompile Include="ai\ai_basic_enemy.cpp" />
-    <ClCompile Include="ai\ai_basic_wander.cpp" />
+    <ClCompile Include="ai\aimanager.cpp" />
+    <ClCompile Include="ai\behaviour_trees.cpp" />
+    <ClCompile Include="ai\bt_basic_enemy.cpp" />
+    <ClCompile Include="ai\bt_node.cpp" />
+    <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
@@ -279,6 +298,9 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
+    <ClCompile Include="components\comp_skeleton.cpp" />
+    <ClCompile Include="components\comp_skeleton_ik.cpp" />
+    <ClCompile Include="components\comp_skeleton_lookat.cpp" />
     <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
@@ -314,6 +336,7 @@
     <ClCompile Include="handle\prefabs_manager.cpp" />
     <ClCompile Include="importer_parser.cpp" />
     <ClCompile Include="io\iostatus.cpp" />
+    <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="navmesh\navmesh.cpp" />
     <ClCompile Include="navmesh\navmesh_builder.cpp" />
     <ClCompile Include="navmesh\navmesh_input.cpp" />
@@ -444,6 +467,7 @@
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
+    <ClCompile Include="skeletons\skeleton_manager.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="winmain.cpp" />
     <ClCompile Include="mcv_platform.cpp">
@@ -466,6 +490,11 @@
     <Xml Include="resolution.xml">
       <SubType>Designer</SubType>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="cal3d\cal3d.vcxproj">
+      <Project>{bb9d0314-c731-4321-a394-767216a4601a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
