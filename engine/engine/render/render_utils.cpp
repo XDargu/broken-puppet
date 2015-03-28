@@ -536,7 +536,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 			pos = XMVector3Rotate(pos, quat);
 
 			ropeVertices[i * sizes + j].Pos = XMFLOAT3(ropeReferences[i].x + XMVectorGetX(pos), ropeReferences[i].y + XMVectorGetY(pos), ropeReferences[i].z + XMVectorGetZ(pos));
-			float uvy = i % 2 == 0 ? 0 : 1;
+			float uvy = i % 2 == 0.f ? 0.f : 1.f;
 			float uvx = (1.0f / sizes) * j;
 			ropeVertices[i * sizes + j].UV = XMFLOAT2(uvx, uvy);
 			XMVECTOR realNormal = XMVector3Normalize(pos);

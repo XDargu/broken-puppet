@@ -105,7 +105,7 @@ void registerAllComponentMsgs() {
 }
 
 void createManagers() {
-	CErrorContext ec("Creating", "managers");
+	SET_ERROR_CONTEXT("Creating", "managers");
 
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
@@ -686,9 +686,9 @@ void CApp::render() {
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll(((TCompCamera*)activeCamera)->view_projection);
-	renderDebugEntities();
+	render_manager.renderAll(((TCompCamera*)activeCamera)->view_projection);	
 	renderEntities();
+	renderDebugEntities();
 
 #ifdef _DEBUG
 	TwDraw();
