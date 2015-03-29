@@ -27,7 +27,6 @@
     <ClInclude Include="render\render_utils.h">
       <Filter>render</Filter>
     </ClInclude>
-    <ClInclude Include="doom_controller.h" />
     <ClInclude Include="font\font.h">
       <Filter>font</Filter>
     </ClInclude>
@@ -355,7 +354,6 @@
     <ClCompile Include="render\render_utils.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="doom_controller.cpp" />
     <ClCompile Include="font\font.cpp">
       <Filter>font</Filter>
     </ClCompile>
