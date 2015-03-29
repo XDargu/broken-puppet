@@ -61,8 +61,8 @@ public:
 				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, offset1, actor2, offset2);
 			}
 		}
-		
-		Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
+		if (Physics.gPhysicsSDK->getPvdConnectionManager())
+			Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 		XASSERT((actor1 != actor2), "Joint actors must be different");
 
 		float dist_between_positions = (pos1 - pos2).magnitude();
