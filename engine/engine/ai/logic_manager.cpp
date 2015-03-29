@@ -22,7 +22,7 @@ void CLogicManager::update(float elapsed) {
 
 		// Check if the timer has reached the limit
 		if (it.second.counter >= it.second.limit) {
-			XDEBUG("Timer %s has reached the time limit", it.first);
+			XDEBUG("Timer %s has reached the time limit", it.first.c_str());
 			timers_to_delete.push_back(it.first);
 		}
 	};
@@ -38,7 +38,7 @@ void CLogicManager::update(float elapsed) {
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
-	XDEBUG("Timer %s is set to %f seconds", the_name, time);
+	XDEBUG("Timer %s is set to %f seconds", the_name.c_str(), time);
 	timers[the_name] = CTimer(time);
 }
 

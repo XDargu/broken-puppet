@@ -18,7 +18,7 @@ void CCoreModel::onStartElement(const std::string &elem, MKeyValue &atts) {
     auto bones = getCoreSkeleton()->getVectorCoreBone();
     int bone_id = 0;
     for (auto b : bones) {
-      dbg("Bone %02d : %s\n", bone_id, b->getName().c_str());
+      //dbg("Bone %02d : %s\n", bone_id, b->getName().c_str());
       bone_id++;
     }
 

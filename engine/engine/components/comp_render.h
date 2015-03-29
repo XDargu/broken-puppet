@@ -12,9 +12,9 @@ struct TCompRender : TBaseComponent {
 		int subMeshId;
 	};
 
-	const CMesh*     mesh;
-	unsigned         submesh_id;
-	const CMaterial* mat;
+	const CMesh*		mesh;
+	unsigned			submesh_id;
+	const CMaterial*	mat;
 
 	std::vector< RKey > keys;
 
