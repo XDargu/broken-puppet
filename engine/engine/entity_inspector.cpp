@@ -127,19 +127,25 @@ void TW_CALL GetAngularDamping(void *value, void *clientData)
 	*static_cast<float *>(value) = static_cast<TCompRigidBody *>(clientData)->rigidBody->getAngularDamping();
 }
 
-
-// MESH
-void TW_CALL ReloadMesh(const void *value, void *clientData)
+// CAMERA
+void TW_CALL GetZNear(void *value, void *clientData)
 {
-	(static_cast<TCompMesh *>(clientData))->mesh = mesh_manager.getByName((*(const std::string *)value).c_str());
-	TCompMesh* mesh = static_cast<TCompMesh *>(clientData);
-	std::strcpy(mesh->path, (*(const std::string *)value).c_str());
+	*static_cast<float *>(value) = static_cast<TCompCamera *>(clientData)->getZNear();
 }
-void TW_CALL GetMeshPath(void *value, void *clientData)
-{	
-	std::string *destPtr = static_cast<std::string *>(value);	
-	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompMesh *>(clientData)->path);
-	
+
+void TW_CALL GetZFar(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompCamera *>(clientData)->getZFar();
+}
+
+void TW_CALL GetFov(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompCamera *>(clientData)->getFov();
+}
+
+void TW_CALL GetAspectRatio(void *value, void *clientData)
+{
+	*static_cast<float *>(value) = static_cast<TCompCamera *>(clientData)->getAspectRatio();
 }
 
 // DISTANCE JINT
@@ -180,15 +186,6 @@ void TW_CALL AddTransform(void *clientData) {
 
 	TCompTransform* t = CHandle::create<TCompTransform>();
 	static_cast<CEntity *>(clientData)->add(t);
-	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
-}
-
-void TW_CALL AddMesh(void *clientData) {
-
-	TCompMesh* m = CHandle::create<TCompMesh>();
-	std::strcpy(m->path, "teapot");
-	m->mesh = mesh_manager.getByName("teapot");
-	static_cast<CEntity *>(clientData)->add(m);
 	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
 
@@ -244,7 +241,6 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	TCompTransform* e_transform = inspectedEntity->get<TCompTransform>();
 	TCompName* e_name = inspectedEntity->get<TCompName>();
-	TCompMesh* e_mesh = inspectedEntity->get<TCompMesh>();
 	TCompRender* e_render = inspectedEntity->get<TCompRender>();
 	TCompAABB* e_aabb = inspectedEntity->get<TCompAABB>();
 	TCompCollider* e_collider = inspectedEntity->get<TCompCollider>();
@@ -283,14 +279,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform axisx=-x axisz=-z");
 		TwAddSeparator(bar, "Transform", "");
 	}
-	if (e_mesh) {
-		TwAddVarRW(bar, "MActive", TW_TYPE_BOOL8, &e_mesh->active, " group=Mesh label='Active'");
-		//TwAddVarRW(bar, "Color", TW_TYPE_COLOR4F, &e_mesh->color, " group=Mesh");
-		TwAddVarRW(bar, "LightDir", TW_TYPE_DIR3F, &e_mesh->color, " group=Mesh axisx=-x axisz=-z");
-		TwAddVarCB(bar, "Path", TW_TYPE_STDSTRING, ReloadMesh, GetMeshPath, e_mesh, " group=Mesh");
-	}
 	if (e_render) {
-		//TwAddVarRW(bar, "RenderActive", TW_TYPE_BOOL8, &e_render->active, " group=Render label='Active'");
+		TwAddVarRW(bar, "RenderActive", TW_TYPE_BOOL8, &e_render->active, " group=Render label='Active'");
 		std::string aux = "";
 		for (int i = 0; i < e_render->keys.size(); ++i) {
 			aux = "RenderMesh" + i;
@@ -331,10 +321,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (e_camera) {
 		TwAddVarRW(bar, "CameraActive", TW_TYPE_BOOL8, &e_camera->active, " group=Camera label='Active'");
-		TwAddVarRW(bar, "Fov", TW_TYPE_FLOAT, &e_camera->fov_in_radians, " group=Camera min=15 max=180");
-		TwAddVarRW(bar, "Aspect ratio", TW_TYPE_FLOAT, &e_camera->aspect_ratio, " group=Camera");	
-		TwAddVarRW(bar, "Znear", TW_TYPE_FLOAT, &e_camera->znear, " group=Camera min=0.1");
-		TwAddVarRW(bar, "Zfar", TW_TYPE_FLOAT, &e_camera->zfar, " group=Camera");
+		/*TwAddVarCB(bar, "Fov", TW_TYPE_STDSTRING, NULL, GetFov, e_camera, " group=Camera min=15 max=180");
+		TwAddVarCB(bar, "Aspect ratio", TW_TYPE_STDSTRING, NULL, GetAspectRatio, e_camera, " group=Camera");
+		TwAddVarCB(bar, "Znear", TW_TYPE_STDSTRING, NULL, GetZNear, e_camera, " group=Camera min=0.1");
+		TwAddVarCB(bar, "Zfar", TW_TYPE_STDSTRING, NULL, GetZFar, e_camera, " group=Camera");*/
 	}
 
 	if (e_player_controller) {
@@ -396,9 +386,6 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (!e_transform) {
 		TwAddButton(bar, "Transform", AddTransform, inspectedEntity, "");
-	}
-	if (!e_mesh) {
-		TwAddButton(bar, "Mesh", AddMesh, inspectedEntity, "");
 	}
 	if (!e_directional_light) {
 		TwAddButton(bar, "Directional Light", AddDirectionalLight, inspectedEntity, "");

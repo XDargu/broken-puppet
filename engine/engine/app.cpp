@@ -235,7 +235,7 @@ bool CApp::create() {
 	activeCamera = e->get<TCompCamera>();
 
 	XASSERT(font.create(), "Error creating the font");
-	font.camera = (TCompCamera*)activeCamera;
+	font.camera = activeCamera;
 
 	// Ctes ---------------------------
 	bool is_ok = renderUtilsCreate();
@@ -693,7 +693,7 @@ void CApp::render() {
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll(((TCompCamera*)activeCamera)->view_projection);	
+	render_manager.renderAll(((TCompCamera*)activeCamera)->getViewProjection());	
 	renderEntities();
 	renderDebugEntities();
 
