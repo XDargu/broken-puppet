@@ -14,8 +14,6 @@ public:
 	XMMATRIX       projection;      // Prespective info
 	XMMATRIX       view_projection;
 
-	XMVECTOR       target;          // Where we are looking at
-
 	float          fov_in_radians;  // Field of view in radians
 	float          aspect_ratio;
 	float          znear, zfar;
@@ -31,18 +29,20 @@ public:
 	}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		target = atts.getPoint("target");
 		zfar = atts.getFloat("zfar", 1000);
 		znear = atts.getFloat("znear", 1);
 		fov_in_radians = deg2rad(atts.getFloat("fov", 60));
+
+		float width = atts.getFloat("width", (float)CApp::get().xres);
+		float height = atts.getFloat("height", (float)CApp::get().yres);
+		
+		transform = assertRequiredComponent<TCompTransform>(this);
+		setViewport(0, 0, width, height);
+
+		updateViewProjection();
 	}
 
-	void init() {
-		transform = assertRequiredComponent<TCompTransform>(this);
-		TCompTransform* trans = (TCompTransform*)transform;
-
-		trans->lookAt(target, trans->getUp());
-		setViewport(0, 0, (float)CApp::get().xres, (float)CApp::get().yres);
+	void init() {		
 	}
 
 	void update(float elapsed) {
@@ -100,10 +100,6 @@ public:
 		*y = viewport.TopLeftY + (-sy * 0.5f + 0.5f) * viewport.Height;
 
 		return true;
-	}
-
-	std::string toString() {
-		return "Target: (" + std::to_string(XMVectorGetX(target)) + ", " + std::to_string(XMVectorGetY(target)) + ", " + std::to_string(XMVectorGetZ(target)) + ")";
 	}
 };
 
