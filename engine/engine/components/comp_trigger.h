@@ -11,7 +11,7 @@ struct TCompTrigger : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle m_aabb;
-	vector<CEntity*> inside;
+	std::vector<CEntity*> inside;
 public:
 
     TCompTrigger(){}
@@ -50,7 +50,7 @@ public:
 		for (int i = 0; i < CEntityManager::get().getEntities().size(); ++i){
 			TCompAABB* aabb = (TCompAABB*)m_aabb;
 			CEntity* e = (CEntity*)CEntityManager::get().getEntities()[i];
-			string nameOther = e->getName();
+			std::string nameOther = e->getName();
 			if (e->has<TCompAABB>()){
 				if (!checkIfInside(e)){
 					TCompAABB* i_aabb = e->get<TCompAABB>();
@@ -96,7 +96,7 @@ public:
 		return false;
 	}
 
-	void remove(vector<CEntity*>& vec, size_t pos)
+	void remove(std::vector<CEntity*>& vec, size_t pos)
 	{
 		std::vector<CEntity*>::iterator it = vec.begin();
 		std::advance(it, pos);

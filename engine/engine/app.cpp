@@ -9,6 +9,7 @@
 #include "importer_parser.h"
 #include "options_parser.h"
 #include "physics_manager.h"
+#include "ai\logic_manager.h"
 #include "error\log.h"
 #include <time.h>
 
@@ -33,6 +34,7 @@ using namespace physx;
 
 static CApp the_app;
 
+CLogicManager	 &logic_manager = CLogicManager::get();
 CEntityInspector &entity_inspector = CEntityInspector::get();
 CEntityLister	 &entity_lister = CEntityLister::get();
 CEntityActioner	 &entity_actioner = CEntityActioner::get();
@@ -265,6 +267,9 @@ bool CApp::create() {
 #endif
 
 	activateInspectorMode(false);
+
+	// Timer test
+	logic_manager.setTimer("TestTimer", 10);
 
 	return true;
 }
@@ -648,6 +653,8 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompTrigger>()->update(elapsed);
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
+
+	logic_manager.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();

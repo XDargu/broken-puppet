@@ -327,6 +327,12 @@
     <ClInclude Include="ai\fsm_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="ai\logic_manager.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\timer.h">
+      <Filter>ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -547,6 +553,12 @@
     </ClCompile>
     <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\logic_manager.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\timer.cpp">
       <Filter>ai</Filter>
     </ClCompile>
   </ItemGroup>
