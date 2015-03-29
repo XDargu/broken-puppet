@@ -5,8 +5,6 @@
 
 using namespace DirectX;
 
-#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
-
 fsm_basic_enemy::fsm_basic_enemy()
 {
 }

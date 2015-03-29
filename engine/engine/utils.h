@@ -23,10 +23,15 @@ XMVECTOR getVectorFromYaw(float yaw);
 
 float getPitchFromVector(XMVECTOR front);
 
-
 bool isKeyPressed(int key);
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
 int getRandomNumber(int num1, int num2);
+
+// XMVECTOR definitions
+#define V3COMPARE(v1, v2) memcmp(&v1, &v2, 12);
+#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
+
+#define V4COMPARE(v1, v2) memcmp(&v1, &v2, 16);
 
 #endif

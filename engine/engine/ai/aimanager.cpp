@@ -5,8 +5,6 @@
 
 using namespace DirectX;
 
-#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
-
 static aimanager the_aimanager;
 std::vector<aicontroller*> bots;
 

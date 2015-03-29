@@ -5,9 +5,6 @@
 #include "../item_manager.h"
 #include "comp_transform.h"
 #include "comp_needle.h"
-using namespace DirectX;
-
-#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
 
 struct TCompSensorNeedles : TBaseComponent{
 private:

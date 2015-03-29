@@ -6,8 +6,6 @@
 #include "comp_transform.h"
 using namespace DirectX;
 
-#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
-
 struct TCompPlayerPosSensor : TBaseComponent{
 private:
 	TCompTransform*		e_transform;

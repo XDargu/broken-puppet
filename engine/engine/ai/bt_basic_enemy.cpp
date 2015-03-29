@@ -5,8 +5,6 @@
 
 using namespace DirectX;
 
-#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
-
 void bt_basic_enemy::create(string s)
 {
 	name = s;
