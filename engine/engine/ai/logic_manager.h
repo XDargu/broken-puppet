@@ -19,6 +19,9 @@ public:
 	void update(float elapsed);
 
 	void setTimer(std::string, float time);
+
+	void registerTrigger(CHandle trigger);
+	void unregisterTrigger(CHandle trigger);
 };
 
 #endif

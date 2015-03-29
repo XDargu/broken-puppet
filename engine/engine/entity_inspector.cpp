@@ -706,19 +706,12 @@ void CEntityActioner::init() {
 	TwSetParam(actioner_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
 	TwDefine(" Lister label='Entity actions' ");
 	TwDefine(" Lister refresh='0.3' ");
-}
-
-void CEntityActioner::update() {
-
-	TwRemoveAllVars(actioner_bar);
-
-	std::vector< CHandle > entities = CEntityManager::get().getEntities();
 
 	TwAddButton(actioner_bar, "New entity", CallbackCreateEntity, NULL, "");
 	TwAddButton(actioner_bar, "Destroy entity", CallbackDestroyEntity, NULL, "");
-	//TwAddButton(actioner_bar, "Load level", CallbackLoadLevel, NULL, "");
+}
 
-
+void CEntityActioner::update() {
 }
 
 

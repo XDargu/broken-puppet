@@ -73,9 +73,6 @@ public:
 
 	// Updates the min and max variables, if needed
 	void update(float elapsed) {
-		CEntity* e = CHandle(this).getOwner();
-		TCompName* name = e->get<TCompName>();
-
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, trans->position)) && XMVectorGetY(XMVectorEqual(prev_position, trans->position)) && XMVectorGetZ(XMVectorEqual(prev_position, trans->position));

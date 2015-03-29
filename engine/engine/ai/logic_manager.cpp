@@ -41,3 +41,12 @@ void CLogicManager::setTimer(std::string the_name, float time) {
 	XDEBUG("Timer %s is set to %f seconds", the_name, time);
 	timers[the_name] = CTimer(time);
 }
+
+void CLogicManager::registerTrigger(CHandle trigger) {
+	triggers.push_back(trigger);
+}
+
+void CLogicManager::unregisterTrigger(CHandle trigger) {
+	auto it = std::find(triggers.begin(), triggers.end(), trigger);
+	triggers.erase(it);
+}

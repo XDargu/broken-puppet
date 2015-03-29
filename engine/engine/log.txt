@@ -1,99 +1,75 @@
-- 20:33:19.953 DEBUG: Bone 00 : Bip01
+- 01:50:38.281 DEBUG: Bone 00 : Bip01
 
-- 20:33:19.953 DEBUG: Bone 01 : Bip01 Pelvis
+- 01:50:38.281 DEBUG: Bone 01 : Bip01 Pelvis
 
-- 20:33:19.953 DEBUG: Bone 02 : Bip01 Spine
+- 01:50:38.281 DEBUG: Bone 02 : Bip01 Spine
 
-- 20:33:19.953 DEBUG: Bone 03 : Bip01 Spine1
+- 01:50:38.281 DEBUG: Bone 03 : Bip01 Spine1
 
-- 20:33:19.953 DEBUG: Bone 04 : Bip01 Neck
+- 01:50:38.281 DEBUG: Bone 04 : Bip01 Neck
 
-- 20:33:19.953 DEBUG: Bone 05 : Bip01 Head
+- 01:50:38.281 DEBUG: Bone 05 : Bip01 Head
 
-- 20:33:19.953 DEBUG: Bone 06 : Bip01 R Clavicle
+- 01:50:38.281 DEBUG: Bone 06 : Bip01 R Clavicle
 
-- 20:33:19.953 DEBUG: Bone 07 : Bip01 R UpperArm
+- 01:50:38.281 DEBUG: Bone 07 : Bip01 R UpperArm
 
-- 20:33:19.953 DEBUG: Bone 08 : Bip01 R Forearm
+- 01:50:38.281 DEBUG: Bone 08 : Bip01 R Forearm
 
-- 20:33:19.953 DEBUG: Bone 09 : Bip01 R Hand
+- 01:50:38.281 DEBUG: Bone 09 : Bip01 R Hand
 
-- 20:33:19.953 DEBUG: Bone 10 : Bip01 R Hook
+- 01:50:38.281 DEBUG: Bone 10 : Bip01 R Hook
 
-- 20:33:19.953 DEBUG: Bone 11 : Bip01 L Clavicle
+- 01:50:38.281 DEBUG: Bone 11 : Bip01 L Clavicle
 
-- 20:33:19.953 DEBUG: Bone 12 : Bip01 L UpperArm
+- 01:50:38.281 DEBUG: Bone 12 : Bip01 L UpperArm
 
-- 20:33:19.953 DEBUG: Bone 13 : Bip01 L Forearm
+- 01:50:38.281 DEBUG: Bone 13 : Bip01 L Forearm
 
-- 20:33:19.969 DEBUG: Bone 14 : Bip01 L Hand
+- 01:50:38.281 DEBUG: Bone 14 : Bip01 L Hand
 
-- 20:33:19.969 DEBUG: Bone 15 : Bip01 L Hook
+- 01:50:38.281 DEBUG: Bone 15 : Bip01 L Hook
 
-- 20:33:19.969 DEBUG: Bone 16 : Bip01 Shield
+- 01:50:38.281 DEBUG: Bone 16 : Bip01 Shield
 
-- 20:33:19.969 DEBUG: Bone 17 : Bone04
+- 01:50:38.281 DEBUG: Bone 17 : Bone04
 
-- 20:33:19.969 DEBUG: Bone 18 : Bone05
+- 01:50:38.281 DEBUG: Bone 18 : Bone05
 
-- 20:33:19.969 DEBUG: Bone 19 : Bip01 L Thigh
+- 01:50:38.281 DEBUG: Bone 19 : Bip01 L Thigh
 
-- 20:33:19.969 DEBUG: Bone 20 : Bip01 L Calf
+- 01:50:38.281 DEBUG: Bone 20 : Bip01 L Calf
 
-- 20:33:19.969 DEBUG: Bone 21 : Bip01 L Foot
+- 01:50:38.281 DEBUG: Bone 21 : Bip01 L Foot
 
-- 20:33:19.969 DEBUG: Bone 22 : Bip01 L Toe0
+- 01:50:38.281 DEBUG: Bone 22 : Bip01 L Toe0
 
-- 20:33:19.969 DEBUG: Bone 23 : Bip01 R Thigh
+- 01:50:38.281 DEBUG: Bone 23 : Bip01 R Thigh
 
-- 20:33:19.969 DEBUG: Bone 24 : Bip01 R Calf
+- 01:50:38.281 DEBUG: Bone 24 : Bip01 R Calf
 
-- 20:33:19.969 DEBUG: Bone 25 : Bip01 R Foot
+- 01:50:38.281 DEBUG: Bone 25 : Bip01 R Foot
 
-- 20:33:19.969 DEBUG: Bone 26 : Bip01 R Toe0
+- 01:50:38.281 DEBUG: Bone 26 : Bip01 R Toe0
 
-- 20:33:23.422 DEBUG: Debug message: 
+- 01:50:41.812 DEBUG: When Creating: app
+Debug message: 
+	Timer 0ˆ”&P is set to 10.000000 seconds
+	Line: 41
+	File: ai\logic_manager.cpp
+
+- 01:50:41.921 DEBUG: Debug message: 
 	On enter: mBox_3.0
-	Line: 61
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
+	Line: 44
+	File: components\comp_trigger.cpp
 
-- 20:33:54.313 DEBUG: Debug message: 
-	On enter: Player
-	Line: 61
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
+- 01:50:51.828 DEBUG: Debug message: 
+	Timer À‰”&P has reached the time limit
+	Line: 25
+	File: ai\logic_manager.cpp
 
-- 20:33:55.172 DEBUG: Debug message: 
-	On exit: Player
-	Line: 81
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
-
-- 20:33:56.844 DEBUG: Debug message: 
-	On enter: Player
-	Line: 61
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
-
-- 20:33:57.485 DEBUG: Debug message: 
-	On exit: Player
-	Line: 81
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
-
-- 20:33:58.532 DEBUG: Debug message: 
-	On enter: Player
-	Line: 61
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
-
-- 20:33:59.313 DEBUG: Debug message: 
+- 01:50:58.984 DEBUG: Debug message: 
 	On exit: mBox_3.0
-	Line: 81
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
-
-- 20:33:59.610 DEBUG: Debug message: 
-	On exit: Player
-	Line: 81
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
-
-- 20:34:00.188 DEBUG: Debug message: 
-	On enter: Player
-	Line: 61
-	File: c:\users\daniel\documents\broken puppet\engine\engine\components\comp_trigger.h
+	Line: 63
+	File: components\comp_trigger.cpp
 

@@ -561,6 +561,9 @@
     <ClCompile Include="ai\timer.cpp">
       <Filter>ai</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_trigger.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
