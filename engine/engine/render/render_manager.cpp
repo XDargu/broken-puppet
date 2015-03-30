@@ -51,7 +51,7 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
 	while (it != keys.end()) {
-
+		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		if (it->material != prev_it->material || is_first) {
 
 			// La tech

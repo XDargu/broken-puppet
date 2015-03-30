@@ -538,52 +538,7 @@ void CApp::update(float elapsed) {
 					firstNeedle = CHandle();
 				}
 			}
-	}
-
-
-	if (io.becomesPressed(CIOStatus::EXTRA)) {
-		// Get the camera position
-		CEntity* e = CEntityManager::get().getByName("PlayerCamera");
-		TCompTransform* t = e->get<TCompTransform>();
-
-		// Raycast detecting the collider the mouse is pointing at
-		PxRaycastBuffer hit;
-		physics_manager.raycast(t->position, t->getFront(), 1000, hit);
-
-		static int entitycount = 1;
-		static PxRigidActor* firstActor = nullptr;
-		static PxVec3 firstPosition = PxVec3(0, 0, 0);
-		if (hit.hasBlock) {
-			PxRaycastHit blockHit = hit.block;
-
-			CEntity* new_e = entity_manager.createEmptyEntity();
-
-			TCompName* new_e_name = CHandle::create<TCompName>();
-			strcpy(new_e_name->name, ("TestCube" + std::to_string(entitycount)).c_str());
-			new_e->add(new_e_name);
-
-			TCompTransform* new_e_t = CHandle::create<TCompTransform>();
-			new_e_t->position = physics_manager.PxVec3ToXMVECTOR(blockHit.position + blockHit.normal * 1);
-			new_e->add(new_e_t);
-
-			TCompMesh* new_e_m = CHandle::create<TCompMesh>();
-			new_e_m->mesh = mesh_manager.getByName("primitive_box");
-			strcpy(new_e_m->path, "primitive_box");
-			new_e->add(new_e_m);
-
-			TCompCollider* new_e_c = CHandle::create<TCompCollider>();
-			new_e_c->setShape(0.5f, 0.5f, 0.5f, 0.5f, 0.2f, 0.6f);
-			new_e->add(new_e_c);
-
-			TCompRigidBody* new_e_r = CHandle::create<TCompRigidBody>();
-			new_e->add(new_e_r);
-			new_e_r->create(10, false, true);
-
-
-			entitycount++;
-		}
-	}
-	
+	}	
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
@@ -730,6 +685,8 @@ void CApp::renderEntities() {
 
 		TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
+		TCompName* name = ((CEntity*)entity_manager.getEntities()[i])->get<TCompName>();
+
 
 		// Draw the joints
 		if (c_rope) {

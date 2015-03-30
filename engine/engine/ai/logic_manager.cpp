@@ -15,7 +15,7 @@ CLogicManager::~CLogicManager() {}
 std::vector<std::string> timers_to_delete;
 
 void CLogicManager::update(float elapsed) {
-
+	SET_ERROR_CONTEXT("Upadating timers", "");
 	// Update the timers
 	for (auto& it : timers) {
 		it.second.update(elapsed);
@@ -38,6 +38,7 @@ void CLogicManager::update(float elapsed) {
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
+	SET_ERROR_CONTEXT("Setting a timer", the_name.c_str());
 	XDEBUG("Timer %s is set to %f seconds", the_name.c_str(), time);
 	timers[the_name] = CTimer(time);
 }

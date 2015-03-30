@@ -95,7 +95,7 @@ void CMesh::destroy() {
 // --------------------------------------
 void CMesh::activate() const {
 
-	assert(vb);
+	XASSERT(vb, "Error loading vertex buffer");
 
 	// Activate the vertex buffer
 	UINT stride = vtxs_decl->bytes_per_vertex;
