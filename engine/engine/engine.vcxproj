@@ -304,6 +304,7 @@
     <ClCompile Include="components\comp_skeleton.cpp" />
     <ClCompile Include="components\comp_skeleton_ik.cpp" />
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
+    <ClCompile Include="components\comp_transform.cpp" />
     <ClCompile Include="components\comp_trigger.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />

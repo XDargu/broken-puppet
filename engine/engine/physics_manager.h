@@ -4,6 +4,7 @@
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
 #include "mcv_platform.h"
+#include "transform.h"
 
 using namespace physx;
 
@@ -50,6 +51,9 @@ public:
 
 	void raycastAll(physx::PxVec3 origin, physx::PxVec3 unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
 	void raycastAll(XMVECTOR origin, XMVECTOR unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
+
+	PxTransform transformToPxTransform(TTransform the_transform);
+	TTransform pxTransformToTransform(PxTransform the_transform);
 
 };
 

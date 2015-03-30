@@ -565,6 +565,9 @@
     <ClCompile Include="components\comp_rigid_body.cpp">
       <Filter>components</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_transform.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
