@@ -1674,8 +1674,8 @@ fn getJointPrismatic obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
+--addObjectsID()
+--exportXMLScene()
  --funcion que abre y cierra una última cosa para poder trabajar, a depurar
-openCloseFile()
-removeObjectsID()
+--openCloseFile()
+--removeObjectsID()
