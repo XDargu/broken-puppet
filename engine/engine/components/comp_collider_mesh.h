@@ -2,6 +2,8 @@
 #define INC_COMP_COLLIDER_MESH_H_
 
 #include "base_component.h"
+#include "physics_manager.h"
+#include "render\collision_mesh.h"
 
 struct TCompColliderMesh : TBaseComponent {
 
