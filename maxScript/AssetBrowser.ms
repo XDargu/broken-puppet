@@ -353,7 +353,7 @@ macroScript MCVAssetBrowser
 		(
 			group "Exportador"
 			(
-				checkbox exportMesh "Exportar meshes" across: 2
+				checkbox exportMeshCheck "Exportar meshes" across: 2
 				checkbox exportMaterial "Exportar materiales"
 				button exportAll "Exportar todo" width:110 height:25 toolTip:"" across: 2 
 				button exportSel "Exportar selección" width:110 height:25 toolTip:"" 
@@ -367,7 +367,7 @@ macroScript MCVAssetBrowser
 			
 			on Exporter open do (
 				if (ExportMeshes != undefined) then (
-					exportMesh.checked = ExportMeshes)
+					exportMeshCheck.checked = ExportMeshes)
 				if (export_materials != undefined) then
 					exportMaterial.checked = export_materials
 			)
@@ -464,7 +464,7 @@ macroScript MCVAssetBrowser
 					if (validateScene false == true) then ( messageBox "La escena es correcta" )
 					
 				)
-				on exportMesh changed theState do (
+				on exportMeshCheck changed theState do (
 					ExportMeshes = theState
 				)	
 				
