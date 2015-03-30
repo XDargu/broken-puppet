@@ -527,6 +527,7 @@ macroScript MCVAssetBrowser
 			button goToLocation "Abrir ubicación" across: 3
 			button reload "Actualizar"
 			button rebake "Recargar"
+			pickbutton rebakePick "Seleccionar y recargar"
 			button autoCeiling "Auto-techar escena"
 			
 			on rebake pressed do (
@@ -550,6 +551,25 @@ macroScript MCVAssetBrowser
 					removeSubRollout moduleSubRollout ro
 				
 				addSubRollout moduleSubRollout (loadDynamicModules ModuleList)
+			)
+			
+			on rebakePick picked obj do 
+			(
+				ModuleList = loadModules ModulePath
+				local searchValues = #(obj.name)
+				
+				local searchList = searchInList ModuleList searchValues
+				
+				progress.value = 0
+				
+				countTotal = 0
+				count = 0
+				for module in searchList do (
+					countTotal += updateAsset (ModulePath + module as string) module
+					count += 1
+					progress.value = (100.0 / ModuleList.count) * count
+				)
+				messagebox ("Se han recargado " + (count as string) + " módulos")
 			)
 			
 			on searchPickButton picked obj do
