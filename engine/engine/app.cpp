@@ -202,51 +202,15 @@ bool CApp::create() {
 
 	// Start random seed
 	srand((unsigned int)time(NULL));
-
-	// public delta time inicialization
-	delta_time = 0.f;
-	total_time = delta_time;
-	fixedUpdateCounter = 0.0f;
-
-	renderAABB = false;
-	renderAxis = false;
-	renderGrid = false;
-	renderNames = false;
-	debug_mode = false;
-
+	
 	createManagers();
 
 	physics_manager.init();
 
-	CImporterParser p;
-	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
-	//XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
-	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
-	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
-
-	initManagers();	
-
-	// Create Debug Technique
-	XASSERT(debugTech.load("basic"), "Error loading basic technique");
-	
-	CEntity* e = entity_manager.getByName("PlayerCamera");
-	XASSERT(CHandle(e).isValid(), "Camera not valid");
-
-	activeCamera = e->get<TCompCamera>();
-
-	XASSERT(font.create(), "Error creating the font");
-	font.camera = activeCamera;
-
-	// Ctes ---------------------------
-	bool is_ok = renderUtilsCreate();
-
-	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
-	is_ok &= ctes_global.create();
-	XASSERT(is_ok, "Error creating global constants");
+	loadScene("data/scenes/my_file.xml");
 
 	// Create debug meshes
-	is_ok &= createGrid(grid, 10);
+	bool is_ok = createGrid(grid, 10);
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
@@ -264,10 +228,10 @@ bool CApp::create() {
 	entity_lister.init();
 	entity_actioner.init();
 	debug_optioner.init();
+
+	entity_lister.update();
 #endif
-
-	activateInspectorMode(false);
-
+	
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
 
@@ -319,6 +283,10 @@ void CApp::update(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 	io.update(elapsed);
+
+	if (io.becomesReleased(CIOStatus::EXTRA)) {
+		loadScene("data/scenes/milestone2.xml");
+	}
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
@@ -896,4 +864,60 @@ unsigned int CApp::numStrings(){
 
 void CApp::activateVictory(){
 	getObjManager<TCompThirdPersonCameraController>()->setActiveComponents(false);
+}
+
+void CApp::loadScene(std::string scene_name) {
+	CImporterParser p;
+	entity_manager.clear();
+	mesh_manager.destroyAll();
+	texture_manager.destroyAll();
+	render_techniques_manager.destroyAll();
+	material_manager.destroyAll();
+	render_manager.destroyAllKeys();
+	ctes_global.destroy();
+	renderUtilsDestroy();
+
+	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
+
+	// public delta time inicialization
+	delta_time = 0.f;
+	total_time = delta_time;
+	fixedUpdateCounter = 0.0f;
+
+	renderAABB = false;
+	renderAxis = false;
+	renderGrid = false;
+	renderNames = false;
+	debug_mode = false;
+
+	//physics_manager.init();
+
+	initManagers();
+
+	// Create Debug Technique
+	XASSERT(debugTech.load("basic"), "Error loading basic technique");
+
+	CEntity* e = entity_manager.getByName("PlayerCamera");
+	XASSERT(CHandle(e).isValid(), "Camera not valid");
+
+	activeCamera = e->get<TCompCamera>();
+
+	//XASSERT(font.create(), "Error creating the font");
+	font.camera = activeCamera;
+
+	// Ctes ---------------------------
+	bool is_ok = renderUtilsCreate();
+
+	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
+	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
+	is_ok &= ctes_global.create();
+	XASSERT(is_ok, "Error creating global constants");
+
+	XASSERT(is_ok, "Error creating debug meshes");
+
+#ifdef _DEBUG	
+	entity_inspector.inspectEntity(CHandle());
+#endif
+
+	activateInspectorMode(false);
 }

@@ -48,6 +48,7 @@ bool CEntityManager::clear() {
 		entity_event_count++;
 	}
 
+	entity_event_count = 0;
 	entities.clear();
 	return true;
 }

@@ -38,7 +38,8 @@ public:
 	void destroy();
 	unsigned int numStrings();
 	void activateVictory();
-
+	
+	void loadScene(std::string scene_name);
 
 	static CApp& get();
 };

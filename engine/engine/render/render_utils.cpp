@@ -89,6 +89,7 @@ void renderUtilsDestroy() {
   ctes_camera.destroy();
   ctes_bones.destroy();
   wire_cube.destroy();
+  mesh_line.destroy();
 }
 
 void activateWorldMatrix( int slot ) {

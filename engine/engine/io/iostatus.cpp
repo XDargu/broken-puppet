@@ -27,7 +27,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[THROW_STRING].key = VK_LBUTTON;
 	buttons[TENSE_STRING].key = VK_RBUTTON;
 	buttons[CANCEL_STRING].key = VK_MBUTTON;
-	buttons[EXTRA].key = 'O';	
+	buttons[EXTRA].key = 'K';	
 	buttons[INSPECTOR_MODE].key = VK_F2;
 	buttons[DEBUG_MODE].key = VK_F3;
 	buttons[EXIT].key = VK_ESCAPE;

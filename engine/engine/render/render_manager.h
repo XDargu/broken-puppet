@@ -32,6 +32,8 @@ public:
 
 	void renderAll(const XMMATRIX view_projection);
 
+	void destroyAllKeys();
+
 };
 
 extern CRenderManager render_manager;

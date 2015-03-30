@@ -93,3 +93,7 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 
 
 }
+
+void CRenderManager::destroyAllKeys() {
+	keys.clear();
+}
