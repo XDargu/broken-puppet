@@ -92,7 +92,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   const CMesh* mesh = core_model->getMesh();
 
   for (int i = 0; i < mesh->getNGroups(); ++i )
-    render_manager.addKey(mesh, mat, i, CHandle(this));
+    render_manager.addKey(mesh, mat, i, CHandle(this), &active);
 }
 
 

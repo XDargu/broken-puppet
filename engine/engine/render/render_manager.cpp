@@ -24,6 +24,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	, const CMaterial*  material
 	, int  mesh_id
 	, CHandle owner
+	, bool* active
 	) {
 
 	SET_ERROR_CONTEXT("Adding a render key", "")
@@ -33,6 +34,8 @@ void CRenderManager::addKey(const CMesh*      mesh
 	CEntity* e = owner.getOwner();
 	k.transform = e->get< TCompTransform >();
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
+
+	k.active = active;
 
 	keys.push_back(k);
 	sort_required = true;
@@ -67,9 +70,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		culling = camera_transform->isInFront(tmx->position);
-		if (((it->owner.isTypeOf<TCompRender>() && ((TCompRender*)it->owner)->active)
-			|| (it->owner.isTypeOf<TCompSkeleton>() && ((TCompSkeleton*)it->owner)->active)
-			) && (culling))
+		if (*it->active && culling)
 		{
 			render_count++;
 			if (it->material != prev_it->material || is_first) {

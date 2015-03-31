@@ -16,6 +16,7 @@ class CRenderManager {
 		int                mesh_id;
 		CHandle            owner;
 		CHandle            transform;
+		bool*			   active;
 
 		bool operator==(const TKey &key) const {
 			return key.owner == owner && key.mesh_id == mesh_id && key.material == material && key.mesh == mesh;
@@ -34,6 +35,7 @@ public:
 		, const CMaterial*  material
 		, int  mesh_id
 		, CHandle owner
+		, bool* active
 		);
 
 	void removeKeysFromOwner(CHandle owner);
