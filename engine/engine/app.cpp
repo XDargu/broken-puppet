@@ -117,7 +117,7 @@ void createManagers() {
 	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
-	getObjManager<TCompCollider>()->init(512);
+	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
@@ -162,7 +162,7 @@ void initManagers() {
 	CErrorContext ec("Initializing", "managers");
 
 	getObjManager<TCompCamera>()->initHandlers();
-	getObjManager<TCompCollider>()->initHandlers();
+	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();

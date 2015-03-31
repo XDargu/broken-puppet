@@ -1,7 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_rigid_body.h"
 #include "comp_transform.h"
-#include "comp_collider.h"
+#include "comp_collider_box.h"
 #include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
 #include "comp_collider_sphere.h"
@@ -11,7 +11,7 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
-	TCompCollider* c = e->get<TCompCollider>();
+	TCompColliderBox* c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
@@ -78,7 +78,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
-	TCompCollider* c = e->get<TCompCollider>();
+	TCompColliderBox* c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();

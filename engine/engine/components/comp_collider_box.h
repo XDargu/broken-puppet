@@ -1,13 +1,13 @@
-#ifndef INC_COMP_COLLIDER_H_
-#define INC_COMP_COLLIDER_H_
+#ifndef INC_COMP_COLLIDER_BOX_H_
+#define INC_COMP_COLLIDER_BOX_H_
 
 #include "base_component.h"
 
-struct TCompCollider : TBaseComponent {
+struct TCompColliderBox : TBaseComponent {
 
 	physx::PxShape* collider;
 
-	TCompCollider() { }
+	TCompColliderBox() { }
 
 	void setShape(float boxX, float boxY, float boxZ, float static_friction, float dynamic_friction, float restitution) {
 		collider = Physics.gPhysicsSDK->createShape(

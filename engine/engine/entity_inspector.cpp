@@ -56,29 +56,29 @@ void TW_CALL GetPitch(void *value, void *clientData)
 // COLLIDER
 void TW_CALL SetStaticFriction(const void *value, void *clientData)
 {
-	static_cast<TCompCollider *>(clientData)->getMaterial()->setStaticFriction(*static_cast<const float *>(value));
+	static_cast<TCompColliderBox *>(clientData)->getMaterial()->setStaticFriction(*static_cast<const float *>(value));
 }
 void TW_CALL GetStaticFriction(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCompCollider *>(clientData)->getMaterial()->getStaticFriction();
+	*static_cast<float *>(value) = static_cast<TCompColliderBox *>(clientData)->getMaterial()->getStaticFriction();
 }
 
 void TW_CALL SetDynamicFriction(const void *value, void *clientData)
 {
-	static_cast<TCompCollider *>(clientData)->getMaterial()->setDynamicFriction(*static_cast<const float *>(value));
+	static_cast<TCompColliderBox *>(clientData)->getMaterial()->setDynamicFriction(*static_cast<const float *>(value));
 }
 void TW_CALL GetDynamicFriction(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCompCollider *>(clientData)->getMaterial()->getDynamicFriction();
+	*static_cast<float *>(value) = static_cast<TCompColliderBox *>(clientData)->getMaterial()->getDynamicFriction();
 }
 
 void TW_CALL SetRestitution(const void *value, void *clientData)
 {
-	static_cast<TCompCollider *>(clientData)->getMaterial()->setRestitution(*static_cast<const float *>(value));
+	static_cast<TCompColliderBox *>(clientData)->getMaterial()->setRestitution(*static_cast<const float *>(value));
 }
 void TW_CALL GetRestitution(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCompCollider *>(clientData)->getMaterial()->getRestitution();
+	*static_cast<float *>(value) = static_cast<TCompColliderBox *>(clientData)->getMaterial()->getRestitution();
 }
 
 // RIGIDBODY
@@ -239,28 +239,45 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	CEntity* inspectedEntity = target_entity;
 
+	// Basic
 	TCompTransform* e_transform = inspectedEntity->get<TCompTransform>();
 	TCompName* e_name = inspectedEntity->get<TCompName>();
-	TCompRender* e_render = inspectedEntity->get<TCompRender>();
 	TCompAABB* e_aabb = inspectedEntity->get<TCompAABB>();
-	TCompCollider* e_collider = inspectedEntity->get<TCompCollider>();
-	TCompRigidBody* e_rigidbody = inspectedEntity->get<TCompRigidBody>();
+
+	// Render	
+	TCompRender* e_render = inspectedEntity->get<TCompRender>();
 	TCompCamera* e_camera = inspectedEntity->get<TCompCamera>();
-	TCompPlayerController* e_player_controller = inspectedEntity->get<TCompPlayerController>();
-	TCompPlayerPivotController* e_player_pivot_controller = inspectedEntity->get<TCompPlayerPivotController>();
-	TCompCameraPivotController* e_camera_pivot_controller = inspectedEntity->get<TCompCameraPivotController>();
-	TCompThirdPersonCameraController* e_third_person_camera_controller = inspectedEntity->get<TCompThirdPersonCameraController>();
-	TCompDistanceJoint* e_distance_joint = inspectedEntity->get<TCompDistanceJoint>();
-	TCompRope* e_rope = inspectedEntity->get<TCompRope>();
-
-	// AI
-	TCompAiFsmBasic* e_comp_ai_fsm_basic = inspectedEntity->get<TCompAiFsmBasic>();
-
 	TCompDirectionalLight* e_directional_light = inspectedEntity->get<TCompDirectionalLight>();
 	TCompAmbientLight* e_ambient_light = inspectedEntity->get<TCompAmbientLight>();
 	TCompPointLight* e_point_light = inspectedEntity->get<TCompPointLight>();
 
-	// Lógica
+	// Animation
+
+	// Physics	
+	TCompColliderBox* e_collider_box = inspectedEntity->get<TCompColliderBox>();
+	TCompColliderMesh* e_collider_mesh = inspectedEntity->get<TCompColliderMesh>();
+	TCompColliderSphere* e_collider_sphere = inspectedEntity->get<TCompColliderSphere>();
+	TCompColliderCapsule* e_collider_capsule = inspectedEntity->get<TCompColliderCapsule>();
+	TCompRigidBody* e_rigidbody = inspectedEntity->get<TCompRigidBody>();
+	TCompDistanceJoint* e_distance_joint = inspectedEntity->get<TCompDistanceJoint>();
+
+	// Misc
+	TCompRope* e_rope = inspectedEntity->get<TCompRope>();
+
+	// Controllers
+	TCompPlayerController* e_player_controller = inspectedEntity->get<TCompPlayerController>();
+	TCompPlayerPivotController* e_player_pivot_controller = inspectedEntity->get<TCompPlayerPivotController>();
+	TCompCameraPivotController* e_camera_pivot_controller = inspectedEntity->get<TCompCameraPivotController>();
+	TCompThirdPersonCameraController* e_third_person_camera_controller = inspectedEntity->get<TCompThirdPersonCameraController>();
+	
+	// AI
+	// Player
+	TCompAiFsmBasic* e_comp_ai_fsm_basic = inspectedEntity->get<TCompAiFsmBasic>();
+
+	// Enemies
+
+
+	// Logic
 	TCompTrigger* e_trigger = inspectedEntity->get<TCompTrigger>();
 
 	TwAddVarRW(bar, "ETag", TW_TYPE_CSSTRING(sizeof(inspectedEntity->tag)), &inspectedEntity->tag, " label='Tag'");
@@ -294,11 +311,20 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddSeparator(bar, "", "group=Render");
 		}
 	}
-	if (e_collider) {
-		TwAddVarRW(bar, "CActive", TW_TYPE_BOOL8, &e_collider->active, " group=Collider label='Active'");
-		TwAddVarCB(bar, "Static friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider, " min=0 max=1 step=0.1 group=Collider");
-		TwAddVarCB(bar, "Dynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider, " min=0 max=1 step=0.1 group=Collider");
-		TwAddVarCB(bar, "Restitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider, " min=0 max=1 step=0.1 group=Collider");
+	if (e_collider_box) {
+		TwAddVarRW(bar, "CActive", TW_TYPE_BOOL8, &e_collider_box->active, " group='Box Collider' label='Active'");
+		TwAddVarCB(bar, "Static friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
+		TwAddVarCB(bar, "Dynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
+		TwAddVarCB(bar, "Restitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
+	}
+	if (e_collider_mesh) {
+		TwAddVarRW(bar, "CMeshActive", TW_TYPE_BOOL8, &e_collider_mesh->active, " group='Mesh Collider' label='Active'");
+	}
+	if (e_collider_sphere) {
+		TwAddVarRW(bar, "CSphereActive", TW_TYPE_BOOL8, &e_collider_sphere->active, " group='Sphere Collider' label='Active'");
+	}
+	if (e_collider_capsule) {
+		TwAddVarRW(bar, "CCapsuleActive", TW_TYPE_BOOL8, &e_collider_capsule->active, " group='Capsule Collider' label='Active'");
 	}
 	if (e_rigidbody) {
 		TwAddVarRW(bar, "RActive", TW_TYPE_BOOL8, &e_rigidbody->active, " group=Rigidbody label='Active'");
@@ -521,7 +547,7 @@ bool entityHasComponent(CEntity* e, std::string component_name) {
 	if (component_name == ":camera")
 		return e->has<TCompCamera>();
 	if (component_name == ":collider")
-		return e->has<TCompCollider>();
+		return e->has<TCompColliderBox>();
 	if (component_name == ":rigidbody")
 		return e->has<TCompRigidBody>();
 	if (component_name == ":staticbody")

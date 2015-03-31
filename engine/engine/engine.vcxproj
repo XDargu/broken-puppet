@@ -205,7 +205,7 @@
     <ClInclude Include="components\comp_aabb.h" />
     <ClInclude Include="components\comp_camera.h" />
     <ClInclude Include="components\comp_camera_pivot_controller.h" />
-    <ClInclude Include="components\comp_collider.h" />
+    <ClInclude Include="components\comp_collider_box.h" />
     <ClInclude Include="components\comp_directional_light.h" />
     <ClInclude Include="components\comp_distance_joint.h" />
     <ClInclude Include="components\comp_life.h" />

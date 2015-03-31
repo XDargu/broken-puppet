@@ -221,9 +221,6 @@
     <ClInclude Include="components\base_component.h">
       <Filter>components\basic</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_collider.h">
-      <Filter>components\physics</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_collider_capsule.h">
       <Filter>components\physics</Filter>
     </ClInclude>
@@ -331,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="components\comp_basic_player_controller.h">
       <Filter>components\ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_box.h">
+      <Filter>components\physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
