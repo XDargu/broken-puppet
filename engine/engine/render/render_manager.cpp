@@ -35,7 +35,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	sort_required = true;
 }
 
-void CRenderManager::renderAll(const XMMATRIX view_projection) {
+void CRenderManager::renderAll(const CCamera* camera) {
 	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
@@ -58,7 +58,7 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 			if (it->material->getTech() != curr_tech) {
 				curr_tech = it->material->getTech();
 				curr_tech->activate();				
-				activateCamera(view_projection, 1);
+				activateCamera(camera, 1);
 				activateWorldMatrix(0);
 
 				uploading_bones = it->material->getTech()->usesBones();

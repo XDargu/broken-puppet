@@ -616,7 +616,7 @@ void CApp::render() {
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll(((TCompCamera*)activeCamera)->getViewProjection());	
+	render_manager.renderAll((TCompCamera*)activeCamera);	
 	renderEntities();
 	renderDebugEntities();
 

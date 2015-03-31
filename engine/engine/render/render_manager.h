@@ -5,6 +5,7 @@
 
 class CMaterial;
 class CMesh;
+class CCamera;
 
 class CRenderManager {
 
@@ -30,7 +31,7 @@ public:
 		, CHandle owner
 		);
 
-	void renderAll(const XMMATRIX view_projection);
+	void renderAll(const CCamera* camera);
 
 	void destroyAllKeys();
 
