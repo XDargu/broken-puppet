@@ -332,6 +332,9 @@
     <ClInclude Include="components\comp_collider_box.h">
       <Filter>components\physics</Filter>
     </ClInclude>
+    <ClInclude Include="components\collider.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

@@ -11,51 +11,32 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
-	TCompColliderBox* c = e->get<TCompColliderBox>();
+	TCompColliderBox* box_c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
-	XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
+	CCollider* col = nullptr;
+	if (box_c)
+		col = box_c;
+	if (mesh_c)
+		col = mesh_c;
+	if (sphere_c)
+		col = sphere_c;
+	if (capsule_c)
+		col = capsule_c;
 
-	if (c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *c->collider
-			, density);
-	}
-	if (mesh_c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *mesh_c->collider
-			, density);
-	}
-	if (sphere_c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *sphere_c->collider
-			, density);
-	}
-	if (capsule_c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *capsule_c->collider
-			, density);
-	}
+	XASSERT(col != nullptr, "TRigidBody requieres a TCollider or TMeshCollider component");
+
+	rigidBody = physx::PxCreateDynamic(
+		*Physics.gPhysicsSDK
+		, physx::PxTransform(
+		Physics.XMVECTORToPxVec3(trans->position),
+		Physics.XMVECTORToPxQuat(trans->rotation))
+		, *col->collider
+		, density);
 
 	//Asignación de mascara al actor para el filtrado de colisiones
 	setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
@@ -78,51 +59,32 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
-	TCompColliderBox* c = e->get<TCompColliderBox>();
+	TCompColliderBox* box_c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
-	XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
+	CCollider* col = nullptr;
+	if (box_c)
+		col = box_c;
+	if (mesh_c)
+		col = mesh_c;
+	if (sphere_c)
+		col = sphere_c;
+	if (capsule_c)
+		col = capsule_c;
 
-	if (c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *c->collider
-			, temp_density);
-	}
-	if (mesh_c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *mesh_c->collider
-			, temp_density);
-	}
-	if (sphere_c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *sphere_c->collider
-			, temp_density);
-	}
-	if (capsule_c) {
-		rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(trans->position),
-			Physics.XMVECTORToPxQuat(trans->rotation))
-			, *capsule_c->collider
-			, temp_density);
-	}
+	XASSERT(col != nullptr, "TRigidBody requieres a TCollider or TMeshCollider component");
+
+	rigidBody = physx::PxCreateDynamic(
+		*Physics.gPhysicsSDK
+		, physx::PxTransform(
+		Physics.XMVECTORToPxVec3(trans->position),
+		Physics.XMVECTORToPxQuat(trans->rotation))
+		, *col->collider
+		, temp_density);
 
 	//Asignación de mascara al actor para el filtrado de colisiones
 	setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);

@@ -4,13 +4,13 @@
 #include "base_component.h"
 #include "physics_manager.h"
 #include "render\collision_mesh.h"
+#include "collider.h"
 
-struct TCompColliderMesh : TBaseComponent {
+struct TCompColliderMesh : public CCollider, TBaseComponent {
 
 	char path[32];
-	physx::PxShape* collider;
 
-	TCompColliderMesh() { collider = nullptr; }
+	TCompColliderMesh() : CCollider() { }
 	TCompColliderMesh(physx::PxShape* the_mesh_collider) { collider = the_mesh_collider; strcpy(path, "unknown"); }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -39,37 +39,6 @@ struct TCompColliderMesh : TBaseComponent {
 	}
 
 	void init() {
-	}
-
-	physx::PxMaterial* getMaterial() {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		return mat;
-	}
-
-	// Set the collider static friction, dynamic friction and restitution given by a vector
-	void setMaterialProperties(XMVECTOR properties) {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		mat->setStaticFriction(XMVectorGetX(properties));
-		mat->setDynamicFriction(XMVectorGetY(properties));
-		mat->setRestitution(XMVectorGetZ(properties));
-	}
-
-	// Returns the material properties as a vector
-	XMVECTOR getMaterialProperties() {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		return XMVectorSet(
-			mat->getStaticFriction(),
-			mat->getDynamicFriction(),
-			mat->getRestitution(),
-			0
-			);
-	}
-
-	std::string toString() {
-		return "Mesh Collider: " + std::string(path);
 	}
 };
 
