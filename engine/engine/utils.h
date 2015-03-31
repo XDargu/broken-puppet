@@ -28,6 +28,9 @@ bool isKeyPressed(int key);
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
 int getRandomNumber(int num1, int num2);
 
+// Strings
+bool stringEndsWith(std::string const &value, std::string const &ending);
+
 // XMVECTOR definitions
 #define V3COMPARE(v1, v2) memcmp(&v1, &v2, 12);
 #define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))

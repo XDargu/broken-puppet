@@ -908,3 +908,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	activateInspectorMode(false);
 }
+
+void CApp::loadPrefab(std::string prefab_name) {
+	CEntity* e = prefabs_manager.getInstanceByName(prefab_name.c_str());
+}
