@@ -78,6 +78,10 @@ void CCoreModel::TBoneCorrector::apply(CalModel* model, CalVector world_pos, flo
 }
 
 void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
+
+	h_transform = assertRequiredComponent<TCompTransform>(this);
+	h_rigidbody = getSibling<TCompRigidBody>(this);
+
   std::string skel_name = atts["name"];
   CCoreModel* core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
   model = new CalModel(core_model);
@@ -122,10 +126,9 @@ void TCompSkeleton::update(float elapsed) {
   //}
 
   // Get transform of the entity
-  CEntity* e = CHandle(this).getOwner();
-  TCompTransform *t = e->get<TCompTransform>();
-  TCompRigidBody *r = e->get<TCompRigidBody>();
-  TCompUnityCharacterController *u = e->get<TCompUnityCharacterController>();
+  TCompTransform *t = h_transform;
+  TCompRigidBody *r = h_rigidbody;
+  TCompUnityCharacterController *u = getSibling<TCompUnityCharacterController>(this);
 
   model->getMixer()->setRootTranslation(DX2Cal(t->position));
   model->getMixer()->setRootRotation(DX2CalQuat(t->rotation));
