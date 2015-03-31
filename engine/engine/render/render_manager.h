@@ -6,6 +6,7 @@
 class CMaterial;
 class CMesh;
 class CCamera;
+struct TTransform;
 
 class CRenderManager {
 
@@ -38,6 +39,7 @@ public:
 	void removeKeysFromOwner(CHandle owner);
 
 	void renderAll(const CCamera* camera);
+	void renderAll(const CCamera* camera, TTransform* camera_transform);
 
 	void destroyAllKeys();
 

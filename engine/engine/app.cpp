@@ -208,6 +208,8 @@ bool CApp::create() {
 
 	physics_manager.init();
 
+	XASSERT(font.create(), "Error creating the font");
+
 	loadScene("data/scenes/my_file.xml");
 
 	// Create debug meshes
@@ -602,7 +604,7 @@ void CApp::render() {
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll((TCompCamera*)activeCamera);	
+	render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 	renderDebugEntities();
 
@@ -888,7 +890,6 @@ void CApp::loadScene(std::string scene_name) {
 
 	activeCamera = e->get<TCompCamera>();
 
-	//XASSERT(font.create(), "Error creating the font");
 	font.camera = activeCamera;
 
 	// Ctes ---------------------------

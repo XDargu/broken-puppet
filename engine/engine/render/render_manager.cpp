@@ -2,6 +2,8 @@
 #include "render_manager.h"
 #include "render_utils.h"
 #include "camera.h"
+#include "transform.h"
+#include "font\font.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
 #include "components/comp_transform.h"
@@ -37,6 +39,9 @@ void CRenderManager::addKey(const CMesh*      mesh
 }
 
 void CRenderManager::renderAll(const CCamera* camera) {
+	renderAll(camera, &TTransform());
+}
+void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform) {
 	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
@@ -51,14 +56,22 @@ void CRenderManager::renderAll(const CCamera* camera) {
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
+
+	bool culling = true;
+	int render_count = 0;
+
 	while (it != keys.end()) {
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 
-		if ((it->owner.isTypeOf<TCompRender>() && ((TCompRender*)it->owner)->active)
-			|| (it->owner.isTypeOf<TCompSkeleton>() && ((TCompSkeleton*)it->owner)->active)
-			)
-		{
+		TCompTransform* tmx = it->transform;
+		XASSERT(tmx, "Invalid transform");
 
+		culling = camera_transform->isInFront(tmx->position);
+		if (((it->owner.isTypeOf<TCompRender>() && ((TCompRender*)it->owner)->active)
+			|| (it->owner.isTypeOf<TCompSkeleton>() && ((TCompSkeleton*)it->owner)->active)
+			) && (culling))
+		{
+			render_count++;
 			if (it->material != prev_it->material || is_first) {
 
 				// La tech
@@ -86,8 +99,6 @@ void CRenderManager::renderAll(const CCamera* camera) {
 			}
 
 			// Activar la world del obj
-			TCompTransform* tmx = it->transform;
-			XASSERT(tmx, "Invalid transform");
 			setWorldMatrix(tmx->getWorld());
 
 			// Pintar la mesh:submesh del it
@@ -99,7 +110,7 @@ void CRenderManager::renderAll(const CCamera* camera) {
 		++it;		
 	}
 
-
+	font.printf(200, 50, "Dibujando %i keys de %i", render_count, (int)keys.size());
 }
 
 void CRenderManager::removeKeysFromOwner(CHandle owner) {
