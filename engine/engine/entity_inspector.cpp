@@ -3,6 +3,8 @@
 #include <AntTweakBar.h>
 #include "handle\handle.h"
 #include "components\all_components.h"
+#include "components\comp_skeleton.h"
+#include "components\comp_skeleton_ik.h"
 #include "importer_parser.h"
 #include <locale>
 #include <algorithm>
@@ -253,6 +255,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	TCompPointLight* e_point_light = inspectedEntity->get<TCompPointLight>();
 
 	// Animation
+	TCompSkeleton* e_skel = inspectedEntity->get<TCompSkeleton>();
+	TCompSkeletonIK* e_skel_ik = inspectedEntity->get<TCompSkeletonIK>();
 
 	// Physics	
 	TCompColliderBox* e_collider_box = inspectedEntity->get<TCompColliderBox>();
@@ -424,6 +428,12 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_trigger) {
 		TwAddVarRW(bar, "TriggerActive", TW_TYPE_BOOL8, &e_trigger->active, " group='Trigger' label='Active' ");
+	}
+	if (e_skel) {
+		TwAddVarRW(bar, "SkeletonActive", TW_TYPE_BOOL8, &e_skel->active, " group='Skeleton' label='Active' ");
+	}
+	if (e_skel_ik) {
+		TwAddVarRW(bar, "SkeletonIKActive", TW_TYPE_BOOL8, &e_skel_ik->active, " group='Skeleton IK' label='Active' ");
 	}
 
 	TwAddSeparator(bar, "", "");

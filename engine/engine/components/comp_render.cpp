@@ -4,7 +4,7 @@
 #include "comp_render.h"
 
 TCompRender::~TCompRender() {
-	render_manager.removeKeysFromEntity(CHandle(this));
+	render_manager.removeKeysFromOwner(CHandle(this));
 }
 
 void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {

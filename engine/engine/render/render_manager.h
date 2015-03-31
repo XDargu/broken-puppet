@@ -35,7 +35,7 @@ public:
 		, CHandle owner
 		);
 
-	void removeKeysFromEntity(CHandle owner);
+	void removeKeysFromOwner(CHandle owner);
 
 	void renderAll(const CCamera* camera);
 

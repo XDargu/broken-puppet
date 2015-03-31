@@ -6,6 +6,7 @@
 #include "components/comp_transform.h"
 #include "components/comp_transform.h"
 #include "components/comp_skeleton.h"
+#include "components\comp_render.h"
 
 CRenderManager render_manager;
 
@@ -52,49 +53,56 @@ void CRenderManager::renderAll(const CCamera* camera) {
 	auto it = keys.begin();
 	while (it != keys.end()) {
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
-		if (it->material != prev_it->material || is_first) {
 
-			// La tech
-			if (it->material->getTech() != curr_tech) {
-				curr_tech = it->material->getTech();
-				curr_tech->activate();				
-				activateCamera(camera, 1);
-				activateWorldMatrix(0);
+		if ((it->owner.isTypeOf<TCompRender>() && ((TCompRender*)it->owner)->active)
+			|| (it->owner.isTypeOf<TCompSkeleton>() && ((TCompSkeleton*)it->owner)->active)
+			)
+		{
 
-				uploading_bones = it->material->getTech()->usesBones();
+			if (it->material != prev_it->material || is_first) {
+
+				// La tech
+				if (it->material->getTech() != curr_tech) {
+					curr_tech = it->material->getTech();
+					curr_tech->activate();
+					activateCamera(camera, 1);
+					activateWorldMatrix(0);
+
+					uploading_bones = it->material->getTech()->usesBones();
+				}
+
+				// Activar shader y material de it
+				it->material->activateTextures();
 			}
 
-			// Activar shader y material de it
-			it->material->activateTextures();
+			if (it->mesh != prev_it->mesh || is_first) {
+				it->mesh->activate();
+			}
+
+			if (uploading_bones) {
+				const TCompSkeleton* skel = it->owner;
+				XASSERT(skel, "Invalid skeleton");
+				skel->uploadBonesToGPU();
+			}
+
+			// Activar la world del obj
+			TCompTransform* tmx = it->transform;
+			XASSERT(tmx, "Invalid transform");
+			setWorldMatrix(tmx->getWorld());
+
+			// Pintar la mesh:submesh del it
+			it->mesh->renderGroup(it->mesh_id);
+
+			prev_it = it;
+			is_first = false;
 		}
-
-		if (it->mesh != prev_it->mesh || is_first) {
-			it->mesh->activate();
-		}
-
-		if (uploading_bones) {
-			const TCompSkeleton* skel = it->owner;
-			XASSERT(skel, "Invalid skeleton");
-			skel->uploadBonesToGPU();
-		}
-
-		// Activar la world del obj
-		TCompTransform* tmx = it->transform;
-		XASSERT(tmx, "Invalid transform");
-		setWorldMatrix(tmx->getWorld());
-
-		// Pintar la mesh:submesh del it
-		it->mesh->renderGroup(it->mesh_id);
-
-		prev_it = it;
-		++it;
-		is_first = false;
+		++it;		
 	}
 
 
 }
 
-void CRenderManager::removeKeysFromEntity(CHandle owner) {
+void CRenderManager::removeKeysFromOwner(CHandle owner) {
 	VKeys keys_to_remove;
 
 	for (auto& it : keys) {
