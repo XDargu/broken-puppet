@@ -16,6 +16,7 @@
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
+#include "handle\prefabs_manager.h"
 
 #include "components\all_components.h"
 #include "components/comp_skeleton.h"
@@ -381,24 +382,17 @@ void CApp::update(float elapsed) {
 					firstPosition = blockHit.position;
 					firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
 
-					CEntity* new_e = entity_manager.createEmptyEntity();
-					CEntity* rigidbody_e = entity_manager.getByName(firstActor->getName());
+					// Needle
+					CEntity* new_e = prefabs_manager.getInstanceByName("Needle");
+					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
-					TCompName* new_e_name = CHandle::create<TCompName>();
+					TCompName* new_e_name = new_e->get<TCompName>();
 					std::strcpy(new_e_name->name, ("Needle" + to_string(entitycount)).c_str());
-					new_e->add(new_e_name);
 
-					TCompTransform* new_e_trans = CHandle::create<TCompTransform>();
-					new_e->add(new_e_trans);
+					TCompTransform* new_e_trans = new_e->get<TCompTransform>();
 					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
 
-					/*TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
-					std::strcpy(new_e_mesh->path, "aguja");
-					new_e_mesh->mesh = mesh_manager.getByName("aguja");
-					new_e->add(new_e_mesh);*/
-
-					TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
-					new_e->add(new_e_needle);
+					TCompNeedle* new_e_needle = new_e->get<TCompNeedle>();
 					XMVECTOR rotation;
 					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
@@ -453,24 +447,16 @@ void CApp::update(float elapsed) {
 					new_e_r->create();
 
 					// Needle
-					CEntity* new_e2 = entity_manager.createEmptyEntity();
+					CEntity* new_e2 = prefabs_manager.getInstanceByName("Needle");
 					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
-					TCompName* new_e_name2 = CHandle::create<TCompName>();
+					TCompName* new_e_name2 = new_e2->get<TCompName>();
 					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
-					new_e2->add(new_e_name2);
 
-					TCompTransform* new_e_trans2 = CHandle::create<TCompTransform>();
-					new_e2->add(new_e_trans2);
+					TCompTransform* new_e_trans2 = new_e2->get<TCompTransform>();
 					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
 
-					/*TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
-					std::strcpy(new_e_mesh2->path, "aguja");
-					new_e_mesh2->mesh = mesh_manager.getByName("aguja");
-					new_e2->add(new_e_mesh2);*/
-
-					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
-					new_e2->add(new_e_needle2);
+					TCompNeedle* new_e_needle2 = new_e2->get<TCompNeedle>();
 					XMVECTOR rotation;
 					if (blockHit.position == physics_manager.XMVECTORToPxVec3(t->position)) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
