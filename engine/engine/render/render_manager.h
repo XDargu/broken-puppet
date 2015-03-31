@@ -15,6 +15,10 @@ class CRenderManager {
 		int                mesh_id;
 		CHandle            owner;
 		CHandle            transform;
+
+		bool operator==(const TKey &key) const {
+			return key.owner == owner && key.mesh_id == mesh_id && key.material == material && key.mesh == mesh;
+		}
 	};
 
 	typedef std::vector< TKey > VKeys;
@@ -30,6 +34,8 @@ public:
 		, int  mesh_id
 		, CHandle owner
 		);
+
+	void removeKeysFromEntity(CHandle owner);
 
 	void renderAll(const CCamera* camera);
 

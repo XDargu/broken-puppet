@@ -3,6 +3,10 @@
 #include "comp_transform.h"
 #include "comp_render.h"
 
+TCompRender::~TCompRender() {
+	render_manager.removeKeysFromEntity(CHandle(this));
+}
+
 void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 	assertRequiredComponent<TCompTransform>(this);

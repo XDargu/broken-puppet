@@ -19,6 +19,7 @@ struct TCompRender : TBaseComponent {
 	std::vector< RKey > keys;
 
 	TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr) { }
+	~TCompRender();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 };

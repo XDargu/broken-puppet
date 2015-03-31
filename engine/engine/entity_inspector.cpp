@@ -243,6 +243,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	TCompTransform* e_transform = inspectedEntity->get<TCompTransform>();
 	TCompName* e_name = inspectedEntity->get<TCompName>();
 	TCompAABB* e_aabb = inspectedEntity->get<TCompAABB>();
+	TCompLife* e_life = inspectedEntity->get<TCompLife>();
 
 	// Render	
 	TCompRender* e_render = inspectedEntity->get<TCompRender>();
@@ -263,6 +264,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	// Misc
 	TCompRope* e_rope = inspectedEntity->get<TCompRope>();
+	TCompNeedle* e_needle = inspectedEntity->get<TCompNeedle>();
 
 	// Controllers
 	TCompPlayerController* e_player_controller = inspectedEntity->get<TCompPlayerController>();
@@ -295,6 +297,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarCB(bar, "Pich", TW_TYPE_FLOAT, NULL, GetPitch, e_transform, " group=Transform");
 		TwAddVarRW(bar, "Scale", TW_TYPE_DIR3F, &e_transform->scale, " group=Transform axisx=-x axisz=-z");
 		TwAddSeparator(bar, "Transform", "");
+	}
+	if (e_life) {
+		TwAddVarRW(bar, "LifeActive", TW_TYPE_BOOL8, &e_life->active, " group=Life label='Active'");
+		TwAddVarRW(bar, "LifeLife", TW_TYPE_FLOAT, &e_life->life, " group=Life");
 	}
 	if (e_render) {
 		TwAddVarRW(bar, "RenderActive", TW_TYPE_BOOL8, &e_render->active, " group=Render label='Active'");
@@ -412,6 +418,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarRW(bar, "RopeActive", TW_TYPE_BOOL8, &e_rope->active, " group='Rope' label='Active' ");
 		TwAddVarRW(bar, "RopeWidth", TW_TYPE_FLOAT, &e_rope->width, " min=0.01 max=0.5 step=0.01 group='Rope' label='Width' ");
 		TwAddVarRW(bar, "RopeMaxDistance", TW_TYPE_FLOAT, &e_rope->max_distance, " min=1 max=1000 step=0.5 group='Rope' label='Max distance' ");
+	}
+	if (e_needle) {
+		TwAddVarRW(bar, "NeedleActive", TW_TYPE_BOOL8, &e_needle->active, " group='Needle' label='Active' ");
 	}
 	if (e_trigger) {
 		TwAddVarRW(bar, "TriggerActive", TW_TYPE_BOOL8, &e_trigger->active, " group='Trigger' label='Active' ");

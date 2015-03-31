@@ -94,6 +94,20 @@ void CRenderManager::renderAll(const CCamera* camera) {
 
 }
 
+void CRenderManager::removeKeysFromEntity(CHandle owner) {
+	VKeys keys_to_remove;
+
+	for (auto& it : keys) {
+		if (it.owner == owner)
+			keys_to_remove.push_back(it);
+	}
+
+	for (auto& it : keys_to_remove) {
+		auto it2 = std::remove(keys.begin(), keys.end(), it);
+		keys.erase(it2, keys.end());
+	}
+}
+
 void CRenderManager::destroyAllKeys() {
 	keys.clear();
 }
