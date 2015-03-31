@@ -60,25 +60,25 @@ void TW_CALL SetStaticFriction(const void *value, void *clientData)
 }
 void TW_CALL GetStaticFriction(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCompColliderBox *>(clientData)->getMaterial()->getStaticFriction();
+	*static_cast<float *>(value) = static_cast<CCollider *>(clientData)->getMaterial()->getStaticFriction();
 }
 
 void TW_CALL SetDynamicFriction(const void *value, void *clientData)
 {
-	static_cast<TCompColliderBox *>(clientData)->getMaterial()->setDynamicFriction(*static_cast<const float *>(value));
+	static_cast<CCollider *>(clientData)->getMaterial()->setDynamicFriction(*static_cast<const float *>(value));
 }
 void TW_CALL GetDynamicFriction(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCompColliderBox *>(clientData)->getMaterial()->getDynamicFriction();
+	*static_cast<float *>(value) = static_cast<CCollider *>(clientData)->getMaterial()->getDynamicFriction();
 }
 
 void TW_CALL SetRestitution(const void *value, void *clientData)
 {
-	static_cast<TCompColliderBox *>(clientData)->getMaterial()->setRestitution(*static_cast<const float *>(value));
+	static_cast<CCollider *>(clientData)->getMaterial()->setRestitution(*static_cast<const float *>(value));
 }
 void TW_CALL GetRestitution(void *value, void *clientData)
 {
-	*static_cast<float *>(value) = static_cast<TCompColliderBox *>(clientData)->getMaterial()->getRestitution();
+	*static_cast<float *>(value) = static_cast<CCollider *>(clientData)->getMaterial()->getRestitution();
 }
 
 // RIGIDBODY
@@ -312,19 +312,29 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		}
 	}
 	if (e_collider_box) {
-		TwAddVarRW(bar, "CActive", TW_TYPE_BOOL8, &e_collider_box->active, " group='Box Collider' label='Active'");
-		TwAddVarCB(bar, "Static friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
-		TwAddVarCB(bar, "Dynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
-		TwAddVarCB(bar, "Restitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
+		TwAddVarRW(bar, "CBoxActive", TW_TYPE_BOOL8, &e_collider_box->active, " group='Box Collider' label='Active'");
+		TwAddVarCB(bar, "CBoxStatic friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
+		TwAddVarCB(bar, "CBoxDynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
+		TwAddVarCB(bar, "CBoxRestitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider_box, " min=0 max=1 step=0.1 group='Box Collider'");
 	}
 	if (e_collider_mesh) {
 		TwAddVarRW(bar, "CMeshActive", TW_TYPE_BOOL8, &e_collider_mesh->active, " group='Mesh Collider' label='Active'");
+		TwAddVarRO(bar, "CMeshPath", TW_TYPE_CSSTRING(sizeof(e_collider_mesh->path)), &e_collider_mesh->path, " group='Mesh Collider' label='Path'");
+		TwAddVarCB(bar, "CMeshStatic friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider_mesh, " min=0 max=1 step=0.1 group='Mesh Collider'");
+		TwAddVarCB(bar, "CMeshDynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider_mesh, " min=0 max=1 step=0.1 group='Mesh Collider'");
+		TwAddVarCB(bar, "CMeshRestitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider_mesh, " min=0 max=1 step=0.1 group='Mesh Collider'");
 	}
 	if (e_collider_sphere) {
 		TwAddVarRW(bar, "CSphereActive", TW_TYPE_BOOL8, &e_collider_sphere->active, " group='Sphere Collider' label='Active'");
+		TwAddVarCB(bar, "CSphereStatic friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider_sphere, " min=0 max=1 step=0.1 group='Sphere Collider'");
+		TwAddVarCB(bar, "CSphereDynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider_sphere, " min=0 max=1 step=0.1 group='Sphere Collider'");
+		TwAddVarCB(bar, "CSphereRestitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider_sphere, " min=0 max=1 step=0.1 group='Sphere Collider'");
 	}
 	if (e_collider_capsule) {
 		TwAddVarRW(bar, "CCapsuleActive", TW_TYPE_BOOL8, &e_collider_capsule->active, " group='Capsule Collider' label='Active'");
+		TwAddVarCB(bar, "CCapsuleStatic friction", TW_TYPE_FLOAT, SetStaticFriction, GetStaticFriction, e_collider_capsule, " min=0 max=1 step=0.1 group='Capsule Collider'");
+		TwAddVarCB(bar, "CCapsuleDynamic friction", TW_TYPE_FLOAT, SetDynamicFriction, GetDynamicFriction, e_collider_capsule, " min=0 max=1 step=0.1 group='Capsule Collider'");
+		TwAddVarCB(bar, "CCapsuleRestitution", TW_TYPE_FLOAT, SetRestitution, GetRestitution, e_collider_capsule, " min=0 max=1 step=0.1 group='Capsule Collider'");
 	}
 	if (e_rigidbody) {
 		TwAddVarRW(bar, "RActive", TW_TYPE_BOOL8, &e_rigidbody->active, " group=Rigidbody label='Active'");
