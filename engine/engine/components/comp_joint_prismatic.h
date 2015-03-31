@@ -7,6 +7,7 @@ struct  TCompJointPrismatic : TBaseComponent {
 private:
 	std::string actor1;
 	std::string actor2;
+
 	physx::PxD6Joint* mJoint;
 
 public:
@@ -43,21 +44,35 @@ public:
 		physx::PxReal stiffness;
 		physx::PxReal damping;
 
+		physx::PxReal linearModeX;
+		physx::PxReal linearModeY;
+		physx::PxReal linearModeZ;
+
+		physx::PxReal linearPosition;
+		physx::PxReal linearRestitution;
+
 		actor1 = atts.getString("actor1", "");
 		actor2 = atts.getString("actor2", "");
+
+		linearModeX = atts.getFloat("linearModeX", 1);
+		linearModeY = atts.getFloat("linearModeY", 1);
+		linearModeZ = atts.getFloat("linearModeZ", 1);
+
+		linearPosition = atts.getFloat("linearPosition", 0);
 
 		lower_limit = atts.getFloat("linearPosition", 0.1) / 2;
 		upper_limit = atts.getFloat("linearPosition", 0.1) / 2;
 
-		stiffness = atts.getFloat("posSpring", 0.1);
-		damping = atts.getFloat("posDamping", 0.1);
+
+		stiffness = atts.getFloat("posSpring", 0);
+		damping = atts.getFloat("posDamping", 0);
 
 
 		CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 		const char* nombre = owner_entity->getName();
 
-		CEntity* e_a1;
-		CEntity* e_a2;
+		CHandle e_a1;
+		CHandle e_a2;
 
 		// Sustituir los static por null y poner una posicion en la que deberían estar
 
@@ -75,47 +90,85 @@ public:
 			e_a2 = CEntityManager::get().getByName(actor2.c_str());
 		}
 
-		TCompRigidBody* r1 = NULL;
-		TCompRigidBody* r2 = NULL;
+		CHandle r1;
+		CHandle r2;
 
-		TCompStaticBody* s1 = NULL;
-		TCompStaticBody* s2 = NULL;
+		CHandle s1;
+		CHandle s2;
 
-		if (e_a1)
+		PxTransform Pos1 = PxTransform(0.0f, 0.0f, 0.0f);
+		PxTransform Pos2 = PxTransform(0.0f, 0.0f, 0.0f);
+		PxTransform drive_position = PxTransform(0.f, 0.f, 0.f);
+		
+		// Tenemos que sacar la distancia entre pivotes
+
+		if (e_a1.isValid())
 		{
-			r1 = e_a1->get<TCompRigidBody>();
-			s1 = e_a1->get<TCompStaticBody>();
+			r1 = ((CEntity*)e_a1)->get<TCompRigidBody>();
+			s1 = ((CEntity*)e_a1)->get<TCompStaticBody>();
+		}
+
+		if (e_a2.isValid())
+		{
+			r2 = ((CEntity*)e_a2)->get<TCompRigidBody>();
+			s2 = ((CEntity*)e_a2)->get<TCompStaticBody>();
 		}
 		
-
-		if (e_a2)
-		{
-			r2 = e_a2->get<TCompRigidBody>();
-			s2 = e_a2->get<TCompStaticBody>();
+		// Take the positions in world
+		if (e_a1.isValid()){
+			if (r1.isValid()){
+				Pos1 = ((TCompRigidBody*)(((CEntity*)e_a1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+			}
+			if (s1.isValid()){
+				Pos1 = ((TCompStaticBody*)(((CEntity*)e_a1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+			}
 		}
-		
+		else if (e_a2.isValid()){
+			if (s2.isValid()){
+				Pos1 = ((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+			}
+			else if (r2.isValid()){
+				Pos1 = ((TCompRigidBody*)(((CEntity*)e_a2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+			}
+		}
+
+		if (e_a2.isValid()){
+			if (r2.isValid()){
+				Pos2 = ((TCompRigidBody*)(((CEntity*)e_a2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+			}
+			if (s2.isValid()){
+				Pos2 = ((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+			}
+		}
+		else if (e_a1.isValid()){
+			if (s1.isValid()){
+				Pos2 = ((TCompStaticBody*)(((CEntity*)e_a1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+			}
+			else if (r1.isValid()){
+				Pos2 = ((TCompRigidBody*)(((CEntity*)e_a1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+			}
+		}
 
 		//create a joint
-		/*
-		if (r1) {
-			if (r2)
-				joint = physx::PxPrismaticJointCreate(*Physics.gPhysicsSDK, r1->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), r2->rigidBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+		
+		if (r1.isValid()) {
+			if (r2.isValid())
+			{
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f));
+				drive_position.p = Pos1.p - Pos2.p;
+			}
+			
 
 			else
-				joint = physx::PxPrismaticJointCreate(*Physics.gPhysicsSDK, r1->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), s2->staticBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), NULL, Pos2);
 		}
 		else {
-			if (s1)
-				joint = physx::PxPrismaticJointCreate(*Physics.gPhysicsSDK, s1->staticBody, physx::PxTransform(0.5f, 0.5f, 0.5f), r2->rigidBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+			if (s1.isValid())
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos1, ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f));
 			else
-				joint = physx::PxPrismaticJointCreate(*Physics.gPhysicsSDK, s1->staticBody, physx::PxTransform(0.5f, 0.5f, 0.5f), s2->staticBody, physx::PxTransform(0.0f, -0.5f, 0.0f));
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos2, NULL, Pos2);
 		}
-		*/
-		TCompRigidBody* trans = e_a1->get<TCompRigidBody>();
-			
-		mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, r1->rigidBody, physx::PxTransform(0.f, 0.f, 0.f), NULL, trans->rigidBody->getGlobalPose());
-
-
+		
 		// pasos para usar joints d6
 
 		/*
@@ -137,36 +190,73 @@ public:
 			Una vez creado el drive, deben aplicarse fuerzas o puntos a seguir.
 			con la funcion setDriveVelocity, indicamos a todos los drives del joint un vector direcctor que seguir.
 			con la función setDrivePoint indicamos a todos los drives del joint que punto deben intentar alcanzar.
-			
+					
 
-		
+			los joints, las livertados son en local al objeto que tiene el joint, el drive position funciona de igual modo.
 		*/
 
 
-		mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eLIMITED);
-		mJoint->setLinearLimit(physx::PxJointLinearLimit(0.8f, physx::PxSpring(0, 0)));
-		mJoint->setDrive(physx::PxD6Drive::eY, physx::PxD6JointDrive(200, 10, 10000, false));
-		mJoint->setDrivePosition(physx::PxTransform(0.f, 0.f, 0.f));
+		// Set the axis to locked, limited or free    mode 1 = Locked, 2 = Limited, 3 = Free
 
+		switch ((int)linearModeX)
+		{
+		case 1: 
+			/*set de axis as locked*/
+			break;
+		case 2: 
+			/*set de axis as limited*/
+			mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eLIMITED);
+			mJoint->setDrive(physx::PxD6Drive::eX, physx::PxD6JointDrive(stiffness, damping, 10000, false));
+			break;
+		case 3: 
+			/*set de axis as free*/
+			mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eFREE);
+			break;
+		default:
+			/*set de axis as locked*/
+			break;
+		}
 
-		//mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eLIMITED);
-		//mJoint->setLinearLimit(physx::PxJointLinearLimit(0.5f, physx::PxSpring(0, 0)));
-		//mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eFREE);
-		
-		//mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
+		switch ((int)linearModeY)
+		{
+		case 1:
+			/*set de axis as locked*/
+			break;
+		case 2:
+			/*set de axis as limited*/
+			mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eLIMITED);
+			mJoint->setDrive(physx::PxD6Drive::eY, physx::PxD6JointDrive(stiffness, damping, 10000, false));
+			break;
+		case 3:
+			/*set de axis as free*/
+			mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eFREE);
+			break;
+		default:
+			/*set de axis as locked*/
+			break;
+		}
 
+		switch ((int)linearModeZ)
+		{
+		case 1:
+			/*set de axis as locked*/
+			break;
+		case 2:
+			/*set de axis as limited*/
+			mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eLIMITED);
+			mJoint->setDrive(physx::PxD6Drive::eZ, physx::PxD6JointDrive(stiffness, damping, 10000, false));
+			break;
+		case 3:
+			/*set de axis as free*/
+			mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
+			break;
+		default:
+			/*set de axis as locked*/
+			break;
+		}
 
-
-		//mJoint->setDriveVelocity(physx::PxVec3(10, 10, 0), physx::PxVec3(0, 0, 0));
-		//mJoint->setConstraintFlag(physx::PxConstraintFlag::ePROJECTION, true);		
-		//mJoint->setConstraintFlag(physx::PxConstraintFlag::eDRIVE_LIMITS_ARE_FORCES, true);
-		//physx::PxD6JointDrive cosa = physx::PxD6JointDrive();
-		//cosa.damping = 100000000000000;
-		//cosa.forceLimit = true;
-		//cosa.stiffness = 10000000000000000;
-		//physx::PxConstraintFlag::eBROKEN;		
-
-		//mJoint->setDrivePosition(physx::PxTransform(0.f, 0.f, 0.f));
+		mJoint->setLinearLimit(physx::PxJointLinearLimit(linearPosition, physx::PxSpring(0, 0)));
+		mJoint->setDrivePosition(drive_position);
 
 	}
 

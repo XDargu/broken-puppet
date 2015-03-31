@@ -1424,11 +1424,11 @@ fn getJointPrismatic obj = (
 	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + mJoint.linearModeX as string + "\" "
-	mString += "linearModeY=\"" + mJoint.linearModeZ as string + "\" "
-	mString += "linearModeZ=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
+	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
 	
-	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
+	mString += "linearPosition=\"" + (mJoint.linearPosition * 100) as string + "\" "
 	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
 	
 	-- Spring

@@ -27,16 +27,31 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.862267" boxY="0.590108" boxZ="0.711541"/>
 <rigidbody density="10.0"  />
 	</entity>
-	<entity tag = "actor">
-<name name="mSphere_4.0" />
-<transform position="-34.1575 1.50258 26.8165" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="mSphere" sub_mesh="0" mat="Standardmaterial"/>
-</render>
-<aabb min="-1.31792 -1.31792 -1.31792" max="1.31792 1.31792 1.31792"/>
-<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="1.31792"/>
-<rigidbody density="500.0"  />
-	</entity>
+
+  <entity tag = "actor">
+    <name name="mSphere_44.0" />
+    <transform position="-32.1575 5.50258 26.8165" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="mSphere" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.31792 -1.31792 -1.31792" max="1.31792 1.31792 1.31792"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="1.31792"/>
+    <rigidbody density="1.0"  />
+  </entity>
+
+  <entity tag = "actor">
+    <name name="mSphere_4.0" />
+    <transform position="-34.1575 3.50258 26.8165" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="mSphere" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.31792 -1.31792 -1.31792" max="1.31792 1.31792 1.31792"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="1.31792"/>
+    <rigidbody density="1.0"  />
+    jointPrismatic actor1="mSphere_4.0" actor2="mSphere_44.0" linearModeY="1" linearPosition="3" posSpring="2000" />
+    <jointPrismatic actor1="mSphere_4.0" actor2="mSphere_44.0" linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="3" linearRestitution="0.35" posSpring="158.82" posDamping="12.99" />
+  </entity>
+  
 	<entity >
 <name name="StraightStair002_5.0" />
 <transform position="14.0 7.86805e-007 18.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
