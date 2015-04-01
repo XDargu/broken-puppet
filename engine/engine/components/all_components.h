@@ -47,6 +47,7 @@ using namespace DirectX;
 // Controllers 2
 #include "comp_character_controller.h"
 #include "comp_player_controller.h"
+#include "comp_switch_controller.h"
 
 // AI
 #include "comp_ai_fsm_basic.h"

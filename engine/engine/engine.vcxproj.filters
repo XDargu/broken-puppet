@@ -330,6 +330,9 @@
     <ClInclude Include="comp_joint_d6.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_switch_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

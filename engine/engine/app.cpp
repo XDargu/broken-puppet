@@ -137,6 +137,8 @@ void createManagers() {
 	getObjManager<TCompVictoryCond>()->init(1);
 	//
 
+	// Interruptores
+	getObjManager<TCompSwitchController>()->init(32);
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -645,6 +647,9 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
+	
+	// Interruptor
+	getObjManager<TCompSwitchController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);

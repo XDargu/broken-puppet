@@ -8,9 +8,14 @@ private:
 	std::string actor1;
 	std::string actor2;
 
-	physx::PxD6Joint* mJoint;
+	
 
 public:
+
+	CHandle e_a1;
+	CHandle e_a2; 
+	physx::PxD6Joint* mJoint;
+	PxReal linearPosition;
 
 	TCompJointPrismatic() {}
 	~TCompJointPrismatic() {
@@ -39,17 +44,16 @@ public:
 		//Physics->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlags::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
 		// Physics var
-		physx::PxReal lower_limit;
-		physx::PxReal upper_limit;
-		physx::PxReal stiffness;
-		physx::PxReal damping;
+		PxReal lower_limit;
+		PxReal upper_limit;
+		PxReal stiffness;
+		PxReal damping;
 
-		physx::PxReal linearModeX;
-		physx::PxReal linearModeY;
-		physx::PxReal linearModeZ;
+		PxReal linearModeX;
+		PxReal linearModeY;
+		PxReal linearModeZ;
 
-		physx::PxReal linearPosition;
-		physx::PxReal linearRestitution;
+		PxReal linearRestitution;
 
 		actor1 = atts.getString("actor1", "");
 		actor2 = atts.getString("actor2", "");
@@ -71,8 +75,8 @@ public:
 		CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 		const char* nombre = owner_entity->getName();
 
-		CHandle e_a1;
-		CHandle e_a2;
+		e_a1;
+		e_a2;
 
 		// Sustituir los static por null y poner una posicion en la que deberían estar
 
@@ -137,6 +141,9 @@ public:
 				Pos2 = ((TCompRigidBody*)(((CEntity*)e_a2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
 			}
 			if (s2.isValid()){
+				((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()));
+				auto cosa2 = ((TCompStaticBody*)s2)->staticBody;
+				((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 				Pos2 = ((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 			}
 		}
@@ -155,7 +162,7 @@ public:
 			if (r2.isValid())
 			{
 				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f));
-				drive_position.p = Pos1.p - Pos2.p;
+				drive_position.p = Pos2.p - Pos1.p;
 			}
 			
 
@@ -262,6 +269,19 @@ public:
 
 	void init() {
 
+	}
+
+	PxD6Joint* getJoint(){
+		return mJoint;
+	}
+	CHandle getActor1(){
+		return e_a1;
+	}
+	CHandle getActor2(){
+		return e_a2;
+	}
+	PxReal getLinealPosition(){
+		return linearPosition;
 	}
 };
 
