@@ -54,6 +54,10 @@ void fsm_basic_player::Init()
 }
 
 void fsm_basic_player::Idle(){	
+
+	if (on_enter)
+		XDEBUG("Player entra en: Idle");
+	
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
 
 	if (((TCompUnityCharacterController*)comp_unity_controller)->IsJumping()){

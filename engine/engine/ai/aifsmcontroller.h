@@ -23,7 +23,10 @@ class aifsmcontroller :public aicontroller
 	string state;
 	// the states, as maps to functions
 	map<string, statehandler>* statemap;
+	bool state_changed;
 
+protected:
+	bool on_enter;
 public:
 
 	aifsmcontroller();

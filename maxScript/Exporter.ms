@@ -1418,17 +1418,17 @@ fn getJointPrismatic obj = (
 	
 	-- Actors
 	if (mJoint.body0 != undefined) then 
-	mString += "actor0 = \"" + mJoint.body0.name + "_" + obj.id as string + "\" "
+	mString += "actor1 = \"" + mJoint.body0.name + "_" + obj.id as string + "\" "
 	if (mJoint.body1 != undefined) then 
-	mString += "actor1 = \"" + mJoint.body1.name + "_" + obj.id as string + "\" "
+	mString += "actor2 = \"" + mJoint.body1.name + "_" + obj.id as string + "\" "
 	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + mJoint.linearModeX as string + "\" "
-	mString += "linearModeY=\"" + mJoint.linearModeZ as string + "\" "
-	mString += "linearModeZ=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
+	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
 	
-	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
+	mString += "linearPosition=\"" + (mJoint.linearPosition * 100) as string + "\" "
 	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
 	
 	-- Spring

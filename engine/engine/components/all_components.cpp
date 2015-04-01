@@ -42,3 +42,4 @@ DECL_OBJ_MANAGER(TCompSkeletonLookAt, "skeleton_lookat");
 DECL_OBJ_MANAGER(TCompSkeletonIK, "skeleton_ik");
 DECL_OBJ_MANAGER(TCompPlayerPosSensor, "sensorPlayerPos");
 DECL_OBJ_MANAGER(TCompSensorNeedles, "sensorNeedles");
+DECL_OBJ_MANAGER(TCompSwitchController, "switchController");
