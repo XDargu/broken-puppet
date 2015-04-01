@@ -93,6 +93,8 @@ CFont         font;
 
 CShaderCte<TCtesGlobal> ctes_global;
 
+const CTexture* cubemap;
+
 float fixedUpdateCounter;
 
 bool debug_mode;
@@ -241,6 +243,10 @@ bool CApp::create() {
 	
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
+
+	cubemap = texture_manager.getByName("sunsetcube1024");
+
+	cubemap->activate(3);
 
 	return true;
 }
