@@ -2,7 +2,7 @@ filein("GeneralConfig.ms")
 clearlistener()
 
 	--ExportMeshes = true
-	engine_path = "D:\\GitHub\\engine\\engine\\"
+	--engine_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
 
 
 	/********************** CONFIG ************************/
@@ -451,11 +451,10 @@ clearlistener()
 		-- Convert to dds using texconv.exe por ejemplo
 		--copyFile infile full_target
 		local cmd = "\"" + tools_path + "texconv.exe\" -f DXT5 \"" + infile + "\" -o " + out_path + "textures\\"
-		--format "Executing: --%--\n" cmd
+		format "Executing: --%--\n" cmd
 		local log_file = out_path + "log\\" + base_name + ".log"
-		local rc = DOSCommand (cmd + " > \"" + log_file + "\"")
+		local rc = DOSCommand (cmd)
 		format "  rc = %\n" rc
-		format "Executing: --%--\n" (cmd + " > \"" + log_file + "\"" as string)
 		return base_name
 	)
 		
@@ -780,8 +779,7 @@ clearlistener()
 				validAttributes = false;
 			)		
 		)	
-		print (classof obj)
-		return ((classof obj == Editable_mesh) and ((findItem NotMesh (classof obj)) == 0) and validAttributes)
+		return (((findItem NotMesh (classof obj)) == 0) and validAttributes and (classof obj == Editable_mesh))
 	)
 
 	fn validateExportedNames obj = (
@@ -831,7 +829,7 @@ clearlistener()
 				validAttributes = false;
 			)		
 		)	
-		return ( (classof obj == Editable_Mesh) and((findItem NotMesh (classof obj)) == 0) and validAttributes)
+		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes)
 	)
 
 	fn validateObjExported obj = (
@@ -1054,7 +1052,7 @@ clearlistener()
 															+ extents.z as string + "\"" \													
 				+ "/>\n"
 		)
-		if (obj.modifiers[#PhysX_Rigid_Body].meshType == 5) then (
+		if ((obj.modifiers[#PhysX_Rigid_Body].meshType == 5) or (obj.modifiers[#PhysX_Rigid_Body].meshType == 6)) then (
 			-- if not in expShapesNames export
 			if (findItem expShapesNames obj.name) == 0 then (
 				exportMeshShape obj
@@ -1353,9 +1351,9 @@ clearlistener()
 											+ "/>\n"
 		return mString
 	)	
-
 	
 	
+		
 fn validateJointPrismatic obj = (
 	-- Get all the Uconstraints in the scene
 	list = for o in $* where (classof o == UConstraint) collect o
@@ -1366,22 +1364,25 @@ fn validateJointPrismatic obj = (
 		local body1 = false
 		local undefinedTest = false
 		
-		
 		if( mJoint.body0 != undefined) then (
 			body0 = mJoint.body0 == obj
 		)
-		else(
+		else (
 			undefinedTest = true
-			)
+		)
 
 		if( mJoint.body1 != undefined) then (
 			body1 = mJoint.body1 == obj
 		)
-		else(
+		else (
 			undefinedTest = true
-			)
+		)
 		
+		
+			
 		if (body0) or (body1) then (
+			
+
 			
 			-- If the mJoint is not in the exp list add it and return false
 			if (findItem expJoints mJoint.name ) == 0 then (
@@ -1392,7 +1393,7 @@ fn validateJointPrismatic obj = (
 				-- return false
 				return undefined
 			)
-			-- In only have one actor
+			-- If there are two actor
 			else (
 				return mJoint
 			)
@@ -1401,7 +1402,6 @@ fn validateJointPrismatic obj = (
 	
 	return undefined
 )
-
 
 /**********************************************************************************************
 Gets a Distance Text component
@@ -1412,15 +1412,21 @@ Gets a Distance Text component
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
 	local mJoint = validateJointPrismatic obj
+	print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	print mJoint as string
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointPrismatic "
 	
+	i = 1;
 	-- Actors
-	if (mJoint.body0 != undefined) then 
-	mString += "actor1 = \"" + mJoint.body0.name + "_" + obj.id as string + "\" "
+	if (mJoint.body0 != undefined) then (		
+		mString += "actor" + i as string + " = \"" + mJoint.body0.name + "_" + mJoint.body0.id as string + "\" "
+		i += 1;
+	)
+	
 	if (mJoint.body1 != undefined) then 
-	mString += "actor2 = \"" + mJoint.body1.name + "_" + obj.id as string + "\" "
+	mString += "actor" + i as string + " = \"" + mJoint.body1.name + "_" + mJoint.body1.id as string + "\" "
 	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
@@ -1428,7 +1434,7 @@ fn getJointPrismatic obj = (
 	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
 	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
 	
-	mString += "linearPosition=\"" + (mJoint.linearPosition * 100) as string + "\" "
+	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
 	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
 	
 	-- Spring
@@ -1438,14 +1444,9 @@ fn getJointPrismatic obj = (
 	mString += "/>\n"	
 	
 	return mString
-)
-
+)	
 	
 	
-	
-	
-	
-
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #distanceTextData == true
 	)
@@ -1581,6 +1582,7 @@ fn getJointPrismatic obj = (
 		expObjects = #()
 		expShapesNames = #()
 		expDiff = #()
+		expJoints = #()
 		
 		initializePrefabs()
 		
@@ -1674,8 +1676,7 @@ fn getJointPrismatic obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
- --funcion que abre y cierra una última cosa para poder trabajar, a depurar
-openCloseFile()
-removeObjectsID()
+--addObjectsID()
+--exportXMLScene()
+--openCloseFile()
+--removeObjectsID()

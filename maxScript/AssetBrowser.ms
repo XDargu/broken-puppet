@@ -304,9 +304,12 @@ macroScript MCVAssetBrowser
 		(		
 			-- Buttons placed at the top
 			button botonA "Subir" pos:[5,3] width:75 height:25 toolTip:""
-			button botonB "Bajar" pos:[87,3] width:75 height:25 toolTip:""
-			button botonC "Backface cull" pos:[5,34] width:75 height:25 toolTip:""
-			button botonD "Grid 45/90º" pos: [87,34] width:75 height:25 toolTip:""
+			button botonB "Bajar" pos:[86,3] width:75 height:25 toolTip:""
+			button botonC "Backface cull" pos:[167,3] width:75 height:25 toolTip:""
+			button button8Grid "Grid 8x8" pos:[5,34] width:75 height:25 toolTip:""
+			button button4Grid "Grid 4x4" pos:[86,34] width:75 height:25 toolTip:""
+			button button2Grid "Grid2x2" pos:[167,34] width:75 height:25 toolTip:""
+			button button1Grid "Grid 1x1" pos:[248,34] width:75 height:25 toolTip:""
 				
 			on botonA pressed do	( 
 				objs = $*
@@ -332,13 +335,17 @@ macroScript MCVAssetBrowser
 					)
 				)
 			)
-			on botonD pressed do (
-				if activeGrid == $45degGrid then (
-					activeGrid = undefined
-				)
-				else (
-					activeGrid = $45degGrid
-				)
+			on button8Grid pressed do (
+				setGridSpacing 8
+			)
+			on button4Grid pressed do (
+				setGridSpacing 3
+			)
+			on button2Grid pressed do (
+				setGridSpacing 2
+			)
+			on button1Grid pressed do (
+				setGridSpacing 1
 			)
 		)
 		
@@ -346,7 +353,7 @@ macroScript MCVAssetBrowser
 		(
 			group "Exportador"
 			(
-				checkbox exportMesh "Exportar meshes" across: 2
+				checkbox exportMeshCheck "Exportar meshes" across: 2
 				checkbox exportMaterial "Exportar materiales"
 				button exportAll "Exportar todo" width:110 height:25 toolTip:"" across: 2 
 				button exportSel "Exportar selección" width:110 height:25 toolTip:"" 
@@ -360,7 +367,7 @@ macroScript MCVAssetBrowser
 			
 			on Exporter open do (
 				if (ExportMeshes != undefined) then (
-					exportMesh.checked = ExportMeshes)
+					exportMeshCheck.checked = ExportMeshes)
 				if (export_materials != undefined) then
 					exportMaterial.checked = export_materials
 			)
@@ -392,7 +399,7 @@ macroScript MCVAssetBrowser
 					removeObjectsID()
 					enableSceneRedraw()
 					
-					DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
+					ShellLaunch  (engine_path + "engined.exe") ""
 				)
 				catch ( 
 					format "*** % ***\n" (getCurrentException())
@@ -402,7 +409,7 @@ macroScript MCVAssetBrowser
 			)
 			
 			on play pressed do (
-				DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
+				ShellLaunch  (engine_path + "engined.exe") ""
 			)
 			
 			on exportAll pressed do (
@@ -457,7 +464,7 @@ macroScript MCVAssetBrowser
 					if (validateScene false == true) then ( messageBox "La escena es correcta" )
 					
 				)
-				on exportMesh changed theState do (
+				on exportMeshCheck changed theState do (
 					ExportMeshes = theState
 				)	
 				
@@ -495,10 +502,11 @@ macroScript MCVAssetBrowser
 			
 			edittext searchText "" 
 			group "Búsqueda avanzada" (
-				checkbox searchArq "Arquitectónicos" across: 2 align: #left triState: 1
-				checkbox searchRmp "Rampas" align: #left
+				checkbox searchArq "Arquitectónicos" align: #left triState: 1
 				
+				checkbox searchRmp "Rampas" align: #left across: 3				
 				checkbox searchTub "Tuberías" align: #left
+				checkbox searchSelev "Suelo elevado" align: #left
 				
 				checkbox searchSlo "Suelo" align: #left across: 4
 				checkbox searchTch "Techo" align: #left
@@ -508,9 +516,8 @@ macroScript MCVAssetBrowser
 				checkbox searchEsq "Esquinas" align: #left across: 2
 				checkbox searchPas "Pasillos" align: #left
 				
-				checkbox searchPar "Parches" align: #left across: 3
+				checkbox searchPar "Parches" align: #left across: 2
 				checkbox searchHlf "Mitades" align: #left
-				checkbox search45g "Giros (45º)" align: #left
 				
 			)
 			button searchButton "Buscar"  across: 2
@@ -520,6 +527,7 @@ macroScript MCVAssetBrowser
 			button goToLocation "Abrir ubicación" across: 3
 			button reload "Actualizar"
 			button rebake "Recargar"
+			pickbutton rebakePick "Seleccionar y recargar"
 			button autoCeiling "Auto-techar escena"
 			
 			on rebake pressed do (
@@ -545,6 +553,25 @@ macroScript MCVAssetBrowser
 				addSubRollout moduleSubRollout (loadDynamicModules ModuleList)
 			)
 			
+			on rebakePick picked obj do 
+			(
+				ModuleList = loadModules ModulePath
+				local searchValues = #(obj.name)
+				
+				local searchList = searchInList ModuleList searchValues
+				
+				progress.value = 0
+				
+				countTotal = 0
+				count = 0
+				for module in searchList do (
+					countTotal += updateAsset (ModulePath + module as string) module
+					count += 1
+					progress.value = (100.0 / ModuleList.count) * count
+				)
+				messagebox ("Se han recargado " + (count as string) + " módulos")
+			)
+			
 			on searchPickButton picked obj do
 			(
 				ModuleList = loadModules ModulePath
@@ -564,9 +591,11 @@ macroScript MCVAssetBrowser
 				-- Advanced search
 				if (searchArq.state == true) then
 					append searchValues "arqui"
+				
 				if (searchRmp.state == true) then
 					append searchValues "rampa"
-				
+				if (searchSelev.state == true) then
+					append searchValues "selev"				
 				if (searchTub.state == true) then
 					append searchValues "tuber"
 				
@@ -588,8 +617,6 @@ macroScript MCVAssetBrowser
 					append searchValues "parche"
 				if (searchHlf.state == true) then
 					append searchValues "half"
-					if (search45g.state == true) then
-					append searchValues "45g"
 				
 				local searchList = searchInList ModuleList searchValues
 				
@@ -730,14 +757,5 @@ macroScript MCVAssetBrowser
 		AddRollout Prefabs TestFloater rolledUp:on
 		
 		setGridSpacing 8
-		-- 45 degrees grid
-		if ($45degGrid == undefined) then (
-			oGrid = grid()
-			oGrid.name = "45degGrid"
-		)
-		$45degGrid.rotation = (quat 0 0 0.382683 0.92388)
-		$45degGrid.grid = 8
-		$45degGrid.length = 200
-		$45degGrid.width = 200
 	)
 )
