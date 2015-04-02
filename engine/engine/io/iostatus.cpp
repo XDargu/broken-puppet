@@ -33,6 +33,9 @@ CIOStatus::CIOStatus( ) {
 	buttons[EXIT].key = VK_ESCAPE;
 	buttons[RUN].key = VK_LSHIFT;
 
+	buttons[VIEWER_MOVE_CAM].key = VK_RBUTTON;
+	buttons[VIEWER_ZOOM].key = VK_MBUTTON;
+
 	mouse.dx = 0;
 	mouse.dy = 0;
 

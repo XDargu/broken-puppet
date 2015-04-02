@@ -130,6 +130,7 @@ void createManagers() {
 	getObjManager<TCompPlayerPivotController>()->init(1);
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
+	getObjManager<TCompViewerCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompRope>()->init(32);
@@ -564,6 +565,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);

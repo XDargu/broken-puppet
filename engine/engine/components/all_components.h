@@ -22,6 +22,7 @@ using namespace DirectX;
 // Controllers
 #include "comp_player_pivot_controller.h"
 #include "comp_camera_pivot_controller.h"
+#include "comp_viewer_camera_controller.h"
 #include "comp_third_person_camera_controller.h"
 #include "comp_enemy_controller.h"
 #include "comp_unity_character_controller.h"

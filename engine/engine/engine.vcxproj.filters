@@ -341,6 +341,9 @@
     <ClInclude Include="components\comp_switch_controller.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_viewer_camera_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
