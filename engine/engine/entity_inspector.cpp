@@ -651,6 +651,10 @@ void CEntityLister::init() {
 	component_names = std::vector<std::string>(std::begin(components), std::end(components));
 }
 
+void CEntityLister::resetEventCount() {
+	m_entity_event_count = 0;
+}
+
 void CEntityLister::update() {
 
 	// if the entities has changed

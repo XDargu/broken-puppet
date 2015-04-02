@@ -151,7 +151,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float4 result = lightAccum * color /* Tint*/;
 
 	// Pruebas de cámara
-	float3 normalizeCameraDirection = normalize(CameraPosition - input.WorldPos);
+	/*float3 normalizeCameraDirection = normalize(CameraPosition - input.WorldPos);
 	float distCamera = distance(input.WorldPos, CameraPosition);
 	float normalCamera = max(0, dot(input.Normal, normalizeCameraDirection));
 
@@ -163,7 +163,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float gamma = 3;
 	float contrast = 2;
 	float lightCorrection = (pow(cos(normalCamera) * gamma, contrast) / gamma);
-	result = lightCorrection * result;
+	result = lightCorrection * result;*/
 
 	/*float Gamma = 1;
 	float Regions = 3;

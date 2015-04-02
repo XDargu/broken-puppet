@@ -877,6 +877,7 @@ void CApp::loadScene(std::string scene_name) {
 	render_manager.destroyAllKeys();
 	ctes_global.destroy();
 	renderUtilsDestroy();
+	entity_lister.resetEventCount();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 

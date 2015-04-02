@@ -201,6 +201,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				// Load prefab
 				if (stringEndsWith(s, ".xml") && (folder.find("prefabs") != std::string::npos)) {
+					CApp::get().loadScene("data/scenes/viewer.xml");
 					std::string file_without_extension = s.substr(found + 1, s.length() - 5 - found);
 					CApp::get().loadPrefab(file_without_extension);
 				}
