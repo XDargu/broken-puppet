@@ -1,85 +1,11 @@
-- Cargar una textura
-- Aplicarla al shader
-- TextureManager
-  y MeshManager
-  ... 
 
+- Algunos componentes referencian a objetos y no a Handlers!!!!!!!!
 
+- Componentes que ya no se usan/son inútiles:
+ - TCompEnemyController
+ - TCompPlayerController
 
-
-+ Entidades con posicion
-
-+ Controladores de entidades
-
-+ Pintar texto con fuente
-+ Camaras en entidades
-
-+ Importador de mallas molonas
-  + Crear las vtx declaration
-    + Pos, UV, Normal
-  + Crear un shader q use esa vtx declaration
-    + Que use las UV o el Normal como color
-  + Optimizar el exportador
-
-+ Activar ZBuffer
-+ Cargarse lo del transpose de las matrices
-+ Simplificar lo del vertex declation
-
-Componentes a añadir:
- + Transform completo
- + Camera
- + Mesh
- + Collider (PXShape)
- + RigidBody
- + StaticBody
- - CharacterController
- - Distance Joint
- + AABB (center + extensión o puntos mínimo y máximo? ¿ambos?)
- - AI (pensar con qué estructura):
-
-Mejoras de componentes:
- - Mesh con textura? Materiales?
- - Mesh con shader? Componente shader?
- - Helpers para Camera
-  - Screen to Viewport
-  - Screen to World
-  - Viewport to Screen
-  - Viewport to World
-  - World to Screen
-  - World to Viewport
- - Helpers para Transform
-  + LookAt
-  - Local to World
-  - World to Local
-  - Rotate?
-  - Rotate around?
-  - Move?
-
- Importador:
-  - Cargar con etiquetas, no solo con atributos: ¡fundamental para Physx! No se puede meter todo a base de atributos.
-  - Cargar XML de configuración
-
- Helpers:
-  + Conversiones de Physx: PxReal a XMVECTOR
-  - Métodos de vectores (ver librería con Wrapper!)
-  - Conversor de vertex buffer del motor a VB de Physx para crear colliders con meshes
-  - Raycast, SweepTest y Overlay simplificados
-
-Cosas que iría bien tener:
- - Gestión de destrucción de entidades
- - Cambiar el workflow de carga de entidades?: primero añadir componente a entidad, luego hacerle cargar sus atributos (para que pueda acceder a otros componentes de la entidad)
- + Ver las entidades del mundo y sus componentes (para debug)
- + Método toString común de todos los componentes (para debug)
- - Método toString de entidades, accediendo a sus componentes (para debug)
- + Método init de componentes
- - Acceso a los componentes de una entidad (llamar a sus métodos)
- - Métodos genéricos de componentes: ¿hacer componente base?
- + Manager de entidades nuevas
-  + Búsqueda por nombre (si tiene nombre)
-  - Gestión de diferentes vectores de entidades (luces, enemigos, etc.)
-  - Gestión específica de vectores de entidades (mapeado por zona de enemigos?)
- - Primitivas en el mesh manager (cubos, cilindros, cápsulas...)
- - Gestión de errores
- - Copiar parámetros de un componente a otro (sin copiar el componente en sí)
- - FixedUpdate en App para Physx (posiblemente a 50Hz)
- - FixedUpdate en componentes
+- Componentes que hay que actualizar o dejar de usar:
+ - TCompUnityCharacterController debería dejar de usarse, y utilizar TCompCharacterController
+ - Crear nuevo controlador de personaje (y dejar de usar el TCompBasicPlayerController)
+ - Crear controladores nuevos de enemigos (y dejar de usar TCompAiFsmBasic)

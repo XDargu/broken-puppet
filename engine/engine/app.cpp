@@ -9,12 +9,14 @@
 #include "importer_parser.h"
 #include "options_parser.h"
 #include "physics_manager.h"
+#include "ai\logic_manager.h"
 #include "error\log.h"
 #include <time.h>
 
 using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
+#include "handle\prefabs_manager.h"
 
 #include "components\all_components.h"
 #include "components/comp_skeleton.h"
@@ -33,6 +35,7 @@ using namespace physx;
 
 static CApp the_app;
 
+CLogicManager	 &logic_manager = CLogicManager::get();
 CEntityInspector &entity_inspector = CEntityInspector::get();
 CEntityLister	 &entity_lister = CEntityLister::get();
 CEntityActioner	 &entity_actioner = CEntityActioner::get();
@@ -90,6 +93,8 @@ CFont         font;
 
 CShaderCte<TCtesGlobal> ctes_global;
 
+const CTexture* cubemap;
+
 float fixedUpdateCounter;
 
 bool debug_mode;
@@ -105,7 +110,7 @@ void registerAllComponentMsgs() {
 }
 
 void createManagers() {
-	CErrorContext ec("Creating", "managers");
+	SET_ERROR_CONTEXT("Creating", "managers");
 
 	getObjManager<CEntity>()->init(1024);
 	getObjManager<TCompTransform>()->init(1024);
@@ -115,7 +120,7 @@ void createManagers() {
 	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
-	getObjManager<TCompCollider>()->init(512);
+	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
@@ -125,6 +130,7 @@ void createManagers() {
 	getObjManager<TCompPlayerPivotController>()->init(1);
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
+	getObjManager<TCompViewerCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompRope>()->init(32);
@@ -163,7 +169,7 @@ void initManagers() {
 	CErrorContext ec("Initializing", "managers");
 
 	getObjManager<TCompCamera>()->initHandlers();
-	getObjManager<TCompCollider>()->initHandlers();
+	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
@@ -204,51 +210,17 @@ bool CApp::create() {
 
 	// Start random seed
 	srand((unsigned int)time(NULL));
-
-	// public delta time inicialization
-	delta_time = 0.f;
-	total_time = delta_time;
-	fixedUpdateCounter = 0.0f;
-
-	renderAABB = false;
-	renderAxis = false;
-	renderGrid = false;
-	renderNames = false;
-	debug_mode = false;
-
+	
 	createManagers();
 
 	physics_manager.init();
 
-	CImporterParser p;
-	XASSERT(p.xmlParseFile("data/scenes/my_file.xml"), "Error loading the scene");
-	//XASSERT(p.xmlParseFile("data/scenes/skels.xml"), "Error loading the scene");
-	//XASSERT(p.xmlParseFile("my_file.xml"), "Error loading the scene");
-	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
-
-	initManagers();	
-
-	// Create Debug Technique
-	XASSERT(debugTech.load("basic"), "Error loading basic technique");
-	
-	CEntity* e = entity_manager.getByName("PlayerCamera");
-	XASSERT(CHandle(e).isValid(), "Camera not valid");
-
-	activeCamera = e->get<TCompCamera>();
-
 	XASSERT(font.create(), "Error creating the font");
-	font.camera = (TCompCamera*)activeCamera;
 
-	// Ctes ---------------------------
-	bool is_ok = renderUtilsCreate();
-
-	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
-	is_ok &= ctes_global.create();
-	XASSERT(is_ok, "Error creating global constants");
+	loadScene("data/scenes/my_file.xml");
 
 	// Create debug meshes
-	is_ok &= createGrid(grid, 10);
+	bool is_ok = createGrid(grid, 10);
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
@@ -266,9 +238,16 @@ bool CApp::create() {
 	entity_lister.init();
 	entity_actioner.init();
 	debug_optioner.init();
-#endif
 
-	activateInspectorMode(false);
+	entity_lister.update();
+#endif
+	
+	// Timer test
+	logic_manager.setTimer("TestTimer", 10);
+
+	cubemap = texture_manager.getByName("sunsetcube1024");
+
+	cubemap->activate(3);
 
 	return true;
 }
@@ -318,6 +297,10 @@ void CApp::update(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 	io.update(elapsed);
+
+	if (io.becomesReleased(CIOStatus::EXTRA)) {
+		loadScene("data/scenes/milestone2.xml");
+	}
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
@@ -412,24 +395,17 @@ void CApp::update(float elapsed) {
 					firstPosition = blockHit.position;
 					firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
 
-					CEntity* new_e = entity_manager.createEmptyEntity();
-					CEntity* rigidbody_e = entity_manager.getByName(firstActor->getName());
+					// Needle
+					CEntity* new_e = prefabs_manager.getInstanceByName("Needle");
+					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
-					TCompName* new_e_name = CHandle::create<TCompName>();
+					TCompName* new_e_name = new_e->get<TCompName>();
 					std::strcpy(new_e_name->name, ("Needle" + to_string(entitycount)).c_str());
-					new_e->add(new_e_name);
 
-					TCompTransform* new_e_trans = CHandle::create<TCompTransform>();
-					new_e->add(new_e_trans);
+					TCompTransform* new_e_trans = new_e->get<TCompTransform>();
 					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
 
-					/*TCompMesh* new_e_mesh = CHandle::create<TCompMesh>();
-					std::strcpy(new_e_mesh->path, "aguja");
-					new_e_mesh->mesh = mesh_manager.getByName("aguja");
-					new_e->add(new_e_mesh);*/
-
-					TCompNeedle* new_e_needle = CHandle::create<TCompNeedle>();
-					new_e->add(new_e_needle);
+					TCompNeedle* new_e_needle = new_e->get<TCompNeedle>();
 					XMVECTOR rotation;
 					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
@@ -484,24 +460,16 @@ void CApp::update(float elapsed) {
 					new_e_r->create();
 
 					// Needle
-					CEntity* new_e2 = entity_manager.createEmptyEntity();
+					CEntity* new_e2 = prefabs_manager.getInstanceByName("Needle");
 					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
-					TCompName* new_e_name2 = CHandle::create<TCompName>();
+					TCompName* new_e_name2 = new_e2->get<TCompName>();
 					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
-					new_e2->add(new_e_name2);
 
-					TCompTransform* new_e_trans2 = CHandle::create<TCompTransform>();
-					new_e2->add(new_e_trans2);
+					TCompTransform* new_e_trans2 = new_e2->get<TCompTransform>();
 					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
 
-					/*TCompMesh* new_e_mesh2 = CHandle::create<TCompMesh>();
-					std::strcpy(new_e_mesh2->path, "aguja");
-					new_e_mesh2->mesh = mesh_manager.getByName("aguja");
-					new_e2->add(new_e_mesh2);*/
-
-					TCompNeedle* new_e_needle2 = CHandle::create<TCompNeedle>();
-					new_e2->add(new_e_needle2);
+					TCompNeedle* new_e_needle2 = new_e2->get<TCompNeedle>();
 					XMVECTOR rotation;
 					if (blockHit.position == physics_manager.XMVECTORToPxVec3(t->position)) {
 						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
@@ -537,52 +505,7 @@ void CApp::update(float elapsed) {
 					firstNeedle = CHandle();
 				}
 			}
-	}
-
-
-	if (io.becomesPressed(CIOStatus::EXTRA)) {
-		// Get the camera position
-		CEntity* e = CEntityManager::get().getByName("PlayerCamera");
-		TCompTransform* t = e->get<TCompTransform>();
-
-		// Raycast detecting the collider the mouse is pointing at
-		PxRaycastBuffer hit;
-		physics_manager.raycast(t->position, t->getFront(), 1000, hit);
-
-		static int entitycount = 1;
-		static PxRigidActor* firstActor = nullptr;
-		static PxVec3 firstPosition = PxVec3(0, 0, 0);
-		if (hit.hasBlock) {
-			PxRaycastHit blockHit = hit.block;
-
-			CEntity* new_e = entity_manager.createEmptyEntity();
-
-			TCompName* new_e_name = CHandle::create<TCompName>();
-			strcpy(new_e_name->name, ("TestCube" + std::to_string(entitycount)).c_str());
-			new_e->add(new_e_name);
-
-			TCompTransform* new_e_t = CHandle::create<TCompTransform>();
-			new_e_t->position = physics_manager.PxVec3ToXMVECTOR(blockHit.position + blockHit.normal * 1);
-			new_e->add(new_e_t);
-
-			TCompMesh* new_e_m = CHandle::create<TCompMesh>();
-			new_e_m->mesh = mesh_manager.getByName("primitive_box");
-			strcpy(new_e_m->path, "primitive_box");
-			new_e->add(new_e_m);
-
-			TCompCollider* new_e_c = CHandle::create<TCompCollider>();
-			new_e_c->setShape(0.5f, 0.5f, 0.5f, 0.5f, 0.2f, 0.6f);
-			new_e->add(new_e_c);
-
-			TCompRigidBody* new_e_r = CHandle::create<TCompRigidBody>();
-			new_e->add(new_e_r);
-			new_e_r->create(10, false, true);
-
-
-			entitycount++;
-		}
-	}
-	
+	}	
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
@@ -642,6 +565,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
@@ -655,6 +579,8 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompTrigger>()->update(elapsed);
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
+
+	logic_manager.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -693,9 +619,9 @@ void CApp::render() {
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll(((TCompCamera*)activeCamera)->view_projection);
-	renderDebugEntities();
+	render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
+	renderDebugEntities();
 
 #ifdef _DEBUG
 	TwDraw();
@@ -730,6 +656,8 @@ void CApp::renderEntities() {
 
 		TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
+		TCompName* name = ((CEntity*)entity_manager.getEntities()[i])->get<TCompName>();
+
 
 		// Draw the joints
 		if (c_rope) {
@@ -916,6 +844,7 @@ void CApp::destroy() {
 	TwTerminate();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
+	render_techniques_manager.destroyAll();
 	axis.destroy();
 	grid.destroy();
 	intersectsWiredCube.destroy();
@@ -939,4 +868,64 @@ unsigned int CApp::numStrings(){
 
 void CApp::activateVictory(){
 	getObjManager<TCompThirdPersonCameraController>()->setActiveComponents(false);
+}
+
+void CApp::loadScene(std::string scene_name) {
+	CImporterParser p;
+	entity_manager.clear();
+	mesh_manager.destroyAll();
+	texture_manager.destroyAll();
+	render_techniques_manager.destroyAll();
+	material_manager.destroyAll();
+	render_manager.destroyAllKeys();
+	ctes_global.destroy();
+	renderUtilsDestroy();
+	entity_lister.resetEventCount();
+
+	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
+
+	// public delta time inicialization
+	delta_time = 0.f;
+	total_time = delta_time;
+	fixedUpdateCounter = 0.0f;
+
+	renderAABB = false;
+	renderAxis = false;
+	renderGrid = false;
+	renderNames = false;
+	debug_mode = false;
+
+	//physics_manager.init();
+
+	initManagers();
+
+	// Create Debug Technique
+	XASSERT(debugTech.load("basic"), "Error loading basic technique");
+
+	CEntity* e = entity_manager.getByName("PlayerCamera");
+	XASSERT(CHandle(e).isValid(), "Camera not valid");
+
+	activeCamera = e->get<TCompCamera>();
+
+	font.camera = activeCamera;
+
+	// Ctes ---------------------------
+	bool is_ok = renderUtilsCreate();
+
+	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
+	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
+	is_ok &= ctes_global.create();
+	XASSERT(is_ok, "Error creating global constants");
+
+	XASSERT(is_ok, "Error creating debug meshes");
+
+#ifdef _DEBUG	
+	entity_inspector.inspectEntity(CHandle());
+#endif
+
+	activateInspectorMode(false);
+}
+
+void CApp::loadPrefab(std::string prefab_name) {
+	CEntity* e = prefabs_manager.getInstanceByName(prefab_name.c_str());
 }

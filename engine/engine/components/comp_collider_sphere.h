@@ -2,12 +2,11 @@
 #define INC_COMP_SPHERE_COLLIDER_H_
 
 #include "base_component.h"
+#include "collider.h"
 
-struct TCompColliderSphere : TBaseComponent {
+struct TCompColliderSphere : public CCollider, TBaseComponent {
 
-	physx::PxShape* collider;
-
-	TCompColliderSphere() : collider(nullptr) {}
+	TCompColliderSphere() : CCollider() {}
 
 	void setShape(float radius, float static_friction, float dynamic_friction, float restitution) {
 		collider = Physics.gPhysicsSDK->createShape(
@@ -71,39 +70,6 @@ struct TCompColliderSphere : TBaseComponent {
 	}
 
 	void init() {
-	}
-
-	physx::PxMaterial* getMaterial() {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		return mat;
-	}
-
-	// Set the collider static friction, dynamic friction and restitution given by a vector
-	void setMaterialProperties(XMVECTOR properties) {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		mat->setStaticFriction(XMVectorGetX(properties));
-		mat->setDynamicFriction(XMVectorGetY(properties));
-		mat->setRestitution(XMVectorGetZ(properties));
-	}
-
-	// Returns the material properties as a vector
-	XMVECTOR getMaterialProperties() {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		return XMVectorSet(
-			mat->getStaticFriction(),
-			mat->getDynamicFriction(),
-			mat->getRestitution(),
-			0
-			);
-	}
-
-	std::string toString() {
-		return "Static friction: " + std::to_string(getMaterial()->getStaticFriction()) +
-			"\nDynamic friction: " + std::to_string(getMaterial()->getDynamicFriction()) +
-			"\nRestitution: " + std::to_string(getMaterial()->getRestitution());
 	}
 };
 

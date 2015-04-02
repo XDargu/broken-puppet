@@ -5,13 +5,10 @@
 #include "../item_manager.h"
 #include "comp_transform.h"
 #include "comp_needle.h"
-using namespace DirectX;
-
-#define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
 
 struct TCompSensorNeedles : TBaseComponent{
 private:
-	TCompTransform*		transform;
+	CHandle		transform;
 	unsigned int numNeedlesInRange;
 	float radius;
 public:
@@ -19,16 +16,17 @@ public:
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		radius = atts.getFloat("radius", 2.f);
+
+		transform = assertRequiredComponent<TCompTransform>(this);
 	}
 
 	void init() {
 		numNeedlesInRange = 0;
 	}
 
-	std::vector<TCompNeedle*> getNeedlesInRange(){
-		CEntity* e = CHandle(this).getOwner();
-		transform = (TCompTransform*)e->get<TCompTransform>();
-		needleInRange(transform->position, radius);
+	std::vector<TCompNeedle*> getNeedlesInRange(){		
+		TCompTransform* m_transform = transform;
+		needleInRange(m_transform->position, radius);
 		return needlesInRange;
 	}
 

@@ -12,13 +12,14 @@ struct TCompRender : TBaseComponent {
 		int subMeshId;
 	};
 
-	const CMesh*     mesh;
-	unsigned         submesh_id;
-	const CMaterial* mat;
+	const CMesh*		mesh;
+	unsigned			submesh_id;
+	const CMaterial*	mat;
 
 	std::vector< RKey > keys;
 
 	TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr) { }
+	~TCompRender();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 };

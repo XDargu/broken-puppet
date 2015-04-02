@@ -79,6 +79,13 @@ public:
 	uint32_t getAge() const { return age; }
 	uint32_t getExternalIndex() const { return external_index; }
 
+	template <class TObj>
+	bool isTypeOf() {
+		auto om = getObjManager<std::remove_const<TObj>::type>();
+		XASSERT(om, "Invalid object manager");
+		return om->getType() == this->type;
+	}
+
 private:
 	uint32_t external_index : num_bits_index;
 	uint32_t type : num_bits_type;

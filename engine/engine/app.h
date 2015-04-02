@@ -10,7 +10,6 @@ class CApp {
 	void render();
 	void renderEntities();
 	void renderDebugEntities();
-	void activateInspectorMode(bool active);
 	void activateDebugMode(bool active);
 
 public:
@@ -38,7 +37,11 @@ public:
 	void destroy();
 	unsigned int numStrings();
 	void activateVictory();
+	
+	void loadScene(std::string scene_name);
+	void loadPrefab(std::string prefab_name);
 
+	void activateInspectorMode(bool active);
 
 	static CApp& get();
 };

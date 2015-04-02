@@ -10,7 +10,7 @@ skeleton_ik bone_c0="25" normal_c0="0 1 0"
 </entity>
 <entity>
   <name name="PlayerCamera" />
-  <transform position="-15 25 30"/>
+  <transform position="-15 25 30" rotation="-0.44 -0.83 0.13 -0.32"/>
   <camera target="0 0 0" fov="75.0" znear="0.1" zfar="1000.0"/>
 </entity>
 </scene>

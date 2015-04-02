@@ -2,10 +2,13 @@
 #include "render_manager.h"
 #include "render_utils.h"
 #include "camera.h"
+#include "transform.h"
+#include "font\font.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
 #include "components/comp_transform.h"
 #include "components/comp_skeleton.h"
+#include "components\comp_render.h"
 
 CRenderManager render_manager;
 
@@ -21,6 +24,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	, const CMaterial*  material
 	, int  mesh_id
 	, CHandle owner
+	, bool* active
 	) {
 
 	SET_ERROR_CONTEXT("Adding a render key", "")
@@ -31,11 +35,16 @@ void CRenderManager::addKey(const CMesh*      mesh
 	k.transform = e->get< TCompTransform >();
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
 
+	k.active = active;
+
 	keys.push_back(k);
 	sort_required = true;
 }
 
-void CRenderManager::renderAll(const XMMATRIX view_projection) {
+void CRenderManager::renderAll(const CCamera* camera) {
+	renderAll(camera, &TTransform());
+}
+void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform) {
 	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
@@ -50,46 +59,75 @@ void CRenderManager::renderAll(const XMMATRIX view_projection) {
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
+
+	bool culling = true;
+	int render_count = 0;
+
 	while (it != keys.end()) {
+		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 
-		if (it->material != prev_it->material || is_first) {
-
-			// La tech
-			if (it->material->getTech() != curr_tech) {
-				curr_tech = it->material->getTech();
-				curr_tech->activate();				
-				activateCamera(view_projection, 1);
-				activateWorldMatrix(0);
-
-				uploading_bones = it->material->getTech()->usesBones();
-			}
-
-			// Activar shader y material de it
-			it->material->activateTextures();
-		}
-
-		if (it->mesh != prev_it->mesh || is_first) {
-			it->mesh->activate();
-		}
-
-		if (uploading_bones) {
-			const TCompSkeleton* skel = it->owner;
-			XASSERT(skel, "Invalid skeleton");
-			skel->uploadBonesToGPU();
-		}
-
-		// Activar la world del obj
 		TCompTransform* tmx = it->transform;
 		XASSERT(tmx, "Invalid transform");
-		setWorldMatrix(tmx->getWorld());
 
-		// Pintar la mesh:submesh del it
-		it->mesh->renderGroup(it->mesh_id);
+		culling = camera_transform->isInFront(tmx->position);
+		if (*it->active && culling)
+		{
+			render_count++;
+			if (it->material != prev_it->material || is_first) {
 
-		prev_it = it;
-		++it;
-		is_first = false;
+				// La tech
+				if (it->material->getTech() != curr_tech) {
+					curr_tech = it->material->getTech();
+					curr_tech->activate();
+					activateCamera(camera, 1);
+					activateWorldMatrix(0);
+
+					uploading_bones = it->material->getTech()->usesBones();
+				}
+
+				// Activar shader y material de it
+				it->material->activateTextures();
+			}
+
+			if (it->mesh != prev_it->mesh || is_first) {
+				it->mesh->activate();
+			}
+
+			if (uploading_bones) {
+				const TCompSkeleton* skel = it->owner;
+				XASSERT(skel, "Invalid skeleton");
+				skel->uploadBonesToGPU();
+			}
+
+			// Activar la world del obj
+			setWorldMatrix(tmx->getWorld());
+
+			// Pintar la mesh:submesh del it
+			it->mesh->renderGroup(it->mesh_id);
+
+			prev_it = it;
+			is_first = false;
+		}
+		++it;		
 	}
 
+	font.printf(200, 50, "Dibujando %i keys de %i", render_count, (int)keys.size());
+}
 
+void CRenderManager::removeKeysFromOwner(CHandle owner) {
+	VKeys keys_to_remove;
+
+	for (auto& it : keys) {
+		if (it.owner == owner)
+			keys_to_remove.push_back(it);
+	}
+
+	for (auto& it : keys_to_remove) {
+		auto it2 = std::remove(keys.begin(), keys.end(), it);
+		keys.erase(it2, keys.end());
+	}
+}
+
+void CRenderManager::destroyAllKeys() {
+	keys.clear();
 }

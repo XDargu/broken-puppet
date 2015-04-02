@@ -17,6 +17,9 @@ public:
 	void setName(const char *new_name) {
 		name = new_name;
 	}
+
+	void destroy();
+
 	const std::string& getName() const { return name; }
 	void activateTextures() const;
 	const CRenderTechnique* getTech() const { return tech; }

@@ -26,10 +26,10 @@ public:
 
 		mJoint->getActors(a1, a2);
 		// Call the addForce method to awake the bodies, if dynamic
-		if (a1->isRigidDynamic()) {
+		if (a1 && a1->isRigidDynamic()) {
 			((physx::PxRigidDynamic*)a1)->wakeUp();
 		}
-		if (a2->isRigidDynamic()) {
+		if (a2 && a2->isRigidDynamic()) {
 			((physx::PxRigidDynamic*)a2)->wakeUp();
 		}
 

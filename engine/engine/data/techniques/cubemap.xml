@@ -1,0 +1,6 @@
+<technique 
+	fx="cubemap.fx"
+	vs="VSNormal"
+	vs_decl="vdcl_position_uv_normal"
+	ps="PSTextured"
+	/>

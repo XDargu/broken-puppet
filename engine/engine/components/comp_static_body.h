@@ -15,7 +15,7 @@ public:
 
 		CEntity* e = CHandle(this).getOwner();
 		TCompTransform* t = e->get<TCompTransform>();
-		TCompCollider* c = e->get<TCompCollider>();
+		TCompColliderBox* c = e->get<TCompColliderBox>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 
 		assert(t || fatal("TStaticBody requieres a TTransform component"));

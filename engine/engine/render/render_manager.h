@@ -5,6 +5,8 @@
 
 class CMaterial;
 class CMesh;
+class CCamera;
+struct TTransform;
 
 class CRenderManager {
 
@@ -14,6 +16,11 @@ class CRenderManager {
 		int                mesh_id;
 		CHandle            owner;
 		CHandle            transform;
+		bool*			   active;
+
+		bool operator==(const TKey &key) const {
+			return key.owner == owner && key.mesh_id == mesh_id && key.material == material && key.mesh == mesh;
+		}
 	};
 
 	typedef std::vector< TKey > VKeys;
@@ -28,9 +35,15 @@ public:
 		, const CMaterial*  material
 		, int  mesh_id
 		, CHandle owner
+		, bool* active
 		);
 
-	void renderAll(const XMMATRIX view_projection);
+	void removeKeysFromOwner(CHandle owner);
+
+	void renderAll(const CCamera* camera);
+	void renderAll(const CCamera* camera, TTransform* camera_transform);
+
+	void destroyAllKeys();
 
 };
 

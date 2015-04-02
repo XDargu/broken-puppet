@@ -50,15 +50,31 @@ struct TTransform {     // 1
 
 	// Aim the transform to a position instantly
 	void lookAt(XMVECTOR new_target, XMVECTOR new_up_aux) {
-
-		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
-		rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+		bool posEqual = XMVectorGetX(XMVectorEqual(new_target, position)) && XMVectorGetY(XMVectorEqual(new_target, position)) && XMVectorGetZ(XMVectorEqual(new_target, position));
+		if (!posEqual) {
+			XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
+			rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+		}
 	}
 
 	// Aim the transform to a position with SLerp
 	void aimAt(XMVECTOR new_target, XMVECTOR new_up_aux, float t) {
-		XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
-		rotation = XMQuaternionSlerp(rotation, XMQuaternionInverse(XMQuaternionRotationMatrix(view)), t);
+		bool posEqual = XMVectorGetX(XMVectorEqual(new_target, position)) && XMVectorGetY(XMVectorEqual(new_target, position)) && XMVectorGetZ(XMVectorEqual(new_target, position));
+		if (!posEqual) {
+			XMMATRIX view = XMMatrixLookAtRH(position, position - (new_target - position), new_up_aux);
+			rotation = XMQuaternionSlerp(rotation, XMQuaternionInverse(XMQuaternionRotationMatrix(view)), t);
+		}
+	}
+
+	// Transforms a direction from World space to Local space
+	XMVECTOR inverseTransformDirection(XMVECTOR dir) {
+		// Formula: (World direction - position) * inverse(rotation)
+		return XMVector3Rotate((dir - position), XMQuaternionInverse(rotation));
+	}
+
+	// Transform position from local space to world space
+	XMVECTOR transformPoint(XMVECTOR point) {
+		return position + XMVector3Rotate(point, rotation);
 	}
 
 };

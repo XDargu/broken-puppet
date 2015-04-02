@@ -3,6 +3,10 @@
 #include "comp_transform.h"
 #include "comp_render.h"
 
+TCompRender::~TCompRender() {
+	render_manager.removeKeysFromOwner(CHandle(this));
+}
+
 void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 	assertRequiredComponent<TCompTransform>(this);
@@ -15,7 +19,7 @@ void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		XASSERT(submesh_id >= 0, "Invalid submesh id: %i", submesh_id);
 		mat = material_manager.getByName(mat_name.c_str());
 
-		render_manager.addKey(mesh, mat, submesh_id, CHandle(this));
+		render_manager.addKey(mesh, mat, submesh_id, CHandle(this), &active);
 
 		RKey k = { mesh_name, mat_name, submesh_id };
 		keys.push_back(k);

@@ -5,6 +5,8 @@
 #include "render/render_utils.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
+#include "components/comp_rigid_body.h"
+#include "comp_unity_character_controller.h"
 #include "font/font.h"
 #include "render/render_manager.h"
 
@@ -76,6 +78,10 @@ void CCoreModel::TBoneCorrector::apply(CalModel* model, CalVector world_pos, flo
 }
 
 void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
+
+	h_transform = assertRequiredComponent<TCompTransform>(this);
+	h_rigidbody = getSibling<TCompRigidBody>(this);
+
   std::string skel_name = atts["name"];
   CCoreModel* core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
   model = new CalModel(core_model);
@@ -86,7 +92,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   const CMesh* mesh = core_model->getMesh();
 
   for (int i = 0; i < mesh->getNGroups(); ++i )
-    render_manager.addKey(mesh, mat, i, CHandle(this));
+    render_manager.addKey(mesh, mat, i, CHandle(this), &active);
 }
 
 
@@ -120,15 +126,31 @@ void TCompSkeleton::update(float elapsed) {
   //}
 
   // Get transform of the entity
-  CEntity* e = CHandle(this).getOwner();
-  TCompTransform *t = e->get<TCompTransform>();
+  TCompTransform *t = h_transform;
+  TCompRigidBody *r = h_rigidbody;
+  TCompUnityCharacterController *u = getSibling<TCompUnityCharacterController>(this);
+
   model->getMixer()->setRootTranslation(DX2Cal(t->position));
   model->getMixer()->setRootRotation(DX2CalQuat(t->rotation));
   model->update(elapsed);
 
   CalVector delta_logic_trans = model->getMixer()->getAndClearLogicTranslation();
-  t->position += Cal2DX(delta_logic_trans);
 
+  if (delta_logic_trans.length() > 0) {
+	  if (u) {
+		  PxTransform u_transform = u->enemy_rigidbody->getGlobalPose();
+		  u_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
+		  u->enemy_rigidbody->setGlobalPose(u_transform);
+	  }
+	  else if (r) {
+		  PxTransform r_transform = r->rigidBody->getGlobalPose();
+			r_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
+			r->rigidBody->setGlobalPose(r_transform);
+	  }
+	  else {
+		  t->position += Cal2DX(delta_logic_trans);
+	  }
+  }
 }
 
 void TCompSkeleton::renderBoneAxis(int bone_id) const {

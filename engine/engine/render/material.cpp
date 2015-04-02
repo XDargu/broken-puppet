@@ -33,3 +33,7 @@ bool CMaterial::load(const char* name) {
 	XASSERT(mat_load, "Material: %s not found", name);
 	return xmlParseFile(full_name);
 }
+
+void CMaterial::destroy() {
+	
+}

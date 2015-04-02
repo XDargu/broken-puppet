@@ -2,6 +2,7 @@
 #define INC_COMP_UNITY_CHARACTER_CONTROLLER_H_
 
 #include "base_component.h"
+#include "comp_name.h"
 
 struct TCompUnityCharacterController : TBaseComponent {
 private:

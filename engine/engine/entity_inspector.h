@@ -35,6 +35,7 @@ public:
 	~CEntityLister();
 	void init();
 	void update();
+	void resetEventCount();
 };
 
 class CEntityActioner

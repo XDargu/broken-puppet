@@ -180,7 +180,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
     // -----------------------------------------------------
     CMesh::TGroup group;
     group.first_index = index0;
-    group.num_indices = vfaces.size() * 3;
+	group.num_indices = (int)(vfaces.size() * 3);
     skin_groups.push_back(group);
 
     // -----------------------------------------------------
@@ -249,8 +249,8 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
   header.bytes_per_vertex = sizeof(CSkinVertex);
   header.magic = CMesh::THeader::valid_magic;
   header.magic_tail = header.magic;
-  header.nidxs = skin_idxs.size();
-  header.nvertexs = skin_vtxs.size();
+  header.nidxs = (int)skin_idxs.size();
+  header.nvertexs = (int)skin_vtxs.size();
   header.primitive_type = CMesh::TRIANGLE_LIST;
   header.version = CMesh::THeader::current_version;
   header.vertex_type = CMesh::POSITION_UV_NORMAL_SKIN;

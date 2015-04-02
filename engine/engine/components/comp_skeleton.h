@@ -7,16 +7,20 @@ class CalModel;
 class CalBone;
 
 
-struct TCompSkeleton : TBaseComponent {    // 2 ...
-  CalModel*  model;
+struct TCompSkeleton : TBaseComponent {
 
-  TCompSkeleton() : model(nullptr) { }
-  void loadFromAtts(const std::string& elem, MKeyValue &atts);
-  void update(float elapsed);
-  void renderDebug3D() const;
-  void renderBoneAxis(int bone_id) const;
+	CHandle h_transform;
+	CHandle h_rigidbody;
 
-  void uploadBonesToGPU() const;
+	CalModel*  model;
+
+	TCompSkeleton() : model(nullptr) { }
+	void loadFromAtts(const std::string& elem, MKeyValue &atts);
+	void update(float elapsed);
+	void renderDebug3D() const;
+	void renderBoneAxis(int bone_id) const;
+
+	void uploadBonesToGPU() const;
 
 };
 

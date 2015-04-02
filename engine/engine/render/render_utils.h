@@ -35,11 +35,10 @@ void drawLine(XMVECTOR src, XMVECTOR target);
 // Render world
 void setWorldMatrix(XMMATRIX world);
 void activateWorldMatrix(int slot);
-void activateCamera(const XMMATRIX viewProjection, const XMVECTOR position, int slot);
 void activateCamera(const XMVECTOR position, int slot);
+void activateCamera(const CCamera* camera, int slot);
 
 // Provisional
-void activateCamera(const XMMATRIX viewProjection, int slot);
 void setTint(XMVECTOR tint);
 void activateTint(int slot);
 
