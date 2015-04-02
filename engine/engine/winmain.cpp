@@ -5,6 +5,7 @@
 #include "app.h"
 #include "io\iostatus.h"
 #include <AntTweakBar.h>
+#include <shellapi.h>
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
@@ -127,7 +128,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
 
    // Create the actual window
-   hWnd = CreateWindow("MCVClass", "MCV Engine 2014"
+   /*hWnd = CreateWindow("MCVClass", "MCV Engine 2014"
+	   , dwStyle
+	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
+	   , rc.right - rc.left					// Width
+	   , rc.bottom - rc.top					// Height
+	   , NULL, NULL
+	   , hInstance
+	   , NULL);*/
+
+   hWnd = CreateWindowEx(
+	   WS_EX_ACCEPTFILES
+	   , "MCVClass"
+	   , "MCV Engine 2014"
 	   , dwStyle
 	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
 	   , rc.right - rc.left					// Width
@@ -168,10 +181,37 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	// AntTweakBar
 	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
 		return 0; // event has been handled by AntTweakBar
+
+	if (message == WM_DROPFILES) {
+		HDROP hDropInfo = (HDROP)wParam;
+		char sItem[MAX_PATH];
+		for (int i = 0; DragQueryFile(hDropInfo, i, (LPSTR)sItem, sizeof(sItem)); i++)
+		{
+			if (GetFileAttributes(sItem) & FILE_ATTRIBUTE_ARCHIVE)
+			{
+				std::string s = sItem;
+				unsigned found = s.find_last_of("/\\");
+				std::string folder = s.substr(0, found);
+				std::string file = s.substr(found + 1);
+				
+				// Load scene
+				if (stringEndsWith(s, ".xml") && (folder.find("scenes") != std::string::npos)) {
+					CApp::get().loadScene("data/scenes/" + file);
+				}
+
+				// Load prefab
+				if (stringEndsWith(s, ".xml") && (folder.find("prefabs") != std::string::npos)) {
+					CApp::get().loadScene("data/scenes/viewer.xml");
+					std::string file_without_extension = s.substr(found + 1, s.length() - 5 - found);
+					CApp::get().loadPrefab(file_without_extension);
+				}
+			}
+		}
+		DragFinish(hDropInfo);
+	}
 #endif
 
 	CIOStatus &io = CIOStatus::get();
-	
 
 	switch (message)
 	{

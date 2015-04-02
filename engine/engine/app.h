@@ -38,7 +38,9 @@ public:
 	void destroy();
 	unsigned int numStrings();
 	void activateVictory();
-
+	
+	void loadScene(std::string scene_name);
+	void loadPrefab(std::string prefab_name);
 
 	static CApp& get();
 };

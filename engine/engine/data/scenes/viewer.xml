@@ -1,0 +1,22 @@
+<scene>
+<entity>
+	<name name="Ambient_light" />
+	<transform position="44.0 1.39876e-006 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	<ambientLight intensity="0.5" color="0.95 0.95 1.0 1"/>
+</entity>
+<entity >
+	<name name="Directional_light 1" />
+	<transform position="34.936 1.63083e-006 37.309" rotation="-0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
+	<directionalLight intensity="0.5" color="1.0 1.0 1.0 1"/>
+</entity>
+<entity >
+	<name name="Directional_light 2" />
+	<transform position="39.5895 1.65619e-006 37.8893" rotation="0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
+	<directionalLight intensity="0.5" color="1.0 1.0 1.0 1"/>
+</entity>
+<entity>
+	<name name="PlayerCamera" />
+	<transform position="-1.5 2.5 3.0" rotation="-0.44 -0.83 0.13 -0.32"/>
+	<camera target="0 0 0" fov="75.0" znear="0.1" zfar="1000.0"/>
+</entity>
+</scene>

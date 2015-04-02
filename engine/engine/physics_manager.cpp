@@ -154,6 +154,20 @@ void CPhysicsManager::raycastAll(XMVECTOR origin, XMVECTOR unit_dir, physx::PxRe
 	hit = buf;
 }
 
+PxTransform CPhysicsManager::transformToPxTransform(TTransform the_transform) {
+	return PxTransform(
+		XMVECTORToPxVec3(the_transform.position),
+		XMVECTORToPxQuat(the_transform.rotation)
+		);
+}
+TTransform CPhysicsManager::pxTransformToTransform(PxTransform the_transform) {
+	return TTransform(
+		PxVec3ToXMVECTOR(the_transform.p),
+		PxQuatToXMVECTOR(the_transform.q),
+		XMVectorSet(1, 1, 1, 1)
+	);
+}
+
 //Asignación de mascaras para filtrar las colisiones por Actores
 void setupFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask)
 {

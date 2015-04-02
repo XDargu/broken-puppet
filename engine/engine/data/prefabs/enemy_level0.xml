@@ -1,5 +1,7 @@
+<prefab>
 <entity prefab="basic_enemy">
     <render>
-        <draw mesh="Torus001" sub_mesh="1" mat="Azul"/>
+        <draw mesh="Torus001" sub_mesh="1" mat="CubemapMaterial"/>
     </render>
 </entity>
+</prefab>

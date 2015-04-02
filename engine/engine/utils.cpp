@@ -96,3 +96,8 @@ bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {
 int getRandomNumber(int num1, int num2){
 	return rand() % num2 + num1;
 }
+
+bool stringEndsWith(std::string const &value, std::string const &ending) {
+	if (ending.size() > value.size()) return false;
+	return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}

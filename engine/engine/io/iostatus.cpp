@@ -27,7 +27,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[THROW_STRING].key = VK_LBUTTON;
 	buttons[TENSE_STRING].key = VK_RBUTTON;
 	buttons[CANCEL_STRING].key = VK_MBUTTON;
-	buttons[EXTRA].key = 'O';	
+	buttons[EXTRA].key = 'K';	
 	buttons[INSPECTOR_MODE].key = VK_F2;
 	buttons[DEBUG_MODE].key = VK_F3;
 	buttons[EXIT].key = VK_ESCAPE;
@@ -46,8 +46,8 @@ CIOStatus::CIOStatus( ) {
 	mouse.screen_x = cursor_screen.x;
 	mouse.screen_y = cursor_screen.y;
 
-	mouse.normalized_x = cursor_screen.x / App.xres;
-	mouse.normalized_y = cursor_screen.y / App.yres;
+	mouse.normalized_x = (float)cursor_screen.x / App.xres;
+	mouse.normalized_y = (float)cursor_screen.y / App.yres;
 }
 
 void CIOStatus::TButton::setPressed(bool how, float elapsed) {
@@ -89,8 +89,8 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 	screen_x = cursor_screen.x;
 	screen_y = cursor_screen.y;
 
-	normalized_x = cursor_screen.x / App.xres;
-	normalized_y = cursor_screen.y / App.yres;
+	normalized_x = (float)cursor_screen.x / App.xres;
+	normalized_y = (float)cursor_screen.y / App.yres;
 
 	prev_x = screen_x;
 	prev_y = screen_y;
@@ -119,13 +119,13 @@ void CIOStatus::setMousePointer(bool mode){
 		::GetCursorPos(&cursor_screen);
 		::ScreenToClient(App.hWnd, &cursor_screen);
 
-		float del_x = cursor_screen.x - mouse.prev_x;
-		float del_y = cursor_screen.y - mouse.prev_y;
+		float del_x = (float)cursor_screen.x - mouse.prev_x;
+		float del_y = (float)cursor_screen.y - mouse.prev_y;
 
 		::SetCursorPos(mid_screen.x, mid_screen.y);
 
-		mouse.prev_x = (App.xres / 2) + del_x;
-		mouse.prev_y = (App.yres / 2) + del_y;
+		mouse.prev_x = (App.xres / 2) + (int)del_x;
+		mouse.prev_y = (App.yres / 2) + (int)del_y;
 	}
 }
 

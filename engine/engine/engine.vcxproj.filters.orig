@@ -1,0 +1,669 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="mcv_platform.h" />
+    <ClInclude Include="app.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="render\render.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\shaders.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\vertex_declarations.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\mesh.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ctes\shader_ctes.h">
+      <Filter>render\ctes</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ctes\shader_platform.h">
+      <Filter>render\ctes</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="render\render_utils.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="font\font.h">
+      <Filter>font</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\data_provider.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="items_by_name.h" />
+    <ClInclude Include="render\texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLParser.h" />
+    <ClInclude Include="importer_parser.h" />
+    <ClInclude Include="physics_manager.h" />
+    <ClInclude Include="entity_inspector.h" />
+    <ClInclude Include="handle\entity.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\handle.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\handle_manager.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\msgs.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\objs_manager.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_manager.h" />
+    <ClInclude Include="io\iostatus.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="components\all_components.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h" />
+    <ClInclude Include="handle\app_msgs.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="render\collision_mesh.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="callback_controllers.h" />
+    <ClInclude Include="callback_physics.h" />
+    <ClInclude Include="ai\fsm_basic_player.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="options_parser.h" />
+    <ClInclude Include="render\render_manager.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\material.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="error\error_context.h">
+      <Filter>error</Filter>
+    </ClInclude>
+    <ClInclude Include="error\log.h">
+      <Filter>error</Filter>
+    </ClInclude>
+    <ClInclude Include="navmesh\navmesh.h">
+      <Filter>navmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="navmesh\navmesh_builder.h">
+      <Filter>navmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="navmesh\navmesh_input.h">
+      <Filter>navmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="navmesh\navmesh_query.h">
+      <Filter>navmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="navmesh\PerfTimer.h">
+      <Filter>navmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DebugDraw.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourAlloc.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourAssert.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourCommon.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourCrowd.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourDebugDraw.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourLocalBoundary.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourMath.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourNavMesh.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourNavMeshBuilder.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourNavMeshQuery.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourNode.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourObstacleAvoidance.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourPathCorridor.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourPathQueue.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourProximityGrid.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourStatus.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourTileCache.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\DetourTileCacheBuilder.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\Recast.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\RecastAlloc.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\RecastAssert.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\RecastDebugDraw.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="recast\include\RecastDump.h">
+      <Filter>recast</Filter>
+    </ClInclude>
+    <ClInclude Include="navmesh\navmesh_render.h">
+      <Filter>navmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="handle\prefabs_manager.h">
+      <Filter>handle</Filter>
+    </ClInclude>
+    <ClInclude Include="skeletons\skeleton_manager.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="skeletons\ik_handler.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\data_saver.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aimanager.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aicontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\aifsmcontroller.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\behaviour_trees.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_basic_enemy.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_node.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="item_manager.h" />
+    <ClInclude Include="ai\fsm_basic_enemy.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\logic_manager.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\timer.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="components\base_component.h">
+      <Filter>components\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_capsule.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_mesh.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_sphere.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_rigid_body.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_aabb.h">
+      <Filter>components\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_transform.h">
+      <Filter>components\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_directional_light.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_camera.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_render.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_distance_text.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_ambient_light.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_point_light.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_joint_prismatic.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_trigger.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_name.h">
+      <Filter>components\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_static_body.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_distance_joint.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_character_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_third_person_camera_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_unity_character_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_pivot_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_enemy_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_camera_pivot_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_life.h">
+      <Filter>components\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_mesh.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton_lookat.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton_ik.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_skeleton.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_needle.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_rope.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="comp_victory_cond.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_sensor_needles.h">
+      <Filter>components\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_ai_fsm_basic.h">
+      <Filter>components\ai\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_position_sensor.h">
+      <Filter>components\ai\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_basic_player_controller.h">
+      <Filter>components\ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_box.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\collider.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="comp_joint_d6.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_switch_controller.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="comp_ai_bt.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_mesh_manager.h" />
+    <ClInclude Include="ssb.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="winmain.cpp" />
+    <ClCompile Include="mcv_platform.cpp" />
+    <ClCompile Include="app.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="render\render.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\shaders.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\vertex_declarations.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\mesh.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="render\render_utils.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="font\font.cpp">
+      <Filter>font</Filter>
+    </ClCompile>
+    <ClCompile Include="render\texture.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DDSTextureLoader.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="handle\handle.cpp">
+      <Filter>handle</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLParser.cpp" />
+    <ClCompile Include="importer_parser.cpp" />
+    <ClCompile Include="expat\xmlparse.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmlrole.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok_impl.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="expat\xmltok_ns.c">
+      <Filter>expat</Filter>
+    </ClCompile>
+    <ClCompile Include="physics_manager.cpp" />
+    <ClCompile Include="entity_inspector.cpp" />
+    <ClCompile Include="entity_manager.cpp" />
+    <ClCompile Include="io\iostatus.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="components\all_components.cpp">
+      <Filter>components</Filter>
+    </ClCompile>
+    <ClCompile Include="handle\entity.cpp" />
+    <ClCompile Include="render\collision_mesh.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="callback_physics.cpp" />
+    <ClCompile Include="callback_controllers.cpp" />
+    <ClCompile Include="ai\fsm_basic_player.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="options_parser.cpp" />
+    <ClCompile Include="render\render_manager.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\material.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="error\error_context.cpp">
+      <Filter>error</Filter>
+    </ClCompile>
+    <ClCompile Include="navmesh\navmesh.cpp">
+      <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="navmesh\navmesh_builder.cpp">
+      <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="navmesh\navmesh_input.cpp">
+      <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="navmesh\navmesh_query.cpp">
+      <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="navmesh\PerfTimer.cpp">
+      <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DebugDraw.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourAlloc.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourCommon.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourCrowd.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourDebugDraw.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourLocalBoundary.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourNavMesh.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourNavMeshBuilder.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourNavMeshQuery.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourNode.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourObstacleAvoidance.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourPathCorridor.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourPathQueue.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourProximityGrid.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourTileCache.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\DetourTileCacheBuilder.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\Recast.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastAlloc.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastArea.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastContour.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastDebugDraw.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastDump.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastFilter.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastLayers.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastMesh.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastMeshDetail.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastRasterization.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="recast\source\RecastRegion.cpp">
+      <Filter>recast</Filter>
+    </ClCompile>
+    <ClCompile Include="navmesh\navmesh_render.cpp">
+      <Filter>navmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="handle\prefabs_manager.cpp">
+      <Filter>handle</Filter>
+    </ClCompile>
+    <ClCompile Include="skeletons\skeleton_manager.cpp">
+      <Filter>skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aimanager.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aicontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\aifsmcontroller.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\behaviour_trees.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_basic_enemy.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_node.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="ai\fsm_basic_enemy.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+<<<<<<< .merge_file_a02968
+    <ClCompile Include="nav_mesh_manager.cpp" />
+    <ClCompile Include="ssb.cpp" />
+=======
+    <ClCompile Include="ai\logic_manager.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\timer.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_rigid_body.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_transform.cpp">
+      <Filter>components\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_render.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_trigger.cpp">
+      <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton_ik.cpp">
+      <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton_lookat.cpp">
+      <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_skeleton.cpp">
+      <Filter>components\animation</Filter>
+    </ClCompile>
+>>>>>>> .merge_file_a14176
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="render">
+      <UniqueIdentifier>{9a4bd7ef-63a4-4938-be0a-3be6be56534e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\ctes">
+      <UniqueIdentifier>{891f6c5a-ba74-4e02-992b-12d04b1149dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="font">
+      <UniqueIdentifier>{cf68130b-bc31-4883-84dd-e943d19c8c73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="memory">
+      <UniqueIdentifier>{b81c8c00-8f12-4c22-821d-86139dca9f0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="handle">
+      <UniqueIdentifier>{3784e6e4-20d1-4a7f-b127-88b6c56f9384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="expat">
+      <UniqueIdentifier>{53c315d5-b637-43c9-b255-5955106c6230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai">
+      <UniqueIdentifier>{fbceda24-3914-46d4-b638-015953a730f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{b70b3f42-c6cb-4070-ab96-e5e2079108e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components">
+      <UniqueIdentifier>{be0bcca5-bb86-4f0f-8698-4ce9f80f4cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="error">
+      <UniqueIdentifier>{52232cff-61bd-4257-a901-c03ebae54dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast">
+      <UniqueIdentifier>{6969df3d-2577-406a-88e1-695b794881e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="navmesh">
+      <UniqueIdentifier>{d44573e9-aa4f-48f8-87bc-058d1d61ab96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skeleton">
+      <UniqueIdentifier>{5bc314a1-d81c-4849-a985-549c62cb2697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\basic">
+      <UniqueIdentifier>{a9270aa6-8bbc-42fb-a07c-5d7a232f17f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\render">
+      <UniqueIdentifier>{1886aa43-5326-471d-8c49-69b2e01ac2bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\physics">
+      <UniqueIdentifier>{544aa24f-6b17-4bdd-8483-0b26f7a2b1d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\logic">
+      <UniqueIdentifier>{a643d34e-8406-4c48-a6a5-af33ee2d3fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\controllers">
+      <UniqueIdentifier>{22cdbdc2-f676-4b98-80f1-c700073ac029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\misc">
+      <UniqueIdentifier>{c7c733b0-f7a3-40b0-8d9e-666a30714927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\animation">
+      <UniqueIdentifier>{d3e92c98-7a6b-48e6-99ab-d0826bf73cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai">
+      <UniqueIdentifier>{d16abbf3-3e7b-4180-a637-921003a1dd8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai\enemies">
+      <UniqueIdentifier>{e9c6c2f0-5e8a-4ea3-9787-967f0e8188cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai\player">
+      <UniqueIdentifier>{e83cfa9d-c7ba-472e-ab07-fc57d3613e29}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="render\notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="my_file.xml" />
+    <Xml Include="resolution.xml" />
+  </ItemGroup>
+</Project>

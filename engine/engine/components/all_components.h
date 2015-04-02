@@ -28,7 +28,7 @@ using namespace DirectX;
 #include "comp_basic_player_controller.h"
 
 // Physx
-#include "comp_collider.h"
+#include "comp_collider_box.h"
 #include "comp_collider_sphere.h"
 #include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
@@ -47,6 +47,7 @@ using namespace DirectX;
 // Controllers 2
 #include "comp_character_controller.h"
 #include "comp_player_controller.h"
+#include "comp_switch_controller.h"
 
 // AI
 #include "comp_ai_fsm_basic.h"

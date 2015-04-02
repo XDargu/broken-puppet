@@ -2,12 +2,11 @@
 #define INC_COMP_COLLIDER_CAPSULE_H_
 
 #include "base_component.h"
+#include "collider.h"
 
-struct TCompColliderCapsule : TBaseComponent {
+struct TCompColliderCapsule : public CCollider, TBaseComponent {
 
-	physx::PxShape* collider;
-
-	TCompColliderCapsule() : collider(nullptr) {}
+	TCompColliderCapsule() : CCollider() {}
 
 	void setShape(float radius, float half_height, float static_friction, float dynamic_friction, float restitution) {
 		collider = Physics.gPhysicsSDK->createShape(
@@ -79,12 +78,6 @@ struct TCompColliderCapsule : TBaseComponent {
 	void init() {
 	}
 
-	physx::PxMaterial* getMaterial() {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		return mat;
-	}
-
 	// Returns the half height of the capsule
 	float getHalfHeight() {
 		physx::PxCapsuleGeometry geom;
@@ -97,27 +90,6 @@ struct TCompColliderCapsule : TBaseComponent {
 		physx::PxCapsuleGeometry geom;
 		collider->getCapsuleGeometry(geom);
 		return geom.radius;
-	}
-
-	// Set the collider static friction, dynamic friction and restitution given by a vector
-	void setMaterialProperties(XMVECTOR properties) {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		mat->setStaticFriction(XMVectorGetX(properties));
-		mat->setDynamicFriction(XMVectorGetY(properties));
-		mat->setRestitution(XMVectorGetZ(properties));
-	}
-
-	// Returns the material properties as a vector
-	XMVECTOR getMaterialProperties() {
-		physx::PxMaterial* mat;
-		collider->getMaterials(&mat, 1);
-		return XMVectorSet(
-			mat->getStaticFriction(),
-			mat->getDynamicFriction(),
-			mat->getRestitution(),
-			0
-			);
 	}
 };
 

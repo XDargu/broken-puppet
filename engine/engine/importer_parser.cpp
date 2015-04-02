@@ -58,6 +58,7 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 	}
 	else {
 		current_entity = h;
+		current_entity.loadFromAtts(elem, atts);
 	}
 
 	// Keep a copy of the root handle
@@ -70,8 +71,11 @@ void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 void CImporterParser::onEndElement(const std::string &elem) {
 	//dbg("onEnd %s\n", elem.c_str());
 	if (elem == "entity") {
-		CEntityManager::get().add(current_entity);
-		current_entity = CHandle();
+		auto it = std::find(CEntityManager::get().getEntities().begin(), CEntityManager::get().getEntities().end(), current_entity);
+		if (it == CEntityManager::get().getEntities().end()) {
+			CEntityManager::get().add(current_entity);
+			current_entity = CHandle();
+		}
 	}
 	else {
 		if (current_comp.getTypeName() == elem) {

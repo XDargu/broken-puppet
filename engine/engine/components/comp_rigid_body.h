@@ -2,6 +2,7 @@
 #define INC_COMP_RIGID_BODY_H_
 
 #include "base_component.h"
+#include "physics_manager.h"
 
 struct TCompRigidBody : TBaseComponent {
 private:
@@ -20,228 +21,39 @@ public:
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
 
-	void create(float density, bool is_kinematic, bool use_gravity) {
+	void create(float density, bool is_kinematic, bool use_gravity);
 
-		CEntity* e = CHandle(this).getOwner();
-		transform = assertRequiredComponent<TCompTransform>(this);
-		TCompCollider* c = e->get<TCompCollider>();
-		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
-		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
-		TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
+	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
-		TCompTransform* trans = (TCompTransform*)transform;
+	void init();
 
-		XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
+	void fixedUpdate(float elapsed);
 
-		if (c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *c->collider
-				, density);
-		}
-		if (mesh_c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *mesh_c->collider
-				, density);
-		}
-		if (sphere_c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *sphere_c->collider
-				, density);
-		}
-		if (capsule_c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *capsule_c->collider
-				, density);
-		}
+	XMVECTOR getPosition();
 
-		//Asignación de mascara al actor para el filtrado de colisiones
-		setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
-		//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
-		physx::PxReal threshold = 15000.f;
-		rigidBody->setContactReportThreshold(threshold);
+	XMVECTOR getRotation();
 
-		Physics.gScene->addActor(*rigidBody);
-		setKinematic(is_kinematic);
-		setUseGravity(use_gravity);
+	void setKinematic(bool is_kinematic);
 
-		// Set the owner entity as the rigidbody user data
-		rigidBody->setName(e->getName());
-	}
+	bool isKinematic();
 
-	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		float temp_density = atts.getFloat("density", 1);
-		bool temp_is_kinematic = atts.getBool("kinematic", false);
-		bool temp_use_gravity = atts.getBool("gravity", true);
+	void setUseGravity(bool use_gravity);
 
-		CEntity* e = CHandle(this).getOwner();
-		transform = assertRequiredComponent<TCompTransform>(this);
-		TCompCollider* c = e->get<TCompCollider>();
-		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
-		TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
-		TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
+	bool isUsingGravity();
 
-		TCompTransform* trans = (TCompTransform*)transform;
+	void setLockXPos(bool locked);
 
-		XASSERT((c || mesh_c || sphere_c || capsule_c), "TRigidBody requieres a TCollider or TMeshCollider component");
+	void setLockYPos(bool locked);
 
-		if (c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *c->collider
-				, temp_density);
-		}
-		if (mesh_c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *mesh_c->collider
-				, temp_density);
-		}
-		if (sphere_c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *sphere_c->collider
-				, temp_density);
-		}
-		if (capsule_c) {
-			rigidBody = physx::PxCreateDynamic(
-				*Physics.gPhysicsSDK
-				, physx::PxTransform(
-				Physics.XMVECTORToPxVec3(trans->position),
-				Physics.XMVECTORToPxQuat(trans->rotation))
-				, *capsule_c->collider
-				, temp_density);
-		}
+	void setLockZPos(bool locked);
 
-		//Asignación de mascara al actor para el filtrado de colisiones
-		setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
-		//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
-		physx::PxReal threshold = 15000.f;
-		rigidBody->setContactReportThreshold(threshold);
+	void setLockXRot(bool locked);
 
+	void setLockYRot(bool locked);
 
-		Physics.gScene->addActor(*rigidBody);
-		setKinematic(temp_is_kinematic);
-		setUseGravity(temp_use_gravity);
+	void setLockZRot(bool locked);
 
-		// Block the rigidbody, if needed
-		block_joint = PxD6JointCreate(*Physics.gPhysicsSDK, rigidBody, physx::PxTransform::createIdentity(), NULL, rigidBody->getGlobalPose());
-
-		bool lock_x_pos = atts.getBool("lockXPos", false);
-		bool lock_y_pos = atts.getBool("lockYPos", false);
-		bool lock_z_pos = atts.getBool("lockZPos", false);
-
-		bool lock_x_rot = atts.getBool("lockXRot", false);
-		bool lock_y_rot = atts.getBool("lockYRot", false);
-		bool lock_z_rot = atts.getBool("lockZRot", false);
-
-		block_joint->setMotion(physx::PxD6Axis::eX, lock_x_pos ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-		block_joint->setMotion(physx::PxD6Axis::eY, lock_y_pos ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-		block_joint->setMotion(physx::PxD6Axis::eZ, lock_z_pos ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-
-		block_joint->setMotion(physx::PxD6Axis::eTWIST, lock_x_rot ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-		block_joint->setMotion(physx::PxD6Axis::eSWING1, lock_y_rot ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-		block_joint->setMotion(physx::PxD6Axis::eSWING2, lock_z_rot ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);		
-
-		// Set the owner entity as the rigidbody user data
-		rigidBody->setName(e->getName());
-	}
-
-	void init() {
-	}
-
-	void fixedUpdate(float elapsed) {
-		TCompTransform* trans = (TCompTransform*)transform;
-
-		if (auto_translate_transform)
-			trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
-
-		if (auto_rotate_transform)
-			trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
-
-	}
-
-	XMVECTOR getPosition() {
-		return Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
-	}
-
-	XMVECTOR getRotation() {
-		return Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
-	}
-
-	void setKinematic(bool is_kinematic) {
-		rigidBody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, is_kinematic);
-	}
-
-	bool isKinematic() {
-		return rigidBody->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC);
-	}
-
-	void setUseGravity(bool use_gravity) {
-		rigidBody->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !use_gravity);
-	}
-
-	bool isUsingGravity() {
-		return !rigidBody->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
-	}
-
-	void setLockXPos(bool locked) {
-		block_joint->setMotion(physx::PxD6Axis::eX, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-	}
-
-	void setLockYPos(bool locked) {
-		block_joint->setMotion(physx::PxD6Axis::eY, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-	}
-
-	void setLockZPos(bool locked) {
-		block_joint->setMotion(physx::PxD6Axis::eZ, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-	}
-
-	void setLockXRot(bool locked) {
-		block_joint->setMotion(physx::PxD6Axis::eTWIST, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-	}
-
-	void setLockYRot(bool locked) {
-		block_joint->setMotion(physx::PxD6Axis::eSWING1, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-	}
-
-	void setLockZRot(bool locked) {
-		block_joint->setMotion(physx::PxD6Axis::eSWING2, locked ? physx::PxD6Motion::eLOCKED : physx::PxD6Motion::eFREE);
-	}
-
-	std::string toString() {
-		return "Mass: " + std::to_string(rigidBody->getMass()) +
-			"\nLinear velocity: " + Physics.toString(rigidBody->getLinearVelocity()) +
-			"\nAngular velocity: " + Physics.toString(rigidBody->getAngularVelocity());
-	}
-
-	physx::PxReal getMass(){
-		return rigidBody->getMass();
-	}
+	physx::PxReal getMass();
 };
 
 #endif
