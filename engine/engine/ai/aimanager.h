@@ -8,7 +8,7 @@ public:
 	aimanager();
 	~aimanager();
 	aicontroller* getAI(unsigned int id);
-	aicontroller *getAI(XMVECTOR pos, float radius);
+	void getAI(XMVECTOR pos, float radius, std::vector<aicontroller*>& botsInRange);
 	aicontroller *getClosest(XMVECTOR pos);
 	static aimanager& get();
 	void addBot(aicontroller* bot);

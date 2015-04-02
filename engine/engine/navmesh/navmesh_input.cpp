@@ -18,21 +18,79 @@ void CNavmeshInput::clearInput( ) {
   ntris_total = 0;
 }
 
-void CNavmeshInput::addInput(const DirectX::XMVECTOR& p0, const DirectX::XMVECTOR& p1) {
-  nverts_total += 8;
-  ntris_total += 10;
+void CNavmeshInput::addInput(const DirectX::XMVECTOR& p0, const DirectX::XMVECTOR& p1, float* vertx_mod, int* indx_mod, int nvtx_mod, int nindx_mod, unsigned vertex_stride) {
+  nverts_total += nvtx_mod*3;
+  ntris_total += nindx_mod/4;
 
   TInput input;
   input.pmin = p0;
   input.pmax = p1;
+  input.vertx_module = vertx_mod;
+  input.triangles_module = indx_mod;
+  input.nvtx_module = nvtx_mod;
+  input.nindx_module = nindx_mod;
+
+  //formamos los vectores de vertices y de triangulos ------
+  //for (int i = 0; i < nvtx_mod*8; i++){
+  int ind = 0;
+  while (ind<nvtx_mod*8){
+	  input.vertex_vector.push_back(&vertx_mod[ind]);
+	  ind++;
+	  input.vertex_vector.push_back(&vertx_mod[ind]);
+	  ind++;
+	  input.vertex_vector.push_back(&vertx_mod[ind]);
+	  ind = ind + 6;
+  }
+  //--------------------------------------------------------
+
+  //formamos los vectores de vertices y de triangulos ------
+  for (int i = 0; i < input.nindx_module; i++){
+	  input.triangles_vector.push_back(&indx_mod[i]);
+  }
+  //--------------------------------------------------------
+  
+
+  /*nverts_total += 8;
+  ntris_total += 10;
+
+  TInput input;
+  input.pmin = p0;
+  input.pmax = p1;*/
+
+
+
   inputs.push_back( input );
 }
 
 // ---------------------------------------------------
 void CNavmeshInput::prepareInput( const TInput& input ) {
+	// usar este metodo para usando los punteros a la primera posicion de los vectores de vertex y de indices
+	// para hacer hacer el memset con sus longitudes correspondientes
   unprepareInput( );
+ 
+  nverts = input.nvtx_module;
+  ntris = input.nindx_module;
 
-  nverts = 8;
+  //verts = input.vertx_module;
+
+  verts = new float[nverts * 3];
+  tris = new int[ntris];
+
+  memset(verts, 0, nverts * 3 * sizeof(float));
+  memset(tris, 0, ntris * sizeof(int));
+
+  // RECORRER EL ARRAY DE VERTICES Y ALMACENAR SUS TRANSFORMARLAS A GLOBALES
+  //
+
+  verts = input.vertex_vector[0];
+  tris = input.triangles_vector[0];
+
+  float prueba1 = *input.vertex_vector[1];
+  float prueba2 = *input.vertex_vector[2];
+
+  ntris = input.nindx_module / 3;
+
+  /*nverts = 8;
   ntris = 10;
 
   verts = new float[ nverts * 3 ];
@@ -80,12 +138,12 @@ void CNavmeshInput::prepareInput( const TInput& input ) {
     tris[ idx++ ] = idxs[ i ][ 2 ];
   }
 
-  assert( idx == ntris * 3 );
+  assert( idx == ntris * 3 );*/
 }
 
 void CNavmeshInput::unprepareInput( ) {
-  delete [] verts;
-  delete [] tris;
+  //delete [] verts;
+  //delete [] tris;
   verts = 0;
   tris = 0;
 }

@@ -2,6 +2,7 @@
 #define INC_COMP_COLLIDER_MESH_H_
 
 #include "base_component.h"
+#include "nav_mesh_manager.h"
 
 struct TCompColliderMesh : TBaseComponent {
 
@@ -15,6 +16,14 @@ struct TCompColliderMesh : TBaseComponent {
 
 		strcpy(path, ("colliders/" + atts.getString("path", "missing_mesh") + "_collider").c_str());
 		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
+
+		//PRUEBA NAV MESH
+		TCompAABB* aabb_module=getSibling<TCompAABB>(this);
+		XMVECTOR min = aabb_module->min;
+		XMVECTOR max = aabb_module->max;
+		CNav_mesh_manager::get().nav_mesh_input.addInput(aabb_module->min, aabb_module->max, c_m->vertex_floats, c_m->index_int, c_m->nvertexs, c_m->nindices, c_m->nav_stride_vertex);
+		//----------------
+
 		physx::PxTriangleMesh* triangle_mesh = c_m->collision_mesh;
 
 		physx::PxTriangleMeshGeometry geom(triangle_mesh);
@@ -26,6 +35,16 @@ struct TCompColliderMesh : TBaseComponent {
 			, atts.getFloat("restitution", 0.5))
 			,
 			true);
+
+		const PxVec3* vertex = geom.triangleMesh->getVertices();
+		unsigned n_vertex = geom.triangleMesh->getNbVertices();
+
+		
+		const float* m_v = (float*)vertex;
+
+		for (int i = 0; i < n_vertex * 3; ++i) {
+			const float a = m_v[i];
+		}
 
 		//Asignación de mascara al Shape para el filtrado de colisiones
 		setupFiltering(collider, FilterGroup::eLEVEL, FilterGroup::eLEVEL);

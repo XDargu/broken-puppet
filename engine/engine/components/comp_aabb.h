@@ -59,9 +59,6 @@ public:
 		XMVECTOR identity_max = atts.getPoint("max");
 
 		setIdentityMinMax(identity_min, identity_max);
-	}
-
-	void init() {
 		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
 
@@ -69,6 +66,10 @@ public:
 		prev_rotation = trans->rotation;
 		prev_scale = trans->scale;
 		recalcMinMax();
+	}
+
+	void init() {
+		
 	}
 
 	// Updates the min and max variables, if needed

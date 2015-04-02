@@ -18,6 +18,7 @@ using namespace DirectX;
 
 #include "item_manager.h"
 #include "navmesh\navmesh.h"
+#include "nav_mesh_manager.h"
 
 #include "components\all_components.h"
 #include "components/comp_skeleton.h"
@@ -98,7 +99,7 @@ float fixedUpdateCounter;
 bool debug_mode;
 
 //---------------------------------------------------
-CNavmesh nav_prueba;
+//CNavmesh nav_prueba;
 //---------------------------------------------------
 
 void registerAllComponentMsgs() {
@@ -208,9 +209,6 @@ bool CApp::create() {
 	// Start random seed
 	srand((unsigned int)time(NULL));
 
-	//navMeshes prueba
-	nav_prueba.build();
-
 	// public delta time inicialization
 	delta_time = 0.f;
 	total_time = delta_time;
@@ -233,6 +231,10 @@ bool CApp::create() {
 	//bool is_ok = p.xmlParseFile("data/scenes/scene_enemies.xml");
 
 	initManagers();	
+
+	//PRUEBAS NAV MESHES -----------------
+	bool valid=CNav_mesh_manager::get().build_nav_mesh();
+	//------------------------------------
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");

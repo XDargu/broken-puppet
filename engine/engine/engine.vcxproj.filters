@@ -330,6 +330,8 @@
     <ClInclude Include="comp_ai_bt.h">
       <Filter>components</Filter>
     </ClInclude>
+    <ClInclude Include="nav_mesh_manager.h" />
+    <ClInclude Include="ssb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -552,6 +554,8 @@
     <ClCompile Include="ai\fsm_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
+    <ClCompile Include="nav_mesh_manager.cpp" />
+    <ClCompile Include="ssb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

@@ -239,6 +239,7 @@
     <ClInclude Include="navmesh\navmesh_query.h" />
     <ClInclude Include="navmesh\navmesh_render.h" />
     <ClInclude Include="navmesh\PerfTimer.h" />
+    <ClInclude Include="nav_mesh_manager.h" />
     <ClInclude Include="options_parser.h" />
     <ClInclude Include="physics_manager.h" />
     <ClInclude Include="recast\include\DebugDraw.h" />
@@ -278,6 +279,7 @@
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
     <ClInclude Include="skeletons\skeleton_manager.h" />
+    <ClInclude Include="ssb.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="utils.h" />
@@ -343,6 +345,7 @@
     <ClCompile Include="navmesh\navmesh_query.cpp" />
     <ClCompile Include="navmesh\navmesh_render.cpp" />
     <ClCompile Include="navmesh\PerfTimer.cpp" />
+    <ClCompile Include="nav_mesh_manager.cpp" />
     <ClCompile Include="options_parser.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="recast\source\DebugDraw.cpp">
@@ -468,6 +471,7 @@
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />
+    <ClCompile Include="ssb.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="winmain.cpp" />
     <ClCompile Include="mcv_platform.cpp">

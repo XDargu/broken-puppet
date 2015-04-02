@@ -4,6 +4,7 @@
 
 CMeshCollisionManager mesh_collision_manager;
 
+
 // Just to check we are not rendering a mesh we have not previously activated
 //const CCollision_Mesh* CCollision_Mesh::current_active_mesh = nullptr;
 
@@ -44,13 +45,22 @@ bool CCollision_Mesh::create(
 	default:
 		fatal("Primitive_type %d is not valid", primitive_type);
 	}
+
 	size_t total_bytes_for_vertex = avtxs_decl->bytes_per_vertex * anvertexs;
+	
 	vertexs = new u8[total_bytes_for_vertex];
 	memcpy(vertexs, the_vertexs, total_bytes_for_vertex);
+
+	//Copiamos el vector de vertices a un vector de floats
+	vertex_floats = new float[total_bytes_for_vertex];
+	memcpy(vertex_floats, the_vertexs, total_bytes_for_vertex);
 
 	indices = new TIndex[anindices];
 	memcpy(indices, the_indices, anindices * sizeof(TIndex));
 
+	//Copiamos el vector de indices a un vector de ints
+	index_int = new int[anindices];
+	memcpy(index_int, &v_tris[0], anindices * sizeof(int));
 	// Change indices
 
 	return true;
@@ -115,6 +125,13 @@ bool CCollision_Mesh::load(CDataProvider& dp) {
 		idxs_copy.push_back(idxs[i]);
 	}*/
 
+	//Probando a sacar informacion casteada para nav meshes
+	/*std::vector<float>vec_cast_float(vtxs.begin(), vtxs.end());
+	v_vertex = vec_cast_float;*/
+	std::vector<int>vec_cast_int(idxs.begin(), idxs.end());
+	v_tris = vec_cast_int;
+	//-----------------------------------------------------
+
 	// Use our create mesh function
 	return create(header.nvertexs
 		, &vtxs[0]
@@ -141,7 +158,6 @@ bool CCollision_Mesh::load(const char* name){//, PxCooking* mCooking, PxPhysics*
 		meshDesc.flags = physx::PxMeshFlags(physx::PxMeshFlag::e16_BIT_INDICES | physx::PxMeshFlag::eFLIPNORMALS);
 		
 		bool valid = meshDesc.isValid();
-
 		physx::PxDefaultMemoryOutputStream stream;
 
 		bool sucess = CPhysicsManager::get().gCooking->cookTriangleMesh(meshDesc, stream);
@@ -174,4 +190,15 @@ unsigned CCollision_Mesh::getNindices(){
 D3D_PRIMITIVE_TOPOLOGY CCollision_Mesh::getTopology(){
 	return topology;
 }
+
+/*float* CCollision_Mesh::getVertexPointerNav(){
+	return vertex_floats;
+}
+
+int* CCollision_Mesh::getIndexPointerNav(){
+	return index_int;
+}*/
+
+
+
 
