@@ -72,6 +72,11 @@ struct TTransform {     // 1
 		return XMVector3Rotate((dir - position), XMQuaternionInverse(rotation));
 	}
 
+	// Transform position from local space to world space
+	XMVECTOR transformPoint(XMVECTOR point) {
+		return position + XMVector3Rotate(point, rotation);
+	}
+
 };
 
 #endif

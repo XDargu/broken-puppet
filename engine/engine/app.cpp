@@ -842,6 +842,7 @@ void CApp::destroy() {
 	TwTerminate();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
+	render_techniques_manager.destroyAll();
 	axis.destroy();
 	grid.destroy();
 	intersectsWiredCube.destroy();
