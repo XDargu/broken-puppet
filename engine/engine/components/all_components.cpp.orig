@@ -20,7 +20,11 @@ DECL_OBJ_MANAGER(TCompPlayerController, "playerController");
 DECL_OBJ_MANAGER(TCompPlayerPivotController, "playerPivotController");
 DECL_OBJ_MANAGER(TCompCameraPivotController, "cameraPivotController");
 DECL_OBJ_MANAGER(TCompThirdPersonCameraController, "thirdPersonCameraController");
+<<<<<<< HEAD
+=======
 DECL_OBJ_MANAGER(TCompViewerCameraController, "viewerCameraController");
+DECL_OBJ_MANAGER(TCompAABB, "aabb");
+>>>>>>> 1c0e56aad496939a2143f71ca3f684aa1a917da2
 DECL_OBJ_MANAGER(TCompDistanceJoint, "distanceJoint");
 DECL_OBJ_MANAGER(TCompDirectionalLight, "directionalLight");
 DECL_OBJ_MANAGER(TCompAmbientLight, "ambientLight");

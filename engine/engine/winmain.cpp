@@ -204,6 +204,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					CApp::get().loadScene("data/scenes/viewer.xml");
 					std::string file_without_extension = s.substr(found + 1, s.length() - 5 - found);
 					CApp::get().loadPrefab(file_without_extension);
+					CApp::get().activateInspectorMode(true);
 				}
 			}
 		}

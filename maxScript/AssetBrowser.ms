@@ -399,7 +399,7 @@ macroScript MCVAssetBrowser
 					removeObjectsID()
 					enableSceneRedraw()
 					
-					DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
+					ShellLaunch  (engine_path + "engined.exe") ""
 				)
 				catch ( 
 					format "*** % ***\n" (getCurrentException())
@@ -409,7 +409,7 @@ macroScript MCVAssetBrowser
 			)
 			
 			on play pressed do (
-				DOSCommand ("cd \"" + engine_path + "\" & \"" + engine_path + "engined.exe\"")
+				ShellLaunch  (engine_path + "engined.exe") ""
 			)
 			
 			on exportAll pressed do (

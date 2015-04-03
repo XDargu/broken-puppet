@@ -44,6 +44,8 @@ public:
 		, EXTRA
 		, EXIT
 		, RUN
+		, VIEWER_MOVE_CAM
+		, VIEWER_ZOOM
 		, BUTTONS_COUNT
 		
 	};

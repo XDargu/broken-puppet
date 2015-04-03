@@ -341,11 +341,17 @@
     <ClInclude Include="components\comp_switch_controller.h">
       <Filter>components</Filter>
     </ClInclude>
+<<<<<<< .merge_file_a07712
     <ClInclude Include="comp_ai_bt.h">
       <Filter>components</Filter>
     </ClInclude>
     <ClInclude Include="nav_mesh_manager.h" />
     <ClInclude Include="ssb.h" />
+=======
+    <ClInclude Include="components\comp_viewer_camera_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+>>>>>>> .merge_file_a05652
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -555,10 +561,8 @@
     <ClCompile Include="ai\fsm_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
-<<<<<<< .merge_file_a02968
     <ClCompile Include="nav_mesh_manager.cpp" />
     <ClCompile Include="ssb.cpp" />
-=======
     <ClCompile Include="ai\logic_manager.cpp">
       <Filter>ai</Filter>
     </ClCompile>
@@ -586,7 +590,6 @@
     <ClCompile Include="components\comp_skeleton.cpp">
       <Filter>components\animation</Filter>
     </ClCompile>
->>>>>>> .merge_file_a14176
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
