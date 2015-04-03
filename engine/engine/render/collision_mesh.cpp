@@ -52,15 +52,15 @@ bool CCollision_Mesh::create(
 	memcpy(vertexs, the_vertexs, total_bytes_for_vertex);
 
 	//Copiamos el vector de vertices a un vector de floats
-	vertex_floats = new float[total_bytes_for_vertex];
-	memcpy(vertex_floats, the_vertexs, total_bytes_for_vertex);
+	//vertex_floats = new float[total_bytes_for_vertex];
+	//memcpy(vertex_floats, the_vertexs, total_bytes_for_vertex);
 
 	indices = new TIndex[anindices];
 	memcpy(indices, the_indices, anindices * sizeof(TIndex));
 
 	//Copiamos el vector de indices a un vector de ints
-	index_int = new int[anindices];
-	memcpy(index_int, &v_tris[0], anindices * sizeof(int));
+	//index_int = new int[anindices];
+	//memcpy(index_int, &v_tris[0], anindices * sizeof(int));
 	// Change indices
 
 	return true;
@@ -128,8 +128,8 @@ bool CCollision_Mesh::load(CDataProvider& dp) {
 	//Probando a sacar informacion casteada para nav meshes
 	/*std::vector<float>vec_cast_float(vtxs.begin(), vtxs.end());
 	v_vertex = vec_cast_float;*/
-	std::vector<int>vec_cast_int(idxs.begin(), idxs.end());
-	v_tris = vec_cast_int;
+	//std::vector<int>vec_cast_int(idxs.begin(), idxs.end());
+	//v_tris = vec_cast_int;
 	//-----------------------------------------------------
 
 	// Use our create mesh function

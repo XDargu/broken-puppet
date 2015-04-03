@@ -2,27 +2,26 @@
 #define _NAVMESH_INPUT_INC
 
 #include <vector>
+#include "transform.h"
 
 class CNavmeshInput {
 public:
   struct TInput {
-    DirectX::XMVECTOR pmin;
-	DirectX::XMVECTOR pmax;
-	float* vertx_module;
-	std::vector<float*>vertex_vector;
-	int* triangles_module;
-	std::vector<int*>triangles_vector;
+	DirectX::XMFLOAT3 pmin;
+	DirectX::XMFLOAT3 pmax;
+	const float* vertex_vector;
+	const short* triangles_vector;
 	int nvtx_module;
 	int nindx_module;
-	TInput() : pmin(DirectX::XMVectorZero()), pmax(DirectX::XMVectorZero()), vertx_module(nullptr), triangles_module(nullptr), nvtx_module(0), nindx_module(0){}
+	TInput() : nvtx_module(0), nindx_module(0){}
   };
   static const int MAX_INPUTS = 1024;
   typedef std::vector< TInput > VInputs;
 
 public:
   VInputs               inputs;
-  DirectX::XMVECTOR           aabb_min;
-  DirectX::XMVECTOR           aabb_max;
+  DirectX::XMFLOAT3           aabb_min;
+  DirectX::XMFLOAT3           aabb_max;
   
   float*                verts;
   int*                  tris;
@@ -37,7 +36,7 @@ public:
   CNavmeshInput( );
 
   void clearInput( );
-  void addInput(const DirectX::XMVECTOR& p0, const DirectX::XMVECTOR& p1, float* vertx_mod, int* indx_mod, int nvtx_mod, int nindx_mod, unsigned vertex_stride);
+  void addInput(const DirectX::XMFLOAT3& p0, const DirectX::XMFLOAT3& p1, const float* vertx_mod, const short* indx_mod, unsigned nvtx_mod, unsigned nindx_mod, TTransform* t);
   void prepareInput( const TInput& input );
   void unprepareInput( );
   void computeBoundaries(  );

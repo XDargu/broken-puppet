@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "navmesh_input.h"
+#include "transform.h"
 #include <assert.h>
 
 CNavmeshInput::CNavmeshInput( )
@@ -18,37 +19,18 @@ void CNavmeshInput::clearInput( ) {
   ntris_total = 0;
 }
 
-void CNavmeshInput::addInput(const DirectX::XMVECTOR& p0, const DirectX::XMVECTOR& p1, float* vertx_mod, int* indx_mod, int nvtx_mod, int nindx_mod, unsigned vertex_stride) {
+void CNavmeshInput::addInput(const DirectX::XMFLOAT3& p0, const DirectX::XMFLOAT3& p1, const float* vertx_mod, const short* indx_mod, unsigned nvtx_mod, unsigned nindx_mod, TTransform* t) {
   nverts_total += nvtx_mod*3;
-  ntris_total += nindx_mod/4;
+  ntris_total += nindx_mod;
 
   TInput input;
   input.pmin = p0;
   input.pmax = p1;
-  input.vertx_module = vertx_mod;
-  input.triangles_module = indx_mod;
   input.nvtx_module = nvtx_mod;
   input.nindx_module = nindx_mod;
 
-  //formamos los vectores de vertices y de triangulos ------
-  //for (int i = 0; i < nvtx_mod*8; i++){
-  int ind = 0;
-  while (ind<nvtx_mod*8){
-	  input.vertex_vector.push_back(&vertx_mod[ind]);
-	  ind++;
-	  input.vertex_vector.push_back(&vertx_mod[ind]);
-	  ind++;
-	  input.vertex_vector.push_back(&vertx_mod[ind]);
-	  ind = ind + 6;
-  }
-  //--------------------------------------------------------
-
-  //formamos los vectores de vertices y de triangulos ------
-  for (int i = 0; i < input.nindx_module; i++){
-	  input.triangles_vector.push_back(&indx_mod[i]);
-  }
-  //--------------------------------------------------------
-  
+  input.vertex_vector = vertx_mod;
+  input.triangles_vector = indx_mod;  
 
   /*nverts_total += 8;
   ntris_total += 10;
@@ -82,11 +64,11 @@ void CNavmeshInput::prepareInput( const TInput& input ) {
   // RECORRER EL ARRAY DE VERTICES Y ALMACENAR SUS TRANSFORMARLAS A GLOBALES
   //
 
-  verts = input.vertex_vector[0];
+  /*verts = input.vertex_vector[0];
   tris = input.triangles_vector[0];
 
   float prueba1 = *input.vertex_vector[1];
-  float prueba2 = *input.vertex_vector[2];
+  float prueba2 = *input.vertex_vector[2];*/
 
   ntris = input.nindx_module / 3;
 
@@ -149,15 +131,19 @@ void CNavmeshInput::unprepareInput( ) {
 }
 
 void CNavmeshInput::computeBoundaries( ) {
-  aabb_min = DirectX::XMVectorZero();
-  aabb_max = DirectX::XMVectorZero();
+  aabb_min.x = 0.f;
+  aabb_min.y = 0.f;
+  aabb_min.z = 0.f;
+  aabb_max.x = 0.f;
+  aabb_max.y = 0.f;
+  aabb_max.z = 0.f;
 
   for( auto& i : inputs ) {
-	  if (DirectX::XMVectorGetX(i.pmin) < DirectX::XMVectorGetX(aabb_min))   DirectX::XMVectorSetX(aabb_min, DirectX::XMVectorGetX(i.pmin));
-	  if (DirectX::XMVectorGetY(i.pmin) < DirectX::XMVectorGetY(aabb_min))   DirectX::XMVectorSetY(aabb_min, DirectX::XMVectorGetY(i.pmin));
-	  if (DirectX::XMVectorGetZ(i.pmin) < DirectX::XMVectorGetZ(aabb_min))   DirectX::XMVectorSetZ(aabb_min, DirectX::XMVectorGetZ(i.pmin));
-	  if (DirectX::XMVectorGetX(i.pmax) > DirectX::XMVectorGetX(aabb_max))   DirectX::XMVectorSetX(aabb_max, DirectX::XMVectorGetX(i.pmax));
-	  if (DirectX::XMVectorGetY(i.pmax) > DirectX::XMVectorGetY(aabb_max))   DirectX::XMVectorSetY(aabb_max, DirectX::XMVectorGetY(i.pmax));
-	  if (DirectX::XMVectorGetZ(i.pmax) > DirectX::XMVectorGetZ(aabb_max))   DirectX::XMVectorSetZ(aabb_max, DirectX::XMVectorGetZ(i.pmax));
+	  if (i.pmin.x < aabb_min.x)   aabb_min.x=i.pmin.x;
+	  if (i.pmin.y < aabb_min.y)   aabb_min.y=i.pmin.y;
+	  if (i.pmin.z < aabb_min.z)   aabb_min.z=i.pmin.z;
+	  if (i.pmax.x > aabb_max.x)   aabb_max.x=i.pmax.x;
+	  if (i.pmax.y > aabb_max.y)   aabb_max.y=i.pmax.y;
+	  if (i.pmax.z > aabb_max.z)   aabb_max.z=i.pmax.z;
   }
 }

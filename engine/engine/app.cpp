@@ -222,10 +222,6 @@ bool CApp::create() {
 
 	physics_manager.init();
 
-	//PRUEBAS NAV MESHES -----------------
-	bool valid=CNav_mesh_manager::get().build_nav_mesh();
-	//------------------------------------
-
 	XASSERT(font.create(), "Error creating the font");
 
 	loadScene("data/scenes/my_file.xml");
@@ -259,6 +255,10 @@ bool CApp::create() {
 	cubemap = texture_manager.getByName("sunsetcube1024");
 
 	cubemap->activate(3);
+
+	//PRUEBAS NAV MESHES -----------------
+	bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	//------------------------------------
 
 	return true;
 }

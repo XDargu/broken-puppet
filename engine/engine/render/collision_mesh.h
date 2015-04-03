@@ -65,13 +65,13 @@ public:
 	~CCollision_Mesh();
 
 	//puntero a floats necesario para navMeshes
-	float* vertex_floats;
-	int* index_int;
+	//float* vertex_floats;
+	//int* index_int;
 	unsigned               nvertexs;
 	unsigned               nindices;
-	unsigned nav_stride_vertex;
+	//unsigned nav_stride_vertex;
 	//std::vector<float>v_vertex;
-	std::vector<int> v_tris;
+	//std::vector<int> v_tris;
 	//Collision Mesh de acceso publico----------------------------------
 	physx::PxTriangleMesh* collision_mesh;
 	//------------------------------------------------------------------

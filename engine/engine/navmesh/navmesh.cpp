@@ -18,8 +18,8 @@ void CNavmesh::build( ) {
   m_ctx->resetLog( );
 
   rcConfig config;
-  const float x_min = DirectX::XMVectorGetX(m_input.aabb_min);
-  const float x_max = DirectX::XMVectorGetX(m_input.aabb_max);
+  const float x_min = m_input.aabb_min.x;
+  const float x_max = m_input.aabb_max.x;
   rcVcopy(config.bmin, &x_min);
   rcVcopy(config.bmax, &x_max);
   config.tileSize = 32;
