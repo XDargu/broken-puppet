@@ -112,6 +112,8 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
+	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
 	SUBSCRIBE(TCompAiFsmBasic, TMsgRopeTensed, onRopeTensed);
 	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);

@@ -284,9 +284,6 @@
     <ClInclude Include="components\comp_player_pivot_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_player_controller.h">
-      <Filter>components\controllers</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_enemy_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
@@ -341,17 +338,23 @@
     <ClInclude Include="components\comp_switch_controller.h">
       <Filter>components</Filter>
     </ClInclude>
-<<<<<<< .merge_file_a07712
+    <ClInclude Include="components\comp_viewer_camera_controller.h">
+      <Filter>components\controllers</Filter>
+    </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="comp_ai_bt.h">
       <Filter>components</Filter>
     </ClInclude>
     <ClInclude Include="nav_mesh_manager.h" />
     <ClInclude Include="ssb.h" />
 =======
-    <ClInclude Include="components\comp_viewer_camera_controller.h">
-      <Filter>components\controllers</Filter>
+    <ClInclude Include="ai\fsm_player_legs.h">
+      <Filter>ai\player</Filter>
     </ClInclude>
->>>>>>> .merge_file_a05652
+    <ClInclude Include="components\comp_player_controller.h">
+      <Filter>components\ai\player</Filter>
+    </ClInclude>
+>>>>>>> 0b4082dc261397447ddf72f03a81b0a6671f8e3e
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -590,6 +593,9 @@
     <ClCompile Include="components\comp_skeleton.cpp">
       <Filter>components\animation</Filter>
     </ClCompile>
+    <ClCompile Include="ai\fsm_player_legs.cpp">
+      <Filter>ai\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -660,6 +666,9 @@
     </Filter>
     <Filter Include="components\ai\player">
       <UniqueIdentifier>{e83cfa9d-c7ba-472e-ab07-fc57d3613e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\player">
+      <UniqueIdentifier>{426a6489-9652-48e2-b731-ef3e8cb3645c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
