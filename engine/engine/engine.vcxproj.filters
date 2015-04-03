@@ -284,9 +284,6 @@
     <ClInclude Include="components\comp_player_pivot_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_player_controller.h">
-      <Filter>components\controllers</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_enemy_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
@@ -343,6 +340,12 @@
     </ClInclude>
     <ClInclude Include="components\comp_viewer_camera_controller.h">
       <Filter>components\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\fsm_player_legs.h">
+      <Filter>ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_controller.h">
+      <Filter>components\ai\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -580,6 +583,9 @@
     <ClCompile Include="components\comp_skeleton.cpp">
       <Filter>components\animation</Filter>
     </ClCompile>
+    <ClCompile Include="ai\fsm_player_legs.cpp">
+      <Filter>ai\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -650,6 +656,9 @@
     </Filter>
     <Filter Include="components\ai\player">
       <UniqueIdentifier>{e83cfa9d-c7ba-472e-ab07-fc57d3613e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\player">
+      <UniqueIdentifier>{426a6489-9652-48e2-b731-ef3e8cb3645c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
