@@ -142,7 +142,6 @@ public:
 			}
 			if (s2.isValid()){
 				((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()));
-				auto cosa2 = ((TCompStaticBody*)s2)->staticBody;
 				((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 				Pos2 = ((TCompStaticBody*)(((CEntity*)e_a2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 			}
@@ -161,17 +160,16 @@ public:
 		if (r1.isValid()) {
 			if (r2.isValid())
 			{
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f));
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f), ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f));
 				drive_position.p = Pos2.p - Pos1.p;
+				linearPosition = (drive_position.p).magnitude();
 			}
-			
-
 			else
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f), NULL, Pos2);
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f), NULL, Pos2);
 		}
 		else {
 			if (s1.isValid())
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos1, ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.5f, 0.5f, 0.5f));
+				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos1, ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f));
 			else
 				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos2, NULL, Pos2);
 		}
@@ -201,7 +199,6 @@ public:
 
 			los joints, las livertados son en local al objeto que tiene el joint, el drive position funciona de igual modo.
 		*/
-
 
 		// Set the axis to locked, limited or free    mode 1 = Locked, 2 = Limited, 3 = Free
 
@@ -261,10 +258,8 @@ public:
 			/*set de axis as locked*/
 			break;
 		}
-
 		mJoint->setLinearLimit(physx::PxJointLinearLimit(linearPosition, physx::PxSpring(0, 0)));
 		mJoint->setDrivePosition(drive_position);
-
 	}
 
 	void init() {
