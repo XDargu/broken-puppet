@@ -72,6 +72,23 @@ public:
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
+
+		awakeActors();
+	}
+
+	void awakeActors() {
+		// Awake the actors
+		physx::PxRigidActor* a1 = nullptr;
+		physx::PxRigidActor* a2 = nullptr;
+
+		joint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a1)->wakeUp();
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a2)->wakeUp();
+		}
 	}
 
 	void init() {

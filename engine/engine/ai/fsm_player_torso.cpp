@@ -270,7 +270,30 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 void FSMPlayerTorso::PullString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
-	// Moves the camera to the shoulder and shorten the distance joint
+	if (on_enter) {
+		CEntity* rope_entity = current_rope_entity;
+		TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
+
+		if (joint) {
+			// -------------- Moves the camera to the shoulder
+
+
+			// -------------- Shorten the distance joint
+
+			float oldMaxDistance = joint->joint->getMaxDistance();
+			if (oldMaxDistance > 1)
+				joint->joint->setMaxDistance(oldMaxDistance - 1);
+			else
+				joint->joint->setMaxDistance(0);
+			
+			joint->awakeActors();
+		}
+	}
+
+	// Animation ends
+	if (state_time >= 0.1f) {
+		ChangeState("fbp_GrabString");		
+	}
 }
 
 void FSMPlayerTorso::GrabString(float elapsed) {
@@ -279,9 +302,15 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	// Make the distance joint from the rope follow the player
 	CEntity* rope_entity = current_rope_entity;
 	TCompRope* rope = rope_entity->get<TCompRope>();
+	TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
 
 	// Get the player transform
 	TCompTransform* p_transform = comp_transform;
+
+	if (joint) {
+		joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(p_transform->position + XMVectorSet(0, 2, 0, 0))));
+		joint->awakeActors();
+	}
 
 	rope->pos_2 = p_transform->position + XMVectorSet(0, 2, 0, 0);
 
@@ -299,8 +328,12 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		first_needle = CHandle();
 		entitycount++;
 
-		ChangeState("fbp_Inactive");
-		
+		ChangeState("fbp_Inactive");		
+	}
+
+	// Pull
+	if (io.becomesReleased(CIOStatus::PULL_STRING)) {
+		ChangeState("fbp_PullString");
 	}
 
 	// Throw the second needle
