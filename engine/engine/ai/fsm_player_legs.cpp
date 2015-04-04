@@ -232,13 +232,10 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		rigidbody->setLockXRot(false);
 		rigidbody->setLockYRot(false);
 		rigidbody->setLockZRot(false);
+
+		rigidbody->auto_rotate_transform = true;
+		rigidbody->auto_translate_transform = true;
 	}
-
-	/*m_transform->rotation =
-		Physics.PxQuatToXMVECTOR(
-		rigidbody->rigidBody->getGlobalPose().q
-		);*/
-
 	if (((state_time >= 1 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
 		|| (state_time >= 5))
 	{
@@ -246,6 +243,8 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		rigidbody->setLockYRot(true);
 		rigidbody->setLockZRot(true);
 
+		rigidbody->auto_rotate_transform = false;
+		rigidbody->auto_translate_transform = false;
 
 		// Volver a colocar al PJ. TODO: Mejorarlo para que no se quede atascado
 		rigidbody->rigidBody->setGlobalPose(
@@ -357,30 +356,30 @@ bool FSMPlayerLegs::EvaluateFall(){
 	return velocity.y <= 0 && !((TCompCharacterController*)comp_character_controller)->OnGround();
 }
 
-void FSMPlayerLegs::EvaluateHit(){
+void FSMPlayerLegs::EvaluateHit(float damage){
 
-	if (getCurrentNode() != "fbp_Dead") {
-		if (last_hit == 0)
-			return;
-		float damage = 0;
-		if (last_hit >= 10){ //ragdoll force
-			damage = 20;
+	float real_damage = 0.f;
+
+	if (getCurrentNode() != "fbp_Dead") {		
+		if (damage > 10000.f){ // Damage needed for ragdoll state
+			real_damage = 20;
 			ChangeState("fbp_Ragdoll");
 		}
 		else if (getCurrentNode() != "fbp_Ragdoll"){
-			damage = 10;
+			real_damage = 10;
 			ChangeState("fbp_Hurt");
 		}
-		// Evaluate live to lose
-		EvaluateLiveToLose(damage);
-		last_hit = 0.f;
 	}
+
+	EvaluateLiveToLose(real_damage);
+	
 }
 
 void FSMPlayerLegs::EvaluateLiveToLose(float damage){
 	// Call to component live and 
 	if (((TCompLife*)life)->Hurt(damage))// live under or equal 0
 	{
+		// Change state to ragdoll instead of death, for visual purposes
 		ChangeState("fbp_Ragdoll");
 	}
 }

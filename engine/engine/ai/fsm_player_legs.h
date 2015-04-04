@@ -45,7 +45,7 @@ public:
 	void ReevaluatePriorities();
 	void WakeUp(float elapsed);
 
-	void EvaluateHit();
+	void EvaluateHit(float damage);
 	void EvaluateLiveToLose(float damage);
 
 	void localCameraFront();
