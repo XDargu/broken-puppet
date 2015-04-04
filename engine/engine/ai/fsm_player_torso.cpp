@@ -109,25 +109,37 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
 				new_e->add(new_e_name);
 
-				// Add a distance joint
-				TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-				PxVec3 pos = first_actor->getGlobalPose().q.rotate(first_offset) + first_actor->getGlobalPose().p;
-
-				PxVec3 offset_1 = first_offset;
-				PxVec3 offset_2 = PxVec3(0, 0, 0);
-
-				// The second position is the player
+				// Get the player transform
 				TCompTransform* p_transform = comp_transform;
-				PxVec3 pos2 = physics_manager.XMVECTORToPxVec3(p_transform->position);
 
-				new_e_j->create(first_actor, NULL, 1, first_position, pos2, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
+				// Only add a distance joint in the first throw if the first actor is a rigidbody
+				if (first_actor->isRigidDynamic()) {
+					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
 
-				new_e->add(new_e_j);
+					// The first position is the actor position with offset in world coords
+					PxVec3 pos = first_actor->getGlobalPose().q.rotate(first_offset) + first_actor->getGlobalPose().p;
 
+					// The second position is the player
+					PxVec3 pos2 = physics_manager.XMVECTORToPxVec3(p_transform->position);
+
+					// Offsets
+					PxVec3 offset_1 = first_offset;
+					PxVec3 offset_2 = PxVec3(0, 0, 0);					
+
+					new_e_j->create(first_actor, NULL, 1, first_position, pos2, PxTransform(offset_1), physx::PxTransform(offset_2));
+
+					new_e->add(new_e_j);
+				}
+				
 				// Add the rope component
 				TCompRope* new_e_r = CHandle::create<TCompRope>();
 				new_e->add(new_e_r);
-				new_e_r->create();
+
+				// Get the transform of the needle
+				TCompTransform* needle_transform = new_needle->get<TCompTransform>();
+
+				// Assing the positions (needle transform + current player position)
+				new_e_r->setPositions(needle_transform, p_transform->position);
 
 				// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
 				current_rope_entity = new_e;
@@ -149,35 +161,26 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						entity_manager.remove(c_rope.getOwner());
 					}
 
-					CEntity* new_e = entity_manager.createEmptyEntity();
-
-					TCompName* new_e_name = CHandle::create<TCompName>();
-					std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
-					new_e->add(new_e_name);
-
-					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-					PxVec3 pos = first_actor->getGlobalPose().q.rotate(first_offset) + first_actor->getGlobalPose().p;
-					
+					// -------------- Get the offsets
 					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)
 					PxVec3 offset_1 = first_offset;
 					PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
 
-					new_e_j->create(first_actor, blockHit.actor, 1, first_position, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
+					// -------------- Whats here so far:
+					// - We have an entity with a rope component, pointing to a needle transform and a position
+					// - A distance joint may or may not exists in this entity
+					CEntity* rope_entity = current_rope_entity;
+					CEntity* first_needle_entity = first_needle;
 
-					new_e->add(new_e_j);
-
-					TCompRope* new_e_r = CHandle::create<TCompRope>();
-					new_e->add(new_e_r);
-					new_e_r->create();
-
+					// -------------- Create the new needle
 					// Get the needle prefab
-					CEntity* new_e2 = prefabs_manager.getInstanceByName("Needle");
+					CEntity* new_needle_2 = prefabs_manager.getInstanceByName("Needle");
 
 					// Get the entity of the rigidbody on wich the needle is pierced
 					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
 					// Rename the needle
-					TCompName* new_e_name2 = new_e2->get<TCompName>();
+					TCompName* new_e_name2 = new_needle_2->get<TCompName>();
 					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
 
 					// Set the rotation of the needle according to the camera angle and normal of the surface
@@ -197,15 +200,45 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
 
 					// Get the needle component and initialize it
-					TCompNeedle* new_e_needle2 = new_e2->get<TCompNeedle>();
+					TCompNeedle* new_e_needle2 = new_needle_2->get<TCompNeedle>();
 
 					new_e_needle2->create(
 						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
 						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
 						, rigidbody_e->get<TCompRigidBody>()
-						);
+					);
 
-					// Set the distance joint of the needle as an invalid Handle
+					// -------------- If the distance joint doesn't exists, create one
+
+					TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
+					if (!joint) {
+						// Create a new distance joint
+						TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
+
+						new_e_j->create(first_actor, blockHit.actor, 1, first_position, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
+
+						rope_entity->add(new_e_j);
+					}
+
+					// If the distance joint already exists, update it
+					else {
+						PxRigidActor* a1 = nullptr;
+						PxRigidActor* a2 = nullptr;
+
+						joint->joint->setActors(first_actor, blockHit.actor);
+					}
+
+					// -------------- Update the rope component
+					TCompRope* new_e_r = rope_entity->get<TCompRope>();
+					TCompTransform* first_needle_transform = first_needle_entity->get<TCompTransform>();
+					
+					// Get the transform of the needle
+					TCompTransform* second_needle_transform = new_needle_2->get<TCompTransform>();
+
+					new_e_r->setPositions(first_needle_transform, second_needle_transform);
+										
+
+					// Set the current rope entity as an invalid Handle
 					current_rope_entity = CHandle();
 
 					strings.push_back(CHandle(new_e_r));

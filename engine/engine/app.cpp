@@ -324,7 +324,7 @@ void CApp::update(float elapsed) {
 	//Calculate the current number of strings
 	unsigned int num_strings = numStrings();
 
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+	/*if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f  && num_strings > 0) {
 			CHandle c_rope = strings.back();
@@ -452,8 +452,8 @@ void CApp::update(float elapsed) {
 
 					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
 					
-					/*new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));*/
+					//new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
+					//new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));
 
 					new_e->add(new_e_j);
 
@@ -507,7 +507,7 @@ void CApp::update(float elapsed) {
 					firstNeedle = CHandle();
 				}
 			}
-	}	
+	}*/	
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
@@ -663,7 +663,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 		if (c_rope) {
-			PxRigidActor* a1 = nullptr;
+			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
 			djoint->joint->getActors(a1, a2);
@@ -703,7 +703,13 @@ void CApp::renderEntities() {
 			}
 			else {
 				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
-			}
+			}*/
+
+			XMVECTOR initialPos = c_rope->pos_1;
+			XMVECTOR finalPos = c_rope->pos_2;
+
+			XMVECTOR rot1 = XMQuaternionIdentity();
+			XMVECTOR rot2 = XMQuaternionIdentity();
 
 			float dist = djoint->joint->getDistance();
 			float maxDist = pow(djoint->joint->getMaxDistance(), 2);
