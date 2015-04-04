@@ -227,10 +227,8 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					// If the distance joint already exists, update it
 					else {
-						PxRigidActor* a1 = nullptr;
-						PxRigidActor* a2 = nullptr;
-
-						joint->joint->setActors(first_actor, blockHit.actor);
+						joint->joint->release();
+						joint->create(first_actor, blockHit.actor, 1, first_position, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
 					}
 
 					// -------------- Update the rope component
@@ -260,7 +258,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 	}
 
 	// Animation ends
-	if (state_time >= 2.0f) {
+	if (state_time >= 0.1f) {
 		if (first_throw)
 			ChangeState("fbp_GrabString");
 		else
@@ -285,7 +283,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	// Get the player transform
 	TCompTransform* p_transform = comp_transform;
 
-	rope->pos_2 = p_transform->position;
+	rope->pos_2 = p_transform->position + XMVectorSet(0, 2, 0, 0);
 
 	// Cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
@@ -378,7 +376,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Waits for the player to throw
-	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
+	if (io.isPressed(CIOStatus::THROW_STRING)) {
 
 		ChangeState("fbp_ThrowString");
 	}

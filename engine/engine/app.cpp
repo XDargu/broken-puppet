@@ -711,8 +711,12 @@ void CApp::renderEntities() {
 			XMVECTOR rot1 = XMQuaternionIdentity();
 			XMVECTOR rot2 = XMQuaternionIdentity();
 
-			float dist = djoint->joint->getDistance();
-			float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+			float dist = V3DISTANCE(initialPos, finalPos);
+			float maxDist = dist;
+
+			if (djoint) {
+				maxDist = pow(djoint->joint->getMaxDistance(), 2);
+			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 

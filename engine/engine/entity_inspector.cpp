@@ -190,6 +190,13 @@ void TW_CALL GetPlayerFSMLegsState(void *value, void *clientData)
 
 }
 
+void TW_CALL GetPlayerFSMTorsoState(void *value, void *clientData)
+{
+	std::string *destPtr = static_cast<std::string *>(value);
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_torso.getCurrentNode());
+
+}
+
 // ---------------------------- ADD COMPONENT CALLBACKS --------------------------
 void TW_CALL AddTransform(void *clientData) {
 
@@ -382,7 +389,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (e_player_controller) {
 		TwAddVarRW(bar, "PlayerControllerActive", TW_TYPE_BOOL8, &e_player_controller->active, " group='Player Controller' label='Active'");
-		TwAddVarCB(bar, "PlayerControllerState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMLegsState, e_player_controller, " group='Player Controller' label='State'");
+		TwAddVarCB(bar, "PlayerControllerLegsState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMLegsState, e_player_controller, " group='Player Controller' label='Legs State'");
+		TwAddVarCB(bar, "PlayerControllerTorsoState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMTorsoState, e_player_controller, " group='Player Controller' label='Torso State'");
 	}
 
 	if (e_player_pivot_controller) {
