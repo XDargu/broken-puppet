@@ -4,11 +4,13 @@
 #include "base_component.h"
 #include "handle/app_msgs.h"
 #include "ai\fsm_player_legs.h"
+#include "ai\fsm_player_torso.h"
 
 struct TCompPlayerController : TBaseComponent {
 public:
 	FSMPlayerLegs fsm_player_legs;
-
+	FSMPlayerTorso fsm_player_torso;
+	
 	float hit_cool_down;
 	float time_since_last_hit;
 
@@ -22,6 +24,7 @@ public:
 		assertRequiredComponent<TCompCharacterController>(this);
 
 		fsm_player_legs.SetEntity(CHandle(this).getOwner());
+		fsm_player_torso.SetEntity(CHandle(this).getOwner());
 
 		hit_cool_down = 1;
 		time_since_last_hit = 0;
@@ -29,6 +32,7 @@ public:
 
 	void init() {
 		fsm_player_legs.Init();
+		fsm_player_torso.Init();
 	}
 
 	void update(float elapsed) {
@@ -41,6 +45,7 @@ public:
 
 	void fixedUpdate(float elapsed) {
 		fsm_player_legs.update(elapsed);
+		fsm_player_torso.update(elapsed);
 	}
 
 	void actorHit(const TActorHit& msg) {

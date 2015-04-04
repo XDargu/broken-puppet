@@ -36,6 +36,8 @@ void FSMPlayerTorso::Init() {
 	comp_camera_transform = e->get<TCompTransform>();
 
 	max_num_string = 4;
+
+	can_move = true;
 }
 
 void FSMPlayerTorso::ThrowString(float elapsed) {
@@ -144,6 +146,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
 				current_rope_entity = new_e;
 
+				// Add the string to the strings vector
+				strings.push_back(CHandle(new_e_r));
+
 				entitycount++;
 			}
 			// Second throw
@@ -241,7 +246,6 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					// Set the current rope entity as an invalid Handle
 					current_rope_entity = CHandle();
 
-					strings.push_back(CHandle(new_e_r));
 					first_actor = nullptr;
 					first_needle = CHandle();
 					entitycount++;
@@ -275,6 +279,37 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
 	// Make the distance joint from the rope follow the player
+	CEntity* rope_entity = current_rope_entity;
+	TCompRope* rope = rope_entity->get<TCompRope>();
+
+	// Get the player transform
+	TCompTransform* p_transform = comp_transform;
+
+	rope->pos_2 = p_transform->position;
+
+	// Cancel
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+
+		// Remove the current string
+		CHandle c_rope = strings.back();
+		strings.pop_back();
+		CEntityManager::get().remove(c_rope.getOwner());
+
+		// Reset the variables
+		current_rope_entity = CHandle();
+		first_actor = nullptr;
+		first_needle = CHandle();
+		entitycount++;
+
+		ChangeState("fbp_Inactive");
+		
+	}
+
+	// Throw the second needle
+	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
+
+		ChangeState("fbp_ThrowString");
+	}
 	
 }
 
