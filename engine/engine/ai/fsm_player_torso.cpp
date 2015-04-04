@@ -280,9 +280,9 @@ void FSMPlayerTorso::PullString(float elapsed) {
 
 			// -------------- Shorten the distance joint
 
-			float oldMaxDistance = joint->joint->getMaxDistance();
-			if (oldMaxDistance > 1)
-				joint->joint->setMaxDistance(oldMaxDistance - 1);
+			float oldDistance = sqrt(joint->joint->getDistance());
+			if (oldDistance > 1)
+				joint->joint->setMaxDistance(oldDistance - 1);
 			else
 				joint->joint->setMaxDistance(0);
 			
