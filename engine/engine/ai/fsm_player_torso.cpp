@@ -12,6 +12,7 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, first_needle(CHandle())
 	, first_offset(PxVec3(0, 0, 0))
 	, first_position(PxVec3(0, 0, 0))
+	, standard_camera_offset(PxVec3(0, 0, 0))
 	, first_throw(false)
 	, max_num_string(0)
 {}
@@ -32,8 +33,9 @@ void FSMPlayerTorso::Init() {
 	comp_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	// Get tge camera
-	CEntity* e = CEntityManager::get().getByName("PlayerCamera");
-	comp_camera_transform = e->get<TCompTransform>();
+	camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
+	standard_camera_offset = camera_controller->offset;
 
 	max_num_string = 4;
 
@@ -49,7 +51,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 		CEntityManager &entity_manager = CEntityManager::get();
 		CPhysicsManager &physics_manager = CPhysicsManager::get();
 		
-		TCompTransform* camera_transform = comp_camera_transform;
+		TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
 
 		// Raycast detecting the collider the mouse is pointing at
 		PxRaycastBuffer hit;
@@ -271,27 +273,30 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
 	if (on_enter) {
-		CEntity* rope_entity = current_rope_entity;
-		TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
+		// -------------- Moves the camera to the shoulder
+		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
+		camera_controller->offset = PxVec3(0.56, -0.22f, 1.07f);	
+	}
 
-		if (joint) {
-			// -------------- Moves the camera to the shoulder
+	CEntity* rope_entity = current_rope_entity;
+	TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
 
+	if (joint) {
+		// -------------- Shorten the distance joint
+		float oldDistance = sqrt(joint->joint->getDistance());
+		if (oldDistance > 0.1f)
+			joint->joint->setMaxDistance(oldDistance - 10.f * elapsed);
+		else
+			joint->joint->setMaxDistance(0);
 
-			// -------------- Shorten the distance joint
-
-			float oldDistance = sqrt(joint->joint->getDistance());
-			if (oldDistance > 1)
-				joint->joint->setMaxDistance(oldDistance - 1);
-			else
-				joint->joint->setMaxDistance(0);
-			
-			joint->awakeActors();
-		}
+		joint->awakeActors();
 	}
 
 	// Animation ends
-	if (state_time >= 0.1f) {
+	if (io.isReleased(CIOStatus::PULL_STRING)) {
+		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
+		camera_controller->offset = standard_camera_offset;
+
 		ChangeState("fbp_GrabString");		
 	}
 }
@@ -332,7 +337,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	}
 
 	// Pull
-	if (io.becomesReleased(CIOStatus::PULL_STRING)) {
+	if (io.isPressed(CIOStatus::PULL_STRING)) {
 		ChangeState("fbp_PullString");
 	}
 

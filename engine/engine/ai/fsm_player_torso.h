@@ -17,13 +17,15 @@ private:
 	CHandle first_needle;
 	CHandle current_rope_entity;
 	bool first_throw;
+
+	PxVec3 standard_camera_offset;
 public:
 
 	bool can_move;
 	unsigned int max_num_string;
 
 	CHandle comp_transform;
-	CHandle comp_camera_transform;
+	CHandle camera_entity;
 
 	FSMPlayerTorso();
 	~FSMPlayerTorso();
