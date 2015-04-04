@@ -35,7 +35,6 @@ void FSMPlayerLegs::Init()
 	ChangeState("fbp_Idle");
 
 	// Values
-	comp_mesh = ((CEntity*)entity)->get<TCompMesh>();
 	comp_rigidbody = ((CEntity*)entity)->get<TCompRigidBody>();
 	comp_collider = ((CEntity*)entity)->get<TCompColliderCapsule>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();

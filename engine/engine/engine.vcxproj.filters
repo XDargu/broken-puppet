@@ -347,6 +347,9 @@
     <ClInclude Include="components\comp_player_controller.h">
       <Filter>components\ai\player</Filter>
     </ClInclude>
+    <ClInclude Include="ai\fsm_player_torso.h">
+      <Filter>ai\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -584,6 +587,9 @@
       <Filter>components\animation</Filter>
     </ClCompile>
     <ClCompile Include="ai\fsm_player_legs.cpp">
+      <Filter>ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\fsm_player_torso.cpp">
       <Filter>ai\player</Filter>
     </ClCompile>
   </ItemGroup>

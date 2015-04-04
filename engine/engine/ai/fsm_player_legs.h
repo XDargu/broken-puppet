@@ -1,5 +1,5 @@
-#ifndef _FSM_PLAYER_LEGS_H
-#define _FSM_PLAYER_LEGS_H
+#ifndef _FSM_PLAYER_LEGS_H_
+#define _FSM_PLAYER_LEGS_H_
 
 #include "aifsmcontroller.h"
 
@@ -8,11 +8,10 @@ class FSMPlayerLegs : public aifsmcontroller
 
 public:
 
-	CHandle comp_mesh;
 	CHandle comp_character_controller;
 	CHandle comp_rigidbody;
 	CHandle comp_collider;
-	CHandle comp_basic_player_controller;
+	CHandle comp_player_controller;
 	CHandle comp_player_pivot_transform;
 	CHandle entity_camera;
 
