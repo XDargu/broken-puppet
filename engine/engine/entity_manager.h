@@ -5,8 +5,16 @@
 
 class CHandle;
 
+struct TEntityChunk {
+	char name[32];
+	std::vector< CHandle > entities;
+	XMVECTOR min;
+	XMVECTOR max;
+};
+
 class CEntityManager {
 	typedef std::vector< CHandle > VEntities;
+	typedef std::vector< TEntityChunk > MEntities;
 	unsigned int entity_event_count;
 public:
 	static CEntityManager& get();
@@ -26,6 +34,9 @@ protected:
 	// General entity vector
 	VEntities entities;
 	VEntities handles_to_destroy;
+
+	// Vector of entity chuncks
+	MEntities entity_chunks;
 };
 
 
