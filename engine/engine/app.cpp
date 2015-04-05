@@ -453,11 +453,11 @@ void CApp::render() {
 	TwDraw();
 #endif
 
-	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
+	/*std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
 	font.print(15, 15, life_text.c_str());
 
 	std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
-	font.print(15, 35, strings_text.c_str());
+	font.print(15, 35, strings_text.c_str());*/
 
 	::render.swap_chain->Present(0, 0);
 
@@ -717,6 +717,7 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();
+	logic_manager.clearKeyframes();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 

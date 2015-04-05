@@ -44,7 +44,7 @@ void CLogicManager::update(float elapsed) {
 	for (auto& it : current_keyframes) {
 		// Check if the keyframe has reached the limit
 		if (it.update(elapsed)) {
-			XDEBUG("Keyframehas reached the time limit");
+			XDEBUG("Keyframe has reached the time limit");
 			keyframes_to_delete.push_back(it);
 		}
 	};
@@ -161,4 +161,31 @@ void CLogicManager::addRelativeKeyFrame(CHandle the_target_transform, XMVECTOR p
 		}
 
 	}
+}
+
+void CLogicManager::stopKeyframes(CHandle the_target_transform) {
+
+	XDEBUG("Keyframe has been stopped");
+
+	// Erase the keyframe from the current list
+	for (auto& it : current_keyframes) {
+		// Check if the keyframe has reached the limit
+		if (it.target_transform == the_target_transform) {
+			keyframes_to_delete.push_back(it);
+		}
+	};
+
+	// Erase the keyframe from the queue list
+	for (auto& it : keyframe_queue) {
+		// Check if the keyframe has reached the limit
+		if (it.target_transform == the_target_transform) {
+			keyframes_to_delete.push_back(it);
+		}
+	};
+}
+
+void CLogicManager::clearKeyframes() {
+	current_keyframes.clear();
+	keyframe_queue.clear();
+	keyframes_to_delete.clear();
 }
