@@ -353,6 +353,7 @@
     <ClInclude Include="ai\key_frame.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="aabb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />

@@ -72,3 +72,11 @@ CHandle CEntityManager::createEmptyEntity() {
 unsigned int CEntityManager::getEntityEventCount() {
 	return entity_event_count;
 }
+
+TEntityChunk* CEntityManager::getCurrentRoom(XMVECTOR position) {
+	for (auto& it : entity_chunks) {
+		if (it.bounds.containts(position))
+			return &it;
+	};
+	return nullptr;
+}

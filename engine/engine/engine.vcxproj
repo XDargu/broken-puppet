@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="aabb.h" />
     <ClInclude Include="ai\aifsmcontroller.h" />
     <ClInclude Include="ai\aicontroller.h" />
     <ClInclude Include="ai\aimanager.h" />

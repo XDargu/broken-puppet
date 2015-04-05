@@ -2,14 +2,14 @@
 #define INC_ENTITY_MANAGER_H_
 
 #include "mcv_platform.h"
+#include "aabb.h"
 
 class CHandle;
 
 struct TEntityChunk {
 	char name[32];
 	std::vector< CHandle > entities;
-	XMVECTOR min;
-	XMVECTOR max;
+	AABB bounds;
 };
 
 class CEntityManager {
@@ -29,6 +29,8 @@ public:
 	CHandle createEmptyEntity();
 
 	unsigned int getEntityEventCount();
+
+	TEntityChunk* getCurrentRoom(XMVECTOR position);
 
 protected:
 	// General entity vector

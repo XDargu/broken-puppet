@@ -2,8 +2,9 @@
 #define INC_COMP_AABB_H_
 
 #include "base_component.h"
+#include "aabb.h"
 
-struct TCompAABB : TBaseComponent{
+struct TCompAABB : public AABB, TBaseComponent{
 private:
 	CHandle		transform;
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
@@ -41,13 +42,7 @@ private:
 	}
 public:
 
-	XMVECTOR min;
-	XMVECTOR max;
-	XMVECTOR getCenter() { return (min + max) / 2; };
-	XMVECTOR getExtents() { return (max - min) / 2; };
-	XMVECTOR getSize() { return max - min; };
-
-	TCompAABB() {}
+	TCompAABB() : AABB() {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		XMVECTOR identity_min = atts.getPoint("min");
@@ -75,16 +70,6 @@ public:
 			recalcMinMax();
 	}
 
-	// Squared distance from a point to the AABB
-	float sqrDistance(XMVECTOR point) {
-		XMVECTOR nearestPoint = XMVectorZero();
-		nearestPoint = XMVectorSetX(nearestPoint, (XMVectorGetX(point) <  XMVectorGetX(min)) ? XMVectorGetX(min) : (XMVectorGetX(point) > XMVectorGetX(max)) ? XMVectorGetX(max) : XMVectorGetX(point));
-		nearestPoint = XMVectorSetY(nearestPoint, (XMVectorGetY(point) <  XMVectorGetY(min)) ? XMVectorGetY(min) : (XMVectorGetY(point) > XMVectorGetY(max)) ? XMVectorGetY(max) : XMVectorGetY(point));
-		nearestPoint = XMVectorSetZ(nearestPoint, (XMVectorGetZ(point) <  XMVectorGetZ(min)) ? XMVectorGetZ(min) : (XMVectorGetZ(point) > XMVectorGetZ(max)) ? XMVectorGetZ(max) : XMVectorGetZ(point));
-
-		return XMVectorGetX(XMVector3LengthSq(nearestPoint - point));
-	}
-
 	// Sets the identity rotation AABB points
 	void setIdentityMinMax(XMVECTOR identity_min, XMVECTOR identity_max) {
 
@@ -97,21 +82,6 @@ public:
 		bbpoints[5] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_min), XMVectorGetZ(identity_max), 1);
 		bbpoints[6] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_min), 1);
 		bbpoints[7] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_max), 1);
-	}
-
-	// Check if the AABB contains a point
-	bool containts(XMVECTOR point) {
-		return XMVector3InBounds(point - getCenter(), getExtents());
-	}
-
-	// Checks if the aabb intersects with another one
-	bool intersects(TCompAABB* aabb) {
-		return XMVector3Greater(max, aabb->min) && XMVector3Greater(aabb->max, min);
-	}
-
-	std::string toString() {
-		return "AABB Min: (" + std::to_string(XMVectorGetX(min)) + ", " + std::to_string(XMVectorGetY(min)) + ", " + std::to_string(XMVectorGetZ(min)) + ")" +
-			"\nAABB Max: (" + std::to_string(XMVectorGetX(max)) + ", " + std::to_string(XMVectorGetY(max)) + ", " + std::to_string(XMVectorGetZ(max)) + ")";
 	}
 };
 
