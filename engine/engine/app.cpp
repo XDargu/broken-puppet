@@ -250,14 +250,14 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	CEntity* r = entity_manager.getByName("Hose001_2.0");
+	CEntity* r = entity_manager.getByName("mBox_3.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -6, 0, 0), XMQuaternionIdentity(), 10);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(-20, 0, 0, 0), XMQuaternionIdentity(), 5);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -5, 0, 0), XMQuaternionIdentity(), 10);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 6, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(90)), 10);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
 
 	return true;
@@ -382,6 +382,7 @@ void CApp::update(float elapsed) {
 	TCompTransform* cam_t = cam->get<TCompTransform>();
 	activateCamera(cam_t->position, 1);
 
+	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
 	getObjManager<TCompSkeletonIK>()->update(elapsed);
@@ -425,6 +426,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 }
 

@@ -8,9 +8,6 @@ private:
 	CHandle		transform;
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
 
-	// Used to check if the transform has been moved since the last frame, should be moved to transform component
-	TTransform prev_transform;
-
 	void recalcMinMax() {
 		// Recalcultate AABB:
 		// - Take the non rotated AABB min and max position and calculate the 8 bounding box points
@@ -63,7 +60,6 @@ public:
 		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		prev_transform = TTransform(trans->position, trans->rotation, trans->scale);
 		recalcMinMax();
 	}
 
@@ -74,16 +70,9 @@ public:
 		/*bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, trans->position)) && XMVectorGetY(XMVectorEqual(prev_position, trans->position)) && XMVectorGetZ(XMVectorEqual(prev_position, trans->position));
 		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, trans->rotation));
 		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, trans->scale));*/
-		TTransform a = *trans;
-
-		int equal = memcmp(&prev_transform, &a, sizeof(a));
-
-		if (equal != 0)
+		
+		if (trans->transformChanged())
 			recalcMinMax();
-
-		prev_transform.position = trans->position;
-		prev_transform.rotation = trans->rotation;
-		prev_transform.scale = trans->scale;
 	}
 
 	// Squared distance from a point to the AABB

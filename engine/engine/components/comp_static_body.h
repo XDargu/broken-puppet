@@ -4,6 +4,8 @@
 #include "base_component.h"
 
 struct TCompStaticBody : TBaseComponent {
+private:
+	CHandle h_transform;
 public:
 	physx::PxRigidStatic* staticBody;
 
@@ -13,8 +15,10 @@ public:
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
+		h_transform = assertRequiredComponent<TCompTransform>(this);
+
 		CEntity* e = CHandle(this).getOwner();
-		TCompTransform* t = e->get<TCompTransform>();
+		TCompTransform* t = h_transform;
 		TCompColliderBox* c = e->get<TCompColliderBox>();
 		TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 
@@ -46,6 +50,19 @@ public:
 	}
 
 	void init() {
+	}
+
+	void fixedUpdate(float elapsed) {
+		TCompTransform* transform = h_transform;
+
+		if (transform->transformChanged()) {
+			staticBody->setGlobalPose(
+				PxTransform(
+					Physics.XMVECTORToPxVec3(transform->position),
+					Physics.XMVECTORToPxQuat(transform->rotation)
+				)
+			);
+		}
 	}
 
 	std::string toString() {
