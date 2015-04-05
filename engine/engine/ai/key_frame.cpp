@@ -13,9 +13,15 @@ TKeyFrame::TKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position,
 bool TKeyFrame::update(float elapsed) {
 	TCompTransform* transform = target_transform;
 
+	// In the first frame we store the initial position and rotation
+	if (elapsed_time == 0) {
+		XMStoreFloat3(&initial_position, transform->position);
+		XMStoreFloat4(&initial_rotation, transform->rotation);
+	}
+
 	// Update the position and rotation
-	transform->position = XMVectorLerp(transform->position, XMLoadFloat3(&target_position), elapsed_time / time * elapsed);
-	transform->rotation = XMQuaternionSlerp(transform->rotation, XMLoadFloat4(&target_rotation), elapsed_time / time * elapsed);
+	transform->position = XMVectorLerp(XMLoadFloat3(&initial_position), XMLoadFloat3(&target_position), elapsed_time / time );
+	transform->rotation = XMQuaternionSlerp(XMLoadFloat4(&initial_rotation), XMLoadFloat4(&target_rotation), elapsed_time / time);
 	elapsed_time += elapsed;
 
 	// If the keyFrame has reached the destiny, then leave
