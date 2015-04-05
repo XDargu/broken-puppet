@@ -80,3 +80,19 @@ TEntityChunk* CEntityManager::getCurrentRoom(XMVECTOR position) {
 	};
 	return nullptr;
 }
+
+std::vector< CHandle > CEntityManager::getCurrentRoomEntities(XMVECTOR position) {
+	for (auto& it : entity_chunks) {
+		if (it.bounds.containts(position))
+			return it.entities;
+	};
+
+	return std::vector< CHandle >();
+}
+
+TEntityChunk* CEntityManager::addChunk(char name[32], XMVECTOR min, XMVECTOR max) {
+	TEntityChunk new_chunk(name, min, max);
+	entity_chunks.push_back(new_chunk);
+
+	return &new_chunk;
+}

@@ -1,4 +1,8 @@
 <scene>
+  <chunk>
+	<name name="TestChunk"/>
+	<aabb min="-1000 -1000 -1000" max="1000 1000 1000" />
+  </chunk>
   <entity >
     <name name="45degGrid_1.0" />
     <transform position="0.0 -16.0 6.99382e-007" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>

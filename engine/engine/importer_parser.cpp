@@ -8,6 +8,18 @@
 void CImporterParser::onStartElement(const std::string &elem, MKeyValue &atts) {
 	//dbg("onStart %s\n", elem.c_str());
 
+	// Chunks
+	if (elem == "chunk") {
+		current_chunk = CEntityManager::get().addChunk("", XMVectorZero(), XMVectorZero());
+		return;
+	}
+
+	// If we are inside a chunk, send the xml tag to it
+	if (current_chunk != nullptr) {
+		current_chunk->loadFromAtts(elem, atts);
+		return;
+	}
+
 	// Check if there is a handle manager with that name
 
 	// If we are inside a component, send the xml tag to the component
@@ -81,5 +93,9 @@ void CImporterParser::onEndElement(const std::string &elem) {
 		if (current_comp.getTypeName() == elem) {
 			current_comp = CHandle();
 		}
+	}
+
+	if (elem == "chunk") {
+		current_chunk = nullptr;
 	}
 }

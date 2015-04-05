@@ -10,6 +10,22 @@ struct TEntityChunk {
 	char name[32];
 	std::vector< CHandle > entities;
 	AABB bounds;
+
+	TEntityChunk(char the_name[32], XMVECTOR min, XMVECTOR max) {
+		std::strcpy(name, the_name);
+		bounds.min = min;
+		bounds.max = max;
+	}
+
+	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
+		if (elem == "name") {
+			std::strcpy(name, atts.getString("name", "unnamed").c_str());
+		}
+		if (elem == "aabb") {
+			bounds.min = atts.getPoint("min");
+			bounds.max = atts.getPoint("max");
+		}
+	}
 };
 
 class CEntityManager {
@@ -31,6 +47,9 @@ public:
 	unsigned int getEntityEventCount();
 
 	TEntityChunk* getCurrentRoom(XMVECTOR position);
+	VEntities getCurrentRoomEntities(XMVECTOR position);
+
+	TEntityChunk* addChunk(char name[32], XMVECTOR min, XMVECTOR max);	
 
 protected:
 	// General entity vector
