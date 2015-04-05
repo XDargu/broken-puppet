@@ -212,12 +212,6 @@
     <ClInclude Include="ai\fsm_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
-    <ClInclude Include="ai\logic_manager.h">
-      <Filter>ai</Filter>
-    </ClInclude>
-    <ClInclude Include="ai\timer.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="components\base_component.h">
       <Filter>components\basic</Filter>
     </ClInclude>
@@ -349,6 +343,15 @@
     </ClInclude>
     <ClInclude Include="ai\fsm_player_torso.h">
       <Filter>ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\logic_manager.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\timer.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\key_frame.h">
+      <Filter>ai\logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -559,12 +562,6 @@
     <ClCompile Include="ai\fsm_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
-    <ClCompile Include="ai\logic_manager.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\timer.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
     <ClCompile Include="components\comp_rigid_body.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
@@ -591,6 +588,15 @@
     </ClCompile>
     <ClCompile Include="ai\fsm_player_torso.cpp">
       <Filter>ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\logic_manager.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\timer.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\key_frame.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -665,6 +671,9 @@
     </Filter>
     <Filter Include="ai\player">
       <UniqueIdentifier>{426a6489-9652-48e2-b731-ef3e8cb3645c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\logic">
+      <UniqueIdentifier>{d450a530-747e-479a-9228-539dc68bcc9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

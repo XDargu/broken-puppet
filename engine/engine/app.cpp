@@ -250,6 +250,17 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
+	CEntity* r = entity_manager.getByName("Hose001_2.0");
+	CHandle t = r->get<TCompTransform>();
+	TCompTransform* tt = t;
+
+
+	logic_manager.addKeyFrame(t, tt->position + XMVectorSet(0, 6, 0, 0), tt->rotation, 10);
+	logic_manager.addKeyFrame(t, tt->position + XMVectorSet(-20, 0, 0, 0), tt->rotation, 5);
+	logic_manager.addKeyFrame(t, tt->position + XMVectorSet(-20, 0, 0, 0), tt->rotation, 5);
+	logic_manager.addKeyFrame(t, tt->position + XMVectorSet(-20, 6, 0, 0), XMQuaternionMultiply(tt->rotation, XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(90))), 10);
+	
+
 	return true;
 }
 
