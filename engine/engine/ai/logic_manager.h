@@ -27,6 +27,7 @@ public:
 	void unregisterTrigger(CHandle trigger);
 
 	void addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time);
+	void addRelativeKeyFrame(CHandle the_target_transform, XMVECTOR position_offset, XMVECTOR rotation_offset, float the_time);
 };
 
 #endif

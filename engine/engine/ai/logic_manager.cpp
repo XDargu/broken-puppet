@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
+#include "components\comp_transform.h"
 
 static CLogicManager logic_manager;
 
@@ -110,5 +111,54 @@ void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_targe
 	}
 	else {
 		current_keyframes.push_back(kf);
+	}
+}
+
+void CLogicManager::addRelativeKeyFrame(CHandle the_target_transform, XMVECTOR position_offset, XMVECTOR rotation_offset, float the_time) {
+	TCompTransform* t = the_target_transform;
+	
+	XMVECTOR last_pos;
+	XMVECTOR last_rot;
+	bool found = false;
+
+	// Before create the keyframe, we should find for the last keyframe with this transform
+	// Starting with the queue vector
+	for (auto& it = keyframe_queue.rbegin(); it != keyframe_queue.rend(); ++it) {
+		if (it->target_transform == the_target_transform) {			
+			last_pos = XMLoadFloat3(&it->target_position);
+			last_rot = XMLoadFloat4(&it->target_rotation);
+			found = true;
+			break;
+		}
+	}
+
+	// If we found it, add it
+	if (found) {
+		TKeyFrame kf(the_target_transform, last_pos + position_offset, XMQuaternionMultiply(last_rot, rotation_offset), the_time);
+		keyframe_queue.push_back(kf);
+	}
+
+	// If the transform wasn't in the queue vector, search in the current vector
+	else {
+		for (auto& it = current_keyframes.rbegin(); it != current_keyframes.rend(); ++it) {
+			if (it->target_transform == the_target_transform) {
+				last_pos = XMLoadFloat3(&it->target_position);
+				last_rot = XMLoadFloat4(&it->target_rotation);
+				found = true;
+			}
+		}
+
+		// If it is in the current vector, add it to the queue vector
+		if (found) {
+			TKeyFrame kf(the_target_transform, last_pos + position_offset, XMQuaternionMultiply(last_rot, rotation_offset), the_time);
+			keyframe_queue.push_back(kf);
+		}
+
+		// If the transform wasn't either in the current vector, add it
+		else {
+			TKeyFrame kf(the_target_transform, t->position + position_offset, XMQuaternionMultiply(t->rotation, rotation_offset), the_time);
+			current_keyframes.push_back(kf);
+		}
+
 	}
 }
