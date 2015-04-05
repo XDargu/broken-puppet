@@ -303,7 +303,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		camera_controller->offset = standard_camera_offset;
 
 		// Remove the rope
-		CHandle c_rope = strings.front();
+		CHandle c_rope = strings.back();
 		strings.pop_front();
 		CEntityManager::get().remove(c_rope.getOwner());
 

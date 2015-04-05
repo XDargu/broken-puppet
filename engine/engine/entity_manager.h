@@ -49,6 +49,8 @@ public:
 	TEntityChunk* getCurrentRoom(XMVECTOR position);
 	VEntities getCurrentRoomEntities(XMVECTOR position);
 
+	bool removeFromChunk(CHandle the_handle);
+
 	TEntityChunk* addChunk(char name[32], XMVECTOR min, XMVECTOR max);	
 
 protected:

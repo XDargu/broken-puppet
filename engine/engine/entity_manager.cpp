@@ -90,6 +90,10 @@ std::vector< CHandle > CEntityManager::getCurrentRoomEntities(XMVECTOR position)
 	return std::vector< CHandle >();
 }
 
+bool CEntityManager::removeFromChunk(CHandle the_handle) {
+	return false;
+}
+
 TEntityChunk* CEntityManager::addChunk(char name[32], XMVECTOR min, XMVECTOR max) {
 	TEntityChunk new_chunk(name, min, max);
 	entity_chunks.push_back(new_chunk);
