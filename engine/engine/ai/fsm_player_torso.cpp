@@ -68,6 +68,15 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				first_position = blockHit.position;
 				first_offset = first_actor->getGlobalPose().q.rotateInv(blockHit.position - first_actor->getGlobalPose().p);
 
+				unsigned int num_strings = getStringCount();
+
+				// If there are more strings than the maximun available, remove the oldest one
+				if (num_strings >= max_num_string){
+					CHandle c_rope = strings.front();
+					strings.pop_front();
+					entity_manager.remove(c_rope.getOwner());
+				}
+
 				// Get the needle prefab
 				CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
 
@@ -158,15 +167,6 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				// The string can be thrown
 				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
 					first_throw = false;
-
-					unsigned int num_strings = getStringCount();
-
-					// If there are more strings than the maximun available, remove the oldest one
-					if (num_strings >= max_num_string){
-						CHandle c_rope = strings.front();
-						strings.pop_front();
-						entity_manager.remove(c_rope.getOwner());
-					}
 
 					// -------------- Get the offsets
 					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)
@@ -280,14 +280,19 @@ void FSMPlayerTorso::PullString(float elapsed) {
 
 	CEntity* rope_entity = current_rope_entity;
 	TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
+	TCompRope* rope = rope_entity->get<TCompRope>();
 
 	if (joint) {
 		// -------------- Shorten the distance joint
 		float oldDistance = sqrt(joint->joint->getDistance());
-		if (oldDistance > 0.1f)
+		if (oldDistance > 0.1f) {
 			joint->joint->setMaxDistance(oldDistance - 10.f * elapsed);
-		else
+			rope->max_distance = oldDistance - 10.f * elapsed;
+		}
+		else {
 			joint->joint->setMaxDistance(0);
+			rope->max_distance = 0;
+		}
 
 		joint->awakeActors();
 	}
@@ -297,7 +302,18 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
 		camera_controller->offset = standard_camera_offset;
 
-		ChangeState("fbp_GrabString");		
+		// Remove the rope
+		CHandle c_rope = strings.front();
+		strings.pop_front();
+		CEntityManager::get().remove(c_rope.getOwner());
+
+		// Reset the variables
+		current_rope_entity = CHandle();
+		first_actor = nullptr;
+		first_needle = CHandle();
+		entitycount++;
+
+		ChangeState("fbp_Inactive");		
 	}
 }
 

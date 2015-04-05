@@ -48,6 +48,10 @@ public:
 		fsm_player_torso.update(elapsed);
 	}
 
+	unsigned int getStringCount() {
+		return fsm_player_torso.getStringCount();
+	}
+
 	void actorHit(const TActorHit& msg) {
 
 		if (time_since_last_hit >= hit_cool_down){
