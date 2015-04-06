@@ -1,5 +1,5 @@
-#ifndef INC_COMP_SWITCH_CONTROLLER_H_
-#define INC_COMP_SWITCH_CONTROLLER_H_
+#ifndef INC_COMP_SWITCH_PULL_CONTROLLER_H_
+#define INC_COMP_SWITCH_PULL_CONTROLLER_H_
 
 #include "base_component.h"
 
@@ -15,7 +15,7 @@ un elemento solo, puede formar un interruptor de presión y de tensado
 
 */
 
-struct TCompSwitchController : TBaseComponent{
+struct TCompSwitchPullController : TBaseComponent{
 
 	CHandle actor1;
 	CHandle actor2;
@@ -36,7 +36,7 @@ struct TCompSwitchController : TBaseComponent{
 	PxTransform init_pos;
 	PxTransform actual_pos;
 
-	TCompSwitchController() { }
+	TCompSwitchPullController() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		// Get the initial values
@@ -71,9 +71,9 @@ struct TCompSwitchController : TBaseComponent{
 				tipe = 1;
 			}
 		}
-		else if (actor2.isValid()){					
+		else if (actor2.isValid()){
 			if (s2.isValid()){
-				Pos1 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();					
+				Pos1 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 			}
 			else if (r2.isValid()){
 				Pos1 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
@@ -92,12 +92,12 @@ struct TCompSwitchController : TBaseComponent{
 			}
 		}
 		else if (actor1.isValid()){
-			
+
 			if (s1.isValid()){
-				Pos2 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();				
+				Pos2 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 			}
 			else if (r1.isValid()){
-				Pos2 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();				
+				Pos2 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
 			}
 			tipe = 2;
 			init_pos = Pos2;
@@ -169,7 +169,7 @@ struct TCompSwitchController : TBaseComponent{
 				onPress();
 				pressed = true;
 			}
-			else if ((pressed == true) && ((Pos1.p - Pos2.p).magnitudeSquared() < (limit*limit)*3 / 5)){
+			else if ((pressed == true) && ((Pos1.p - Pos2.p).magnitudeSquared() < (limit*limit) * 3 / 5)){
 				// free
 				int i = 0;
 				onLeave();

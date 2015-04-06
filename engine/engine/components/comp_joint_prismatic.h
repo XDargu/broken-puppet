@@ -17,7 +17,7 @@ public:
 	physx::PxD6Joint* mJoint;
 	PxReal linearPosition;
 
-	TCompJointPrismatic() {}
+	TCompJointPrismatic() : mJoint(nullptr) {}
 	~TCompJointPrismatic() {
 
 		// Awake the actors
@@ -38,6 +38,9 @@ public:
 	}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
+
+		if (mJoint)
+			mJoint->release();
 
 		Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
