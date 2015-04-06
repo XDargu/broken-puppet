@@ -43,7 +43,6 @@ CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
-deque<CHandle> strings;
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
@@ -104,6 +103,8 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
+	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompAiFsmBasic, TActorHit, actorHit);
 	SUBSCRIBE(TCompAiFsmBasic, TMsgRopeTensed, onRopeTensed);
 	SUBSCRIBE(TCompVictoryCond, TVictoryCondition, victory);
@@ -249,6 +250,16 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
+	CEntity* r = entity_manager.getByName("mBox_3.0");
+	CHandle t = r->get<TCompTransform>();
+	TCompTransform* tt = t;
+
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -5, 0, 0), XMQuaternionIdentity(), 10);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
+	
+
 	return true;
 }
 
@@ -319,193 +330,6 @@ void CApp::update(float elapsed) {
 			activateDebugMode(false);
 	}
 #endif
-	//Calculate the current number of strings
-	unsigned int num_strings = numStrings();
-
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
-
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f  && num_strings > 0) {
-			CHandle c_rope = strings.back();
-			strings.pop_back();
-			entity_manager.remove(c_rope.getOwner());
-		}		
-	}
-
-	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && num_strings > 0) {
-			strings.clear();
-			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-			{
-				TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-
-				if (djoint) {
-					entity_manager.remove(CHandle(djoint).getOwner());
-				}
-			}
-		}
-	}
-
-	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
-		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-		{
-			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-
-			if (djoint) {
-				djoint->joint->setMaxDistance(0.1f);
-				PxRigidActor* a1 = nullptr;
-				PxRigidActor* a2 = nullptr;
-
-				djoint->joint->getActors(a1, a2);
-				// Wake up the actors, if dynamic
-				if (a1 && a1->isRigidDynamic()) {
-					((physx::PxRigidDynamic*)a1)->wakeUp();
-					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-				}
-				if (a2 && a2->isRigidDynamic()) {
-					((physx::PxRigidDynamic*)a2)->wakeUp();
-					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-				}
-			}
-		}
-	}
-
-
-	if (io.becomesPressed(CIOStatus::THROW_STRING)) {	
-
-			// Get the camera position
-			CEntity* e = CEntityManager::get().getByName("PlayerCamera");
-			TCompTransform* t = e->get<TCompTransform>();
-
-			// Raycast detecting the collider the mouse is pointing at
-			PxRaycastBuffer hit;
-			physics_manager.raycast(t->position, t->getFront(), 1000, hit);
-
-			static int entitycount = 1;
-			static PxRigidActor* firstActor = nullptr;
-			static PxVec3 firstPosition = PxVec3(0, 0, 0);
-			static PxVec3 firstOffset = PxVec3(0, 0, 0);
-			static CHandle firstNeedle;
-			if (hit.hasBlock) {
-				PxRaycastHit blockHit = hit.block;
-				//dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
-				//dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
-
-				if (firstActor == nullptr) {
-					firstActor = blockHit.actor;
-					firstPosition = blockHit.position;
-					firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
-
-					// Needle
-					CEntity* new_e = prefabs_manager.getInstanceByName("Needle");
-					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
-
-					TCompName* new_e_name = new_e->get<TCompName>();
-					std::strcpy(new_e_name->name, ("Needle" + to_string(entitycount)).c_str());
-
-					TCompTransform* new_e_trans = new_e->get<TCompTransform>();
-					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
-
-					TCompNeedle* new_e_needle = new_e->get<TCompNeedle>();
-					XMVECTOR rotation;
-					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-					else {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-
-					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
-					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
-
-					new_e_needle->create(
-						firstActor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(firstOffset) : physics_manager.PxVec3ToXMVECTOR(firstPosition)
-						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(firstActor->getGlobalPose().q)))
-						, rigidbody_e->get<TCompRigidBody>()
-						);
-
-					firstNeedle = new_e;
-
-				}
-				else if ((blockHit.actor != firstActor) && !(blockHit.actor->isRigidStatic() && firstActor->isRigidStatic())) {
-					if (num_strings >= max_num_string){
-						CHandle c_rope = strings.front();
-						strings.pop_front();
-						entity_manager.remove(c_rope.getOwner());
-					}
-
-					CEntity* new_e = entity_manager.createEmptyEntity();
-
-					TCompName* new_e_name = CHandle::create<TCompName>();
-					std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
-					new_e->add(new_e_name);
-
-					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-					PxVec3 pos = firstActor->getGlobalPose().q.rotate(firstOffset) + firstActor->getGlobalPose().p;
-					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
-					PxVec3 offset_1 = firstOffset;//firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
-					PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
-
-					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
-					
-					/*new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));*/
-
-					new_e->add(new_e_j);
-
-					TCompRope* new_e_r = CHandle::create<TCompRope>();
-					new_e->add(new_e_r);
-					new_e_r->create();
-
-					// Needle
-					CEntity* new_e2 = prefabs_manager.getInstanceByName("Needle");
-					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
-
-					TCompName* new_e_name2 = new_e2->get<TCompName>();
-					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
-
-					TCompTransform* new_e_trans2 = new_e2->get<TCompTransform>();
-					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
-
-					TCompNeedle* new_e_needle2 = new_e2->get<TCompNeedle>();
-					XMVECTOR rotation;
-					if (blockHit.position == physics_manager.XMVECTORToPxVec3(t->position)) {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-					else {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-
-					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
-					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
-
-					new_e_needle2->create(
-						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
-						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
-						, rigidbody_e->get<TCompRigidBody>()
-						);
-
-
-					strings.push_back(CHandle(new_e_r));
-					firstActor = nullptr;
-					firstNeedle = CHandle();
-					entitycount++;
-					
-				}
-				// Same actor, action cancelled
-				else {
-					firstActor = nullptr;
-					firstPosition = PxVec3(0, 0, 0);
-					entity_manager.remove(firstNeedle);
-					firstNeedle = CHandle();
-				}
-			}
-	}	
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
@@ -558,6 +382,7 @@ void CApp::update(float elapsed) {
 	TCompTransform* cam_t = cam->get<TCompTransform>();
 	activateCamera(cam_t->position, 1);
 
+	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
 	getObjManager<TCompSkeletonIK>()->update(elapsed);
@@ -601,6 +426,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
+	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 }
 
@@ -661,7 +487,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 		if (c_rope) {
-			PxRigidActor* a1 = nullptr;
+			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
 			djoint->joint->getActors(a1, a2);
@@ -701,10 +527,20 @@ void CApp::renderEntities() {
 			}
 			else {
 				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
-			}
+			}*/
 
-			float dist = djoint->joint->getDistance();
-			float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+			XMVECTOR initialPos = c_rope->pos_1;
+			XMVECTOR finalPos = c_rope->pos_2;
+
+			XMVECTOR rot1 = XMQuaternionIdentity();
+			XMVECTOR rot2 = XMQuaternionIdentity();
+
+			float dist = V3DISTANCE(initialPos, finalPos);
+			float maxDist = dist;
+
+			if (djoint) {
+				maxDist = pow(djoint->joint->getMaxDistance(), 2);
+			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 
@@ -881,6 +717,7 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();
+	logic_manager.clearKeyframes();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 

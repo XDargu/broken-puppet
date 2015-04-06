@@ -187,11 +187,12 @@ public:
 	void TurnTowardsCameraForward()
 	{
 		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+		TCompTransform* trans = (TCompTransform*)transform;
 
 		physx::PxVec3 lookAt = rigid->rigidBody->getGlobalPose().q.rotate(currentLookPos) + rigid->rigidBody->getGlobalPose().p;
-		lookAt.y = rigid->rigidBody->getGlobalPose().p.y - 0.1f;
+		lookAt.y = XMVectorGetY(trans->position);//rigid->rigidBody->getGlobalPose().p.y - 0.1f;
 
-		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
+		trans->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
 
 		//rigid->rigidBody->setGlobalPose(physx::PxTransform(rigid->rigidBody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}

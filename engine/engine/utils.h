@@ -32,9 +32,9 @@ int getRandomNumber(int num1, int num2);
 bool stringEndsWith(std::string const &value, std::string const &ending);
 
 // XMVECTOR definitions
-#define V3COMPARE(v1, v2) memcmp(&v1, &v2, 12);
+#define V3COMPARE(v1, v2) memcmp(&v1, &v2, 12)
 #define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length(x - y))
 
-#define V4COMPARE(v1, v2) memcmp(&v1, &v2, 16);
+#define V4COMPARE(v1, v2) memcmp(&v1, &v2, 16)
 
 #endif

@@ -2,14 +2,12 @@
 #define INC_COMP_AABB_H_
 
 #include "base_component.h"
+#include "aabb.h"
 
-struct TCompAABB : TBaseComponent{
+struct TCompAABB : public AABB, TBaseComponent{
 private:
 	CHandle		transform;
 	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
-
-	// Used to check if the transform has been moved since the last frame, should be moved to transform component
-	TTransform prev_transform;
 
 	void recalcMinMax() {
 		// Recalcultate AABB:
@@ -44,13 +42,7 @@ private:
 	}
 public:
 
-	XMVECTOR min;
-	XMVECTOR max;
-	XMVECTOR getCenter() { return (min + max) / 2; };
-	XMVECTOR getExtents() { return (max - min) / 2; };
-	XMVECTOR getSize() { return max - min; };
-
-	TCompAABB() {}
+	TCompAABB() : AABB() {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		XMVECTOR identity_min = atts.getPoint("min");
@@ -63,7 +55,6 @@ public:
 		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		prev_transform = TTransform(trans->position, trans->rotation, trans->scale);
 		recalcMinMax();
 	}
 
@@ -74,26 +65,9 @@ public:
 		/*bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, trans->position)) && XMVectorGetY(XMVectorEqual(prev_position, trans->position)) && XMVectorGetZ(XMVectorEqual(prev_position, trans->position));
 		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, trans->rotation));
 		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, trans->scale));*/
-		TTransform a = *trans;
-
-		int equal = memcmp(&prev_transform, &a, sizeof(a));
-
-		if (equal != 0)
+		
+		if (trans->transformChanged())
 			recalcMinMax();
-
-		prev_transform.position = trans->position;
-		prev_transform.rotation = trans->rotation;
-		prev_transform.scale = trans->scale;
-	}
-
-	// Squared distance from a point to the AABB
-	float sqrDistance(XMVECTOR point) {
-		XMVECTOR nearestPoint = XMVectorZero();
-		nearestPoint = XMVectorSetX(nearestPoint, (XMVectorGetX(point) <  XMVectorGetX(min)) ? XMVectorGetX(min) : (XMVectorGetX(point) > XMVectorGetX(max)) ? XMVectorGetX(max) : XMVectorGetX(point));
-		nearestPoint = XMVectorSetY(nearestPoint, (XMVectorGetY(point) <  XMVectorGetY(min)) ? XMVectorGetY(min) : (XMVectorGetY(point) > XMVectorGetY(max)) ? XMVectorGetY(max) : XMVectorGetY(point));
-		nearestPoint = XMVectorSetZ(nearestPoint, (XMVectorGetZ(point) <  XMVectorGetZ(min)) ? XMVectorGetZ(min) : (XMVectorGetZ(point) > XMVectorGetZ(max)) ? XMVectorGetZ(max) : XMVectorGetZ(point));
-
-		return XMVectorGetX(XMVector3LengthSq(nearestPoint - point));
 	}
 
 	// Sets the identity rotation AABB points
@@ -108,21 +82,6 @@ public:
 		bbpoints[5] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_min), XMVectorGetZ(identity_max), 1);
 		bbpoints[6] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_min), 1);
 		bbpoints[7] = XMVectorSet(XMVectorGetX(identity_max), XMVectorGetY(identity_max), XMVectorGetZ(identity_max), 1);
-	}
-
-	// Check if the AABB contains a point
-	bool containts(XMVECTOR point) {
-		return XMVector3InBounds(point - getCenter(), getExtents());
-	}
-
-	// Checks if the aabb intersects with another one
-	bool intersects(TCompAABB* aabb) {
-		return XMVector3Greater(max, aabb->min) && XMVector3Greater(aabb->max, min);
-	}
-
-	std::string toString() {
-		return "AABB Min: (" + std::to_string(XMVectorGetX(min)) + ", " + std::to_string(XMVectorGetY(min)) + ", " + std::to_string(XMVectorGetZ(min)) + ")" +
-			"\nAABB Max: (" + std::to_string(XMVectorGetX(max)) + ", " + std::to_string(XMVectorGetY(max)) + ", " + std::to_string(XMVectorGetZ(max)) + ")";
 	}
 };
 

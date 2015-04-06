@@ -212,12 +212,6 @@
     <ClInclude Include="ai\fsm_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
-    <ClInclude Include="ai\logic_manager.h">
-      <Filter>ai</Filter>
-    </ClInclude>
-    <ClInclude Include="ai\timer.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="components\base_component.h">
       <Filter>components\basic</Filter>
     </ClInclude>
@@ -284,9 +278,6 @@
     <ClInclude Include="components\comp_player_pivot_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_player_controller.h">
-      <Filter>components\controllers</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_enemy_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
@@ -344,6 +335,25 @@
     <ClInclude Include="components\comp_viewer_camera_controller.h">
       <Filter>components\controllers</Filter>
     </ClInclude>
+    <ClInclude Include="ai\fsm_player_legs.h">
+      <Filter>ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_controller.h">
+      <Filter>components\ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\fsm_player_torso.h">
+      <Filter>ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\logic_manager.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\timer.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\key_frame.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="aabb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -553,12 +563,6 @@
     <ClCompile Include="ai\fsm_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
-    <ClCompile Include="ai\logic_manager.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\timer.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
     <ClCompile Include="components\comp_rigid_body.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
@@ -579,6 +583,21 @@
     </ClCompile>
     <ClCompile Include="components\comp_skeleton.cpp">
       <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\fsm_player_legs.cpp">
+      <Filter>ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\fsm_player_torso.cpp">
+      <Filter>ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\logic_manager.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\timer.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\key_frame.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -650,6 +669,12 @@
     </Filter>
     <Filter Include="components\ai\player">
       <UniqueIdentifier>{e83cfa9d-c7ba-472e-ab07-fc57d3613e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\player">
+      <UniqueIdentifier>{426a6489-9652-48e2-b731-ef3e8cb3645c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\logic">
+      <UniqueIdentifier>{d450a530-747e-479a-9228-539dc68bcc9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

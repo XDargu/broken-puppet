@@ -40,26 +40,26 @@ public:
 
 		SET_ERROR_CONTEXT("Creating a distance joint", "");
 		// If any actor is static, then attack the joint to he air instead of the actor
-		if (actor1->isRigidStatic()) {
-			if (actor2->isRigidStatic()) {
-				// Static static -- ¡No se puede!
-				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, NULL, physx::PxTransform(pos1), NULL, physx::PxTransform(pos2));
-			}
-			else {
-				// Static dynamic
-				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, NULL, physx::PxTransform(pos1), actor2, offset2);
-			}
-		}
-		else {
-			if (actor2->isRigidStatic()) {
-				// Dynamic static
-				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, offset1, NULL, physx::PxTransform(pos2));
-
-			}
-			else {
+		if (actor1 && actor1->isRigidDynamic()) {
+			if (actor2 && actor2->isRigidDynamic()) {
 				// Dynamic dynamic
 				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, offset1, actor2, offset2);
 			}
+			else {
+				// Dynamic static
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, actor1, offset1, NULL, physx::PxTransform(pos2));
+			}
+		}
+		else {
+			if (actor2 && actor2->isRigidDynamic()) {
+				// Static dynamic
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, NULL, physx::PxTransform(pos1), actor2, offset2);
+			}
+			else {
+				// Static static -- ¡No se puede!
+				joint = physx::PxDistanceJointCreate(*Physics.gPhysicsSDK, NULL, physx::PxTransform(pos1), NULL, physx::PxTransform(pos2));				
+			}
+			
 		}
 		if (Physics.gPhysicsSDK->getPvdConnectionManager())
 			Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
@@ -72,6 +72,23 @@ public:
 		joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
 		joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
+
+		awakeActors();
+	}
+
+	void awakeActors() {
+		// Awake the actors
+		physx::PxRigidActor* a1 = nullptr;
+		physx::PxRigidActor* a2 = nullptr;
+
+		joint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a1)->wakeUp();
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a2)->wakeUp();
+		}
 	}
 
 	void init() {
