@@ -146,6 +146,8 @@ void createManagers() {
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
+	getObjManager<TCompSwitchPullController>()->init(32);
+	
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -189,6 +191,8 @@ void initManagers() {
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 
 	//PRUEBA TRIGGER
+	
+	getObjManager<TCompSwitchPullController>()->initHandlers();
 	getObjManager<TCompTrigger>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
@@ -250,7 +254,7 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	CEntity* r = entity_manager.getByName("mBox_3.0");
+	CEntity* r = entity_manager.getByName("dvn_arqui_suelo_pasil_curv_01_33.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
@@ -399,6 +403,7 @@ void CApp::update(float elapsed) {
 	
 	// Interruptor
 	getObjManager<TCompSwitchController>()->update(elapsed);
+	getObjManager<TCompSwitchPullController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);

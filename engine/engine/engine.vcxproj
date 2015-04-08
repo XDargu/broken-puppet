@@ -200,6 +200,8 @@
     <ClInclude Include="components\comp_skeleton_ik.h" />
     <ClInclude Include="components\comp_skeleton_lookat.h" />
     <ClInclude Include="components\comp_switch_controller.h" />
+    <ClInclude Include="components\comp_switch_pull_controller.h" />
+    <ClInclude Include="components\comp_switch_push_controller.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />

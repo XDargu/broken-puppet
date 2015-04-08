@@ -354,6 +354,12 @@
       <Filter>ai\logic</Filter>
     </ClInclude>
     <ClInclude Include="aabb.h" />
+    <ClInclude Include="components\comp_switch_pull_controller.h">
+      <Filter>components\logic\switches</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_switch_push_controller.h">
+      <Filter>components\logic\switches</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -675,6 +681,9 @@
     </Filter>
     <Filter Include="ai\logic">
       <UniqueIdentifier>{d450a530-747e-479a-9228-539dc68bcc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\logic\switches">
+      <UniqueIdentifier>{4b410d89-e4e2-464c-856c-fd6fe9b838a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

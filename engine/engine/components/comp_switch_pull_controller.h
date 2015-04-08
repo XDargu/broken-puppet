@@ -39,6 +39,76 @@ struct TCompSwitchPullController : TBaseComponent{
 	TCompSwitchPullController() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
+		//// Get the initial values
+		//// TODO meter assert
+		//TCompJointPrismatic* joint = ((CEntity*)((CHandle)this).getOwner())->get<TCompJointPrismatic>();
+		//actor1 = joint->getActor1();
+		//actor2 = joint->getActor2();
+		//limit = joint->getLinealPosition();
+		//
+		//pressed = false;
+		//tipe = 0;
+		//
+		//// check if there are two actors
+		//if (actor1.isValid())
+		//{
+		//	r1 = ((CEntity*)actor1)->get<TCompRigidBody>();
+		//	s1 = ((CEntity*)actor1)->get<TCompStaticBody>();
+		//}
+		//
+		//if (actor2.isValid())
+		//{
+		//	r2 = ((CEntity*)actor2)->get<TCompRigidBody>();
+		//	s2 = ((CEntity*)actor2)->get<TCompStaticBody>();
+		//}
+		//
+		//if (actor1.isValid()){
+		//	if (r1.isValid()){
+		//		Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+		//	}
+		//	else if (s1.isValid()){
+		//		Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+		//		tipe = 1;
+		//	}
+		//}
+		//else if (actor2.isValid()){
+		//	if (s2.isValid()){
+		//		Pos1 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+		//	}
+		//	else if (r2.isValid()){
+		//		Pos1 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+		//	}
+		//	tipe = 2;
+		//	init_pos = Pos1;
+		//}
+		//
+		//if (actor2.isValid()){
+		//	if (r2.isValid()){
+		//		Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+		//	}
+		//	if (s2.isValid()){
+		//		Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+		//		tipe = 1;
+		//	}
+		//}
+		//else if (actor1.isValid()){
+		//
+		//	if (s1.isValid()){
+		//		Pos2 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+		//	}
+		//	else if (r1.isValid()){
+		//		Pos2 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+		//	}
+		//	tipe = 2;
+		//	init_pos = Pos2;
+		//}
+		//
+		//
+		//initial_distance_squared = (Pos1.p - Pos2.p).magnitudeSquared();
+		//int i = 0;
+	}
+
+	void init(){
 		// Get the initial values
 		// TODO meter assert
 		TCompJointPrismatic* joint = ((CEntity*)((CHandle)this).getOwner())->get<TCompJointPrismatic>();

@@ -6,7 +6,7 @@
 #include "../handle/app_msgs.h"
 
 struct TCompName : TBaseComponent {     // 1
-	char name[32];
+	char name[64];
 	TCompName() { name[0] = 0x00; }
 	TCompName(const char *aname) { strcpy(name, aname); }
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
