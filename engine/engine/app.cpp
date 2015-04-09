@@ -147,6 +147,9 @@ void createManagers() {
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
 	getObjManager<TCompSwitchPullController>()->init(32);
+	getObjManager<TCompSwitchPushController>()->init(32);
+
+	
 	
 
 	// Lights (temporary)
@@ -190,9 +193,13 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 
-	//PRUEBA TRIGGER
-	
+
+	// SWITCHS
 	getObjManager<TCompSwitchPullController>()->initHandlers();
+	getObjManager<TCompSwitchPushController>()->initHandlers();
+
+	//PRUEBA TRIGGER
+
 	getObjManager<TCompTrigger>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
@@ -401,9 +408,10 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	
-	// Interruptor
+	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
 	getObjManager<TCompSwitchPullController>()->update(elapsed);
+	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
