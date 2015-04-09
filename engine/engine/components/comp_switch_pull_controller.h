@@ -18,37 +18,34 @@ struct TCompSwitchPullController : TBaseComponent{
 	PxActor* px_actor2;
 
 	float limit;
-	bool fixed;
 
 	bool pressed;
-
-	int tipe;
 
 	CHandle r1;
 	CHandle s1;
 	CHandle r2;
 	CHandle s2;
-	PxTransform Pos1;
-	PxTransform Pos2;
 
 	TCompSwitchPullController() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	}
 
-	void init(){
-		// Get the initial values
-		// TODO meter assert
-		TCompJointPrismatic* joint = ((CEntity*)((CHandle)this).getOwner())->get<TCompJointPrismatic>();
+	void init(){		
+		TCompJointPrismatic* joint = assertRequiredComponent<TCompJointPrismatic>(this);
+
 		actor1 = joint->getActor1();
+		px_actor1 = nullptr;
+
 		actor2 = joint->getActor2();
+		px_actor2 = nullptr;
+
 		limit = joint->getLinealPosition();
 
 		bool is_static = false;
 		bool is_rigid = false;
 
 		pressed = false;
-		tipe = 0;
 
 		// check if there are two actors
 		if (actor1.isValid())
@@ -56,83 +53,71 @@ struct TCompSwitchPullController : TBaseComponent{
 			r1 = ((CEntity*)actor1)->get<TCompRigidBody>();
 			s1 = ((CEntity*)actor1)->get<TCompStaticBody>();
 		}
+		else {
+			// The switch needs two valid bodies in a joint
+			assert("The switch needs two valid bodies in a joint");
+		}
 
 		if (actor2.isValid())
 		{
 			r2 = ((CEntity*)actor2)->get<TCompRigidBody>();
 			s2 = ((CEntity*)actor2)->get<TCompStaticBody>();
 		}
-
-		if (actor1.isValid()){
-			if (r1.isValid()){
-				Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-				is_rigid = true;
-			}
-			else if (s1.isValid()){
-				Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-				is_static = true;
-			}
-		}
 		else {
 			// The switch needs two valid bodies in a joint
 			assert("The switch needs two valid bodies in a joint");
+		}
+
+		if (actor1.isValid()){
+			if (r1.isValid()){				
+				px_actor1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody;
+				is_rigid = true;
+			}
+			else if (s1.isValid()){			
+				px_actor1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody;
+				is_static = true;
+			}
 		}
 
 		if (actor2.isValid()){
 			if (r2.isValid()){
-				Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+				px_actor2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody;
 				is_rigid = true;
 			}
 			if (s2.isValid()){
-				Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+				px_actor2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody;
 				is_static = true;
 			}
-		}
-		else {
-			// The switch needs two valid bodies in a joint
-			assert("The switch needs two valid bodies in a joint");
 		}
 
 		if (!(is_static && is_rigid)) assert("the switch pull needs ans static body and an rigidbody");
 	}
 
 	void update(float elapsed) {
+		PxTransform Pos1;
+		PxTransform Pos2;
 
-		PxActor* actor;
-		if (r1.isValid()){
-			Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			actor = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody;
-			actor->getType();
-			PxActorType::eRIGID_DYNAMIC;
-			actor->isRigidBody();
-			PxTransform pos_aux1 = ((PxRigidBody*)actor)->getGlobalPose();
+		if (px_actor1->isRigidBody()){
+			Pos1 = ((PxRigidBody*)px_actor1)->getGlobalPose();
 		}
-		else if (s1.isValid()){
-			Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+		else {
+			Pos1 = ((PxRigidStatic*)px_actor1)->getGlobalPose();
 		}
 
-		if (r2.isValid()){
-			Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			actor = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody;
-			actor->getType();
-			PxActorType::eRIGID_DYNAMIC;
-			actor->isRigidBody();
-			PxTransform pos_aux1 = ((PxRigidBody*)actor)->getGlobalPose();
+		if (px_actor2->isRigidBody()){
+			Pos2 = ((PxRigidBody*)px_actor2)->getGlobalPose();
 		}
-		if (s2.isValid()){
-			Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
+		else {
+			Pos2 = ((PxRigidStatic*)px_actor2)->getGlobalPose();
 		}
 
-		// there are a rigid and a static
 		if ((pressed == false) && ((Pos1.p - Pos2.p).magnitudeSquared() >= (limit*limit) * 3 / 5)){
-			// Llamar a la función de activar
-			int i = 0;
+			// Call on press function
 			onPress();
 			pressed = true;
 		}
 		else if ((pressed == true) && ((Pos1.p - Pos2.p).magnitudeSquared() < (limit*limit) * 3 / 5)){
-			// free
-			int i = 0;
+			// Call on press function
 			onLeave();
 			pressed = false;
 		}
