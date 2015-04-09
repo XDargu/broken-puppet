@@ -41,11 +41,12 @@ public:
 		if (isKeyPressed('F')) {
 			fsm_player_legs.ChangeState("fbp_Ragdoll");
 		}
+		fsm_player_torso.update(elapsed);
 	}
 
 	void fixedUpdate(float elapsed) {
 		fsm_player_legs.update(elapsed);
-		fsm_player_torso.update(elapsed);
+
 	}
 
 	unsigned int getStringCount() {

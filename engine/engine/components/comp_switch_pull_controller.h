@@ -5,22 +5,19 @@
 
 /*
 
-En los interruptores asumimos:
-
-dos elementos rígidos conforman un interruptor de presión móvil, cuando se acercan se activa
-
-un elemento statico y un elemento rígido tienen que formar un interruptor de tensado
-
-un elemento solo, puede formar un interruptor de presión y de tensado
+It needs a rigidbody and an static body
 
 */
 
 struct TCompSwitchPullController : TBaseComponent{
 
 	CHandle actor1;
+	PxActor* px_actor1;
+
 	CHandle actor2;
+	PxActor* px_actor2;
+
 	float limit;
-	float initial_distance_squared;
 	bool fixed;
 
 	bool pressed;
@@ -33,79 +30,10 @@ struct TCompSwitchPullController : TBaseComponent{
 	CHandle s2;
 	PxTransform Pos1;
 	PxTransform Pos2;
-	PxTransform init_pos;
-	PxTransform actual_pos;
 
 	TCompSwitchPullController() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		//// Get the initial values
-		//// TODO meter assert
-		//TCompJointPrismatic* joint = ((CEntity*)((CHandle)this).getOwner())->get<TCompJointPrismatic>();
-		//actor1 = joint->getActor1();
-		//actor2 = joint->getActor2();
-		//limit = joint->getLinealPosition();
-		//
-		//pressed = false;
-		//tipe = 0;
-		//
-		//// check if there are two actors
-		//if (actor1.isValid())
-		//{
-		//	r1 = ((CEntity*)actor1)->get<TCompRigidBody>();
-		//	s1 = ((CEntity*)actor1)->get<TCompStaticBody>();
-		//}
-		//
-		//if (actor2.isValid())
-		//{
-		//	r2 = ((CEntity*)actor2)->get<TCompRigidBody>();
-		//	s2 = ((CEntity*)actor2)->get<TCompStaticBody>();
-		//}
-		//
-		//if (actor1.isValid()){
-		//	if (r1.isValid()){
-		//		Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-		//	}
-		//	else if (s1.isValid()){
-		//		Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-		//		tipe = 1;
-		//	}
-		//}
-		//else if (actor2.isValid()){
-		//	if (s2.isValid()){
-		//		Pos1 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-		//	}
-		//	else if (r2.isValid()){
-		//		Pos1 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-		//	}
-		//	tipe = 2;
-		//	init_pos = Pos1;
-		//}
-		//
-		//if (actor2.isValid()){
-		//	if (r2.isValid()){
-		//		Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-		//	}
-		//	if (s2.isValid()){
-		//		Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-		//		tipe = 1;
-		//	}
-		//}
-		//else if (actor1.isValid()){
-		//
-		//	if (s1.isValid()){
-		//		Pos2 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-		//	}
-		//	else if (r1.isValid()){
-		//		Pos2 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-		//	}
-		//	tipe = 2;
-		//	init_pos = Pos2;
-		//}
-		//
-		//
-		//initial_distance_squared = (Pos1.p - Pos2.p).magnitudeSquared();
-		//int i = 0;
 	}
 
 	void init(){
@@ -115,6 +43,9 @@ struct TCompSwitchPullController : TBaseComponent{
 		actor1 = joint->getActor1();
 		actor2 = joint->getActor2();
 		limit = joint->getLinealPosition();
+
+		bool is_static = false;
+		bool is_rigid = false;
 
 		pressed = false;
 		tipe = 0;
@@ -135,130 +66,75 @@ struct TCompSwitchPullController : TBaseComponent{
 		if (actor1.isValid()){
 			if (r1.isValid()){
 				Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+				is_rigid = true;
 			}
 			else if (s1.isValid()){
 				Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-				tipe = 1;
+				is_static = true;
 			}
 		}
-		else if (actor2.isValid()){
-			if (s2.isValid()){
-				Pos1 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-			}
-			else if (r2.isValid()){
-				Pos1 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			}
-			tipe = 2;
-			init_pos = Pos1;
+		else {
+			// The switch needs two valid bodies in a joint
+			assert("The switch needs two valid bodies in a joint");
 		}
 
 		if (actor2.isValid()){
 			if (r2.isValid()){
 				Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+				is_rigid = true;
 			}
 			if (s2.isValid()){
 				Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-				tipe = 1;
+				is_static = true;
 			}
 		}
-		else if (actor1.isValid()){
-
-			if (s1.isValid()){
-				Pos2 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-			}
-			else if (r1.isValid()){
-				Pos2 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			}
-			tipe = 2;
-			init_pos = Pos2;
+		else {
+			// The switch needs two valid bodies in a joint
+			assert("The switch needs two valid bodies in a joint");
 		}
 
-
-		initial_distance_squared = (Pos1.p - Pos2.p).magnitudeSquared();
-		int i = 0;
+		if (!(is_static && is_rigid)) assert("the switch pull needs ans static body and an rigidbody");
 	}
 
 	void update(float elapsed) {
-		if (actor1.isValid()){
-			if (r1.isValid()){
-				Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			}
-			else if (s1.isValid()){
-				Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-			}
+
+		PxActor* actor;
+		if (r1.isValid()){
+			Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+			actor = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody;
+			actor->getType();
+			PxActorType::eRIGID_DYNAMIC;
+			actor->isRigidBody();
+			PxTransform pos_aux1 = ((PxRigidBody*)actor)->getGlobalPose();
 		}
-		else if (actor2.isValid()){
-			if (s2.isValid()){
-				Pos1 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-			}
-			else if (r2.isValid()){
-				Pos1 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			}
-			actual_pos = Pos1;
+		else if (s1.isValid()){
+			Pos1 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 		}
 
-		if (actor2.isValid()){
-			if (r2.isValid()){
-				Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			}
-			if (s2.isValid()){
-				Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-			}
+		if (r2.isValid()){
+			Pos2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+			actor = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody;
+			actor->getType();
+			PxActorType::eRIGID_DYNAMIC;
+			actor->isRigidBody();
+			PxTransform pos_aux1 = ((PxRigidBody*)actor)->getGlobalPose();
 		}
-		else if (actor1.isValid()){
-			if (s1.isValid()){
-				Pos2 = ((TCompStaticBody*)(((CEntity*)actor1)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
-			}
-			else if (r1.isValid()){
-				Pos2 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
-			}
-			actual_pos = Pos2;
+		if (s2.isValid()){
+			Pos2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody->getGlobalPose();
 		}
 
-		// if both actors are rigidbodies
-		if (tipe == 0){
-			if ((pressed == false) && ((Pos1.p - Pos2.p).magnitudeSquared() <= initial_distance_squared / 3)){
-				// Llamar a la función de activar
-				int i = 0;
-				onPress();
-				pressed = true;
-			}
-			else if ((pressed == true) && ((Pos1.p - Pos2.p).magnitudeSquared() > initial_distance_squared / 3)){
-				// free
-				int i = 0;
-				onLeave();
-				pressed = false;
-			}
-		}
 		// there are a rigid and a static
-		else if (tipe == 1)
-		{
-			if ((pressed == false) && ((Pos1.p - Pos2.p).magnitudeSquared() >= (limit*limit) * 3 / 5)){
-				// Llamar a la función de activar
-				int i = 0;
-				onPress();
-				pressed = true;
-			}
-			else if ((pressed == true) && ((Pos1.p - Pos2.p).magnitudeSquared() < (limit*limit) * 3 / 5)){
-				// free
-				int i = 0;
-				onLeave();
-				pressed = false;
-			}
+		if ((pressed == false) && ((Pos1.p - Pos2.p).magnitudeSquared() >= (limit*limit) * 3 / 5)){
+			// Llamar a la función de activar
+			int i = 0;
+			onPress();
+			pressed = true;
 		}
-		else if (tipe == 2)
-		{
-			float distance = (init_pos.p - actual_pos.p).magnitudeSquared();
-			if ((pressed == false) && ((init_pos.p - actual_pos.p).magnitudeSquared() >= (limit) / 2)){
-				// Llamar a la función de activar
-				onPress();
-				pressed = true;
-			}
-			else if ((pressed == true) && ((init_pos.p - actual_pos.p).magnitudeSquared() < (limit) / 2)){
-				// free
-				onLeave();
-				pressed = false;
-			}
+		else if ((pressed == true) && ((Pos1.p - Pos2.p).magnitudeSquared() < (limit*limit) * 3 / 5)){
+			// free
+			int i = 0;
+			onLeave();
+			pressed = false;
 		}
 	}
 
