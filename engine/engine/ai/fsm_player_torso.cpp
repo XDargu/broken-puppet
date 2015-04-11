@@ -442,12 +442,5 @@ void FSMPlayerTorso::ProcessHit(float elapsed) {
 }
 
 unsigned int FSMPlayerTorso::getStringCount() {
-	unsigned int num_strings = 0;
-	for (int i = 0; i < CEntityManager::get().getEntities().size(); ++i){
-		TCompRope* c_rope = ((CEntity*)CEntityManager::get().getEntities()[i])->get<TCompRope>();
-		if (c_rope){
-			num_strings++;
-		}
-	}
-	return num_strings;
+	return strings.size();
 }
