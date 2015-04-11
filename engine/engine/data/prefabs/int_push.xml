@@ -1,0 +1,14 @@
+<prefab>
+  <entity tag = "actor">
+    <name name="int_push" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="int_push" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.625 -0.125 -0.625" max="0.625 0.125 0.625"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.625" boxY="0.125" boxZ="0.625"/>
+    <rigidbody density="10.0"  />
+    <jointPrismatic actor1 = "int_push" linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="0.25" linearRestitution="0.0" posSpring="5000.0" posDamping="2000.0" />
+    <switchPushController/>
+  </entity>
+</prefab>

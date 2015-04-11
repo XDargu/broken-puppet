@@ -3,17 +3,9 @@
 
 #include "base_component.h"
 
-/*
-
-En los interruptores asumimos:
-
-dos elementos rígidos conforman un interruptor de presión móvil, cuando se acercan se activa
-
-un elemento statico y un elemento rígido tienen que formar un interruptor de tensado
-
-un elemento solo, puede formar un interruptor de presión y de tensado
-
-*/
+/*****************************************************
+	This Switch needs a joint with one RigidActor.
+******************************************************/
 
 struct TCompSwitchPushController : TBaseComponent{
 	
@@ -34,11 +26,11 @@ struct TCompSwitchPushController : TBaseComponent{
 	void init(){
 
 		// This needs a joint component in the owner entity
-		// TODO meter assert
 		TCompJointPrismatic* joint = assertRequiredComponent<TCompJointPrismatic>(this);
 
 		// This switch needs an actor1
 		CHandle actor1 = joint->getActor1();
+		XASSERT((actor1.isValid()), "The comp push switch needs an actor1.");
 		if (actor1.isValid() == false) assert("The comp push switch needs an actor1.");
 
 		// This switch needs just one actor
@@ -66,20 +58,19 @@ struct TCompSwitchPushController : TBaseComponent{
 		// Have to be a valid rigidbody
 		actual_pos = ((PxRigidBody*)px_actor1)->getGlobalPose();
 
-		// TODO: Check if pulling or pushing
+		// Check if pulling or pushing
 		PxVec3 aux_up =  init_pos.q.getBasisVector1();
 		PxVec3 aux_p = init_pos.p + aux_up;
 		PxReal aux_distance = (actual_pos.p - aux_p).magnitude();
-
 		bool pushing = init_up_distance < aux_distance;
-		
-		float distance = (init_pos.p - actual_pos.p).magnitudeSquared();
-		if (pushing && (pressed == false) && ((init_pos.p - actual_pos.p).magnitudeSquared() >= (limit*limit) * 3 / 5)){
+
+		float distance_squared = (init_pos.p - actual_pos.p).magnitudeSquared();
+		if (pushing && (pressed == false) && (distance_squared >= (limit*limit) * 3 / 5)){
 			// Call onPress function
 			onPress();
 			pressed = true;
 		}
-		else if ((pressed == true) && ((init_pos.p - actual_pos.p).magnitudeSquared() < (limit*limit) * 3 / 5)){
+		else if ((pressed == true) && (distance_squared < (limit*limit) * 3 / 5)){
 			// Call onPress function
 			onLeave();
 			pressed = false;
@@ -87,17 +78,20 @@ struct TCompSwitchPushController : TBaseComponent{
 
 	}
 
+	std::string toString() {
+		return "Switch";
+	}
 
+
+	/**************************
+		CALL LUA FUNTCIONS
+	 **************************/
 	void onPress(){
 		int i = 0;
 	}
 
 	void onLeave(){
 		int i = 0;
-	}
-
-	std::string toString() {
-		return "Switch";
 	}
 
 };
