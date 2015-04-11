@@ -2,6 +2,7 @@
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
+#include <SLB\include\SLB\SLB.hpp>
 
 static CLogicManager logic_manager;
 
@@ -181,7 +182,7 @@ void CLogicManager::stopKeyframes(CHandle the_target_transform) {
 		if (it.target_transform == the_target_transform) {
 			keyframes_to_delete.push_back(it);
 		}
-	};
+	};	
 }
 
 void CLogicManager::clearKeyframes() {
