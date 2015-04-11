@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AEDCE6E7-B121-41BB-AFBA-CC1DE30883A8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SLB</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;SLB_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\SLB\include;.\SLB;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\SLB\Allocator.hpp" />
+    <ClInclude Include="include\SLB\Class.hpp" />
+    <ClInclude Include="include\SLB\ClassHelpers.hpp" />
+    <ClInclude Include="include\SLB\ClassInfo.hpp" />
+    <ClInclude Include="include\SLB\Conversor.hpp" />
+    <ClInclude Include="include\SLB\Debug.hpp" />
+    <ClInclude Include="include\SLB\Error.hpp" />
+    <ClInclude Include="include\SLB\Export.hpp" />
+    <ClInclude Include="include\SLB\FuncCall.hpp" />
+    <ClInclude Include="include\SLB\FuncCall_inline.hpp" />
+    <ClInclude Include="include\SLB\Hybrid.hpp" />
+    <ClInclude Include="include\SLB\Instance.hpp" />
+    <ClInclude Include="include\SLB\Iterator.hpp" />
+    <ClInclude Include="include\SLB\lua.hpp" />
+    <ClInclude Include="include\SLB\LuaCall.hpp" />
+    <ClInclude Include="include\SLB\Manager.hpp" />
+    <ClInclude Include="include\SLB\Mutex.hpp" />
+    <ClInclude Include="include\SLB\Object.hpp" />
+    <ClInclude Include="include\SLB\Private_FuncCall.hpp" />
+    <ClInclude Include="include\SLB\Property.hpp" />
+    <ClInclude Include="include\SLB\PushGet.hpp" />
+    <ClInclude Include="include\SLB\ref_ptr.hpp" />
+    <ClInclude Include="include\SLB\Script.hpp" />
+    <ClInclude Include="include\SLB\SLB.hpp" />
+    <ClInclude Include="include\SLB\SPP.hpp" />
+    <ClInclude Include="include\SLB\StatefulHybrid.hpp" />
+    <ClInclude Include="include\SLB\String.hpp" />
+    <ClInclude Include="include\SLB\Table.hpp" />
+    <ClInclude Include="include\SLB\Type.hpp" />
+    <ClInclude Include="include\SLB\TypeInfoWrapper.hpp" />
+    <ClInclude Include="include\SLB\util.hpp" />
+    <ClInclude Include="include\SLB\Value.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Allocator.cpp" />
+    <ClCompile Include="src\Class.cpp" />
+    <ClCompile Include="src\ClassHelpers.cpp" />
+    <ClCompile Include="src\ClassInfo.cpp" />
+    <ClCompile Include="src\Debug.cpp" />
+    <ClCompile Include="src\Error.cpp" />
+    <ClCompile Include="src\FuncCall.cpp" />
+    <ClCompile Include="src\Hybrid.cpp" />
+    <ClCompile Include="src\Instance.cpp" />
+    <ClCompile Include="src\Iterator.cpp" />
+    <ClCompile Include="src\lua.c" />
+    <ClCompile Include="src\LuaCall.cpp" />
+    <ClCompile Include="src\Manager.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\Property.cpp" />
+    <ClCompile Include="src\Script.cpp" />
+    <ClCompile Include="src\SLB.cpp" />
+    <ClCompile Include="src\Table.cpp" />
+    <ClCompile Include="src\Type.cpp" />
+    <ClCompile Include="src\Value.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

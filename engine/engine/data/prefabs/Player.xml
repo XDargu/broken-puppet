@@ -1,7 +1,7 @@
 <prefab>
 <entity >
     <name name="Player" />
-    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="0 10 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
       <draw mesh="prota_idle" sub_mesh="0" mat="Standardmaterial"/>
       <draw mesh="prota_idle" sub_mesh="1" mat="Standardmaterial"/>
@@ -11,7 +11,9 @@
     </render>
     <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
     <life life="100"/>
-    <unityCharacterController/>
-	<basicPlayerController/>
+    <colliderCapsule radius="0.25" halfHeigth="0.5" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
+    <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
+    <characterController/>
+	<playerController/>
  </entity>
 </prefab>
