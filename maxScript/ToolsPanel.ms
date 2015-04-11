@@ -99,6 +99,38 @@ clearListener()
 			--createModuleSelectionPoint dir
 		)
 	)
+	
+	
+/**********************************************************************************************
+Object PATH structure
+ Params:
+  - PATH: path of vertex based in a spline
+***********************************************************************************************/
+objectSpinePath = attributes objectSpinePath
+(
+	parameters main rollout:params
+	(
+		mPathName type:#string ui:SpinePathName default:""
+	)
+	 
+	rollout params "Object Spine Path"
+	(
+		editText SpinePathName "SpinePathName" type: #string
+	)
+)
+
+/**********************************************************************************************
+	Set the mPathName of all the objects of the scene
+***********************************************************************************************/
+fn addObjectSpinePath = (	
+	local obj = $
+	if (obj != undefined) and (isProperty obj.baseObject #mPathName != true) then
+	(
+		custAttributes.add obj objectSpinePath
+	)				
+)
+
+	
 
 	-- AssetPath
 	AssetPath = "D:\\Users\\Daniel\\Documents\\Assets\\"
@@ -121,6 +153,7 @@ clearListener()
 		button botonB "Bajar" pos:[87,3] width:75 height:25 toolTip:""
 		button botonC "Backface cull" pos:[5,34] width:75 height:25 toolTip:""
 		button botonD "Cambiar grid" pos: [87,34] width:75 height:25 toolTip:""
+		button botonPath "Añadir plataforma path" pos: [5,65] width:75 height:25 toolTip:""
 			
 		on botonA pressed do	( 
 			objs = $*
@@ -153,6 +186,9 @@ clearListener()
 			else (
 				activeGrid = $45degGrid
 			)
+		)
+		on botonPath pressed do (
+			addObjectSpinePath
 		)
 	)
 	

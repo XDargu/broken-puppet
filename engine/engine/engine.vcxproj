@@ -190,6 +190,7 @@
     <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
+    <ClInclude Include="components\comp_platform_path.h" />
     <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_render.h" />

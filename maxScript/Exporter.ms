@@ -18,10 +18,10 @@ clearlistener()
 	allObject = $*
 
 	-- List of object not evaluables
-	NotEval = #(targetobject, UConstraint)
+	NotEval = #(targetobject, UConstraint, line)
 
 	-- List of object without mesh
-	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight,grid)
+	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight, grid, line)
 
 	DistanceTextAttributes = "distanceTextData"
 	CameraAttribute = "objectCameraData"
@@ -340,7 +340,7 @@ clearlistener()
 		local data_path = out_path
 		local filename = data_path + "meshes\\"
 		filename += obj.name + ".mesh"
-		
+		print obj.name
 		if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
 		
 		-- Open file in binary mode, destroy existing version
@@ -930,7 +930,7 @@ clearlistener()
 	)
 
 	fn validateRigidbody obj = (
-		return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1))
+		return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1 or  obj.modifiers[#PhysX_Rigid_Body].type == 2))
 	)
 	
 	fn validateRigidbodyParams obj = (
@@ -965,6 +965,7 @@ clearlistener()
 			if (obj.objectRigidBodyData.lockZRot) then
 				params += "lockZRot=\"" + (obj.objectRigidBodyData.lockZRot as string) + "\" ";
 		)
+		if (obj.modifiers[#PhysX_Rigid_Body].type == 2) then params += "kinematic=\"true\" "
 		
 		return "<rigidbody " + "density=\"" + ((obj.modifiers[#PhysX_Rigid_Body].density * 1000) as string) + "\" " + params + " />\n"
 		
@@ -1420,8 +1421,6 @@ Gets a Distance Text component
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
 	local mJoint = validateJointPrismatic obj
-	print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-	print mJoint as string
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointPrismatic "
@@ -1454,6 +1453,57 @@ fn getJointPrismatic obj = (
 	return mString
 )	
 	
+
+
+fn validatePlatformPath obj = (
+	
+	local mPath = undefined
+	
+	if(isProperty obj.baseObject #mPathName) then
+	(
+		mPath = getnodebyname obj.mPathName
+	)
+		
+	return mPath
+	
+)
+
+/**********************************************************************************************
+Gets the component platform path, it contains a list of point that makes a path
+Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/	
+fn getPlatformPath obj = (	
+	local mPath = validatePlatformPath obj
+	if (mPath == undefined) then return ""
+	
+	local copyPath = copy mPath
+	
+	--local world2local = inverse copyPath.transform
+	--local max2mcv = rotateXMatrix -90
+	--local _world2mcv = world2local * max2mcv
+	
+	--copyPath.transform = _world2mcv
+	
+	local mString = "<platformPath>"
+	
+	for k = 1 to (numknots copyPath 1) do (				
+		local mPoint = getKnotPoint copyPath 1 k
+		
+		mString += "<point index=\"" + k as string + "\"  position=\"" \
+														+ mPoint.x as string+" " \
+														+ mPoint.z as string+" " \
+														+ (-mPoint.y) as string+"" \
+		+"\"/>\n"		
+	)
+	
+	mString += "</platformPath>"
+	delete copyPath
+	return mString
+)
+
 	
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #distanceTextData == true
@@ -1639,7 +1689,8 @@ fn getJointPrismatic obj = (
 			getAmbientLight,
 			getDirectionalLight,
 			getDistanceText,
-			getJointPrismatic
+			getJointPrismatic,
+			getPlatformPath
 		)
 
 		-- Initialize XML

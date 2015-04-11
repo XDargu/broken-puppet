@@ -360,6 +360,9 @@
     <ClInclude Include="components\comp_switch_push_controller.h">
       <Filter>components\logic\switches</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_platform_path.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
