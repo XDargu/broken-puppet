@@ -149,8 +149,8 @@ void createManagers() {
 	getObjManager<TCompSwitchPullController>()->init(32);
 	getObjManager<TCompSwitchPushController>()->init(32);
 
-	
-	
+	// Plataformas
+	getObjManager<TCompPlatformPath>()->init(32);	
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -193,6 +193,8 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 
+	// PLATFORMS
+	getObjManager<TCompPlatformPath>()->initHandlers();
 
 	// SWITCHS
 	getObjManager<TCompSwitchPullController>()->initHandlers();
@@ -408,6 +410,9 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	
+	//PLATFORMS
+	getObjManager<TCompPlatformPath>()->update(elapsed);
+
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
 	getObjManager<TCompSwitchPullController>()->update(elapsed);
