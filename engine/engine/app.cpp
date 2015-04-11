@@ -146,6 +146,11 @@ void createManagers() {
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
+	getObjManager<TCompSwitchPullController>()->init(32);
+	getObjManager<TCompSwitchPushController>()->init(32);
+
+	
+	
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -188,7 +193,13 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 
+
+	// SWITCHS
+	getObjManager<TCompSwitchPullController>()->initHandlers();
+	getObjManager<TCompSwitchPushController>()->initHandlers();
+
 	//PRUEBA TRIGGER
+
 	getObjManager<TCompTrigger>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
@@ -250,14 +261,14 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	/*CEntity* r = entity_manager.getByName("mBox_3.0");
+	CEntity* r = entity_manager.getByName("dvn_arqui_suelo_pasil_curv_01_33.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -5, 0, 0), XMQuaternionIdentity(), 10);
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);*/
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
 
 	return true;
@@ -397,8 +408,10 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	
-	// Interruptor
+	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
+	getObjManager<TCompSwitchPullController>()->update(elapsed);
+	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);

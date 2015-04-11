@@ -218,3 +218,4 @@ pip-log.txt
 .mr.developer.cfg
 maxScript/PathConfig.ms
 engine/engine/log.txt
+engine/engine/data/scenes/my_file.xml

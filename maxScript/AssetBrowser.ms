@@ -270,6 +270,36 @@ macroScript MCVAssetBrowser
 			)*/
 			return selection
 		)
+		
+		/**********************************************************************************************
+		Object PATH structure
+		 Params:
+		  - PATH: path of vertex based in a spline
+		***********************************************************************************************/
+		objectSpinePath = attributes objectSpinePath
+		(
+			parameters main rollout:params
+			(
+				mPathName type:#string ui:SpinePathName default:""
+			)
+			 
+			rollout params "Object Spine Path"
+			(
+				editText SpinePathName "SpinePathName" type: #string
+			)
+		)
+
+		/**********************************************************************************************
+			Set the mPathName of all the objects of the scene
+		***********************************************************************************************/
+		fn addObjectSpinePath = (	
+			local obj = $
+			if (obj != undefined) and (isProperty obj.baseObject #mPathName != true) then
+			(
+				custAttributes.add obj objectSpinePath
+				objectSpinePath = obj.name + "_Path"
+			)				
+		)
 
 		global createModuleSelectionPoint
 		fn createModuleSelectionPoint dir = (
@@ -306,10 +336,12 @@ macroScript MCVAssetBrowser
 			button botonA "Subir" pos:[5,3] width:75 height:25 toolTip:""
 			button botonB "Bajar" pos:[86,3] width:75 height:25 toolTip:""
 			button botonC "Backface cull" pos:[167,3] width:75 height:25 toolTip:""
+			button buttonAddPath "Platform path" pos:[248,3] width:75 height:25 toolTip:""
 			button button8Grid "Grid 8x8" pos:[5,34] width:75 height:25 toolTip:""
 			button button4Grid "Grid 4x4" pos:[86,34] width:75 height:25 toolTip:""
 			button button2Grid "Grid2x2" pos:[167,34] width:75 height:25 toolTip:""
 			button button1Grid "Grid 1x1" pos:[248,34] width:75 height:25 toolTip:""
+			
 				
 			on botonA pressed do	( 
 				objs = $*
@@ -334,6 +366,10 @@ macroScript MCVAssetBrowser
 						o.backfaceCull = true
 					)
 				)
+			)
+			
+			on buttonAddPath pressed do (
+				addObjectSpinePath()
 			)
 			on button8Grid pressed do (
 				setGridSpacing 8

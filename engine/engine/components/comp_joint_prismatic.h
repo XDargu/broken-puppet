@@ -14,23 +14,23 @@ public:
 
 	CHandle e_a1;
 	CHandle e_a2; 
-	physx::PxD6Joint* mJoint;
+	PxD6Joint* mJoint;
 	PxReal linearPosition;
 
 	TCompJointPrismatic() : mJoint(nullptr) {}
 	~TCompJointPrismatic() {
 
 		// Awake the actors
-		physx::PxRigidActor* a1 = nullptr;
-		physx::PxRigidActor* a2 = nullptr;
+		PxRigidActor* a1 = nullptr;
+		PxRigidActor* a2 = nullptr;
 
 		mJoint->getActors(a1, a2);
 		// Call the addForce method to awake the bodies, if dynamic
 		if (a1 && a1->isRigidDynamic()) {
-			((physx::PxRigidDynamic*)a1)->wakeUp();
+			((PxRigidDynamic*)a1)->wakeUp();
 		}
 		if (a2 && a2->isRigidDynamic()) {
-			((physx::PxRigidDynamic*)a2)->wakeUp();
+			((PxRigidDynamic*)a2)->wakeUp();
 		}
 
 		// Release the joint
@@ -42,7 +42,7 @@ public:
 		if (mJoint)
 			mJoint->release();
 
-		Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
+		Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
 		//Physics->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlags::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
@@ -89,6 +89,7 @@ public:
 		else{
 			e_a1 = CEntityManager::get().getByName(actor1.c_str());
 		}
+		XASSERT(e_a1.isValid(), "The prismatic joint requires an actor1");
 
 		if (nombre == actor2){
 			e_a2 = owner_entity;
@@ -163,18 +164,18 @@ public:
 		if (r1.isValid()) {
 			if (r2.isValid())
 			{
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f), ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f));
+				mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, PxTransform(0.f, 0.f, 0.f), ((TCompRigidBody*)r2)->rigidBody, PxTransform(0.f, 0.f, 0.f));
 				drive_position.p = Pos2.p - Pos1.p;
 				linearPosition = (drive_position.p).magnitude();
 			}
 			else
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f), NULL, Pos2);
+				mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, ((TCompRigidBody*)r1)->rigidBody, PxTransform(0.f, 0.f, 0.f), NULL, Pos2);
 		}
 		else {
 			if (s1.isValid())
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos1, ((TCompRigidBody*)r2)->rigidBody, physx::PxTransform(0.f, 0.f, 0.f));
+				mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos1, ((TCompRigidBody*)r2)->rigidBody, PxTransform(0.f, 0.f, 0.f));
 			else
-				mJoint = physx::PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos2, NULL, Pos2);
+				mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos2, NULL, Pos2);
 		}
 		
 		// pasos para usar joints d6
@@ -212,12 +213,12 @@ public:
 			break;
 		case 2: 
 			/*set de axis as limited*/
-			mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eLIMITED);
-			mJoint->setDrive(physx::PxD6Drive::eX, physx::PxD6JointDrive(stiffness, damping, 10000, false));
+			mJoint->setMotion(PxD6Axis::eX, PxD6Motion::eLIMITED);
+			mJoint->setDrive(PxD6Drive::eX, PxD6JointDrive(stiffness, damping, 10000, false));
 			break;
 		case 3: 
 			/*set de axis as free*/
-			mJoint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eFREE);
+			mJoint->setMotion(PxD6Axis::eX, PxD6Motion::eFREE);
 			break;
 		default:
 			/*set de axis as locked*/
@@ -231,12 +232,12 @@ public:
 			break;
 		case 2:
 			/*set de axis as limited*/
-			mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eLIMITED);
-			mJoint->setDrive(physx::PxD6Drive::eY, physx::PxD6JointDrive(stiffness, damping, 10000, false));
+			mJoint->setMotion(PxD6Axis::eY, PxD6Motion::eLIMITED);
+			mJoint->setDrive(PxD6Drive::eY, PxD6JointDrive(stiffness, damping, 10000, false));
 			break;
 		case 3:
 			/*set de axis as free*/
-			mJoint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eFREE);
+			mJoint->setMotion(PxD6Axis::eY, PxD6Motion::eFREE);
 			break;
 		default:
 			/*set de axis as locked*/
@@ -250,18 +251,18 @@ public:
 			break;
 		case 2:
 			/*set de axis as limited*/
-			mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eLIMITED);
-			mJoint->setDrive(physx::PxD6Drive::eZ, physx::PxD6JointDrive(stiffness, damping, 10000, false));
+			mJoint->setMotion(PxD6Axis::eZ, PxD6Motion::eLIMITED);
+			mJoint->setDrive(PxD6Drive::eZ, PxD6JointDrive(stiffness, damping, 10000, false));
 			break;
 		case 3:
 			/*set de axis as free*/
-			mJoint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
+			mJoint->setMotion(PxD6Axis::eZ, PxD6Motion::eFREE);
 			break;
 		default:
 			/*set de axis as locked*/
 			break;
 		}
-		mJoint->setLinearLimit(physx::PxJointLinearLimit(linearPosition, physx::PxSpring(0, 0)));
+		mJoint->setLinearLimit(PxJointLinearLimit(linearPosition, PxSpring(0, 0)));
 		mJoint->setDrivePosition(drive_position);
 	}
 

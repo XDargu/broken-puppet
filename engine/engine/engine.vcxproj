@@ -190,6 +190,7 @@
     <ClInclude Include="components\comp_enemy_controller.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
+    <ClInclude Include="components\comp_platform_path.h" />
     <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
     <ClInclude Include="components\comp_render.h" />
@@ -200,6 +201,8 @@
     <ClInclude Include="components\comp_skeleton_ik.h" />
     <ClInclude Include="components\comp_skeleton_lookat.h" />
     <ClInclude Include="components\comp_switch_controller.h" />
+    <ClInclude Include="components\comp_switch_pull_controller.h" />
+    <ClInclude Include="components\comp_switch_push_controller.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />
