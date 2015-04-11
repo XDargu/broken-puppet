@@ -250,14 +250,14 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	CEntity* r = entity_manager.getByName("mBox_3.0");
+	/*CEntity* r = entity_manager.getByName("mBox_3.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -5, 0, 0), XMQuaternionIdentity(), 10);
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
 	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
+	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);*/
 	
 
 	return true;
