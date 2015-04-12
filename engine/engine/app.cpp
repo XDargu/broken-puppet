@@ -150,8 +150,8 @@ void createManagers() {
 	getObjManager<TCompSwitchPullController>()->init(32);
 	getObjManager<TCompSwitchPushController>()->init(32);
 
-	
-	
+	// Plataformas
+	getObjManager<TCompPlatformPath>()->init(32);	
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -194,6 +194,8 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 
+	// PLATFORMS
+	getObjManager<TCompPlatformPath>()->initHandlers();
 
 	// SWITCHS
 	getObjManager<TCompSwitchPullController>()->initHandlers();
@@ -412,7 +414,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
-	
+
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
 	getObjManager<TCompSwitchPullController>()->update(elapsed);
@@ -443,9 +445,12 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
+	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
-	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
+		
+	
 }
 
 void CApp::render() {

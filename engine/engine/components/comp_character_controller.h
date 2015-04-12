@@ -29,6 +29,7 @@ private:
 	float max_vel_y;						// constante de velocidad maxima en y para muerte por caida
 	physx::PxVec3 velocity;
 	CHandle m_entity;
+	
 
 public:
 	float crouchHeightFactor;					// collider height is multiplied by this when crouching
@@ -170,6 +171,8 @@ public:
 		rigid->rigidBody->setLinearVelocity(velocity);
 	}
 
+
+
 	void ConvertMoveInput()
 	{
 		// convert the world relative moveInput vector into a local-relative
@@ -201,18 +204,17 @@ public:
 	{
 		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
-		physx::PxTransform &px_trans = rigid->rigidBody->getGlobalPose();
+		PxTransform &px_trans = rigid->rigidBody->getGlobalPose();
 
-		physx::PxRaycastBuffer buf;
+		PxRaycastBuffer buf;
 
 		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 0.25f, buf);
 
 		if (velocity.y < jumpPower*.5f)
 		{
-			onGround = false;
-			// Dejo el rigidbody usando la gravity todo el tiempo
-			//rigidbody.useGravity = true;				
+			onGround = false;		
 
+			// comprobamos si el el objeto es el más cercano, si lo es, obtenemos su movimiento
 
 			for (int i = 0; i < (int)buf.nbTouches; i++)
 			{
@@ -223,18 +225,32 @@ public:
 
 					// stick to surface - helps character stick to ground - specially when running down slopes
 					if (velocity.y <= 0)
-					{
-						//TODO hacer el movimiento fluido;
-
+					{					
 						// Colocamos en el ground a pelo
-						physx::PxTransform px_trans = rigid->rigidBody->getGlobalPose();
+						PxTransform px_trans = rigid->rigidBody->getGlobalPose();
 						px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.1f, 0);
 						rigid->rigidBody->setGlobalPose(px_trans);
+						
+						
+						PxActor* ground_actor = buf.touches[i].actor;						
+						// If is a rigidbody
+						if (ground_actor->isRigidBody())
+						{
+							// Check if is moving
+							TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+							PxVec3 ground_velocity = ((PxRigidBody*)ground_actor)->getLinearVelocity();
+							ground_velocity = PxVec3(ground_velocity.x, 0, ground_velocity.z);
+							rigid->rigidBody->addForce(ground_velocity, PxForceMode::eVELOCITY_CHANGE, true);
+							//rigid->rigidBody->addTorque(((PxRigidBody*)ground_actor)->getAngularVelocity(), PxForceMode::eVELOCITY_CHANGE, true);
+						}
+
+
+
 					}
 
 					// Comprobar velocidad aculumada en caida
 					if (velocity.y < max_vel_y){
-						//TO DO: usar el metodo para eliminar enemigo
+						//TODO: usar el metodo para eliminar enemigo
 						CEntity* e = CHandle(this).getOwner();
 						e->sendMsg(TGroundHit(e, velocity.y));
 					}
@@ -279,6 +295,11 @@ public:
 		// remember when we were last in air, for jump delay
 		if (!onGround) lastAirTime = CApp::get().total_time;
 	}
+
+	void FollowFloor(){
+		
+	}
+
 
 	void SetFriction()
 	{
