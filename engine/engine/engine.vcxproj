@@ -166,6 +166,7 @@
     <ClInclude Include="ai\aicontroller.h" />
     <ClInclude Include="ai\aimanager.h" />
     <ClInclude Include="ai\behaviour_trees.h" />
+    <ClInclude Include="ai\bot.h" />
     <ClInclude Include="ai\bt_basic_enemy.h" />
     <ClInclude Include="ai\bt_node.h" />
     <ClInclude Include="ai\fsm_basic_enemy.h" />
@@ -299,6 +300,7 @@
     <ClCompile Include="ai\aicontroller.cpp" />
     <ClCompile Include="ai\aimanager.cpp" />
     <ClCompile Include="ai\behaviour_trees.cpp" />
+    <ClCompile Include="ai\bot.cpp" />
     <ClCompile Include="ai\bt_basic_enemy.cpp" />
     <ClCompile Include="ai\bt_node.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp" />
@@ -516,6 +518,9 @@
     <ProjectReference Include="SLB\SLB.vcxproj">
       <Project>{aedce6e7-b121-41bb-afba-cc1de30883a8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

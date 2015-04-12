@@ -2,6 +2,7 @@
 #define INC_COMP_LIFE_H_
 
 #include "base_component.h"
+#include "handle\app_msgs.h"
 
 struct TCompLife : TBaseComponent {    // 2 ...
   float life;

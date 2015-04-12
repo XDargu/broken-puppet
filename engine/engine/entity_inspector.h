@@ -59,4 +59,18 @@ public:
 	void init();
 };
 
+class CConsole
+{
+public:
+	static CConsole& get();
+
+	int num_lines;
+	std::deque<std::string> lines;
+
+	CConsole();
+	~CConsole();
+	void init();
+	void print(std::string text);
+};
+
 #endif
