@@ -133,9 +133,9 @@ bool CPhysicsManager::raycast(XMVECTOR origin, XMVECTOR unit_dir, PxReal max_dis
 }
 
 void CPhysicsManager::raycastAll(physx::PxVec3 origin, physx::PxVec3 unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit) {
-	const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
-	physx::PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
-	physx::PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+	const PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+	PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+	PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
 
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call are all hits along the ray, stored in 'hitBuffer'
@@ -144,15 +144,42 @@ void CPhysicsManager::raycastAll(physx::PxVec3 origin, physx::PxVec3 unit_dir, p
 }
 
 void CPhysicsManager::raycastAll(XMVECTOR origin, XMVECTOR unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit) {
-	const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
-	physx::PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
-	physx::PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+	const PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+	PxRaycastHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+	PxRaycastBuffer buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
 
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call are all hits along the ray, stored in 'hitBuffer'
 	gScene->raycast(XMVECTORToPxVec3(origin), XMVECTORToPxVec3(unit_dir), max_distance, buf);
 	hit = buf;
 }
+
+bool CPhysicsManager::sweepTest(PxGeometry sweepShape, PxTransform initialPose, PxVec3 unit_dir, PxReal max_distance, PxSweepBuffer &hit) {
+	return gScene->sweep(sweepShape, initialPose, unit_dir, max_distance, hit);
+}
+
+bool CPhysicsManager::sweepTest(PxGeometry sweepShape, TTransform initialPose, XMVECTOR unit_dir, PxReal max_distance, PxSweepBuffer &hit) {
+	return gScene->sweep(sweepShape, transformToPxTransform(initialPose), XMVECTORToPxVec3(unit_dir), max_distance, hit);
+}
+
+void CPhysicsManager::sweepTestAll(PxGeometry sweepShape, PxTransform initialPose, PxVec3 unit_dir, PxReal max_distance, PxSweepBuffer &hit) {
+	const PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+	PxSweepHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+	PxSweepBuffer s_buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+
+	gScene->sweep(sweepShape, initialPose, unit_dir, max_distance, s_buf);
+	hit = s_buf;
+}
+
+void CPhysicsManager::sweepTestAll(PxGeometry sweepShape, TTransform initialPose, XMVECTOR unit_dir, PxReal max_distance, PxSweepBuffer &hit) {
+	const PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
+	PxSweepHit hitBuffer[bufferSize];  // [out] User provided buffer for results
+	PxSweepBuffer s_buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
+
+	gScene->sweep(sweepShape, transformToPxTransform(initialPose), XMVECTORToPxVec3(unit_dir), max_distance, s_buf);
+	hit = s_buf;
+}
+
 
 PxTransform CPhysicsManager::transformToPxTransform(TTransform the_transform) {
 	return PxTransform(
