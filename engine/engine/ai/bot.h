@@ -2,6 +2,7 @@
 #define _BOT_H_
 
 #include "handle\handle.h"
+#include "lua_vector.h"
 
 // Wrapper LUA Bot class
 class CBot {
@@ -14,7 +15,9 @@ public:
 
 	// LUA
 	void kill();
+	void teleport(CVector pos);
 	void teleport(float x, float y, float z);
+	CVector getPos();
 	float getLife();
 	void setLife(float value);
 	void hurt(float value);

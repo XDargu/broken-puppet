@@ -2,6 +2,7 @@
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
+#include "components\comp_name.h"
 #include "entity_manager.h"
 #include "entity_inspector.h"
 #include <SLB\include\SLB\SLB.hpp>
@@ -28,13 +29,14 @@ void CLogicManager::update(float elapsed) {
 
 		// Check if the timer has reached the limit
 		if (it.second.counter >= it.second.limit) {
-			XDEBUG("Timer %s has reached the time limit", it.first.c_str());
 			timers_to_delete.push_back(it.first);
 		}
 	};
 
 	// Remove timers that has reached the limit
 	for (auto& it : timers_to_delete) {
+		XDEBUG("Timer %s has reached the time limit", it.c_str());
+		execute("onTimerEnd_" + it + "();");
 		timers.erase(it);
 	}
 
@@ -89,6 +91,19 @@ void CLogicManager::setTimer(std::string the_name, float time) {
 
 void CLogicManager::registerTrigger(CHandle trigger) {
 	triggers.push_back(trigger);
+}
+
+void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
+	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
+	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
+
+	execute("onTriggerEnter_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+}
+void CLogicManager::onTriggerExit(CHandle trigger, CHandle who) {
+	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
+	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
+
+	execute("onTriggerExit_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
 }
 
 void CLogicManager::unregisterTrigger(CHandle trigger) {
@@ -206,24 +221,39 @@ void CLogicManager::bootLUA() {
 	SLB::Manager::defaultManager()->registerSLB(L);
 
 	SLB::Class< CLogicManager >("LogicManager")
+		.set("setTimer", &CLogicManager::setTimer)
 		.set("getBot", &CLogicManager::getBot)
 		.set("print", &CLogicManager::print)
 	;
 
 	// Register the bot class
 	SLB::Class< CBot >("Bot")
-		.set("getLife", (float (CBot::*)()) &CBot::getLife)
-		.set("setLife", (void (CBot::*)(float)) &CBot::setLife)
-		.set("hurt", (void (CBot::*)(float)) &CBot::hurt)
+		.set("getLife", &CBot::getLife)
+		.set("setLife", &CBot::setLife)
+		.set("hurt", &CBot::hurt)
+		.set("getPos", &CBot::getPos)
 		.set("teleport", (void (CBot::*)(float, float, float)) &CBot::teleport)
+		.set("teleportToPos", (void (CBot::*)(CVector)) &CBot::teleport)
 		.set("help", &CBot::help)
+	;
+
+	SLB::Class<CVector>("Vector")
+		.constructor()
+		.constructor<float, float, float>()
+		.property("x", &CVector::x)
+		.property("y", &CVector::y)
+		.property("z", &CVector::z)
 	;
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
 	luaL_dofile(L, "test.lua");
 
-	luaL_dostring(L, "onSceneInit();");
+	execute("onInit();");
+}
+
+void CLogicManager::onSceneLoad(std::string scene_name) {
+	execute("onSceneLoad_" + scene_name + "();");
 }
 
 CBot CLogicManager::getBot(std::string name) {
@@ -236,7 +266,7 @@ void CLogicManager::print(std::string text) {
 }
 
 void CLogicManager::help() {
-	luaL_dostring(L, "SLB.using(SLB)\nlogicManager:print(tostring(LogicManager))");
+	execute("SLB.using(SLB)\nlogicManager:print(tostring(LogicManager))");
 }
 
 void CLogicManager::execute(std::string text) {

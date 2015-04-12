@@ -176,6 +176,7 @@
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
     <ClInclude Include="ai\timer.h" />
+    <ClInclude Include="ai\lua_vector.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />

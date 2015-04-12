@@ -231,12 +231,12 @@ bool CApp::create() {
 	physics_manager.init();
 
 	// Boot LUA
-	
+	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
 
 	loadScene("data/scenes/my_file.xml");
-	logic_manager.bootLUA();
+
 	// Create debug meshes
 	bool is_ok = createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -784,6 +784,8 @@ void CApp::loadScene(std::string scene_name) {
 #endif
 
 	activateInspectorMode(false);
+	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
+	logic_manager.onSceneLoad(name);
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

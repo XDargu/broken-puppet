@@ -366,6 +366,9 @@
     <ClInclude Include="ai\bot.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="ai\lua_vector.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
