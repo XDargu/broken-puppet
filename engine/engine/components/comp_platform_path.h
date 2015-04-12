@@ -29,7 +29,9 @@ struct TCompPlatformPath : TBaseComponent{
 	TCompPlatformPath() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		movement_speed = atts.getFloat("speed", 3);
+		if (elem == "platformPath") {
+			movement_speed = atts.getFloat("speed", 2);
+		}
 		// Get the list of points
 		if (elem == "point") {
 			mPath.push_back(Physics.XMVECTORToPxVec3(atts.getPoint("position")));

@@ -29,6 +29,10 @@ private:
 	float max_vel_y;						// constante de velocidad maxima en y para muerte por caida
 	physx::PxVec3 velocity;
 	CHandle m_entity;
+	PxVec3 ground_velocity;
+
+	// PRUEBAS
+	PxVec3 last_platform_speed;
 	
 
 public:
@@ -106,6 +110,9 @@ public:
 		originalHeight = (coll->getRadius() + coll->getHalfHeight()) * 2;
 		onAir = false;
 
+		// PRUEBAS
+		last_platform_speed = PxVec3(0, 0, 0);
+
 		// Give the look position a default in case the character is not under control
 		currentLookPos = Physics.XMVECTORToPxVec3(trans->position);
 	}
@@ -131,6 +138,8 @@ public:
 		// Move the transform position
 		trans->position = Physics.PxVec3ToXMVECTOR(rigid->rigidBody->getGlobalPose().p + rot);
 		//((TCompTransform*)transform)->rotation = Physics.PxQuatToXMVECTOR(enemy_rigidbody->getGlobalPose().q);
+		
+		if (!onGround) ground_velocity = PxVec3(0, 0, 0);
 	}
 
 	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos)
@@ -153,7 +162,7 @@ public:
 
 		TurnTowardsCameraForward(); // makes the character face the way the camera is looking
 
-		GroundCheck(); // detect and stick to ground
+		GroundCheck(0); // detect and stick to ground
 
 		SetFriction(); // use low or high friction values depending on the current states
 
@@ -192,15 +201,20 @@ public:
 		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		physx::PxVec3 lookAt = rigid->rigidBody->getGlobalPose().q.rotate(currentLookPos) + rigid->rigidBody->getGlobalPose().p;
-		lookAt.y = XMVectorGetY(trans->position);//rigid->rigidBody->getGlobalPose().p.y - 0.1f;
+		PxTransform tt = Physics.transformToPxTransform(*trans);
+		tt.q = PxQuat(0, 0, 0, 1);
+		PxVec3 tLookAt = tt.q.rotate(currentLookPos) + tt.p;
+		tLookAt.y = XMVectorGetY(trans->position);
 
-		trans->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
+		/*physx::PxVec3 lookAt = rigid->rigidBody->getGlobalPose().q.rotate(currentLookPos) + rigid->rigidBody->getGlobalPose().p;
+		lookAt.y = XMVectorGetY(trans->position);//rigid->rigidBody->getGlobalPose().p.y - 0.1f;*/
+
+		trans->aimAt(Physics.PxVec3ToXMVECTOR(tLookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
 
 		//rigid->rigidBody->setGlobalPose(physx::PxTransform(rigid->rigidBody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
 
-	void GroundCheck()
+	void GroundCheck(float elapsed)
 	{
 		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
@@ -225,23 +239,39 @@ public:
 
 					// stick to surface - helps character stick to ground - specially when running down slopes
 					if (velocity.y <= 0)
-					{					
+					{				
+
+						if (elapsed == 0)
+							int i = 0;
+
 						// Colocamos en el ground a pelo
 						PxTransform px_trans = rigid->rigidBody->getGlobalPose();
 						px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.1f, 0);
-						rigid->rigidBody->setGlobalPose(px_trans);
-						
+						rigid->rigidBody->setGlobalPose(px_trans);						
 						
 						PxActor* ground_actor = buf.touches[i].actor;						
 						// If is a rigidbody
 						if (ground_actor->isRigidBody())
-						{
+						{ 
+							
 							// Check if is moving
 							TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
-							PxVec3 ground_velocity = ((PxRigidBody*)ground_actor)->getLinearVelocity();
+							ground_velocity = ((PxRigidBody*)ground_actor)->getLinearVelocity();
 							ground_velocity = PxVec3(ground_velocity.x, 0, ground_velocity.z);
-							rigid->rigidBody->addForce(ground_velocity, PxForceMode::eVELOCITY_CHANGE, true);
-							//rigid->rigidBody->addTorque(((PxRigidBody*)ground_actor)->getAngularVelocity(), PxForceMode::eVELOCITY_CHANGE, true);
+							
+							// Pruebas							
+							// restar última velocidad y añadir la nueva
+
+							PxVec3 diff = last_platform_speed - ground_velocity;
+							rigid->rigidBody->addForce(ground_velocity - diff, PxForceMode::eVELOCITY_CHANGE, true);
+							last_platform_speed = ground_velocity;
+
+							// Aply weight force
+							PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass();
+							((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
+						}
+						else {
+							ground_velocity = PxVec3(0, 0, 0);
 						}
 
 
@@ -263,43 +293,9 @@ public:
 
 		}
 
-		// Sweeptest para saber si, aunque el raycast no encuentre nada, estamos sobre algo
-		/*if (velocity.y < 0)
-		{
-		physx::PxSweepBuffer hit;              // [out] Sweep results
-		physx::PxSphereGeometry sweepShape = physx::PxSphereGeometry(enemy_width / 2);    // [in] swept shape
-		physx::PxTransform initialPose = physx::PxTransform(px_trans.p, px_trans.q);  // [in] initial shape pose (at distance=0)
-		physx::PxVec3 sweepDirection = physx::PxVec3(0, -1, 0);    // [in] normalized sweep direction
-
-		const physx::PxU32 bufferSize = 256;        // [in] size of 'hitBuffer'
-		physx::PxSweepHit hitBuffer[bufferSize];  // [out] User provided buffer for results
-		physx::PxSweepBuffer s_buf(hitBuffer, bufferSize); // [out] Blocking and touching hits will be stored here
-
-		Physics.gScene->sweep(sweepShape, initialPose, sweepDirection, (enemy_height / 2.f) + 0.5f - enemy_width, s_buf);
-
-		for (int i = 0; i < s_buf.nbTouches; i++)
-		{
-		if (s_buf.touches[i].actor != enemy_rigidbody) {
-		onGround = true;
-		//rigidbody.useGravity = false;
-
-		// Colocamos en el ground a pelo
-		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();
-		px_trans.p.y = buf.touches[i].position.y + ((enemy_height / 2.f) + 0.1f);
-		enemy_rigidbody->setGlobalPose(px_trans);
-		break;
-		}
-		}
-		}*/
-
 		// remember when we were last in air, for jump delay
 		if (!onGround) lastAirTime = CApp::get().total_time;
 	}
-
-	void FollowFloor(){
-		
-	}
-
 
 	void SetFriction()
 	{
@@ -353,6 +349,8 @@ public:
 			onGround = false;
 			velocity = moveInput*airSpeed;
 			velocity.y = jumpPower;
+			TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+			rigid->rigidBody->addForce(ground_velocity, PxForceMode::eVELOCITY_CHANGE, true);
 		}
 	}
 
@@ -394,6 +392,54 @@ public:
 	physx::PxReal getMass(){
 		return ((TCompRigidBody*)rigidbody)->rigidBody->getMass();
 	}
+
+
+
+
+	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos, float elapsed)
+	{
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+
+		if (move.magnitude() > 1) move.normalize();
+
+		// transfer input parameters to member variables.
+		moveInput = move;
+		crouchInput = crouch;
+		jumpInput = jump;
+		currentLookPos = lookPos;
+
+		// grab current velocity, we will be changing it.
+		velocity = rigid->rigidBody->getLinearVelocity();
+		physx::PxVec3 prev_velocity = rigid->rigidBody->getLinearVelocity();
+
+		ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
+
+		TurnTowardsCameraForward(); // makes the character face the way the camera is looking
+
+		GroundCheck(elapsed); // detect and stick to ground
+
+		SetFriction(); // use low or high friction values depending on the current states
+
+		// control and velocity handling is different when grounded and airborne:
+		if (onGround)
+		{
+			HandleGroundedVelocities();
+		}
+		else
+		{
+			HandleAirborneVelocities();
+		}
+
+		// reassign velocity, since it will have been modified by the above functions.		
+		rigid->rigidBody->setLinearVelocity(velocity);
+	}
+
+
+
+
+
+
+
 };
 
 #endif

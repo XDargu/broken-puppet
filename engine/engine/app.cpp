@@ -445,8 +445,8 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
-	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);	
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 		
