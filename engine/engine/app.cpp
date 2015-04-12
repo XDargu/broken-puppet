@@ -409,9 +409,6 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
-	
-	//PLATFORMS
-	getObjManager<TCompPlatformPath>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
@@ -443,9 +440,12 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
+	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
-	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
+		
+	
 }
 
 void CApp::render() {

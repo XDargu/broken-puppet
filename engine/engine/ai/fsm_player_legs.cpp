@@ -178,7 +178,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 
 void FSMPlayerLegs::Land(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
-
+	EvaluateMovement(true);
 	if (state_time >= 0.2){
 		ChangeState("fbp_Idle");
 	}

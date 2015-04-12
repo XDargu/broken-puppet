@@ -29,7 +29,7 @@ struct TCompPlatformPath : TBaseComponent{
 	TCompPlatformPath() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		movement_speed = atts.getFloat("speed", 30);
+		movement_speed = atts.getFloat("speed", 3);
 		// Get the list of points
 		if (elem == "point") {
 			mPath.push_back(Physics.XMVECTORToPxVec3(atts.getPoint("position")));
@@ -41,7 +41,7 @@ struct TCompPlatformPath : TBaseComponent{
 		follow_line = true;
 
 		next_target = 0;
-		distance_enough = 0.1f;
+		distance_enough = 0.5f;
 
 		mRigidbody = assertRequiredComponent<TCompRigidBody>(this);
 
@@ -49,7 +49,7 @@ struct TCompPlatformPath : TBaseComponent{
 		XASSERT(mRigidbody.isValid(), "The comp platform path requires a ridigbody in the entity");
 	}
 
-	void update(float elapsed) {
+	void fixedUpdate(float elapsed) {
 
 		if (follow_line != true) return;
 
@@ -72,9 +72,16 @@ struct TCompPlatformPath : TBaseComponent{
 		PxVec3 dir = next_pos - my_trans.p;
 		dir.normalize();
 
-		my_trans.p = my_trans.p + (dir * movement_speed * elapsed);
+		float speed = lerp(distance, movement_speed, .8f);
+
+		my_trans.p = my_trans.p + (dir * speed * elapsed);
 
 		px_platform->setKinematicTarget(my_trans);
+	}
+
+	float lerp(float a, float b, float f)
+	{
+		return a + f * (b - a);
 	}
 
 	void startMoving(){
