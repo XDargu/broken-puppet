@@ -17,6 +17,8 @@ public:
 	
 	void update(float elapsed);
 
+	void teleport(XMVECTOR the_position);
+
 	bool transformChanged();
 };
 

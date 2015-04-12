@@ -30,6 +30,7 @@ int getRandomNumber(int num1, int num2);
 
 // Strings
 bool stringEndsWith(std::string const &value, std::string const &ending);
+std::vector<std::string> split_string(const std::string& str, const std::string& delimiter);
 
 // XMVECTOR definitions
 #define V3COMPARE(v1, v2) memcmp(&v1, &v2, 12)

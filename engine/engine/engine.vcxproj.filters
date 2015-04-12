@@ -363,6 +363,9 @@
     <ClInclude Include="components\comp_platform_path.h">
       <Filter>components\logic</Filter>
     </ClInclude>
+    <ClInclude Include="ai\bot.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -608,6 +611,9 @@
     <ClCompile Include="ai\key_frame.cpp">
       <Filter>ai\logic</Filter>
     </ClCompile>
+    <ClCompile Include="ai\bot.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -695,5 +701,8 @@
   <ItemGroup>
     <Xml Include="my_file.xml" />
     <Xml Include="resolution.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.lua" />
   </ItemGroup>
 </Project>

@@ -40,6 +40,7 @@ CEntityInspector &entity_inspector = CEntityInspector::get();
 CEntityLister	 &entity_lister = CEntityLister::get();
 CEntityActioner	 &entity_actioner = CEntityActioner::get();
 CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
+CConsole		 &console = CConsole::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
@@ -227,10 +228,13 @@ bool CApp::create() {
 
 	physics_manager.init();
 
+	// Boot LUA
+	
+
 	XASSERT(font.create(), "Error creating the font");
 
 	loadScene("data/scenes/my_file.xml");
-
+	logic_manager.bootLUA();
 	// Create debug meshes
 	bool is_ok = createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -250,8 +254,9 @@ bool CApp::create() {
 	entity_lister.init();
 	entity_actioner.init();
 	debug_optioner.init();
+	console.init();
 
-	entity_lister.update();
+	entity_lister.update();	
 #endif
 	
 	// Timer test

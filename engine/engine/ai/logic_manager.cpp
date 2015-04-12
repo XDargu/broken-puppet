@@ -2,9 +2,12 @@
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
+#include "entity_manager.h"
+#include "entity_inspector.h"
 #include <SLB\include\SLB\SLB.hpp>
 
 static CLogicManager logic_manager;
+lua_State* L;
 
 CLogicManager& CLogicManager::get() {
 	return logic_manager;
@@ -189,4 +192,54 @@ void CLogicManager::clearKeyframes() {
 	current_keyframes.clear();
 	keyframe_queue.clear();
 	keyframes_to_delete.clear();
+}
+
+void CLogicManager::bootLUA() {
+	// Create a lua State, using normal lua API
+	L = luaL_newstate();
+
+	// load default functions (optional)
+	luaL_openlibs(L);
+
+	// Register SLB inside the lua_State, we use here the
+	// default manager, but any SLB::Manager could be used.
+	SLB::Manager::defaultManager()->registerSLB(L);
+
+	SLB::Class< CLogicManager >("LogicManager")
+		.set("getBot", &CLogicManager::getBot)
+		.set("print", &CLogicManager::print)
+	;
+
+	// Register the bot class
+	SLB::Class< CBot >("Bot")
+		.set("getLife", (float (CBot::*)()) &CBot::getLife)
+		.set("setLife", (void (CBot::*)(float)) &CBot::setLife)
+		.set("hurt", (void (CBot::*)(float)) &CBot::hurt)
+		.set("teleport", (void (CBot::*)(float, float, float)) &CBot::teleport)
+		.set("help", &CBot::help)
+	;
+
+	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
+
+	luaL_dofile(L, "test.lua");
+
+	luaL_dostring(L, "onSceneInit();");
+}
+
+CBot CLogicManager::getBot(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	return CBot(entity);
+}
+
+void CLogicManager::print(std::string text) {
+	CConsole::get().print(text);
+}
+
+void CLogicManager::help() {
+	luaL_dostring(L, "SLB.using(SLB)\nlogicManager:print(tostring(LogicManager))");
+}
+
+void CLogicManager::execute(std::string text) {
+	std::string ex = "SLB.using(SLB)\n" + text;
+	luaL_dostring(L, ex.c_str());
 }

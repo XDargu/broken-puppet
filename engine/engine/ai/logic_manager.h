@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "key_frame.h"
 #include "handle\handle.h"
+#include "bot.h"
 
 class CLogicManager
 {
@@ -31,6 +32,15 @@ public:
 	void stopKeyframes(CHandle the_target_transform);
 
 	void clearKeyframes();
+
+	void bootLUA();
+
+	// LUA
+	void execute(std::string text);
+
+	CBot getBot(std::string name);
+	void print(std::string text);
+	void help();
 };
 
 #endif
