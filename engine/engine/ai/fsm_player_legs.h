@@ -35,7 +35,7 @@ public:
 	void PullString(float elapsed);
 	void Fall(float elapsed);
 	void Land(float elapsed);
-	void WrongFall();
+	void WrongFall(float elapsed);
 	void WrongLand(float elapsed);
 	void ProcessHit(float elapsed);
 	void Hurt(float elapsed);
@@ -48,8 +48,8 @@ public:
 	void EvaluateLiveToLose(float damage);
 
 	void localCameraFront();
-	bool EvaluateMovement(bool lookAtCamera);
-	bool EvaluateFall();
+	bool EvaluateMovement(bool lookAtCamera, float elapsed);
+	bool EvaluateFall(float elapsed);
 
 	bool trueEveryXSeconds(float time);
 };

@@ -60,7 +60,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 	if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 		ChangeState("fbp_Jump");
 	}
-	if (EvaluateMovement(false)){
+	if (EvaluateMovement(false, elapsed)){
 		ChangeState("fbp_Walk");
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
@@ -80,7 +80,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			ChangeState("fbp_Jump");
 			return;
 		}
-		if (!EvaluateMovement(true)){
+		if (!EvaluateMovement(true, elapsed)){
 			ChangeState("fbp_Idle");
 			return;
 		}
@@ -105,7 +105,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			ChangeState("fbp_Jump");
 			return;
 		}
-		if (!EvaluateMovement(true)){
+		if (!EvaluateMovement(true, elapsed)){
 			ChangeState("fbp_Idle");
 			return;
 		}
@@ -124,7 +124,7 @@ void FSMPlayerLegs::Run(float elapsed){
 
 void FSMPlayerLegs::Jump(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
-	EvaluateMovement(true);
+	EvaluateMovement(true, elapsed);
 
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
 		ChangeState("fbp_Idle");
@@ -144,7 +144,7 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
-	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir);
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= 0.1f && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
 		ChangeState("fbp_Idle");
@@ -162,7 +162,7 @@ void FSMPlayerLegs::PullString(float elapsed){
 
 void FSMPlayerLegs::Fall(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_falling");
-	EvaluateMovement(true);
+	EvaluateMovement(true, elapsed);
 
 	if (((TCompRigidBody*)comp_rigidbody)->rigidBody->getLinearVelocity().y > 0){
 		ChangeState("fbp_Jump");
@@ -178,17 +178,17 @@ void FSMPlayerLegs::Fall(float elapsed){
 
 void FSMPlayerLegs::Land(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
-	EvaluateMovement(true);
+	EvaluateMovement(true, elapsed);
 	if (state_time >= 0.2){
 		ChangeState("fbp_Idle");
 	}
 }
 
-void FSMPlayerLegs::WrongFall(){
+void FSMPlayerLegs::WrongFall(float elapsed){
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
 	dir.normalize();
-	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir);
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
 		ChangeState("fbp_WrongLand");
@@ -210,7 +210,7 @@ void FSMPlayerLegs::Hurt(float elapsed){
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
 	dir.normalize();
-	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir);
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= .2f){
 		ChangeState("fbp_ReevaluatePriorities");
@@ -269,7 +269,7 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 void FSMPlayerLegs::Dead(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_dead");
 
-	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()));
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()),elapsed);
 
 	if (state_time >= 6){
 		((TCompLife*)life)->life = 100;
@@ -298,7 +298,7 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 
 // NO FSM FUNCTIONS
 
-bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera){
+bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
@@ -338,7 +338,7 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera){
 
 	dir.normalize();
 	bool ragdoll = (getCurrentNode() == "fbp_Ragdoll");
-	((TCompCharacterController*)comp_character_controller)->Move(movement_vector, false, jump, dir);
+	((TCompCharacterController*)comp_character_controller)->Move(movement_vector, false, jump, dir, elapsed);
 
 	// Evaluate falling
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
@@ -347,8 +347,8 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera){
 	return is_moving;
 }
 
-bool FSMPlayerLegs::EvaluateFall(){
-	EvaluateMovement(true);
+bool FSMPlayerLegs::EvaluateFall(float elapsed){
+	EvaluateMovement(true, elapsed);
 	TCompRigidBody* rigidbody = (TCompRigidBody*)comp_rigidbody;
 
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
