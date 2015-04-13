@@ -97,13 +97,15 @@ void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
 
-	execute("onTriggerEnter_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+	if (c_name && c_name_who)
+		execute("onTriggerEnter_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
 }
 void CLogicManager::onTriggerExit(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
 
-	execute("onTriggerExit_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+	if (c_name && c_name_who)
+		execute("onTriggerExit_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
 }
 
 void CLogicManager::unregisterTrigger(CHandle trigger) {
@@ -111,12 +113,18 @@ void CLogicManager::unregisterTrigger(CHandle trigger) {
 	triggers.erase(it);
 }
 
-void onSwitchPressed(CHandle the_switch) {
+void CLogicManager::onSwitchPressed(CHandle the_switch) {
+	TCompName* c_name = ((CEntity*)the_switch)->get<TCompName>();
 
+	if (c_name)
+		execute("onSwitchPressed_" + std::string(c_name->name) + "()");
 }
 
-void onSwitchReleased(CHandle the_switch) {
+void CLogicManager::onSwitchReleased(CHandle the_switch) {
+	TCompName* c_name = ((CEntity*)the_switch)->get<TCompName>();
 
+	if (c_name)
+		execute("onSwitchReleased_" + std::string(c_name->name) + "()");
 }
 
 void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {

@@ -4,7 +4,7 @@ function onSceneLoad_my_file()
 	
 	-- Get the player 
 	player = getBot("Player");
-	player:teleport(0, 100, 0);
+	player:teleport(0, 10, 0);
 
 	a = Vector(1, 2, 3);
 	print(a.x);
@@ -26,7 +26,16 @@ function getBot(name)
 	return logicManager:getBot(tostring(name));
 end
 
+-- Funciones de la escena
+
 function onTriggerEnter_mTrigger(who)
 	print(tostring(who) .. " ha entrado en el trigger");
 end
 
+function onSwitchPressed_int_pull_51()
+	print("Interruptor pulsado");
+end
+
+function onSwitchReleased_int_pull_51()
+	print("Interruptor soltado");
+end

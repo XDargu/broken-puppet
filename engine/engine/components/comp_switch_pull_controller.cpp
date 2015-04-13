@@ -3,6 +3,7 @@
 #include "comp_joint_prismatic.h"
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
+#include "ai\logic_manager.h"
 
 void TCompSwitchPullController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
@@ -72,10 +73,10 @@ void TCompSwitchPullController::update(float elapsed) {
 	}
 }
 
-void TCompSwitchPullController::onPress(){
-	int i = 0;
+void TCompSwitchPullController::onPress() {
+	CLogicManager::get().onSwitchPressed(CHandle(this).getOwner());
 }
 
-void TCompSwitchPullController::onLeave(){
-	int i = 0;
+void TCompSwitchPullController::onLeave() {
+	CLogicManager::get().onSwitchReleased(CHandle(this).getOwner());
 }
