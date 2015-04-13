@@ -617,6 +617,15 @@
     <ClCompile Include="ai\bot.cpp">
       <Filter>ai\logic</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_switch_pull_controller.cpp">
+      <Filter>components\logic\switches</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_joint_prismatic.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_static_body.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

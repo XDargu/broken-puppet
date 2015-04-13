@@ -316,11 +316,14 @@
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+    <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />
     <ClCompile Include="components\comp_skeleton_ik.cpp" />
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
+    <ClCompile Include="components\comp_static_body.cpp" />
+    <ClCompile Include="components\comp_switch_pull_controller.cpp" />
     <ClCompile Include="components\comp_transform.cpp" />
     <ClCompile Include="components\comp_trigger.cpp" />
     <ClCompile Include="entity_manager.cpp" />

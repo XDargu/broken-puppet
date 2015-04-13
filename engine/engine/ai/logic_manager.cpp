@@ -111,6 +111,14 @@ void CLogicManager::unregisterTrigger(CHandle trigger) {
 	triggers.erase(it);
 }
 
+void onSwitchPressed(CHandle the_switch) {
+
+}
+
+void onSwitchReleased(CHandle the_switch) {
+
+}
+
 void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
 	// Create the keyframe
 	TKeyFrame kf(the_target_transform, the_target_position, the_target_rotation, the_time);
