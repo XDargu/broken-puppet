@@ -237,6 +237,7 @@ void CLogicManager::bootLUA() {
 	SLB::Manager::defaultManager()->registerSLB(L);
 
 	SLB::Class< CLogicManager >("LogicManager")
+		.set("loadScene", &CLogicManager::loadScene)
 		.set("setTimer", &CLogicManager::setTimer)
 		.set("getBot", &CLogicManager::getBot)
 		.set("print", &CLogicManager::print)
@@ -266,6 +267,10 @@ void CLogicManager::bootLUA() {
 	luaL_dofile(L, "test.lua");
 
 	execute("onInit();");
+}
+
+void CLogicManager::loadScene(std::string scene_name) {
+	CApp::get().loadScene(scene_name);
 }
 
 void CLogicManager::onSceneLoad(std::string scene_name) {
