@@ -274,6 +274,9 @@ void CLogicManager::onSceneLoad(std::string scene_name) {
 
 CBot CLogicManager::getBot(std::string name) {
 	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid bot name: " + name + "\")");
+
 	return CBot(entity);
 }
 
