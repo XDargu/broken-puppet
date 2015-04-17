@@ -87,8 +87,14 @@ end
 
 function onSwitchPressed_int_pull_51()
 	print("Interruptor pulsado");
+	logicManager:setTimer("Load", 3)
 end
 
 function onSwitchReleased_int_pull_51()
 	print("Interruptor soltado");
+end
+
+
+function onTimerEnd_Load()
+	logicManager:loadScene("data/scenes/milestone2.xml");
 end

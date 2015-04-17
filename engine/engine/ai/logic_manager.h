@@ -44,6 +44,7 @@ public:
 	// LUA
 	void execute(std::string text);
 
+	void loadScene(std::string scene_name);
 	void onSceneLoad(std::string scene_name);
 	CBot getBot(std::string name);
 	void print(std::string text);
