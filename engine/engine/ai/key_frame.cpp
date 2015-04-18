@@ -25,8 +25,10 @@ bool TKeyFrame::update(float elapsed) {
 	elapsed_time += elapsed;
 
 	// If the keyFrame has reached the destiny, then leave
-	if (elapsed_time >= time)
+	if (elapsed_time >= time) {
+		elapsed_time = 0;
 		return true;
+	}
 
 	return false;
 }

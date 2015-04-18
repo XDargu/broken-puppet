@@ -268,14 +268,18 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_pasil_curv_01_33.0");
+	CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -5, 0, 0), XMQuaternionIdentity(), 10);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);*/
+	CRigidAnimation anim(t);
+
+	anim.addRelativeKeyframe(XMVectorSet(0, -15, 0, 0), XMQuaternionIdentity(), 3);
+	anim.addRelativeKeyframe(XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
+	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
+	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
+	
+	logic_manager.addRigidAnimation(anim);
 	
 
 	return true;
@@ -740,7 +744,8 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();
-	logic_manager.clearKeyframes();
+	//logic_manager.clearKeyframes();
+	logic_manager.clearAnimations();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 

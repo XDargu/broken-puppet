@@ -45,7 +45,13 @@ void CLogicManager::update(float elapsed) {
 		timers_to_delete.clear();
 
 
-	CErrorContext ce2("Updating keyframes", "");
+	CErrorContext ce2("Updating animations", "");
+	for (auto& it : animations) {
+		// Update the animation
+		it.update(elapsed);		
+	};
+
+	/*CErrorContext ce2("Updating keyframes", "");
 	// Update the keyframes
 	for (auto& it : current_keyframes) {
 		// Check if the keyframe has reached the limit
@@ -81,6 +87,7 @@ void CLogicManager::update(float elapsed) {
 	// Clear the delete vector, if needed
 	if (keyframes_to_delete.size() > 0)
 		keyframes_to_delete.clear();
+	*/
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
@@ -127,7 +134,15 @@ void CLogicManager::onSwitchReleased(CHandle the_switch) {
 		execute("onSwitchReleased_" + std::string(c_name->name) + "()");
 }
 
-void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
+void CLogicManager::addRigidAnimation(CRigidAnimation animation) {
+	animations.push_back(animation);
+}
+
+void CLogicManager::clearAnimations() {
+	animations.clear();
+}
+
+/*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
 	// Create the keyframe
 	TKeyFrame kf(the_target_transform, the_target_position, the_target_rotation, the_time);
 
@@ -224,6 +239,7 @@ void CLogicManager::clearKeyframes() {
 	keyframe_queue.clear();
 	keyframes_to_delete.clear();
 }
+*/
 
 void CLogicManager::bootLUA() {
 	// Create a lua State, using normal lua API

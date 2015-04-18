@@ -175,6 +175,7 @@
     <ClInclude Include="ai\fsm_player_torso.h" />
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
+    <ClInclude Include="ai\rigid_animation.h" />
     <ClInclude Include="ai\timer.h" />
     <ClInclude Include="ai\lua_vector.h" />
     <ClInclude Include="app.h" />
@@ -310,6 +311,7 @@
     <ClCompile Include="ai\fsm_player_torso.cpp" />
     <ClCompile Include="ai\key_frame.cpp" />
     <ClCompile Include="ai\logic_manager.cpp" />
+    <ClCompile Include="ai\rigid_animation.cpp" />
     <ClCompile Include="ai\timer.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="callback_controllers.cpp" />

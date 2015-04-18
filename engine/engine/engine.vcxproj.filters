@@ -369,6 +369,9 @@
     <ClInclude Include="ai\lua_vector.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="ai\rigid_animation.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -625,6 +628,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_static_body.cpp">
       <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\rigid_animation.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
