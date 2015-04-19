@@ -320,6 +320,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
+    <ClCompile Include="components\comp_needle.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />

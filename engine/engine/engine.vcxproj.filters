@@ -638,6 +638,9 @@
     <ClCompile Include="components\comp_ragdoll.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_needle.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

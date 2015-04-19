@@ -81,7 +81,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
 
 				// Get the entity of the rigidbody on wich the needle is pierced
-				CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
+				CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName()); //CHandle(blockHit.actor->userData);
 
 				// Rename the needle
 				TCompName* new_needle_name = new_needle->get<TCompName>();

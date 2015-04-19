@@ -229,6 +229,8 @@ void TCompSkeleton::uploadBonesToGPU() const {
     
     const CalMatrix& cal_mtx1 = bone->getTransformMatrix();    // 3x3
     const CalVector  cal_pos1 = bone->getTranslationBoneSpace(); // vec3
+	CalVector cal_pos3 = bone->getTranslationAbsolute();
+	CalVector diff = cal_pos3 - cal_pos1;
 
 	CalMatrix cal_mtx = cal_mtx1;
 	CalVector cal_pos = cal_pos1;
@@ -238,8 +240,11 @@ void TCompSkeleton::uploadBonesToGPU() const {
 
 		if (ragdoll->isRagdollActive()) {
 			PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
-			if (rigid_bone)
-				cal_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p));
+			if (rigid_bone) {
+				cal_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p)) - diff;
+				/*CalQuaternion q = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
+				cal_mtx = CalMatrix(q);*/
+			}
 		}
 	}
 

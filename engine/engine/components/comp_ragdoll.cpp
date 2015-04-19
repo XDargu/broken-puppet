@@ -21,7 +21,7 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		cal_bones[bone_idx]->getCoreBone()->getName();
 	}
 
-	for (int i = 53; i < 54; ++i) {
+	for (int i = 0; i < 78; ++i) {
 		CalBone* cal_bone = skel->model->getSkeleton()->getBone(i);
 		const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
 		const CalQuaternion& cal_mtx = cal_bone->getRotation();
@@ -45,7 +45,7 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			Physics.XMVECTORToPxVec3(dx_pos),
 			Physics.XMVECTORToPxQuat(dx_rot))
 			, *collider
-			, 1);
+			, 1000);
 
 		Physics.gScene->addActor(*rigidBody);
 
@@ -53,7 +53,7 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	}
 	
 
-	setActive(true);
+	setActive(false);
 }
 
 void TCompRagdoll::fixedUpdate(float elapsed) {
@@ -65,6 +65,9 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
 			const CalQuaternion& cal_mtx = cal_bone->getRotation();
 			it.second->setKinematicTarget(PxTransform(Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)), Physics.XMVECTORToPxQuat(Cal2DX(cal_mtx))));
+			/*PxVec3 targetVel = Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)) - it.second->getGlobalPose().p;
+			targetVel.normalize();
+			it.second->setLinearVelocity(targetVel);*/
 		}
 	}
 }
