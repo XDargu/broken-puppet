@@ -49,6 +49,7 @@ DECL_OBJ_MANAGER(TCompSwitchController, "switchController");
 DECL_OBJ_MANAGER(TCompSwitchPushController, "switchPushController");
 DECL_OBJ_MANAGER(TCompSwitchPullController, "switchPullController");
 DECL_OBJ_MANAGER(TCompPlatformPath, "platformPath");
+DECL_OBJ_MANAGER(TCompRagdoll, "ragdoll");
 
 
 

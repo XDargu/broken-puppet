@@ -37,6 +37,7 @@ using namespace DirectX;
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"
 #include "comp_joint_prismatic.h"
+#include "comp_ragdoll.h"
 
 // Render
 #include "comp_render.h"

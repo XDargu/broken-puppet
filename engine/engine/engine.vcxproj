@@ -196,6 +196,7 @@
     <ClInclude Include="components\comp_platform_path.h" />
     <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
+    <ClInclude Include="components\comp_ragdoll.h" />
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
@@ -319,6 +320,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
+    <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />

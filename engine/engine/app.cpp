@@ -169,6 +169,8 @@ void createManagers() {
 	getObjManager<TCompSkeletonLookAt>()->init(1024);
 	getObjManager<TCompSkeletonIK>()->init(1024);
 
+	getObjManager<TCompRagdoll>()->init(64);
+
 	registerAllComponentMsgs();
 }
 
@@ -209,6 +211,9 @@ void initManagers() {
 
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
+
+	getObjManager<TCompSkeleton>()->initHandlers();
+
 }
 
 bool CApp::create() {
@@ -453,8 +458,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);	
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
-		
-	
+	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);	
 }
 
 void CApp::render() {
