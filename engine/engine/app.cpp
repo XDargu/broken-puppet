@@ -284,8 +284,7 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
-	logic_manager.addRigidAnimation(anim);
-	
+	logic_manager.addRigidAnimation(anim);	
 
 	return true;
 }
