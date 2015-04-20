@@ -39,11 +39,19 @@ void CRenderManager::addKey(const CMesh*      mesh
 
 	keys.push_back(k);
 	sort_required = true;
+
+	// 
+	if (material->castsShadows()) {
+		TShadowCasterKey ck = { mesh, owner };
+		ck.transform = k.transform;
+		shadow_casters_keys.push_back(ck);
+	}
 }
 
 void CRenderManager::renderAll(const CCamera* camera) {
 	renderAll(camera, &TTransform());
 }
+
 void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform) {
 	SET_ERROR_CONTEXT("Rendering entities", "")
 
@@ -53,6 +61,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	}
 
 	const CRenderTechnique* curr_tech = nullptr;
+	activateCamera(*camera, 1);
 
 	bool uploading_bones = false;
 
@@ -70,6 +79,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		culling = camera_transform->isInFront(tmx->position);
+		culling = true;
 		if (*it->active && culling)
 		{
 			render_count++;
@@ -79,7 +89,6 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				if (it->material->getTech() != curr_tech) {
 					curr_tech = it->material->getTech();
 					curr_tech->activate();
-					activateCamera(camera, 1);
 					activateWorldMatrix(0);
 
 					uploading_bones = it->material->getTech()->usesBones();
@@ -130,4 +139,20 @@ void CRenderManager::removeKeysFromOwner(CHandle owner) {
 
 void CRenderManager::destroyAllKeys() {
 	keys.clear();
+}
+
+// ---------------------------------------------------------------
+void CRenderManager::renderShadowsCasters() {
+
+	for (auto k : shadow_casters_keys) {
+
+		// Activar la world del obj
+		TCompTransform* tmx = k.transform;
+		assert(tmx);
+		setWorldMatrix(tmx->getWorld());
+
+		// Pintar la mesh:submesh del it
+		k.mesh->activateAndRender();
+	}
+
 }

@@ -375,6 +375,18 @@
     <ClInclude Include="components\comp_ragdoll.h">
       <Filter>components\physics</Filter>
     </ClInclude>
+    <ClInclude Include="render\deferred_render.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\render_to_texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\shadows.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_shadows.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -640,6 +652,12 @@
     </ClCompile>
     <ClCompile Include="components\comp_needle.cpp">
       <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="render\deferred_render.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\render_to_texture.cpp">
+      <Filter>render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

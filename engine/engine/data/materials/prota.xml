@@ -1,0 +1,11 @@
+<std_material name="prota"
+diffuse="prota_Albedo"
+ao="prota_AO"
+normal="prota_Normal"
+specular="prota_Specular"
+glossiness="prota_Gloss"
+emissive="prota_Emissive"
+cubemap2="desertcube1024"
+cubemap="sunsetcube1024"
+tech="deferred_gbuffer"
+/>

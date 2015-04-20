@@ -200,6 +200,7 @@ bool CMesh::load(CDataProvider& dp) {
 	case POSITION_COLOR: vtx_decl = &vdcl_position_color; break;
 	case POSITION_UV_NORMAL: vtx_decl = &vdcl_position_uv_normal; break;
 	case POSITION_UV_NORMAL_SKIN: vtx_decl = &vdcl_position_uv_normal_skin; break;
+	case POSITION_UV_NORMAL_TANGENT: vtx_decl = &vdcl_position_uv_normal_tangent; break;
 	}
 	assert(vtx_decl);
 

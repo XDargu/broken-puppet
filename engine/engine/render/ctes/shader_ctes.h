@@ -9,7 +9,15 @@ cbuffer TCtesObject SHADER_REGISTER(b0)
 cbuffer TCtesCamera SHADER_REGISTER(b1)
 {
   matrix ViewProjection;
+  float4 CameraWorldPos;
   float3 CameraPosition;
+};
+
+cbuffer TCtesLight SHADER_REGISTER(b4)
+{
+	matrix LightViewProjection;
+	matrix LightViewProjectionOffset;
+	float4 LightWorldPos;
 };
 
 #define MaxDirLights 10
@@ -17,7 +25,7 @@ cbuffer TCtesCamera SHADER_REGISTER(b1)
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
-  float4 AmbientLight;
+  /*float4 AmbientLight;
 
   float4 LightDirections[MaxDirLights];
   float4 LightColors[MaxDirLights];
@@ -30,7 +38,7 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
  
 
   int OmniLightCount;  
-  int LightCount;
+  int LightCount;*/
   float  world_time;
   float  dummy3[3];
   
