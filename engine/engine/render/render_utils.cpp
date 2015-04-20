@@ -8,9 +8,11 @@ using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
+CShaderCte<TCtesLight>  ctes_light;
 CShaderCte<TCtesBones>  ctes_bones;
 CMesh        wire_cube;
 CMesh        mesh_line;
+CMesh        mesh_textured_quad_xy;
 
 bool createLine(CMesh& mesh);
 
@@ -19,68 +21,147 @@ template<>
 CVertexDecl* getVertexDecl< CVertexPosColor >() {
   return &vdcl_position_color;
 }
+template<>
+CVertexDecl* getVertexDecl< CVertexPosUV >() {
+	return &vdcl_position_uv;
+}
 
 // --------------------------------------------
 enum eSamplerType {
-  SAMPLER_WRAP_LINEAR = 0
-, SAMPLER_CLAMP_LINEAR
-, SAMPLERS_COUNT
+	SAMPLER_WRAP_LINEAR = 0
+	, SAMPLER_CLAMP_LINEAR
+	, SAMPLER_BORDER_LINEAR
+	, SAMPLER_PCF_SHADOWS
+	, SAMPLERS_COUNT
 };
 
 ID3D11SamplerState* all_samplers[SAMPLERS_COUNT];
 
 bool createSamplers() {
 
-  // Create the sample state
-  D3D11_SAMPLER_DESC sampDesc;
+	// Create the sample state
+	D3D11_SAMPLER_DESC sampDesc;
 
-  ZeroMemory(&sampDesc, sizeof(sampDesc));
-  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-  sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-  sampDesc.MinLOD = 0;
-  sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-  HRESULT hr = ::render.device->CreateSamplerState(
-    &sampDesc, &all_samplers[SAMPLER_WRAP_LINEAR]);
-  if (FAILED(hr))
-    return false;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	HRESULT hr = ::render.device->CreateSamplerState(
+		&sampDesc, &all_samplers[SAMPLER_WRAP_LINEAR]);
+	if (FAILED(hr))
+		return false;
 
-  ZeroMemory(&sampDesc, sizeof(sampDesc));
-  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-  sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-  sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-  sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-  sampDesc.MinLOD = 0;
-  sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-  hr = ::render.device->CreateSamplerState(
-    &sampDesc, &all_samplers[SAMPLER_CLAMP_LINEAR]);
-  if (FAILED(hr))
-    return false;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = ::render.device->CreateSamplerState(
+		&sampDesc, &all_samplers[SAMPLER_CLAMP_LINEAR]);
+	if (FAILED(hr))
+		return false;
 
-  return true;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	sampDesc.BorderColor[0] = 0;
+	sampDesc.BorderColor[1] = 0;
+	sampDesc.BorderColor[2] = 0;
+	sampDesc.BorderColor[3] = 0;
+	hr = ::render.device->CreateSamplerState(
+		&sampDesc, &all_samplers[SAMPLER_BORDER_LINEAR]);
+	if (FAILED(hr))
+		return false;
+
+	// PCF sampling
+	D3D11_SAMPLER_DESC sampler_desc = {
+		D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT,// D3D11_FILTER Filter;
+		D3D11_TEXTURE_ADDRESS_BORDER, //D3D11_TEXTURE_ADDRESS_MODE AddressU;
+		D3D11_TEXTURE_ADDRESS_BORDER, //D3D11_TEXTURE_ADDRESS_MODE AddressV;
+		D3D11_TEXTURE_ADDRESS_BORDER, //D3D11_TEXTURE_ADDRESS_MODE AddressW;
+		0,//FLOAT MipLODBias;
+		0,//UINT MaxAnisotropy;
+		D3D11_COMPARISON_LESS, //D3D11_COMPARISON_FUNC ComparisonFunc;
+		0.0, 0.0, 0.0, 0.0,//FLOAT BorderColor[ 4 ];
+		0,//FLOAT MinLOD;
+		0//FLOAT MaxLOD;   
+	};
+	hr = ::render.device->CreateSamplerState(
+		&sampler_desc, &all_samplers[SAMPLER_PCF_SHADOWS]);
+	if (FAILED(hr))
+		return false;
+
+	return true;
 }
 
 void destroySamplers() {
-  for (int i = 0; i < SAMPLERS_COUNT; ++i)
-    SAFE_RELEASE(all_samplers[i]);
+	for (int i = 0; i < SAMPLERS_COUNT; ++i)
+		SAFE_RELEASE(all_samplers[i]);
 }
 
 void activateTextureSamplers() {
-  ::render.ctx->PSSetSamplers(0, SAMPLERS_COUNT, all_samplers);
+	::render.ctx->PSSetSamplers(0, SAMPLERS_COUNT, all_samplers);
+}
+
+// ---------------------------------------
+ID3D11DepthStencilState* z_cfgs[ZCFG_COUNT];
+
+void activateZConfig(enum ZConfig cfg) {
+	assert(z_cfgs[cfg] != nullptr);
+	render.ctx->OMSetDepthStencilState(z_cfgs[cfg], 0);
+}
+
+bool createDepthStencilStates() {
+	D3D11_DEPTH_STENCIL_DESC desc;
+	memset(&desc, 0x00, sizeof(desc));
+	desc.DepthEnable = FALSE;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+	desc.StencilEnable = FALSE;
+	HRESULT hr;
+	hr = render.device->CreateDepthStencilState(&desc, &z_cfgs[ZCFG_DISABLE_ALL]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(z_cfgs[ZCFG_DISABLE_ALL], "ZCFG_DISABLE_ALL");
+
+	// Default app, only pass those which are near than the previous samples
+	memset(&desc, 0x00, sizeof(desc));
+	desc.DepthEnable = TRUE;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	desc.DepthFunc = D3D11_COMPARISON_LESS;
+	desc.StencilEnable = FALSE;
+	hr = render.device->CreateDepthStencilState(&desc, &z_cfgs[ZCFG_DEFAULT]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(z_cfgs[ZCFG_DEFAULT], "ZCFG_DEFAULT");
+
+	return true;
 }
 
 // -----------------------------------------------
 bool renderUtilsCreate() {
-  bool is_ok = ctes_object.create();
-  is_ok &= ctes_camera.create();
-  is_ok &= ctes_bones.create();
-  is_ok &= createWiredCube(wire_cube);
-  is_ok &= createLine(mesh_line);
-  is_ok &= createSamplers();
-  return is_ok;
+	bool is_ok = ctes_object.create();
+	is_ok &= ctes_camera.create();
+	is_ok &= ctes_light.create();
+	is_ok &= ctes_bones.create();
+	is_ok &= createWiredCube(wire_cube);
+	is_ok &= createLine(mesh_line);
+	is_ok &= createTexturedQuadXY(mesh_textured_quad_xy);
+	is_ok &= createSamplers();
+	is_ok &= createDepthStencilStates();
+	return is_ok;
 }
 
 void renderUtilsDestroy() {
@@ -90,6 +171,9 @@ void renderUtilsDestroy() {
   ctes_bones.destroy();
   wire_cube.destroy();
   mesh_line.destroy();
+  ctes_light.destroy();
+  mesh_textured_quad_xy.destroy();
+  wire_cube.destroy();
 }
 
 void activateWorldMatrix( int slot ) {
@@ -100,10 +184,11 @@ void activateTint(int slot) {
 	ctes_object.activateInPS(slot);
 }
 
-void activateCamera(const CCamera* camera, int slot) {
+void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
-	ctes_camera.get()->ViewProjection = camera->getViewProjection();
+	ctes_camera.get()->ViewProjection = camera.getViewProjection();
+	ctes_camera.get()->CameraWorldPos = camera.getPosition();
 	ctes_camera.uploadToGPU();
 }
 
@@ -112,6 +197,18 @@ void activateCamera(const XMVECTOR position, int slot) {
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
 	ctes_camera.get()->CameraPosition = position;
 	ctes_camera.uploadToGPU();
+}
+
+void activateLight(const CCamera& light, int slot) {
+	ctes_light.activateInVS(slot);    // as set in the shader.fx!!
+	ctes_light.activateInPS(slot);    // as set in the shader.fx!!
+	ctes_light.get()->LightWorldPos = light.getPosition();
+	ctes_light.get()->LightViewProjection = light.getViewProjection();
+	XMMATRIX offset = XMMatrixTranslation(0.5f, 0.5f, 0.f);
+	XMMATRIX scale = XMMatrixScaling(0.5f, -0.5f, 1.f);
+	XMMATRIX tmx = scale * offset;
+	ctes_light.get()->LightViewProjectionOffset = light.getViewProjection() * tmx;
+	ctes_light.uploadToGPU();
 }
 
 // -----------------------------------------------------
@@ -166,6 +263,18 @@ bool createAxis(CMesh& mesh) {
   v->Pos = XMFLOAT3(0.f, 0.f, 3.f); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
 
   return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::LINE_LIST);
+}
+
+// -----------------------------------------------------
+bool createTexturedQuadXY(CMesh& mesh) {
+	std::vector< CVertexPosUV > vtxs;
+	vtxs.resize(4);
+	CVertexPosUV *v = &vtxs[0];
+	v->Pos = XMFLOAT3(0.f, 0.f, 0.f); v->UV = XMFLOAT2(0, 0); ++v;
+	v->Pos = XMFLOAT3(1.f, 0.f, 0.f); v->UV = XMFLOAT2(1, 0); ++v;
+	v->Pos = XMFLOAT3(0.f, 1.f, 0.f); v->UV = XMFLOAT2(0, 1); ++v;
+	v->Pos = XMFLOAT3(1.f, 1.f, 0.f); v->UV = XMFLOAT2(1, 1); ++v;
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::TRIANGLE_STRIP);
 }
 
 // -----------------------------------------------------
@@ -607,4 +716,31 @@ void setWorldMatrix(XMMATRIX world) {
 void setTint(XMVECTOR tint) {
 	ctes_object.get()->Tint = tint;
 	ctes_object.uploadToGPU();
+}
+
+// -----------------------------------------------
+void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture) {
+
+	render_techniques_manager.getByName("textured")->activate();
+
+	// Activate the texture
+	texture->activate(0);
+
+	// Activate a ortho camera view projection matrix
+	XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
+	ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
+		0, render.xres,
+		render.yres, 0,
+		-1, 1);
+	ctes_camera.uploadToGPU();
+
+	// Update the world matrix to match the params
+	ctes_object.get()->World = XMMatrixScaling(w, h, 1) * XMMatrixTranslation(x0, y0, 0);
+	ctes_object.uploadToGPU();
+
+	mesh_textured_quad_xy.activateAndRender();
+
+	// Restore old view proj
+	ctes_camera.get()->ViewProjection = prev_view_proj;
+	ctes_camera.uploadToGPU();
 }

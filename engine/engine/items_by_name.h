@@ -4,37 +4,48 @@
 template < class TItem >
 class CItemsByName {
 
-  typedef std::map< std::string, TItem* > MItems;
-  MItems all_items;
+	typedef std::map< std::string, TItem* > MItems;
+	MItems all_items;
 
 public:
 
-  void destroyAll() {
-    for (auto it : all_items) {
-      it.second->destroy();
-      delete it.second;
-    }
-    all_items.clear();
-  }
+	void destroyAll() {
+		for (auto it : all_items) {
+			it.second->destroy();
+			delete it.second;
+		}
+		all_items.clear();
+	}
 
-  const TItem* getByName(const char* name) {
-	 
-    // Search ...
-    auto it = all_items.find(name);
+	const TItem* getByName(const char* name) {
 
-    // If found, return value
-    if (it != all_items.end())
-      return it->second;
+		// Search ...
+		auto it = all_items.find(name);
 
-    // create new obj
-    TItem *t = new TItem;
-    t->load(name);
-    t->setName(name);
+		// If found, return value
+		if (it != all_items.end())
+			return it->second;
 
-    all_items[name] = t;
-    return t;
-  }
+		// create new obj
+		TItem *t = new TItem;
+		bool is_ok = t->load(name);
+		assert(is_ok);
 
+		registerNew(name, t);
+		return t;
+	}
+
+	bool registerNew(const char* name, TItem *t) {
+		// Confirm it does NOT exists
+		auto it = all_items.find(name);
+		if (it != all_items.end())
+			return false;
+
+		// So, register it
+		t->setName(name);
+		all_items[name] = t;
+		return true;
+	}
 
 };
 

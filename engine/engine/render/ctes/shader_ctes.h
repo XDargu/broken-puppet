@@ -9,7 +9,15 @@ cbuffer TCtesObject SHADER_REGISTER(b0)
 cbuffer TCtesCamera SHADER_REGISTER(b1)
 {
   matrix ViewProjection;
+  float4 CameraWorldPos;
   float3 CameraPosition;
+};
+
+cbuffer TCtesLight SHADER_REGISTER(b4)
+{
+	matrix LightViewProjection;
+	matrix LightViewProjectionOffset;
+	float4 LightWorldPos;
 };
 
 #define MaxDirLights 10

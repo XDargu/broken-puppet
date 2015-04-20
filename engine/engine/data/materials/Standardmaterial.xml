@@ -1,1 +1,12 @@
-<std_material name="Standardmaterial" diffuse="StandardDiff"/>
+<!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
+<std_material name="prota"
+diffuse="prota_Albedo"
+ao="prota_AO"
+normal="prota_Normal"
+specular="prota_Specular"
+glossiness="prota_Gloss"
+emissive="prota_Emissive"
+cubemap="desertcube1024"
+cubemap2="sunsetcube1024"
+tech="deferred_gbuffer"
+/>

@@ -23,6 +23,8 @@ using namespace DirectX;
 #include "components/comp_skeleton_lookat.h"
 #include "components/comp_skeleton_ik.h"
 #include "skeletons/ik_handler.h"
+#include "render/render_to_texture.h"
+#include "render/deferred_render.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -90,7 +92,7 @@ CHandle		 life;
 
 CHandle		  activeCamera;
 CFont         font;
-
+CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 
 const CTexture* cubemap;
@@ -170,6 +172,8 @@ void createManagers() {
 	getObjManager<TCompSkeletonIK>()->init(1024);
 
 	getObjManager<TCompRagdoll>()->init(64);
+	getObjManager<TCompShadows>()->init(8);
+
 
 	registerAllComponentMsgs();
 }
@@ -213,6 +217,8 @@ void initManagers() {
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 
 	getObjManager<TCompSkeleton>()->initHandlers();
+	getObjManager<TCompShadows>()->initHandlers();
+
 
 }
 
@@ -247,6 +253,7 @@ bool CApp::create() {
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
+	is_ok &= deferred.create(xres, yres);
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -467,15 +474,47 @@ void CApp::render() {
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	activateTextureSamplers();
+
 	activateWorldMatrix(0);
 	activateTint(0);
 
-	activateTextureSamplers();
+	CHandle h_light = entity_manager.getByName("the_light");
+	CEntity* e_light = h_light;
+	if (e_light) {
+		TCompCamera* cam_light = e_light->get<TCompCamera>();
+		activateLight(*cam_light, 4);
+	}
 
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+	// Generate all shadows maps
+	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
+
+	deferred.render(((CCamera*)(TCompCamera*)activeCamera));
+
+	::render.activateBackbuffer();
+	int sz = 300;
+
+
+	CCamera camera = *(TCompCamera*)activeCamera;
+	
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
+	drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
+	
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo"));
+	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("Zthe_light"));
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	render_techniques_manager.getByName("basic")->activate();
+	activateWorldMatrix(0);
+	activateCamera(*((CCamera*)(TCompCamera*)activeCamera), 1);
+
+	setWorldMatrix(XMMatrixIdentity());
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
+	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 	renderDebugEntities();
 
