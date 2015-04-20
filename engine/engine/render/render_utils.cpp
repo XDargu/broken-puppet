@@ -192,13 +192,6 @@ void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.uploadToGPU();
 }
 
-void activateCamera(const XMVECTOR position, int slot) {
-	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
-	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
-	ctes_camera.get()->CameraPosition = position;
-	ctes_camera.uploadToGPU();
-}
-
 void activateLight(const CCamera& light, int slot) {
 	ctes_light.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_light.activateInPS(slot);    // as set in the shader.fx!!

@@ -366,7 +366,7 @@ void CApp::update(float elapsed) {
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
-	
+	/*
 	// Ñapa para luz ambiental
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
 		CEntity* e_ambLight = entity_manager.getEntities()[i];
@@ -410,11 +410,11 @@ void CApp::update(float elapsed) {
 	ctes_global.uploadToGPU();
 	ctes_global.activateInVS(2);
 	ctes_global.activateInPS(2);
-
+	
 	CEntity* cam = entity_manager.getByName("PlayerCamera");
 	TCompTransform* cam_t = cam->get<TCompTransform>();
-	activateCamera(cam_t->position, 1);
-
+	//activateCamera(cam_t->position, 1);
+	*/
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
@@ -475,9 +475,7 @@ void CApp::render() {
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	activateTextureSamplers();
-
-	activateWorldMatrix(0);
-	activateTint(0);
+	CCamera camera = *(TCompCamera*)activeCamera;
 
 	CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
@@ -491,24 +489,22 @@ void CApp::render() {
 	// Generate all shadows maps
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
 
-	deferred.render(((CCamera*)(TCompCamera*)activeCamera));
+
+	deferred.render(&camera);
 
 	::render.activateBackbuffer();
 	int sz = 300;
-
-
-	CCamera camera = *(TCompCamera*)activeCamera;
 	
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
-	drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
+	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
+	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
 	
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo"));
-	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("Zthe_light"));
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("Zthe_light"));
 	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
-	activateCamera(*((CCamera*)(TCompCamera*)activeCamera), 1);
+	activateCamera(camera, 1);
 
 	setWorldMatrix(XMMatrixIdentity());
 	render_techniques_manager.getByName("basic")->activate();

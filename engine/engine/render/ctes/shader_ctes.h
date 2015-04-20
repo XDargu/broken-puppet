@@ -25,7 +25,7 @@ cbuffer TCtesLight SHADER_REGISTER(b4)
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
-  float4 AmbientLight;
+  /*float4 AmbientLight;
 
   float4 LightDirections[MaxDirLights];
   float4 LightColors[MaxDirLights];
@@ -38,7 +38,7 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
  
 
   int OmniLightCount;  
-  int LightCount;
+  int LightCount;*/
   float  world_time;
   float  dummy3[3];
   

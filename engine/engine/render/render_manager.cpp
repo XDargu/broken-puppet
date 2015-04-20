@@ -79,6 +79,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		culling = camera_transform->isInFront(tmx->position);
+		culling = true;
 		if (*it->active && culling)
 		{
 			render_count++;

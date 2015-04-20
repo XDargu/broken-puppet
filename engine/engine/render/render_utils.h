@@ -42,7 +42,6 @@ void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture);
 // Render world
 void setWorldMatrix(XMMATRIX world);
 void activateWorldMatrix(int slot);
-void activateCamera(const XMVECTOR position, int slot);
 void activateCamera(const CCamera& camera, int slot);
 void activateLight(const CCamera& camera, int slot);
 
