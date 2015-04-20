@@ -54,6 +54,7 @@ VS_TEXTURED_OUTPUT VS(
 //--------------------------------------------------------------------------------------
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 {
-	return float4(input.UV, 0, 1); // txDiffuse.Sample(samWrapLinear, input.UV);
+	return txDiffuse.Sample(samWrapLinear, input.UV);
+	//return float4(input.UV, 0, 1); // txDiffuse.Sample(samWrapLinear, input.UV);
 }
 
