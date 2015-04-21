@@ -40,6 +40,7 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	Physics.gScene->addActor(*staticBody);
 
 	staticBody->setName(e->getName());
+	staticBody->userData = CHandle(this).getOwner().asVoidPtr();
 }
 
 void TCompStaticBody::init() {

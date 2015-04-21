@@ -23,6 +23,8 @@ using namespace DirectX;
 #include "components/comp_skeleton_lookat.h"
 #include "components/comp_skeleton_ik.h"
 #include "skeletons/ik_handler.h"
+#include "render/render_to_texture.h"
+#include "render/deferred_render.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -90,7 +92,7 @@ CHandle		 life;
 
 CHandle		  activeCamera;
 CFont         font;
-
+CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 
 const CTexture* cubemap;
@@ -169,6 +171,10 @@ void createManagers() {
 	getObjManager<TCompSkeletonLookAt>()->init(1024);
 	getObjManager<TCompSkeletonIK>()->init(1024);
 
+	getObjManager<TCompRagdoll>()->init(64);
+	getObjManager<TCompShadows>()->init(8);
+
+
 	registerAllComponentMsgs();
 }
 
@@ -209,6 +215,11 @@ void initManagers() {
 
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
+
+	getObjManager<TCompSkeleton>()->initHandlers();
+	getObjManager<TCompShadows>()->initHandlers();
+
+
 }
 
 bool CApp::create() {
@@ -242,6 +253,7 @@ bool CApp::create() {
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
+	is_ok &= deferred.create(xres, yres);
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -268,15 +280,18 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_pasil_curv_01_33.0");
+	CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, -5, 0, 0), XMQuaternionIdentity(), 10);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
-	logic_manager.addRelativeKeyFrame(t, XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);*/
+	CRigidAnimation anim(t);
+
+	anim.addRelativeKeyframe(XMVectorSet(0, -15, 0, 0), XMQuaternionIdentity(), 3);
+	anim.addRelativeKeyframe(XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
+	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
+	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
+	logic_manager.addRigidAnimation(anim);	
 
 	return true;
 }
@@ -351,7 +366,7 @@ void CApp::update(float elapsed) {
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
-	
+	/*
 	// Ñapa para luz ambiental
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
 		CEntity* e_ambLight = entity_manager.getEntities()[i];
@@ -395,11 +410,11 @@ void CApp::update(float elapsed) {
 	ctes_global.uploadToGPU();
 	ctes_global.activateInVS(2);
 	ctes_global.activateInPS(2);
-
+	
 	CEntity* cam = entity_manager.getByName("PlayerCamera");
 	TCompTransform* cam_t = cam->get<TCompTransform>();
-	activateCamera(cam_t->position, 1);
-
+	//activateCamera(cam_t->position, 1);
+	*/
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
@@ -449,8 +464,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);	
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
-		
-	
+	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);	
 }
 
 void CApp::render() {
@@ -460,15 +474,43 @@ void CApp::render() {
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	activateWorldMatrix(0);
-	activateTint(0);
-
 	activateTextureSamplers();
+	CCamera camera = *(TCompCamera*)activeCamera;
 
+	CHandle h_light = entity_manager.getByName("the_light");
+	CEntity* e_light = h_light;
+	if (e_light) {
+		TCompCamera* cam_light = e_light->get<TCompCamera>();
+		activateLight(*cam_light, 4);
+	}
+
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+	// Generate all shadows maps
+	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
+
+
+	deferred.render(&camera);
+
+	::render.activateBackbuffer();
+	int sz = 300;
+	
+	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
+	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
+	
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo"));
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("Zthe_light"));
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	render_techniques_manager.getByName("basic")->activate();
+	activateWorldMatrix(0);
+	activateCamera(camera, 1);
+
+	setWorldMatrix(XMMatrixIdentity());
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
+	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 	renderDebugEntities();
 
@@ -740,7 +782,8 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();
-	logic_manager.clearKeyframes();
+	//logic_manager.clearKeyframes();
+	logic_manager.clearAnimations();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 

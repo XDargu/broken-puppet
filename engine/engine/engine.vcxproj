@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3CommonDEBUG_x64.lib PhysX3DEBUG_x64.lib PhysX3CookingDEBUG_x64.lib PhysX3CharacterKinematicDEBUG_x64.lib PhysX3ExtensionsDEBUG.lib PhysX3VehicleDEBUG.lib PhysXProfileSDKDEBUG.lib PhysXVisualDebuggerSDKDEBUG.lib PxTaskDEBUG.lib /DEBUG</AdditionalOptions>
     </Link>
@@ -175,6 +175,7 @@
     <ClInclude Include="ai\fsm_player_torso.h" />
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
+    <ClInclude Include="ai\rigid_animation.h" />
     <ClInclude Include="ai\timer.h" />
     <ClInclude Include="ai\lua_vector.h" />
     <ClInclude Include="app.h" />
@@ -195,10 +196,12 @@
     <ClInclude Include="components\comp_platform_path.h" />
     <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
+    <ClInclude Include="components\comp_ragdoll.h" />
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
     <ClInclude Include="components\comp_sensor_needles.h" />
+    <ClInclude Include="components\comp_shadows.h" />
     <ClInclude Include="components\comp_skeleton.h" />
     <ClInclude Include="components\comp_skeleton_ik.h" />
     <ClInclude Include="components\comp_skeleton_lookat.h" />
@@ -281,12 +284,15 @@
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
+    <ClInclude Include="render\deferred_render.h" />
     <ClInclude Include="render\material.h" />
     <ClInclude Include="render\mesh.h" />
     <ClInclude Include="render\render.h" />
     <ClInclude Include="render\render_manager.h" />
+    <ClInclude Include="render\render_to_texture.h" />
     <ClInclude Include="render\render_utils.h" />
     <ClInclude Include="render\shaders.h" />
+    <ClInclude Include="render\shadows.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
@@ -310,6 +316,7 @@
     <ClCompile Include="ai\fsm_player_torso.cpp" />
     <ClCompile Include="ai\key_frame.cpp" />
     <ClCompile Include="ai\logic_manager.cpp" />
+    <ClCompile Include="ai\rigid_animation.cpp" />
     <ClCompile Include="ai\timer.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
@@ -317,6 +324,8 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
+    <ClCompile Include="components\comp_needle.cpp" />
+    <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />
@@ -483,10 +492,12 @@
     </ClCompile>
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
+    <ClCompile Include="render\deferred_render.cpp" />
     <ClCompile Include="render\material.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />
     <ClCompile Include="render\render_manager.cpp" />
+    <ClCompile Include="render\render_to_texture.cpp" />
     <ClCompile Include="render\render_utils.cpp" />
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\texture.cpp" />

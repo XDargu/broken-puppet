@@ -829,7 +829,7 @@ void TW_CALL GetNothing(void *value, void *clientData)
 TwBar *console_bar;
 TwBar *console_input_bar;
 
-CConsole::CConsole() : num_lines(5)
+CConsole::CConsole() : num_lines(100)
 {}
 
 CConsole::~CConsole() { }
@@ -841,7 +841,7 @@ CConsole& CConsole::get() {
 }
 
 void CConsole::init() {
-	num_lines = 50;
+	num_lines = 100;
 
 	// Create a tewak bar
 	console_bar = TwNewBar("Console");

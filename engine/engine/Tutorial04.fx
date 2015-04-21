@@ -80,7 +80,8 @@ float4 PS( VS_OUTPUT input ) : SV_Target
 //--------------------------------------------------------------------------------------
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 {
-
+	float4 lightAccum = float4(1, 1, 1, 1);
+	/*
 	// Luz inicial
 	float4 lightAccum = AmbientLight * AmbientLight.w;
 
@@ -105,7 +106,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 			lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
 		}
 	}
-
+	*/
 	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 
 	// Blur
@@ -179,7 +180,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 
 	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
 	return result /* checker /*+ finalRim*/;
-
+	
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }
 

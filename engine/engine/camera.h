@@ -5,6 +5,7 @@
 
 class CCamera {
 protected:
+	XMVECTOR	   position;
 	XMMATRIX       view;            // Where is and where is looking at
 	XMMATRIX       projection;      // Prespective info
 	XMMATRIX       view_projection;
@@ -23,6 +24,7 @@ public:
   XMMATRIX getProjection() const { return projection; }
   XMMATRIX getViewProjection() const { return view_projection; }
 
+  XMVECTOR getPosition() const { return position; }
   float    getFov() const { return fov_in_radians; }
   float    getAspectRatio() const { return aspect_ratio; }
   float    getZNear() const { return znear; }

@@ -9,6 +9,7 @@
 #include "comp_unity_character_controller.h"
 #include "font/font.h"
 #include "render/render_manager.h"
+#include "comp_ragdoll.h"
 
 extern CMesh        axis;
 #include "render/ctes/shader_ctes.h"
@@ -82,6 +83,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	h_transform = assertRequiredComponent<TCompTransform>(this);
 	h_rigidbody = getSibling<TCompRigidBody>(this);
 
+
   std::string skel_name = atts["name"];
   CCoreModel* core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
   model = new CalModel(core_model);
@@ -93,6 +95,10 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
   for (int i = 0; i < mesh->getNGroups(); ++i )
     render_manager.addKey(mesh, mat, i, CHandle(this), &active);
+}
+
+void TCompSkeleton::init() {
+	h_ragdoll = getSibling<TCompRagdoll>(this);
 }
 
 
@@ -221,8 +227,26 @@ void TCompSkeleton::uploadBonesToGPU() const {
   for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
     CalBone* bone = cal_bones[bone_idx];
     
-    const CalMatrix& cal_mtx = bone->getTransformMatrix();    // 3x3
-    const CalVector  cal_pos = bone->getTranslationBoneSpace(); // vec3
+    const CalMatrix& cal_mtx1 = bone->getTransformMatrix();    // 3x3
+    const CalVector  cal_pos1 = bone->getTranslationBoneSpace(); // vec3
+	CalVector cal_pos3 = bone->getTranslationAbsolute();
+	CalVector diff = cal_pos3 - cal_pos1;
+
+	CalMatrix cal_mtx = cal_mtx1;
+	CalVector cal_pos = cal_pos1;
+
+	if (h_ragdoll.isValid()) {
+		TCompRagdoll* ragdoll = h_ragdoll;
+
+		if (ragdoll->isRagdollActive()) {
+			PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
+			if (rigid_bone) {
+				cal_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p)) - diff;
+				/*CalQuaternion q = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
+				cal_mtx = CalMatrix(q);*/
+			}
+		}
+	}
 
     *fout++ = cal_mtx.dxdx;
     *fout++ = cal_mtx.dydx;

@@ -9,12 +9,16 @@ CBot::~CBot() {}
 
 // LUA
 void CBot::kill() {
+	if (!entity.isValid())
+		return;
 	TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 	if (life)
 		life->life = 0;
 }
 
 void CBot::teleport(CVector pos) {
+	if (!entity.isValid())
+		return;
 	TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
 	if (transform)
 		transform->teleport(XMVectorSet(pos.x, pos.y, pos.z, 0));
@@ -25,6 +29,8 @@ void CBot::teleport(float x, float y, float z) {
 }
 
 CVector CBot::getPos() {
+	if (!entity.isValid())
+		return CVector(0, 0, 0);
 	TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
 	if (transform)
 		return CVector(transform->position);
@@ -33,6 +39,8 @@ CVector CBot::getPos() {
 }
 
 float CBot::getLife() {
+	if (!entity.isValid())
+		return 0;
 	TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 	if (life)
 		return life->life;
@@ -41,12 +49,16 @@ float CBot::getLife() {
 }
 
 void CBot::setLife(float value) {
+	if (!entity.isValid())
+		return;
 	TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 	if (life)
 		life->life = value;
 }
 
 void CBot::hurt(float value) {
+	if (!entity.isValid())
+		return;
 	TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 	if (life)
 		life->life -= value;

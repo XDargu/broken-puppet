@@ -32,6 +32,8 @@ public:
 	void update(float elapsed) {
 		// Update matrix
 		updateViewProjection();
+		TCompTransform* m_t = transform;
+		position = m_t->position;
 	}
 
 	void updateViewProjection() {

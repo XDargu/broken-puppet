@@ -88,7 +88,7 @@ void CPixelShader::destroy() {
 
 
 void CPixelShader::activate() const {
-	assert(ps);
+	// ps might be null, for example when generating shadows
 	render.ctx->PSSetShader(ps, NULL, 0);
 }
 
@@ -120,10 +120,14 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 		const CVertexDecl* decl = nullptr;
 		if (vs_decl_name == "vdcl_position_color")
 			decl = &vdcl_position_color;
+		else if (vs_decl_name == "vdcl_position_uv")
+			decl = &vdcl_position_uv;
 		else if (vs_decl_name == "vdcl_position_uv_normal")
 			decl = &vdcl_position_uv_normal;
 		else if (vs_decl_name == "vdcl_position_uv_normal_skin")
 			decl = &vdcl_position_uv_normal_skin;
+		else if (vs_decl_name == "vdcl_position_uv_normal_tangent")
+			decl = &vdcl_position_uv_normal_tangent;
 		else
 			fatal("Unsupported vdcl %s", vs_decl_name.c_str());
 		assert(decl != nullptr);
@@ -135,7 +139,9 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 			fx_name = "Tutorial04.fx";
 
 		bool is_ok = vs.compile(fx_name.c_str(), vs_name.c_str(), *decl);
-		is_ok &= ps.compile(fx_name.c_str(), ps_name.c_str());
+
+		if (!ps_name.empty())
+			is_ok &= ps.compile(fx_name.c_str(), ps_name.c_str());
 
 		uses_bones = atts.getBool("uses_bones", false);
 
