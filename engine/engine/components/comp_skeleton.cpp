@@ -232,6 +232,10 @@ void TCompSkeleton::uploadBonesToGPU() const {
 	CalVector cal_pos3 = bone->getTranslationAbsolute();
 	CalVector diff = cal_pos3 - cal_pos1;
 
+	CalQuaternion q_bone_space = bone->getRotationBoneSpace();
+	CalQuaternion q_absolute = bone->getRotationAbsolute();
+	
+
 	CalMatrix cal_mtx = cal_mtx1;
 	CalVector cal_pos = cal_pos1;
 

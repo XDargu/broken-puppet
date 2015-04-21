@@ -2,6 +2,7 @@
 #include "comp_ragdoll.h"
 #include "comp_skeleton.h"
 #include "skeletons/skeleton_manager.h"
+#include "io\iostatus.h"
 
 TCompRagdoll::TCompRagdoll() {
 	ragdoll_active = false;
@@ -57,6 +58,11 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 }
 
 void TCompRagdoll::fixedUpdate(float elapsed) {
+
+	if (CIOStatus::get().becomesPressed(CIOStatus::CANCEL_STRING))
+		setActive(!isRagdollActive());
+		
+
 	// If the ragdoll is not active, the rigid bones must follow the bone position of the animation
 	if (!ragdoll_active) {
 		for (auto& it : bone_map) {
