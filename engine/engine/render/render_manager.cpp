@@ -151,6 +151,7 @@ void CRenderManager::renderShadowsCasters() {
 		assert(tmx);
 		setWorldMatrix(tmx->getWorld());
 
+
 		// Pintar la mesh:submesh del it
 		k.mesh->activateAndRender();
 	}

@@ -81,7 +81,6 @@ void CCoreModel::TBoneCorrector::apply(CalModel* model, CalVector world_pos, flo
 void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	h_transform = assertRequiredComponent<TCompTransform>(this);
-	h_rigidbody = getSibling<TCompRigidBody>(this);
 
 
   std::string skel_name = atts["name"];
@@ -91,6 +90,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
   // Register a key to render the mesh
   const CMaterial* mat = material_manager.getByName("skin_ipa");
+  bool a = mat->castsShadows();
   const CMesh* mesh = core_model->getMesh();
 
   for (int i = 0; i < mesh->getNGroups(); ++i )
@@ -99,6 +99,8 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompSkeleton::init() {
 	h_ragdoll = getSibling<TCompRagdoll>(this);
+	h_rigidbody = getSibling<TCompRigidBody>(this);
+
 }
 
 
@@ -109,7 +111,8 @@ void TCompSkeleton::update(float elapsed) {
   }
 
   if (isKeyPressed('o') || isKeyPressed('O')) {
-    model->getMixer()->executeAction(1, 0.0f, 0.3f, 1.0f, false);
+    //model->getMixer()->executeAction(1, 0.0f, 0.3f, 1.0f, false);
+	//model->getMixer()->blendCycle(1, 1.0, 0.3);
   }
   if (isKeyPressed('P')) {
     model->getMixer()->removeAction(1, 0.f);

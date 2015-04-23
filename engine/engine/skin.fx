@@ -19,6 +19,7 @@ struct VS_TEXTURED_OUTPUT
 	float4 Pos    : SV_POSITION;
 	float2 UV     : TEXCOORD0;
 	float3 Normal : NORMAL;
+	float4 wPos    : TEXCOORD1;
 };
 
 //--------------------------------------------------------------------------------------
@@ -42,10 +43,11 @@ VS_TEXTURED_OUTPUT VS(
 
 	float4 skinned_pos = mul(ipos, skin_mtx);
 
-		output.Pos = mul(skinned_pos, ViewProjection);
+	output.Pos = mul(skinned_pos, ViewProjection);
+	output.wPos = mul(skinned_pos, World);
 	output.Normal = mul(inormal, (float3x3) skin_mtx);
-	output.UV = iuv;
-	output.UV = bone_ids.xx / 50.;
+	output.UV = float2(iuv.x, 1 - iuv.y);
+	//output.UV = bone_ids.xy / 50.;
 	return output;
 }
 
@@ -54,7 +56,24 @@ VS_TEXTURED_OUTPUT VS(
 //--------------------------------------------------------------------------------------
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 {
-	return txDiffuse.Sample(samWrapLinear, input.UV);
+	//return txDiffuse.Sample(samWrapLinear, input.UV);
 	//return float4(input.UV, 0, 1); // txDiffuse.Sample(samWrapLinear, input.UV);
+
+	// Basic diffuse lighting
+	float3 L = LightWorldPos.xyz - input.wPos.xyz;
+	L = normalize(L);
+	float3 N = normalize(input.Normal);
+	float  diffuse_amount = saturate(dot(N, L));
+
+	// Speculares
+	float3 E = normalize(CameraWorldPos.xyz - input.wPos.xyz);
+	//float3 H = normalize(E + L);
+	//float  cos_beta = saturate( dot(H, N) );
+	float3 ER = reflect(-E, N);
+	float  cos_beta = saturate(dot(ER, L));
+	float  spec_amount = pow(cos_beta, 20.);
+
+	float4 albedo = txDiffuse.Sample(samWrapLinear, input.UV);
+	return (albedo + spec_amount) * diffuse_amount;
 }
 
