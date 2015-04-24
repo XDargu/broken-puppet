@@ -100,7 +100,7 @@ CShaderCte<TCtesGlobal> ctes_global;
 const CTexture* cubemap;
 
 float fixedUpdateCounter;
-
+float fps;
 bool debug_mode;
 
 //---------------------------------------------------
@@ -279,6 +279,8 @@ bool CApp::create() {
 	entity_lister.update();	
 #endif
 	
+	fps = 0;
+
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
 
@@ -323,7 +325,7 @@ void CApp::doFrame() {
 	delta_time = delta_secs;
 	total_time += delta_secs;
 
-	float fps = 1.0f / delta_secs;
+	fps = 1.0f / delta_secs;
 
 	before = now;
 
@@ -681,6 +683,9 @@ void CApp::renderEntities() {
 }
 
 void CApp::renderDebugEntities() {
+
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(300, 30, s_fps.c_str());
 
 	//getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
