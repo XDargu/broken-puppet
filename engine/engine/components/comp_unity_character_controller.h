@@ -102,6 +102,7 @@ public:
 			true);
 
 		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
+
 		physx::PxTransform relativePose(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 		enemy_collider->setLocalPose(relativePose);
 
@@ -123,7 +124,9 @@ public:
 		enemy_rigidbody->setName(name->name);
 
 		setupFiltering(enemy_collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
-		physx::PxReal threshold = 3500.f;
+
+		//physx::PxReal threshold = 3500.f;
+		physx::PxReal threshold = 1000.f;
 		enemy_rigidbody->setContactReportThreshold(threshold);
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);

@@ -12,12 +12,6 @@ struct TCompAiFsmBasic : TBaseComponent {
 	aicontroller* m_ai_controller;
 
 	TCompAiFsmBasic(){ }
-	TCompAiFsmBasic(bt_basic_enemy* ai_controller) {
-		m_ai_controller = new bt_basic_enemy;
-		m_ai_controller->SetEntity(CHandle(this).getOwner());
-		aimanager::get().addBot(m_ai_controller);
-	}
-
 	TCompAiFsmBasic(fsm_basic_enemy* ai_controller) {
 		m_ai_controller = new fsm_basic_enemy;
 		m_ai_controller->SetEntity(CHandle(this).getOwner());
@@ -30,7 +24,7 @@ struct TCompAiFsmBasic : TBaseComponent {
 		assertRequiredComponent<TCompUnityCharacterController>(this);
 
 		//m_ai_controller = new ai_basic_enemy;
-		m_ai_controller = new bt_basic_enemy;
+		m_ai_controller = new fsm_basic_enemy;
 		m_ai_controller->SetEntity(CHandle(this).getOwner());
 		aimanager::get().addBot(m_ai_controller);
 	}

@@ -2,21 +2,33 @@
 #define _NAVMESH_INPUT_INC
 
 #include <vector>
+#include "transform.h"
 
 class CNavmeshInput {
 public:
+  enum kind{
+	MODULE,
+	OBSTACLE
+  };
+
   struct TInput {
-    DirectX::XMVECTOR pmin;
-	DirectX::XMVECTOR pmax;
-	TInput() : pmin(DirectX::XMVectorZero()), pmax(DirectX::XMVectorZero()) { }
+	DirectX::XMFLOAT3 pmin;
+	DirectX::XMFLOAT3 pmax;
+	const float* vertex_vector;
+	const int* triangles_vector;
+	int nvtx_module;
+	int nindx_module;
+	TTransform* t;
+	kind type;
+	TInput() : nvtx_module(0), nindx_module(0){}
   };
   static const int MAX_INPUTS = 1024;
   typedef std::vector< TInput > VInputs;
 
 public:
   VInputs               inputs;
-  DirectX::XMVECTOR           aabb_min;
-  DirectX::XMVECTOR           aabb_max;
+  DirectX::XMFLOAT3           aabb_min;
+  DirectX::XMFLOAT3           aabb_max;
   
   float*                verts;
   int*                  tris;
@@ -25,11 +37,14 @@ public:
   int                   nverts_total;
   int                   ntris_total;
 
+  //std::vector<float>* vertex_vector;
+  //std::vector<int>* indices_vector;
+
 public:
   CNavmeshInput( );
 
   void clearInput( );
-  void addInput(const DirectX::XMVECTOR& p0, const DirectX::XMVECTOR& p1);
+  void addInput(const DirectX::XMFLOAT3& p0, const DirectX::XMFLOAT3& p1, const float* vertx_mod, const int* indx_mod, unsigned nvtx_mod, unsigned nindx_mod, TTransform* t, kind k);
   void prepareInput( const TInput& input );
   void unprepareInput( );
   void computeBoundaries(  );

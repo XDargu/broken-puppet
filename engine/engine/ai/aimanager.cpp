@@ -28,20 +28,24 @@ aicontroller* aimanager::getAI(unsigned int id){
 			return element;
 	}
 	//Meter un xassert
+	CErrorContext ec("Getting bot", "aimanager");
+	XASSERT(id, "bot doesn't exists");
 	return nullptr;
 }
 
-aicontroller* aimanager::getAI(XMVECTOR pos, float radius){
+//Para evitar el retorno de un vector de punteros de aicontrollers pasamos la referencia del vector 
+//donde queremos que se almacenen los bots que esten en el rango dado. El metodo se encargara
+//simplemente de rellenarlo.
+void aimanager::getAI(XMVECTOR pos, float radius, std::vector<aicontroller*>& botsInRange){
 	fsm_basic_enemy* initialization = new fsm_basic_enemy;
 	aicontroller* bot = initialization;
 	for (auto & element : bots) {
 		TCompTransform* e_transform = element->getTransform();
 		float aux_distance = V3DISTANCE(e_transform->position, pos);
 		if (aux_distance <= radius){
-			return bot;
+			botsInRange.push_back(element);
 		}
 	}
-	return nullptr;
 }
 
 aicontroller* aimanager::getClosest(XMVECTOR pos){

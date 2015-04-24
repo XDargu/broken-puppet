@@ -18,6 +18,10 @@ using namespace DirectX;
 #include "render/render_manager.h"
 #include "handle\prefabs_manager.h"
 
+#include "item_manager.h"
+#include "navmesh\navmesh.h"
+#include "nav_mesh_manager.h"
+
 #include "components\all_components.h"
 #include "components/comp_skeleton.h"
 #include "components/comp_skeleton_lookat.h"
@@ -76,8 +80,6 @@ void CApp::loadConfig() {
 		xres = 1024;
 		yres = 768;
 	}
-
-
 }
 
 // Debug 
@@ -100,6 +102,10 @@ const CTexture* cubemap;
 float fixedUpdateCounter;
 
 bool debug_mode;
+
+//---------------------------------------------------
+//CNavmesh nav_prueba;
+//---------------------------------------------------
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
@@ -280,7 +286,10 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
+	//PRUEBAS NAV MESHES -----------------
+	bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	//------------------------------------
+	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
@@ -291,7 +300,7 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
-	logic_manager.addRigidAnimation(anim);	
+	logic_manager.addRigidAnimation(anim);	*/
 
 	return true;
 }
@@ -346,6 +355,17 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/milestone2.xml");
 	}
 
+	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
+	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
+	CEntity* player = entity_manager.getByName("Player");
+	TCompTransform* player_t = player->get<TCompTransform>();
+	fin = player_t->position;
+	XMVECTOR* path=new XMVECTOR;
+	int num_points_path;
+	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);*/
+	//-----------------------------------------------------------------------------------------
+
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
 #ifdef _DEBUG
@@ -363,6 +383,17 @@ void CApp::update(float elapsed) {
 			activateDebugMode(false);
 	}
 #endif
+	//Insertamos aguja en vector agujas del item manager
+	/*Citem_manager::get().addNeedle(new_e_needle);
+
+	//Insertamos aguja en vector agujas del item manager					
+	Citem_manager::get().addNeedle(new_e_needle2);
+
+	//borrado de la aguja también del item manager
+	CEntity* e = (CEntity*)firstNeedle;
+	TCompNeedle* needle = e->get<TCompNeedle>();
+	Citem_manager::get().removeNeedle(needle);*/
+
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
@@ -525,7 +556,6 @@ void CApp::render() {
 	font.print(15, 35, strings_text.c_str());*/
 
 	::render.swap_chain->Present(0, 0);
-
 }
 
 void CApp::renderEntities() {
@@ -655,6 +685,13 @@ void CApp::renderDebugEntities() {
 	//getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 
+	//--------- NavMesh render Prueba --------------
+	//if (renderNavMesh)
+	CNav_mesh_manager::get().render_nav_mesh();
+	//----------------------------------------------
+
+	CNav_mesh_manager::get().pathRender();
+
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
@@ -715,7 +752,7 @@ void CApp::activateInspectorMode(bool active) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 	io.setMousePointer(!active);
-
+	renderNavMesh = active;
 	// Activa el modo debug
 	renderAxis = active;
 	renderAABB = active;

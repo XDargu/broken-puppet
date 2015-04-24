@@ -39,7 +39,6 @@
     </ClInclude>
     <ClInclude Include="XMLParser.h" />
     <ClInclude Include="importer_parser.h" />
-    <ClInclude Include="physics_manager.h" />
     <ClInclude Include="entity_inspector.h" />
     <ClInclude Include="handle\entity.h">
       <Filter>handle</Filter>
@@ -338,9 +337,16 @@
     <ClInclude Include="ai\fsm_player_legs.h">
       <Filter>ai\player</Filter>
     </ClInclude>
+    <ClInclude Include="comp_ai_bt.h">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_mesh_manager.h" />
+    <ClInclude Include="ssb.h" />
     <ClInclude Include="components\comp_player_controller.h">
       <Filter>components\ai\player</Filter>
     </ClInclude>
+    <ClInclude Include="collision_parser.h" />
+    <ClInclude Include="physics_manager.h" />
     <ClInclude Include="ai\fsm_player_torso.h">
       <Filter>ai\player</Filter>
     </ClInclude>
@@ -596,6 +602,8 @@
     <ClCompile Include="ai\fsm_basic_enemy.cpp">
       <Filter>ai</Filter>
     </ClCompile>
+    <ClCompile Include="nav_mesh_manager.cpp" />
+    <ClCompile Include="ssb.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
@@ -619,6 +627,19 @@
     </ClCompile>
     <ClCompile Include="ai\fsm_player_legs.cpp">
       <Filter>ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="collision_parser.cpp" />
+    <ClCompile Include="components\comp_collider_mesh.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_collider_box.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_collider_sphere.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_collider_capsule.cpp">
+      <Filter>components\physics</Filter>
     </ClCompile>
     <ClCompile Include="ai\fsm_player_torso.cpp">
       <Filter>ai\player</Filter>
@@ -746,6 +767,7 @@
   <ItemGroup>
     <Xml Include="my_file.xml" />
     <Xml Include="resolution.xml" />
+    <Xml Include="collision_table.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.lua" />

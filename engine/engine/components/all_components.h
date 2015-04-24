@@ -53,6 +53,7 @@ using namespace DirectX;
 
 // AI
 #include "comp_ai_fsm_basic.h"
+#include "comp_ai_bt.h"
 #include "comp_player_position_sensor.h"
 #include "comp_sensor_needles.h"
 
