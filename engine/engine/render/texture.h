@@ -4,22 +4,26 @@
 #include "mcv_platform.h"
 
 class CTexture {
-  ID3D11ShaderResourceView* resource_view;
-  ID3D11Resource*           resource;
-  std::string               name;
-public:
-  // DirectX... pointers
-  // extra info 
-  // name
+protected:
+	ID3D11ShaderResourceView* resource_view;
+	ID3D11Texture2D*          resource;
+	std::string               name;
 
-  CTexture() : resource_view(nullptr), resource(nullptr) {}
-  bool load(const char* name);
-  void setName(const char *new_name) {
-    name = new_name;
-  }
-  void destroy();
-  void activate(int slot) const;
-  bool isValid() const { return resource != nullptr; }
+	friend class CRenderToTexture;
+
+public:
+	// DirectX... pointers
+	// extra info 
+	// name
+
+	CTexture() : resource_view(nullptr), resource(nullptr) {}
+	bool load(const char* name);
+	void setName(const char *new_name) {
+		name = new_name;
+	}
+	const char* getName() const { return name.c_str(); }
+	void destroy();
+	void activate(int slot) const;
 };
 
 typedef CItemsByName< CTexture > CTextureManager;

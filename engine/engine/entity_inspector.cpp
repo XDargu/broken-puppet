@@ -6,6 +6,7 @@
 #include "components\comp_skeleton.h"
 #include "components\comp_skeleton_ik.h"
 #include "importer_parser.h"
+#include "ai\logic_manager.h"
 #include <locale>
 #include <algorithm>
 
@@ -180,6 +181,20 @@ void TW_CALL GetAIFSMState(void *value, void *clientData)
 	std::string *destPtr = static_cast<std::string *>(value);
 	//TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller.GetState());
 	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller->getCurrentNode());
+
+}
+
+void TW_CALL GetPlayerFSMLegsState(void *value, void *clientData)
+{
+	std::string *destPtr = static_cast<std::string *>(value);
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_legs.getCurrentNode());
+
+}
+
+void TW_CALL GetPlayerFSMTorsoState(void *value, void *clientData)
+{
+	std::string *destPtr = static_cast<std::string *>(value);
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_torso.getCurrentNode());
 
 }
 
@@ -375,6 +390,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (e_player_controller) {
 		TwAddVarRW(bar, "PlayerControllerActive", TW_TYPE_BOOL8, &e_player_controller->active, " group='Player Controller' label='Active'");
+		TwAddVarCB(bar, "PlayerControllerLegsState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMLegsState, e_player_controller, " group='Player Controller' label='Legs State'");
+		TwAddVarCB(bar, "PlayerControllerTorsoState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMTorsoState, e_player_controller, " group='Player Controller' label='Torso State'");
 	}
 
 	if (e_player_pivot_controller) {
@@ -793,4 +810,78 @@ void CDebugOptioner::init() {
 	TwAddVarRW(debug_bar, "Draw axis", TW_TYPE_BOOL8, &app.renderAxis, "");
 	TwAddVarRW(debug_bar, "Draw names", TW_TYPE_BOOL8, &app.renderNames, "");
 	TwAddVarRW(debug_bar, "Draw AABBs", TW_TYPE_BOOL8, &app.renderAABB, "");
+}
+
+// ------------------------------------------------------
+
+void TW_CALL ExecuteConsoleAction(const void *value, void *clientData)
+{
+	CLogicManager::get().execute((*(const std::string *)value));
+}
+
+void TW_CALL GetNothing(void *value, void *clientData)
+{
+	std::string *destPtr = static_cast<std::string *>(value);
+	TwCopyStdStringToLibrary(*destPtr, "");
+
+}
+
+TwBar *console_bar;
+TwBar *console_input_bar;
+
+CConsole::CConsole() : num_lines(100)
+{}
+
+CConsole::~CConsole() { }
+
+static CConsole console;
+
+CConsole& CConsole::get() {
+	return console;
+}
+
+void CConsole::init() {
+	num_lines = 100;
+
+	// Create a tewak bar
+	console_bar = TwNewBar("Console");
+	console_input_bar = TwNewBar("ConsoleInput");
+
+	CApp &app = CApp::get();
+
+	// AntTweakBar test
+	int barSize[2] = { 400, 220 };
+	int varPosition[2] = { 240, app.yres - 520 };
+	TwSetParam(console_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	TwSetParam(console_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
+	TwDefine(" Console label='ConsoleOutput' ");
+	TwDefine(" Console refresh='2' ");
+
+	int barSize2[2] = { 400, 100 };
+	int varPosition2[2] = { 240, app.yres - 620 };
+	TwSetParam(console_input_bar, NULL, "size", TW_PARAM_INT32, 2, barSize2);
+	TwSetParam(console_input_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition2);
+	TwDefine(" ConsoleInput label='ConsoleInput' ");
+	TwDefine(" ConsoleInput refresh='2' ");
+
+	TwAddButton(console_input_bar, "Commands", NULL, NULL, "");
+	TwAddVarCB(console_input_bar, "Command", TW_TYPE_STDSTRING, ExecuteConsoleAction, GetNothing, NULL, " label='Command'");
+}
+
+void CConsole::print(std::string text) {
+	std::vector<std::string> text_lines = split_string(text, "\n");
+
+	for (std::string t : text_lines) {
+		if (lines.size() >= num_lines)
+			lines.pop_front();
+		lines.push_back(t);
+	}
+
+
+	for (int i = 0; i < lines.size(); ++i) {
+		std::string name = "Line" + std::to_string(i);
+		std::string label = "label='" + lines[i] + "'";
+		TwRemoveVar(console_bar, name.c_str());
+		TwAddButton(console_bar, name.c_str(), NULL, NULL, label.c_str());
+	}
 }

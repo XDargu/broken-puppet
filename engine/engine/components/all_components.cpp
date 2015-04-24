@@ -4,6 +4,8 @@
 #include "comp_skeleton_lookat.h"
 #include "comp_skeleton_ik.h"
 
+
+
 DECL_OBJ_MANAGER(CEntity, "entity");
 DECL_OBJ_MANAGER(TCompTransform, "transform");
 DECL_OBJ_MANAGER(TCompLife, "life");
@@ -45,3 +47,8 @@ DECL_OBJ_MANAGER(TCompSkeletonIK, "skeleton_ik");
 DECL_OBJ_MANAGER(TCompPlayerPosSensor, "sensorPlayerPos");
 DECL_OBJ_MANAGER(TCompSensorNeedles, "sensorNeedles");
 DECL_OBJ_MANAGER(TCompSwitchController, "switchController");
+DECL_OBJ_MANAGER(TCompSwitchPushController, "switchPushController");
+DECL_OBJ_MANAGER(TCompSwitchPullController, "switchPullController");
+DECL_OBJ_MANAGER(TCompPlatformPath, "platformPath");
+DECL_OBJ_MANAGER(TCompRagdoll, "ragdoll");
+DECL_OBJ_MANAGER(TCompShadows, "shadows");

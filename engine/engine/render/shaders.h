@@ -112,5 +112,4 @@ public:
 typedef CItemsByName< CRenderTechnique > CRenderTechniquesManager;
 extern CRenderTechniquesManager render_techniques_manager;
 
-
 #endif

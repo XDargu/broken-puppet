@@ -37,6 +37,7 @@ using namespace DirectX;
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"
 #include "comp_joint_prismatic.h"
+#include "comp_ragdoll.h"
 
 // Render
 #include "comp_render.h"
@@ -44,17 +45,23 @@ using namespace DirectX;
 #include "comp_directional_light.h"
 #include "comp_ambient_light.h"
 #include "comp_point_light.h"
+#include "comp_shadows.h"
 
 // Controllers 2
 #include "comp_character_controller.h"
 #include "comp_player_controller.h"
-#include "comp_switch_controller.h"
 
 // AI
 #include "comp_ai_fsm_basic.h"
 #include "comp_ai_bt.h"
 #include "comp_player_position_sensor.h"
 #include "comp_sensor_needles.h"
+
+// Logic
+#include "comp_platform_path.h"
+#include "comp_switch_controller.h"
+#include "comp_switch_push_controller.h"
+#include "comp_switch_pull_controller.h"
 
 // Varios
 #include "comp_needle.h"

@@ -6,6 +6,7 @@ class CEntity {
 	CHandle components[CHandle::max_types];
 public:
 	char tag[32];
+	char collision_tag[32];
 	~CEntity() {
 		for (uint32_t i = 0; i < CHandle::max_types; i++)
 			components[i].destroy();
@@ -56,6 +57,7 @@ public:
 	const char* getName() const;
 	void loadFromAtts(const std::string& elem, MKeyValue& atts) {
 		std::strcpy(tag, atts.getString("tag", "untagged").c_str());
+		std::strcpy(collision_tag, atts.getString("collisionTag", "untagged").c_str());
 	}
 
   // Mandar un msg a todos los componentes de esta entidad que se 
@@ -85,6 +87,10 @@ public:
 
 	bool hasTag(char* the_tag) {
 		return std::strcmp(tag, the_tag) == 0;
+	}
+
+	bool hasCollisionTag(char* the_tag) {
+		return std::strcmp(collision_tag, the_tag) == 0;
 	}
 
 	/*

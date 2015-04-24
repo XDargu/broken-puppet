@@ -5,21 +5,38 @@
 
 struct TCompRope : TBaseComponent {
 private:
-	CHandle needle_1;
-	CHandle needle_2;
+	CHandle transform_1;
+	CHandle transform_2;
+
 	CHandle joint;
 public:
+
+	XMVECTOR pos_1;
+	XMVECTOR pos_2;
 
 	float max_distance;
 	float width;
 
 	TCompRope() : max_distance( 20 ) , width ( 0.02f ) {}
 
-	void create(/*CHandle the_needle_1, CHandle the_needle_2*/) {
+	void setPositions(CHandle the_transform_1, XMVECTOR the_pos_2) {
+
+		transform_1 = the_transform_1;
+		pos_2 = the_pos_2;
+	}
+
+	void setPositions(XMVECTOR the_pos_1, CHandle the_transform_2) {
+
+		pos_1 = the_pos_1;
+		transform_2 = the_transform_2;
+	}
+
+	// With two transforms, a distance joiny is required
+	void setPositions(CHandle the_transform_1, CHandle the_transform_2) {
 		joint = assertRequiredComponent<TCompDistanceJoint>(this);
 
-		/*needle_1 = the_needle_1;
-		needle_2 = the_needle_2;*/
+		transform_1 = the_transform_1;
+		transform_2 = the_transform_2;
 	}
 
 	void loadFromAtts(const std::string& elem, MKeyValue& atts) {
@@ -30,6 +47,18 @@ public:
 	}
 
 	void fixedUpdate(float elapsed) {
+
+		// Update the first pos
+		if (transform_1.isValid()) {
+			TCompTransform* trans_1 = transform_1;
+			pos_1 = trans_1->position;
+		}
+
+		// Update the second pos
+		if (transform_2.isValid()) {
+			TCompTransform* trans_2 = transform_2;
+			pos_2 = trans_2->position;
+		}
 		// If the joint distance exceeds the max distance, the destroy the entity
 		/*float dist = ((TCompDistanceJoint*)joint)->joint->getDistance();
 		if (dist > max_distance * max_distance) {

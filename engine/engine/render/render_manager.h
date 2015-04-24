@@ -25,6 +25,18 @@ class CRenderManager {
 
 	typedef std::vector< TKey > VKeys;
 	VKeys keys;
+
+	struct TShadowCasterKey {
+		const CMesh*       mesh;
+		CHandle            owner;
+		CHandle            transform;
+	};
+
+	// In case we want to save only those keys of objects which 
+	// generates shadows.
+	typedef std::vector< TShadowCasterKey > VShadowCasterKeys;
+	VShadowCasterKeys shadow_casters_keys;
+
 	bool  sort_required;
 
 	static bool sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2);
@@ -42,6 +54,8 @@ public:
 
 	void renderAll(const CCamera* camera);
 	void renderAll(const CCamera* camera, TTransform* camera_transform);
+	
+	void renderShadowsCasters();
 
 	void destroyAllKeys();
 

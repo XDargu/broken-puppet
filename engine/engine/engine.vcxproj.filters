@@ -211,12 +211,6 @@
     <ClInclude Include="ai\fsm_basic_enemy.h">
       <Filter>ai</Filter>
     </ClInclude>
-    <ClInclude Include="ai\logic_manager.h">
-      <Filter>ai</Filter>
-    </ClInclude>
-    <ClInclude Include="ai\timer.h">
-      <Filter>ai</Filter>
-    </ClInclude>
     <ClInclude Include="components\base_component.h">
       <Filter>components\basic</Filter>
     </ClInclude>
@@ -353,6 +347,52 @@
     </ClInclude>
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="physics_manager.h" />
+    <ClInclude Include="ai\fsm_player_torso.h">
+      <Filter>ai\player</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\logic_manager.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\timer.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\key_frame.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="aabb.h" />
+    <ClInclude Include="components\comp_switch_pull_controller.h">
+      <Filter>components\logic\switches</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_switch_push_controller.h">
+      <Filter>components\logic\switches</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_platform_path.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bot.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\lua_vector.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\rigid_animation.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_ragdoll.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="render\deferred_render.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\render_to_texture.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\shadows.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_shadows.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -564,12 +604,6 @@
     </ClCompile>
     <ClCompile Include="nav_mesh_manager.cpp" />
     <ClCompile Include="ssb.cpp" />
-    <ClCompile Include="ai\logic_manager.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
-    <ClCompile Include="ai\timer.cpp">
-      <Filter>ai</Filter>
-    </ClCompile>
     <ClCompile Include="components\comp_rigid_body.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
@@ -606,6 +640,45 @@
     </ClCompile>
     <ClCompile Include="components\comp_collider_capsule.cpp">
       <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\fsm_player_torso.cpp">
+      <Filter>ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\logic_manager.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\timer.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\key_frame.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bot.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_switch_pull_controller.cpp">
+      <Filter>components\logic\switches</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_joint_prismatic.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_static_body.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\rigid_animation.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_ragdoll.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_needle.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="render\deferred_render.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\render_to_texture.cpp">
+      <Filter>render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -681,6 +754,12 @@
     <Filter Include="ai\player">
       <UniqueIdentifier>{426a6489-9652-48e2-b731-ef3e8cb3645c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ai\logic">
+      <UniqueIdentifier>{d450a530-747e-479a-9228-539dc68bcc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\logic\switches">
+      <UniqueIdentifier>{4b410d89-e4e2-464c-856c-fd6fe9b838a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="render\notes.txt" />
@@ -689,5 +768,8 @@
     <Xml Include="my_file.xml" />
     <Xml Include="resolution.xml" />
     <Xml Include="collision_table.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.lua" />
   </ItemGroup>
 </Project>

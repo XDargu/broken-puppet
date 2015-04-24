@@ -1,0 +1,19 @@
+<prefab>
+  <entity tag = "actor">
+    <name name="int_pull" />
+    <transform rotation="0.0 0.0 0.0 1.0" position="0.0 0.0 0.0" scale="0.05 0.05 0.05"/>
+    <render>
+      <draw mesh="int_pull" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="int_pull" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="int_pull" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="int_pull" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="int_pull" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="int_pull" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.62 -0.12 -0.62" max="0.62 0.12 0.62"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.62" boxY="0.12" boxZ="0.62"/>
+    <rigidbody density="50.0" />
+    <jointPrismatic actor1 = "int_pull"  linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="0.24" linearRestitution="0.0" posSpring="5000.0" posDamping="2000.0" />
+	<switchPullController/>
+  </entity>
+</prefab>

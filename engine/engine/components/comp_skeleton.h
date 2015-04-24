@@ -8,7 +8,9 @@ class CalBone;
 
 
 struct TCompSkeleton : TBaseComponent {
-
+private:
+	CHandle h_ragdoll;
+public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
 
@@ -16,6 +18,7 @@ struct TCompSkeleton : TBaseComponent {
 
 	TCompSkeleton() : model(nullptr) { }
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
+	void init();
 	void update(float elapsed);
 	void renderDebug3D() const;
 	void renderBoneAxis(int bone_id) const;

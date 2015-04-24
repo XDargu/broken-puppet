@@ -59,6 +59,7 @@ class CMesh
 		, POSITION_COLOR
 		, POSITION_UV_NORMAL
 		, POSITION_UV_NORMAL_SKIN
+		, POSITION_UV_NORMAL_TANGENT    // 1006 as in maxscript
 	};
 
 	// ------------------------------------

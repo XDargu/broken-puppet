@@ -24,12 +24,12 @@ class CPhysicsManager
 {
 public:
 
-	physx::PxPhysics *gPhysicsSDK;
-	physx::PxCooking *gCooking;
-	physx::PxScene* gScene;
-	physx::PxControllerManager* gManager;
+	PxPhysics *gPhysicsSDK;
+	PxCooking *gCooking;
+	PxScene* gScene;
+	PxControllerManager* gManager;
 
-	physx::PxReal timeStep;
+	PxReal timeStep;
 
 	static CPhysicsManager& get();
 
@@ -45,28 +45,34 @@ public:
 	void addCollisionFilter(physx::PxU32 s, physx::PxU32 filter);
 	void loadCollisions();
 
-	physx::PxVec3 XMVECTORToPxVec3(XMVECTOR vector);
-	XMVECTOR PxVec3ToXMVECTOR(physx::PxVec3 vector);
+	PxVec3 XMVECTORToPxVec3(XMVECTOR vector);
+	XMVECTOR PxVec3ToXMVECTOR(PxVec3 vector);
 
-	physx::PxQuat XMVECTORToPxQuat(XMVECTOR quat);
-	XMVECTOR PxQuatToXMVECTOR(physx::PxQuat quat);
+	PxQuat XMVECTORToPxQuat(XMVECTOR quat);
+	XMVECTOR PxQuatToXMVECTOR(PxQuat quat);
 
-	std::string toString(physx::PxVec3 vector);
-	std::string toString(physx::PxQuat quat);
+	std::string toString(PxVec3 vector);
+	std::string toString(PxQuat quat);
 
-	bool raycast(physx::PxVec3 origin, physx::PxVec3 unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
-	bool raycast(XMVECTOR origin, XMVECTOR unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
+	bool raycast(PxVec3 origin, PxVec3 unit_dir, PxReal max_distance, PxRaycastBuffer &hit);
+	bool raycast(XMVECTOR origin, XMVECTOR unit_dir, PxReal max_distance, PxRaycastBuffer &hit);
 
-	void raycastAll(physx::PxVec3 origin, physx::PxVec3 unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
-	void raycastAll(XMVECTOR origin, XMVECTOR unit_dir, physx::PxReal max_distance, physx::PxRaycastBuffer &hit);
+	void raycastAll(PxVec3 origin, PxVec3 unit_dir, PxReal max_distance, PxRaycastBuffer &hit);
+	void raycastAll(XMVECTOR origin, XMVECTOR unit_dir, PxReal max_distance, PxRaycastBuffer &hit);
+
+	bool sweepTest(PxGeometry sweepShape, PxTransform initialPose, PxVec3 unit_dir, PxReal max_distance, PxSweepBuffer &hit);
+	bool sweepTest(PxGeometry sweepShape, TTransform initialPose, XMVECTOR unit_dir, PxReal max_distance, PxSweepBuffer &hit);
+
+	void sweepTestAll(PxGeometry sweepShape, PxTransform initialPose, PxVec3 unit_dir, PxReal max_distance, PxSweepBuffer &hit);
+	void sweepTestAll(PxGeometry sweepShape, TTransform initialPose, XMVECTOR unit_dir, PxReal max_distance, PxSweepBuffer &hit);
 
 	PxTransform transformToPxTransform(TTransform the_transform);
 	TTransform pxTransformToTransform(PxTransform the_transform);
 
 };
 
-void setupFiltering(physx::PxRigidActor* actor, physx::PxU32 filterGroup, physx::PxU32 filterMask);
-void setupFiltering(physx::PxShape* shape, physx::PxU32 filterGroup, physx::PxU32 filterMask);
+void setupFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask);
+void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask);
 
 #define Physics CPhysicsManager::get()
 

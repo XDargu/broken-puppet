@@ -2,6 +2,6 @@
 	fx="skin.fx"
 	vs="VS"
 	vs_decl="vdcl_position_uv_normal_skin"
-	ps="PSTexturedLighting"
+	ps="PSTextured"
     uses_bones="1"
 	/>

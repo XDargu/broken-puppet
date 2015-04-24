@@ -41,6 +41,7 @@ bool TCompTrigger::onEnter(){
 				CEntity* own = CHandle(this).getOwner();
 				if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
 					inside.push_back(e);
+					CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
 					XDEBUG("On enter: %s", e->getName());
 					return true;
 				}
@@ -60,6 +61,7 @@ bool TCompTrigger::onExit(){
 				CEntity* own = CHandle(this).getOwner();
 				if ((e != own) && (!aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
 					remove(inside, i);
+					CLogicManager::get().onTriggerExit(CHandle(CHandle(this).getOwner()), CHandle(e));
 					XDEBUG("On exit: %s", e->getName());
 					return true;
 				}

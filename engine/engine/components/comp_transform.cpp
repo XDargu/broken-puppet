@@ -16,4 +16,32 @@ void TCompTransform::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	if (u) {
 		u->enemy_rigidbody->setGlobalPose(Physics.transformToPxTransform(*this));
 	}
+
+	prev_transform = TTransform(position, rotation, scale);
+}
+
+void TCompTransform::update(float elapsed) {
+	prev_transform.position = position;
+	prev_transform.rotation = rotation;
+	prev_transform.scale = scale;
+}
+
+void TCompTransform::teleport(XMVECTOR the_position) {
+
+	position = the_position;
+
+	TCompRigidBody* r = getSibling<TCompRigidBody>(this);
+	TCompUnityCharacterController* u = getSibling<TCompUnityCharacterController>(this);
+	if (r) {
+		r->rigidBody->setGlobalPose(Physics.transformToPxTransform(*this));
+	}
+	if (u) {
+		u->enemy_rigidbody->setGlobalPose(Physics.transformToPxTransform(*this));
+	}
+}
+
+bool TCompTransform::transformChanged() {
+	int equal = memcmp(&prev_transform, &*this, sizeof(*this));
+
+	return equal != 0;
 }

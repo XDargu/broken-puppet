@@ -3,15 +3,17 @@
 
 class CVertexDecl {
 public:
-  D3D11_INPUT_ELEMENT_DESC* elems;
-  UINT                      nelems;
-  unsigned                  bytes_per_vertex;
-  CVertexDecl(D3D11_INPUT_ELEMENT_DESC* the_elems, UINT the_nelems);
+	D3D11_INPUT_ELEMENT_DESC* elems;
+	UINT                      nelems;
+	unsigned                  bytes_per_vertex;
+	CVertexDecl(D3D11_INPUT_ELEMENT_DESC* the_elems, UINT the_nelems);
 };
 
 extern CVertexDecl vdcl_position_color;
+extern CVertexDecl vdcl_position_uv;
 extern CVertexDecl vdcl_position_uv_normal;
 extern CVertexDecl vdcl_position_uv_normal_skin;
+extern CVertexDecl vdcl_position_uv_normal_tangent;
 
 template<class TVertex>
 CVertexDecl* getVertexDecl();

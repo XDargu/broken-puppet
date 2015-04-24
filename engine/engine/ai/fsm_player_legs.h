@@ -1,5 +1,5 @@
-#ifndef _FSM_PLAYER_LEGS_H
-#define _FSM_PLAYER_LEGS_H
+#ifndef _FSM_PLAYER_LEGS_H_
+#define _FSM_PLAYER_LEGS_H_
 
 #include "aifsmcontroller.h"
 
@@ -8,11 +8,10 @@ class FSMPlayerLegs : public aifsmcontroller
 
 public:
 
-	CHandle comp_mesh;
 	CHandle comp_character_controller;
 	CHandle comp_rigidbody;
 	CHandle comp_collider;
-	CHandle comp_basic_player_controller;
+	CHandle comp_player_controller;
 	CHandle comp_player_pivot_transform;
 	CHandle entity_camera;
 
@@ -36,7 +35,7 @@ public:
 	void PullString(float elapsed);
 	void Fall(float elapsed);
 	void Land(float elapsed);
-	void WrongFall();
+	void WrongFall(float elapsed);
 	void WrongLand(float elapsed);
 	void ProcessHit(float elapsed);
 	void Hurt(float elapsed);
@@ -45,12 +44,12 @@ public:
 	void ReevaluatePriorities();
 	void WakeUp(float elapsed);
 
-	void EvaluateHit();
+	void EvaluateHit(float damage);
 	void EvaluateLiveToLose(float damage);
 
 	void localCameraFront();
-	bool EvaluateMovement(bool lookAtCamera);
-	bool EvaluateFall();
+	bool EvaluateMovement(bool lookAtCamera, float elapsed);
+	bool EvaluateFall(float elapsed);
 
 	bool trueEveryXSeconds(float time);
 };

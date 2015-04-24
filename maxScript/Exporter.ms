@@ -18,10 +18,10 @@ clearlistener()
 	allObject = $*
 
 	-- List of object not evaluables
-	NotEval = #(targetobject)
+	NotEval = #(targetobject, UConstraint, line)
 
 	-- List of object without mesh
-	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight,grid)
+	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight, grid, line)
 
 	DistanceTextAttributes = "distanceTextData"
 	CameraAttribute = "objectCameraData"
@@ -52,6 +52,8 @@ clearlistener()
 	CameraPivotName = "CameraPivot"
 	CameraName = "PlayerCamera"
 	BasicEnemyName = "BasicEnemy"
+	IntPullName = "int_pull"
+	IntPushName = "int_push"
 
 
 	-- List of special names
@@ -338,7 +340,7 @@ clearlistener()
 		local data_path = out_path
 		local filename = data_path + "meshes\\"
 		filename += obj.name + ".mesh"
-		
+		print obj.name
 		if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
 		
 		-- Open file in binary mode, destroy existing version
@@ -908,24 +910,29 @@ clearlistener()
 		return ((findItem reservedNames (obj.name)) != 0)
 	)
 
+	fn getIdName obj = (
+		if (validateName obj) then (
+			return  obj.name
+		)
+		return  obj.name + "_" + obj.id as string
+	)
+	
 	/**********************************************************************************************
 	Gets the object name
 	Params:
 	  - obj: target object
 	 Returns:
 	  - String with the component information
-	***********************************************************************************************/
-	fn getName obj = (
-		if (validateName obj) then
-		return "<name " + "name=\"" + obj.name + "\" />\n"
-		
-		return "<name " + "name=\"" + obj.name + "_" + obj.id as string + "\" />\n"
+	***********************************************************************************************/	
+	fn getName obj = (		
+		local mName = getIdName obj		
+		return "<name " + "name=\"" + mName + "\" />\n"		
 	)
 
 	fn validateRigidbody obj = (
-		return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1))
+		return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1 or  obj.modifiers[#PhysX_Rigid_Body].type == 2))
 	)
-
+	
 	fn validateRigidbodyParams obj = (
 		return isProperty obj.baseObject #objectRigidBodyData == true
 	)
@@ -958,6 +965,7 @@ clearlistener()
 			if (obj.objectRigidBodyData.lockZRot) then
 				params += "lockZRot=\"" + (obj.objectRigidBodyData.lockZRot as string) + "\" ";
 		)
+		if (obj.modifiers[#PhysX_Rigid_Body].type == 2) then params += "kinematic=\"true\" "
 		
 		return "<rigidbody " + "density=\"" + ((obj.modifiers[#PhysX_Rigid_Body].density * 1000) as string) + "\" " + params + " />\n"
 		
@@ -1047,9 +1055,9 @@ clearlistener()
 										 + " boxX=\"" \
 															+ extents.x as string + "\"" \
 										 + " boxY=\"" \
-															+ extents.y as string + "\"" \
+															+ extents.z as string + "\"" \
 										 + " boxZ=\"" \
-															+ extents.z as string + "\"" \													
+															+ extents.y as string + "\"" \													
 				+ "/>\n"
 		)
 		if ((obj.modifiers[#PhysX_Rigid_Body].meshType == 5) or (obj.modifiers[#PhysX_Rigid_Body].meshType == 6)) then (
@@ -1355,6 +1363,7 @@ clearlistener()
 	
 		
 fn validateJointPrismatic obj = (
+	
 	-- Get all the Uconstraints in the scene
 	list = for o in $* where (classof o == UConstraint) collect o
 	
@@ -1378,16 +1387,16 @@ fn validateJointPrismatic obj = (
 			undefinedTest = true
 		)
 		
-		
 			
 		if (body0) or (body1) then (
 			
-
+			local mName = getIdName mJoint
 			
 			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mJoint.name ) == 0 then (
+			if (findItem expJoints mName ) == 0 then (
 				-- Add it
-				append expJoints mJoint.name
+				
+				append expJoints mName
 				-- If have only one actor
 				if (undefinedTest) then return mJoint
 				-- return false
@@ -1412,8 +1421,6 @@ Gets a Distance Text component
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
 	local mJoint = validateJointPrismatic obj
-	print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-	print mJoint as string
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointPrismatic "
@@ -1446,6 +1453,57 @@ fn getJointPrismatic obj = (
 	return mString
 )	
 	
+
+
+fn validatePlatformPath obj = (
+	
+	local mPath = undefined
+	
+	if(isProperty obj.baseObject #mPathName) then
+	(
+		mPath = getnodebyname obj.mPathName
+	)
+		
+	return mPath
+	
+)
+
+/**********************************************************************************************
+Gets the component platform path, it contains a list of point that makes a path
+Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/	
+fn getPlatformPath obj = (	
+	local mPath = validatePlatformPath obj
+	if (mPath == undefined) then return ""
+	
+	local copyPath = copy mPath
+	
+	--local world2local = inverse copyPath.transform
+	--local max2mcv = rotateXMatrix -90
+	--local _world2mcv = world2local * max2mcv
+	
+	--copyPath.transform = _world2mcv
+	
+	local mString = "<platformPath>"
+	
+	for k = 1 to (numknots copyPath 1) do (				
+		local mPoint = getKnotPoint copyPath 1 k
+		
+		mString += "<point index=\"" + k as string + "\"  position=\"" \
+														+ mPoint.x as string+" " \
+														+ mPoint.z as string+" " \
+														+ (-mPoint.y) as string+"" \
+		+"\"/>\n"		
+	)
+	
+	mString += "</platformPath>"
+	delete copyPath
+	return mString
+)
+
 	
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #distanceTextData == true
@@ -1568,9 +1626,16 @@ fn getJointPrismatic obj = (
 		basicEnemyPrefab.obj_name = BasicEnemyName
 		append basicEnemyPrefab.components getTransform
 		append basicEnemyPrefab.components getAiFsmBasic
+		
+		-- Create IntPull prefab
+		pullIntPrefab = objPrefab()
+		pullIntPrefab.obj_name = IntPullName
+		append pullIntPrefab.components getName
+		append pullIntPrefab.components getTransform
+		append pullIntPrefab.components getJointPrismatic
 
 		-- Adding prefabs to the prefabs list
-		ex_prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab)
+		ex_prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab, pullIntPrefab)
 	)
 
 	/**********************************************************************************************
@@ -1624,7 +1689,8 @@ fn getJointPrismatic obj = (
 			getAmbientLight,
 			getDirectionalLight,
 			getDistanceText,
-			getJointPrismatic
+			getJointPrismatic,
+			getPlatformPath
 		)
 
 		-- Initialize XML
@@ -1656,7 +1722,7 @@ fn getJointPrismatic obj = (
 					for func in mPrefab.components do (
 						mXML += "" + func obj
 					)
-					mXML += "\t</entity>\n"		
+					mXML += "\t</entity>\n"	
 				)
 			)
 			

@@ -109,8 +109,6 @@ struct TCompSwitchController : TBaseComponent{
 	}
 
 	void update(float elapsed) {
-		// Check if distance <= initialDistance - limit
-		// Take the positions in world
 		if (actor1.isValid()){
 			if (r1.isValid()){
 				Pos1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
@@ -181,7 +179,7 @@ struct TCompSwitchController : TBaseComponent{
 		else if (tipe == 2)
 		{
 			float distance = (init_pos.p - actual_pos.p).magnitudeSquared();
-			if ((pressed == false) && ((init_pos.p - actual_pos.p).magnitudeSquared() >= (limit)/2)){
+			if ((pressed == false) && ((init_pos.p - actual_pos.p).magnitudeSquared() >= (limit) / 2)){
 				// Llamar a la función de activar
 				onPress();
 				pressed = true;

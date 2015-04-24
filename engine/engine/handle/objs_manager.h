@@ -253,6 +253,13 @@ public:
 		for (; num--; obj++)
 			obj->renderDebug3D();
 	}
+
+	void onAll(void (TObj::*TMemberFn)()) const {
+		TObj* obj = objs;
+		uint32_t num = num_objects_in_use;
+		for (; num--; obj++)
+			(obj->*TMemberFn)();
+	}
 };
 
 

@@ -27,6 +27,8 @@ using namespace DirectX;
 #include "components/comp_skeleton_lookat.h"
 #include "components/comp_skeleton_ik.h"
 #include "skeletons/ik_handler.h"
+#include "render/render_to_texture.h"
+#include "render/deferred_render.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -44,10 +46,10 @@ CEntityInspector &entity_inspector = CEntityInspector::get();
 CEntityLister	 &entity_lister = CEntityLister::get();
 CEntityActioner	 &entity_actioner = CEntityActioner::get();
 CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
+CConsole		 &console = CConsole::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
-deque<CHandle> strings;
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
@@ -92,7 +94,7 @@ CHandle		 life;
 
 CHandle		  activeCamera;
 CFont         font;
-
+CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 
 const CTexture* cubemap;
@@ -153,6 +155,11 @@ void createManagers() {
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
+	getObjManager<TCompSwitchPullController>()->init(32);
+	getObjManager<TCompSwitchPushController>()->init(32);
+
+	// Plataformas
+	getObjManager<TCompPlatformPath>()->init(32);	
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -169,6 +176,10 @@ void createManagers() {
 	getObjManager<TCompSkeleton>()->init(1024);
 	getObjManager<TCompSkeletonLookAt>()->init(1024);
 	getObjManager<TCompSkeletonIK>()->init(1024);
+
+	getObjManager<TCompRagdoll>()->init(64);
+	getObjManager<TCompShadows>()->init(8);
+
 
 	registerAllComponentMsgs();
 }
@@ -195,13 +206,26 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 
+	// PLATFORMS
+	getObjManager<TCompPlatformPath>()->initHandlers();
+
+	// SWITCHS
+	getObjManager<TCompSwitchPullController>()->initHandlers();
+	getObjManager<TCompSwitchPushController>()->initHandlers();
+
 	//PRUEBA TRIGGER
+
 	getObjManager<TCompTrigger>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
 
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
+
+	getObjManager<TCompSkeleton>()->initHandlers();
+	getObjManager<TCompShadows>()->initHandlers();
+
+
 }
 
 bool CApp::create() {
@@ -223,6 +247,9 @@ bool CApp::create() {
 
 	physics_manager.init();
 
+	// Boot LUA
+	logic_manager.bootLUA();
+
 	XASSERT(font.create(), "Error creating the font");
 
 	loadScene("data/scenes/my_file.xml");
@@ -232,6 +259,7 @@ bool CApp::create() {
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
+	is_ok &= deferred.create(xres, yres);
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -246,8 +274,9 @@ bool CApp::create() {
 	entity_lister.init();
 	entity_actioner.init();
 	debug_optioner.init();
+	console.init();
 
-	entity_lister.update();
+	entity_lister.update();	
 #endif
 	
 	// Timer test
@@ -260,6 +289,18 @@ bool CApp::create() {
 	//PRUEBAS NAV MESHES -----------------
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 	//------------------------------------
+	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
+	CHandle t = r->get<TCompTransform>();
+	TCompTransform* tt = t;
+
+	CRigidAnimation anim(t);
+
+	anim.addRelativeKeyframe(XMVectorSet(0, -15, 0, 0), XMQuaternionIdentity(), 3);
+	anim.addRelativeKeyframe(XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
+	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
+	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
+	
+	logic_manager.addRigidAnimation(anim);	*/
 
 	return true;
 }
@@ -315,15 +356,14 @@ void CApp::update(float elapsed) {
 	}
 
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
-	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
 	CEntity* player = entity_manager.getByName("Player");
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
 	XMVECTOR* path=new XMVECTOR;
 	int num_points_path;
-	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);
-	int caca = 1;
+	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);*/
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
@@ -343,208 +383,21 @@ void CApp::update(float elapsed) {
 			activateDebugMode(false);
 	}
 #endif
-	//Calculate the current number of strings
-	unsigned int num_strings = numStrings();
+	//Insertamos aguja en vector agujas del item manager
+	/*Citem_manager::get().addNeedle(new_e_needle);
 
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+	//Insertamos aguja en vector agujas del item manager					
+	Citem_manager::get().addNeedle(new_e_needle2);
 
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f  && num_strings > 0) {
-			CHandle c_rope = strings.back();
-			strings.pop_back();
-			entity_manager.remove(c_rope.getOwner());
-		}		
-	}
+	//borrado de la aguja también del item manager
+	CEntity* e = (CEntity*)firstNeedle;
+	TCompNeedle* needle = e->get<TCompNeedle>();
+	Citem_manager::get().removeNeedle(needle);*/
 
-	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && num_strings > 0) {
-			strings.clear();
-			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-			{
-				TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-
-				if (djoint) {
-					entity_manager.remove(CHandle(djoint).getOwner());
-				}
-			}
-		}
-	}
-
-	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
-		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
-		{
-			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-
-			if (djoint) {
-				djoint->joint->setMaxDistance(0.1f);
-				PxRigidActor* a1 = nullptr;
-				PxRigidActor* a2 = nullptr;
-
-				djoint->joint->getActors(a1, a2);
-				// Wake up the actors, if dynamic
-				if (a1 && a1->isRigidDynamic()) {
-					((physx::PxRigidDynamic*)a1)->wakeUp();
-					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-				}
-				if (a2 && a2->isRigidDynamic()) {
-					((physx::PxRigidDynamic*)a2)->wakeUp();
-					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-				}
-			}
-		}
-	}
-
-
-	if (io.becomesPressed(CIOStatus::THROW_STRING)) {	
-
-			// Get the camera position
-			CEntity* e = CEntityManager::get().getByName("PlayerCamera");
-			TCompTransform* t = e->get<TCompTransform>();
-
-			// Raycast detecting the collider the mouse is pointing at
-			PxRaycastBuffer hit;
-			physics_manager.raycast(t->position, t->getFront(), 1000, hit);
-
-			static int entitycount = 1;
-			static PxRigidActor* firstActor = nullptr;
-			static PxVec3 firstPosition = PxVec3(0, 0, 0);
-			static PxVec3 firstOffset = PxVec3(0, 0, 0);
-			static CHandle firstNeedle;
-			if (hit.hasBlock) {
-				PxRaycastHit blockHit = hit.block;
-				//dbg("Click en un actor en: %f, %f, %f\n", blockHit.actor->getGlobalPose().p.x, blockHit.actor->getGlobalPose().p.y, blockHit.actor->getGlobalPose().p.z);
-				//dbg("Punto de click: %f, %f, %f\n", blockHit.position.x, blockHit.position.y, blockHit.position.z);
-
-				if (firstActor == nullptr) {
-					firstActor = blockHit.actor;
-					firstPosition = blockHit.position;
-					firstOffset = firstActor->getGlobalPose().q.rotateInv(blockHit.position - firstActor->getGlobalPose().p);
-
-					// Needle
-					CEntity* new_e = prefabs_manager.getInstanceByName("Needle");
-					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
-
-					TCompName* new_e_name = new_e->get<TCompName>();
-					std::strcpy(new_e_name->name, ("Needle" + to_string(entitycount)).c_str());
-
-					TCompTransform* new_e_trans = new_e->get<TCompTransform>();
-					new_e_trans->scale = XMVectorSet(2, 2, 2, 1);
-
-					TCompNeedle* new_e_needle = new_e->get<TCompNeedle>();
-					XMVECTOR rotation;
-					if (firstPosition == physics_manager.XMVECTORToPxVec3(t->position)) {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-					else {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(firstPosition) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-
-					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(firstPosition - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(firstPosition), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
-					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
-
-					new_e_needle->create(
-						firstActor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(firstOffset) : physics_manager.PxVec3ToXMVECTOR(firstPosition)
-						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(firstActor->getGlobalPose().q)))
-						, rigidbody_e->get<TCompRigidBody>()
-						);
-
-					firstNeedle = new_e;
-
-					//Insertamos aguja en vector agujas del item manager
-					Citem_manager::get().addNeedle(new_e_needle);
-
-				}
-				else if ((blockHit.actor != firstActor) && !(blockHit.actor->isRigidStatic() && firstActor->isRigidStatic())) {
-					if (num_strings >= max_num_string){
-						CHandle c_rope = strings.front();
-						strings.pop_front();
-						entity_manager.remove(c_rope.getOwner());
-					}
-
-					CEntity* new_e = entity_manager.createEmptyEntity();
-
-					TCompName* new_e_name = CHandle::create<TCompName>();
-					std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
-					new_e->add(new_e_name);
-
-					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-					PxVec3 pos = firstActor->getGlobalPose().q.rotate(firstOffset) + firstActor->getGlobalPose().p;
-					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)			  
-					PxVec3 offset_1 = firstOffset;//firstActor->getGlobalPose().q.rotateInv(firstPosition - firstActor->getGlobalPose().p);
-					PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
-
-					new_e_j->create(firstActor, blockHit.actor, 1, firstPosition, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
-					
-					/*new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR0, PxTransform(offset_1));
-					new_e_j->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(offset_2));*/
-
-					new_e->add(new_e_j);
-
-					TCompRope* new_e_r = CHandle::create<TCompRope>();
-					new_e->add(new_e_r);
-					new_e_r->create();
-
-					// Needle
-					CEntity* new_e2 = prefabs_manager.getInstanceByName("Needle");
-					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
-
-					TCompName* new_e_name2 = new_e2->get<TCompName>();
-					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
-
-					TCompTransform* new_e_trans2 = new_e2->get<TCompTransform>();
-					new_e_trans2->scale = XMVectorSet(2, 2, 2, 1);
-
-					TCompNeedle* new_e_needle2 = new_e2->get<TCompNeedle>();
-					XMVECTOR rotation;
-					if (blockHit.position == physics_manager.XMVECTORToPxVec3(t->position)) {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(t->getFront() * 0.01f)) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-					else {
-						XMMATRIX view = XMMatrixLookAtRH(t->position, t->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - t->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-
-					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
-					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
-
-					new_e_needle2->create(
-						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
-						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
-						, rigidbody_e->get<TCompRigidBody>()
-						);
-
-					//Insertamos aguja en vector agujas del item manager					
-					Citem_manager::get().addNeedle(new_e_needle2);
-
-					strings.push_back(CHandle(new_e_r));
-					firstActor = nullptr;
-					firstNeedle = CHandle();
-					entitycount++;
-					
-				}
-				// Same actor, action cancelled
-				else {
-
-					//borrado de la aguja también del item manager
-					CEntity* e = (CEntity*)firstNeedle;
-					TCompNeedle* needle = e->get<TCompNeedle>();
-					Citem_manager::get().removeNeedle(needle);
-
-					firstActor = nullptr;
-					firstPosition = PxVec3(0, 0, 0);
-					entity_manager.remove(firstNeedle);
-					firstNeedle = CHandle();
-				}
-			}
-	}	
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
-	
+	/*
 	// Ñapa para luz ambiental
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
 		CEntity* e_ambLight = entity_manager.getEntities()[i];
@@ -588,11 +441,12 @@ void CApp::update(float elapsed) {
 	ctes_global.uploadToGPU();
 	ctes_global.activateInVS(2);
 	ctes_global.activateInPS(2);
-
+	
 	CEntity* cam = entity_manager.getByName("PlayerCamera");
 	TCompTransform* cam_t = cam->get<TCompTransform>();
-	activateCamera(cam_t->position, 1);
-
+	//activateCamera(cam_t->position, 1);
+	*/
+	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
 	getObjManager<TCompSkeletonIK>()->update(elapsed);
@@ -606,9 +460,11 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
-	
-	// Interruptor
+
+	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
+	getObjManager<TCompSwitchPullController>()->update(elapsed);
+	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
@@ -635,8 +491,11 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);	
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
-	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
+	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
+	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);	
 }
 
 void CApp::render() {
@@ -646,15 +505,43 @@ void CApp::render() {
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	activateWorldMatrix(0);
-	activateTint(0);
-
 	activateTextureSamplers();
+	CCamera camera = *(TCompCamera*)activeCamera;
 
+	CHandle h_light = entity_manager.getByName("the_light");
+	CEntity* e_light = h_light;
+	if (e_light) {
+		TCompCamera* cam_light = e_light->get<TCompCamera>();
+		activateLight(*cam_light, 4);
+	}
+
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+	// Generate all shadows maps
+	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
+
+
+	deferred.render(&camera);
+
+	::render.activateBackbuffer();
+	int sz = 300;
+	
+	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
+	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
+	
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo"));
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("Zthe_light"));
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	render_techniques_manager.getByName("basic")->activate();
+	activateWorldMatrix(0);
+	activateCamera(camera, 1);
+
+	setWorldMatrix(XMMatrixIdentity());
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
-	render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
+	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 	renderDebugEntities();
 
@@ -695,7 +582,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 		if (c_rope) {
-			PxRigidActor* a1 = nullptr;
+			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
 			djoint->joint->getActors(a1, a2);
@@ -735,10 +622,20 @@ void CApp::renderEntities() {
 			}
 			else {
 				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
-			}
+			}*/
 
-			float dist = djoint->joint->getDistance();
-			float maxDist = pow(djoint->joint->getMaxDistance(), 2);
+			XMVECTOR initialPos = c_rope->pos_1;
+			XMVECTOR finalPos = c_rope->pos_2;
+
+			XMVECTOR rot1 = XMQuaternionIdentity();
+			XMVECTOR rot2 = XMQuaternionIdentity();
+
+			float dist = V3DISTANCE(initialPos, finalPos);
+			float maxDist = dist;
+
+			if (djoint) {
+				maxDist = pow(djoint->joint->getMaxDistance(), 2);
+			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 
@@ -785,7 +682,7 @@ void CApp::renderEntities() {
 
 void CApp::renderDebugEntities() {
 
-	getObjManager<TCompSkeleton>()->renderDebug3D();
+	//getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
@@ -922,6 +819,8 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();
+	//logic_manager.clearKeyframes();
+	logic_manager.clearAnimations();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 
@@ -965,6 +864,8 @@ void CApp::loadScene(std::string scene_name) {
 #endif
 
 	activateInspectorMode(false);
+	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
+	logic_manager.onSceneLoad(name);
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

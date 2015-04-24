@@ -21,6 +21,9 @@ public:
 		, external_index(aidx)
 		, age(aage)
 	{ }
+	CHandle(void* data) {
+		fromVoidPtr(data);
+	}
 
 	template< class TObj >
 	CHandle(TObj *obj) {
@@ -66,6 +69,10 @@ public:
 
 	bool isValid() const;
 	uint32_t asUnsigned() const { return *(uint32_t*)this; }
+	void fromUnsigned(uint32_t data) { *(uint32_t*) this = data; }
+
+	void* asVoidPtr() const { return (uintptr_t*)asUnsigned(); }
+	void fromVoidPtr(void* data) { *(uint32_t*) this = (uint32_t)data; }
 
 	// Owner
 	CHandle getOwner() const;
