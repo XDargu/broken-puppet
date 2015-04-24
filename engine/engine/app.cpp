@@ -78,8 +78,6 @@ void CApp::loadConfig() {
 		xres = 1024;
 		yres = 768;
 	}
-
-
 }
 
 // Debug 
@@ -315,6 +313,18 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
 		loadScene("data/scenes/milestone2.xml");
 	}
+
+	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
+	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
+	CEntity* player = entity_manager.getByName("Player");
+	TCompTransform* player_t = player->get<TCompTransform>();
+	fin = player_t->position;
+	XMVECTOR* path=new XMVECTOR;
+	int num_points_path;
+	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);
+	int caca = 1;
+	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
@@ -659,7 +669,6 @@ void CApp::render() {
 	font.print(15, 35, strings_text.c_str());*/
 
 	::render.swap_chain->Present(0, 0);
-
 }
 
 void CApp::renderEntities() {
@@ -779,6 +788,13 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 
+	//--------- NavMesh render Prueba --------------
+	//if (renderNavMesh)
+	CNav_mesh_manager::get().render_nav_mesh();
+	//----------------------------------------------
+
+	CNav_mesh_manager::get().pathRender();
+
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
@@ -839,7 +855,7 @@ void CApp::activateInspectorMode(bool active) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 	io.setMousePointer(!active);
-
+	renderNavMesh = active;
 	// Activa el modo debug
 	renderAxis = active;
 	renderAABB = active;

@@ -21,6 +21,7 @@ public:
 	bool renderAxis;
 	bool renderGrid;
 	bool renderNames;
+	bool renderNavMesh;
 
 	//Variables usadas para limitar el número de tramas de hilo disponibles
 	static const unsigned int max_num_string = 4;

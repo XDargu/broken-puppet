@@ -176,6 +176,7 @@
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\collider.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
@@ -307,6 +308,7 @@
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
@@ -315,6 +317,10 @@
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
     <ClCompile Include="components\comp_transform.cpp" />
     <ClCompile Include="components\comp_trigger.cpp" />
+    <ClCompile Include="components\comp_collider_mesh.cpp" />
+    <ClCompile Include="components\comp_collider_box.cpp" />
+    <ClCompile Include="components\comp_collider_sphere.cpp" />
+    <ClCompile Include="components\comp_collider_capsule.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="error\error_context.cpp" />
@@ -499,6 +505,9 @@
     <Text Include="render\notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="collision_table.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="my_file.xml">
       <SubType>Designer</SubType>
     </Xml>

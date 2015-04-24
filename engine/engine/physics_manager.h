@@ -5,6 +5,7 @@
 #include <foundation\PxFoundation.h>
 #include "mcv_platform.h"
 #include "transform.h"
+#include "collision_parser.h"
 
 using namespace physx;
 
@@ -32,10 +33,17 @@ public:
 
 	static CPhysicsManager& get();
 
+	//typedef std::string(*collision_filter)();
+
+	std::map< physx::PxU32, std::vector<physx::PxU32> >* m_collision;
+
 	void init();
 
 	CPhysicsManager();
 	~CPhysicsManager();
+
+	void addCollisionFilter(physx::PxU32 s, physx::PxU32 filter);
+	void loadCollisions();
 
 	physx::PxVec3 XMVECTORToPxVec3(XMVECTOR vector);
 	XMVECTOR PxVec3ToXMVECTOR(physx::PxVec3 vector);

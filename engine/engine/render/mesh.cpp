@@ -84,6 +84,19 @@ bool CMesh::create(
 		assert(nindices == 0);
 	}
 
+	if (v_tris.size() > 0){
+
+		size_t total_bytes_for_vertex = avtxs_decl->bytes_per_vertex * anvertexs;
+		vertex_floats = new float[anvertexs];
+		memcpy(vertex_floats, the_vertexs, anvertexs*sizeof(float));
+
+		index_int = new int[anindices];
+		memcpy(index_int, &v_tris[0], anindices * sizeof(int));
+
+		numvertexs = anvertexs;
+		numindices = anindices;
+	}
+
 	return true;
 }
 
@@ -202,6 +215,12 @@ bool CMesh::load(CDataProvider& dp) {
 	case POSITION_UV_NORMAL_SKIN: vtx_decl = &vdcl_position_uv_normal_skin; break;
 	}
 	assert(vtx_decl);
+
+	std::vector<float>vec_cast_float(vtxs.begin(), vtxs.end());
+	v_vertex = vec_cast_float;
+
+	std::vector<int>vec_cast_int(idxs.begin(), idxs.end());
+	v_tris = vec_cast_int;
 
 	// Use our create mesh function
 	return create(header.nvertexs

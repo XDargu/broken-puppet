@@ -29,6 +29,21 @@ private:
 	const physx::PxReal forceMediumImpact;
 };
 
+class CFilterCallback:public physx::PxSimulationFilterCallback
+{
+public:
+	CFilterCallback();
+
+	//Filter method to specify how a pair of potentially colliding objects should be processed.
+	virtual PxFilterFlags 	pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor *a0, const PxShape *s0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor *a1, const PxShape *s1, PxPairFlags &pairFlags);
+	
+	//Callback to inform that a tracked collision pair is gone.
+	virtual void 	        pairLost(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, bool objectDeleted){};
+	
+	//Callback to give the opportunity to change the filter state of a tracked collision pair.
+	virtual bool 	        statusChange(PxU32 &pairID, PxPairFlags &pairFlags, PxFilterFlags &filterFlags){ return false; };
+};
+
 PxFilterFlags FilterShader(
 	PxFilterObjectAttributes attributes0,
 	PxFilterData filterData0,

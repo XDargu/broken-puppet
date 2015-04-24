@@ -78,6 +78,13 @@ public:
 
 	typedef unsigned short TIndex;
 
+	float* vertex_floats;
+	std::vector<float>v_vertex;
+	int* index_int;
+	std::vector<int> v_tris;
+	unsigned               numvertexs;
+	unsigned               numindices;
+
 	enum ePrimitiveType {
 		POINTS = 4000
 		, LINE_LIST

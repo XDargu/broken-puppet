@@ -19,7 +19,7 @@ class CCollision_Mesh
 	TIndex* indices;
 
 	// Just to we don't forget to activate the mesh before rendering
-	//static const CCollision_Mesh*    current_active_mesh;
+	static const CCollision_Mesh*    mesh_collision;
 
 	struct THeader {
 		unsigned magic;
@@ -65,13 +65,13 @@ public:
 	~CCollision_Mesh();
 
 	//puntero a floats necesario para navMeshes
-	//float* vertex_floats;
-	//int* index_int;
+	float* vertex_floats;
+	int* index_int;
 	unsigned               nvertexs;
 	unsigned               nindices;
 	//unsigned nav_stride_vertex;
-	//std::vector<float>v_vertex;
-	//std::vector<int> v_tris;
+	std::vector<float>v_vertex;
+	std::vector<int> v_tris;
 	//Collision Mesh de acceso publico----------------------------------
 	physx::PxTriangleMesh* collision_mesh;
 	//------------------------------------------------------------------
@@ -143,6 +143,7 @@ public:
 
 typedef CItemsByName< CCollision_Mesh > CMeshCollisionManager;
 extern CMeshCollisionManager mesh_collision_manager;
+extern CCollision_Mesh mesh_collision;
 
 #endif
 

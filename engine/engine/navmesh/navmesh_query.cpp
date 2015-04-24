@@ -5,7 +5,7 @@
 #include "DetourDebugDraw.h"
 
 void CNavmeshQuery::update( XMVECTOR& curr_pos ) {
-  CIOStatus& io = CIOStatus::get();
+  /*CIOStatus& io = CIOStatus::get();
   if (io.becomesPressed(CIOStatus::MOUSE_LEFT)) {
     // moving end point?
 	  if (io.isPressed(CIOStatus::RUN)) {
@@ -38,7 +38,23 @@ void CNavmeshQuery::update( XMVECTOR& curr_pos ) {
     }
 
     updateTool( );
-  }
+  }*/
+}
+
+void CNavmeshQuery::updatePos(XMVECTOR& init_pos, XMVECTOR& end_pos) {
+	// moving init point?
+	XMStoreFloat3(&p1.p, init_pos);
+	p1.set = true;
+	if (data){
+		if (data->m_navMesh) {
+			data->m_navQuery->findNearestPoly(&p1.p.x, m_polyPickExt, &m_filter, &m_startRef, 0);
+		}
+		XMStoreFloat3(&p2.p, end_pos);
+		p2.set = true;
+		if ((data->m_navMesh) && (m_startRef))
+			data->m_navQuery->findNearestPoly(&p2.p.x, m_polyPickExt, &m_filter, &m_endRef, 0);
+		updateTool();
+	}
 }
 
 void CNavmeshQuery::render( ) {
@@ -58,11 +74,11 @@ void CNavmeshQuery::render( ) {
 
   dd.depthMask( false );
   if (p1.set) {
-	  const float pos = DirectX::XMVectorGetX(p1.p);
+	  const float pos = p1.p.x;
 	  drawAgent(&pos, agentRadius, agentHeight, agentClimb, startCol);
   }
   if (p2.set) {
-	  const float pos = DirectX::XMVectorGetX(p2.p);
+	  const float pos = p2.p.x;
 	  drawAgent(&pos, agentRadius, agentHeight, agentClimb, endCol);
   }
   dd.depthMask( true );
@@ -158,7 +174,7 @@ void CNavmeshQuery::render( ) {
   else if( tool == ETool::WALL_DISTANCE ) {
     duDebugDrawNavMeshPoly( &dd, *data->m_navMesh, m_startRef, startCol );
     dd.depthMask( false );
-	duDebugDrawCircle(&dd, DirectX::XMVectorGetX(p1.p), DirectX::XMVectorGetY(p1.p) + agentHeight / 2, DirectX::XMVectorGetZ(p1.p), m_distanceToWall, duRGBA(64, 16, 0, 220), 2.0f);
+	duDebugDrawCircle(&dd, p1.p.x, p1.p.y + agentHeight / 2, p1.p.z, m_distanceToWall, duRGBA(64, 16, 0, 220), 2.0f);
     dd.begin( DU_DRAW_LINES, 3.0f );
     dd.vertex( m_hitPos[ 0 ], m_hitPos[ 1 ] + 0.02f, m_hitPos[ 2 ], duRGBA( 0, 0, 0, 192 ) );
     dd.vertex( m_hitPos[ 0 ], m_hitPos[ 1 ] + agentHeight, m_hitPos[ 2 ], duRGBA( 0, 0, 0, 192 ) );
@@ -191,9 +207,9 @@ void CNavmeshQuery::drawAgent( const float* pos, float r, float h, float c, cons
 }
 
 // =============================================================== TOOLS
-void CNavmeshQuery::setTool( ETool atool ) {
+void CNavmeshQuery::setTool( ETool atool) {
   tool = atool;
-  updateTool( );
+  updateTool();
 }
 
 void CNavmeshQuery::resetTools( ) {
@@ -219,10 +235,10 @@ void CNavmeshQuery::resetTools( ) {
   tool = FIND_PATH;
 }
 
-void CNavmeshQuery::updateTool( ) {
+void CNavmeshQuery::updateTool() {
   // update the current tool
   if( tool == ETool::FIND_PATH )
-    findPath( p1, p2 );
+	  findPath(p1, p2);
   else if( tool == ETool::WALL_DISTANCE )
     wallDistance( p1 );
   else if( tool == ETool::RAYCAST )
@@ -380,7 +396,7 @@ static bool getSteerTarget( dtNavMeshQuery* navQuery, const float* startPos, con
 // --------------------------------------
 // --------------------------------------
 
-void CNavmeshQuery::findPath( TPos& start, TPos& end ) {
+void CNavmeshQuery::findPath(TPos& start, TPos& end) {
   m_pathFindStatus = DT_FAILURE;
 
   m_pathIterNum = 0;
@@ -391,8 +407,8 @@ void CNavmeshQuery::findPath( TPos& start, TPos& end ) {
             m_filter.getIncludeFlags( ), m_filter.getExcludeFlags( ) );
 #endif
 
-	const float start_pos_x = DirectX::XMVectorGetX(start.p);
-	const float end_pos_x = DirectX::XMVectorGetX(end.p);
+	const float start_pos_x =start.p.x;
+	const float end_pos_x = end.p.x;
 	data->m_navQuery->findPath(m_startRef, m_endRef, &start_pos_x, &end_pos_x, &m_filter, m_polys, &m_npolys, MAX_POLYS);
 
     m_nsmoothPath = 0;
@@ -510,7 +526,6 @@ void CNavmeshQuery::findPath( TPos& start, TPos& end ) {
         }
       }
     }
-
   }
   else {
     m_npolys = 0;
@@ -518,9 +533,39 @@ void CNavmeshQuery::findPath( TPos& start, TPos& end ) {
   }
 }
 
+void CNavmeshQuery::findStraightPath(){
+	// Straight path pruebas---------------------------------
+	float* ini_pos = new float[3];
+	ini_pos[0] = p1.p.x;
+	ini_pos[1] = p1.p.y;
+	ini_pos[2] = p1.p.z;
+	const float* ini_pos_cte = ini_pos;
+	float* end_pos = new float[3];
+	end_pos[0] = p2.p.x;
+	end_pos[1] = p2.p.y;
+	end_pos[2] = p2.p.z;
+	const float* end_pos_cte = end_pos;
+
+
+	static const int MAX_STEER_POINTS = 256;
+	float steerPath[MAX_STEER_POINTS * 3];
+	unsigned char steerPathFlags[MAX_STEER_POINTS];
+	dtPolyRef steerPathPolys[MAX_STEER_POINTS];
+	int nsteerPath = 0;
+	numPointsStraightPath = 0;
+	if (data){
+		data->m_navQuery->findStraightPath(ini_pos_cte, end_pos_cte, m_polys, m_npolys,
+			steerPath, steerPathFlags, steerPathPolys, &nsteerPath, MAX_STEER_POINTS);
+		straightPath = new float[MAX_STEER_POINTS * 3];
+		numPointsStraightPath = nsteerPath;
+		memcpy(straightPath, steerPath, numPointsStraightPath * 3 * sizeof(float));
+	}
+	// ------------------------------------------------------
+}
+
 void CNavmeshQuery::wallDistance( TPos& pos ) {
   
-	const float pos_x = DirectX::XMVectorGetY(pos.p);
+	const float pos_x = pos.p.y;
 
   m_distanceToWall = 0;
   if( pos.set && m_startRef ) {
@@ -536,10 +581,10 @@ void CNavmeshQuery::wallDistance( TPos& pos ) {
 
 void CNavmeshQuery::raycast( TPos& start, TPos& end ) {
 
-  const float start_pos_x = DirectX::XMVectorGetX(start.p);
-  const float start_pos_y = DirectX::XMVectorGetY(start.p);
-  const float start_pos_z = DirectX::XMVectorGetZ(start.p);
-  const float end_pos_x = DirectX::XMVectorGetX(end.p);
+  const float start_pos_x = start.p.x;
+  const float start_pos_y = start.p.y;
+  const float start_pos_z = start.p.z;
+  const float end_pos_x = end.p.x;
 
   m_nstraightPath = 0;
   if( start.set && end.set && m_startRef ) {
