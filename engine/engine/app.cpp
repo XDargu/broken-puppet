@@ -356,14 +356,14 @@ void CApp::update(float elapsed) {
 	}
 
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
-	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
 	CEntity* player = entity_manager.getByName("Player");
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
-	XMVECTOR* path=new XMVECTOR;
-	int num_points_path;
-	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);*/
+	std::vector<XMVECTOR> path;
+	int num_points_path = 0;
+	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible

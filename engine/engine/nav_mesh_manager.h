@@ -22,7 +22,7 @@ public:
 	bool build_nav_mesh();
 	void render_nav_mesh();
 	void render_tile(const dtMeshTile* tile);
-	void findPath(XMVECTOR pst_src, XMVECTOR pst_dst, XMVECTOR* straightPath, int &numPoints);
+	void findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath, int &numPoints);
 	void pathRender();
 	void updateNavmesh();
 	void prepareInputNavMesh();
