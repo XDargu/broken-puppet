@@ -95,6 +95,26 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
   for (int i = 0; i < mesh->getNGroups(); ++i )
     render_manager.addKey(mesh, mat, i, CHandle(this), &active);
+
+  TCtesBones* cpu_bones = ctes_bones.get();
+  float*      fout = (float*)cpu_bones->bones;
+
+  CalSkeleton* skel = model->getSkeleton();
+  auto& cal_bones = skel->getVectorBone();
+
+  int size = cal_bones.size();
+  bone_ragdoll_transforms = new TTransform[size];
+
+  for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+	  CalBone* bone = cal_bones[bone_idx];
+
+	  bone_ragdoll_transforms[bone_idx] = TTransform(
+		    Cal2DX(bone->getTranslationAbsolute())
+		  , Cal2DX(bone->getRotation())
+		  , XMVectorSet(1, 1, 1, 1)
+	  );
+  }
+
 }
 
 void TCompSkeleton::init() {
@@ -111,7 +131,7 @@ void TCompSkeleton::update(float elapsed) {
   }
 
   if (isKeyPressed('o') || isKeyPressed('O')) {
-    //model->getMixer()->executeAction(1, 0.0f, 0.3f, 1.0f, false);
+    model->getMixer()->executeAction(1, 0.0f, 0.3f, 1.0f, false);
 	//model->getMixer()->blendCycle(1, 1.0, 0.3);
   }
   if (isKeyPressed('P')) {
@@ -175,7 +195,7 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-
+	
   CCoreModel *core = (CCoreModel*) model->getCoreModel();
   for (auto bc : core->bone_ids_to_debug) {
     renderBoneAxis(bc);
@@ -229,31 +249,71 @@ void TCompSkeleton::uploadBonesToGPU() const {
   auto& cal_bones = skel->getVectorBone();
   for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
     CalBone* bone = cal_bones[bone_idx];
-    
+
     const CalMatrix& cal_mtx1 = bone->getTransformMatrix();    // 3x3
     const CalVector  cal_pos1 = bone->getTranslationBoneSpace(); // vec3
 	CalVector cal_pos3 = bone->getTranslationAbsolute();
 	CalVector diff = cal_pos3 - cal_pos1;
 
 	CalQuaternion q_bone_space = bone->getRotationBoneSpace();
-	CalQuaternion q_absolute = bone->getRotationAbsolute();
-	
+	CalQuaternion q_absolute = bone->getRotationAbsolute();	
+
+	// Parent bone
+	//CalBone* parent = cal_bones[bone->getCoreBone()->getParentId()];
 
 	CalMatrix cal_mtx = cal_mtx1;
 	CalVector cal_pos = cal_pos1;
+	CalQuaternion cal_rot = bone->getRotationBoneSpace();
 
 	if (h_ragdoll.isValid()) {
 		TCompRagdoll* ragdoll = h_ragdoll;
 
 		if (ragdoll->isRagdollActive()) {
 			PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
+
 			if (rigid_bone) {
 				cal_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p)) - diff;
-				/*CalQuaternion q = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
-				cal_mtx = CalMatrix(q);*/
+				int parent_id = bone->getCoreBone()->getParentId();
+				if (parent_id != -1) {
+					TTransform parent = bone_ragdoll_transforms[parent_id];
+					cal_rot = DX2CalQuat(parent.rotation) * DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
+
+					TTransform me = TTransform(
+							  Cal2DX(cal_pos)
+							, Cal2DX(bone->getRotationBoneSpace())
+							, XMVectorSet(1, 1, 1, 1)
+						);
+
+					XMVECTOR rot = me.inverseTransformDirection(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
+
+
+					//cal_rot = DX2CalQuat(rot);
+					//cal_rot = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
+				}
 			}
+			else {
+				int parent_id = bone->getCoreBone()->getParentId();
+				if (parent_id != -1) {
+					TTransform parent = bone_ragdoll_transforms[parent_id];
+					cal_pos = DX2Cal(parent.position) + cal_pos;
+					//cal_rot = DX2CalQuat(parent.rotation) * cal_rot;
+				}
+			}
+
+			// Set the position
+			int parent_id = bone->getCoreBone()->getParentId();
+			if (parent_id != -1) {
+				/*TTransform parent = bone_ragdoll_transforms[parent_id];
+				cal_pos = DX2Cal(parent.position) - diff;*/
+				
+				bone_ragdoll_transforms[bone_idx].position = Cal2DX(cal_pos);
+				bone_ragdoll_transforms[bone_idx].rotation = Cal2DX(cal_rot);
+			}
+			
 		}
 	}
+
+	cal_mtx = CalMatrix(cal_rot);
 
     *fout++ = cal_mtx.dxdx;
     *fout++ = cal_mtx.dydx;

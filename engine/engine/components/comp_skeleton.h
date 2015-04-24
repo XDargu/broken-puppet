@@ -2,6 +2,7 @@
 #define INC_COMP_SKELETON_H_
 
 #include "base_component.h"
+#include "transform.h"
 
 class CalModel;
 class CalBone;
@@ -10,6 +11,7 @@ class CalBone;
 struct TCompSkeleton : TBaseComponent {
 private:
 	CHandle h_ragdoll;
+	TTransform* bone_ragdoll_transforms;
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;

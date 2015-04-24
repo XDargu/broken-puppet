@@ -137,6 +137,8 @@ PxFilterFlags FilterShader(
 			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 			return PxFilterFlag::eDEFAULT;
 		}
+
+		return PxFilterFlag::eDEFAULT;
 	}
 }
 

@@ -22,14 +22,18 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		cal_bones[bone_idx]->getCoreBone()->getName();
 	}
 
-	for (int i = 0; i < 78; ++i) {
+	int nums[7] = {1, 2, 41, 26, 42, 74, 79 };
+	
+	
+	//for (int i = 0; i < 8; ++i) {
+	for (int i : nums) {
 		CalBone* cal_bone = skel->model->getSkeleton()->getBone(i);
 		const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
 		const CalQuaternion& cal_mtx = cal_bone->getRotation();
 
 		XMVECTOR dx_pos = Cal2DX(cal_pos);
 		XMVECTOR dx_rot = Cal2DX(cal_mtx);
-
+		
 		physx::PxMaterial* mat = Physics.gPhysicsSDK->createMaterial(0.5, 0.5, 0.5);
 
 		PxShape* collider = Physics.gPhysicsSDK->createShape(

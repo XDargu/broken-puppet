@@ -40,6 +40,8 @@ void TCompColliderMesh::addInputNavMesh(){
 	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
 	TCompTransform* trans = getSibling<TCompTransform>(this);
 
+	std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+
 	TTransform* t = trans;
 	//t->transformPoint()
 	XMFLOAT3 min;

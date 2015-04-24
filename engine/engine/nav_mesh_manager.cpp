@@ -72,7 +72,7 @@ void CNav_mesh_manager::updateNavmesh() {
 		generating_navmesh.unlock();
 
 		// esperamos un poco antes de volver a actulizarla
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 		nav_mesh_input.clearInput();
 		prepareInputNavMesh();
