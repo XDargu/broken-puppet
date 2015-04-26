@@ -24,7 +24,7 @@ void TCompColliderMesh::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	addInputNavMesh();
 
 	//Asignación de mascara al Shape para el filtrado de colisiones
-	setupFiltering(collider, FilterGroup::eLEVEL, FilterGroup::eLEVEL);
+	//setupFiltering(collider, FilterGroup::eLEVEL, FilterGroup::eLEVEL);
 
 	//Una vez creado el shape, no necesitamos el triangleMesh
 	triangle_mesh->release();
@@ -42,27 +42,52 @@ void TCompColliderMesh::addInputNavMesh(){
 
 	std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
 
-	TTransform* t = trans;
-	//t->transformPoint()
-	XMFLOAT3 min;
-	XMStoreFloat3(&min, aabb_module->min);
-	XMFLOAT3 max;
-	XMStoreFloat3(&max, aabb_module->max);
+	if ((aabb_module) && (trans)){
 
-	const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
+		TTransform* t = trans;
+		//t->transformPoint()
+		XMFLOAT3 min;
+		XMStoreFloat3(&min, aabb_module->min);
+		XMFLOAT3 max;
+		XMStoreFloat3(&max, aabb_module->max);
 
-	if (path){
-		//const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
-		if (c_m){
-			unsigned n_vertex = c_m->nvertexs;
-			float* m_v = new float[n_vertex * 8];
-			memcpy(m_v, c_m->vertex_floats, n_vertex * 8 * sizeof(float));
+		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
 
-			unsigned n_triangles = c_m->nindices;
-			int* t_v = new int[n_triangles];
-			memcpy(t_v, c_m->index_int, n_triangles * sizeof(int));
+		if (path){
+			//const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
+			if (c_m){
+				unsigned n_vertex = c_m->nvertexs;
+				float* m_v = new float[n_vertex * 8];
+				memcpy(m_v, c_m->vertex_floats, n_vertex * 8 * sizeof(float));
 
-			CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.MODULE);
+				unsigned n_triangles = c_m->nindices;
+				int* t_v = new int[n_triangles];
+				memcpy(t_v, c_m->index_int, n_triangles * sizeof(int));
+
+				CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.MODULE);
+			}
+		}
+	}else{
+		if (!aabb_module)
+			XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+	}
+}
+
+void TCompColliderMesh::setCollisionGroups(){
+	PxU32 myMask = FilterGroup::eLEVEL;
+	PxU32 notCollide = 0;
+	bool found = false;
+	auto it = CPhysicsManager::get().m_collision->find(myMask);
+	if (it != CPhysicsManager::get().m_collision->end()){
+		std::vector<physx::PxU32>colFil = it->second;
+		if (!colFil.empty()){
+			//found = std::find(colFil.begin(), colFil.end(), filterData1.word0) != colFil.end();
+			for (int i = 0; i < colFil.size(); i++){
+				notCollide |= colFil[i];
+			}
 		}
 	}
+	setupFiltering(collider, myMask, notCollide);
 }

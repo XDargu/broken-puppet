@@ -22,6 +22,8 @@ public:
 	float getRadius();
 
 	void addInputNavMesh();
+
+	void setCollisionGroups();
 };
 
 #endif

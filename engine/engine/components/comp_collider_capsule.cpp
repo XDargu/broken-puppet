@@ -69,7 +69,8 @@ void TCompColliderCapsule::loadFromAtts(const std::string& elem, MKeyValue &atts
 		collider->setLocalPose(relativePose);
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 
-		addInputNavMesh();
+		//addInputNavMesh();
+		setCollisionGroups();
 	}
 
 void TCompColliderCapsule::init() {
@@ -90,42 +91,57 @@ float TCompColliderCapsule::getRadius() {
 	}
 
 void TCompColliderCapsule::addInputNavMesh(){
-		//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
+	//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
 
-		TCompAABB* aabb_module = getSibling<TCompAABB>(this);
-		TCompTransform* trans = getSibling<TCompTransform>(this);
+	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
+	TCompTransform* trans = getSibling<TCompTransform>(this);
 
-		TTransform* t = trans;
-		//t->transformPoint()
-		XMFLOAT3 min;
-		XMStoreFloat3(&min, aabb_module->min);
-		XMFLOAT3 max;
-		XMStoreFloat3(&max, aabb_module->max);
-		int n_vertex = 8;
-		int n_triangles = 24;
+	TTransform* t = trans;
+	XMFLOAT3 min;
+	XMStoreFloat3(&min, aabb_module->min);
+	XMFLOAT3 max;
+	XMStoreFloat3(&max, aabb_module->max);
+	int n_vertex = 8;
+	int n_triangles = 24;
 
-		const float vertex[24] = {
-			min.x, min.y, min.z
-			, max.x, min.y, min.z
-			, min.x, max.y, min.z
-			, max.x, max.y, min.z
-			, min.x, min.y, max.z
-			, max.x, min.y, max.z
-			, min.x, max.y, max.z
-			, max.x, max.y, max.z
-		};
+	const float vertex[24] = {
+		min.x, min.y, min.z
+		, max.x, min.y, min.z
+		, min.x, max.y, min.z
+		, max.x, max.y, min.z
+		, min.x, min.y, max.z
+		, max.x, min.y, max.z
+		, min.x, max.y, max.z
+		, max.x, max.y, max.z
+	};
 
-		float* m_v = new float[n_vertex * 3];
-		memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
+	float* m_v = new float[n_vertex * 3];
+	memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
 
-		const int indices[] = {
-			0, 1, 2, 3, 4, 5, 6, 7
-			, 0, 2, 1, 3, 4, 6, 5, 7
-			, 0, 4, 1, 5, 2, 6, 3, 7
-		};
-		int* t_v = new int[n_triangles];
-		memcpy(t_v, indices, n_triangles * sizeof(int));
+	const int indices[] = {
+		0, 1, 2, 3, 4, 5, 6, 7
+		, 0, 2, 1, 3, 4, 6, 5, 7
+		, 0, 4, 1, 5, 2, 6, 3, 7
+	};
+	int* t_v = new int[n_triangles];
+	memcpy(t_v, indices, n_triangles * sizeof(int));
 
-		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
-		//------------------------------------------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+	//------------------------------------------------------------------------------------------------------------------------
+}
+
+void TCompColliderCapsule::setCollisionGroups(){
+	PxU32 myMask = FilterGroup::eENEMY;
+	PxU32 notCollide = 0;
+	bool found = false;
+	auto it = CPhysicsManager::get().m_collision->find(myMask);
+	if (it != CPhysicsManager::get().m_collision->end()){
+		std::vector<physx::PxU32>colFil = it->second;
+		if (!colFil.empty()){
+			for (int i = 0; i < colFil.size(); i++){
+				notCollide |= colFil[i];
+			}
+		}
 	}
+	setupFiltering(collider, myMask, notCollide);
+}

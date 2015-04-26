@@ -36,6 +36,7 @@ void CPhysicsManager::loadCollisions() {
 	bool success = p.xmlParseFile("collision_table.xml");
 	if (success){
 		//ERROR: METER XASSERT
+		XASSERT(p.xmlParseFile("collision_table.xml"), "error leyendo tabla de colisiones");
 	}
 }
 

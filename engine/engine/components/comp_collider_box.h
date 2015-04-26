@@ -15,6 +15,8 @@ public:
 	void init();
 
 	void addInputNavMesh();
+
+	void setCollisionGroups();
 };
 
 #endif

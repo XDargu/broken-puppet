@@ -43,7 +43,6 @@ public:
 	void loadPrefab(std::string prefab_name);
 
 	void activateInspectorMode(bool active);
-
 	static CApp& get();
 };
 

@@ -36,15 +36,15 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 		TCompColliderMesh* collider_mesh = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderMesh>();
 		TCompColliderBox* collider_box = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderBox>();
 		TCompColliderSphere* collider_sphere = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderSphere>();
-		TCompColliderCapsule* collider_capsule = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderCapsule>();
+		//TCompColliderCapsule* collider_capsule = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderCapsule>();
 		if (collider_mesh){
 			collider_mesh->addInputNavMesh();
 		}else if (collider_box){
 			collider_box->addInputNavMesh();
 		}else if (collider_sphere){
 			collider_sphere->addInputNavMesh();
-		}else if (collider_capsule){
-			collider_capsule->addInputNavMesh();
+		//}else if (collider_capsule){
+			//collider_capsule->addInputNavMesh();
 		}
 	}
 	nav_A.m_input = nav_mesh_input;
@@ -80,7 +80,6 @@ void CNav_mesh_manager::updateNavmesh() {
 }
 
 void CNav_mesh_manager::render_nav_mesh(){
-	//nav_mesh.render();
 	if (nav_mesh){
 		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
 		if (navmesh){
@@ -90,8 +89,6 @@ void CNav_mesh_manager::render_nav_mesh(){
 			}
 		}
 	}
-	//nav_mesh.m_draw_mode = CNavmesh::EDrawMode::NAVMESH_DRAW_COUNTOURS;
-	//nav_mesh.render(true);
 }
 
 void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
@@ -123,7 +120,7 @@ void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
 	}
 }
 
-void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath, int &numPoints){
+void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath){
 	CNavmeshQuery navMeshQuery(nav_mesh);
 	if (nav_mesh){
 		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
@@ -140,7 +137,6 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 				XMVECTOR point = XMVectorSet(navMeshQuery.straightPath[i * 3], navMeshQuery.straightPath[i * 3 + 1] + 0.10f, navMeshQuery.straightPath[i * 3 + 2], 1);
 				straightPath.push_back(point);
 			}
-			numPoints = navMeshQuery.numPointsStraightPath;
 		}
 	}
 }

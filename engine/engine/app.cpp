@@ -225,7 +225,6 @@ void initManagers() {
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
 
-
 }
 
 bool CApp::create() {
@@ -364,8 +363,7 @@ void CApp::update(float elapsed) {
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
 	std::vector<XMVECTOR> path;
-	int num_points_path = 0;
-	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);
+	CNav_mesh_manager::get().findPath(ini, fin, path);
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
@@ -871,6 +869,9 @@ void CApp::loadScene(std::string scene_name) {
 	activateInspectorMode(false);
 	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
 	logic_manager.onSceneLoad(name);
+
+	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
+	CPhysicsManager::get().m_collision->clear();
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

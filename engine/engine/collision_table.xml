@@ -1,11 +1,13 @@
 <collisions>
 <collision_table own_tag="Actor">
    <collision_filter not_collides_tag="Actor"/>
+   <collision_filter not_collides_tag="Enemy"/>
 </collision_table>
 <collision_table own_tag="Level">
    <collision_filter not_collides_tag="Level"/>
 </collision_table>
 <collision_table own_tag="Enemy">
    <collision_filter not_collides_tag="Enemy"/>
+   <collision_filter not_collides_tag="Actor"/>
 </collision_table>
 </collisions>

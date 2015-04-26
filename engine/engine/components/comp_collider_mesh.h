@@ -23,6 +23,8 @@ public:
 
 	void addInputNavMesh();
 
+	void setCollisionGroups();
+
 };
 
 #endif

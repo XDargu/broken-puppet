@@ -69,13 +69,15 @@ void TCompColliderSphere::init() {
 	}
 
 void TCompColliderSphere::addInputNavMesh(){
-		//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
+	//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
 
-		TCompAABB* aabb_module = getSibling<TCompAABB>(this);
-		TCompTransform* trans = getSibling<TCompTransform>(this);
+	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
+	TCompTransform* trans = getSibling<TCompTransform>(this);
+
+	if ((aabb_module) && (trans)){
 
 		TTransform* t = trans;
-		//t->transformPoint()
+
 		XMFLOAT3 min;
 		XMStoreFloat3(&min, aabb_module->min);
 		XMFLOAT3 max;
@@ -107,4 +109,27 @@ void TCompColliderSphere::addInputNavMesh(){
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
 		//------------------------------------------------------------------------------------------------------------------------
+	}else{
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		if (!aabb_module)
+			XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
 	}
+}
+
+void TCompColliderSphere::setCollisionGroups(){
+	PxU32 myMask = FilterGroup::eACTOR;
+	PxU32 notCollide = 0;
+	bool found = false;
+	auto it = CPhysicsManager::get().m_collision->find(myMask);
+	if (it != CPhysicsManager::get().m_collision->end()){
+		std::vector<physx::PxU32>colFil = it->second;
+		if (!colFil.empty()){
+			for (int i = 0; i < colFil.size(); i++){
+				notCollide |= colFil[i];
+			}
+		}
+	}
+	setupFiltering(collider, myMask, notCollide);
+}
