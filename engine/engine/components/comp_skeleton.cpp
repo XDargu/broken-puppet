@@ -89,7 +89,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   model->getMixer()->blendCycle(0, 1.0, 0.f);
 
   // Register a key to render the mesh
-  const CMaterial* mat = material_manager.getByName("skin_ipa");
+  const CMaterial* mat = material_manager.getByName(("skin_" + skel_name).c_str());
   bool a = mat->castsShadows();
   const CMesh* mesh = core_model->getMesh();
 
@@ -126,12 +126,12 @@ void TCompSkeleton::init() {
 
 void TCompSkeleton::update(float elapsed) {
 
-  if (isKeyPressed(VK_SHIFT)) {
+  /*if (isKeyPressed(VK_SHIFT)) {
     elapsed *= 0.05f;
-  }
+  }*/
 
   if (isKeyPressed('o') || isKeyPressed('O')) {
-    model->getMixer()->executeAction(1, 0.0f, 0.3f, 1.0f, false);
+    model->getMixer()->executeAction(3, 0.0f, 0.3f, 1.0f, false);
 	//model->getMixer()->blendCycle(1, 1.0, 0.3);
   }
   if (isKeyPressed('P')) {
@@ -335,4 +335,16 @@ void TCompSkeleton::uploadBonesToGPU() const {
 
   ctes_bones.uploadToGPU();
   ctes_bones.activateInVS(3);     // fixed in shader_ctes.h TCtesBones SHADER_REGISTER(b3)
+}
+
+void TCompSkeleton::stopAnimation(int id) {
+	model->getMixer()->clearCycle(id, 0.3);
+}
+
+void TCompSkeleton::loopAnimation(int id) {
+	model->getMixer()->blendCycle(id, 1.0, 0.3);
+}
+
+void TCompSkeleton::playAnimation(int id) {
+	model->getMixer()->executeAction(id, 0.0f, 0.3f, 1.0f, false);
 }
