@@ -259,7 +259,6 @@ bool CApp::create() {
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-	is_ok &= deferred.create(xres, yres);
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -289,7 +288,7 @@ bool CApp::create() {
 	cubemap->activate(3);
 
 	//PRUEBAS NAV MESHES -----------------
-	bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	//bool valid = CNav_mesh_manager::get().build_nav_mesh();
 	//------------------------------------
 	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
@@ -358,14 +357,14 @@ void CApp::update(float elapsed) {
 	}
 
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
-	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
 	CEntity* player = entity_manager.getByName("Player");
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
 	std::vector<XMVECTOR> path;
 	int num_points_path = 0;
-	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);
+	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);*/
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
@@ -856,6 +855,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	// Ctes ---------------------------
 	bool is_ok = renderUtilsCreate();
+	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
