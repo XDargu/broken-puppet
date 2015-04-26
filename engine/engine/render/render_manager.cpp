@@ -139,6 +139,7 @@ void CRenderManager::removeKeysFromOwner(CHandle owner) {
 
 void CRenderManager::destroyAllKeys() {
 	keys.clear();
+	shadow_casters_keys.clear();
 }
 
 // ---------------------------------------------------------------

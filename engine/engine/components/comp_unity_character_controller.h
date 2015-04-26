@@ -317,7 +317,7 @@ public:
 		physx::PxVec3 lookAt = enemy_rigidbody->getGlobalPose().q.rotate(currentLookPos) + enemy_rigidbody->getGlobalPose().p;
 		lookAt.y = enemy_rigidbody->getGlobalPose().p.y - (enemy_height / 2.0f + 0.1f);
 
-		((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
+		//((TCompTransform*)transform)->aimAt(Physics.PxVec3ToXMVECTOR(lookAt), XMVectorSet(0, 1, 0, 0), lerpRotation);
 
 		//enemy_rigidbody->setGlobalPose(physx::PxTransform(enemy_rigidbody->getGlobalPose().p, Physics.XMVECTORToPxQuat(((TCompTransform*)transform)->rotation)));
 	}
