@@ -16,9 +16,9 @@ public:
   };
 
   struct TPos {
-    DirectX::XMVECTOR p;
+    DirectX::XMFLOAT3 p;
     bool   set;
-	TPos() : p(DirectX::XMVectorZero()), set(false) { }
+	TPos() : p(0.f,0.f,0.f), set(false) { }
   };
 
   CNavmesh* data;
@@ -29,17 +29,19 @@ public:
 public:
   CNavmeshQuery( CNavmesh* anavmesh ) : data( anavmesh ) { }
   void update(DirectX::XMVECTOR& curr_pos);
+  void updatePos(XMVECTOR& init_pos, XMVECTOR& end_pos);
   void render( );
   void drawAgent( const float* pos, float r, float h, float c, const unsigned int col );
-
+  void findStraightPath();
   // tools
   void setTool( ETool atool );
   void resetTools( );
-  void updateTool( );
+  void updateTool();
   void findInside( TPos& pos );
-  void findPath( TPos& start, TPos& end );
+  void findPath( TPos& start, TPos& end);
   void wallDistance( TPos& pos );
   void raycast( TPos& start, TPos& end );
+
 
 private:
   // the dt data
@@ -59,8 +61,6 @@ private:
   dtPolyRef m_straightPathPolys[ MAX_POLYS ];
   int m_nstraightPath;
   float m_polyPickExt[ 3 ];
-  float m_smoothPath[ MAX_SMOOTH * 3 ];
-  int m_nsmoothPath;
   float m_queryPoly[ 4 * 3 ];
 
   static const int MAX_RAND_POINTS = 64;
@@ -87,6 +87,15 @@ private:
   static const int MAX_STEER_POINTS = 10;
   float m_steerPoints[ MAX_STEER_POINTS * 3 ];
   int m_steerPointCount;
+
+public:
+	//Path variables
+	float m_smoothPath[MAX_SMOOTH * 3];
+	int m_nsmoothPath;
+	//PATH ----------------------------------------------------------------------
+	float* straightPath;
+	int numPointsStraightPath;
+	//---------------------------------------------------------------------------
 };
 
 #endif

@@ -9,3 +9,8 @@
  - TCompUnityCharacterController debería dejar de usarse, y utilizar TCompCharacterController
  - Crear nuevo controlador de personaje (y dejar de usar el TCompBasicPlayerController)
  - Crear controladores nuevos de enemigos (y dejar de usar TCompAiFsmBasic)
+
+
+ - las posiciones de los vertices tienen que ser globales
+ - los aabb no se pueden pasar como XMVECTOR por referencia -> por eso no los coge bien
+ - NOTA: en el navMesh_query hay uso de XMVector que no va a furular.

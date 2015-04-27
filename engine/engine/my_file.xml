@@ -98,5 +98,17 @@
     <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <cameraPivotController />
   </entity>
-  
-</scene>
+  <entity>
+    <name name="BasicEnemy_63.0" />
+    <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <mesh color="1 1 1 1" path="BasicEnemy"/>
+    <aabb min="-0.5 0.0 -0.866025" max="1.0 2.0 0.866025"/>
+    <life life="100" />
+    <sensorPlayerPos radius="2" />
+    <sensorNeedles radius="2"/>
+    <unityCharacterController />
+    <aiFSMBasic />
+  </entity>   
+
+
+  </scene>

@@ -88,16 +88,18 @@ void DebugDrawGL::begin(duDebugDrawPrimitives prim, float size)
 
 void DebugDrawGL::vertex(const float* pos, unsigned int color)
 {
-  /*assert( num_colored_vertices < MAX_VERTICES-1 );
-  colored_vertices[ num_colored_vertices ].assign( pos[0], pos[1], pos[2], color );
-  ++num_colored_vertices;*/
+  assert( num_colored_vertices < MAX_VERTICES-1 );
+  //colored_vertices[ num_colored_vertices ].assign( pos[0], pos[1], pos[2], color );
+  colored_vertices[num_colored_vertices] = XMVectorSet(pos[0], pos[1], pos[2], color);
+  ++num_colored_vertices;
 }
 
 void DebugDrawGL::vertex(const float x, const float y, const float z, unsigned int color)
 {
-  /*assert( num_colored_vertices < MAX_VERTICES-1 );
-  colored_vertices[ num_colored_vertices ].assign( x, y, z, color );
-  ++num_colored_vertices;*/
+  assert( num_colored_vertices < MAX_VERTICES-1 );
+  //colored_vertices[ num_colored_vertices ].assign( x, y, z, color );
+  colored_vertices[num_colored_vertices] = XMVectorSet(x, y, z, color);
+  ++num_colored_vertices;
 }
 
 void DebugDrawGL::vertex(const float* pos, unsigned int color, const float* uv)
@@ -118,6 +120,16 @@ void DebugDrawGL::vertex(const float x, const float y, const float z, unsigned i
 
 void DebugDrawGL::end()
 {
+
+  bool first = true;
+  for (int i = 0; i < num_colored_vertices; i++){
+	  if (i%2==1){
+		  XMVECTOR vtx_last = XMVectorSetW(colored_vertices[i - 1], 1);
+		  XMVECTOR vtx_current = XMVectorSetW(colored_vertices[i], 1);
+		  drawLine(vtx_last,vtx_current);
+	  }
+	  first = false;
+  }
   /*g_pd3dDevice->SetTexture( 0, NULL );
   g_pd3dDevice->SetFVF( D3DFVF_CUSTOMVERTEX );
   g_pd3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );

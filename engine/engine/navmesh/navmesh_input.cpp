@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "navmesh_input.h"
+#include "transform.h"
 #include <assert.h>
 
 CNavmeshInput::CNavmeshInput( )
@@ -18,69 +19,85 @@ void CNavmeshInput::clearInput( ) {
   ntris_total = 0;
 }
 
-void CNavmeshInput::addInput(const DirectX::XMVECTOR& p0, const DirectX::XMVECTOR& p1) {
-  nverts_total += 8;
-  ntris_total += 10;
+void CNavmeshInput::addInput(const DirectX::XMFLOAT3& p0, const DirectX::XMFLOAT3& p1, const float* vertx_mod, const int* indx_mod, unsigned nvtx_mod, unsigned nindx_mod, TTransform* t, kind k) {
+  nverts_total += nvtx_mod;
+  ntris_total += nindx_mod;
 
   TInput input;
   input.pmin = p0;
   input.pmax = p1;
+  input.nvtx_module = nvtx_mod;
+  input.nindx_module = nindx_mod;
+
+  input.vertex_vector = vertx_mod;
+  input.triangles_vector = indx_mod;  
+  input.t = t;
+  input.type = k;
+
   inputs.push_back( input );
 }
 
 // ---------------------------------------------------
 void CNavmeshInput::prepareInput( const TInput& input ) {
+	// usar este metodo para usando los punteros a la primera posicion de los vectores de vertex y de indices
+	// para hacer hacer el memset con sus longitudes correspondientes
   unprepareInput( );
+ 
+  nverts = input.nvtx_module;
+  ntris = input.nindx_module;
 
-  nverts = 8;
-  ntris = 10;
+  //verts = input.vertx_module;
 
-  verts = new float[ nverts * 3 ];
-  tris = new int[ ntris * 3 ];
+  verts = new float[nverts*3];
+  tris = new int[ntris];
 
-  memset( verts, 0, nverts * 3 * sizeof( float ) );
-  memset( tris, 0, ntris * 3 * sizeof( int ) );
+  memset(verts, 0, nverts * 3 * sizeof(float));
+  memset(tris, 0, ntris * sizeof(int));
 
-  XMVECTOR v[ 8 ] = {
-      DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmin), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmax), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmin), DirectX::XMVectorGetZ(input.pmax), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmin), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmax), 0)
-	, DirectX::XMVectorSet(DirectX::XMVectorGetX(input.pmax), DirectX::XMVectorGetY(input.pmax), DirectX::XMVectorGetZ(input.pmax), 0)
-  };
-
-  static const int idxs[ 6 ][ 4 ] = {
-      { 4, 6, 7, 5 }
-      , { 5, 7, 3, 1 }
-      , { 1, 3, 2, 0 }
-      , { 0, 2, 6, 4 }
-      , { 3, 7, 6, 2 }
-      , { 5, 1, 0, 4 }
-  };
-
-  for( int i = 0; i<8; ++i ) {
-    XMVECTOR p = v[ i ];
-    int idx = i * 3;
-	verts[idx] = DirectX::XMVectorGetX(p);
-	verts[idx + 1] = DirectX::XMVectorGetY(p);
-	verts[idx + 2] = DirectX::XMVectorGetZ(p);
+  int ind_indx = 0;
+  int idx_first = 0;
+  int idx_second = 0;
+  int idx_third = 0;
+  for (int j = 0; j < ntris; j++){
+	  if (ind_indx == 0){
+		  idx_first = (int)input.triangles_vector[j];
+		  ind_indx++;
+	  }
+	  else if (ind_indx == 1){
+		  idx_second = (int)input.triangles_vector[j];
+		  ind_indx++;
+	  }
+	  else if (ind_indx == 2){
+		  idx_third = (int)input.triangles_vector[j];
+		  tris[j - 2] = idx_first;
+		  tris[j - 1] = idx_third;
+		  tris[j] = idx_second;
+		  ind_indx = 0;
+	  }
   }
+  ntris = input.nindx_module/3;
 
-  int idx = 0;
-  for( int i = 0; i<5; ++i ) {
-    tris[ idx++ ] = idxs[ i ][ 0 ];
-    tris[ idx++ ] = idxs[ i ][ 2 ];
-    tris[ idx++ ] = idxs[ i ][ 1 ];
-
-    tris[ idx++ ] = idxs[ i ][ 0 ];
-    tris[ idx++ ] = idxs[ i ][ 3 ];
-    tris[ idx++ ] = idxs[ i ][ 2 ];
+  if (input.type == MODULE){
+	  int ind = 0;
+	  int i = 0;
+	  while (ind < input.nvtx_module * 8){
+		  XMVECTOR vertex = DirectX::XMVectorSet(input.vertex_vector[ind], input.vertex_vector[ind + 1], input.vertex_vector[ind + 2], 0);
+		  ind = ind + 8;
+		  XMVECTOR aux = input.t->transformPoint(vertex);
+		  XMFLOAT3 vertex_coords;
+		  XMStoreFloat3(&vertex_coords, aux);
+		  verts[i] = vertex_coords.x;
+		  verts[i + 1] = vertex_coords.y;
+		  verts[i + 2] = vertex_coords.z;
+		  i = i + 3;
+	  }
+  }else if (input.type == OBSTACLE){
+	  int i = 0;
+	  while (i < input.nvtx_module * 3){
+		  verts[i] = input.vertex_vector[i];
+		  i = i + 1;
+	  }
   }
-
-  assert( idx == ntris * 3 );
 }
 
 void CNavmeshInput::unprepareInput( ) {
@@ -91,15 +108,19 @@ void CNavmeshInput::unprepareInput( ) {
 }
 
 void CNavmeshInput::computeBoundaries( ) {
-  aabb_min = DirectX::XMVectorZero();
-  aabb_max = DirectX::XMVectorZero();
+  aabb_min.x = 0.f;
+  aabb_min.y = 0.f;
+  aabb_min.z = 0.f;
+  aabb_max.x = 0.f;
+  aabb_max.y = 0.f;
+  aabb_max.z = 0.f;
 
   for( auto& i : inputs ) {
-	  if (DirectX::XMVectorGetX(i.pmin) < DirectX::XMVectorGetX(aabb_min))   DirectX::XMVectorSetX(aabb_min, DirectX::XMVectorGetX(i.pmin));
-	  if (DirectX::XMVectorGetY(i.pmin) < DirectX::XMVectorGetY(aabb_min))   DirectX::XMVectorSetY(aabb_min, DirectX::XMVectorGetY(i.pmin));
-	  if (DirectX::XMVectorGetZ(i.pmin) < DirectX::XMVectorGetZ(aabb_min))   DirectX::XMVectorSetZ(aabb_min, DirectX::XMVectorGetZ(i.pmin));
-	  if (DirectX::XMVectorGetX(i.pmax) > DirectX::XMVectorGetX(aabb_max))   DirectX::XMVectorSetX(aabb_max, DirectX::XMVectorGetX(i.pmax));
-	  if (DirectX::XMVectorGetY(i.pmax) > DirectX::XMVectorGetY(aabb_max))   DirectX::XMVectorSetY(aabb_max, DirectX::XMVectorGetY(i.pmax));
-	  if (DirectX::XMVectorGetZ(i.pmax) > DirectX::XMVectorGetZ(aabb_max))   DirectX::XMVectorSetZ(aabb_max, DirectX::XMVectorGetZ(i.pmax));
+	  if (i.pmin.x < aabb_min.x)   aabb_min.x=i.pmin.x;
+	  if (i.pmin.y < aabb_min.y)   aabb_min.y=i.pmin.y;
+	  if (i.pmin.z < aabb_min.z)   aabb_min.z=i.pmin.z;
+	  if (i.pmax.x > aabb_max.x)   aabb_max.x=i.pmax.x;
+	  if (i.pmax.y > aabb_max.y)   aabb_max.y=i.pmax.y;
+	  if (i.pmax.z > aabb_max.z)   aabb_max.z=i.pmax.z;
   }
 }

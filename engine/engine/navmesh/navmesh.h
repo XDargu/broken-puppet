@@ -54,6 +54,24 @@ private:
   rcBuildContext*       m_ctx;
   unsigned char*        m_triareas;
 
+  //----------------------------------
+  int m_maxTiles;
+  int m_maxPolysPerTile;
+  float m_tileSize;
+
+  unsigned int m_tileCol;
+  float m_tileBmin[3];
+  float m_tileBmax[3];
+  float m_tileBuildTime;
+  float m_tileMemUsage;
+  int m_tileTriCount;
+
+  float m_cellsize;
+  float m_cellheight;
+
+  float m_totalBuildTimeMs;
+  //----------------------------------
+
   rcBuildContext        m_context;
 
 public:
@@ -67,7 +85,8 @@ public:
   void prepareQueries( );
   void destroy( );
   void dumpLog( );
-  void render( bool use_z_test );
+  void buildAllTiles();
+  unsigned char* buildTileMesh(const int tx, const int ty, const float* bmin, const float* bmax, int& dataSize);
 };
 
 

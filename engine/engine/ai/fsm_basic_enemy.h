@@ -7,7 +7,6 @@ class fsm_basic_enemy : public aifsmcontroller
 {
 	CHandle player;
 	CHandle character_controller;
-	CHandle comp_mesh;
 	CHandle comp_life;
 
 	int probability_wander;

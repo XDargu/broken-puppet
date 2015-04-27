@@ -1,0 +1,13 @@
+<skeleton>
+    <mesh name="prota"/>
+	
+	<anim name="idle"/>	
+	<anim name="walk"/>
+	<anim name="run"/>
+    <anim name="dance"/>
+	
+	
+	<ik_foot bone="Bip01 R Foot" local_dir="0 1 0" amount="1" render="1"/>
+	<ik_foot bone="Bip01 L Foot" local_dir="0 1 0" amount="1" render="1"/>
+	
+</skeleton>

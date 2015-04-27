@@ -18,6 +18,10 @@ using namespace DirectX;
 #include "render/render_manager.h"
 #include "handle\prefabs_manager.h"
 
+#include "item_manager.h"
+#include "navmesh\navmesh.h"
+#include "nav_mesh_manager.h"
+
 #include "components\all_components.h"
 #include "components/comp_skeleton.h"
 #include "components/comp_skeleton_lookat.h"
@@ -76,8 +80,6 @@ void CApp::loadConfig() {
 		xres = 1024;
 		yres = 768;
 	}
-
-
 }
 
 // Debug 
@@ -98,8 +100,12 @@ CShaderCte<TCtesGlobal> ctes_global;
 const CTexture* cubemap;
 
 float fixedUpdateCounter;
-
+float fps;
 bool debug_mode;
+
+//---------------------------------------------------
+//CNavmesh nav_prueba;
+//---------------------------------------------------
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
@@ -137,6 +143,7 @@ void createManagers() {
 	getObjManager<TCompViewerCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompJointPrismatic>()->init(32);
+	getObjManager<TCompJointHinge>()->init(32);	
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
@@ -253,7 +260,6 @@ bool CApp::create() {
 	is_ok &= createAxis(axis);
 	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-	is_ok &= deferred.create(xres, yres);
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -273,6 +279,8 @@ bool CApp::create() {
 	entity_lister.update();	
 #endif
 	
+	fps = 0;
+
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
 
@@ -280,7 +288,10 @@ bool CApp::create() {
 
 	cubemap->activate(3);
 
-	CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
+	//PRUEBAS NAV MESHES -----------------
+	//bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	//------------------------------------
+	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
 	TCompTransform* tt = t;
 
@@ -291,7 +302,7 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
-	logic_manager.addRigidAnimation(anim);	
+	logic_manager.addRigidAnimation(anim);	*/
 
 	return true;
 }
@@ -314,7 +325,7 @@ void CApp::doFrame() {
 	delta_time = delta_secs;
 	total_time += delta_secs;
 
-	float fps = 1.0f / delta_secs;
+	fps = 1.0f / delta_secs;
 
 	before = now;
 
@@ -346,6 +357,17 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/milestone2.xml");
 	}
 
+	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
+	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
+	CEntity* player = entity_manager.getByName("Player");
+	TCompTransform* player_t = player->get<TCompTransform>();
+	fin = player_t->position;
+	std::vector<XMVECTOR> path;
+	int num_points_path = 0;
+	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);*/
+	//-----------------------------------------------------------------------------------------
+
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
 	CEntity* e = CEntityManager::get().getByName("Player");
 #ifdef _DEBUG
@@ -363,6 +385,17 @@ void CApp::update(float elapsed) {
 			activateDebugMode(false);
 	}
 #endif
+	//Insertamos aguja en vector agujas del item manager
+	/*Citem_manager::get().addNeedle(new_e_needle);
+
+	//Insertamos aguja en vector agujas del item manager					
+	Citem_manager::get().addNeedle(new_e_needle2);
+
+	//borrado de la aguja también del item manager
+	CEntity* e = (CEntity*)firstNeedle;
+	TCompNeedle* needle = e->get<TCompNeedle>();
+	Citem_manager::get().removeNeedle(needle);*/
+
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
@@ -525,7 +558,6 @@ void CApp::render() {
 	font.print(15, 35, strings_text.c_str());*/
 
 	::render.swap_chain->Present(0, 0);
-
 }
 
 void CApp::renderEntities() {
@@ -652,8 +684,18 @@ void CApp::renderEntities() {
 
 void CApp::renderDebugEntities() {
 
-	getObjManager<TCompSkeleton>()->renderDebug3D();
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(300, 30, s_fps.c_str());
+
+	//getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
+
+	//--------- NavMesh render Prueba --------------
+	//if (renderNavMesh)
+	CNav_mesh_manager::get().render_nav_mesh();
+	//----------------------------------------------
+
+	CNav_mesh_manager::get().pathRender();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
@@ -715,7 +757,7 @@ void CApp::activateInspectorMode(bool active) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 	io.setMousePointer(!active);
-
+	renderNavMesh = active;
 	// Activa el modo debug
 	renderAxis = active;
 	renderAABB = active;
@@ -814,6 +856,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	// Ctes ---------------------------
 	bool is_ok = renderUtilsCreate();
+	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);

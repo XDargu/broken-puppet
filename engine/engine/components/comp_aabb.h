@@ -2,6 +2,7 @@
 #define INC_COMP_AABB_H_
 
 #include "base_component.h"
+#include "comp_transform.h"
 #include "aabb.h"
 
 struct TCompAABB : public AABB, TBaseComponent{
@@ -49,13 +50,14 @@ public:
 		XMVECTOR identity_max = atts.getPoint("max");
 
 		setIdentityMinMax(identity_min, identity_max);
-	}
-
-	void init() {
 		transform = assertRequiredComponent<TCompTransform>(this);
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		recalcMinMax();
+	}
+
+	void init() {
+		
 	}
 
 	// Updates the min and max variables, if needed

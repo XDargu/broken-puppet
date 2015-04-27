@@ -77,7 +77,8 @@ public:
 		rigid->rigidBody->setName(name->name);		
 
 		setupFiltering(rigid->rigidBody, FilterGroup::eENEMY, FilterGroup::eENEMY);
-		float threshold = 3500.f;
+		//float threshold = 3500.f;
+		physx::PxReal threshold = 1000.f;
 		rigid->rigidBody->setContactReportThreshold(threshold);
 
 		// Lock rotation

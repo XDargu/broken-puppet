@@ -21,6 +21,7 @@
 
 #include "DebugDraw.h"
 #include "RecastDebugDraw.h"
+#include "render\render_utils.h"
 
 /// OpenGL debug draw implementation.
 class DebugDrawGL : public duDebugDraw {

@@ -155,7 +155,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3Common_x64.lib PhysX3_x64.lib PhysX3Cooking_x64.lib PhysX3CharacterKinematic_x64.lib PhysX3Extensions.lib PhysX3Vehicle.lib PhysXProfileSDK.lib PhysXVisualDebuggerSDK.lib PxTask.lib</AdditionalOptions>
     </Link>
@@ -182,6 +182,7 @@
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\collider.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="components\comp_collider_capsule.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
     <ClInclude Include="components\comp_enemy_controller.h" />
+    <ClInclude Include="components\comp_joint_hinge.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
     <ClInclude Include="components\comp_platform_path.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />
+    <ClInclude Include="comp_ai_bt.h" />
     <ClInclude Include="components\comp_viewer_camera_controller.h" />
     <ClInclude Include="comp_joint_d6.h" />
     <ClInclude Include="comp_victory_cond.h" />
@@ -255,6 +258,7 @@
     <ClInclude Include="navmesh\navmesh_query.h" />
     <ClInclude Include="navmesh\navmesh_render.h" />
     <ClInclude Include="navmesh\PerfTimer.h" />
+    <ClInclude Include="nav_mesh_manager.h" />
     <ClInclude Include="options_parser.h" />
     <ClInclude Include="physics_manager.h" />
     <ClInclude Include="recast\include\DebugDraw.h" />
@@ -297,6 +301,7 @@
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
     <ClInclude Include="skeletons\skeleton_manager.h" />
+    <ClInclude Include="ssb.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="utils.h" />
@@ -322,7 +327,9 @@
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+    <ClCompile Include="components\comp_joint_hinge.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_needle.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />
@@ -335,6 +342,10 @@
     <ClCompile Include="components\comp_switch_pull_controller.cpp" />
     <ClCompile Include="components\comp_transform.cpp" />
     <ClCompile Include="components\comp_trigger.cpp" />
+    <ClCompile Include="components\comp_collider_mesh.cpp" />
+    <ClCompile Include="components\comp_collider_box.cpp" />
+    <ClCompile Include="components\comp_collider_sphere.cpp" />
+    <ClCompile Include="components\comp_collider_capsule.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="error\error_context.cpp" />
@@ -376,6 +387,7 @@
     <ClCompile Include="navmesh\navmesh_query.cpp" />
     <ClCompile Include="navmesh\navmesh_render.cpp" />
     <ClCompile Include="navmesh\PerfTimer.cpp" />
+    <ClCompile Include="nav_mesh_manager.cpp" />
     <ClCompile Include="options_parser.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="recast\source\DebugDraw.cpp">
@@ -503,6 +515,7 @@
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />
+    <ClCompile Include="ssb.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="winmain.cpp" />
     <ClCompile Include="mcv_platform.cpp">
@@ -519,6 +532,9 @@
     <Text Include="render\notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="collision_table.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="my_file.xml">
       <SubType>Designer</SubType>
     </Xml>

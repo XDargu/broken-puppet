@@ -37,6 +37,7 @@ using namespace DirectX;
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"
 #include "comp_joint_prismatic.h"
+#include "comp_joint_hinge.h"
 #include "comp_ragdoll.h"
 
 // Render
@@ -53,6 +54,7 @@ using namespace DirectX;
 
 // AI
 #include "comp_ai_fsm_basic.h"
+#include "comp_ai_bt.h"
 #include "comp_player_position_sensor.h"
 #include "comp_sensor_needles.h"
 

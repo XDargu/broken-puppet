@@ -11,6 +11,7 @@ using namespace DirectX;
 static CPhysicsManager physics_manager;
 
 CCallbacks_physx gContactReportCallBack;
+CFilterCallback gFilterCallback;
 static PxDefaultErrorCallback gDefaultErrorCallback;
 static PxDefaultAllocator gDefaultAllocatorCallback;
 static PxSimulationFilterShader gDefaultFilterShader = FilterShader;
@@ -21,10 +22,26 @@ CPhysicsManager& CPhysicsManager::get() {
 
 CPhysicsManager::CPhysicsManager() : gScene(NULL), timeStep( 1.f / 60.f ) // 60 Hz
 {
+	m_collision = new std::map<physx::PxU32, std::vector<physx::PxU32>>();
+	loadCollisions();
 }
 
 CPhysicsManager::~CPhysicsManager()
 {
+}
+
+void CPhysicsManager::loadCollisions() {
+	// Parse xml file...
+	CCollisionParser p;
+	bool success = p.xmlParseFile("collision_table.xml");
+	if (success){
+		//ERROR: METER XASSERT
+	}
+}
+
+void CPhysicsManager::addCollisionFilter(physx::PxU32 s, physx::PxU32 filter){
+	m_collision->operator[](s).push_back(filter);
+	int prueba = 1;
 }
 
 void CPhysicsManager::init() {
@@ -68,6 +85,7 @@ void CPhysicsManager::init() {
 
 	// Asignación de callback de colisiones
 	sceneDesc.simulationEventCallback = &gContactReportCallBack;
+	sceneDesc.filterCallback = &gFilterCallback;
 
 	gScene = gPhysicsSDK->createScene(sceneDesc);
 	gScene->setFlag(PxSceneFlag::eENABLE_CCD, true);
@@ -208,6 +226,7 @@ void setupFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask)
 	{
 		PxShape* shape = shapes[i];
 		shape->setSimulationFilterData(filterData);
+		shape->setQueryFilterData(filterData);
 	}
 	free(shapes);
 }
@@ -219,4 +238,6 @@ void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask)
 	filterData.word0 = filterGroup;
 	filterData.word1 = filterMask;
 	shape->setSimulationFilterData(filterData);
+	shape->setQueryFilterData(filterData);
+	//free(shape);
 }

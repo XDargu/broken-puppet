@@ -140,6 +140,7 @@ void CRenderManager::removeKeysFromOwner(CHandle owner) {
 
 void CRenderManager::destroyAllKeys() {
 	keys.clear();
+	shadow_casters_keys.clear();
 }
 
 // ---------------------------------------------------------------
@@ -151,6 +152,7 @@ void CRenderManager::renderShadowsCasters() {
 		TCompTransform* tmx = k.transform;
 		assert(tmx);
 		setWorldMatrix(tmx->getWorld());
+
 
 		// Pintar la mesh:submesh del it
 		k.mesh->activateAndRender();

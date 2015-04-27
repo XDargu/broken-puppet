@@ -6,6 +6,10 @@
 #include "io\iostatus.h"
 #include <AntTweakBar.h>
 #include <shellapi.h>
+#include <windows.h>
+#include <process.h> 
+#include "nav_mesh_manager.h"
+#include <stdio.h>
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
@@ -14,6 +18,11 @@ HINSTANCE hInst;								// current instance
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
+
+unsigned int __stdcall mythread(void* data) {
+	CNav_mesh_manager::get().build_nav_mesh();
+	return 0;
+}
 
 int APIENTRY WinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -26,6 +35,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 	CApp &app = CApp::get();
 	app.loadConfig();
 
+	HANDLE myhandle;
 
 	// Initialize global strings
 	MyRegisterClass(hInstance);
@@ -47,13 +57,15 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
       TranslateMessage(&msg);
       DispatchMessage(&msg);
     }
+	    //ResumeThread(myhandle);
+		//myhandle = (HANDLE)_beginthreadex(0, 0, &mythread, 0, 0, 0);
+		//WaitForSingleObject(myhandle, INFINITE);
+		//CloseHandle(myhandle);
 		app.doFrame();
 	}
 	app.destroy();
 	return (int) msg.wParam;
 }
-
-
 
 //
 //  FUNCTION: MyRegisterClass()

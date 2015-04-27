@@ -2,6 +2,7 @@
 #define INC_COMP_SKELETON_H_
 
 #include "base_component.h"
+#include "transform.h"
 
 class CalModel;
 class CalBone;
@@ -10,6 +11,7 @@ class CalBone;
 struct TCompSkeleton : TBaseComponent {
 private:
 	CHandle h_ragdoll;
+	TTransform* bone_ragdoll_transforms;
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
@@ -22,6 +24,10 @@ public:
 	void update(float elapsed);
 	void renderDebug3D() const;
 	void renderBoneAxis(int bone_id) const;
+
+	void stopAnimation(int id);
+	void loopAnimation(int id);
+	void playAnimation(int id);
 
 	void uploadBonesToGPU() const;
 

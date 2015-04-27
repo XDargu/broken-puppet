@@ -28,7 +28,7 @@ function onSceneLoad_my_file()
 	
 	-- Get the player 
 	player = getBot("Player");
-	player:teleport(0, 10, 0);
+	-- player:teleport(0, 10, 0);
 
 	print("Scene loaded")
 
