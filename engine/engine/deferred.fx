@@ -320,8 +320,8 @@ void PSGBuffer(
 	  float4 ao = txAO.Sample(samWrapLinear, input.UV);
 
 	  float4 diffuse_brdf = /*(1 - fresnel) */ albedo / 3.14159;
-	  //albedo = albedo / 3.14159 * diffuse_amount + float4(res, 1) + emissive;
-	  albedo = (saturate(albedo * diffuse_amount * ao) + saturate(float4(res, 1))) * saturate(acc_light) + emissive;
+	  albedo = albedo / 3.14159 * diffuse_amount + emissive;
+	  //albedo = (saturate(albedo * diffuse_amount * ao) + saturate(float4(res, 1))) * saturate(acc_light) + emissive;
 
 	  
   //albedo *= saturate(acc_light);
