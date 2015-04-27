@@ -59,12 +59,12 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		std::sort(keys.begin(), keys.end(), sort_by_material_then_mesh);
 		sort_required = false;
 	}
-
+	
 	const CRenderTechnique* curr_tech = nullptr;
 	activateCamera(*camera, 1);
 
 	bool uploading_bones = false;
-
+	
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
@@ -74,17 +74,18 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 	while (it != keys.end()) {
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
-
+		
 		TCompTransform* tmx = it->transform;
 		XASSERT(tmx, "Invalid transform");
 
-		culling = camera_transform->isInFront(tmx->position);
-		culling = true;
+		bool is_in_front = XMVectorGetX(XMVector3Dot(camera->getFront(), tmx->position - camera->getPosition())) > 0.f;
+		culling = is_in_front;
+		//culling = true;
 		if (*it->active && culling)
 		{
 			render_count++;
 			if (it->material != prev_it->material || is_first) {
-
+				
 				// La tech
 				if (it->material->getTech() != curr_tech) {
 					curr_tech = it->material->getTech();
