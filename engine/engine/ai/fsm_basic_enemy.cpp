@@ -2,6 +2,7 @@
 #include "fsm_basic_enemy.h"
 #include "../entity_manager.h"
 #include "../components/all_components.h"
+#include "components\comp_skeleton.h"
 
 using namespace DirectX;
 
@@ -46,7 +47,7 @@ void fsm_basic_enemy::create(string)
 	character_controller = ((CEntity*)entity)->get<TCompUnityCharacterController>();
 
 	probability_wander = 40;
-	probability_idle = 20;
+	probability_idle = 6;
 
 	probability_aggresive = 60;
 	probability_mobile = 30;
@@ -71,7 +72,7 @@ void fsm_basic_enemy::create(string)
 	assert(orbit_angle < 180);
 
 	wander_target = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
-	comp_mesh = ((CEntity*)entity)->get<TCompMesh>();
+	//comp_mesh = ((CEntity*)entity)->get<TCompMesh>();
 	comp_life = ((CEntity*)entity)->get<TCompLife>();
 
 	// For orbit check purpose
@@ -84,7 +85,14 @@ void fsm_basic_enemy::create(string)
 
 void fsm_basic_enemy::Idle() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
+	TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
+
+	if (on_enter) {
+		skeleton->loopAnimation(0);
+	}
+
+
+	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Idle");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -98,13 +106,14 @@ void fsm_basic_enemy::Idle() {
 		int prob = getRandomNumber(1, 100);
 		if (prob < probability_wander) {
 			already_animated = false;
+			skeleton->stopAnimation(0);
 			ChangeState("aibe_Wander");
 		}
 	}
 
 	// Check if player viewed
 
-	if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
+	/*if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
 	{
 
 		// Check if player is visible
@@ -121,12 +130,18 @@ void fsm_basic_enemy::Idle() {
 			already_animated = false;
 			ChangeState("aibe_View");
 		}
-	}
+	}*/
 }
 
 void fsm_basic_enemy::Wander() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
+	TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
+
+	if (on_enter) {
+		skeleton->loopAnimation(1);
+	}
+
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
 
@@ -167,12 +182,13 @@ void fsm_basic_enemy::Wander() {
 		int prob = getRandomNumber(1, 100);
 		if (prob < probability_idle) {
 			already_animated = false;
+			skeleton->stopAnimation(1);
 			ChangeState("aibe_Idle");
 		}
 	}
 
 	// Check if player viewed
-	if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
+	/*if (V3DISTANCE(m_transform->position, p_transform->position) < view_distance)
 	{
 		// Check if player is visible
 		physx::PxRaycastBuffer buf;
@@ -183,23 +199,22 @@ void fsm_basic_enemy::Wander() {
 		if (std::strcmp(buf.touches[1].actor->getName(), "Player") == 0) {
 			player_visible = true;
 		}
-		/*for (int i = 0; i < buf.nbTouches; i++) {
-			if (std::strcmp(buf.touches[i].actor->getName(), "Player") == 0) {
-				player_visible = true;
-				break;
-			}
-		}*/
+//		for (int i = 0; i < buf.nbTouches; i++) {
+//			if (std::strcmp(buf.touches[i].actor->getName(), "Player") == 0) {
+//				player_visible = true;
+//				break;
+//			}
+//		}
 
 		if (player_visible) {
 			already_animated = false;
 			ChangeState("aibe_View");
 		}
-	}
+	}*/
 }
 
 void fsm_basic_enemy::View() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -218,7 +233,6 @@ void fsm_basic_enemy::Lost() {
 
 	initial_attack_done = false;
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -235,7 +249,6 @@ void fsm_basic_enemy::Lost() {
 
 void fsm_basic_enemy::Chase() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Run");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompTransform* p_transform = ((CEntity*)player)->get<TCompTransform>();
@@ -268,7 +281,6 @@ void fsm_basic_enemy::InitialAttack() {
 
 	initial_attack_done = true;
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -292,7 +304,6 @@ void fsm_basic_enemy::InitialAttack() {
 
 void fsm_basic_enemy::IdleWar() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_IdleWar");
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -364,7 +375,6 @@ void fsm_basic_enemy::SelectAttack() {
 
 void fsm_basic_enemy::Attacking1() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -387,7 +397,6 @@ void fsm_basic_enemy::Attacking1() {
 
 void fsm_basic_enemy::Attacking2() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Attack");
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
@@ -429,7 +438,6 @@ void fsm_basic_enemy::SelectSide() {
 
 void fsm_basic_enemy::OrbitRight() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -451,7 +459,6 @@ void fsm_basic_enemy::OrbitRight() {
 
 void fsm_basic_enemy::OrbitLeft() {
 
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Walk");
 
 	XMVECTOR mPosition = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	XMVECTOR pPosition = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
@@ -474,7 +481,6 @@ void fsm_basic_enemy::OrbitLeft() {
 float state_time = 0.f;
 
 void fsm_basic_enemy::Ragdoll(float elapsed){
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_T");
 
 	state_time += elapsed;
 
@@ -539,7 +545,6 @@ void fsm_basic_enemy::Ragdoll(float elapsed){
 
 void fsm_basic_enemy::Dead(float elapsed){
 	// --TODO: MUERTE
-	((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("Soldado_MS1_Dead");
 }
 
 void fsm_basic_enemy::EvaluateHit(float damage) {

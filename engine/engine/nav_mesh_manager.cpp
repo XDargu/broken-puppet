@@ -11,21 +11,12 @@ CNavmesh* nav_mesh;
 CNavmesh 	nav_A;		// temporal 1
 CNavmesh 	nav_B;		// temporal 2
 std::mutex	generating_navmesh;	// mutex de control
-std::mutex	updating_input_navmesh;	// mutex de control
 bool		keep_updating_navmesh;
 CEntityManager &entity_manager_S = CEntityManager::get();
 
 CNav_mesh_manager& CNav_mesh_manager::get() {
 	return the_nav_mesh_manager;
 }
-
-/*bool CNav_mesh_manager::build_nav_mesh(){
-	nav_mesh->m_input = nav_mesh_input;
-	nav_mesh->m_input.computeBoundaries();
-	nav_mesh->build();
-	return true;
-}*/
-
 
 bool CNav_mesh_manager::build_nav_mesh(){
 	first = true;
@@ -36,7 +27,6 @@ bool CNav_mesh_manager::build_nav_mesh(){
 	nav_A.build();
 	nav_mesh = &nav_A;
 	keep_updating_navmesh = true;
-	//clearMeshManager();
 	new std::thread(&CNav_mesh_manager::updateNavmesh, this);
 	return true;
 }
@@ -48,7 +38,6 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 		TCompColliderSphere* collider_sphere = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderSphere>();
 		TCompColliderCapsule* collider_capsule = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderCapsule>();
 		if (collider_mesh){
-			//collider_mesh->init();
 			collider_mesh->addInputNavMesh();
 		}else if (collider_box){
 			collider_box->addInputNavMesh();
@@ -57,9 +46,6 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 		}else if (collider_capsule){
 			collider_capsule->addInputNavMesh();
 		}
-		/*if (i == entity_manager_S.getEntities().size() - 1){
-			collider_mesh->clearMeshManager();
-		}*/
 	}
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
@@ -137,7 +123,7 @@ void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
 	}
 }
 
-void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, XMVECTOR *straightPath, int &numPoints){
+void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath, int &numPoints){
 	CNavmeshQuery navMeshQuery(nav_mesh);
 	if (nav_mesh){
 		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
@@ -148,14 +134,12 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, XMVECTOR *s
 			navMeshQuery.findStraightPath();
 			num = navMeshQuery.numPointsStraightPath;
 			prue = navMeshQuery.straightPath;
-			int ind = 0;
-			XMVECTOR* aux_array = new XMVECTOR[navMeshQuery.numPointsStraightPath];
+			straightPath.clear();
+			XMFLOAT3* aux_array = new XMFLOAT3[navMeshQuery.numPointsStraightPath];
 			for (int i = 0; i <navMeshQuery.numPointsStraightPath; ++i){
 				XMVECTOR point = XMVectorSet(navMeshQuery.straightPath[i * 3], navMeshQuery.straightPath[i * 3 + 1] + 0.10f, navMeshQuery.straightPath[i * 3 + 2], 1);
-				aux_array[ind] = point;
-				ind++;
+				straightPath.push_back(point);
 			}
-			memcpy(straightPath, aux_array, navMeshQuery.numPointsStraightPath*sizeof(XMVECTOR));
 			numPoints = navMeshQuery.numPointsStraightPath;
 		}
 	}

@@ -11,6 +11,7 @@ public:
 	CHandle comp_character_controller;
 	CHandle comp_rigidbody;
 	CHandle comp_collider;
+	CHandle comp_skeleton;
 	CHandle comp_player_controller;
 	CHandle comp_player_pivot_transform;
 	CHandle entity_camera;
