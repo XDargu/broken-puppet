@@ -234,14 +234,31 @@ float4 PSBasicLighting(VS_TEXTURED_OUTPUT input) : SV_Target
 
 
 //--------------------------------------------------------------------------------------
+float getShadowAtCoords(float4 wPos) {
+	float4 light_proj_coords = mul(wPos, LightViewProjectionOffset);
+		light_proj_coords.xyz /= light_proj_coords.w;
+	if (light_proj_coords.z <= 1e-3)
+		return 0;
+	float amount = txShadowMap.SampleCmpLevelZero(samPCFShadows
+		, light_proj_coords.xy, light_proj_coords.z - 0.01);
+	return amount;
+}
+
 float getShadowAt(float4 wPos) {
-  float4 light_proj_coords = mul(wPos, LightViewProjectionOffset);
-  light_proj_coords.xyz /= light_proj_coords.w;
-  if (light_proj_coords.z <= 1e-3)
-    return 0;
-  float amount = txShadowMap.SampleCmpLevelZero(samPCFShadows
-    , light_proj_coords.xy, light_proj_coords.z - 0.01);
-  return amount;
+
+	float4 amount = getShadowAtCoords(wPos);
+
+		float sz = 1.0 / 128
+		;
+
+	amount += getShadowAtCoords(wPos + float4(sz, sz, 0, 0));
+	amount += getShadowAtCoords(wPos + float4(-sz, sz, 0, 0));
+	amount += getShadowAtCoords(wPos + float4(sz, -sz, 0, 0));
+	amount += getShadowAtCoords(wPos + float4(-sz, -sz, 0, 0));
+
+	amount *= 1.0 / 5;
+
+	return amount;
 }
 
 //--------------------------------------------------------------------------------------
