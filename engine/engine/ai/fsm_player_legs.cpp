@@ -62,7 +62,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompSkeletonIK* skeleton_ik = comp_skeleton_ik;
 
-	skeleton_ik->active = false;
+	skeleton_ik->active = state_time > 0.3f;
 
 	if (on_enter) {
 		skeleton->loopAnimation(0);
@@ -245,12 +245,23 @@ void FSMPlayerLegs::Fall(float elapsed){
 
 void FSMPlayerLegs::Land(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
 	if (on_enter) {
 		skeleton->loopAnimation(7);
 	}
+
+	if (state_time > 0.2f) {
+		physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+		dir.normalize();
+		((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+	}
+	else {
+		EvaluateMovement(true, elapsed);
+	}
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
-	EvaluateMovement(true, elapsed);
+	
 	if (state_time >= 0.5f){
 		ChangeState("fbp_Idle");
 		skeleton->stopAnimation(7);
