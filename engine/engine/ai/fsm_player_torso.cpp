@@ -15,6 +15,7 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, first_position(PxVec3(0, 0, 0))
 	, standard_camera_offset(PxVec3(0, 0, 0))
 	, first_throw(false)
+	, up_animation(false)
 	, max_num_string(0)
 {}
 FSMPlayerTorso::~FSMPlayerTorso() {}
@@ -324,6 +325,8 @@ void FSMPlayerTorso::PullString(float elapsed) {
 void FSMPlayerTorso::GrabString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
+	up_animation = true;
+
 	TCompSkeleton* skeleton = comp_skeleton;
 
 	// Make the distance joint from the rope follow the player
@@ -355,18 +358,20 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		first_actor = nullptr;
 		first_needle = CHandle();
 		entitycount++;
-
+		
+		up_animation = false;
 		ChangeState("fbp_Inactive");		
 	}
 
 	// Pull
 	if (io.isPressed(CIOStatus::PULL_STRING)) {
+		up_animation = false;
 		ChangeState("fbp_PullString");
 	}
 
 	// Throw the second needle
 	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
-
+		up_animation = false;
 		ChangeState("fbp_ThrowString");
 	}
 	

@@ -9,6 +9,9 @@
 	<anim name="jump"/>5
 	<anim name="on_air"/>6
 	<anim name="falling"/>7
+	<anim name="idle_up"/>8
+	<anim name="walk_up"/>9
+	<anim name="run_up"/>10
 	
 	<ik_foot bone="Bip01 R Foot" local_dir="0 1 0" amount="1" render="1"/>
 	<ik_foot bone="Bip01 L Foot" local_dir="0 1 0" amount="1" render="1"/>

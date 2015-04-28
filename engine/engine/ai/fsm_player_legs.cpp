@@ -54,6 +54,8 @@ void FSMPlayerLegs::Init()
 	((TCompCharacterController*)comp_character_controller)->jumpPower = 7;
 	walk_speed = 1.5f;
 
+	current_animation_id = -1;
+
 	life = ((CEntity*)entity)->get<TCompLife>();
 
 }
@@ -63,29 +65,41 @@ void FSMPlayerLegs::Idle(float elapsed){
 	TCompSkeletonIK* skeleton_ik = comp_skeleton_ik;
 
 	skeleton_ik->active = state_time > 0.3f;
+	
+	int animation = torso->up_animation ? 8 : 0;
+
+	if (animation != current_animation_id) {
+		skeleton->stopAnimation(current_animation_id);
+		skeleton->loopAnimation(animation);
+		current_animation_id = animation;
+	}	
 
 	if (on_enter) {
-		skeleton->loopAnimation(0);
+		skeleton->loopAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
 
 	if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
+		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton_ik->active = false;
 		ChangeState("fbp_Jump");
 	}
 	if (EvaluateMovement(false, elapsed)){
+		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton_ik->active = false;
 		ChangeState("fbp_Walk");
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowString");
 	}
 	if (falling){
+		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton_ik->active = false;
 		ChangeState("fbp_Fall");
@@ -94,9 +108,17 @@ void FSMPlayerLegs::Idle(float elapsed){
 
 void FSMPlayerLegs::Walk(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
+	
+	int animation = torso->up_animation ? 9 : 1;
+
+	if (animation != current_animation_id) {
+		skeleton->stopAnimation(current_animation_id);
+		skeleton->loopAnimation(animation);
+		current_animation_id = animation;
+	}
 
 	if (on_enter) {
-		skeleton->loopAnimation(1);
+		skeleton->loopAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_walk");
@@ -104,25 +126,30 @@ void FSMPlayerLegs::Walk(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier = walk_speed;
 	if (!CIOStatus::get().isPressed(CIOStatus::RUN)){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
+			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			ChangeState("fbp_Jump");
 			return;
 		}
 		if (!EvaluateMovement(true, elapsed)){
+			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			ChangeState("fbp_Idle");
 			return;
 		}
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			ChangeState("fbp_ThrowString");
 		}
 		if (falling){
+			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			ChangeState("fbp_Fall");
 		}
 	}
 	else{
+		skeleton->stopAnimation(9);
 		skeleton->stopAnimation(1);
 		ChangeState("fbp_Run");
 	}
@@ -131,8 +158,16 @@ void FSMPlayerLegs::Walk(float elapsed){
 void FSMPlayerLegs::Run(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	int animation = torso->up_animation ? 10 : 2;
+
+	if (animation != current_animation_id) {
+		skeleton->stopAnimation(current_animation_id);
+		skeleton->loopAnimation(animation);
+		current_animation_id = animation;
+	}
+
 	if (on_enter) {
-		skeleton->loopAnimation(2);
+		skeleton->loopAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_run");
@@ -140,25 +175,30 @@ void FSMPlayerLegs::Run(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier = run_speed;
 	if (CIOStatus::get().isPressed(CIOStatus::RUN)){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
+			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			ChangeState("fbp_Jump");
 			return;
 		}
 		if (!EvaluateMovement(true, elapsed)){
+			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			ChangeState("fbp_Idle");
 			return;
 		}
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			ChangeState("fbp_ThrowString");
 		}
 		if (falling){
+			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			ChangeState("fbp_Fall");
 		}
 	}
 	else{
+		skeleton->stopAnimation(10);
 		skeleton->stopAnimation(2);
 		ChangeState("fbp_Walk");
 	}

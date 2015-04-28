@@ -22,6 +22,7 @@ private:
 	PxVec3 standard_camera_offset;
 public:
 
+	bool up_animation;
 	bool can_move;
 	unsigned int max_num_string;
 
@@ -40,7 +41,7 @@ public:
 
 	void ProcessHit(float elapsed);
 
-	unsigned int getStringCount();
+	unsigned int getStringCount();	
 };
 
 #endif
