@@ -21,6 +21,8 @@ public:
 
 	void setCollisionGroups();
 
+	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
+
 	bool  getIfUpdated();
 };
 

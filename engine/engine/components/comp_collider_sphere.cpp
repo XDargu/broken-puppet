@@ -136,6 +136,14 @@ void TCompColliderSphere::setCollisionGroups(){
 	setupFiltering(collider, myMask, notCollide);
 }
 
+void TCompColliderSphere::setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems){
+	PxU32 not_collide;
+	for (int i = 0; i < num_elems; i++){
+		not_collide |= vector_masks[i];
+	}
+	setupFiltering(collider, own_mask, not_collide);
+}
+
 bool TCompColliderSphere::getIfUpdated(){
 	TCompTransform* trans = getSibling<TCompTransform>(this);
 	if (trans){

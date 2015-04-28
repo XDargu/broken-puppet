@@ -93,3 +93,11 @@ void TCompColliderMesh::setCollisionGroups(){
 	}
 	setupFiltering(collider, myMask, notCollide);
 }
+
+void TCompColliderMesh::setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems){
+	PxU32 not_collide;
+	for (int i = 0; i < num_elems; i++){
+		not_collide |= vector_masks[i];
+	}
+	setupFiltering(collider, own_mask, not_collide);
+}
