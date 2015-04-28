@@ -166,7 +166,7 @@ void TCompSkeleton::update(float elapsed) {
   CalVector delta_logic_trans = model->getMixer()->getAndClearLogicTranslation();
 
   if (delta_logic_trans.length() > 0) {
-	  if (u) {
+	  /*if (u) {
 		  PxTransform u_transform = u->enemy_rigidbody->getGlobalPose();
 		  u_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
 		  u->enemy_rigidbody->setGlobalPose(u_transform);
@@ -178,7 +178,7 @@ void TCompSkeleton::update(float elapsed) {
 	  }
 	  else {
 		  t->position += Cal2DX(delta_logic_trans);
-	  }
+	  }*/
   }
 }
 
@@ -347,4 +347,12 @@ void TCompSkeleton::loopAnimation(int id) {
 
 void TCompSkeleton::playAnimation(int id) {
 	model->getMixer()->executeAction(id, 0.0f, 0.3f, 1.0f, false);
+}
+
+XMVECTOR TCompSkeleton::getPositionOfBone(int id) {
+	CalSkeleton* skel = model->getSkeleton();
+	auto& cal_bones = skel->getVectorBone();
+
+	CalBone* bone = cal_bones[id];
+	return Cal2DX(bone->getTranslationAbsolute());
 }

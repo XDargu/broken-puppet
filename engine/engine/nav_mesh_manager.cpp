@@ -1,18 +1,12 @@
 #include "mcv_platform.h"
 #include "nav_mesh_manager.h"
 #include "entity_manager.h"
-#include "components\comp_collider_mesh.h"
-#include "components\comp_collider_box.h"
-#include "components\comp_collider_sphere.h"
-#include "components\comp_collider_capsule.h"
 
 static CNav_mesh_manager the_nav_mesh_manager;
 CNavmesh* nav_mesh;
 CNavmesh 	nav_A;		// temporal 1
 CNavmesh 	nav_B;		// temporal 2
 std::mutex	generating_navmesh;	// mutex de control
-bool		keep_updating_navmesh;
-CEntityManager &entity_manager_S = CEntityManager::get();
 
 CNav_mesh_manager& CNav_mesh_manager::get() {
 	return the_nav_mesh_manager;
@@ -32,55 +26,97 @@ bool CNav_mesh_manager::build_nav_mesh(){
 }
 
 void CNav_mesh_manager::prepareInputNavMesh(){
-	for (int i = 0; i < entity_manager_S.getEntities().size(); ++i){
+	/*for (int i = 0; i < entity_manager_S.getEntities().size(); ++i){
 		TCompColliderMesh* collider_mesh = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderMesh>();
 		TCompColliderBox* collider_box = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderBox>();
 		TCompColliderSphere* collider_sphere = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderSphere>();
-		TCompColliderCapsule* collider_capsule = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderCapsule>();
+		//TCompColliderCapsule* collider_capsule = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderCapsule>();
 		if (collider_mesh){
 			collider_mesh->addInputNavMesh();
 		}else if (collider_box){
 			collider_box->addInputNavMesh();
 		}else if (collider_sphere){
 			collider_sphere->addInputNavMesh();
-		}else if (collider_capsule){
-			collider_capsule->addInputNavMesh();
+		//}else if (collider_capsule){
+			//collider_capsule->addInputNavMesh();
 		}
+	}*/
+
+	for (int i = 0; i < colMeshes.size(); ++i){
+		colMeshes[i]->addInputNavMesh();
 	}
+
+	for (int i = 0; i < colBoxes.size(); ++i){
+		colBoxes[i]->addInputNavMesh();
+	}
+
+	for (int i = 0; i < colSpheres.size(); ++i){
+		colSpheres[i]->addInputNavMesh();
+	}
+
+	/*for (int i = 0; i < colCapsules.size(); ++i){
+		colCapsules[i]->addInputNavMesh();
+	}*/
+
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
 	nav_B.m_input = nav_mesh_input;
 	nav_B.m_input.computeBoundaries();
 }
 
+bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
+	int i = 0;
+	bool updatedChecked = false;
+	while ((!updatedChecked) && (i < colBoxes.size())){
+		updatedChecked = colBoxes[i]->getIfUpdated();
+		i++;
+	}
+	
+	if (!updatedChecked){
+		i = 0;
+		while ((!updatedChecked) && (i < colSpheres.size())){
+			updatedChecked = colSpheres[i]->getIfUpdated();
+			i++;
+		}
+	}
+
+	if (updatedChecked)
+		return true;
+	else
+		return false;
+}
+
 void CNav_mesh_manager::updateNavmesh() {
 	while (keep_updating_navmesh) {
+		bool lock = false;
+		bool need_update = checkIfUpdatedNavMesh();
+		if (need_update){
 
-		// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
-		CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
+			// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
+			CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
 
-		// generamos la navmesh con los datos actualizados
-		updated_nav->build();
+			// generamos la navmesh con los datos actualizados
+			updated_nav->build();
 
-		// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
-		generating_navmesh.lock();
+			// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
+			generating_navmesh.lock();
 
-		// hacemos el swap de los datos de la navmesh
-		nav_mesh = updated_nav;
+			// hacemos el swap de los datos de la navmesh
+			nav_mesh = updated_nav;
 
-		// desactivamos el mutex
-		generating_navmesh.unlock();
+			// desactivamos el mutex
+			generating_navmesh.unlock();
 
-		// esperamos un poco antes de volver a actulizarla
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			// esperamos un poco antes de volver a actulizarla
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-		nav_mesh_input.clearInput();
-		prepareInputNavMesh();
+			nav_mesh_input.clearInput();
+			prepareInputNavMesh();
+		}
 	}
 }
 
 void CNav_mesh_manager::render_nav_mesh(){
-	//nav_mesh.render();
 	if (nav_mesh){
 		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
 		if (navmesh){
@@ -90,8 +126,6 @@ void CNav_mesh_manager::render_nav_mesh(){
 			}
 		}
 	}
-	//nav_mesh.m_draw_mode = CNavmesh::EDrawMode::NAVMESH_DRAW_COUNTOURS;
-	//nav_mesh.render(true);
 }
 
 void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
@@ -123,7 +157,7 @@ void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
 	}
 }
 
-void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath, int &numPoints){
+void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath){
 	CNavmeshQuery navMeshQuery(nav_mesh);
 	if (nav_mesh){
 		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
@@ -140,7 +174,6 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 				XMVECTOR point = XMVectorSet(navMeshQuery.straightPath[i * 3], navMeshQuery.straightPath[i * 3 + 1] + 0.10f, navMeshQuery.straightPath[i * 3 + 2], 1);
 				straightPath.push_back(point);
 			}
-			numPoints = navMeshQuery.numPointsStraightPath;
 		}
 	}
 }

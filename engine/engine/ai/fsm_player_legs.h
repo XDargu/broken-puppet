@@ -2,19 +2,23 @@
 #define _FSM_PLAYER_LEGS_H_
 
 #include "aifsmcontroller.h"
+#include "fsm_player_torso.h"
 
 class FSMPlayerLegs : public aifsmcontroller
 {
-
+private:
+	int current_animation_id;
 public:
 
 	CHandle comp_character_controller;
 	CHandle comp_rigidbody;
 	CHandle comp_collider;
 	CHandle comp_skeleton;
+	CHandle comp_skeleton_ik;
 	CHandle comp_player_controller;
 	CHandle comp_player_pivot_transform;
 	CHandle entity_camera;
+	FSMPlayerTorso* torso;
 
 	CHandle life;
 

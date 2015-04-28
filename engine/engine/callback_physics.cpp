@@ -103,15 +103,9 @@ PxFilterFlags FilterShader(
 	//Si la colision se produce entre dos entities descartadas entre si, se anula dicha colision.
 	//Si no es así, se hacen las comprobaciones pertinentes y se deja la colision
 
-	bool found = false;
-	auto it = CPhysicsManager::get().m_collision->find(filterData0.word0);
-	if (it != CPhysicsManager::get().m_collision->end()){
-		std::vector<physx::PxU32>colFil = it->second;
-		if (!colFil.empty()){
-			found = std::find(colFil.begin(), colFil.end(), filterData1.word0) != colFil.end();
-		}
-	}
-	if (found)
+	if (filterData0.word1&filterData1.word0)
+		return PxFilterFlag::eSUPPRESS;
+	else if (filterData1.word0&filterData0.word1)
 		return PxFilterFlag::eSUPPRESS;
 	else{
 		//Colisiones entre actores (cajas) y enemigos
