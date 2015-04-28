@@ -51,7 +51,15 @@ public:
 		// Update the first pos
 		if (transform_1.isValid()) {
 			TCompTransform* trans_1 = transform_1;
-			pos_1 = trans_1->position;
+
+			XMVECTOR normal_dir = trans_1->position - pos_1;
+			normal_dir = XMVector3Normalize(normal_dir);
+			float dist = V3DISTANCE(trans_1->position, pos_1);
+			float speed = min(dist / elapsed, 50);
+
+			pos_1 = pos_1 + normal_dir * speed * elapsed;
+
+			//pos_1 = trans_1->position;
 		}
 
 		// Update the second pos

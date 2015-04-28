@@ -309,20 +309,44 @@ void FSMPlayerLegs::Land(float elapsed){
 }
 
 void FSMPlayerLegs::WrongFall(float elapsed){
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	if (on_enter) {
+		skeleton->loopAnimation(6);
+	}
+
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
 	dir.normalize();
+
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
+		skeleton->stopAnimation(6);
 		ChangeState("fbp_WrongLand");
 	}
 }
 
 void FSMPlayerLegs::WrongLand(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_landing");
+	TCompSkeleton* skeleton = comp_skeleton;
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+
+	if (on_enter) {
+		skeleton->loopAnimation(7);
+	}
+
+	if (state_time > 0.2f) {
+		physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+		dir.normalize();
+		((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+	}
+	else {
+		EvaluateMovement(true, elapsed);
+	}
 
 	if (state_time >= 0.2){
+		skeleton->stopAnimation(7);
 		ChangeState("fbp_Idle");
 	}
 }

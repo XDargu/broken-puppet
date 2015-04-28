@@ -158,6 +158,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 				// Assing the positions (needle transform + current player position)
 				new_e_r->setPositions(needle_transform, p_transform->position);
+				new_e_r->pos_1 = p_transform->position;
 
 				// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
 				current_rope_entity = new_e;
