@@ -15,6 +15,7 @@ private:
 	PxVec3 first_position;
 	PxVec3 first_offset;
 	CHandle first_needle;
+	CHandle comp_skeleton;
 	CHandle current_rope_entity;
 	bool first_throw;
 

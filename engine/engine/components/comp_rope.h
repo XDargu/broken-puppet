@@ -57,7 +57,15 @@ public:
 		// Update the second pos
 		if (transform_2.isValid()) {
 			TCompTransform* trans_2 = transform_2;
-			pos_2 = trans_2->position;
+
+			XMVECTOR normal_dir = trans_2->position - pos_2;
+			normal_dir = XMVector3Normalize(normal_dir);
+			float dist = V3DISTANCE(trans_2->position, pos_2);
+			float speed = min(dist / elapsed, 50);
+
+			pos_2 = pos_2 + normal_dir * speed * elapsed;
+
+			//pos_2 = trans_2->position;
 		}
 		// If the joint distance exceeds the max distance, the destroy the entity
 		/*float dist = ((TCompDistanceJoint*)joint)->joint->getDistance();

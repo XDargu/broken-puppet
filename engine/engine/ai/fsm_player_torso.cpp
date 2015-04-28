@@ -3,6 +3,7 @@
 #include "io\iostatus.h"
 #include "components\all_components.h"
 #include "handle\prefabs_manager.h"
+#include "components\comp_skeleton.h"
 
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
@@ -31,6 +32,9 @@ void FSMPlayerTorso::Init() {
 
 	// Get the transform
 	comp_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	// Get the skeleton
+	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
 	// Get tge camera
 	camera_entity = CEntityManager::get().getByName("PlayerCamera");
@@ -320,6 +324,8 @@ void FSMPlayerTorso::PullString(float elapsed) {
 void FSMPlayerTorso::GrabString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
+	TCompSkeleton* skeleton = comp_skeleton;
+
 	// Make the distance joint from the rope follow the player
 	CEntity* rope_entity = current_rope_entity;
 	TCompRope* rope = rope_entity->get<TCompRope>();
@@ -333,7 +339,8 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		joint->awakeActors();
 	}
 
-	rope->pos_2 = p_transform->position + XMVectorSet(0, 2, 0, 0);
+	
+	rope->pos_2 = skeleton->getPositionOfBone(36);
 
 	// Cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
