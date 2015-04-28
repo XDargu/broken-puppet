@@ -287,7 +287,7 @@ bool CApp::create() {
 	cubemap->activate(3);
 
 	//PRUEBAS NAV MESHES -----------------
-	//bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 	//------------------------------------
 	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
@@ -356,7 +356,7 @@ void CApp::update(float elapsed) {
 	}
 
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
-	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
 	CEntity* player = entity_manager.getByName("Player");
 	TCompTransform* player_t = player->get<TCompTransform>();
@@ -688,6 +688,9 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompTrigger>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
+	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		exit(-1);
+	}
 	//if (renderNavMesh)
 	CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
@@ -792,6 +795,7 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }
 

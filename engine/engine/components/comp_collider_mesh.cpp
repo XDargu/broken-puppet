@@ -22,9 +22,11 @@ void TCompColliderMesh::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		true);
 
 	addInputNavMesh();
+	CNav_mesh_manager::get().colMeshes.push_back(this);
 
 	//Asignación de mascara al Shape para el filtrado de colisiones
 	//setupFiltering(collider, FilterGroup::eLEVEL, FilterGroup::eLEVEL);
+	setCollisionGroups();
 
 	//Una vez creado el shape, no necesitamos el triangleMesh
 	triangle_mesh->release();

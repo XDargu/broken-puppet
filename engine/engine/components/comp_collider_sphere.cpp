@@ -62,6 +62,8 @@ void TCompColliderSphere::loadFromAtts(const std::string& elem, MKeyValue &atts)
 			true);
 
 		addInputNavMesh();
+		setCollisionGroups();
+		CNav_mesh_manager::get().colSpheres.push_back(this);
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
@@ -77,7 +79,7 @@ void TCompColliderSphere::addInputNavMesh(){
 	if ((aabb_module) && (trans)){
 
 		TTransform* t = trans;
-
+		t_previous = trans->position;
 		XMFLOAT3 min;
 		XMStoreFloat3(&min, aabb_module->min);
 		XMFLOAT3 max;
@@ -132,4 +134,26 @@ void TCompColliderSphere::setCollisionGroups(){
 		}
 	}
 	setupFiltering(collider, myMask, notCollide);
+}
+
+bool TCompColliderSphere::getIfUpdated(){
+	TCompTransform* trans = getSibling<TCompTransform>(this);
+	if (trans){
+		t_current = trans->position;
+		float current_x = XMVectorGetX(t_current);
+		float current_y = XMVectorGetY(t_current);
+		float current_z = XMVectorGetZ(t_current);
+
+		float prev_x = XMVectorGetX(t_previous);
+		float prev_y = XMVectorGetY(t_previous);
+		float prev_z = XMVectorGetZ(t_previous);
+		if ((current_x != prev_x) || (current_y != prev_y) || (current_z != prev_z))
+			return true;
+		else
+			return false;
+	}else{
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+	}
 }
