@@ -22,9 +22,9 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		cal_bones[bone_idx]->getCoreBone()->getName();
 	}
 
-	int nums[7] = {1, 2, 41, 26, 42, 74, 79 };
+	//int nums[7] = {1, 2, 41, 26, 42, 74, 79 };
 	
-	
+	int nums[1] = { 1 };
 	//for (int i = 0; i < 8; ++i) {
 	for (int i : nums) {
 		CalBone* cal_bone = skel->model->getSkeleton()->getBone(i);
