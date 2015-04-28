@@ -192,6 +192,7 @@
     <ClInclude Include="components\comp_collider_capsule.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
     <ClInclude Include="components\comp_enemy_controller.h" />
+    <ClInclude Include="components\comp_joint_hinge.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
     <ClInclude Include="components\comp_platform_path.h" />
@@ -328,6 +329,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+    <ClCompile Include="components\comp_joint_hinge.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_needle.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />

@@ -739,7 +739,7 @@ clearlistener()
 		-- Change the reference system of the object to mcv
 		
 		local mObj = max2mcvMatrix obj
-		local qObj = mObj.rotationPart as quat	
+		local qObj = mObj.rotationPart as quat
 		qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
 		
 		local mString = ""
@@ -1080,7 +1080,7 @@ clearlistener()
 	***********************************************************************************************/
 	fn getAABB obj = (
 		
-		if(validateMesh obj == false) then
+		if(validateCompRender obj == false) then
 		return ""
 		
 			-- Save the original transform and move the obj to the identity
@@ -1369,6 +1369,8 @@ fn validateJointPrismatic obj = (
 	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
+		
+		if ((mJoint.constraintType == 2) == false) then continue
 		local body0 = false
 		local body1 = false
 		local undefinedTest = false
@@ -1452,6 +1454,114 @@ fn getJointPrismatic obj = (
 	
 	return mString
 )	
+
+		
+fn validateJointHinge obj = (
+	
+	-- Get all the Uconstraints in the scene
+	list = for o in $* where (classof o == UConstraint) collect o
+	
+	-- check if the obj is an actor in a Uconstraint
+	for mJoint in list do (
+		
+		if ((mJoint.constraintType == 4) == false) then continue
+		local body0 = false
+		local body1 = false
+		local undefinedTest = false
+		
+		if( mJoint.body0 != undefined) then (
+			body0 = mJoint.body0 == obj
+		)
+		else (
+			undefinedTest = true
+		)
+
+		if( mJoint.body1 != undefined) then (
+			body1 = mJoint.body1 == obj
+		)
+		else (
+			undefinedTest = true
+		)
+		
+			
+		if (body0) or (body1) then (
+			
+			local mName = getIdName mJoint
+			
+			-- If the mJoint is not in the exp list add it and return false
+			if (findItem expJoints mName ) == 0 then (
+				-- Add it
+				
+				append expJoints mName
+				-- If have only one actor
+				if (undefinedTest) then return mJoint
+				-- return false
+				return undefined
+			)
+			-- If there are two actor
+			else (
+				return mJoint
+			)
+		)
+	)	
+	
+	return undefined
+)
+
+/**********************************************************************************************
+Gets a Hinge joint component
+ Params:
+  - obj: target object
+ Returns:
+  - Hinge joint data
+***********************************************************************************************/
+fn getJointHinge obj = (
+	local mJoint = validateJointHinge obj
+	if (mJoint == undefined) then return ""
+		
+		local mObj = max2mcvMatrix mJoint
+		local qObj = mObj.rotationPart as quat
+		qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+	
+	local hingePos = undefined
+	
+	mString = "<jointHinge "
+	
+	i = 1;
+	-- Actors
+	if (mJoint.body0 != undefined) then (		
+		mString += "actor" + i as string + " = \"" + mJoint.body0.name + "_" + mJoint.body0.id as string + "\" "
+		i += 1;
+	)
+	
+	if (mJoint.body1 != undefined) then 
+	mString += "actor" + i as string + " = \"" + mJoint.body1.name + "_" + mJoint.body1.id as string + "\" "
+	
+	-- Translations limits
+	-- mode 1 = Locked, 2 = Limited, 3 = Free
+	
+	mString += " jointPosition=\"" \
+											+ mObj.row4.x as string+" " \
+											+ mObj.row4.y as string+" " \
+											+ mObj.row4.z as string+"" \
+						+ "\" jointRotation=\"" \
+											+ qObj.x as string+" "\
+											+ qObj.y as string+" "\
+											+ qObj.z as string+" "\
+											+ qObj.w as string+"\" "
+	
+	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
+	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
+	
+	-- Spring
+	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
+	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
+	
+	mString += "/>\n"	
+	
+	return mString
+)	
+	
 	
 
 
@@ -1690,6 +1800,7 @@ fn getPlatformPath obj = (
 			getDirectionalLight,
 			getDistanceText,
 			getJointPrismatic,
+			getJointHinge,
 			getPlatformPath
 		)
 

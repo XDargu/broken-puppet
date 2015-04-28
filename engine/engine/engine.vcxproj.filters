@@ -393,6 +393,9 @@
     <ClInclude Include="components\comp_shadows.h">
       <Filter>components\render</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_joint_hinge.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -679,6 +682,9 @@
     </ClCompile>
     <ClCompile Include="render\render_to_texture.cpp">
       <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_joint_hinge.cpp">
+      <Filter>components\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

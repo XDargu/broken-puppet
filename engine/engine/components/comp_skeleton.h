@@ -30,7 +30,7 @@ public:
 	void playAnimation(int id);
 
 	void uploadBonesToGPU() const;
-
+	XMVECTOR getPositionOfBone(int id);
 };
 
 #endif

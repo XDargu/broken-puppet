@@ -3,7 +3,7 @@
     <name name="Player" />
     <transform position="0 10 0" rotation="0.0 0.0 0.0 1.0" scale="0.01 0.01 0.01"/>
 	<skeleton name="prota"/>
-	skeleton_ik bone_c0="81" normal_c0="0 1 0"
+	<skeleton_ik bone_c0="81" normal_c0="0 1 0"
                  bone_c1="76" normal_c1="0 -1 0"
               />
     <!--<render>
@@ -23,7 +23,7 @@
       <draw mesh="prota_idle" sub_mesh="4" mat="Standardmaterial"/>
     </render>-->
     <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
-    <colliderCapsule radius="0.25" halfHeigth="0.5" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
+    <colliderCapsule radius="0.35" halfHeigth="0.45" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
     <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
     <characterController/>
 	<life life="100"/>

@@ -3,6 +3,7 @@
 #include "io\iostatus.h"
 #include "components\all_components.h"
 #include "handle\prefabs_manager.h"
+#include "components\comp_skeleton.h"
 
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
@@ -14,6 +15,7 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, first_position(PxVec3(0, 0, 0))
 	, standard_camera_offset(PxVec3(0, 0, 0))
 	, first_throw(false)
+	, up_animation(false)
 	, max_num_string(0)
 {}
 FSMPlayerTorso::~FSMPlayerTorso() {}
@@ -31,6 +33,9 @@ void FSMPlayerTorso::Init() {
 
 	// Get the transform
 	comp_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	// Get the skeleton
+	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
 	// Get tge camera
 	camera_entity = CEntityManager::get().getByName("PlayerCamera");
@@ -153,6 +158,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 				// Assing the positions (needle transform + current player position)
 				new_e_r->setPositions(needle_transform, p_transform->position);
+				new_e_r->pos_1 = p_transform->position;
 
 				// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
 				current_rope_entity = new_e;
@@ -320,6 +326,10 @@ void FSMPlayerTorso::PullString(float elapsed) {
 void FSMPlayerTorso::GrabString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
+	up_animation = true;
+
+	TCompSkeleton* skeleton = comp_skeleton;
+
 	// Make the distance joint from the rope follow the player
 	CEntity* rope_entity = current_rope_entity;
 	TCompRope* rope = rope_entity->get<TCompRope>();
@@ -333,7 +343,8 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		joint->awakeActors();
 	}
 
-	rope->pos_2 = p_transform->position + XMVectorSet(0, 2, 0, 0);
+	
+	rope->pos_2 = skeleton->getPositionOfBone(36);
 
 	// Cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
@@ -348,18 +359,20 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		first_actor = nullptr;
 		first_needle = CHandle();
 		entitycount++;
-
+		
+		up_animation = false;
 		ChangeState("fbp_Inactive");		
 	}
 
 	// Pull
 	if (io.isPressed(CIOStatus::PULL_STRING)) {
+		up_animation = false;
 		ChangeState("fbp_PullString");
 	}
 
 	// Throw the second needle
 	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
-
+		up_animation = false;
 		ChangeState("fbp_ThrowString");
 	}
 	
