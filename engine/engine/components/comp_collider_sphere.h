@@ -6,6 +6,9 @@
 #include "collider.h"
 
 struct TCompColliderSphere : public CCollider, TBaseComponent {
+private:
+	XMVECTOR t_current;
+	XMVECTOR t_previous;
 public:
 	TCompColliderSphere() : CCollider() {}
 
@@ -16,6 +19,12 @@ public:
 	void init();
 
 	void addInputNavMesh();
+
+	void setCollisionGroups();
+
+	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
+
+	bool getIfUpdated();
 };
 
 #endif

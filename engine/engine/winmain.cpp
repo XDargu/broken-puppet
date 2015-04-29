@@ -57,10 +57,6 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
       TranslateMessage(&msg);
       DispatchMessage(&msg);
     }
-	    //ResumeThread(myhandle);
-		//myhandle = (HANDLE)_beginthreadex(0, 0, &mythread, 0, 0, 0);
-		//WaitForSingleObject(myhandle, INFINITE);
-		//CloseHandle(myhandle);
 		app.doFrame();
 	}
 	app.destroy();

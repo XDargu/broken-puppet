@@ -28,8 +28,6 @@ public:
 		if (V3DISTANCE(p_transform->position, e_transform->position) < radius){
 			physx::PxRaycastBuffer buf;
 			Physics.raycastAll(e_transform->position + XMVectorSet(0, 1.5f, 0, 0), XMVector3Normalize(p_transform->position - e_transform->position), radius, buf);
-
-			bool player_visible = false;
 			if (buf.nbTouches > 1){
 				if (std::strcmp(buf.touches[1].actor->getName(), "Player") == 0) {
 					return true;
@@ -41,7 +39,7 @@ public:
 			return false;
 		}
 
-		return STAY;
+		return false;
 	}
 };
 #endif

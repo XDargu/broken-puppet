@@ -3,6 +3,10 @@
 #include "navmesh\navmesh.h"
 #include "navmesh\navmesh_query.h"
 #include "render\render_utils.h"
+#include "components\comp_collider_mesh.h"
+#include "components\comp_collider_box.h"
+#include "components\comp_collider_sphere.h"
+#include "components\comp_collider_capsule.h"
 
 #include <thread>
 #include <mutex>
@@ -22,12 +26,18 @@ public:
 	bool build_nav_mesh();
 	void render_nav_mesh();
 	void render_tile(const dtMeshTile* tile);
-	void findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath, int &numPoints);
+	void findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath);
 	void pathRender();
 	void updateNavmesh();
 	void prepareInputNavMesh();
+	bool checkIfUpdatedNavMesh();
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
+	std::vector<TCompColliderMesh*>     colMeshes;
+	std::vector<TCompColliderBox*>      colBoxes;
+	std::vector<TCompColliderSphere*>   colSpheres;
+	bool keep_updating_navmesh;
+	//std::vector<TCompColliderCapsule*>  colCapsules;
 };
 #endif
 
