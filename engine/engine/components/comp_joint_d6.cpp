@@ -81,14 +81,26 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxRigidDynamic* m_ridig_dynamic1 = ((TCompRigidBody*)r1)->rigidBody;
 	PxRigidDynamic* m_ridig_dynamic2 = ((TCompRigidBody*)r2)->rigidBody;
 
+	PxTransform t_1 = PxTransform(
+		PxVec3(0, 0, 0),
+		PxQuat(0, 0, 0, 1)
+		);
+	PxTransform t_2 = PxTransform(
+		PxVec3(0, 0, 0),
+		PxQuat(0, 0, 0, 1)
+		);
+
+	t_1 = getAnchorConfiguration(m_ridig_dynamic1->getGlobalPose(), joint_position, joint_rotation);
+	t_2 = getAnchorConfiguration(m_ridig_dynamic2->getGlobalPose(), joint_position, joint_rotation);
+
 
 	// Create a joint
 	mJoint = PxD6JointCreate(
 		  *Physics.gPhysicsSDK
 		  , m_ridig_dynamic1
-		  , getAnchorConfiguration(m_ridig_dynamic1->getGlobalPose(), joint_position, joint_rotation)
+		  , t_1
 		  , m_ridig_dynamic2
-		  , getAnchorConfiguration(m_ridig_dynamic2->getGlobalPose(), joint_position, joint_rotation)
+		  , t_2
 	);
 
 	// Set the axis to locked, limited or free  mode 1 = Locked, 2 = Limited, 3 = Free

@@ -143,7 +143,8 @@ void createManagers() {
 	getObjManager<TCompViewerCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompJointPrismatic>()->init(32);
-	getObjManager<TCompJointHinge>()->init(32);	
+	getObjManager<TCompJointHinge>()->init(32);
+	getObjManager<TCompJointD6>()->init(512);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
@@ -202,6 +203,7 @@ void initManagers() {
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompJointPrismatic>()->initHandlers();
+	getObjManager<TCompJointD6>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
