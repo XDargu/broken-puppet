@@ -106,13 +106,13 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./SLB/include;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3CommonDEBUG_x64.lib PhysX3DEBUG_x64.lib PhysX3CookingDEBUG_x64.lib PhysX3CharacterKinematicDEBUG_x64.lib PhysX3ExtensionsDEBUG.lib PhysX3VehicleDEBUG.lib PhysXProfileSDKDEBUG.lib PhysXVisualDebuggerSDKDEBUG.lib PxTaskDEBUG.lib /DEBUG</AdditionalOptions>
     </Link>
@@ -146,7 +146,7 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/MP10 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./SLB/include;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir)</AdditionalIncludeDirectories>
       <CallingConvention>Cdecl</CallingConvention>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -155,56 +155,69 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3Common_x64.lib PhysX3_x64.lib PhysX3Cooking_x64.lib PhysX3CharacterKinematic_x64.lib PhysX3Extensions.lib PhysX3Vehicle.lib PhysXProfileSDK.lib PhysXVisualDebuggerSDK.lib PxTask.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="aabb.h" />
     <ClInclude Include="ai\aifsmcontroller.h" />
     <ClInclude Include="ai\aicontroller.h" />
     <ClInclude Include="ai\aimanager.h" />
     <ClInclude Include="ai\behaviour_trees.h" />
+    <ClInclude Include="ai\bot.h" />
     <ClInclude Include="ai\bt_basic_enemy.h" />
+    <ClInclude Include="ai\bt_grandma.h" />
     <ClInclude Include="ai\bt_node.h" />
     <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
+    <ClInclude Include="ai\fsm_player_legs.h" />
+    <ClInclude Include="ai\fsm_player_torso.h" />
+    <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
+    <ClInclude Include="ai\rigid_animation.h" />
     <ClInclude Include="ai\timer.h" />
+    <ClInclude Include="ai\lua_vector.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\collider.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
     <ClInclude Include="components\comp_basic_player_controller.h" />
+    <ClInclude Include="components\comp_bt_grandma.h" />
     <ClInclude Include="components\comp_character_controller.h" />
     <ClInclude Include="components\comp_collider_capsule.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
     <ClInclude Include="components\comp_enemy_controller.h" />
+    <ClInclude Include="components\comp_joint_hinge.h" />
     <ClInclude Include="components\comp_joint_prismatic.h" />
     <ClInclude Include="components\comp_needle.h" />
+    <ClInclude Include="components\comp_platform_path.h" />
     <ClInclude Include="components\comp_player_position_sensor.h" />
     <ClInclude Include="components\comp_point_light.h" />
+    <ClInclude Include="components\comp_ragdoll.h" />
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
     <ClInclude Include="components\comp_sensor_needles.h" />
+    <ClInclude Include="components\comp_shadows.h" />
     <ClInclude Include="components\comp_skeleton.h" />
     <ClInclude Include="components\comp_skeleton_ik.h" />
     <ClInclude Include="components\comp_skeleton_lookat.h" />
     <ClInclude Include="components\comp_switch_controller.h" />
+    <ClInclude Include="components\comp_switch_pull_controller.h" />
+    <ClInclude Include="components\comp_switch_push_controller.h" />
     <ClInclude Include="components\comp_unity_character_controller.h" />
     <ClInclude Include="components\comp_trigger.h" />
     <ClInclude Include="components\comp_distance_text.h" />
-<<<<<<< .merge_file_a16132
     <ClInclude Include="comp_ai_bt.h" />
-=======
     <ClInclude Include="components\comp_viewer_camera_controller.h" />
->>>>>>> .merge_file_a12328
-    <ClInclude Include="comp_joint_d6.h" />
+    <ClInclude Include="components\comp_joint_d6.h" />
     <ClInclude Include="comp_victory_cond.h" />
     <ClInclude Include="error\error_context.h" />
     <ClInclude Include="error\log.h" />
@@ -277,12 +290,15 @@
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
+    <ClInclude Include="render\deferred_render.h" />
     <ClInclude Include="render\material.h" />
     <ClInclude Include="render\mesh.h" />
     <ClInclude Include="render\render.h" />
     <ClInclude Include="render\render_manager.h" />
+    <ClInclude Include="render\render_to_texture.h" />
     <ClInclude Include="render\render_utils.h" />
     <ClInclude Include="render\shaders.h" />
+    <ClInclude Include="render\shadows.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
@@ -298,24 +314,49 @@
     <ClCompile Include="ai\aicontroller.cpp" />
     <ClCompile Include="ai\aimanager.cpp" />
     <ClCompile Include="ai\behaviour_trees.cpp" />
+    <ClCompile Include="ai\bot.cpp" />
     <ClCompile Include="ai\bt_basic_enemy.cpp" />
+    <ClCompile Include="ai\bt_grandma.cpp" />
     <ClCompile Include="ai\bt_node.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
+    <ClCompile Include="ai\fsm_player_legs.cpp" />
+    <ClCompile Include="ai\fsm_player_torso.cpp" />
+    <ClCompile Include="ai\key_frame.cpp" />
     <ClCompile Include="ai\logic_manager.cpp" />
+    <ClCompile Include="ai\rigid_animation.cpp" />
     <ClCompile Include="ai\timer.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="components\comp_bt_grandma.cpp" />
+    <ClCompile Include="components\comp_character_controller.cpp" />
+=======
+    <ClCompile Include="components\comp_joint_d6.cpp" />
+>>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
+    <ClCompile Include="components\comp_joint_hinge.cpp" />
+    <ClCompile Include="components\comp_joint_prismatic.cpp" />
+    <ClCompile Include="components\comp_needle.cpp" />
+    <ClCompile Include="components\comp_player_position_sensor.cpp" />
+    <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
+    <ClCompile Include="components\comp_sensor_needles.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />
     <ClCompile Include="components\comp_skeleton_ik.cpp" />
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
+    <ClCompile Include="components\comp_static_body.cpp" />
+    <ClCompile Include="components\comp_switch_pull_controller.cpp" />
     <ClCompile Include="components\comp_transform.cpp" />
     <ClCompile Include="components\comp_trigger.cpp" />
+    <ClCompile Include="components\comp_collider_mesh.cpp" />
+    <ClCompile Include="components\comp_collider_box.cpp" />
+    <ClCompile Include="components\comp_collider_sphere.cpp" />
+    <ClCompile Include="components\comp_collider_capsule.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="error\error_context.cpp" />
@@ -474,10 +515,12 @@
     </ClCompile>
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
+    <ClCompile Include="render\deferred_render.cpp" />
     <ClCompile Include="render\material.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />
     <ClCompile Include="render\render_manager.cpp" />
+    <ClCompile Include="render\render_to_texture.cpp" />
     <ClCompile Include="render\render_utils.cpp" />
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\texture.cpp" />
@@ -500,6 +543,9 @@
     <Text Include="render\notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="collision_table.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="my_file.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -511,6 +557,12 @@
     <ProjectReference Include="cal3d\cal3d.vcxproj">
       <Project>{bb9d0314-c731-4321-a394-767216a4601a}</Project>
     </ProjectReference>
+    <ProjectReference Include="SLB\SLB.vcxproj">
+      <Project>{aedce6e7-b121-41bb-afba-cc1de30883a8}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

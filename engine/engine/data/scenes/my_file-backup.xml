@@ -1,4 +1,11 @@
 <scene>
+ <entity>
+    <name name="abuela"/>
+    <transform position="0 0 0" rotation="0 0 0 1"/>
+    <skeleton name="abuela"/>
+	<ragdoll/>
+	<aiFSMcontroller/>
+  </entity>
   <entity>
     <name name="the_light"/>
     <transform position="0 7 -30" rotation="0.16 0.14 -0.06 0.98"/>
@@ -424,5 +431,35 @@
 <aabb min="-0.70364 -0.484364 -0.665835" max="0.70364 0.484364 0.665835"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.70364" boxY="0.665835" boxZ="0.484364"/>
 <rigidbody density="10.0"  />
+	</entity>
+		<entity tag = "actor">
+<name name="D6Test01_42.0" />
+<transform position="14.8864 1.04749 -6.80304" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="D6Test01" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="D6Test01" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="D6Test01" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="D6Test01" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="D6Test01" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="D6Test01" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-1.92327 0.0 -1.22394" max="1.92327 1.5416 1.22394"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.91258" boxY="1.22394" boxZ="0.770802"/>
+<rigidbody density="42.478"  />
+	</entity>
+	<entity tag = "actor">
+<name name="D6Test02_43.0" />
+<transform position="14.9644 4.00073 -6.84086" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="D6Test02" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-1.38992 -1.38992 -1.38992" max="1.38992 1.38992 1.38992"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="1.38992"/>
+<rigidbody density="50.0"  />
+<jointPrismatic actor1 = "D6Test02_43.0" actor2 = "D6Test01_42.0" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" />
+	</entity>
+	<entity >
+<name name="UniversalConstraint03_44.0" />
+<transform position="14.9644 4.00073 -6.84086" rotation="-0.678984 0.699206 0.155919 -0.160563" scale="1.0 1.0 1.0"/>
 	</entity>
 </scene>

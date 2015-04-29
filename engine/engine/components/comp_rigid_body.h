@@ -54,6 +54,8 @@ public:
 	void setLockZRot(bool locked);
 
 	physx::PxReal getMass();
+
+	void setCollisionMask();
 };
 
 #endif

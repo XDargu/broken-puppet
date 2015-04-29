@@ -12,7 +12,6 @@ private:
 	float radius;
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
-
 	void init();
 
 	bool playerInRange();

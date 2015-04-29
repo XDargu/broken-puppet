@@ -62,6 +62,8 @@ void TCompColliderSphere::loadFromAtts(const std::string& elem, MKeyValue &atts)
 			true);
 
 		addInputNavMesh();
+		setCollisionGroups();
+		CNav_mesh_manager::get().colSpheres.push_back(this);
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
@@ -69,13 +71,15 @@ void TCompColliderSphere::init() {
 	}
 
 void TCompColliderSphere::addInputNavMesh(){
-		//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
+	//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
 
-		TCompAABB* aabb_module = getSibling<TCompAABB>(this);
-		TCompTransform* trans = getSibling<TCompTransform>(this);
+	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
+	TCompTransform* trans = getSibling<TCompTransform>(this);
+
+	if ((aabb_module) && (trans)){
 
 		TTransform* t = trans;
-		//t->transformPoint()
+		t_previous = trans->position;
 		XMFLOAT3 min;
 		XMStoreFloat3(&min, aabb_module->min);
 		XMFLOAT3 max;
@@ -107,4 +111,57 @@ void TCompColliderSphere::addInputNavMesh(){
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
 		//------------------------------------------------------------------------------------------------------------------------
+	}else{
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		if (!aabb_module)
+			XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
 	}
+}
+
+void TCompColliderSphere::setCollisionGroups(){
+	PxU32 myMask = FilterGroup::eACTOR;
+	PxU32 notCollide = 0;
+	bool found = false;
+	auto it = CPhysicsManager::get().m_collision->find(myMask);
+	if (it != CPhysicsManager::get().m_collision->end()){
+		std::vector<physx::PxU32>colFil = it->second;
+		if (!colFil.empty()){
+			for (int i = 0; i < colFil.size(); i++){
+				notCollide |= colFil[i];
+			}
+		}
+	}
+	setupFiltering(collider, myMask, notCollide);
+}
+
+void TCompColliderSphere::setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems){
+	PxU32 not_collide;
+	for (int i = 0; i < num_elems; i++){
+		not_collide |= vector_masks[i];
+	}
+	setupFiltering(collider, own_mask, not_collide);
+}
+
+bool TCompColliderSphere::getIfUpdated(){
+	TCompTransform* trans = getSibling<TCompTransform>(this);
+	if (trans){
+		t_current = trans->position;
+		float current_x = XMVectorGetX(t_current);
+		float current_y = XMVectorGetY(t_current);
+		float current_z = XMVectorGetZ(t_current);
+
+		float prev_x = XMVectorGetX(t_previous);
+		float prev_y = XMVectorGetY(t_previous);
+		float prev_z = XMVectorGetZ(t_previous);
+		if ((current_x != prev_x) || (current_y != prev_y) || (current_z != prev_z))
+			return true;
+		else
+			return false;
+	}else{
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+	}
+}

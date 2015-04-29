@@ -38,6 +38,7 @@ using namespace DirectX;
 #include "comp_distance_joint.h"
 #include "comp_joint_prismatic.h"
 #include "comp_joint_hinge.h"
+#include "comp_joint_d6.h"
 #include "comp_ragdoll.h"
 
 // Render

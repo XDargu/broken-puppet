@@ -111,6 +111,11 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+
+	//IA events
+	SUBSCRIBE(TCompAiBT, TActorHit, actorHit);
+
+
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompPlayerController, TMsgAttackDamage, onAttackDamage);
@@ -143,7 +148,8 @@ void createManagers() {
 	getObjManager<TCompViewerCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
 	getObjManager<TCompJointPrismatic>()->init(32);
-	getObjManager<TCompJointHinge>()->init(32);	
+	getObjManager<TCompJointHinge>()->init(32);
+	getObjManager<TCompJointD6>()->init(512);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
@@ -203,6 +209,7 @@ void initManagers() {
 	getObjManager<TCompThirdPersonCameraController>()->initHandlers();
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompJointPrismatic>()->initHandlers();
+	getObjManager<TCompJointD6>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
@@ -227,7 +234,6 @@ void initManagers() {
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
-
 
 }
 
@@ -291,7 +297,7 @@ bool CApp::create() {
 	cubemap->activate(3);
 
 	//PRUEBAS NAV MESHES -----------------
-	//bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 	//------------------------------------
 	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
@@ -359,6 +365,10 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/milestone2.xml");
 	}
 
+	//-----------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().checkUpdates();
+	//-----------------------------------------------------------------------------------------
+
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
 	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
@@ -366,8 +376,7 @@ void CApp::update(float elapsed) {
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
 	std::vector<XMVECTOR> path;
-	int num_points_path = 0;
-	CNav_mesh_manager::get().findPath(ini, fin, path, num_points_path);*/
+	CNav_mesh_manager::get().findPath(ini, fin, path);*/
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
@@ -546,6 +555,8 @@ void CApp::render() {
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 	renderDebugEntities();
@@ -694,6 +705,10 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompTrigger>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
+	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		CNav_mesh_manager::get().keep_updating_navmesh = false;
+		exit(-1);
+	}
 	//if (renderNavMesh)
 	CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
@@ -798,6 +813,7 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }
 
@@ -817,6 +833,7 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
 	entity_manager.clear();
 	mesh_manager.destroyAll();
@@ -875,6 +892,9 @@ void CApp::loadScene(std::string scene_name) {
 	activateInspectorMode(false);
 	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
 	logic_manager.onSceneLoad(name);
+
+	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
+	CPhysicsManager::get().m_collision->clear();
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

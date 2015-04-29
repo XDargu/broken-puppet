@@ -42,7 +42,7 @@ struct TCompAiBT : TBaseComponent {
 
 	void actorHit(const TActorHit& msg) {
 		dbg("Force recieved is  %f\n", msg.damage);
-		//m_ai_controller.EvaluateHit(msg.damage);
+		//m_ai_controller->EvaluateHit(msg.damage);
 	}
 
 	void groundHit(const TGroundHit& msg) {
