@@ -133,7 +133,7 @@ void btnode::recalc(bt *tree)
 			}
 		}
 
-		children[children.size()-1]->recalc(tree);
+		//children[children.size()-1]->recalc(tree);
 		break;
 	}
 	case PRIORITY:

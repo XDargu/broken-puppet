@@ -33,13 +33,20 @@ class bt:public aicontroller
 	map<string, btcondition>* conditions;
 
 	btnode *root;
+	btnode *previous;
 
 	// moved to private as really the derived classes do not need to see this
 	btnode *createNode(string);
 protected:
 	btnode *current;
+	bool state_changed;
 
 public:
+	// Time in the state
+	float state_time;
+	// Just enter to a new state
+	bool on_enter;
+
 	string name;
 	// use a derived create to declare BT nodes for your specific BTs
 	virtual void create(string);
@@ -82,6 +89,9 @@ public:
 	void setDecoratorCondition(string name, bool t);
 	bool getDecoratorCondition(string name);
 	void initDecoratorCondition(string name, float t);
+
+	float timer;
+
 	bt();
 	~bt();
 	//--------------------------------------------------------------------------------------------

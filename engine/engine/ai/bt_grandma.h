@@ -111,6 +111,8 @@ public:
 	//Check if it is too far from the target position
 	int conditionfar_from_target_pos();
 
+	bool trueEveryXSeconds(float time);
+
 	/*Sensores*/
 
 	void playerViewedSensor();

@@ -117,7 +117,18 @@ int bt_grandma::actionTakeNeedle()
 //Select the idle and play it
 int bt_grandma::actionIdle()
 {
-	return LEAVE;
+	float aux_time = state_time;
+	bool aux_enter = on_enter;
+
+	if (on_enter)
+		int caca = 1;
+
+	if (trueEveryXSeconds(1.5f)){
+		return LEAVE;
+	}else{
+		return STAY;
+	}
+
 }
 
 //Select a point to go and chase it
@@ -407,21 +418,33 @@ void bt_grandma::needleViewedSensor(){
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	//le pedimos que nos diga las agujas que el enemigo tiene en su rango
 	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
-	m_sensor->getNeedlesInRange();
-	//almacenamos el numero de agujas en rango para comprobar variaciones
-	currentNumNeedlesViewed = (unsigned int)m_sensor->needlesInRange.size();//list_needles.size();
-	if (currentNumNeedlesViewed != lastNumNeedlesViewed){
-		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
-		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-		if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
-			setCurrent(NULL);
+	if (!m_sensor->getNeedlesInRange().empty()){
+		//almacenamos el numero de agujas en rango para comprobar variaciones
+		currentNumNeedlesViewed = (unsigned int)m_sensor->needlesInRange.size();//list_needles.size();
+		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
+			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
+			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
+			if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
+				setCurrent(NULL);
+		}
+		lastNumNeedlesViewed = currentNumNeedlesViewed;
 	}
-	lastNumNeedlesViewed = currentNumNeedlesViewed;
 }
 
 void bt_grandma::update(float elapsed){
 	//playerViewedSensor();
 	//needleViewedSensor();
 	this->recalc(elapsed);
+}
+
+bool bt_grandma::trueEveryXSeconds(float time)
+{
+	static float counter = 0;
+	counter += CApp::get().delta_time;
+	if (counter >= time) {
+		counter = 0;
+		return true;
+	}
+	return false;
 }
 

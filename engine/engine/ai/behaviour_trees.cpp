@@ -1,12 +1,13 @@
 #include "mcv_platform.h"
 #include "behaviour_trees.h"
 
-
 bt::bt()
 {
 	tree = new map<string, btnode *>();
 	actions= new map<string, btaction>();
 	conditions = new map<string, btcondition>();
+	state_time = 0.f;
+	on_enter = true;
 }
 
 bt::~bt()
@@ -194,12 +195,27 @@ bool bt::validateNode(string parent, int type, subType subType){
 
 void bt::recalc(float deltaTime)
 {
+	state_changed = false;
+
 	if (current == NULL) root->recalc(this);	// I'm not in a sequence, start from the root
-	else current->recalc(this);				// I'm in a sequence. Continue where I left
+	else current->recalc(this);				    // I'm in a sequence. Continue where I left
+	timer += deltaTime;
+	state_time += deltaTime;
+
+	if (!state_changed)
+		on_enter = false;
+
 }
 
 void bt::setCurrent(btnode *nc)
 {
+	if (nc != current)
+	{
+		on_enter = true;
+		state_changed = true;
+		state_time = 0;
+	}
+
 	current = nc;
 }
 
