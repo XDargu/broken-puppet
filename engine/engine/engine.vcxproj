@@ -168,6 +168,7 @@
     <ClInclude Include="ai\behaviour_trees.h" />
     <ClInclude Include="ai\bot.h" />
     <ClInclude Include="ai\bt_basic_enemy.h" />
+    <ClInclude Include="ai\bt_grandma.h" />
     <ClInclude Include="ai\bt_node.h" />
     <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
     <ClInclude Include="components\comp_basic_player_controller.h" />
+    <ClInclude Include="components\comp_bt_grandma.h" />
     <ClInclude Include="components\comp_character_controller.h" />
     <ClInclude Include="components\comp_collider_capsule.h" />
     <ClInclude Include="components\comp_collider_mesh.h" />
@@ -314,6 +316,7 @@
     <ClCompile Include="ai\behaviour_trees.cpp" />
     <ClCompile Include="ai\bot.cpp" />
     <ClCompile Include="ai\bt_basic_enemy.cpp" />
+    <ClCompile Include="ai\bt_grandma.cpp" />
     <ClCompile Include="ai\bt_node.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
@@ -329,12 +332,16 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+    <ClCompile Include="components\comp_bt_grandma.cpp" />
+    <ClCompile Include="components\comp_character_controller.cpp" />
     <ClCompile Include="components\comp_joint_hinge.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_needle.cpp" />
+    <ClCompile Include="components\comp_player_position_sensor.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
+    <ClCompile Include="components\comp_sensor_needles.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />
     <ClCompile Include="components\comp_skeleton_ik.cpp" />
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />

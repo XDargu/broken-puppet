@@ -169,6 +169,7 @@ void createManagers() {
 
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
+	getObjManager<TCompBtGrandma>()->init(64);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -222,6 +223,7 @@ void initManagers() {
 
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
+	getObjManager<TCompBtGrandma>()->initHandlers();
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
@@ -460,6 +462,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
+	getObjManager<TCompBtGrandma>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 

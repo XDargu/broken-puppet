@@ -57,6 +57,7 @@ using namespace DirectX;
 #include "comp_ai_bt.h"
 #include "comp_player_position_sensor.h"
 #include "comp_sensor_needles.h"
+#include "comp_bt_grandma.h"
 
 // Logic
 #include "comp_platform_path.h"

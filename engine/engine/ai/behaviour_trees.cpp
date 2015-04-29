@@ -151,6 +151,29 @@ btnode *bt::addChild(string parent, string son, int type, subType subType, btcon
 	}
 }
 
+btnode *bt::addChild(string parent, string son, int type, typeInterrupAllowed kind, btcondition btc, btaction bta, int weight)
+{
+	if (validateNode(parent, type)){
+		btnode *p = findNode(parent);
+		btnode *s = createNode(son);
+		p->addChild(s);
+		s->setParent(p);
+		s->setType(type);
+		s->setTypeInter(kind);
+		if (btc != NULL) addCondition(son, btc);
+		if (bta != NULL) addAction(son, bta);
+		s->setNodeWeight(weight);
+		return s;
+	}
+	else{
+		//METER UN xassert
+		CErrorContext ec("Adding child", "Behaviour trees");
+		//fatal("node not valid\n");
+		XASSERT(validateNode(parent, type), "Child not valid");
+		return nullptr;
+	}
+}
+
 bool bt::validateNode(string parent, int type){
 	btnode *p = findNode(parent);
 	if ((p != nullptr) && (type != 0) && (type != DECORATOR)){

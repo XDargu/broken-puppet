@@ -307,13 +307,7 @@
     <ClInclude Include="comp_victory_cond.h">
       <Filter>components\misc</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_sensor_needles.h">
-      <Filter>components\ai</Filter>
-    </ClInclude>
     <ClInclude Include="components\comp_ai_fsm_basic.h">
-      <Filter>components\ai\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="components\comp_player_position_sensor.h">
       <Filter>components\ai\enemies</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_basic_player_controller.h">
@@ -395,6 +389,18 @@
     </ClInclude>
     <ClInclude Include="components\comp_joint_hinge.h">
       <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_grandma.h">
+      <Filter>ai\behaviour trees</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_bt_grandma.h">
+      <Filter>components\ai\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_sensor_needles.h">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_player_position_sensor.h">
+      <Filter>components\ai\enemies\sensors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -686,6 +692,21 @@
     <ClCompile Include="components\comp_joint_hinge.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
+    <ClCompile Include="ai\bt_grandma.cpp">
+      <Filter>ai\behaviour trees</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_bt_grandma.cpp">
+      <Filter>components\ai\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_sensor_needles.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_player_position_sensor.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_character_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -765,6 +786,12 @@
     </Filter>
     <Filter Include="components\logic\switches">
       <UniqueIdentifier>{4b410d89-e4e2-464c-856c-fd6fe9b838a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\behaviour trees">
+      <UniqueIdentifier>{11d355f0-3304-43d2-858e-d9abf3e354e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai\enemies\sensors">
+      <UniqueIdentifier>{af53a7b1-8bd6-4321-976a-fb162f642437}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

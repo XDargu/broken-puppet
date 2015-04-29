@@ -52,6 +52,9 @@ public:
 	btnode *addChild(string, string, int, typeInterrupAllowed, subType, btcondition, btaction);
 	btnode *addChild(string, string, int, subType, btcondition, btaction);
 
+	//Sobrecargar del addChild para priorizar por pesos los hijos de los nodos random
+	btnode *addChild(string parent, string son, int type, typeInterrupAllowed kind, btcondition btc, btaction bta, int weight);
+
 	btnode *findNode(string);
 
 	// internals used by btnode and other bt calls
