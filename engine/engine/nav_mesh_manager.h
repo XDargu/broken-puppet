@@ -31,6 +31,7 @@ public:
 	void updateNavmesh();
 	void prepareInputNavMesh();
 	bool checkIfUpdatedNavMesh();
+	void clearNavMesh();
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	std::vector<TCompColliderMesh*>     colMeshes;

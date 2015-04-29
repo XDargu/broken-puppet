@@ -111,6 +111,11 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+
+	//IA events
+	SUBSCRIBE(TCompAiBT, TActorHit, actorHit);
+
+
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompPlayerController, TMsgAttackDamage, onAttackDamage);
@@ -357,13 +362,13 @@ void CApp::update(float elapsed) {
 	}
 
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
-	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
 	CEntity* player = entity_manager.getByName("Player");
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
 	std::vector<XMVECTOR> path;
-	CNav_mesh_manager::get().findPath(ini, fin, path);
+	CNav_mesh_manager::get().findPath(ini, fin, path);*/
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
@@ -816,6 +821,7 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
 	entity_manager.clear();
 	mesh_manager.destroyAll();
