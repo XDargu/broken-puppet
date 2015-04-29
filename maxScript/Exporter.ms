@@ -4,7 +4,6 @@ clearlistener()
 	--ExportMeshes = true
 	--engine_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
 
-
 	/********************** CONFIG ************************/
 
 	out_path = engine_path + "data\\"
@@ -1360,7 +1359,128 @@ clearlistener()
 		return mString
 	)	
 	
+fn validateJointD6 obj = (
 	
+	-- Get all the Uconstraints in the scene
+	list = for o in $* where (classof o == UConstraint) collect o
+	
+	-- check if the obj is an actor in a Uconstraint
+	for mJoint in list do (
+		
+		if ((mJoint.constraintType == 6) == false) then continue
+		local body0 = false
+		local body1 = false
+		local undefinedTest = false
+		
+		if( mJoint.body0 != undefined) then (
+			body0 = mJoint.body0 == obj
+		)
+		else (
+			undefinedTest = true
+		)
+
+		if( mJoint.body1 != undefined) then (
+			body1 = mJoint.body1 == obj
+		)
+		else (
+			undefinedTest = true
+		)
+		
+			
+		if (body0) or (body1) then (
+			
+			local mName = getIdName mJoint
+			
+			-- If the mJoint is not in the exp list add it and return false
+			if (findItem expJoints mName ) == 0 then (
+				-- Add it
+				
+				append expJoints mName
+				-- If have only one actor
+				if (undefinedTest) then return mJoint
+				-- return false
+				return undefined
+			)
+			-- If there are two actor
+			else (
+				return mJoint
+			)
+		)
+	)	
+	
+	return undefined
+)
+
+/**********************************************************************************************
+Gets a Distance Text component
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getJointD6 obj = (
+	local mJoint = validateJointD6 obj
+	if (mJoint == undefined) then return ""
+	
+	mString = "<jointD6 "
+	
+	i = 1;
+	-- Actors
+	if (mJoint.body0 != undefined) then (		
+		mString += "actor" + i as string + " = \"" + mJoint.body0.name + "_" + mJoint.body0.id as string + "\" "
+		i += 1;
+	)
+	
+	if (mJoint.body1 != undefined) then 
+	mString += "actor" + i as string + " = \"" + mJoint.body1.name + "_" + mJoint.body1.id as string + "\" "
+	
+	-- Translations limits
+	-- mode 1 = Locked, 2 = Limited, 3 = Free
+	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
+	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
+	
+	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
+	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
+	
+	-- Spring
+	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
+	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
+	
+	-- Modos de swing/twist:
+	-- 1: Locked
+	-- 2: Limited
+	-- 3: Free
+	local modes = #("Locked", "Limited", "Free")
+	
+	-- Swing 1 (Swing Z en max)
+	mString += "swing1Mode=\"" + modes[mJoint.swing1mode] as string + "\" "
+	mString += "swing1Angle=\"" + mJoint.swing1Angle as string + "\" "
+	mString += "swing1Restitution=\"" + mJoint.swing1Restitution as string + "\" "
+	mString += "swing1Spring=\"" + mJoint.swing1Spring as string + "\" "
+	mString += "swing1Damping=\"" + mJoint.swing1Damping as string + "\" "
+	
+	-- Swing 2 (Swing Y en max)
+	mString += "swing2Mode=\"" + modes[mJoint.swing2mode] as string + "\" "
+	mString += "swing2Angle=\"" + mJoint.swing2Angle as string + "\" "
+	mString += "swing2Restitution=\"" + mJoint.swing2Restitution as string + "\" "
+	mString += "swing2Spring=\"" + mJoint.swing2Spring as string + "\" "
+	mString += "swing2Damping=\"" + mJoint.swing2Damping as string + "\" "
+	
+	-- Twist
+	mString += "twistMode=\"" + modes[mJoint.twistMode] as string + "\" "
+	
+	-- Advanced
+	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
+	mString += "breakable=\"" + mJoint.breakable as string + "\" "
+	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
+	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
+	
+	mString += "/>\n"	
+	
+	return mString
+)
+
 		
 fn validateJointPrismatic obj = (
 	
@@ -1801,6 +1921,7 @@ fn getPlatformPath obj = (
 			getDistanceText,
 			getJointPrismatic,
 			getJointHinge,
+			getJointD6,
 			getPlatformPath
 		)
 
@@ -1853,7 +1974,7 @@ fn getPlatformPath obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
---openCloseFile()
---removeObjectsID()
+addObjectsID()
+exportXMLScene()
+openCloseFile()
+removeObjectsID()

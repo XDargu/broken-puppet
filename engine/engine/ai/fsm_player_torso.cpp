@@ -344,7 +344,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	}
 
 	
-	rope->pos_2 = skeleton->getPositionOfBone(36);
+	rope->pos_2 = skeleton->getPositionOfBone(89);
 
 	// Cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {

@@ -74,6 +74,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float  spec_amount = pow(cos_beta, 20.);
 
 	float4 albedo = txDiffuse.Sample(samWrapLinear, input.UV);
-	return (albedo + spec_amount) * diffuse_amount;
+		//return (albedo + spec_amount) * diffuse_amount;
+		return albedo * diffuse_amount;
 }
 
