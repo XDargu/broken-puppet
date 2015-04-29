@@ -86,10 +86,13 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 		return false;
 }
 
+void CNav_mesh_manager::checkUpdates(){
+	need_update = checkIfUpdatedNavMesh();
+}
+
 void CNav_mesh_manager::updateNavmesh() {
 	while (keep_updating_navmesh) {
 		bool lock = false;
-		bool need_update = checkIfUpdatedNavMesh();
 		if (need_update){
 
 			// seleccionamos navmesh a actualizar (las actualizamso alternativamente)

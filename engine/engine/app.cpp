@@ -363,6 +363,10 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/milestone2.xml");
 	}
 
+	//-----------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().checkUpdates();
+	//-----------------------------------------------------------------------------------------
+
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
 	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
@@ -699,6 +703,7 @@ void CApp::renderDebugEntities() {
 
 	//--------- NavMesh render Prueba --------------
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
 	//if (renderNavMesh)

@@ -19,6 +19,7 @@ private:
 	float* prue;
 	int num;
 	bool first;
+	bool need_update;
 
 public:
 	CNav_mesh_manager();
@@ -32,6 +33,7 @@ public:
 	void prepareInputNavMesh();
 	bool checkIfUpdatedNavMesh();
 	void clearNavMesh();
+	void checkUpdates();
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	std::vector<TCompColliderMesh*>     colMeshes;
