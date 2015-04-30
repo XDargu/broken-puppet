@@ -103,6 +103,40 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		  , t_2
 	);
 
+	//mJoint->set
+
+	mJoint->setMotion(PxD6Axis::eSWING1, PxD6Motion::eLOCKED);
+	mJoint->setMotion(PxD6Axis::eSWING2, PxD6Motion::eLOCKED);
+	mJoint->setMotion(PxD6Axis::eSWING2, PxD6Motion::eLOCKED);
+
+	mJoint->setMotion(PxD6Axis::eX, PxD6Motion::eLOCKED);
+	mJoint->setMotion(PxD6Axis::eY, PxD6Motion::eLOCKED);
+	mJoint->setMotion(PxD6Axis::eZ, PxD6Motion::eLOCKED);
+
+	PxD6Motion::Enum swing1_motion = (PxD6Motion::Enum)(atts.getInt("swing1Mode", 0) - 1);
+	PxD6Motion::Enum swing2_motion = (PxD6Motion::Enum)(atts.getInt("swing2Mode", 0) - 1);
+	PxD6Motion::Enum twist_motion = (PxD6Motion::Enum)(atts.getInt("twistMode", 0) - 1);
+
+	float swing1Angle = atts.getFloat("swing1Angle", 45);
+	float swing2Angle = atts.getFloat("swing2Angle", 45);
+	float twistAngle = atts.getFloat("twistAngle", 45);
+
+	// SWING 1: Rot Y
+	// SWING 2: Rot X
+	// TWIST: Rot Z
+	mJoint->setMotion(PxD6Axis::eSWING1, swing1_motion);
+	mJoint->setMotion(PxD6Axis::eSWING2, swing2_motion);
+	mJoint->setMotion(PxD6Axis::eTWIST, twist_motion);
+
+	// Primer valor: Swing 1 angle / 2, segundo valor: Swing 2 angle / 2
+	mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), -1));
+	
+	// Twist limit
+	mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), -1));
+	
+	//mJoint->setMotion(PxD6Axis::eX, PxD6Motion::eLIMITED);
+	//mJoint->setDrive(PxD6Drive::eX, PxD6JointDrive(stiffness, damping, 10000, false));
+
 	// Set the axis to locked, limited or free  mode 1 = Locked, 2 = Limited, 3 = Free
 }
 
