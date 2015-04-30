@@ -44,7 +44,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 
 	// 
 	if (material->castsShadows()) {
-		TShadowCasterKey ck = { mesh, owner };
+		TShadowCasterKey ck = { material, mesh, owner };
 		ck.transform = k.transform;
 		shadow_casters_keys.push_back(ck);
 	}
@@ -197,12 +197,26 @@ void CRenderManager::destroyAllKeys() {
 // ---------------------------------------------------------------
 void CRenderManager::renderShadowsCasters() {
 
+	bool uploading_bones = false;
 	for (auto k : shadow_casters_keys) {
 
 		// Activar la world del obj
 		TCompTransform* tmx = k.transform;
 		assert(tmx);
 		setWorldMatrix(tmx->getWorld());
+
+		uploading_bones = k.material->getTech()->usesBones();
+
+		if (uploading_bones) {
+			render_techniques_manager.getByName("gen_shadows_skel")->activate();
+
+			const TCompSkeleton* skel = k.owner;
+			XASSERT(skel, "Invalid skeleton");
+			skel->uploadBonesToGPU();
+		}
+		else {
+			render_techniques_manager.getByName("gen_shadows")->activate();
+		}
 
 
 		// Pintar la mesh:submesh del it
