@@ -32,7 +32,7 @@ class bt:public aicontroller
 	// the C++ functions that implement conditions
 	map<string, btcondition>* conditions;
 
-	btnode *root;
+	btnode *root;	
 	btnode *previous;
 
 	// moved to private as really the derived classes do not need to see this
@@ -66,7 +66,7 @@ public:
 
 	// internals used by btnode and other bt calls
 	void addAction(string, btaction);
-	int execAction(string);
+	int execAction(string, btnode* th);
 	void addCondition(string, btcondition);
 	bool testCondition(string);
 	void setCurrent(btnode *);
@@ -89,6 +89,7 @@ public:
 	void setDecoratorCondition(string name, bool t);
 	bool getDecoratorCondition(string name);
 	void initDecoratorCondition(string name, float t);
+	void checkIfStateChanged(btnode* nd);
 
 	float timer;
 

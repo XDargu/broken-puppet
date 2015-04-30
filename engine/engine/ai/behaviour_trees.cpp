@@ -8,6 +8,7 @@ bt::bt()
 	conditions = new map<string, btcondition>();
 	state_time = 0.f;
 	on_enter = true;
+	previous = nullptr;
 }
 
 bt::~bt()
@@ -202,8 +203,8 @@ void bt::recalc(float deltaTime)
 	timer += deltaTime;
 	state_time += deltaTime;
 
-	if (!state_changed)
-		on_enter = false;
+	//if (!state_changed)
+		//on_enter = false;
 
 }
 
@@ -211,8 +212,8 @@ void bt::setCurrent(btnode *nc)
 {
 	if (nc != current)
 	{
-		on_enter = true;
-		state_changed = true;
+		//on_enter = true;
+		//state_changed = true;
 		state_time = 0;
 	}
 
@@ -232,13 +233,21 @@ void bt::addAction(string s, btaction act)
 }
 
 
-int bt::execAction(string s)
+int bt::execAction(string s, btnode* th)
 {
 	if (actions->find(s) == actions->end())
 	{
 		printf("ERROR: Missing node action for node %s\n", s.c_str());
 		return LEAVE; // error: action does not exist
 	}
+	/*if (current != previous){
+		on_enter = true;
+	}
+	else{
+		on_enter = false;
+	}
+	previous = current;*/
+	checkIfStateChanged(th);
 	return (this->*actions->operator[](s))();
 }
 
@@ -261,6 +270,12 @@ bool bt::testCondition(string s)
 	{
 		return true;	// error: no condition defined, we assume TRUE
 	}
+		/*if (current!=previous){
+			on_enter = true;
+		}else{
+			on_enter = false;
+		}
+		previous = current;*/
 	//return (this->*conditions[s])();
 	return (this->*conditions->operator[](s))();
 }
@@ -329,5 +344,15 @@ CHandle bt::getTransform(){
 	//Debería delegar en la clase hija
 	CHandle aux;
 	return aux;
+}
+
+void bt::checkIfStateChanged(btnode* nd){
+	if (nd != previous){
+		on_enter = true;
+	}
+	else{
+		on_enter = false;
+	}
+	previous = nd;
 }
 //------------------------------------------------------------------------------------------------------
