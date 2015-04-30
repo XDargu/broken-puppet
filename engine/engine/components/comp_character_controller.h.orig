@@ -56,13 +56,28 @@ public:
 
 	void update(float elapsed);
 
+<<<<<<< HEAD
 	void fixedUpdate(float elapsed);
+=======
+		// Death velocity
+		max_vel_y = -10.f;
+		
+		// Set up the collider
+		//setupFiltering(coll->collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
+>>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
 
 	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos);
 
 	void ConvertMoveInput();
 
+<<<<<<< HEAD
 	void TurnTowardsCameraForward();
+=======
+		//setupFiltering(rigid->rigidBody, FilterGroup::eENEMY, FilterGroup::eENEMY);
+		//float threshold = 3500.f;
+		physx::PxReal threshold = 15000.f;
+		rigid->rigidBody->setContactReportThreshold(threshold);
+>>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
 
 	void GroundCheck(float elapsed);
 

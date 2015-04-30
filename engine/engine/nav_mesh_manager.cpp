@@ -86,10 +86,13 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 		return false;
 }
 
+void CNav_mesh_manager::checkUpdates(){
+	need_update = checkIfUpdatedNavMesh();
+}
+
 void CNav_mesh_manager::updateNavmesh() {
 	while (keep_updating_navmesh) {
 		bool lock = false;
-		bool need_update = checkIfUpdatedNavMesh();
 		if (need_update){
 
 			// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
@@ -117,19 +120,20 @@ void CNav_mesh_manager::updateNavmesh() {
 }
 
 void CNav_mesh_manager::render_nav_mesh(){
-	if (nav_mesh){
-		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
-		if (navmesh){
-			int totalTiles = navmesh->getMaxTiles();
-			for (int i = 0; i < totalTiles; i++){
-				render_tile(navmesh->getTile(i));
+	if (keep_updating_navmesh){
+		if (nav_mesh){
+			const dtNavMesh* navmesh = nav_mesh->m_navMesh;
+			if (navmesh){
+				int totalTiles = navmesh->getMaxTiles();
+				for (int i = 0; i < totalTiles; i++){
+					render_tile(navmesh->getTile(i));
+				}
 			}
 		}
 	}
 }
 
 void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
-	
 	int numPolys=tile->header->polyCount;
 	int pairs = 0;
 	int indx = 0;
@@ -158,21 +162,23 @@ void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
 }
 
 void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath){
-	CNavmeshQuery navMeshQuery(nav_mesh);
-	if (nav_mesh){
-		const dtNavMesh* navmesh = nav_mesh->m_navMesh;
-		if (navmesh){
-			navMeshQuery.resetTools();
-			navMeshQuery.updatePos(pst_src, pst_dst);
-			navMeshQuery.setTool(CNavmeshQuery::ETool::FIND_PATH);
-			navMeshQuery.findStraightPath();
-			num = navMeshQuery.numPointsStraightPath;
-			prue = navMeshQuery.straightPath;
-			straightPath.clear();
-			XMFLOAT3* aux_array = new XMFLOAT3[navMeshQuery.numPointsStraightPath];
-			for (int i = 0; i <navMeshQuery.numPointsStraightPath; ++i){
-				XMVECTOR point = XMVectorSet(navMeshQuery.straightPath[i * 3], navMeshQuery.straightPath[i * 3 + 1] + 0.10f, navMeshQuery.straightPath[i * 3 + 2], 1);
-				straightPath.push_back(point);
+	if (keep_updating_navmesh){
+		CNavmeshQuery navMeshQuery(nav_mesh);
+		if (nav_mesh){
+			const dtNavMesh* navmesh = nav_mesh->m_navMesh;
+			if (navmesh){
+				navMeshQuery.resetTools();
+				navMeshQuery.updatePos(pst_src, pst_dst);
+				navMeshQuery.setTool(CNavmeshQuery::ETool::FIND_PATH);
+				navMeshQuery.findStraightPath();
+				num = navMeshQuery.numPointsStraightPath;
+				prue = navMeshQuery.straightPath;
+				straightPath.clear();
+				XMFLOAT3* aux_array = new XMFLOAT3[navMeshQuery.numPointsStraightPath];
+				for (int i = 0; i < navMeshQuery.numPointsStraightPath; ++i){
+					XMVECTOR point = XMVectorSet(navMeshQuery.straightPath[i * 3], navMeshQuery.straightPath[i * 3 + 1] + 0.10f, navMeshQuery.straightPath[i * 3 + 2], 1);
+					straightPath.push_back(point);
+				}
 			}
 		}
 	}
@@ -188,6 +194,11 @@ void CNav_mesh_manager::pathRender(){
 			}
 		}
 	}
+}
+
+void CNav_mesh_manager::clearNavMesh(){
+	keep_updating_navmesh = false;
+	nav_mesh_input.clearInput();
 }
 
 CNav_mesh_manager::CNav_mesh_manager()

@@ -13,32 +13,9 @@ private:
 	float radius;
 public:
 	std::vector<TCompNeedle*> needlesInRange;
-
-	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		radius = atts.getFloat("radius", 2.f);
-
-		transform = assertRequiredComponent<TCompTransform>(this);
-	}
-
-	void init() {
-		numNeedlesInRange = 0;
-	}
-
-	std::vector<TCompNeedle*> getNeedlesInRange(){		
-		TCompTransform* m_transform = transform;
-		needleInRange(m_transform->position, radius);
-		return needlesInRange;
-	}
-
-	void needleInRange(XMVECTOR pos, float radius){
-		for (auto & element : Citem_manager::get().needles) {
-			TCompTransform* e_transform = element->getTransform();
-			//float aux_distance = V3DISTANCE(e_transform->position, pos);
-			if (V3DISTANCE(e_transform->position, pos) <= radius){
-				needlesInRange.push_back(element);
-			}
-		}
-	}
+	void loadFromAtts(const std::string& elem, MKeyValue &atts);
+	void init();
+	std::vector<TCompNeedle*> getNeedlesInRange();
+	void needleInRange(XMVECTOR pos, float radius);
 };
 #endif
-

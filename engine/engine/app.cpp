@@ -111,6 +111,11 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+
+	//IA events
+	SUBSCRIBE(TCompAiBT, TActorHit, actorHit);
+
+
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompPlayerController, TMsgAttackDamage, onAttackDamage);
@@ -170,6 +175,7 @@ void createManagers() {
 
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
+	getObjManager<TCompBtGrandma>()->init(64);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -224,6 +230,7 @@ void initManagers() {
 
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
+	getObjManager<TCompBtGrandma>()->initHandlers();
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
@@ -358,14 +365,18 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/milestone2.xml");
 	}
 
+	//-----------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().checkUpdates();
+	//-----------------------------------------------------------------------------------------
+
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
-	XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
+	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
 	CEntity* player = entity_manager.getByName("Player");
 	TCompTransform* player_t = player->get<TCompTransform>();
 	fin = player_t->position;
 	std::vector<XMVECTOR> path;
-	CNav_mesh_manager::get().findPath(ini, fin, path);
+	CNav_mesh_manager::get().findPath(ini, fin, path);*/
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
@@ -460,6 +471,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
+	getObjManager<TCompBtGrandma>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 
@@ -694,6 +706,7 @@ void CApp::renderDebugEntities() {
 
 	//--------- NavMesh render Prueba --------------
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
 	//if (renderNavMesh)
@@ -820,6 +833,7 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
 	entity_manager.clear();
 	mesh_manager.destroyAll();

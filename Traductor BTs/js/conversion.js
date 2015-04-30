@@ -201,7 +201,7 @@ function createCpp(input) {
 		var parNode = getParentNode(tree, currNode);
 		var condNode = getConditionNode(tree, currNode);
 		
-		var nodeCondition = condNode ? '(btaction)&bt_' + title + '::condition' + tree.nodes[condNode].title : 'NULL';
+		var nodeCondition = condNode ? '(btcondition)&bt_' + title + '::condition' + tree.nodes[condNode].title : 'NULL';
 		var nodeAction = (tree.nodes[currNode].name == "Runner") ? '(btaction)&bt_' + title + '::action' + tree.nodes[currNode].title : 'NULL';
 		
 		if (parNode) {

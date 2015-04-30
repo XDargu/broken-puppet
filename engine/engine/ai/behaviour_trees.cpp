@@ -1,12 +1,13 @@
 #include "mcv_platform.h"
 #include "behaviour_trees.h"
 
-
 bt::bt()
 {
 	tree = new map<string, btnode *>();
 	actions= new map<string, btaction>();
 	conditions = new map<string, btcondition>();
+	state_time = 0.f;
+	on_enter = true;
 }
 
 bt::~bt()
@@ -151,6 +152,29 @@ btnode *bt::addChild(string parent, string son, int type, subType subType, btcon
 	}
 }
 
+btnode *bt::addChild(string parent, string son, int type, typeInterrupAllowed kind, btcondition btc, btaction bta, int weight)
+{
+	if (validateNode(parent, type)){
+		btnode *p = findNode(parent);
+		btnode *s = createNode(son);
+		p->addChild(s);
+		s->setParent(p);
+		s->setType(type);
+		s->setTypeInter(kind);
+		if (btc != NULL) addCondition(son, btc);
+		if (bta != NULL) addAction(son, bta);
+		s->setNodeWeight(weight);
+		return s;
+	}
+	else{
+		//METER UN xassert
+		CErrorContext ec("Adding child", "Behaviour trees");
+		//fatal("node not valid\n");
+		XASSERT(validateNode(parent, type), "Child not valid");
+		return nullptr;
+	}
+}
+
 bool bt::validateNode(string parent, int type){
 	btnode *p = findNode(parent);
 	if ((p != nullptr) && (type != 0) && (type != DECORATOR)){
@@ -171,12 +195,27 @@ bool bt::validateNode(string parent, int type, subType subType){
 
 void bt::recalc(float deltaTime)
 {
+	state_changed = false;
+
 	if (current == NULL) root->recalc(this);	// I'm not in a sequence, start from the root
-	else current->recalc(this);				// I'm in a sequence. Continue where I left
+	else current->recalc(this);				    // I'm in a sequence. Continue where I left
+	timer += deltaTime;
+	state_time += deltaTime;
+
+	if (!state_changed)
+		on_enter = false;
+
 }
 
 void bt::setCurrent(btnode *nc)
 {
+	if (nc != current)
+	{
+		on_enter = true;
+		state_changed = true;
+		state_time = 0;
+	}
+
 	current = nc;
 }
 

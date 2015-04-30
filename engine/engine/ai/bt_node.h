@@ -133,6 +133,7 @@ class btnode
 {
 	string name;
 	int type;
+	int weight;
 
 	vector<btnode *>children;
 	btnode *parent;
@@ -153,6 +154,8 @@ public:
 	void setType(int);
 	void recalc(bt *);
 	string getName();
+	int getNodeWeight();
+	void setNodeWeight(int w);
 	void setDecSubType(subType);
 	void setTypeInter(typeInterrupAllowed);
 	typeInterrupAllowed getTypeInter();

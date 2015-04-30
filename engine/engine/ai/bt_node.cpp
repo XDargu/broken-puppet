@@ -118,8 +118,22 @@ void btnode::recalc(bt *tree)
 	}
 	case RANDOM:
 	{
-		int r = rand() % children.size();
-		children[r]->recalc(tree);
+		int total = 0;
+		for (int i = 0; i < children.size(); ++i){
+			total += children[i]->getNodeWeight();
+		}
+		int random = rand() % total;
+		int j = 0;
+		for (int i = 0; i < children.size(); ++i)
+		{
+			j += children[i]->getNodeWeight();
+			if (j > random){
+				children[i]->recalc(tree);
+				break;
+			}
+		}
+
+		//children[children.size()-1]->recalc(tree);
 		break;
 	}
 	case PRIORITY:
@@ -236,4 +250,12 @@ void btnode::recalc(bt *tree)
 		break;
 	}
 	}
+}
+
+int btnode::getNodeWeight(){
+	return weight;
+}
+
+void btnode::setNodeWeight(int w){
+	weight = w;
 }
