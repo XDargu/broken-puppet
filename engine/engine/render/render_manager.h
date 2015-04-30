@@ -27,6 +27,7 @@ class CRenderManager {
 	VKeys keys;
 
 	struct TShadowCasterKey {
+		const CMaterial*   material;
 		const CMesh*       mesh;
 		CHandle            owner;
 		CHandle            transform;

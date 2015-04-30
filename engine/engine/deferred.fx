@@ -38,6 +38,24 @@ void VSGenShadows(
   oPos = mul(world_pos, ViewProjection);
 }
 
+void VSGenShadowsSkel(
+	float4 ipos     : POSITION
+	, float2 iuv : TEXCOORD0
+	, float3 inormal : NORMAL
+	, uint4  bone_ids : BONEIDS
+	, float4 weights : WEIGHTS
+	, out float4 oPos : SV_POSITION
+	)
+{
+	matrix skin_mtx = bones[bone_ids.x] * weights[0]
+		+ bones[bone_ids.y] * weights[1]
+		+ bones[bone_ids.z] * weights[2]
+		+ bones[bone_ids.w] * weights[3]
+		;
+	float4 skinned_pos = mul(ipos, skin_mtx);
+	oPos = mul(skinned_pos, ViewProjection);
+}
+
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@ filein("GeneralConfig.ms")
 clearlistener()
 
 	--ExportMeshes = true
-	--engine_path = "C:\\Users\\Daniel\\Documents\\Broken Puppet\\engine\\engine\\"
+	engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
 
 	/********************** CONFIG ************************/
 
@@ -1424,6 +1424,13 @@ fn getJointD6 obj = (
 	
 	mString = "<jointD6 "
 	
+	local mObj = max2mcvMatrix mJoint
+	local qObj = mObj.rotationPart as quat
+	qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+	
+	-- Translations limits
+	-- mode 1 = Locked, 2 = Limited, 3 = Free
+	
 	i = 1;
 	-- Actors
 	if (mJoint.body0 != undefined) then (		
@@ -1433,6 +1440,16 @@ fn getJointD6 obj = (
 	
 	if (mJoint.body1 != undefined) then 
 	mString += "actor" + i as string + " = \"" + mJoint.body1.name + "_" + mJoint.body1.id as string + "\" "
+	
+	mString += " jointPosition=\"" \
+											+ mObj.row4.x as string+" " \
+											+ mObj.row4.y as string+" " \
+											+ mObj.row4.z as string+"" \
+						+ "\" jointRotation=\"" \
+											+ qObj.x as string+" "\
+											+ qObj.y as string+" "\
+											+ qObj.z as string+" "\
+											+ qObj.w as string+"\" "
 	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
@@ -1451,24 +1468,47 @@ fn getJointD6 obj = (
 	-- 1: Locked
 	-- 2: Limited
 	-- 3: Free
-	local modes = #("Locked", "Limited", "Free")
 	
+	/* Rotaciones:
+	
+	El primer swing es swing2
+	El segundo swing es swing1
+	
+	 - Swing1 = Rotar en Y
+	 - Swing2 = Rotar en X
+	 - Twist = Rotar en Z
+	 
+	 Ya que de Max a DX se cambia de sistema:
+	  - X en Max = X en DX
+	  - Y en Max = -Z en DX
+	  - Z en Max = Y  en DX
+	  
+	  Es ncesario cambiar los valores:
+	   - Swing1 tendrá los valores de Twist
+	   - Swing2 tendrá los valores de Swing2
+	   - Twist tendrá los valores de Swing1 negados (ya que la Z de DX es la -Y de max)
+	   
+	*/
 	-- Swing 1 (Swing Z en max)
-	mString += "swing1Mode=\"" + modes[mJoint.swing1mode] as string + "\" "
-	mString += "swing1Angle=\"" + mJoint.swing1Angle as string + "\" "
-	mString += "swing1Restitution=\"" + mJoint.swing1Restitution as string + "\" "
-	mString += "swing1Spring=\"" + mJoint.swing1Spring as string + "\" "
-	mString += "swing1Damping=\"" + mJoint.swing1Damping as string + "\" "
+	mString += "swing1Mode=\"" + mJoint.twistMode as string + "\" "
+	mString += "swing1Angle=\"" + mJoint.twistAngleHigh as string + "\" "
+	mString += "swing1Restitution=\"" + mJoint.twistRestitutionHigh as string + "\" "
+	mString += "swing1Spring=\"" + mJoint.twistSpringHigh as string + "\" "
+	mString += "swing1Damping=\"" + mJoint.twistDampingHigh as string + "\" "
 	
 	-- Swing 2 (Swing Y en max)
-	mString += "swing2Mode=\"" + modes[mJoint.swing2mode] as string + "\" "
-	mString += "swing2Angle=\"" + mJoint.swing2Angle as string + "\" "
-	mString += "swing2Restitution=\"" + mJoint.swing2Restitution as string + "\" "
-	mString += "swing2Spring=\"" + mJoint.swing2Spring as string + "\" "
-	mString += "swing2Damping=\"" + mJoint.swing2Damping as string + "\" "
+	mString += "swing2Mode=\"" + mJoint.swing1mode as string + "\" "
+	mString += "swing2Angle=\"" + mJoint.swing1Angle as string + "\" "
+	mString += "swing2Restitution=\"" + mJoint.swing1Restitution as string + "\" "
+	mString += "swing2Spring=\"" + mJoint.swing1Spring as string + "\" "
+	mString += "swing2Damping=\"" + mJoint.swing1Damping as string + "\" "
 	
 	-- Twist
-	mString += "twistMode=\"" + modes[mJoint.twistMode] as string + "\" "
+	mString += "twistMode=\"" + mJoint.swing2Mode as string + "\" "
+	mString += "twistAngle=\"" + mJoint.swing2Angle as string + "\" "
+	mString += "twistRestitution=\"" + mJoint.swing2Restitution as string + "\" "
+	mString += "twistSpring=\"" + mJoint.swing2Spring as string + "\" "
+	mString += "twistDamping=\"" + mJoint.swing2Damping as string + "\" "
 	
 	-- Advanced
 	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
