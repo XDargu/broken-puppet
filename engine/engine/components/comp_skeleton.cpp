@@ -150,7 +150,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 
   std::string skel_name = atts["name"];
-  CCoreModel* core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
+  core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
   model = new CalModel(core_model);
   model->getMixer()->blendCycle(0, 1.0, 0.f);
 

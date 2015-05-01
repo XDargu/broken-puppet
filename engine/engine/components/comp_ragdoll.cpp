@@ -15,8 +15,12 @@ TCompRagdoll::~TCompRagdoll() {
 void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	skeleton = assertRequiredComponent<TCompSkeleton>(this);
 
+	std::string ragdoll_name = atts["name"];
+
+	ragdoll = (CCoreRagdoll*)ragdoll_manager.getByName(ragdoll_name.c_str());
+
 	// Obtener los bones en base a sus nombres
-	TCompSkeleton* skel = skeleton;
+	/*TCompSkeleton* skel = skeleton;
 	auto& cal_bones = skel->model->getSkeleton()->getVectorBone();
 	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
 		cal_bones[bone_idx]->getCoreBone()->getName();
@@ -60,8 +64,8 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		Physics.gScene->addActor(*rigidBody);
 
-		bone_map[i] = rigidBody;
-	}
+		ragdoll->bone_map[i] = rigidBody;
+	}*/
 	
 
 	setActive(false);
@@ -75,7 +79,7 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 
 	// If the ragdoll is not active, the rigid bones must follow the bone position of the animation
 	if (!ragdoll_active) {
-		for (auto& it : bone_map) {
+		for (auto& it : ragdoll->bone_map) {
 			TCompSkeleton* skel = skeleton;
 			CalBone* cal_bone = skel->model->getSkeleton()->getBone(it.first);
 			const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
@@ -92,7 +96,7 @@ void TCompRagdoll::setActive(bool active) {
 	ragdoll_active = active;
 
 	// Make all the rigidboies kinematic if the ragdoll is not active, and make them not kinematic if active
-	for (auto& it : bone_map) {
+	for (auto& it : ragdoll->bone_map) {
 		it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, !active);
 	}	
 }
@@ -102,7 +106,7 @@ bool TCompRagdoll::isRagdollActive() {
 }
 
 PxRigidDynamic* TCompRagdoll::getBoneRigid(int id) {
-	if (bone_map.find(id) != bone_map.end())
-		return bone_map[id];
+	if (ragdoll->bone_map.find(id) != ragdoll->bone_map.end())
+		return ragdoll->bone_map[id];
 	return nullptr;
 }

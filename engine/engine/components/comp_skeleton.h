@@ -12,6 +12,7 @@ struct TCompSkeleton : TBaseComponent {
 private:
 	CHandle h_ragdoll;
 	CalTransform* bone_ragdoll_transforms;
+	CCoreModel* core_model;
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
@@ -33,6 +34,8 @@ public:
 
 	void uploadBonesToGPU() const;
 	XMVECTOR getPositionOfBone(int id);
+
+	CCoreModel* getCCoreModel() { return core_model; }
 };
 
 #endif

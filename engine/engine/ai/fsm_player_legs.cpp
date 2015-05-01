@@ -261,6 +261,8 @@ void FSMPlayerLegs::Jump(float elapsed){
 
 void FSMPlayerLegs::ThrowString(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
+
+	canThrow = false;
 	
 	if (on_enter) {
 		skeleton->loopAnimation(0);
@@ -414,7 +416,7 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		EvaluateMovement(true, elapsed);
 	}
 
-	if (state_time >= 0.2){
+	if (state_time >= 0.5){
 		skeleton->stopAnimation(7);
 		ChangeState("fbp_Idle");
 	}
