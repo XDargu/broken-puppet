@@ -162,11 +162,35 @@ int bt_grandma::actionSearchPoint()
 	//float rand_num_y = (max_y - center_y) * ((((float)rand()) / (float)RAND_MAX)) + center_y;
 	float rand_num_z = (max_z - min_z) * ((((float)rand()) / (float)RAND_MAX)) + min_z;
 
-	rand_point = XMVectorSet(rand_num_x, 0.1f, rand_num_z,0);
+	//rand_point = XMVectorSet(rand_num_x, 0.15f, rand_num_z,0);
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	//rand_point = XMVectorSet(XMVectorGetX(m_transform->position) + 1.f, 0.f, XMVectorGetZ(m_transform->position) + 1.f,0.f);
+	//rand_point = XMVectorSet(XMVectorGetX(m_transform->position), 0.10f, XMVectorGetZ(m_transform->position),0.f);
 	
+	/*float pos_x = XMVectorGetX(m_transform->position);
+	float pos_z = XMVectorGetZ(m_transform->position);
+	if (abs(rand_num_x - pos_x)<2.f){
+		rand_num_x += 1.5f;
+	}else if (abs(rand_num_z - pos_z)<2.f){
+		rand_num_z += 1.5f;
+	}*/
+
+	int x = getRandomNumber(0, 10) - 5;
+	int z = getRandomNumber(0, 10) - 5;
+	XMVECTOR prueba = XMVectorSet(XMVectorGetX(m_transform->position), 0.f, XMVectorGetZ(m_transform->position), 0.f);
+
+	/*int dif = abs(XMVectorGetX(prueba)+x - center_x);
+	if (dif>radius){
+		if (XMVectorGetX(prueba)+x > 0){
+			x = XMVectorGetX(prueba) - dif;
+		}else{
+			x = XMVectorGetX(prueba) + dif;
+		}
+	}*/
+	rand_point = prueba + XMVectorSet(x, 0, z, 0);
+
+	//rand_point = XMVectorSet(rand_num_x, 0.15f, rand_num_z, 0);
+
 	ind_path = 0;
 	return LEAVE;
 
