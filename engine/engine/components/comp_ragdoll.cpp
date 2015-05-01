@@ -24,10 +24,10 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	//int nums[7] = {1, 2, 41, 26, 42, 74, 79 };
 
-	int nums[7];
-	std::string bone_names[7] = { "Bip001 Spine", "Bip001 Spine2", "Bip001 L UpperArm", "Bip001 R UpperArm", "Bip001 Head", "Bip001 L Thigh", "Bip001 R Thigh" };
+	int nums[1];
+	std::string bone_names[1] = { "Bip001 Head" };
 
-	for (int i = 0; i < 7; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		nums[i] = skel->model->getSkeleton()->getCoreSkeleton()->getCoreBoneId(bone_names[i]);
 	}	
 
@@ -44,7 +44,7 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		PxShape* collider = Physics.gPhysicsSDK->createShape(
 			physx::PxSphereGeometry(
-			physx::PxReal(0.05)
+			physx::PxReal(0.15)
 			),
 			*mat
 			,

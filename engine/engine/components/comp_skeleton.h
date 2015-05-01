@@ -6,12 +6,12 @@
 
 class CalModel;
 class CalBone;
-
+struct CalTransform;
 
 struct TCompSkeleton : TBaseComponent {
 private:
 	CHandle h_ragdoll;
-	TTransform* bone_ragdoll_transforms;
+	CalTransform* bone_ragdoll_transforms;
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
