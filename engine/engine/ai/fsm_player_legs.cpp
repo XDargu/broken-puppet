@@ -21,6 +21,7 @@ void FSMPlayerLegs::Init()
 	AddState("fbp_Jump", (statehandler)&FSMPlayerLegs::Jump);
 	AddState("fbp_Run", (statehandler)&FSMPlayerLegs::Run);
 	AddState("fbp_ThrowString", (statehandler)&FSMPlayerLegs::ThrowString);
+	AddState("fbp_ThrowStringPartial", (statehandler)&FSMPlayerLegs::ThrowStringPartial);
 	AddState("fbp_PullString", (statehandler)&FSMPlayerLegs::PullString);
 	AddState("fbp_Fall", (statehandler)&FSMPlayerLegs::Fall);
 	AddState("fbp_Land", (statehandler)&FSMPlayerLegs::Land);
@@ -140,7 +141,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
-			ChangeState("fbp_ThrowString");
+			ChangeState("fbp_ThrowStringPartial");
 		}
 		if (falling){
 			skeleton->stopAnimation(9);
@@ -189,7 +190,7 @@ void FSMPlayerLegs::Run(float elapsed){
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
-			ChangeState("fbp_ThrowString");
+			ChangeState("fbp_ThrowStringPartial");
 		}
 		if (falling){
 			skeleton->stopAnimation(10);
@@ -222,7 +223,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 		return;
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
-		ChangeState("fbp_ThrowString");
+		ChangeState("fbp_ThrowStringPartial");
 		skeleton->stopAnimation(6);
 	}
 	if (falling){
@@ -231,13 +232,28 @@ void FSMPlayerLegs::Jump(float elapsed){
 	}
 }
 
-
-
 void FSMPlayerLegs::ThrowString(float elapsed){
+	TCompSkeleton* skeleton = comp_skeleton;
+	
+	if (on_enter) {
+		skeleton->playAnimation(4);
+	}
+
+	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+
+	if (state_time >= 0.1f && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
+		ChangeState("fbp_Idle");
+	}
+}
+
+void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
 	if (on_enter) {
-		skeleton->playAnimation(4);
+		skeleton->playAnimation(11);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");

@@ -37,6 +37,7 @@ public:
 	void Jump(float elapsed);
 	void Run(float elapsed);
 	void ThrowString(float elapsed);
+	void ThrowStringPartial(float elapsed);
 	void PullString(float elapsed);
 	void Fall(float elapsed);
 	void Land(float elapsed);
