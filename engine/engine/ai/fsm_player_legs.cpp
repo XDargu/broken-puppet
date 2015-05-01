@@ -112,6 +112,15 @@ void FSMPlayerLegs::Walk(float elapsed){
 	
 	int animation = torso->up_animation ? 9 : 1;
 
+	if (movement_dir.z == 0) {
+		if (movement_dir.x < 0) {
+			animation = 13;
+		}
+		else if (movement_dir.x > 0) {
+			animation = 12;
+		}
+	}
+
 	if (animation != current_animation_id) {
 		skeleton->stopAnimation(current_animation_id);
 		skeleton->loopAnimation(animation);
@@ -160,6 +169,15 @@ void FSMPlayerLegs::Run(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
 	int animation = torso->up_animation ? 10 : 2;
+
+	if (movement_dir.z == 0) {
+		if (movement_dir.x < 0) {
+			animation = 13;
+		}
+		else if (movement_dir.x > 0) {
+			animation = 14;
+		}
+	}
 
 	if (animation != current_animation_id) {
 		skeleton->stopAnimation(current_animation_id);
@@ -493,9 +511,12 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 		jump = true;
 	}
 
+	movement_dir = movement_vector;
+
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
 	XMVECTOR projected_front = XMVector3Cross(up, XMVector3Cross(camera_transform->getFront(), up));
 	movement_vector = rotation.rotate(movement_vector);
+
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(projected_front);
 	if (!lookAtCamera)
 		dir = Physics.XMVECTORToPxVec3(m_transform->getFront());

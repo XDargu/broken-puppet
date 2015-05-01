@@ -13,6 +13,9 @@
 	<anim name="walk_up"/>9
 	<anim name="run_up"/>10
 	<anim name="throw_partial"/>11
+	<anim name="walk_left"/>12
+	<anim name="walk_right"/>13
+	<anim name="run_left"/>14
 	
 	<ik_foot bone="Bip01 R Foot" local_dir="0 1 0" amount="1" render="1"/>
 	<ik_foot bone="Bip01 L Foot" local_dir="0 1 0" amount="1" render="1"/>

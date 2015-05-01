@@ -7,8 +7,10 @@
 class FSMPlayerLegs : public aifsmcontroller
 {
 private:
-	int current_animation_id;
+	int current_animation_id;	
 public:
+
+	physx::PxVec3 movement_dir;
 
 	CHandle comp_character_controller;
 	CHandle comp_rigidbody;
