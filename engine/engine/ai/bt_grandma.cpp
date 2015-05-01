@@ -147,71 +147,13 @@ int bt_grandma::actionIdle()
 
 //Select a point to go 
 int bt_grandma::actionSearchPoint()
-{
-	/*float center_x = XMVectorGetX(center);
-	float center_z = XMVectorGetZ(center);
-	float max_x = center_x + radius;
-	float max_z = center_z + radius;
-	float min_x = center_x - radius;
-	float min_z = center_z - radius;
-	srand(static_cast<float>(time(NULL)));
-	float rand_num_x = (max_x - min_x) * ((((float)rand()) / (float)RAND_MAX)) + min_x;
-	float rand_num_z = (max_z - min_z) * ((((float)rand()) / (float)RAND_MAX)) + min_z;*/
-	
+{	
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
-	//------------------ PRUEBAS --------------------------------------------------------
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
-	//-----------------------------------------------------------------------------------
-	//rand_point = XMVectorSet(XMVectorGetX(rand_point)*1.5f, XMVectorGetY(rand_point), XMVectorGetZ(rand_point)*1.5f, 0.f);
-
-	/*float distance = V3DISTANCE(rand_point, m_transform->position);
-	if (distance < 0.9f){
-		float new_distance_x = getRandomNumber(1.5f, 2.3f);
-		float new_distance_z = getRandomNumber(1.5f, 2.3f);
-		rand_point = XMVectorSet(XMVectorGetX(rand_point) + new_distance_x, XMVectorGetY(rand_point), XMVectorGetZ(rand_point) + new_distance_z, 0.f);
-	}*/
 
 	ind_path = 0;
 	return LEAVE;
-	
-	/*XMVECTOR prueba = XMVectorSet(XMVectorGetX(m_transform->position), 0.f, XMVectorGetZ(m_transform->position), 0.f);
-
-	rand_point = prueba + XMVectorSet(rand_num_x, 0, rand_num_z, 0);
-	int new_x;
-	int new_z;
-	float distance = V3DISTANCE(rand_point, center);
-	if (distance>radius){
-		if (XMVectorGetX(rand_point) >= 0.f)
-			new_x = (XMVectorGetX(rand_point)) - distance;
-		else
-			new_x = (XMVectorGetX(rand_point)) + distance;
-
-		if (XMVectorGetZ(rand_point) >= 0.f)
-			new_z = (XMVectorGetZ(rand_point)) - distance;
-		else
-			new_z = (XMVectorGetZ(rand_point)) + distance;
-
-		rand_point = prueba + XMVectorSet(new_x, 0, new_z, 0);
-
-	}else if ((V3DISTANCE(rand_point, center) < 1.0f)){
-		rand_point = rand_point*1.5f;
-	}
-
-	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
-	if (path.size()==0){
-		CNav_mesh_manager::get().findPath(m_transform->position, rand_point*-1.f, path);
-		if (path.size() > 0){
-			rand_point = rand_point*-1.f;
-		}
-		else if (path.size()==0){
-			XMVECTOR new_direction = XMVectorSet(-1.f, 0.f, 0.f, 0.f);
-			CNav_mesh_manager::get().findPath(m_transform->position, rand_point*new_direction, path);
-			if (path.size() > 0){
-				rand_point = rand_point*new_direction;
-			}
-		}
-	}*/
 
 }
 
