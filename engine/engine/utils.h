@@ -27,6 +27,8 @@ bool isKeyPressed(int key);
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
 int getRandomNumber(int num1, int num2);
+float getRandomNumber(float min,float max);
+
 
 // Strings
 bool stringEndsWith(std::string const &value, std::string const &ending);

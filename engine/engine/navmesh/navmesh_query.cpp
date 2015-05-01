@@ -6,7 +6,7 @@
 #include <time.h>
 
 float getRandomFloat(){
-	srand(static_cast<float>(time(NULL)));
+	//srand(static_cast<float>(time(NULL)));
 	float num1 = 0.f;
 	float num2 = 1.f;
 	float rand_num_x = (num2 - num1) * ((((float)rand()) / (float)RAND_MAX)) + num1;

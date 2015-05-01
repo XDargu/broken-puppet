@@ -165,6 +165,13 @@ int bt_grandma::actionSearchPoint()
 	//-----------------------------------------------------------------------------------
 	//rand_point = XMVectorSet(XMVectorGetX(rand_point)*1.5f, XMVectorGetY(rand_point), XMVectorGetZ(rand_point)*1.5f, 0.f);
 
+	/*float distance = V3DISTANCE(rand_point, m_transform->position);
+	if (distance < 0.9f){
+		float new_distance_x = getRandomNumber(1.5f, 2.3f);
+		float new_distance_z = getRandomNumber(1.5f, 2.3f);
+		rand_point = XMVectorSet(XMVectorGetX(rand_point) + new_distance_x, XMVectorGetY(rand_point), XMVectorGetZ(rand_point) + new_distance_z, 0.f);
+	}*/
+
 	ind_path = 0;
 	return LEAVE;
 	
@@ -217,8 +224,8 @@ int bt_grandma::actionWander()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(path[ind_path] - m_transform->position));
-
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
 				ind_path++;
 				return STAY;
 			}
