@@ -129,15 +129,12 @@ int bt_grandma::actionTakeNeedle()
 int bt_grandma::actionIdle()
 {
 	float aux_time = state_time;
-	bool aux_enter = on_enter;
-
-	if (on_enter)
-		int caca = 1;
+	bool aux_on_enter = on_enter;
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, last_look_direction);
 
-	if (trueEveryXSeconds(1.5f)){
+	if (state_time >= 2){
 		return LEAVE;
 	}else{
 		return STAY;
@@ -148,7 +145,16 @@ int bt_grandma::actionIdle()
 //Select a point to go 
 int bt_grandma::actionSearchPoint()
 {	
-	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	float aux_time = state_time;
+	bool aux_on_enter = on_enter;
+
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();	
+
+	rand_point = XMVectorSet(rand_num_x, 0.1f, rand_num_z,0);
+							rand_num_x
+							, Physics.XMVECTORToPxVec3(m_transform->position).y
+							, rand_num_z, 0);
 
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
 
@@ -160,6 +166,10 @@ int bt_grandma::actionSearchPoint()
 //Chase the selected point
 int bt_grandma::actionWander()
 {
+
+	float aux_time = state_time;
+	bool aux_on_enter = on_enter;
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
