@@ -24,10 +24,10 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	//int nums[7] = {1, 2, 41, 26, 42, 74, 79 };
 
-	int nums[1];
-	std::string bone_names[1] = { "Bip001 Head" };
+	int nums[6];
+	std::string bone_names[6] = { "Bip001 Head", "Bip001 L UpperArm", "Bip001 R UpperArm", "Bip001 L Thigh", "Bip001 R Thigh", "Bip001 Pelvis" };
 
-	for (int i = 0; i < 1; ++i) {
+	for (int i = 0; i < 6; ++i) {
 		nums[i] = skel->model->getSkeleton()->getCoreSkeleton()->getCoreBoneId(bone_names[i]);
 	}	
 

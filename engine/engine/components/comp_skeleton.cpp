@@ -262,88 +262,6 @@ void TCompSkeleton::update(float elapsed) {
 			  CalVector rigid_abs_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p));
 			  CalQuaternion rigid_abs_rot = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
 
-			  CalTransform pose_bone_abs = bone_ragdoll_transforms[bone_idx];
-			  CalTransform bone_abs = CalTransform(cal_abs_pos, cal_abs_rot);
-			  CalTransform rigid_abs = CalTransform(rigid_abs_pos, rigid_abs_rot);
-
-			  CalTransform rigid_abs_inv = rigid_abs;
-			  rigid_abs_inv.invert();
-
-			  CalTransform bone_to_rigid = rigid_abs_inv * pose_bone_abs;
-
-			  CalTransform bone_bas_inv = bone_abs;
-			  bone_bas_inv.invert();
-
-			  CalTransform rigid_to_bone = bone_bas_inv * pose_bone_abs;
-
-			  CalTransform bone_desired_abs = rigid_abs * bone_to_rigid;
-
-			  CalTransform bone_desired_abs_inv = bone_desired_abs;
-			  bone_desired_abs_inv.invert();
-
-			  CalTransform parent_abs = CalTransform(parent_abs_pos, parent_abs_rot);
-
-			  CalTransform parent_abs_inv = parent_abs;
-			  parent_abs_inv.invert();
-
-			  CalTransform bone_to_parent = parent_abs_inv * bone_desired_abs;
-
-			  /*bone->setRotation(bone_to_parent.rot);
-			  bone->setTranslation(bone_to_parent.pos);
-
-			  bone->calculateState();*/
-
-
-			  // -------------------- PRUEBAS ------------
-			  /*XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-			  XMMATRIX cat_mat = XMMatrixAffineTransformation(XMVectorSet(1, 1, 1, 1), zero, Cal2DX(ct.rot), Cal2DX(ct.pos));
-			  XMVECTOR dx_pos = XMVector3Transform(Cal2DX(pos), cat_mat);
-			  CalVector n_pos = DX2Cal(dx_pos);
-			  
-
-			  CalQuaternion ref_change = DX2CalQuat(XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(90)));
-			  rigid_abs.pos = CalVector(0,1,0);
-			  rigid_abs.rot = CalQuaternion(0,0,0,1);
-			  TTransform rigid_abs_tt = TTransform(Cal2DX(pose_bone_abs.pos), Cal2DX(pose_bone_abs.rot), XMVectorSet(1, 1, 1, 1));
-			  CalVector pos_tt = DX2Cal(rigid_abs_tt.inverseTransformPoint(Cal2DX(rigid_abs.pos)));
-			  CalQuaternion quat_tt = DX2CalQuat( rigid_abs_tt.inverseTransformDirection(Cal2DX(rigid_abs.rot)) );
-
-			  CalTransform test = CalTransform(bone->getTranslationBoneSpace(), bone->getRotationBoneSpace());
-
-			  CalQuaternion quat_f = pose_bone_abs.rot * rigid_abs.rot;
-			  CalVector pos_f = rigid_abs.pos;
-			  XMVector3Rotate(Cal2DX(pos_f), Cal2DX(pose_bone_abs.rot));
-
-			  CalTransform final_test = rigid_abs * pose_bone_abs;
-
-			  //bone->setRotation(quat_f);
-			  //bone->setTranslation(CalVector(0, 1, 0));
-
-			  //bone->calculateState();*/
-
-			  // Convert 
-
-			  // parent_abs * delta = my_abs
-			  // delta = parent_abs_inv * my_abs
-
-
-			  /* LO QUE HACE CAL:
-			  m_translationAbsolute = m_translation;
-			  m_translationAbsolute *= pParent->getRotationAbsolute();
-			  m_translationAbsolute += pParent->getTranslationAbsolute();
-
-			  m_rotationAbsolute = m_rotation;
-			  m_rotationAbsolute *= pParent->getRotationAbsolute();
-			  
-			  // calculate the bone space transformation
-			  m_translationBoneSpace = m_pCoreBone->getTranslationBoneSpace();
-			  m_translationBoneSpace *= m_rotationAbsolute;
-			  m_translationBoneSpace += m_translationAbsolute;
-
-			  m_rotationBoneSpace = m_pCoreBone->getRotationBoneSpace();
-			  m_rotationBoneSpace *= m_rotationAbsolute;
-			  */
-
 			  CalQuaternion parent_to_local = parent_abs_rot;
 			  parent_to_local.invert();
 
@@ -354,7 +272,7 @@ void TCompSkeleton::update(float elapsed) {
 
 			  // T_abs = (T * p_rot_abs) + p_T_abs
 			  // (T_abs - p_T_abs) = T * p_rot_abs
-			  // T_abs - p_T_abs
+			  // T_abs - p_T_abs * p_rot_abs_in = T
 			  CalVector delta_abs_pos = rigid_abs_pos - parent_abs_pos;
 			  CalQuaternion my_rotation_to_local = parent_abs_rot;
 			  my_rotation_to_local.invert();
