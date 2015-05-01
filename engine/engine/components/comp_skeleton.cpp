@@ -501,6 +501,10 @@ void TCompSkeleton::playAnimation(int id) {
 	model->getMixer()->executeAction(id, 0.0f, 0.3f, 1.0f, false);
 }
 
+float TCompSkeleton::getAnimationDuration(int id) {
+	return model->getMixer()->getAnimationDuration();
+}
+
 XMVECTOR TCompSkeleton::getPositionOfBone(int id) {
 	CalSkeleton* skel = model->getSkeleton();
 	auto& cal_bones = skel->getVectorBone();

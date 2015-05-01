@@ -5,6 +5,8 @@
 #include "physics_manager.h"
 #include "handle\handle.h"
 
+class FSMPlayerLegs;
+
 class FSMPlayerTorso : public aifsmcontroller
 {
 private:
@@ -28,6 +30,8 @@ public:
 
 	CHandle comp_transform;
 	CHandle camera_entity;
+
+	FSMPlayerLegs* legs;
 
 	FSMPlayerTorso();
 	~FSMPlayerTorso();

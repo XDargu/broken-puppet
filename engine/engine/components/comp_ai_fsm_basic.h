@@ -32,7 +32,7 @@ struct TCompAiFsmBasic : TBaseComponent {
 	void init(){
 		m_ai_controller->create("enemy");
 		TCompUnityCharacterController* controller = getSibling<TCompUnityCharacterController>(this);
-		controller->moveSpeedMultiplier = 0.2;
+		controller->moveSpeedMultiplier = 0.2f;
 	}
 
 	void update(float elapsed){

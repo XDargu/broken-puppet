@@ -29,6 +29,8 @@ public:
 	void loopAnimation(int id);
 	void playAnimation(int id);
 
+	float getAnimationDuration(int id);
+
 	void uploadBonesToGPU() const;
 	XMVECTOR getPositionOfBone(int id);
 };

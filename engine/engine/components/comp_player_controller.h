@@ -26,6 +26,7 @@ public:
 		fsm_player_legs.SetEntity(CHandle(this).getOwner());
 		fsm_player_torso.SetEntity(CHandle(this).getOwner());
 		fsm_player_legs.torso = &fsm_player_torso;
+		fsm_player_torso.legs = &fsm_player_legs;
 
 		hit_cool_down = 1;
 		time_since_last_hit = 0;

@@ -276,17 +276,30 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 }
 
 void FSMPlayerTorso::PullString(float elapsed) {
+	if (!legs->canThrow)
+		return;
+
 	CIOStatus& io = CIOStatus::get();
 
 	if (on_enter) {
 		// -------------- Moves the camera to the shoulder
-		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
-		camera_controller->offset = PxVec3(0.56, -0.22f, 1.07f);	
+		/*TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
+		camera_controller->offset = PxVec3(0.56f, -0.22f, 1.07f);*/
+		
+		TCompSkeleton* skeleton = comp_skeleton;		
+		skeleton->playAnimation(15);
+		
 	}
+
+	TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
+	camera_controller->offset = Physics.XMVECTORToPxVec3(XMVectorLerp(Physics.PxVec3ToXMVECTOR(camera_controller->offset), XMVectorSet(0.56f, -0.22f, 1.07f, 0), 0.05f));
 
 	CEntity* rope_entity = current_rope_entity;
 	TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
 	TCompRope* rope = rope_entity->get<TCompRope>();
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	rope->pos_2 = skeleton->getPositionOfBone(89);
 
 	if (joint) {
 		// -------------- Shorten the distance joint
@@ -324,6 +337,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 }
 
 void FSMPlayerTorso::GrabString(float elapsed) {
+
 	CIOStatus& io = CIOStatus::get();
 
 	up_animation = true;
@@ -347,6 +361,9 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	rope->pos_2 = skeleton->getPositionOfBone(89);
 
 	// Cancel
+	if (!legs->canThrow)
+		return;
+
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
 		// Remove the current string
@@ -364,23 +381,26 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		ChangeState("fbp_Inactive");		
 	}
 
-	// Pull
-	if (io.isPressed(CIOStatus::PULL_STRING)) {
-		up_animation = false;
-		ChangeState("fbp_PullString");
-	}
-
 	// Throw the second needle
 	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
 		up_animation = false;
 		ChangeState("fbp_ThrowString");
+	}
+
+	if (legs->getCurrentNode() != "fbp_Idle")
+		return;
+
+	// Pull
+	if (io.isPressed(CIOStatus::PULL_STRING)) {
+		up_animation = false;
+		ChangeState("fbp_PullString");
 	}
 	
 }
 
 void FSMPlayerTorso::Inactive(float elapsed) {
 
-	if (!can_move)
+	if (!legs->canThrow)
 		return;
 
 	CIOStatus& io = CIOStatus::get();
@@ -455,5 +475,5 @@ void FSMPlayerTorso::ProcessHit(float elapsed) {
 }
 
 unsigned int FSMPlayerTorso::getStringCount() {
-	return strings.size();
+	return (int)strings.size();
 }

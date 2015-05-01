@@ -24,6 +24,7 @@ public:
 
 	CHandle life;
 
+	bool canThrow;
 	bool falling;
 	float last_hit;
 	float walk_speed;
