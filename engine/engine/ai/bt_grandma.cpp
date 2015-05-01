@@ -151,11 +151,6 @@ int bt_grandma::actionSearchPoint()
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();	
 
-	rand_point = XMVectorSet(rand_num_x, 0.1f, rand_num_z,0);
-							rand_num_x
-							, Physics.XMVECTORToPxVec3(m_transform->position).y
-							, rand_num_z, 0);
-
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
 
 	ind_path = 0;
