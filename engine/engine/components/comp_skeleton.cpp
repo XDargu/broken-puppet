@@ -51,8 +51,10 @@ struct CalTransform {
 	CalVector pos;
 	CalQuaternion rot;
 
+	
+
 	CalTransform()
-	{
+	{		
 		pos = CalVector(0, 0, 0);
 		rot = CalQuaternion(0, 0, 0, 1);
 	}
@@ -69,6 +71,15 @@ struct CalTransform {
 
 	CalTransform operator*(const CalTransform& ct) {
 
+		// Lo que hace Cal:
+
+		/*m_translationAbsolute = m_translation;
+		m_translationAbsolute *= pParent->getRotationAbsolute();
+		m_translationAbsolute += pParent->getTranslationAbsolute();
+
+		m_rotationAbsolute = m_rotation;
+		m_rotationAbsolute *= pParent->getRotationAbsolute();*/
+
 		/*CalQuaternion vector_as_quat = CalQuaternion(pos.x, pos.y, pos.z, 0);
 		CalQuaternion ct_rot_conj = ct.rot;
 		ct_rot_conj.conjugate();
@@ -78,10 +89,17 @@ struct CalTransform {
 		// pointOnMatB = matB*(inverseMatA*pointOnMatA);
 
 		XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-		XMMATRIX cat_mat = XMMatrixAffineTransformation(XMVectorSet(1, 1, 1, 1), zero, Cal2DX(ct.rot), Cal2DX(ct.pos));
+		XMVECTOR one = XMVectorSet(1, 1, 1, 1);
+		XMMATRIX cat_mat = XMMatrixTransformation(zero, zero, one, zero, Cal2DX(ct.rot), Cal2DX(ct.pos));
 		XMVECTOR dx_pos = XMVector3Transform(Cal2DX(pos), cat_mat);
 
 		CalVector n_pos = DX2Cal(dx_pos);
+		
+		/*CalQuaternion vector_as_quat = CalQuaternion(pos.x, pos.y, pos.z, 0);
+		CalQuaternion ct_rot_conj = ct.rot;
+		ct_rot_conj.conjugate();
+		CalQuaternion result = ct.rot * vector_as_quat * ct_rot_conj;
+		CalVector result_v = CalVector(result.x, result.y, result.z);*/
 				
 		return CalTransform(
 			
@@ -156,8 +174,8 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	  CalBone* bone = cal_bones[bone_idx];
 
 	  bone_ragdoll_transforms[bone_idx] = CalTransform(
-		  bone->getTranslationBoneSpace()
-		  , bone->getRotationBoneSpace()
+		  bone->getTranslationAbsolute()
+		  , bone->getRotationAbsolute()
 		  );
   }
 
@@ -270,10 +288,10 @@ void TCompSkeleton::update(float elapsed) {
 
 			  CalTransform bone_to_parent = parent_abs_inv * bone_desired_abs;
 
-			  bone->setRotation(bone_to_parent.rot);
+			  /*bone->setRotation(bone_to_parent.rot);
 			  bone->setTranslation(bone_to_parent.pos);
 
-			  bone->calculateState();
+			  bone->calculateState();*/
 
 
 			  // -------------------- PRUEBAS ------------
@@ -308,7 +326,25 @@ void TCompSkeleton::update(float elapsed) {
 			  // parent_abs * delta = my_abs
 			  // delta = parent_abs_inv * my_abs
 
-			  /*CalQuaternion parent_to_local = parent_abs_rot;
+
+			  /* LO QUE HACE CAL:
+			  m_translationAbsolute = m_translation;
+			  m_translationAbsolute *= pParent->getRotationAbsolute();
+			  m_translationAbsolute += pParent->getTranslationAbsolute();
+
+			  m_rotationAbsolute = m_rotation;
+			  m_rotationAbsolute *= pParent->getRotationAbsolute();
+			  
+			  // calculate the bone space transformation
+			  m_translationBoneSpace = m_pCoreBone->getTranslationBoneSpace();
+			  m_translationBoneSpace *= m_rotationAbsolute;
+			  m_translationBoneSpace += m_translationAbsolute;
+
+			  m_rotationBoneSpace = m_pCoreBone->getRotationBoneSpace();
+			  m_rotationBoneSpace *= m_rotationAbsolute;
+			  */
+
+			  CalQuaternion parent_to_local = parent_abs_rot;
 			  parent_to_local.invert();
 
 			  CalQuaternion new_local_rotation = rigid_abs_rot;
@@ -316,16 +352,19 @@ void TCompSkeleton::update(float elapsed) {
 
 			  bone->setRotation(new_local_rotation);
 
+			  // T_abs = (T * p_rot_abs) + p_T_abs
+			  // (T_abs - p_T_abs) = T * p_rot_abs
+			  // T_abs - p_T_abs
 			  CalVector delta_abs_pos = rigid_abs_pos - parent_abs_pos;
-			  CalQuaternion my_rotation_to_local = rigid_abs_rot;
+			  CalQuaternion my_rotation_to_local = parent_abs_rot;
 			  my_rotation_to_local.invert();
 
 			  CalVector delta_in_local = delta_abs_pos;
 			  delta_in_local *= my_rotation_to_local;
 
 			  bone->setTranslation(delta_in_local);
-
-			  bone->calculateState();*/
+			  
+			  bone->calculateState();
 		  }
 	  }
 
