@@ -3,9 +3,18 @@
 
 #include "mcv_platform.h"
 #include "behaviour_trees.h"
+#include "physics_manager.h"
 
 class bt_grandma : public bt
 {
+private:
+	float radius;
+	XMVECTOR center;
+	XMVECTOR rand_point;
+	CHandle character_controller;
+	int ind_path;
+	physx::PxVec3 last_look_direction;
+	std::vector<XMVECTOR> path;
 public:
 	void create(string);
 
@@ -29,7 +38,9 @@ public:
 	int actionTakeNeedle();
 	//Select the idle and play it
 	int actionIdle();
-	//Select a point to go and chase it
+	//Select a point to go
+	int actionSearchPoint();
+	//Chase the selected point
 	int actionWander();
 	//Makes a warcry
 	int actionWarcry();

@@ -3,6 +3,15 @@
 #include <assert.h>
 #include "io\iostatus.h"
 #include "DetourDebugDraw.h"
+#include <time.h>
+
+float getRandomFloat(){
+	//srand(static_cast<float>(time(NULL)));
+	float num1 = 0.f;
+	float num2 = 1.f;
+	float rand_num_x = (num2 - num1) * ((((float)rand()) / (float)RAND_MAX)) + num1;
+	return rand_num_x;
+}
 
 void CNavmeshQuery::update( XMVECTOR& curr_pos ) {
   /*CIOStatus& io = CIOStatus::get();
@@ -618,4 +627,23 @@ void CNavmeshQuery::raycast( TPos& start, TPos& end ) {
     }
     dtVcopy( &m_straightPath[ 3 ], m_hitPos );
   }
+}
+
+XMVECTOR CNavmeshQuery::getRandomPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
+	TPos Pos;
+	XMStoreFloat3(&Pos.p, current_pos);
+	Pos.set = true;
+	resetTools();
+	data->m_navQuery->findNearestPoly(&Pos.p.x, m_polyPickExt, &m_filter, &m_startRef, 0);
+	dtPolyRef* randomRef = new dtPolyRef;
+	float* randomPt=new float;
+	float center_floats[3];
+	center_floats[0] = XMVectorGetX(center);
+	center_floats[1] = XMVectorGetY(center);
+	center_floats[2] = XMVectorGetZ(center);
+	float (* ptr_rand_func)();
+	ptr_rand_func = getRandomFloat;
+	data->m_navQuery->findRandomPointAroundCircle(m_startRef, center_floats, radius, &m_filter, ptr_rand_func, randomRef, randomPt);
+	XMVECTOR randomPoint = XMVectorSet(randomPt[0], randomPt[1], randomPt[2], 0.f);
+	return randomPoint;
 }

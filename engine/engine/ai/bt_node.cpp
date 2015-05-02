@@ -84,13 +84,14 @@ void btnode::addChild(btnode *c)
 void btnode::recalc(bt *tree)
 {
 	// activate the next line to debug
+	//tree->checkIfStateChanged();
 	printf("recalcing node %s\n", name.c_str());
 	switch (type)
 	{
 	case ACTION:
 	{
 		// run the controller of this node
-		int res = tree->execAction(name);
+		int res = tree->execAction(name, this);
 		// now, the next lines compute what's the NEXT node to use in the next frame...
 		if (res == STAY) { tree->setCurrent(this); return; }// looping vs. on-shot actions
 		// climb tree iteratively, look for the next unfinished sequence to complete

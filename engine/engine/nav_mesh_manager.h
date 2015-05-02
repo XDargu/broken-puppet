@@ -7,6 +7,7 @@
 #include "components\comp_collider_box.h"
 #include "components\comp_collider_sphere.h"
 #include "components\comp_collider_capsule.h"
+#include "physics_manager.h"
 
 #include <thread>
 #include <mutex>
@@ -34,6 +35,7 @@ public:
 	bool checkIfUpdatedNavMesh();
 	void clearNavMesh();
 	void checkUpdates();
+	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	std::vector<TCompColliderMesh*>     colMeshes;

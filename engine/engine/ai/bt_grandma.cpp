@@ -2,6 +2,8 @@
 #include "bt_grandma.h"
 #include "../entity_manager.h"
 #include "../components/all_components.h"
+#include "utils.h"
+#include "nav_mesh_manager.h"
 
 void bt_grandma::create(string s)
 {
@@ -57,7 +59,16 @@ void bt_grandma::create(string s)
 	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseNeedlePosition);
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionIdle, 50);
-	addChild("FreeTime", "Wander30", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander, 50);
+	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL, 50);
+
+	addChild("Wander30", "SearchPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSearchPoint);
+	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander);
+
+	radius = 6.f;
+	ind_path = 0;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	center = m_transform->position;
+	character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -118,12 +129,12 @@ int bt_grandma::actionTakeNeedle()
 int bt_grandma::actionIdle()
 {
 	float aux_time = state_time;
-	bool aux_enter = on_enter;
+	bool aux_on_enter = on_enter;
 
-	if (on_enter)
-		int caca = 1;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, last_look_direction);
 
-	if (trueEveryXSeconds(1.5f)){
+	if (state_time >= 2){
 		return LEAVE;
 	}else{
 		return STAY;
@@ -131,10 +142,52 @@ int bt_grandma::actionIdle()
 
 }
 
-//Select a point to go and chase it
+//Select a point to go 
+int bt_grandma::actionSearchPoint()
+{	
+
+	float aux_time = state_time;
+	bool aux_on_enter = on_enter;
+
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();	
+
+	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
+
+	ind_path = 0;
+	return LEAVE;
+
+}
+
+//Chase the selected point
 int bt_grandma::actionWander()
 {
-	return LEAVE;
+
+	float aux_time = state_time;
+	bool aux_on_enter = on_enter;
+
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+	if (path.size() > 0){
+		if (ind_path < path.size()){
+			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(path[ind_path] - m_transform->position));
+			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
+				ind_path++;
+				return STAY;
+			}
+			else{
+				return STAY;
+			}
+		}
+		else{
+			ind_path = 0;
+			last_look_direction = front;
+			return LEAVE;
+		}
+	}else{
+		return LEAVE;
+	}
 }
 
 //Makes a warcry

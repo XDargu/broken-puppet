@@ -41,6 +41,8 @@ public:
   void findPath( TPos& start, TPos& end);
   void wallDistance( TPos& pos );
   void raycast( TPos& start, TPos& end );
+  XMVECTOR getRandomPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
+  //float getRandomFloat();
 
 
 private:

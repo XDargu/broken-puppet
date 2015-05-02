@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "error\log.h"
+#include <time.h>
 
 using namespace DirectX;
 
@@ -95,6 +96,12 @@ bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {
 
 int getRandomNumber(int num1, int num2){
 	return rand() % num2 + num1;
+}
+
+float getRandomNumber(float min, float max){
+	//srand(static_cast<float>(time(NULL)));
+	float rand_num = (max - min) * ((((float)rand()) / (float)RAND_MAX)) + min;
+	return rand_num;
 }
 
 bool stringEndsWith(std::string const &value, std::string const &ending) {
