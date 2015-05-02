@@ -83,7 +83,7 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			TCompSkeleton* skel = skeleton;
 			CalBone* cal_bone = skel->model->getSkeleton()->getBone(it.first);
 			const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
-			const CalQuaternion& cal_mtx = cal_bone->getRotation();
+			const CalQuaternion& cal_mtx = cal_bone->getRotationAbsolute();
 			it.second->setKinematicTarget(PxTransform(Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)), Physics.XMVECTORToPxQuat(Cal2DX(cal_mtx))));
 			/*PxVec3 targetVel = Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)) - it.second->getGlobalPose().p;
 			targetVel.normalize();

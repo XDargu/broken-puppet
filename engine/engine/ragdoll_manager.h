@@ -12,6 +12,8 @@ class CCoreRagdoll : public CXMLParser {
 	std::string               name;
 
 	void onStartElement(const std::string &elem, MKeyValue &atts);
+
+	PxTransform getAnchorConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot);
 public:
 	std::map<int, PxRigidDynamic*> bone_map;
 	std::vector<PxD6Joint*> articulations;

@@ -280,7 +280,19 @@ void TCompSkeleton::update(float elapsed) {
 			  CalVector delta_in_local = delta_abs_pos;
 			  delta_in_local *= my_rotation_to_local;
 
-			  bone->setTranslation(delta_in_local);
+			  TTransform tt = TTransform(Cal2DX(delta_in_local), Cal2DX(new_local_rotation), XMVectorSet(1,1,1,1));
+
+			  CalVector right = DX2Cal(tt.getLeft());
+			  float half_height = 0;
+			  
+			  PxShape* collider;
+			  rigid_bone->getShapes(&collider, 1, 0);
+
+			  PxCapsuleGeometry geom;
+			  collider->getCapsuleGeometry(geom);
+			  half_height = geom.halfHeight;
+
+			  bone->setTranslation(delta_in_local/* + (right * half_height)*/);
 			  
 			  bone->calculateState();
 		  }
@@ -366,7 +378,40 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-	
+
+	bool draw_ragdoll = h_ragdoll.isValid();
+
+	if (draw_ragdoll) {
+		TCompRagdoll* ragdoll = h_ragdoll;
+		CalSkeleton* skel = model->getSkeleton();
+		auto& cal_bones = skel->getVectorBone();
+		for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+
+			PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
+
+			if (rigid_bone) {
+				CalBone* bone = cal_bones[bone_idx];
+
+				// Physics abs coords
+				XMVECTOR rigid_abs_pos = Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p);
+				XMVECTOR rigid_abs_rot = Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q);
+
+				TTransform bone_tt = TTransform(rigid_abs_pos, rigid_abs_rot, XMVectorSet(1, 1, 1, 1));
+
+				XMVECTOR front = XMVector3Normalize(bone_tt.getFront());
+				XMVECTOR up = XMVector3Normalize(bone_tt.getUp());
+				XMVECTOR right = XMVector3Normalize(-bone_tt.getLeft());
+				
+
+				drawLine(rigid_abs_pos, rigid_abs_pos + front);
+				drawLine(rigid_abs_pos, rigid_abs_pos + up);
+				drawLine(rigid_abs_pos, rigid_abs_pos + right);
+			}
+		}
+	}
+
+	return;
+
   CCoreModel *core = (CCoreModel*) model->getCoreModel();
   for (auto bc : core->bone_ids_to_debug) {
     renderBoneAxis(bc);
