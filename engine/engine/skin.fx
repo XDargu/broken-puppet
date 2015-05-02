@@ -54,7 +54,12 @@ VS_TEXTURED_OUTPUT VS(
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
+float4 PSTextured(
+	VS_TEXTURED_OUTPUT input
+	, out float4 normal : SV_Target1
+	, out float4 acc_light : SV_Target2
+	, out float  depth : SV_Target3
+	) : SV_Target
 {
 	//return txDiffuse.Sample(samWrapLinear, input.UV);
 	//return float4(input.UV, 0, 1); // txDiffuse.Sample(samWrapLinear, input.UV);
@@ -66,15 +71,19 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float  diffuse_amount = saturate(dot(N, L));
 
 	// Speculares
-	float3 E = normalize(CameraWorldPos.xyz - input.wPos.xyz);
+	float3 E = normalize(cameraWorldPos.xyz - input.wPos.xyz);
 	//float3 H = normalize(E + L);
 	//float  cos_beta = saturate( dot(H, N) );
 	float3 ER = reflect(-E, N);
 	float  cos_beta = saturate(dot(ER, L));
 	float  spec_amount = pow(cos_beta, 20.);
+	depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+	acc_light = float4(1,1,1,1);
+	
+	normal = (float4(N, 1) + 1.) * 0.5;
 
 	float4 albedo = txDiffuse.Sample(samWrapLinear, input.UV);
-		//return (albedo + spec_amount) * diffuse_amount;
-		return albedo * diffuse_amount;
+	//return (albedo + spec_amount) * diffuse_amount;
+	return albedo * diffuse_amount;
 }
 

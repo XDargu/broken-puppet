@@ -37,7 +37,7 @@ using namespace physx;
 
 #include <AntTweakBar.h>
 #include "entity_inspector.h"
-
+#include "render\blur_step.h"
 
 static CApp the_app;
 
@@ -84,8 +84,6 @@ void CApp::loadConfig() {
 
 // Debug 
 CRenderTechnique debugTech;
-CMesh        grid;
-CMesh        axis;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
@@ -96,12 +94,16 @@ CHandle		  activeCamera;
 CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
+CRenderToTexture* rt_base;
 
 const CTexture* cubemap;
 
 float fixedUpdateCounter;
 float fps;
 bool debug_mode;
+
+TBlurStep bs;
+TBlurStep bs2;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -263,10 +265,8 @@ bool CApp::create() {
 
 	loadScene("data/scenes/my_file-backup.xml");
 
-	// Create debug meshes
-	bool is_ok = createGrid(grid, 10);
-	is_ok &= createAxis(axis);
-	is_ok &= createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
+	// Create debug meshes	
+	bool is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
 	XASSERT(is_ok, "Error creating debug meshes");
@@ -295,6 +295,16 @@ bool CApp::create() {
 	cubemap = texture_manager.getByName("sunsetcube1024");
 
 	cubemap->activate(3);
+
+	rt_base = new CRenderToTexture;
+	is_ok &= rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
+
+	texture_manager.getByName("storm")->activate(4);
+
+	is_ok &= bs.create("blur0", xres, yres, 1);
+	is_ok &= bs2.create("blur1", xres / bs.factor, yres / bs.factor, 1);
+
+	assert(is_ok);
 
 	//PRUEBAS NAV MESHES -----------------
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
@@ -532,10 +542,14 @@ void CApp::render() {
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
 	// Generate all shadows maps
+	CTraceScoped scope("gen_shadows");
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
 
 
-	deferred.render(&camera);
+	deferred.render(&camera, *rt_base);
+
+	bs.apply(rt_base);
+	bs2.apply(bs.getOutput());
 
 	::render.activateBackbuffer();
 	int sz = 300;
@@ -544,8 +558,15 @@ void CApp::render() {
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
 	
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo"));
-	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("Zthe_light"));
+	bs2.getOutput()->activate(1);
+	texture_manager.getByName("rt_depth")->activate(2);
+
+	drawTexture2D(0, 0, xres, yres, rt_base, "blur_by_z");
+	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
+
+	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
+	
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);

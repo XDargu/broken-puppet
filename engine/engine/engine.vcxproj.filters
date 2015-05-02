@@ -405,6 +405,9 @@
     <ClInclude Include="ragdoll_manager.h">
       <Filter>skeleton</Filter>
     </ClInclude>
+    <ClInclude Include="render\blur_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -716,6 +719,15 @@
     <ClCompile Include="ragdoll_manager.cpp">
       <Filter>skeleton</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_point_light.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_shadows.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\blur_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -801,6 +813,9 @@
     </Filter>
     <Filter Include="components\ai\enemies\sensors">
       <UniqueIdentifier>{af53a7b1-8bd6-4321-976a-fb162f642437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\postpro">
+      <UniqueIdentifier>{59d3f46a-ca33-4aab-aee3-77703d5581c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

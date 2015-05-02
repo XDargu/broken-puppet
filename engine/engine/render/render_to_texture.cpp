@@ -36,6 +36,10 @@ bool CRenderToTexture::create(
 			if (!createDepthBuffer())
 				return false;
 	}
+	else if (zbuffer_type == NO_ZBUFFER) {
+		depth_stencil_view = nullptr;
+
+	}
 	else {
 		assert(zbuffer_type == USE_BACK_ZBUFFER);
 		depth_stencil_view = render.depth_stencil_view;

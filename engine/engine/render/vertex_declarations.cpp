@@ -26,6 +26,13 @@ CVertexDecl::CVertexDecl(D3D11_INPUT_ELEMENT_DESC* the_elems, UINT the_nelems)
 #define DEF_VTX_DECL(x) CVertexDecl x(x##_layout, ARRAYSIZE(x##_layout)) 
 
 // ------------------------------------------------------
+D3D11_INPUT_ELEMENT_DESC vdcl_position_layout[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+};
+DEF_VTX_DECL(vdcl_position);
+
+// ------------------------------------------------------
 D3D11_INPUT_ELEMENT_DESC vdcl_position_color_layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },

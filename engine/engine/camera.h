@@ -5,7 +5,10 @@
 
 class CCamera {
 protected:
-	XMVECTOR	   front;
+	XMVECTOR	   front;			// Local Z in world coords
+	XMVECTOR       up;              // Local up in world coords
+	XMVECTOR       right;           // Local X in world coords
+
 	XMVECTOR	   position;
 	XMMATRIX       view;            // Where is and where is looking at
 	XMMATRIX       projection;      // Prespective info
@@ -27,6 +30,9 @@ public:
 
   XMVECTOR getPosition() const { return position; }
   XMVECTOR getFront() const { return front; }
+  XMVECTOR getUp() const { return up; }
+  XMVECTOR getRight() const { return right; }
+
   float    getFov() const { return fov_in_radians; }
   float    getAspectRatio() const { return aspect_ratio; }
   float    getZNear() const { return znear; }
@@ -35,6 +41,7 @@ public:
   // 
   void setPerspective(float new_fov_in_rad, float new_znear, float new_zfar);
   void setViewport(float x0, float y0, float xmax, float ymax);
+  D3D11_VIEWPORT getViewport() const { return viewport; }
 
   // helpers
   bool getScreenCoords(XMVECTOR world_coord, float *x, float *y) const;

@@ -2,6 +2,8 @@
 #include "render_utils.h"
 #include "camera.h"
 #include "render/render_utils.h"
+#include "components/comp_point_light.h"
+#include "components/comp_shadows.h"
 
 using namespace DirectX;
 
@@ -9,10 +11,20 @@ using namespace DirectX;
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
 CShaderCte<TCtesLight>  ctes_light;
+CShaderCte<TCtesPointLight>  ctes_point_light;
+CShaderCte<TCtesDirLight>    ctes_dir_light;
 CShaderCte<TCtesBones>  ctes_bones;
+
+// Post process
+CShaderCte<TCtesBlur> ctes_blur;
+
 CMesh        wire_cube;
+CMesh        mesh_view_volume;
 CMesh        mesh_line;
 CMesh        mesh_textured_quad_xy;
+CMesh        mesh_icosahedron;
+CMesh        grid;
+CMesh        axis;
 
 bool createLine(CMesh& mesh);
 
@@ -24,6 +36,10 @@ CVertexDecl* getVertexDecl< CVertexPosColor >() {
 template<>
 CVertexDecl* getVertexDecl< CVertexPosUV >() {
 	return &vdcl_position_uv;
+}
+template<>
+CVertexDecl* getVertexDecl< CVertexPos >() {
+	return &vdcl_position;
 }
 
 // --------------------------------------------
@@ -147,7 +163,133 @@ bool createDepthStencilStates() {
 		return false;
 	setDbgName(z_cfgs[ZCFG_DEFAULT], "ZCFG_DEFAULT");
 
+	// Inverse Z Test, don't write. Used while rendering the lights
+	memset(&desc, 0x00, sizeof(desc));
+	desc.DepthEnable = TRUE;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	desc.DepthFunc = D3D11_COMPARISON_GREATER;
+	desc.StencilEnable = FALSE;
+	hr = render.device->CreateDepthStencilState(&desc, &z_cfgs[ZCFG_INVERSE_TEST_NO_WRITE]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(z_cfgs[ZCFG_INVERSE_TEST_NO_WRITE], "ZCFG_INVERSE_TEST_NO_WRITE");
+
 	return true;
+}
+
+void destroyDepthStencilStates() {
+	for (int i = 0; i < ZCFG_COUNT; ++i)
+		SAFE_RELEASE(z_cfgs[i]);
+}
+
+// -----------------------------------------------
+ID3D11RasterizerState *rasterize_states[RSCFG_COUNT];
+
+bool createRasterizationStates() {
+
+	rasterize_states[RSCFG_DEFAULT] = nullptr;
+
+	// Depth bias options when rendering the shadows
+	D3D11_RASTERIZER_DESC desc = {
+		D3D11_FILL_SOLID, // D3D11_FILL_MODE FillMode;
+		D3D11_CULL_BACK,  // D3D11_CULL_MODE CullMode;
+		FALSE,            // BOOL FrontCounterClockwise;
+		13,               // INT DepthBias;
+		0.0f,             // FLOAT DepthBiasClamp;
+		2.0,              // FLOAT SlopeScaledDepthBias;
+		TRUE,             // BOOL DepthClipEnable;
+		FALSE,            // BOOL ScissorEnable;
+		FALSE,            // BOOL MultisampleEnable;
+		FALSE,            // BOOL AntialiasedLineEnable;
+	};
+	HRESULT hr = render.device->CreateRasterizerState(&desc, &rasterize_states[RSCFG_SHADOWS]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(rasterize_states[RSCFG_SHADOWS], "RS_DEPTH");
+
+	// Culling is reversed. Used when rendering the light volumes
+	D3D11_RASTERIZER_DESC rev_desc = {
+		D3D11_FILL_SOLID, // D3D11_FILL_MODE FillMode;
+		D3D11_CULL_FRONT, // D3D11_CULL_MODE CullMode;
+		FALSE,            // BOOL FrontCounterClockwise;
+		0,                // INT DepthBias;
+		0.0f,             // FLOAT DepthBiasClamp;
+		0.0,              // FLOAT SlopeScaledDepthBias;
+		FALSE,            // BOOL DepthClipEnable;
+		FALSE,            // BOOL ScissorEnable;
+		FALSE,            // BOOL MultisampleEnable;
+		FALSE,            // BOOL AntialiasedLineEnable;
+	};
+	hr = render.device->CreateRasterizerState(&rev_desc, &rasterize_states[RSCFG_REVERSE_CULLING]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(rasterize_states[RSCFG_REVERSE_CULLING], "RS_REVERSE_CULLING");
+
+	return true;
+}
+
+void destroyRasterizationStates() {
+	for (int i = 0; i < RSCFG_COUNT; ++i)
+		SAFE_RELEASE(rasterize_states[i]);
+}
+
+void activateRSConfig(enum RSConfig cfg) {
+	render.ctx->RSSetState(rasterize_states[cfg]);
+}
+
+
+// -----------------------------------------------
+ID3D11BlendState *blend_states[BLEND_CFG_COUNT];
+
+bool createBlendStates() {
+
+	blend_states[BLEND_CFG_DEFAULT] = nullptr;
+
+	D3D11_BLEND_DESC desc;
+	HRESULT hr;
+
+	// Combinative blending
+	memset(&desc, 0x00, sizeof(desc));
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+	hr = render.device->CreateBlendState(&desc, &blend_states[BLEND_CFG_COMBINATIVE]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(blend_states[BLEND_CFG_COMBINATIVE], "BLEND_COMBINATIVE");
+
+	// Additive blending
+	memset(&desc, 0x00, sizeof(desc));
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;      // Color must come premultiplied
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	hr = render.device->CreateBlendState(&desc, &blend_states[BLEND_CFG_ADDITIVE]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(blend_states[BLEND_CFG_ADDITIVE], "BLEND_ADDITIVE");
+
+	return true;
+}
+
+void destroyBlendStates() {
+	for (int i = 0; i < RSCFG_COUNT; ++i)
+		SAFE_RELEASE(blend_states[i]);
+}
+
+void activateBlendConfig(enum BlendConfig cfg) {
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };    // Not used
+	UINT sampleMask = 0xffffffff;
+	render.ctx->OMSetBlendState(blend_states[cfg], blendFactor, sampleMask);
 }
 
 // -----------------------------------------------
@@ -155,25 +297,46 @@ bool renderUtilsCreate() {
 	bool is_ok = ctes_object.create();
 	is_ok &= ctes_camera.create();
 	is_ok &= ctes_light.create();
+	is_ok &= ctes_point_light.create();
+	is_ok &= ctes_dir_light.create();
 	is_ok &= ctes_bones.create();
+
+	is_ok &= ctes_blur.create();
+
+	is_ok &= createGrid(grid, 10);
+	is_ok &= createAxis(axis);
 	is_ok &= createWiredCube(wire_cube);
+	is_ok &= createViewVolume(mesh_view_volume);
 	is_ok &= createLine(mesh_line);
 	is_ok &= createTexturedQuadXY(mesh_textured_quad_xy);
+	is_ok &= createIcosahedron(mesh_icosahedron);
 	is_ok &= createSamplers();
 	is_ok &= createDepthStencilStates();
+	is_ok &= createRasterizationStates();
+	is_ok &= createBlendStates();
 	return is_ok;
 }
 
 void renderUtilsDestroy() {
-  destroySamplers();
-  ctes_object.destroy();
-  ctes_camera.destroy();
-  ctes_bones.destroy();
-  wire_cube.destroy();
-  mesh_line.destroy();
-  ctes_light.destroy();
-  mesh_textured_quad_xy.destroy();
-  wire_cube.destroy();
+	destroyBlendStates();
+	destroyRasterizationStates();
+	destroyDepthStencilStates();
+	destroySamplers();
+	ctes_object.destroy();
+	ctes_dir_light.destroy();
+	ctes_point_light.destroy();
+	ctes_light.destroy();
+	ctes_camera.destroy();
+	ctes_bones.destroy();
+
+	ctes_blur.destroy();
+
+	axis.destroy();
+	grid.destroy();
+	mesh_line.destroy();
+	mesh_textured_quad_xy.destroy();
+	mesh_view_volume.destroy();
+	wire_cube.destroy();
 }
 
 void activateWorldMatrix( int slot ) {
@@ -188,7 +351,22 @@ void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
 	ctes_camera.get()->ViewProjection = camera.getViewProjection();
-	ctes_camera.get()->CameraWorldPos = camera.getPosition();
+	ctes_camera.get()->cameraView = camera.getView();
+	ctes_camera.get()->cameraWorldPos = camera.getPosition();
+	ctes_camera.get()->cameraWorldFront = camera.getFront();
+	ctes_camera.get()->cameraWorldLeft = -camera.getRight();
+	ctes_camera.get()->cameraWorldUp = camera.getUp();
+	ctes_camera.get()->cameraZFar = camera.getZFar();
+	ctes_camera.get()->cameraZNear = camera.getZNear();
+	ctes_camera.get()->cameraDummy1 = 0.f;
+	
+	D3D11_VIEWPORT vp = camera.getViewport();
+	ctes_camera.get()->cameraHalfXRes = vp.Width / 2.f;
+	ctes_camera.get()->cameraHalfYRes = vp.Height / 2.f;
+
+	// tan( fov/2 ) = ( yres/2 ) / view_d
+	ctes_camera.get()->cameraViewD = (vp.Height / 2.f) / tanf(camera.getFov() * 0.5f);
+
 	ctes_camera.uploadToGPU();
 }
 
@@ -202,6 +380,28 @@ void activateLight(const CCamera& light, int slot) {
 	XMMATRIX tmx = scale * offset;
 	ctes_light.get()->LightViewProjectionOffset = light.getViewProjection() * tmx;
 	ctes_light.uploadToGPU();
+}
+
+void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int slot) {
+	ctes_point_light.activateInVS(slot);    // as set in the deferred.fx!!
+	ctes_point_light.activateInPS(slot);    // as set in the deferred.fx!!
+	TCtesPointLight *c = ctes_point_light.get();
+	c->plight_color = plight->color;
+	c->plight_world_pos = light_pos;
+	c->plight_max_radius = plight->radius;
+	c->plight_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
+	ctes_point_light.uploadToGPU();
+}
+
+void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slot) {
+	ctes_dir_light.activateInVS(slot);    // as set in the deferred.fx!!
+	ctes_dir_light.activateInPS(slot);    // as set in the deferred.fx!!
+	TCtesDirLight *c = ctes_dir_light.get();
+	c->dir_light_color = dir_light->color;
+	c->dir_light_world_pos = light_pos;
+	//c->dir_light_max_radius = dir_light->radius;
+	//c->dir_light_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
+	ctes_dir_light.uploadToGPU();
 }
 
 // -----------------------------------------------------
@@ -259,6 +459,35 @@ bool createAxis(CMesh& mesh) {
 }
 
 // -----------------------------------------------------
+bool createViewVolume(CMesh& mesh) {
+
+	std::vector< CVertexPos > vtxs;
+	vtxs.resize(8);
+	CVertexPos *v = &vtxs[0];
+
+	// Axis X
+	v->Pos = XMFLOAT3(-1.f, -1.f, 0.f); ++v;
+	v->Pos = XMFLOAT3(1.f, -1.f, 0.f); ++v;
+	v->Pos = XMFLOAT3(-1.f, 1.f, 0.f); ++v;
+	v->Pos = XMFLOAT3(1.f, 1.f, 0.f); ++v;
+	v->Pos = XMFLOAT3(-1.f, -1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(1.f, -1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(-1.f, 1.f, 1.f); ++v;
+	v->Pos = XMFLOAT3(1.f, 1.f, 1.f); ++v;
+
+	const CMesh::TIndex idxs[] = {
+		0, 2, 1, 1, 2, 3,
+		4, 5, 6, 5, 7, 6,
+		0, 1, 4, 1, 5, 4,
+		2, 6, 7, 2, 7, 3,
+		0, 4, 2, 4, 6, 2,
+		1, 3, 5, 5, 3, 7,
+	};
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], sizeof(idxs) / sizeof(CMesh::TIndex), idxs, CMesh::TRIANGLE_LIST);
+}
+
+
+// -----------------------------------------------------
 bool createTexturedQuadXY(CMesh& mesh) {
 	std::vector< CVertexPosUV > vtxs;
 	vtxs.resize(4);
@@ -314,6 +543,25 @@ bool createWiredCube(CMesh& mesh) {
     , 0, 4, 1, 5, 2, 6, 3, 7
   };
   return mesh.create((unsigned)vtxs.size(), &vtxs[0], 24, idxs, CMesh::LINE_LIST);
+}
+
+// -----------------------------------------------------
+bool createIcosahedron(CMesh& mesh) {
+#define X (.525731112119133606f*1.2584085f)
+#define Z (.850650808352039932f*1.2584085f)
+	static const float vs[12][3] = {
+		{ -X, 0.0, Z }, { X, 0.0, Z }, { -X, 0.0, -Z }, { X, 0.0, -Z },
+		{ 0.0, Z, X }, { 0.0, Z, -X }, { 0.0, -Z, X }, { 0.0, -Z, -X },
+		{ Z, X, 0.0 }, { -Z, X, 0.0 }, { Z, -X, 0.0 }, { -Z, -X, 0.0 }
+	};
+#undef X
+#undef Y
+	static const CMesh::TIndex idxs[20][3] = {
+		{ 0, 4, 1 }, { 0, 9, 4 }, { 9, 5, 4 }, { 4, 5, 8 }, { 4, 8, 1 },
+		{ 8, 10, 1 }, { 8, 3, 10 }, { 5, 3, 8 }, { 5, 2, 3 }, { 2, 7, 3 },
+		{ 7, 10, 3 }, { 7, 6, 10 }, { 7, 11, 6 }, { 11, 0, 6 }, { 0, 1, 6 },
+		{ 6, 1, 10 }, { 9, 0, 11 }, { 9, 11, 2 }, { 9, 2, 5 }, { 7, 2, 11 } };
+	return mesh.create(12, (const CVertexPos*)vs, 20 * 3, &idxs[0][0], CMesh::TRIANGLE_LIST);
 }
 
 // -----------------------------------------------------
@@ -712,9 +960,12 @@ void setTint(XMVECTOR tint) {
 }
 
 // -----------------------------------------------
-void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture) {
+void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const char *tech_name) {
 
-	render_techniques_manager.getByName("textured")->activate();
+	if (tech_name == nullptr)
+		tech_name = "textured";
+
+	render_techniques_manager.getByName(tech_name)->activate();
 
 	// Activate the texture
 	texture->activate(0);
@@ -723,8 +974,8 @@ void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture) {
 	XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
 	ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
 		0, render.xres,
-		render.yres, 0,
-		-1, 1);
+		render.yres, 0.f,
+		-1.f, 1.f);
 	ctes_camera.uploadToGPU();
 
 	// Update the world matrix to match the params

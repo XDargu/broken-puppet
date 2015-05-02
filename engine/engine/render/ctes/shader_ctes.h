@@ -1,3 +1,6 @@
+#ifndef _SHADERS_CTES_H
+#define _SHADERS_CTES_H
+
 #include "render/ctes/shader_platform.h"
 
 cbuffer TCtesObject SHADER_REGISTER(b0)
@@ -8,9 +11,14 @@ cbuffer TCtesObject SHADER_REGISTER(b0)
 
 cbuffer TCtesCamera SHADER_REGISTER(b1)
 {
-  matrix ViewProjection;
-  float4 CameraWorldPos;
-  float3 CameraPosition;
+	matrix ViewProjection;
+	matrix cameraView;
+	float4 cameraWorldPos;
+	float4 cameraWorldFront;
+	float4 cameraWorldUp;
+	float4 cameraWorldLeft;
+	float  cameraZNear, cameraZFar, cameraViewD, cameraDummy1;
+	float  cameraHalfXRes, cameraHalfYRes, cameraXRes, cameraYRes;
 };
 
 cbuffer TCtesLight SHADER_REGISTER(b4)
@@ -20,25 +28,25 @@ cbuffer TCtesLight SHADER_REGISTER(b4)
 	float4 LightWorldPos;
 };
 
-#define MaxDirLights 10
-#define MaxOmniLights 25
+cbuffer TCtesPointLight SHADER_REGISTER(b5)
+{
+	float4 plight_world_pos;
+	float4 plight_color;
+	float  plight_max_radius, plight_inv_delta_radius;
+	float  plight_dummy1, plight_dummy2;
+};
+
+cbuffer TCtesDirLight SHADER_REGISTER(b5)   // using the same register as the point light
+{
+	float4 dir_light_world_pos;
+	float4 dir_light_color;
+	//float  dir_light_max_radius, dir_light_inv_delta_radius;
+	//float  dir_light_dummy1, dir_light_dummy2;
+};
+
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
-  /*float4 AmbientLight;
-
-  float4 LightDirections[MaxDirLights];
-  float4 LightColors[MaxDirLights];
-
-  float4 OmniLightPositions[MaxOmniLights];
-  float4 OmniLightColors[MaxOmniLights];
-  float4 OmniLightRadius[MaxOmniLights];
-
- 
- 
-
-  int OmniLightCount;  
-  int LightCount;*/
   float  world_time;
   float  dummy3[3];
   
@@ -49,3 +57,10 @@ cbuffer TCtesBones SHADER_REGISTER(b3)
 {
 	matrix bones[256];
 };
+
+cbuffer TCtesBlur SHADER_REGISTER(b3)
+{
+	float4 blur_delta;
+};
+
+#endif

@@ -10,14 +10,16 @@ class CDeferredRender {
 	CRenderToTexture*  rt_lights;
 	CRenderToTexture*  rt_albedo;
 	CRenderToTexture*  rt_normals;
+	CRenderToTexture*  rt_depth;
 
 	void generateGBuffer(const CCamera* camera);
 	void generateLightBuffer();
+	void resolve(const CCamera* camera, CRenderToTexture& rt_out);
 
 public:
 
 	bool create(int xres, int yres);
-	void render(const CCamera* camera);
+	void render(const CCamera* camera, CRenderToTexture& rt_out);
 
 	// CTexture* getOutput();
 };
