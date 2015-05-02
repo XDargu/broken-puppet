@@ -6,6 +6,6 @@
    <collision_filter not_collides_tag="Level"/>
 </collision_table>
 <collision_table own_tag="Enemy">
-   <collision_filter not_collides_tag="Enemy"/>
+   <collision_filter not_collides_tag="none"/>
 </collision_table>
 </collisions>

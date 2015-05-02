@@ -81,6 +81,8 @@ public:
 	physx::PxReal getMass();
 
 	void Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos, float elapsed);
+
+	CHandle getRigidBody();
 };
 
 #endif

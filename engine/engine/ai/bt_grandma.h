@@ -15,6 +15,8 @@ private:
 	int ind_path;
 	physx::PxVec3 last_look_direction;
 	std::vector<XMVECTOR> path;
+	float path_change_time;
+	float prev_path_change_time;
 public:
 	void create(string);
 

@@ -66,6 +66,7 @@ void bt_grandma::create(string s)
 
 	radius = 6.f;
 	ind_path = 0;
+	path_change_time = 0.f;
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	center = m_transform->position;
 	character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
@@ -170,13 +171,31 @@ int bt_grandma::actionWander()
 	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
+
+			if (state_time - path_change_time > 1.5f){
+				physx::PxRaycastBuffer buf;
+				Physics.raycastAll(m_transform->position + XMVectorSet(0, 0.1f, 0, 0), XMVector3Normalize(path[ind_path] - m_transform->position), 1.f, buf);
+				for (int i = 0; i < (int)buf.nbTouches; i++)
+				{
+					TCompCharacterController* character_cntrl = (TCompCharacterController*)character_controller;
+					TCompRigidBody* own_rigid = character_cntrl->getRigidBody();
+					if (buf.touches[i].actor != (own_rigid->rigidBody)) {
+						//path_change_time = state_time;
+						//CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+						ind_path = 0;
+						return LEAVE;
+					}
+				}
+			}
 			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(path[ind_path] - m_transform->position));
 			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
 			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
 				ind_path++;
+				//prev_path_change_time = path_change_time;
 				return STAY;
 			}
 			else{
+				//prev_path_change_time = path_change_time;
 				return STAY;
 			}
 		}
