@@ -7,6 +7,7 @@
 
 void bt_grandma::create(string s)
 {
+	player_viewed_sensor = false;
 	name = s;
 	createRoot("Root", PRIORITY, NULL, NULL);
 	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_grandma::conditionis_ragdoll, NULL);
@@ -134,7 +135,7 @@ int bt_grandma::actionIdle()
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, last_look_direction);
 
-	if (state_time >= 2){
+	if (state_time >= 6){
 		return LEAVE;
 	}else{
 		return STAY;
@@ -145,9 +146,6 @@ int bt_grandma::actionIdle()
 //Select a point to go 
 int bt_grandma::actionSearchPoint()
 {
-
-	float aux_time = state_time;
-	bool aux_on_enter = on_enter;
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();	
 
@@ -167,7 +165,7 @@ int bt_grandma::actionSearchPoint()
 
 	rand_point = XMVectorSet(
 							rand_num_x
-							, Physics.XMVECTORToPxVec3(m_transform->position).y
+							, XMVectorGetY(m_transform->position)
 							, rand_num_z, 0);
 
 	//rand_point = XMVectorSet(XMVectorGetX(m_transform->position) + 1.f, 0.f, XMVectorGetZ(m_transform->position) + 1.f,0.f);
@@ -181,17 +179,18 @@ int bt_grandma::actionSearchPoint()
 int bt_grandma::actionWander()
 {
 
-	float aux_time = state_time;
-	bool aux_on_enter = on_enter;
-
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
-			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(path[ind_path] - m_transform->position));
 
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.8f)){
+			XMVECTOR aux_position = path[ind_path];
+			XMVectorSetY(aux_position, XMVectorGetY(m_transform->position));
+
+			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(aux_position - m_transform->position));
+
+			if ((V3DISTANCE(m_transform->position, aux_position) < 0.8f)){
 				ind_path++;
 				return STAY;
 			}
@@ -207,6 +206,7 @@ int bt_grandma::actionWander()
 	}else{
 		return LEAVE;
 	}
+	return LEAVE;
 }
 
 //Makes a warcry
@@ -236,6 +236,7 @@ int bt_grandma::actionLookAround()
 //Takes a roll, attacker or taunter and a poisition to go
 int bt_grandma::actionSelectRole()
 {
+
 	return LEAVE;
 }
 
@@ -356,7 +357,14 @@ int bt_grandma::conditiontoo_close_attack()
 //Check if there is a needle to take
 int bt_grandma::conditionneedle_to_take()
 {
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	if ((m_sensor->needlesInRange).size() > 0)
+	{
+		return true;
+	}
+
 	return false;
+
 	//return needle_to_take;
 }
 
@@ -471,15 +479,19 @@ int bt_grandma::conditionfar_from_target_pos()
 
 // Sensor para detectar si el enemigo ve al player
 void bt_grandma::playerViewedSensor(){
+	TCompPlayerPosSensor* p_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
 	if (!player_viewed_sensor){
-
-		TCompPlayerPosSensor* p_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
-		bool tri = p_sensor->playerInRange();
-		if (p_sensor->playerInRange()) {
-			if ((!current->isRoot()) && ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))){
+ 		bool tri = p_sensor->playerInRange();
+		if (p_sensor->playerInRange()) {	
+			//if ((!current->isRoot()) /*&& ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))*/){
 				setCurrent(NULL);
 				player_viewed_sensor = true;
-			}
+			//}
+		}
+	}
+	else{
+		if (!p_sensor->playerInRange()){
+			player_viewed_sensor = false;
 		}
 	}
 }
@@ -496,7 +508,7 @@ void bt_grandma::needleViewedSensor(){
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
+			if ((!current->isRoot()) && ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH)))
 				setCurrent(NULL);
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
@@ -504,7 +516,7 @@ void bt_grandma::needleViewedSensor(){
 }
 
 void bt_grandma::update(float elapsed){
-	//playerViewedSensor();
+	playerViewedSensor();
 	//needleViewedSensor();
 	this->recalc(elapsed);
 }

@@ -121,6 +121,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	// Set the owner entity as the rigidbody user data
 	rigidBody->setName(e->getName());
+	rigidBody->userData = CHandle(this).getOwner().asVoidPtr();
 }
 
 void TCompRigidBody::init() {
