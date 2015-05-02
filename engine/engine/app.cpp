@@ -38,15 +38,17 @@ using namespace physx;
 #include <AntTweakBar.h>
 #include "entity_inspector.h"
 #include "render\blur_step.h"
+#include "render\sharpen_step.h"
 
 static CApp the_app;
 
-CLogicManager	 &logic_manager = CLogicManager::get();
-CEntityInspector &entity_inspector = CEntityInspector::get();
-CEntityLister	 &entity_lister = CEntityLister::get();
-CEntityActioner	 &entity_actioner = CEntityActioner::get();
-CDebugOptioner	 &debug_optioner = CDebugOptioner::get();
-CConsole		 &console = CConsole::get();
+CLogicManager			 &logic_manager = CLogicManager::get();
+CEntityInspector		 &entity_inspector = CEntityInspector::get();
+CEntityLister			 &entity_lister = CEntityLister::get();
+CEntityActioner			 &entity_actioner = CEntityActioner::get();
+CDebugOptioner			 &debug_optioner = CDebugOptioner::get();
+CConsole				 &console = CConsole::get();
+CPostProcessOptioner	 &post_process_optioner = CPostProcessOptioner::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
@@ -102,8 +104,7 @@ float fixedUpdateCounter;
 float fps;
 bool debug_mode;
 
-TBlurStep bs;
-TBlurStep bs2;
+TSharpenStep sharpen;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -283,6 +284,9 @@ bool CApp::create() {
 	entity_actioner.init();
 	debug_optioner.init();
 	console.init();
+	post_process_optioner.sharpen = &sharpen;
+	post_process_optioner.init();
+	
 
 	entity_lister.update();	
 #endif
@@ -301,8 +305,7 @@ bool CApp::create() {
 
 	texture_manager.getByName("storm")->activate(4);
 
-	is_ok &= bs.create("blur0", xres, yres, 1);
-	is_ok &= bs2.create("blur1", xres / bs.factor, yres / bs.factor, 1);
+	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 
 	assert(is_ok);
 
@@ -375,6 +378,14 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/milestone2.xml");
 	}
 
+	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+		//render_techniques_manager.reload("deferred_gbuffer");
+		//render_techniques_manager.reload("deferred_point_lights");
+		//render_techniques_manager.reload("deferred_dir_lights");
+		//render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("sharpen");
+	}
+
 	//-----------------------------------------------------------------------------------------
 	CNav_mesh_manager::get().checkUpdates();
 	//-----------------------------------------------------------------------------------------
@@ -420,55 +431,7 @@ void CApp::update(float elapsed) {
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
-	/*
-	// Ñapa para luz ambiental
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-		CEntity* e_ambLight = entity_manager.getEntities()[i];
-		TCompAmbientLight* ambLight = e_ambLight->get<TCompAmbientLight>();
-		if (ambLight && ambLight->active) {
-			ctes_global.get()->AmbientLight = ambLight->color;
-		}
-	}
-
-	// Ñapa para luces direccionales
-	// Recorrer las luces y añadirlas al array
-	ctes_global.get()->LightCount = 0;
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-		CEntity* e_dirLD = entity_manager.getEntities()[i];
-		TCompDirectionalLight* dirLD = e_dirLD->get<TCompDirectionalLight>();
-		TCompTransform* transLD = e_dirLD->get<TCompTransform>();
-		if (dirLD && transLD && dirLD->active) {
-			ctes_global.get()->LightDirections[ctes_global.get()->LightCount] = XMVector3Rotate(XMVectorSet(0, 0, 1, 0), transLD->rotation);
-			// La intensidad se pasa en el alfa del color
-			ctes_global.get()->LightColors[ctes_global.get()->LightCount] = XMVectorSetW(dirLD->color, dirLD->intensity * 0.1f);
-			ctes_global.get()->LightCount++;
-		}
-	}
-
-	// Ñapa para luces puntuales
-	// Recorrer las luces y añadirlas al array
-	ctes_global.get()->OmniLightCount = 0;
-	for (int i = 0; i < entity_manager.getEntities().size(); ++i) {
-		CEntity* e_pointL = entity_manager.getEntities()[i];
-		TCompPointLight* pointL = e_pointL->get<TCompPointLight>();
-		TCompTransform* trans_pointL = e_pointL->get<TCompTransform>();
-		if (pointL && trans_pointL && pointL->active) {
-			ctes_global.get()->OmniLightColors[ctes_global.get()->OmniLightCount] = XMVectorSetW(pointL->color, pointL->intensity * 0.1f);;
-			ctes_global.get()->OmniLightPositions[ctes_global.get()->OmniLightCount] = trans_pointL->position;
-			ctes_global.get()->OmniLightRadius[ctes_global.get()->OmniLightCount] = XMVectorSet(pointL->radius, 0, 0, 0);
-			ctes_global.get()->OmniLightCount++;
-		}
-	}
-	float f = ctes_global.get()->world_time;
-
-	ctes_global.uploadToGPU();
-	ctes_global.activateInVS(2);
-	ctes_global.activateInPS(2);
 	
-	CEntity* cam = entity_manager.getByName("PlayerCamera");
-	TCompTransform* cam_t = cam->get<TCompTransform>();
-	//activateCamera(cam_t->position, 1);
-	*/
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
@@ -548,8 +511,8 @@ void CApp::render() {
 
 	deferred.render(&camera, *rt_base);
 
-	bs.apply(rt_base);
-	bs2.apply(bs.getOutput());
+	sharpen.apply(rt_base);
+	//bs2.apply(bs.getOutput());
 
 	::render.activateBackbuffer();
 	int sz = 300;
@@ -558,10 +521,10 @@ void CApp::render() {
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
 	
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
-	bs2.getOutput()->activate(1);
+	sharpen.getOutput()->activate(1);
 	texture_manager.getByName("rt_depth")->activate(2);
 
-	drawTexture2D(0, 0, xres, yres, rt_base, "blur_by_z");
+	drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());

@@ -63,4 +63,11 @@ cbuffer TCtesBlur SHADER_REGISTER(b3)
 	float4 blur_delta;
 };
 
+cbuffer TCtesSharpen SHADER_REGISTER(b3)
+{
+	float4 sharpen_delta;
+	float amount;
+	float dummy_sharpen, dummy_sharpen2, dummy_sharpen3;
+};
+
 #endif

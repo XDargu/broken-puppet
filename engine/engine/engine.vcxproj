@@ -301,6 +301,7 @@
     <ClInclude Include="render\render_utils.h" />
     <ClInclude Include="render\shaders.h" />
     <ClInclude Include="render\shadows.h" />
+    <ClInclude Include="render\sharpen_step.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
@@ -526,6 +527,7 @@
     <ClCompile Include="render\render_to_texture.cpp" />
     <ClCompile Include="render\render_utils.cpp" />
     <ClCompile Include="render\shaders.cpp" />
+    <ClCompile Include="render\sharpen_step.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />

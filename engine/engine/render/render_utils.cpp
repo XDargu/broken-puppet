@@ -17,6 +17,7 @@ CShaderCte<TCtesBones>  ctes_bones;
 
 // Post process
 CShaderCte<TCtesBlur> ctes_blur;
+CShaderCte<TCtesSharpen> ctes_sharpen;
 
 CMesh        wire_cube;
 CMesh        mesh_view_volume;
@@ -302,6 +303,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_bones.create();
 
 	is_ok &= ctes_blur.create();
+	is_ok &= ctes_sharpen.create();
 
 	is_ok &= createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -330,6 +332,7 @@ void renderUtilsDestroy() {
 	ctes_bones.destroy();
 
 	ctes_blur.destroy();
+	ctes_sharpen.destroy();
 
 	axis.destroy();
 	grid.destroy();

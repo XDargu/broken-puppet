@@ -73,4 +73,18 @@ public:
 	void print(std::string text);
 };
 
+struct TSharpenStep;
+
+class CPostProcessOptioner
+{
+public:
+	TSharpenStep* sharpen;
+
+	static CPostProcessOptioner& get();
+
+	CPostProcessOptioner();
+	~CPostProcessOptioner();
+	void init();
+};
+
 #endif

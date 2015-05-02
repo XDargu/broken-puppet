@@ -408,6 +408,9 @@
     <ClInclude Include="render\blur_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="render\sharpen_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -726,6 +729,9 @@
       <Filter>components\render</Filter>
     </ClCompile>
     <ClCompile Include="render\blur_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\sharpen_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
   </ItemGroup>

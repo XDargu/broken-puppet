@@ -10,6 +10,8 @@
 #include "render/ctes/shader_ctes.h"
 
 Texture2D txDiffuse : register(t0);
+Texture2D txNormal : register(t1);
+
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
 
@@ -20,6 +22,8 @@ struct VS_TEXTURED_OUTPUT
 	float2 UV     : TEXCOORD0;
 	float3 Normal : NORMAL;
 	float4 wPos    : TEXCOORD1;
+	float4 wTangent : TANGENT;
+
 };
 
 //--------------------------------------------------------------------------------------
@@ -31,6 +35,7 @@ VS_TEXTURED_OUTPUT VS(
 	, float3 inormal : NORMAL
 	, uint4  bone_ids : BONEIDS
 	, float4 weights : WEIGHTS
+	, float4 Tangent : TANGENT
 	)
 {
 	VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
@@ -48,6 +53,11 @@ VS_TEXTURED_OUTPUT VS(
 	output.Normal = mul(inormal, (float3x3) skin_mtx);
 	output.UV = float2(iuv.x, 1 - iuv.y);
 	//output.UV = bone_ids.xy / 50.;
+
+	// Rotate the tangent and keep the w value
+	output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
+	output.wTangent.w = Tangent.w;
+
 	return output;
 }
 
@@ -78,12 +88,12 @@ float4 PSTextured(
 	float  cos_beta = saturate(dot(ER, L));
 	float  spec_amount = pow(cos_beta, 20.);
 	depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
-	acc_light = float4(1,1,1,1);
+	acc_light = diffuse_amount;
 	
 	normal = (float4(N, 1) + 1.) * 0.5;
 
 	float4 albedo = txDiffuse.Sample(samWrapLinear, input.UV);
 	//return (albedo + spec_amount) * diffuse_amount;
-	return albedo * diffuse_amount;
+	return albedo ;
 }
 

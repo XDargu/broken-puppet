@@ -98,5 +98,6 @@ extern CMesh        mesh_view_volume;
 
 // Post process
 extern	CShaderCte<TCtesBlur> ctes_blur;
+extern	CShaderCte<TCtesSharpen> ctes_sharpen;
 
 #endif
