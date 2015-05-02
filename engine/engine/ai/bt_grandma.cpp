@@ -44,7 +44,9 @@ void bt_grandma::create(string s)
 	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
 	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
+	
 	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
+	
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
 	addChild("XSecAttack", "TooCloseAttack23", ACTION, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
@@ -66,10 +68,12 @@ void bt_grandma::create(string s)
 
 	radius = 6.f;
 	ind_path = 0;
-	path_change_time = 0.f;
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	center = m_transform->position;
 	character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = PxVec3(0, 0, 0);
+	player = CEntityManager::get().getByName("Player");
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -133,7 +137,10 @@ int bt_grandma::actionIdle()
 	bool aux_on_enter = on_enter;
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, last_look_direction);
+	//((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, );
+
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
 
 	if (state_time >= 2){
 		return LEAVE;
@@ -154,6 +161,9 @@ int bt_grandma::actionSearchPoint()
 
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
 
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+
 	ind_path = 0;
 	return LEAVE;
 
@@ -167,41 +177,21 @@ int bt_grandma::actionWander()
 	bool aux_on_enter = on_enter;
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	jump = false;
 	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
-
-			if (state_time - path_change_time > 1.5f){
-				physx::PxRaycastBuffer buf;
-				Physics.raycastAll(m_transform->position + XMVectorSet(0, 0.1f, 0, 0), XMVector3Normalize(path[ind_path] - m_transform->position), 1.f, buf);
-				for (int i = 0; i < (int)buf.nbTouches; i++)
-				{
-					TCompCharacterController* character_cntrl = (TCompCharacterController*)character_controller;
-					TCompRigidBody* own_rigid = character_cntrl->getRigidBody();
-					if (buf.touches[i].actor != (own_rigid->rigidBody)) {
-						//path_change_time = state_time;
-						//CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
-						ind_path = 0;
-						return LEAVE;
-					}
-				}
-			}
-			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(path[ind_path] - m_transform->position));
-			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
+			chasePoint(m_transform, path[ind_path]);
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
 				ind_path++;
-				//prev_path_change_time = path_change_time;
 				return STAY;
-			}
-			else{
-				//prev_path_change_time = path_change_time;
+			}else{
 				return STAY;
 			}
 		}
 		else{
 			ind_path = 0;
-			last_look_direction = front;
+			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}else{
@@ -242,7 +232,27 @@ int bt_grandma::actionSelectRole()
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
-	return LEAVE;
+	wander_target = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (path.size() > 0){
+		if (ind_path < path.size()){
+			chasePoint(m_transform, path[ind_path]);
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+				ind_path++;
+				return STAY;
+			}
+			else{
+				return STAY;
+			}
+		}else{
+			ind_path = 0;
+			return LEAVE;
+		}
+	}else{
+		ind_path = 0;
+		return LEAVE;
+	}
 }
 
 //First attack
@@ -506,6 +516,9 @@ void bt_grandma::needleViewedSensor(){
 void bt_grandma::update(float elapsed){
 	//playerViewedSensor();
 	//needleViewedSensor();
+	((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
+	((TCompCharacterController*)character_controller)->jumpPower = 0.7f;
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 	this->recalc(elapsed);
 }
 
@@ -520,3 +533,18 @@ bool bt_grandma::trueEveryXSeconds(float time)
 	return false;
 }
 
+void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
+	physx::PxRaycastBuffer buf;
+	Physics.raycastAll(own_position->position + XMVectorSet(0, 0.1f, 0, 0), own_position->getFront(), 1.f, buf);
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		TCompCharacterController* character_cntrl = (TCompCharacterController*)character_controller;
+		TCompRigidBody* own_rigid = character_cntrl->getRigidBody();
+		//CEntity* e = CHandle(this).getOwner();
+		if (buf.touches[i].actor != (own_rigid->rigidBody)) {
+			jump = true;
+		}
+	}
+	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
+	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
+}

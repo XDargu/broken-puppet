@@ -38,9 +38,6 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 		, *col->collider
 		, density);
 
-	//Asignación de mascara al actor para el filtrado de colisiones
-	//setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
-
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	physx::PxReal threshold = 15000.f;
 	rigidBody->setContactReportThreshold(threshold);
@@ -87,9 +84,6 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		Physics.XMVECTORToPxQuat(trans->rotation))
 		, *col->collider
 		, temp_density);
-
-	//Asignación de mascara al actor para el filtrado de colisiones
-	//setupFiltering(rigidBody, FilterGroup::eACTOR, FilterGroup::eACTOR);
 
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	physx::PxReal threshold = 15000.f;

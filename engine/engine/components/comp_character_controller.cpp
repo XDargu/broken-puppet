@@ -22,9 +22,6 @@ void TCompCharacterController::loadFromAtts(const std::string& elem, MKeyValue &
 	// Death velocity
 	max_vel_y = -10.f;
 
-	// Set up the collider
-	//setupFiltering(coll->collider, FilterGroup::eENEMY, FilterGroup::eENEMY);
-
 	physx::PxTransform relativePose(physx::PxVec3(0, (coll->getRadius() + coll->getHalfHeight()), 0), physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 	coll->collider->setLocalPose(relativePose);
 
@@ -34,7 +31,6 @@ void TCompCharacterController::loadFromAtts(const std::string& elem, MKeyValue &
 	rigid->rigidBody->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 	rigid->rigidBody->setName(name->name);
 
-	//setupFiltering(rigid->rigidBody, FilterGroup::eENEMY, FilterGroup::eENEMY);
 	//float threshold = 3500.f;
 	physx::PxReal threshold = 1000.f;
 	rigid->rigidBody->setContactReportThreshold(threshold);
