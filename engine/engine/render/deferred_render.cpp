@@ -42,7 +42,7 @@ void CDeferredRender::generateGBuffer(const CCamera* camera) {
 	float clear_depth[4] = { 1.f, 1.f, 1.f, 1.f };
 	rt_depth->clearColorBuffer(clear_depth);
 
-	texture_manager.getByName("Zthe_light")->activate(6);
+	//texture_manager.getByName("Zthe_light")->activate(6);
 
 	render_manager.renderAll(camera);
 }

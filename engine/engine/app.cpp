@@ -495,12 +495,12 @@ void CApp::render() {
 	activateTextureSamplers();
 	CCamera camera = *(TCompCamera*)activeCamera;
 
-	CHandle h_light = entity_manager.getByName("the_light");
+	/*CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	if (e_light) {
 		TCompCamera* cam_light = e_light->get<TCompCamera>();
 		activateLight(*cam_light, 4);
-	}
+	}*/
 
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 

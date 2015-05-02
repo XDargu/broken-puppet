@@ -125,6 +125,9 @@ void FSMPlayerLegs::Walk(float elapsed){
 			animation = 12;
 		}
 	}
+	else if (movement_dir.z < 0) {
+		animation = 16;
+	}
 
 	if (animation != current_animation_id) {
 		skeleton->stopAnimation(current_animation_id);
@@ -179,7 +182,7 @@ void FSMPlayerLegs::Run(float elapsed){
 
 	if (movement_dir.z == 0) {
 		if (movement_dir.x < 0) {
-			animation = 13;
+			animation = 15;
 		}
 		else if (movement_dir.x > 0) {
 			animation = 14;

@@ -62,6 +62,7 @@ void TCompShadows::draw() {
 	rt.getZTexture()->activate(6);
 
 	// Activate color, radius and intensity
+	activateLight(*c, 4);
 	activateDirLight(this, c->getPosition(), 5);
 
 	mesh_view_volume.activateAndRender();
