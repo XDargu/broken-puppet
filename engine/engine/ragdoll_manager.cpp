@@ -17,6 +17,11 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		float radius = atts.getFloat("radius", 0.2);
 		float half_height = atts.getFloat("height", 0.2) / 2;
 
+		XMVECTOR rotation_in_max_coords = atts.getQuat("rotation");
+		XMVECTOR max2mcv = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(0));
+
+		XMVECTOR rotation = XMQuaternionMultiply(rotation_in_max_coords, max2mcv);
+
 		std::string bone_name = atts.getString("name", "unknown");
 		int bone_id = model->getBoneId(bone_name);
 
@@ -26,7 +31,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		XMVECTOR corrector = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(90));
 
-		cal_mtx *= DX2CalQuat(corrector);
+		//cal_mtx *= DX2CalQuat(corrector);
 
 		XMVECTOR dx_pos = Cal2DX(cal_pos);
 		XMVECTOR dx_rot = Cal2DX(cal_mtx);
@@ -43,9 +48,9 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 			true);
 
 		// Rotate the capsule (we want the capsule in a vertical position)
-		//physx::PxTransform relativePose(physx::PxVec3(0, (radius + half_height), 0), physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
+		//physx::PxTransform relativePose(physx::PxVec3((radius + half_height), 0, 0), physx::PxQuat(deg2rad(90), physx::PxVec3(0, 0, 1)));
 		//physx::PxTransform relativePose(physx::PxVec3(0, (radius + half_height), 0));
-		physx::PxTransform relativePose(physx::PxVec3(radius + half_height, 0, 0));
+		physx::PxTransform relativePose(physx::PxVec3(radius + half_height, 0, 0)/*, Physics.XMVECTORToPxQuat(rotation)*/);
 		collider->setLocalPose(relativePose);
 
 		/*PxShape* collider = Physics.gPhysicsSDK->createShape(

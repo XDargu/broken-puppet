@@ -13,10 +13,21 @@ clearlistener()
 	fn getBoneRigidbody obj = (
 		
 		if (obj.modifiers[#PhysX_Rigid_Body] == undefined) then return ""
+		
+		local obj_rot  = biped.getTransform obj #rotation
+		
+		local mObj = max2mcvMatrix mJoint
+		local qObj = mObj.rotationPart as quat
+		qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
 
 		local mString = "<BoneRigidbody "
 		
 		mString += "name= \"" + obj.name + "\" "
+		mString += "rotation= \"" + obj_rot.x as string+" "\
+												+ obj_rot.y as string+" "\
+												+ obj_rot.z as string+" "\
+												+ obj_rot.w as string+"\" "
+		
 		mString += "density= \"" + obj.modifiers[#PhysX_Rigid_Body].density as string + "\" "				
 		mString += "staticfriction= \"" + obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\" "
 		mString += "dynamicfriction= \"" + obj.modifiers[#PhysX_Rigid_Body].DynamicFriction as string + "\" "
