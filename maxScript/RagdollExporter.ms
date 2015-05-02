@@ -9,16 +9,28 @@ clearlistener()
 	local tools_path = engine_path + "tools\\"
 	local collider_path = mesh_path + "colliders\\"
 	
+	fn getRelativeTransform obj parent = (	
+		return (obj.transform * (inverse parent.transform))
+	)	
+	
+	fn getRelativeTransform obj_pos obj_rot parent = (
+		local helperDummy = dummy()
+		helperDummy.rotation = obj_rot
+		helperDummy.pos = obj_pos
+		
+		delete helperDummy
+		
+		return (obj.transform * (inverse parent.transform))		
+	)
 	
 	fn getBoneRigidbody obj = (
 		
 		if (obj.modifiers[#PhysX_Rigid_Body] == undefined) then return ""
 		
+		local obj_pos  = biped.getTransform obj #pos
 		local obj_rot  = biped.getTransform obj #rotation
 		
-		local mObj = max2mcvMatrix mJoint
-		local qObj = mObj.rotationPart as quat
-		qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+		
 
 		local mString = "<BoneRigidbody "
 		
