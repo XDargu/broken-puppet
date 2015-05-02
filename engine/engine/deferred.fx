@@ -118,7 +118,7 @@ float getShadowAt(float4 wPos) {
 
   float amount = tapAt(center, depth);
 
-  float sz = 2. / 512.;
+  float sz = 1. / 1024;
   amount += tapAt(center + float2(sz, sz), depth);
   amount += tapAt(center + float2(-sz, sz), depth);
   amount += tapAt(center + float2(sz, -sz), depth);

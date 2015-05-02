@@ -70,4 +70,11 @@ cbuffer TCtesSharpen SHADER_REGISTER(b3)
 	float dummy_sharpen, dummy_sharpen2, dummy_sharpen3;
 };
 
+cbuffer TCtesSSAO SHADER_REGISTER(b3)
+{
+	float4 ssao_delta;
+	float radius;
+	float dummy_ssao, dummy_ssao2, dummy_ssao3;
+};
+
 #endif

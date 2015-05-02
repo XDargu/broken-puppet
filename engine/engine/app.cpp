@@ -39,6 +39,7 @@ using namespace physx;
 #include "entity_inspector.h"
 #include "render\blur_step.h"
 #include "render\sharpen_step.h"
+#include "render\ssao_step.h"
 
 static CApp the_app;
 
@@ -105,6 +106,7 @@ float fps;
 bool debug_mode;
 
 TSharpenStep sharpen;
+TSSAOStep ssao;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -306,6 +308,7 @@ bool CApp::create() {
 	texture_manager.getByName("storm")->activate(4);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
+	is_ok &= ssao.create("ssao", xres, yres, 1);
 
 	assert(is_ok);
 
@@ -383,7 +386,7 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("deferred_point_lights");
 		//render_techniques_manager.reload("deferred_dir_lights");
 		//render_techniques_manager.reload("deferred_resolve");
-		render_techniques_manager.reload("sharpen");
+		render_techniques_manager.reload("ssao");
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -512,6 +515,7 @@ void CApp::render() {
 	deferred.render(&camera, *rt_base);
 
 	sharpen.apply(rt_base);
+	//ssao.apply(sharpen.getOutput());
 	//bs2.apply(bs.getOutput());
 
 	::render.activateBackbuffer();
@@ -521,10 +525,14 @@ void CApp::render() {
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
 	
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
-	sharpen.getOutput()->activate(1);
-	texture_manager.getByName("rt_depth")->activate(2);
+	//ssao.getOutput()->activate(1);
+	
 
-	drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
+
+	//texture_manager.getByName("rt_depth")->activate(2);
+
+	//drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
+	drawTexture2D(0, 0, xres, yres, sharpen.getOutput());
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
