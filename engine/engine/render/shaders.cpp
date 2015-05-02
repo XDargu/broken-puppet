@@ -128,6 +128,9 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 			decl = &vdcl_position_uv_normal_skin;
 		else if (vs_decl_name == "vdcl_position_uv_normal_tangent")
 			decl = &vdcl_position_uv_normal_tangent;
+		else if (vs_decl_name == "vdcl_position_uv_normal_skin_tangent")
+			decl = &vdcl_position_uv_normal_skin_tangent;
+		
 		else
 			fatal("Unsupported vdcl %s", vs_decl_name.c_str());
 		assert(decl != nullptr);

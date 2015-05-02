@@ -47,6 +47,7 @@ public:
 		, RUN
 		, VIEWER_MOVE_CAM
 		, VIEWER_ZOOM
+		, F8_KEY
 		, BUTTONS_COUNT
 		
 	};

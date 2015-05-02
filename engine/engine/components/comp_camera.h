@@ -35,6 +35,8 @@ public:
 		TCompTransform* m_t = transform;
 		position = m_t->position;
 		front = m_t->getFront();
+		right = -m_t->getLeft();
+		up = m_t->getUp();
 	}
 
 	void updateViewProjection() {

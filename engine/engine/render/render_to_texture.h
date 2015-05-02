@@ -1,6 +1,6 @@
 #ifndef INC_RENDER_TO_TEXTURE_H_
 #define INC_RENDER_TO_TEXTURE_H_
-#pragma comment( lib, "dxguid.lib")
+
 #include "texture.h"
 
 class CRenderToTexture : public CTexture {
@@ -21,7 +21,7 @@ class CRenderToTexture : public CTexture {
 
 public:
 
-	enum TZBufferType { USE_BACK_ZBUFFER, USE_OWN_ZBUFFER };
+	enum TZBufferType { USE_BACK_ZBUFFER, USE_OWN_ZBUFFER, NO_ZBUFFER };
 
 	CRenderToTexture();
 	bool create(const char* name, int xres, int yres, DXGI_FORMAT color_fmt, DXGI_FORMAT depth_fmt
