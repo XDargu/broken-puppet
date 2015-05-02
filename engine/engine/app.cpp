@@ -262,7 +262,7 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file-backup.xml");
 
 	// Create debug meshes
 	bool is_ok = createGrid(grid, 10);
@@ -702,7 +702,7 @@ void CApp::renderDebugEntities() {
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(300, 30, s_fps.c_str());
 
-	//getObjManager<TCompSkeleton>()->renderDebug3D();
+	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------

@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "nav_mesh_manager.h"
 #include "entity_manager.h"
+#include "physics_manager.h"
 
 static CNav_mesh_manager the_nav_mesh_manager;
 CNavmesh* nav_mesh;
@@ -199,6 +200,11 @@ void CNav_mesh_manager::pathRender(){
 void CNav_mesh_manager::clearNavMesh(){
 	keep_updating_navmesh = false;
 	nav_mesh_input.clearInput();
+}
+
+XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
+	CNavmeshQuery navMeshQuery(nav_mesh);
+	return navMeshQuery.getRandomPoint(center, radius, current_pos);
 }
 
 CNav_mesh_manager::CNav_mesh_manager()

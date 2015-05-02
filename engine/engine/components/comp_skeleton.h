@@ -6,12 +6,13 @@
 
 class CalModel;
 class CalBone;
-
+struct CalTransform;
 
 struct TCompSkeleton : TBaseComponent {
 private:
 	CHandle h_ragdoll;
-	TTransform* bone_ragdoll_transforms;
+	CalTransform* bone_ragdoll_transforms;
+	CCoreModel* core_model;
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
@@ -29,8 +30,12 @@ public:
 	void loopAnimation(int id);
 	void playAnimation(int id);
 
+	float getAnimationDuration(int id);
+
 	void uploadBonesToGPU() const;
 	XMVECTOR getPositionOfBone(int id);
+
+	CCoreModel* getCCoreModel() { return core_model; }
 };
 
 #endif

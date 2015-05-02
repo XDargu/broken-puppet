@@ -387,7 +387,9 @@
     <ClInclude Include="components\comp_joint_hinge.h">
       <Filter>components\physics</Filter>
     </ClInclude>
-<<<<<<< HEAD
+    <ClInclude Include="components\comp_joint_d6.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
     <ClInclude Include="ai\bt_grandma.h">
       <Filter>ai\behaviour trees</Filter>
     </ClInclude>
@@ -399,10 +401,14 @@
     </ClInclude>
     <ClInclude Include="components\comp_player_position_sensor.h">
       <Filter>components\ai\enemies\sensors</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="components\comp_sensor_distance_player.h">
+      <Filter>components\ai\enemies\sensors</Filter>
 =======
-    <ClInclude Include="components\comp_joint_d6.h">
-      <Filter>components\physics</Filter>
->>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
+    <ClInclude Include="ragdoll_manager.h">
+      <Filter>skeleton</Filter>
+>>>>>>> 5dd6eb1b5576d274b5670a15c978cfc7347c5fb4
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -694,7 +700,9 @@
     <ClCompile Include="components\comp_joint_hinge.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
-<<<<<<< HEAD
+    <ClCompile Include="components\comp_joint_d6.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
     <ClCompile Include="ai\bt_grandma.cpp">
       <Filter>ai\behaviour trees</Filter>
     </ClCompile>
@@ -709,10 +717,14 @@
     </ClCompile>
     <ClCompile Include="components\comp_character_controller.cpp">
       <Filter>components\controllers</Filter>
+    </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="components\comp_sensor_distance_player.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
 =======
-    <ClCompile Include="components\comp_joint_d6.cpp">
-      <Filter>components\physics</Filter>
->>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
+    <ClCompile Include="ragdoll_manager.cpp">
+      <Filter>skeleton</Filter>
+>>>>>>> 5dd6eb1b5576d274b5670a15c978cfc7347c5fb4
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

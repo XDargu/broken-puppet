@@ -7,8 +7,10 @@
 class FSMPlayerLegs : public aifsmcontroller
 {
 private:
-	int current_animation_id;
+	int current_animation_id;	
 public:
+
+	physx::PxVec3 movement_dir;
 
 	CHandle comp_character_controller;
 	CHandle comp_rigidbody;
@@ -22,6 +24,7 @@ public:
 
 	CHandle life;
 
+	bool canThrow;
 	bool falling;
 	float last_hit;
 	float walk_speed;
@@ -37,6 +40,7 @@ public:
 	void Jump(float elapsed);
 	void Run(float elapsed);
 	void ThrowString(float elapsed);
+	void ThrowStringPartial(float elapsed);
 	void PullString(float elapsed);
 	void Fall(float elapsed);
 	void Land(float elapsed);

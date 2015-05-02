@@ -3,7 +3,7 @@
     <name name="abuela"/>
     <transform position="0 0 0" rotation="0 0 0 1"/>
     <skeleton name="abuela"/>
-	<ragdoll/>
+	<ragdoll name="abuela"/>
 	<aiFSMcontroller/>
   </entity>
   <entity>

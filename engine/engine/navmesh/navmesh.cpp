@@ -31,7 +31,7 @@ void CNavmesh::build() {
 	config.bmax[2] = m_input.aabb_max.z;
 	config.tileSize = 32;
 	config.cs = 0.3f;
-	config.ch = 0.3f;
+	config.ch = 0.1f;
 
 	// TILES ---------------------------
 	m_cellsize = config.cs;
@@ -76,7 +76,7 @@ dtNavMesh* CNavmesh::create(const rcConfig& cfg) {
 		m_cfg.ch = cfg.ch;
 		m_cfg.walkableSlopeAngle = cfg.walkableSlopeAngle;
 		m_cfg.walkableHeight = (int)ceilf(cfg.walkableHeight / m_cfg.ch);
-		m_cfg.walkableClimb = (int)floorf(cfg.walkableClimb / m_cfg.ch * 0.4f);
+		m_cfg.walkableClimb = (int)floorf(cfg.walkableClimb / m_cfg.ch * 0.3f);
 		m_cfg.walkableRadius = (int)ceilf(cfg.walkableRadius / m_cfg.cs * 0.5f);
 		m_cfg.maxEdgeLen = (int)(cfg.maxEdgeLen / cfg.cs);
 		m_cfg.maxSimplificationError = cfg.maxSimplificationError;

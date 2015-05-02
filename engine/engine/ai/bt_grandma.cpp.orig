@@ -149,9 +149,32 @@ int bt_grandma::actionSearchPoint()
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();	
 
-	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
-							, XMVectorGetY(m_transform->position)
+<<<<<<< HEAD
+	float center_x = XMVectorGetX(center);
+	float center_y = XMVectorGetY(center);
+	float center_z = XMVectorGetZ(center);
+	float max_x = center_x + radius;
+	float max_y = center_y + radius;
+	float max_z = center_z + radius;
+	float min_x = center_x - radius;
+	float min_y = center_y - radius;
+	float min_z = center_z - radius;
+	srand(static_cast<float>(time(NULL)));
+	float rand_num_x = (max_x - min_x) * ((((float)rand()) / (float)RAND_MAX)) + min_x;
+	//float rand_num_y = (max_y - center_y) * ((((float)rand()) / (float)RAND_MAX)) + center_y;
+	float rand_num_z = (max_z - min_z) * ((((float)rand()) / (float)RAND_MAX)) + min_z;
 
+	rand_point = XMVectorSet(
+							rand_num_x
+							, XMVectorGetY(m_transform->position)
+							, rand_num_z, 0);
+
+	//rand_point = XMVectorSet(XMVectorGetX(m_transform->position) + 1.f, 0.f, XMVectorGetZ(m_transform->position) + 1.f,0.f);
+	
+=======
+	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
+
+>>>>>>> 5dd6eb1b5576d274b5670a15c978cfc7347c5fb4
 	ind_path = 0;
 	return LEAVE;
 
@@ -166,13 +189,19 @@ int bt_grandma::actionWander()
 	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
-			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
+<<<<<<< HEAD
+
 			XMVECTOR aux_position = path[ind_path];
 			XMVectorSetY(aux_position, XMVectorGetY(m_transform->position));
 
 			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(aux_position - m_transform->position));
 
 			if ((V3DISTANCE(m_transform->position, aux_position) < 0.8f)){
+=======
+			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(path[ind_path] - m_transform->position));
+			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
+>>>>>>> 5dd6eb1b5576d274b5670a15c978cfc7347c5fb4
 				ind_path++;
 				return STAY;
 			}
