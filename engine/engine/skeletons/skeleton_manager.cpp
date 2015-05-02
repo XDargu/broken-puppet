@@ -102,6 +102,14 @@ void CCoreModel::onStartElement(const std::string &elem, MKeyValue &atts) {
       bone_corrections.push_back(bc);
   }
 
+  else if (elem == "BoneRigidbody") {
+
+  }
+
+  else if (elem == "jointD6") {
+
+  }
+
 }
 
 

@@ -21,6 +21,7 @@ void FSMPlayerLegs::Init()
 	AddState("fbp_Jump", (statehandler)&FSMPlayerLegs::Jump);
 	AddState("fbp_Run", (statehandler)&FSMPlayerLegs::Run);
 	AddState("fbp_ThrowString", (statehandler)&FSMPlayerLegs::ThrowString);
+	AddState("fbp_ThrowStringPartial", (statehandler)&FSMPlayerLegs::ThrowStringPartial);
 	AddState("fbp_PullString", (statehandler)&FSMPlayerLegs::PullString);
 	AddState("fbp_Fall", (statehandler)&FSMPlayerLegs::Fall);
 	AddState("fbp_Land", (statehandler)&FSMPlayerLegs::Land);
@@ -48,6 +49,7 @@ void FSMPlayerLegs::Init()
 	last_hit = 0.f;
 	state_time = 0.f;
 	falling = false;
+	canThrow = false;
 
 	//run_speed = ((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier;
 	run_speed = 6;
@@ -64,7 +66,9 @@ void FSMPlayerLegs::Idle(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompSkeletonIK* skeleton_ik = comp_skeleton_ik;
 
-	skeleton_ik->active = state_time > 0.3f;
+	canThrow = true;
+
+	skeleton_ik->active = false;// state_time > 0.3f;
 	
 	int animation = torso->up_animation ? 8 : 0;
 
@@ -108,8 +112,19 @@ void FSMPlayerLegs::Idle(float elapsed){
 
 void FSMPlayerLegs::Walk(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
+
+	canThrow = true;
 	
 	int animation = torso->up_animation ? 9 : 1;
+
+	if (movement_dir.z == 0) {
+		if (movement_dir.x < 0) {
+			animation = 13;
+		}
+		else if (movement_dir.x > 0) {
+			animation = 12;
+		}
+	}
 
 	if (animation != current_animation_id) {
 		skeleton->stopAnimation(current_animation_id);
@@ -140,7 +155,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
-			ChangeState("fbp_ThrowString");
+			ChangeState("fbp_ThrowStringPartial");
 		}
 		if (falling){
 			skeleton->stopAnimation(9);
@@ -158,7 +173,18 @@ void FSMPlayerLegs::Walk(float elapsed){
 void FSMPlayerLegs::Run(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	canThrow = true;
+
 	int animation = torso->up_animation ? 10 : 2;
+
+	if (movement_dir.z == 0) {
+		if (movement_dir.x < 0) {
+			animation = 13;
+		}
+		else if (movement_dir.x > 0) {
+			animation = 14;
+		}
+	}
 
 	if (animation != current_animation_id) {
 		skeleton->stopAnimation(current_animation_id);
@@ -189,7 +215,7 @@ void FSMPlayerLegs::Run(float elapsed){
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
-			ChangeState("fbp_ThrowString");
+			ChangeState("fbp_ThrowStringPartial");
 		}
 		if (falling){
 			skeleton->stopAnimation(10);
@@ -208,6 +234,8 @@ void FSMPlayerLegs::Run(float elapsed){
 void FSMPlayerLegs::Jump(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	canThrow = true;
+
 	if (on_enter) {
 		skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
@@ -222,7 +250,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 		return;
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
-		ChangeState("fbp_ThrowString");
+		ChangeState("fbp_ThrowStringPartial");
 		skeleton->stopAnimation(6);
 	}
 	if (falling){
@@ -231,13 +259,35 @@ void FSMPlayerLegs::Jump(float elapsed){
 	}
 }
 
-
-
 void FSMPlayerLegs::ThrowString(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	canThrow = false;
+	
 	if (on_enter) {
+		skeleton->loopAnimation(0);
 		skeleton->playAnimation(4);
+	}
+
+	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+
+	if (state_time >= skeleton->getAnimationDuration(4) && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
+		skeleton->stopAnimation(0);
+		ChangeState("fbp_Idle");
+	}
+}
+
+void FSMPlayerLegs::ThrowStringPartial(float elapsed){
+
+	canThrow = false;
+
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	if (on_enter) {
+		skeleton->playAnimation(11);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -251,16 +301,28 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 }
 
 void FSMPlayerLegs::PullString(float elapsed){
+
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	canThrow = false;
+
+	if (on_enter) {
+		skeleton->loopAnimation(15);
+	}
+
 	TCompThirdPersonCameraController* camera_controller = ((CEntity*)entity_camera)->get<TCompThirdPersonCameraController>();
 	camera_controller->offset = physx::PxVec3(0.5f, -0.22f, 1.07f);
 	
 	if (state_time > 2) {
+		skeleton->stopAnimation(15);
 		ChangeState("fbp_Idle");
 	}
 }
 
 void FSMPlayerLegs::Fall(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
+
+	canThrow = false;
 
 	if (on_enter) {
 		skeleton->loopAnimation(6);
@@ -284,6 +346,9 @@ void FSMPlayerLegs::Fall(float elapsed){
 }
 
 void FSMPlayerLegs::Land(float elapsed){
+
+	canThrow = false;
+
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
@@ -309,6 +374,9 @@ void FSMPlayerLegs::Land(float elapsed){
 }
 
 void FSMPlayerLegs::WrongFall(float elapsed){
+
+	canThrow = false;
+
 	TCompSkeleton* skeleton = comp_skeleton;
 
 	if (on_enter) {
@@ -328,6 +396,9 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 }
 
 void FSMPlayerLegs::WrongLand(float elapsed){
+
+	canThrow = false;
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_landing");
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
@@ -345,7 +416,7 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		EvaluateMovement(true, elapsed);
 	}
 
-	if (state_time >= 0.2){
+	if (state_time >= 0.5){
 		skeleton->stopAnimation(7);
 		ChangeState("fbp_Idle");
 	}
@@ -354,6 +425,9 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 void FSMPlayerLegs::ProcessHit(float elapsed){}
 
 void FSMPlayerLegs::Hurt(float elapsed){
+
+	canThrow = false;
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_hurt");
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
@@ -366,6 +440,9 @@ void FSMPlayerLegs::Hurt(float elapsed){
 }
 
 void FSMPlayerLegs::Ragdoll(float elapsed){
+
+	canThrow = false;
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_ragdoll");
 
 	TCompCharacterController* character_controller = (TCompCharacterController*)comp_character_controller;
@@ -477,9 +554,12 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 		jump = true;
 	}
 
+	movement_dir = movement_vector;
+
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
 	XMVECTOR projected_front = XMVector3Cross(up, XMVector3Cross(camera_transform->getFront(), up));
 	movement_vector = rotation.rotate(movement_vector);
+
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(projected_front);
 	if (!lookAtCamera)
 		dir = Physics.XMVECTORToPxVec3(m_transform->getFront());

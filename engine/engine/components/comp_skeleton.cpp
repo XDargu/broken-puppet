@@ -47,10 +47,76 @@ CalQuaternion getRotationFromAToB(CalVector a, CalVector b, float unit_amount) {
   return DX2CalQuat(q);
 }
 
+struct CalTransform {
+	CalVector pos;
+	CalQuaternion rot;
+
+	
+
+	CalTransform()
+	{		
+		pos = CalVector(0, 0, 0);
+		rot = CalQuaternion(0, 0, 0, 1);
+	}
+
+	CalTransform(CalVector p, CalQuaternion q) {
+		pos = p;
+		rot = q;
+	}
+
+	void invert() {
+		rot.invert();
+		pos *= rot;
+	}
+
+	CalTransform operator*(const CalTransform& ct) {
+
+		// Lo que hace Cal:
+
+		/*m_translationAbsolute = m_translation;
+		m_translationAbsolute *= pParent->getRotationAbsolute();
+		m_translationAbsolute += pParent->getTranslationAbsolute();
+
+		m_rotationAbsolute = m_rotation;
+		m_rotationAbsolute *= pParent->getRotationAbsolute();*/
+
+		/*CalQuaternion vector_as_quat = CalQuaternion(pos.x, pos.y, pos.z, 0);
+		CalQuaternion ct_rot_conj = ct.rot;
+		ct_rot_conj.conjugate();
+		CalQuaternion result = ct.rot * vector_as_quat * ct_rot_conj;
+		CalVector result_v = CalVector(result.x, result.y, result.z);*/
+
+		// pointOnMatB = matB*(inverseMatA*pointOnMatA);
+
+		XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+		XMVECTOR one = XMVectorSet(1, 1, 1, 1);
+		XMMATRIX cat_mat = XMMatrixTransformation(zero, zero, one, zero, Cal2DX(ct.rot), Cal2DX(ct.pos));
+		XMVECTOR dx_pos = XMVector3Transform(Cal2DX(pos), cat_mat);
+
+		CalVector n_pos = DX2Cal(dx_pos);
+		
+		/*CalQuaternion vector_as_quat = CalQuaternion(pos.x, pos.y, pos.z, 0);
+		CalQuaternion ct_rot_conj = ct.rot;
+		ct_rot_conj.conjugate();
+		CalQuaternion result = ct.rot * vector_as_quat * ct_rot_conj;
+		CalVector result_v = CalVector(result.x, result.y, result.z);*/
+				
+		return CalTransform(
+			
+			// Vector transform o quat transform vector
+			// quat * vector * quaternion conjugado, ampliando vector a quat con 0 a W
+			
+			n_pos,
+			ct.rot * rot
+			);
+		
+	}
+};
+
 void CCoreModel::TBoneCorrector::apply(CalModel* model, CalVector world_pos, float amount) {
   CalBone* bone = model->getSkeleton()->getBone(bone_id);
   assert(bone);
-
+  
   // My coords in world coords
   CalVector bone_abs_pos = bone->getTranslationAbsolute();
 
@@ -84,7 +150,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 
   std::string skel_name = atts["name"];
-  CCoreModel* core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
+  core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
   model = new CalModel(core_model);
   model->getMixer()->blendCycle(0, 1.0, 0.f);
 
@@ -96,23 +162,21 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   for (int i = 0; i < mesh->getNGroups(); ++i )
     render_manager.addKey(mesh, mat, i, CHandle(this), &active);
 
-  TCtesBones* cpu_bones = ctes_bones.get();
-  float*      fout = (float*)cpu_bones->bones;
-
+  // Guardar estado inicial del esqueleto
+  model->update(0.05f);
   CalSkeleton* skel = model->getSkeleton();
   auto& cal_bones = skel->getVectorBone();
 
   int size = cal_bones.size();
-  bone_ragdoll_transforms = new TTransform[size];
+  bone_ragdoll_transforms = new CalTransform[size];
 
   for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
 	  CalBone* bone = cal_bones[bone_idx];
 
-	  bone_ragdoll_transforms[bone_idx] = TTransform(
-		    Cal2DX(bone->getTranslationAbsolute())
-		  , Cal2DX(bone->getRotation())
-		  , XMVectorSet(1, 1, 1, 1)
-	  );
+	  bone_ragdoll_transforms[bone_idx] = CalTransform(
+		  bone->getTranslationAbsolute()
+		  , bone->getRotationAbsolute()
+		  );
   }
 
 }
@@ -177,33 +241,59 @@ void TCompSkeleton::update(float elapsed) {
 		  if (rigid_bone) {
 			  CalBone* bone = cal_bones[bone_idx];
 
-			  CalVector parent_pos = CalVector(0, 0, 0);
-			  CalQuaternion parent_rot = CalQuaternion(0, 0, 0, 1);
+			  CalVector parent_abs_pos = CalVector(0, 0, 0);
+			  CalQuaternion parent_abs_rot = CalQuaternion(0, 0, 0, 1);
 
+			  // Parent abs coords
 			  int parent_id = bone->getCoreBone()->getParentId();
 			  if (parent_id != -1) {
-				  parent_pos = cal_bones[parent_id]->getTranslation();
-				  parent_rot = cal_bones[parent_id]->getRotation();
+				  parent_abs_pos = cal_bones[parent_id]->getTranslationAbsolute();
+				  parent_abs_rot = cal_bones[parent_id]->getRotationAbsolute();
+			  }
+			  else {
+				  parent_abs_pos = bone->getTranslationAbsolute();
+				  parent_abs_rot = bone->getRotationAbsolute();
 			  }
 
-			  CalQuaternion cal_rot = bone->getRotationAbsolute();  // quat
-			  CalVector  cal_pos = bone->getTranslationBoneSpace(); // vec3
+			  CalQuaternion cal_abs_rot = bone->getRotationAbsolute();  // quat
+			  CalVector  cal_abs_pos = bone->getTranslationAbsolute(); // vec3
 
+			  // Physics abs coords
 			  CalVector rigid_abs_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p));
 			  CalQuaternion rigid_abs_rot = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
 
-			  bone->setTranslation(rigid_abs_pos - parent_pos);			  
-			  
-			  CalQuaternion m_rotationBoneSpace = bone->getCoreBone()->getRotationBoneSpace();
-			  rigid_abs_rot *= parent_rot;
-			  m_rotationBoneSpace *= rigid_abs_rot;
+			  CalQuaternion parent_to_local = parent_abs_rot;
+			  parent_to_local.invert();
 
-			  // m_rotationBoneSpace = m_pCoreBone->getRotationBoneSpace();
-			  // m_rotationBoneSpace *= m_rotationAbsolute;
-			  parent_rot.invert();
-			  CalQuaternion rot_diff = rigid_abs_rot * parent_rot;
-			  CalQuaternion bone_rot = bone->getCoreBone()->getRotationBoneSpace();
-			  bone->setRotation(rot_diff * bone_rot);
+			  CalQuaternion new_local_rotation = rigid_abs_rot;
+			  new_local_rotation *= parent_to_local;
+
+			  bone->setRotation(new_local_rotation);
+
+			  // T_abs = (T * p_rot_abs) + p_T_abs
+			  // (T_abs - p_T_abs) = T * p_rot_abs
+			  // T_abs - p_T_abs * p_rot_abs_in = T
+			  CalVector delta_abs_pos = rigid_abs_pos - parent_abs_pos;
+			  CalQuaternion my_rotation_to_local = parent_abs_rot;
+			  my_rotation_to_local.invert();
+
+			  CalVector delta_in_local = delta_abs_pos;
+			  delta_in_local *= my_rotation_to_local;
+
+			  TTransform tt = TTransform(Cal2DX(delta_in_local), Cal2DX(new_local_rotation), XMVectorSet(1,1,1,1));
+
+			  CalVector right = DX2Cal(tt.getLeft());
+			  float half_height = 0;
+			  
+			  PxShape* collider;
+			  rigid_bone->getShapes(&collider, 1, 0);
+
+			  PxCapsuleGeometry geom;
+			  collider->getCapsuleGeometry(geom);
+			  half_height = geom.halfHeight;
+
+			  bone->setTranslation(delta_in_local/* + (right * half_height)*/);
+			  
 			  bone->calculateState();
 		  }
 	  }
@@ -288,7 +378,40 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-	
+
+	bool draw_ragdoll = h_ragdoll.isValid();
+
+	if (draw_ragdoll) {
+		TCompRagdoll* ragdoll = h_ragdoll;
+		CalSkeleton* skel = model->getSkeleton();
+		auto& cal_bones = skel->getVectorBone();
+		for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+
+			PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
+
+			if (rigid_bone) {
+				CalBone* bone = cal_bones[bone_idx];
+
+				// Physics abs coords
+				XMVECTOR rigid_abs_pos = Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p);
+				XMVECTOR rigid_abs_rot = Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q);
+
+				TTransform bone_tt = TTransform(rigid_abs_pos, rigid_abs_rot, XMVectorSet(1, 1, 1, 1));
+
+				XMVECTOR front = XMVector3Normalize(bone_tt.getFront());
+				XMVECTOR up = XMVector3Normalize(bone_tt.getUp());
+				XMVECTOR right = XMVector3Normalize(-bone_tt.getLeft());
+				
+
+				drawLine(rigid_abs_pos, rigid_abs_pos + front);
+				drawLine(rigid_abs_pos, rigid_abs_pos + up);
+				drawLine(rigid_abs_pos, rigid_abs_pos + right);
+			}
+		}
+	}
+
+	return;
+
   CCoreModel *core = (CCoreModel*) model->getCoreModel();
   for (auto bc : core->bone_ids_to_debug) {
     renderBoneAxis(bc);
@@ -380,6 +503,10 @@ void TCompSkeleton::playAnimation(int id) {
 	model->getMixer()->executeAction(id, 0.0f, 0.3f, 1.0f, false);
 }
 
+float TCompSkeleton::getAnimationDuration(int id) {
+	return model->getMixer()->getAnimationDuration();
+}
+
 XMVECTOR TCompSkeleton::getPositionOfBone(int id) {
 	CalSkeleton* skel = model->getSkeleton();
 	auto& cal_bones = skel->getVectorBone();
@@ -387,3 +514,4 @@ XMVECTOR TCompSkeleton::getPositionOfBone(int id) {
 	CalBone* bone = cal_bones[id];
 	return Cal2DX(bone->getTranslationAbsolute());
 }
+

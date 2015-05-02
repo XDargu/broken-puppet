@@ -263,6 +263,7 @@
     <ClInclude Include="nav_mesh_manager.h" />
     <ClInclude Include="options_parser.h" />
     <ClInclude Include="physics_manager.h" />
+    <ClInclude Include="ragdoll_manager.h" />
     <ClInclude Include="recast\include\DebugDraw.h" />
     <ClInclude Include="recast\include\DetourAlloc.h" />
     <ClInclude Include="recast\include\DetourAssert.h" />
@@ -398,6 +399,7 @@
     <ClCompile Include="nav_mesh_manager.cpp" />
     <ClCompile Include="options_parser.cpp" />
     <ClCompile Include="physics_manager.cpp" />
+    <ClCompile Include="ragdoll_manager.cpp" />
     <ClCompile Include="recast\source\DebugDraw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>

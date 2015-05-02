@@ -402,6 +402,9 @@
     <ClInclude Include="components\comp_player_position_sensor.h">
       <Filter>components\ai\enemies\sensors</Filter>
     </ClInclude>
+    <ClInclude Include="ragdoll_manager.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -709,6 +712,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_character_controller.cpp">
       <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ragdoll_manager.cpp">
+      <Filter>skeleton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
