@@ -86,7 +86,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
 
 				// Get the entity of the rigidbody on wich the needle is pierced
-				CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName()); //CHandle(blockHit.actor->userData);
+				//CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName()); //CHandle(blockHit.actor->userData);
 
 				// Rename the needle
 				TCompName* new_needle_name = new_needle->get<TCompName>();
@@ -111,10 +111,16 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				// Get the needle component and initialize it
 				TCompNeedle* new_e_needle = new_needle->get<TCompNeedle>();
 
-				new_e_needle->create(
+				/*new_e_needle->create(
 					first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
 					, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)))
 					, rigidbody_e->get<TCompRigidBody>()
+					);*/
+
+				new_e_needle->create(
+					first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
+					, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)))
+					, blockHit.actor
 					);
 
 				first_needle = new_needle;
@@ -190,7 +196,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					CEntity* new_needle_2 = prefabs_manager.getInstanceByName("Needle");
 
 					// Get the entity of the rigidbody on wich the needle is pierced
-					CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
+					//CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
 					// Rename the needle
 					TCompName* new_e_name2 = new_needle_2->get<TCompName>();
@@ -215,11 +221,17 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					// Get the needle component and initialize it
 					TCompNeedle* new_e_needle2 = new_needle_2->get<TCompNeedle>();
 
-					new_e_needle2->create(
+					/*new_e_needle2->create(
 						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
 						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
 						, rigidbody_e->get<TCompRigidBody>()
-					);
+					);*/
+
+					new_e_needle2->create(
+						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
+						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
+						, blockHit.actor
+						);
 
 					// -------------- If the distance joint doesn't exists, create one
 
@@ -451,11 +463,15 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 				// Wake up the actors, if dynamic
 				if (a1 && a1->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a1)->wakeUp();
-					((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+
+					((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+
+					//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
 				if (a2 && a2->isRigidDynamic()) {
 					((physx::PxRigidDynamic*)a2)->wakeUp();
-					((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+					((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+					//((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
 			}
 		}

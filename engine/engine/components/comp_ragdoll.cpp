@@ -19,6 +19,10 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	ragdoll = (CCoreRagdoll*)ragdoll_manager.getByName(ragdoll_name.c_str());
 
+	for (auto& rigid : ragdoll->bone_map) {
+		rigid.second->userData = CHandle(this).getOwner().asVoidPtr();
+	}
+
 	// Obtener los bones en base a sus nombres
 	/*TCompSkeleton* skel = skeleton;
 	auto& cal_bones = skel->model->getSkeleton()->getVectorBone();
