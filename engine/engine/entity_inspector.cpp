@@ -10,6 +10,7 @@
 #include <locale>
 #include <algorithm>
 #include "render\sharpen_step.h"
+#include "render\chromatic_aberration_step.h"
 
 using namespace physx;
 
@@ -914,8 +915,9 @@ void CPostProcessOptioner::init() {
 	int varPosition[2] = { 500, 20 };
 	TwSetParam(post_process_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(post_process_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
-	TwDefine(" PostProcessOptioner label='Debug options' ");
+	TwDefine(" PostProcessOptioner label='Post process options' ");
 	TwDefine(" PostProcessOptioner refresh='2' ");
 
 	TwAddVarRW(post_process_bar, "Sharpen", TW_TYPE_FLOAT, &sharpen->amount, "min=0 max=10 step=0.05 ");
+	TwAddVarRW(post_process_bar, "Chromatic aberration", TW_TYPE_FLOAT, &chromatic_aberration->amount, "min=0 max=2 step=0.01 ");
 }

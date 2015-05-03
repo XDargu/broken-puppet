@@ -1,0 +1,6 @@
+<technique 
+	fx="chromatic_aberration.fx"
+	vs="VSCA"
+	vs_decl="vdcl_position_uv"
+	ps="PSCA"
+	/>

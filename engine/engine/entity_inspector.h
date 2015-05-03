@@ -74,11 +74,13 @@ public:
 };
 
 struct TSharpenStep;
+struct TChromaticAberrationStep;
 
 class CPostProcessOptioner
 {
 public:
 	TSharpenStep* sharpen;
+	TChromaticAberrationStep* chromatic_aberration;
 
 	static CPostProcessOptioner& get();
 

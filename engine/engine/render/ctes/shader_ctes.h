@@ -77,4 +77,11 @@ cbuffer TCtesSSAO SHADER_REGISTER(b3)
 	float dummy_ssao, dummy_ssao2, dummy_ssao3;
 };
 
+cbuffer TCtesChromaticAberration SHADER_REGISTER(b3)
+{
+	float4 ca_delta;
+	float chromatic_amount;
+	float dummy_ca, dummy_ca2, dummy_ca3;
+};
+
 #endif

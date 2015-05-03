@@ -15,7 +15,7 @@ struct VS_TEXTURED_OUTPUT
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-VS_TEXTURED_OUTPUT VSSSAO(
+VS_TEXTURED_OUTPUT VSCA(
   float4 Pos : POSITION
 , float2 UV : TEXCOORD0
 )
@@ -25,19 +25,6 @@ VS_TEXTURED_OUTPUT VSSSAO(
   output.Pos = mul(output.Pos, ViewProjection);
   output.UV = UV;
   return output;
-}
-
-float3 getWorldCoords(float2 screen_coords, float depth) {
-	float3 view_dir = float3(cameraHalfXRes - screen_coords.x
-		, cameraHalfYRes - screen_coords.y
-		, cameraViewD);
-	view_dir = view_dir / cameraViewD * cameraZFar * depth;
-
-	float3 world_dir = view_dir.z * cameraWorldFront.xyz
-		+ view_dir.y * cameraWorldUp.xyz
-		+ view_dir.x * cameraWorldLeft.xyz;
-	float3 wPos = cameraWorldPos.xyz + world_dir;
-		return wPos;
 }
 
 float2 getDistorsion(float2 tex, float k, float kcube) {
@@ -63,16 +50,15 @@ float2 getDistorsion(float2 tex, float k, float kcube) {
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PSSSAO(VS_TEXTURED_OUTPUT input,
+float4 PSCA(VS_TEXTURED_OUTPUT input,
 	in float4 iPosition : SV_Position
 	) : SV_Target
 {
-	float4 color = txDiffuse.Sample(samClampLinear, input.UV);
 	float2 tex = input.UV;
 
-	float2 rDist = getDistorsion(tex, -0.05, 0.05);
-	float2 gDist = getDistorsion(tex, -0.08, 0.08);
-	float2 bDist = getDistorsion(tex, -0.11, 0.11);
+	float2 bDist = getDistorsion(tex, -0.05, 0.05);
+	float2 gDist = getDistorsion(tex, -0.05 - chromatic_amount, 0.05 + chromatic_amount);
+	float2 rDist = getDistorsion(tex, -0.05 - chromatic_amount * 2, 0.05 + chromatic_amount * 2);
   
 	float3 inputDistordr = txDiffuse.Sample(samClampLinear, rDist);
 	float3 inputDistordg = txDiffuse.Sample(samClampLinear, gDist);
@@ -80,12 +66,5 @@ float4 PSSSAO(VS_TEXTURED_OUTPUT input,
 
 
   return float4(inputDistordr.r, inputDistordg.g, inputDistordb.b, 1);
-  
-
-  //return original;
-  //return blurred;
-  //alfa = 1.5;
-  //return original *(1 - alfa) + blurred * alfa;  
-  return color;
 }
 

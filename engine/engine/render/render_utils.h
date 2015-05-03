@@ -100,5 +100,5 @@ extern CMesh        mesh_view_volume;
 extern	CShaderCte<TCtesBlur> ctes_blur;
 extern	CShaderCte<TCtesSharpen> ctes_sharpen;
 extern	CShaderCte<TCtesSSAO> ctes_ssao;
-
+extern  CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 #endif

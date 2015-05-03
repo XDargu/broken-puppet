@@ -414,6 +414,9 @@
     <ClInclude Include="render\ssao_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="render\chromatic_aberration_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -738,6 +741,9 @@
       <Filter>render\postpro</Filter>
     </ClCompile>
     <ClCompile Include="render\ssao_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\chromatic_aberration_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
   </ItemGroup>

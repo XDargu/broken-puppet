@@ -37,18 +37,11 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
 
-	/*float3x3 conv =
+	float3x3 conv =
 	{
 		1. / 16., 1. / 8., 1. / 16.,
 		1. / 8., 1. / 4., 1. / 8.,
 		1. / 16., 1. / 8., 1. / 16.
-	};*/
-
-	float3x3 conv =
-	{
-		0, -1, 0,
-		-1, 5, -1,
-		0, -1, 0
 	};
 
 	for (int i = 0; i < 3; i++) {

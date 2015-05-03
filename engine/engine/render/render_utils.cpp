@@ -19,6 +19,7 @@ CShaderCte<TCtesBones>  ctes_bones;
 CShaderCte<TCtesBlur> ctes_blur;
 CShaderCte<TCtesSharpen> ctes_sharpen;
 CShaderCte<TCtesSSAO> ctes_ssao;
+CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 
 CMesh        wire_cube;
 CMesh        mesh_view_volume;
@@ -306,6 +307,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_blur.create();
 	is_ok &= ctes_sharpen.create();
 	is_ok &= ctes_ssao.create();
+	is_ok &= ctes_chromatic_aberration.create();
 
 	is_ok &= createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -336,6 +338,7 @@ void renderUtilsDestroy() {
 	ctes_blur.destroy();
 	ctes_sharpen.destroy();
 	ctes_ssao.destroy();
+	ctes_chromatic_aberration.destroy();
 
 	axis.destroy();
 	grid.destroy();

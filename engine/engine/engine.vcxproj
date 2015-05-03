@@ -289,6 +289,7 @@
     <ClInclude Include="recast\include\RecastAssert.h" />
     <ClInclude Include="recast\include\RecastDebugDraw.h" />
     <ClInclude Include="recast\include\RecastDump.h" />
+    <ClInclude Include="render\chromatic_aberration_step.h" />
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
@@ -518,6 +519,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="render\blur_step.cpp" />
+    <ClCompile Include="render\chromatic_aberration_step.cpp" />
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\deferred_render.cpp" />
