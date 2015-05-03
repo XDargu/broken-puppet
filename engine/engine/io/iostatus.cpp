@@ -141,24 +141,25 @@ void CIOStatus::setMouseCoords(int x, int y){
 
 void CIOStatus::update(float elapsed) {
 
-	//mouse	
-	mouse.update(elapsed, mouse_pointer);
+	if (CApp::get().has_focus){
+		//mouse	
+		mouse.update(elapsed, mouse_pointer);
 
-	// update buttons
-	for (int i = 0; i<BUTTONS_COUNT; ++i) {
-		TButton &b = buttons[i];
+		// update buttons
+		for (int i = 0; i < BUTTONS_COUNT; ++i) {
+			TButton &b = buttons[i];
 
-		
-		b.was_pressed = b.is_pressed;
+			b.was_pressed = b.is_pressed;
 
-		bool now_is_pressed = false;
+			bool now_is_pressed = false;
 
-		// Is the key right now pressed?
-		if (b.key){
-			now_is_pressed = (::GetAsyncKeyState(b.key) & 0x8000) != 0;
+			// Is the key right now pressed?
+			if (b.key){
+				now_is_pressed = (::GetAsyncKeyState(b.key) & 0x8000) != 0;
+			}
+
+			b.setPressed(now_is_pressed, elapsed);
 		}
-
-		b.setPressed(now_is_pressed, elapsed);		
 	}
 }
 

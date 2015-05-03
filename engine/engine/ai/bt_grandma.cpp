@@ -60,8 +60,8 @@ void bt_grandma::create(string s)
 	addChild("HowToCutAndTakeNeedle", "TakeNeedle27", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionTakeNeedle);
 	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseNeedlePosition);
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionIdle, 50);
-	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL, 50);
+	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionIdle, 70);
+	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL,30);
 
 	addChild("Wander30", "SearchPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSearchPoint);
 	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander);
@@ -178,7 +178,18 @@ int bt_grandma::actionWander()
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	jump = false;
-	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+	
+	//Tratamos de evitar cambios demasiado repentinos de ruta
+	if (on_enter){
+		CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+		find_path_time = state_time;
+	}else{
+		if ((state_time - find_path_time) > 1.f){
+			CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+			find_path_time = state_time;
+		}
+	}
+
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
@@ -234,7 +245,9 @@ int bt_grandma::actionChaseRoleDistance()
 {
 	wander_target = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);

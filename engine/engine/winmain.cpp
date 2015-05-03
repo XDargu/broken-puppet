@@ -116,21 +116,24 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
    DWORD dwStyle = WS_OVERLAPPEDWINDOW;
+   int width = rc.right - rc.left;
+   int height = rc.bottom - rc.top;
    
    if (app.fullscreen){
 	   //Initializando parametros de ventana a Fullscreen
 	   DEVMODE screen;
 	   DWORD dwExStyle;
-	   dwStyle = WS_POPUP;
+	   dwStyle = WS_OVERLAPPED | WS_POPUP;
 	   memset(&screen, 0, sizeof(screen));
 	   screen.dmSize = sizeof(screen);
-	   screen.dmPelsWidth = app.xres;
-	   screen.dmPelsHeight = app.yres;
+	   screen.dmPelsWidth = rc.right - rc.left;
+	   screen.dmPelsHeight = rc.bottom - rc.top;
 	   screen.dmBitsPerPel = 32;
+	   height = (int)GetSystemMetrics(SM_CYSCREEN);
+	   width = (int)GetSystemMetrics(SM_CXSCREEN);
 	   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 	   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
 		   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
-		   dwStyle = WS_OVERLAPPEDWINDOW;
 		   ShowCursor(TRUE);
 	   }
    }
@@ -151,24 +154,29 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   , "MCV Engine 2014"
 	   , dwStyle
 	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
-	   , rc.right - rc.left					// Width
-	   , rc.bottom - rc.top					// Height
+	   , width				// Width
+	   , height			    // Height
 	   , NULL, NULL
 	   , hInstance
 	   , NULL);
+
+   
+
 
    if (!hWnd)
       return FALSE;
 
    app.hWnd = hWnd;
+
+   if (app.fullscreen){
+	   app.xres = width;
+	   app.yres = height;
+   }
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
  
    return TRUE;
-}
-
-void fullscreenMode(){
-
 }
 
 //
@@ -221,6 +229,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif
 
 	CIOStatus &io = CIOStatus::get();
+	CApp &app = CApp::get();
 
 	switch (message)
 	{
@@ -253,12 +262,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MBUTTONDOWN:
 		io.getButtons()[io.MOUSE_MIDDLE].setPressed(true, 0.f);
 		break;*/
-		/*case WM_KILLFOCUS:
-		app.has_focus = false;
+		case WM_KILLFOCUS:
+			app.has_focus = false;
 		break;
 		case WM_SETFOCUS:
-		app.has_focus = true;
-		break;*/
+			app.has_focus = true;
+		break;
+	
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
