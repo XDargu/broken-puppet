@@ -185,6 +185,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
+    <ClInclude Include="render\all_post_process_effects.h" />
     <ClInclude Include="render\blur_step.h" />
     <ClInclude Include="components\collider.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
@@ -294,6 +295,7 @@
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
     <ClInclude Include="render\deferred_render.h" />
+    <ClInclude Include="render\glow_step.h" />
     <ClInclude Include="render\material.h" />
     <ClInclude Include="render\mesh.h" />
     <ClInclude Include="render\render.h" />
@@ -523,6 +525,7 @@
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\deferred_render.cpp" />
+    <ClCompile Include="render\glow_step.cpp" />
     <ClCompile Include="render\material.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />

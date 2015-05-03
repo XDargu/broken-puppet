@@ -37,10 +37,7 @@ using namespace physx;
 
 #include <AntTweakBar.h>
 #include "entity_inspector.h"
-#include "render\blur_step.h"
-#include "render\sharpen_step.h"
-#include "render\ssao_step.h"
-#include "render\chromatic_aberration_step.h"
+#include "render\all_post_process_effects.h"
 
 static CApp the_app;
 
@@ -110,6 +107,7 @@ TSharpenStep sharpen;
 TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
+TGlowStep glow;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -269,7 +267,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/my_file-backup.xml");
+	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file-backup.xml");
 
 	// Create debug meshes	
 	bool is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -317,6 +316,7 @@ bool CApp::create() {
 	is_ok &= ssao.create("ssao", xres, yres, 1);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 1);
 
 	assert(is_ok);
 
@@ -395,7 +395,11 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("deferred_dir_lights");
 		//render_techniques_manager.reload("deferred_resolve");
 		//render_techniques_manager.reload("chromatic_aberration");
-		render_techniques_manager.reload("blur");
+		render_techniques_manager.reload("glow");
+		render_techniques_manager.reload("glow_lights");
+		texture_manager.reload("Foco_albedo");
+		texture_manager.reload("Foco_normal");
+		
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -526,7 +530,7 @@ void CApp::render() {
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	blur.apply(chromatic_aberration.getOutput());
-	//bs2.apply(bs.getOutput());
+	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
 	int sz = 300;

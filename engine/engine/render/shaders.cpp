@@ -139,7 +139,7 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 		std::string ps_name = atts["ps"];
 		std::string fx_name = atts["fx"];
 		if (fx_name.empty())
-			fx_name = "Tutorial04.fx";
+			fx_name = "deferred_gbuffer.fx";
 
 		bool is_ok = vs.compile(fx_name.c_str(), vs_name.c_str(), *decl);
 

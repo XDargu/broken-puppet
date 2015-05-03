@@ -46,7 +46,7 @@ VS_TEXTURED_OUTPUT VS(
   float4 world_pos = mul(Pos, World);
   output.Pos = mul(world_pos, ViewProjection);
   output.wNormal = mul(Normal, (float3x3)World);
-  output.UV = UV *= 3;
+  output.UV = UV * 1;
   output.wPos = world_pos;
   // Rotate the tangent and keep the w value
   output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);

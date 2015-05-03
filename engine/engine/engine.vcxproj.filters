@@ -417,6 +417,12 @@
     <ClInclude Include="render\chromatic_aberration_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="render\glow_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\all_post_process_effects.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -744,6 +750,9 @@
       <Filter>render\postpro</Filter>
     </ClCompile>
     <ClCompile Include="render\chromatic_aberration_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\glow_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
   </ItemGroup>

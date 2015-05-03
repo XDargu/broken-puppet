@@ -86,4 +86,12 @@ cbuffer TCtesChromaticAberration SHADER_REGISTER(b3)
 	float dummy_ca, dummy_ca2, dummy_ca3;
 };
 
+cbuffer TCtesGlow SHADER_REGISTER(b3)
+{
+	float4 glow_pos;
+	float4 glow_delta;
+	float glow_amount;
+	float dummy_glow, dummy_glow2, dummy_glow3;
+};
+
 #endif
