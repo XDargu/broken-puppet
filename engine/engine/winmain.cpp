@@ -157,6 +157,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   , hInstance
 	   , NULL);
 
+      AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+
    if (!hWnd)
       return FALSE;
 
@@ -221,6 +223,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif
 
 	CIOStatus &io = CIOStatus::get();
+	CApp &app = CApp::get();
 
 	switch (message)
 	{
@@ -253,12 +256,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MBUTTONDOWN:
 		io.getButtons()[io.MOUSE_MIDDLE].setPressed(true, 0.f);
 		break;*/
-		/*case WM_KILLFOCUS:
-		app.has_focus = false;
+		case WM_KILLFOCUS:
+			app.has_focus = false;
 		break;
 		case WM_SETFOCUS:
-		app.has_focus = true;
-		break;*/
+			app.has_focus = true;
+		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

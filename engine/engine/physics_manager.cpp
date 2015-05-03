@@ -242,3 +242,17 @@ void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask)
 	shape->setQueryFilterData(filterData);
 	//free(shape);
 }
+
+PxU32 convertInCollisionFilter(std::string name){
+	PxU32 result;
+	if (name == "Enemy"){
+		result = FilterGroup::eENEMY;
+	}else if (name == "Actor"){
+		result = FilterGroup::eACTOR;
+	}else if (name == "Level"){
+		result = FilterGroup::eLEVEL;
+	}else{
+		result = FilterGroup::eUNDEFINED;
+	}
+	return result;
+}
