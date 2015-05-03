@@ -109,6 +109,7 @@ bool debug_mode;
 TSharpenStep sharpen;
 TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
+TBlurStep blur;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -290,6 +291,8 @@ bool CApp::create() {
 	console.init();
 	post_process_optioner.sharpen = &sharpen;
 	post_process_optioner.chromatic_aberration = &chromatic_aberration;
+	post_process_optioner.blur = &blur;
+
 	post_process_optioner.init();
 	
 
@@ -313,6 +316,7 @@ bool CApp::create() {
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 	is_ok &= ssao.create("ssao", xres, yres, 1);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
+	is_ok &= blur.create("blur", xres, yres, 1);
 
 	assert(is_ok);
 
@@ -390,7 +394,8 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("deferred_point_lights");
 		//render_techniques_manager.reload("deferred_dir_lights");
 		//render_techniques_manager.reload("deferred_resolve");
-		render_techniques_manager.reload("chromatic_aberration");
+		//render_techniques_manager.reload("chromatic_aberration");
+		render_techniques_manager.reload("blur");
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -520,6 +525,7 @@ void CApp::render() {
 
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
+	blur.apply(chromatic_aberration.getOutput());
 	//bs2.apply(bs.getOutput());
 
 	::render.activateBackbuffer();
@@ -536,7 +542,7 @@ void CApp::render() {
 	//texture_manager.getByName("rt_depth")->activate(2);
 
 	//drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
-	drawTexture2D(0, 0, xres, yres, chromatic_aberration.getOutput());
+	drawTexture2D(0, 0, xres, yres, blur.getOutput());
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());

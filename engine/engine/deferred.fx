@@ -104,6 +104,18 @@ float tapAt(float2 homo_coords, float depth) {
   return amount;
 }
 
+float rand_1_05(in float2 uv)
+{
+	float2 noise = (frac(sin(dot(uv, float2(12.9898, 78.233)*2.0)) * 43758.5453));
+	return abs(noise.x + noise.y) * 0.5;
+}
+
+float2 rand_2_10(in float2 uv) {
+	float noiseX = (frac(sin(dot(uv, float2(12.9898, 78.233) * 2.0)) * 43758.5453));
+	float noiseY = sqrt(1 - noiseX * noiseX);
+	return float2(noiseX, noiseY);
+}
+
 // -------------------------
 float getShadowAt(float4 wPos) {
 
@@ -114,12 +126,20 @@ float getShadowAt(float4 wPos) {
     return 0;
 
   float2 center = light_proj_coords.xy;
-    float depth = light_proj_coords.z - 0.001;
+  float depth = light_proj_coords.z - 0.002;
 
-  float amount = tapAt(center, depth);
+  float amount = tapAt(center, depth) * 0.2;
 
-  float sz = 1. / 1024;
-  amount += tapAt(center + float2(sz, sz), depth);
+  float sz = 2. / 1024;
+  float2 rand = rand_2_10(wPos.xy);
+  float weigth = 0.1;
+  // 8 Random tabs
+  for (int i = 0; i < 8; i++) {
+	  rand = rand_2_10(wPos.xz + float2(i, 0)) * sz;
+	  amount += tapAt(center + rand, depth) * weigth;
+  }
+
+  /*amount += tapAt(center + float2(sz, sz), depth);
   amount += tapAt(center + float2(-sz, sz), depth);
   amount += tapAt(center + float2(sz, -sz), depth);
   amount += tapAt(center + float2(-sz, -sz), depth);
@@ -127,9 +147,9 @@ float getShadowAt(float4 wPos) {
   amount += tapAt(center + float2(sz, 0), depth);
   amount += tapAt(center + float2(-sz, 0), depth);
   amount += tapAt(center + float2(0, -sz), depth);
-  amount += tapAt(center + float2(0, sz), depth);
+  amount += tapAt(center + float2(0, sz), depth);*/
 
-  amount *= 1.f / 9.;
+  //amount *= 1.f / 9.;
   //amount *= 1.f / 5.;
 
   return amount;

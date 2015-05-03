@@ -61,6 +61,8 @@ cbuffer TCtesBones SHADER_REGISTER(b3)
 cbuffer TCtesBlur SHADER_REGISTER(b3)
 {
 	float4 blur_delta;
+	float blur_amount;
+	float dummy_blur, dummy_blur2, dummy_blur3;
 };
 
 cbuffer TCtesSharpen SHADER_REGISTER(b3)
