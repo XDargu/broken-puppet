@@ -10,6 +10,7 @@ class bt_grandma : public bt
 {
 private:
 	float radius;
+	float find_path_time;
 	XMVECTOR center;
 	XMVECTOR rand_point;
 	CHandle character_controller;

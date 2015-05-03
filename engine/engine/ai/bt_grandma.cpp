@@ -178,7 +178,18 @@ int bt_grandma::actionWander()
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	jump = false;
-	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+	
+	//Tratamos de evitar cambios demasiado repentinos de ruta
+	if (on_enter){
+		CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+		find_path_time = state_time;
+	}else{
+		if ((state_time - find_path_time) > 1.f){
+			CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
+			find_path_time = state_time;
+		}
+	}
+
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
@@ -234,7 +245,9 @@ int bt_grandma::actionChaseRoleDistance()
 {
 	wander_target = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);

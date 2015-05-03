@@ -168,8 +168,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    app.hWnd = hWnd;
 
-   app.xres = width;
-   app.yres = height;
+   if (app.fullscreen){
+	   app.xres = width;
+	   app.yres = height;
+   }
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
