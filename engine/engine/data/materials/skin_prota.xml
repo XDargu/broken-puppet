@@ -1,3 +1,5 @@
 <std_material name="skin_prota"
               tech="skin_basic"
-              diffuse="prota_Albedo"/>
+              diffuse="prota_Albedo"
+			  normal="prota_Normal"
+			  />

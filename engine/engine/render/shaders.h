@@ -107,6 +107,7 @@ public:
 	void activate() const;
 	void destroy();
 	bool usesBones() const { return uses_bones; }
+	bool reload() { return load(name.c_str()); }
 };
 
 typedef CItemsByName< CRenderTechnique > CRenderTechniquesManager;

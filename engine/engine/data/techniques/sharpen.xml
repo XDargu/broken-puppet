@@ -1,0 +1,6 @@
+<technique 
+	fx="sharpen.fx"
+	vs="VSSharpen"
+	vs_decl="vdcl_position_uv"
+	ps="PSSharpen"
+	/>

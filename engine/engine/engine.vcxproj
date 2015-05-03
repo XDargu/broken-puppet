@@ -185,6 +185,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
+    <ClInclude Include="render\blur_step.h" />
     <ClInclude Include="components\collider.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
     <ClInclude Include="components\comp_ambient_light.h" />
@@ -301,6 +302,8 @@
     <ClInclude Include="render\render_utils.h" />
     <ClInclude Include="render\shaders.h" />
     <ClInclude Include="render\shadows.h" />
+    <ClInclude Include="render\sharpen_step.h" />
+    <ClInclude Include="render\ssao_step.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
@@ -341,11 +344,13 @@
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_needle.cpp" />
     <ClCompile Include="components\comp_player_position_sensor.cpp" />
+    <ClCompile Include="components\comp_point_light.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
     <ClCompile Include="components\comp_sensor_distance_player.cpp" />
     <ClCompile Include="components\comp_sensor_needles.cpp" />
+    <ClCompile Include="components\comp_shadows.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />
     <ClCompile Include="components\comp_skeleton_ik.cpp" />
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
@@ -514,6 +519,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="render\blur_step.cpp" />
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\deferred_render.cpp" />
@@ -524,6 +530,8 @@
     <ClCompile Include="render\render_to_texture.cpp" />
     <ClCompile Include="render\render_utils.cpp" />
     <ClCompile Include="render\shaders.cpp" />
+    <ClCompile Include="render\sharpen_step.cpp" />
+    <ClCompile Include="render\ssao_step.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />

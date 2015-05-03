@@ -40,7 +40,7 @@ void CMaterial::activateTextures() const {
 	diffuse->activate(0);
 	if (normal)
 		normal->activate(1);      // as per t1 in the deferred.fx
-	if (specular)
+	/*if (specular)
 		specular->activate(2);
 	if (glossiness)
 		glossiness->activate(3);
@@ -49,7 +49,7 @@ void CMaterial::activateTextures() const {
 	if (ao)
 		ao->activate(5);
 	if (cubemap)
-		cubemap->activate(7);
+		cubemap->activate(7);*/
 }
 
 

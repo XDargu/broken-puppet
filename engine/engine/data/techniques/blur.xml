@@ -1,0 +1,6 @@
+<technique 
+	fx="blur.fx"
+	vs="VSBlur"
+	vs_decl="vdcl_position_uv"
+	ps="PSBlur"
+	/>

@@ -287,7 +287,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		camera_controller->offset = PxVec3(0.56f, -0.22f, 1.07f);*/
 		
 		TCompSkeleton* skeleton = comp_skeleton;		
-		skeleton->playAnimation(15);
+		skeleton->playAnimation(17);
 		
 	}
 

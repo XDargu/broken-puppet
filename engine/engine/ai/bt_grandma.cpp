@@ -7,7 +7,6 @@
 
 void bt_grandma::create(string s)
 {
-	player_viewed_sensor = false;
 	name = s;
 	createRoot("Root", PRIORITY, NULL, NULL);
 	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_grandma::conditionis_ragdoll, NULL);
@@ -45,7 +44,9 @@ void bt_grandma::create(string s)
 	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
 	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
+	
 	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
+	
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
 	addChild("XSecAttack", "TooCloseAttack23", ACTION, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
@@ -70,6 +71,9 @@ void bt_grandma::create(string s)
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	center = m_transform->position;
 	character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = PxVec3(0, 0, 0);
+	player = CEntityManager::get().getByName("Player");
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -133,9 +137,12 @@ int bt_grandma::actionIdle()
 	bool aux_on_enter = on_enter;
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, last_look_direction);
+	//((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, );
 
-	if (state_time >= 6){
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+
+	if (state_time >= 2){
 		return LEAVE;
 	}else{
 		return STAY;
@@ -147,10 +154,15 @@ int bt_grandma::actionIdle()
 int bt_grandma::actionSearchPoint()
 {	
 
+	float aux_time = state_time;
+	bool aux_on_enter = on_enter;
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();	
 
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, m_transform->position);
-							, XMVectorGetY(m_transform->position)
+
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
 
 	ind_path = 0;
 	return LEAVE;
@@ -161,34 +173,30 @@ int bt_grandma::actionSearchPoint()
 int bt_grandma::actionWander()
 {
 
+	float aux_time = state_time;
+	bool aux_on_enter = on_enter;
+
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	physx::PxVec3 front = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	jump = false;
 	CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
-			((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
-			XMVECTOR aux_position = path[ind_path];
-			XMVectorSetY(aux_position, XMVectorGetY(m_transform->position));
-
-			((TCompCharacterController*)character_controller)->Move(front, false, false, Physics.XMVECTORToPxVec3(aux_position - m_transform->position));
-
-			if ((V3DISTANCE(m_transform->position, aux_position) < 0.8f)){
+			chasePoint(m_transform, path[ind_path]);
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
 				ind_path++;
 				return STAY;
-			}
-			else{
+			}else{
 				return STAY;
 			}
 		}
 		else{
 			ind_path = 0;
-			last_look_direction = front;
+			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}else{
 		return LEAVE;
 	}
-	return LEAVE;
 }
 
 //Makes a warcry
@@ -218,14 +226,33 @@ int bt_grandma::actionLookAround()
 //Takes a roll, attacker or taunter and a poisition to go
 int bt_grandma::actionSelectRole()
 {
-
 	return LEAVE;
 }
 
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
-	return LEAVE;
+	wander_target = ((TCompTransform*)((CEntity*)player)->get<TCompTransform>())->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (path.size() > 0){
+		if (ind_path < path.size()){
+			chasePoint(m_transform, path[ind_path]);
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+				ind_path++;
+				return STAY;
+			}
+			else{
+				return STAY;
+			}
+		}else{
+			ind_path = 0;
+			return LEAVE;
+		}
+	}else{
+		ind_path = 0;
+		return LEAVE;
+	}
 }
 
 //First attack
@@ -339,14 +366,7 @@ int bt_grandma::conditiontoo_close_attack()
 //Check if there is a needle to take
 int bt_grandma::conditionneedle_to_take()
 {
-	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	if ((m_sensor->needlesInRange).size() > 0)
-	{
-		return true;
-	}
-
 	return false;
-
 	//return needle_to_take;
 }
 
@@ -461,19 +481,15 @@ int bt_grandma::conditionfar_from_target_pos()
 
 // Sensor para detectar si el enemigo ve al player
 void bt_grandma::playerViewedSensor(){
-	TCompPlayerPosSensor* p_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
 	if (!player_viewed_sensor){
- 		bool tri = p_sensor->playerInRange();
-		if (p_sensor->playerInRange()) {	
-			//if ((!current->isRoot()) /*&& ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))*/){
+
+		TCompPlayerPosSensor* p_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
+		bool tri = p_sensor->playerInRange();
+		if (p_sensor->playerInRange()) {
+			if ((!current->isRoot()) && ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))){
 				setCurrent(NULL);
 				player_viewed_sensor = true;
-			//}
-		}
-	}
-	else{
-		if (!p_sensor->playerInRange()){
-			player_viewed_sensor = false;
+			}
 		}
 	}
 }
@@ -490,7 +506,7 @@ void bt_grandma::needleViewedSensor(){
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH)))
+			if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
 				setCurrent(NULL);
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
@@ -498,8 +514,11 @@ void bt_grandma::needleViewedSensor(){
 }
 
 void bt_grandma::update(float elapsed){
-	playerViewedSensor();
+	//playerViewedSensor();
 	//needleViewedSensor();
+	((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
+	((TCompCharacterController*)character_controller)->jumpPower = 0.7f;
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 	this->recalc(elapsed);
 }
 
@@ -514,3 +533,18 @@ bool bt_grandma::trueEveryXSeconds(float time)
 	return false;
 }
 
+void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
+	physx::PxRaycastBuffer buf;
+	Physics.raycastAll(own_position->position + XMVectorSet(0, 0.1f, 0, 0), own_position->getFront(), 1.f, buf);
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		TCompCharacterController* character_cntrl = (TCompCharacterController*)character_controller;
+		TCompRigidBody* own_rigid = character_cntrl->getRigidBody();
+		//CEntity* e = CHandle(this).getOwner();
+		if (buf.touches[i].actor != (own_rigid->rigidBody)) {
+			jump = true;
+		}
+	}
+	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
+	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
+}

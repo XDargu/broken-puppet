@@ -402,13 +402,22 @@
     <ClInclude Include="components\comp_player_position_sensor.h">
       <Filter>components\ai\enemies\sensors</Filter>
     </ClInclude>
+    <ClInclude Include="ragdoll_manager.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
 <<<<<<< HEAD
     <ClInclude Include="components\comp_sensor_distance_player.h">
       <Filter>components\ai\enemies\sensors</Filter>
 =======
-    <ClInclude Include="ragdoll_manager.h">
-      <Filter>skeleton</Filter>
->>>>>>> 5dd6eb1b5576d274b5670a15c978cfc7347c5fb4
+    <ClInclude Include="render\blur_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\sharpen_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ssao_step.h">
+      <Filter>render\postpro</Filter>
+>>>>>>> 4dbf661ea76fb004a90397d910c2b94fffa77be5
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -718,13 +727,28 @@
     <ClCompile Include="components\comp_character_controller.cpp">
       <Filter>components\controllers</Filter>
     </ClCompile>
+    <ClCompile Include="ragdoll_manager.cpp">
+      <Filter>skeleton</Filter>
+    </ClCompile>
 <<<<<<< HEAD
     <ClCompile Include="components\comp_sensor_distance_player.cpp">
       <Filter>components\ai\enemies\sensors</Filter>
 =======
-    <ClCompile Include="ragdoll_manager.cpp">
-      <Filter>skeleton</Filter>
->>>>>>> 5dd6eb1b5576d274b5670a15c978cfc7347c5fb4
+    <ClCompile Include="components\comp_point_light.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_shadows.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\blur_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\sharpen_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ssao_step.cpp">
+      <Filter>render\postpro</Filter>
+>>>>>>> 4dbf661ea76fb004a90397d910c2b94fffa77be5
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -811,6 +835,9 @@
     </Filter>
     <Filter Include="components\ai\enemies\sensors">
       <UniqueIdentifier>{af53a7b1-8bd6-4321-976a-fb162f642437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\postpro">
+      <UniqueIdentifier>{59d3f46a-ca33-4aab-aee3-77703d5581c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include "mcv_platform.h"
 #include "behaviour_trees.h"
 #include "physics_manager.h"
+#include "components\comp_transform.h"
 
 class bt_grandma : public bt
 {
@@ -12,9 +13,14 @@ private:
 	XMVECTOR center;
 	XMVECTOR rand_point;
 	CHandle character_controller;
+	CHandle player;
 	int ind_path;
 	physx::PxVec3 last_look_direction;
+	physx::PxVec3 mov_direction;
+	physx::PxVec3 look_direction;
 	std::vector<XMVECTOR> path;
+	XMVECTOR wander_target;
+	bool jump;
 public:
 	void create(string);
 
@@ -123,6 +129,7 @@ public:
 	int conditionfar_from_target_pos();
 
 	bool trueEveryXSeconds(float time);
+	void chasePoint(TCompTransform* own_position, XMVECTOR chase_point);
 
 	/*Sensores*/
 

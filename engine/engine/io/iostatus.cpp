@@ -37,6 +37,8 @@ CIOStatus::CIOStatus( ) {
 	buttons[VIEWER_MOVE_CAM].key = VK_RBUTTON;
 	buttons[VIEWER_ZOOM].key = VK_MBUTTON;
 
+	buttons[F8_KEY].key = VK_F8;
+
 	mouse.dx = 0;
 	mouse.dy = 0;
 

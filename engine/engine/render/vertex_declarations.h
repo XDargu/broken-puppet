@@ -9,11 +9,13 @@ public:
 	CVertexDecl(D3D11_INPUT_ELEMENT_DESC* the_elems, UINT the_nelems);
 };
 
+extern CVertexDecl vdcl_position;
 extern CVertexDecl vdcl_position_color;
 extern CVertexDecl vdcl_position_uv;
 extern CVertexDecl vdcl_position_uv_normal;
 extern CVertexDecl vdcl_position_uv_normal_skin;
 extern CVertexDecl vdcl_position_uv_normal_tangent;
+extern CVertexDecl vdcl_position_uv_normal_skin_tangent;
 
 template<class TVertex>
 CVertexDecl* getVertexDecl();
