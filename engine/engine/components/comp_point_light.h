@@ -2,26 +2,28 @@
 #define INC_COMP_POINT_LIGHT_H_
 
 #include "base_component.h"
+#include "render/render.h"
 
 struct TCompPointLight : TBaseComponent {
-	XMVECTOR color;
-	float radius;
-	float intensity;
+	float               radius;
+	float               decay_factor;       // Amount of radius where energy stars to decay
+	float               intensity;
+	XMVECTOR            color;
 
-	TCompPointLight() {}
+	TCompPointLight() : radius(1.f), decay_factor(0.7f), intensity(1.0f) {
+		color = DirectX::XMVectorSet(1, 1, 1, 1);
+	}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		CEntity* e = CHandle(this).getOwner();
-		CHandle transform = e->get<TCompTransform>();
-
-		TCompTransform* trans = (TCompTransform*)transform;
-
-		assert(trans || fatal("TCompPointLight requieres a TCompTransform component"));
-
-		intensity = atts.getFloat("intensity", 0.5f);
-		color = atts.getQuat("color");
-		radius = atts.getFloat("radius", 20.0f);
+		radius = atts.getFloat("radius", 1.0f);
+		// Intensity of the lights starts to decay at 70% of the radius
+		// We want that the amount of light at radius is zero
+		decay_factor = atts.getFloat("decay_factor", 0.7f);
+		intensity = atts.getFloat("intensity", 1.f);
+		color = atts.getPoint("color");
 	}
+
+	void draw();
 };
 
 #endif

@@ -1,53 +1,30 @@
 #ifndef INC_COMP_RENDER_SHADOWS_H_
 #define INC_COMP_RENDER_SHADOWS_H_
 
+#include "base_component.h"
 #include "render/render_to_texture.h"
 #include "comp_camera.h"
 #include "render/render_utils.h"
 #include "render/render_manager.h"
 
-struct TCompShadows {
+struct TCompShadows : TBaseComponent {
 	int              resolution;
 	CRenderToTexture rt;
+	XMVECTOR         color;
 
-	TCompShadows() : resolution(256) {}
-
-	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		resolution = atts.getInt("res", 256);
+	TCompShadows() : resolution(256) {
+		color = DirectX::XMVectorSet(1, 1, 1, 1);
 	}
 
-	void init() {
+	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
-		CEntity* e = CHandle(this).getOwner();
-		assert(e);
+	void init();
 
-		bool is_ok = rt.create(e->getName(), resolution, resolution
-			, DXGI_FORMAT_UNKNOWN     // I do NOT want COLOR Buffer
-			, DXGI_FORMAT_R32_TYPELESS
-			);
-		assert(is_ok);
-	}
+	// This generates the depth map from the ligth source
+	void generate();
 
-	void generate()  {
-		CTraceScoped s("shadows");
-
-		// Activate the camera component which is the source of the light
-		CEntity* e = CHandle(this).getOwner();
-		TCompCamera* camera = e->get<TCompCamera>();
-		assert(camera || fatal("TCompShadows requieres a TCompCamera component"));
-
-		// Start rendering in the rt of the depth buffer
-		rt.activate();
-		rt.clearDepthBuffer();
-
-		activateCamera(*camera, 1);
-		
-		// 
-		render_techniques_manager.getByName("gen_shadows")->activate();
-
-		render_manager.renderShadowsCasters();
-
-	}
+	// This renders the light volume into the light accumulation buffer
+	void draw();
 
 
 };

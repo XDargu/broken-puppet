@@ -1,7 +1,7 @@
 <technique 
 	fx="skin.fx"
 	vs="VS"
-	vs_decl="vdcl_position_uv_normal_skin"
+	vs_decl="vdcl_position_uv_normal_skin_tangent"
 	ps="PSTextured"
     uses_bones="1"
 	/>

@@ -1,4 +1,14 @@
 <scene>
+  <entity>
+    <name name="light00"/>
+    <transform position="10 0 0" rotation="0 0 0 1"/>
+    <pointLight decay_factor="0.2" radius="15" color="0 0 1"/>
+  </entity>
+  <entity>
+    <name name="light01"/>
+    <transform position="0 0 0" rotation="0 0 0 1"/>
+    <pointLight decay_factor="0.2" radius="15" color="1 0 0"/>
+  </entity>
  <entity>
     <name name="abuela"/>
     <transform position="0 0 0" rotation="0 0 0 1"/>
@@ -9,8 +19,15 @@
   <entity>
     <name name="the_light"/>
     <transform position="0 7 -30" rotation="0.16 0.14 -0.06 0.98"/>
-    <camera target="0 0 0" fov="45.0" znear="5" zfar="2500"/>
-    <shadows res="1024"/>
+    <camera target="0 0 0" fov="45.0" znear="5" zfar="250"/>
+    <shadows res="1024" color="1 1 1"/>
+    playerDoomController/>
+  </entity>
+  <entity>
+    <name name="the_light2"/>
+    <transform position="0 7 30" rotation="0.16 0.14 -0.06 0.98"/>
+    <camera target="0 0 0" fov="45.0" znear="5" zfar="250"/>
+    <shadows res="1024" color="1 1 1"/>
     playerDoomController/>
   </entity>
 	<entity tag = "player" prefab="Player">

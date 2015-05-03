@@ -1,8 +1,8 @@
 <!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
 <std_material name="Standardmaterial"
-diffuse="Steel_Worn_00_A"
+diffuse="stones2_diffuse"
 ao="Steel_Worn_00_A"
-normal="Steel_Worn_00_N"
+normal="stones2_normal"
 specular="black"
 glossiness="Steel_Worn_00_R"
 emissive="black"

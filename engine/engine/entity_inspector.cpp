@@ -9,6 +9,7 @@
 #include "ai\logic_manager.h"
 #include <locale>
 #include <algorithm>
+#include "render\sharpen_step.h"
 
 using namespace physx;
 
@@ -884,4 +885,37 @@ void CConsole::print(std::string text) {
 		TwRemoveVar(console_bar, name.c_str());
 		TwAddButton(console_bar, name.c_str(), NULL, NULL, label.c_str());
 	}
+}
+
+
+
+// ------------------------------------------------------
+TwBar *post_process_bar;
+
+CPostProcessOptioner::CPostProcessOptioner()
+{}
+
+CPostProcessOptioner::~CPostProcessOptioner() { }
+
+static CPostProcessOptioner post_process_optioner;
+
+CPostProcessOptioner& CPostProcessOptioner::get() {
+	return post_process_optioner;
+}
+
+void CPostProcessOptioner::init() {
+	// Create a tewak bar
+	post_process_bar = TwNewBar("PostProcessOptioner");
+
+	CApp &app = CApp::get();
+
+	// AntTweakBar test
+	int barSize[2] = { 224, 120 };
+	int varPosition[2] = { 500, 20 };
+	TwSetParam(post_process_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	TwSetParam(post_process_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
+	TwDefine(" PostProcessOptioner label='Debug options' ");
+	TwDefine(" PostProcessOptioner refresh='2' ");
+
+	TwAddVarRW(post_process_bar, "Sharpen", TW_TYPE_FLOAT, &sharpen->amount, "min=0 max=10 step=0.05 ");
 }

@@ -47,6 +47,20 @@ public:
 		return true;
 	}
 
+	bool reload(const char* name) {
+
+		// Search ...
+		auto it = all_items.find(name);
+
+		// If not found, return false
+		if (it == all_items.end()) {
+			dbg("Can't reload item %s\n", name);
+			return false;
+		}
+
+		return it->second->reload();
+	}
+
 };
 
 #endif

@@ -2,22 +2,16 @@
 
 Texture2D txDiffuse   : register(t0);
 Texture2D txNormal    : register(t1);
-Texture2D txSpecular  : register(t2);
-Texture2D txGloss  : register(t3);
-Texture2D txEmissive  : register(t4);
-Texture2D txAO  : register(t5);
+Texture2D txDepth     : register(t2);
+Texture2D txAccLight  : register(t3);
 Texture2D txShadowMap : register(t6);
-TextureCube EnvMap : register(t7);
+
+TextureCube  txEnvironment : register(t4);
+
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
 SamplerState samBorderLinear : register(s2);
 SamplerComparisonState samPCFShadows : register(s3);
-SamplerState EnvMapSampler : TEXUNIT3{
-	Texture = txCubemap;
-	MIPFILTER = LINEAR;
-	MINFILTER = LINEAR;
-	MAGFILTER = LINEAR;
-};
 
 //--------------------------------------------------------------------------------------
 struct VS_TEXTURED_OUTPUT
@@ -30,12 +24,34 @@ struct VS_TEXTURED_OUTPUT
 };
 
 //--------------------------------------------------------------------------------------
-void VSGenShadows(
+void VSCommon(
         float4 iPos : POSITION
   , out float4 oPos : SV_POSITION
   ) {
   float4 world_pos = mul(iPos, World);
   oPos = mul(world_pos, ViewProjection);
+}
+
+//--------------------------------------------------------------------------------------
+// Vertex Shader
+//--------------------------------------------------------------------------------------
+VS_TEXTURED_OUTPUT VS(
+    float4 Pos : POSITION
+  , float2 UV : TEXCOORD0
+  , float3 Normal : NORMAL
+  , float4 Tangent : TANGENT
+  )
+{
+  VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+  float4 world_pos = mul(Pos, World);
+  output.Pos = mul(world_pos, ViewProjection);
+  output.wNormal = mul(Normal, (float3x3)World);
+  output.UV = UV *= 3;
+  output.wPos = world_pos;
+  // Rotate the tangent and keep the w value
+  output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
+  output.wTangent.w = Tangent.w;
+  return output;
 }
 
 void VSGenShadowsSkel(
@@ -53,177 +69,7 @@ void VSGenShadowsSkel(
 		+ bones[bone_ids.w] * weights[3]
 		;
 	float4 skinned_pos = mul(ipos, skin_mtx);
-	oPos = mul(skinned_pos, ViewProjection);
-}
-
-//--------------------------------------------------------------------------------------
-// Vertex Shader
-//--------------------------------------------------------------------------------------
-VS_TEXTURED_OUTPUT VS(
-    float4 Pos : POSITION
-  , float2 UV : TEXCOORD0
-  , float3 Normal : NORMAL
-  , float4 Tangent : TANGENT
-  )
-{
-  VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
-  float4 world_pos = mul(Pos, World);
-  output.Pos = mul(world_pos, ViewProjection);
-  output.wNormal = mul(Normal, (float3x3)World);
-  output.UV = UV;
-  output.wPos = world_pos;
-  // Rotate the tangent and keep the w value
-  output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
-  output.wTangent.w = Tangent.w;
-  return output;
-}
-
-
-// PBR TEST
-
-float PI = 3.14159;
-
-// http://graphicrants.blogspot.com.au/2013/08/specular-brdf-reference.html
-float GGX(float NdotV, float a)
-{
-	float k = a / 2;
-	return NdotV / (NdotV * (1.0f - k) + k);
-}
-
-// http://graphicrants.blogspot.com.au/2013/08/specular-brdf-reference.html
-float G_Smith(float a, float nDotV, float nDotL)
-{
-	return GGX(nDotL, a * a) * GGX(nDotV, a * a);
-}
-
-float radicalInverse_VdC(uint bits) {
-	bits = (bits << 16u) | (bits >> 16u);
-	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
-	bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
-	bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
-	bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
-	return float(bits) * 2.3283064365386963e-10; // / 0x100000000
-}
-// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
-float2 Hammersley(uint i, uint N) {
-	return float2(float(i) / float(N), radicalInverse_VdC(i));
-}
-
-
-float3 ImportanceSampleGGX(float2 Xi, float Roughness, float3 N)
-{
-	float a = Roughness * Roughness; // DISNEY'S ROUGHNESS [see Burley'12 siggraph]
-
-	// Compute distribution direction
-	float Phi = 2 * PI * Xi.x;
-	float CosTheta = sqrt((1 - Xi.y) / (1 + (a*a - 1) * Xi.y));
-	float SinTheta = sqrt(1 - CosTheta * CosTheta);
-
-	// Convert to spherical direction
-	float3 H;
-	H.x = SinTheta * cos(Phi);
-	H.y = SinTheta * sin(Phi);
-	H.z = CosTheta;
-
-	float3 UpVector = abs(N.z) < 0.999 ? float3(0, 0, 1) : float3(1, 0, 0);
-	float3 TangentX = normalize(cross(UpVector, N));
-	float3 TangentY = cross(N, TangentX);
-
-	// Tangent to world space
-	return TangentX * H.x + TangentY * H.y + N * H.z;
-}
-
-float3 SpecularIBL(float3 SpecularColor, float Roughness, float3 N, float3 V)
-{
-	float3 SpecularLighting = 0;
-	const uint NumSamples = 1024;
-	for (uint i = 0; i < NumSamples; i++)
-	{
-		float2 Xi = Hammersley(i, NumSamples);
-		float3 H = ImportanceSampleGGX(Xi, Roughness, N);
-		float3 L = 2 * dot(V, H) * H - V;
-		float NoV = saturate(dot(N, V));
-		float NoL = saturate(dot(N, L));
-		float NoH = saturate(dot(N, H));
-		float VoH = saturate(dot(V, H));
-		if (NoL > 0)
-		{
-			float3 SampleColor = EnvMap.SampleLevel(EnvMapSampler, L, 0).rgb;
-			float G = G_Smith(Roughness, NoV, NoL);
-			float Fc = pow(1 - VoH, 5);
-			float3 F = (1 - Fc) * SpecularColor + Fc;
-				// Incident light = SampleColor * NoL
-				// Microfacet specular = D*G*F / (4*NoL*NoV)
-				// pdf = D * NoH / (4 * VoH)
-				SpecularLighting += SampleColor * F * G * VoH / (NoH * NoV);
-		}
-	}
-	return SpecularLighting / NumSamples;
-}
-
-float3 PrefilterEnvMap(float Roughness, float3 R)
-{
-	float3 TotalWeight = float3(0, 0, 0);
-	float3 N = R;
-	float3 V = R;
-	float3 PrefilteredColor = 0;
-	const uint NumSamples = 16;
-	for (uint i = 0; i < NumSamples; i++)
-	{
-		float2 Xi = Hammersley(i, NumSamples);
-			float3 H = ImportanceSampleGGX(Xi, Roughness, N);
-			float3 L = 2 * dot(V, H) * H - V;
-			float NoL = saturate(dot(N, L));
-		if (NoL > 0)
-		{
-			PrefilteredColor += EnvMap.SampleLevel(EnvMapSampler, L, 0).rgb * NoL;
-			TotalWeight += NoL;
-		}
-	}
-	return PrefilteredColor / TotalWeight;
-}
-
-float2 IntegrateBRDF(float Roughness, float NoV, float3 N)
-{
-	//float3 N = float3(0, 0, 1);
-
-	float3 V;
-	V.x = sqrt(1.0f - NoV * NoV); // sin
-	V.y = 0;
-	V.z = NoV; // cos
-	float A = 0;
-	float B = 0;
-	const uint NumSamples = 16;
-	for (uint i = 0; i < NumSamples; i++)
-	{
-		float2 Xi = Hammersley(i, NumSamples);
-		float3 H = ImportanceSampleGGX(Xi, Roughness, N);
-		float3 L = 2 * dot(V, H) * H - V;
-		float NoL = saturate(L.z);
-		float NoH = saturate(H.z);
-		float VoH = saturate(dot(V, H));
-		if (NoL > 0)
-		{
-			float G = G_Smith(Roughness, NoV, NoL);
-			float G_Vis = G * VoH / (NoH * NoV);
-			float Fc = pow(1 - VoH, 5);
-			A += (1 - Fc) * G_Vis;
-			B += Fc * G_Vis;
-		}
-	}
-	return float2(A, B) / NumSamples;
-}
-
-float3 ApproximateSpecularIBL(float3 SpecularColor, float Roughness, float3 N, float3 V)
-{
-	float NoV = saturate(dot(N, V));
-	float3 R = 2 * dot(V, N) * N - V;
-
-	float3 PrefilteredColor = PrefilterEnvMap(Roughness, R);
-	//float3 PrefilteredColor = float3(1, 1, 1);
-	float2 EnvBRDF = IntegrateBRDF(Roughness, NoV, N);
-
-	return PrefilteredColor * (SpecularColor * EnvBRDF.x + EnvBRDF.y);
+		oPos = mul(skinned_pos, ViewProjection);
 }
 
 //--------------------------------------------------------------------------------------
@@ -239,7 +85,7 @@ float4 PSBasicLighting(VS_TEXTURED_OUTPUT input) : SV_Target
   float  diffuse_amount = saturate( dot(N, L) );
 
   // Speculares
-  float3 E = normalize(CameraWorldPos.xyz - input.wPos.xyz);
+  float3 E = normalize(cameraWorldPos.xyz - input.wPos.xyz);
   //float3 H = normalize(E + L);
   //float  cos_beta = saturate( dot(H, N) );
   float3 ER = reflect(-E, N);
@@ -252,32 +98,43 @@ float4 PSBasicLighting(VS_TEXTURED_OUTPUT input) : SV_Target
 
 
 //--------------------------------------------------------------------------------------
-float getShadowAtCoords(float4 wPos) {
-	float4 light_proj_coords = mul(wPos, LightViewProjectionOffset);
-		light_proj_coords.xyz /= light_proj_coords.w;
-	if (light_proj_coords.z <= 1e-3)
-		return 0;
-	float amount = txShadowMap.SampleCmpLevelZero(samPCFShadows
-		, light_proj_coords.xy, light_proj_coords.z - 0.01);
-	return amount;
+float tapAt(float2 homo_coords, float depth) {
+  float amount = txShadowMap.SampleCmpLevelZero(samPCFShadows
+    , homo_coords, depth);
+  return amount;
 }
 
+// -------------------------
 float getShadowAt(float4 wPos) {
 
-	float4 amount = getShadowAtCoords(wPos);
+  // Move to homogeneous space of the light
+  float4 light_proj_coords = mul(wPos, LightViewProjectionOffset);
+  light_proj_coords.xyz /= light_proj_coords.w;
+  if (light_proj_coords.z <= 1e-3)
+    return 0;
 
-		float sz = 1.0 / 128
-		;
+  float2 center = light_proj_coords.xy;
+    float depth = light_proj_coords.z - 0.001;
 
-	amount += getShadowAtCoords(wPos + float4(sz, sz, 0, 0));
-	amount += getShadowAtCoords(wPos + float4(-sz, sz, 0, 0));
-	amount += getShadowAtCoords(wPos + float4(sz, -sz, 0, 0));
-	amount += getShadowAtCoords(wPos + float4(-sz, -sz, 0, 0));
+  float amount = tapAt(center, depth);
 
-	amount *= 1.0 / 5;
+  float sz = 1. / 1024;
+  amount += tapAt(center + float2(sz, sz), depth);
+  amount += tapAt(center + float2(-sz, sz), depth);
+  amount += tapAt(center + float2(sz, -sz), depth);
+  amount += tapAt(center + float2(-sz, -sz), depth);
 
-	return amount;
+  amount += tapAt(center + float2(sz, 0), depth);
+  amount += tapAt(center + float2(-sz, 0), depth);
+  amount += tapAt(center + float2(0, -sz), depth);
+  amount += tapAt(center + float2(0, sz), depth);
+
+  amount *= 1.f / 9.;
+  //amount *= 1.f / 5.;
+
+  return amount;
 }
+
 
 //--------------------------------------------------------------------------------------
 // GBuffer creation
@@ -287,6 +144,7 @@ void PSGBuffer(
   , out float4 albedo : SV_Target0
   , out float4 normal : SV_Target1
   , out float4 acc_light : SV_Target2
+  , out float  depth : SV_Target3
 )
 {
 
@@ -300,70 +158,121 @@ void PSGBuffer(
                          , in_normal);
 
   // Convert the range 0...1 from the texture to range -1 ..1 
-  float3 normal_tangent_space =  txNormal.Sample(samWrapLinear, input.UV) * 2 - 1.;
+  float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
   float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
 
   // Save the normal
-  normal = float4(wnormal_per_pixel, 1);
+  normal = (float4(wnormal_per_pixel, 1) + 1. ) * 0.5;
   
   // Basic diffuse lighting
-  float3 L = LightWorldPos.xyz - input.wPos.xyz;	  
+  float3 L = LightWorldPos.xyz - input.wPos.xyz;
   L = normalize(L);
   float3 N = normalize(wnormal_per_pixel);
   float  diffuse_amount = saturate(dot(N, L));
+  
+  float  diffuse_amount2 = saturate(dot(in_normal, L));
 
-  // Speculares
-  float3 E = normalize(CameraWorldPos.xyz - input.wPos.xyz);
-  //float3 H = normalize(E + L);
-  //float  cos_beta = saturate( dot(H, N) );
-  float3 ER = reflect(-E, N);
-  float cos_beta = saturate(dot(ER, L));
-  float spec_amount = pow(cos_beta, 2.);
-  float spec_intensity = txSpecular.Sample(samWrapLinear, input.UV);
-  float spec_final = saturate(spec_amount * spec_intensity);
+  depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+  //depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
 
-  /*float3 reflectedColor = txCubemap.Sample(samCube, ER);
-  float4 cube_reflection = float4(reflectedColor, 1);*/
-
-  float3 emissiveColor = txEmissive.Sample(samWrapLinear, input.UV);
-  float4 emissive = float4(emissiveColor, 1);
   // 
   acc_light = getShadowAt(input.wPos);
+  //acc_light *= diffuse_amount2;
+  //albedo *= (0.2 + acc_light * 0.8);
+}
 
-  //albedo *= (0.3 + acc_light * 0.7);
-  //albedo = (diffuse_amount * albedo + spec_final) * acc_light + emissive;  
+float3 getWorldCoords( float2 screen_coords, float depth ) {
+  float3 view_dir = float3(cameraHalfXRes - screen_coords.x
+                          , cameraHalfYRes - screen_coords.y
+                          , cameraViewD);
+  view_dir = view_dir / cameraViewD * cameraZFar * depth;
 
-  //ApproximateSpecularIBL(float3 SpecularColor, float Roughness, float3 N, float3 V)
-  float3 SpecularColor = txSpecular.Sample(samWrapLinear, input.UV).rgb;
-	  SpecularColor = pow(length(SpecularColor), 2) * SpecularColor;
-  float Roughness = 1 - txGloss.Sample(samWrapLinear, input.UV);
-  //SpecularColor = float3(0.2, 0.2, 0.2);
-  //Roughness = 1;
-  float3 res = ApproximateSpecularIBL(SpecularColor, Roughness, N, E);
+  float3 world_dir = view_dir.z * cameraWorldFront.xyz
+                   + view_dir.y * cameraWorldUp.xyz
+                   + view_dir.x * cameraWorldLeft.xyz;
+  float3 wPos = cameraWorldPos.xyz + world_dir;
+  return wPos;
+}
 
-  //albedo = albedo * (diffuse_amount + float4(res, 1));
+// -------------------------------------------------
+float getSpecular(float3 wPos, float3 L, float3 N) {
+  float3 E = normalize(cameraWorldPos.xyz - wPos);
+  float3 H = normalize(L + E);
+  float  spec_amount = pow(saturate(dot(H, N)), 20);    // 20 should come from a texture
+  return spec_amount;
+}
 
-  // Fresnel
-  float angle = 1.0f - saturate(dot(N, E));
-  float fresnel = angle * angle;
-  fresnel = fresnel * fresnel;
-  fresnel = fresnel * angle;
-  float refractionStrength = 0.1;
-  float4 fresnelFromAlbedo = saturate(fresnel * (1.0f - saturate(albedo)) + albedo - refractionStrength);
-	  float4 fresnel4 = float4(fresnel, fresnel, fresnel, fresnel);
+// -------------------------------------------------
+// Point lights
+// -------------------------------------------------
+float4 PSPointLights(
+  in float4 iPosition : SV_Position
+  ) :SV_Target0{
 
-	  float4 ao = txAO.Sample(samWrapLinear, input.UV);
+  int3 ss_load_coords = uint3(iPosition.xy, 0);
+  float depth = txDepth.Load(ss_load_coords).x;
+  float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 
-	  float4 diffuse_brdf = /*(1 - fresnel) */ albedo / 3.14159;
-	  albedo = albedo / 3.14159 * diffuse_amount + emissive;
-	  //albedo = (saturate(albedo * diffuse_amount * ao) + saturate(float4(res, 1))) * saturate(acc_light) + emissive;
+  float3 wPos = getWorldCoords(iPosition.xy, depth);
 
-	  
-  //albedo *= saturate(acc_light);
-  
-  
-  //albedo = float4(1, 0, 0, 1);
+  // Basic diffuse lighting
+  float3 L = plight_world_pos.xyz - wPos;
+  float  distance_to_light = length(L);
+  L = L / distance_to_light;
+  float  diffuse_amount = saturate(dot(N, L));
+
+  float spec_amount = getSpecular(wPos, L, N);
+
+  // Attenuation based on distance:   1 - [( r - rmin ) / ( rmax - rmin )]
+  float  att_factor = saturate((plight_max_radius - distance_to_light) * plight_inv_delta_radius);
+
+  // Save spec amount in the alpha channel
+  float4 output = plight_color * diffuse_amount;
+  output.a = spec_amount;
+  return output * att_factor;
 }
 
 
+// -------------------------------------------------
+// Dir lights
+// -------------------------------------------------
+float4 PSDirLights(
+  in float4 iPosition : SV_Position
+  ) :SV_Target0{
 
+  int3 ss_load_coords = uint3(iPosition.xy, 0);
+  float depth = txDepth.Load(ss_load_coords).x;
+  float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+
+  float3 wPos = getWorldCoords(iPosition.xy, depth);
+
+  // Basic diffuse lighting
+  float3 L = dir_light_world_pos.xyz - wPos;
+  float  distance_to_light = length(L);
+  L = L / distance_to_light;
+  float  diffuse_amount = saturate(dot(N, L));
+
+  // Currently, no attenuation based on distance
+  // Attenuation based on shadowmap
+  float att_factor = getShadowAt(float4(wPos, 1));
+
+  float spec_amount = getSpecular(wPos, L, N);
+  return float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
+}
+
+
+// -------------------------------------------------
+// Resolve lights
+// -------------------------------------------------
+float4 PSResolve(
+  in float4 iPosition : SV_Position
+  ) :SV_Target0{
+
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float4 albedo = txDiffuse.Load(ss_load_coords);
+	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+	float4 diffuse = txAccLight.Load(ss_load_coords);
+	float4 env = txEnvironment.Sample(samWrapLinear, N);
+
+	return (albedo * diffuse + diffuse.a) * 0.9 + env* 0.1;
+}
