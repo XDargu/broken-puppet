@@ -28,6 +28,13 @@ VS_TEXTURED_OUTPUT VSBlur(
   return output;
 }
 
+static float3x3 conv =
+{
+	1. / 16., 1. / 8., 1. / 16.,
+	1. / 8., 1. / 4., 1. / 8.,
+	1. / 16., 1. / 8., 1. / 16.
+};
+
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
@@ -36,14 +43,7 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 	if (blur_amount > 0) {
 		float4 color = float4(0, 0, 0, 0);
 			float2 delta = float2(0, 0);
-			float factor = 1.f;
-
-		float3x3 conv =
-		{
-			1. / 16., 1. / 8., 1. / 16.,
-			1. / 8., 1. / 4., 1. / 8.,
-			1. / 16., 1. / 8., 1. / 16.
-		};
+			float factor = 1.f;		
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
