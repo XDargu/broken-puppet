@@ -127,7 +127,7 @@ void TCompColliderBox::addInputNavMesh(){
 
 void TCompColliderBox::setCollisionGroups(){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
-	PxU32 myMask = convertInCollisionFilter(e->collision_tag);
+	PxU32 myMask = convertStrInCollisionFilter(e->collision_tag);
 	PxU32 notCollide=0;
 	bool found = false;
 	auto it = CPhysicsManager::get().m_collision->find(myMask);

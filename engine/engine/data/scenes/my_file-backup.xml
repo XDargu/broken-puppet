@@ -37,7 +37,7 @@
     <shadows res="1024" color="0.5 0.5 0"/>
     playerDoomController/>
   </entity>
-	<entity tag = "player" collisionTag="Actor" prefab="Player">
+	<entity tag = "player" collisionTag="Player" prefab="Player">
 <transform position="0.297749 2.05983 -4.19523" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <ragdoll name="prota"/>
 	</entity>
@@ -397,7 +397,7 @@
 <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
 <colliderMesh path="dvn_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor">
+	<entity tag = "actor"  collisionTag="Actor">
 <name name="Caja001_39.0" />
 <transform position="-0.948828 0.412787 -15.4685" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -412,7 +412,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.490561" boxY="0.579522" boxZ="0.412788"/>
 <rigidbody density="15.9776"  />
 	</entity>
-	<entity tag = "actor">
+	<entity tag = "actor"  collisionTag="Actor">
 <name name="Caja002_40.0" />
 <transform position="7.47402 0.500163 -7.50217" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -427,7 +427,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.596399" boxY="0.679869" boxZ="0.500163"/>
 <rigidbody density="12.3273"  />
 	</entity>
-	<entity tag = "actor">
+	<entity tag = "actor"  collisionTag="Actor">
 <name name="Caja003_41.0" />
 <transform position="-1.70162 0.320121 -2.68186" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -442,7 +442,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.338724" boxY="0.299597" boxZ="0.320121"/>
 <rigidbody density="38.478"  />
 	</entity>
-	<entity tag = "actor">
+	<entity tag = "actor"  collisionTag="Actor">
 <name name="Caja004_42.0" />
 <transform position="9.3308 0.484364 -0.643363" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -457,7 +457,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.70364" boxY="0.665835" boxZ="0.484364"/>
 <rigidbody density="10.0"  />
 	</entity>
-		<entity tag = "actor">
+		<entity tag = "actor" collisionTag="Actor">
 <name name="D6Test01_42.0" />
 <transform position="14.8864 1.04749 -6.80304" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -472,7 +472,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.91258" boxY="1.22394" boxZ="0.770802"/>
 <rigidbody density="42.478"  />
 	</entity>
-	<entity tag = "actor">
+	<entity tag = "actor" collisionTag="Actor">
 <name name="D6Test02_43.0" />
 <transform position="14.9644 4.00073 -6.84086" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
