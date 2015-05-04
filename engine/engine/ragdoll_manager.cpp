@@ -71,6 +71,12 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		Physics.gScene->addActor(*rigidBody);
 
+		// More solver iteration (precise rigidbody collision)
+		rigidBody->setSolverIterationCounts(8, 8);
+
+		// Increase the sleep threshold, to prevent the shakiness of the ragdoll
+		rigidBody->setSleepThreshold(0.1f);
+
 		bone_map[bone_id] = rigidBody;
 	}
 
@@ -160,7 +166,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		// Primer valor: Swing 1 angle / 2, segundo valor: Swing 2 angle / 2
 		mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), PxSpring(100, 10)));
-
+		
 		// Twist limit
 		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), PxSpring(100, 10)));
 
