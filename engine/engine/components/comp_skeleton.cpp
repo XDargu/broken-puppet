@@ -292,51 +292,11 @@ void TCompSkeleton::update(float elapsed) {
 			  collider->getCapsuleGeometry(geom);
 			  half_height = geom.halfHeight;
 
-			  bone->setTranslation(delta_in_local/* + (right * half_height)*/);
+			  bone->setTranslation(delta_in_local);			  
 			  
 			  bone->calculateState();
 		  }
 	  }
-
-	  //model->getMixer()->updateSkeleton();
-
-		  /*if (rigid_bone) {
-			  cal_pos = DX2Cal(Physics.PxVec3ToXMVECTOR(rigid_bone->getGlobalPose().p)) - diff;
-			  int parent_id = bone->getCoreBone()->getParentId();
-			  if (parent_id != -1) {
-			  TTransform parent = bone_ragdoll_transforms[parent_id];
-			  cal_rot = DX2CalQuat(parent.rotation) * DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
-
-			  TTransform me = TTransform(
-			  Cal2DX(cal_pos)
-			  , Cal2DX(bone->getRotationBoneSpace())
-			  , XMVectorSet(1, 1, 1, 1)
-			  );
-
-			  XMVECTOR rot = me.inverseTransformDirection(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
-
-
-			  //cal_rot = DX2CalQuat(rot);
-			  //cal_rot = DX2CalQuat(Physics.PxQuatToXMVECTOR(rigid_bone->getGlobalPose().q));
-			  }
-			  }
-			  else {
-			  int parent_id = bone->getCoreBone()->getParentId();
-			  if (parent_id != -1) {
-			  TTransform parent = bone_ragdoll_transforms[parent_id];
-			  cal_pos = DX2Cal(parent.position) + cal_pos;
-			  //cal_rot = DX2CalQuat(parent.rotation) * cal_rot;
-			  }
-			  }
-
-			  // Set the position
-			  int parent_id = bone->getCoreBone()->getParentId();
-			  if (parent_id != -1) {
-
-			  bone_ragdoll_transforms[bone_idx].position = Cal2DX(cal_pos);
-			  bone_ragdoll_transforms[bone_idx].rotation = Cal2DX(cal_rot);
-			  }*/
-	  
   }
 
   else {
@@ -378,8 +338,8 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-
-	bool draw_ragdoll = h_ragdoll.isValid();
+	return;
+	/*bool draw_ragdoll = h_ragdoll.isValid();
 
 	if (draw_ragdoll) {
 		TCompRagdoll* ragdoll = h_ragdoll;
@@ -409,8 +369,7 @@ void TCompSkeleton::renderDebug3D() const {
 			}
 		}
 	}
-
-	return;
+	*/
 
   CCoreModel *core = (CCoreModel*) model->getCoreModel();
   for (auto bc : core->bone_ids_to_debug) {
@@ -436,7 +395,7 @@ void TCompSkeleton::renderDebug3D() const {
   }
 
   // 
-  auto actions = model->getMixer()->getAnimationActionList();
+  /*auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
   float y0 = 20.f;
   for (auto a : actions) {
@@ -452,7 +411,7 @@ void TCompSkeleton::renderDebug3D() const {
       , a->getWeight()
       , a->getCoreAnimation()->getDuration()
       );
-  }
+  }*/
 
 }
 

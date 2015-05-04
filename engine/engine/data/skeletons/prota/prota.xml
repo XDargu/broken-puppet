@@ -19,6 +19,16 @@
 	<anim name="run_right"/>15
 	<anim name="walk_back"/>16
 	<anim name="pull_up"/>17
+	<anim name="stand_up"/>18
+	<anim name="throw_up"/>19
+	<anim name="throw_partial_up"/>20
+	<anim name="run_back"/>21
+	<anim name="walk_back_up"/>22
+	<anim name="run_back_up"/>23
+	<anim name="walk_left_up"/>24
+	<anim name="walk_right_up"/>25
+	<anim name="run_left_up"/>26
+	<anim name="run_right_up"/>27
 	
 	<ik_foot bone="Bip01 R Foot" local_dir="0 1 0" amount="1" render="1"/>
 	<ik_foot bone="Bip01 L Foot" local_dir="0 1 0" amount="1" render="1"/>

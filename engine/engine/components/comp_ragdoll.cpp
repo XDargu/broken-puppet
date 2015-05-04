@@ -19,61 +19,17 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	ragdoll = (CCoreRagdoll*)ragdoll_manager.getByName(ragdoll_name.c_str());
 
-	// Obtener los bones en base a sus nombres
-	/*TCompSkeleton* skel = skeleton;
-	auto& cal_bones = skel->model->getSkeleton()->getVectorBone();
-	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
-		cal_bones[bone_idx]->getCoreBone()->getName();
+	for (auto& rigid : ragdoll->bone_map) {
+		rigid.second->userData = CHandle(this).getOwner().asVoidPtr();
 	}
-
-	//int nums[7] = {1, 2, 41, 26, 42, 74, 79 };
-
-	int nums[6];
-	std::string bone_names[6] = { "Bip001 Head", "Bip001 L UpperArm", "Bip001 R UpperArm", "Bip001 L Thigh", "Bip001 R Thigh", "Bip001 Pelvis" };
-
-	for (int i = 0; i < 6; ++i) {
-		nums[i] = skel->model->getSkeleton()->getCoreSkeleton()->getCoreBoneId(bone_names[i]);
-	}	
-
-	//for (int i = 0; i < 8; ++i) {
-	for (int i : nums) {
-		CalBone* cal_bone = skel->model->getSkeleton()->getBone(i);
-		const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
-		const CalQuaternion& cal_mtx = cal_bone->getRotation();
-
-		XMVECTOR dx_pos = Cal2DX(cal_pos);
-		XMVECTOR dx_rot = Cal2DX(cal_mtx);
-		
-		physx::PxMaterial* mat = Physics.gPhysicsSDK->createMaterial(0.5, 0.5, 0.5);
-
-		PxShape* collider = Physics.gPhysicsSDK->createShape(
-			physx::PxSphereGeometry(
-			physx::PxReal(0.15)
-			),
-			*mat
-			,
-			true);
-
-		PxRigidDynamic* rigidBody = physx::PxCreateDynamic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(dx_pos),
-			Physics.XMVECTORToPxQuat(dx_rot))
-			, *collider
-			, 1000);
-
-		Physics.gScene->addActor(*rigidBody);
-
-		ragdoll->bone_map[i] = rigidBody;
-	}*/
 	
-
+	setCollisionGroups();
 	setActive(false);
 }
 
 void TCompRagdoll::fixedUpdate(float elapsed) {
 
-	if (CIOStatus::get().becomesPressed(CIOStatus::CANCEL_STRING))
+	if (CIOStatus::get().becomesPressed(CIOStatus::F8_KEY))
 		setActive(!isRagdollActive());
 		
 
@@ -109,4 +65,27 @@ PxRigidDynamic* TCompRagdoll::getBoneRigid(int id) {
 	if (ragdoll->bone_map.find(id) != ragdoll->bone_map.end())
 		return ragdoll->bone_map[id];
 	return nullptr;
+}
+
+void TCompRagdoll::setCollisionGroups(){
+	CEntity* e = (CEntity*)CHandle(this).getOwner();
+	PxU32 myMask = convertInCollisionFilter(e->collision_tag);
+	PxU32 notCollide = 0;
+	bool found = false;
+	auto it = CPhysicsManager::get().m_collision->find(myMask);
+	if (it != CPhysicsManager::get().m_collision->end()){
+		std::vector<physx::PxU32>colFil = it->second;
+		if (!colFil.empty()){
+			for (int i = 0; i < colFil.size(); i++){
+				notCollide |= colFil[i];
+			}
+		}
+	}
+
+	for (auto& it : ragdoll->bone_map) {
+		PxShape* collider;
+		it.second->getShapes(&collider, 1);
+
+		setupFiltering(collider, myMask, notCollide);
+	}
 }

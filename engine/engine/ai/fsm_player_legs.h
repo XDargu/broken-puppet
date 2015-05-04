@@ -16,6 +16,7 @@ public:
 	CHandle comp_rigidbody;
 	CHandle comp_collider;
 	CHandle comp_skeleton;
+	CHandle comp_ragdoll;
 	CHandle comp_skeleton_ik;
 	CHandle comp_player_controller;
 	CHandle comp_player_pivot_transform;
