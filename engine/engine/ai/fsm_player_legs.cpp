@@ -395,7 +395,8 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
 		skeleton->stopAnimation(6);
-		ChangeState("fbp_WrongLand");
+		//ChangeState("fbp_WrongLand");
+		ChangeState("fbp_Ragdoll");
 	}
 }
 
@@ -499,7 +500,6 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 			if (m_ragdoll) { m_ragdoll->setActive(false); }
 			ChangeState("fbp_WakeUp");
 		}
-
 	}
 
 	else
@@ -510,9 +510,12 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 			// Bone 003: Spine
 			XMVECTOR spine_pos = m_skeleton->getPositionOfBone(3);
 
+			XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(rigidbody->rigidBody->getGlobalPose().p);
+			XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+		
 			rigidbody->rigidBody->setGlobalPose(
 				physx::PxTransform(
-				Physics.XMVECTORToPxVec3(spine_pos),
+				Physics.XMVECTORToPxVec3(pos_final),
 				rigidbody->rigidBody->getGlobalPose().q
 				)
 				);

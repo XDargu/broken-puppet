@@ -83,6 +83,8 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 	else if (elem == "jointD6") {
 
+		bool breakable = atts.getBool("breakable", false);
+
 		PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 		PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 
@@ -171,15 +173,9 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		// Twist limit
 		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), PxSpring(100, 10)));
 
-		// Break only some bones
-		std::string bone_names[4] = { "Bip001 L UpperArm", "Bip001 R UpperArm", "Bip001 L Thigh", "Bip001 R Thigh" };
-
-		for (std::string& bone : bone_names) {
-			if (bone_name2 == bone) {
-				mJoint->setBreakForce(10000, 10000);
-				break;
-			}
-
+		// Break bones
+		if (breakable) {
+			mJoint->setBreakForce(10000, 10000);
 		}
 
 		articulations.push_back(mJoint);
