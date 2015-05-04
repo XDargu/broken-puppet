@@ -348,7 +348,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 		ChangeState("fbp_Jump");
 		skeleton->stopAnimation(6);
 	}
-	else if (state_time >= 0.7f){
+	else if (state_time >= 1.1f){
 		ChangeState("fbp_WrongFall");
 		skeleton->stopAnimation(6);
 	}
@@ -561,11 +561,11 @@ void FSMPlayerLegs::ReevaluatePriorities(){
 }
 
 void FSMPlayerLegs::WakeUp(float elapsed){
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
-	/*if (on_enter) {
-		TCompSkeleton* m_skeleton = comp_skeleton;
-		m_skeleton->playAnimation(18);
-	}*/
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	dir.normalize();
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= 3.3f){
 		ChangeState("fbp_Idle");
