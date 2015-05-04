@@ -7,6 +7,7 @@
 
 FSMPlayerLegs::FSMPlayerLegs()
 {
+	
 }
 
 FSMPlayerLegs::~FSMPlayerLegs()
@@ -120,14 +121,14 @@ void FSMPlayerLegs::Walk(float elapsed){
 
 	if (movement_dir.z == 0) {
 		if (movement_dir.x < 0) {
-			animation = 13;
+			animation = torso->up_animation ? 25 : 13;
 		}
 		else if (movement_dir.x > 0) {
-			animation = 12;
+			animation = torso->up_animation ? 24 : 12;
 		}
 	}
 	else if (movement_dir.z < 0) {
-		animation = 16;
+		animation = torso->up_animation ? 22 : 16;
 	}
 
 	if (animation != current_animation_id) {
@@ -183,11 +184,14 @@ void FSMPlayerLegs::Run(float elapsed){
 
 	if (movement_dir.z == 0) {
 		if (movement_dir.x < 0) {
-			animation = 15;
+			animation = torso->up_animation ? 25 : 15;
 		}
 		else if (movement_dir.x > 0) {
-			animation = 14;
+			animation = torso->up_animation ? 26 : 14;
 		}
+	}
+	else if (movement_dir.z < 0) {
+		animation = torso->up_animation ? 23 : 21;
 	}
 
 	if (animation != current_animation_id) {
@@ -268,9 +272,11 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 
 	canThrow = false;
 	
+	int animation = torso->up_animation ? 19 : 4;
+
 	if (on_enter) {
 		skeleton->loopAnimation(0);
-		skeleton->playAnimation(4);
+		skeleton->playAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -290,8 +296,10 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	int animation = torso->up_animation ? 20 : 11;
+
 	if (on_enter) {
-		skeleton->playAnimation(11);
+		skeleton->playAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
