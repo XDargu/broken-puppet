@@ -58,6 +58,8 @@ void FSMPlayerLegs::Init()
 	((TCompCharacterController*)comp_character_controller)->jumpPower = 7;
 	walk_speed = 1.5f;
 
+	((TCompCharacterController*)comp_character_controller)->lerpRotation = 0.15;
+
 	current_animation_id = -1;
 
 	life = ((CEntity*)entity)->get<TCompLife>();
