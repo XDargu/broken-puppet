@@ -550,8 +550,13 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
+
+	CHandle h_light = entity_manager.getByName("the_light");
+	CEntity* e_light = h_light;
+	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
-	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	
+	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);

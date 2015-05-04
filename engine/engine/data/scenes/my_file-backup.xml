@@ -19,7 +19,7 @@
   <entity>
     <name name="the_light"/>
     <transform position="0 7 -30" rotation="0.16 0.14 -0.06 0.98"/>
-    <camera target="0 0 0" fov="45.0" znear="5" zfar="250"/>
+    <camera target="0 0 0" fov="45.0" znear="5" zfar="25000"/>
     <shadows res="1024" color="1 1 1"/>
     playerDoomController/>
   </entity>
