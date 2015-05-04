@@ -16,7 +16,6 @@ bool TCompPlayerPosSensor::playerInRange(){
 	p_transform = ((CEntity*)player)->get<TCompTransform>();
 	CEntity* e = CHandle(this).getOwner();
 	e_transform = (TCompTransform*)e->get<TCompTransform>();
-	float prueba = V3DISTANCE(p_transform->position, e_transform->position);
 	if (V3DISTANCE(p_transform->position, e_transform->position) < radius){
 		physx::PxRaycastBuffer buf;
 		Physics.raycastAll(e_transform->position + XMVectorSet(0, 1.5f, 0, 0), XMVector3Normalize(p_transform->position - e_transform->position), radius, buf);

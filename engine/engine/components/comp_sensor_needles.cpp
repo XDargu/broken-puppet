@@ -11,10 +11,9 @@ void TCompSensorNeedles::init() {
 	numNeedlesInRange = 0;
 }
 
-std::vector<TCompNeedle*> TCompSensorNeedles::getNeedlesInRange(){
+void TCompSensorNeedles::getNeedlesInRange(std::vector<TCompNeedle*>* needlesInRange){
 	TCompTransform* m_transform = transform;
 	needleInRange(m_transform->position, radius);
-	return needlesInRange;
 }
 
 void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){

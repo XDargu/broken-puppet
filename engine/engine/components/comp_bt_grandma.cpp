@@ -31,7 +31,8 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 void TCompBtGrandma::init(){
 	m_ai_controller->create("enemy");
 	TCompCharacterController* controller = getSibling<TCompCharacterController>(this);
-	controller->moveSpeedMultiplier = 0.2;
+	controller->moveSpeedMultiplier = 1.0f;
+	controller->jumpPower = 0.7f;
 }
 
 void TCompBtGrandma::update(float elapsed){
