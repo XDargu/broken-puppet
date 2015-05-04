@@ -338,7 +338,7 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-
+	return;
 	/*bool draw_ragdoll = h_ragdoll.isValid();
 
 	if (draw_ragdoll) {
@@ -395,7 +395,7 @@ void TCompSkeleton::renderDebug3D() const {
   }
 
   // 
-  auto actions = model->getMixer()->getAnimationActionList();
+  /*auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
   float y0 = 20.f;
   for (auto a : actions) {
@@ -411,7 +411,7 @@ void TCompSkeleton::renderDebug3D() const {
       , a->getWeight()
       , a->getCoreAnimation()->getDuration()
       );
-  }
+  }*/
 
 }
 

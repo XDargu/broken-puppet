@@ -357,7 +357,7 @@ void FSMPlayerLegs::Land(float elapsed){
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
 	if (on_enter) {
-		skeleton->loopAnimation(7);
+		skeleton->playAnimation(7);
 	}
 
 	if (state_time > 0.2f) {
@@ -373,7 +373,6 @@ void FSMPlayerLegs::Land(float elapsed){
 	
 	if (state_time >= 0.5f){
 		ChangeState("fbp_Idle");
-		skeleton->stopAnimation(7);
 	}
 }
 
@@ -462,32 +461,32 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
 
-		rigidbody->setLockXRot(false);
+		/*rigidbody->setLockXRot(false);
 		rigidbody->setLockYRot(false);
 		rigidbody->setLockZRot(false);
 
 		rigidbody->auto_rotate_transform = true;
-		rigidbody->auto_translate_transform = true;
+		rigidbody->auto_translate_transform = true;*/
 	}
 	if (((state_time >= 4 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
 		|| (state_time >= 5))
 	{
 		if (m_ragdoll) { m_ragdoll->setActive(false); }
 
-		rigidbody->setLockXRot(true);
+		/*rigidbody->setLockXRot(true);
 		rigidbody->setLockYRot(true);
 		rigidbody->setLockZRot(true);
 
 		rigidbody->auto_rotate_transform = false;
-		rigidbody->auto_translate_transform = false;
+		rigidbody->auto_translate_transform = false;*/
 
 		// Volver a colocar al PJ. TODO: Mejorarlo para que no se quede atascado
-		rigidbody->rigidBody->setGlobalPose(
+		/*rigidbody->rigidBody->setGlobalPose(
 			physx::PxTransform(
 				rigidbody->rigidBody->getGlobalPose().p + physx::PxVec3(0, 1, 0),
 				rigidbody->rigidBody->getGlobalPose().q
 			)
-		);
+		);*/
 
 		collider->setMaterialProperties(0, 0, 0);
 
@@ -498,6 +497,8 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		}
 		else{
 			if (m_ragdoll) { m_ragdoll->setActive(false); }
+			TCompSkeleton* m_skeleton = comp_skeleton;
+			m_skeleton->playAnimation(18);
 			ChangeState("fbp_WakeUp");
 		}
 	}
@@ -512,12 +513,15 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 			XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(rigidbody->rigidBody->getGlobalPose().p);
 			XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
-		
+			
+			/*((TCompCharacterController*)comp_character_controller)->Move(
+				Physics.XMVECTORToPxVec3(pos_final - pos_orig)
+				, false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()), elapsed);*/
 			rigidbody->rigidBody->setGlobalPose(
 				physx::PxTransform(
-				Physics.XMVECTORToPxVec3(pos_final),
-				rigidbody->rigidBody->getGlobalPose().q
-				)
+					Physics.XMVECTORToPxVec3(pos_final),
+					rigidbody->rigidBody->getGlobalPose().q
+					)
 				);
 		}
 	}
@@ -548,7 +552,12 @@ void FSMPlayerLegs::ReevaluatePriorities(){
 
 void FSMPlayerLegs::WakeUp(float elapsed){
 
-	if (state_time >= 0.01f){
+	/*if (on_enter) {
+		TCompSkeleton* m_skeleton = comp_skeleton;
+		m_skeleton->playAnimation(18);
+	}*/
+
+	if (state_time >= 3.3f){
 		ChangeState("fbp_Idle");
 	}
 }
