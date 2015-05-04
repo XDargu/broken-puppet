@@ -171,6 +171,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    if (app.fullscreen){
 	   app.xres = width;
 	   app.yres = height;
+   }else{
+	   RECT rect = { 0, 0, 0, 0 };
+	   BOOL res = GetClientRect(hWnd, &rect);
+	   app.xres = rect.right;
+	   app.yres = rect.bottom;
    }
 
    ShowWindow(hWnd, nCmdShow);

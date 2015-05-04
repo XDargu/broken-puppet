@@ -5,6 +5,7 @@
 #include "comp_sensor_needles.h"
 #include "comp_sensor_tied.h"
 #include "comp_player_position_sensor.h"
+#include "comp_skeleton.h"
 #include "../ai/aimanager.h"
 
 aicontroller* m_ai_controller;
@@ -24,6 +25,7 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
 	assertRequiredComponent<TCompSensorTied>(this);
+	assertRequiredComponent<TCompSkeleton>(this);
 
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());

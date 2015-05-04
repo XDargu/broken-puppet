@@ -4,6 +4,7 @@
 #include "../components/all_components.h"
 #include "utils.h"
 #include "nav_mesh_manager.h"
+#include "components\comp_skeleton.h"
 
 void bt_grandma::create(string s)
 {
@@ -139,6 +140,8 @@ int bt_grandma::actionIdle()
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	//((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, );
+
+	TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
