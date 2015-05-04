@@ -125,14 +125,6 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 				first_needle = new_needle;
 
-				//Checking if enemy tied
-				//Hacerlo a traves del aiManager??
-				const char* name = first_actor->getName();
-				CEntity* firstActorEntity = CEntityManager::get().getByName(name);
-				if (firstActorEntity->hasTag("enemy")){
-					TCompBtGrandma* grandma = ((CEntity*)firstActorEntity)->get<TCompBtGrandma>();
-				}
-
 				// Create the rope, between the player and the target
 				CEntity* new_e = entity_manager.createEmptyEntity();
 
@@ -181,6 +173,14 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				strings.push_back(CHandle(new_e_r));
 
 				entitycount++;
+
+				//Checking if enemy tied
+				const char* name = first_actor->getName();
+				CEntity* firstActorEntity = CEntityManager::get().getByName(name);
+				if (firstActorEntity->hasTag("enemy")){
+					TCompSensorTied* tied_sensor=firstActorEntity->get<TCompSensorTied>();
+					tied_sensor->changeTiedState(true, new_e_r);
+				}
 			}
 			// Second throw
 			else {

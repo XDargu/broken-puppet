@@ -528,9 +528,18 @@ void bt_grandma::needleViewedSensor(){
 	}
 }
 
+void bt_grandma::tiedSensor(){
+	TCompSensorTied* tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
+	if (tied_sensor->getTiedState()){
+		TCompRope* ropeRef = (TCompRope*)tied_sensor->getRopeRef();
+		setCurrent(NULL);
+	}
+}
+
 void bt_grandma::update(float elapsed){
 	//playerViewedSensor();
 	//needleViewedSensor();	
+	tiedSensor();
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 	this->recalc(elapsed);
 }
@@ -560,11 +569,6 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	}
 	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
-}
-
-void bt_grandma::tiedSensor(){
-	tied_event = true;
-	setCurrent(NULL);
 }
 
 void bt_grandma::setId(unsigned int id){

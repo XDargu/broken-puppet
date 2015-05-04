@@ -3,6 +3,7 @@
 #include "comp_transform.h"
 #include "comp_character_controller.h"
 #include "comp_sensor_needles.h"
+#include "comp_sensor_tied.h"
 #include "comp_player_position_sensor.h"
 #include "../ai/aimanager.h"
 
@@ -22,6 +23,7 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompCharacterController>(this);
 	assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
+	assertRequiredComponent<TCompSensorTied>(this);
 
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
@@ -57,3 +59,4 @@ void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
 	//m_ai_controller.ChangeState("aibe_Ragdoll");		
 }
+

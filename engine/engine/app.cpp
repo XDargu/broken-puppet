@@ -120,7 +120,7 @@ void registerAllComponentMsgs() {
 
 	//IA events
 	SUBSCRIBE(TCompAiBT, TActorHit, actorHit);
-
+	//SUBSCRIBE(TCompBtGrandma, TMsgEnemyTied, onEnemyTied);
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
@@ -160,6 +160,7 @@ void createManagers() {
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
+	getObjManager<TCompSensorTied>()->init(64);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
@@ -220,6 +221,7 @@ void initManagers() {
 
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
+	getObjManager<TCompSensorTied>()->initHandlers();
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();

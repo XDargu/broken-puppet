@@ -19,7 +19,6 @@ void TCompSensorNeedles::getNeedlesInRange(std::vector<TCompNeedle*>* needlesInR
 void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
 	for (auto & element : Citem_manager::get().needles) {
 		TCompTransform* e_transform = element->getTransform();
-		//float aux_distance = V3DISTANCE(e_transform->position, pos);
 		if (V3DISTANCE(e_transform->position, pos) <= radius){
 			needlesInRange.push_back(element);
 		}

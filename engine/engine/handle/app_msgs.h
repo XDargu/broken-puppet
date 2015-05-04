@@ -36,6 +36,12 @@ struct TActorHit {
 	DECLARE_MSG_ID();
 };
 
+/*struct TMsgEnemyTied {
+	CEntity* rope;
+	TMsgEnemyTied(CHandle arope) :rope(arope) { }
+	DECLARE_MSG_ID();
+};*/
+
 struct TMsgAttackDamage {
 	CEntity* who;
 	float damage;
