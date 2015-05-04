@@ -9,13 +9,13 @@
     <transform position="0 0 0" rotation="0 0 0 1"/>
     <pointLight decay_factor="0.2" radius="15" color="1 0 0"/>
   </entity>
-  <entity>
+  <!--<entity>
     <name name="prota_rag"/>
     <transform position="2 0 0" rotation="0 0 0 1"/>
     <skeleton name="prota"/>
     <ragdoll name="prota"/>
     <aiFSMcontroller/>
-  </entity>
+  </entity>-->
  <entity>
     <name name="abuela_rag"/>
     <transform position="0 0 0" rotation="0 0 0 1"/>
@@ -37,8 +37,9 @@
     <shadows res="1024" color="0.5 0.5 0"/>
     playerDoomController/>
   </entity>
-	<entity tag = "player" prefab="Player">
+	<entity tag = "player" collisionTag="Actor" prefab="Player">
 <transform position="0.297749 2.05983 -4.19523" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="prota"/>
 	</entity>
 	<entity  prefab="PlayerPivot">
 <transform position="0.297749 2.05983 -4.19523" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>

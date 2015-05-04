@@ -41,6 +41,7 @@ void FSMPlayerLegs::Init()
 	comp_rigidbody = ((CEntity*)entity)->get<TCompRigidBody>();
 	comp_collider = ((CEntity*)entity)->get<TCompColliderCapsule>();
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
+	comp_ragdoll = ((CEntity*)entity)->get<TCompRagdoll>();
 	comp_skeleton_ik = ((CEntity*)entity)->get<TCompSkeletonIK>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	comp_player_pivot_transform = ((CEntity*)(CEntityManager::get().getByName("PlayerPivot")))->get<TCompTransform>();
@@ -452,8 +453,12 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 	TCompRigidBody* rigidbody = (TCompRigidBody*)comp_rigidbody;
 	TCompColliderCapsule* collider = (TCompColliderCapsule*)comp_collider;
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompRagdoll* m_ragdoll = comp_ragdoll;
+	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
+		if (m_ragdoll) { m_ragdoll->setActive(true); }
+
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
 
 		rigidbody->setLockXRot(false);
@@ -463,9 +468,11 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		rigidbody->auto_rotate_transform = true;
 		rigidbody->auto_translate_transform = true;
 	}
-	if (((state_time >= 1 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
+	if (((state_time >= 4 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
 		|| (state_time >= 5))
 	{
+		if (m_ragdoll) { m_ragdoll->setActive(false); }
+
 		rigidbody->setLockXRot(true);
 		rigidbody->setLockYRot(true);
 		rigidbody->setLockZRot(true);
@@ -484,13 +491,32 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		collider->setMaterialProperties(0, 0, 0);
 
 		if (((TCompLife*)life)->life <= 0){
+			if (m_ragdoll) { m_ragdoll->setActive(false); }
 			m_transform->rotation = XMQuaternionIdentity();
 			ChangeState("fbp_Dead");
 		}
 		else{
+			if (m_ragdoll) { m_ragdoll->setActive(false); }
 			ChangeState("fbp_WakeUp");
 		}
 
+	}
+
+	else
+	{
+		// Tiempo normal de ragdoll
+		// Recolocar la cápsula donde el ragdoll, para que la cámara lo siga
+		if (m_ragdoll) {
+			// Bone 003: Spine
+			XMVECTOR spine_pos = m_skeleton->getPositionOfBone(3);
+
+			rigidbody->rigidBody->setGlobalPose(
+				physx::PxTransform(
+				Physics.XMVECTORToPxVec3(spine_pos),
+				rigidbody->rigidBody->getGlobalPose().q
+				)
+				);
+		}
 	}
 }
 

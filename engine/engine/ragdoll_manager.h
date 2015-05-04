@@ -10,6 +10,7 @@
 class CCoreRagdoll : public CXMLParser {
 	std::string               root_path;
 	std::string               name;
+	int						  uid;
 
 	void onStartElement(const std::string &elem, MKeyValue &atts);
 

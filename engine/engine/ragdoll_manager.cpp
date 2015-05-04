@@ -5,6 +5,7 @@
 #include "cal3d/corekeyframe.h"
 
 CRagdollManager ragdoll_manager;
+int ragdoll_uid = 0;
 
 CCoreRagdoll::CCoreRagdoll() {}
 
@@ -188,7 +189,11 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 
 bool CCoreRagdoll::load(const char* name) {
+	uid = ragdoll_uid;
+	ragdoll_uid++;
+
 	setName(name);
+	
 	root_path = "data/skeletons/" + std::string(name) + "/";
 
 	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);

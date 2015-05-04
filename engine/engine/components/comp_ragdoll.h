@@ -24,6 +24,8 @@ public:
 	bool isRagdollActive();
 
 	PxRigidDynamic* getBoneRigid(int id);
+
+	void setCollisionGroups();
 };
 
 #endif
