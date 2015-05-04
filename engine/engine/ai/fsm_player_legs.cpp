@@ -603,13 +603,40 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 		jump = true;
 	}
 
+	// Movement correction
 	movement_dir = movement_vector;
-
-	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
-	XMVECTOR projected_front = XMVector3Cross(up, XMVector3Cross(camera_transform->getFront(), up));
 	movement_vector = rotation.rotate(movement_vector);
 
-	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(projected_front);
+	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
+
+	XMVECTOR projected_front = XMVector3Cross(up, XMVector3Cross(camera_transform->getFront(), up));
+	XMVECTOR projected_left = XMVector3Cross(up, XMVector3Cross(camera_transform->getLeft(), up));
+
+	XMVECTOR camera_dir = camera_transform->getFront();
+
+	// Going front
+	if (movement_dir.z > 0) {
+		camera_dir =
+			camera_transform->getFront() * movement_dir.z +
+			camera_transform->getLeft() * movement_dir.x;
+				
+		movement_vector = PxQuat(deg2rad(-45 * movement_dir.x), PxVec3(0, 1, 0)).rotate(movement_vector);
+	}
+
+	// Going back
+	if (movement_dir.z < 0) {
+		camera_dir =
+			-camera_transform->getFront() * movement_dir.z +
+			-camera_transform->getLeft() * movement_dir.x;
+
+		movement_vector = PxQuat(deg2rad(45 * movement_dir.x), PxVec3(0, 1, 0)).rotate(movement_vector);
+	}
+
+	// Look at the front of the camera
+	//physx::PxVec3 dir = Physics.XMVECTORToPxVec3(projected_front);
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_dir);
+
+	// Look at the front of the transform
 	if (!lookAtCamera)
 		dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
 
