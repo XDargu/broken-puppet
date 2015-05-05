@@ -269,6 +269,15 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					new_e_r->setPositions(first_needle_transform, second_needle_transform);
 										
 
+					//Checking if enemy tied
+					PxRigidActor* second_actor = blockHit.actor;
+					const char* name = second_actor->getName();
+					CEntity* firstActorEntity = CEntityManager::get().getByName(name);
+					if (firstActorEntity->hasTag("enemy")){
+						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
+						tied_sensor->changeTiedState(true, new_e_r);
+					}
+
 					// Set the current rope entity as an invalid Handle
 					current_rope_entity = CHandle();
 

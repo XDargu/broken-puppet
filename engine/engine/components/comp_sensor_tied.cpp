@@ -21,3 +21,11 @@ bool TCompSensorTied::getTiedState(){
 CHandle TCompSensorTied::getRopeRef(){
 	return rope;
 }
+
+void TCompSensorTied::keepTied(){
+	if (rope == NULL){
+		tied=false;
+	}else{
+		tied=true;
+	}
+}

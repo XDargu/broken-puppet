@@ -23,6 +23,7 @@ private:
 	XMVECTOR wander_target;
 	bool jump;
 	bool tied_event;
+	bool tied_enter;
 	unsigned int my_id;
 public:
 	void create(string);

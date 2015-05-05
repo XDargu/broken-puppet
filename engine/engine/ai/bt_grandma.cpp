@@ -76,6 +76,7 @@ void bt_grandma::create(string s)
 	look_direction = PxVec3(0, 0, 0);
 	player = CEntityManager::get().getByName("Player");
 	tied_event = false;
+	tied_enter = false;
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -533,9 +534,13 @@ void bt_grandma::needleViewedSensor(){
 
 void bt_grandma::tiedSensor(){
 	TCompSensorTied* tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
-	if (tied_sensor->getTiedState()){
-		TCompRope* ropeRef = (TCompRope*)tied_sensor->getRopeRef();
-		setCurrent(NULL);
+	tied_sensor->keepTied();
+	if (!tied_enter){
+		if (tied_sensor->getTiedState()){
+			TCompRope* ropeRef = (TCompRope*)tied_sensor->getRopeRef();
+			setCurrent(NULL);
+			tied_enter = true;
+		}
 	}
 }
 

@@ -14,6 +14,7 @@ public:
 	void changeTiedState(bool b, CHandle ropeRef);
 	bool getTiedState();
 	CHandle getRopeRef();
+	void keepTied();
 };
 #endif
 
