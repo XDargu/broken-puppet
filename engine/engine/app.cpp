@@ -548,7 +548,7 @@ void CApp::render() {
 	//texture_manager.getByName("rt_depth")->activate(2);
 
 	//drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
-	drawTexture2D(0, 0, xres, yres, blur.getOutput());
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());

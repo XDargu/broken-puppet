@@ -21,6 +21,7 @@ void Citem_manager::addNeedle(TCompNeedle* needle, TCompRope* rope){
 	needle_rope needle_rope_struct;
 	needle_rope_struct.needleRef = needle;
 	needle_rope_struct.rope_asociated = rope;
+	needle_rope_struct.call_it = false;
 	needles.push_back(needle_rope_struct);
 }
 

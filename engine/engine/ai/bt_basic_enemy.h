@@ -4,6 +4,7 @@
 
 #include "mcv_platform.h"
 #include "behaviour_trees.h"
+#include "../components/comp_sensor_needles.h"
 
 class bt_basic_enemy :public bt
 {
@@ -29,6 +30,8 @@ class bt_basic_enemy :public bt
 	unsigned int my_id;
 	unsigned int lastNumNeedlesViewed;
 	unsigned int currentNumNeedlesViewed;
+
+	needle_rope* needle_objective;
 
 public:
 	void create(string);

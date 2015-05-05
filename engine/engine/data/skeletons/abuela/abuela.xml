@@ -1,6 +1,6 @@
 <skeleton>
     <mesh name="abuela"/>
 	
-	<anim name="idle_base"/>
-	<anim name="walk"/>
+	<anim name="idle_base"/>0
+	<anim name="walk"/>1
 </skeleton>

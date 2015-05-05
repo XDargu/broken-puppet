@@ -5,6 +5,7 @@
 #include "behaviour_trees.h"
 #include "physics_manager.h"
 #include "components\comp_transform.h"
+#include "../components/comp_sensor_needles.h"
 
 class bt_grandma : public bt
 {
@@ -25,6 +26,7 @@ private:
 	bool tied_event;
 	bool tied_enter;
 	unsigned int my_id;
+	needle_rope* needle_objective;
 public:
 	void create(string);
 

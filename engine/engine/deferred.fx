@@ -290,7 +290,7 @@ float4 PSResolve(
 
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
 	float4 albedo = txDiffuse.Load(ss_load_coords);
-	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+	float3 N = -txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 	float4 diffuse = txAccLight.Load(ss_load_coords);
 	float4 env = txEnvironment.Sample(samWrapLinear, N);
 

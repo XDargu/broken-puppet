@@ -77,6 +77,8 @@ void bt_grandma::create(string s)
 	player = CEntityManager::get().getByName("Player");
 	tied_event = false;
 	tied_enter = false;
+	needle_objective = nullptr;
+	lastNumNeedlesViewed = 0;
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -112,7 +114,34 @@ int bt_grandma::actionTooCloseAttack()
 //Go to the needle position (leave if cant reach)
 int bt_grandma::actionChaseNeedlePosition()
 {
-	return LEAVE;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompTransform* n_transform = needle_objective->needleRef->getTransform();
+
+	if (on_enter){
+		CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
+		find_path_time = state_time;
+		ind_path = 0;
+	}else{
+		if (path.size() > 0){
+			if (ind_path < path.size()){
+				chasePoint(m_transform, path[ind_path]);
+				if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+					ind_path++;
+					return STAY;
+				}
+				else{
+					return STAY;
+				}
+			}
+			else{
+				last_look_direction = look_direction;
+				return LEAVE;
+			}
+		}else{
+			return LEAVE;
+		}
+	}
+
 }
 
 //Select the priority needle
@@ -140,7 +169,6 @@ int bt_grandma::actionIdle()
 	bool aux_on_enter = on_enter;
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	//((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, );
 
 	TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
@@ -158,7 +186,6 @@ int bt_grandma::actionIdle()
 //Select a point to go 
 int bt_grandma::actionSearchPoint()
 {	
-
 	float aux_time = state_time;
 	bool aux_on_enter = on_enter;
 
@@ -169,7 +196,6 @@ int bt_grandma::actionSearchPoint()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
 
-	ind_path = 0;
 	return LEAVE;
 
 }
@@ -177,7 +203,6 @@ int bt_grandma::actionSearchPoint()
 //Chase the selected point
 int bt_grandma::actionWander()
 {
-
 	float aux_time = state_time;
 	bool aux_on_enter = on_enter;
 
@@ -188,6 +213,7 @@ int bt_grandma::actionWander()
 	if (on_enter){
 		CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
 		find_path_time = state_time;
+		ind_path = 0;
 	}else{
 		if ((state_time - find_path_time) > 1.f){
 			CNav_mesh_manager::get().findPath(m_transform->position, rand_point, path);
@@ -206,7 +232,6 @@ int bt_grandma::actionWander()
 			}
 		}
 		else{
-			ind_path = 0;
 			last_look_direction = look_direction;
 			return LEAVE;
 		}
@@ -264,11 +289,9 @@ int bt_grandma::actionChaseRoleDistance()
 				return STAY;
 			}
 		}else{
-			ind_path = 0;
 			return LEAVE;
 		}
 	}else{
-		ind_path = 0;
 		return LEAVE;
 	}
 }
@@ -503,7 +526,7 @@ void bt_grandma::playerViewedSensor(){
 		TCompPlayerPosSensor* p_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
 		bool tri = p_sensor->playerInRange();
 		if (p_sensor->playerInRange()) {
-			if ((!current->isRoot()) && ((current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))){
+			if ((!current->isRoot()) && ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))){
 				setCurrent(NULL);
 				player_viewed_sensor = true;
 			}
@@ -513,22 +536,27 @@ void bt_grandma::playerViewedSensor(){
 
 // Sensor para detectar si el enemigo ve alguna aguja
 void bt_grandma::needleViewedSensor(){
+
+	/*NOTA: Las abuelas solo deben tener en cuenta los avisos de este sensor ni no tienen ya asignada
+	        una aguja objetivo. De no ser así, iran a por todas las agujas nuevas*/
+
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	std::vector<needle_rope>* needle_vector = new std::vector<needle_rope>;
-	//le pedimos que nos diga las agujas que el enemigo tiene en su rango
-	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
-	m_sensor->getNeedlesInRange(needle_vector);
-	if (!needle_vector->empty()){
-		//almacenamos el numero de agujas en rango para comprobar variaciones
-		currentNumNeedlesViewed = (unsigned int)needle_vector->size();//list_needles.size();
+	m_sensor->getNeedlesInRange();
+
+	if (!needle_objective){
+		currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles();//list_needles.size();
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))
+			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+				needle_objective = m_sensor->getTargetNeedle();
+				needle_objective->call_it = true;
 				setCurrent(NULL);
+			}
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
+		//}
 	}
 }
 

@@ -10,17 +10,21 @@
 struct needle_rope{
 	TCompNeedle* needleRef;
 	TCompRope*   rope_asociated;
+	bool         call_it;
 };
 
 struct TCompSensorNeedles : TBaseComponent{
 private:
+	std::vector<needle_rope*> needlesInRangeVector;
 	CHandle		transform;
 	unsigned int numNeedlesInRange;
 	float radius;
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
-	void getNeedlesInRange(std::vector<needle_rope>* needlesInRange);
-	void needleInRange(std::vector<needle_rope>* needlesInRange, XMVECTOR pos, float radius);
+	void getNeedlesInRange();
+	void needleInRange(XMVECTOR pos, float radius);
+	needle_rope* getTargetNeedle();
+	int getNumNeedles();
 };
 #endif

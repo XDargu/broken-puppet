@@ -41,6 +41,7 @@ void bt_basic_enemy::create(string s)
 
 	currentNumNeedlesViewed = 0;
 	lastNumNeedlesViewed = 0;
+	needle_objective = new needle_rope;
 
 	//inicializamos las condiciones de los timer_nodes
 	initDecoratorCondition("attack", 2);
@@ -304,23 +305,28 @@ void bt_basic_enemy::playerViewedSensor(){
 
 // Sensor para detectar si el enemigo ve alguna aguja
 void bt_basic_enemy::needleViewedSensor(){
+	/*NOTA: Las abuelas solo deben tener en cuenta los avisos de este sensor ni no tienen ya asignada
+	una aguja objetivo. De no ser así, iran a por todas las agujas nuevas*/
+
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	std::vector<needle_rope>* needle_vector = new std::vector<needle_rope>;
+	//std::vector<needle_rope>* needle_vector = new std::vector<needle_rope>;
 	//le pedimos que nos diga las agujas que el enemigo tiene en su rango
 	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
-	m_sensor->getNeedlesInRange(needle_vector);
-	if (!needle_vector->empty()){
-		//almacenamos el numero de agujas en rango para comprobar variaciones
-		currentNumNeedlesViewed = (unsigned int)needle_vector->size();//list_needles.size();
-		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
-			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
-			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))
-				setCurrent(NULL);
+	//m_sensor->getNeedlesInRange(needle_vector);
+	//if (!needle_vector->empty()){
+	//almacenamos el numero de agujas en rango para comprobar variaciones
+	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles();//list_needles.size();
+	if (currentNumNeedlesViewed != lastNumNeedlesViewed){
+		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
+		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
+		if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+			needle_objective = m_sensor->getTargetNeedle();
+			setCurrent(NULL);
 		}
-		lastNumNeedlesViewed = currentNumNeedlesViewed;
 	}
+	lastNumNeedlesViewed = currentNumNeedlesViewed;
+	//}
 }
 
 void bt_basic_enemy::setId(unsigned int id){
