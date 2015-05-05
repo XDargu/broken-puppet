@@ -6,13 +6,17 @@
 #include "comp_transform.h"
 #include "comp_needle.h"
 
+/*struct needle_rope{
+	TCompNeedle* needleRef;
+	TCompRope*   rope_asociated;
+};*/
+
 struct TCompSensorNeedles : TBaseComponent{
 private:
 	CHandle		transform;
 	unsigned int numNeedlesInRange;
 	float radius;
 public:
-	std::vector<TCompNeedle*> needlesInRange;
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void getNeedlesInRange(std::vector<TCompNeedle*>* needlesInRange);

@@ -761,6 +761,12 @@
     <ClCompile Include="components\comp_sensor_tied.cpp">
       <Filter>components\ai\enemies\sensors</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_rope.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_distance_joint.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

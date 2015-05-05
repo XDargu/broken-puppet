@@ -365,6 +365,8 @@
     <ClCompile Include="components\comp_collider_sphere.cpp" />
     <ClCompile Include="components\comp_collider_capsule.cpp" />
     <ClCompile Include="components\comp_sensor_tied.cpp" />
+    <ClCompile Include="components\comp_rope.cpp" />
+    <ClCompile Include="components\comp_distance_joint.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="error\error_context.cpp" />
