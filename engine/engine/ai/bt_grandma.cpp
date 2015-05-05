@@ -525,7 +525,7 @@ void bt_grandma::needleViewedSensor(){
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
+			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))
 				setCurrent(NULL);
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
@@ -546,7 +546,7 @@ void bt_grandma::tiedSensor(){
 
 void bt_grandma::update(float elapsed){
 	//playerViewedSensor();
-	//needleViewedSensor();	
+	needleViewedSensor();	
 	tiedSensor();
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 	this->recalc(elapsed);

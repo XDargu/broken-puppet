@@ -16,6 +16,6 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void getNeedlesInRange(std::vector<TCompNeedle*>* needlesInRange);
-	void needleInRange(XMVECTOR pos, float radius);
+	void needleInRange(std::vector<TCompNeedle*>* needlesInRange, XMVECTOR pos, float radius);
 };
 #endif
