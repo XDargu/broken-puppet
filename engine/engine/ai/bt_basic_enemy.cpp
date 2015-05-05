@@ -306,7 +306,7 @@ void bt_basic_enemy::playerViewedSensor(){
 void bt_basic_enemy::needleViewedSensor(){
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	std::vector<TCompNeedle*>* needle_vector = new std::vector<TCompNeedle*>;
+	std::vector<needle_rope>* needle_vector = new std::vector<needle_rope>;
 	//le pedimos que nos diga las agujas que el enemigo tiene en su rango
 	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
 	m_sensor->getNeedlesInRange(needle_vector);
@@ -316,7 +316,7 @@ void bt_basic_enemy::needleViewedSensor(){
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
+			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))
 				setCurrent(NULL);
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;

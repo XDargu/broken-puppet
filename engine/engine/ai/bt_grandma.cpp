@@ -515,7 +515,7 @@ void bt_grandma::playerViewedSensor(){
 void bt_grandma::needleViewedSensor(){
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	std::vector<TCompNeedle*>* needle_vector = new std::vector<TCompNeedle*>;
+	std::vector<needle_rope>* needle_vector = new std::vector<needle_rope>;
 	//le pedimos que nos diga las agujas que el enemigo tiene en su rango
 	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
 	m_sensor->getNeedlesInRange(needle_vector);

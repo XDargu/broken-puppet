@@ -5,11 +5,12 @@
 #include "../item_manager.h"
 #include "comp_transform.h"
 #include "comp_needle.h"
+#include "comp_rope.h"
 
-/*struct needle_rope{
+struct needle_rope{
 	TCompNeedle* needleRef;
 	TCompRope*   rope_asociated;
-};*/
+};
 
 struct TCompSensorNeedles : TBaseComponent{
 private:
@@ -19,7 +20,7 @@ private:
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
-	void getNeedlesInRange(std::vector<TCompNeedle*>* needlesInRange);
-	void needleInRange(std::vector<TCompNeedle*>* needlesInRange, XMVECTOR pos, float radius);
+	void getNeedlesInRange(std::vector<needle_rope>* needlesInRange);
+	void needleInRange(std::vector<needle_rope>* needlesInRange, XMVECTOR pos, float radius);
 };
 #endif

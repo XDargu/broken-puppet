@@ -11,14 +11,14 @@ void TCompSensorNeedles::init() {
 	numNeedlesInRange = 0;
 }
 
-void TCompSensorNeedles::getNeedlesInRange(std::vector<TCompNeedle*>* needlesInRangeVector){
+void TCompSensorNeedles::getNeedlesInRange(std::vector<needle_rope>* needlesInRangeVector){
 	TCompTransform* m_transform = transform;
 	needleInRange(needlesInRangeVector, m_transform->position, radius);
 }
 
-void TCompSensorNeedles::needleInRange(std::vector<TCompNeedle*>* needlesInRangeVector, XMVECTOR pos, float radius){
+void TCompSensorNeedles::needleInRange(std::vector<needle_rope>* needlesInRangeVector, XMVECTOR pos, float radius){
 	for (auto & element : Citem_manager::get().needles) {
-		TCompTransform* e_transform = element->getTransform();
+		TCompTransform* e_transform = element.needleRef->getTransform();
 		if (V3DISTANCE(e_transform->position, pos) <= radius){
 			needlesInRangeVector->push_back(element);
 		}
