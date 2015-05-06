@@ -164,6 +164,8 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 			mJoint = PxD6JointCreate(*Physics.gPhysicsSDK, NULL, Pos2, NULL, Pos2);
 	}
 
+
+	
 	// pasos para usar joints d6
 
 	/*

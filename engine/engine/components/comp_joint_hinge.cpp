@@ -29,7 +29,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (mJoint)
 		mJoint->release();
 
-	Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
+	//Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
 	// Physics var
 	PxReal lower_limit;
