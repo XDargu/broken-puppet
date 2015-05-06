@@ -60,8 +60,8 @@ public:
 
 	void removeKeysFromOwner(CHandle owner);
 
-	void renderAll(const CCamera* camera);
-	void renderAll(const CCamera* camera, TTransform* camera_transform);
+	void renderAll(const CCamera* camera, bool solids);
+	void renderAll(const CCamera* camera, TTransform* camera_transform, bool solids);
 	
 	void renderShadowsCasters();
 

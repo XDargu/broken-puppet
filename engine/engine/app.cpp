@@ -267,11 +267,12 @@ bool CApp::create() {
 	createManagers();
 
 	physics_manager.init();
-
+	bool is_ok = true;
 	// Boot LUA
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
+
 
 	//loadScene("data/scenes/my_file.xml");
 	loadScene("data/scenes/my_file-backup.xml");
@@ -284,7 +285,7 @@ bool CApp::create() {
 	sm.playTrack(0);
 
 	// Create debug meshes	
-	bool is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
+	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
 	XASSERT(is_ok, "Error creating debug meshes");
@@ -317,11 +318,8 @@ bool CApp::create() {
 	logic_manager.setTimer("TestTimer", 10);
 
 	cubemap = texture_manager.getByName("sunsetcube1024");
-
+	
 	cubemap->activate(3);
-
-	rt_base = new CRenderToTexture;
-	is_ok &= rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 
 	texture_manager.getByName("storm")->activate(4);
 
@@ -521,6 +519,8 @@ void CApp::render() {
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	ctes_global.uploadToGPU();
+	ctes_global.activateInPS(2);
 	activateTextureSamplers();
 	CCamera camera = *(TCompCamera*)activeCamera;
 
@@ -564,7 +564,7 @@ void CApp::render() {
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
 
-	CHandle h_light = entity_manager.getByName("the_light");
+	/*CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
@@ -573,7 +573,7 @@ void CApp::render() {
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
-	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
+	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);
@@ -586,6 +586,7 @@ void CApp::render() {
 
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
+	render_manager.renderAll(&camera, false);
 	renderDebugEntities();
 
 #ifdef _DEBUG
@@ -875,6 +876,9 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
+
+	rt_base = new CRenderToTexture;
+	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 

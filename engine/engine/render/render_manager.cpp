@@ -15,8 +15,12 @@
 CRenderManager render_manager;
 
 bool CRenderManager::sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2) {
-	if (k1.material != k2.material)
+	if (k1.material != k2.material) {
+		// sort, first the solid, then the transparent
+		if (k1.material->isSolid() != k2.material->isSolid())
+			return k1.material->isSolid();
 		return k1.material->getName() < k2.material->getName();
+	}
 	if (k1.mesh != k2.mesh)
 		return k1.mesh < k2.mesh;
 	return k1.mesh_id < k2.mesh_id;
@@ -50,11 +54,11 @@ void CRenderManager::addKey(const CMesh*      mesh
 	}
 }
 
-void CRenderManager::renderAll(const CCamera* camera) {
-	renderAll(camera, &TTransform());
+void CRenderManager::renderAll(const CCamera* camera, bool solids) {
+	renderAll(camera, &TTransform(), solids);
 }
 
-void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform) {
+void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform, bool solids) {
 	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
@@ -69,6 +73,15 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 	bool uploading_bones = false;
 	
+	auto first_transparent = std::lower_bound(keys.begin(), keys.end(), false
+		, [](const CRenderManager::TKey&k1, bool is_solid) {
+		return k1.material->isSolid() != is_solid;
+	}
+	);
+
+	auto first_it = solids ? keys.begin() : first_transparent;
+	auto last_it = solids ? first_transparent : keys.end();
+
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
@@ -86,6 +99,8 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
 		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes.isVisible(m_aabb);
+
+		culling &= it->material->isSolid() == solids;
 				
 		//culling = true;
 		if (*it->active && culling)
