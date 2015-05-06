@@ -1,7 +1,7 @@
 <technique 
-	fx="skin.fx"
-	vs="VS"
+	fx="deferred.fx"
+	vs="VSSkels"
 	vs_decl="vdcl_position_uv_normal_skin_tangent"
-	ps="PSTextured"
+	ps="PSGBuffer"
     uses_bones="1"
 	/>

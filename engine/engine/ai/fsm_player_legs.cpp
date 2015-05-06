@@ -561,9 +561,21 @@ void FSMPlayerLegs::ReevaluatePriorities(){
 }
 
 void FSMPlayerLegs::WakeUp(float elapsed){
-	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompSkeleton* m_skeleton = comp_skeleton;
 
-	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	if (on_enter) {
+		XMVECTOR head_pos = m_skeleton->getPositionOfBone(41);
+		XMVectorSetY(head_pos, XMVectorGetY(m_transform->position));
+		XMVECTOR head_dir = XMVector3Normalize(head_pos - m_transform->position);
+		XMVECTOR up = XMVectorSet(0, 1, 0, 0);
+
+		XMVECTOR new_front = XMVector3Cross(up, head_dir);
+		m_transform->lookAt(m_transform->position - new_front, up);
+	}
+	
+
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	dir.normalize();
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 

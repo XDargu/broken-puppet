@@ -74,6 +74,20 @@ float4 PSTextured(
 	//return txDiffuse.Sample(samWrapLinear, input.UV);
 	//return float4(input.UV, 0, 1); // txDiffuse.Sample(samWrapLinear, input.UV);
 
+	float3   in_normal = normalize(input.Normal);
+	float3   in_tangent = normalize(input.wTangent.xyz);
+	float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;
+	float3x3 TBN = float3x3(in_tangent
+	, in_binormal
+	, in_normal);
+
+	// Convert the range 0...1 from the texture to range -1 ..1 
+	float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
+	float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+
+	// Save the normal
+	normal = (float4(wnormal_per_pixel, 1) + 1.) * 0.5;
+
 	// Basic diffuse lighting
 	float3 L = LightWorldPos.xyz - input.wPos.xyz;
 	L = normalize(L);
@@ -89,8 +103,9 @@ float4 PSTextured(
 	float  spec_amount = pow(cos_beta, 20.);
 	depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
 	acc_light = diffuse_amount;
+	acc_light = float4(0,0,0,0);
 	
-	normal = (float4(N, 1) + 1.) * 0.5;
+	//normal = (float4(N, 1) + 1.) * 0.5;
 
 	float4 albedo = txDiffuse.Sample(samWrapLinear, input.UV);
 	//return (albedo + spec_amount) * diffuse_amount;

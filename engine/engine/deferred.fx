@@ -58,6 +58,7 @@ void VSGenShadowsSkel(
 	float4 ipos     : POSITION
 	, float2 iuv : TEXCOORD0
 	, float3 inormal : NORMAL
+	, float4 Tangent : TANGENT
 	, uint4  bone_ids : BONEIDS
 	, float4 weights : WEIGHTS
 	, out float4 oPos : SV_POSITION
@@ -70,6 +71,39 @@ void VSGenShadowsSkel(
 		;
 	float4 skinned_pos = mul(ipos, skin_mtx);
 		oPos = mul(skinned_pos, ViewProjection);
+}
+
+// Skels Vertex Shader
+VS_TEXTURED_OUTPUT VSSkels(
+	float4 ipos     : POSITION
+	, float2 iuv : TEXCOORD0
+	, float3 inormal : NORMAL
+	, float4 Tangent : TANGENT
+	, uint4  bone_ids : BONEIDS
+	, float4 weights : WEIGHTS	
+	)
+{
+	VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+
+	matrix skin_mtx = bones[bone_ids.x] * weights[0]
+		+ bones[bone_ids.y] * weights[1]
+		+ bones[bone_ids.z] * weights[2]
+		+ bones[bone_ids.w] * weights[3]
+		;
+
+	float4 skinned_pos = mul(ipos, skin_mtx);
+
+	output.Pos = mul(skinned_pos, ViewProjection);
+	output.wPos = skinned_pos;
+	output.wNormal = mul(inormal, (float3x3) skin_mtx);
+	output.UV = float2(iuv.x, 1 - iuv.y);
+	//output.UV = bone_ids.xy / 50.;
+
+	// Rotate the tangent and keep the w value
+	output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
+	output.wTangent.w = Tangent.w;
+
+	return output;
 }
 
 //--------------------------------------------------------------------------------------
@@ -179,10 +213,16 @@ void PSGBuffer(
 
   // Convert the range 0...1 from the texture to range -1 ..1 
   float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
-  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+	  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+
+	  //wnormal_per_pixel = in_tangent;
 
   // Save the normal
-  normal = (float4(wnormal_per_pixel, 1) + 1. ) * 0.5;
+
+  bool test = length(in_tangent) < 2;
+  float3 m_norm = test ? wnormal_per_pixel : in_normal;
+  normal = (float4(m_norm, 1) + 1.) * 0.5;
+
   
   // Basic diffuse lighting
   float3 L = LightWorldPos.xyz - input.wPos.xyz;
@@ -264,13 +304,17 @@ float4 PSDirLights(
   float depth = txDepth.Load(ss_load_coords).x;
   float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 
-  float3 wPos = getWorldCoords(iPosition.xy, depth);
+	  float3 wPos = getWorldCoords(iPosition.xy, depth);
+
+	 // return float4(wPos.x - int(wPos.x), 0, 0, 1);
 
   // Basic diffuse lighting
   float3 L = dir_light_world_pos.xyz - wPos;
   float  distance_to_light = length(L);
   L = L / distance_to_light;
   float  diffuse_amount = saturate(dot(N, L));
+
+
 
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap

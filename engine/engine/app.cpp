@@ -85,6 +85,7 @@ void CApp::loadConfig() {
 
 // Debug 
 CRenderTechnique debugTech;
+CRenderTechnique ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
@@ -270,8 +271,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/my_file-backup.xml");
+	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file-backup.xml");
 
 	// Create debug meshes	
 	bool is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -393,13 +394,13 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		//render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_gbuffer");
 		//render_techniques_manager.reload("deferred_point_lights");
 		//render_techniques_manager.reload("deferred_dir_lights");
 		//render_techniques_manager.reload("deferred_resolve");
 		//render_techniques_manager.reload("chromatic_aberration");
-		render_techniques_manager.reload("glow");
-		render_techniques_manager.reload("glow_lights");
+		render_techniques_manager.reload("deferred_dir_lights");
+		render_techniques_manager.reload("skin_basic");
 		texture_manager.reload("Foco_albedo");
 		texture_manager.reload("Foco_normal");
 		
@@ -536,7 +537,7 @@ void CApp::render() {
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
-	int sz = 300;
+	static int sz = 150;
 	
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
@@ -554,13 +555,16 @@ void CApp::render() {
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
 
-	//CHandle h_light = entity_manager.getByName("the_light");
-	//CEntity* e_light = h_light;
-	//TCompShadows* shadow = e_light->get<TCompShadows>();
+	CHandle h_light = entity_manager.getByName("the_light");
+	CEntity* e_light = h_light;
+	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	
-	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
-	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
+	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
+	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);
@@ -591,7 +595,7 @@ void CApp::render() {
 void CApp::renderEntities() {
 
 	debugTech.activate();
-	const CTexture *t = texture_manager.getByName("wood_d");
+	const CTexture *t = texture_manager.getByName("grass");
 	t->activate(0);	
 
 	//ctes_global.activateInVS(2);
@@ -672,6 +676,7 @@ void CApp::renderEntities() {
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
+			ropeTech.activate();
 			float color_tension = min(dist / maxDist * 0.25f, 1);
 			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
 			setWorldMatrix(XMMatrixIdentity());
@@ -682,6 +687,7 @@ void CApp::renderEntities() {
 
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
 			wiredCube.activateAndRender();
+			debugTech.activate();
 		}
 
 		// If the component has no transform it can't be rendered
@@ -880,6 +886,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
+	XASSERT(ropeTech.load("textured"), "Error loading basic technique");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");
 	XASSERT(CHandle(e).isValid(), "Camera not valid");

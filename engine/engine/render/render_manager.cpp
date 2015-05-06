@@ -123,11 +123,11 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		
-		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		/*TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
 		if (m_aabb)
 			culling = camera_aabb.intersects(m_aabb);
 		else
-			culling = true;
+			culling = true;*/
 
 		/*bool is_in_front = XMVectorGetX(XMVector3Dot(camera->getFront(), tmx->position - camera->getPosition())) > 0.f;
 		culling = is_in_front;*/
@@ -177,15 +177,26 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 void CRenderManager::removeKeysFromOwner(CHandle owner) {
 	VKeys keys_to_remove;
+	VShadowCasterKeys shadow_keys_to_remove;
 
 	for (auto& it : keys) {
 		if (it.owner == owner)
 			keys_to_remove.push_back(it);
 	}
 
+	for (auto& it : shadow_casters_keys) {
+		if (it.owner == owner)
+			shadow_keys_to_remove.push_back(it);
+	}
+
 	for (auto& it : keys_to_remove) {
 		auto it2 = std::remove(keys.begin(), keys.end(), it);
 		keys.erase(it2, keys.end());
+	}
+
+	for (auto& it : shadow_keys_to_remove) {
+		auto it2 = std::remove(shadow_casters_keys.begin(), shadow_casters_keys.end(), it);
+		shadow_casters_keys.erase(it2, shadow_casters_keys.end());
 	}
 }
 

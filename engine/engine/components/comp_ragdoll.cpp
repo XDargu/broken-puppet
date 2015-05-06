@@ -53,6 +53,12 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 void TCompRagdoll::setActive(bool active) {
 	ragdoll_active = active;
 
+	// Call the skeleton to save the ragdoll bone positions
+	if (!active) {
+		TCompSkeleton* skel = skeleton;
+		skel->ragdollUnactive();
+	}
+
 	// Make all the rigidboies kinematic if the ragdoll is not active, and make them not kinematic if active
 	for (auto& it : ragdoll->bone_map) {
 		it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, !active);

@@ -49,9 +49,7 @@ CalQuaternion getRotationFromAToB(CalVector a, CalVector b, float unit_amount) {
 
 struct CalTransform {
 	CalVector pos;
-	CalQuaternion rot;
-
-	
+	CalQuaternion rot;	
 
 	CalTransform()
 	{		
@@ -62,54 +60,6 @@ struct CalTransform {
 	CalTransform(CalVector p, CalQuaternion q) {
 		pos = p;
 		rot = q;
-	}
-
-	void invert() {
-		rot.invert();
-		pos *= rot;
-	}
-
-	CalTransform operator*(const CalTransform& ct) {
-
-		// Lo que hace Cal:
-
-		/*m_translationAbsolute = m_translation;
-		m_translationAbsolute *= pParent->getRotationAbsolute();
-		m_translationAbsolute += pParent->getTranslationAbsolute();
-
-		m_rotationAbsolute = m_rotation;
-		m_rotationAbsolute *= pParent->getRotationAbsolute();*/
-
-		/*CalQuaternion vector_as_quat = CalQuaternion(pos.x, pos.y, pos.z, 0);
-		CalQuaternion ct_rot_conj = ct.rot;
-		ct_rot_conj.conjugate();
-		CalQuaternion result = ct.rot * vector_as_quat * ct_rot_conj;
-		CalVector result_v = CalVector(result.x, result.y, result.z);*/
-
-		// pointOnMatB = matB*(inverseMatA*pointOnMatA);
-
-		XMVECTOR zero = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-		XMVECTOR one = XMVectorSet(1, 1, 1, 1);
-		XMMATRIX cat_mat = XMMatrixTransformation(zero, zero, one, zero, Cal2DX(ct.rot), Cal2DX(ct.pos));
-		XMVECTOR dx_pos = XMVector3Transform(Cal2DX(pos), cat_mat);
-
-		CalVector n_pos = DX2Cal(dx_pos);
-		
-		/*CalQuaternion vector_as_quat = CalQuaternion(pos.x, pos.y, pos.z, 0);
-		CalQuaternion ct_rot_conj = ct.rot;
-		ct_rot_conj.conjugate();
-		CalQuaternion result = ct.rot * vector_as_quat * ct_rot_conj;
-		CalVector result_v = CalVector(result.x, result.y, result.z);*/
-				
-		return CalTransform(
-			
-			// Vector transform o quat transform vector
-			// quat * vector * quaternion conjugado, ampliando vector a quat con 0 a W
-			
-			n_pos,
-			ct.rot * rot
-			);
-		
 	}
 };
 
@@ -174,10 +124,12 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	  CalBone* bone = cal_bones[bone_idx];
 
 	  bone_ragdoll_transforms[bone_idx] = CalTransform(
-		  bone->getTranslationAbsolute()
-		  , bone->getRotationAbsolute()
+		  bone->getTranslationBoneSpace()
+		  , bone->getRotationBoneSpace()
 		  );
   }
+
+  time_since_last_ragdoll = 5000;
 
 }
 
@@ -298,12 +250,44 @@ void TCompSkeleton::update(float elapsed) {
 		  }
 	  }
   }
-
   else {
 
 	  model->getMixer()->setRootTranslation(DX2Cal(t->position));
 	  model->getMixer()->setRootRotation(DX2CalQuat(t->rotation));
 	  model->update(elapsed);
+
+	  if (h_ragdoll.isValid()) {
+		  time_since_last_ragdoll += elapsed;
+
+		  // If the ragdoll exists and has been deactivated recently, interpolate the bones
+		  if (time_since_last_ragdoll < 0.5f) {
+			  CalSkeleton* skel = model->getSkeleton();
+			  auto& cal_bones = skel->getVectorBone();
+
+			  int size = cal_bones.size();
+
+			  for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+				  CalBone* bone = cal_bones[bone_idx];
+
+				  CalVector cal_pos = bone->getTranslation();
+				  CalQuaternion cal_rot = bone->getRotation();
+
+				  XMVECTOR dx_cal_pos = Cal2DX(cal_pos);
+				  XMVECTOR dx_cal_rot = Cal2DX(cal_rot);
+
+				  XMVECTOR ragdoll_pos = Cal2DX(bone_ragdoll_transforms[bone_idx].pos);
+				  XMVECTOR ragdoll_rot = Cal2DX(bone_ragdoll_transforms[bone_idx].rot);
+
+				  XMVECTOR final_pos = XMVectorLerp(ragdoll_pos, dx_cal_pos, time_since_last_ragdoll / .5f);
+				  XMVECTOR final_rot = XMQuaternionSlerp(ragdoll_rot, dx_cal_rot, time_since_last_ragdoll / .5f);
+
+				  //bone->setTranslation(DX2Cal(final_pos));
+				  bone->setRotation(DX2CalQuat(final_rot));
+
+				  bone->calculateState();
+			  }
+		  }
+	  }
 
 	  CalVector delta_logic_trans = model->getMixer()->getAndClearLogicTranslation();
 
@@ -474,3 +458,19 @@ XMVECTOR TCompSkeleton::getPositionOfBone(int id) {
 	return Cal2DX(bone->getTranslationAbsolute());
 }
 
+void TCompSkeleton::ragdollUnactive() {
+	time_since_last_ragdoll = 0;
+	CalSkeleton* skel = model->getSkeleton();
+	auto& cal_bones = skel->getVectorBone();
+
+	int size = cal_bones.size();
+
+	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+		CalBone* bone = cal_bones[bone_idx];
+
+		bone_ragdoll_transforms[bone_idx] = CalTransform(
+			bone->getTranslation()
+			, bone->getRotation()
+			);
+	}
+}

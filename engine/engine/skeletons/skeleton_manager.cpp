@@ -147,6 +147,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
     XMFLOAT3 pos;
     XMFLOAT2 uv;
     XMFLOAT3 normal;
+	XMFLOAT3 tangent;
     unsigned char bone_ids[4];    // Bones influencing this vertex
     unsigned char weights[4];     // How much the influence is
   };
@@ -166,6 +167,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
   int nsubmeshes = core_mesh->getCoreSubmeshCount();
   for (int sm_id = 0; sm_id < nsubmeshes; ++sm_id) {
     CalCoreSubmesh *sm = core_mesh->getCoreSubmesh(sm_id);
+	sm->enableTangents(0, true);
 
     // -----------------------------------------------------
     // INDEX DATA
@@ -197,7 +199,9 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
 
     // All texture coords sets
     typedef std::vector<CalCoreSubmesh::TextureCoordinate> VCalTexCoords;
+	typedef std::vector<CalCoreSubmesh::TangentSpace> VCalTangent;
     auto& all_tex_coords = sm->getVectorVectorTextureCoordinate();
+	auto& all_tangent = sm->getVectorVectorTangentSpace();
     //assert(!all_tex_coords.empty());
 
     // Vertices
@@ -209,7 +213,14 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
       tex_coords0 = &all_tex_coords[0];
       // Sizes must match
       assert(tex_coords0->size() == nvertexs);
-    }
+    }	
+	
+	VCalTangent* tangent = nullptr;
+	if (!all_tangent.empty()) {
+		tangent = &all_tangent[0];
+		// Sizes must match
+		assert(tangent->size() == nvertexs);
+	}
 
     // For each cal3d vertex
     int cal_vtx_idx = 0;
@@ -218,11 +229,15 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
       // Build one of our skinned vertexs
       CSkinVertex sv;
       memset(&sv, 0x00, sizeof(sv));
-
+	  
       sv.pos = XMFLOAT3(vit.position.x, vit.position.y, vit.position.z);
       sv.normal = XMFLOAT3(vit.normal.x, vit.normal.y, vit.normal.z);
+	  
       if (tex_coords0)
         sv.uv = XMFLOAT2((*tex_coords0)[cal_vtx_idx].u, (*tex_coords0)[cal_vtx_idx].v);
+
+	  if (tangent)
+		  sv.tangent = XMFLOAT3((*tangent)[cal_vtx_idx].tangent.x, (*tangent)[cal_vtx_idx].tangent.y, (*tangent)[cal_vtx_idx].tangent.z);
 
       assert(vit.vectorInfluence.size() <= 4);
       int idx = 0;
@@ -261,7 +276,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
   header.nvertexs = (int)skin_vtxs.size();
   header.primitive_type = CMesh::TRIANGLE_LIST;
   header.version = CMesh::THeader::current_version;
-  header.vertex_type = CMesh::POSITION_UV_NORMAL_SKIN;
+  header.vertex_type = CMesh::POSITION_UV_NORMAL_SKIN_TANGENT;
 
   // Virtual file
   CMemoryDataSaver mds;

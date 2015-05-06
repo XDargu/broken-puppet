@@ -1,5 +1,11 @@
 <scene>
   <entity>
+    <name name="player_rag1"/>
+    <transform position="0 0 0" rotation="0 0 0 1"/>
+    <skeleton name="prota"/>
+    <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
+  </entity>
+  <!--<entity>
     <name name="light00"/>
     <transform position="10 0 0" rotation="0 0 0 1"/>
     <pointLight decay_factor="0.2" radius="15" color="0 0 1"/>
@@ -9,20 +15,14 @@
     <transform position="0 0 0" rotation="0 0 0 1"/>
     <pointLight decay_factor="0.2" radius="15" color="1 0 0"/>
   </entity>
-  <!--<entity>
+  <entity>
     <name name="prota_rag"/>
     <transform position="2 0 0" rotation="0 0 0 1"/>
     <skeleton name="prota"/>
     <ragdoll name="prota"/>
     <aiFSMcontroller/>
   </entity>-->
- <entity>
-    <name name="abuela_rag"/>
-    <transform position="0 0 0" rotation="0 0 0 1"/>
-    <skeleton name="abuela"/>
-	  <ragdoll name="abuela"/>
-	<aiFSMcontroller/>
-  </entity>
+ 
   <entity>
     <name name="the_light"/>
     <transform position="0 7 -30" rotation="0.16 0.14 -0.06 0.98"/>
@@ -30,17 +30,11 @@
     <shadows res="1024" color="1 1 1"/>
     playerDoomController/>
   </entity>
-  <entity>
-    <name name="the_light2"/>
-    <transform position="0 20 30" rotation="0.63 -0.57 0.25 0.47"/>
-    <camera target="0 0 0" fov="45.0" znear="5" zfar="250"/>
-    <shadows res="1024" color="0.5 0.5 0"/>
-    playerDoomController/>
-  </entity>
 	<entity tag = "player" collisionTag="Player" prefab="Player">
 <transform position="0.297749 2.05983 -4.19523" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <ragdoll name="prota"/>
 	</entity>
+  
 	<entity  prefab="PlayerPivot">
 <transform position="0.297749 2.05983 -4.19523" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
@@ -50,6 +44,13 @@
 	<entity  prefab="PlayerCamera">
 <transform position="8.29775 8.05983 -4.19523"/>
 	</entity>
+  
+  <entity>
+    <name name="player_rag2"/>
+    <transform position="1 0 0" rotation="0 0 0 1"/>
+    <skeleton name="abuela"/>
+    <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
+  </entity>
 	<entity >
 <name name="Sky001_6.0" />
 <transform position="-8.51466 0.303587 -6.63193" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
