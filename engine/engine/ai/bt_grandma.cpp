@@ -4,6 +4,7 @@
 #include "../components/all_components.h"
 #include "utils.h"
 #include "nav_mesh_manager.h"
+#include "components\comp_skeleton.h"
 
 void bt_grandma::create(string s)
 {
@@ -74,6 +75,8 @@ void bt_grandma::create(string s)
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = PxVec3(0, 0, 0);
 	player = CEntityManager::get().getByName("Player");
+	tied_event = false;
+	tied_enter = false;
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -138,6 +141,8 @@ int bt_grandma::actionIdle()
 
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	//((TCompCharacterController*)character_controller)->Move(PxVec3(0, 0, 0), false, false, );
+
+	TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
@@ -456,8 +461,7 @@ int bt_grandma::conditionfalling_event()
 //Check if is a tied event
 int bt_grandma::conditiontied_event()
 {
-	return false;
-	//return tied_event;
+	return tied_event;
 }
 
 //Check if can reach the selected needle
@@ -511,26 +515,39 @@ void bt_grandma::playerViewedSensor(){
 void bt_grandma::needleViewedSensor(){
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	std::vector<needle_rope>* needle_vector = new std::vector<needle_rope>;
 	//le pedimos que nos diga las agujas que el enemigo tiene en su rango
 	//std::vector<TCompNeedle*> list_needles = m_sensor->getNeedlesInRange();
-	if (!m_sensor->getNeedlesInRange().empty()){
+	m_sensor->getNeedlesInRange(needle_vector);
+	if (!needle_vector->empty()){
 		//almacenamos el numero de agujas en rango para comprobar variaciones
-		currentNumNeedlesViewed = (unsigned int)m_sensor->needlesInRange.size();//list_needles.size();
+		currentNumNeedlesViewed = (unsigned int)needle_vector->size();//list_needles.size();
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == INTERNAL) || (current->getTypeInter() == BOTH))
+			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))
 				setCurrent(NULL);
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
 	}
 }
 
+void bt_grandma::tiedSensor(){
+	TCompSensorTied* tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
+	tied_sensor->keepTied();
+	if (!tied_enter){
+		if (tied_sensor->getTiedState()){
+			TCompRope* ropeRef = (TCompRope*)tied_sensor->getRopeRef();
+			setCurrent(NULL);
+			tied_enter = true;
+		}
+	}
+}
+
 void bt_grandma::update(float elapsed){
 	//playerViewedSensor();
-	//needleViewedSensor();
-	((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 1.5f;
-	((TCompCharacterController*)character_controller)->jumpPower = 0.7f;
+	needleViewedSensor();	
+	tiedSensor();
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 	this->recalc(elapsed);
 }
@@ -560,4 +577,12 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	}
 	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
+}
+
+void bt_grandma::setId(unsigned int id){
+	my_id = id;
+}
+
+unsigned int bt_grandma::getId(){
+	return my_id;
 }

@@ -14,9 +14,12 @@ struct FilterGroup
 	enum Enum
 	{
 		eUNDEFINED = (1 << 1),
-		eENEMY = (1 << 2),
-		eACTOR = (1 << 3),
-		eLEVEL = (1 << 4),
+		eENEMY =     (1 << 2),
+		ePLAYER =    (1 << 3),
+		eACTOR =     (1 << 4),
+		eLEVEL =     (1 << 5),
+		ePLAYER_RG = (1 << 6),
+		eENEMY_RG  = (1 << 7),
 	};
 };
 
@@ -74,7 +77,7 @@ public:
 void setupFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask);
 void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask);
 
-PxU32 convertInCollisionFilter(std::string name);
+PxU32 convertStrInCollisionFilter(std::string name);
 
 #define Physics CPhysicsManager::get()
 

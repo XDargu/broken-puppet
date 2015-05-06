@@ -17,15 +17,19 @@ Citem_manager::~Citem_manager()
 {
 }
 
-void Citem_manager::addNeedle(TCompNeedle* n){
-	needles.push_back(n);
+void Citem_manager::addNeedle(TCompNeedle* needle, TCompRope* rope){
+	needle_rope needle_rope_struct;
+	needle_rope_struct.needleRef = needle;
+	needle_rope_struct.rope_asociated = rope;
+	needles.push_back(needle_rope_struct);
 }
 
-void Citem_manager::removeNeedle(TCompNeedle* n){
-	std::vector<TCompNeedle*>::iterator iter = needles.begin();
+void Citem_manager::removeNeedle(needle_rope n){
+	std::vector<needle_rope>::iterator iter = needles.begin();
+	int i = 0;
 	while (iter != needles.end())
 	{
-		if (*iter == n)
+		if (needles[i].needleRef==n.needleRef)
 		{
 			iter = needles.erase(iter);
 			return;
@@ -33,6 +37,7 @@ void Citem_manager::removeNeedle(TCompNeedle* n){
 		else
 		{
 			++iter;
+			++i;
 		}
 	}
 }

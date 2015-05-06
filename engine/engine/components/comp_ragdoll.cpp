@@ -71,7 +71,12 @@ PxRigidDynamic* TCompRagdoll::getBoneRigid(int id) {
 
 void TCompRagdoll::setCollisionGroups(){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
-	PxU32 myMask = convertInCollisionFilter(e->collision_tag);
+	PxU32 myMask;
+	if (e->hasTag("enemy")){
+		myMask = convertStrInCollisionFilter("Enemy_Ragdoll");
+	}else if (e->hasTag("player")){
+		myMask = convertStrInCollisionFilter("Player_Ragdoll");
+	}
 	PxU32 notCollide = 0;
 	bool found = false;
 	auto it = CPhysicsManager::get().m_collision->find(myMask);

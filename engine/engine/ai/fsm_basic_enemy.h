@@ -65,6 +65,7 @@ public:
 	void setTarget(CHandle target) { player = target; };
 
 	void setId(unsigned int id);
+
 	unsigned int getInt();
 	CHandle getTransform();
 };

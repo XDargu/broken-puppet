@@ -3,7 +3,9 @@
 #include "comp_transform.h"
 #include "comp_character_controller.h"
 #include "comp_sensor_needles.h"
+#include "comp_sensor_tied.h"
 #include "comp_player_position_sensor.h"
+#include "comp_skeleton.h"
 #include "../ai/aimanager.h"
 
 aicontroller* m_ai_controller;
@@ -22,6 +24,8 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompCharacterController>(this);
 	assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
+	assertRequiredComponent<TCompSensorTied>(this);
+	assertRequiredComponent<TCompSkeleton>(this);
 
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
@@ -31,7 +35,8 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 void TCompBtGrandma::init(){
 	m_ai_controller->create("enemy");
 	TCompCharacterController* controller = getSibling<TCompCharacterController>(this);
-	controller->moveSpeedMultiplier = 0.2;
+	controller->moveSpeedMultiplier = 1.0f;
+	controller->jumpPower = 0.7f;
 }
 
 void TCompBtGrandma::update(float elapsed){
@@ -56,3 +61,4 @@ void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
 	//m_ai_controller.ChangeState("aibe_Ragdoll");		
 }
+

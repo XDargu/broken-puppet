@@ -22,6 +22,9 @@ private:
 	std::vector<XMVECTOR> path;
 	XMVECTOR wander_target;
 	bool jump;
+	bool tied_event;
+	bool tied_enter;
+	unsigned int my_id;
 public:
 	void create(string);
 
@@ -136,7 +139,10 @@ public:
 
 	void playerViewedSensor();
 	void needleViewedSensor();	
+	void tiedSensor();
 	void update(float elapsed);
+	unsigned getId();
+	void setId(unsigned int id);
 
 	bool player_viewed_sensor;
 	unsigned int lastNumNeedlesViewed;

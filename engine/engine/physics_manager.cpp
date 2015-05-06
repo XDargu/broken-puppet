@@ -34,7 +34,7 @@ void CPhysicsManager::loadCollisions() {
 	// Parse xml file...
 	CCollisionParser p;
 	bool success = p.xmlParseFile("collision_table.xml");
-	if (success){
+	if (!success){
 		//ERROR: METER XASSERT
 		XASSERT(p.xmlParseFile("collision_table.xml"), "error leyendo tabla de colisiones");
 	}
@@ -243,14 +243,20 @@ void setupFiltering(PxShape* shape, PxU32 filterGroup, PxU32 filterMask)
 	//free(shape);
 }
 
-PxU32 convertInCollisionFilter(std::string name){
+PxU32 convertStrInCollisionFilter(std::string name){
 	PxU32 result;
 	if (name == "Enemy"){
 		result = FilterGroup::eENEMY;
+	}else if (name == "Player"){
+		result = FilterGroup::ePLAYER;
 	}else if (name == "Actor"){
 		result = FilterGroup::eACTOR;
 	}else if (name == "Level"){
 		result = FilterGroup::eLEVEL;
+	}else if (name == "Enemy_Ragdoll"){
+		result = FilterGroup::eENEMY_RG;
+	}else if (name == "Player_Ragdoll"){
+		result = FilterGroup::ePLAYER_RG;
 	}else{
 		result = FilterGroup::eUNDEFINED;
 	}
