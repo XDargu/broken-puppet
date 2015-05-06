@@ -321,7 +321,7 @@ void bt_basic_enemy::needleViewedSensor(){
 		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
 		if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-			needle_objective = m_sensor->getTargetNeedle();
+			//m_sensor->asociateGrandmaTargetNeedle(entity);
 			setCurrent(NULL);
 		}
 	}

@@ -182,7 +182,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				}
 
 				//adding needle and rope to item manager
-				Citem_manager::get().addNeedle(new_e_needle, new_e_r);
+				Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
 			}
 			// Second throw
 			else {
@@ -280,7 +280,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					}
 
 					//adding needle to item manager
-					Citem_manager::get().addNeedle(new_e_needle2, new_e_r);
+					Citem_manager::get().addNeedle(CHandle(new_e_needle2), CHandle(new_e_r));
 
 					// Set the current rope entity as an invalid Handle
 					current_rope_entity = CHandle();

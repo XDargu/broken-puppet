@@ -6,6 +6,10 @@
 #include "nav_mesh_manager.h"
 #include "components\comp_skeleton.h"
 
+//Constants
+const int max_bf_posibilities = 7;
+const float max_dist_reach_needle = 2.f;
+
 void bt_grandma::create(string s)
 {
 	name = s;
@@ -78,7 +82,10 @@ void bt_grandma::create(string s)
 	tied_event = false;
 	event_detected = false;
 	tied_succesfull = false;
-	needle_objective = nullptr;
+	needle_to_take = false;
+	can_reach_needle = false;
+	is_needle_tied = false;
+	needle_objective = NULL;
 	ropeRef = nullptr;
 	lastNumNeedlesViewed = 0;
 }
@@ -117,12 +124,20 @@ int bt_grandma::actionTooCloseAttack()
 int bt_grandma::actionChaseNeedlePosition()
 {
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-	TCompTransform* n_transform = needle_objective->needleRef->getTransform();
+
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
+	TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
+	/*CEntity* owner=needle_objective->needleRef.getOwner();
+	TCompTransform* n_transform = ((CEntity*)owner)->get<TCompTransform>();*/
+
+	
 
 	if (on_enter){
 		CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
-		find_path_time = state_time;
+		//find_path_time = state_time;
 		ind_path = 0;
+		return STAY;
 	}else{
 		if (path.size() > 0){
 			if (ind_path < path.size()){
@@ -426,15 +441,20 @@ int bt_grandma::conditiontoo_close_attack()
 //Check if there is a needle to take
 int bt_grandma::conditionneedle_to_take()
 {
-	return false;
-	//return needle_to_take;
+	return needle_to_take;
 }
 
 //
 int bt_grandma::conditionis_needle_tied()
 {
-	return false;
-	//return is_needle_tied;
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	CHandle target_rope= m_sensor->getRopeAsociatedSensor(entity);
+	if (target_rope.isValid()){
+		is_needle_tied=true;
+	}else{
+		is_needle_tied=false;
+	}
+	return is_needle_tied;
 }
 
 //Check if is necesary a warcry
@@ -509,8 +529,22 @@ int bt_grandma::conditiontied_event()
 //Check if can reach the selected needle
 int bt_grandma::conditioncan_reach_needle()
 {
-	return false;
-	//return can_reach_needle;
+	//XASSERT(needle_objective->needleRef.isValid(), "Invalid needle");
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
+	XASSERT(target_needle.isValid(), "Invalid owner");
+	TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
+
+	wander_target = e_transform->position;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	if (V3DISTANCE(wander_target, m_transform->position) < max_dist_reach_needle){
+		can_reach_needle = true;
+	}else{
+		can_reach_needle = false;
+	}
+
+	return can_reach_needle;
 }
 
 //Check if the role is taunter and is close enought
@@ -562,9 +596,9 @@ void bt_grandma::needleViewedSensor(){
 
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	m_sensor->getNeedlesInRange();
+	//m_sensor->getNeedlesInRange();
 
-	if (!needle_objective){
+	if (!needle_to_take){
 		currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles();//list_needles.size();
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
@@ -572,11 +606,8 @@ void bt_grandma::needleViewedSensor(){
 			if (current != NULL){
 				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
 					TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-					needle_objective = m_sensor->getTargetNeedle();
-					
-					if (needle_objective)
-						needle_objective->call_it = true;
-					
+					m_sensor->asociateGrandmaTargetNeedle(entity);
+					needle_to_take = true;
 					setCurrent(NULL);
 				}
 			}

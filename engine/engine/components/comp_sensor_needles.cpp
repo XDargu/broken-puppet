@@ -11,19 +11,15 @@ void TCompSensorNeedles::init() {
 	numNeedlesInRange = 0;
 }
 
-void TCompSensorNeedles::getNeedlesInRange(){
-	TCompTransform* m_transform = transform;
-	needleInRange(m_transform->position, radius);
-}
-
 void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
-	needlesInRangeVector.clear();
+	/*needlesInRangeVector.clear();
 	for (auto & element : Citem_manager::get().needles) {
-		TCompTransform* e_transform = element.needleRef->getTransform();
+		CEntity* owner=element->needleRef.getOwner();
+		TCompTransform* e_transform = ((CEntity*)owner)->get<TCompTransform>();
 		if (V3DISTANCE(e_transform->position, pos) <= radius){
-			needlesInRangeVector.push_back(&element);
+			needlesInRangeVector.push_back(element);
 		}
-	}
+	}*/
 }
 
 //bool sortDeque(needle_rope* n1, needle_rope* n2){
@@ -49,16 +45,21 @@ void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
 
 //}
 
-needle_rope* TCompSensorNeedles::getTargetNeedle(){
-	int min_distance = 100.f;
+void TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef){
+
+	TCompTransform* m_transform = transform;
+	Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef);
+
+	/*int min_distance = 100.f;
 	needle_rope* priority = nullptr;
 	needle_rope* nearest = nullptr;
 	for (int i = 0; i < needlesInRangeVector.size(); i++) {
 		if (((needlesInRangeVector)[i])->call_it == false){
-			TCompTransform* e_transform = needlesInRangeVector[i]->needleRef->getTransform();
+			CEntity* owner = needlesInRangeVector[i]->needleRef.getOwner();
+			TCompTransform* e_transform = ((CEntity*)owner)->get<TCompTransform>();
 			TCompTransform* m_transform = transform;
 			if (V3DISTANCE(e_transform->position, m_transform->position) < min_distance){
-				if (needlesInRangeVector[i]->rope_asociated){
+				if (needlesInRangeVector[i]->rope_asociated.isValid()){
 					priority = needlesInRangeVector[i];
 				}
 				nearest = needlesInRangeVector[i];
@@ -70,9 +71,19 @@ needle_rope* TCompSensorNeedles::getTargetNeedle(){
 		return priority;
 	}else{
 		return nearest;
-	}
+	}*/
 }
 
 int TCompSensorNeedles::getNumNeedles(){
-	return needlesInRangeVector.size();
+	TCompTransform* m_transform = transform;
+	int result = Citem_manager::get().getNumInRangle(m_transform->position, radius);
+	return result;
+}
+
+CHandle TCompSensorNeedles::getNeedleAsociatedSensor(CHandle grandma){
+	return Citem_manager::get().getNeedleAsociated(grandma);
+}
+
+CHandle TCompSensorNeedles::getRopeAsociatedSensor(CHandle grandma){
+	return Citem_manager::get().getRopeAsociated(grandma);
 }

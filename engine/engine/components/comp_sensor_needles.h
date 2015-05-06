@@ -8,23 +8,24 @@
 #include "comp_rope.h"
 
 struct needle_rope{
-	TCompNeedle* needleRef;
-	TCompRope*   rope_asociated;
-	bool         call_it;
+	CHandle      needleRef;
+	CHandle      rope_asociated;
+	CHandle      grandma_asociated;
 };
 
 struct TCompSensorNeedles : TBaseComponent{
 private:
-	std::vector<needle_rope*> needlesInRangeVector;
 	CHandle		transform;
 	unsigned int numNeedlesInRange;
 	float radius;
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
-	void getNeedlesInRange();
+	//void getNeedlesInRange();
 	void needleInRange(XMVECTOR pos, float radius);
-	needle_rope* getTargetNeedle();
+	void asociateGrandmaTargetNeedle(CHandle gradmaRef);
+	CHandle getNeedleAsociatedSensor(CHandle grandma);
+	CHandle getRopeAsociatedSensor(CHandle grandma);
 	int getNumNeedles();
 };
 #endif

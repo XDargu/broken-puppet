@@ -10,7 +10,6 @@
 class bt_grandma : public bt
 {
 private:
-	static const int max_bf_posibilities = 7;
 
 	float radius;
 	float find_path_time;
@@ -28,6 +27,9 @@ private:
 	bool tied_event;
 	bool event_detected;
 	bool tied_succesfull;
+	bool needle_to_take;
+	bool can_reach_needle;
+	bool is_needle_tied;
 	unsigned int my_id;
 	needle_rope* needle_objective;
 	TCompRope* ropeRef;
