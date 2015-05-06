@@ -84,6 +84,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 		
 		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes.isVisible(m_aabb);
 				
 		//culling = true;

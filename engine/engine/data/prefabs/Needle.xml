@@ -4,7 +4,9 @@
 	<transform position="0 0 0" rotation="0 0 0 1" scale="1 1 1"/>
 	<render>
       <draw mesh="aguja" sub_mesh="0" mat="Standardmaterial"/>
-    </render>
-	<needle/>
- </entity>
+  </render>
+  <aabb min="-0.2 0 -0.2" max="0.2 1 0.2"/>
+	<needle/>  
+
+</entity>
 </prefab>
