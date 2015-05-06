@@ -20,7 +20,14 @@ void CCollisionParser::convertInCollisionFilter(std::string own, std::string not
 	bool col_t = false;
 
 	own_tag = convertStrInCollisionFilter(own);
-	if (own_tag != FilterGroup::eUNDEFINED) own_t = true;
+	if (own_tag != FilterGroup::eUNDEFINED)
+	{
+		own_t = true;
+	}
+	else
+	{
+		int i = 0;
+	}
 
 	not_collides = convertStrInCollisionFilter(not_col);
 	if (not_collides != FilterGroup::eUNDEFINED) col_t = true;
