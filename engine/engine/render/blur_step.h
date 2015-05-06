@@ -6,13 +6,14 @@
 
 // --------------------------------
 struct TBlurStep {
-	CRenderToTexture *rt_down_by_x;
-	CRenderToTexture *rt_down_by_y;
+	CRenderToTexture *rt_blur;
 	char name_by_x[64];
 	char name_by_y[64];
 	int  factor;
 	int  xres;
 	int  yres;
+
+	float amount;
 
 	bool create(const char* name, int axres, int ayres, int afactor);
 

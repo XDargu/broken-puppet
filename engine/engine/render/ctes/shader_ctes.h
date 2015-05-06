@@ -61,6 +61,8 @@ cbuffer TCtesBones SHADER_REGISTER(b3)
 cbuffer TCtesBlur SHADER_REGISTER(b3)
 {
 	float4 blur_delta;
+	float blur_amount;
+	float dummy_blur, dummy_blur2, dummy_blur3;
 };
 
 cbuffer TCtesSharpen SHADER_REGISTER(b3)
@@ -75,6 +77,21 @@ cbuffer TCtesSSAO SHADER_REGISTER(b3)
 	float4 ssao_delta;
 	float radius;
 	float dummy_ssao, dummy_ssao2, dummy_ssao3;
+};
+
+cbuffer TCtesChromaticAberration SHADER_REGISTER(b3)
+{
+	float4 ca_delta;
+	float chromatic_amount;
+	float dummy_ca, dummy_ca2, dummy_ca3;
+};
+
+cbuffer TCtesGlow SHADER_REGISTER(b3)
+{
+	float4 glow_pos;
+	float4 glow_delta;
+	float glow_amount;
+	float dummy_glow, dummy_glow2, dummy_glow3;
 };
 
 #endif

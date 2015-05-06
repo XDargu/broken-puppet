@@ -185,6 +185,8 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
+    <ClInclude Include="components\comp_sensor_tied.h" />
+    <ClInclude Include="render\all_post_process_effects.h" />
     <ClInclude Include="render\blur_step.h" />
     <ClInclude Include="components\collider.h" />
     <ClInclude Include="components\comp_ai_fsm_basic.h" />
@@ -290,10 +292,12 @@
     <ClInclude Include="recast\include\RecastAssert.h" />
     <ClInclude Include="recast\include\RecastDebugDraw.h" />
     <ClInclude Include="recast\include\RecastDump.h" />
+    <ClInclude Include="render\chromatic_aberration_step.h" />
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
     <ClInclude Include="render\deferred_render.h" />
+    <ClInclude Include="render\glow_step.h" />
     <ClInclude Include="render\material.h" />
     <ClInclude Include="render\mesh.h" />
     <ClInclude Include="render\render.h" />
@@ -362,6 +366,9 @@
     <ClCompile Include="components\comp_collider_box.cpp" />
     <ClCompile Include="components\comp_collider_sphere.cpp" />
     <ClCompile Include="components\comp_collider_capsule.cpp" />
+    <ClCompile Include="components\comp_sensor_tied.cpp" />
+    <ClCompile Include="components\comp_rope.cpp" />
+    <ClCompile Include="components\comp_distance_joint.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="error\error_context.cpp" />
@@ -520,9 +527,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="render\blur_step.cpp" />
+    <ClCompile Include="render\chromatic_aberration_step.cpp" />
     <ClCompile Include="render\collision_mesh.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\deferred_render.cpp" />
+    <ClCompile Include="render\glow_step.cpp" />
     <ClCompile Include="render\material.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />

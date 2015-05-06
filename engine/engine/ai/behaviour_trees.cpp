@@ -74,6 +74,7 @@ btnode *bt::addChild(string parent, string son, int type, typeInterrupAllowed ki
 		s->setParent(p);
 		s->setType(type);
 		s->setTypeInter(kind);
+		s->setNodeWeight(0);
 		if (btc != NULL) addCondition(son, btc);
 		if (bta != NULL) addAction(son, bta);
 		return s;
@@ -95,6 +96,7 @@ btnode *bt::addChild(string parent, string son, int type, btcondition btc, btact
 		s->setParent(p);
 		s->setType(type);
 		s->setTypeInter(BOTH);
+		s->setNodeWeight(0);
 		if (btc != NULL) addCondition(son, btc);
 		if (bta != NULL) addAction(son, bta);
 		return s;
@@ -118,6 +120,7 @@ btnode *bt::addChild(string parent, string son, int type, typeInterrupAllowed ki
 		s->setType(type);
 		s->setDecSubType(subType);
 		s->setTypeInter(kind);
+		s->setNodeWeight(0);
 		if (btc != NULL) addCondition(son, btc);
 		if (bta != NULL) addAction(son, bta);
 		return s;
@@ -140,6 +143,7 @@ btnode *bt::addChild(string parent, string son, int type, subType subType, btcon
 		s->setType(type);
 		s->setDecSubType(subType);
 		s->setTypeInter(BOTH);
+		s->setNodeWeight(0);
 		if (btc != NULL) addCondition(son, btc);
 		if (bta != NULL) addAction(son, bta);
 		return s;

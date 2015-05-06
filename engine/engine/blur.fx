@@ -28,38 +28,35 @@ VS_TEXTURED_OUTPUT VSBlur(
   return output;
 }
 
+static float3x3 conv =
+{
+	1. / 16., 1. / 8., 1. / 16.,
+	1. / 8., 1. / 4., 1. / 8.,
+	1. / 16., 1. / 8., 1. / 16.
+};
+
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 {
-	float4 color = float4(0, 0, 0, 0);
-	float2 delta = float2(0, 0);
-	float factor = 1.f;
+	if (blur_amount > 0) {
+		float4 color = float4(0, 0, 0, 0);
+			float2 delta = float2(0, 0);
+			float factor = 1.f;		
 
-	/*float3x3 conv =
-	{
-		1. / 16., 1. / 8., 1. / 16.,
-		1. / 8., 1. / 4., 1. / 8.,
-		1. / 16., 1. / 8., 1. / 16.
-	};*/
-
-	float3x3 conv =
-	{
-		0, -1, 0,
-		-1, 5, -1,
-		0, -1, 0
-	};
-
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			factor = conv[i][j];
-			delta = float2(blur_delta.x * (i - 1), blur_delta.y * (j - 1));
-			color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.3) * factor;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				factor = conv[i][j];
+				delta = float2(blur_delta.x * (i - 1), blur_delta.y * (j - 1)) * blur_amount;
+				color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.3) * factor;
+			}
 		}
+
+		return color * 1;
 	}
 
-  return color * 1;
+	return txDiffuse.Sample(samClampLinear, input.UV);
 }
 
 

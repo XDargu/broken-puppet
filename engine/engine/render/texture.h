@@ -24,6 +24,7 @@ public:
 	const char* getName() const { return name.c_str(); }
 	void destroy();
 	void activate(int slot) const;
+	bool reload() { return load(name.c_str()); }
 };
 
 typedef CItemsByName< CTexture > CTextureManager;

@@ -417,6 +417,18 @@
     <ClInclude Include="render\ssao_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="render\chromatic_aberration_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\glow_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\all_post_process_effects.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_sensor_tied.h">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -745,6 +757,21 @@
     </ClCompile>
     <ClCompile Include="render\ssao_step.cpp">
       <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\chromatic_aberration_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\glow_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_sensor_tied.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_rope.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_distance_joint.cpp">
+      <Filter>components\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

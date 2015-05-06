@@ -1,0 +1,6 @@
+<technique 
+	fx="glow.fx"
+	vs="VSGlow"
+	vs_decl="vdcl_position_uv"
+	ps="PSGlowLights"
+	/>

@@ -9,11 +9,27 @@ clearlistener()
 	local tools_path = engine_path + "tools\\"
 	local collider_path = mesh_path + "colliders\\"
 	
+	fn max2mcvMatrix obj = (
+		local max_world = obj.transform
+		local max2mcv = rotatexmatrix -90
+		local mcv2max = inverse max2mcv
+		local mcv_world = mcv2max * max_world * max2mcv
+		return mcv_world
+	)
+	
+	fn max2mcvMatrixTransform trans = (
+		local max_world = trans
+		local max2mcv = rotatexmatrix -90
+		local mcv2max = inverse max2mcv
+		local mcv_world = mcv2max * max_world * max2mcv
+		return mcv_world
+	)
+	
 	fn getRelativeTransform obj parent = (	
 		return (obj.transform * (inverse parent.transform))
 	)	
 	
-	fn getRelativeTransform obj_pos obj_rot parent = (
+	fn getRelativeTransformPosRot obj_pos obj_rot parent = (
 		local helperDummy = dummy()
 		helperDummy.rotation = obj_rot
 		helperDummy.pos = obj_pos
@@ -30,6 +46,7 @@ clearlistener()
 		local obj_pos  = biped.getTransform obj #pos
 		local obj_rot  = biped.getTransform obj #rotation
 		
+		local center_of_mass_pos = [obj.modifiers[#PhysX_Rigid_Body].MassCenterX, obj.modifiers[#PhysX_Rigid_Body].MassCenterY, obj.modifiers[#PhysX_Rigid_Body].MassCenterZ]
 		
 
 		local mString = "<BoneRigidbody "
@@ -60,6 +77,20 @@ clearlistener()
 		mJoint = obj
 		
 		mString = "<jointD6 "
+
+		local body0_rel = getRelativeTransform mJoint mJoint.body0
+		local body1_rel = getRelativeTransform mJoint mJoint.body1
+		
+		--local body0_rel_mcv = max2mcvMatrixTransform body0_rel
+		--local body1_rel_mcv = max2mcvMatrixTransform body1_rel
+		
+		local body0_rel_mcv =  body0_rel
+		local body1_rel_mcv =  body1_rel
+		
+		local q_body0_rel_mcv = body0_rel_mcv.rotationPart as quat
+		q_body0_rel_mcv = quat -q_body0_rel_mcv.x -q_body0_rel_mcv.y -q_body0_rel_mcv.z q_body0_rel_mcv.w
+		local q_body1_rel_mcv = body1_rel_mcv.rotationPart as quat
+		q_body1_rel_mcv = quat -q_body1_rel_mcv.x -q_body1_rel_mcv.y -q_body1_rel_mcv.z q_body1_rel_mcv.w
 	
 		local mObj = max2mcvMatrix mJoint
 		local qObj = mObj.rotationPart as quat
@@ -77,6 +108,26 @@ clearlistener()
 		
 		if (mJoint.body1 != undefined) then 
 		mString += "actor" + i as string + " = \"" + mJoint.body1.name + "\" "
+		
+		mString += " jointRelativePosition0=\"" \
+												+ body0_rel_mcv.row4.x as string+" " \
+												+ body0_rel_mcv.row4.y as string+" " \
+												+ body0_rel_mcv.row4.z as string+"" \
+						+ "\" jointRelativeRotation0=\"" \
+											+ q_body0_rel_mcv.x as string+" "\
+											+ q_body0_rel_mcv.y as string+" "\
+											+ q_body0_rel_mcv.z as string+" "\
+											+ q_body0_rel_mcv.w as string+"\" "
+		
+		mString += " jointRelativePosition1=\"" \
+												+ body1_rel_mcv.row4.x as string+" " \
+												+ body1_rel_mcv.row4.y as string+" " \
+												+ body1_rel_mcv.row4.z as string+"" \
+						+ "\" jointRelativeRotation1=\"" \
+											+ q_body1_rel_mcv.x as string+" "\
+											+ q_body1_rel_mcv.y as string+" "\
+											+ q_body1_rel_mcv.z as string+" "\
+											+ q_body1_rel_mcv.w as string+"\" "
 		
 		mString += " jointPosition=\"" \
 												+ mObj.row4.x as string+" " \

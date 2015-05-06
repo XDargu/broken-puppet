@@ -451,7 +451,7 @@ clearlistener()
 		
 		-- Convert to dds using texconv.exe por ejemplo
 		--copyFile infile full_target
-		local cmd = "\"" + tools_path + "texconv.exe\" -f DXT5 \"" + infile + "\" -o " + out_path + "textures\\"
+		local cmd = tools_path + "texconv.exe -f DXT5 " + infile + " -o " + out_path + "textures\\"
 		format "Executing: --%--\n" cmd
 		local log_file = out_path + "log\\" + base_name + ".log"
 		local rc = DOSCommand (cmd)

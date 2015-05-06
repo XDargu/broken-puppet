@@ -18,29 +18,12 @@ void CCollisionParser::convertInCollisionFilter(std::string own, std::string not
 	physx::PxU32 not_collides;
 	bool own_t = false;
 	bool col_t = false;
-	if (own == "Enemy"){
-		own_tag = FilterGroup::eENEMY;
-		own_t = true;
-	}else if (own == "Actor"){
-		own_tag = FilterGroup::eACTOR;
-		own_t = true;
-	}else if (own == "Level"){
-		own_tag = FilterGroup::eLEVEL;
-		own_t = true;
-	}
 
-	if (not_col == "Enemy"){
-		not_collides = FilterGroup::eENEMY;
-		col_t = true;
-	}
-	else if (not_col == "Actor"){
-		not_collides = FilterGroup::eACTOR;
-		col_t = true;
-	}
-	else if (not_col == "Level"){
-		not_collides = FilterGroup::eLEVEL;
-		col_t = true;
-	}
+	own_tag = convertStrInCollisionFilter(own);
+	if (own_tag != FilterGroup::eUNDEFINED) own_t = true;
+
+	not_collides = convertStrInCollisionFilter(not_col);
+	if (not_collides != FilterGroup::eUNDEFINED) col_t = true;
 
 	if ((own_t) && (col_t))
 		CPhysicsManager::get().addCollisionFilter(own_tag, not_collides);

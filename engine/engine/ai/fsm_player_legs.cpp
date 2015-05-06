@@ -7,6 +7,7 @@
 
 FSMPlayerLegs::FSMPlayerLegs()
 {
+	
 }
 
 FSMPlayerLegs::~FSMPlayerLegs()
@@ -41,6 +42,7 @@ void FSMPlayerLegs::Init()
 	comp_rigidbody = ((CEntity*)entity)->get<TCompRigidBody>();
 	comp_collider = ((CEntity*)entity)->get<TCompColliderCapsule>();
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
+	comp_ragdoll = ((CEntity*)entity)->get<TCompRagdoll>();
 	comp_skeleton_ik = ((CEntity*)entity)->get<TCompSkeletonIK>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	comp_player_pivot_transform = ((CEntity*)(CEntityManager::get().getByName("PlayerPivot")))->get<TCompTransform>();
@@ -55,6 +57,8 @@ void FSMPlayerLegs::Init()
 	run_speed = 6;
 	((TCompCharacterController*)comp_character_controller)->jumpPower = 7;
 	walk_speed = 1.5f;
+
+	((TCompCharacterController*)comp_character_controller)->lerpRotation = 0.15;
 
 	current_animation_id = -1;
 
@@ -119,14 +123,14 @@ void FSMPlayerLegs::Walk(float elapsed){
 
 	if (movement_dir.z == 0) {
 		if (movement_dir.x < 0) {
-			animation = 13;
+			animation = torso->up_animation ? 25 : 13;
 		}
 		else if (movement_dir.x > 0) {
-			animation = 12;
+			animation = torso->up_animation ? 24 : 12;
 		}
 	}
 	else if (movement_dir.z < 0) {
-		animation = 16;
+		animation = torso->up_animation ? 22 : 16;
 	}
 
 	if (animation != current_animation_id) {
@@ -182,11 +186,14 @@ void FSMPlayerLegs::Run(float elapsed){
 
 	if (movement_dir.z == 0) {
 		if (movement_dir.x < 0) {
-			animation = 15;
+			animation = torso->up_animation ? 25 : 15;
 		}
 		else if (movement_dir.x > 0) {
-			animation = 14;
+			animation = torso->up_animation ? 26 : 14;
 		}
+	}
+	else if (movement_dir.z < 0) {
+		animation = torso->up_animation ? 23 : 21;
 	}
 
 	if (animation != current_animation_id) {
@@ -267,9 +274,11 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 
 	canThrow = false;
 	
+	int animation = torso->up_animation ? 19 : 4;
+
 	if (on_enter) {
 		skeleton->loopAnimation(0);
-		skeleton->playAnimation(4);
+		skeleton->playAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -289,8 +298,10 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	int animation = torso->up_animation ? 20 : 11;
+
 	if (on_enter) {
-		skeleton->playAnimation(11);
+		skeleton->playAnimation(animation);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -337,7 +348,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 		ChangeState("fbp_Jump");
 		skeleton->stopAnimation(6);
 	}
-	else if (state_time >= 0.7f){
+	else if (state_time >= 1.1f){
 		ChangeState("fbp_WrongFall");
 		skeleton->stopAnimation(6);
 	}
@@ -356,7 +367,7 @@ void FSMPlayerLegs::Land(float elapsed){
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
 	if (on_enter) {
-		skeleton->loopAnimation(7);
+		skeleton->playAnimation(7);
 	}
 
 	if (state_time > 0.2f) {
@@ -372,7 +383,6 @@ void FSMPlayerLegs::Land(float elapsed){
 	
 	if (state_time >= 0.5f){
 		ChangeState("fbp_Idle");
-		skeleton->stopAnimation(7);
 	}
 }
 
@@ -394,7 +404,8 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
 		skeleton->stopAnimation(6);
-		ChangeState("fbp_WrongLand");
+		//ChangeState("fbp_WrongLand");
+		ChangeState("fbp_Ragdoll");
 	}
 }
 
@@ -452,45 +463,77 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 	TCompRigidBody* rigidbody = (TCompRigidBody*)comp_rigidbody;
 	TCompColliderCapsule* collider = (TCompColliderCapsule*)comp_collider;
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompRagdoll* m_ragdoll = comp_ragdoll;
+	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
+		if (m_ragdoll) { m_ragdoll->setActive(true); }
+
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
 
-		rigidbody->setLockXRot(false);
+		/*rigidbody->setLockXRot(false);
 		rigidbody->setLockYRot(false);
 		rigidbody->setLockZRot(false);
 
 		rigidbody->auto_rotate_transform = true;
-		rigidbody->auto_translate_transform = true;
+		rigidbody->auto_translate_transform = true;*/
 	}
-	if (((state_time >= 1 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
+	if (((state_time >= 4 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
 		|| (state_time >= 5))
 	{
-		rigidbody->setLockXRot(true);
+		if (m_ragdoll) { m_ragdoll->setActive(false); }
+
+		/*rigidbody->setLockXRot(true);
 		rigidbody->setLockYRot(true);
 		rigidbody->setLockZRot(true);
 
 		rigidbody->auto_rotate_transform = false;
-		rigidbody->auto_translate_transform = false;
+		rigidbody->auto_translate_transform = false;*/
 
 		// Volver a colocar al PJ. TODO: Mejorarlo para que no se quede atascado
-		rigidbody->rigidBody->setGlobalPose(
+		/*rigidbody->rigidBody->setGlobalPose(
 			physx::PxTransform(
 				rigidbody->rigidBody->getGlobalPose().p + physx::PxVec3(0, 1, 0),
 				rigidbody->rigidBody->getGlobalPose().q
 			)
-		);
+		);*/
 
 		collider->setMaterialProperties(0, 0, 0);
 
 		if (((TCompLife*)life)->life <= 0){
+			if (m_ragdoll) { m_ragdoll->setActive(false); }
 			m_transform->rotation = XMQuaternionIdentity();
 			ChangeState("fbp_Dead");
 		}
 		else{
+			if (m_ragdoll) { m_ragdoll->setActive(false); }
+			TCompSkeleton* m_skeleton = comp_skeleton;
+			m_skeleton->playAnimation(18);
 			ChangeState("fbp_WakeUp");
 		}
+	}
 
+	else
+	{
+		// Tiempo normal de ragdoll
+		// Recolocar la cápsula donde el ragdoll, para que la cámara lo siga
+		if (m_ragdoll) {
+			// Bone 003: Spine
+			XMVECTOR spine_pos = m_skeleton->getPositionOfBone(3);
+
+			XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(rigidbody->rigidBody->getGlobalPose().p);
+			XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+			
+			/*((TCompCharacterController*)comp_character_controller)->Move(
+				Physics.XMVECTORToPxVec3(pos_final - pos_orig)
+				, false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()), elapsed);*/
+			rigidbody->rigidBody->setGlobalPose(
+				physx::PxTransform(
+					Physics.XMVECTORToPxVec3(pos_final),
+					rigidbody->rigidBody->getGlobalPose().q
+					)
+				);
+		}
 	}
 }
 
@@ -518,8 +561,13 @@ void FSMPlayerLegs::ReevaluatePriorities(){
 }
 
 void FSMPlayerLegs::WakeUp(float elapsed){
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
-	if (state_time >= 0.01f){
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	dir.normalize();
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+
+	if (state_time >= 3.3f){
 		ChangeState("fbp_Idle");
 	}
 }
@@ -557,13 +605,40 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 		jump = true;
 	}
 
+	// Movement correction
 	movement_dir = movement_vector;
-
-	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
-	XMVECTOR projected_front = XMVector3Cross(up, XMVector3Cross(camera_transform->getFront(), up));
 	movement_vector = rotation.rotate(movement_vector);
 
-	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(projected_front);
+	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
+
+	XMVECTOR projected_front = XMVector3Cross(up, XMVector3Cross(camera_transform->getFront(), up));
+	XMVECTOR projected_left = XMVector3Cross(up, XMVector3Cross(camera_transform->getLeft(), up));
+
+	XMVECTOR camera_dir = camera_transform->getFront();
+
+	// Going front
+	if (movement_dir.z > 0) {
+		camera_dir =
+			camera_transform->getFront() * movement_dir.z +
+			camera_transform->getLeft() * movement_dir.x;
+				
+		movement_vector = PxQuat(deg2rad(-45 * movement_dir.x), PxVec3(0, 1, 0)).rotate(movement_vector);
+	}
+
+	// Going back
+	if (movement_dir.z < 0) {
+		camera_dir =
+			-camera_transform->getFront() * movement_dir.z +
+			-camera_transform->getLeft() * movement_dir.x;
+
+		movement_vector = PxQuat(deg2rad(45 * movement_dir.x), PxVec3(0, 1, 0)).rotate(movement_vector);
+	}
+
+	// Look at the front of the camera
+	//physx::PxVec3 dir = Physics.XMVECTORToPxVec3(projected_front);
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_dir);
+
+	// Look at the front of the transform
 	if (!lookAtCamera)
 		dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
 

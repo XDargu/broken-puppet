@@ -29,6 +29,7 @@ public:
 	int  xres;
 	int  yres;
 	bool fullscreen;
+	bool has_focus;
 	HWND hWnd;
 
 	CApp();

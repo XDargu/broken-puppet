@@ -5,6 +5,7 @@
 #include "cal3d/corekeyframe.h"
 
 CRagdollManager ragdoll_manager;
+int ragdoll_uid = 0;
 
 CCoreRagdoll::CCoreRagdoll() {}
 
@@ -15,10 +16,10 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 	if (elem == "BoneRigidbody") {
 
 		float radius = atts.getFloat("radius", 0.2);
-		float half_height = atts.getFloat("height", 0.2) / 2;
+		float half_height = (atts.getFloat("height", 0.2)) / 2;
 
 		XMVECTOR rotation_in_max_coords = atts.getQuat("rotation");
-		XMVECTOR max2mcv = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(0));
+		XMVECTOR max2mcv = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(90));
 
 		XMVECTOR rotation = XMQuaternionMultiply(rotation_in_max_coords, max2mcv);
 
@@ -71,13 +72,34 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		Physics.gScene->addActor(*rigidBody);
 
+		// More solver iteration (precise rigidbody collision)
+		rigidBody->setSolverIterationCounts(8, 8);
+
+		// Increase the sleep threshold, to prevent the shakiness of the ragdoll
+		rigidBody->setSleepThreshold(0.1f);
+
 		bone_map[bone_id] = rigidBody;
 	}
 
 	else if (elem == "jointD6") {
 
+		bool breakable = atts.getBool("breakable", false);
+
 		PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 		PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
+
+		PxVec3 joint_rel_pos_0 = Physics.XMVECTORToPxVec3(atts.getPoint("jointRelativePosition0"));
+		PxQuat joint_rel_rot_0 = Physics.XMVECTORToPxQuat(atts.getQuat("jointRelativeRotation0"));
+
+		PxVec3 joint_rel_pos_1 = Physics.XMVECTORToPxVec3(atts.getPoint("jointRelativePosition1"));
+		PxQuat joint_rel_rot_1 = Physics.XMVECTORToPxQuat(atts.getQuat("jointRelativeRotation1"));
+
+		XMVECTOR corrector = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), deg2rad(90));
+		PxQuat pxCorrector = Physics.XMVECTORToPxQuat(corrector);
+		pxCorrector = PxQuat(0, 0, 0, 1);
+
+		PxTransform joint_rel_0 = PxTransform(joint_rel_pos_0, joint_rel_rot_0  );
+		PxTransform joint_rel_1 = PxTransform(joint_rel_pos_1, joint_rel_rot_1  );
 
 		std::string bone_name1 = atts.getString("actor1", "unknown");
 		int bone_id1 = model->getBoneId(bone_name1);
@@ -95,6 +117,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		PxTransform joint_abs = PxTransform(joint_position, joint_rotation);
 
 		PxTransform rigid_abs_inverse1 = m_ridig_dynamic1->getGlobalPose();
+		
 		rigid_abs_inverse1 = rigid_abs_inverse1.getInverse();
 
 		PxTransform rigid_abs_inverse2 = m_ridig_dynamic2->getGlobalPose();
@@ -108,9 +131,9 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		PxD6Joint* mJoint = PxD6JointCreate(
 			*Physics.gPhysicsSDK
 			, m_ridig_dynamic1
-			, t_1
+			, joint_rel_0
 			, m_ridig_dynamic2
-			, t_2
+			, joint_rel_1
 			);
 
 		//mJoint->set
@@ -123,8 +146,8 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		mJoint->setMotion(PxD6Axis::eY, PxD6Motion::eLOCKED);
 		mJoint->setMotion(PxD6Axis::eZ, PxD6Motion::eLOCKED);
 
-		//std::string res_order[3] = { "swing1Mode", "swing2Mode", "twistMode" };
-		//std::string a_order[3] = { "swing1Angle", "swing2Angle", "twistAngle" };
+		/*std::string res_order[3] = { "swing1Mode", "swing2Mode", "twistMode" };
+		std::string a_order[3] = { "swing1Angle", "swing2Angle", "twistAngle" };*/
 
 		std::string res_order[3] = { "twistMode", "swing2Mode", "swing1Mode" };
 		std::string a_order[3] = { "twistAngle", "swing2Angle", "swing1Angle" };
@@ -145,10 +168,15 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		mJoint->setMotion(PxD6Axis::eTWIST, twist_motion);
 
 		// Primer valor: Swing 1 angle / 2, segundo valor: Swing 2 angle / 2
-		mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), -1));
-
+		mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), PxSpring(100, 10)));
+		
 		// Twist limit
-		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), -1));
+		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), PxSpring(100, 10)));
+
+		// Break bones
+		if (breakable) {
+			mJoint->setBreakForce(10000, 10000);
+		}
 
 		articulations.push_back(mJoint);
 	}
@@ -157,7 +185,11 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 
 bool CCoreRagdoll::load(const char* name) {
+	uid = ragdoll_uid;
+	ragdoll_uid++;
+
 	setName(name);
+	
 	root_path = "data/skeletons/" + std::string(name) + "/";
 
 	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);

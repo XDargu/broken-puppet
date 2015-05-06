@@ -1,5 +1,5 @@
 <prefab>
-  <entity>
+  <entity collisionTag="Enemy">
     <name name="grandma"/>
     <transform position="0 10 0" rotation="0.0 0.0 0.0 1.0" scale="0.01 0.01 0.01"/>
     <skeleton name="abuela"/>
@@ -8,8 +8,10 @@
     <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
     <characterController/>
     <life life="100"/>
+    <skeleton name="abuela"/>
     <sensorPlayerPos/>
     <sensorNeedles/>
+    <sensorTied/>
     <sensorDistPlayer/>
     <btGrandma/>
   </entity>

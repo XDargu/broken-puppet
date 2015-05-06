@@ -46,9 +46,11 @@ public:
 	void EvaluateHit();
 	void EvaluateLiveToLose(float damage);
 
+
 	void localCameraFront();
 	bool EvaluateMovement(bool lookAtCamera);
 	bool EvaluateFall();
+	void enemyTied(CHandle ropeRef);
 
 	bool trueEveryXSeconds(float time);
 };
