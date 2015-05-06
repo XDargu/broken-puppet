@@ -432,6 +432,12 @@
     <ClInclude Include="render\culling.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="audio\bass.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\sound_manager.h">
+      <Filter>audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -779,6 +785,9 @@
     <ClCompile Include="render\culling.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="audio\sound_manager.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -867,6 +876,9 @@
     </Filter>
     <Filter Include="render\postpro">
       <UniqueIdentifier>{59d3f46a-ca33-4aab-aee3-77703d5581c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{cf303c48-915a-4b05-8758-0eaf69bf6d35}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,7 @@ using namespace DirectX;
 #include "skeletons/ik_handler.h"
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
+#include "audio\sound_manager.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -97,6 +98,7 @@ CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
+CSoundManager sm;
 
 const CTexture* cubemap;
 
@@ -273,6 +275,13 @@ bool CApp::create() {
 
 	//loadScene("data/scenes/my_file.xml");
 	loadScene("data/scenes/my_file-backup.xml");
+
+	
+
+	sm.addMusicTrack(0, "plug in baby.mp3");
+	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+
+	sm.playTrack(0);
 
 	// Create debug meshes	
 	bool is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
