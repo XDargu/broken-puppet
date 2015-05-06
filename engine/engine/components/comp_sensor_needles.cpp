@@ -87,3 +87,7 @@ CHandle TCompSensorNeedles::getNeedleAsociatedSensor(CHandle grandma){
 CHandle TCompSensorNeedles::getRopeAsociatedSensor(CHandle grandma){
 	return Citem_manager::get().getRopeAsociated(grandma);
 }
+
+void TCompSensorNeedles::removeNeedleRope(CHandle needleToTake){
+	Citem_manager::get().removeNeedle(needleToTake);
+}

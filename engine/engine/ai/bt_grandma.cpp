@@ -170,7 +170,22 @@ int bt_grandma::actionSelectNeedleToTake()
 //Cut the needles rope
 int bt_grandma::actionCutRope()
 {
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
+	CHandle target_rope = m_sensor->getRopeAsociatedSensor(entity);
+	//if ((target_needle.isValid()) && (target_needle.getOwner().isValid())){
+		//CEntityManager::get().remove(target_needle.getOwner());
+			//CEntityManager::get().remove(CHandle(target_rope).getOwner());
+
+	m_sensor->removeNeedleRope(target_needle);
+	CEntityManager::get().remove(CHandle(target_rope).getOwner());
+	CEntityManager::get().remove(CHandle(target_needle).getOwner());
+	needle_to_take = false;
+
 	return LEAVE;
+	//}else{
+		//return LEAVE;
+	//}
 }
 
 //Take the needle

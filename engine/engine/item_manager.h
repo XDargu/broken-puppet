@@ -17,7 +17,7 @@ public:
 	CHandle getRopeAsociated(CHandle grandma);
 	int getNumInRangle(XMVECTOR pos, float radius);
 	//std::vector<TCompNeedle*> needleInRange(XMVECTOR pos, float radius);
-	void removeNeedle(needle_rope n);
+	void removeNeedle(CHandle n);
 	static Citem_manager& get();
 };
 #endif

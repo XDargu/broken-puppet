@@ -27,5 +27,6 @@ public:
 	CHandle getNeedleAsociatedSensor(CHandle grandma);
 	CHandle getRopeAsociatedSensor(CHandle grandma);
 	int getNumNeedles();
+	void removeNeedleRope(CHandle grandmaRef);
 };
 #endif

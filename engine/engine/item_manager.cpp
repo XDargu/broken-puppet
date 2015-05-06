@@ -26,12 +26,12 @@ void Citem_manager::addNeedle(CHandle needle, CHandle rope){
 	int prueba = 1;
 }
 
-void Citem_manager::removeNeedle(needle_rope n){
+void Citem_manager::removeNeedle(CHandle n){
 	std::vector<needle_rope>::iterator iter = needles.begin();
 	int i = 0;
 	while (iter != needles.end())
 	{
-		if (needles[i].needleRef==n.needleRef)
+		if (needles[i].needleRef==n)
 		{
 			iter = needles.erase(iter);
 			return;
