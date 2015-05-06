@@ -8,6 +8,7 @@ struct TCompRigidBody : TBaseComponent {
 private:
 	CHandle transform;
 	physx::PxD6Joint* block_joint;
+	float density;
 public:
 	physx::PxRigidDynamic* rigidBody;
 	bool auto_translate_transform;
