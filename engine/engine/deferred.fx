@@ -94,7 +94,7 @@ VS_TEXTURED_OUTPUT VSSkels(
 	float4 skinned_pos = mul(ipos, skin_mtx);
 
 	output.Pos = mul(skinned_pos, ViewProjection);
-	output.wPos = mul(skinned_pos, World);
+	output.wPos = skinned_pos;
 	output.wNormal = mul(inormal, (float3x3) skin_mtx);
 	output.UV = float2(iuv.x, 1 - iuv.y);
 	//output.UV = bone_ids.xy / 50.;

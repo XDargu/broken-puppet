@@ -395,14 +395,14 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		//render_techniques_manager.reload("deferred_gbuffer");
-		//render_techniques_manager.reload("deferred_point_lights");
+		////render_techniques_manager.reload("deferred_point_lights");
+		////render_techniques_manager.reload("deferred_dir_lights");
+		////render_techniques_manager.reload("deferred_resolve");
+		////render_techniques_manager.reload("chromatic_aberration");
 		//render_techniques_manager.reload("deferred_dir_lights");
-		//render_techniques_manager.reload("deferred_resolve");
-		//render_techniques_manager.reload("chromatic_aberration");
-		render_techniques_manager.reload("glow");
-		render_techniques_manager.reload("glow_lights");
-		texture_manager.reload("Foco_albedo");
-		texture_manager.reload("Foco_normal");
+		//render_techniques_manager.reload("skin_basic");
+		//texture_manager.reload("Foco_albedo");
+		//texture_manager.reload("Foco_normal");
 		
 	}
 
@@ -537,7 +537,7 @@ void CApp::render() {
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
-	int sz = 300;
+	static int sz = 150;
 	
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
@@ -555,13 +555,14 @@ void CApp::render() {
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
 
-	//CHandle h_light = entity_manager.getByName("the_light");
-	//CEntity* e_light = h_light;
-	//TCompShadows* shadow = e_light->get<TCompShadows>();
+	CHandle h_light = entity_manager.getByName("the_light");
+	CEntity* e_light = h_light;
+	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	
-	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
-	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
+	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);

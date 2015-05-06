@@ -123,11 +123,11 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		
-		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		/*TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
 		if (m_aabb)
 			culling = camera_aabb.intersects(m_aabb);
 		else
-			culling = true;
+			culling = true;*/
 
 		/*bool is_in_front = XMVectorGetX(XMVector3Dot(camera->getFront(), tmx->position - camera->getPosition())) > 0.f;
 		culling = is_in_front;*/
