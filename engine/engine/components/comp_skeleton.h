@@ -13,6 +13,7 @@ private:
 	CHandle h_ragdoll;
 	CalTransform* bone_ragdoll_transforms;
 	CCoreModel* core_model;
+	float time_since_last_ragdoll;
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
@@ -34,6 +35,8 @@ public:
 
 	void uploadBonesToGPU() const;
 	XMVECTOR getPositionOfBone(int id);
+
+	void ragdollUnactive();
 
 	CCoreModel* getCCoreModel() { return core_model; }
 };
