@@ -10,6 +10,8 @@
 class bt_grandma : public bt
 {
 private:
+	static const int max_bf_posibilities = 7;
+
 	float radius;
 	float find_path_time;
 	XMVECTOR center;
@@ -24,9 +26,11 @@ private:
 	XMVECTOR wander_target;
 	bool jump;
 	bool tied_event;
-	bool tied_enter;
+	bool event_detected;
+	bool tied_succesfull;
 	unsigned int my_id;
 	needle_rope* needle_objective;
+	TCompRope* ropeRef;
 public:
 	void create(string);
 

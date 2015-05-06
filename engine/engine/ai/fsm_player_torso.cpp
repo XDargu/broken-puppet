@@ -178,7 +178,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				CEntity* firstActorEntity = CHandle(first_actor->userData);
 				if (firstActorEntity->hasTag("enemy")){
 					TCompSensorTied* tied_sensor=firstActorEntity->get<TCompSensorTied>();
-					tied_sensor->changeTiedState(true, new_e_r);
+					tied_sensor->changeTiedState(true, CHandle(new_e_r));
 				}
 
 				//adding needle and rope to item manager
@@ -276,7 +276,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					CEntity* firstActorEntity = CHandle(second_actor->userData);
 					if (firstActorEntity->hasTag("enemy")){
 						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
-						tied_sensor->changeTiedState(true, new_e_r);
+						tied_sensor->changeTiedState(true, CHandle(new_e_r));
 					}
 
 					//adding needle to item manager
@@ -372,6 +372,25 @@ void FSMPlayerTorso::PullString(float elapsed) {
 void FSMPlayerTorso::GrabString(float elapsed) {
 
 	CIOStatus& io = CIOStatus::get();
+
+	/**/
+	if (!current_rope_entity.isValid()) {
+
+		// Remove the current string
+		CHandle c_rope = strings.back();
+		strings.pop_back();
+		CEntityManager::get().remove(c_rope.getOwner());
+
+		// Reset the variables
+		current_rope_entity = CHandle();
+		first_actor = nullptr;
+		first_needle = CHandle();
+		entitycount++;
+
+		up_animation = false;
+		ChangeState("fbp_Inactive");
+		return;
+	}
 
 	up_animation = true;
 

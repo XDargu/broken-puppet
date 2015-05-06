@@ -76,8 +76,10 @@ void bt_grandma::create(string s)
 	look_direction = PxVec3(0, 0, 0);
 	player = CEntityManager::get().getByName("Player");
 	tied_event = false;
-	tied_enter = false;
+	event_detected = false;
+	tied_succesfull = false;
 	needle_objective = nullptr;
+	ropeRef = nullptr;
 	lastNumNeedlesViewed = 0;
 }
 
@@ -338,10 +340,27 @@ int bt_grandma::actionNeedleAppearsEvent()
 	return LEAVE;
 }
 
-//
 int bt_grandma::actionTiedEvent()
 {
-	return LEAVE;
+	if (ropeRef == nullptr){
+		tied_event = false;
+		event_detected = false;
+		return LEAVE;
+	}else{
+		//Plays the cut own string animation
+		int dice = getRandomNumber(0, 10);
+		if (dice < max_bf_posibilities){
+			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+			tied_event = false;
+			event_detected = false;
+			return LEAVE;
+		}else{
+			tied_event = false;
+			event_detected = false;
+			tied_succesfull = true;
+			return LEAVE;
+		}
+	}
 }
 
 //Keeps in falling state till ti
@@ -463,7 +482,7 @@ int bt_grandma::conditionnormal_attack()
 //Init on false
 int bt_grandma::conditionare_events()
 {
-	return false;
+	return event_detected;
 	//return are_events;
 }
 
@@ -526,9 +545,11 @@ void bt_grandma::playerViewedSensor(){
 		TCompPlayerPosSensor* p_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
 		bool tri = p_sensor->playerInRange();
 		if (p_sensor->playerInRange()) {
-			if ((!current->isRoot()) && ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH))){
-				setCurrent(NULL);
-				player_viewed_sensor = true;
+			if (current != NULL){
+				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+					setCurrent(NULL);
+					player_viewed_sensor = true;
+				}
 			}
 		}
 	}
@@ -537,8 +558,7 @@ void bt_grandma::playerViewedSensor(){
 // Sensor para detectar si el enemigo ve alguna aguja
 void bt_grandma::needleViewedSensor(){
 
-	/*NOTA: Las abuelas solo deben tener en cuenta los avisos de este sensor ni no tienen ya asignada
-	        una aguja objetivo. De no ser así, iran a por todas las agujas nuevas*/
+	/*NOTA: Debería solo ejecutar tanto este sensor como el de player position mientras no haya eventos*/
 
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
@@ -549,10 +569,12 @@ void bt_grandma::needleViewedSensor(){
 		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if ((!current->isRoot()) && (current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-				needle_objective = m_sensor->getTargetNeedle();
-				needle_objective->call_it = true;
-				setCurrent(NULL);
+			if (current != NULL){
+				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+					needle_objective = m_sensor->getTargetNeedle();
+					needle_objective->call_it = true;
+					setCurrent(NULL);
+				}
 			}
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
@@ -563,11 +585,20 @@ void bt_grandma::needleViewedSensor(){
 void bt_grandma::tiedSensor(){
 	TCompSensorTied* tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
 	tied_sensor->keepTied();
-	if (!tied_enter){
-		if (tied_sensor->getTiedState()){
-			TCompRope* ropeRef = (TCompRope*)tied_sensor->getRopeRef();
-			setCurrent(NULL);
-			tied_enter = true;
+	if (!tied_succesfull){
+		if (!tied_event){
+			if (tied_sensor->getTiedState()){
+				ropeRef = (TCompRope*)tied_sensor->getRopeRef();
+				setCurrent(NULL);
+				tied_event = true;
+				event_detected = true;
+			}
+		}
+	}else{
+		if (!tied_sensor->getTiedState()){
+			tied_succesfull = false;
+			tied_event = false;
+			event_detected = false;
 		}
 	}
 }

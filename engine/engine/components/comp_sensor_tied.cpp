@@ -23,7 +23,7 @@ CHandle TCompSensorTied::getRopeRef(){
 }
 
 void TCompSensorTied::keepTied(){
-	if (rope == NULL){
+	if (!rope.isValid()){
 		tied=false;
 	}else{
 		tied=true;
