@@ -28,7 +28,7 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	if (mJoint)
 		mJoint->release();
 
-	Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
+	//Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
 	//Physics->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlags::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
 
