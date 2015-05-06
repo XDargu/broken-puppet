@@ -26,16 +26,51 @@ void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
 	}
 }
 
-needle_rope* TCompSensorNeedles::getTargetNeedle(){
-	int i = 0;
-	bool find = false;
-	do{
-		if (((needlesInRangeVector)[i])->call_it == false){
-			find = true;
-			return (needlesInRangeVector)[i];
+//bool sortDeque(needle_rope* n1, needle_rope* n2){
+	/*float min_distance = 100.f;
+	std::deque<needle_rope*> dequeAux;
+	for (int j = 0; j < needlesInRangeVector.size(); ++j){
+		for (int i = 0; i < needlesInRangeVector.size(); ++i){
+			//if (!needlesInRangeVector[i]->call_it){
+				TCompTransform* e_transform = needlesInRangeVector[i]->needleRef->getTransform();
+				if (V3DISTANCE(e_transform->position, pos) <= min_distance){
+					min_distance = V3DISTANCE(e_transform->position, pos);
+					if (needlesInRangeVector[i]->rope_asociated){
+						dequeAux.push_front(needlesInRangeVector[i]);
+					}
+					else{
+						dequeAux.push_back(needlesInRangeVector[i]);
+					}
+				}
+			//}
 		}
-		i++;
-	} while ((i < needlesInRangeVector.size()) && (!find));
+	}
+	needlesInRangeVector = dequeAux;*/	
+
+//}
+
+needle_rope* TCompSensorNeedles::getTargetNeedle(){
+	int min_distance = 100.f;
+	needle_rope* priority = nullptr;
+	needle_rope* nearest = nullptr;
+	for (int i = 0; i < needlesInRangeVector.size(); i++) {
+		if (((needlesInRangeVector)[i])->call_it == false){
+			TCompTransform* e_transform = needlesInRangeVector[i]->needleRef->getTransform();
+			TCompTransform* m_transform = transform;
+			if (V3DISTANCE(e_transform->position, m_transform->position) < min_distance){
+				if (needlesInRangeVector[i]->rope_asociated){
+					priority = needlesInRangeVector[i];
+				}
+				nearest = needlesInRangeVector[i];
+			}
+		}
+	}
+
+	if (priority != nullptr){
+		return priority;
+	}else{
+		return nearest;
+	}
 }
 
 int TCompSensorNeedles::getNumNeedles(){

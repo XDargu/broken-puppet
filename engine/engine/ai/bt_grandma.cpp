@@ -571,8 +571,12 @@ void bt_grandma::needleViewedSensor(){
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
 			if (current != NULL){
 				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+					TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 					needle_objective = m_sensor->getTargetNeedle();
-					needle_objective->call_it = true;
+					
+					if (needle_objective)
+						needle_objective->call_it = true;
+					
 					setCurrent(NULL);
 				}
 			}
