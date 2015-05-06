@@ -5,7 +5,8 @@
 #include "components\comp_name.h"
 #include "entity_manager.h"
 #include "entity_inspector.h"
-#include <SLB\include\SLB\SLB.hpp>
+//#include <SLB\include\SLB\SLB.hpp>
+#include "SLB\include\SLB\SLB.hpp"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -242,12 +243,13 @@ void CLogicManager::clearKeyframes() {
 */
 
 void CLogicManager::bootLUA() {
+
 	// Create a lua State, using normal lua API
 	L = luaL_newstate();
 
 	// load default functions (optional)
 	luaL_openlibs(L);
-
+	
 	// Register SLB inside the lua_State, we use here the
 	// default manager, but any SLB::Manager could be used.
 	SLB::Manager::defaultManager()->registerSLB(L);
