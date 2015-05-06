@@ -213,10 +213,16 @@ void PSGBuffer(
 
   // Convert the range 0...1 from the texture to range -1 ..1 
   float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
-  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+	  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+
+	  //wnormal_per_pixel = in_tangent;
 
   // Save the normal
-  normal = (float4(wnormal_per_pixel, 1) + 1. ) * 0.5;
+
+  bool test = length(in_tangent) < 2;
+  float3 m_norm = test ? wnormal_per_pixel : in_normal;
+  normal = (float4(m_norm, 1) + 1.) * 0.5;
+
   
   // Basic diffuse lighting
   float3 L = LightWorldPos.xyz - input.wPos.xyz;
@@ -298,13 +304,17 @@ float4 PSDirLights(
   float depth = txDepth.Load(ss_load_coords).x;
   float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 
-  float3 wPos = getWorldCoords(iPosition.xy, depth);
+	  float3 wPos = getWorldCoords(iPosition.xy, depth);
+
+	 // return float4(wPos.x - int(wPos.x), 0, 0, 1);
 
   // Basic diffuse lighting
   float3 L = dir_light_world_pos.xyz - wPos;
   float  distance_to_light = length(L);
   L = L / distance_to_light;
   float  diffuse_amount = saturate(dot(N, L));
+
+
 
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap

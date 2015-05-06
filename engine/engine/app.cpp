@@ -394,15 +394,15 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		//render_techniques_manager.reload("deferred_gbuffer");
-		////render_techniques_manager.reload("deferred_point_lights");
-		////render_techniques_manager.reload("deferred_dir_lights");
-		////render_techniques_manager.reload("deferred_resolve");
-		////render_techniques_manager.reload("chromatic_aberration");
+		render_techniques_manager.reload("deferred_gbuffer");
+		//render_techniques_manager.reload("deferred_point_lights");
 		//render_techniques_manager.reload("deferred_dir_lights");
-		//render_techniques_manager.reload("skin_basic");
-		//texture_manager.reload("Foco_albedo");
-		//texture_manager.reload("Foco_normal");
+		//render_techniques_manager.reload("deferred_resolve");
+		//render_techniques_manager.reload("chromatic_aberration");
+		render_techniques_manager.reload("deferred_dir_lights");
+		render_techniques_manager.reload("skin_basic");
+		texture_manager.reload("Foco_albedo");
+		texture_manager.reload("Foco_normal");
 		
 	}
 
@@ -560,9 +560,11 @@ void CApp::render() {
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	
-	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
+	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
+	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
+	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);
