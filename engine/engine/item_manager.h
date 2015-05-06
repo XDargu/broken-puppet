@@ -15,6 +15,8 @@ public:
 	void asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma);
 	CHandle getNeedleAsociated(CHandle grandma);
 	CHandle getRopeAsociated(CHandle grandma);
+	void DesAsociatePriorityNeedleRope(CHandle grandma);
+	bool DesAsociateNoPriorityNeedleRope(CHandle grandma);
 	int getNumInRangle(XMVECTOR pos, float radius);
 	//std::vector<TCompNeedle*> needleInRange(XMVECTOR pos, float radius);
 	void removeNeedle(CHandle n);

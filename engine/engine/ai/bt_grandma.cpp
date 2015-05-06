@@ -8,7 +8,7 @@
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 2.f;
+const float max_dist_reach_needle = 1.f;
 
 void bt_grandma::create(string s)
 {
@@ -140,6 +140,7 @@ int bt_grandma::actionChaseNeedlePosition()
 		return STAY;
 	}else{
 		if (path.size() > 0){
+			CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
 			if (ind_path < path.size()){
 				chasePoint(m_transform, path[ind_path]);
 				if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
@@ -164,7 +165,15 @@ int bt_grandma::actionChaseNeedlePosition()
 //Select the priority needle
 int bt_grandma::actionSelectNeedleToTake()
 {
-	return LEAVE;
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	//if (!needle_to_take){
+		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+		m_sensor->asociateGrandmaTargetNeedle(entity);
+		needle_to_take = true;
+		return LEAVE;
+	//}else{
+		//return LEAVE;
+	//}
 }
 
 //Cut the needles rope
@@ -370,7 +379,19 @@ int bt_grandma::actionHurtEvent()
 //
 int bt_grandma::actionNeedleAppearsEvent()
 {
-	return LEAVE;
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles();//list_needles.size();
+	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
+		if (current != NULL){
+			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+				setCurrent(NULL);
+				lastNumNeedlesViewed = currentNumNeedlesViewed;
+				return LEAVE;
+			}
+		}
+	}else{
+		return LEAVE;
+	}
 }
 
 int bt_grandma::actionTiedEvent()
@@ -459,6 +480,14 @@ int bt_grandma::conditiontoo_close_attack()
 //Check if there is a needle to take
 int bt_grandma::conditionneedle_to_take()
 {
+	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles();
+	if (currentNumNeedlesViewed > 0){
+		needle_to_take = true;
+	}else{
+		needle_to_take = false;
+	}
+
 	return needle_to_take;
 }
 
@@ -610,29 +639,31 @@ void bt_grandma::playerViewedSensor(){
 // Sensor para detectar si el enemigo ve alguna aguja
 void bt_grandma::needleViewedSensor(){
 
+	//--------------------------------------------------------------------------------------------------
 	/*NOTA: Debería solo ejecutar tanto este sensor como el de player position mientras no haya eventos*/
+	//--------------------------------------------------------------------------------------------------
 
 	//componente sensor de agujas del enemigo
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	//m_sensor->getNeedlesInRange();
 
-	if (!needle_to_take){
+	//if (!needle_to_take){
 		currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles();//list_needles.size();
-		if (currentNumNeedlesViewed != lastNumNeedlesViewed){
+		if (currentNumNeedlesViewed > lastNumNeedlesViewed){
 			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
 			if (current != NULL){
 				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-					TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-					m_sensor->asociateGrandmaTargetNeedle(entity);
-					needle_to_take = true;
+					//TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+					//m_sensor->asociateGrandmaTargetNeedle(entity);
+					//needle_to_take = true;
 					setCurrent(NULL);
 				}
 			}
 		}
 		lastNumNeedlesViewed = currentNumNeedlesViewed;
-		//}
-	}
+	//}
+	//}
 }
 
 void bt_grandma::tiedSensor(){

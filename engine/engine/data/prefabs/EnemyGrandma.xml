@@ -10,7 +10,7 @@
     <life life="100"/>
     <skeleton name="abuela"/>
     <sensorPlayerPos/>
-    <sensorNeedles radius="4"/>
+    <sensorNeedles radius="7"/>
     <sensorTied/>
     <sensorDistPlayer/>
     <btGrandma/>

@@ -11,7 +11,7 @@ void TCompSensorNeedles::init() {
 	numNeedlesInRange = 0;
 }
 
-void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
+//void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
 	/*needlesInRangeVector.clear();
 	for (auto & element : Citem_manager::get().needles) {
 		CEntity* owner=element->needleRef.getOwner();
@@ -20,7 +20,7 @@ void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
 			needlesInRangeVector.push_back(element);
 		}
 	}*/
-}
+//}
 
 //bool sortDeque(needle_rope* n1, needle_rope* n2){
 	/*float min_distance = 100.f;
