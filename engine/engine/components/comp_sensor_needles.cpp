@@ -45,10 +45,12 @@ void TCompSensorNeedles::init() {
 
 //}
 
-void TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef){
+bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef){
 
 	TCompTransform* m_transform = transform;
-	Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef);
+	bool success=Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef);
+
+	return success;
 
 	/*int min_distance = 100.f;
 	needle_rope* priority = nullptr;

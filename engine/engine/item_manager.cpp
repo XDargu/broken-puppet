@@ -43,7 +43,8 @@ void Citem_manager::removeNeedle(CHandle n){
 	}
 }
 
-void Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma){
+bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma){
+	bool success = false;
 	int min_distance_rope = 100.f;
 	int min_distance_no_rope = 100.f;
 	int ind_priority=-1;
@@ -62,6 +63,7 @@ void Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 					if (V3DISTANCE(e_transform->position, pos) < min_distance_no_rope){
 						min_distance_no_rope = (V3DISTANCE(e_transform->position, pos));
 						ind_nearest = i;
+						success = true;
 					}
 				}
 			}
@@ -71,12 +73,16 @@ void Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 		//SI ESTA ABUELA TIENE ASOCIADA OTRA NEEDLE_ROPE, TENDRE QUE DESASOCIARLA Y ASOCIAR LA MAS PRIORITARIA
 		DesAsociatePriorityNeedleRope(grandma);
 		needles[ind_priority].grandma_asociated = grandma;
+		success = true;
 	}else if (ind_nearest > -1){
 		//SI ESTA ABUELA TIENE ASOCIADA OTRA NEEDLE_ROPE, TENDRE QUE DESASOCIARLA Y ASOCIAR LA MAS PRIORITARIA
 		bool can_asociate_another=DesAsociateNoPriorityNeedleRope(grandma);
-		if (can_asociate_another)
+		if (can_asociate_another){
 			needles[ind_nearest].grandma_asociated = grandma;
+			success = true;
+		}
 	}
+	return success;
 }
 
 int Citem_manager::getNumInRangle(XMVECTOR pos, float radius){

@@ -12,7 +12,7 @@ public:
 	Citem_manager();
 	~Citem_manager();
 	void addNeedle(CHandle needle, CHandle rope);
-	void asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma);
+	bool asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma);
 	CHandle getNeedleAsociated(CHandle grandma);
 	CHandle getRopeAsociated(CHandle grandma);
 	void DesAsociatePriorityNeedleRope(CHandle grandma);

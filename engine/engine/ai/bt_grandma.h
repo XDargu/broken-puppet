@@ -28,6 +28,7 @@ private:
 	bool event_detected;
 	bool tied_succesfull;
 	bool needle_to_take;
+	bool needle_is_valid;
 	bool can_reach_needle;
 	bool is_needle_tied;
 	unsigned int my_id;

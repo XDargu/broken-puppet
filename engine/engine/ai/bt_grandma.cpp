@@ -85,6 +85,7 @@ void bt_grandma::create(string s)
 	needle_to_take = false;
 	can_reach_needle = false;
 	is_needle_tied = false;
+	needle_is_valid = false;
 	needle_objective = NULL;
 	ropeRef = nullptr;
 	lastNumNeedlesViewed = 0;
@@ -123,41 +124,47 @@ int bt_grandma::actionTooCloseAttack()
 //Go to the needle position (leave if cant reach)
 int bt_grandma::actionChaseNeedlePosition()
 {
-	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	if (needle_is_valid){
+		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
-	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
-	TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
-	/*CEntity* owner=needle_objective->needleRef.getOwner();
-	TCompTransform* n_transform = ((CEntity*)owner)->get<TCompTransform>();*/
+		TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+		CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
+		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
+		/*CEntity* owner=needle_objective->needleRef.getOwner();
+		TCompTransform* n_transform = ((CEntity*)owner)->get<TCompTransform>();*/
 
-	
 
-	if (on_enter){
-		CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
-		//find_path_time = state_time;
-		ind_path = 0;
-		return STAY;
-	}else{
-		if (path.size() > 0){
+
+		if (on_enter){
 			CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
-			if (ind_path < path.size()){
-				chasePoint(m_transform, path[ind_path]);
-				if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
-					ind_path++;
-					return STAY;
+			//find_path_time = state_time;
+			ind_path = 0;
+			return STAY;
+		}
+		else{
+			if (path.size() > 0){
+				//CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
+				if (ind_path < path.size()){
+					chasePoint(m_transform, path[ind_path]);
+					if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+						ind_path++;
+						return STAY;
+					}
+					else{
+						return STAY;
+					}
 				}
 				else{
-					return STAY;
+					last_look_direction = look_direction;
+					return LEAVE;
 				}
 			}
 			else{
-				last_look_direction = look_direction;
 				return LEAVE;
 			}
-		}else{
-			return LEAVE;
 		}
+	}else{
+		return LEAVE;
 	}
 
 }
@@ -168,8 +175,9 @@ int bt_grandma::actionSelectNeedleToTake()
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	//if (!needle_to_take){
 		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-		m_sensor->asociateGrandmaTargetNeedle(entity);
-		needle_to_take = true;
+		bool sucess=(m_sensor->asociateGrandmaTargetNeedle(entity));
+		if (sucess)
+			needle_is_valid = true;
 		return LEAVE;
 	//}else{
 		//return LEAVE;
@@ -187,6 +195,7 @@ int bt_grandma::actionCutRope()
 	CEntityManager::get().remove(CHandle(target_rope).getOwner());
 	CEntityManager::get().remove(CHandle(target_needle).getOwner());
 	needle_to_take = false;
+	needle_is_valid = false;
 
 	return LEAVE;
 
@@ -201,8 +210,8 @@ int bt_grandma::actionTakeNeedle()
 	m_sensor->removeNeedleRope(target_needle);
 	CEntityManager::get().remove(CHandle(target_needle).getOwner());
 	needle_to_take = false;
+	needle_is_valid = false;
 
-	return LEAVE;
 	return LEAVE;
 }
 
@@ -577,16 +586,21 @@ int bt_grandma::conditiontied_event()
 int bt_grandma::conditioncan_reach_needle()
 {
 	//XASSERT(needle_objective->needleRef.isValid(), "Invalid needle");
-	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
-	XASSERT(target_needle.isValid(), "Invalid owner");
-	TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
+	if (needle_is_valid){
+		TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
+		CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
+		XASSERT(target_needle.isValid(), "Invalid owner");
+		TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
-	wander_target = e_transform->position;
-	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+		wander_target = e_transform->position;
+		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
-	if (V3DISTANCE(wander_target, m_transform->position) < max_dist_reach_needle){
-		can_reach_needle = true;
+		if (V3DISTANCE(wander_target, m_transform->position) < max_dist_reach_needle){
+			can_reach_needle = true;
+		}
+		else{
+			can_reach_needle = false;
+		}
 	}else{
 		can_reach_needle = false;
 	}

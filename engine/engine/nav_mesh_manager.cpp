@@ -27,21 +27,6 @@ bool CNav_mesh_manager::build_nav_mesh(){
 }
 
 void CNav_mesh_manager::prepareInputNavMesh(){
-	/*for (int i = 0; i < entity_manager_S.getEntities().size(); ++i){
-		TCompColliderMesh* collider_mesh = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderMesh>();
-		TCompColliderBox* collider_box = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderBox>();
-		TCompColliderSphere* collider_sphere = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderSphere>();
-		//TCompColliderCapsule* collider_capsule = ((CEntity*)entity_manager_S.getEntities()[i])->get<TCompColliderCapsule>();
-		if (collider_mesh){
-			collider_mesh->addInputNavMesh();
-		}else if (collider_box){
-			collider_box->addInputNavMesh();
-		}else if (collider_sphere){
-			collider_sphere->addInputNavMesh();
-		//}else if (collider_capsule){
-			//collider_capsule->addInputNavMesh();
-		}
-	}*/
 
 	for (int i = 0; i < colMeshes.size(); ++i){
 		colMeshes[i]->addInputNavMesh();
@@ -205,6 +190,14 @@ void CNav_mesh_manager::clearNavMesh(){
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
 	CNavmeshQuery navMeshQuery(nav_mesh);
 	return navMeshQuery.getRandomPoint(center, radius, current_pos);
+}
+
+bool CNav_mesh_manager::rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos){
+	bool hit = false;
+	CNavmeshQuery navMeshQuery(nav_mesh);
+	navMeshQuery.updatePos(pos, wanted_pos);
+	navMeshQuery.setTool(CNavmeshQuery::ETool::RAYCAST);
+	return hit;
 }
 
 CNav_mesh_manager::CNav_mesh_manager()

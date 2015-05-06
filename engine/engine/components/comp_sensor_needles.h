@@ -23,7 +23,7 @@ public:
 	void init();
 	//void getNeedlesInRange();
 	//void needleInRange(XMVECTOR pos, float radius);
-	void asociateGrandmaTargetNeedle(CHandle gradmaRef);
+	bool asociateGrandmaTargetNeedle(CHandle gradmaRef);
 	CHandle getNeedleAsociatedSensor(CHandle grandma);
 	CHandle getRopeAsociatedSensor(CHandle grandma);
 	int getNumNeedles();

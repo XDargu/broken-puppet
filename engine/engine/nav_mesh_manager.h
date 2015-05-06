@@ -33,6 +33,7 @@ public:
 	void updateNavmesh();
 	void prepareInputNavMesh();
 	bool checkIfUpdatedNavMesh();
+	bool rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos);
 	void clearNavMesh();
 	void checkUpdates();
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
