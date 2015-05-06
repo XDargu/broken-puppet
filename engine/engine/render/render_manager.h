@@ -2,6 +2,7 @@
 #define INC_RENDER_MANAGER_H_
 
 #include "handle/handle.h"
+#include "culling.h"
 
 class CMaterial;
 class CMesh;
@@ -9,6 +10,8 @@ class CCamera;
 struct TTransform;
 
 class CRenderManager {
+
+	VPlanes planes;
 
 	struct TKey {
 		const CMaterial*   material;

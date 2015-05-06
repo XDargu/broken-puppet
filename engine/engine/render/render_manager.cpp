@@ -62,6 +62,8 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		sort_required = false;
 	}
 	
+	planes.create(camera->getViewProjection());
+
 	const CRenderTechnique* curr_tech = nullptr;
 	activateCamera(*camera, 1);
 
@@ -70,48 +72,6 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
-
-
-	// Frustrum points
-	float yFac = tanf(camera->getFov() * 3.14159f / 360.0f);
-	float xFac = yFac*camera->getAspectRatio();
-
-	XMVECTOR Forward, Right, Up; //Simply the three columns from your transformation matrix (or the inverse of your view matrix)
-
-	XMVECTOR Position = camera->getPosition();
-	Forward = camera->getFront();
-	Up = XMVectorSet(0, 1, 0, 0);
-	Right = XMVector3Cross(camera->getFront(), Up);
-	float zfar = camera->getZFar();
-	float znear = camera->getZNear();
-
-	XMFLOAT3 frustum[8];
-
-	XMStoreFloat3(&frustum[0], Position + Forward*zfar - zfar*Right*xFac*zfar + Up*yFac*zfar);
-	XMStoreFloat3(&frustum[1], Position + Forward*zfar + zfar*Right*xFac*zfar + Up*yFac*zfar);
-	XMStoreFloat3(&frustum[2], Position + Forward*zfar - zfar*Right*xFac*zfar - Up*yFac*zfar);
-	XMStoreFloat3(&frustum[3], Position + Forward*zfar + zfar*Right*xFac*zfar - Up*yFac*zfar);
-	// and so on for the near plane 
-	XMStoreFloat3(&frustum[4], Position + Forward*znear - zfar*Right*xFac*znear + Up*yFac*znear);
-	XMStoreFloat3(&frustum[5], Position + Forward*znear + zfar*Right*xFac*znear + Up*yFac*znear);
-	XMStoreFloat3(&frustum[6], Position + Forward*znear - zfar*Right*xFac*znear - Up*yFac*znear);
-	XMStoreFloat3(&frustum[7], Position + Forward*znear + zfar*Right*xFac*znear - Up*yFac*znear);
-
-	XMFLOAT3 v_min = XMFLOAT3(1000000, 1000000, 1000000);
-	XMFLOAT3 v_max = XMFLOAT3(-1000000, -1000000, -1000000);
-
-	for (int i = 0; i < 8; ++i) {
-
-		v_min.x = min(v_min.x, frustum[i].x);
-		v_min.y = min(v_min.y, frustum[i].y);
-		v_min.z = min(v_min.z, frustum[i].z);
-
-		v_max.x = max(v_max.x, frustum[i].x);
-		v_max.y = max(v_max.y, frustum[i].y);
-		v_max.z = max(v_max.z, frustum[i].z);
-	}
-
-	AABB camera_aabb = AABB(XMLoadFloat3(&v_min), XMLoadFloat3(&v_max));
 	
 	bool culling = true;
 	int render_count = 0;
@@ -123,14 +83,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		
-		/*TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
-		if (m_aabb)
-			culling = camera_aabb.intersects(m_aabb);
-		else
-			culling = true;*/
-
-		/*bool is_in_front = XMVectorGetX(XMVector3Dot(camera->getFront(), tmx->position - camera->getPosition())) > 0.f;
-		culling = is_in_front;*/
+		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		culling = planes.isVisible(m_aabb);
+				
 		//culling = true;
 		if (*it->active && culling)
 		{

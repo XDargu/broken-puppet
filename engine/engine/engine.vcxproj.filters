@@ -429,6 +429,9 @@
     <ClInclude Include="components\comp_sensor_tied.h">
       <Filter>components\ai\enemies\sensors</Filter>
     </ClInclude>
+    <ClInclude Include="render\culling.h">
+      <Filter>render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -772,6 +775,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_distance_joint.cpp">
       <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="render\culling.cpp">
+      <Filter>render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
