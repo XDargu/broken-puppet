@@ -561,9 +561,10 @@ void FSMPlayerLegs::ReevaluatePriorities(){
 }
 
 void FSMPlayerLegs::WakeUp(float elapsed){
-	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	
 
-	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
 	dir.normalize();
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 

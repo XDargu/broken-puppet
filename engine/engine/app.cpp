@@ -85,6 +85,7 @@ void CApp::loadConfig() {
 
 // Debug 
 CRenderTechnique debugTech;
+CRenderTechnique ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
@@ -161,6 +162,7 @@ void createManagers() {
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
+	getObjManager<TCompSensorDistPlayer>()->init(64);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
@@ -209,7 +211,7 @@ void initManagers() {
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
-	getObjManager<TCompUnityCharacterController>()->initHandlers();
+	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
 	getObjManager<TCompCameraPivotController>()->initHandlers();
@@ -269,8 +271,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/my_file-backup.xml");
+	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file-backup.xml");
 
 	// Create debug meshes	
 	bool is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -553,9 +555,9 @@ void CApp::render() {
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
 
-	CHandle h_light = entity_manager.getByName("the_light");
-	CEntity* e_light = h_light;
-	TCompShadows* shadow = e_light->get<TCompShadows>();
+	//CHandle h_light = entity_manager.getByName("the_light");
+	//CEntity* e_light = h_light;
+	//TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	
 	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
@@ -590,7 +592,7 @@ void CApp::render() {
 void CApp::renderEntities() {
 
 	debugTech.activate();
-	const CTexture *t = texture_manager.getByName("wood_d");
+	const CTexture *t = texture_manager.getByName("grass");
 	t->activate(0);	
 
 	//ctes_global.activateInVS(2);
@@ -671,6 +673,7 @@ void CApp::renderEntities() {
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
+			ropeTech.activate();
 			float color_tension = min(dist / maxDist * 0.25f, 1);
 			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
 			setWorldMatrix(XMMatrixIdentity());
@@ -681,6 +684,7 @@ void CApp::renderEntities() {
 
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
 			wiredCube.activateAndRender();
+			debugTech.activate();
 		}
 
 		// If the component has no transform it can't be rendered
@@ -879,6 +883,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
+	XASSERT(ropeTech.load("textured"), "Error loading basic technique");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");
 	XASSERT(CHandle(e).isValid(), "Camera not valid");

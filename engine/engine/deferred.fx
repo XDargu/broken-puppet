@@ -58,6 +58,7 @@ void VSGenShadowsSkel(
 	float4 ipos     : POSITION
 	, float2 iuv : TEXCOORD0
 	, float3 inormal : NORMAL
+	, float4 Tangent : TANGENT
 	, uint4  bone_ids : BONEIDS
 	, float4 weights : WEIGHTS
 	, out float4 oPos : SV_POSITION
@@ -70,6 +71,39 @@ void VSGenShadowsSkel(
 		;
 	float4 skinned_pos = mul(ipos, skin_mtx);
 		oPos = mul(skinned_pos, ViewProjection);
+}
+
+// Skels Vertex Shader
+VS_TEXTURED_OUTPUT VSSkels(
+	float4 ipos     : POSITION
+	, float2 iuv : TEXCOORD0
+	, float3 inormal : NORMAL
+	, float4 Tangent : TANGENT
+	, uint4  bone_ids : BONEIDS
+	, float4 weights : WEIGHTS	
+	)
+{
+	VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+
+	matrix skin_mtx = bones[bone_ids.x] * weights[0]
+		+ bones[bone_ids.y] * weights[1]
+		+ bones[bone_ids.z] * weights[2]
+		+ bones[bone_ids.w] * weights[3]
+		;
+
+	float4 skinned_pos = mul(ipos, skin_mtx);
+
+	output.Pos = mul(skinned_pos, ViewProjection);
+	output.wPos = mul(skinned_pos, World);
+	output.wNormal = mul(inormal, (float3x3) skin_mtx);
+	output.UV = float2(iuv.x, 1 - iuv.y);
+	//output.UV = bone_ids.xy / 50.;
+
+	// Rotate the tangent and keep the w value
+	output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
+	output.wTangent.w = Tangent.w;
+
+	return output;
 }
 
 //--------------------------------------------------------------------------------------

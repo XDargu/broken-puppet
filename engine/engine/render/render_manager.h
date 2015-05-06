@@ -31,6 +31,10 @@ class CRenderManager {
 		const CMesh*       mesh;
 		CHandle            owner;
 		CHandle            transform;
+
+		bool operator==(const TShadowCasterKey &key) const {
+			return key.owner == owner && key.material == material && key.mesh == mesh;
+		}
 	};
 
 	// In case we want to save only those keys of objects which 

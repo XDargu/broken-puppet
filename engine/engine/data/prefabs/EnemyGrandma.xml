@@ -12,6 +12,7 @@
     <sensorPlayerPos/>
     <sensorNeedles radius="4"/>
     <sensorTied/>
+    <sensorDistPlayer/>
     <btGrandma/>
   </entity>
 </prefab>
