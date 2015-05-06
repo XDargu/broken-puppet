@@ -2,6 +2,7 @@
 #define INC_RENDER_MANAGER_H_
 
 #include "handle/handle.h"
+#include "culling.h"
 
 class CMaterial;
 class CMesh;
@@ -9,6 +10,8 @@ class CCamera;
 struct TTransform;
 
 class CRenderManager {
+
+	VPlanes planes;
 
 	struct TKey {
 		const CMaterial*   material;
@@ -57,8 +60,8 @@ public:
 
 	void removeKeysFromOwner(CHandle owner);
 
-	void renderAll(const CCamera* camera);
-	void renderAll(const CCamera* camera, TTransform* camera_transform);
+	void renderAll(const CCamera* camera, bool solids);
+	void renderAll(const CCamera* camera, TTransform* camera_transform, bool solids);
 	
 	void renderShadowsCasters();
 

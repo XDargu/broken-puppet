@@ -16,10 +16,11 @@ class CMaterial : public CXMLParser {
 	const CRenderTechnique*   tech;
 	std::string               name;
 	bool                      casts_shadows;
+	bool                      solid;
 	void onStartElement(const std::string &elem, MKeyValue &atts);
 
 public:
-	CMaterial() : diffuse(nullptr), normal(nullptr), specular(nullptr), tech(nullptr), casts_shadows(true) {}
+	CMaterial() : diffuse(nullptr), normal(nullptr), specular(nullptr), tech(nullptr), casts_shadows(true), solid(true) {}
 	bool load(const char* name);
 	void setName(const char *new_name) {
 		name = new_name;
@@ -29,6 +30,8 @@ public:
 	void activateTextures() const;
 	const CRenderTechnique* getTech() const { return tech; }
 	bool castsShadows() const { return casts_shadows; }
+	bool isSolid() const { return solid; }
+
 };
 
 typedef CItemsByName< CMaterial > CMaterialManager;

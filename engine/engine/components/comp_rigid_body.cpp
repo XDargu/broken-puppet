@@ -52,7 +52,7 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 }
 
 void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	float temp_density = atts.getFloat("density", 1);
+	density = atts.getFloat("density", 1);
 	bool temp_is_kinematic = atts.getBool("kinematic", false);
 	bool temp_use_gravity = atts.getBool("gravity", true);
 
@@ -83,7 +83,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		Physics.XMVECTORToPxVec3(trans->position),
 		Physics.XMVECTORToPxQuat(trans->rotation))
 		, *col->collider
-		, temp_density);
+		, density);
 
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	physx::PxReal threshold = 15000.f;
@@ -123,6 +123,26 @@ void TCompRigidBody::init() {
 
 void TCompRigidBody::fixedUpdate(float elapsed) {
 	TCompTransform* trans = (TCompTransform*)transform;
+
+	CEntity* e = CHandle(rigidBody->userData);
+
+	if (!e->hasTag("player")) {
+		float water_level = .9f;
+		float atten = 0.2f;
+		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
+
+		if (rigidBody->getGlobalPose().p.y < water_level) {
+			float volume = rigidBody->getMass() / density;
+			float water_density = 50;
+			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
+			rigidBody->setLinearDamping(1);
+			rigidBody->setAngularDamping(1);
+		}
+		else {
+			rigidBody->setLinearDamping(0.05f);
+			rigidBody->setAngularDamping(0.05f);
+		}
+	}
 
 	if (auto_translate_transform)
 		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);

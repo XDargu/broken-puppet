@@ -112,8 +112,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib;./audio/Lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3CommonDEBUG_x64.lib PhysX3DEBUG_x64.lib PhysX3CookingDEBUG_x64.lib PhysX3CharacterKinematicDEBUG_x64.lib PhysX3ExtensionsDEBUG.lib PhysX3VehicleDEBUG.lib PhysXProfileSDKDEBUG.lib PhysXVisualDebuggerSDKDEBUG.lib PxTaskDEBUG.lib /DEBUG</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -155,8 +155,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib;../x64/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PhysX3Common_x64.lib;PhysX3Extensions.lib;PhysX3_x64.lib;d3d11.lib;d3dcompiler.lib;d3d9.lib;dxguid.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./physx/Lib;./antTweakBar/Lib;../x64/Release;./audio/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/LIBPATH:./physx/Lib/win64 PhysX3Common_x64.lib PhysX3_x64.lib PhysX3Cooking_x64.lib PhysX3CharacterKinematic_x64.lib PhysX3Extensions.lib PhysX3Vehicle.lib PhysXProfileSDK.lib PhysXVisualDebuggerSDK.lib PxTask.lib SLB.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -180,6 +180,8 @@
     <ClInclude Include="ai\timer.h" />
     <ClInclude Include="ai\lua_vector.h" />
     <ClInclude Include="app.h" />
+    <ClInclude Include="audio\bass.h" />
+    <ClInclude Include="audio\sound_manager.h" />
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
@@ -296,6 +298,7 @@
     <ClInclude Include="render\collision_mesh.h" />
     <ClInclude Include="render\ctes\shader_ctes.h" />
     <ClInclude Include="render\ctes\shader_platform.h" />
+    <ClInclude Include="render\culling.h" />
     <ClInclude Include="render\deferred_render.h" />
     <ClInclude Include="render\glow_step.h" />
     <ClInclude Include="render\material.h" />
@@ -336,6 +339,7 @@
     <ClCompile Include="ai\rigid_animation.cpp" />
     <ClCompile Include="ai\timer.cpp" />
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="audio\sound_manager.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -529,6 +533,7 @@
     <ClCompile Include="render\blur_step.cpp" />
     <ClCompile Include="render\chromatic_aberration_step.cpp" />
     <ClCompile Include="render\collision_mesh.cpp" />
+    <ClCompile Include="render\culling.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\deferred_render.cpp" />
     <ClCompile Include="render\glow_step.cpp" />
