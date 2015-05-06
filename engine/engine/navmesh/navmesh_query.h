@@ -74,7 +74,6 @@ private:
   //float m_epos[ 3 ];
   float m_hitPos[ 3 ];
   float m_hitNormal[ 3 ];
-  bool m_hitResult;
   float m_distanceToWall;
   float m_neighbourhoodRadius;
   float m_randomRadius;
@@ -97,6 +96,9 @@ public:
 	//PATH ----------------------------------------------------------------------
 	float* straightPath;
 	int numPointsStraightPath;
+	//---------------------------------------------------------------------------
+	//RAYCAST -------------------------------------------------------------------
+	bool m_hitResult;
 	//---------------------------------------------------------------------------
 };
 

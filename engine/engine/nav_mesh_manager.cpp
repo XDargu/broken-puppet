@@ -195,9 +195,10 @@ XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius,
 bool CNav_mesh_manager::rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos){
 	bool hit = false;
 	CNavmeshQuery navMeshQuery(nav_mesh);
+	navMeshQuery.resetTools();
 	navMeshQuery.updatePos(pos, wanted_pos);
 	navMeshQuery.setTool(CNavmeshQuery::ETool::RAYCAST);
-	return hit;
+	return navMeshQuery.m_hitResult;
 }
 
 CNav_mesh_manager::CNav_mesh_manager()

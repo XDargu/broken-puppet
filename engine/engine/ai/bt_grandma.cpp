@@ -126,40 +126,43 @@ int bt_grandma::actionChaseNeedlePosition()
 {
 	if (needle_is_valid){
 		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-
 		TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 		CHandle target_needle = m_sensor->getNeedleAsociatedSensor(entity);
 		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
-		/*CEntity* owner=needle_objective->needleRef.getOwner();
-		TCompTransform* n_transform = ((CEntity*)owner)->get<TCompTransform>();*/
-
-
 
 		if (on_enter){
-			CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
-			//find_path_time = state_time;
-			ind_path = 0;
-			return STAY;
+			bool can_go=CNav_mesh_manager::get().rayCastHit(m_transform->position, n_transform->position);
+			if (can_go){
+				CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
+				ind_path = 0;
+				return STAY;
+			}else{
+				return LEAVE;
+			}
 		}
 		else{
-			if (path.size() > 0){
-				//CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
-				if (ind_path < path.size()){
-					chasePoint(m_transform, path[ind_path]);
-					if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
-						ind_path++;
-						return STAY;
+			bool can_go = CNav_mesh_manager::get().rayCastHit(m_transform->position, n_transform->position);
+			if (can_go){
+				if (path.size() > 0){
+					if (ind_path < path.size()){
+						chasePoint(m_transform, path[ind_path]);
+						if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+							ind_path++;
+							return STAY;
+						}
+						else{
+							return STAY;
+						}
 					}
 					else{
-						return STAY;
+						last_look_direction = look_direction;
+						return LEAVE;
 					}
 				}
 				else{
-					last_look_direction = look_direction;
 					return LEAVE;
 				}
-			}
-			else{
+			}else{
 				return LEAVE;
 			}
 		}
@@ -173,15 +176,12 @@ int bt_grandma::actionChaseNeedlePosition()
 int bt_grandma::actionSelectNeedleToTake()
 {
 	TCompSensorNeedles* m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
-	//if (!needle_to_take){
-		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-		bool sucess=(m_sensor->asociateGrandmaTargetNeedle(entity));
-		if (sucess)
-			needle_is_valid = true;
-		return LEAVE;
-	//}else{
-		//return LEAVE;
-	//}
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	bool sucess=(m_sensor->asociateGrandmaTargetNeedle(entity));
+	if (sucess)
+		needle_is_valid = true;
+	return LEAVE;
+
 }
 
 //Cut the needles rope
