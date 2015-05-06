@@ -387,7 +387,9 @@
     <ClInclude Include="components\comp_joint_hinge.h">
       <Filter>components\physics</Filter>
     </ClInclude>
-<<<<<<< HEAD
+    <ClInclude Include="components\comp_joint_d6.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
     <ClInclude Include="ai\bt_grandma.h">
       <Filter>ai\behaviour trees</Filter>
     </ClInclude>
@@ -399,10 +401,23 @@
     </ClInclude>
     <ClInclude Include="components\comp_player_position_sensor.h">
       <Filter>components\ai\enemies\sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="ragdoll_manager.h">
+      <Filter>skeleton</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="components\comp_sensor_distance_player.h">
+      <Filter>components\ai\enemies\sensors</Filter>
 =======
-    <ClInclude Include="components\comp_joint_d6.h">
-      <Filter>components\physics</Filter>
->>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
+    <ClInclude Include="render\blur_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\sharpen_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ssao_step.h">
+      <Filter>render\postpro</Filter>
+>>>>>>> 4dbf661ea76fb004a90397d910c2b94fffa77be5
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -694,7 +709,9 @@
     <ClCompile Include="components\comp_joint_hinge.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
-<<<<<<< HEAD
+    <ClCompile Include="components\comp_joint_d6.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
     <ClCompile Include="ai\bt_grandma.cpp">
       <Filter>ai\behaviour trees</Filter>
     </ClCompile>
@@ -709,10 +726,29 @@
     </ClCompile>
     <ClCompile Include="components\comp_character_controller.cpp">
       <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ragdoll_manager.cpp">
+      <Filter>skeleton</Filter>
+    </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="components\comp_sensor_distance_player.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
 =======
-    <ClCompile Include="components\comp_joint_d6.cpp">
-      <Filter>components\physics</Filter>
->>>>>>> 7b6431a5fce19aa83e545b98da31e58c0c16e37a
+    <ClCompile Include="components\comp_point_light.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_shadows.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\blur_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\sharpen_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ssao_step.cpp">
+      <Filter>render\postpro</Filter>
+>>>>>>> 4dbf661ea76fb004a90397d910c2b94fffa77be5
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -799,6 +835,9 @@
     </Filter>
     <Filter Include="components\ai\enemies\sensors">
       <UniqueIdentifier>{af53a7b1-8bd6-4321-976a-fb162f642437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\postpro">
+      <UniqueIdentifier>{59d3f46a-ca33-4aab-aee3-77703d5581c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

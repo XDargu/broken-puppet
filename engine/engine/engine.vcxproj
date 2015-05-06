@@ -207,6 +207,7 @@
     <ClInclude Include="components\comp_render.h" />
     <ClInclude Include="components\comp_rope.h" />
     <ClInclude Include="components\comp_collider_sphere.h" />
+    <ClInclude Include="components\comp_sensor_distance_player.h" />
     <ClInclude Include="components\comp_sensor_needles.h" />
     <ClInclude Include="components\comp_shadows.h" />
     <ClInclude Include="components\comp_skeleton.h" />
@@ -351,6 +352,7 @@
     <ClCompile Include="components\comp_ragdoll.cpp" />
     <ClCompile Include="components\comp_render.cpp" />
     <ClCompile Include="components\comp_rigid_body.cpp" />
+    <ClCompile Include="components\comp_sensor_distance_player.cpp" />
     <ClCompile Include="components\comp_sensor_needles.cpp" />
     <ClCompile Include="components\comp_shadows.cpp" />
     <ClCompile Include="components\comp_skeleton.cpp" />

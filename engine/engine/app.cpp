@@ -161,6 +161,7 @@ void createManagers() {
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
+	getObjManager<TCompSensorDistPlayer>()->init(64);
 	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
@@ -209,7 +210,7 @@ void initManagers() {
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
-	getObjManager<TCompUnityCharacterController>()->initHandlers();
+	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
 	getObjManager<TCompCameraPivotController>()->initHandlers();
@@ -553,9 +554,9 @@ void CApp::render() {
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
 
-	CHandle h_light = entity_manager.getByName("the_light");
-	CEntity* e_light = h_light;
-	TCompShadows* shadow = e_light->get<TCompShadows>();
+	//CHandle h_light = entity_manager.getByName("the_light");
+	//CEntity* e_light = h_light;
+	//TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	
 	//drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	

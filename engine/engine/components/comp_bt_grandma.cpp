@@ -6,6 +6,7 @@
 #include "comp_sensor_tied.h"
 #include "comp_player_position_sensor.h"
 #include "comp_skeleton.h"
+#include "comp_sensor_distance_player.h"
 #include "../ai/aimanager.h"
 
 aicontroller* m_ai_controller;
@@ -24,6 +25,7 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompCharacterController>(this);
 	assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
+	assertRequiredComponent<TCompSensorDistPlayer>(this);
 	assertRequiredComponent<TCompSensorTied>(this);
 	assertRequiredComponent<TCompSkeleton>(this);
 

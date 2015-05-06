@@ -405,6 +405,9 @@
     <ClInclude Include="ragdoll_manager.h">
       <Filter>skeleton</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_sensor_distance_player.h">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClInclude>
     <ClInclude Include="render\blur_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
@@ -736,6 +739,9 @@
     </ClCompile>
     <ClCompile Include="ragdoll_manager.cpp">
       <Filter>skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_sensor_distance_player.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
     </ClCompile>
     <ClCompile Include="components\comp_point_light.cpp">
       <Filter>components\render</Filter>
