@@ -8,7 +8,7 @@
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 1.3f;
+const float max_dist_reach_needle = 1.7f;
 const float distance_change_way_point = 0.3f;
 
 void bt_grandma::create(string s)
@@ -133,17 +133,29 @@ int bt_grandma::actionChaseNeedlePosition()
 
 		if (on_enter){
 			CNav_mesh_manager::get().findPath(m_transform->position, n_transform->position, path);
-			ind_path = 0;
-			return STAY;
+			if (path.size() > 0){
+				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle-distance_change_way_point){
+					ind_path = 0;
+					return STAY;
+				}else{
+					return LEAVE;
+				}
+			}
 		}else{
 			if (path.size() > 0){
 				if (ind_path < path.size()){
-					chasePoint(m_transform, path[ind_path]);
-					if ((V3DISTANCE(m_transform->position, path[ind_path]) < distance_change_way_point)){
-						ind_path++;
-						return STAY;
+					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle - distance_change_way_point){
+						chasePoint(m_transform, path[ind_path]);
+						if ((V3DISTANCE(m_transform->position, path[ind_path]) < distance_change_way_point)){
+							ind_path++;
+							return STAY;
+						}
+						else{
+							return STAY;
+						}
 					}else{
-						return STAY;
+						last_look_direction = look_direction;
+						return LEAVE;
 					}
 				}else{
 					last_look_direction = look_direction;
