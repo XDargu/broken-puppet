@@ -30,6 +30,10 @@ public:
 	CHandle getActor2();
 
 	PxReal getLinealPosition();
+
+	PxTransform getAnchorConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot);
+	PxTransform getAxisConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot);
+
 };
 
 #endif

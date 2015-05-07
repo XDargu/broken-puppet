@@ -56,3 +56,31 @@
 		)	
 		
 	)
+	
+	/**********************************************************************************************
+	Object  structure Interruptor
+	 Params:
+	  - Is an interruptor
+	***********************************************************************************************/
+	objectDataLogic = attributes objectLogic
+	(
+		parameters main rollout:params
+		(
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Trigger"
+		(
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsLogic = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #Logic_element != true) then
+		(
+			custAttributes.add objSelected objectDataLogic	
+		)	
+		
+	)
