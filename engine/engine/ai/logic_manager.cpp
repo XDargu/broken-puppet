@@ -3,6 +3,7 @@
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
 #include "components\comp_name.h"
+#include "components\comp_platform_path.h"
 #include "entity_manager.h"
 #include "entity_inspector.h"
 //#include <SLB\include\SLB\SLB.hpp>
@@ -280,6 +281,18 @@ void CLogicManager::bootLUA() {
 		.property("z", &CVector::z)
 	;
 
+	// Moving platforms
+	SLB::Class<CMovingPlatform>("MovingPlatform")
+		.set("start", &CMovingPlatform::start)
+		.set("stop", &CMovingPlatform::stop)
+	;
+
+	// Distance joint
+	SLB::Class<CPrismaticJoint>("PrismaticJoint")
+		.set("setLinearLimit", (void (CPrismaticJoint::*)(float))&CPrismaticJoint::setLinearLimit)
+	;
+	
+
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
 	luaL_dofile(L, "test.lua");
@@ -301,6 +314,22 @@ CBot CLogicManager::getBot(std::string name) {
 		execute("error(\"Invalid bot name: " + name + "\")");
 
 	return CBot(entity);
+}
+
+CMovingPlatform CLogicManager::getMovingPlatform(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid moving platform name: " + name + "\")");
+
+	return CMovingPlatform(entity);
+}
+
+CPrismaticJoint CLogicManager::getPrismaticJoint(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid prismatic joint name: " + name + "\")");
+
+	return CPrismaticJoint(entity);
 }
 
 void CLogicManager::print(std::string text) {
