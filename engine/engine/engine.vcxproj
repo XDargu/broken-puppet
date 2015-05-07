@@ -314,6 +314,7 @@
     <ClInclude Include="render\sharpen_step.h" />
     <ClInclude Include="render\ssao_step.h" />
     <ClInclude Include="render\texture.h" />
+    <ClInclude Include="render\underwater_step.h" />
     <ClInclude Include="render\vertex_declarations.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
     <ClInclude Include="skeletons\skeleton_manager.h" />
@@ -552,6 +553,7 @@
     <ClCompile Include="render\sharpen_step.cpp" />
     <ClCompile Include="render\ssao_step.cpp" />
     <ClCompile Include="render\texture.cpp" />
+    <ClCompile Include="render\underwater_step.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />
     <ClCompile Include="ssb.cpp" />

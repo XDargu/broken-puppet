@@ -444,6 +444,9 @@
     <ClInclude Include="ai\prismatic_joint.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="render\underwater_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -802,6 +805,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_platform_path.cpp">
       <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="render\underwater_step.cpp">
+      <Filter>render\postpro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

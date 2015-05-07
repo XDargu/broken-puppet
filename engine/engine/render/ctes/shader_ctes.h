@@ -94,4 +94,13 @@ cbuffer TCtesGlow SHADER_REGISTER(b3)
 	float dummy_glow, dummy_glow2, dummy_glow3;
 };
 
+cbuffer TCtesUnderwater SHADER_REGISTER(b3)
+{
+	float4 uw_pos;
+	float4 uw_delta;
+	float uw_amount;
+	float water_level;
+	float dummy_uw, dummy_uw2;
+};
+
 #endif

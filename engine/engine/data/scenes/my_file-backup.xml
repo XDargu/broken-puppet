@@ -46,10 +46,11 @@
 	</entity>
   
   <entity>
-    <name name="player_rag2"/>
+    <name name="abuela_rag"/>
     <transform position="1 0 0" rotation="0 0 0 1"/>
     <skeleton name="abuela"/>
     <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
+    <ragdoll name="abuela"/>
   </entity>
 	<entity >
 <name name="Sky001_6.0" />
