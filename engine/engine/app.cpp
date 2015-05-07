@@ -328,6 +328,7 @@ bool CApp::create() {
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 
+	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
 		TCompTransform* water_t = water->get<TCompTransform>();

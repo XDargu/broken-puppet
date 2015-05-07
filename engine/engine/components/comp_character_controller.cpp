@@ -280,8 +280,21 @@ void TCompCharacterController::SetFriction()
 
 void TCompCharacterController::HandleGroundedVelocities()
 {
+	TCompRigidBody* rigid = rigidbody;
+
+	float water_level = CApp::get().water_level;
+	float atten = 0.2f;
+	float water_multiplier = 1;
+
+	if (rigid->rigidBody->getGlobalPose().p.y < water_level - atten)  {	
+
+		float proportion = min(1, (water_level - rigid->rigidBody->getGlobalPose().p.y) / atten);
+		water_multiplier = 1 - (proportion * 0.5f);
+	}
+	
+
 	onAir = false;
-	physx::PxVec3 groundMove = physx::PxVec3(moveInput.x, velocity.y, moveInput.z) * moveSpeedMultiplier;
+	physx::PxVec3 groundMove = physx::PxVec3(moveInput.x, velocity.y, moveInput.z) * moveSpeedMultiplier * water_multiplier;
 	velocity = groundMove;
 
 	velocity.y = 0;
