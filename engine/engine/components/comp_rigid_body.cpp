@@ -127,7 +127,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	CEntity* e = CHandle(rigidBody->userData);
 
 	if (!e->hasTag("player")) {
-		float water_level = .9f;
+		float water_level = CApp::get().water_level;
 		float atten = 0.2f;
 		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
 
@@ -136,7 +136,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 			float water_density = 50;
 			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
 			rigidBody->setLinearDamping(1);
-			rigidBody->setAngularDamping(1);
+			rigidBody->setAngularDamping(0.5f);
 		}
 		else {
 			rigidBody->setLinearDamping(0.05f);

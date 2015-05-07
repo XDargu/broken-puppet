@@ -438,6 +438,12 @@
     <ClInclude Include="audio\sound_manager.h">
       <Filter>audio</Filter>
     </ClInclude>
+    <ClInclude Include="ai\moving_platform.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\prismatic_joint.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -787,6 +793,15 @@
     </ClCompile>
     <ClCompile Include="audio\sound_manager.cpp">
       <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\moving_platform.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\prismatic_joint.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_platform_path.cpp">
+      <Filter>components\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

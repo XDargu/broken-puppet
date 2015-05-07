@@ -490,8 +490,8 @@
 	</entity>
   
   <entity >
-    <name name="dvn_arqui_suelo_suelo_01_9.0" />
-    <transform position="0 0.9 0" rotation="0.0 0.0 0.0 1.0" scale="10.0 1.0 10.0"/>
+    <name name="water" />
+    <transform position="0 0.9 0" rotation="0.0 0.0 0.0 1.0" scale="10 1 10"/>
     <render>
       <draw mesh="dvn_arqui_suelo_suelo_01" sub_mesh="0" mat="distorsion"/>
     </render>

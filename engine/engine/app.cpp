@@ -328,6 +328,13 @@ bool CApp::create() {
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 
+	water_level = -1000;
+	CEntity* water = entity_manager.getByName("water");
+	if (water) {
+		TCompTransform* water_t = water->get<TCompTransform>();
+		water_level = XMVectorGetY(water_t->position);
+	}
+
 	assert(is_ok);
 
 	//PRUEBAS NAV MESHES -----------------
@@ -400,16 +407,23 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("deferred_gbuffer");
-		//render_techniques_manager.reload("deferred_point_lights");
-		//render_techniques_manager.reload("deferred_dir_lights");
-		//render_techniques_manager.reload("deferred_resolve");
-		//render_techniques_manager.reload("chromatic_aberration");
+		/*render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_point_lights");
+		render_techniques_manager.reload("deferred_dir_lights");
+		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
 		texture_manager.reload("Foco_albedo");
-		texture_manager.reload("Foco_normal");
-		
+		texture_manager.reload("Foco_normal");*/
+		render_techniques_manager.reload("distorsion");		
+	}
+
+	// Water level
+	CEntity* water = entity_manager.getByName("water");
+	if (water) {
+		TCompTransform* water_t = water->get<TCompTransform>();
+		water_level = XMVectorGetY(water_t->position);
 	}
 
 	//-----------------------------------------------------------------------------------------

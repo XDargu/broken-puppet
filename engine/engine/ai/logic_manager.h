@@ -5,6 +5,8 @@
 #include "rigid_animation.h"
 #include "handle\handle.h"
 #include "bot.h"
+#include "moving_platform.h"
+#include "prismatic_joint.h"
 #include "lua_vector.h"
 
 class CLogicManager
@@ -49,6 +51,9 @@ public:
 	void loadScene(std::string scene_name);
 	void onSceneLoad(std::string scene_name);
 	CBot getBot(std::string name);
+	CMovingPlatform getMovingPlatform(std::string name);
+	CPrismaticJoint getPrismaticJoint(std::string name);
+
 	void print(std::string text);
 	void help();
 };
