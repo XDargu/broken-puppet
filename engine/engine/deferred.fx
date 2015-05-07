@@ -354,7 +354,11 @@ VS_TEXTURED_OUTPUT vin
 	float3 wpos = vin.wPos.xyz;
 	float4 noise = txNormal.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
 	float4 noise2 = txNormal.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
-	noise2 *= 3;
+	noise2 *= 1;
+
+	noise *= 0.9;
+	noise2 *= 0.9;
+
 	wpos.x += noise.x * cos(world_time);
 	wpos.z += noise.x * sin(world_time + .123f);
 	wpos.x += noise2.x * cos(world_time*0.23);
@@ -362,7 +366,7 @@ VS_TEXTURED_OUTPUT vin
 
 	// ++add noise
 	float4 hpos = mul(float4(wpos, 1), ViewProjection);
-		hpos.xyz /= hpos.w;   // -1 .. 1
+	hpos.xyz /= hpos.w;   // -1 .. 1
 	hpos.x = (hpos.x + 1) * 0.5;
 	hpos.y = (1 - hpos.y) * 0.5;
 	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
@@ -376,7 +380,6 @@ VS_TEXTURED_OUTPUT vin
 	float3 N_reflected = reflect(-dir_to_eye, N);
 		float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
 		float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
-
 
 		return env*fresnel + new_color*(1 - fresnel);
 }

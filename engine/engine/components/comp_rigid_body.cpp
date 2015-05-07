@@ -127,7 +127,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	CEntity* e = CHandle(rigidBody->userData);
 
 	if (!e->hasTag("player")) {
-		float water_level = .9f;
+		float water_level = CApp::get().water_level;
 		float atten = 0.2f;
 		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
 

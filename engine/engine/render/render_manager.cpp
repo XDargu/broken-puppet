@@ -181,6 +181,9 @@ void CRenderManager::renderShadowsCasters() {
 
 	bool uploading_bones = false;
 	for (auto k : shadow_casters_keys) {
+		
+		if (!k.material->isSolid())
+			continue;
 
 		// Activar la world del obj
 		TCompTransform* tmx = k.transform;

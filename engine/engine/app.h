@@ -13,7 +13,7 @@ class CApp {
 	void activateDebugMode(bool active);
 
 public:
-
+	float water_level;
 	float delta_time;
 	double total_time;
 
