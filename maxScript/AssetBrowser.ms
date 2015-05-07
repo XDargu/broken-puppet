@@ -310,6 +310,66 @@ macroScript MCVAssetBrowser
 			)
 		)
 		
+	/**********************************************************************************************
+	Object  structure Trigger
+	 Params:
+	  - TRIGGER: Indicate that the object is a trigger
+	***********************************************************************************************/
+	objectDataTrigger = attributes objectTrigger
+	(
+		parameters main rollout:params
+		(
+			TRIGGER type:#boolean ui:TRIGGER default:true
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Trigger"
+		(
+			checkbox TRIGGER "TRIGGER" type: #boolean
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsTrigger = 
+	(		
+		local objSelected = $
+		actionMan.executeAction 0 "373"
+		if (isProperty objSelected.baseobject #TRIGGER != true) then
+		(
+			custAttributes.add objSelected objectDataTrigger	
+						
+		)	
+		
+	)
+	
+		
+	/**********************************************************************************************
+	Object  structure Logic
+	 Params:
+	  - Logic: Unique object logic
+	***********************************************************************************************/
+	objectDataLogic = attributes objectLogic
+	(
+		parameters main rollout:params
+		(
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Logic"
+		(
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsLogic = 
+	(
+		local objSelected = $
+		if (isProperty objSelected.baseObject #Logic_element != true) then
+		(
+			custAttributes.add objSelected objectDataLogic		
+		)	
+	)
+		
 		-- Reloads all the instances of the asset with the given path
 		fn updateAsset dir assetName = (
 			amount = 0
@@ -341,8 +401,9 @@ macroScript MCVAssetBrowser
 			button button4Grid "Grid 4x4" pos:[86,34] width:75 height:25 toolTip:""
 			button button2Grid "Grid2x2" pos:[167,34] width:75 height:25 toolTip:""
 			button button1Grid "Grid 1x1" pos:[248,34] width:75 height:25 toolTip:""
-			
-				
+			button botonAddTrigger "Add Trigger" pos:[5,65] width:75 height:25 toolTip:""
+			button botonAddLogic "Add Logic" pos:[86,65] width:75 height:25 toolTip:""
+							
 			on botonA pressed do	( 
 				objs = $*
 				for o in objs do (
@@ -383,6 +444,13 @@ macroScript MCVAssetBrowser
 			on button1Grid pressed do (
 				setGridSpacing 1
 			)
+			on botonAddTrigger pressed do (
+				addObjectsTrigger()
+			)
+			on botonAddLogic pressed do (
+				addObjectsLogic()
+			)
+
 		)
 		
 		rollout Exporter "Exportador" 
@@ -787,7 +855,7 @@ macroScript MCVAssetBrowser
 		TestFloater = NewRolloutFloater "Tools" 340 825
 		cui.RegisterDialogBar TestFloater style: #(#cui_handles, #cui_dock_left , #cui_dock_right, #cui_floatable)
 		
-		AddRollout LevelEdition TestFloater rolledUp:on
+		AddRollout LevelEdition TestFloater rolledUp:on heigth: 120
 		AddRollout Exporter TestFloater rolledUp:on
 		AddRollout Modules TestFloater rolledUp:on
 		AddRollout Prefabs TestFloater rolledUp:on

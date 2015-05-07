@@ -1,8 +1,13 @@
 filein("GeneralConfig.ms")
 clearlistener()
 
-	--ExportMeshes = true
-	engine_path = "D:\\Users\\Daniel\\Documents\\BrokenPuppet\\engine\\engine\\"
+/********************** 
+
+	Excepcion, 
+	donde meter el comp int,
+	ya que en el xml puede dar problemas de carga por el orden.
+
+************************/
 
 	/********************** CONFIG ************************/
 
@@ -27,8 +32,12 @@ clearlistener()
 	CameraPivotAttribute = "objectCameraPivotData"
 	PlayerPivotAttribute = "objectPlayerPivotData"
 	PlayerAttribute = "objectPlayerData"
-
-	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute)
+	TriggerAttribute = "TRIGGER"
+	
+	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute)
+	
+	-- Logic attribute	
+	logicAttribute = "Logic_element"
 
 	-- List of objects exported
 	expNames = #()
@@ -451,7 +460,7 @@ clearlistener()
 		
 		-- Convert to dds using texconv.exe por ejemplo
 		--copyFile infile full_target
-		local cmd = tools_path + "texconv.exe -f DXT5 " + infile + " -o " + out_path + "textures\\"
+		local cmd = "\"" + tools_path + "texconv.exe\" -f DXT5 \"" + infile + "\" -o " + out_path + "textures\\"
 		format "Executing: --%--\n" cmd
 		local log_file = out_path + "log\\" + base_name + ".log"
 		local rc = DOSCommand (cmd)
@@ -903,10 +912,13 @@ clearlistener()
 		mString += "</render>\n"
 		
 	)	
-
+	fn validateLogicObj obj = (
+		return (isProperty  obj.baseObject #Logic_element)
+	)
 
 	fn validateName obj = (
-		return ((findItem reservedNames (obj.name)) != 0)
+		-- If is a logic element or a reserved name
+		return ((findItem reservedNames (obj.name)) != 0) or (validateLogicObj obj == true)
 	)
 
 	fn getIdName obj = (
@@ -927,6 +939,22 @@ clearlistener()
 		local mName = getIdName obj		
 		return "<name " + "name=\"" + mName + "\" />\n"		
 	)
+	
+	
+	fn validatePullInt obj = (
+		-- If is a logic element or a reserved name
+		return (isProperty obj.baseobject #PullInt)
+	)
+	/**********************************************************************************************
+	Gets the object Pull Int
+	Params:
+	  - obj: target object
+	***********************************************************************************************/	
+	fn getPullInt obj = (		
+		if(validatePullInt obj == false) then return ""
+		return "<switchPullController />\n"
+	)
+
 
 	fn validateRigidbody obj = (
 		return ((obj.modifiers[#PhysX_Rigid_Body] != undefined) and (obj.modifiers[#PhysX_Rigid_Body].type == 1 or  obj.modifiers[#PhysX_Rigid_Body].type == 2))
@@ -1070,6 +1098,13 @@ clearlistener()
 		return mString
 	)
 
+	
+	fn validateCompAABB obj = (
+	
+			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true)
+		
+	)
+	
 	/**********************************************************************************************
 	Gets the AABB min and max positions in the engine reference system
 	 Params:
@@ -1079,7 +1114,7 @@ clearlistener()
 	***********************************************************************************************/
 	fn getAABB obj = (
 		
-		if(validateCompRender obj == false) then
+		if(validateCompAABB obj == false) then
 		return ""
 		
 			-- Save the original transform and move the obj to the identity
@@ -1359,168 +1394,7 @@ clearlistener()
 		return mString
 	)	
 	
-fn validateJointD6 obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
-	
-	-- check if the obj is an actor in a Uconstraint
-	for mJoint in list do (
-		
-		if ((mJoint.constraintType == 6) == false) then continue
-		local body0 = false
-		local body1 = false
-		local undefinedTest = false
-		
-		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
-		)
-		else (
-			undefinedTest = true
-		)
-
-		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
-		)
-		else (
-			undefinedTest = true
-		)
-		
-			
-		if (body0) or (body1) then (
-			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
-				return mJoint
-			)
-		)
-	)	
-	
-	return undefined
-)
-
-/**********************************************************************************************
-Gets a Distance Text component
- Params:
-  - obj: target object
- Returns:
-  - String with the component information
-***********************************************************************************************/
-fn getJointD6 obj = (
-	local mJoint = validateJointD6 obj
-	if (mJoint == undefined) then return ""
-	
-	mString = "<jointD6 "
-	
-	local mObj = max2mcvMatrix mJoint
-	local qObj = mObj.rotationPart as quat
-	qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
-	
-	-- Translations limits
-	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	
-	i = 1;
-	-- Actors
-	if (mJoint.body0 != undefined) then (		
-		mString += "actor" + i as string + " = \"" + mJoint.body0.name + "_" + mJoint.body0.id as string + "\" "
-		i += 1;
-	)
-	
-	if (mJoint.body1 != undefined) then 
-	mString += "actor" + i as string + " = \"" + mJoint.body1.name + "_" + mJoint.body1.id as string + "\" "
-	
-	mString += " jointPosition=\"" \
-											+ mObj.row4.x as string+" " \
-											+ mObj.row4.y as string+" " \
-											+ mObj.row4.z as string+"" \
-						+ "\" jointRotation=\"" \
-											+ qObj.x as string+" "\
-											+ qObj.y as string+" "\
-											+ qObj.z as string+" "\
-											+ qObj.w as string+"\" "
-	
-	-- Translations limits
-	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
-	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
-	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
-	
-	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
-	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
-	
-	-- Spring
-	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
-	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
-	
-	-- Modos de swing/twist:
-	-- 1: Locked
-	-- 2: Limited
-	-- 3: Free
-	
-	/* Rotaciones:
-	
-	El primer swing es swing2
-	El segundo swing es swing1
-	
-	 - Swing1 = Rotar en Y
-	 - Swing2 = Rotar en X
-	 - Twist = Rotar en Z
-	 
-	 Ya que de Max a DX se cambia de sistema:
-	  - X en Max = X en DX
-	  - Y en Max = -Z en DX
-	  - Z en Max = Y  en DX
-	  
-	  Es ncesario cambiar los valores:
-	   - Swing1 tendrá los valores de Twist
-	   - Swing2 tendrá los valores de Swing2
-	   - Twist tendrá los valores de Swing1 negados (ya que la Z de DX es la -Y de max)
-	   
-	*/
-	-- Swing 1 (Swing Z en max)
-	mString += "swing1Mode=\"" + mJoint.twistMode as string + "\" "
-	mString += "swing1Angle=\"" + mJoint.twistAngleHigh as string + "\" "
-	mString += "swing1Restitution=\"" + mJoint.twistRestitutionHigh as string + "\" "
-	mString += "swing1Spring=\"" + mJoint.twistSpringHigh as string + "\" "
-	mString += "swing1Damping=\"" + mJoint.twistDampingHigh as string + "\" "
-	
-	-- Swing 2 (Swing Y en max)
-	mString += "swing2Mode=\"" + mJoint.swing1mode as string + "\" "
-	mString += "swing2Angle=\"" + mJoint.swing1Angle as string + "\" "
-	mString += "swing2Restitution=\"" + mJoint.swing1Restitution as string + "\" "
-	mString += "swing2Spring=\"" + mJoint.swing1Spring as string + "\" "
-	mString += "swing2Damping=\"" + mJoint.swing1Damping as string + "\" "
-	
-	-- Twist
-	mString += "twistMode=\"" + mJoint.swing2Mode as string + "\" "
-	mString += "twistAngle=\"" + mJoint.swing2Angle as string + "\" "
-	mString += "twistRestitution=\"" + mJoint.swing2Restitution as string + "\" "
-	mString += "twistSpring=\"" + mJoint.swing2Spring as string + "\" "
-	mString += "twistDamping=\"" + mJoint.swing2Damping as string + "\" "
-	
-	-- Advanced
-	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
-	mString += "breakable=\"" + mJoint.breakable as string + "\" "
-	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
-	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
-	
-	mString += "/>\n"	
-	
-	return mString
-)
-
 		
 fn validateJointPrismatic obj = (
 	
@@ -1583,6 +1457,7 @@ Gets a Distance Text component
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
 	local mJoint = validateJointPrismatic obj
+	
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointPrismatic "
@@ -1590,13 +1465,15 @@ fn getJointPrismatic obj = (
 	i = 1;
 	-- Actors
 	if (mJoint.body0 != undefined) then (		
-		mString += "actor" + i as string + " = \"" + mJoint.body0.name + "_" + mJoint.body0.id as string + "\" "
+		local name1 = getIdName mJoint.body0
+		mString += "actor" + i as string + " = \"" + name1 as string + "\" "
 		i += 1;
 	)
 	
-	if (mJoint.body1 != undefined) then 
-	mString += "actor" + i as string + " = \"" + mJoint.body1.name + "_" + mJoint.body1.id as string + "\" "
-	
+	if (mJoint.body1 != undefined) then (
+		local name2 = getIdName mJoint.body1	
+		mString += "actor" + i as string + " = \"" + name2 as string + "\" "
+	)
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
 	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
@@ -1774,6 +1651,24 @@ fn getPlatformPath obj = (
 	return mString
 )
 
+
+	fn  validateTrigger obj = (
+		return  (isProperty obj.baseObject TriggerAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the object name
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getTrigger obj = (
+			if (validateTrigger obj) then
+				return "<trigger/>\n"		
+		return ""
+	)
+
 	
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #distanceTextData == true
@@ -1831,7 +1726,28 @@ fn getPlatformPath obj = (
 	fn validateEntity obj = (
 		return ((findItem NotEval (classof obj)) == 0)
 	)
+	
+	fn validateEntityCollisionTag obj = (	
+		if(obj != undefined)then
+			return (isProperty obj.baseobject #collisionTag)
+		return false
+	)
 
+	fn getEntityCollisionTag obj = (
+		local collisionTag = ""
+		
+		if(validateStaticbody obj) then
+		(
+			collisionTag = "collisionTag = \"Level\""
+		)	
+		
+		if(validateEntityCollisionTag obj) then (
+			collisionTag = "collisionTag = \"" + obj.collisionTag + "\""
+		)
+
+		return collisionTag
+	)
+	
 	fn getEntityTag obj = (
 		local tag = "";
 		if(obj.name == PlayerName) then
@@ -1912,7 +1828,7 @@ fn getPlatformPath obj = (
 	Export the XML with entities and components
 	***********************************************************************************************/
 	fn exportXMLScene progress:undefined = (
-		
+		local logicObjs = #()
 		expNames = #()
 		expObjects = #()
 		expShapesNames = #()
@@ -1961,8 +1877,9 @@ fn getPlatformPath obj = (
 			getDistanceText,
 			getJointPrismatic,
 			getJointHinge,
-			getJointD6,
-			getPlatformPath
+			getPlatformPath,
+			getTrigger,
+			getPullInt
 		)
 
 		-- Initialize XML
@@ -1972,35 +1889,72 @@ fn getPlatformPath obj = (
 			progress.value = 0
 		count = 1
 		-- Calls every function in the function arrays
-		for obj in allObject do (
+		for obj in allObject do 
+			(
 			-- Check if needs to be evaluate
-			if(validateEntity obj) then
-			(		
-				local mPrefab = validatePrefabList obj
-				
-				if (mPrefab == false) then 
+			if(validateEntity obj)then
+			(
+				-- Check if needs to check this after
+				if (validateLogicObj obj == false) then
 				(
-					local tag = getEntityTag obj
-					mXML += "\t<entity " + tag + ">\n"
-					for func in functions do (
-						mXML += "" + func obj
+					local mPrefab = validatePrefabList obj
+					
+					if (mPrefab == false) then 
+					(
+						local collisionTag = getEntityCollisionTag obj
+						local tag = getEntityTag obj
+						mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+						for func in functions do (
+							mXML += "" + func obj
+						)
+						mXML += "\t</entity>\n"		
 					)
-					mXML += "\t</entity>\n"		
+					else
+					(
+						local tag = getEntityTag obj
+						mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+						for func in mPrefab.components do (
+							mXML += "" + func obj
+						)
+						mXML += "\t</entity>\n"	
+					)
 				)
 				else
 				(
-					local tag = getEntityTag obj
-					mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
-					for func in mPrefab.components do (
-						mXML += "" + func obj
-					)
-					mXML += "\t</entity>\n"	
+					-- add nuevas cosas					 
+					append logicObjs obj
 				)
+
 			)
 			
 			if (progress != undefined) then
 				progress.value = (100.0 / allObject.count) * count
 			count +=1
+		)
+		for obj in logicObjs do 
+		(
+			local mPrefab = validatePrefabList obj
+			
+			if (mPrefab == false) then 
+			(
+				local collisionTag = getEntityCollisionTag obj
+				local tag = getEntityTag obj
+				mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+				for func in functions do (
+					mXML += "" + func obj
+				)
+				mXML += "\t</entity>\n"		
+			)
+			else
+			(
+				local tag = getEntityTag obj
+				mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+				for func in mPrefab.components do (
+					mXML += "" + func obj
+				)
+				mXML += "\t</entity>\n"	
+			)
+		
 		)
 		
 		--mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
@@ -2014,7 +1968,7 @@ fn getPlatformPath obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
-openCloseFile()
-removeObjectsID()
+--addObjectsID()
+--exportXMLScene()
+--openCloseFile()
+--removeObjectsID()

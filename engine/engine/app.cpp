@@ -273,7 +273,6 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-
 	//loadScene("data/scenes/my_file.xml");
 	loadScene("data/scenes/my_file-backup.xml");
 
@@ -577,7 +576,8 @@ void CApp::render() {
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
 
-	/*CHandle h_light = entity_manager.getByName("the_light");
+	/*
+	CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
@@ -587,6 +587,7 @@ void CApp::render() {
 	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
+	
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);
