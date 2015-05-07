@@ -179,10 +179,10 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				if (firstActorEntity->hasTag("enemy")){
 					TCompSensorTied* tied_sensor=firstActorEntity->get<TCompSensorTied>();
 					tied_sensor->changeTiedState(true, CHandle(new_e_r));
+				}else{
+					//adding needle and rope to item manager
+					Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
 				}
-
-				//adding needle and rope to item manager
-				Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
 			}
 			// Second throw
 			else {
@@ -277,10 +277,10 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					if (firstActorEntity->hasTag("enemy")){
 						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
 						tied_sensor->changeTiedState(true, CHandle(new_e_r));
+					}else{
+						//adding needle to item manager
+						Citem_manager::get().addNeedle(CHandle(new_e_needle2), CHandle(new_e_r));
 					}
-
-					//adding needle to item manager
-					Citem_manager::get().addNeedle(CHandle(new_e_needle2), CHandle(new_e_r));
 
 					// Set the current rope entity as an invalid Handle
 					current_rope_entity = CHandle();
