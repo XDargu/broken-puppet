@@ -1,0 +1,6 @@
+<std_material name="distorsion"
+diffuse="deferred_output"
+normal="dither_noise"
+tech="distorsion"
+              solid="0"
+/>

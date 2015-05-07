@@ -626,6 +626,7 @@ void CNavmeshQuery::raycast( TPos& start, TPos& end ) {
       m_hitPos[ 1 ] = h;
     }
     dtVcopy( &m_straightPath[ 3 ], m_hitPos );
+	//
   }
 }
 

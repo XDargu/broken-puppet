@@ -94,7 +94,7 @@ VS_TEXTURED_OUTPUT VSSkels(
 	float4 skinned_pos = mul(ipos, skin_mtx);
 
 	output.Pos = mul(skinned_pos, ViewProjection);
-	output.wPos = mul(skinned_pos, World);
+	output.wPos = skinned_pos;
 	output.wNormal = mul(inormal, (float3x3) skin_mtx);
 	output.UV = float2(iuv.x, 1 - iuv.y);
 	//output.UV = bone_ids.xy / 50.;
@@ -213,10 +213,16 @@ void PSGBuffer(
 
   // Convert the range 0...1 from the texture to range -1 ..1 
   float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
-  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+	  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+
+	  //wnormal_per_pixel = in_tangent;
 
   // Save the normal
-  normal = (float4(wnormal_per_pixel, 1) + 1. ) * 0.5;
+
+  bool test = length(in_tangent) < 2;
+  float3 m_norm = test ? wnormal_per_pixel : in_normal;
+  normal = (float4(m_norm, 1) + 1.) * 0.5;
+
   
   // Basic diffuse lighting
   float3 L = LightWorldPos.xyz - input.wPos.xyz;
@@ -298,13 +304,17 @@ float4 PSDirLights(
   float depth = txDepth.Load(ss_load_coords).x;
   float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 
-  float3 wPos = getWorldCoords(iPosition.xy, depth);
+	  float3 wPos = getWorldCoords(iPosition.xy, depth);
+
+	 // return float4(wPos.x - int(wPos.x), 0, 0, 1);
 
   // Basic diffuse lighting
   float3 L = dir_light_world_pos.xyz - wPos;
   float  distance_to_light = length(L);
   L = L / distance_to_light;
   float  diffuse_amount = saturate(dot(N, L));
+
+
 
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap
@@ -329,4 +339,44 @@ float4 PSResolve(
 	float4 env = txEnvironment.Sample(samWrapLinear, N);
 
 	return (albedo * diffuse + diffuse.a) * 0.9 + env* 0.1;
+}
+
+
+// -------------------------------------------------
+// Distorsion
+// -------------------------------------------------
+float4 PSDistorsion(
+VS_TEXTURED_OUTPUT vin
+, in float4 iPosition : SV_Position
+
+) : SV_Target0{
+
+	float3 wpos = vin.wPos.xyz;
+	float4 noise = txNormal.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
+	float4 noise2 = txNormal.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
+	noise2 *= 3;
+	wpos.x += noise.x * cos(world_time);
+	wpos.z += noise.x * sin(world_time + .123f);
+	wpos.x += noise2.x * cos(world_time*0.23);
+	wpos.z += noise2.x * sin(world_time*1.7 + .123f);
+
+	// ++add noise
+	float4 hpos = mul(float4(wpos, 1), ViewProjection);
+		hpos.xyz /= hpos.w;   // -1 .. 1
+	hpos.x = (hpos.x + 1) * 0.5;
+	hpos.y = (1 - hpos.y) * 0.5;
+	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
+
+		// A bit of fresnel
+		float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
+		float3 N = normalize(vin.wNormal.xyz);
+		float fresnel = 1 - dot(N, dir_to_eye);
+	fresnel = pow(fresnel, 4);
+
+	float3 N_reflected = reflect(-dir_to_eye, N);
+		float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
+		float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
+
+
+		return env*fresnel + new_color*(1 - fresnel);
 }

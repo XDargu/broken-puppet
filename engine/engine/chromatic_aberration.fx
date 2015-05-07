@@ -60,9 +60,9 @@ float4 PSCA(VS_TEXTURED_OUTPUT input,
 	float2 gDist = getDistorsion(tex, -0.05 - chromatic_amount, 0.05 + chromatic_amount);
 	float2 rDist = getDistorsion(tex, -0.05 - chromatic_amount * 2, 0.05 + chromatic_amount * 2);
   
-	float3 inputDistordr = txDiffuse.Sample(samClampLinear, rDist);
-	float3 inputDistordg = txDiffuse.Sample(samClampLinear, gDist);
-	float3 inputDistordb = txDiffuse.Sample(samClampLinear, bDist);
+	float4 inputDistordr = txDiffuse.Sample(samClampLinear, rDist);
+	float4 inputDistordg = txDiffuse.Sample(samClampLinear, gDist);
+	float4 inputDistordb = txDiffuse.Sample(samClampLinear, bDist);
 
 
   return float4(inputDistordr.r, inputDistordg.g, inputDistordb.b, 1);

@@ -45,10 +45,10 @@ void TCompSensorNeedles::init() {
 
 //}
 
-bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef){
+bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle, float distance_change_way_point){
 
 	TCompTransform* m_transform = transform;
-	bool success=Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef);
+	bool success = Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef, max_dist_reach_needle, distance_change_way_point);
 
 	return success;
 
@@ -76,9 +76,9 @@ bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef){
 	}*/
 }
 
-int TCompSensorNeedles::getNumNeedles(){
+int TCompSensorNeedles::getNumNeedles(CHandle grandmaRef, float max_dist_reach_needle, float distance_change_way_point){
 	TCompTransform* m_transform = transform;
-	int result = Citem_manager::get().getNumInRangle(m_transform->position, radius);
+	int result = Citem_manager::get().getNumInRangle(grandmaRef, m_transform->position, radius, max_dist_reach_needle, distance_change_way_point);
 	return result;
 }
 
