@@ -273,8 +273,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/my_file-backup.xml");
+	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file-backup.xml");
 
 	
 
