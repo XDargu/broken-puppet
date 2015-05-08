@@ -98,3 +98,19 @@ end
 function onTimerEnd_Load()
 	logicManager:loadScene("data/scenes/milestone2.xml");
 end
+
+function onTimerEnd_GrandmaCrasher003Restore()
+	local crasher = logicManager:getPrismaticJoint("GrandmaCrasher003")
+	crasher:setLinearLimit(2.4, 10000000, 10000000)
+	print("Timer ends")
+end
+
+
+function onTriggerEnter_GrandmaCrasher003_Trigger(who)
+	print(tostring(who) .. " ha entrado en el trigger")
+	local crasher = logicManager:getPrismaticJoint("GrandmaCrasher003")
+	crasher:setLinearLimit(1000, 0, 0)
+
+	logicManager:setTimer("GrandmaCrasher003Restore", 3)
+end
+

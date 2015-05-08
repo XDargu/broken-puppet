@@ -13,7 +13,7 @@ public:
 	~CPrismaticJoint();
 
 	// LUA
-	void setLinearLimit(float extent);
+	void setLinearLimit(float extent, float spring, float damping);
 	
 };
 

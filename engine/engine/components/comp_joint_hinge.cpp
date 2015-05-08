@@ -31,6 +31,8 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 
+	float angle_limit = atts.getFloat("swingAngle", 0);
+
 	/*PxVec3 joint_rel_pos_0 = Physics.XMVECTORToPxVec3(atts.getPoint("jointRelativePosition0"));
 	PxQuat joint_rel_rot_0 = Physics.XMVECTORToPxQuat(atts.getQuat("jointRelativeRotation0"));
 
@@ -117,6 +119,13 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		, t_1
 		);
 	
+	PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * 2 * angle_limit ), deg2rad(0));
+	mJoint->setLimit(limit);
+	mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
+
+	mJoint->setDriveForceLimit(100000);
+	mJoint->setDriveVelocity(-1);
+	mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
 	
 }
 
