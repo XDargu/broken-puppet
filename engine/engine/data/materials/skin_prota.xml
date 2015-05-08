@@ -2,4 +2,6 @@
               tech="skin_basic"
               diffuse="prota_Albedo"
 			  normal="prota_Normal"
+			  emissive="prota_Emissive"
+			specular="prota_Specular"
 			  />

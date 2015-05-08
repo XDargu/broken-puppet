@@ -175,8 +175,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				entitycount++;
 
 				//Checking if enemy tied
-				const char* name = first_actor->getName();
-				CEntity* firstActorEntity = CEntityManager::get().getByName(name);
+				CEntity* firstActorEntity = CHandle(first_actor->userData);
 				if (firstActorEntity->hasTag("enemy")){
 					TCompSensorTied* tied_sensor=firstActorEntity->get<TCompSensorTied>();
 					tied_sensor->changeTiedState(true, new_e_r);
@@ -274,8 +273,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					//Checking if enemy tied
 					PxRigidActor* second_actor = blockHit.actor;
-					const char* name = second_actor->getName();
-					CEntity* firstActorEntity = CEntityManager::get().getByName(name);
+					CEntity* firstActorEntity = CHandle(second_actor->userData);
 					if (firstActorEntity->hasTag("enemy")){
 						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
 						tied_sensor->changeTiedState(true, new_e_r);

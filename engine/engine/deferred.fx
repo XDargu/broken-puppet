@@ -4,9 +4,13 @@ Texture2D txDiffuse   : register(t0);
 Texture2D txNormal    : register(t1);
 Texture2D txDepth     : register(t2);
 Texture2D txAccLight  : register(t3);
-Texture2D txShadowMap : register(t6);
 
 TextureCube  txEnvironment : register(t4);
+
+Texture2D txSpecular    : register(t5);
+Texture2D txEmissive    : register(t7);
+
+Texture2D txShadowMap : register(t6);
 
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
@@ -236,7 +240,11 @@ void PSGBuffer(
   //depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
 
   // 
-  acc_light = getShadowAt(input.wPos);
+  //acc_light = getShadowAt(input.wPos);
+
+  float4 emis = txEmissive.Sample(samWrapLinear, input.UV) * 0.5; 
+  acc_light = float4(emis.xyz, 0);
+  
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
 }

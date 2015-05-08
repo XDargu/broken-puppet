@@ -111,6 +111,7 @@ TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
+TUnderwaterEffect underwater;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -327,6 +328,7 @@ bool CApp::create() {
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
+	is_ok &= underwater.create("underwater", xres, yres, 1);
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");
@@ -416,7 +418,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("skin_basic");
 		texture_manager.reload("Foco_albedo");
 		texture_manager.reload("Foco_normal");*/
-		render_techniques_manager.reload("distorsion");		
+		render_techniques_manager.reload("underwater");		
 	}
 
 	// Water level
@@ -424,6 +426,17 @@ void CApp::update(float elapsed) {
 	if (water) {
 		TCompTransform* water_t = water->get<TCompTransform>();
 		water_level = XMVectorGetY(water_t->position);
+		underwater.water_level = water_level;
+		CEntity* player = entity_manager.getByName("PlayerCamera");
+		if (player) {
+			TCompTransform* player_t = player->get<TCompTransform>();
+			float p_y = XMVectorGetY(player_t->position);
+			underwater.amount = p_y > water_level ? 0 : 1;
+		}		
+	}
+	else
+	{
+		underwater.amount = 0;
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -556,6 +569,7 @@ void CApp::render() {
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	blur.apply(chromatic_aberration.getOutput());
+	underwater.apply(blur.getOutput());
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
@@ -566,13 +580,11 @@ void CApp::render() {
 	
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 	//ssao.getOutput()->activate(1);
-	
-
 
 	//texture_manager.getByName("rt_depth")->activate(2);
 
 	//drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
-	drawTexture2D(0, 0, xres, yres, blur.getOutput());
+	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
@@ -582,12 +594,12 @@ void CApp::render() {
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
-	
+	*/
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
-	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
+	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
-	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
+	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
