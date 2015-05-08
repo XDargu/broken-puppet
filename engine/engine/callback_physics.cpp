@@ -41,7 +41,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 		}
 
-		/*
+		
 		//Colision entre actor y enemigo
 		if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 			TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
@@ -57,7 +57,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			float force_float = force;
 			secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 		}
-
+		/*
 		//Colision entre enemigo y escenario
 		if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))){
 			TCompUnityCharacterController* first_controller = firstActorEntity->get<TCompUnityCharacterController>();

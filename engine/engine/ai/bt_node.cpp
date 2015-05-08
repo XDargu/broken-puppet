@@ -190,7 +190,13 @@ void btnode::recalc(bt *tree)
 			}
 		}else if (decSubType == TIMER_NODE){
 			btnode *cand = this;
-			decorator_node->updateCondition(true);
+			//decorator_node->updateCondition(true);
+			if (tree->last_time - tree->timer >= decorator_node->getMainInfo()){
+				decorator_node->updateCondition(true);
+				tree->last_time = tree->timer;
+			}else{
+				decorator_node->updateCondition(false);
+			}
 			if (decorator_node->getCondition()){
 				//la condicion es cierta, ejecutamos la action
 				for (int i = 0; i < children.size(); i++)

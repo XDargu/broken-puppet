@@ -28,6 +28,7 @@ struct decorator{
 	virtual void updateCondition(bool t) = 0;
 	virtual bool getCondition() = 0;
 	virtual void initCondition(float n) = 0;
+	virtual float getMainInfo() = 0;
 };
 
 
@@ -51,6 +52,10 @@ struct decorator_limiter:virtual decorator{
 	void initCondition(float n){
 		maxIterations = n;
 	}
+
+	float getMainInfo(){
+		return 0.f;
+	};
 };
 
 struct decorator_conditional :virtual decorator{
@@ -72,28 +77,32 @@ struct decorator_conditional :virtual decorator{
 	};
 
 	void initCondition(float n){};
+
+	float getMainInfo(){
+		return 0.f;
+	};
 };
 
 struct decorator_timer :virtual decorator{
 	subType decSubType;
-	float time;
 	float max_time;
 	bool condition;
 
 	void init(subType t){
-		time = 0;
 		condition = false;
 		decSubType = t;
 	};
 
 	void updateCondition(bool t){
-		time += CApp::get().delta_time;
-		if (time >= max_time) {
+		//time += CApp::get().delta_time;
+		/*if (time >= max_time) {
+			
 			condition = true;
 			time = 0;
 		}else{
 			condition = false;
-		}
+		}*/
+		condition = t;
 	};
 
 	bool getCondition(){
@@ -101,9 +110,12 @@ struct decorator_timer :virtual decorator{
 	};
 
 	void initCondition(float n){
-		time = 0.f;
 		condition = false;
 		max_time = n;
+	};
+
+	float getMainInfo(){
+		return max_time;
 	};
 };
 
@@ -126,6 +138,10 @@ struct decorator_loop :virtual decorator{
 
 	void initCondition(float n){
 		condition = true;
+	};
+
+	float getMainInfo(){
+		return 0.f;
 	};
 };
 

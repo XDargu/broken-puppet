@@ -7,7 +7,7 @@
 
 struct TCompBtGrandma : TBaseComponent {
 
-	aicontroller* m_ai_controller;
+	bt_grandma* m_ai_controller;
 
 	TCompBtGrandma();
 	TCompBtGrandma(bt_grandma* ai_controller);
@@ -19,6 +19,10 @@ struct TCompBtGrandma : TBaseComponent {
 	void update(float elapsed);
 
 	void actorHit(const TActorHit& msg);
+
+	void warWarning(const TWarWarning& msg);
+
+	void notifyPlayerFound(const TPlayerFound& msg);
 
 	void groundHit(const TGroundHit& msg);
 

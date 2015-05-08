@@ -122,8 +122,9 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 
 	//IA events
-	SUBSCRIBE(TCompAiBT, TActorHit, actorHit);
-	//SUBSCRIBE(TCompBtGrandma, TMsgEnemyTied, onEnemyTied);
+	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
+	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
+	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);

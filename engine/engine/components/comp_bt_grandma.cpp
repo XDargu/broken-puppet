@@ -9,10 +9,9 @@
 #include "comp_sensor_distance_player.h"
 #include "../ai/aimanager.h"
 
-aicontroller* m_ai_controller;
-
 TCompBtGrandma::TCompBtGrandma(){ }
 TCompBtGrandma::TCompBtGrandma(bt_grandma* ai_controller) {
+
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
 	aimanager::get().addBot(m_ai_controller);
@@ -37,7 +36,7 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 void TCompBtGrandma::init(){
 	m_ai_controller->create("enemy");
 	TCompCharacterController* controller = getSibling<TCompCharacterController>(this);
-	controller->moveSpeedMultiplier = 1.0f;
+	controller->moveSpeedMultiplier = 0.8f;
 	controller->jumpPower = 0.7f;
 }
 
@@ -47,7 +46,15 @@ void TCompBtGrandma::update(float elapsed){
 
 void TCompBtGrandma::actorHit(const TActorHit& msg) {
 	dbg("Force recieved is  %f\n", msg.damage);
-	//m_ai_controller.EvaluateHit(msg.damage);
+	m_ai_controller->hurtSensor(msg.damage);
+}
+
+void TCompBtGrandma::warWarning(const TWarWarning& msg) {
+	m_ai_controller->WarWarningSensor(msg.player_position);
+}
+
+void TCompBtGrandma::notifyPlayerFound(const TPlayerFound& msg){
+	m_ai_controller->PlayerFoundSensor();
 }
 
 void TCompBtGrandma::groundHit(const TGroundHit& msg) {

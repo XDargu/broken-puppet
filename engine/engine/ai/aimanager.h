@@ -13,6 +13,8 @@ public:
 	static aimanager& get();
 	void addBot(aicontroller* bot);
 	void removeBot(unsigned int id);
+	void warningToClose(aicontroller* me, float warning_distance);
+	void warningPlayerFound(aicontroller* me);
 private:
 	unsigned int last_id;
 };

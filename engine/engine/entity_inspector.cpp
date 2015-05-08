@@ -187,6 +187,16 @@ void TW_CALL GetAIFSMState(void *value, void *clientData)
 
 }
 
+void TW_CALL GetGrandmaState(void *value, void *clientData)
+{
+	std::string *destPtr = static_cast<std::string *>(value);
+	//TwCopyStdStringToLibrary(*destPtr, static_cast<TCompAiFsmBasic *>(clientData)->m_ai_controller.GetState());
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompBtGrandma *>(clientData)->m_ai_controller->getCurrentNode());
+
+}
+
+
+
 void TW_CALL GetPlayerFSMLegsState(void *value, void *clientData)
 {
 	std::string *destPtr = static_cast<std::string *>(value);
@@ -299,6 +309,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	TCompAiFsmBasic* e_comp_ai_fsm_basic = inspectedEntity->get<TCompAiFsmBasic>();
 
 	// Enemies
+	TCompBtGrandma* e_comp_bt_grandma = inspectedEntity->get<TCompBtGrandma>();
 
 
 	// Logic
@@ -431,6 +442,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_comp_ai_fsm_basic) {
 		TwAddVarCB(bar, "AIFSMBasicState", TW_TYPE_STDSTRING, NULL, GetAIFSMState, e_comp_ai_fsm_basic, " group='AI FSM Basic' label='State'");
+	}
+	if (e_comp_bt_grandma) {
+		TwAddVarCB(bar, "BtGrandmaState", TW_TYPE_STDSTRING, NULL, GetGrandmaState, e_comp_bt_grandma, " group='Bt grandma' label='State'");
 	}
 	if (e_distance_joint) {
 		TwAddVarRW(bar, "DistanceJointActive", TW_TYPE_BOOL8, &e_distance_joint->active, " group='Distance Joint' label='Active' ");

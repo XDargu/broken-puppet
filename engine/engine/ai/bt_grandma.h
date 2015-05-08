@@ -6,6 +6,8 @@
 #include "physics_manager.h"
 #include "components\comp_transform.h"
 #include "../components/comp_sensor_needles.h"
+#include "../components/comp_sensor_tied.h"
+#include "../components/comp_player_position_sensor.h"
 
 class bt_grandma : public bt
 {
@@ -13,6 +15,7 @@ private:
 
 	float radius;
 	float find_path_time;
+	float last_time_player_saw;
 	XMVECTOR center;
 	XMVECTOR rand_point;
 	CHandle character_controller;
@@ -23,6 +26,7 @@ private:
 	physx::PxVec3 look_direction;
 	std::vector<XMVECTOR> path;
 	XMVECTOR wander_target;
+	XMVECTOR player_detected_pos;
 	bool jump;
 	bool tied_event;
 	bool event_detected;
@@ -31,9 +35,20 @@ private:
 	bool needle_is_valid;
 	bool can_reach_needle;
 	bool is_needle_tied;
+	bool too_close_attack;
+	bool is_angry;
+	bool have_to_warcry;
+	bool is_ragdoll;
+	bool hurt_event;
+	bool see_player;
 	unsigned int my_id;
-	needle_rope* needle_objective;
-	TCompRope* ropeRef;
+	CHandle ropeRef;
+	CHandle m_sensor;
+	CHandle own_transform;
+	CHandle player_pos_sensor;
+	CHandle tied_sensor;
+	CHandle player_transform;
+
 public:
 	void create(string);
 
@@ -149,6 +164,9 @@ public:
 	void playerViewedSensor();
 	void needleViewedSensor();	
 	void tiedSensor();
+	void hurtSensor(float damage);
+	void PlayerFoundSensor();
+	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
 	unsigned getId();
 	void setId(unsigned int id);
@@ -156,6 +174,10 @@ public:
 	bool player_viewed_sensor;
 	unsigned int lastNumNeedlesViewed;
 	unsigned int currentNumNeedlesViewed;
+
+	CHandle getPlayerTransform();
+	bool findPlayer();
+	bool isAngry();
 };
 
 #endif

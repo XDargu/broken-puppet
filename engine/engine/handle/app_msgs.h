@@ -36,6 +36,18 @@ struct TActorHit {
 	DECLARE_MSG_ID();
 };
 
+struct TWarWarning {
+	CEntity* who;
+	XMVECTOR player_position;
+	TWarWarning(CEntity* awho, XMVECTOR player_pos) :who(awho), player_position(player_pos) { }
+	DECLARE_MSG_ID();
+};
+
+struct TPlayerFound {
+	TPlayerFound() { }
+	DECLARE_MSG_ID();
+};
+
 /*struct TMsgEnemyTied {
 	CEntity* rope;
 	TMsgEnemyTied(CHandle arope) :rope(arope) { }

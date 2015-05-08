@@ -9,6 +9,8 @@ bt::bt()
 	state_time = 0.f;
 	on_enter = true;
 	previous = nullptr;
+	timer = 0;
+	last_time = 0;
 }
 
 bt::~bt()
@@ -202,6 +204,7 @@ void bt::recalc(float deltaTime)
 {
 	state_changed = false;
 	state_time += deltaTime;
+	timer += deltaTime;
 	if (current == NULL) root->recalc(this);	// I'm not in a sequence, start from the root
 	else current->recalc(this);				    // I'm in a sequence. Continue where I left
 
@@ -273,7 +276,10 @@ void bt::update(float elapsed){
 
 std::string bt::getCurrentNode(){
 	//Debería hacer el currentNode de la clase derivada
-	return "derivada";
+	if (this->current != NULL)
+		return this->current->getName();
+	else
+		return "Root";
 }
 
 CHandle bt::GetEntity(){
@@ -289,10 +295,11 @@ void bt::initDecoratorCondition(string name, float t){
 	btnode *p = findNode(name);
 	if (p != nullptr){
 		p->decorator_node->initCondition(t);
-	};
-	//xassert si no existe nodo
-	CErrorContext ec("Initializing decorator node", "Behaviour trees");
-	XASSERT(p == nullptr, "node doesn't exists");
+	}else{
+		//xassert si no existe nodo
+		CErrorContext ec("Initializing decorator node", "Behaviour trees");
+		XASSERT(p == nullptr, "node doesn't exists");
+	}
 }
 
 void bt::setDecoratorCondition(string name, bool t){

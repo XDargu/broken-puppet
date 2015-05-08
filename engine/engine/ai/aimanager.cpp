@@ -87,3 +87,33 @@ void aimanager::removeBot(unsigned int id){
 		}
 	}
 }
+
+void aimanager::warningToClose(aicontroller* me, float warning_distance){
+	bt_grandma* me_bt = (bt_grandma*)me;
+	TCompTransform* player_transform=(TCompTransform*)me_bt->getPlayerTransform();
+	TCompTransform* me_transform = ((CEntity*)me->GetEntity())->get<TCompTransform>();
+	for (int i = 0; i < bots.size(); i++){
+		//I don´t warn myself
+		if (bots[i] != me){
+			//Check if the bot is close enought to recieve the warning
+			TCompTransform* bot_transform = ((CEntity*)bots[i]->GetEntity())->get<TCompTransform>();
+			if (V3DISTANCE(me_transform->position, bot_transform->position) < warning_distance){
+				((CEntity*)bots[i]->GetEntity())->sendMsg(TWarWarning(((CEntity*)bots[i]->GetEntity()), player_transform->position));
+			}
+		}
+	}
+}
+
+void aimanager::warningPlayerFound(aicontroller* me){
+	//Warning all the angry grandma that the player have been found
+
+	for (int i = 0; i < bots.size(); i++){
+		bt_grandma* bt_bot = (bt_grandma*)bots[i];
+		// TENDRIA QUE DESCARTAR A LA ABUELA QUE INVOCA ESTE METODO!!
+		if (me != bots[i]){
+			if (bt_bot->isAngry()){
+				((CEntity*)bots[i]->GetEntity())->sendMsg(TPlayerFound());
+			}
+		}
+	}
+}

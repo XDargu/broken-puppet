@@ -92,6 +92,7 @@ public:
 	void checkIfStateChanged(btnode* nd);
 
 	float timer;
+	float last_time;
 
 	bt();
 	~bt();
