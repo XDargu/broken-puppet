@@ -13,11 +13,14 @@ class bt_grandma : public bt
 {
 private:
 
-	float radius;
 	float find_path_time;
 	float last_time_player_saw;
+	float time_searching_player;
+	XMVECTOR previous_point_search;
 	XMVECTOR center;
+	XMVECTOR last_point_player_saw;
 	XMVECTOR rand_point;
+	XMVECTOR slot_position;
 	CHandle character_controller;
 	CHandle player;
 	int ind_path;
@@ -41,6 +44,11 @@ private:
 	bool is_ragdoll;
 	bool hurt_event;
 	bool see_player;
+
+	//Bool ñapa a quitar en un futuro -----
+	bool player_previously_lost;
+	//-------------------------------------
+
 	unsigned int my_id;
 	CHandle ropeRef;
 	CHandle m_sensor;
@@ -48,6 +56,11 @@ private:
 	CHandle player_pos_sensor;
 	CHandle tied_sensor;
 	CHandle player_transform;
+	
+	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
+	role rol;
+	enum attacker_slots{ UNASIGNATED, NORTH, WEST, EAST };
+	attacker_slots slot;
 
 public:
 	void create(string);
@@ -135,6 +148,8 @@ public:
 	int conditionsee_player();
 	//Check the look for timer
 	int conditionLook_for_timeout();
+	//Search random point around the last place player was saw
+	int actionSearchArroundLastPoint();
 	//Check if the role is attacker and is close enought
 	int conditionis_attacker();
 	//
@@ -178,6 +193,8 @@ public:
 	CHandle getPlayerTransform();
 	bool findPlayer();
 	bool isAngry();
+	void setRol(int r);
+	void setAttackerSlot(int s);
 };
 
 #endif

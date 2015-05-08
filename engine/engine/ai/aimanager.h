@@ -15,8 +15,11 @@ public:
 	void removeBot(unsigned int id);
 	void warningToClose(aicontroller* me, float warning_distance);
 	void warningPlayerFound(aicontroller* me);
+	void getEnemyRol(aicontroller* enemy);
 private:
 	unsigned int last_id;
+	vector<aicontroller*> attackers_rol;
+
 };
 
 #endif

@@ -7,6 +7,7 @@ using namespace DirectX;
 
 static aimanager the_aimanager;
 std::vector<aicontroller*> bots;
+const int max_size_attackers=3;
 
 aimanager::aimanager()
 {
@@ -115,5 +116,35 @@ void aimanager::warningPlayerFound(aicontroller* me){
 				((CEntity*)bots[i]->GetEntity())->sendMsg(TPlayerFound());
 			}
 		}
+	}
+}
+
+void aimanager::getEnemyRol(aicontroller* enemy){
+	bool free_slot = false;
+	int ind_asignated = -1;
+	bt_grandma* bt_enemy = (bt_grandma*)enemy;
+	for (int i = 0; i < max_size_attackers; ++i){
+		if (attackers_rol[i] == nullptr){
+			attackers_rol[i] = enemy;
+			free_slot = true;
+			break;
+		}
+	}
+	if (free_slot){
+		//Attacker role 
+		bt_enemy->setRol(1);
+		if (ind_asignated == 0){
+			//North slot
+			bt_enemy->setAttackerSlot(1);
+		}else if (ind_asignated == 1){
+			//East slot
+			bt_enemy->setAttackerSlot(2);
+		}else if(ind_asignated == 2){
+			//West slot
+			bt_enemy->setAttackerSlot(3);
+		}
+	}else{
+		//Taunter role
+		bt_enemy->setRol(2);
 	}
 }
