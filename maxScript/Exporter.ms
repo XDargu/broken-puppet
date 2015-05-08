@@ -419,6 +419,90 @@ clearlistener()
 		
 		fclose fs
 	)
+	
+	fn computeTangentSpace vtxs idxs = (
+	local vertexCount = vtxs.count
+	local tan1 = #()
+	local tan2 = #()
+
+	-- default arrays to zero
+	for i = 1 to vertexCount do (
+		tan1[i] = [0,0,0]
+		tan2[i] = [0,0,0]
+	)
+
+	local a = 1
+	while( a < idxs.count ) do (
+		-- Get the indices of each triangle in base 1
+		local i1 = idxs[a]
+		local i2 = idxs[a+1]
+		local i3 = idxs[a+2]
+		
+		-- vtx-i is the original array of floats #(pos, uv, N ...)
+		local vtx1 = vtxs[ i1 ]	
+		local vtx2 = vtxs[ i2 ]
+		local vtx3 = vtxs[ i3 ]
+		
+		-- The positions are the 3 first floats in each array
+		local v1 = [vtx1[1], vtx1[2], vtx1[3] ]
+		local v2 = [vtx2[1], vtx2[2], vtx2[3] ]
+		local v3 = [vtx3[1], vtx3[2], vtx3[3] ]
+
+		-- Then the tex coords
+		local w1 = [vtx1[4], vtx1[5]]
+		local w2 = [vtx2[4], vtx2[5]]
+		local w3 = [vtx3[4], vtx3[5]]
+		        
+		local x1 = v2.x - v1.x
+        local x2 = v3.x - v1.x
+        local y1 = v2.y - v1.y
+        local y2 = v3.y - v1.y
+        local z1 = v2.z - v1.z
+        local z2 = v3.z - v1.z
+        
+        local s1 = w2.x - w1.x
+        local s2 = w3.x - w1.x
+        local t1 = w2.y - w1.y
+        local t2 = w3.y - w1.y
+		
+		local r = 1.0 / (s1 * t2 - s2 * t1)
+
+		local sdir = [(t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r]
+        local tdir = [(s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r]
+
+		tan1[i1] = tan1[i1] + sdir
+		tan1[i2] = tan1[i2] + sdir
+		tan1[i3] = tan1[i3] + sdir
+		                     
+		tan2[i1] = tan2[i1] + tdir
+		tan2[i2] = tan2[i2] + tdir
+		tan2[i3] = tan2[i3] + tdir
+
+		-- Next triangle
+		a = a + 3
+	)
+	
+	
+	for a = 1 to vtxs.count do (
+		local n = [ vtxs[a][6], vtxs[a][7], vtxs[a][8] ]
+		local t = tan1[a]
+		
+        -- Gram-Schmidt orthogonalize
+		local dot_nt = dot n t
+        local tangent = normalize( t - n * dot_nt)
+		
+        -- Calculate handedness
+		local cross_nt = cross n t
+		local dot_cross_tan2 = dot cross_nt tan2[a]
+        local tangent_w = 1
+		if dot_cross_tan2 < 0 then (
+			tangent_w = -1
+		)
+		
+		-- Append the tangent + tanget_w to the information of each vertex
+		join vtxs[a] #( tangent.x, tangent.y, tangent.z, tangent_w )
+	)
+)
 		
 	fn findIndexOfVertex vtxs str_vtxs v = (
 
@@ -591,8 +675,10 @@ clearlistener()
 			append all_groups g
 		)
 		
+		computeTangentSpace all_vtxs all_idxs
+		
 		-- Save in binary form to file
-		saveBinaryMesh obj all_vtxs all_idxs all_groups 1004		-- Positions+UV2 only
+		saveBinaryMesh obj all_vtxs all_idxs all_groups 1006		-- Positions+UV2 only
 		
 		-- Delete the temp mesh
 		if obj != obj_to_export then delete obj

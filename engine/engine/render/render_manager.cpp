@@ -143,7 +143,6 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		++it;		
 	}
 
-	//font.printf(200, 50, "Dibujando %i keys de %i", render_count, (int)keys.size());
 }
 
 void CRenderManager::removeKeysFromOwner(CHandle owner) {
