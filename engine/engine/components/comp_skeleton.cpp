@@ -323,6 +323,21 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 
 void TCompSkeleton::renderDebug3D() const {
 	return;
+	int id_bones[] = { 10, 23, 21, 8 };
+	CalSkeleton* skel = model->getSkeleton();
+	auto& cal_bones = skel->getVectorBone();
+
+	
+
+	for (int id : id_bones) {
+		CalBone* bone = cal_bones[id];
+		XMVECTOR bone_pos = Cal2DX(bone->getTranslationAbsolute());
+
+		drawLine(bone_pos, bone_pos + XMVectorSet(0, 10, 0, 0));
+	}
+	
+
+	return;
 	/*bool draw_ragdoll = h_ragdoll.isValid();
 
 	if (draw_ragdoll) {

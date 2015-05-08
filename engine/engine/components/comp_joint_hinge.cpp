@@ -25,7 +25,7 @@ TCompJointHinge::~TCompJointHinge() {
 }
 
 void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	
+	return;
 	actor1 = atts.getString("actor1","");
 	actor2 = atts.getString("actor2", "");
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
