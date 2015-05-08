@@ -51,6 +51,9 @@ clearlistener()
 	-- List of diffuses exported
 	expDiff = #()
 	
+	-- List of diffuses exported
+	expDNormal = #()
+	
 	-- List of UConstrait exported
 	expJoints = #()
 
@@ -465,7 +468,7 @@ clearlistener()
 		
 		-- Convert to dds using texconv.exe por ejemplo
 		--copyFile infile full_target
-		local cmd = "\"" + tools_path + "texconv.exe\" -f DXT5 \"" + infile + "\" -o " + out_path + "textures\\"
+		local cmd = tools_path + "texconv.exe -f DXT5 " + infile + " -o " + out_path + "textures\\"
 		format "Executing: --%--\n" cmd
 		local log_file = out_path + "log\\" + base_name + ".log"
 		local rc = DOSCommand (cmd)
@@ -478,17 +481,20 @@ clearlistener()
 		-- if is exported	
 		if (m.diffusemap == undefined) then return 0
 		if (findItem expDiff m.diffusemap.filename) != 0 then return 0
+		if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
 		
 		append expDiff m.diffusemap.filename
+		append expNormal m.bumpmap.normal_map.filename
 		 
 		if classof m != Standardmaterial then throw( "No se importar materiales que no sean std" )
 		local diff_name = importTexture m.diffusemap.filename
+		local normal_name = importTexture m.bumpmap.normal_map.filename
 		--	importTexture m.normalmap.filename	
 		-- Exportar la definicion del material a un xml
 		local out_filename = out_path + "materials\\" + m.name + ".xml"
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
-		format "<std_material name=\"%\" diffuse=\"%\"/>\n" m.name diff_name to:mfs
+		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\"/>\n" m.name diff_name normal_name to:mfs
 		close mfs
 	)
 		

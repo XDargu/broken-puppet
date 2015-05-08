@@ -52,7 +52,7 @@ void CDeferredRender::generateLightBuffer() {
 	CTraceScoped scope("light_buffer");
 	rt_lights->activate();
 	float black[4] = { 0.0f, 0.0f, 0.0f, 0.f };
-	rt_lights->clearColorBuffer(black);
+	//rt_lights->clearColorBuffer(black);
 
 	// Activate gbuffer textures
 	rt_albedo->CTexture::activate(0);

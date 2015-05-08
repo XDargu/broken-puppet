@@ -434,6 +434,10 @@ void CApp::update(float elapsed) {
 			underwater.amount = p_y > water_level ? 0 : 1;
 		}		
 	}
+	else
+	{
+		underwater.amount = 0;
+	}
 
 	//-----------------------------------------------------------------------------------------
 	CNav_mesh_manager::get().checkUpdates();
@@ -590,12 +594,12 @@ void CApp::render() {
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
-	
+	*/
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
-	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
+	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
-	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
+	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
