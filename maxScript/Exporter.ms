@@ -52,7 +52,7 @@ clearlistener()
 	expDiff = #()
 	
 	-- List of diffuses exported
-	expDNormal = #()
+	expNormal = #()
 	
 	-- List of UConstrait exported
 	expJoints = #()
@@ -480,6 +480,7 @@ clearlistener()
 		if export_materials == false then return 0
 		-- if is exported	
 		if (m.diffusemap == undefined) then return 0
+		if (m.bumpmap == undefined) then return 0
 		if (findItem expDiff m.diffusemap.filename) != 0 then return 0
 		if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
 		
@@ -495,6 +496,7 @@ clearlistener()
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
 		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\"/>\n" m.name diff_name normal_name to:mfs
+		print ("Exported material: " + (m.name as string))
 		close mfs
 	)
 		
@@ -1131,8 +1133,8 @@ clearlistener()
 			-- Save the original transform and move the obj to the identity
 			originalTransform = moveToIdentity obj
 			
-			local mMin = [obj.min.x, obj.min.z, obj.min.y]
-			local mMax = [obj.max.x, obj.max.z, obj.max.y]
+			local mMin = [obj.min.x, obj.min.z, -obj.max.y]
+			local mMax = [obj.max.x, obj.max.z, -obj.min.y]
 			
 			-- Moves the obj to the original transform
 			changeTransform obj originalTransform
