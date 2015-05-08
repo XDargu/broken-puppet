@@ -282,7 +282,7 @@ bool CApp::create() {
 	sm.addMusicTrack(0, "plug in baby.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 
-	sm.playTrack(0);
+	//sm.playTrack(0);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));

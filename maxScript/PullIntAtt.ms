@@ -28,6 +28,37 @@
 		
 	)
 	
+	/**********************************************************************************************
+	Object  structure Interruptor Push
+	 Params:
+	  - Is an interruptor Push
+	***********************************************************************************************/
+	objectDataPushInt = attributes objectPushInt
+	(
+		parameters main rollout:params
+		(
+			PushInt type:#boolean ui:PushInt default:true
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Trigger"
+		(
+			checkbox PushInt "PushInt" type: #boolean
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsPushInt = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #PushInt != true) then
+		(
+			custAttributes.add objSelected objectDataPushInt	
+		)	
+		
+	)
+	
+	
 	
 	/**********************************************************************************************
 	Object  structure CollisionTag

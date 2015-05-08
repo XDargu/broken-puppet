@@ -259,6 +259,8 @@ void CLogicManager::bootLUA() {
 		.set("loadScene", &CLogicManager::loadScene)
 		.set("setTimer", &CLogicManager::setTimer)
 		.set("getBot", &CLogicManager::getBot)
+		.set("getPrismaticJoint", &CLogicManager::getPrismaticJoint)
+		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
 		.set("print", &CLogicManager::print)
 	;
 
@@ -289,7 +291,7 @@ void CLogicManager::bootLUA() {
 
 	// Distance joint
 	SLB::Class<CPrismaticJoint>("PrismaticJoint")
-		.set("setLinearLimit", (void (CPrismaticJoint::*)(float))&CPrismaticJoint::setLinearLimit)
+		.set("setLinearLimit", (void (CPrismaticJoint::*)(float, float, float))&CPrismaticJoint::setLinearLimit)
 	;
 	
 

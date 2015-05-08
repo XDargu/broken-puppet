@@ -7,10 +7,27 @@ CPrismaticJoint::~CPrismaticJoint() {}
 
 // LUA
 
-void CPrismaticJoint::setLinearLimit(float extent){
+void CPrismaticJoint::setLinearLimit(float extent, float spring, float damping){
 	if (!entity.isValid())
 		return;
 	TCompJointPrismatic* joint = ((CEntity*)entity)->get<TCompJointPrismatic>();
 	if (joint)
-		joint->mJoint->setLinearLimit(PxJointLinearLimit(extent, PxSpring(0, 0)));
+	{
+		// Awake the actors
+		physx::PxRigidActor* a1 = nullptr;
+		physx::PxRigidActor* a2 = nullptr;
+
+		joint->mJoint->getActors(a1, a2);
+
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			((PxRigidDynamic*)a1)->wakeUp();
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			((PxRigidDynamic*)a2)->wakeUp();
+		}
+
+		joint->mJoint->setLinearLimit(PxJointLinearLimit(extent, PxSpring(spring, damping)));
+	}
+		
 }
