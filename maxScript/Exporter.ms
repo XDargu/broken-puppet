@@ -946,18 +946,18 @@ clearlistener()
 	)
 	
 	
-	fn validatePullInt obj = (
+	fn validatePushInt obj = (
 		-- If is a logic element or a reserved name
-		return (isProperty obj.baseobject #PullInt)
+		return (isProperty obj.baseobject #PushInt)
 	)
 	/**********************************************************************************************
-	Gets the object Pull Int
+	Gets the object Push Int
 	Params:
 	  - obj: target object
 	***********************************************************************************************/	
-	fn getPullInt obj = (		
-		if(validatePullInt obj == false) then return ""
-		return "<switchPullController />\n"
+	fn getPushInt obj = (		
+		if(validatePushInt obj == false) then return ""
+		return "<switchPushController />\n"
 	)
 
 
@@ -1796,6 +1796,8 @@ fn getJointHinge obj = (
 	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
 	mString += "linearRestitution=\"" + mJoint.linearRestitution as string + "\" "
 	
+	mString += "swingAngle=\"" + mJoint.swing1Angle as string + "\" "
+	
 	-- Spring
 	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
 	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
@@ -2086,7 +2088,8 @@ fn getPlatformPath obj = (
 			getJointD6,
 			getPlatformPath,
 			getTrigger,
-			getPullInt
+			getPullInt,
+			getPushInt
 		)
 
 		-- Initialize XML
