@@ -376,7 +376,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}	
 	if (e_aabb) {
 		TwAddVarRW(bar, "AABBActive", TW_TYPE_BOOL8, &e_aabb->active, " group=AABB label='Active'");
-		TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB axisx=-x axisz=-z");
+		TwAddVarRW(bar, "Min", TW_TYPE_DIR3F, &e_aabb->min, " group=AABB axisx=-x axisz=-z");
 		TwAddVarRW(bar, "Max", TW_TYPE_DIR3F, &e_aabb->max, " group=AABB axisx=-x axisz=-z");
 		TwAddVarRO(bar, "Center", TW_TYPE_DIR3F, &center, " group=AABB axisx=-x axisz=-z");
 		TwAddVarRO(bar, "Extents", TW_TYPE_DIR3F, &extents, " group=AABB axisx=-x axisz=-z");
