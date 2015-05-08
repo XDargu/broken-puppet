@@ -260,6 +260,7 @@ void CLogicManager::bootLUA() {
 		.set("setTimer", &CLogicManager::setTimer)
 		.set("getBot", &CLogicManager::getBot)
 		.set("getPrismaticJoint", &CLogicManager::getPrismaticJoint)
+		.set("getHingeJoint", &CLogicManager::getHingeJoint)
 		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
 		.set("print", &CLogicManager::print)
 	;
@@ -294,6 +295,10 @@ void CLogicManager::bootLUA() {
 		.set("setLinearLimit", (void (CPrismaticJoint::*)(float, float, float))&CPrismaticJoint::setLinearLimit)
 	;
 	
+	// Hinge joint
+	SLB::Class<CHingeJoint>("PrismaticJoint")
+		.set("setMotor", (void (CHingeJoint::*)(float, float))&CHingeJoint::setMotor)
+	;
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
@@ -332,6 +337,14 @@ CPrismaticJoint CLogicManager::getPrismaticJoint(std::string name) {
 		execute("error(\"Invalid prismatic joint name: " + name + "\")");
 
 	return CPrismaticJoint(entity);
+}
+
+CHingeJoint CLogicManager::getHingeJoint(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid prismatic joint name: " + name + "\")");
+
+	return CHingeJoint(entity);
 }
 
 void CLogicManager::print(std::string text) {
