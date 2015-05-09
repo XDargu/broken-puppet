@@ -48,6 +48,7 @@ using namespace DirectX;
 #include "comp_ambient_light.h"
 #include "comp_point_light.h"
 #include "comp_shadows.h"
+#include "comp_spot_light.h"
 
 // Controllers 2
 #include "comp_character_controller.h"

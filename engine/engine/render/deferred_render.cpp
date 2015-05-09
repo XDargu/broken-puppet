@@ -2,6 +2,7 @@
 #include "deferred_render.h"
 #include "render/render_manager.h"
 #include "components/comp_point_light.h"
+#include "components/comp_spot_light.h"
 #include "components/comp_shadows.h"
 
 bool CDeferredRender::create(int xres, int yres) {
@@ -70,8 +71,14 @@ void CDeferredRender::generateLightBuffer() {
 	}
 
 	if (1) {
-		CTraceScoped scope("dir_lights");
+		CTraceScoped scope("spot_lights");
 		render_techniques_manager.getByName("deferred_dir_lights")->activate();
+		getObjManager<TCompSpotlight>()->onAll(&TCompSpotlight::draw);
+	}
+
+	if (1) {
+		CTraceScoped scope("dir_lights");
+		render_techniques_manager.getByName("deferred_spot_lights")->activate();
 		getObjManager<TCompShadows>()->onAll(&TCompShadows::draw);
 	}
 

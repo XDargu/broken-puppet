@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "render/render_utils.h"
 #include "components/comp_point_light.h"
+#include "components/comp_spot_light.h"
 #include "components/comp_shadows.h"
 
 using namespace DirectX;
@@ -13,6 +14,7 @@ CShaderCte<TCtesCamera> ctes_camera;
 CShaderCte<TCtesLight>  ctes_light;
 CShaderCte<TCtesPointLight>  ctes_point_light;
 CShaderCte<TCtesDirLight>    ctes_dir_light;
+CShaderCte<TCtesSpotLight>    ctes_spot_light;
 CShaderCte<TCtesBones>  ctes_bones;
 
 // Post process
@@ -304,6 +306,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_light.create();
 	is_ok &= ctes_point_light.create();
 	is_ok &= ctes_dir_light.create();
+	is_ok &= ctes_spot_light.create();
 	is_ok &= ctes_bones.create();
 
 	is_ok &= ctes_blur.create();
@@ -335,6 +338,7 @@ void renderUtilsDestroy() {
 	ctes_object.destroy();
 	ctes_dir_light.destroy();
 	ctes_point_light.destroy();
+	ctes_spot_light.destroy();
 	ctes_light.destroy();
 	ctes_camera.destroy();
 	ctes_bones.destroy();
@@ -417,6 +421,17 @@ void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slo
 	//c->dir_light_max_radius = dir_light->radius;
 	//c->dir_light_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
 	ctes_dir_light.uploadToGPU();
+}
+
+void activateSpotLight(const TCompSpotlight* spot_light, XMVECTOR light_pos, XMVECTOR light_dir, float radius, int slot) {
+	ctes_dir_light.activateInVS(slot);    // as set in the deferred.fx!!
+	ctes_dir_light.activateInPS(slot);    // as set in the deferred.fx!!
+	TCtesSpotLight *c = ctes_spot_light.get();
+	c->spot_light_color = spot_light->color;
+	c->spot_light_world_pos = light_pos;
+	c->spot_light_max_radius = radius;
+	c->spot_light_direction = light_dir;
+	ctes_spot_light.uploadToGPU();
 }
 
 // -----------------------------------------------------

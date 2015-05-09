@@ -447,6 +447,9 @@
     <ClInclude Include="render\underwater_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_spot_light.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -808,6 +811,9 @@
     </ClCompile>
     <ClCompile Include="render\underwater_step.cpp">
       <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_spot_light.cpp">
+      <Filter>components\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

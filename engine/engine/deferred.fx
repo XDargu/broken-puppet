@@ -332,6 +332,41 @@ float4 PSDirLights(
   return float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
 }
 
+// -------------------------------------------------
+// Dir lights
+// -------------------------------------------------
+float4 PSSpotLights(
+in float4 iPosition : SV_Position
+) :SV_Target0{
+
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float depth = txDepth.Load(ss_load_coords).x;
+	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+
+	float3 wPos = getWorldCoords(iPosition.xy, depth);
+
+	// return float4(wPos.x - int(wPos.x), 0, 0, 1);
+
+	// Basic diffuse lighting
+	float3 L = spot_light_world_pos.xyz - wPos;
+	float  distance_to_light = length(L);
+	L = L / distance_to_light;
+	float  diffuse_amount = saturate(dot(N, L));
+
+	float3 dir = normalize(L);
+
+	float angle_cos = dot(dir, spot_light_direction);
+	float max_cos = cos(0.1);
+	
+	float att_factor = 0;
+	if (angle_cos < max_cos * 0.5) {
+		att_factor = getShadowAt(float4(wPos, 1));
+	}
+
+	float spec_amount = getSpecular(wPos, L, N);
+	return float4(spot_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
+}
+
 
 // -------------------------------------------------
 // Resolve lights

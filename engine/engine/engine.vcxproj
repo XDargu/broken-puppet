@@ -190,6 +190,7 @@
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\comp_sensor_tied.h" />
     <ClInclude Include="ai\moving_platform.h" />
+    <ClInclude Include="components\comp_spot_light.h" />
     <ClInclude Include="render\all_post_process_effects.h" />
     <ClInclude Include="render\blur_step.h" />
     <ClInclude Include="components\collider.h" />
@@ -367,6 +368,7 @@
     <ClCompile Include="components\comp_skeleton.cpp" />
     <ClCompile Include="components\comp_skeleton_ik.cpp" />
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
+    <ClCompile Include="components\comp_spot_light.cpp" />
     <ClCompile Include="components\comp_static_body.cpp" />
     <ClCompile Include="components\comp_switch_pull_controller.cpp" />
     <ClCompile Include="components\comp_transform.cpp" />
