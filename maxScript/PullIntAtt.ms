@@ -115,3 +115,31 @@
 		)	
 		
 	)
+	
+	/**********************************************************************************************
+	Object  structure Collision Mesh
+	 Params:
+	  - Set if is a collision mesh
+	***********************************************************************************************/
+	objectDataCollisionMesh = attributes objectCollisionMesh
+	(
+		parameters main rollout:params
+		(
+			collisionMesh type:#boolean ui:collisionMesh default:true
+		)
+
+		rollout params "Object Custom Collisionmesh"
+		(
+			checkbox collisionMesh "collisionMesh" type: #boolean
+		)
+	)
+	
+	fn addObjectsCollisionMesh = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #collisionMesh != true) then
+		(
+			custAttributes.add objSelected objectDataCollisionMesh	
+		)	
+		
+	)

@@ -944,7 +944,9 @@ clearlistener()
 				validAttributes = false;
 			)		
 		)	
-		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes)
+		-- The collision mesh has no render
+		local isNotCollisionMesh = not(isProperty  obj.baseObject #collisionMesh)
+		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes and isNotCollisionMesh)
 	)
 
 	fn validateObjExported obj = (
