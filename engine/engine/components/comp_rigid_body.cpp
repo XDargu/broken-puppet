@@ -86,7 +86,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		, temp_density);
 
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
-	physx::PxReal threshold = 15000.f;
+	physx::PxReal threshold = 3000.f;
 	rigidBody->setContactReportThreshold(threshold);
 
 

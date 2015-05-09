@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_ragdoll.h"
 #include "comp_skeleton.h"
+#include "comp_name.h"
 #include "skeletons/skeleton_manager.h"
 #include "io\iostatus.h"
 
@@ -19,8 +20,11 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	ragdoll = (CCoreRagdoll*)ragdoll_manager.getByName(ragdoll_name.c_str());
 
+	TCompName* name = assertRequiredComponent<TCompName>(this);
+	
 	for (auto& rigid : ragdoll->bone_map) {
 		rigid.second->userData = CHandle(this).getOwner().asVoidPtr();
+		rigid.second->setName(name->name);
 	}
 	
 	setCollisionGroups();

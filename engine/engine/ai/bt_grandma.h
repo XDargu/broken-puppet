@@ -57,6 +57,9 @@ private:
 	CHandle player_pos_sensor;
 	CHandle tied_sensor;
 	CHandle player_transform;
+	CHandle enemy_skeleton;
+	CHandle enemy_ragdoll;
+	CHandle enemy_rigid;
 	
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;

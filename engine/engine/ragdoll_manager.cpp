@@ -10,8 +10,9 @@ int ragdoll_uid = 0;
 CCoreRagdoll::CCoreRagdoll() {}
 
 void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
-	
-	CCoreModel* model = (CCoreModel*)skeleton_manager.getByName(name.c_str());
+	std::string real_name = split_string(std::string(name), "#")[0];
+
+	CCoreModel* model = (CCoreModel*)skeleton_manager.getByName(real_name.c_str());
 
 	if (elem == "BoneRigidbody") {
 
@@ -55,12 +56,12 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		collider->setLocalPose(relativePose);
 
 		/*PxShape* collider = Physics.gPhysicsSDK->createShape(
-			physx::PxSphereGeometry(
-			radius
-			),
-			*mat
-			,
-			true);*/
+		physx::PxSphereGeometry(
+		radius
+		),
+		*mat
+		,
+		true);*/
 
 		PxRigidDynamic* rigidBody = physx::PxCreateDynamic(
 			*Physics.gPhysicsSDK
@@ -98,8 +99,8 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		PxQuat pxCorrector = Physics.XMVECTORToPxQuat(corrector);
 		pxCorrector = PxQuat(0, 0, 0, 1);
 
-		PxTransform joint_rel_0 = PxTransform(joint_rel_pos_0, joint_rel_rot_0  );
-		PxTransform joint_rel_1 = PxTransform(joint_rel_pos_1, joint_rel_rot_1  );
+		PxTransform joint_rel_0 = PxTransform(joint_rel_pos_0, joint_rel_rot_0);
+		PxTransform joint_rel_1 = PxTransform(joint_rel_pos_1, joint_rel_rot_1);
 
 		std::string bone_name1 = atts.getString("actor1", "unknown");
 		int bone_id1 = model->getBoneId(bone_name1);
@@ -117,7 +118,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		PxTransform joint_abs = PxTransform(joint_position, joint_rotation);
 
 		PxTransform rigid_abs_inverse1 = m_ridig_dynamic1->getGlobalPose();
-		
+
 		rigid_abs_inverse1 = rigid_abs_inverse1.getInverse();
 
 		PxTransform rigid_abs_inverse2 = m_ridig_dynamic2->getGlobalPose();
@@ -154,7 +155,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		PxD6Motion::Enum swing1_motion = (PxD6Motion::Enum)(atts.getInt(res_order[0].c_str(), 0) - 1);
 		PxD6Motion::Enum swing2_motion = (PxD6Motion::Enum)(atts.getInt(res_order[1].c_str(), 0) - 1);
-		PxD6Motion::Enum twist_motion = (PxD6Motion::Enum)(atts.getInt (res_order[2].c_str(), 0) - 1);
+		PxD6Motion::Enum twist_motion = (PxD6Motion::Enum)(atts.getInt(res_order[2].c_str(), 0) - 1);
 
 		float swing1Angle = atts.getFloat(a_order[0].c_str(), 45);
 		float swing2Angle = atts.getFloat(a_order[1].c_str(), 45);
@@ -169,7 +170,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		// Primer valor: Swing 1 angle / 2, segundo valor: Swing 2 angle / 2
 		mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), PxSpring(100, 10)));
-		
+
 		// Twist limit
 		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), PxSpring(100, 10)));
 
@@ -188,14 +189,15 @@ bool CCoreRagdoll::load(const char* name) {
 	uid = ragdoll_uid;
 	ragdoll_uid++;
 
-	setName(name);
-	
-	root_path = "data/skeletons/" + std::string(name) + "/";
 
-	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);
+	std::string real_name = split_string(std::string(name), "#")[0];
+	setName(name);
+	root_path = "data/skeletons/" + real_name + "/";
 
 	char full_name[MAX_PATH];
 	sprintf(full_name, "%s%s.xml", root_path.c_str(), (std::string(name) + "_ragdoll").c_str());
+
+
 	return xmlParseFile(full_name);
 }
 
@@ -208,7 +210,7 @@ PxTransform CCoreRagdoll::getAnchorConfiguration(PxTransform body_transform, PxV
 	// Rigid = joint
 
 	PxTransform anchor = PxTransform(0, 0, 0, PxQuat(deg2rad(90), PxVec3(0, 0, 1)));
-	
+
 	CalQuaternion parent_to_local = DX2CalQuat(Physics.PxQuatToXMVECTOR(body_transform.q));
 	parent_to_local.invert();
 
@@ -226,7 +228,7 @@ PxTransform CCoreRagdoll::getAnchorConfiguration(PxTransform body_transform, PxV
 
 	anchor.p = Physics.XMVECTORToPxVec3(Cal2DX(delta_in_local));
 
-	
+
 
 	/*PxVec3 diff_pos;
 

@@ -2,6 +2,7 @@
 #include "comp_bt_grandma.h"
 #include "comp_transform.h"
 #include "comp_character_controller.h"
+#include "comp_rigid_body.h"
 #include "comp_sensor_needles.h"
 #include "comp_sensor_tied.h"
 #include "comp_player_position_sensor.h"
@@ -39,6 +40,12 @@ void TCompBtGrandma::init(){
 	TCompCharacterController* controller = getSibling<TCompCharacterController>(this);
 	controller->moveSpeedMultiplier = 0.8f;
 	controller->jumpPower = 0.7f;
+
+	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
+	TCompRigidBody* rigidBody = getSibling<TCompRigidBody>(this);
+
+	physx::PxReal threshold = 100.f;
+	rigidBody->rigidBody->setContactReportThreshold(threshold);
 }
 
 void TCompBtGrandma::update(float elapsed){

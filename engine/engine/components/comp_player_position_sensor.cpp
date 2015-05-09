@@ -55,7 +55,12 @@ bool TCompPlayerPosSensor::playerInRange(){
 
 				}										
 			}
-			if (std::strcmp(lowest_actor->getName(), "Player") == 0)
+			TCompTransform* p_transform = (((CEntity*)player)->get<TCompTransform>());
+			XMVECTOR player_pos = p_transform->position;
+			TCompTransform* e_transform = ((TCompTransform*)e->get<TCompTransform>());
+			XMVECTOR own_pos = e_transform->position;
+			float distance = V3DISTANCE(player_pos, own_pos);
+			if ((std::strcmp(lowest_actor->getName(), "Player") == 0) || (distance< 7.f))
 			{
 				return true;
 			}

@@ -19,8 +19,9 @@ const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 2.f;
 const float distance_change_way_point = 0.55f;
 const float force_large_impact = 10000.f;
-const float force_medium_impact = 6500.f;
-const float radius = 8.f;
+const float force_medium_impact = 200.f;
+const float max_time_ragdoll = 3.f;
+const float radius = 7.f;
 
 void bt_grandma::create(string s)
 {
@@ -94,6 +95,9 @@ void bt_grandma::create(string s)
 	own_transform = ((CEntity*)entity)->get<TCompTransform>();
 	center = ((TCompTransform*)own_transform)->position;
 	character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
+	enemy_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
+	enemy_ragdoll = ((CEntity*)entity)->get<TCompRagdoll>();
+	enemy_rigid = ((CEntity*)entity)->get<TCompRigidBody>();
 	last_time_player_saw = 0;
 	last_time = delta_time_close_attack;
 	mov_direction = PxVec3(0, 0, 0);
@@ -131,7 +135,29 @@ void bt_grandma::create(string s)
 //Se mantiene en modo ragdoll durante un tiempo
 int bt_grandma::actionRagdoll()
 {
-	return LEAVE;
+	TCompRagdoll* m_ragdoll = enemy_ragdoll;
+	if (on_enter && !m_ragdoll->isRagdollActive()) {
+		m_ragdoll->setActive(true);
+	}
+
+	jump = false;
+	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
+
+	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
+	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+
+	((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
+		physx::PxTransform(
+		Physics.XMVECTORToPxVec3(pos_final),
+		((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().q
+		)
+		);
+
+	if (state_time < max_time_ragdoll){
+		return STAY;
+	}else{
+		return LEAVE;
+	}
 }
 
 //Ejecuta la animacin de levantarse
@@ -408,7 +434,7 @@ int bt_grandma::actionSelectRole()
 		aimanager::get().setEnemyRol(this);
 		if (rol == role::ATTACKER){
 			if (slot == attacker_slots::NORTH){
-				slot_position =  ((TCompTransform*)player_transform)->getFront()* -1.f * max_distance_to_attack;
+				slot_position =  ((TCompTransform*)player_transform)->getFront() * max_distance_to_attack;
 			}
 			else if (slot == attacker_slots::WEST){
 				slot_position = ((TCompTransform*)player_transform)->getLeft() * max_distance_to_attack;
@@ -441,7 +467,7 @@ int bt_grandma::actionChaseRoleDistance()
 	}
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
-	if (distance < 4) {
+	if (distance < 4.f) {
 		return LEAVE;
 	}
 
@@ -501,7 +527,7 @@ int bt_grandma::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
 				ind_path++;
 				return STAY;
 			}
@@ -556,6 +582,7 @@ int bt_grandma::actionTaunter()
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 int bt_grandma::actionHurtEvent()
 {
+
 	return LEAVE;
 }
 
@@ -622,7 +649,6 @@ int bt_grandma::conditionTied()
 {
 
 	return false;
-	//return Tied;
 }
 
 //
@@ -634,8 +660,13 @@ int bt_grandma::conditionis_ragdoll()
 //
 int bt_grandma::conditionis_grounded()
 {
-	return false;
-	//return is_grounded;
+	TCompCharacterController* me_controller=((CEntity*)entity)->get<TCompCharacterController>();
+	if (me_controller->OnGround()){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 //
@@ -736,7 +767,7 @@ int bt_grandma::conditionis_attacker()
 	TCompTransform* p_transform = player_transform;
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
-	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) < 4.f)){
+	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) <= 4.5f)){
 		return true;
 	}else{
 		return false;
@@ -814,7 +845,7 @@ int bt_grandma::conditioncan_reach_needle()
 int bt_grandma::conditionis_taunter()
 {
 	float distance = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
-	if ((rol == role::TAUNTER) && (distance < 4.f)){
+	if ((rol == role::TAUNTER) && (distance <= 4.5f)){
 		return true;
 	}
 	else{
@@ -843,7 +874,7 @@ int bt_grandma::conditionfar_from_target_pos()
 	TCompTransform* p_transform = player_transform;
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
-	if (V3DISTANCE(m_transform->position, p_transform->position + slot_position) > 1.f){
+	if (V3DISTANCE(m_transform->position, p_transform->position + slot_position) > 2.f){
 		return true;
 	}else{
 		return false;
@@ -929,6 +960,7 @@ void bt_grandma::hurtSensor(float damage){
 		have_to_warcry = true;
 	is_angry = true;
 	if (damage >= force_large_impact){
+		//Muerte!!
 	}else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		is_ragdoll = true;
 	}else if (damage < force_medium_impact){
@@ -963,7 +995,11 @@ void bt_grandma::update(float elapsed){
 				aimanager::get().RemoveEnemyAttacker(this);
 		}
 	}*/
-	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+	TCompRagdoll* m_ragdoll = enemy_ragdoll;
+
+	if (!m_ragdoll->isRagdollActive()) {
+		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+	}
 	this->recalc(elapsed);
 }
 
