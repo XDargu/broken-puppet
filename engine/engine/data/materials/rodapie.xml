@@ -1,1 +1,1 @@
-<std_material name="rodapie" diffuse="rodapie_diffuse" normal="rodapie_normal"/>
+<std_material name="rodapie" diffuse="rodapie_diffuse" normal="rodapie_normal" emissive=""/>

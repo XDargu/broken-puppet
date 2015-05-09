@@ -391,3 +391,34 @@ VS_TEXTURED_OUTPUT vin
 
 		return env*fresnel + new_color*(1 - fresnel);
 }
+
+// -------------------------------------------------
+// Glass
+// -------------------------------------------------
+float4 PSGlass(
+VS_TEXTURED_OUTPUT vin
+, in float4 iPosition : SV_Position
+
+) : SV_Target0{
+
+	float3 wpos = vin.wPos.xyz;
+
+	
+	float4 hpos = mul(float4(wpos, 1), ViewProjection);
+	hpos.xyz /= hpos.w;   // -1 .. 1
+	hpos.x = (hpos.x + 1) * 0.5;
+	hpos.y = (1 - hpos.y) * 0.5;
+	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
+
+	// A bit of fresnel
+	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
+	float3 N = normalize(vin.wNormal.xyz);
+	float fresnel = 1 - dot(N, dir_to_eye);
+	fresnel = pow(fresnel, 4);
+
+	float3 N_reflected = reflect(-dir_to_eye, N);
+	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
+	float4 new_color = float4(albedo.x*0.9, albedo.y*0.9, albedo.z*0.9, 1);
+
+	return env*fresnel + new_color*(1 - fresnel);
+}

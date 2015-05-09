@@ -25,7 +25,6 @@ TCompJointHinge::~TCompJointHinge() {
 }
 
 void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	return;
 	actor1 = atts.getString("actor1","");
 	actor2 = atts.getString("actor2", "");
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
@@ -119,13 +118,17 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		, t_1
 		);
 	
-	PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * 2 * angle_limit ), deg2rad(0));
-	mJoint->setLimit(limit);
-	mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
+	if (angle_limit != 0)
+	{
+		PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * 2 * angle_limit), deg2rad(0));
+		mJoint->setLimit(limit);
+		mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 
-	mJoint->setDriveForceLimit(100000);
-	mJoint->setDriveVelocity(-1);
-	mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
+	}
+	
+	//mJoint->setDriveForceLimit(100000);
+	//mJoint->setDriveVelocity(-1);
+	//mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
 	
 }
 

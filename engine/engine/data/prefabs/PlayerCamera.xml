@@ -2,7 +2,7 @@
 <entity >
     <name name="PlayerCamera" />
     <transform position="48.2918 -7.46728 45.8579"/>
-    <camera target="0.593842 -1.42814e-007 -3.26721 " fov="75.0" znear="0.1" zfar="1000.0"/>
-    <thirdPersonCameraController offset="0.2 -0.33 2.0"/>
+    <camera target="0.593842 -1.42814e-007 -3.26721 " fov="60.0" znear="0.1" zfar="1000.0"/>
+    <thirdPersonCameraController offset="0.2 -0.33 2.5"/>
 </entity>
 </prefab>
