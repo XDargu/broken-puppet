@@ -298,6 +298,7 @@ void CLogicManager::bootLUA() {
 	// Hinge joint
 	SLB::Class<CHingeJoint>("PrismaticJoint")
 		.set("setMotor", (void (CHingeJoint::*)(float, float))&CHingeJoint::setMotor)
+		.set("setLimit", (void (CHingeJoint::*)(float))&CHingeJoint::setLimit)
 	;
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");

@@ -114,3 +114,24 @@ function onTriggerEnter_GrandmaCrasher003_Trigger(who)
 	logicManager:setTimer("GrandmaCrasher003Restore", 3)
 end
 
+
+
+function onTriggerEnter_TriggerClock(who)
+	print(tostring(who) .. " ha entrado en el trigger");
+	if who == "minutero" then	
+		print("Clock Blocked!");
+		m_minutero = logicManager:getHingeJoint("minutero");
+		m_minutero:setLimit(10);
+	end
+end
+
+
+function onSwitchPressed_InterruptorTirarReloj(who)
+	print(tostring(who) .. "Interruptor pulsado");
+	m_minutero = logicManager:getHingeJoint("minutero");
+	m_minutero:setLimit(0);
+	m_minutero:setMotor(1, 60000);
+end
+
+
+

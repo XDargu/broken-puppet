@@ -110,7 +110,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxTransform t_1 = r2_abs.transform(joint_abs);
 
 	// Create a joint
-	PxRevoluteJoint* mJoint = PxRevoluteJointCreate(
+	mJoint = PxRevoluteJointCreate(
 		*Physics.gPhysicsSDK
 		, m_ridig_Actor1
 		, t_0

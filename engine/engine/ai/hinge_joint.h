@@ -13,8 +13,8 @@ public:
 	~CHingeJoint();
 
 	// LUA
-	void setMotor(float velocity, float limit);
-
+	void setMotor(float velocity, float force_limit);
+	void setLimit(float limit);
 };
 
 #endif
