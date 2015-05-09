@@ -119,20 +119,61 @@ void aimanager::warningPlayerFound(aicontroller* me){
 	}
 }
 
-void aimanager::getEnemyRol(aicontroller* enemy){
+void aimanager::setEnemyRol(aicontroller* enemy){
 	bool free_slot = false;
-	int ind_asignated = -1;
 	bt_grandma* bt_enemy = (bt_grandma*)enemy;
-	for (int i = 0; i < max_size_attackers; ++i){
-		if (attackers_rol[i] == nullptr){
-			attackers_rol[i] = enemy;
-			free_slot = true;
-			break;
+	int ind_asignated = -1;
+	if (attackers_rol.size() < max_size_attackers){
+		attackers_rol.push_back(enemy);
+		bt_enemy->setRol(1);
+		free_slot = true;
+	}else{
+		for (int i = 0; i < attackers_rol.size(); ++i){
+			bt_grandma* bot_bt = (bt_grandma*)attackers_rol[i];
+			if (attackers_rol[i] != enemy){
+				if (bt_enemy->getDistanceToPlayer() < bot_bt->getDistanceToPlayer()){
+					RemoveEnemyAttacker(attackers_rol[i]);
+					attackers_rol.push_back(enemy);
+					bt_enemy->setRol(1);
+					free_slot = true;
+					break;
+				}
+			}
 		}
 	}
+
 	if (free_slot){
 		//Attacker role 
 		bt_enemy->setRol(1);
+		ind_asignated = attackers_rol.size() - 1;
+		if (ind_asignated == 0){
+			//North slot
+			bt_enemy->setAttackerSlot(1);
+		}
+		else if (ind_asignated == 1){
+			//East slot
+			bt_enemy->setAttackerSlot(2);
+		}
+		else if (ind_asignated == 2){
+			//West slot
+			bt_enemy->setAttackerSlot(3);
+		}
+	}else{
+		//Taunter role
+		bt_enemy->setRol(2);
+	}
+	/*bool free_slot = false;
+	int ind_asignated = -1;
+	bt_grandma* bt_enemy = (bt_grandma*)enemy;
+	if (attackers_rol.size() < max_size_attackers){
+		attackers_rol.push_back(enemy);
+		free_slot = true;
+	}
+
+	if (free_slot){
+		//Attacker role 
+		bt_enemy->setRol(1);
+		ind_asignated = attackers_rol.size() - 1;
 		if (ind_asignated == 0){
 			//North slot
 			bt_enemy->setAttackerSlot(1);
@@ -146,5 +187,13 @@ void aimanager::getEnemyRol(aicontroller* enemy){
 	}else{
 		//Taunter role
 		bt_enemy->setRol(2);
+	}*/
+}
+
+void aimanager::RemoveEnemyAttacker(aicontroller* enemy){
+	for (int i = 0; i < attackers_rol.size(); i++){
+		if (attackers_rol[i] == enemy){
+			attackers_rol.erase(attackers_rol.begin()+(i));
+		}
 	}
 }

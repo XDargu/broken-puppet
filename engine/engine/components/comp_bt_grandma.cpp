@@ -8,6 +8,7 @@
 #include "comp_skeleton.h"
 #include "comp_sensor_distance_player.h"
 #include "../ai/aimanager.h"
+#include "font\font.h"
 
 TCompBtGrandma::TCompBtGrandma(){ }
 TCompBtGrandma::TCompBtGrandma(bt_grandma* ai_controller) {
@@ -71,3 +72,9 @@ void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
 	//m_ai_controller.ChangeState("aibe_Ragdoll");		
 }
 
+
+void TCompBtGrandma::renderDebug3D() {
+	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();
+	font.print3D(m_transform->position + XMVectorSet(0, 1, 0, 0), m_ai_controller->getCurrentNode().c_str());
+	m_ai_controller->drawdebug();
+}

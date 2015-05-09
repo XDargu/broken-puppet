@@ -15,10 +15,13 @@ public:
 	void removeBot(unsigned int id);
 	void warningToClose(aicontroller* me, float warning_distance);
 	void warningPlayerFound(aicontroller* me);
-	void getEnemyRol(aicontroller* enemy);
+	void setEnemyRol(aicontroller* enemy);
+	void RemoveEnemyAttacker(aicontroller* enemy);
+	void changeEnemyRol(aicontroller* enemy);
 private:
 	unsigned int last_id;
-	vector<aicontroller*> attackers_rol;
+	std::vector<aicontroller*> attackers_rol;
+	std::vector<aicontroller*> taunters_rol;
 
 };
 

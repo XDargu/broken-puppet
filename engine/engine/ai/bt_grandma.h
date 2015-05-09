@@ -44,6 +44,7 @@ private:
 	bool is_ragdoll;
 	bool hurt_event;
 	bool see_player;
+	bool initial_attack;
 
 	//Bool ñapa a quitar en un futuro -----
 	bool player_previously_lost;
@@ -59,7 +60,7 @@ private:
 	
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;
-	enum attacker_slots{ UNASIGNATED, NORTH, WEST, EAST };
+	enum attacker_slots{ NO_SLOT, NORTH, WEST, EAST };
 	attacker_slots slot;
 
 public:
@@ -195,6 +196,9 @@ public:
 	bool isAngry();
 	void setRol(int r);
 	void setAttackerSlot(int s);
+	float getDistanceToPlayer();
+
+	void drawdebug();
 };
 
 #endif

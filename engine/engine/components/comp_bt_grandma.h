@@ -27,6 +27,8 @@ struct TCompBtGrandma : TBaseComponent {
 	void groundHit(const TGroundHit& msg);
 
 	void onRopeTensed(const TMsgRopeTensed& msg);
+
+	void renderDebug3D();
 };
 #endif
 

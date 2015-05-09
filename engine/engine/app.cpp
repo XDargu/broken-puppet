@@ -279,10 +279,10 @@ bool CApp::create() {
 	loadScene("data/scenes/my_file.xml");
 	
 
-	sm.addMusicTrack(0, "plug in baby.mp3");
-	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	//sm.addMusicTrack(0, "plug in baby.mp3");
+	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 
-	sm.playTrack(0);
+	//sm.playTrack(0);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -733,6 +733,7 @@ void CApp::renderDebugEntities() {
 
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
+	getObjManager<TCompBtGrandma>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){

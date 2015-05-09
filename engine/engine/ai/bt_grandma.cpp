@@ -5,13 +5,17 @@
 #include "utils.h"
 #include "nav_mesh_manager.h"
 #include "components\comp_skeleton.h"
+#include "font\font.h"
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 2.f;
+const float max_dist_reach_needle = 1.8f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
-const float max_time_player_search = 27.f;
+const float max_distance_to_attack = 1.f;
+const float max_time_player_search = 7.f;
+const float max_range_role = 7.f;
+const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 1.3f;
 const float distance_change_way_point = 0.55f;
 const float force_large_impact = 10000.f;
@@ -56,8 +60,8 @@ void bt_grandma::create(string s)
 	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_grandma::actionSelectRole);
 	addChild("TryAttack", "ExecuteRole", PRIORITY, NULL, NULL);
 	addChild("ExecuteRole", "AttackRoutine", PRIORITY, (btcondition)&bt_grandma::conditionis_attacker, NULL);
-	addChild("AttackRoutine", "InitialAttack16", ACTION, (btcondition)&bt_grandma::conditioninitial_attack, (btaction)&bt_grandma::actionInitialAttack);
-	addChild("AttackRoutine", "NormalAttack17", ACTION, (btcondition)&bt_grandma::conditionnormal_attack, (btaction)&bt_grandma::actionNormalAttack);
+	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL,(btcondition)&bt_grandma::conditioninitial_attack, (btaction)&bt_grandma::actionInitialAttack);
+	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_grandma::conditionnormal_attack, (btaction)&bt_grandma::actionNormalAttack);
 	addChild("AttackRoutine", "Situate18", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("AttackRoutine", "IdleWa19r", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionIdleWar);
 	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
@@ -68,7 +72,7 @@ void bt_grandma::create(string s)
 	
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
-	addChild("XSecAttack", "TooCloseAttack23", ACTION, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
+	addChild("XSecAttack", "TooCloseAttack23", ACTION, INTERNAL, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
 	addChild("Peacefull", "TakeNeedle", SEQUENCE, (btcondition)&bt_grandma::conditionneedle_to_take, NULL);
 	addChild("TakeNeedle", "XSecsNeedle", SEQUENCE, NULL, NULL);
 	addChild("XSecsNeedle", "NeedleAppearsEvent24", ACTION, NULL, (btaction)&bt_grandma::actionNeedleAppearsEvent);
@@ -91,6 +95,7 @@ void bt_grandma::create(string s)
 	center = ((TCompTransform*)own_transform)->position;
 	character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	last_time_player_saw = 0;
+	last_time = delta_time_close_attack;
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = PxVec3(0, 0, 0);
 	player = CEntityManager::get().getByName("Player");
@@ -108,6 +113,7 @@ void bt_grandma::create(string s)
 	hurt_event = false;
 	player_viewed_sensor = false;
 	player_previously_lost = false;
+	initial_attack = false;
 	see_player = false;
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -118,7 +124,7 @@ void bt_grandma::create(string s)
 	tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
-	slot = attacker_slots::UNASIGNATED;
+	slot = attacker_slots::NO_SLOT;
 	lastNumNeedlesViewed = 0;
 }
 
@@ -268,7 +274,7 @@ int bt_grandma::actionSearchPoint()
 
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(center, radius, ((TCompTransform*)own_transform)->position);
 	if (V3DISTANCE(rand_point, previous_point_search) < 1.3){
-		rand_point = center;
+		rand_point = XMVectorSet(XMVectorGetX(center), XMVectorGetY(((TCompTransform*)own_transform)->position), XMVectorGetZ(center), 0);
 	}
 	previous_point_search = rand_point;
 	mov_direction = PxVec3(0, 0, 0);
@@ -359,24 +365,143 @@ int bt_grandma::actionLookAround()
 	bool aux_on_enter = on_enter;
 	jump = false;
 	time_searching_player += CApp::get().delta_time;
-	//Tratamos de evitar cambios demasiado repentinos de ruta
-	if (on_enter){
-		((TCompSkeleton*)(((CEntity*)entity)->get<TCompSkeleton>()))->loopAnimation(1);
+//Tratamos de evitar cambios demasiado repentinos de ruta
+if (on_enter){
+	((TCompSkeleton*)(((CEntity*)entity)->get<TCompSkeleton>()))->loopAnimation(1);
+	CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
+	find_path_time = state_time;
+	ind_path = 0;
+}
+else{
+	if ((state_time - find_path_time) > 1.f){
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
-		ind_path = 0;
 	}
-	else{
-		if ((state_time - find_path_time) > 1.f){
-			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
-			find_path_time = state_time;
+}
+
+if (path.size() > 0){
+	if (ind_path < path.size()){
+		chasePoint(((TCompTransform*)own_transform), path[ind_path]);
+		if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
+			ind_path++;
+			return STAY;
+		}
+		else{
+			return STAY;
 		}
 	}
+	else{
+		last_look_direction = look_direction;
+		return LEAVE;
+	}
+}
+else{
+	return LEAVE;
+}
+}
 
+//Takes a roll, attacker or taunter and a poisition to go
+int bt_grandma::actionSelectRole()
+{
+	time_searching_player = 0;
+	if ((V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position))<max_range_role){
+		aimanager::get().setEnemyRol(this);
+		if (rol == role::ATTACKER){
+			if (slot == attacker_slots::NORTH){
+				slot_position =  ((TCompTransform*)player_transform)->getFront() * max_distance_to_attack;
+			}
+			else if (slot == attacker_slots::WEST){
+				slot_position = ((TCompTransform*)player_transform)->getLeft() * max_distance_to_attack;
+			}
+			else if (slot == attacker_slots::EAST){
+				slot_position = ((TCompTransform*)player_transform)->getLeft()*-1.f * max_distance_to_attack;
+			}
+		}
+		else if (rol == role::TAUNTER){
+			slot_position = (((TCompTransform*)player_transform)->position - ((TCompTransform*)own_transform)->position);
+			slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
+		}
+	}
+	return LEAVE;
+}
+
+//Go to his position
+int bt_grandma::actionChaseRoleDistance()
+{
+	TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = player_transform;
+
+	if (!findPlayer())
+		wander_target = last_point_player_saw;
+	else {
+		wander_target = p_transform->position;
+	}
+
+	if (on_enter){
+		ind_path = 0;
+	}
+
+	
+	if (V3DISTANCE(m_transform->position, p_transform->position) < 4) {
+		return LEAVE;
+	}
+
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
-			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
+			chasePoint(m_transform, path[ind_path]);
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+				ind_path++;
+				return LEAVE;
+			}
+			else{
+				return STAY;
+			}
+		}
+		else{
+			return LEAVE;
+		}
+	}
+	else{
+		return LEAVE;
+	}
+}
+
+//First attack
+int bt_grandma::actionInitialAttack()
+{
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+	initial_attack = false;
+	((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+	if (state_time < 2)
+		return STAY;
+	else
+		return LEAVE;
+}
+
+//Move step by step to the roll position (leave on reach or lost)
+int bt_grandma::actionSituate()
+{
+	TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = player_transform;
+
+	wander_target = p_transform->position + slot_position;
+
+	if (on_enter){
+		ind_path = 0;
+	}
+
+	if (V3DISTANCE(m_transform->position, wander_target) < 2) {
+		return LEAVE;
+	}
+
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (path.size() > 0){
+		if (ind_path < path.size()){
+			chasePoint(m_transform, path[ind_path]);
+			XMVECTOR prueba = m_transform->position;
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
 				ind_path++;
 				return STAY;
 			}
@@ -385,7 +510,6 @@ int bt_grandma::actionLookAround()
 			}
 		}
 		else{
-			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}
@@ -394,78 +518,39 @@ int bt_grandma::actionLookAround()
 	}
 }
 
-//Takes a roll, attacker or taunter and a poisition to go
-int bt_grandma::actionSelectRole()
-{
-	time_searching_player = 0;
-	aimanager::get().getEnemyRol(this);
-	if (slot == attacker_slots::NORTH){
-		slot_position=player
-	}
-	return LEAVE;
-}
-
-//Go to his position
-int bt_grandma::actionChaseRoleDistance()
-{
-	wander_target = last_point_player_saw;
-	if (on_enter){
-		//CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, wander_target, path);
-		ind_path = 0;
-		/*if (path.size() > 0){
-			return STAY;
-		}else{
-			return LEAVE;
-		}*/
-	}
-
-	CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, wander_target, path);
-	if (path.size() > 0){
-		if (ind_path < path.size()){
-			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-			XMVECTOR prueba = ((TCompTransform*)own_transform)->position;
-			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
-				ind_path++;
-				return STAY;
-			}else{
-				return STAY;
-			}
-		}else{
-			return LEAVE;
-		}
-	}else{
-		return LEAVE;
-	}
-}
-
-//First attack
-int bt_grandma::actionInitialAttack()
-{
-	return LEAVE;
-}
-
-//Move step by step to the roll position (leave on reach or lost)
-int bt_grandma::actionSituate()
-{
-	return LEAVE;
-}
-
 //
 int bt_grandma::actionNormalAttack()
 {
-	return LEAVE;
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+	((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+	if (state_time < 2)
+		return STAY;
+	else
+		return LEAVE;
 }
 
 //Play a Idle war animation
 int bt_grandma::actionIdleWar()
 {
-	return LEAVE;
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+	if (state_time < 2)
+		return STAY;
+	else
+		return LEAVE;
 }
 
 //Play a taunter routine
 int bt_grandma::actionTaunter()
 {
-	return LEAVE;
+	//Meter animacion
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+	if (state_time < 2)
+		return STAY;
+	else
+		return LEAVE;
 }
 
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
@@ -614,6 +699,7 @@ int bt_grandma::conditionplayer_lost()
 {
 	if ((last_time_player_saw) > max_time_player_lost){
 		player_previously_lost = true;
+		initial_attack = false;
 		return true;
 	}
 	return false;
@@ -646,14 +732,29 @@ int bt_grandma::conditionLook_for_timeout()
 //Check if the role is attacker and is close enought
 int bt_grandma::conditionis_attacker()
 {
-	return false;
-	//return is_attacker;
+	TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = player_transform;
+
+	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
+	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) < 4.f)){
+		return true;
+	}else{
+		return false;
+	}
 }
 
-//
+//Check if the player is in range and cold down time passed
 int bt_grandma::conditionnormal_attack()
 {
-	return false;
+	TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = player_transform;
+
+	if (((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+		last_time = timer;
+		return true;
+	}else{
+		return false;
+	}
 	//return normal_attack;
 }
 
@@ -712,22 +813,40 @@ int bt_grandma::conditioncan_reach_needle()
 //Check if the role is taunter and is close enought
 int bt_grandma::conditionis_taunter()
 {
-	return false;
+	float distance = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+	if ((rol == role::TAUNTER) && (distance < 4.f)){
+		return true;
+	}
+	else{
+		return false;
+	}
 	//return is_taunter;
 }
 
 //
 int bt_grandma::conditioninitial_attack()
 {
-	return false;
-	//return initial_attack;
+	TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = player_transform;
+
+	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.f))){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 //Check if it is too far from the target position
 int bt_grandma::conditionfar_from_target_pos()
 {
-	return false;
-	//return far_from_target_pos;
+	TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = player_transform;
+
+	if (V3DISTANCE(m_transform->position, p_transform->position + slot_position) > 2.f){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 
@@ -836,7 +955,13 @@ void bt_grandma::update(float elapsed){
 	if (findPlayer()){
 		last_point_player_saw = ((TCompTransform*)player_transform)->position;
 		last_time_player_saw = 0;
-	}
+	}/*else{
+		float prueba=V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+		if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
+			if (rol == role::ATTACKER)
+				aimanager::get().RemoveEnemyAttacker(this);
+		}
+	}*/
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 	this->recalc(elapsed);
 }
@@ -910,4 +1035,12 @@ void bt_grandma::setAttackerSlot(int s){
 	}
 }
 
+float bt_grandma::getDistanceToPlayer(){
+	return V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+}
+
+
+void bt_grandma::drawdebug() {
+	font.print3D(wander_target, "Destino");
+}
 
