@@ -405,10 +405,9 @@
     <ClInclude Include="ragdoll_manager.h">
       <Filter>skeleton</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="components\comp_sensor_distance_player.h">
       <Filter>components\ai\enemies\sensors</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="render\blur_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
@@ -417,7 +416,44 @@
     </ClInclude>
     <ClInclude Include="render\ssao_step.h">
       <Filter>render\postpro</Filter>
->>>>>>> 4dbf661ea76fb004a90397d910c2b94fffa77be5
+    </ClInclude>
+    <ClInclude Include="render\chromatic_aberration_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\glow_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="render\all_post_process_effects.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_sensor_tied.h">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="render\culling.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\bass.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\sound_manager.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\moving_platform.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\prismatic_joint.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="render\underwater_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+<<<<<<< .merge_file_a22976
+    <ClInclude Include="components\comp_spot_light.h">
+      <Filter>components\render</Filter>
+=======
+    <ClInclude Include="ai\hinge_joint.h">
+      <Filter>ai\logic</Filter>
+>>>>>>> .merge_file_a02664
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -730,10 +766,9 @@
     <ClCompile Include="ragdoll_manager.cpp">
       <Filter>skeleton</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="components\comp_sensor_distance_player.cpp">
       <Filter>components\ai\enemies\sensors</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="components\comp_point_light.cpp">
       <Filter>components\render</Filter>
     </ClCompile>
@@ -748,7 +783,47 @@
     </ClCompile>
     <ClCompile Include="render\ssao_step.cpp">
       <Filter>render\postpro</Filter>
->>>>>>> 4dbf661ea76fb004a90397d910c2b94fffa77be5
+    </ClCompile>
+    <ClCompile Include="render\chromatic_aberration_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="render\glow_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_sensor_tied.cpp">
+      <Filter>components\ai\enemies\sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_rope.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_distance_joint.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="render\culling.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\sound_manager.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\moving_platform.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\prismatic_joint.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_platform_path.cpp">
+      <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="render\underwater_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+<<<<<<< .merge_file_a22976
+    <ClCompile Include="components\comp_spot_light.cpp">
+      <Filter>components\render</Filter>
+=======
+    <ClCompile Include="ai\hinge_joint.cpp">
+      <Filter>ai\logic</Filter>
+>>>>>>> .merge_file_a02664
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -838,6 +913,9 @@
     </Filter>
     <Filter Include="render\postpro">
       <UniqueIdentifier>{59d3f46a-ca33-4aab-aee3-77703d5581c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{cf303c48-915a-4b05-8758-0eaf69bf6d35}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

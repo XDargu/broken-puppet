@@ -3,7 +3,6 @@
 #include "camera.h"
 #include "render/render_utils.h"
 #include "components/comp_point_light.h"
-#include "components/comp_spot_light.h"
 #include "components/comp_shadows.h"
 
 using namespace DirectX;
@@ -423,16 +422,6 @@ void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slo
 	ctes_dir_light.uploadToGPU();
 }
 
-void activateSpotLight(const TCompSpotlight* spot_light, XMVECTOR light_pos, XMVECTOR light_dir, float radius, int slot) {
-	ctes_dir_light.activateInVS(slot);    // as set in the deferred.fx!!
-	ctes_dir_light.activateInPS(slot);    // as set in the deferred.fx!!
-	TCtesSpotLight *c = ctes_spot_light.get();
-	c->spot_light_color = spot_light->color;
-	c->spot_light_world_pos = light_pos;
-	c->spot_light_max_radius = radius;
-	c->spot_light_direction = light_dir;
-	ctes_spot_light.uploadToGPU();
-}
 
 // -----------------------------------------------------
 bool createGrid(CMesh& mesh, int nsamples) {

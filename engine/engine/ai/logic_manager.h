@@ -7,6 +7,7 @@
 #include "bot.h"
 #include "moving_platform.h"
 #include "prismatic_joint.h"
+#include "hinge_joint.h"
 #include "lua_vector.h"
 
 class CLogicManager
@@ -53,6 +54,7 @@ public:
 	CBot getBot(std::string name);
 	CMovingPlatform getMovingPlatform(std::string name);
 	CPrismaticJoint getPrismaticJoint(std::string name);
+	CHingeJoint getHingeJoint(std::string name);
 
 	void print(std::string text);
 	void help();

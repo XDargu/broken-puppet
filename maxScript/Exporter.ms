@@ -52,7 +52,7 @@ clearlistener()
 	expDiff = #()
 	
 	-- List of diffuses exported
-	expDNormal = #()
+	expNormal = #()
 	
 	-- List of UConstrait exported
 	expJoints = #()
@@ -564,6 +564,7 @@ clearlistener()
 		if export_materials == false then return 0
 		-- if is exported	
 		if (m.diffusemap == undefined) then return 0
+		if (m.bumpmap == undefined) then return 0
 		if (findItem expDiff m.diffusemap.filename) != 0 then return 0
 		if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
 		
@@ -573,12 +574,19 @@ clearlistener()
 		if classof m != Standardmaterial then throw( "No se importar materiales que no sean std" )
 		local diff_name = importTexture m.diffusemap.filename
 		local normal_name = importTexture m.bumpmap.normal_map.filename
+		local emissive_name = ""
+		
+		if (m.selfIllumMap != undefined) then (
+			emissive_name = importTexture m.selfIllumMap.filename
+		)
+		
 		--	importTexture m.normalmap.filename	
 		-- Exportar la definicion del material a un xml
 		local out_filename = out_path + "materials\\" + m.name + ".xml"
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
-		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\"/>\n" m.name diff_name normal_name to:mfs
+		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name emissive_name to:mfs
+		print ("Exported material: " + (m.name as string))
 		close mfs
 	)
 		
@@ -936,7 +944,9 @@ clearlistener()
 				validAttributes = false;
 			)		
 		)	
-		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes)
+		-- The collision mesh has no render
+		local isNotCollisionMesh = not(isProperty  obj.baseObject #collisionMesh)
+		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes and isNotCollisionMesh)
 	)
 
 	fn validateObjExported obj = (

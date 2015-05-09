@@ -447,8 +447,8 @@
     <ClInclude Include="render\underwater_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_spot_light.h">
-      <Filter>components\render</Filter>
+    <ClInclude Include="ai\hinge_joint.h">
+      <Filter>ai\logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -812,8 +812,8 @@
     <ClCompile Include="render\underwater_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
-    <ClCompile Include="components\comp_spot_light.cpp">
-      <Filter>components\render</Filter>
+    <ClCompile Include="ai\hinge_joint.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

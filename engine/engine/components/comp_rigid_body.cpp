@@ -75,6 +75,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (capsule_c)
 		col = capsule_c;
 
+
 	XASSERT(col != nullptr, "TRigidBody requieres a TCollider or TMeshCollider component");
 
 	rigidBody = physx::PxCreateDynamic(
