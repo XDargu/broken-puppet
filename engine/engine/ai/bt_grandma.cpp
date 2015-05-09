@@ -12,11 +12,11 @@ const int max_bf_posibilities = 7;
 const float max_dist_reach_needle = 1.8f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
-const float max_distance_to_attack = 1.f;
+const float max_distance_to_attack = 1.5f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
-const float delta_time_close_attack = 1.3f;
+const float delta_time_close_attack = 2.f;
 const float distance_change_way_point = 0.55f;
 const float force_large_impact = 10000.f;
 const float force_medium_impact = 6500.f;
@@ -404,11 +404,11 @@ else{
 int bt_grandma::actionSelectRole()
 {
 	time_searching_player = 0;
-	if ((V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position))<max_range_role){
+	if ((V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position))<4.f){
 		aimanager::get().setEnemyRol(this);
 		if (rol == role::ATTACKER){
 			if (slot == attacker_slots::NORTH){
-				slot_position =  ((TCompTransform*)player_transform)->getFront() * max_distance_to_attack;
+				slot_position =  ((TCompTransform*)player_transform)->getFront()* -1.f * max_distance_to_attack;
 			}
 			else if (slot == attacker_slots::WEST){
 				slot_position = ((TCompTransform*)player_transform)->getLeft() * max_distance_to_attack;
@@ -416,8 +416,7 @@ int bt_grandma::actionSelectRole()
 			else if (slot == attacker_slots::EAST){
 				slot_position = ((TCompTransform*)player_transform)->getLeft()*-1.f * max_distance_to_attack;
 			}
-		}
-		else if (rol == role::TAUNTER){
+		}else if (rol == role::TAUNTER){
 			slot_position = (((TCompTransform*)player_transform)->position - ((TCompTransform*)own_transform)->position);
 			slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
 		}
@@ -441,8 +440,8 @@ int bt_grandma::actionChaseRoleDistance()
 		ind_path = 0;
 	}
 
-	
-	if (V3DISTANCE(m_transform->position, p_transform->position) < 4) {
+	float distance = V3DISTANCE(m_transform->position, p_transform->position);
+	if (distance < 4) {
 		return LEAVE;
 	}
 
@@ -452,7 +451,7 @@ int bt_grandma::actionChaseRoleDistance()
 			chasePoint(m_transform, path[ind_path]);
 			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
 				ind_path++;
-				return LEAVE;
+				return STAY;
 			}
 			else{
 				return STAY;
@@ -472,7 +471,7 @@ int bt_grandma::actionInitialAttack()
 {
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
-	initial_attack = false;
+	initial_attack = true;
 	((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
 	if (state_time < 2)
 		return STAY;
@@ -492,7 +491,8 @@ int bt_grandma::actionSituate()
 		ind_path = 0;
 	}
 
-	if (V3DISTANCE(m_transform->position, wander_target) < 2) {
+	float distance=V3DISTANCE(m_transform->position, wander_target);
+	if (distance < 1.f) {
 		return LEAVE;
 	}
 
@@ -842,7 +842,8 @@ int bt_grandma::conditionfar_from_target_pos()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (V3DISTANCE(m_transform->position, p_transform->position + slot_position) > 2.f){
+	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
+	if (V3DISTANCE(m_transform->position, p_transform->position + slot_position) > 1.f){
 		return true;
 	}else{
 		return false;
@@ -1033,6 +1034,14 @@ void bt_grandma::setAttackerSlot(int s){
 	}else if (s == 3){
 		slot = attacker_slots::WEST;
 	}
+}
+
+int bt_grandma::getAttackerSlot(){
+	return slot;
+}
+
+int bt_grandma::getRol(){
+	return rol;
 }
 
 float bt_grandma::getDistanceToPlayer(){

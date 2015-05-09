@@ -195,7 +195,9 @@ public:
 	bool findPlayer();
 	bool isAngry();
 	void setRol(int r);
+	int getRol();
 	void setAttackerSlot(int s);
+	int getAttackerSlot();
 	float getDistanceToPlayer();
 
 	void drawdebug();

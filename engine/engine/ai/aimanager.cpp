@@ -121,31 +121,68 @@ void aimanager::warningPlayerFound(aicontroller* me){
 
 void aimanager::setEnemyRol(aicontroller* enemy){
 	bool free_slot = false;
+	bool already_attacker = false;
+	bool sustitute_attacker = false;
+	bool no_reasignated = false;
 	bt_grandma* bt_enemy = (bt_grandma*)enemy;
 	int ind_asignated = -1;
+	int ind_sustitution = -1;
+	int ind_my_already = -1;
 	if (attackers_rol.size() < max_size_attackers){
-		attackers_rol.push_back(enemy);
-		bt_enemy->setRol(1);
+		for (int i = 0; i < attackers_rol.size(); ++i){
+			if (attackers_rol[i] == enemy){
+				ind_my_already = i;
+				already_attacker = true;
+			}
+		}
+		if (!already_attacker){
+			attackers_rol.push_back(enemy);
+			bt_enemy->setRol(1);
+			free_slot = true;
+		}
 		free_slot = true;
 	}else{
-		for (int i = 0; i < attackers_rol.size(); ++i){
-			bt_grandma* bot_bt = (bt_grandma*)attackers_rol[i];
-			if (attackers_rol[i] != enemy){
-				if (bt_enemy->getDistanceToPlayer() < bot_bt->getDistanceToPlayer()){
-					RemoveEnemyAttacker(attackers_rol[i]);
-					attackers_rol.push_back(enemy);
-					bt_enemy->setRol(1);
-					free_slot = true;
-					break;
+		//Comprobar si es atacante, de serlo, no cambiar nada. Tendré que conseguir devolver mi slot actual
+		int role = bt_enemy->getRol();
+		if ( role == 2){
+			for (int i = 0; i < attackers_rol.size(); ++i){
+				bt_grandma* bot_bt = (bt_grandma*)attackers_rol[i];
+				if (attackers_rol[i] != enemy){
+					if (bt_enemy->getDistanceToPlayer() < bot_bt->getDistanceToPlayer()){
+						//RemoveEnemyAttacker(attackers_rol[i]);
+						//NOTA quizas tenga que poner el que sustituyo como taunter
+						attackers_rol[i] = enemy;
+						ind_my_already = i;
+						bt_enemy->setRol(1);
+						sustitute_attacker = true;
+						free_slot = true;
+						break;
+					}
 				}
 			}
+			//Aqui si sustitute_attacker==false tenemos que meter al enemy en taunter
+			if (!sustitute_attacker){
+				bt_enemy->setRol(2);
+				free_slot = false;
+			}
+		}else{
+			free_slot = true;
+			no_reasignated = true;
 		}
 	}
 
 	if (free_slot){
 		//Attacker role 
 		bt_enemy->setRol(1);
-		ind_asignated = attackers_rol.size() - 1;
+		if (sustitute_attacker)
+			ind_asignated = ind_my_already;
+		else if (no_reasignated)
+			ind_asignated = bt_enemy->getAttackerSlot()-1;
+		else if (!already_attacker)
+			ind_asignated = attackers_rol.size() - 1;
+		else
+			ind_asignated = ind_my_already;
+
 		if (ind_asignated == 0){
 			//North slot
 			bt_enemy->setAttackerSlot(1);
@@ -162,32 +199,6 @@ void aimanager::setEnemyRol(aicontroller* enemy){
 		//Taunter role
 		bt_enemy->setRol(2);
 	}
-	/*bool free_slot = false;
-	int ind_asignated = -1;
-	bt_grandma* bt_enemy = (bt_grandma*)enemy;
-	if (attackers_rol.size() < max_size_attackers){
-		attackers_rol.push_back(enemy);
-		free_slot = true;
-	}
-
-	if (free_slot){
-		//Attacker role 
-		bt_enemy->setRol(1);
-		ind_asignated = attackers_rol.size() - 1;
-		if (ind_asignated == 0){
-			//North slot
-			bt_enemy->setAttackerSlot(1);
-		}else if (ind_asignated == 1){
-			//East slot
-			bt_enemy->setAttackerSlot(2);
-		}else if(ind_asignated == 2){
-			//West slot
-			bt_enemy->setAttackerSlot(3);
-		}
-	}else{
-		//Taunter role
-		bt_enemy->setRol(2);
-	}*/
 }
 
 void aimanager::RemoveEnemyAttacker(aicontroller* enemy){
