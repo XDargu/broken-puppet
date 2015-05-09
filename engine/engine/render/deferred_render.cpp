@@ -71,7 +71,7 @@ void CDeferredRender::generateLightBuffer() {
 
 	if (1) {
 		CTraceScoped scope("dir_lights");
-		render_techniques_manager.getByName("deferred_spot_lights")->activate();
+		render_techniques_manager.getByName("deferred_dir_lights")->activate();
 		getObjManager<TCompShadows>()->onAll(&TCompShadows::draw);
 	}
 
