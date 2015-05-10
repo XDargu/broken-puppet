@@ -217,7 +217,7 @@ void PSGBuffer(
 
   // Convert the range 0...1 from the texture to range -1 ..1 
   float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
-	  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
+  float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
 
 	  //wnormal_per_pixel = in_tangent;
 
@@ -242,7 +242,7 @@ void PSGBuffer(
   // 
   //acc_light = getShadowAt(input.wPos);
 
-  float4 emis = txEmissive.Sample(samWrapLinear, input.UV) * 0.5; 
+  float4 emis = txEmissive.Sample(samWrapLinear, input.UV); 
   acc_light = float4(emis.xyz, 0);
   
   //acc_light *= diffuse_amount2;
@@ -266,7 +266,7 @@ float3 getWorldCoords( float2 screen_coords, float depth ) {
 float getSpecular(float3 wPos, float3 L, float3 N) {
   float3 E = normalize(cameraWorldPos.xyz - wPos);
   float3 H = normalize(L + E);
-  float  spec_amount = pow(saturate(dot(H, N)), 20);    // 20 should come from a texture
+  float  spec_amount = pow(saturate(dot(H, N)), 50);    // 20 should come from a texture
   return spec_amount;
 }
 
@@ -292,7 +292,7 @@ float4 PSPointLights(
   float spec_amount = getSpecular(wPos, L, N);
 
   // Attenuation based on distance:   1 - [( r - rmin ) / ( rmax - rmin )]
-  float  att_factor = saturate((plight_max_radius - distance_to_light) * plight_inv_delta_radius);
+  float  att_factor = saturate((plight_max_radius -  distance_to_light) * plight_inv_delta_radius * 0.4);
 
   // Save spec amount in the alpha channel
   float4 output = plight_color * diffuse_amount;
@@ -379,9 +379,11 @@ float4 PSResolve(
 	float4 albedo = txDiffuse.Load(ss_load_coords);
 	float3 N = -txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 	float4 diffuse = txAccLight.Load(ss_load_coords);
-	float4 env = txEnvironment.Sample(samWrapLinear, N);
+	//float4 env = txEnvironment.Sample(samWrapLinear, N);
 
-	return (albedo * diffuse + diffuse.a) * 0.9 + env* 0.1;
+	float ambient_val = 0.15;
+	float ambient_color = float4(0.98, 0.85, 0.8, 0);
+	return (albedo * diffuse + diffuse.a) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 

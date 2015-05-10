@@ -1,12 +1,1 @@
-<!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
-<std_material name="Standardmaterial"
-diffuse="stones2_diffuse"
-ao="Steel_Worn_00_A"
-normal="stones2_normal"
-specular="black"
-glossiness="Steel_Worn_00_R"
-emissive="black"
-cubemap="desertcube1024"
-cubemap2="sunsetcube1024"
-tech="deferred_gbuffer"
-/>
+<std_material name="Material #2" diffuse="Joint_Platform3_diffuse" normal="Joint_Platform3_normal" emissive="Joint_Platform3_emissive"/>

@@ -128,14 +128,27 @@ end
 
 function onSwitchReleased_InterruptorTirarAgua(who)
 	print(tostring(who) .. "Interruptor pulsado");
-	logicManager:changeWaterLevel(-3.58394,0.015);
+	--logicManager:changeWaterLevel(-3.58394,0.015);
 
 	--local m_platform = logicManager:getMovingPlatform("plataforma_madera");
 	--m_platform:start(0.001);
 
 end
 
+
+					-- INTERMEDIATE ROOM --
+
+function onSwitchPressed_PushIntIntermediate(who)
+	print(tostring(who) .. "Interruptor pulsado");
+	m_minutero = logicManager:getHingeJoint("armarioGatingClock");
+	m_minutero:setLimit(0);
+	m_minutero:setMotor(-2, 60000);
+end
+
+
 					-- CLOCK ROOM --
+
+-- Puzzle Atrezzo
 
 function onTriggerEnter_TriggerClock(who)
 	print(tostring(who) .. " ha entrado en el trigger");
@@ -170,6 +183,57 @@ function onSwitchPressed_InterruptorTirarReloj(who)
 
 	m_puerta = logicManager:getHingeJoint("puertaIzda");
 	m_puerta:setMotor(-1, 1000);
+end
+
+-- Puzzle Machaca Abuelas
+
+function onTimerEnd_grandma_crasher01Restore()
+	local crasher = logicManager:getPrismaticJoint("grandma_crasher01")
+	crasher:setLinearLimit(2.4, 10000000, 10000000)
+	print("Timer ends")
+end
+
+
+function onTriggerEnter_grandma_crasher01_Trigger(who)
+	print(tostring(who) .. " ha entrado en el trigger")
+	local crasher = logicManager:getPrismaticJoint("grandma_crasher01")
+	crasher:setLinearLimit(1000, 0, 0)
+
+	logicManager:setTimer("grandma_crasher01Restore", 3)
+end
+
+
+
+
+function onTimerEnd_grandma_crasher02Restore()
+	local crasher = logicManager:getPrismaticJoint("grandma_crasher02")
+	crasher:setLinearLimit(2.4, 10000000, 10000000)
+	print("Timer ends")
+end
+
+
+function onTriggerEnter_grandma_crasher02_Trigger(who)
+	print(tostring(who) .. " ha entrado en el trigger")
+	local crasher = logicManager:getPrismaticJoint("grandma_crasher02")
+	crasher:setLinearLimit(1000, 0, 0)
+
+	logicManager:setTimer("grandma_crasher02Restore", 3)
+end
+
+
+function onTimerEnd_grandma_crasher03Restore()
+	local crasher = logicManager:getPrismaticJoint("grandma_crasher03")
+	crasher:setLinearLimit(2.4, 10000000, 10000000)
+	print("Timer ends")
+end
+
+
+function onTriggerEnter_grandma_crasher03_Trigger(who)
+	print(tostring(who) .. " ha entrado en el trigger")
+	local crasher = logicManager:getPrismaticJoint("grandma_crasher03")
+	crasher:setLinearLimit(1000, 0, 0)
+
+	logicManager:setTimer("grandma_crasher03Restore", 3)
 end
 
 

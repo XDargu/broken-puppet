@@ -2,6 +2,7 @@
 #define INC_COMP_SWITCH_PUSH_CONTROLLER_H_
 
 #include "base_component.h"
+#include "ai\logic_manager.h"
 
 /*****************************************************
 	This Switch needs a joint with one RigidActor.
@@ -87,11 +88,11 @@ struct TCompSwitchPushController : TBaseComponent{
 		CALL LUA FUNTCIONS
 	 **************************/
 	void onPress(){
-		int i = 0;
+		CLogicManager::get().onSwitchPressed(CHandle(this).getOwner());
 	}
 
 	void onLeave(){
-		int i = 0;
+		CLogicManager::get().onSwitchReleased(CHandle(this).getOwner());
 	}
 
 };

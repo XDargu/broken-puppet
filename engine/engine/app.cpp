@@ -422,7 +422,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("skin_basic");
 		texture_manager.reload("Foco_albedo");
 		texture_manager.reload("Foco_normal");*/
-		render_techniques_manager.reload("underwater");		
+		//render_techniques_manager.reload("underwater");		
+		render_techniques_manager.reload("deferred_point_lights");
 	}
 
 	// Water level
