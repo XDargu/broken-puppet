@@ -70,7 +70,7 @@ void TCompRagdoll::setActive(bool active) {
 		PxU32 notCollide = FilterGroup::ePLAYER;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
-			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, active);
+			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 			if (e->hasTag("player")){
 				it.second->getShapes(&collider, 1);
 				setupFiltering(collider, myMask, notCollide);
@@ -80,13 +80,14 @@ void TCompRagdoll::setActive(bool active) {
 		PxU32 myMask = FilterGroup::eNON_COLLISION;
 		PxU32 notCollide = FilterGroup::eACTOR
 			| FilterGroup::eACTOR_NON_COLLISION
+			| FilterGroup::ePLAYER
 			| FilterGroup::eENEMY
 			| FilterGroup::eENEMY_RG
 			| FilterGroup::eLEVEL
 			| FilterGroup::eNON_COLLISION;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
-			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, !active);
+			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			if (e->hasTag("player")){
 				it.second->getShapes(&collider, 1);
 				setupFiltering(collider, myMask, notCollide);
