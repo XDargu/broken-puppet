@@ -18,7 +18,7 @@ const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 6.f;
 const float distance_change_way_point = 0.55f;
-const float force_large_impact = 10000.f;
+const float force_large_impact = 3000.f;
 const float force_medium_impact = 2000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
@@ -124,6 +124,7 @@ void bt_grandma::create(string s)
 	player_previously_lost = false;
 	initial_attack = false;
 	see_player = false;
+	animation_done = false;
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	previous_point_search = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -296,24 +297,32 @@ int bt_grandma::actionSelectNeedleToTake()
 int bt_grandma::actionCutRope()
 {
 	if (on_enter) {
-		playAnimationIfNotPlaying(7);
+		playAnimationIfNotPlaying(8);
 	}
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
 
-	
-	if (state_time >= getAnimationDuration(7)) {
-		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
-
-		((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-		CEntityManager::get().remove(CHandle(target_rope).getOwner());
-		CEntityManager::get().remove(CHandle(target_needle).getOwner());
-		needle_to_take = false;
-		needle_is_valid = false;
-
-		return LEAVE;
+	if (state_time >= getAnimationDuration(8)) {
+		//stopAllAnimations();
+		if (!animation_done){
+			CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
+			CEntityManager::get().remove(CHandle(target_rope).getOwner());
+			animation_done = true;
+		}
+		playAnimationIfNotPlaying(7);
+		int duration = (getAnimationDuration(8) + getAnimationDuration(7));
+		if (state_time >= duration) {
+			CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
+			((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
+			CEntityManager::get().remove(CHandle(target_needle).getOwner());
+			needle_to_take = false;
+			needle_is_valid = false;
+			animation_done = false;
+			return LEAVE;
+		}else{
+			return STAY;
+		}
 	}
 	else
 		return STAY;
@@ -834,6 +843,8 @@ int bt_grandma::actionTiedEvent()
 		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		tied_event = false;
 		event_detected = false;
+		is_angry = true;
+		have_to_warcry = true;
 		return LEAVE;
 	}
 	
@@ -1176,7 +1187,19 @@ void bt_grandma::hurtSensor(float damage){
 		have_to_warcry = true;
 	is_angry = true;
 	if (damage >= force_large_impact){
-		//Muerte!!
+		TCompRagdoll* m_ragdoll = enemy_ragdoll;
+		TCompTransform* m_transform = own_transform;
+		TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
+		XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
+		XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
+		CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+		CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+		CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
+		ragdoll_aabb->setIdentityMinMax(min, max);
+		m_ragdoll->setActive(true);
+		CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
+		stopAllAnimations();
+
 	}else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		is_ragdoll = true;
 	}else if (damage < force_medium_impact){

@@ -45,6 +45,7 @@ private:
 	bool hurt_event;
 	bool see_player;
 	bool initial_attack;
+	bool animation_done;
 	int last_anim_id;
 
 	//Bool ñapa a quitar en un futuro -----
