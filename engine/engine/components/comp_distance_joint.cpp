@@ -75,11 +75,16 @@ void TCompDistanceJoint::awakeActors() {
 
 	joint->getActors(a1, a2);
 	// Call the addForce method to awake the bodies, if dynamic
-	if (a1 && a1->isRigidDynamic()) {
-		((physx::PxRigidDynamic*)a1)->wakeUp();
+	if (a1) {
+		if (a1->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a1)->wakeUp();
+		}
 	}
-	if (a2 && a2->isRigidDynamic()) {
-		((physx::PxRigidDynamic*)a2)->wakeUp();
+	if (a2)
+	{
+		if (a2->isRigidDynamic()) {
+			((physx::PxRigidDynamic*)a2)->wakeUp();
+		}
 	}
 }
 

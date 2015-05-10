@@ -327,26 +327,28 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
 	camera_controller->offset = Physics.XMVECTORToPxVec3(XMVectorLerp(Physics.PxVec3ToXMVECTOR(camera_controller->offset), XMVectorSet(0.56f, -0.22f, 1.07f, 0), 0.05f));
 
-	CEntity* rope_entity = current_rope_entity;
-	TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
-	TCompRope* rope = rope_entity->get<TCompRope>();
-	TCompSkeleton* skeleton = comp_skeleton;
+	if (current_rope_entity.isValid()) {
+		CEntity* rope_entity = current_rope_entity;
+		TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
+		TCompRope* rope = rope_entity->get<TCompRope>();
+		TCompSkeleton* skeleton = comp_skeleton;
 
-	rope->pos_2 = skeleton->getPositionOfBone(89);
+		rope->pos_2 = skeleton->getPositionOfBone(89);
 
-	if (joint) {
-		// -------------- Shorten the distance joint
-		float oldDistance = sqrt(joint->joint->getDistance());
-		if (oldDistance > 0.1f) {
-			joint->joint->setMaxDistance(oldDistance - 10.f * elapsed);
-			rope->max_distance = oldDistance - 10.f * elapsed;
+		if (joint) {
+			// -------------- Shorten the distance joint
+			float oldDistance = sqrt(joint->joint->getDistance());
+			if (oldDistance > 0.1f) {
+				joint->joint->setMaxDistance(oldDistance - 1000.f * elapsed);
+				rope->max_distance = oldDistance - 1000.f * elapsed;
+			}
+			else {
+				joint->joint->setMaxDistance(0);
+				rope->max_distance = 0;
+			}
+
+			joint->awakeActors();
 		}
-		else {
-			joint->joint->setMaxDistance(0);
-			rope->max_distance = 0;
-		}
-
-		joint->awakeActors();
 	}
 
 	// Animation ends

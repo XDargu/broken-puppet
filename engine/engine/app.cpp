@@ -92,6 +92,7 @@ CMesh		 intersectsWiredCube;
 CMesh		 rope;
 
 CHandle		 life;
+CHandle		 h_player;
 
 CHandle		  activeCamera;
 CFont         font;
@@ -281,10 +282,10 @@ bool CApp::create() {
 	//loadScene("data/scenes/my_file-backup.xml");
 	
 
-	//sm.addMusicTrack(0, "plug in baby.mp3");
+	sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 
-	//sm.playTrack(0);
+	sm.playTrack(0);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -632,11 +633,12 @@ void CApp::render() {
 	TwDraw();
 #endif
 
-	/*std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)entity_manager.getByName("Player"))->get<TCompLife>())->life);
+	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life);
 	font.print(15, 15, life_text.c_str());
 
-	std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
+	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
+	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -972,6 +974,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();
+
+	h_player = entity_manager.getByName("Player");
 }
 
 void CApp::loadPrefab(std::string prefab_name) {
