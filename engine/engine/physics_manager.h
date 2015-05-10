@@ -20,6 +20,7 @@ struct FilterGroup
 		eLEVEL =     (1 << 5),
 		ePLAYER_RG = (1 << 6),
 		eENEMY_RG  = (1 << 7),
+		eACTOR_NON_COLLISION = (1 << 8),
 	};
 };
 
