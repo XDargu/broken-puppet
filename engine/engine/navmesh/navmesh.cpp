@@ -45,7 +45,7 @@ void CNavmesh::build() {
 	config.minRegionArea = 1;
 	config.mergeRegionArea = 1;
 	config.maxEdgeLen = 10;
-	config.maxSimplificationError = 2.0f;
+	config.maxSimplificationError = 3.f;
 	config.maxVertsPerPoly = 6;
 	config.detailSampleDist = 1.0f;
 	config.detailSampleMaxError = 0.1f;
@@ -77,7 +77,7 @@ dtNavMesh* CNavmesh::create(const rcConfig& cfg) {
 		m_cfg.walkableSlopeAngle = cfg.walkableSlopeAngle;
 		m_cfg.walkableHeight = (int)ceilf(cfg.walkableHeight / m_cfg.ch);
 		m_cfg.walkableClimb = (int)floorf(cfg.walkableClimb / m_cfg.ch * 0.3f);
-		m_cfg.walkableRadius = (int)ceilf(cfg.walkableRadius / m_cfg.cs * 0.5f);
+		m_cfg.walkableRadius = (int)ceilf(cfg.walkableRadius / m_cfg.cs * 0.2f);
 		m_cfg.maxEdgeLen = (int)(cfg.maxEdgeLen / cfg.cs);
 		m_cfg.maxSimplificationError = cfg.maxSimplificationError;
 		m_cfg.minRegionArea = (int)rcSqr(cfg.minRegionArea);		// Note: area = size*size
