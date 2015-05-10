@@ -451,7 +451,7 @@ VS_TEXTURED_OUTPUT vin
 	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
 	float3 N = normalize(vin.wNormal.xyz);
 	float fresnel = 1 - dot(N, dir_to_eye);
-	fresnel = pow(fresnel, 4);
+	fresnel = pow(fresnel, 4) * 0.5;
 
 	float3 N_reflected = reflect(-dir_to_eye, N);
 	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
