@@ -45,7 +45,7 @@ void CNavmesh::build() {
 	config.minRegionArea = 1;
 	config.mergeRegionArea = 1;
 	config.maxEdgeLen = 10;
-	config.maxSimplificationError = 3.f;
+	config.maxSimplificationError = 2.f;
 	config.maxVertsPerPoly = 6;
 	config.detailSampleDist = 1.0f;
 	config.detailSampleMaxError = 0.1f;
