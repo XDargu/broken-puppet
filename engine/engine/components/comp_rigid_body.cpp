@@ -134,7 +134,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 
 		if (rigidBody->getGlobalPose().p.y < water_level) {
 			float volume = rigidBody->getMass() / density;
-			float water_density = 50;
+			float water_density = 500;
 			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
 			rigidBody->setLinearDamping(1);
 			rigidBody->setAngularDamping(0.5f);

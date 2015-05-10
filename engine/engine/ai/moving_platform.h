@@ -13,7 +13,7 @@ public:
 	~CMovingPlatform();
 
 	// LUA
-	void start();
+	void start(float velocity);
 	void stop();
 };
 

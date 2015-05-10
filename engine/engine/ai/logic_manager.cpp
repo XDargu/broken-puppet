@@ -2,6 +2,7 @@
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
+#include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -16,7 +17,19 @@ CLogicManager& CLogicManager::get() {
 	return logic_manager;
 }
 
-CLogicManager::CLogicManager() {}
+CLogicManager::CLogicManager() {
+
+}
+
+void CLogicManager::init()
+{
+	water_transform = CEntityManager::get().getByName("water");
+	if (water_transform.isValid()) {		
+		TCompTransform* water_t = ((CEntity*)water_transform)->get<TCompTransform>();
+		water_level_dest = XMVectorGetY(water_t->position);
+		lerp_water = 0.05f;
+	}
+}
 
 CLogicManager::~CLogicManager() {}
 
@@ -52,6 +65,27 @@ void CLogicManager::update(float elapsed) {
 		// Update the animation
 		it.update(elapsed);		
 	};
+
+	// Update water level
+	if (water_transform.isValid()) {
+		TCompTransform* water_t = ((CEntity*)water_transform)->get<TCompTransform>();
+		XMVECTOR water_dest = water_t->position;
+		water_dest = XMVectorSetY(water_dest, water_level_dest);
+		water_t->position = XMVectorLerp(water_t->position, water_dest, lerp_water);
+
+		// Ñapa hacer flotar
+		CHandle madera = ((CEntity*)CEntityManager::get().getByName("plataforma_madera"));
+		if (madera.isValid()){
+			CHandle rigid = ((CEntity*)madera)->get<TCompRigidBody>();
+			if (rigid.isValid()){
+				PxTransform aux_pos = ((TCompRigidBody*)rigid)->rigidBody->getGlobalPose();
+				aux_pos.p.y = XMVectorGetY(water_t->position);				
+				((TCompRigidBody*)rigid)->rigidBody->setKinematicTarget(aux_pos);
+			}
+		}
+
+
+	}
 
 	/*CErrorContext ce2("Updating keyframes", "");
 	// Update the keyframes
@@ -142,6 +176,12 @@ void CLogicManager::addRigidAnimation(CRigidAnimation animation) {
 
 void CLogicManager::clearAnimations() {
 	animations.clear();
+}
+
+void CLogicManager::changeWaterLevel(float pos1, float time)
+{
+	lerp_water = time;
+	water_level_dest = pos1;
 }
 
 /*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
@@ -262,6 +302,7 @@ void CLogicManager::bootLUA() {
 		.set("getPrismaticJoint", &CLogicManager::getPrismaticJoint)
 		.set("getHingeJoint", &CLogicManager::getHingeJoint)
 		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
+		.set("changeWaterLevel", (void (CLogicManager::*)(float, float)) &CLogicManager::changeWaterLevel)
 		.set("print", &CLogicManager::print)
 	;
 
@@ -286,7 +327,7 @@ void CLogicManager::bootLUA() {
 
 	// Moving platforms
 	SLB::Class<CMovingPlatform>("MovingPlatform")
-		.set("start", &CMovingPlatform::start)
+		.set("start", (void (CMovingPlatform::*)(float)) &CMovingPlatform::start)
 		.set("stop", &CMovingPlatform::stop)
 	;
 
@@ -349,7 +390,9 @@ CHingeJoint CLogicManager::getHingeJoint(std::string name) {
 }
 
 void CLogicManager::print(std::string text) {
+#ifdef _DEBUG
 	CConsole::get().print(text);
+#endif
 }
 
 void CLogicManager::help() {

@@ -130,13 +130,13 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				XASSERT(skel, "Invalid skeleton");
 				skel->uploadBonesToGPU();
 			}
-
+			std::string name = ((CEntity*)it->transform.getOwner())->getName();
 			// Activar la world del obj
 			setWorldMatrix(tmx->getWorld());
 
 			// Pintar la mesh:submesh del it
 			it->mesh->renderGroup(it->mesh_id);
-
+			
 			prev_it = it;
 			is_first = false;
 		}

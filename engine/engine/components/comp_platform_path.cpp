@@ -14,7 +14,7 @@ void TCompPlatformPath::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompPlatformPath::init(){
 
-	follow_line = true;
+	follow_line = false;
 
 	next_target = 0;
 	distance_enough = 0.5f;

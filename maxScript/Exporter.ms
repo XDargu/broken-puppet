@@ -564,17 +564,21 @@ clearlistener()
 		if export_materials == false then return 0
 		-- if is exported	
 		if (m.diffusemap == undefined) then return 0
-		if (m.bumpmap == undefined) then return 0
+		--if (m.bumpmap == undefined) then return 0
 		if (findItem expDiff m.diffusemap.filename) != 0 then return 0
-		if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
+		--if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
 		
 		append expDiff m.diffusemap.filename
-		append expNormal m.bumpmap.normal_map.filename
+		--append expNormal m.bumpmap.normal_map.filename
 		 
 		if classof m != Standardmaterial then throw( "No se importar materiales que no sean std" )
 		local diff_name = importTexture m.diffusemap.filename
-		local normal_name = importTexture m.bumpmap.normal_map.filename
+		local normal_name = ""
 		local emissive_name = ""
+		
+		if (m.selfIllumMap != undefined) then (
+			normal_name = importTexture m.bumpmap.normal_map.filename
+		)
 		
 		if (m.selfIllumMap != undefined) then (
 			emissive_name = importTexture m.selfIllumMap.filename
@@ -1207,9 +1211,9 @@ clearlistener()
 
 	
 	fn validateCompAABB obj = (
-	
-			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true)
 		
+		 local is_collision = (isProperty obj.baseObject #collisionMesh == true)
+			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true) or is_collision
 	)
 	
 	/**********************************************************************************************
@@ -2143,6 +2147,7 @@ fn getPlatformPath obj = (
 		expObjects = #()
 		expShapesNames = #()
 		expDiff = #()
+		expNormal = #()
 		expJoints = #()
 		
 		initializePrefabs()
@@ -2280,7 +2285,7 @@ fn getPlatformPath obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
---openCloseFile()
---removeObjectsID()
+addObjectsID()
+exportXMLScene()
+openCloseFile()
+removeObjectsID()

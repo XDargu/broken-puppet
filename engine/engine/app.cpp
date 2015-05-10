@@ -270,6 +270,8 @@ bool CApp::create() {
 	physics_manager.init();
 	bool is_ok = true;
 	// Boot LUA
+
+
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
@@ -289,6 +291,8 @@ bool CApp::create() {
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
 	XASSERT(is_ok, "Error creating debug meshes");
+
+	logic_manager.init();
 
 #ifdef _DEBUG
 	// Init AntTweakBar
@@ -923,6 +927,9 @@ void CApp::loadScene(std::string scene_name) {
 	//physics_manager.init();
 
 	initManagers();
+
+
+	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");

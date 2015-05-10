@@ -40,7 +40,8 @@ struct TCompPlatformPath : TBaseComponent{
 		return a + f * (b - a);
 	}
 
-	void startMoving(){
+	void startMoving(float velocity){
+		movement_speed = velocity;
 		follow_line = true;
 	}
 

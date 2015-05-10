@@ -7,12 +7,12 @@ CMovingPlatform::~CMovingPlatform() {}
 
 // LUA
 
-void CMovingPlatform::start(){
+void CMovingPlatform::start(float velocity){
 	if (!entity.isValid())
 		return;
 	TCompPlatformPath* platform = ((CEntity*)entity)->get<TCompPlatformPath>();
 	if (platform)
-		platform->startMoving();
+		platform->startMoving( velocity);
 }
 
 void CMovingPlatform::stop() {

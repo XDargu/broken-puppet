@@ -212,7 +212,7 @@ void PSGBuffer(
   float3   in_tangent = normalize(input.wTangent.xyz);
   float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;
   float3x3 TBN = float3x3( in_tangent
-                         , in_binormal
+                         , -in_binormal
                          , in_normal);
 
   // Convert the range 0...1 from the texture to range -1 ..1 

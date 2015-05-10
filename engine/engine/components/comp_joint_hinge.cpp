@@ -120,7 +120,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 	if (angle_limit != 0)
 	{
-		PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * 2 * angle_limit), deg2rad(0));
+		PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * angle_limit), deg2rad(angle_limit));
 		mJoint->setLimit(limit);
 		mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 
