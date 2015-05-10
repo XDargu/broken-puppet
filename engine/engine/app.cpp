@@ -99,7 +99,7 @@ CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
-CSoundManager sm;
+//CSoundManager sm;
 
 const CTexture* cubemap;
 
@@ -282,10 +282,10 @@ bool CApp::create() {
 	//loadScene("data/scenes/my_file-backup.xml");
 	
 
-	sm.addMusicTrack(0, "CANCION.mp3");
+	//sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 
-	sm.playTrack(0);
+	//sm.playTrack(0);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -634,7 +634,7 @@ void CApp::render() {
 #endif
 
 	int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-	std::string life_text = "Life: " + std::to_string((int)(life_val / 10));
+	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
 	font.print(15, 15, life_text.c_str());
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";

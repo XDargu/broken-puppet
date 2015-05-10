@@ -127,29 +127,33 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 
 	CEntity* e = CHandle(rigidBody->userData);
 
-	if (!e->hasTag("player")) {
-		float water_level = CApp::get().water_level;
-		float atten = 0.2f;
-		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
-
-		if (rigidBody->getGlobalPose().p.y < water_level) {
-			float volume = rigidBody->getMass() / density;
-			float water_density = 500;
-			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
-			rigidBody->setLinearDamping(1);
-			rigidBody->setAngularDamping(0.5f);
-		}
-		else {
-			rigidBody->setLinearDamping(0.05f);
-			rigidBody->setAngularDamping(0.05f);
-		}
-	}
-
 	if (auto_translate_transform)
 		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);
 
 	if (auto_rotate_transform)
 		trans->rotation = Physics.PxQuatToXMVECTOR(rigidBody->getGlobalPose().q);
+
+	bool kinematic = rigidBody->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC);
+
+	if (kinematic) { return; }
+		if (!e->hasTag("player")) {
+			float water_level = CApp::get().water_level;
+			float atten = 0.2f;
+			float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
+
+			if (rigidBody->getGlobalPose().p.y < water_level) {
+				float volume = rigidBody->getMass() / density;
+				float water_density = 500;
+
+				rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
+				rigidBody->setLinearDamping(1);
+				rigidBody->setAngularDamping(0.5f);
+			}
+			else {
+				rigidBody->setLinearDamping(0.05f);
+				rigidBody->setAngularDamping(0.05f);
+			}
+		}
 
 }
 
