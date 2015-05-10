@@ -1,0 +1,60 @@
+#include "mcv_platform.h"
+#include "comp_player_controller.h"
+#include "comp_life.h"
+#include "comp_transform.h"
+#include "comp_collider_capsule.h"
+#include "comp_rigid_body.h"
+#include "comp_character_controller.h"
+
+void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
+	assertRequiredComponent<TCompLife>(this);
+	assertRequiredComponent<TCompTransform>(this);
+	assertRequiredComponent<TCompColliderCapsule>(this);
+	assertRequiredComponent<TCompRigidBody>(this);
+	assertRequiredComponent<TCompCharacterController>(this);
+
+	fsm_player_legs.SetEntity(CHandle(this).getOwner());
+	fsm_player_torso.SetEntity(CHandle(this).getOwner());
+	fsm_player_legs.torso = &fsm_player_torso;
+	fsm_player_torso.legs = &fsm_player_legs;
+
+	hit_cool_down = 1;
+	time_since_last_hit = 0;
+}
+
+void TCompPlayerController::init() {
+	fsm_player_legs.Init();
+	fsm_player_torso.Init();
+}
+
+void TCompPlayerController::update(float elapsed) {
+	time_since_last_hit += elapsed;
+	fsm_player_torso.update(elapsed);
+}
+
+void TCompPlayerController::fixedUpdate(float elapsed) {
+	fsm_player_legs.update(elapsed);
+
+}
+
+unsigned int TCompPlayerController::getStringCount() {
+	return fsm_player_torso.getStringCount();
+}
+
+void TCompPlayerController::actorHit(const TActorHit& msg) {
+
+	if (time_since_last_hit >= hit_cool_down){
+		dbg("Force recieved is  %f\n", msg.damage);
+		fsm_player_legs.EvaluateHit(msg.damage);
+		time_since_last_hit = 0;
+	}
+}
+
+void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
+	if (time_since_last_hit >= hit_cool_down){
+		dbg("Damage recieved is  %f\n", msg.damage);
+		//fsm_player_legs.last_hit = 2;
+		fsm_player_legs.EvaluateHit(msg.damage);
+		time_since_last_hit = 0;
+	}
+}

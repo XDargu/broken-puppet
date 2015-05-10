@@ -815,6 +815,9 @@
     <ClCompile Include="ai\hinge_joint.cpp">
       <Filter>ai\logic</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_player_controller.cpp">
+      <Filter>components\ai\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

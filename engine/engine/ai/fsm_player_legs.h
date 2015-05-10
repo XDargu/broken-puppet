@@ -55,6 +55,8 @@ public:
 	void ReevaluatePriorities();
 	void WakeUp(float elapsed);
 
+	void Victory(float elapsed);
+
 	void EvaluateHit(float damage);
 	void EvaluateLiveToLose(float damage);
 

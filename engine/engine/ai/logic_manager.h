@@ -64,6 +64,7 @@ public:
 	CHingeJoint getHingeJoint(std::string name);
 
 	void changeWaterLevel(float pos1, float time);
+	void pushPlayerLegsState(std::string state_name);
 
 	void playerDead();
 

@@ -35,6 +35,7 @@ void FSMPlayerLegs::Init()
 	AddState("fbp_Dead", (statehandler)&FSMPlayerLegs::Dead);
 	AddState("fbp_ReevaluatePriorities", (statehandler)&FSMPlayerLegs::ReevaluatePriorities);
 	AddState("fbp_WakeUp", (statehandler)&FSMPlayerLegs::WakeUp);
+	AddState("fbp_Victory", (statehandler)&FSMPlayerLegs::Victory);
 
 	// reset the state
 	ChangeState("fbp_Idle");
@@ -456,7 +457,7 @@ void FSMPlayerLegs::Hurt(float elapsed){
 	dir.normalize();
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
-	if (state_time >= .4f){
+	if (state_time >= 1.f){
 		skeleton->stopAnimation(28);
 		ChangeState("fbp_ReevaluatePriorities");
 	}
@@ -593,6 +594,24 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= 3.3f){
+		ChangeState("fbp_Idle");
+	}
+}
+
+void FSMPlayerLegs::Victory(float elapsed){
+
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+	TCompSkeleton* m_skeleton = comp_skeleton;
+
+	if (on_enter) {
+		m_skeleton->playAnimation(3);
+	}
+
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(m_transform->getFront());
+	dir.normalize();
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+
+	if (state_time >= 20.f){
 		ChangeState("fbp_Idle");
 	}
 }

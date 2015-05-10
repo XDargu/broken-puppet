@@ -4,6 +4,8 @@
 #include "components\comp_transform.h"
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
+#include "components\comp_player_controller.h"
+#include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
 #include "entity_inspector.h"
@@ -71,7 +73,7 @@ void CLogicManager::update(float elapsed) {
 		TCompTransform* water_t = ((CEntity*)water_transform)->get<TCompTransform>();
 		XMVECTOR water_dest = water_t->position;
 		water_dest = XMVectorSetY(water_dest, water_level_dest);
-		water_t->position = XMVectorLerp(water_t->position, water_dest, lerp_water);
+		water_t->position = XMVectorLerp(water_t->position, water_dest, lerp_water * elapsed);
 
 		// Ñapa hacer flotar
 		CHandle madera = ((CEntity*)CEntityManager::get().getByName("plataforma_madera"));
@@ -304,6 +306,7 @@ void CLogicManager::bootLUA() {
 		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
 		.set("changeWaterLevel", (void (CLogicManager::*)(float, float)) &CLogicManager::changeWaterLevel)
 		.set("print", &CLogicManager::print)
+		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
 	;
 
 	// Register the bot class
@@ -406,4 +409,17 @@ void CLogicManager::execute(std::string text) {
 
 void CLogicManager::playerDead() {
 	execute("onPlayerDead();");
+}
+
+void CLogicManager::pushPlayerLegsState(std::string state_name) {
+	CHandle entity = CEntityManager::get().getByName("Player");
+	if (entity.isValid()) {
+		CEntity* p_entity = entity;
+		CHandle p_controller = p_entity->get<TCompPlayerController>();
+		if (p_controller.isValid()) {
+			TCompPlayerController* controller = p_controller;
+			controller->fsm_player_legs.ChangeState(state_name);
+		}
+	}
+
 }

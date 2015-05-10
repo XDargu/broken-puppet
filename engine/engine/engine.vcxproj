@@ -358,6 +358,7 @@
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_needle.cpp" />
     <ClCompile Include="components\comp_platform_path.cpp" />
+    <ClCompile Include="components\comp_player_controller.cpp" />
     <ClCompile Include="components\comp_player_position_sensor.cpp" />
     <ClCompile Include="components\comp_point_light.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />

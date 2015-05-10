@@ -119,7 +119,7 @@ end
 
 function onSwitchPressed_InterruptorTirarAgua(who)
 	print(tostring(who) .. "Interruptor pulsado");
-	logicManager:changeWaterLevel(-1,0.015);
+	logicManager:changeWaterLevel(-1,0.25);
 
 	--local m_platform = logicManager:getMovingPlatform("plataforma_madera");
 	--m_platform:start(0.001);
@@ -169,6 +169,7 @@ function onTriggerEnter_TriggerClock(who)
 end
 
 function onSwitchPressed_InterruptorTirarReloj(who)
+
 	print(tostring(who) .. "Interruptor pulsado");
 	m_minutero = logicManager:getHingeJoint("minutero");
 	m_minutero:setLimit(0);
@@ -242,6 +243,7 @@ end
 function onTriggerEnter_Trigger_Victory(who)
 	if who == "Player" then
 		print(tostring(who) .. " VICTORIAAAA!!!");
+		logicManager:pushPlayerLegsState("fbp_Victory");
 	end
 end
 

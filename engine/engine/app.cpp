@@ -408,9 +408,14 @@ void CApp::update(float elapsed) {
 	// Update input
 	io.update(elapsed);
 
-	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/milestone2.xml");
+	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		CNav_mesh_manager::get().keep_updating_navmesh = false;
+		exit(-1);
 	}
+
+	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
+		loadScene("data/scenes/milestone2.xml");
+	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		/*render_techniques_manager.reload("deferred_gbuffer");
@@ -459,7 +464,7 @@ void CApp::update(float elapsed) {
 	//-----------------------------------------------------------------------------------------
 
 	//Acceso al componente player controller para mirar el número de tramas de hilo disponible
-	CEntity* e = CEntityManager::get().getByName("Player");
+	//CEntity* e = CEntityManager::get().getByName("Player");
 #ifdef _DEBUG
 	if (io.becomesReleased(CIOStatus::INSPECTOR_MODE)) {
 		if (io.getMousePointer())
@@ -606,12 +611,13 @@ void CApp::render() {
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
 	
-	render_techniques_manager.getByName("basic")->activate();
+	/*render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
-	activateCamera(camera, 1);
+	activateCamera(camera, 1);*/
 
 	setWorldMatrix(XMMatrixIdentity());
 	render_techniques_manager.getByName("basic")->activate();
+	activateCamera(camera, 1);
 	activateWorldMatrix(0);
 
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
