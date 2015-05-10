@@ -415,12 +415,12 @@ int bt_grandma::actionWander()
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
 		ind_path = 0;
-	}/*else{
+	}else{
 		if ((state_time - find_path_time) > 1.f){
 			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 			find_path_time = state_time;
 		}
-	}*/
+	}
 
 	if (path.size() > 0){
 		if (ind_path < path.size()){
@@ -526,12 +526,12 @@ if (on_enter){
 	find_path_time = state_time;
 	ind_path = 0;
 }
-/*else{
+else{
 	if ((state_time - find_path_time) > 1.f){
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
 	}
-}*/
+}
 
 if (path.size() > 0){
 	if (ind_path < path.size()){
@@ -608,7 +608,6 @@ int bt_grandma::actionChaseRoleDistance()
 
 	if (on_enter){
 		ind_path = 0;
-		CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	}
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
@@ -616,6 +615,7 @@ int bt_grandma::actionChaseRoleDistance()
 		return LEAVE;
 	}
 
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
@@ -675,7 +675,6 @@ int bt_grandma::actionSituate()
 	wander_target = p_transform->position + slot_position;
 
 	if (on_enter){
-		CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 		ind_path = 0;
 	}
 
@@ -684,6 +683,7 @@ int bt_grandma::actionSituate()
 		return LEAVE;
 	}
 
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
