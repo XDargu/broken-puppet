@@ -705,3 +705,5 @@ void FSMPlayerLegs::localCameraFront(){
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3((((TCompTransform*)((CEntity*)entity_camera)->get<TCompTransform>())->getFront()));
 	dir.y = 0;
 }
+
+void stopAnimation(int id);

@@ -12,9 +12,7 @@ private:
 	CHandle rigidbody;						// Reference to the rigidbody
 	CHandle collider;						// Reference to the collider
 
-	float airSpeed;							// determines the max speed of the character while airborne
-	float airControl;						// determines the response speed of controlling the character while airborne;
-	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters
+	
 
 	float animSpeedMultiplier;				// how much the animation of the character will be multiplied by
 
@@ -37,6 +35,10 @@ private:
 	
 
 public:
+	float airSpeed;							// determines the max speed of the character while airborne
+	float airControl;						// determines the response speed of controlling the character while airborne;
+	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters
+
 	float crouchHeightFactor;					// collider height is multiplied by this when crouching
 	float crouchChangeSpeed;					// speed at which capsule changes height when crouching/standing
 	float jumpRepeatDelayTime;					// amount of time that must elapse between landing and being able to jump again

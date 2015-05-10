@@ -124,7 +124,7 @@ void TCompRigidBody::init() {
 void TCompRigidBody::fixedUpdate(float elapsed) {
 	TCompTransform* trans = (TCompTransform*)transform;
 
-	float water_level = 0.9f;
+	/*float water_level = 0.9f;
 
 	if (rigidBody->getGlobalPose().p.y < water_level) {
 		rigidBody->addForce(PxVec3(0, 1, 0) * rigidBody->getMass() * 10);
@@ -134,7 +134,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	else {
 		rigidBody->setLinearDamping(0.05f);
 		rigidBody->setAngularDamping(0.05f);
-	}
+	}*/
 
 	if (auto_translate_transform)
 		trans->position = Physics.PxVec3ToXMVECTOR(rigidBody->getGlobalPose().p);

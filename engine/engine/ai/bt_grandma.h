@@ -45,6 +45,7 @@ private:
 	bool hurt_event;
 	bool see_player;
 	bool initial_attack;
+	int last_anim_id;
 
 	//Bool ñapa a quitar en un futuro -----
 	bool player_previously_lost;
@@ -204,6 +205,11 @@ public:
 	float getDistanceToPlayer();
 
 	void drawdebug();
+
+	void stopAllAnimations();
+	void playAnimationIfNotPlaying(int id);
+	void stopAnimation(int id);
+	float getAnimationDuration(int id);
 };
 
 #endif

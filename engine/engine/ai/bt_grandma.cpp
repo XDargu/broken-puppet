@@ -12,16 +12,20 @@ const int max_bf_posibilities = 7;
 const float max_dist_reach_needle = 1.8f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
-const float max_distance_to_attack = 1.5f;
+const float max_distance_to_attack = 1.f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
-const float delta_time_close_attack = 2.f;
+const float delta_time_close_attack = 6.f;
 const float distance_change_way_point = 0.55f;
 const float force_large_impact = 10000.f;
-const float force_medium_impact = 200.f;
+const float force_medium_impact = 2000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
+
+const float walk_speed = 0.8f;
+const float run_speed = 2.f;
+const float run_angry_speed = 2.2f;
 
 void bt_grandma::create(string s)
 {
@@ -91,6 +95,7 @@ void bt_grandma::create(string s)
 	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander);
 
 
+	last_anim_id = -1;
 	ind_path = 0;
 	own_transform = ((CEntity*)entity)->get<TCompTransform>();
 	center = ((TCompTransform*)own_transform)->position;
@@ -140,7 +145,6 @@ int bt_grandma::actionRagdoll()
 		m_ragdoll->setActive(true);
 	}
 
-	jump = false;
 	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
 
 	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
@@ -163,7 +167,22 @@ int bt_grandma::actionRagdoll()
 //Ejecuta la animacin de levantarse
 int bt_grandma::actionWakeUp()
 {
-	return LEAVE;
+	if (on_enter) {
+		is_ragdoll = false;
+		TCompRagdoll* m_ragdoll = enemy_ragdoll;
+		m_ragdoll->setActive(false);
+		playAnimationIfNotPlaying(16);
+	}
+
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+
+	if (state_time > getAnimationDuration(16)) {		
+		return LEAVE;
+	}
+	else
+		return STAY;
+	
 }
 
 //Corta todas las cuerdas a la que est atada
@@ -181,9 +200,30 @@ int bt_grandma::actionLeave()
 //Attack to the player when he is too close
 int bt_grandma::actionTooCloseAttack()
 {
-	//Play close attack animation 
-	((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 5000.f));
-	return LEAVE;
+	if (on_enter) {
+		TCompTransform* p_transform = player_transform;
+		TCompTransform* m_transform = own_transform;
+
+		//Play close attack animation 
+		if (m_transform->isInLeft(p_transform->position))
+			playAnimationIfNotPlaying(2);
+		else
+			playAnimationIfNotPlaying(3);
+
+	}
+
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+
+	if (state_time >= getAnimationDuration(7)) {
+		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 5000.f));
+		return LEAVE;
+	}
+	else
+	{
+		return STAY;
+	}
+	
 }
 
 //Go to the needle position (leave if cant reach)
@@ -194,6 +234,14 @@ int bt_grandma::actionChaseNeedlePosition()
 		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
 		if (on_enter){
+
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_speed;
+			m_char_controller->airSpeed = run_speed * 0.8f;
+
+			playAnimationIfNotPlaying(14);
+
 			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, n_transform->position, path);
 			if (path.size() > 0){
 				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle-distance_change_way_point){
@@ -247,45 +295,71 @@ int bt_grandma::actionSelectNeedleToTake()
 //Cut the needles rope
 int bt_grandma::actionCutRope()
 {
-	CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-	CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
+	if (on_enter) {
+		playAnimationIfNotPlaying(7);
+	}
 
-	((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-	CEntityManager::get().remove(CHandle(target_rope).getOwner());
-	CEntityManager::get().remove(CHandle(target_needle).getOwner());
-	needle_to_take = false;
-	needle_is_valid = false;
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
 
-	return LEAVE;
+	
+	if (state_time >= getAnimationDuration(7)) {
+		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
+		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
+
+		((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
+		CEntityManager::get().remove(CHandle(target_rope).getOwner());
+		CEntityManager::get().remove(CHandle(target_needle).getOwner());
+		needle_to_take = false;
+		needle_is_valid = false;
+
+		return LEAVE;
+	}
+	else
+		return STAY;
 
 }
 
 //Take the needle
 int bt_grandma::actionTakeNeedle()
 {
-	CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
+	if (on_enter) {
+		playAnimationIfNotPlaying(7);
+	}
 
-	((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-	CEntityManager::get().remove(CHandle(target_needle).getOwner());
-	needle_to_take = false;
-	needle_is_valid = false;
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
 
-	return LEAVE;
+	if (state_time >= getAnimationDuration(7)) {
+		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
+
+		((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
+		CEntityManager::get().remove(CHandle(target_needle).getOwner());
+		needle_to_take = false;
+		needle_is_valid = false;
+
+		return LEAVE;
+	}
+	else {
+		return STAY;
+	}
 }
 
 //Select the idle and play it
 int bt_grandma::actionIdle()
 {
-	float aux_time = state_time;
-	bool aux_on_enter = on_enter;
-
 	//TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
 
+	if (on_enter) {
+		playAnimationIfNotPlaying(0);
+	}
+
 	if (state_time >= 2){
 		return LEAVE;
+
 	}else{
 		return STAY;
 	}
@@ -313,8 +387,16 @@ int bt_grandma::actionSearchPoint()
 //Chase the selected point
 int bt_grandma::actionWander()
 {
+	if (on_enter) {
+		playAnimationIfNotPlaying(1);
+
+		TCompCharacterController* m_char_controller = character_controller;
+
+		m_char_controller->moveSpeedMultiplier = walk_speed;
+		m_char_controller->airSpeed = walk_speed * 0.8f;
+	}
+
 	jump = false;
-	
 	//Tratamos de evitar cambios demasiado repentinos de ruta
 	if (on_enter){
 		((TCompSkeleton*)(((CEntity*)entity)->get<TCompSkeleton>()))->loopAnimation(1);
@@ -350,18 +432,45 @@ int bt_grandma::actionWander()
 //Makes a warcry
 int bt_grandma::actionWarcry()
 {
-	aimanager::get().warningToClose(this, 20.f);
-	have_to_warcry = false;
-	time_searching_player = 0;
-	return LEAVE;
+	if (on_enter) {
+		playAnimationIfNotPlaying(18);
+	}
+
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+
+
+	if (state_time >= getAnimationDuration(18) + 1) {
+		aimanager::get().warningToClose(this, 20.f);
+		have_to_warcry = false;
+		time_searching_player = 0;
+		return LEAVE;
+	}
+	else {
+		return STAY;
+	}
 }
 
 //Alert to the other grandma about the player
 int bt_grandma::actionPlayerAlert()
 {
-	//Call the iaManager method for warning the rest of the grandmas
-	aimanager::get().warningPlayerFound(this);
-	return LEAVE;
+	if (on_enter) {
+		playAnimationIfNotPlaying(17);
+	}
+
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+
+	if (state_time > getAnimationDuration(17)) {
+		//Call the iaManager method for warning the rest of the grandmas
+		aimanager::get().warningPlayerFound(this);
+		return LEAVE;
+	}
+	else
+		return STAY;	
 }
 
 //Leave the angry state, go to peacefull
@@ -393,7 +502,14 @@ int bt_grandma::actionLookAround()
 	time_searching_player += CApp::get().delta_time;
 //Tratamos de evitar cambios demasiado repentinos de ruta
 if (on_enter){
-	((TCompSkeleton*)(((CEntity*)entity)->get<TCompSkeleton>()))->loopAnimation(1);
+
+	TCompCharacterController* m_char_controller = character_controller;
+
+	m_char_controller->moveSpeedMultiplier = run_speed;
+	m_char_controller->airSpeed = run_speed * 0.8f;
+
+	playAnimationIfNotPlaying(14);
+	
 	CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 	find_path_time = state_time;
 	ind_path = 0;
@@ -429,21 +545,28 @@ else{
 //Takes a roll, attacker or taunter and a poisition to go
 int bt_grandma::actionSelectRole()
 {
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+
+	XMVECTOR left = XMVectorSet(-1, 0, 0, 0);
+	XMVECTOR right = XMVectorSet(1, 0, 0, 0);
+	XMVECTOR front = XMVectorSet(0, 0, 1, 0);
+
 	time_searching_player = 0;
-	if ((V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position))<4.f){
+	if ((V3DISTANCE(m_transform->position, p_transform->position))<4.f){
 		aimanager::get().setEnemyRol(this);
 		if (rol == role::ATTACKER){
 			if (slot == attacker_slots::NORTH){
-				slot_position =  ((TCompTransform*)player_transform)->getFront() * max_distance_to_attack;
-			}
-			else if (slot == attacker_slots::WEST){
-				slot_position = ((TCompTransform*)player_transform)->getLeft() * max_distance_to_attack;
+				slot_position = right * max_distance_to_attack;
 			}
 			else if (slot == attacker_slots::EAST){
-				slot_position = ((TCompTransform*)player_transform)->getLeft()*-1.f * max_distance_to_attack;
+				slot_position = left * max_distance_to_attack;
+			}
+			else if (slot == attacker_slots::WEST){
+				slot_position = front * max_distance_to_attack;
 			}
 		}else if (rol == role::TAUNTER){
-			slot_position = (((TCompTransform*)player_transform)->position - ((TCompTransform*)own_transform)->position);
+			slot_position = -(p_transform->position - m_transform->position);
 			slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
 		}
 	}
@@ -453,11 +576,20 @@ int bt_grandma::actionSelectRole()
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
+	if (on_enter) {
+		playAnimationIfNotPlaying(15);
+
+		TCompCharacterController* m_char_controller = character_controller;
+
+		m_char_controller->moveSpeedMultiplier = run_angry_speed;
+		m_char_controller->airSpeed = run_angry_speed * 0.8f;
+	}
+
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
 	if (!findPlayer())
-		wander_target = last_point_player_saw;
+		wander_target = p_transform->position;// last_point_player_saw;
 	else {
 		wander_target = p_transform->position;
 	}
@@ -495,19 +627,36 @@ int bt_grandma::actionChaseRoleDistance()
 //First attack
 int bt_grandma::actionInitialAttack()
 {
+	if (on_enter) {
+		initial_attack = true;
+		playAnimationIfNotPlaying(11);
+	}
+
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-	initial_attack = true;
-	((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
-	if (state_time < 2)
-		return STAY;
-	else
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+
+	if (state_time > getAnimationDuration(11)) {
+		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
 		return LEAVE;
+	}
+	else
+		return STAY;
 }
 
 //Move step by step to the roll position (leave on reach or lost)
 int bt_grandma::actionSituate()
 {
+	if (on_enter) {
+		TCompCharacterController* m_char_controller = character_controller;
+
+		m_char_controller->moveSpeedMultiplier = run_angry_speed;
+		m_char_controller->airSpeed = run_angry_speed * 0.8f;
+		playAnimationIfNotPlaying(15);
+	}
+
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
@@ -518,7 +667,7 @@ int bt_grandma::actionSituate()
 	}
 
 	float distance=V3DISTANCE(m_transform->position, wander_target);
-	if (distance < 1.f) {
+	if (distance < 0.5f) {
 		return LEAVE;
 	}
 
@@ -527,7 +676,7 @@ int bt_grandma::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.6f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.3f)){
 				ind_path++;
 				return STAY;
 			}
@@ -547,43 +696,86 @@ int bt_grandma::actionSituate()
 //
 int bt_grandma::actionNormalAttack()
 {
+	if (on_enter) {
+
+		int anim = getRandomNumber(4, 6);
+		playAnimationIfNotPlaying(anim);
+	}
+
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-	((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
-	if (state_time < 2)
-		return STAY;
-	else
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+
+	if (state_time > getAnimationDuration(4)) {
+		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
 		return LEAVE;
+	}
+	else
+		return STAY;
 }
 
 //Play a Idle war animation
 int bt_grandma::actionIdleWar()
 {
+	if (on_enter) {
+		playAnimationIfNotPlaying(10);
+	}
+
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-	if (state_time < 2)
-		return STAY;
-	else
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+
+	if (state_time > getAnimationDuration(10))
 		return LEAVE;
+	else
+		return STAY;
 }
 
 //Play a taunter routine
 int bt_grandma::actionTaunter()
 {
 	//Meter animacion
+	if (on_enter) {
+		playAnimationIfNotPlaying(17);
+	}
+
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-	if (state_time < 2)
-		return STAY;
-	else
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+
+	if (state_time > getAnimationDuration(17))
 		return LEAVE;
+	else
+		return STAY;
 }
 
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 int bt_grandma::actionHurtEvent()
 {
+	if (on_enter) {
+		playAnimationIfNotPlaying(9);
+	}
 
-	return LEAVE;
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+
+	if (state_time > getAnimationDuration(9)) {
+		//Call the iaManager method for warning the rest of the grandmas
+		aimanager::get().warningPlayerFound(this);
+		event_detected = false;
+		return LEAVE;
+	}
+	else
+		return STAY;
 }
 
 //
@@ -605,25 +797,46 @@ int bt_grandma::actionNeedleAppearsEvent()
 
 int bt_grandma::actionTiedEvent()
 {
-	if (ropeRef == nullptr){
+
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = last_look_direction;
+
+	if (on_enter) {
+
+		if (ropeRef == nullptr){
+			tied_event = false;
+			event_detected = false;
+			return LEAVE;
+		}
+		else{
+			//Plays the cut own string animation
+			int dice = getRandomNumber(0, 10);
+			if (dice < max_bf_posibilities){
+				// Ninja animation
+				playAnimationIfNotPlaying(11);
+				tied_event = false;
+				event_detected = false;
+			}
+			else{
+				tied_event = false;
+				event_detected = false;
+				tied_succesfull = true;
+				return LEAVE;
+			}
+		}
+
+	}
+
+	if (state_time < getAnimationDuration(11)){
+		return STAY;
+	}
+	else{
+		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		tied_event = false;
 		event_detected = false;
 		return LEAVE;
-	}else{
-		//Plays the cut own string animation
-		int dice = getRandomNumber(0, 10);
-		if (dice < max_bf_posibilities){
-			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-			tied_event = false;
-			event_detected = false;
-			return LEAVE;
-		}else{
-			tied_event = false;
-			event_detected = false;
-			tied_succesfull = true;
-			return LEAVE;
-		}
 	}
+	
 }
 
 //Keeps in falling state till ti
@@ -635,6 +848,7 @@ int bt_grandma::actionFallingEvent()
 //
 int bt_grandma::actionGetAngry()
 {
+	is_angry = true;
 	return LEAVE;
 }
 
@@ -873,8 +1087,10 @@ int bt_grandma::conditionfar_from_target_pos()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
-	if (V3DISTANCE(m_transform->position, p_transform->position + slot_position) > 2.f){
+	XMVECTOR target = p_transform->position + slot_position;
+
+	float distance = V3DISTANCE(m_transform->position, target);
+	if (distance > 2.f){
 		return true;
 	}else{
 		return false;
@@ -1089,3 +1305,32 @@ void bt_grandma::drawdebug() {
 	font.print3D(wander_target, "Destino");
 }
 
+void bt_grandma::stopAllAnimations() {
+	TCompSkeleton* m_skeleton = enemy_skeleton;
+	
+	for (int i = 0; i < 20; ++i) {
+		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
+	}
+}
+
+void bt_grandma::playAnimationIfNotPlaying(int id) {
+	TCompSkeleton* m_skeleton = enemy_skeleton;
+
+	if (id != last_anim_id) {
+		stopAnimation(last_anim_id);
+		last_anim_id = id;
+		m_skeleton->loopAnimation(id);
+	}
+}
+
+void bt_grandma::stopAnimation(int id) {
+	TCompSkeleton* m_skeleton = enemy_skeleton;	
+	m_skeleton->stopAnimation(id);
+}
+
+float bt_grandma::getAnimationDuration(int id) {
+	TCompSkeleton* m_skeleton = enemy_skeleton;
+
+	float res = m_skeleton->model->getMixer()->getAnimationDuration();
+	return res;
+}

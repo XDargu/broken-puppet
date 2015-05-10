@@ -39,12 +39,13 @@ void TCompBtGrandma::init(){
 	m_ai_controller->create("enemy");
 	TCompCharacterController* controller = getSibling<TCompCharacterController>(this);
 	controller->moveSpeedMultiplier = 0.8f;
+	controller->airSpeed = 0.6f;
 	controller->jumpPower = 0.7f;
 
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	TCompRigidBody* rigidBody = getSibling<TCompRigidBody>(this);
 
-	physx::PxReal threshold = 100.f;
+	physx::PxReal threshold = 2000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 }
 
