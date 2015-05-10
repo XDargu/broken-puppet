@@ -7,7 +7,7 @@ using namespace DirectX;
 
 static aimanager the_aimanager;
 std::vector<aicontroller*> bots;
-const int max_size_attackers=2;
+const int max_size_attackers=3;
 
 aimanager::aimanager()
 {
