@@ -13,6 +13,7 @@ CShaderCte<TCtesCamera> ctes_camera;
 CShaderCte<TCtesLight>  ctes_light;
 CShaderCte<TCtesPointLight>  ctes_point_light;
 CShaderCte<TCtesDirLight>    ctes_dir_light;
+CShaderCte<TCtesSpotLight>    ctes_spot_light;
 CShaderCte<TCtesBones>  ctes_bones;
 
 // Post process
@@ -21,6 +22,7 @@ CShaderCte<TCtesSharpen> ctes_sharpen;
 CShaderCte<TCtesSSAO> ctes_ssao;
 CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 CShaderCte<TCtesGlow> ctes_glow;
+CShaderCte<TCtesUnderwater> ctes_underwater;
 
 CMesh        wire_cube;
 CMesh        mesh_view_volume;
@@ -303,6 +305,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_light.create();
 	is_ok &= ctes_point_light.create();
 	is_ok &= ctes_dir_light.create();
+	is_ok &= ctes_spot_light.create();
 	is_ok &= ctes_bones.create();
 
 	is_ok &= ctes_blur.create();
@@ -310,6 +313,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_ssao.create();
 	is_ok &= ctes_chromatic_aberration.create();
 	is_ok &= ctes_glow.create();
+	is_ok &= ctes_underwater.create();	
 
 	is_ok &= createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -333,6 +337,7 @@ void renderUtilsDestroy() {
 	ctes_object.destroy();
 	ctes_dir_light.destroy();
 	ctes_point_light.destroy();
+	ctes_spot_light.destroy();
 	ctes_light.destroy();
 	ctes_camera.destroy();
 	ctes_bones.destroy();
@@ -342,6 +347,7 @@ void renderUtilsDestroy() {
 	ctes_ssao.destroy();
 	ctes_chromatic_aberration.destroy();
 	ctes_glow.destroy();
+	ctes_underwater.destroy();
 	
 	axis.destroy();
 	grid.destroy();
@@ -415,6 +421,7 @@ void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slo
 	//c->dir_light_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
 	ctes_dir_light.uploadToGPU();
 }
+
 
 // -----------------------------------------------------
 bool createGrid(CMesh& mesh, int nsamples) {

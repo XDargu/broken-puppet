@@ -130,20 +130,19 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				XASSERT(skel, "Invalid skeleton");
 				skel->uploadBonesToGPU();
 			}
-
+			std::string name = ((CEntity*)it->transform.getOwner())->getName();
 			// Activar la world del obj
 			setWorldMatrix(tmx->getWorld());
 
 			// Pintar la mesh:submesh del it
 			it->mesh->renderGroup(it->mesh_id);
-
+			
 			prev_it = it;
 			is_first = false;
 		}
 		++it;		
 	}
 
-	font.printf(200, 50, "Dibujando %i keys de %i", render_count, (int)keys.size());
 }
 
 void CRenderManager::removeKeysFromOwner(CHandle owner) {
@@ -181,6 +180,9 @@ void CRenderManager::renderShadowsCasters() {
 
 	bool uploading_bones = false;
 	for (auto k : shadow_casters_keys) {
+		
+		if (!k.material->isSolid())
+			continue;
 
 		// Activar la world del obj
 		TCompTransform* tmx = k.transform;

@@ -28,6 +28,37 @@
 		
 	)
 	
+	/**********************************************************************************************
+	Object  structure Interruptor Push
+	 Params:
+	  - Is an interruptor Push
+	***********************************************************************************************/
+	objectDataPushInt = attributes objectPushInt
+	(
+		parameters main rollout:params
+		(
+			PushInt type:#boolean ui:PushInt default:true
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Trigger"
+		(
+			checkbox PushInt "PushInt" type: #boolean
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsPushInt = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #PushInt != true) then
+		(
+			custAttributes.add objSelected objectDataPushInt	
+		)	
+		
+	)
+	
+	
 	
 	/**********************************************************************************************
 	Object  structure CollisionTag
@@ -53,6 +84,62 @@
 		if (isProperty objSelected.baseobject #collisionTag != true) then
 		(
 			custAttributes.add objSelected objectDataCollisionTag	
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure Interruptor
+	 Params:
+	  - Is an interruptor
+	***********************************************************************************************/
+	objectDataLogic = attributes objectLogic
+	(
+		parameters main rollout:params
+		(
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Trigger"
+		(
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsLogic = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #Logic_element != true) then
+		(
+			custAttributes.add objSelected objectDataLogic	
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure Collision Mesh
+	 Params:
+	  - Set if is a collision mesh
+	***********************************************************************************************/
+	objectDataCollisionMesh = attributes objectCollisionMesh
+	(
+		parameters main rollout:params
+		(
+			collisionMesh type:#boolean ui:collisionMesh default:true
+		)
+
+		rollout params "Object Custom Collisionmesh"
+		(
+			checkbox collisionMesh "collisionMesh" type: #boolean
+		)
+	)
+	
+	fn addObjectsCollisionMesh = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #collisionMesh != true) then
+		(
+			custAttributes.add objSelected objectDataCollisionMesh	
 		)	
 		
 	)

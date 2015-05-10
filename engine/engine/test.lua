@@ -98,3 +98,87 @@ end
 function onTimerEnd_Load()
 	logicManager:loadScene("data/scenes/milestone2.xml");
 end
+
+function onTimerEnd_GrandmaCrasher003Restore()
+	local crasher = logicManager:getPrismaticJoint("GrandmaCrasher003")
+	crasher:setLinearLimit(2.4, 10000000, 10000000)
+	print("Timer ends")
+end
+
+
+function onTriggerEnter_GrandmaCrasher003_Trigger(who)
+	print(tostring(who) .. " ha entrado en el trigger")
+	local crasher = logicManager:getPrismaticJoint("GrandmaCrasher003")
+	crasher:setLinearLimit(1000, 0, 0)
+
+	logicManager:setTimer("GrandmaCrasher003Restore", 3)
+end
+
+
+					-- WATER ROOM --
+
+function onSwitchPressed_InterruptorTirarAgua(who)
+	print(tostring(who) .. "Interruptor pulsado");
+	logicManager:changeWaterLevel(-1,0.015);
+
+	--local m_platform = logicManager:getMovingPlatform("plataforma_madera");
+	--m_platform:start(0.001);
+
+end
+
+function onSwitchReleased_InterruptorTirarAgua(who)
+	print(tostring(who) .. "Interruptor pulsado");
+	logicManager:changeWaterLevel(-3.58394,0.015);
+
+	--local m_platform = logicManager:getMovingPlatform("plataforma_madera");
+	--m_platform:start(0.001);
+
+end
+
+					-- CLOCK ROOM --
+
+function onTriggerEnter_TriggerClock(who)
+	print(tostring(who) .. " ha entrado en el trigger");
+	if who == "minutero" then	
+		print("Clock Blocked!");
+		m_minutero = logicManager:getHingeJoint("minutero");
+		m_minutero:setLimit(10);
+
+		
+		m_atrezzo01 = logicManager:getHingeJoint("atrezzo_plataforma01");
+		m_atrezzo01:setMotor(-10, 100000);
+		m_atrezzo02 = logicManager:getHingeJoint("atrezzo_plataforma02");
+		m_atrezzo02:setMotor(-10, 100000);
+		m_atrezzo03 = logicManager:getHingeJoint("atrezzo_plataforma03");
+		m_atrezzo03:setMotor(-10, 1000);
+
+	end
+end
+
+function onSwitchPressed_InterruptorTirarReloj(who)
+	print(tostring(who) .. "Interruptor pulsado");
+	m_minutero = logicManager:getHingeJoint("minutero");
+	m_minutero:setLimit(0);
+	m_minutero:setMotor(1.55, 60000);
+
+	m_atrezzo01 = logicManager:getHingeJoint("atrezzo_plataforma01");
+	m_atrezzo01:setMotor(1000, 100000);
+	m_atrezzo02 = logicManager:getHingeJoint("atrezzo_plataforma02");
+	m_atrezzo02:setMotor(1000, 100000);
+	m_atrezzo03 = logicManager:getHingeJoint("atrezzo_plataforma03");
+	m_atrezzo03:setMotor(1000, 100000);
+
+	m_puerta = logicManager:getHingeJoint("puertaIzda");
+	m_puerta:setMotor(-1, 1000);
+end
+
+
+					-- VICTORY --
+
+function onTriggerEnter_Trigger_Victory(who)
+	if who == "Player" then
+		print(tostring(who) .. " VICTORIAAAA!!!");
+	end
+end
+
+

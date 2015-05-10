@@ -1,0 +1,6 @@
+<technique 
+	fx="underwater.fx"
+	vs="VSUnderwater"
+	vs_decl="vdcl_position_uv"
+	ps="PSUnderwater"
+	/>

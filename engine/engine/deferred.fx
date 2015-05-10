@@ -4,9 +4,13 @@ Texture2D txDiffuse   : register(t0);
 Texture2D txNormal    : register(t1);
 Texture2D txDepth     : register(t2);
 Texture2D txAccLight  : register(t3);
-Texture2D txShadowMap : register(t6);
 
 TextureCube  txEnvironment : register(t4);
+
+Texture2D txSpecular    : register(t5);
+Texture2D txEmissive    : register(t7);
+
+Texture2D txShadowMap : register(t6);
 
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
@@ -208,7 +212,7 @@ void PSGBuffer(
   float3   in_tangent = normalize(input.wTangent.xyz);
   float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;
   float3x3 TBN = float3x3( in_tangent
-                         , in_binormal
+                         , -in_binormal
                          , in_normal);
 
   // Convert the range 0...1 from the texture to range -1 ..1 
@@ -236,7 +240,11 @@ void PSGBuffer(
   //depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
 
   // 
-  acc_light = getShadowAt(input.wPos);
+  //acc_light = getShadowAt(input.wPos);
+
+  float4 emis = txEmissive.Sample(samWrapLinear, input.UV) * 0.5; 
+  acc_light = float4(emis.xyz, 0);
+  
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
 }
@@ -324,6 +332,41 @@ float4 PSDirLights(
   return float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
 }
 
+// -------------------------------------------------
+// Dir lights
+// -------------------------------------------------
+float4 PSSpotLights(
+in float4 iPosition : SV_Position
+) :SV_Target0{
+
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float depth = txDepth.Load(ss_load_coords).x;
+	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+
+	float3 wPos = getWorldCoords(iPosition.xy, depth);
+
+	// return float4(wPos.x - int(wPos.x), 0, 0, 1);
+
+	// Basic diffuse lighting
+	float3 L = spot_light_world_pos.xyz - wPos;
+	float  distance_to_light = length(L);
+	L = L / distance_to_light;
+	float  diffuse_amount = saturate(dot(N, L));
+
+	float3 dir = normalize(L);
+
+	float angle_cos = dot(dir, spot_light_direction);
+	float max_cos = cos(0.1);
+	
+	float att_factor = 0;
+	if (angle_cos < max_cos * 0.5) {
+		att_factor = getShadowAt(float4(wPos, 1));
+	}
+
+	float spec_amount = getSpecular(wPos, L, N);
+	return float4(spot_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
+}
+
 
 // -------------------------------------------------
 // Resolve lights
@@ -354,7 +397,11 @@ VS_TEXTURED_OUTPUT vin
 	float3 wpos = vin.wPos.xyz;
 	float4 noise = txNormal.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
 	float4 noise2 = txNormal.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
-	noise2 *= 3;
+	noise2 *= 1;
+
+	noise *= 0.9;
+	noise2 *= 0.9;
+
 	wpos.x += noise.x * cos(world_time);
 	wpos.z += noise.x * sin(world_time + .123f);
 	wpos.x += noise2.x * cos(world_time*0.23);
@@ -362,7 +409,7 @@ VS_TEXTURED_OUTPUT vin
 
 	// ++add noise
 	float4 hpos = mul(float4(wpos, 1), ViewProjection);
-		hpos.xyz /= hpos.w;   // -1 .. 1
+	hpos.xyz /= hpos.w;   // -1 .. 1
 	hpos.x = (hpos.x + 1) * 0.5;
 	hpos.y = (1 - hpos.y) * 0.5;
 	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
@@ -377,6 +424,36 @@ VS_TEXTURED_OUTPUT vin
 		float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
 		float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
 
-
 		return env*fresnel + new_color*(1 - fresnel);
+}
+
+// -------------------------------------------------
+// Glass
+// -------------------------------------------------
+float4 PSGlass(
+VS_TEXTURED_OUTPUT vin
+, in float4 iPosition : SV_Position
+
+) : SV_Target0{
+
+	float3 wpos = vin.wPos.xyz;
+
+	
+	float4 hpos = mul(float4(wpos, 1), ViewProjection);
+	hpos.xyz /= hpos.w;   // -1 .. 1
+	hpos.x = (hpos.x + 1) * 0.5;
+	hpos.y = (1 - hpos.y) * 0.5;
+	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
+
+	// A bit of fresnel
+	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
+	float3 N = normalize(vin.wNormal.xyz);
+	float fresnel = 1 - dot(N, dir_to_eye);
+	fresnel = pow(fresnel, 4);
+
+	float3 N_reflected = reflect(-dir_to_eye, N);
+	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
+	float4 new_color = float4(albedo.x*0.9, albedo.y*0.9, albedo.z*0.9, 1);
+
+	return env*fresnel + new_color*(1 - fresnel);
 }

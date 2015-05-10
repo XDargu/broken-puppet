@@ -6,5 +6,6 @@
 #include "glow_step.h"
 #include "sharpen_step.h"
 #include "ssao_step.h"
+#include "underwater_step.h"
 
 #endif

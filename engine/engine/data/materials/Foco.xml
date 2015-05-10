@@ -1,1 +1,1 @@
-<std_material name="Foco" diffuse="Foco_albedo" normal="Foco_normal" tech="deferred_gbuffer"/>
+<std_material name="foco" diffuse="foco_diffuse" normal="foco_normal" emissive=""/>

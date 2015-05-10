@@ -438,6 +438,18 @@
     <ClInclude Include="audio\sound_manager.h">
       <Filter>audio</Filter>
     </ClInclude>
+    <ClInclude Include="ai\moving_platform.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\prismatic_joint.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="render\underwater_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\hinge_joint.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -787,6 +799,21 @@
     </ClCompile>
     <ClCompile Include="audio\sound_manager.cpp">
       <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\moving_platform.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\prismatic_joint.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_platform_path.cpp">
+      <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="render\underwater_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\hinge_joint.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

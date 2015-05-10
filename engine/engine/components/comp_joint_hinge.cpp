@@ -25,32 +25,24 @@ TCompJointHinge::~TCompJointHinge() {
 }
 
 void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-
-	if (mJoint)
-		mJoint->release();
-
-	Physics.gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlags(PxVisualDebuggerFlag::eTRANSMIT_CONTACTS | PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS);
-
-	// Physics var
-	PxReal lower_limit;
-	PxReal upper_limit;
-	PxReal stiffness;
-	PxReal damping;
-
-	PxRigidActor* actor;
-
-	PxReal linearModeX;
-	PxReal linearModeY;
-	PxReal linearModeZ;
-	
+	actor1 = atts.getString("actor1","");
+	actor2 = atts.getString("actor2", "");
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 
-	actor1 = atts.getString("actor1", "");
+	float angle_limit = atts.getFloat("swingAngle", 0);
+
+	/*PxVec3 joint_rel_pos_0 = Physics.XMVECTORToPxVec3(atts.getPoint("jointRelativePosition0"));
+	PxQuat joint_rel_rot_0 = Physics.XMVECTORToPxQuat(atts.getQuat("jointRelativeRotation0"));
+
+	PxVec3 joint_rel_pos_1 = Physics.XMVECTORToPxVec3(atts.getPoint("jointRelativePosition1"));
+	PxQuat joint_rel_rot_1 = Physics.XMVECTORToPxQuat(atts.getQuat("jointRelativeRotation1"));
+
+	PxTransform joint_rel_0 = PxTransform(joint_rel_pos_0, joint_rel_rot_0);
+	PxTransform joint_rel_1 = PxTransform(joint_rel_pos_1, joint_rel_rot_1);*/
 
 	CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 	const char* nombre = owner_entity->getName();
-
 	// Sustituir los static por null y poner una posicion en la que deberían estar
 	if (nombre == actor1){
 		e_a1 = owner_entity;
@@ -59,7 +51,6 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		e_a1 = CEntityManager::get().getByName(actor1.c_str());
 	}
 	XASSERT(e_a1.isValid(), "The prismatic joint requires an actor1");
-
 	if (nombre == actor2){
 		e_a2 = owner_entity;
 	}
@@ -73,40 +64,72 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	CHandle s1;
 	CHandle s2;
 
-	// Tenemos que sacar la distancia entre pivotes
-	r1 = ((CEntity*)e_a1)->get<TCompRigidBody>();
+	if (e_a1.isValid())
+	{
+		r1 = ((CEntity*)e_a1)->get<TCompRigidBody>();
+		s1 = ((CEntity*)e_a1)->get<TCompStaticBody>();
+	}
 
-	// Anchor configuration
-	PxVec3 diff_pos;
+	if (e_a2.isValid())
+	{
+		r2 = ((CEntity*)e_a2)->get<TCompRigidBody>();
+		s2 = ((CEntity*)e_a2)->get<TCompStaticBody>();
+	}
 
-	// Take the positions in world
-	PxTransform c_rigidbody_trans = ((TCompRigidBody*)(((CEntity*)e_a1)->get<TCompRigidBody>()))->rigidBody->getGlobalPose();
+	PxRigidActor* m_ridig_Actor1 = NULL;
+	PxRigidActor* m_ridig_Actor2 = NULL;
 
-	PxTransform anchor = PxTransform(0, 0, 0);
-	diff_pos = joint_position - c_rigidbody_trans.p;
-	diff_pos = c_rigidbody_trans.q.rotateInv(diff_pos);
-	anchor.p = anchor.p + diff_pos;
+	if (r1.isValid()) {
+		m_ridig_Actor1 = ((TCompRigidBody*)r1)->rigidBody;	
+	}
+	else if (s1.isValid()){
+		m_ridig_Actor1 = ((TCompStaticBody*)s1)->staticBody;
+	}
+	if (r2.isValid()) {
+		m_ridig_Actor2 = ((TCompRigidBody*)r2)->rigidBody;
+	}
+	else if (s2.isValid()){
+		m_ridig_Actor2 = ((TCompStaticBody*)s2)->staticBody;
+	}
+
+	XMVECTOR corrector = XMQuaternionRotationAxis(XMVectorSet(0, 0, 1, 0), deg2rad(-90));
+	PxQuat pxCorrector = Physics.XMVECTORToPxQuat(corrector);
+	PxTransform t_corrector = PxTransform(PxVec3(0, 0, 0), pxCorrector);
+
+	// Get the transforms from the joint to the actors
+	PxTransform joint_abs = PxTransform(joint_position, joint_rotation);
+	joint_abs = joint_abs.transform(t_corrector);
+
+	PxTransform r1_abs = m_ridig_Actor1->getGlobalPose();
+	PxTransform r2_abs = m_ridig_Actor2->getGlobalPose();
 	
-	anchor.q = PxQuat(deg2rad(90), PxVec3(0, 1, 0));
-	PxRigidDynamic* m_ridig_dynamic = ((TCompRigidBody*)r1)->rigidBody;
-	PxVec3 aux_pos = m_ridig_dynamic->getGlobalPose().p;
+	r1_abs = r1_abs.getInverse();
+	r2_abs = r2_abs.getInverse();
 
-	// Axis configuration
-	TTransform j_trans = TTransform(Physics.PxVec3ToXMVECTOR(joint_position), Physics.PxQuatToXMVECTOR(joint_rotation), XMVectorSet(1, 1, 1, 0));
-
-	XMVECTOR corrector = XMQuaternionRotationAxis(j_trans.getFront(), deg2rad(-90));
-
-	PxQuat joint_final_rot = Physics.XMVECTORToPxQuat(
-			XMQuaternionMultiply(
-				  Physics.PxQuatToXMVECTOR(joint_rotation)
-				, corrector
-			)
-		);
+	PxTransform t_0 = r1_abs.transform(joint_abs);
+	PxTransform t_1 = r2_abs.transform(joint_abs);
 
 	// Create a joint
-	mJoint = PxRevoluteJointCreate(*Physics.gPhysicsSDK, m_ridig_dynamic, anchor, NULL, PxTransform(joint_position, joint_final_rot));
+	mJoint = PxRevoluteJointCreate(
+		*Physics.gPhysicsSDK
+		, m_ridig_Actor1
+		, t_0
+		, m_ridig_Actor2
+		, t_1
+		);
+	
+	if (angle_limit != 0)
+	{
+		PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * angle_limit), deg2rad(angle_limit));
+		mJoint->setLimit(limit);
+		mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 
-	// Set the axis to locked, limited or free  mode 1 = Locked, 2 = Limited, 3 = Free
+	}
+	
+	//mJoint->setDriveForceLimit(100000);
+	//mJoint->setDriveVelocity(-1);
+	//mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
+	
 }
 
 /*
@@ -134,4 +157,33 @@ CHandle TCompJointHinge::getActor2(){
 }
 PxReal TCompJointHinge::getLinealPosition(){
 	return linearPosition;
+}
+
+PxTransform TCompJointHinge::getAnchorConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot) {
+	PxVec3 diff_pos;
+
+	PxTransform anchor = PxTransform(0, 0, 0);
+	diff_pos = joint_pos - body_transform.p;
+	diff_pos = body_transform.q.rotateInv(diff_pos);
+	anchor.p = anchor.p + diff_pos;
+
+	anchor.q = PxQuat(deg2rad(90), PxVec3(0, 1, 0));
+
+	return anchor;
+}
+
+PxTransform TCompJointHinge::getAxisConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot) {
+
+	TTransform j_trans = TTransform(Physics.PxVec3ToXMVECTOR(joint_pos), Physics.PxQuatToXMVECTOR(joint_rot), XMVectorSet(1, 1, 1, 0));
+
+	XMVECTOR corrector = XMQuaternionRotationAxis(j_trans.getFront(), deg2rad(-90));
+
+	PxQuat joint_final_rot = Physics.XMVECTORToPxQuat(
+		XMQuaternionMultiply(
+		Physics.PxQuatToXMVECTOR(joint_rot)
+		, corrector
+		)
+		);
+
+	return PxTransform(joint_pos, joint_final_rot);
 }

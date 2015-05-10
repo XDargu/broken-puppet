@@ -11,8 +11,9 @@ struct TCompShadows : TBaseComponent {
 	int              resolution;
 	CRenderToTexture rt;
 	XMVECTOR         color;
+	float intensity;
 
-	TCompShadows() : resolution(256) {
+	TCompShadows() : resolution(256) , intensity(1) {
 		color = DirectX::XMVectorSet(1, 1, 1, 1);
 	}
 

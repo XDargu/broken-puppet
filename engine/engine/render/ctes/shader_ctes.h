@@ -44,6 +44,14 @@ cbuffer TCtesDirLight SHADER_REGISTER(b5)   // using the same register as the po
 	//float  dir_light_dummy1, dir_light_dummy2;
 };
 
+cbuffer TCtesSpotLight SHADER_REGISTER(b5)   // using the same register as the point light
+{
+	float4 spot_light_world_pos;
+	float4 spot_light_color;
+	float4 spot_light_direction;
+	float  spot_light_max_radius;
+	float  spot_light_dummy1, spot_light_dummy2, spot_light_dummy3;
+};
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
@@ -92,6 +100,15 @@ cbuffer TCtesGlow SHADER_REGISTER(b3)
 	float4 glow_delta;
 	float glow_amount;
 	float dummy_glow, dummy_glow2, dummy_glow3;
+};
+
+cbuffer TCtesUnderwater SHADER_REGISTER(b3)
+{
+	float4 uw_pos;
+	float4 uw_delta;
+	float uw_amount;
+	float water_level;
+	float dummy_uw, dummy_uw2;
 };
 
 #endif

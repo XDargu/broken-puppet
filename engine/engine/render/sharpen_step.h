@@ -13,6 +13,7 @@ struct TSharpenStep {
 	int  yres;
 
 	float amount;
+	float water_level;
 
 	bool create(const char* name, int axres, int ayres, int afactor);
 

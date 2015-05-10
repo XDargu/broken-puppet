@@ -210,7 +210,6 @@ void TCompCharacterController::GroundCheck(float elapsed)
 					{
 
 						// Check if is moving
-						TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 						ground_velocity = ((PxRigidBody*)ground_actor)->getLinearVelocity();
 						ground_velocity = PxVec3(ground_velocity.x, 0, ground_velocity.z);
 
@@ -222,8 +221,10 @@ void TCompCharacterController::GroundCheck(float elapsed)
 						last_platform_speed = ground_velocity;
 
 						// Aply weight force
-						PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass();
-						((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
+						if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+							PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass();
+							((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
+						}
 					}
 					else {
 						ground_velocity = PxVec3(0, 0, 0);
@@ -280,8 +281,21 @@ void TCompCharacterController::SetFriction()
 
 void TCompCharacterController::HandleGroundedVelocities()
 {
+	TCompRigidBody* rigid = rigidbody;
+
+	float water_level = CApp::get().water_level;
+	float atten = 0.2f;
+	float water_multiplier = 1;
+
+	if (rigid->rigidBody->getGlobalPose().p.y < water_level - atten)  {	
+
+		float proportion = min(1, (water_level - rigid->rigidBody->getGlobalPose().p.y) / atten);
+		water_multiplier = 1 - (proportion * 0.5f);
+	}
+	
+
 	onAir = false;
-	physx::PxVec3 groundMove = physx::PxVec3(moveInput.x, velocity.y, moveInput.z) * moveSpeedMultiplier;
+	physx::PxVec3 groundMove = physx::PxVec3(moveInput.x, velocity.y, moveInput.z) * moveSpeedMultiplier * water_multiplier;
 	velocity = groundMove;
 
 	velocity.y = 0;

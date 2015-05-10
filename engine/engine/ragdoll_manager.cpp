@@ -189,8 +189,8 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 bool CCoreRagdoll::load(const char* name) {
 	uid = ragdoll_uid;
 	ragdoll_uid++;
-
-
+	
+	
 	std::string real_name = split_string(std::string(name), "#")[0];
 	setName(name);
 	root_path = "data/skeletons/" + real_name + "/";

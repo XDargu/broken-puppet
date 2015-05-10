@@ -2,7 +2,9 @@
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
+#include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
+#include "components\comp_platform_path.h"
 #include "entity_manager.h"
 #include "entity_inspector.h"
 //#include <SLB\include\SLB\SLB.hpp>
@@ -15,7 +17,19 @@ CLogicManager& CLogicManager::get() {
 	return logic_manager;
 }
 
-CLogicManager::CLogicManager() {}
+CLogicManager::CLogicManager() {
+
+}
+
+void CLogicManager::init()
+{
+	water_transform = CEntityManager::get().getByName("water");
+	if (water_transform.isValid()) {		
+		TCompTransform* water_t = ((CEntity*)water_transform)->get<TCompTransform>();
+		water_level_dest = XMVectorGetY(water_t->position);
+		lerp_water = 0.05f;
+	}
+}
 
 CLogicManager::~CLogicManager() {}
 
@@ -51,6 +65,27 @@ void CLogicManager::update(float elapsed) {
 		// Update the animation
 		it.update(elapsed);		
 	};
+
+	// Update water level
+	if (water_transform.isValid()) {
+		TCompTransform* water_t = ((CEntity*)water_transform)->get<TCompTransform>();
+		XMVECTOR water_dest = water_t->position;
+		water_dest = XMVectorSetY(water_dest, water_level_dest);
+		water_t->position = XMVectorLerp(water_t->position, water_dest, lerp_water);
+
+		// Ñapa hacer flotar
+		CHandle madera = ((CEntity*)CEntityManager::get().getByName("plataforma_madera"));
+		if (madera.isValid()){
+			CHandle rigid = ((CEntity*)madera)->get<TCompRigidBody>();
+			if (rigid.isValid()){
+				PxTransform aux_pos = ((TCompRigidBody*)rigid)->rigidBody->getGlobalPose();
+				aux_pos.p.y = XMVectorGetY(water_t->position);				
+				((TCompRigidBody*)rigid)->rigidBody->setKinematicTarget(aux_pos);
+			}
+		}
+
+
+	}
 
 	/*CErrorContext ce2("Updating keyframes", "");
 	// Update the keyframes
@@ -141,6 +176,12 @@ void CLogicManager::addRigidAnimation(CRigidAnimation animation) {
 
 void CLogicManager::clearAnimations() {
 	animations.clear();
+}
+
+void CLogicManager::changeWaterLevel(float pos1, float time)
+{
+	lerp_water = time;
+	water_level_dest = pos1;
 }
 
 /*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
@@ -258,6 +299,10 @@ void CLogicManager::bootLUA() {
 		.set("loadScene", &CLogicManager::loadScene)
 		.set("setTimer", &CLogicManager::setTimer)
 		.set("getBot", &CLogicManager::getBot)
+		.set("getPrismaticJoint", &CLogicManager::getPrismaticJoint)
+		.set("getHingeJoint", &CLogicManager::getHingeJoint)
+		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
+		.set("changeWaterLevel", (void (CLogicManager::*)(float, float)) &CLogicManager::changeWaterLevel)
 		.set("print", &CLogicManager::print)
 	;
 
@@ -278,6 +323,23 @@ void CLogicManager::bootLUA() {
 		.property("x", &CVector::x)
 		.property("y", &CVector::y)
 		.property("z", &CVector::z)
+	;
+
+	// Moving platforms
+	SLB::Class<CMovingPlatform>("MovingPlatform")
+		.set("start", (void (CMovingPlatform::*)(float)) &CMovingPlatform::start)
+		.set("stop", &CMovingPlatform::stop)
+	;
+
+	// Distance joint
+	SLB::Class<CPrismaticJoint>("PrismaticJoint")
+		.set("setLinearLimit", (void (CPrismaticJoint::*)(float, float, float))&CPrismaticJoint::setLinearLimit)
+	;
+	
+	// Hinge joint
+	SLB::Class<CHingeJoint>("PrismaticJoint")
+		.set("setMotor", (void (CHingeJoint::*)(float, float))&CHingeJoint::setMotor)
+		.set("setLimit", (void (CHingeJoint::*)(float))&CHingeJoint::setLimit)
 	;
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
@@ -303,8 +365,34 @@ CBot CLogicManager::getBot(std::string name) {
 	return CBot(entity);
 }
 
+CMovingPlatform CLogicManager::getMovingPlatform(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid moving platform name: " + name + "\")");
+
+	return CMovingPlatform(entity);
+}
+
+CPrismaticJoint CLogicManager::getPrismaticJoint(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid prismatic joint name: " + name + "\")");
+
+	return CPrismaticJoint(entity);
+}
+
+CHingeJoint CLogicManager::getHingeJoint(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid prismatic joint name: " + name + "\")");
+
+	return CHingeJoint(entity);
+}
+
 void CLogicManager::print(std::string text) {
+#ifdef _DEBUG
 	CConsole::get().print(text);
+#endif
 }
 
 void CLogicManager::help() {

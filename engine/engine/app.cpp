@@ -111,6 +111,7 @@ TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
+TUnderwaterEffect underwater;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -270,13 +271,14 @@ bool CApp::create() {
 	physics_manager.init();
 	bool is_ok = true;
 	// Boot LUA
+
+
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
 
-
-   //loadScene("data/scenes/my_file-backup.xml");
 	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file-backup.xml");
 	
 
 	//sm.addMusicTrack(0, "plug in baby.mp3");
@@ -289,6 +291,8 @@ bool CApp::create() {
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
 	XASSERT(is_ok, "Error creating debug meshes");
+
+	logic_manager.init();
 
 #ifdef _DEBUG
 	// Init AntTweakBar
@@ -328,6 +332,14 @@ bool CApp::create() {
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
+	is_ok &= underwater.create("underwater", xres, yres, 1);
+
+	water_level = -1000;
+	CEntity* water = entity_manager.getByName("water");
+	if (water) {
+		TCompTransform* water_t = water->get<TCompTransform>();
+		water_level = XMVectorGetY(water_t->position);
+	}
 
 	assert(is_ok);
 
@@ -401,16 +413,34 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("deferred_gbuffer");
-		//render_techniques_manager.reload("deferred_point_lights");
-		//render_techniques_manager.reload("deferred_dir_lights");
-		//render_techniques_manager.reload("deferred_resolve");
-		//render_techniques_manager.reload("chromatic_aberration");
+		/*render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_point_lights");
+		render_techniques_manager.reload("deferred_dir_lights");
+		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
 		texture_manager.reload("Foco_albedo");
-		texture_manager.reload("Foco_normal");
-		
+		texture_manager.reload("Foco_normal");*/
+		render_techniques_manager.reload("underwater");		
+	}
+
+	// Water level
+	CEntity* water = entity_manager.getByName("water");
+	if (water) {
+		TCompTransform* water_t = water->get<TCompTransform>();
+		water_level = XMVectorGetY(water_t->position);
+		underwater.water_level = water_level;
+		CEntity* player = entity_manager.getByName("PlayerCamera");
+		if (player) {
+			TCompTransform* player_t = player->get<TCompTransform>();
+			float p_y = XMVectorGetY(player_t->position);
+			underwater.amount = p_y > water_level ? 0 : 1;
+		}		
+	}
+	else
+	{
+		underwater.amount = 0;
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -542,7 +572,8 @@ void CApp::render() {
 
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
-	blur.apply(chromatic_aberration.getOutput());
+	//blur.apply(chromatic_aberration.getOutput());
+	underwater.apply(chromatic_aberration.getOutput());
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
@@ -553,27 +584,27 @@ void CApp::render() {
 	
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 	//ssao.getOutput()->activate(1);
-	
-
 
 	//texture_manager.getByName("rt_depth")->activate(2);
 
 	//drawTexture2D(0, 0, xres, yres, rt_base, "sharpen");
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
+	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	//drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, bs2.getOutput());
+	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
 
-	/*CHandle h_light = entity_manager.getByName("the_light");
+	/*
+	CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
-	
-	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+	*/
+	/*drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
-	drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
+	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
+	
 	render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);
@@ -897,6 +928,9 @@ void CApp::loadScene(std::string scene_name) {
 	//physics_manager.init();
 
 	initManagers();
+
+
+	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");

@@ -600,8 +600,8 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 	if (isKeyPressed('W')){
 		movement_vector += physx::PxVec3(0, 0, 1);
 		is_moving = true;
-	}
-	if (isKeyPressed('S')){
+	}	
+	else if (isKeyPressed('S')){
 		movement_vector += physx::PxVec3(0, 0, -1);
 		is_moving = true;
 	}
@@ -609,7 +609,7 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 		movement_vector += physx::PxVec3(1, 0, 0);
 		is_moving = true;
 	}
-	if (isKeyPressed('D')){
+	else if (isKeyPressed('D')){
 		movement_vector += physx::PxVec3(-1, 0, 0);
 		is_moving = true;
 	}
