@@ -20,6 +20,13 @@ void TCompShadows::init() {
 void TCompShadows::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	resolution = atts.getInt("res", 256);
 	color = atts.getPoint("color");
+	intensity = atts.getFloat("intensity", 1.f);
+
+	// TODO: Para que funcione desde max, es necesario rotarlas 90 grados, cambiar el exportador de max más adelante
+	XMVECTOR corrector = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(90));
+	TCompTransform* m_trans = getSibling<TCompTransform>(this);
+	m_trans->rotation = XMQuaternionMultiply(m_trans->rotation, corrector);
+
 }
 
 // This generates the depth map from the ligth source

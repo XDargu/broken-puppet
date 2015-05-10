@@ -10,8 +10,9 @@ int ragdoll_uid = 0;
 CCoreRagdoll::CCoreRagdoll() {}
 
 void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
-	
-	CCoreModel* model = (CCoreModel*)skeleton_manager.getByName(name.c_str());
+	std::string real_name = split_string(std::string(name), "#")[0];
+
+	CCoreModel* model = (CCoreModel*)skeleton_manager.getByName(real_name.c_str());
 
 	if (elem == "BoneRigidbody") {
 
@@ -187,15 +188,16 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 bool CCoreRagdoll::load(const char* name) {
 	uid = ragdoll_uid;
 	ragdoll_uid++;
-
-	setName(name);
 	
-	root_path = "data/skeletons/" + std::string(name) + "/";
-
-	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);
+	
+	std::string real_name = split_string(std::string(name), "#")[0];
+	setName(name);
+	root_path = "data/skeletons/" + real_name + "/";
 
 	char full_name[MAX_PATH];
 	sprintf(full_name, "%s%s.xml", root_path.c_str(), (std::string(name) + "_ragdoll").c_str());
+
+
 	return xmlParseFile(full_name);
 }
 

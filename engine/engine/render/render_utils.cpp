@@ -13,6 +13,7 @@ CShaderCte<TCtesCamera> ctes_camera;
 CShaderCte<TCtesLight>  ctes_light;
 CShaderCte<TCtesPointLight>  ctes_point_light;
 CShaderCte<TCtesDirLight>    ctes_dir_light;
+CShaderCte<TCtesSpotLight>    ctes_spot_light;
 CShaderCte<TCtesBones>  ctes_bones;
 
 // Post process
@@ -304,6 +305,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_light.create();
 	is_ok &= ctes_point_light.create();
 	is_ok &= ctes_dir_light.create();
+	is_ok &= ctes_spot_light.create();
 	is_ok &= ctes_bones.create();
 
 	is_ok &= ctes_blur.create();
@@ -335,6 +337,7 @@ void renderUtilsDestroy() {
 	ctes_object.destroy();
 	ctes_dir_light.destroy();
 	ctes_point_light.destroy();
+	ctes_spot_light.destroy();
 	ctes_light.destroy();
 	ctes_camera.destroy();
 	ctes_bones.destroy();
@@ -418,6 +421,7 @@ void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slo
 	//c->dir_light_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
 	ctes_dir_light.uploadToGPU();
 }
+
 
 // -----------------------------------------------------
 bool createGrid(CMesh& mesh, int nsamples) {

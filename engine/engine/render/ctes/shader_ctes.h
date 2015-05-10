@@ -44,6 +44,14 @@ cbuffer TCtesDirLight SHADER_REGISTER(b5)   // using the same register as the po
 	//float  dir_light_dummy1, dir_light_dummy2;
 };
 
+cbuffer TCtesSpotLight SHADER_REGISTER(b5)   // using the same register as the point light
+{
+	float4 spot_light_world_pos;
+	float4 spot_light_color;
+	float4 spot_light_direction;
+	float  spot_light_max_radius;
+	float  spot_light_dummy1, spot_light_dummy2, spot_light_dummy3;
+};
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {

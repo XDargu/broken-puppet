@@ -1494,7 +1494,7 @@ clearlistener()
 		if((validateDirectionalLight obj) == false) then
 		return ""
 		
-		local mString = "<directionalLight " \
+		local mString = "<shadows " \
 											+ "intensity=\"" + obj.multiplier as string + "\" " \
 											+ "color=\"" \
 														+ (obj.rgb.r/255) as string + " "\
