@@ -26,6 +26,8 @@ public:
 	PxRigidDynamic* getBoneRigid(int id);
 
 	void setCollisionGroups();
+
+	void breakJoints();
 };
 
 #endif

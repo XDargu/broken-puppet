@@ -18,7 +18,7 @@ const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 6.f;
 const float distance_change_way_point = 0.55f;
-const float force_large_impact = 3000.f;
+const float force_large_impact = 5000.f;
 const float force_medium_impact = 2000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
@@ -171,14 +171,17 @@ int bt_grandma::actionWakeUp()
 	if (on_enter) {
 		is_ragdoll = false;
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
+		TCompSkeleton* m_skeleton = enemy_skeleton;
 		m_ragdoll->setActive(false);
-		playAnimationIfNotPlaying(16);
+		m_skeleton->playAnimation(16);
+		
 	}
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
 
 	if (state_time > getAnimationDuration(16)) {		
+		playAnimationIfNotPlaying(0);
 		return LEAVE;
 	}
 	else
@@ -872,7 +875,6 @@ int bt_grandma::actionNoevents()
 //
 int bt_grandma::conditionTied()
 {
-
 	return false;
 }
 
@@ -1197,6 +1199,7 @@ void bt_grandma::hurtSensor(float damage){
 		CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 		ragdoll_aabb->setIdentityMinMax(min, max);
 		m_ragdoll->setActive(true);
+		m_ragdoll->breakJoints();
 		CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 		stopAllAnimations();
 
