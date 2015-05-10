@@ -21,8 +21,13 @@ void TCompColliderMesh::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		,
 		true);
 
-	addInputNavMesh();
-	CNav_mesh_manager::get().colMeshes.push_back(this);
+	AABB recast_aabb = AABB(XMVectorSet(-24, 0,-37, 0), XMVectorSet(8, 1, -3, 0));
+	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+
+	if (recast_aabb.intersects(m_aabb)) {
+		addInputNavMesh();
+		CNav_mesh_manager::get().colMeshes.push_back(this);
+	}
 
 	setCollisionGroups();
 
