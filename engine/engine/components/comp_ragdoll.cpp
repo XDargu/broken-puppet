@@ -64,9 +64,35 @@ void TCompRagdoll::setActive(bool active) {
 	}
 
 	// Make all the rigidboies kinematic if the ragdoll is not active, and make them not kinematic if active
-	for (auto& it : ragdoll->bone_map) {
-		it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, !active);
-	}	
+	CEntity* e = (CEntity*)CHandle(this).getOwner();
+	if (active){
+		PxU32 myMask = FilterGroup::ePLAYER_RG;
+		PxU32 notCollide = FilterGroup::ePLAYER;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, active);
+			if (e->hasTag("player")){
+				it.second->getShapes(&collider, 1);
+				setupFiltering(collider, myMask, notCollide);
+			}
+		}
+	}else{
+		PxU32 myMask = FilterGroup::eNON_COLLISION;
+		PxU32 notCollide = FilterGroup::eACTOR
+			| FilterGroup::eACTOR_NON_COLLISION
+			| FilterGroup::eENEMY
+			| FilterGroup::eENEMY_RG
+			| FilterGroup::eLEVEL
+			| FilterGroup::eNON_COLLISION;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, !active);
+			if (e->hasTag("player")){
+				it.second->getShapes(&collider, 1);
+				setupFiltering(collider, myMask, notCollide);
+			}
+		}
+	}
 }
 
 bool TCompRagdoll::isRagdollActive() {
