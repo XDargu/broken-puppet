@@ -78,6 +78,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		// Increase the sleep threshold, to prevent the shakiness of the ragdoll
 		rigidBody->setSleepThreshold(0.1f);
+		rigidBody->setContactReportThreshold(100000);
 
 		bone_map[bone_id] = rigidBody;
 	}
