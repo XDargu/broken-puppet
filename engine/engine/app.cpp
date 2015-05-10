@@ -411,7 +411,7 @@ void CApp::update(float elapsed) {
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
-		exit(-1);
+		exit(0);
 	}
 
 	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
@@ -633,7 +633,8 @@ void CApp::render() {
 	TwDraw();
 #endif
 
-	std::string life_text = "Life: " + std::to_string((int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life);
+	int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
+	std::string life_text = "Life: " + std::to_string((int)(life_val / 10));
 	font.print(15, 15, life_text.c_str());
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";

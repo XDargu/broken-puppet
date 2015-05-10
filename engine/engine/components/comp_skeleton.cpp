@@ -146,7 +146,7 @@ void TCompSkeleton::update(float elapsed) {
     elapsed *= 0.05f;
   }*/
 
-  if (isKeyPressed('o') || isKeyPressed('O')) {
+  /*if (isKeyPressed('o') || isKeyPressed('O')) {
     model->getMixer()->executeAction(3, 0.0f, 0.3f, 1.0f, false);
 	//model->getMixer()->blendCycle(1, 1.0, 0.3);
   }
@@ -155,7 +155,7 @@ void TCompSkeleton::update(float elapsed) {
   }
   if (isKeyPressed('L')) {
     model->getMixer()->removeAction(1, 0.3f);
-  }
+  }*/
 
   //if (hasKeyBecomedPressed('o')) {
   //  model->getMixer()->blendCycle(0, 1.0, 0.3);
