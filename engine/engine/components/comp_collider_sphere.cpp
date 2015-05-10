@@ -61,7 +61,7 @@ void TCompColliderSphere::loadFromAtts(const std::string& elem, MKeyValue &atts)
 			,
 			true);
 
-		AABB recast_aabb = AABB(XMVectorSet(-24, 0, -37, 0), XMVectorSet(8, 1, -3, 0));
+		AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
 		TCompAABB* m_aabb = getSibling<TCompAABB>(this);
 
 		if (recast_aabb.intersects(m_aabb)) {

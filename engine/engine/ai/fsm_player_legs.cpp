@@ -351,7 +351,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 		ChangeState("fbp_Jump");
 		skeleton->stopAnimation(6);
 	}
-	else if (state_time >= 1.1f){
+	else if (state_time >= 4.f){
 		ChangeState("fbp_WrongFall");
 		skeleton->stopAnimation(6);
 	}

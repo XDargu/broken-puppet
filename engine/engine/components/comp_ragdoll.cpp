@@ -21,12 +21,12 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	ragdoll = (CCoreRagdoll*)ragdoll_manager.getByName(ragdoll_name.c_str());
 
 	TCompName* name = assertRequiredComponent<TCompName>(this);
-	
+
 	for (auto& rigid : ragdoll->bone_map) {
 		rigid.second->userData = CHandle(this).getOwner().asVoidPtr();
 		rigid.second->setName(name->name);
 	}
-	
+
 	setCollisionGroups();
 	setActive(false);
 }
@@ -37,7 +37,7 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 		if (!((CEntity*)CHandle(this).getOwner())->hasTag("player"))
 			setActive(!isRagdollActive());
 	}
-		
+
 
 	// If the ragdoll is not active, the rigid bones must follow the bone position of the animation
 	if (!ragdoll_active) {
@@ -66,7 +66,7 @@ void TCompRagdoll::setActive(bool active) {
 	// Make all the rigidboies kinematic if the ragdoll is not active, and make them not kinematic if active
 	for (auto& it : ragdoll->bone_map) {
 		it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, !active);
-	}	
+	}
 }
 
 bool TCompRagdoll::isRagdollActive() {
@@ -84,7 +84,8 @@ void TCompRagdoll::setCollisionGroups(){
 	PxU32 myMask;
 	if (e->hasTag("enemy")){
 		myMask = convertStrInCollisionFilter("Enemy_Ragdoll");
-	}else if (e->hasTag("player")){
+	}
+	else if (e->hasTag("player")){
 		myMask = convertStrInCollisionFilter("Player_Ragdoll");
 	}
 	PxU32 notCollide = 0;
