@@ -65,6 +65,8 @@ public:
 
 	void changeWaterLevel(float pos1, float time);
 
+	void playerDead();
+
 	void print(std::string text);
 	void help();
 };

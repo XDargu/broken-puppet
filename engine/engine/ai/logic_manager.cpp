@@ -403,3 +403,7 @@ void CLogicManager::execute(std::string text) {
 	std::string ex = "SLB.using(SLB)\n" + text;
 	luaL_dostring(L, ex.c_str());
 }
+
+void CLogicManager::playerDead() {
+	execute("onPlayerDead();");
+}

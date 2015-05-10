@@ -4,6 +4,7 @@
 #include "../components/all_components.h"
 #include "components\comp_skeleton.h"
 #include "components\comp_skeleton_ik.h"
+#include "ai\logic_manager.h"
 
 FSMPlayerLegs::FSMPlayerLegs()
 {
@@ -52,6 +53,7 @@ void FSMPlayerLegs::Init()
 	state_time = 0.f;
 	falling = false;
 	canThrow = false;
+	dead_counter = 0.f;
 
 	//run_speed = ((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier;
 	run_speed = 6;
@@ -440,6 +442,12 @@ void FSMPlayerLegs::ProcessHit(float elapsed){}
 
 void FSMPlayerLegs::Hurt(float elapsed){
 
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	if (on_enter) {
+		skeleton->loopAnimation(28);
+	}
+
 	canThrow = false;
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_hurt");
@@ -448,7 +456,8 @@ void FSMPlayerLegs::Hurt(float elapsed){
 	dir.normalize();
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
-	if (state_time >= .2f){
+	if (state_time >= .4f){
+		skeleton->stopAnimation(28);
 		ChangeState("fbp_ReevaluatePriorities");
 	}
 }
@@ -456,6 +465,7 @@ void FSMPlayerLegs::Hurt(float elapsed){
 void FSMPlayerLegs::Ragdoll(float elapsed){
 
 	canThrow = false;
+	dead_counter += elapsed;
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_ragdoll");
 
@@ -541,10 +551,13 @@ void FSMPlayerLegs::Dead(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_dead");
 
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()),elapsed);
+	dead_counter += elapsed;
 
-	if (state_time >= 6){
+	if (dead_counter >= 4){
+		dead_counter = 0.f;
+		CLogicManager::get().playerDead();
 		((TCompLife*)life)->life = 100;
-		ChangeState("fbp_Idle");
+		ChangeState("fbp_Idle");		
 	}
 
 

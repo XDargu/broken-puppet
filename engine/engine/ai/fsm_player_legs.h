@@ -30,6 +30,7 @@ public:
 	float last_hit;
 	float walk_speed;
 	float run_speed;
+	float dead_counter;
 
 	FSMPlayerLegs();
 	~FSMPlayerLegs();

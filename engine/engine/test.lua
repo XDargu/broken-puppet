@@ -246,3 +246,9 @@ function onTriggerEnter_Trigger_Victory(who)
 end
 
 
+                     -- DEAD --
+
+function onPlayerDead()
+	local player = logicManager:getBot("Player");
+	player:teleport(5.008, 0.479939, 47.0041);
+end

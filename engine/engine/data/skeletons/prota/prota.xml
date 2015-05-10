@@ -29,6 +29,7 @@
 	<anim name="walk_right_up"/>25
 	<anim name="run_left_up"/>26
 	<anim name="run_right_up"/>27
+	<anim name="hit"/>28
 	
 	<ik_foot bone="Bip01 R Foot" local_dir="0 1 0" amount="1" render="1"/>
 	<ik_foot bone="Bip01 L Foot" local_dir="0 1 0" amount="1" render="1"/>

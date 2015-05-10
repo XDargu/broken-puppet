@@ -619,9 +619,10 @@ void CApp::render() {
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 	render_manager.renderAll(&camera, false);
-	renderDebugEntities();
+	
 
 #ifdef _DEBUG
+	renderDebugEntities();
 	TwDraw();
 #endif
 
@@ -736,8 +737,8 @@ void CApp::renderEntities() {
 		if (!t)
 			continue;
 
-		if (mesh)
-			setTint(mesh->color);
+		/*if (mesh)
+			setTint(mesh->color);*/
 
 		setWorldMatrix(t->getWorld());
 
