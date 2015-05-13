@@ -4202,8 +4202,8 @@
     </render>
     <aabb min="-0.491362 -0.700274 -0.491363" max="0.491362 0.700274 0.491361"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.39" boxY="0.6" boxZ="0.39"/>
-    <rigidbody density="1000.0"  />
-    <jointPrismatic actor1 = "IntPullTope_98.0" actor2 = "InterruptorTirarAgua" linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="2.0" linearRestitution="0.0" posSpring="1000.0" posDamping="3000.0" />
+    <rigidbody density="500.0"  />
+    <jointPrismatic actor1 = "IntPullTope_98.0" actor2 = "InterruptorTirarAgua" linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="2.0" linearRestitution="0.0" posSpring="1000.0" posDamping="100.0" />
     <switchPullController />
   </entity>
   <entity tag = "actor" >
@@ -4341,8 +4341,8 @@
     </render>
     <aabb min="-0.491362 -0.700274 -0.491363" max="0.491362 0.700274 0.491361"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.39" boxY="0.6" boxZ="0.39"/>
-    <rigidbody density="1000.0"  />
-    <jointPrismatic actor1 = "IntPullTope_162.0" actor2 = "InterruptorTirarReloj" linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="2.0" linearRestitution="0.0" posSpring="1000.0" posDamping="3000.0" />
+    <rigidbody density="500.0"  />
+    <jointPrismatic actor1 = "IntPullTope_162.0" actor2 = "InterruptorTirarReloj" linearModeX="1" linearModeY="2" linearModeZ="1" linearPosition="2.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" />
     <switchPullController />
   </entity>
   <entity  >
