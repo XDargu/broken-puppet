@@ -1663,7 +1663,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="dvn_arqui_techo_pared_half_02_164.0" />
-    <transform position="-20.0 8.07568 -4.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <transform position="-20.0 8 -4.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render>
       <draw mesh="dvn_arqui_techo_pared_half_02" sub_mesh="0" mat="techo"/>
       <draw mesh="dvn_arqui_techo_pared_half_02" sub_mesh="1" mat="rodapie"/>
