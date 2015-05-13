@@ -160,6 +160,17 @@ int bt_grandma::actionRagdoll()
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
+
+			TCompTransform* p_transform = player_transform;
+			if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
+				CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
+				TCompTransform* c_transform = camera->get<TCompTransform>();
+				TCompCamera* c_camera = camera->get<TCompCamera>();
+				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
+					CApp::get().slowMotion(4);
+				}
+			}
+
 		}
 			
 	}

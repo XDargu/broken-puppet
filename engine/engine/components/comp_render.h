@@ -22,6 +22,7 @@ struct TCompRender : TBaseComponent {
 	~TCompRender();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
+	void init();
 };
 
 #endif

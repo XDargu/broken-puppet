@@ -39,7 +39,9 @@ void CRenderManager::addKey(const CMesh*      mesh
 	// Pasar de comp_render a entity
 	CEntity* e = owner.getOwner();
 	k.transform = e->get< TCompTransform >();
+	k.aabb = e->get< TCompAABB >();
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
+	XASSERT(k.aabb.isValid(), "AABB from entity %s not valid", e->getName());
 
 	k.active = active;
 
@@ -95,8 +97,11 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		TCompTransform* tmx = it->transform;
 		XASSERT(tmx, "Invalid transform");
 
+		if (!it->aabb.isValid()) {
+			it->aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		}
 		
-		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		TCompAABB* m_aabb = it->aabb;
 		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes.isVisible(m_aabb);
 
@@ -176,18 +181,26 @@ void CRenderManager::destroyAllKeys() {
 }
 
 // ---------------------------------------------------------------
-void CRenderManager::renderShadowsCasters() {
-
+void CRenderManager::renderShadowsCasters(const CCamera* camera) {
+	planes.create(camera->getViewProjection());
+	bool culling = true;
 	bool uploading_bones = false;
+	
+
 	for (auto k : shadow_casters_keys) {
 		
 		if (!k.material->isSolid())
 			continue;
 
+
 		// Activar la world del obj
 		TCompTransform* tmx = k.transform;
 		assert(tmx);
 		setWorldMatrix(tmx->getWorld());
+
+		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		XASSERT(m_aabb, "Invalid AABB");
+		culling = planes.isVisible(m_aabb);
 
 		uploading_bones = k.material->getTech()->usesBones();
 

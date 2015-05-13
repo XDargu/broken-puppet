@@ -44,7 +44,7 @@ struct TTransform {     // 1
 
 	bool isInFov(XMVECTOR loc, float fov_in_rad) const {
 		XMVECTOR unit_delta = XMVector3Normalize(loc - position);
-		float cos_angle = XMVectorGetX(XMVector3Dot(getFront(), unit_delta));
+		float cos_angle = XMVectorGetX(XMVector3Dot(-getFront(), unit_delta));
 		return(cos_angle < cos(fov_in_rad * 0.5f));
 	}
 

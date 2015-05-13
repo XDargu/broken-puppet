@@ -49,7 +49,7 @@ void TCompShadows::generate()  {
 	// 
 	render_techniques_manager.getByName("gen_shadows")->activate();
 
-	render_manager.renderShadowsCasters();
+	render_manager.renderShadowsCasters(camera);
 
 	activateRSConfig(RSCFG_DEFAULT);
 }

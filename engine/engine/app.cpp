@@ -63,6 +63,8 @@ CApp& CApp::get() {
 CApp::CApp()
 	: xres(640)
 	, yres(480)
+	, time_modifier(1)
+	, slow_motion_counter(0)
 { }
 
 void CApp::loadConfig() {
@@ -278,7 +280,7 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/my_file-backup.xml");
 	
 
@@ -382,18 +384,33 @@ void CApp::doFrame() {
 	total_time += delta_secs;
 
 	fps = 1.0f / delta_secs;
-
+	float pxStep = physics_manager.timeStep;
 	before = now;
 
 	// To avoid the fist huge delta time
-	if (delta_secs < 0.5) {		
+	if (delta_secs < 0.5) {
+
+		/*if (isKeyPressed('Q')) {
+			time_modifier = 0.05f;
+		}*/
 		
+		if (slow_motion_counter > 0) {
+			slow_motion_counter -= delta_secs;
+			if (slow_motion_counter <= 0) {
+				time_modifier = 1;
+				slow_motion_counter = 0;
+			}
+		}
+
+		delta_secs *= time_modifier;
+		pxStep *= time_modifier;
+
 		// Fixed update
 		fixedUpdateCounter += delta_secs;
 
-		while (fixedUpdateCounter > physics_manager.timeStep) {
-			fixedUpdateCounter -= physics_manager.timeStep;
-			fixedUpdate(physics_manager.timeStep);
+		while (fixedUpdateCounter > pxStep) {
+			fixedUpdateCounter -= pxStep;
+			fixedUpdate(pxStep);
 		}
 
 		update(delta_secs);
@@ -419,17 +436,17 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		/*render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
-		render_techniques_manager.reload("chromatic_aberration");
+		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
 		texture_manager.reload("Foco_albedo");
 		texture_manager.reload("Foco_normal");*/
 		//render_techniques_manager.reload("underwater");		
-		render_techniques_manager.reload("deferred_point_lights");
+		//render_techniques_manager.reload("deferred_point_lights");
 	}
 
 	// Water level
@@ -981,4 +998,9 @@ void CApp::loadScene(std::string scene_name) {
 
 void CApp::loadPrefab(std::string prefab_name) {
 	CEntity* e = prefabs_manager.getInstanceByName(prefab_name.c_str());
+}
+
+void CApp::slowMotion(float time) {
+	time_modifier = 0.05f;
+	slow_motion_counter = time;
 }

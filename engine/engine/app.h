@@ -11,8 +11,9 @@ class CApp {
 	void renderEntities();
 	void renderDebugEntities();
 	void activateDebugMode(bool active);
-
+	float slow_motion_counter;
 public:
+	float time_modifier;
 	float water_level;
 	float delta_time;
 	double total_time;
@@ -45,6 +46,8 @@ public:
 
 	void activateInspectorMode(bool active);
 	static CApp& get();
+
+	void slowMotion(float time);
 };
 
 #endif

@@ -264,10 +264,14 @@ float3 getWorldCoords( float2 screen_coords, float depth ) {
 
 // -------------------------------------------------
 float getSpecular(float3 wPos, float3 L, float3 N) {
-  float3 E = normalize(cameraWorldPos.xyz - wPos);
-  float3 H = normalize(L + E);
-  float  spec_amount = pow(saturate(dot(H, N)), 50);    // 20 should come from a texture
+  float3 V = normalize(cameraWorldPos.xyz - wPos);
+  float3 R = reflect(normalize(-L), normalize(N));
+  float spec_amount = pow(saturate(dot(R, V)), 50);
   return spec_amount;
+  /*float3 E = normalize(cameraWorldPos.xyz - wPos);
+  float3 H = normalize(L + E);
+  spec_amount = pow(saturate(dot(H, N)), 50);    // 20 should come from a texture
+  return spec_amount;*/
 }
 
 // -------------------------------------------------
@@ -383,7 +387,8 @@ float4 PSResolve(
 
 	float ambient_val = 0.15;
 	float ambient_color = float4(0.98, 0.85, 0.8, 0);
-	float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 0.8;
+	float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
+		//return specular;
 	return (albedo * diffuse + specular) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
@@ -452,7 +457,7 @@ VS_TEXTURED_OUTPUT vin
 	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
 	float3 N = normalize(vin.wNormal.xyz);
 	float fresnel = 1 - dot(N, dir_to_eye);
-	fresnel = pow(fresnel, 4) * 0.5;
+	fresnel = pow(fresnel, 4);
 
 	float3 N_reflected = reflect(-dir_to_eye, N);
 	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);

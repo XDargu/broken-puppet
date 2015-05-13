@@ -19,6 +19,7 @@ class CRenderManager {
 		int                mesh_id;
 		CHandle            owner;
 		CHandle            transform;
+		CHandle            aabb;
 		bool*			   active;
 
 		bool operator==(const TKey &key) const {
@@ -63,7 +64,7 @@ public:
 	void renderAll(const CCamera* camera, bool solids);
 	void renderAll(const CCamera* camera, TTransform* camera_transform, bool solids);
 	
-	void renderShadowsCasters();
+	void renderShadowsCasters(const CCamera* camera);
 
 	void destroyAllKeys();
 
