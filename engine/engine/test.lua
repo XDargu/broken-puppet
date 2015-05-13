@@ -34,6 +34,10 @@ function onSceneLoad_my_file()
 
 	co_generator = coroutine.create(f_generator)
 
+	-- Star gear motors
+
+	ActiveGears();
+
 	--[[samples = 50000
 	v_02 = 0
 	v_24 = 0
@@ -173,7 +177,7 @@ function onSwitchPressed_InterruptorTirarReloj(who)
 	print(tostring(who) .. "Interruptor pulsado");
 	m_minutero = logicManager:getHingeJoint("minutero");
 	m_minutero:setLimit(0);
-	m_minutero:setMotor(1.55, 60000);
+	m_minutero:setMotor(1.55, 20000);
 
 	m_atrezzo01 = logicManager:getHingeJoint("atrezzo_plataforma01");
 	m_atrezzo01:setMotor(1000, 100000);
@@ -203,7 +207,19 @@ function onTriggerEnter_grandma_crasher01_Trigger(who)
 	logicManager:setTimer("grandma_crasher01Restore", 3)
 end
 
+-- Engranajes giratorios
 
+function ActiveGears()
+	
+	local m_gear_1 = logicManager:getHingeJoint("engraje1");
+	local m_gear_2 = logicManager:getHingeJoint("eje1");
+	local m_gear_3 = logicManager:getHingeJoint("eje5");
+
+	m_gear_1:setMotor(-1, 1000);
+	m_gear_2:setMotor(-0.6, 1000);
+	m_gear_3:setMotor(0.2, 1000);
+
+end
 
 
 function onTimerEnd_grandma_crasher02Restore()

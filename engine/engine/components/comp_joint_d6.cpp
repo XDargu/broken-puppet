@@ -46,6 +46,10 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 
+	bool breakable = atts.getBool("breakable", false);
+	float breakForce = atts.getFloat("maxBreakForce", 1000);
+	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
+
 	actor1 = atts.getString("actor1", "");
 	actor2 = atts.getString("actor2", "");
 
@@ -78,8 +82,32 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	r1 = ((CEntity*)e_a1)->get<TCompRigidBody>();
 	r2 = ((CEntity*)e_a2)->get<TCompRigidBody>();
 
-	PxRigidDynamic* m_ridig_dynamic1 = ((TCompRigidBody*)r1)->rigidBody;
-	PxRigidDynamic* m_ridig_dynamic2 = ((TCompRigidBody*)r2)->rigidBody;
+	s1 = ((CEntity*)e_a1)->get<TCompStaticBody>();
+	s2 = ((CEntity*)e_a2)->get<TCompStaticBody>();
+
+	PxRigidActor* m_ridig_dynamic1 = nullptr;
+	PxRigidActor* m_ridig_dynamic2 = nullptr;
+
+	if (r1.isValid()) {
+		m_ridig_dynamic1 = ((TCompRigidBody*)r1)->rigidBody;
+
+		if (r2.isValid()) {
+			m_ridig_dynamic2 = ((TCompRigidBody*)r2)->rigidBody;
+		}
+		else if (s2.isValid()) {
+			m_ridig_dynamic2 = ((TCompStaticBody*)s2)->staticBody;
+		}
+	}
+	else if (s1.isValid()) {
+		m_ridig_dynamic1 = ((TCompStaticBody*)s1)->staticBody;
+
+		if (r2.isValid()) {
+			m_ridig_dynamic2 = ((TCompRigidBody*)r2)->rigidBody;
+		}
+		else if (s2.isValid()) {
+			m_ridig_dynamic2 = ((TCompStaticBody*)s2)->staticBody;
+		}
+	}
 
 	PxTransform t_1 = PxTransform(
 		PxVec3(0, 0, 0),
@@ -92,7 +120,7 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	t_1 = getAnchorConfiguration(m_ridig_dynamic1->getGlobalPose(), joint_position, joint_rotation);
 	t_2 = getAnchorConfiguration(m_ridig_dynamic2->getGlobalPose(), joint_position, joint_rotation);
-
+	
 
 	// Create a joint
 	mJoint = PxD6JointCreate(
@@ -138,6 +166,10 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	//mJoint->setDrive(PxD6Drive::eX, PxD6JointDrive(stiffness, damping, 10000, false));
 
 	// Set the axis to locked, limited or free  mode 1 = Locked, 2 = Limited, 3 = Free
+
+	if (breakable) {
+		mJoint->setBreakForce(breakForce, breakTorque);
+	}
 }
 
 /*

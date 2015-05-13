@@ -30,6 +30,10 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 
+	bool breakable = atts.getBool("breakable", false);
+	float breakForce = atts.getFloat("maxBreakForce", 1000);
+	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
+
 	float angle_limit = atts.getFloat("swingAngle", 0);
 
 	/*PxVec3 joint_rel_pos_0 = Physics.XMVECTORToPxVec3(atts.getPoint("jointRelativePosition0"));
@@ -124,6 +128,10 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		mJoint->setLimit(limit);
 		mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 
+	}
+
+	if (breakable) {
+		mJoint->setBreakForce(breakForce, breakTorque);
 	}
 	
 	//mJoint->setDriveForceLimit(100000);

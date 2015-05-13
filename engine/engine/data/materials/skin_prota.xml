@@ -1,6 +1,6 @@
 <std_material name="skin_prota"
               tech="skin_basic"
-              diffuse="prota_Albedo"
+              diffuse="prota_Diffuse"
 			  normal="prota_Normal"
 			  emissive="prota_Emissive"
 			specular="prota_Specular"

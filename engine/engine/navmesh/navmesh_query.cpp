@@ -631,20 +631,26 @@ void CNavmeshQuery::raycast( TPos& start, TPos& end ) {
 }
 
 XMVECTOR CNavmeshQuery::getRandomPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
-	TPos Pos;
-	XMStoreFloat3(&Pos.p, current_pos);
-	Pos.set = true;
-	resetTools();
-	data->m_navQuery->findNearestPoly(&Pos.p.x, m_polyPickExt, &m_filter, &m_startRef, 0);
-	dtPolyRef* randomRef = new dtPolyRef;
-	float* randomPt=new float;
 	float center_floats[3];
 	center_floats[0] = XMVectorGetX(center);
 	center_floats[1] = XMVectorGetY(center);
 	center_floats[2] = XMVectorGetZ(center);
-	float (* ptr_rand_func)();
-	ptr_rand_func = getRandomFloat;
-	data->m_navQuery->findRandomPointAroundCircle(m_startRef, center_floats, radius, &m_filter, ptr_rand_func, randomRef, randomPt);
-	XMVECTOR randomPoint = XMVectorSet(randomPt[0], randomPt[1], randomPt[2], 0.f);
+	XMVECTOR randomPoint = XMVectorSet(center_floats[0], center_floats[1], center_floats[2], 0.f);
+
+	if (data->m_navMesh){
+		TPos Pos;
+		XMStoreFloat3(&Pos.p, current_pos);
+		Pos.set = true;
+		resetTools();
+		data->m_navQuery->findNearestPoly(&Pos.p.x, m_polyPickExt, &m_filter, &m_startRef, 0);
+		dtPolyRef randomRef;
+		float randomPt[3];
+		float(*ptr_rand_func)() = getRandomFloat;
+
+		if (m_startRef != 0){
+			data->m_navQuery->findRandomPointAroundCircle(m_startRef, center_floats, radius, &m_filter, ptr_rand_func, &randomRef, randomPt);
+			randomPoint = XMVectorSet(randomPt[0], randomPt[1], randomPt[2], 0.f);
+		}
+	}
 	return randomPoint;
 }

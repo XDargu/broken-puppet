@@ -60,6 +60,10 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	stiffness = atts.getFloat("posSpring", 0);
 	damping = atts.getFloat("posDamping", 0);
 
+	bool breakable = atts.getBool("breakable", false);
+	float breakForce = atts.getFloat("maxBreakForce", 1000);
+	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
+
 
 	CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 	const char* nombre = owner_entity->getName();
@@ -252,6 +256,10 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	}
 	mJoint->setLinearLimit(PxJointLinearLimit(linearPosition, PxSpring(0, 0)));
 	mJoint->setDrivePosition(drive_position);
+
+	if (breakable) {
+		mJoint->setBreakForce(breakForce, breakTorque);
+	}
 }
 
 void TCompJointPrismatic::init() {

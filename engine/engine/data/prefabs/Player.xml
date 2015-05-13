@@ -23,7 +23,7 @@
       <draw mesh="prota_idle" sub_mesh="4" mat="Standardmaterial"/>
     </render>-->
     <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
-    <colliderCapsule radius="0.5" halfHeight="0.5" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
+    <colliderCapsule radius="0.5" halfHeight="0.6" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
     <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
     <characterController/>
 	<life life="100"/>

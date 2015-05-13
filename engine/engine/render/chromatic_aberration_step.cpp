@@ -4,7 +4,7 @@
 #include "render\ctes\shader_ctes.h"
 
 bool TChromaticAberrationStep::create(const char* name, int axres, int ayres, int afactor) {
-	amount = 0.03f;
+	amount = 0.02f;
 
 	factor = afactor;
 	xres = axres;

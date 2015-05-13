@@ -188,8 +188,28 @@ void CNav_mesh_manager::clearNavMesh(){
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
-	CNavmeshQuery navMeshQuery(nav_mesh);
-	return navMeshQuery.getRandomPoint(center, radius, current_pos);
+	static CNavmeshQuery navMeshQuery(nullptr);
+	navMeshQuery.data = nav_mesh;
+	if (keep_updating_navmesh){
+		if (nav_mesh){
+			const dtNavMesh* navmesh = nav_mesh->m_navMesh;
+			if (navmesh){
+				return navMeshQuery.getRandomPoint(center, radius, current_pos);
+			}
+			else{
+				XMVECTOR no_point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+				return no_point;
+			}
+		}
+		else{
+			XMVECTOR no_point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+			return no_point;
+		}
+	}
+	else{
+		XMVECTOR no_point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+		return no_point;
+	}
 }
 
 bool CNav_mesh_manager::rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos){

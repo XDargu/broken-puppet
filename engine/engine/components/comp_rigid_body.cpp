@@ -75,6 +75,8 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (capsule_c)
 		col = capsule_c;
 
+	
+
 
 	XASSERT(col != nullptr, "TRigidBody requieres a TCollider or TMeshCollider component");
 
@@ -82,7 +84,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		*Physics.gPhysicsSDK
 		, physx::PxTransform(
 		Physics.XMVECTORToPxVec3(trans->position),
-		Physics.XMVECTORToPxQuat(trans->rotation))
+		Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
 		, *col->collider
 		, density);
 

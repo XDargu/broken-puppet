@@ -142,8 +142,26 @@ void bt_grandma::create(string s)
 int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
-	if (on_enter && !m_ragdoll->isRagdollActive()) {
+	
+
+	if (!m_ragdoll->isRagdollActive()) {
 		m_ragdoll->setActive(true);
+		
+		TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
+		if (m_life->life <= 0) {
+			TCompRagdoll* m_ragdoll = enemy_ragdoll;
+			m_ragdoll->breakJoints();
+			TCompTransform* m_transform = own_transform;
+			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
+			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
+			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
+			ragdoll_aabb->setIdentityMinMax(min, max);
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
+		}
+			
 	}
 
 	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
@@ -1189,19 +1207,11 @@ void bt_grandma::hurtSensor(float damage){
 		have_to_warcry = true;
 	is_angry = true;
 	if (damage >= force_large_impact){
-		TCompRagdoll* m_ragdoll = enemy_ragdoll;
-		TCompTransform* m_transform = own_transform;
-		TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-		XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
-		XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
-		CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-		CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
-		CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
-		ragdoll_aabb->setIdentityMinMax(min, max);
-		m_ragdoll->setActive(true);
-		m_ragdoll->breakJoints();
-		CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
+		TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
+		life->life = 0;
 		stopAllAnimations();
+		is_ragdoll = true;
+		setCurrent(NULL);
 
 	}else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		is_ragdoll = true;
