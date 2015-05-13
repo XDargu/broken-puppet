@@ -383,7 +383,8 @@ float4 PSResolve(
 
 	float ambient_val = 0.15;
 	float ambient_color = float4(0.98, 0.85, 0.8, 0);
-	return (albedo * diffuse + diffuse.a) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 0.8;
+	return (albedo * diffuse + specular) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 
