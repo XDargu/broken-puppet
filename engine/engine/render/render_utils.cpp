@@ -28,11 +28,13 @@ CMesh        wire_cube;
 CMesh        mesh_view_volume;
 CMesh        mesh_line;
 CMesh        mesh_textured_quad_xy;
+CMesh        mesh_textured_quad_xy_centered;
 CMesh        mesh_icosahedron;
 CMesh        grid;
 CMesh        axis;
 
 bool createLine(CMesh& mesh);
+bool createTexturedQuadXYCentered(CMesh& mesh);
 
 // -----------------------
 template<>
@@ -42,6 +44,10 @@ CVertexDecl* getVertexDecl< CVertexPosColor >() {
 template<>
 CVertexDecl* getVertexDecl< CVertexPosUV >() {
 	return &vdcl_position_uv;
+}
+template<>
+CVertexDecl* getVertexDecl< CVertexPosUVNormal >() {
+	return &vdcl_position_uv_normal;
 }
 template<>
 CVertexDecl* getVertexDecl< CVertexPos >() {
@@ -169,6 +175,17 @@ bool createDepthStencilStates() {
 		return false;
 	setDbgName(z_cfgs[ZCFG_DEFAULT], "ZCFG_DEFAULT");
 
+	// test but don't write. Used while rendering particles for example
+	memset(&desc, 0x00, sizeof(desc));
+	desc.DepthEnable = TRUE;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;    // don't write
+	desc.DepthFunc = D3D11_COMPARISON_LESS;               // only near z
+	desc.StencilEnable = FALSE;
+	hr = render.device->CreateDepthStencilState(&desc, &z_cfgs[ZCFG_TEST_BUT_NO_WRITE]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(z_cfgs[ZCFG_TEST_BUT_NO_WRITE], "ZCFG_TEST_BUT_NO_WRITE");
+
 	// Inverse Z Test, don't write. Used while rendering the lights
 	memset(&desc, 0x00, sizeof(desc));
 	desc.DepthEnable = TRUE;
@@ -284,6 +301,21 @@ bool createBlendStates() {
 		return false;
 	setDbgName(blend_states[BLEND_CFG_ADDITIVE], "BLEND_ADDITIVE");
 
+	// Additive blending controlled by src alpha
+	memset(&desc, 0x00, sizeof(desc));
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	hr = render.device->CreateBlendState(&desc, &blend_states[BLEND_CFG_ADDITIVE_BY_SRC_ALPHA]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(blend_states[BLEND_CFG_ADDITIVE_BY_SRC_ALPHA], "BLEND_ADDITIVE_BY_SRC_ALPHA");
+
 	return true;
 }
 
@@ -321,6 +353,7 @@ bool renderUtilsCreate() {
 	is_ok &= createViewVolume(mesh_view_volume);
 	is_ok &= createLine(mesh_line);
 	is_ok &= createTexturedQuadXY(mesh_textured_quad_xy);
+	is_ok &= createTexturedQuadXYCentered(mesh_textured_quad_xy_centered);
 	is_ok &= createIcosahedron(mesh_icosahedron);
 	is_ok &= createSamplers();
 	is_ok &= createDepthStencilStates();
@@ -353,6 +386,7 @@ void renderUtilsDestroy() {
 	grid.destroy();
 	mesh_line.destroy();
 	mesh_textured_quad_xy.destroy();
+	mesh_textured_quad_xy_centered.destroy();
 	mesh_view_volume.destroy();
 	wire_cube.destroy();
 }
@@ -515,6 +549,18 @@ bool createTexturedQuadXY(CMesh& mesh) {
 	v->Pos = XMFLOAT3(1.f, 0.f, 0.f); v->UV = XMFLOAT2(1, 0); ++v;
 	v->Pos = XMFLOAT3(0.f, 1.f, 0.f); v->UV = XMFLOAT2(0, 1); ++v;
 	v->Pos = XMFLOAT3(1.f, 1.f, 0.f); v->UV = XMFLOAT2(1, 1); ++v;
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::TRIANGLE_STRIP);
+}
+
+// -----------------------------------------------------
+bool createTexturedQuadXYCentered(CMesh& mesh) {
+	std::vector< CVertexPosUV > vtxs;
+	vtxs.resize(4);
+	CVertexPosUV *v = &vtxs[0];
+	v->Pos = XMFLOAT3(-0.5f, -0.5f, 0.f); v->UV = XMFLOAT2(0, 0); ++v;
+	v->Pos = XMFLOAT3(0.5f, -0.5f, 0.f); v->UV = XMFLOAT2(1, 0); ++v;
+	v->Pos = XMFLOAT3(-0.5f, 0.5f, 0.f); v->UV = XMFLOAT2(0, 1); ++v;
+	v->Pos = XMFLOAT3(0.5f, 0.5f, 0.f); v->UV = XMFLOAT2(1, 1); ++v;
 	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::TRIANGLE_STRIP);
 }
 

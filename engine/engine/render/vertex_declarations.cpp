@@ -8,6 +8,7 @@ unsigned bytesOfFormat(DXGI_FORMAT fmt) {
 	case DXGI_FORMAT_R32G32B32A32_FLOAT: return 16;
 	case DXGI_FORMAT_R8G8B8A8_UINT: return 4;
 	case DXGI_FORMAT_R8G8B8A8_UNORM: return 4;
+	case DXGI_FORMAT_R32_FLOAT: return 4;
 	}
 	fatal("bytesOfFormat: Unknown fmt");
 	return 0;
@@ -89,3 +90,24 @@ D3D11_INPUT_ELEMENT_DESC vdcl_position_uv_normal_tangent_layout[] =
 	{ "TANGENT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 };
 DEF_VTX_DECL(vdcl_position_uv_normal_tangent);
+
+// ------------------------------------------------------
+D3D11_INPUT_ELEMENT_DESC vdcl_instanced_position_uv_layout[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "POSITION", 1, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+	{ "TEXCOORD", 1, DXGI_FORMAT_R32_FLOAT, 1, 12, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+	// Semantica POSITION 1
+	// Stream 1
+	// Instance multiplier
+};
+DEF_VTX_DECL(vdcl_instanced_position_uv);
+
+// ------------------------------------------------------
+D3D11_INPUT_ELEMENT_DESC vdcl_particle_data_layout[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+};
+DEF_VTX_DECL(vdcl_particle_data);

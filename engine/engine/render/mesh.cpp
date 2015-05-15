@@ -26,6 +26,7 @@ bool CMesh::create(
 	, const TIndex* the_indices     // Can be null
 	, ePrimitiveType primitive_type
 	, const CVertexDecl* avtxs_decl
+	, bool can_be_updated
 	) {
 
 	// Confirm we are not already created
@@ -59,6 +60,11 @@ bool CMesh::create(
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
+	if (can_be_updated) {
+		bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		bd.Usage = D3D11_USAGE_DYNAMIC;
+	}
+
 	// The initial contents of the VB
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
@@ -82,19 +88,6 @@ bool CMesh::create(
 	}
 	else {
 		assert(nindices == 0);
-	}
-
-	if (v_tris.size() > 0){
-
-		size_t total_bytes_for_vertex = avtxs_decl->bytes_per_vertex * anvertexs;
-		vertex_floats = new float[anvertexs];
-		memcpy(vertex_floats, the_vertexs, anvertexs*sizeof(float));
-
-		index_int = new int[anindices];
-		memcpy(index_int, &v_tris[0], anindices * sizeof(int));
-
-		numvertexs = anvertexs;
-		numindices = anindices;
 	}
 
 	return true;
@@ -230,7 +223,9 @@ bool CMesh::load(CDataProvider& dp) {
 		, header.nidxs
 		, &idxs[0]
 		, (ePrimitiveType)header.primitive_type
-		, vtx_decl);
+		, vtx_decl
+		, false
+	);
 }
 
 bool CMesh::load(const char* name) {
@@ -239,3 +234,65 @@ bool CMesh::load(const char* name) {
 	CFileDataProvider fdp(full_name);
 	return load(fdp);
 }
+
+// --------------------------------------
+void CMesh::updateFromCPU(const void *new_cpu_data, size_t num_bytes_to_update) {
+	if (num_bytes_to_update == 0)
+		num_bytes_to_update = nvertexs * vtxs_decl->bytes_per_vertex;
+	assert(vb);
+
+	D3D11_MAPPED_SUBRESOURCE mapped_resource;
+
+	// Get CPU access to the GPU buffer
+	HRESULT hr = ::render.ctx->Map(
+		vb
+		, 0
+		, D3D11_MAP_WRITE_DISCARD
+		, 0
+		, &mapped_resource);
+	assert(hr == D3D_OK);
+
+	// Copy from CPU to GPU
+	memcpy(mapped_resource.pData, new_cpu_data, num_bytes_to_update);
+
+	// Close the map
+	::render.ctx->Unmap(vb, 0);
+
+}
+
+void CMesh::renderInstanced(const CMesh& instanced_data, size_t ninstances) const {
+	assert(isValid());
+	assert(instanced_data.isValid());
+
+	// Set the buffer strides.
+	unsigned int strides[2];
+	strides[0] = vtxs_decl->bytes_per_vertex;      // My stride
+	strides[1] = instanced_data.vtxs_decl->bytes_per_vertex;  // stride of the instance
+
+	// Set the buffer offsets.
+	unsigned int offsets[2] = { 0, 0 };
+
+	// Set the array of pointers to the vertex and instance buffers.
+	ID3D11Buffer* bufferPointers[2];
+	bufferPointers[0] = vb;
+	bufferPointers[1] = instanced_data.vb;
+
+	// Set the vertex buffer to active in the input assembler so it can be rendered.
+	::render.ctx->IASetVertexBuffers(0, 2, bufferPointers, strides, offsets);
+
+	::render.ctx->IASetPrimitiveTopology(topology);
+
+	if (ib) {
+		assert(ib);
+
+		// Set index buffer
+		DXGI_FORMAT fmt = (sizeof(TIndex) == 2) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+		::render.ctx->IASetIndexBuffer(ib, fmt, 0);
+
+		::render.ctx->DrawIndexedInstanced(nindices, (UINT)ninstances, 0, 0, 0);
+	}
+	else {
+		::render.ctx->DrawInstanced(nvertexs, (UINT)ninstances, 0, 0);
+	}
+}
+

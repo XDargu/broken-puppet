@@ -450,6 +450,9 @@
     <ClInclude Include="ai\hinge_joint.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="render\render_instances.h">
+      <Filter>render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -817,6 +820,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_player_controller.cpp">
       <Filter>components\ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="render\render_instances.cpp">
+      <Filter>render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -66,6 +66,7 @@ void activateTextureSamplers();
 enum ZConfig {
 	ZCFG_DEFAULT
 	, ZCFG_DISABLE_ALL
+	, ZCFG_TEST_BUT_NO_WRITE
 	, ZCFG_INVERSE_TEST_NO_WRITE
 	, ZCFG_COUNT
 };
@@ -84,6 +85,7 @@ void activateRSConfig(enum RSConfig cfg);
 enum BlendConfig {
 	BLEND_CFG_DEFAULT
 	, BLEND_CFG_ADDITIVE
+	, BLEND_CFG_ADDITIVE_BY_SRC_ALPHA
 	, BLEND_CFG_COMBINATIVE
 	, BLEND_CFG_COUNT
 };
@@ -95,6 +97,7 @@ extern CMesh        grid;
 extern CMesh        axis;
 extern CMesh        mesh_icosahedron;
 extern CMesh        mesh_view_volume;
+extern CMesh        mesh_textured_quad_xy_centered;
 
 // Post process
 extern	CShaderCte<TCtesBlur> ctes_blur;

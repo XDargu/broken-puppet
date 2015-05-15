@@ -39,6 +39,8 @@ using namespace physx;
 #include <AntTweakBar.h>
 #include "entity_inspector.h"
 #include "render\all_post_process_effects.h"
+#include "render/render_instances.h"
+
 
 static CApp the_app;
 
@@ -101,7 +103,7 @@ CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
-//CSoundManager sm;
+CSoundManager sm;
 
 const CTexture* cubemap;
 
@@ -115,6 +117,8 @@ TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
+
+CRenderInstances  particles;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -281,17 +285,18 @@ bool CApp::create() {
 	XASSERT(font.create(), "Error creating the font");
 
 	loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/my_file-backup.xml");
+	//loadScene("data/scenes/my_file.xml");
 	
 
-	//sm.addMusicTrack(0, "CANCION.mp3");
-	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	sm.addMusicTrack(0, "CANCION.mp3");
+	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 
-	//sm.playTrack(0);
+	sm.playTrack(0);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
+	is_ok &= particles.create(300, &mesh_textured_quad_xy_centered);
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -540,6 +545,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
 	logic_manager.update(elapsed);
+	particles.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -593,6 +599,7 @@ void CApp::render() {
 
 
 	deferred.render(&camera, *rt_base);
+	particles.render();
 
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
@@ -903,6 +910,7 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
+	particles.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }

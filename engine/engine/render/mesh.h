@@ -102,6 +102,7 @@ public:
 		, const TIndex* the_indices     // Can be null
 		, ePrimitiveType primitive_type
 		, const CVertexDecl* avtxs_decl
+		, bool can_be_updated
 		);
 
 	// -------------------- Create using a vertex type
@@ -112,6 +113,7 @@ public:
 		, unsigned anindices
 		, const TIndex* the_indices     // Can be null
 		, ePrimitiveType primitive_type
+		, bool can_be_updated = false
 		) {
 		return create(
 			anvertexs
@@ -120,6 +122,7 @@ public:
 			, the_indices     // Can be null
 			, primitive_type
 			, getVertexDecl<TVertex>()
+			, can_be_updated
 			);
 	}
 
@@ -138,6 +141,10 @@ public:
 	bool load(CDataProvider& dp);
 	bool load(const char* name);
 	void setName(const char*) {}
+	bool isValid() const { return vb != nullptr; }
+
+	void updateFromCPU(const void *new_cpu_data, size_t num_bytes_to_update = 0);
+	void renderInstanced(const CMesh& instanced_data, size_t ninstances) const;
 };
 
 typedef CItemsByName< CMesh > CMeshManager;
