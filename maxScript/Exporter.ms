@@ -1,4 +1,5 @@
 filein("GeneralConfig.ms")
+
 clearlistener()
 
 /********************** 
@@ -65,6 +66,9 @@ clearlistener()
 	BasicEnemyName = "BasicEnemy"
 	IntPullName = "int_pull"
 	IntPushName = "int_push"
+	
+	WaterMaterial = "distorsion"
+	GlassMaterial = "glass"
 
 
 	-- List of special names
@@ -72,6 +76,9 @@ clearlistener()
 
 	-- List of mandatory names
 	mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
+	
+	-- List of no export materials
+	noExportMaterials = #(WaterMaterial, GlassMaterial)
 
 	-- List of enemys
 	enemyNames = #(BasicEnemyName)
@@ -562,9 +569,11 @@ clearlistener()
 		
 	fn importMaterial m = (
 		if export_materials == false then return 0
-		-- if is exported	
+		-- If is a material which should no be exported
+		if (findItem noExportMaterials m.name) != 0 then return 0		
+		-- if has no diffuse
 		if (m.diffusemap == undefined) then return 0
-		--if (m.bumpmap == undefined) then return 0
+		-- If has already been exported
 		if (findItem expDiff m.diffusemap.filename) != 0 then return 0
 		--if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
 		
@@ -576,7 +585,7 @@ clearlistener()
 		local normal_name = ""
 		local emissive_name = ""
 		
-		if (m.selfIllumMap != undefined) then (
+		if (m.bumpmap != undefined) then (
 			normal_name = importTexture m.bumpmap.normal_map.filename
 		)
 		
@@ -1064,6 +1073,21 @@ clearlistener()
 	fn getPushInt obj = (		
 		if(validatePushInt obj == false) then return ""
 		return "<switchPushController />\n"
+	)
+	
+	
+	fn validatePullInt obj = (
+		-- If is a logic element or a reserved name
+		return (isProperty obj.baseobject #PullInt)
+	)
+	/**********************************************************************************************
+	Gets the object Pull Int
+	Params:
+	  - obj: target object
+	***********************************************************************************************/	
+	fn getPullInt obj = (		
+		if(validatePullInt obj == false) then return ""
+		return "<switchPullController />\n"
 	)
 
 
@@ -1908,6 +1932,12 @@ fn getJointHinge obj = (
 	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
 	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
 	
+	-- Advanced
+	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
+	mString += "breakable=\"" + mJoint.breakable as string + "\" "
+	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
+	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
+	
 	mString += "/>\n"	
 	
 	return mString
@@ -2042,8 +2072,9 @@ fn getPlatformPath obj = (
 	)
 	
 	fn validateEntityCollisionTag obj = (	
-		if(obj != undefined)then
+		if(obj != undefined)then (
 			return (isProperty obj.baseobject #collisionTag)
+		)
 		return false
 	)
 
@@ -2285,7 +2316,7 @@ fn getPlatformPath obj = (
 
 
 -- Execution
-addObjectsID()
-exportXMLScene()
-openCloseFile()
-removeObjectsID()
+--addObjectsID()
+--exportXMLScene()
+--openCloseFile()
+--removeObjectsID()
