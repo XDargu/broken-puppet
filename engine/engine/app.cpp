@@ -333,7 +333,7 @@ bool CApp::create() {
 	
 	cubemap->activate(3);
 
-	texture_manager.getByName("storm")->activate(4);
+	texture_manager.getByName("storm")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 	is_ok &= ssao.create("ssao", xres, yres, 1);
@@ -630,11 +630,13 @@ void CApp::render() {
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	*/
-	/*drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
-	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));*/
+	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
+	drawTexture2D(sz * 2, 0 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_specular"));
+	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));
 	
 	/*render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);

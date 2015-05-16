@@ -10,6 +10,8 @@ bool CDeferredRender::create(int xres, int yres) {
 	rt_lights = new CRenderToTexture;
 	rt_albedo = new CRenderToTexture;
 	rt_normals = new CRenderToTexture;
+	rt_specular = new CRenderToTexture;
+	rt_gloss = new CRenderToTexture;
 	rt_depth = new CRenderToTexture;
 
 	if (!rt_lights->create("rt_lights", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER))
@@ -17,6 +19,10 @@ bool CDeferredRender::create(int xres, int yres) {
 	if (!rt_albedo->create("rt_albedo", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
 		return false;
 	if (!rt_normals->create("rt_normals", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
+		return false;
+	if (!rt_specular->create("rt_specular", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
+		return false;
+	if (!rt_gloss->create("rt_gloss", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
 		return false;
 	if (!rt_depth->create("rt_depth", xres, yres, DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN))
 		return false;
@@ -26,19 +32,24 @@ bool CDeferredRender::create(int xres, int yres) {
 void CDeferredRender::generateGBuffer(const CCamera* camera) {
 	CTraceScoped scope("gbuffer");
 
-	ID3D11RenderTargetView* rts[4] = {
+	ID3D11RenderTargetView* rts[6] = {
 		rt_albedo->render_target_view
 		, rt_normals->render_target_view
 		, rt_lights->render_target_view
 		, rt_depth->render_target_view
+		, rt_specular->render_target_view
+		, rt_gloss->render_target_view
 	};
-	::render.ctx->OMSetRenderTargets(4, rts, ::render.depth_stencil_view);
+
+	::render.ctx->OMSetRenderTargets(6, rts, ::render.depth_stencil_view);
 	rt_albedo->activateViewport();
 
 	float black[4] = { 0.f, 0.f, 0.f, 0.f };
 	rt_albedo->clearColorBuffer(black);
 	rt_normals->clearColorBuffer(black);
 	rt_lights->clearColorBuffer(black);
+	rt_specular->clearColorBuffer(black);
+	rt_gloss->clearColorBuffer(black);
 	float clear_depth[4] = { 1.f, 1.f, 1.f, 1.f };
 	rt_depth->clearColorBuffer(clear_depth);
 
@@ -58,6 +69,8 @@ void CDeferredRender::generateLightBuffer() {
 	rt_albedo->CTexture::activate(0);
 	rt_normals->CTexture::activate(1);
 	rt_depth->CTexture::activate(2);
+	rt_specular->CTexture::activate(4);
+	rt_gloss->CTexture::activate(5);
 
 	activateRSConfig(RSCFG_REVERSE_CULLING);
 	activateZConfig(ZCFG_INVERSE_TEST_NO_WRITE);

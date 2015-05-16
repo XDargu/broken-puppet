@@ -4,4 +4,5 @@
 			  normal="prota_Normal"
 			  emissive="prota_Emissive"
 			specular="prota_Specular"
+			glossiness="prota_Gloss"
 			  />

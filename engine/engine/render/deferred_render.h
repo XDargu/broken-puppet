@@ -10,6 +10,8 @@ class CDeferredRender {
 	CRenderToTexture*  rt_lights;
 	CRenderToTexture*  rt_albedo;
 	CRenderToTexture*  rt_normals;
+	CRenderToTexture*  rt_specular;
+	CRenderToTexture*  rt_gloss;
 	CRenderToTexture*  rt_depth;
 
 	void generateGBuffer(const CCamera* camera);

@@ -4,13 +4,14 @@ Texture2D txDiffuse   : register(t0);
 Texture2D txNormal    : register(t1);
 Texture2D txDepth     : register(t2);
 Texture2D txAccLight  : register(t3);
+Texture2D txSpecular    : register(t4);
+Texture2D txGloss    : register(t5);
 
-TextureCube  txEnvironment : register(t4);
-
-Texture2D txSpecular    : register(t5);
 Texture2D txEmissive    : register(t7);
 
 Texture2D txShadowMap : register(t6);
+
+TextureCube  txEnvironment : register(t8);
 
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
@@ -203,10 +204,14 @@ void PSGBuffer(
   , out float4 normal : SV_Target1
   , out float4 acc_light : SV_Target2
   , out float  depth : SV_Target3
+  , out float4 specular : SV_Target4
+  , out float4 gloss : SV_Target5
 )
 {
 
   albedo = txDiffuse.Sample(samWrapLinear, input.UV);
+  specular = txSpecular.Sample(samWrapLinear, input.UV);
+  gloss = txGloss.Sample(samWrapLinear, input.UV);
 
   float3   in_normal = normalize(input.wNormal);
   float3   in_tangent = normalize(input.wTangent.xyz);
@@ -219,7 +224,7 @@ void PSGBuffer(
   float3 normal_tangent_space = txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.;
   float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
 
-	  //wnormal_per_pixel = in_tangent;
+   //wnormal_per_pixel = in_tangent;
 
   // Save the normal
 
@@ -264,10 +269,11 @@ float3 getWorldCoords( float2 screen_coords, float depth ) {
 
 // -------------------------------------------------
 float getSpecular(float3 wPos, float3 L, float3 N) {
-  float3 V = normalize(cameraWorldPos.xyz - wPos);
-  float3 R = reflect(normalize(-L), normalize(N));
-  float spec_amount = pow(saturate(dot(R, V)), 50);
-  return spec_amount;
+	float3 V = normalize(cameraWorldPos.xyz - wPos);
+	float3 R = reflect(normalize(-L), normalize(N));
+	//float spec_amount = pow(saturate(dot(R, V)), 50);
+	float spec_amount = saturate(dot(R, V));
+	return spec_amount;
   /*float3 E = normalize(cameraWorldPos.xyz - wPos);
   float3 H = normalize(L + E);
   spec_amount = pow(saturate(dot(H, N)), 50);    // 20 should come from a texture
@@ -381,15 +387,20 @@ float4 PSResolve(
 
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
 	float4 albedo = txDiffuse.Load(ss_load_coords);
+	float4 specular_color = txSpecular.Load(ss_load_coords);
+	float4 gloss = txGloss.Load(ss_load_coords);
 	float3 N = -txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 	float4 diffuse = txAccLight.Load(ss_load_coords);
 	//float4 env = txEnvironment.Sample(samWrapLinear, N);
 
 	float ambient_val = 0.15;
 	float ambient_color = float4(0.98, 0.85, 0.8, 0);
-	float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
+	
+	//float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
+	float dot_product = diffuse.a;	
+	float4 specular = specular_color * saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
 		//return specular;
-	return (albedo * diffuse + specular) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	return (albedo * diffuse + saturate(specular) * 0.7) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 

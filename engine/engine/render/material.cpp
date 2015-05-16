@@ -31,6 +31,8 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 			specular = texture_manager.getByName("black");
 		if (glossiness_name != "")
 			glossiness = texture_manager.getByName(glossiness_name.c_str());
+		else
+			glossiness = texture_manager.getByName("black");
 		if (emissive_name != "")
 			emissive = texture_manager.getByName(emissive_name.c_str());
 		else
@@ -50,13 +52,10 @@ void CMaterial::activateTextures() const {
 	if (emissive)
 		emissive->activate(7);
 	if (specular)
-		specular->activate(5);
-
-	/*if (specular)
-		specular->activate(2);
+		specular->activate(4);
 	if (glossiness)
-		glossiness->activate(3);
-	if (emissive)
+		glossiness->activate(5);
+	/*if (emissive)
 		emissive->activate(4);
 	if (ao)
 		ao->activate(5);
