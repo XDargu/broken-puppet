@@ -671,12 +671,14 @@ int bt_grandma::actionChaseRoleDistance()
 	}
 }
 
+bool attacked = false;
 //First attack
 int bt_grandma::actionInitialAttack()
 {
 	if (on_enter) {
 		initial_attack = true;
 		playAnimationIfNotPlaying(11);
+		attacked = false;
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -685,8 +687,14 @@ int bt_grandma::actionInitialAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(11)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+	if ((state_time > getAnimationDuration(11)/5)&& (!attacked)) {
+		// Check if the attack reach the player
+		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		if (distance <= max_distance_to_attack * 2)
+		{
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));			
+		}
+		attacked = true;
 		return LEAVE;
 	}
 	else
@@ -744,7 +752,7 @@ int bt_grandma::actionSituate()
 int bt_grandma::actionNormalAttack()
 {
 	if (on_enter) {
-
+		attacked = false;
 		int anim = getRandomNumber(4, 6);
 		playAnimationIfNotPlaying(anim);
 	}
@@ -755,8 +763,14 @@ int bt_grandma::actionNormalAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(4)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+	if ((state_time  > getAnimationDuration(4)/5) && (!attacked)) {
+		// Check if the attack reach the player
+		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		if (distance <= max_distance_to_attack * 2)
+		{
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+		}
+		attacked = true;
 		return LEAVE;
 	}
 	else
