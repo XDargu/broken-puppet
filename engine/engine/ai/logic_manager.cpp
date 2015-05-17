@@ -94,10 +94,6 @@ void CLogicManager::update(float elapsed) {
 
 	}
 
-	if (isKeyPressed('K')){
-		cameraLookAt(XMVectorSet(0, 0, 0, 0));
-	}
-
 	/*CErrorContext ce2("Updating keyframes", "");
 	// Update the keyframes
 	for (auto& it : current_keyframes) {
@@ -316,6 +312,8 @@ void CLogicManager::bootLUA() {
 		.set("changeWaterLevel", (void (CLogicManager::*)(float, float)) &CLogicManager::changeWaterLevel)
 		.set("print", &CLogicManager::print)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
+		.set("cameraLookAtBot", (void (CLogicManager::*)(CBot)) &CLogicManager::cameraLookAtBot)
+		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
 	;
 
 	// Register the bot class
@@ -424,6 +422,20 @@ void CLogicManager::cameraLookAt(XMVECTOR target) {
 		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
 			((TCompPlayerPivotController*)player_pivot_c)->pointAt(target);
 			((TCompCameraPivotController*)camera_pivot_c)->pointAt(target);
+		}
+	}
+}
+
+void CLogicManager::cameraLookAtBot(CBot bot) {
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			CVector pos = bot.getPos();
+			XMVECTOR v_pos = XMVectorSet(pos.x, pos.y, pos.z, 0);
+			((TCompPlayerPivotController*)player_pivot_c)->pointAt(v_pos);
+			((TCompCameraPivotController*)camera_pivot_c)->pointAt(v_pos);
 		}
 	}
 }
