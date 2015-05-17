@@ -72,6 +72,7 @@ public:
 	void changeWaterLevel(float pos1, float time);
 	void pushPlayerLegsState(std::string state_name);
 	void cameraLookAtBot(CBot bot);
+	void cameraLookAtPosition(CVector target);
 	void cameraLookAt(XMVECTOR target);
 
 	void playerDead();

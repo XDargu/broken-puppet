@@ -313,6 +313,7 @@ void CLogicManager::bootLUA() {
 		.set("print", &CLogicManager::print)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
 		.set("cameraLookAtBot", (void (CLogicManager::*)(CBot)) &CLogicManager::cameraLookAtBot)
+		.set("cameraLookAtPosition", (void (CLogicManager::*)(CVector)) &CLogicManager::cameraLookAtPosition)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
 	;
 
@@ -434,6 +435,19 @@ void CLogicManager::cameraLookAtBot(CBot bot) {
 		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
 			CVector pos = bot.getPos();
 			XMVECTOR v_pos = XMVectorSet(pos.x, pos.y, pos.z, 0);
+			((TCompPlayerPivotController*)player_pivot_c)->pointAt(v_pos);
+			((TCompCameraPivotController*)camera_pivot_c)->pointAt(v_pos);
+		}
+	}
+}
+
+void CLogicManager::cameraLookAtPosition(CVector target){
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			XMVECTOR v_pos = XMVectorSet(target.x, target.y, target.z, 0);
 			((TCompPlayerPivotController*)player_pivot_c)->pointAt(v_pos);
 			((TCompCameraPivotController*)camera_pivot_c)->pointAt(v_pos);
 		}
