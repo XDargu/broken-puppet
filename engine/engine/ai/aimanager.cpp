@@ -117,6 +117,7 @@ void aimanager::warningPlayerFound(aicontroller* me){
 			}
 		}
 	}
+
 }
 
 void aimanager::setEnemyRol(aicontroller* enemy){

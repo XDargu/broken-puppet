@@ -27,6 +27,12 @@ const float walk_speed = 0.8f;
 const float run_speed = 2.f;
 const float run_angry_speed = 2.2f;
 
+
+// Sensor
+const float sensor_delay = 1.f;
+float sensor_acum = 0.f;
+
+
 void bt_grandma::create(string s)
 {
 	name = s;
@@ -665,12 +671,14 @@ int bt_grandma::actionChaseRoleDistance()
 	}
 }
 
+bool attacked = false;
 //First attack
 int bt_grandma::actionInitialAttack()
 {
 	if (on_enter) {
 		initial_attack = true;
 		playAnimationIfNotPlaying(11);
+		attacked = false;
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -679,8 +687,14 @@ int bt_grandma::actionInitialAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(11)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+	if ((state_time > getAnimationDuration(11)/5)&& (!attacked)) {
+		// Check if the attack reach the player
+		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		if (distance <= max_distance_to_attack * 2)
+		{
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));			
+		}
+		attacked = true;
 		return LEAVE;
 	}
 	else
@@ -738,7 +752,7 @@ int bt_grandma::actionSituate()
 int bt_grandma::actionNormalAttack()
 {
 	if (on_enter) {
-
+		attacked = false;
 		int anim = getRandomNumber(4, 6);
 		playAnimationIfNotPlaying(anim);
 	}
@@ -749,8 +763,14 @@ int bt_grandma::actionNormalAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(4)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+	if ((state_time  > getAnimationDuration(4)/5) && (!attacked)) {
+		// Check if the attack reach the player
+		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		if (distance <= max_distance_to_attack * 2)
+		{
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+		}
+		attacked = true;
 		return LEAVE;
 	}
 	else
@@ -1245,8 +1265,17 @@ void bt_grandma::PlayerFoundSensor(){
 }
 
 void bt_grandma::update(float elapsed){
+
+	sensor_acum += elapsed;
+
+	if (sensor_delay <= sensor_acum)
+	{
+		needleViewedSensor();
+		sensor_acum = 0;
+	}
+	
+
 	playerViewedSensor();
-	needleViewedSensor();	
 	tiedSensor();
 	if (findPlayer()){
 		last_point_player_saw = ((TCompTransform*)player_transform)->position;

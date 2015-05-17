@@ -50,6 +50,8 @@ private:
 
 	//Bool ñapa a quitar en un futuro -----
 	bool player_previously_lost;
+
+	float sensor_delay;
 	//-------------------------------------
 
 	unsigned int my_id;
