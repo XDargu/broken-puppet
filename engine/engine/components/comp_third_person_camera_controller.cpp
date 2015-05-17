@@ -45,8 +45,8 @@ void TCompThirdPersonCameraController::update(float elapsed) {
 	// LERP
 	XMVECTOR target_pos = camera_pivot_trans->position + camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * (-offset.z + collision_dist);
 	XMVECTOR target_rot = camera_pivot_trans->rotation;
-	transform->position = XMVectorLerp(transform->position, target_pos, 0.15f);
-	transform->rotation = XMQuaternionSlerp(transform->rotation, target_rot, 0.15f);
+	transform->position = target_pos;// XMVectorLerp(transform->position, target_pos, 15.f * elapsed);
+	transform->rotation = target_rot;// XMQuaternionSlerp(transform->rotation, target_rot, 15.f * elapsed);
 	//transform->position = camera_pivot_trans->position + camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * (-offset.z + collision_dist);
 	//transform->rotation = camera_pivot_trans->rotation;
 
