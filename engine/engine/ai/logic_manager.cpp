@@ -5,6 +5,8 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
+#include "components\comp_player_pivot_controller.h"
+#include "components\comp_camera_pivot_controller.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -26,6 +28,9 @@ CLogicManager::CLogicManager() {
 void CLogicManager::init()
 {
 	water_transform = CEntityManager::get().getByName("water");
+	player = CEntityManager::get().getByName("Player");
+	player_pivot = CEntityManager::get().getByName("PlayerPivot");
+	camera_pivot = CEntityManager::get().getByName("CameraPivot");
 	if (water_transform.isValid()) {		
 		TCompTransform* water_t = ((CEntity*)water_transform)->get<TCompTransform>();
 		water_level_dest = XMVectorGetY(water_t->position);
@@ -87,6 +92,10 @@ void CLogicManager::update(float elapsed) {
 		}
 
 
+	}
+
+	if (isKeyPressed('K')){
+		cameraLookAt(XMVectorSet(0, 0, 0, 0));
 	}
 
 	/*CErrorContext ce2("Updating keyframes", "");
@@ -407,14 +416,25 @@ void CLogicManager::execute(std::string text) {
 	luaL_dostring(L, ex.c_str());
 }
 
+void CLogicManager::cameraLookAt(XMVECTOR target) {
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			((TCompPlayerPivotController*)player_pivot_c)->pointAt(target);
+			((TCompCameraPivotController*)camera_pivot_c)->pointAt(target);
+		}
+	}
+}
+
 void CLogicManager::playerDead() {
 	execute("onPlayerDead();");
 }
 
 void CLogicManager::pushPlayerLegsState(std::string state_name) {
-	CHandle entity = CEntityManager::get().getByName("Player");
-	if (entity.isValid()) {
-		CEntity* p_entity = entity;
+	if (player.isValid()) {
+		CEntity* p_entity = player;
 		CHandle p_controller = p_entity->get<TCompPlayerController>();
 		if (p_controller.isValid()) {
 			TCompPlayerController* controller = p_controller;

@@ -824,6 +824,15 @@
     <ClCompile Include="render\render_instances.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_player_pivot_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_third_person_camera_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_camera_pivot_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

@@ -20,7 +20,13 @@ private:
 
 	float water_level_dest;
 	float lerp_water;
+
+	// Keep some usefull handles
 	CHandle water_transform;
+	
+	CHandle player;
+	CHandle player_pivot;
+	CHandle camera_pivot;
 public:
 
 	static CLogicManager& get();
@@ -65,6 +71,7 @@ public:
 
 	void changeWaterLevel(float pos1, float time);
 	void pushPlayerLegsState(std::string state_name);
+	void cameraLookAt(XMVECTOR target);
 
 	void playerDead();
 

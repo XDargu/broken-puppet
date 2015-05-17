@@ -352,6 +352,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+    <ClCompile Include="components\comp_camera_pivot_controller.cpp" />
     <ClCompile Include="components\comp_joint_d6.cpp" />
     <ClCompile Include="components\comp_bt_grandma.cpp" />
     <ClCompile Include="components\comp_character_controller.cpp" />
@@ -360,6 +361,7 @@
     <ClCompile Include="components\comp_needle.cpp" />
     <ClCompile Include="components\comp_platform_path.cpp" />
     <ClCompile Include="components\comp_player_controller.cpp" />
+    <ClCompile Include="components\comp_player_pivot_controller.cpp" />
     <ClCompile Include="components\comp_player_position_sensor.cpp" />
     <ClCompile Include="components\comp_point_light.cpp" />
     <ClCompile Include="components\comp_ragdoll.cpp" />
@@ -373,6 +375,7 @@
     <ClCompile Include="components\comp_skeleton_lookat.cpp" />
     <ClCompile Include="components\comp_static_body.cpp" />
     <ClCompile Include="components\comp_switch_pull_controller.cpp" />
+    <ClCompile Include="components\comp_third_person_camera_controller.cpp" />
     <ClCompile Include="components\comp_transform.cpp" />
     <ClCompile Include="components\comp_trigger.cpp" />
     <ClCompile Include="components\comp_collider_mesh.cpp" />

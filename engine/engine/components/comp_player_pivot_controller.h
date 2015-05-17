@@ -2,8 +2,6 @@
 #define INC_COMP_PLAYER_PIVOT_CONTROLLER_H_
 
 #include "base_component.h"
-#include "comp_transform.h"
-#include "../io/iostatus.h"
 
 struct TCompPlayerPivotController : TBaseComponent {
 private:
@@ -15,48 +13,13 @@ public:
 
 	TCompPlayerPivotController() : rotation_velocity(deg2rad(90.0f)) {}
 
-	void loadFromAtts(const std::string& elem, MKeyValue &atts) {
-		rotation_velocity = deg2rad(atts.getFloat("rotationVelocity", 90));
-	}
+	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
-	void init() {
-		CEntity* e_player = CEntityManager::get().getByName("Player");
+	void init();
 
-		assert(e_player || fatal("TCompPlayerPivotController requieres a player entity"));
+	void update(float elapsed);
 
-		player_transform = e_player->get<TCompTransform>();
-		TCompTransform* player_trans = (TCompTransform*)player_transform;
-
-		assert(player_trans || fatal("TCompPlayerPivotController requieres a player entity with a TTransform component"));
-
-		CEntity* e = CHandle(this).getOwner();
-		m_transform = e->get<TCompTransform>();
-		TCompTransform* transform = (TCompTransform*)m_transform;
-
-		// Move the pivot to the player position
-		transform->position = player_trans->position;
-
-		assert(transform || fatal("TCompPlayerPivotController requieres a TTransform component"));
-	}
-
-	void update(float elapsed) {
-		TCompTransform* player_trans = (TCompTransform*)player_transform;
-		TCompTransform* transform = (TCompTransform*)m_transform;
-
-		// Move the pivot to the player position
-		transform->position = player_trans->position;
-
-		CIOStatus &io = CIOStatus::get();
-
-		CIOStatus::TMouse mouse = io.getMouse();
-		XMVECTOR rot = XMQuaternionRotationAxis(transform->getUp(), -rotation_velocity * mouse.dx * elapsed);
-		transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
-	}
-
-
-	std::string toString() {
-		return "Player pivot controller";
-	}
+	void pointAt(XMVECTOR target);
 };
 
 #endif
