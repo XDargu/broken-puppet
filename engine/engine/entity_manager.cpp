@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "entity_manager.h"
 #include "handle\handle.h"
+#include "components\comp_rigid_body.h"
 
 using namespace DirectX;
 
@@ -13,6 +14,11 @@ CEntityManager& CEntityManager::get() {
 void CEntityManager::add(CHandle the_entity) {
 	entity_event_count++;
 	entities.push_back(the_entity);
+
+	// Check if had rigid
+	CHandle m_rigid = ((CEntity*)the_entity)->get<TCompRigidBody>();
+	if (m_rigid.isValid())
+		rigid_list.push_back(m_rigid);
 }
 
 bool CEntityManager::remove(CHandle the_handle) {
@@ -29,9 +35,15 @@ void CEntityManager::destroyRemovedHandles() {
 	for (auto& it : handles_to_destroy) {
 		if (getObjManager<CEntity>()->getType() == it.getType()) { 
 			// The handle is an entity
-			auto it2 = std::find(entities.begin(), entities.end(), it);			
+			auto it2 = std::find(entities.begin(), entities.end(), it);
 			if (it2 == entities.end()) { fatal(" Trying to destroy an entity %s not registered in the entity manager", ((CEntity*)it)->getName());  }
 			entities.erase(it2);
+
+			// Remove from rigidbody list
+			auto it3 = std::find(rigid_list.begin(), rigid_list.end(), it);
+			if (it3 != rigid_list.end())
+				rigid_list.erase(it3);
+
 			entity_event_count++;
 		}
 		it.destroy();

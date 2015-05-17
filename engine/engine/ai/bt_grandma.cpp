@@ -27,6 +27,12 @@ const float walk_speed = 0.8f;
 const float run_speed = 2.f;
 const float run_angry_speed = 2.2f;
 
+
+// Sensor
+const float sensor_delay = 1.f;
+float sensor_acum = 0.f;
+
+
 void bt_grandma::create(string s)
 {
 	name = s;
@@ -1245,8 +1251,17 @@ void bt_grandma::PlayerFoundSensor(){
 }
 
 void bt_grandma::update(float elapsed){
+
+	sensor_acum += elapsed;
+
+	if (sensor_delay <= sensor_acum)
+	{
+		needleViewedSensor();
+		sensor_acum = 0;
+	}
+	
+
 	playerViewedSensor();
-	needleViewedSensor();	
 	tiedSensor();
 	if (findPlayer()){
 		last_point_player_saw = ((TCompTransform*)player_transform)->position;
