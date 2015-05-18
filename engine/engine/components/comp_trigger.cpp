@@ -32,9 +32,9 @@ void TCompTrigger::update(float elapsed) {
 }
 
 bool TCompTrigger::onEnter(){
-	for (int i = 0; i < CEntityManager::get().getEntities().size(); ++i){
+	for (int i = 0; i < CEntityManager::get().rigid_list.size(); ++i){
 		TCompAABB* aabb = (TCompAABB*)m_aabb;
-		CEntity* e = (CEntity*)CEntityManager::get().getEntities()[i];
+		CEntity* e = (CEntity*)CEntityManager::get().rigid_list[i];
 		if (e->has<TCompAABB>()){
 			if (!checkIfInside(e)){
 				TCompAABB* i_aabb = e->get<TCompAABB>();

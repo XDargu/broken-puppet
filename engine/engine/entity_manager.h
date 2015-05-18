@@ -52,6 +52,7 @@ public:
 	bool removeFromChunk(CHandle the_handle);
 
 	TEntityChunk* addChunk(char name[32], XMVECTOR min, XMVECTOR max);	
+	VEntities rigid_list;
 
 protected:
 	// General entity vector
