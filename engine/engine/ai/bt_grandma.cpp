@@ -428,7 +428,7 @@ int bt_grandma::actionIdle()
 
 //Select a point to go 
 int bt_grandma::actionSearchPoint()
-{	
+{
 	float aux_time = state_time;
 	bool aux_on_enter = on_enter;
 
@@ -633,6 +633,7 @@ int bt_grandma::actionSelectRole()
 	return LEAVE;
 }
 
+bool is_reacheable = false;
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
@@ -643,20 +644,14 @@ int bt_grandma::actionChaseRoleDistance()
 
 		m_char_controller->moveSpeedMultiplier = run_angry_speed;
 		m_char_controller->airSpeed = run_angry_speed * 0.8f;
+		ind_path = 0;
 	}
 
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (!findPlayer())
+	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
-	else {
-		wander_target = p_transform->position;
-	}
-
-	if (on_enter){
-		ind_path = 0;
-	}
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if (distance < 4.f) {
