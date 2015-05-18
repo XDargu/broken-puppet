@@ -1,5 +1,4 @@
 filein("GeneralConfig.ms")
-
 clearlistener()
 
 /********************** 
@@ -552,10 +551,25 @@ clearlistener()
 		
 		return f
 	)
+	
+	fn stringHasChar the_string char = (
+		for i = 1 to the_string.count do (
+			if (the_string[i] == char) then (
+				return true
+			)
+		)
+		
+		return false
+	)
 		
 	fn importTexture infile = (
 		local base_name = getFilenameFile infile
 		local full_target = out_path + "textures/" + base_name + ".dds"
+		
+		if (stringHasChar infile " " == true) then (
+			local msg = "La ruta de textura " + base_name + " contiene un espacio"
+			throw msg
+		)
 		
 		-- Convert to dds using texconv.exe por ejemplo
 		--copyFile infile full_target
