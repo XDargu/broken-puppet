@@ -598,6 +598,8 @@ clearlistener()
 		local diff_name = importTexture m.diffusemap.filename
 		local normal_name = ""
 		local emissive_name = ""
+		local specular_name = ""
+		local gloss_name = ""
 		
 		if (m.bumpmap != undefined) then (
 			normal_name = importTexture m.bumpmap.normal_map.filename
@@ -607,12 +609,20 @@ clearlistener()
 			emissive_name = importTexture m.selfIllumMap.filename
 		)
 		
+		if (m.specularMap != undefined) then (
+			specular_name = importTexture m.specularMap.filename
+		)
+		
+		if (m.glossinessMap != undefined) then (
+			gloss_name = importTexture m.glossinessMap.filename
+		)
+		
 		--	importTexture m.normalmap.filename	
 		-- Exportar la definicion del material a un xml
 		local out_filename = out_path + "materials\\" + m.name + ".xml"
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
-		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name emissive_name to:mfs
+		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" gloss=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name specular_name gloss_name emissive_name to:mfs
 		print ("Exported material: " + (m.name as string))
 		close mfs
 	)
