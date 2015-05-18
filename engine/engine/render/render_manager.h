@@ -11,6 +11,8 @@ struct TTransform;
 
 class CRenderManager {
 
+	const CRenderTechnique* technique_gen_shadows;
+	const CRenderTechnique* technique_gen_shadows_skel;
 	VPlanes planes;
 
 	struct TKey {
@@ -58,6 +60,8 @@ public:
 		, CHandle owner
 		, bool* active
 		);
+
+	void init();
 
 	void removeKeysFromOwner(CHandle owner);
 

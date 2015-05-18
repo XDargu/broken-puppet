@@ -331,38 +331,51 @@ int bt_grandma::actionSelectNeedleToTake()
 
 }
 
+bool cut = false;
 //Cut the needles rope
 int bt_grandma::actionCutRope()
 {
-	if (on_enter) {
-		playAnimationIfNotPlaying(8);
+	if (on_enter){
+		animation_done = false;
+		cut = false;
 	}
+	playAnimationIfNotPlaying(8);
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
 
-	if (state_time >= getAnimationDuration(8)) {
-		//stopAllAnimations();
-		if (!animation_done){
-			CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
-			CEntityManager::get().remove(CHandle(target_rope).getOwner());
-			animation_done = true;
-		}
+	float duration_cut = getAnimationDuration(8);
+
+	// Exe the logic of cut the rope
+	if ((state_time >= duration_cut * 0.7f) && (!cut)){
+		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
+		CEntityManager::get().remove(CHandle(target_rope).getOwner());
+		cut = true;
+	}
+
+	// Finish the animation
+	if (state_time >= duration_cut) {
+
 		playAnimationIfNotPlaying(7);
-		int duration = (getAnimationDuration(8) + getAnimationDuration(7));
-		if (state_time >= duration) {
+		(getAnimationDuration(8) + getAnimationDuration(7));
+
+		// Exe the logic of taking a needle
+		if ((state_time >= (getAnimationDuration(8) + getAnimationDuration(7)*0.6f)) && !animation_done){
 			CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
 			((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
 			CEntityManager::get().remove(CHandle(target_needle).getOwner());
+			animation_done = true;
+		}
+
+		// When the animation finish, leave state and clean bools
+		if (state_time >= getAnimationDuration(8) + getAnimationDuration(7)) {			
 			needle_to_take = false;
 			needle_is_valid = false;
 			animation_done = false;
+			cut = false;
 			return LEAVE;
-		}else{
-			return STAY;
 		}
 	}
-	else
 		return STAY;
 
 }
@@ -415,7 +428,7 @@ int bt_grandma::actionIdle()
 
 //Select a point to go 
 int bt_grandma::actionSearchPoint()
-{	
+{
 	float aux_time = state_time;
 	bool aux_on_enter = on_enter;
 
@@ -620,6 +633,7 @@ int bt_grandma::actionSelectRole()
 	return LEAVE;
 }
 
+bool is_reacheable = false;
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
@@ -630,20 +644,14 @@ int bt_grandma::actionChaseRoleDistance()
 
 		m_char_controller->moveSpeedMultiplier = run_angry_speed;
 		m_char_controller->airSpeed = run_angry_speed * 0.8f;
+		ind_path = 0;
 	}
 
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (!findPlayer())
+	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
-	else {
-		wander_target = p_transform->position;
-	}
-
-	if (on_enter){
-		ind_path = 0;
-	}
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if (distance < 4.f) {
