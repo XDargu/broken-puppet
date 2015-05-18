@@ -255,9 +255,6 @@ macroScript MCVAssetBrowser
 		fn createModuleInPoint dir p = (
 			mergeMaxFile (dir) #mergeDups #useSceneMtlDups #select
 			for obj in selection do (
-				if activeGrid == $45degGrid then (
-					obj.rotation *= (quat 0 0 0.382683 0.92388)
-				)
 				obj.position += p
 			)		
 			-- If the imported max is a Prefab, group it
@@ -436,7 +433,7 @@ macroScript MCVAssetBrowser
 				setGridSpacing 8
 			)
 			on button4Grid pressed do (
-				setGridSpacing 3
+				setGridSpacing 4
 			)
 			on button2Grid pressed do (
 				setGridSpacing 2
