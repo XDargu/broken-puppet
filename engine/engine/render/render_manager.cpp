@@ -7,6 +7,7 @@
 #include "font\font.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
+#include "components/comp_name.h"
 #include "components/comp_transform.h"
 #include "components/comp_skeleton.h"
 #include "components\comp_render.h"
@@ -103,7 +104,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		XASSERT(tmx, "Invalid transform");
 
 		if (!it->aabb.isValid()) {
-			it->aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+			it->aabb = ((CEntity*)it->transform.getOwner())->get<TCompAABB>();
 		}
 		
 		TCompAABB* m_aabb = it->aabb;
@@ -114,7 +115,8 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				
 		//culling = true;
 		if (*it->active && culling)
-		{
+		{			
+			CTraceScoped scope(((TCompName*)((CEntity*)it->transform.getOwner())->get<TCompName>())->name);
 			render_count++;
 			if (it->material != prev_it->material || is_first) {
 				

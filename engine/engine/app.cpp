@@ -597,7 +597,7 @@ void CApp::render() {
 	// Generate all shadows maps
 	CTraceScoped scope("gen_shadows");
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
-
+	scope.end();
 
 	deferred.render(&camera, *rt_base);
 	particles.render();
