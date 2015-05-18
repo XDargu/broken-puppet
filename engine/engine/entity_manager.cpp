@@ -17,8 +17,13 @@ void CEntityManager::add(CHandle the_entity) {
 
 	// Check if had rigid
 	CHandle m_rigid = ((CEntity*)the_entity)->get<TCompRigidBody>();
+	const char* m_name = ((CEntity*)the_entity)->getName();
+
+	if (m_name == "minutero")
+		int i = 0;
+
 	if (m_rigid.isValid())
-		rigid_list.push_back(m_rigid);
+		rigid_list.push_back(the_entity);
 }
 
 bool CEntityManager::remove(CHandle the_handle) {
