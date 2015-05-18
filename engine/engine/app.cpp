@@ -301,6 +301,7 @@ bool CApp::create() {
 	XASSERT(is_ok, "Error creating debug meshes");
 
 	logic_manager.init();
+	render_manager.init();
 
 #ifdef _DEBUG
 	// Init AntTweakBar

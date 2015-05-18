@@ -14,6 +14,11 @@
 
 CRenderManager render_manager;
 
+void CRenderManager::init() {
+	technique_gen_shadows = render_techniques_manager.getByName("gen_shadows");
+	technique_gen_shadows_skel = render_techniques_manager.getByName("gen_shadows_skel");
+}
+
 bool CRenderManager::sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2) {
 	if (k1.material != k2.material) {
 		// sort, first the solid, then the transparent
@@ -135,7 +140,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				XASSERT(skel, "Invalid skeleton");
 				skel->uploadBonesToGPU();
 			}
-			std::string name = ((CEntity*)it->transform.getOwner())->getName();
+
 			// Activar la world del obj
 			setWorldMatrix(tmx->getWorld());
 
@@ -192,32 +197,34 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera) {
 		if (!k.material->isSolid())
 			continue;
 
-
-		// Activar la world del obj
-		TCompTransform* tmx = k.transform;
-		assert(tmx);
-		setWorldMatrix(tmx->getWorld());
-
-		TCompAABB* m_aabb = ((CEntity*)CHandle(tmx).getOwner())->get<TCompAABB>();
+		TCompAABB* m_aabb = ((CEntity*)k.transform.getOwner())->get<TCompAABB>();
 		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes.isVisible(m_aabb);
 
-		uploading_bones = k.material->getTech()->usesBones();
+		if (culling) {
 
-		if (uploading_bones) {
-			render_techniques_manager.getByName("gen_shadows_skel")->activate();
+			// Activar la world del obj
+			TCompTransform* tmx = k.transform;
+			assert(tmx);
+			setWorldMatrix(tmx->getWorld());
 
-			const TCompSkeleton* skel = k.owner;
-			XASSERT(skel, "Invalid skeleton");
-			skel->uploadBonesToGPU();
+			uploading_bones = k.material->getTech()->usesBones();
+
+			if (uploading_bones) {
+				technique_gen_shadows_skel->activate();
+
+				const TCompSkeleton* skel = k.owner;
+				XASSERT(skel, "Invalid skeleton");
+				skel->uploadBonesToGPU();
+			}
+			else {
+				technique_gen_shadows->activate();
+			}
+
+
+			// Pintar la mesh:submesh del it
+			k.mesh->activateAndRender();
 		}
-		else {
-			render_techniques_manager.getByName("gen_shadows")->activate();
-		}
-
-
-		// Pintar la mesh:submesh del it
-		k.mesh->activateAndRender();
 	}
 
 }

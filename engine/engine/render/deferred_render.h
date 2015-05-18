@@ -14,6 +14,10 @@ class CDeferredRender {
 	CRenderToTexture*  rt_gloss;
 	CRenderToTexture*  rt_depth;
 
+	const CRenderTechnique* technique_deferred_point_lights;
+	const CRenderTechnique* technique_deferred_dir_lights;
+
+
 	void generateGBuffer(const CCamera* camera);
 	void generateLightBuffer();
 	void resolve(const CCamera* camera, CRenderToTexture& rt_out);

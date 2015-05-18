@@ -14,6 +14,10 @@ bool CDeferredRender::create(int xres, int yres) {
 	rt_gloss = new CRenderToTexture;
 	rt_depth = new CRenderToTexture;
 
+	technique_deferred_point_lights = render_techniques_manager.getByName("deferred_point_lights");
+	technique_deferred_dir_lights = render_techniques_manager.getByName("deferred_dir_lights");
+
+
 	if (!rt_lights->create("rt_lights", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER))
 		return false;
 	if (!rt_albedo->create("rt_albedo", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
@@ -78,13 +82,13 @@ void CDeferredRender::generateLightBuffer() {
 
 	if (1) {
 		CTraceScoped scope("point_lights");
-		render_techniques_manager.getByName("deferred_point_lights")->activate();
+		technique_deferred_point_lights->activate();
 		getObjManager<TCompPointLight>()->onAll(&TCompPointLight::draw);
 	}
 
 	if (1) {
 		CTraceScoped scope("dir_lights");
-		render_techniques_manager.getByName("deferred_dir_lights")->activate();
+		technique_deferred_dir_lights->activate();
 		getObjManager<TCompShadows>()->onAll(&TCompShadows::draw);
 	}
 
