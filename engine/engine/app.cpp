@@ -98,7 +98,6 @@ CMesh		 rope;
 CHandle		 life;
 CHandle		 h_player;
 
-CHandle		  activeCamera;
 CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
@@ -583,7 +582,7 @@ void CApp::render() {
 	ctes_global.uploadToGPU();
 	ctes_global.activateInPS(2);
 	activateTextureSamplers();
-	CCamera camera = *(TCompCamera*)activeCamera;
+	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	/*CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
@@ -593,6 +592,9 @@ void CApp::render() {
 	}*/
 
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
+	
+	// Generate the culling for the active camera
+	render_manager.cullActiveCamera();
 
 	// Generate all shadows maps
 	CTraceScoped scope("gen_shadows");
@@ -978,9 +980,9 @@ void CApp::loadScene(std::string scene_name) {
 	CEntity* e = entity_manager.getByName("PlayerCamera");
 	XASSERT(CHandle(e).isValid(), "Camera not valid");
 
-	activeCamera = e->get<TCompCamera>();
+	render_manager.activeCamera = e->get<TCompCamera>();
 
-	font.camera = activeCamera;
+	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
 	bool is_ok = renderUtilsCreate();

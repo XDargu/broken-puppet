@@ -13,7 +13,6 @@ class CRenderManager {
 
 	const CRenderTechnique* technique_gen_shadows;
 	const CRenderTechnique* technique_gen_shadows_skel;
-	VPlanes planes;
 
 	struct TKey {
 		const CMaterial*   material;
@@ -37,6 +36,7 @@ class CRenderManager {
 		const CMesh*       mesh;
 		CHandle            owner;
 		CHandle            transform;
+		CHandle            aabb;
 
 		bool operator==(const TShadowCasterKey &key) const {
 			return key.owner == owner && key.material == material && key.mesh == mesh;
@@ -53,6 +53,10 @@ class CRenderManager {
 	static bool sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2);
 
 public:
+
+	VPlanes planes_active_camera;
+	VPlanes planes2;
+	CHandle		  activeCamera;
 
 	void addKey(const CMesh*      mesh
 		, const CMaterial*  material
@@ -71,6 +75,8 @@ public:
 	void renderShadowsCasters(const CCamera* camera);
 
 	void destroyAllKeys();
+
+	void cullActiveCamera();
 
 };
 

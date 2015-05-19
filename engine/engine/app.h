@@ -13,6 +13,7 @@ class CApp {
 	void activateDebugMode(bool active);
 	float slow_motion_counter;
 public:
+
 	float time_modifier;
 	float water_level;
 	float delta_time;

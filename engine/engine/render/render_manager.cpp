@@ -8,6 +8,7 @@
 #include "handle/handle.h"
 #include "components/comp_transform.h"
 #include "components/comp_name.h"
+#include "components/comp_camera.h"
 #include "components/comp_transform.h"
 #include "components/comp_skeleton.h"
 #include "components\comp_render.h"
@@ -57,6 +58,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	// 
 	if (material->castsShadows()) {
 		TShadowCasterKey ck = { material, mesh, owner };
+		ck.aabb = k.aabb;
 		ck.transform = k.transform;
 		shadow_casters_keys.push_back(ck);
 	}
@@ -72,9 +74,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	if (sort_required) {
 		std::sort(keys.begin(), keys.end(), sort_by_material_then_mesh);
 		sort_required = false;
-	}
-	
-	planes.create(camera->getViewProjection());
+	}	
 
 	const CRenderTechnique* curr_tech = nullptr;
 	activateCamera(*camera, 1);
@@ -109,7 +109,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		
 		TCompAABB* m_aabb = it->aabb;
 		XASSERT(m_aabb, "Invalid AABB");
-		culling = planes.isVisible(m_aabb);
+		culling = planes_active_camera.isVisible(m_aabb);
 
 		culling &= it->material->isSolid() == solids;
 				
@@ -189,19 +189,25 @@ void CRenderManager::destroyAllKeys() {
 
 // ---------------------------------------------------------------
 void CRenderManager::renderShadowsCasters(const CCamera* camera) {
-	planes.create(camera->getViewProjection());
+	planes2.create(camera->getViewProjection());
 	bool culling = true;
 	bool uploading_bones = false;
-	
 
 	for (auto k : shadow_casters_keys) {
 		
 		if (!k.material->isSolid())
 			continue;
+		
+		if (!k.aabb.isValid()) {
+			k.aabb = ((CEntity*)k.transform.getOwner())->get<TCompAABB>();
+		}
 
-		TCompAABB* m_aabb = ((CEntity*)k.transform.getOwner())->get<TCompAABB>();
-		XASSERT(m_aabb, "Invalid AABB");
-		culling = planes.isVisible(m_aabb);
+		TCompAABB* m_aabb = k.aabb;
+
+		XASSERT(k.aabb.isValid(), "Invalid AABB");
+		culling = planes_active_camera.isVisible(m_aabb);
+		if (culling)
+			culling &= planes2.isVisible(m_aabb);
 
 		if (culling) {
 
@@ -228,5 +234,10 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera) {
 			k.mesh->activateAndRender();
 		}
 	}
+
+}
+
+void CRenderManager::cullActiveCamera() {
+	planes_active_camera.create(((TCompCamera*)activeCamera)->getViewProjection());
 
 }
