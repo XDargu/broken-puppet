@@ -476,3 +476,30 @@ VS_TEXTURED_OUTPUT vin
 
 	return env*fresnel + new_color*(1 - fresnel);
 }
+
+// Light shafts
+float4 PSLightShafts(VS_TEXTURED_OUTPUT input
+	, in float4 iPosition : SV_Position) : SV_Target0{
+	float my_depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float pixel_detph = txDepth.Load(ss_load_coords).x;
+
+	float delta_z = abs(pixel_detph - my_depth);
+	delta_z = saturate(delta_z * 1000);
+
+	float3 dir_to_eye = normalize(cameraWorldPos.xyz - input.wPos.xyz);
+	float3 N = normalize(input.wNormal.xyz);
+	float fresnel = dot(N, dir_to_eye);
+
+	float4 color = txDiffuse.Sample(samClampLinear, input.UV) * float4(1, 0.5, 0.2, 1);
+
+	color.a *= txNormal.Sample(samWrapLinear, input.wPos + world_time.xx * 0.1);
+	color.a *= txNormal.Sample(samWrapLinear, input.wPos - cos(world_time.xx) * 0.05);
+	//color.a *= delta_z;
+	//color.a *= pow(1 - input.UV.y, 1);
+	color.a *= 0.6f;
+	//color.a *= length(dir_to_eye);
+	color.a *= pow(fresnel, 2);
+	return color;
+}

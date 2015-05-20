@@ -283,8 +283,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
+	loadScene("data/scenes/my_file.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -658,7 +658,15 @@ void CApp::render() {
 
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
+
+	activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);	
 	render_manager.renderAll(&camera, false);
+	activateRSConfig(RSCFG_REVERSE_CULLING);
+	render_manager.renderAll(&camera, false);
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DEFAULT);
+	activateBlendConfig(BLEND_CFG_DEFAULT);
 	
 
 #ifdef _DEBUG
