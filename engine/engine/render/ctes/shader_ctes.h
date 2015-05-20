@@ -38,8 +38,10 @@ cbuffer TCtesPointLight SHADER_REGISTER(b5)
 
 cbuffer TCtesDirLight SHADER_REGISTER(b5)   // using the same register as the point light
 {
+	float4 dir_light_direction;
 	float4 dir_light_world_pos;
 	float4 dir_light_color;
+	float dir_light_angle, dir_light_dummy, dir_light_dummy1, dir_light_dummy2;
 	//float  dir_light_max_radius, dir_light_inv_delta_radius;
 	//float  dir_light_dummy1, dir_light_dummy2;
 };

@@ -461,12 +461,14 @@ void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int s
 	ctes_point_light.uploadToGPU();
 }
 
-void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slot) {
+void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, XMVECTOR light_dir, float angle, int slot) {
 	ctes_dir_light.activateInVS(slot);    // as set in the deferred.fx!!
 	ctes_dir_light.activateInPS(slot);    // as set in the deferred.fx!!
 	TCtesDirLight *c = ctes_dir_light.get();
 	c->dir_light_color = dir_light->color;
 	c->dir_light_world_pos = light_pos;
+	c->dir_light_direction = light_dir;
+	c->dir_light_angle = angle;
 	//c->dir_light_max_radius = dir_light->radius;
 	//c->dir_light_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
 	ctes_dir_light.uploadToGPU();

@@ -54,7 +54,7 @@ void activateWorldMatrix(int slot);
 void activateCamera(const CCamera& camera, int slot);
 void activateLight(const CCamera& camera, int slot);
 void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int slot);
-void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, int slot);
+void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, XMVECTOR light_dir, float angle, int slot);
 
 // Provisional
 void setTint(XMVECTOR tint);

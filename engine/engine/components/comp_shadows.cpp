@@ -63,6 +63,7 @@ void TCompShadows::draw() {
 	// becomes the fustrum in world space
 	CEntity* owner = CHandle(this).getOwner();
 	TCompCamera* c = owner->get<TCompCamera>();
+	TCompTransform* t = owner->get<TCompTransform>();
 	XMVECTOR det;
 	XMMATRIX inv_view_proj = XMMatrixInverse(&det, c->getViewProjection());
 	setWorldMatrix(inv_view_proj);
@@ -72,7 +73,7 @@ void TCompShadows::draw() {
 
 	// Activate color, radius and intensity
 	activateLight(*c, 4);
-	activateDirLight(this, c->getPosition(), 5);
+	activateDirLight(this, c->getPosition(), t->getFront(), c->getFov(), 5);
 
 	mesh_view_volume.activateAndRender();
 }

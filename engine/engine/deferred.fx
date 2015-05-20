@@ -322,9 +322,9 @@ float4 PSDirLights(
   float depth = txDepth.Load(ss_load_coords).x;
   float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 
-	  float3 wPos = getWorldCoords(iPosition.xy, depth);
+  float3 wPos = getWorldCoords(iPosition.xy, depth);
 
-	 // return float4(wPos.x - int(wPos.x), 0, 0, 1);
+  // return float4(wPos.x - int(wPos.x), 0, 0, 1);
 
   // Basic diffuse lighting
   float3 L = dir_light_world_pos.xyz - wPos;
@@ -332,11 +332,19 @@ float4 PSDirLights(
   L = L / distance_to_light;
   float  diffuse_amount = saturate(dot(N, L));
 
-
+  float angle_cos = dot(L, -dir_light_direction);
+  float max_cos = cos(dir_light_angle * 0.45);
 
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap
-  float att_factor = getShadowAt(float4(wPos, 1));
+  float att_factor = 0.0;
+  att_factor = saturate(1 - ((max_cos - angle_cos) * 150));
+  // Only check for shadows if inside the circle
+  if (att_factor > 0) {
+	  att_factor *= getShadowAt(float4(wPos, 1));
+  }
+
+ // return angle_cos.xxxx;
 
   float spec_amount = getSpecular(wPos, L, N);
   return float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;

@@ -445,7 +445,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");*/
-		render_techniques_manager.reload("ssao");
+		//render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("deferred_dir_lights");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
