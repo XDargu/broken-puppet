@@ -10,7 +10,7 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	assertRequiredComponent<TCompLife>(this);
 	assertRequiredComponent<TCompTransform>(this);
 	assertRequiredComponent<TCompColliderCapsule>(this);
-	assertRequiredComponent<TCompRigidBody>(this);
+	TCompRigidBody* rigidBody = assertRequiredComponent<TCompRigidBody>(this);
 	assertRequiredComponent<TCompCharacterController>(this);
 
 	fsm_player_legs.SetEntity(CHandle(this).getOwner());
@@ -20,6 +20,9 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 
 	hit_cool_down = 1;
 	time_since_last_hit = 0;
+
+	physx::PxReal threshold = 1.f;
+	rigidBody->rigidBody->setContactReportThreshold(threshold);
 }
 
 void TCompPlayerController::init() {

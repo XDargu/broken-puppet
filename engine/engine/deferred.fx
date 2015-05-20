@@ -486,6 +486,36 @@ VS_TEXTURED_OUTPUT vin
 }
 
 // Light shafts
+//--------------------------------------------------------------------------------------
+// Vertex Shader
+//--------------------------------------------------------------------------------------
+VS_TEXTURED_OUTPUT VSLightShafts(
+float4 Pos : POSITION
+, float2 UV : TEXCOORD0
+, float3 Normal : NORMAL
+, float4 Tangent : TANGENT
+)
+{
+	VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+	output.wNormal = mul(Normal, (float3x3)World);
+
+	float4 world_pos = mul(Pos, World);
+	float cos_norm = (1 + cos(world_time)) * 0.5;
+	float change = cos_norm;
+	world_pos += float4(normalize(output.wNormal).xyz, 0) * change * 0.1 * UV.y;
+	output.Pos = mul(world_pos, ViewProjection);
+	
+	output.UV = UV * 1;
+	output.wPos = world_pos;
+	// Rotate the tangent and keep the w value
+	output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
+	output.wTangent.w = Tangent.w;
+	return output;
+}
+
+//--------------------------------------------------------------------------------------
+// Pixel Shader
+//--------------------------------------------------------------------------------------
 float4 PSLightShafts(VS_TEXTURED_OUTPUT input
 	, in float4 iPosition : SV_Position) : SV_Target0{
 	float my_depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
@@ -501,13 +531,14 @@ float4 PSLightShafts(VS_TEXTURED_OUTPUT input
 	float fresnel = dot(N, dir_to_eye);
 
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV) * float4(1, 0.5, 0.2, 1);
-
+		
 	color.a *= txNormal.Sample(samWrapLinear, input.wPos.xz + world_time.xx * 0.1);
 	color.a *= txNormal.Sample(samWrapLinear, input.wPos.yz - cos(world_time.xx) * 0.05);
 	//color.a *= delta_z;
 	//color.a *= pow(1 - input.UV.y, 1);
 	color.a *= 0.6f;
 	//color.a *= length(dir_to_eye);
+	float change = (sin(world_time) + 1) * 0.5;
 	color.a *= pow(fresnel, 2);
 	return color;
 }

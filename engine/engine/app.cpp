@@ -283,8 +283,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -445,8 +445,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");*/
-		//render_techniques_manager.reload("ssao");
-		render_techniques_manager.reload("deferred_dir_lights");
+		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("light_shaft");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -582,6 +582,7 @@ void CApp::render() {
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	ctes_global.uploadToGPU();
+	ctes_global.activateInVS(2);
 	ctes_global.activateInPS(2);
 	activateTextureSamplers();
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
@@ -606,8 +607,8 @@ void CApp::render() {
 	deferred.render(&camera, *rt_base);
 	particles.render();
 
-	//ssao.apply(rt_base);
-	//texture_manager.getByName("noise")->activate(9);
+	texture_manager.getByName("noise")->activate(9);
+	ssao.apply(rt_base);	
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
@@ -630,7 +631,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
+	drawTexture2D(0, 0, xres, yres, ssao.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
