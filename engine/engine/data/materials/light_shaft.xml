@@ -1,1 +1,4 @@
-<std_material tech="light_shaft" name="light_shaft" diffuse="falloff" normal="noise" solid="0" />
+<std_material 
+tech="light_shaft" 
+solid="0" 
+name="light_shaft" diffuse="falloff" normal="noise" specular="" gloss="" emissive=""/>
