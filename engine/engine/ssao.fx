@@ -1,7 +1,9 @@
 #include "render/ctes/shader_ctes.h"
 
 Texture2D txDiffuse : register(t0);
+Texture2D txNormal    : register(t1);
 Texture2D txDepth   : register(t2);
+Texture2D txRandom   : register(t9);
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
 
@@ -40,52 +42,108 @@ float3 getWorldCoords(float2 screen_coords, float depth) {
 		return wPos;
 }
 
-float2 getDistorsion(float2 tex, float k, float kcube) {
-	float r2 = (tex.x - 0.5) * (tex.x - 0.5) + (tex.y - 0.5) * (tex.y - 0.5);
-	float f = 0;
+float2 coord2D(float2 coord)
+{
+	return float2((coord.x - cameraHalfXRes) / cameraHalfXRes, -(coord.y - cameraHalfYRes) / cameraHalfYRes);
+}
 
+float2 perspective_correction(float2 coord)
+{
+	float camera_aspect_ratio = cameraHalfXRes / cameraHalfYRes;
+	coord.x *= camera_aspect_ratio;
+	// tan( fov/2 ) = ( yres/2 ) / view_d
+	float tan_half_fov = cameraHalfYRes / cameraViewD;
 
-	//only compute the cubic distortion if necessary
-	if (kcube == 0.0){
-		f = 1 + r2 * k;
-	}
-	else{
-		f = 1 + r2 * (k + kcube * sqrt(r2));
-	};
+	return coord * tan_half_fov;
+}
 
-	// get the right pixel for the current position
-	float x = f*(tex.x - 0.5) + 0.5;
-	float y = f*(tex.y - 0.5) + 0.5;
+float3 getViewSpace(float2 screen_coords, float depth) {
+	//return float3(perspective_correction(screen_coords), -1) * depth * cameraZFar;
+	return float3(perspective_correction(coord2D(screen_coords)), -1) * depth * cameraZFar;
+}
 
-	return float2(x, y);
+float GetAmbientOcclusion(
+	in float2 textureCoords
+	, in float2 uv
+	, in float3 position
+	, in float3 normal
+	, in float depth
+	)
+{
+	float2 coords = textureCoords + uv;
+
+	float3 diff = getViewSpace(coords, depth) - position;
+
+	float AmbientOcclusionDepthClamp = 0.5;
+	float AmbientOcclusionScale = 10;
+	float AmbientOcclusionBias = 0.5;
+	float AmbientOcclusionIntensity = 10;
+
+	//float3 diff = GetPositionInViewSpace(coords, depth) - position;
+
+	float3 v = normalize(diff);
+	float  dist = length(diff) * AmbientOcclusionScale;
+	
+	float  attenuation = 1.0f / (1.0f + dist) * (1.0f - pow(1.0f - depth, AmbientOcclusionDepthClamp));
+
+	return max(0.0f, dot(normal, v) - AmbientOcclusionBias) * 1 * AmbientOcclusionIntensity;
 }
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PSSSAO(VS_TEXTURED_OUTPUT input,
+float4 PSSSAO(
+	VS_TEXTURED_OUTPUT input,
 	in float4 iPosition : SV_Position
 	) : SV_Target
 {
-	float4 color = txDiffuse.Sample(samClampLinear, input.UV);
-	float2 tex = input.UV;
+	
+	int3   screenCoords = uint3(iPosition.xy, 0);
 
-	float2 rDist = getDistorsion(tex, -0.05, 0.05);
-	float2 gDist = getDistorsion(tex, -0.08, 0.08);
-	float2 bDist = getDistorsion(tex, -0.11, 0.11);
-  
-	float3 inputDistordr = txDiffuse.Sample(samClampLinear, rDist);
-	float3 inputDistordg = txDiffuse.Sample(samClampLinear, gDist);
-	float3 inputDistordb = txDiffuse.Sample(samClampLinear, bDist);
+	float3 diffuse = txDiffuse.Sample(samClampLinear, input.UV).xyz;
+	float3 normal = txNormal.Sample(samClampLinear, input.UV).xyz;
+	normal *= cameraViewD;
+	normal = normalize(normal);
+	float  depth = txDepth.Sample(samClampLinear, input.UV).x;
+
+	float3 positionViewSpace = getViewSpace(iPosition.xy, depth);
+		//return float4(normal.x, normal.y, normal.z, 0);
+	//return float4(positionViewSpace.x, positionViewSpace.y, positionViewSpace.z, 0);
 
 
-  return float4(inputDistordr.r, inputDistordg.g, inputDistordb.b, 1);
-  
+	float2 resolution = 1;// 1 / ssao_delta;
+	float2 screenTexture = float2(iPosition.x * resolution.x, iPosition.y * resolution.y);
 
-  //return original;
-  //return blurred;
-  //alfa = 1.5;
-  //return original *(1 - alfa) + blurred * alfa;  
-  return color;
+	//return float4(screenTexture.x, screenTexture.y, 0, 0) * 0.001;
+	
+	float  randomSize = 64.0f;
+	float2 randomCoords = txRandom.Sample(samWrapLinear, screenTexture / randomSize).xy * 2.0f - 1.0f;
+	randomCoords = normalize(randomCoords);
+
+	//return float4(randomCoords.x, randomCoords.y, 0, 0) * 1;
+	
+	float ssao_radius = radius / depth;
+
+	// SSAO
+	float ambientOcclusion = 0.0f;
+	int iterations = 4;
+	const float2 vec[4] = { float2(1.0f, 0.0f), float2(-1.0f, 0.0f), float2(0.0f, 1.0f), float2(0.0f, -1.0f) };
+
+	for (int i = 0; i < iterations; ++i)
+	{
+		float2 coord1 = reflect(vec[i], randomCoords) * ssao_radius;
+		float2 coord2 = float2(coord1.x * 0.707f - coord1.y * 0.707f,
+		coord1.x * 0.707f + coord1.y * 0.707f);
+
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord1 * 0.25f, positionViewSpace, normal, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord2 * 0.5f, positionViewSpace, normal, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord1 * 0.75f, positionViewSpace, normal, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord2 * 1.0f, positionViewSpace, normal, depth);
+	}
+
+	ambientOcclusion /= (float)iterations * 4.0f;
+	
+	//return float4(diffuse, 0) * (1 - ambientOcclusion);
+	return 1.0 - ambientOcclusion;
 }
 

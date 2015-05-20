@@ -28,6 +28,7 @@ CLogicManager::CLogicManager() {
 void CLogicManager::init()
 {
 	water_transform = CEntityManager::get().getByName("water");
+	water2_transform = CEntityManager::get().getByName("water2");
 	player = CEntityManager::get().getByName("Player");
 	player_pivot = CEntityManager::get().getByName("PlayerPivot");
 	camera_pivot = CEntityManager::get().getByName("CameraPivot");
@@ -79,6 +80,14 @@ void CLogicManager::update(float elapsed) {
 		XMVECTOR water_dest = water_t->position;
 		water_dest = XMVectorSetY(water_dest, water_level_dest);
 		water_t->position = XMVectorLerp(water_t->position, water_dest, lerp_water * elapsed);
+
+		// Ver el agua por debajo
+		if (water2_transform.isValid()) {
+			TCompTransform* water2_t = ((CEntity*)water2_transform)->get<TCompTransform>();
+			XMVECTOR water2_dest = water2_t->position;
+			water2_dest = XMVectorSetY(water2_dest, water_level_dest);
+			water2_t->position = XMVectorLerp(water2_t->position, water2_dest, lerp_water * elapsed);
+		}
 
 		// Ñapa hacer flotar
 		CHandle madera = ((CEntity*)CEntityManager::get().getByName("plataforma_madera"));

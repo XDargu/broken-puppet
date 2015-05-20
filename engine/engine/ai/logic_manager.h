@@ -23,6 +23,7 @@ private:
 
 	// Keep some usefull handles
 	CHandle water_transform;
+	CHandle water2_transform;
 	
 	CHandle player;
 	CHandle player_pivot;

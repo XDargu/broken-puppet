@@ -441,10 +441,11 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("deferred_gbuffer");
+		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
-		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("deferred_resolve");*/
+		render_techniques_manager.reload("ssao");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -604,10 +605,13 @@ void CApp::render() {
 	deferred.render(&camera, *rt_base);
 	particles.render();
 
+	//ssao.apply(rt_base);
+	//texture_manager.getByName("noise")->activate(9);
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
+	
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();

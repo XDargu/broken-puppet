@@ -4358,6 +4358,14 @@
     <trigger/>
   </entity>
   <entity  >
+    <name name="water2" />
+    <transform position="9.8027 -3.58394 35.9117" rotation="-1.0 0.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="water" sub_mesh="0" mat="distorsion"/>
+    </render>
+    <aabb min="-8.24553 0.0 -6.51204" max="8.24553 0.0001 6.51204"/>
+  </entity>
+  <entity  >
     <name name="water" />
     <transform position="9.8027 -3.58394 35.9117" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
