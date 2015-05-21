@@ -3,6 +3,7 @@
 #include "comp_rigid_body.h"
 #include "comp_unity_character_controller.h"
 #include "entity_manager.h"
+#include "physics_manager.h"
 
 void TCompTransform::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	position = atts.getPoint("position");
@@ -33,8 +34,16 @@ void TCompTransform::init() {
 		XASSERT(parent.isValid(), "Parent %s must have a transform", parent_name);
 		TCompTransform* c_parent = parent;
 
-		parent_offset.rotation = XMQuaternionMultiply(rotation, XMQuaternionInverse(c_parent->rotation));
-		parent_offset.position = c_parent->position - XMVector3Rotate(position, XMQuaternionInverse(c_parent->rotation));
+		PxTransform my_transform = PxTransform(Physics.XMVECTORToPxVec3(position), Physics.XMVECTORToPxQuat(rotation));
+		PxTransform parent_transform = PxTransform(Physics.XMVECTORToPxVec3(c_parent->position), Physics.XMVECTORToPxQuat(c_parent->rotation));
+
+		PxTransform parent_inverse = parent_transform.getInverse();
+		PxTransform local = parent_inverse.transform(my_transform);
+		parent_offset.position = Physics.PxVec3ToXMVECTOR(local.p);
+		parent_offset.rotation = Physics.PxQuatToXMVECTOR(local.q);
+
+		//parent_offset.rotation = XMQuaternionMultiply(rotation, XMQuaternionInverse(c_parent->rotation));
+		//parent_offset.position = c_parent->position - XMVector3Rotate(position, XMQuaternionInverse(c_parent->rotation));
 		//parent_offset.position = c_parent->inverseTransformPoint(position);
 		
 	}
@@ -52,8 +61,17 @@ void TCompTransform::update(float elapsed) {
 		/*position = c_parent->transformPoint(parent_offset.position);
 		rotation = c_parent->transformDirection(parent_offset.rotation);*/
 
+		/*PxTransform me_to_parent = PxTransform(Physics.XMVECTORToPxVec3(parent_offset.position), Physics.XMVECTORToPxQuat(parent_offset.rotation));
+		PxTransform parent_transform = PxTransform(Physics.XMVECTORToPxVec3(c_parent->position), Physics.XMVECTORToPxQuat(c_parent->rotation));
+
+		PxTransform my_transform = parent_transform.transform(me_to_parent);
+
+		position = Physics.PxVec3ToXMVECTOR(my_transform.p);
+		rotation = Physics.PxQuatToXMVECTOR(my_transform.q);*/
+
+
 		rotation = XMQuaternionMultiply(parent_offset.rotation, c_parent->rotation);
-		position = c_parent->position - XMVector3Rotate(parent_offset.position, c_parent->rotation);
+		position = c_parent->position + XMVector3Rotate(parent_offset.position, c_parent->rotation);
 
 		/*position = parent_offset_pos + c_parent->position;
 		rotation = XMQuaternionMultiply(c_parent->rotation, parent_offset_rot);*/

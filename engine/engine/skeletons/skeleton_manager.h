@@ -30,6 +30,11 @@ public:
     float       local_amount;
     bool        render;
     void apply( CalModel* model, CalVector target, float amount );
+	TBoneCorrector() {}
+	TBoneCorrector(int the_bone_id, CalVector the_local_dir) {
+		bone_id = the_bone_id;
+		local_dir = the_local_dir;
+	}
   };
 
   typedef std::vector <TBoneCorrector> VBoneCorrections;
