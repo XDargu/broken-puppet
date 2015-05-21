@@ -7,17 +7,19 @@
 
 CEntityManager entity_manager = CEntityManager::get();
 
-CCallbacks_physx::CCallbacks_physx() : forceLargeImpact (6000), forceMediumImpact(1000) {
+CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000) {
 }
 
 void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
-	//dbg("onContact");	
-	for (PxU32 i = 0; i < nbPairs; i++){
-		const PxContactPair& cp = pairs[i];
-		if (cp.events & PxPairFlag::eNOTIFY_TOUCH_FOUND) {
+	//dbg("onContact");
 
-			//Acceder a los actores pertenecientes al pair
+	for (PxU32 i = 0; i < nbPairs; i++){
+		//Acceder a los actores pertenecientes al pair
+		const PxContactPair& cp = pairs[i];
+
+		if (cp.events & PxPairFlag::eNOTIFY_TOUCH_FOUND){
+
 			PxActor* firstActor = pairHeader.actors[0];
 			PxActor* otherActor = pairHeader.actors[1];
 
@@ -30,34 +32,41 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			//Colision entre actor y player
 			if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("player"))){
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(second_rigid->getMass(), pairs, i);
 				float force_float = force;
-				firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
+				if (force_float >force_threshold)
+					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 			}
 
 			//Colision entre player y actor
 			if ((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(first_rigid->getMass(), pairs, i);
 				float force_float = force;
-				secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
+				if (force_float >force_threshold)
+					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}
-
 
 			//Colision entre actor y enemigo
 			if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(second_rigid->getMass(), pairs, i);
 				float force_float = force;
-				firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
+				if (force_float >force_threshold)
+					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 			}
 
 			//Colision entre enemigo y actor
 			if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))){
 				TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = firstActorEntity->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(firstActorEntity->getMass(), pairs, i);
 				float force_float = force;
-				secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
+				if (force_float >force_threshold)
+					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}
 			/*
 			//Colision entre enemigo y escenario
@@ -68,14 +77,14 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			if (force_float>3500.f)
 			firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 			}*/
-		}
 
+		}
 	}
 }
 
 //Metodo para el calculo de fuerza media en colisiones
 PxReal CCallbacks_physx::getForce(PxReal mass, const PxContactPair* pairs, PxU32 index){
-	XMVECTOR force = {0.f,0.f,0.f,0.f};
+	XMVECTOR force = { 0.f, 0.f, 0.f, 0.f };
 	const PxU32 bufferSize = 64;
 	PxContactPairPoint contacts[bufferSize];
 	const PxContactPair& cp = pairs[index];
@@ -116,27 +125,31 @@ PxFilterFlags FilterShader(
 		if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eENEMY)){
 			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 			return PxFilterFlag::eDEFAULT;
-		}else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::eACTOR)){
+		}
+		else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::eACTOR)){
 			//Colisiones entre actores (cajas) y enemigos
 			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 			return PxFilterFlag::eDEFAULT;
 			/*}else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eLEVEL)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;*/
-		}else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eACTOR)){
+			//Colisiones entre actores (cajas) y enemigos
+			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+			return PxFilterFlag::eDEFAULT;*/
+		}
+		else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eACTOR)){
 			//Colisiones entre actores (cajas) y enemigos
 			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 			return PxFilterFlag::eDEFAULT;
-		}else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
+		}
+		else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
 			//Colisiones entre actores (cajas) y enemigos
 			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 			return PxFilterFlag::eDEFAULT;
-		}else if ((filterData0.word0 == FilterGroup::eLEVEL) && (filterData1.word0 == FilterGroup::eENEMY)){
+			//}else if ((filterData0.word0 == FilterGroup::eLEVEL) && (filterData1.word0 == FilterGroup::eENEMY)){
 			//Colisiones entre actores y el nivel
-			pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-			return PxFilterFlag::eDEFAULT;
-		}else{
+			//pairFlags = PxPairFlag::eCONTACT_DEFAULT  | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+			//return PxFilterFlag::eDEFAULT;
+		}
+		else{
 			return PxFilterFlag::eDEFAULT;
 		}
 	}

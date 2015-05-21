@@ -74,5 +74,7 @@ using namespace DirectX;
 #include "comp_trigger.h"
 #include "comp_victory_cond.h"
 #include "comp_distance_text.h"
+#include "comp_audio_listener.h"
+#include "comp_audio_source.h"
 
 #endif

@@ -57,3 +57,6 @@ DECL_OBJ_MANAGER(TCompSwitchPullController, "switchPullController");
 DECL_OBJ_MANAGER(TCompPlatformPath, "platformPath");
 DECL_OBJ_MANAGER(TCompRagdoll, "ragdoll");
 DECL_OBJ_MANAGER(TCompShadows, "shadows");
+DECL_OBJ_MANAGER(TCompAudioListener, "audioListener");
+DECL_OBJ_MANAGER(TCompAudioSource, "audioSource");
+
