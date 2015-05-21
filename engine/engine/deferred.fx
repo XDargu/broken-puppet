@@ -461,7 +461,7 @@ float4 PSResolve(
 	
 	float4 specular = specular_color * spec_intensity;// saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
 		//return specular;
-	return (albedo * diffuse + saturate(specular) * 0.7) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	return (albedo * diffuse + saturate(specular)) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 
