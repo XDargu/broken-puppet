@@ -453,6 +453,15 @@
     <ClInclude Include="render\render_instances.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="audio\sound.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_audio_listener.h">
+      <Filter>components\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_audio_source.h">
+      <Filter>components\audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -833,6 +842,15 @@
     <ClCompile Include="components\comp_camera_pivot_controller.cpp">
       <Filter>components\controllers</Filter>
     </ClCompile>
+    <ClCompile Include="audio\sound.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_audio_listener.cpp">
+      <Filter>components\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_audio_source.cpp">
+      <Filter>components\audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -924,6 +942,9 @@
     </Filter>
     <Filter Include="audio">
       <UniqueIdentifier>{cf303c48-915a-4b05-8758-0eaf69bf6d35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\audio">
+      <UniqueIdentifier>{5e035253-ef1f-4caa-a8ca-bbe1e1503d40}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
