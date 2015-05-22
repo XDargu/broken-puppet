@@ -48,7 +48,7 @@ void CRenderInstances::destroy() {
 
 
 void CRenderInstances::render() {
-	
+	return;
 	setWorldMatrix(XMMatrixIdentity());
 	CTraceScoped t0("instances");
 	render_techniques_manager.getByName("particles")->activate();

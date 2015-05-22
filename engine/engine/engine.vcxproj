@@ -194,7 +194,9 @@
     <ClInclude Include="components\comp_audio_source.h" />
     <ClInclude Include="components\comp_sensor_tied.h" />
     <ClInclude Include="ai\moving_platform.h" />
-    <ClInclude Include="components\comp_particle_system.h" />
+    <ClInclude Include="components\comp_particle_group.h" />
+    <ClInclude Include="particles\particle.h" />
+    <ClInclude Include="particles\particle_system.h" />
     <ClInclude Include="render\all_post_process_effects.h" />
     <ClInclude Include="render\blur_step.h" />
     <ClInclude Include="components\collider.h" />
@@ -392,7 +394,7 @@
     <ClCompile Include="components\comp_sensor_tied.cpp" />
     <ClCompile Include="components\comp_rope.cpp" />
     <ClCompile Include="components\comp_distance_joint.cpp" />
-    <ClCompile Include="components\comp_particle_system.cpp" />
+    <ClCompile Include="components\comp_particle_group.cpp" />
     <ClCompile Include="entity_manager.cpp" />
     <ClCompile Include="entity_inspector.cpp" />
     <ClCompile Include="error\error_context.cpp" />
@@ -436,6 +438,8 @@
     <ClCompile Include="navmesh\PerfTimer.cpp" />
     <ClCompile Include="nav_mesh_manager.cpp" />
     <ClCompile Include="options_parser.cpp" />
+    <ClCompile Include="particles\particle.cpp" />
+    <ClCompile Include="particles\particle_system.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="ragdoll_manager.cpp" />
     <ClCompile Include="recast\source\DebugDraw.cpp">

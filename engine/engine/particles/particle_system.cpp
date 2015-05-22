@@ -1,16 +1,15 @@
 #include "mcv_platform.h"
-#include "comp_particle_system.h"
-#include "comp_transform.h"
-#include "physics_manager.h"
+#include "particle_system.h"
 #include "render\render_utils.h"
+#include "components\comp_transform.h"
 
-void TCompParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	h_transform = assertRequiredComponent<TCompTransform>(this);
+void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
+
 	TCompTransform* m_transform = h_transform;
 
 	if (elem == "updater") {
-		std::string updater_type =  atts.getString("type", "");
-		if (updater_type == "lifetime") {
+		std::string updater_type = atts.getString("type", "");
+		if (updater_type == "lifeTime") {
 			updater_lifetime = new TParticleUpdaterLifeTime();
 		}
 		if (updater_type == "size") {
@@ -33,10 +32,12 @@ void TCompParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts)
 		if (emitter_type == "sphere") {
 			float radius = atts.getFloat("radius", 1);
 			float rate = atts.getFloat("rate", 0.1);
-			float life_time = atts.getFloat("lifeTime", 5);
-			
-			emitter_generation = new TParticleEmitterGenerationSphere(position, rate, life_time, radius);
-			emitter_generation->particles = &particles;
+			float min_life_time = atts.getFloat("minLifeTime", 5);
+			float max_life_time = atts.getFloat("maxLifeTime", 5);
+			bool fill_initial = atts.getBool("fillInitial", false);
+			int limit = atts.getInt("limit", 1000);
+
+			emitter_generation = new TParticleEmitterGenerationSphere(&particles, position, rate, min_life_time, max_life_time, radius, fill_initial, limit);
 		}
 	}
 
@@ -47,23 +48,23 @@ void TCompParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	// Instancing
 	instanced_mesh = &mesh_textured_quad_xy_centered;
 
-	particles.resize(1000);
-
+	/*
 	// This mesh has not been registered in the mesh manager
 	instances_data = new CMesh;
 	bool is_ok = instances_data->create(particles.size(), &particles[0]
-		, 0, nullptr        // No indices
-		, CMesh::POINTS     // We are not using this
-		, &vdcl_particle_data    // Type of vertex
-		, true              // the buffer IS dynamic
-		);
+	, 0, nullptr        // No indices
+	, CMesh::POINTS     // We are not using this
+	, &vdcl_particle_data    // Type of vertex
+	, true              // the buffer IS dynamic
+	);
+	*/
 }
 
-void TCompParticleSystem::init() {
+void TParticleSystem::init() {
 
 }
 
-void TCompParticleSystem::update(float elapsed) {
+void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
 		TCompTransform* m_transform = h_transform;
 		emitter_generation->position = m_transform->position;
@@ -101,20 +102,20 @@ void TCompParticleSystem::update(float elapsed) {
 		}
 	}
 
-	for (int i = 0; i < delete_counter; ++i) {
-		particles.push_front(TParticle());
-	}
+	/*for (int i = 0; i < delete_counter; ++i) {
+	particles.push_front(TParticle());
+	}*/
 
 
 
 	// Update particles using some cpu code
 	int idx = 1;
 	/*for (auto& p : particles) {
-		//p.nframe += elapsed;
-		//p.pos.y -= random(1.f, 3.f) * elapsed* 2;
-		//if (p.pos.y < 0)
-		//  p.pos.y += 50.f;
-		++idx;
+	//p.nframe += elapsed;
+	//p.pos.y -= random(1.f, 3.f) * elapsed* 2;
+	//if (p.pos.y < 0)
+	//  p.pos.y += 50.f;
+	++idx;
 	}*/
 
 	if (instances_data != nullptr && particles.size() > 0) {
@@ -122,8 +123,7 @@ void TCompParticleSystem::update(float elapsed) {
 	}
 }
 
-void TCompParticleSystem::render() {
-	return;
+void TParticleSystem::render() {
 	if (instances_data != nullptr) {
 		setWorldMatrix(XMMatrixIdentity());
 		CTraceScoped t0("instances");
@@ -137,13 +137,15 @@ void TCompParticleSystem::render() {
 	}
 }
 
-void TCompParticleSystem::renderDebug3D() const {
+void TParticleSystem::renderDebug3D() const {
+	render_techniques_manager.getByName("basic")->activate();
+
 	for (auto& particle : particles) {
 		XMVECTOR pos = XMLoadFloat3(&particle.position);
 		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
-		XMVECTOR scale = XMVectorSet(1, 1, 1, 1);
+		XMVECTOR scale = XMVectorSet(0.1, 0.1, 0.1, 0.1);
 		XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
 		setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
-		axis.activateAndRender();
+		mesh_icosahedron.activateAndRender();
 	}
 }

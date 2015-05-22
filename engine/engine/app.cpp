@@ -207,7 +207,7 @@ void createManagers() {
 	getObjManager<TCompRagdoll>()->init(64);
 	getObjManager<TCompShadows>()->init(8);
 
-	getObjManager<TCompParticleSystem>()->init(64);
+	getObjManager<TCompParticleGroup>()->init(64);
 
 
 	registerAllComponentMsgs();
@@ -258,7 +258,7 @@ void initManagers() {
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
 
-	getObjManager<TCompParticleSystem>()->initHandlers();
+	getObjManager<TCompParticleGroup>()->initHandlers();
 
 
 }
@@ -555,7 +555,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
 	// PARTICLES
-	getObjManager<TCompParticleSystem>()->update(elapsed);
+	getObjManager<TCompParticleGroup>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 	instances.update(elapsed);
@@ -617,7 +617,7 @@ void CApp::render() {
 
 	deferred.render(&camera, *rt_base);
 	instances.render();
-	getObjManager<TCompParticleSystem>()->onAll(&TCompParticleSystem::render);
+	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
 
 	texture_manager.getByName("noise")->activate(9);
 	ssao.apply(rt_base);	
@@ -831,7 +831,7 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
-	getObjManager<TCompParticleSystem>()->renderDebug3D();
+	getObjManager<TCompParticleGroup>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){

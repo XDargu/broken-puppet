@@ -462,7 +462,13 @@
     <ClInclude Include="components\comp_audio_source.h">
       <Filter>components\audio</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_particle_system.h">
+    <ClInclude Include="particles\particle_system.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_particle_group.h">
       <Filter>components\render</Filter>
     </ClInclude>
   </ItemGroup>
@@ -854,7 +860,13 @@
     <ClCompile Include="components\comp_audio_source.cpp">
       <Filter>components\audio</Filter>
     </ClCompile>
-    <ClCompile Include="components\comp_particle_system.cpp">
+    <ClCompile Include="particles\particle_system.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_particle_group.cpp">
       <Filter>components\render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -951,6 +963,9 @@
     </Filter>
     <Filter Include="components\audio">
       <UniqueIdentifier>{5e035253-ef1f-4caa-a8ca-bbe1e1503d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="particles">
+      <UniqueIdentifier>{b66cdcab-9d81-457d-85e6-0c2377b87c59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

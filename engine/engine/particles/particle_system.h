@@ -1,39 +1,16 @@
-#ifndef INC_COMP_PARTICLE_SYSTEM_H_
-#define INC_COMP_PARTICLE_SYSTEM_H_
+#ifndef INC_PARTICLE_SYSTEM_H_
+#define INC_PARTICLE_SYSTEM_H_
 
-#include "base_component.h"
-#include "render\render_instances.h"
+#include "utils.h"
+#include "handle\handle.h"
+#include "particle.h"
 
-struct TParticle {
-	XMFLOAT3 position;
-	float age;
-	float lifespan;
-	float size;
-	//XMVECTOR color;
-	
+typedef std::vector<TParticle> VParticles;
 
-	TParticle(XMFLOAT3 the_position, float the_age, float the_lifespan, XMVECTOR the_color, float the_size) {
-		position = the_position;
-		age = the_age;
-		lifespan = the_lifespan;
-		//color = the_color;
-		size = the_size;
-	}
-
-	TParticle() {
-		position = XMFLOAT3(0, 0, -1);
-		age = 0;
-		lifespan = 0;
-		//color = XMVectorSet(0, 0, 0, -1);
-		size = -1;
-	}
-
-	void update(float elapsed) {
-		age += elapsed;
-	}
+struct TParticleEmitterDirection {
+protected:
+public:
 };
-
-typedef std::deque<TParticle> VParticles;
 
 struct TParticleEmitterGeneration {
 protected:
@@ -45,7 +22,12 @@ public:
 	// Position of the emitter (Transform position)
 	XMVECTOR position;
 	// Lifetime of the particles
-	float life_time;
+	float min_life_time;
+	float max_life_time;
+	// Should the particle system generate the particles at the begining?
+	bool fill_initial;
+	// Max amount of particles
+	int limit;
 
 	virtual void update(float elapsed) = 0;
 };
@@ -54,31 +36,52 @@ struct TParticleEmitterGenerationSphere : TParticleEmitterGeneration {
 
 	float radius;
 
-	TParticleEmitterGenerationSphere(XMVECTOR the_position, float the_rate, float the_life_time, float the_radius) {
+	TParticleEmitterGenerationSphere(VParticles* the_particles, XMVECTOR the_position, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, bool the_fill_initial, int the_limit) {
 		radius = the_radius;
 		position = the_position;
-		life_time = the_life_time;
+		min_life_time = the_min_life_time;
+		max_life_time = the_max_life_time;
 		rate = the_rate;
 		rate_counter = 0;
+		fill_initial = the_fill_initial;
+		limit = the_limit;
+		particles = the_particles;
+
+		if (fill_initial) {
+			// Make the initial particles
+			for (int i = 0; i < limit; ++i) {
+				addParticle();
+			}
+		}
 	}
 	void update(float elapsed) {
 		rate_counter += elapsed;
-		
+
 		// If we have to make a new particle
-		if (rate_counter > rate){
-			XMFLOAT3 pos;
-			XMStoreFloat3(&pos, position + getRandomVector3(-radius, radius));
-			TParticle n_particle = TParticle(
-				pos
-				, 0
-				, life_time
-				, XMVectorSet(1, 1, 1, 1)
-				, 1
-				);
-			particles->pop_front();
-			particles->push_back(n_particle);
-			rate_counter = 0;
+		if (rate != 0 && rate_counter > rate && particles->size() < limit){
+			addParticle();
 		}
+	}
+
+	void addParticle() {
+		XMFLOAT3 pos;
+		XMStoreFloat3(&pos, getRandomVector3(-radius, radius));
+		bool insideSphere = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
+		while (!insideSphere) {
+			XMStoreFloat3(&pos, getRandomVector3(-radius, radius));
+			insideSphere = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
+		}
+		XMStoreFloat3(&pos, position + XMLoadFloat3(&pos));
+		float life_time = getRandomNumber(min_life_time, max_life_time);
+		TParticle n_particle = TParticle(
+			pos
+			, 0
+			, life_time
+			, XMVectorSet(1, 1, 1, 1)
+			, 1
+			);
+		particles->push_back(n_particle);
+		rate_counter = 0;
 	}
 };
 
@@ -125,39 +128,41 @@ struct TParticleUpdaterColor {
 	}
 };
 
-
-struct TCompParticleSystem : TBaseComponent {
-
+// Particle system
+struct TParticleSystem {
+	// Vector of particles
 	VParticles particles;
+
+	// Updaters
 	TParticleUpdaterLifeTime* updater_lifetime;
 	TParticleUpdaterSize* updater_size;
 	TParticleUpdaterColor* updater_color;
 	TParticleUpdaterMovement* updater_movement;
 
+	// Emitter shape
 	TParticleEmitterGeneration* emitter_generation;
 
+	// Transform reference
 	CHandle h_transform;
 
-	const CMesh* instanced_mesh;      // The single tree, particle
+	const CMesh* instanced_mesh;      // The particle mesh
 	CMesh* instances_data;      // The positions of each instance
-
 public:
 
-	TCompParticleSystem()
-		: updater_lifetime(nullptr)
+	TParticleSystem() : updater_lifetime(nullptr)
 		, updater_size(nullptr)
 		, updater_color(nullptr)
 		, updater_movement(nullptr)
-		
+
 		, emitter_generation(nullptr)
 
 		, h_transform(CHandle())
 
 		, instanced_mesh(nullptr)
 		, instances_data(nullptr)
-	{};
+	{}
 
-	~TCompParticleSystem() {
+	~TParticleSystem() {
 		SAFE_DELETE(updater_lifetime);
 		SAFE_DELETE(updater_size);
 		SAFE_DELETE(updater_color);
