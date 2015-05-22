@@ -4,6 +4,13 @@
 #include "physics_manager.h"
 #include "render\render_utils.h"
 
+
+TCompParticleGroup::~TCompParticleGroup() {
+	for (auto& ps : particle_systems) {
+		ps.destroy();
+	}
+}
+
 void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	CHandle h_transform = assertRequiredComponent<TCompTransform>(this);
 	TCompTransform* m_transform = h_transform;

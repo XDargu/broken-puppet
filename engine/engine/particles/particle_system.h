@@ -162,7 +162,7 @@ public:
 		, instances_data(nullptr)
 	{}
 
-	~TParticleSystem() {
+	void destroy() {
 		SAFE_DELETE(updater_lifetime);
 		SAFE_DELETE(updater_size);
 		SAFE_DELETE(updater_color);

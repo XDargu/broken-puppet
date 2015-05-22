@@ -13,9 +13,7 @@ public:
 
 	TCompParticleGroup() {};
 
-	~TCompParticleGroup() {
-		
-	}
+	~TCompParticleGroup();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

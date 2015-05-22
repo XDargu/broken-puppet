@@ -67,6 +67,7 @@ void TParticleSystem::init() {
 void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
 		TCompTransform* m_transform = h_transform;
+		emitter_generation->particles = &particles;
 		emitter_generation->position = m_transform->position;
 		emitter_generation->update(elapsed);
 	}
