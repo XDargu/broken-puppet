@@ -278,13 +278,12 @@ bool CApp::create() {
 	bool is_ok = true;
 	// Boot LUA
 
-
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
 
-	loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
+	loadScene("data/scenes/scene_volum_light.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -366,6 +365,22 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
 	logic_manager.addRigidAnimation(anim);	*/
+
+	//PRUEBAS PARTICULAS --------------------------
+	/*PxParticleCreationData particleCreationData;
+	PxU32 myIndexBuffer[] = { 0, 1, 2 };
+	PxVec3 myPositionBuffer[] = { PxVec3(0, 0.2, 0), PxVec3(0.5, 1, 0),
+		PxVec3(0, 2, .7) };
+	PxVec3 myVelocityBuffer[] = { PxVec3(0.1, 0, 0), PxVec3(0, 0.1, 0),
+		PxVec3(0, 0, 0.1) };
+	particleCreationData.indexBuffer =
+		PxStrideIterator<const PxU32>(myIndexBuffer);
+	particleCreationData.positionBuffer =
+		PxStrideIterator<const PxVec3>(myPositionBuffer);
+	particleCreationData.velocityBuffer =
+		PxStrideIterator<const PxVec3>(myVelocityBuffer);*/
+	//bool success=CPhysicsManager::get().createParticles();
+	//---------------------------------------------
 
 	return true;
 }
@@ -515,6 +530,15 @@ void CApp::update(float elapsed) {
 	CEntity* e = (CEntity*)firstNeedle;
 	TCompNeedle* needle = e->get<TCompNeedle>();
 	Citem_manager::get().removeNeedle(needle);*/
+
+	PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
+		 };
+	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
+		PxVec3(0, 0, 0) };
+	bool success = CPhysicsManager::get().createParticles(3, myPositionBuffer, myVelocityBuffer);
+
+
+	CPhysicsManager::get().updateParticles();
 
 
 	// Update ---------------------
@@ -813,6 +837,8 @@ void CApp::renderEntities() {
 
 void CApp::renderDebugEntities() {
 
+	debugTech.activate();
+
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(300, 30, s_fps.c_str());
 
@@ -831,7 +857,24 @@ void CApp::renderDebugEntities() {
 
 	CNav_mesh_manager::get().pathRender();
 
-	debugTech.activate();
+
+	PxParticleReadData* rd = CPhysicsManager::get().ps->lockParticleReadData();
+	if (rd)
+	{
+		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
+
+		for (unsigned i = 0; i < rd->nbValidParticles; ++i, ++positionIt)
+		{
+			// access particle position
+			const PxVec3& position = *positionIt;
+			setWorldMatrix(XMMatrixTranslation(position.x, position.y, position.z));
+			axis.activateAndRender();
+		}
+
+		// return ownership of the buffers back to the SDK
+		rd->unlock();
+	}
+
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
 		grid.activateAndRender();

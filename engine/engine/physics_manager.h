@@ -36,6 +36,12 @@ public:
 
 	PxReal timeStep;
 
+	static const PxU32 maxParticles = 1000;
+	PxU32 currentNumParticles;
+	PxParticleSystem* ps;
+	PxParticleCreationData particleCreationData;
+	PxParticleExt::IndexPool* indexPool;
+
 	static CPhysicsManager& get();
 
 	//typedef std::string(*collision_filter)();
@@ -49,6 +55,11 @@ public:
 
 	void addCollisionFilter(physx::PxU32 s, physx::PxU32 filter);
 	void loadCollisions();
+
+	bool createParticles(PxU32 newNumPaticles, PxVec3 myPositionBuffer[], PxVec3 myVelocityBuffer[]);
+	void updateParticles();
+	void releaseParticles(PxU32 numAppParticleIndices);
+	void releaseAllParticles();
 
 	PxVec3 XMVECTORToPxVec3(XMVECTOR vector);
 	XMVECTOR PxVec3ToXMVECTOR(PxVec3 vector);

@@ -28,6 +28,8 @@ CPhysicsManager::CPhysicsManager() : gScene(NULL), timeStep( 1.f / 60.f ) // 60 
 
 CPhysicsManager::~CPhysicsManager()
 {
+	delete m_collision;
+	m_collision = nullptr;
 }
 
 void CPhysicsManager::loadCollisions() {
@@ -106,8 +108,95 @@ void CPhysicsManager::init() {
 	/*PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	gScene->addActor(*plane);*/
 
+	//Particulas 
+	// create particle system in PhysX SDKs
+	ps = gPhysicsSDK->createParticleSystem(maxParticles);
+	// add particle system to scene, in case creation was successful
+	if (ps)
+		gScene->addActor(*ps);
+	particleCreationData.numParticles = 0;
+	ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+	indexPool = PxParticleExt::createIndexPool(maxParticles);
+
 	// Crear el controller manager
 	gManager = PxCreateControllerManager(*gScene);
+}
+
+bool CPhysicsManager::createParticles(PxU32 newNumPaticles, PxVec3 myPositionBuffer[], PxVec3 myVelocityBuffer[]){
+	//IMP: It should be noted that access to particles such as creating, updating, releasing, and
+	//reading particle - related properties can only be done when the PhysX scene is not
+	//being simulated
+
+	//declare particle descriptor for creating new particles
+	//PxParticleCreationData particleCreationData;
+	PxU32* myIndexBuffer = new PxU32[newNumPaticles];
+
+	// create an index pool for a particle system with maximum particle count of maxParticles
+
+	// use the indexPool for allocating numNewAppParticles indices that can be used
+	// for particle creation throughout the particle system lifetime. If numAllocated
+	// is smaller than numNewAppParticles, the maxParticles limit was exceeded
+	PxU32 numAllocated = indexPool->allocateIndices(newNumPaticles, PxStrideIterator<PxU32>(myIndexBuffer));
+
+	// QUIZAS HAY QUE TENER UN INDEX BUFFER PROPIO DE NUESTRA CLASE
+	//indexPool->freeIndices(newNumPaticles, PxStrideIterator<PxU32>(particleCreationData.indexBuffer));
+
+	// if no further index management is needed, the pool should be released
+	//indexPool->release();
+
+
+	particleCreationData.numParticles = numAllocated;
+	particleCreationData.indexBuffer =
+		PxStrideIterator<const PxU32>(myIndexBuffer);
+	particleCreationData.positionBuffer =
+		PxStrideIterator<const PxVec3>(myPositionBuffer);
+	particleCreationData.velocityBuffer =
+		PxStrideIterator<const PxVec3>(myVelocityBuffer);
+
+
+	// create particles in *PxParticleSystem* ps
+	bool success = ps->createParticles(particleCreationData);
+
+	// create an index pool for a particle system with maximum particle count of maxParticles
+	//PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
+
+	return success;
+}
+
+void CPhysicsManager::updateParticles(){
+	// declare strided iterator for providing array of indices corresponding to
+	// particles that should be removed
+	PxU32 myIndexBuffer[] = { 0, 1, 2 };
+	PxVec3 appParticleForces[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
+		PxVec3(0, 0, 0) };
+	// specify strided iterator to provide update forces
+	PxStrideIterator<const PxVec3> forceBuffer(appParticleForces);
+
+	// specify strided iterator to provide indices of particles that need to be updated
+	PxStrideIterator<const PxU32> indexBuffer(myIndexBuffer);
+
+	PxU32 numAppParticleForces = 3;
+
+	// specify force update on PxParticleSystem ps choosing the "force" unit
+	ps->addForces(numAppParticleForces, indexBuffer, forceBuffer, PxForceMode::eFORCE);
+}
+
+void CPhysicsManager::releaseParticles(PxU32 numAppParticleIndices){
+	PxU32 myIndexBuffer[] = { 0, 1, 2 };
+	PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
+	PxStrideIterator<const PxU32> indexBuffer(myIndexBuffer);
+
+	// release particles in *PxParticleSystem* ps
+	ps->releaseParticles(numAppParticleIndices, indexBuffer);
+
+	indexPool->freeIndices(numAppParticleIndices, PxStrideIterator<PxU32>(myIndexBuffer));
+
+	// if no further index management is needed, the pool should be released
+	indexPool->release();
+}
+
+void CPhysicsManager::releaseAllParticles(){
+	ps->releaseParticles();
 }
 
 PxVec3 CPhysicsManager::XMVECTORToPxVec3(XMVECTOR vector) {

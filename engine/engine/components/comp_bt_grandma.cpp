@@ -12,6 +12,12 @@
 #include "font\font.h"
 
 TCompBtGrandma::TCompBtGrandma(){ }
+
+TCompBtGrandma::~TCompBtGrandma(){
+	delete m_ai_controller;
+	m_ai_controller = nullptr;
+}
+
 TCompBtGrandma::TCompBtGrandma(bt_grandma* ai_controller) {
 
 	m_ai_controller = new bt_grandma;
