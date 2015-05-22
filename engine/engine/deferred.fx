@@ -385,7 +385,7 @@ float4 PSDirLights(
   float  diffuse_amount = saturate(dot(N, L));
 
   float angle_cos = dot(L, -dir_light_direction);
-  float max_cos = cos(dir_light_angle * 0.45);
+  float max_cos = cos(dir_light_angle * 0.2);
 
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap

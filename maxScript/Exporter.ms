@@ -25,7 +25,7 @@ clearlistener()
 	NotEval = #(targetobject, UConstraint, line)
 
 	-- List of object without mesh
-	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight, grid, line)
+	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight, grid, line, freeSpot)
 
 	DistanceTextAttributes = "distanceTextData"
 	CameraAttribute = "objectCameraData"
@@ -1527,7 +1527,7 @@ clearlistener()
 
 
 	fn validateDirectionalLight obj = (
-			return ((classof obj) == Directionallight)
+			return ((classof obj) == freeSpot)
 	)
 
 	/**********************************************************************************************
@@ -1549,7 +1549,7 @@ clearlistener()
 														+ (obj.rgb.g/255) as string + " "\
 														+ (obj.rgb.b/255) as string + " "\
 														+ 1 as string + "\""\
-											+ "/>\n"
+											+ " correction=\"true\"/>\n<camera fov=\"" + (obj.falloff ) as string + "\" znear=\"" + obj.nearAttenEnd as string + "\" zfar=\"50\" width=\"30\" height=\"30\" />\n"
 		return mString
 	)	
 	
