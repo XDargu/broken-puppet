@@ -462,6 +462,9 @@
     <ClInclude Include="components\comp_audio_source.h">
       <Filter>components\audio</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_particle_system.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -850,6 +853,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_audio_source.cpp">
       <Filter>components\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_particle_system.cpp">
+      <Filter>components\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

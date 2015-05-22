@@ -323,12 +323,6 @@ public:
 	ScaleCapsuleForCrouching()
 	*/
 
-	float lerp(float a, float b, float f)
-	{
-		//TODO Meter lerp donde debe utils por ejemplo
-		return a + f * (b - a);
-	}
-
 	void ApplyExtraTurnRotation()
 	{
 		physx::PxTransform px_trans = enemy_rigidbody->getGlobalPose();

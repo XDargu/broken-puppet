@@ -117,7 +117,7 @@ TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
 
-CRenderInstances  particles;
+CRenderInstances instances;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -207,6 +207,8 @@ void createManagers() {
 	getObjManager<TCompRagdoll>()->init(64);
 	getObjManager<TCompShadows>()->init(8);
 
+	getObjManager<TCompParticleSystem>()->init(64);
+
 
 	registerAllComponentMsgs();
 }
@@ -256,6 +258,9 @@ void initManagers() {
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
 
+	getObjManager<TCompParticleSystem>()->initHandlers();
+
+
 }
 
 bool CApp::create() {
@@ -296,7 +301,7 @@ bool CApp::create() {
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-	is_ok &= particles.create(300, &mesh_textured_quad_xy_centered);
+	
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -367,6 +372,8 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
 	
 	logic_manager.addRigidAnimation(anim);	*/
+
+	instances.create(300, &mesh_textured_quad_xy_centered);
 
 	return true;
 }
@@ -446,7 +453,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");*/
-		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("particles");
 		render_techniques_manager.reload("light_shaft");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
@@ -547,8 +554,11 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
+	// PARTICLES
+	getObjManager<TCompParticleSystem>()->update(elapsed);
+
 	logic_manager.update(elapsed);
-	particles.update(elapsed);
+	instances.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -606,7 +616,8 @@ void CApp::render() {
 	scope.end();
 
 	deferred.render(&camera, *rt_base);
-	particles.render();
+	instances.render();
+	getObjManager<TCompParticleSystem>()->onAll(&TCompParticleSystem::render);
 
 	texture_manager.getByName("noise")->activate(9);
 	ssao.apply(rt_base);	
@@ -820,6 +831,7 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
+	getObjManager<TCompParticleSystem>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
@@ -930,7 +942,6 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
-	particles.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }
