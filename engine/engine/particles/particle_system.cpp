@@ -36,7 +36,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			float max_life_time = atts.getFloat("maxLifeTime", 5);
 			bool fill_initial = atts.getBool("fillInitial", false);
 			int limit = atts.getInt("limit", 1000);
-
+			particles.reserve(limit);
 			emitter_generation = new TParticleEmitterGenerationSphere(&particles, position, rate, min_life_time, max_life_time, radius, fill_initial, limit);
 		}
 	}
@@ -48,16 +48,15 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	// Instancing
 	instanced_mesh = &mesh_textured_quad_xy_centered;
 
-	/*
 	// This mesh has not been registered in the mesh manager
 	instances_data = new CMesh;
-	bool is_ok = instances_data->create(particles.size(), &particles[0]
+	bool is_ok = instances_data->create(emitter_generation->limit, &particles[0]
 	, 0, nullptr        // No indices
 	, CMesh::POINTS     // We are not using this
 	, &vdcl_particle_data    // Type of vertex
 	, true              // the buffer IS dynamic
 	);
-	*/
+	
 }
 
 void TParticleSystem::init() {
@@ -101,16 +100,17 @@ void TParticleSystem::update(float elapsed) {
 		else {
 			++it;
 		}
+		//++it;
 	}
 
 	/*for (int i = 0; i < delete_counter; ++i) {
-	particles.push_front(TParticle());
+		particles.push_front(TParticle());		
 	}*/
 
 
-
+	
 	// Update particles using some cpu code
-	int idx = 1;
+	//int idx = 1;
 	/*for (auto& p : particles) {
 	//p.nframe += elapsed;
 	//p.pos.y -= random(1.f, 3.f) * elapsed* 2;

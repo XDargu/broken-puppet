@@ -80,6 +80,7 @@ struct TParticleEmitterGenerationSphere : TParticleEmitterGeneration {
 			, XMVectorSet(1, 1, 1, 1)
 			, 1
 			);
+		//particles->erase(particles->begin());
 		particles->push_back(n_particle);
 		rate_counter = 0;
 	}
@@ -160,7 +161,9 @@ public:
 
 		, instanced_mesh(nullptr)
 		, instances_data(nullptr)
-	{}
+	{
+		
+	}
 
 	void destroy() {
 		SAFE_DELETE(updater_lifetime);

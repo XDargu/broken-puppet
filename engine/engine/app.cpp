@@ -339,7 +339,7 @@ bool CApp::create() {
 	
 	cubemap->activate(3);
 
-	texture_manager.getByName("storm")->activate(8);
+	texture_manager.getByName("desertcube1024")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 	is_ok &= ssao.create("ssao", xres, yres, 1);
