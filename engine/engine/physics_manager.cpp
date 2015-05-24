@@ -30,6 +30,7 @@ CPhysicsManager::~CPhysicsManager()
 {
 	delete m_collision;
 	m_collision = nullptr;
+	indexPool->release();
 }
 
 void CPhysicsManager::loadCollisions() {
@@ -163,40 +164,36 @@ bool CPhysicsManager::createParticles(PxU32 newNumPaticles, PxVec3 myPositionBuf
 	return success;
 }
 
-void CPhysicsManager::updateParticles(){
+void CPhysicsManager::updateParticles(PxU32 indicesToMove[], PxVec3 appParticlesForces[], PxU32 numAppParticlesForce){
 	// declare strided iterator for providing array of indices corresponding to
 	// particles that should be removed
-	PxU32 myIndexBuffer[] = { 0, 1, 2 };
-	PxVec3 appParticleForces[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
-		PxVec3(0, 0, 0) };
+	//PxU32 myIndexBuffer[] = { 0, 1, 2 };
+	//PxVec3 appParticleForces[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
+		//PxVec3(0, 0, 0) };
 	// specify strided iterator to provide update forces
-	PxStrideIterator<const PxVec3> forceBuffer(appParticleForces);
+	PxStrideIterator<const PxVec3> forceBuffer(appParticlesForces);
 
 	// specify strided iterator to provide indices of particles that need to be updated
-	PxStrideIterator<const PxU32> indexBuffer(myIndexBuffer);
-
-	PxU32 numAppParticleForces = 3;
+	PxStrideIterator<const PxU32> indexBuffer(indicesToMove);
 
 	// specify force update on PxParticleSystem ps choosing the "force" unit
-	ps->addForces(numAppParticleForces, indexBuffer, forceBuffer, PxForceMode::eFORCE);
+	ps->addForces(numAppParticlesForce, indexBuffer, forceBuffer, PxForceMode::eFORCE);
 }
 
-void CPhysicsManager::releaseParticles(PxU32 numAppParticleIndices){
-	PxU32 myIndexBuffer[] = { 0, 1, 2 };
+void CPhysicsManager::releaseParticles(PxU32 numAppParticleIndices, PxU32 indicesToRelease[]){
+	//PxU32 myIndexBuffer[] = { 0, 1, 2 };
 	PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
-	PxStrideIterator<const PxU32> indexBuffer(myIndexBuffer);
+	PxStrideIterator<const PxU32> indexBuffer(indicesToRelease);
 
 	// release particles in *PxParticleSystem* ps
 	ps->releaseParticles(numAppParticleIndices, indexBuffer);
 
-	indexPool->freeIndices(numAppParticleIndices, PxStrideIterator<PxU32>(myIndexBuffer));
-
-	// if no further index management is needed, the pool should be released
-	indexPool->release();
+	indexPool->freeIndices(numAppParticleIndices, PxStrideIterator<PxU32>(indicesToRelease));
 }
 
 void CPhysicsManager::releaseAllParticles(){
 	ps->releaseParticles();
+	indexPool->release();
 }
 
 PxVec3 CPhysicsManager::XMVECTORToPxVec3(XMVECTOR vector) {

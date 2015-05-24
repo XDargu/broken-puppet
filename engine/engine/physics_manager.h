@@ -57,8 +57,8 @@ public:
 	void loadCollisions();
 
 	bool createParticles(PxU32 newNumPaticles, PxVec3 myPositionBuffer[], PxVec3 myVelocityBuffer[]);
-	void updateParticles();
-	void releaseParticles(PxU32 numAppParticleIndices);
+	void updateParticles(PxU32 indicesToMove[], PxVec3 appParticlesForces[], PxU32 numAppParticlesForce);
+	void releaseParticles(PxU32 numAppParticleIndices, PxU32 indicesToRelease[]);
 	void releaseAllParticles();
 
 	PxVec3 XMVECTORToPxVec3(XMVECTOR vector);
