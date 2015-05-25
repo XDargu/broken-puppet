@@ -13,7 +13,9 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			updater_lifetime = new TParticleUpdaterLifeTime();
 		}
 		if (updater_type == "size") {
-			updater_size = new TParticleUpdaterSize();
+			float initial_size = atts.getFloat("initialSize", 1);
+			float final_size = atts.getFloat("finalSize", 1);
+			updater_size = new TParticleUpdaterSize(initial_size, final_size);
 		}
 		if (updater_type == "color") {
 			updater_color = new TParticleUpdaterColor();
@@ -38,24 +40,27 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			int limit = atts.getInt("limit", 1000);
 			particles.reserve(limit);
 			emitter_generation = new TParticleEmitterGenerationSphere(&particles, position, rate, min_life_time, max_life_time, radius, fill_initial, limit);
+
+			// Instancing
+			instanced_mesh = &mesh_textured_quad_xy_centered;
+
+			// This mesh has not been registered in the mesh manager
+			instances_data = new CMesh;
+			bool is_ok = instances_data->create(emitter_generation->limit, &particles
+				, 0, nullptr        // No indices
+				, CMesh::POINTS     // We are not using this
+				, &vdcl_particle_data    // Type of vertex
+				, true              // the buffer IS dynamic
+				);
 		}
 	}
 
 	if (elem == "renderer") {
-
+		std::string texture_name = atts.getString("texture", "unknown");
+		bool is_aditive = atts.getBool("aditive", true);
+		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive);
+		
 	}
-
-	// Instancing
-	instanced_mesh = &mesh_textured_quad_xy_centered;
-
-	// This mesh has not been registered in the mesh manager
-	instances_data = new CMesh;
-	bool is_ok = instances_data->create(emitter_generation->limit, &particles[0]
-	, 0, nullptr        // No indices
-	, CMesh::POINTS     // We are not using this
-	, &vdcl_particle_data    // Type of vertex
-	, true              // the buffer IS dynamic
-	);
 	
 }
 
@@ -128,9 +133,12 @@ void TParticleSystem::render() {
 	if (instances_data != nullptr) {
 		setWorldMatrix(XMMatrixIdentity());
 		CTraceScoped t0("instances");
-		render_techniques_manager.getByName("particles")->activate();
-		texture_manager.getByName("fire")->activate(0);
-		activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+		render_techniques_manager.getByName("particles")->activate();		
+		texture_manager.getByName(renderer->texture)->activate(0);
+		if (renderer->additive)
+			activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+		else
+			activateBlendConfig(BLEND_CFG_COMBINATIVE);
 		activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 		instanced_mesh->renderInstanced(*instances_data, particles.size());
 		activateZConfig(ZCFG_DEFAULT);

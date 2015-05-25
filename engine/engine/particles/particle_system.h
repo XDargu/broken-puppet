@@ -88,6 +88,15 @@ struct TParticleEmitterGenerationSphere : TParticleEmitterGeneration {
 
 struct TParticleRenderer {
 	VParticles* particles;
+	char texture[64];
+	bool additive;
+
+	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive) {
+		particles = the_particles;
+		strcpy(texture, the_texture);
+		additive = is_aditive;
+
+	}
 
 	void update(TParticle* particle, float elapsed) {
 		particle->age += elapsed;
@@ -114,6 +123,11 @@ struct TParticleUpdaterLifeTime {
 struct TParticleUpdaterSize {
 	float initial_size;
 	float final_size;
+
+	TParticleUpdaterSize(float the_initial_size, float the_final_size) {
+		initial_size = the_initial_size;
+		final_size = the_final_size;
+	}
 
 	void update(TParticle* particle, float elapsed) {
 		particle->size = lerp(initial_size, final_size, particle->age / particle->lifespan);
@@ -143,6 +157,9 @@ struct TParticleSystem {
 	// Emitter shape
 	TParticleEmitterGeneration* emitter_generation;
 
+	// Renderer
+	TParticleRenderer* renderer;
+
 	// Transform reference
 	CHandle h_transform;
 
@@ -157,10 +174,13 @@ public:
 
 		, emitter_generation(nullptr)
 
+		, renderer(nullptr)
+
 		, h_transform(CHandle())
 
 		, instanced_mesh(nullptr)
 		, instances_data(nullptr)
+
 	{
 		
 	}
@@ -172,6 +192,8 @@ public:
 		SAFE_DELETE(updater_movement);
 
 		SAFE_DELETE(emitter_generation);
+
+		SAFE_DELETE(renderer);
 
 		if (instances_data) {
 			instances_data->destroy();

@@ -9,8 +9,7 @@ struct TParticle {
 	float age;
 	float lifespan;
 	float size;
-	//XMVECTOR color;
-
+	//XMFLOAT3 color;
 
 	TParticle(XMFLOAT3 the_position, float the_age, float the_lifespan, XMVECTOR the_color, float the_size);
 

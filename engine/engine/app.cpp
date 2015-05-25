@@ -290,7 +290,7 @@ bool CApp::create() {
 	XASSERT(font.create(), "Error creating the font");
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/scene_volum_light.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -335,11 +335,11 @@ bool CApp::create() {
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
 
-	cubemap = texture_manager.getByName("sunsetcube1024");
+	cubemap = texture_manager.getByName("OutputCube");
 	
 	cubemap->activate(3);
 
-	texture_manager.getByName("desertcube1024")->activate(8);
+	texture_manager.getByName("OutputCube")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 	is_ok &= ssao.create("ssao", xres, yres, 1);
