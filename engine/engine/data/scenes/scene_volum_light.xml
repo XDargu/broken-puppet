@@ -582,23 +582,48 @@
 <aabb min="-0.593201 0.0 -5.04233" max="0.593201 0.0 5.04233"/>
 	</entity>
   <entity>
-    <transform position="-6.15881 1.6 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
+    <name name="fire_ps"/>
+    <transform position="-6.15881 0 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
+    <aabb min="-1 -1 -1" max="1 10 1"/>
     <particleGroup>
       <particleSystem>
-        <emitter type="sphere" radius="0.3" limit="30" rate="0.05" fillInitial="false" minLifeTime="2" maxLifeTime="4"/>
+        <emitter type="sphere" radius="0.3" limit="40" rate="0.15" fillInitial="true" minLifeTime="2" maxLifeTime="4"/>
         <updater type="lifeTime"/>
-        <updater type="size" initialSize="0.1" finalSize="1"/>
+        <updater type="size" initialSize="0.1" finalSize="2"/>
         <updater type="movement" speed="0 0.01 0"/>
         <renderer texture="smoke" aditive="false"/>
       </particleSystem>
       <particleSystem>
-        <emitter type="sphere" radius="0.1" limit="15" rate="0.1" fillInitial="true" minLifeTime="0.2" maxLifeTime="0.5"/>
+        <emitter type="sphere" radius="0.15" limit="15" rate="0.1" fillInitial="true" minLifeTime="0.3" maxLifeTime="2"/>
         <updater type="lifeTime"/>
-        <updater type="movement" speed="0 0.01 0"/>
+        <updater type="movement" speed="0 0.005 0"/>
         <updater type="size" initialSize="0.1" finalSize="1"/>
         <renderer texture="fire"/>
       </particleSystem>
       
     </particleGroup>
   </entity>
+
+  <entity>
+    <name name="smoke_ps_test"/>
+    <transform position="-6.15881 0 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="Player"/>
+    <aabb min="-1 -1 -1" max="1 10 1"/>
+    <particleGroup>
+      <particleSystem>
+        <emitter type="sphere" radius="0.1" limit="90" rate="0.03" fillInitial="true" minLifeTime="1" maxLifeTime="2"/>
+        <updater type="lifeTime"/>
+        <updater type="size" initialSize="0.5" finalSize="1"/>
+        <updater type="movement" speed="0 0.001 0"/>
+        <renderer texture="fire" aditive="true"/>
+      </particleSystem>
+      <particleSystem>
+        <emitter type="sphere" radius="0.1" limit="150" rate="0.01" fillInitial="true" minLifeTime="2" maxLifeTime="4"/>
+        <updater type="lifeTime"/>
+        <updater type="size" initialSize="0.2" finalSize="2"/>
+        <updater type="movement" speed="0 0.001 0"/>
+        <renderer texture="smoke" aditive="false"/>
+      </particleSystem>
+    </particleGroup>
+  </entity>
+  
 </scene>

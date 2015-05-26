@@ -53,7 +53,7 @@ int fatal(const char* fmt, ...) {
 
 // -----------------------------------------
 void dbg(const char* fmt, ...) {
-	return;
+	//return;
 	va_list ap;
 	va_start(ap, fmt);
 	char buf[512];
@@ -79,7 +79,7 @@ void error(int line, char* file, char* method, char* msg, ...) {
 }
 
 void debug(int line, char* file, char* method, char* msg, ...) {
-	return;
+	//return;
 	va_list ap;
 	va_start(ap, msg);
 	char buf[512];

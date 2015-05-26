@@ -32,8 +32,39 @@ void TCompCameraPivotController::init() {
 void TCompCameraPivotController::update(float elapsed) {
 	TCompTransform* player_pivot_trans = (TCompTransform*)player_pivot_transform;
 	TCompTransform* transform = (TCompTransform*)m_transform;
+	
+	XMVECTOR desired_pos = player_pivot_trans->position + player_pivot_trans->getLeft() * -offset.x + player_pivot_trans->getUp() * offset.y + player_pivot_trans->getFront() * -offset.z;
 
-	transform->position = player_pivot_trans->position + player_pivot_trans->getLeft() * -offset.x + player_pivot_trans->getUp() * offset.y + player_pivot_trans->getFront() * -offset.z;
+	// Raycast camera
+	float camera_dist = V3DISTANCE(desired_pos, player_pivot_trans->position);
+	float collision_dist = camera_dist;
+
+	physx::PxRaycastBuffer buf;
+	XMVECTOR ray_position = player_pivot_trans->position;
+	XMVECTOR ray_dir = XMVector3Normalize(desired_pos - ray_position);
+	Physics.raycastAll(ray_position, ray_dir, camera_dist, buf);
+
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		CEntity* e = CHandle(buf.touches[i].actor->userData);
+		if (!e->hasTag("player")) {
+			if (buf.touches[i].distance < collision_dist)
+				collision_dist = buf.touches[i].distance;
+		}
+	}
+
+
+	float distance_normalized = 1;
+
+	if (camera_dist != 0)
+		distance_normalized = collision_dist / camera_dist;
+	
+
+	XMVECTOR target_pos = XMVectorLerp(player_pivot_trans->position, desired_pos, distance_normalized);
+
+	float prev_y = XMVectorGetY(desired_pos);
+	transform->position = XMVectorLerp(transform->position, target_pos, 0.25f);
+	XMVectorSetY(transform->position, prev_y);
 
 	// Get player pivot Y rotation
 	float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());

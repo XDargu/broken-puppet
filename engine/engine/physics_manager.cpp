@@ -169,7 +169,7 @@ void CPhysicsManager::raycastAll(XMVECTOR origin, XMVECTOR unit_dir, physx::PxRe
 
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call are all hits along the ray, stored in 'hitBuffer'
-	gScene->raycast(XMVECTORToPxVec3(origin), XMVECTORToPxVec3(unit_dir), max_distance, buf);
+	gScene->raycast(XMVECTORToPxVec3(origin), XMVECTORToPxVec3(unit_dir).getNormalized(), max_distance, buf);
 	hit = buf;
 }
 

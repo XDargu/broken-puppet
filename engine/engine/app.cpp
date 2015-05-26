@@ -962,6 +962,9 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+
+	bool is_ok = true;
+
 	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
 	entity_manager.clear();
@@ -978,6 +981,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
+
+	is_ok &= renderUtilsCreate();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 
@@ -1011,7 +1016,7 @@ void CApp::loadScene(std::string scene_name) {
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
-	bool is_ok = renderUtilsCreate();
+	
 	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
