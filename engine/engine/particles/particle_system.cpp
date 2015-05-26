@@ -38,7 +38,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			float max_life_time = atts.getFloat("maxLifeTime", 5);
 			bool fill_initial = atts.getBool("fillInitial", false);
 			int limit = atts.getInt("limit", 1000);
-			particles.resize(limit);
+			particles.reserve(limit);
 			emitter_generation = new TParticleEmitterGenerationSphere(&particles, position, rate, min_life_time, max_life_time, radius, fill_initial, limit);
 
 			// Instancing
