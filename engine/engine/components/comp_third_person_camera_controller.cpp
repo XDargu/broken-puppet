@@ -49,14 +49,12 @@ void TCompThirdPersonCameraController::update(float elapsed) {
 		}
 	}
 
-
 	float distance_normalized = 1;
+
+	collision_dist -= 0.3f;
 
 	if (camera_dist != 0)
 		distance_normalized = collision_dist / camera_dist;	
-
-	XDEBUG("Distancias: collision: %f, dist: %f, norm: %f", collision_dist, camera_dist, distance_normalized);
-
 	
 	XMVECTOR target_pos = XMVectorLerp(camera_pivot_trans->position, desired_pos, distance_normalized);
 	//XMVECTOR target_pos = camera_pivot_trans->position + (camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * (-offset.z)) * collision_dist;
