@@ -617,10 +617,11 @@
         <renderer texture="fire" aditive="true"/>
       </particleSystem>
       <particleSystem>
-        <emitter type="sphere" radius="0.1" limit="150" rate="0.01" fillInitial="true" minLifeTime="2" maxLifeTime="4"/>
+        <emitter type="sphere" radius="0.1" limit="150" rate="0.01" fillInitial="false" minLifeTime="2" maxLifeTime="4"/>
         <updater type="lifeTime"/>
         <updater type="size" initialSize="0.2" finalSize="2"/>
         <updater type="movement" speed="0 0.001 0"/>
+        <updater type="color" initialColor="1 0 0" finalColor="0 1 0"/>
         <renderer texture="smoke" aditive="false"/>
       </particleSystem>
     </particleGroup>

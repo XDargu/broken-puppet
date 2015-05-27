@@ -139,7 +139,7 @@ struct TParticleUpdaterColor {
 	XMVECTOR final_color;
 
 	void update(TParticle* particle, float elapsed) {
-		//particle->color = XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan);
+		XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
 	}
 };
 

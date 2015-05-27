@@ -12,6 +12,7 @@ struct VS_TEXTURED_OUTPUT
   float2 UV     : TEXCOORD0;
   float3 wPos   : TEXCOORD1;
   float2 ageLife: TEXCOORD2;
+  float3 color	: COLOR0;
 };
 
 //--------------------------------------------------------------------------------------
@@ -22,7 +23,7 @@ VS_TEXTURED_OUTPUT VS(
 , float2 UV : TEXCOORD0
 , float3 InstancePos : POSITION1      // Stream 1
 , float3 InstanceAgeLifeSpanSize : TEXCOORD1
-//, float3 Color : COLOR0
+, float3 Color : COLOR0
 /*, float  InstanceAge : TEXCOORD1    // Stream 1
 , float  InstanceLifespan : COLOR0    // Stream 1
 , float  InstanceSize : POSITION2    // Stream 1*/
@@ -46,6 +47,7 @@ VS_TEXTURED_OUTPUT VS(
   output.UV.y = (coords_y + UV.y) / 4.0;
 
   output.wPos = wpos;
+  output.color = Color;
 
   if (InstanceAgeLifeSpanSize.z == -1)
 	  output.Pos.w = 0.0;
@@ -74,6 +76,8 @@ float4 PS(VS_TEXTURED_OUTPUT input
   float4 color = txDiffuse.Sample(samClampLinear, input.UV);
   color.a *= delta_z;
   color.a *= 1 - (input.ageLife.x / input.ageLife.y);
+
+  color.xyz *= input.color;
   
   return color;
 }

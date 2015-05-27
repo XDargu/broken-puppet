@@ -18,7 +18,11 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			updater_size = new TParticleUpdaterSize(initial_size, final_size);
 		}
 		if (updater_type == "color") {
+			XMVECTOR initial_color = atts.getPoint("initialColor");
+			XMVECTOR final_color = atts.getPoint("finalColor");
 			updater_color = new TParticleUpdaterColor();
+			updater_color->initial_color = initial_color;
+			updater_color->final_color = final_color;
 		}
 		if (updater_type == "movement") {
 			updater_movement = new TParticleUpdaterMovement();
