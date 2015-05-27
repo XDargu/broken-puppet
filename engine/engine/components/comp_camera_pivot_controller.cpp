@@ -63,7 +63,8 @@ void TCompCameraPivotController::update(float elapsed) {
 	XMVECTOR target_pos = XMVectorLerp(player_pivot_trans->position, desired_pos, distance_normalized);
 
 	float prev_y = XMVectorGetY(desired_pos);
-	transform->position = XMVectorLerp(transform->position, target_pos, 0.25f);
+	//transform->position = XMVectorLerp(transform->position, target_pos, 0.25f);
+	transform->position = target_pos;
 	XMVectorSetY(transform->position, prev_y);
 
 	// Get player pivot Y rotation

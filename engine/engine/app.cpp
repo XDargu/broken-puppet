@@ -529,6 +529,9 @@ void CApp::update(float elapsed) {
 	ctes_global.get()->world_time += elapsed;
 	
 	getObjManager<TCompTransform>()->update(elapsed);
+	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	getObjManager<TCompUnityCharacterController>()->update(elapsed);
+	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
 	getObjManager<TCompSkeletonIK>()->update(elapsed);
@@ -538,11 +541,9 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
-	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
-	getObjManager<TCompUnityCharacterController>()->update(elapsed);
-	getObjManager<TCompCharacterController>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
