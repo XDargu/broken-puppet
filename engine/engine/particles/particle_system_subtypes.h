@@ -71,6 +71,18 @@ struct TParticleEmitterGenerationCone : TParticleEmitterGeneration {
 	void addParticle();
 };
 
+struct TParticleEmitterGenerationRing : TParticleEmitterGeneration {
+
+	float inner_radius;
+	float outer_radius;
+
+	TParticleEmitterGenerationRing(VParticles* the_particles, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_inner_radius, float the_outer_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount);
+
+	void update(float elapsed);
+
+	void addParticle();
+};
+
 struct TParticleEmitterGenerationBox : TParticleEmitterGeneration {
 
 	float size;

@@ -31,6 +31,8 @@ bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
 int getRandomNumber(int num1, int num2);
 float getRandomNumber(float min,float max);
 XMVECTOR getRandomVector3(float minXYZ, float maxXYZ);
+XMVECTOR getRandomVector3(float minX, float minY, float minZ, float maX, float maxY, float maxZ);
+XMVECTOR getRandomVector3(XMFLOAT3 minXYZ, XMFLOAT3 maxXYZ);
 
 float lerp(float a, float b, float f);
 // Strings

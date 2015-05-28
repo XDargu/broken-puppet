@@ -243,6 +243,88 @@ void TParticleEmitterGenerationCone::addParticle() {
 	rate_counter = 0;
 }
 
+TParticleEmitterGenerationRing::TParticleEmitterGenerationRing(
+	VParticles* the_particles
+	, CHandle the_transform
+	, float the_rate
+	, float the_min_life_time
+	, float the_max_life_time
+	, float the_inner_radius
+	, float the_outer_radius
+	, bool the_fill_initial
+	, int the_limit
+	, float the_burst_time
+	, int the_burst_amount
+	) {
+	inner_radius = the_inner_radius;
+	outer_radius = the_outer_radius;
+	h_transform = the_transform;
+	min_life_time = the_min_life_time;
+	max_life_time = the_max_life_time;
+	rate = the_rate;
+	rate_counter = 0;
+	fill_initial = the_fill_initial;
+	limit = the_limit;
+	particles = the_particles;
+	burst_time = the_burst_time;
+	burst_amount = the_burst_amount;
+	burst_counter = 0;
+
+	if (fill_initial) {
+		// Make the initial particles
+		for (int i = 0; i < limit; ++i) {
+			addParticle();
+		}
+	}
+}
+void TParticleEmitterGenerationRing::update(float elapsed) {
+	rate_counter += elapsed;
+	burst_counter += elapsed;
+
+	if (burst_time > 0 && burst_counter > burst_time) {
+		int amount = min(burst_amount, (limit - particles->size()));
+		burst_counter = 0;
+		for (int i = 0; i < amount; ++i) {
+			addParticle();
+		}
+	}
+
+	// If we have to make a new particle
+	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit){
+		addParticle();
+	}
+}
+
+void TParticleEmitterGenerationRing::addParticle() {
+	if (particles->size() >= limit) { return; }
+	TCompTransform* m_transform = h_transform;
+	XMFLOAT3 pos;
+	XMStoreFloat3(&pos, getRandomVector3(-outer_radius, 0, -outer_radius, outer_radius, 0, outer_radius));
+	bool insideRing = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (outer_radius*outer_radius));
+	insideRing &= ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) > (inner_radius*inner_radius));
+
+	while (!insideRing) {
+		XMStoreFloat3(&pos, getRandomVector3(-outer_radius, 0, -outer_radius, outer_radius, 0, outer_radius));
+		insideRing = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (outer_radius*outer_radius));
+		insideRing &= ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) > (inner_radius*inner_radius));
+	}
+	XMStoreFloat3(&pos, m_transform->position + XMLoadFloat3(&pos));
+	float life_time = getRandomNumber(min_life_time, max_life_time);
+	XMFLOAT3 direction;
+	XMStoreFloat3(&direction, XMVector3Normalize(XMLoadFloat3(&pos) - m_transform->position));
+	TParticle n_particle = TParticle(
+		pos
+		, direction
+		, 0
+		, life_time
+		, XMVectorSet(1, 1, 1, 1)
+		, 1
+		);
+	//particles->erase(particles->begin());
+	particles->push_back(n_particle);
+	rate_counter = 0;
+}
+
 
 TParticleEmitterGenerationBox::TParticleEmitterGenerationBox(
 		VParticles* the_particles

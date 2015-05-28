@@ -111,6 +111,25 @@ XMVECTOR getRandomVector3(float minXYZ, float maxXYZ) {
 		);
 }
 
+XMVECTOR getRandomVector3(float minX, float minY, float minZ, float maX, float maxY, float maxZ) {
+	return XMVectorSet(
+		getRandomNumber(minX, maX)
+		, getRandomNumber(minY, maxY)
+		, getRandomNumber(minZ, maxZ)
+		, 0
+		);
+}
+
+XMVECTOR getRandomVector3(XMFLOAT3 minXYZ, XMFLOAT3 maxXYZ) {
+	return XMVectorSet(
+		getRandomNumber(minXYZ.x, maxXYZ.x)
+		, getRandomNumber(minXYZ.y, maxXYZ.y)
+		, getRandomNumber(minXYZ.z, maxXYZ.z)
+		, 0
+		);
+}
+
+
 float getRandomNumber(float min, float max){
 	//srand(static_cast<float>(time(NULL)));
 	float rand_num = (max - min) * ((((float)rand()) / (float)RAND_MAX)) + min;

@@ -35,6 +35,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	}
 
 	if (elem == "emitter") {
+		XASSERT(emitter_generation == nullptr, "Emitter already declared, a particle system can't have two different emitters");
 		std::string emitter_type = atts.getString("type", "");
 
 		float rate = atts.getFloat("rate", 0.1);
@@ -72,6 +73,12 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			float radius = atts.getFloat("radius", 1);
 			float angle = deg2rad(atts.getFloat("angle", 30));
 			emitter_generation = new TParticleEmitterGenerationCone(&particles, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "ring") {
+			float inner_radius = atts.getFloat("innerRadius", 0.5);
+			float outer_radius = atts.getFloat("outerRadius", 1);
+			emitter_generation = new TParticleEmitterGenerationRing(&particles, h_transform, rate, min_life_time, max_life_time, inner_radius, outer_radius, fill_initial, limit, burst_time, burst_amount);
 		}
 
 		if (emitter_type == "box") {
