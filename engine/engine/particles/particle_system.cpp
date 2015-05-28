@@ -32,6 +32,11 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			float gravity = atts.getFloat("gravity", 1);
 			updater_gravity = new TParticleUpdaterGravity(gravity);
 		}
+		if (updater_type == "noise") {
+			XMVECTOR min_noise = atts.getPoint("minNoise");
+			XMVECTOR max_noise = atts.getPoint("maxNoise");
+			updater_noise = new TParticleUpdaterNoise(min_noise, max_noise);
+		}
 	}
 
 	if (elem == "emitter") {
@@ -97,7 +102,9 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 }
 
 void TParticleSystem::init() {
-
+	if (particles.capacity() < emitter_generation->limit) {
+		particles.reserve(emitter_generation->limit - particles.capacity());
+	}
 }
 
 void TParticleSystem::update(float elapsed) {
@@ -112,6 +119,10 @@ void TParticleSystem::update(float elapsed) {
 	while (it != particles.end()) {
 
 		if (it->size != -1) {
+			// Update the position, no updater needed
+			it->position.x += it->speed.x;
+			it->position.y += it->speed.y;
+			it->position.z += it->speed.z;
 
 			if (updater_movement != nullptr) {
 				updater_movement->update(&(*it), elapsed);
@@ -128,7 +139,9 @@ void TParticleSystem::update(float elapsed) {
 			if (updater_size != nullptr) {
 				updater_size->update(&(*it), elapsed);
 			}
-
+			if (updater_noise != nullptr) {
+				updater_noise->update(&(*it), elapsed);
+			}
 			if (it->lifespan != 0 && it->age > it->lifespan) {
 				it = particles.erase(it);
 				delete_counter++;

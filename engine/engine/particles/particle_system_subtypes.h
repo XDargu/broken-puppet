@@ -7,10 +7,7 @@
 
 typedef std::vector<TParticle> VParticles;
 
-struct TParticleEmitterDirection {
-protected:
-public:
-};
+// --------------------------------- EMITTERS ------------------------------
 
 struct TParticleEmitterGeneration {
 protected:
@@ -94,6 +91,8 @@ struct TParticleEmitterGenerationBox : TParticleEmitterGeneration {
 	void addParticle();
 };
 
+// --------------------------------- RENDERER ------------------------------
+
 struct TParticleRenderer {
 	VParticles* particles;
 	char texture[64];
@@ -103,6 +102,8 @@ struct TParticleRenderer {
 
 	void update(TParticle* particle, float elapsed);
 };
+
+// --------------------------------- UPDATERS ------------------------------
 
 struct TParticleUpdaterMovement {
 	float speed;
@@ -116,7 +117,7 @@ struct TParticleUpdaterPhysx {
 struct TParticleUpdaterGravity {
 	float gravity;
 
-	TParticleUpdaterGravity::TParticleUpdaterGravity(float the_gravity) : gravity(the_gravity) {}
+	TParticleUpdaterGravity(float the_gravity) : gravity(the_gravity) {}
 	void update(TParticle* particle, float elapsed);
 };
 
@@ -137,6 +138,14 @@ struct TParticleUpdaterColor {
 	XMVECTOR initial_color;
 	XMVECTOR final_color;
 
+	void update(TParticle* particle, float elapsed);
+};
+
+struct TParticleUpdaterNoise {
+	XMFLOAT3 min_noise;
+	XMFLOAT3 max_noise;
+
+	TParticleUpdaterNoise(XMVECTOR the_min_noise, XMVECTOR the_max_noise) { XMStoreFloat3(&min_noise, the_min_noise); XMStoreFloat3(&max_noise, the_max_noise); };
 	void update(TParticle* particle, float elapsed);
 };
 

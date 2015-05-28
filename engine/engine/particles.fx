@@ -23,6 +23,7 @@ VS_TEXTURED_OUTPUT VS(
 , float2 UV : TEXCOORD0
 , float3 InstancePos : POSITION1      // Stream 1
 , float3 InstanceDir : POSITION2      // Stream 1
+, float3 InstanceSpeed : POSITION3      // Stream 1
 , float3 InstanceAgeLifeSpanSize : TEXCOORD1
 , float3 Color : COLOR0
 /*, float  InstanceAge : TEXCOORD1    // Stream 1

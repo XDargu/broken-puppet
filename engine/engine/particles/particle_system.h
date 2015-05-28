@@ -19,6 +19,7 @@ struct TParticleSystem {
 	TParticleUpdaterColor* updater_color;
 	TParticleUpdaterGravity* updater_gravity;
 	TParticleUpdaterMovement* updater_movement;
+	TParticleUpdaterNoise* updater_noise;
 
 	// Emitter shape
 	TParticleEmitterGeneration* emitter_generation;
@@ -38,6 +39,7 @@ public:
 		, updater_color(nullptr)
 		, updater_movement(nullptr)
 		, updater_gravity(nullptr)
+		, updater_noise(nullptr)
 
 		, emitter_generation(nullptr)
 
@@ -57,6 +59,8 @@ public:
 		SAFE_DELETE(updater_size);
 		SAFE_DELETE(updater_color);
 		SAFE_DELETE(updater_movement);
+		SAFE_DELETE(updater_gravity);
+		SAFE_DELETE(updater_noise);
 
 		SAFE_DELETE(emitter_generation);
 

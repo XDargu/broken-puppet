@@ -418,7 +418,7 @@ void TParticleUpdaterMovement::update(TParticle* particle, float elapsed) {
 }
 
 void TParticleUpdaterGravity::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
 }
 
 void TParticleUpdaterLifeTime::update(TParticle* particle, float elapsed) {
@@ -436,4 +436,8 @@ void TParticleUpdaterSize::update(TParticle* particle, float elapsed) {
 
 void TParticleUpdaterColor::update(TParticle* particle, float elapsed) {
 	XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
+}
+
+void TParticleUpdaterNoise::update(TParticle* particle, float elapsed) {	
+	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + getRandomVector3(min_noise, max_noise) * elapsed);
 }
