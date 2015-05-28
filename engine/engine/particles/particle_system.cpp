@@ -26,36 +26,57 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		}
 		if (updater_type == "movement") {
 			updater_movement = new TParticleUpdaterMovement();
-			updater_movement->speed = atts.getPoint("speed");
+			updater_movement->speed = atts.getFloat("speed", 1);
+		}
+		if (updater_type == "gravity") {
+			float gravity = atts.getFloat("gravity", 1);
+			updater_gravity = new TParticleUpdaterGravity(gravity);
 		}
 	}
 
 	if (elem == "emitter") {
 		std::string emitter_type = atts.getString("type", "");
 
-		XMVECTOR position = m_transform->position;
+		float rate = atts.getFloat("rate", 0.1);
+		float min_life_time = atts.getFloat("minLifeTime", 5);
+		float max_life_time = atts.getFloat("maxLifeTime", 5);
+		bool fill_initial = atts.getBool("fillInitial", false);
+		int limit = atts.getInt("limit", 1000);
+		float burst_time = atts.getFloat("burstTime", 0);
+		int burst_amount = atts.getInt("burstAmount", 100);
+		particles.reserve(limit);
+		
+		// Instancing
+		instanced_mesh = &mesh_textured_quad_xy_centered;
+
+		// This mesh has not been registered in the mesh manager
+		instances_data = new CMesh;
+		bool is_ok = instances_data->create(limit, &particles
+			, 0, nullptr        // No indices
+			, CMesh::POINTS     // We are not using this
+			, &vdcl_particle_data    // Type of vertex
+			, true              // the buffer IS dynamic
+			);
 
 		if (emitter_type == "sphere") {
+			float radius = atts.getFloat("radius", 1);			
+			emitter_generation = new TParticleEmitterGenerationSphere(&particles, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "semiSphere") {
 			float radius = atts.getFloat("radius", 1);
-			float rate = atts.getFloat("rate", 0.1);
-			float min_life_time = atts.getFloat("minLifeTime", 5);
-			float max_life_time = atts.getFloat("maxLifeTime", 5);
-			bool fill_initial = atts.getBool("fillInitial", false);
-			int limit = atts.getInt("limit", 1000);
-			particles.reserve(limit);
-			emitter_generation = new TParticleEmitterGenerationSphere(&particles, position, rate, min_life_time, max_life_time, radius, fill_initial, limit);
+			emitter_generation = new TParticleEmitterGenerationSemiSphere(&particles, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+		}
 
-			// Instancing
-			instanced_mesh = &mesh_textured_quad_xy_centered;
+		if (emitter_type == "cone") {
+			float radius = atts.getFloat("radius", 1);
+			float angle = deg2rad(atts.getFloat("angle", 30));
+			emitter_generation = new TParticleEmitterGenerationCone(&particles, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount);
+		}
 
-			// This mesh has not been registered in the mesh manager
-			instances_data = new CMesh;
-			bool is_ok = instances_data->create(emitter_generation->limit, &particles
-				, 0, nullptr        // No indices
-				, CMesh::POINTS     // We are not using this
-				, &vdcl_particle_data    // Type of vertex
-				, true              // the buffer IS dynamic
-				);
+		if (emitter_type == "box") {
+			float size = atts.getFloat("size", 1);			
+			emitter_generation = new TParticleEmitterGenerationBox(&particles, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
 		}
 	}
 
@@ -74,9 +95,7 @@ void TParticleSystem::init() {
 
 void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
-		TCompTransform* m_transform = h_transform;
 		emitter_generation->particles = &particles;
-		emitter_generation->position = m_transform->position;
 		emitter_generation->update(elapsed);
 	}
 
@@ -89,6 +108,9 @@ void TParticleSystem::update(float elapsed) {
 
 			if (updater_movement != nullptr) {
 				updater_movement->update(&(*it), elapsed);
+			}
+			if (updater_gravity != nullptr) {
+				updater_gravity->update(&(*it), elapsed);
 			}
 			if (updater_color != nullptr) {
 				updater_color->update(&(*it), elapsed);
@@ -152,13 +174,13 @@ void TParticleSystem::render() {
 
 void TParticleSystem::renderDebug3D() const {
 	render_techniques_manager.getByName("basic")->activate();
-
+	return;
 	for (auto& particle : particles) {
 		XMVECTOR pos = XMLoadFloat3(&particle.position);
 		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
 		XMVECTOR scale = XMVectorSet(0.1, 0.1, 0.1, 0.1);
 		XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
 		setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
-		mesh_icosahedron.activateAndRender();
+		axis.activateAndRender();
 	}
 }

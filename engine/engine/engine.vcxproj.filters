@@ -471,6 +471,9 @@
     <ClInclude Include="components\comp_particle_group.h">
       <Filter>components\render</Filter>
     </ClInclude>
+    <ClInclude Include="particles\particle_system_subtypes.h">
+      <Filter>particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -868,6 +871,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_particle_group.cpp">
       <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle_system_subtypes.cpp">
+      <Filter>particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

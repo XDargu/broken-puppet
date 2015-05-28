@@ -22,6 +22,7 @@ VS_TEXTURED_OUTPUT VS(
   float4 Pos : POSITION0              // Stream 0
 , float2 UV : TEXCOORD0
 , float3 InstancePos : POSITION1      // Stream 1
+, float3 InstanceDir : POSITION2      // Stream 1
 , float3 InstanceAgeLifeSpanSize : TEXCOORD1
 , float3 Color : COLOR0
 /*, float  InstanceAge : TEXCOORD1    // Stream 1
@@ -75,7 +76,14 @@ float4 PS(VS_TEXTURED_OUTPUT input
 
   float4 color = txDiffuse.Sample(samClampLinear, input.UV);
   color.a *= delta_z;
-  color.a *= 1 - (input.ageLife.x / input.ageLife.y);
+
+  // 0.2 = % of life during the begining and the end of the particle with opacity fade in/out
+  float opacity_change = input.ageLife.y * 0.2;
+  float begining_opacity_modifier = saturate(input.ageLife.x / opacity_change);
+  float end_opacity_modifier = 1 - saturate((input.ageLife.x - opacity_change) / (input.ageLife.y - opacity_change));
+
+  color.a *= begining_opacity_modifier; // Begining of life opacity change
+  color.a *= end_opacity_modifier; // End of life opacity change
 
   color.xyz *= input.color;
   

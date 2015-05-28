@@ -1,8 +1,9 @@
 #include "mcv_platform.h"
 #include "particle.h"
 
-TParticle::TParticle(XMFLOAT3 the_position, float the_age, float the_lifespan, XMVECTOR the_color, float the_size) {
+TParticle::TParticle(XMFLOAT3 the_position, XMFLOAT3 the_direction, float the_age, float the_lifespan, XMVECTOR the_color, float the_size) {
 	position = the_position;
+	direction = the_direction;
 	age = the_age;
 	lifespan = the_lifespan;
 	XMStoreFloat3(&color, the_color);
@@ -11,6 +12,7 @@ TParticle::TParticle(XMFLOAT3 the_position, float the_age, float the_lifespan, X
 
 TParticle::TParticle() {
 	position = XMFLOAT3(0, 0, -1);
+	direction = XMFLOAT3(0, 0, -1);
 	age = 0;
 	lifespan = 0;
 	color = XMFLOAT3(0, 0, 0);
