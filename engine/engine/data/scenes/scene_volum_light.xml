@@ -614,7 +614,7 @@
       <particleSystem>
         <emitter type="box" size="6" limit="1000" rate="0.0005" fillInitial="true" minLifeTime="2" maxLifeTime="4" />
         <updater type="lifeTime"/>
-        <updater type="noise" minNoise="-0.05 -0.05 -0.05" maxNoise="0.05 0.05 0.05"/>
+        <updater type="noise" minNoise="-0.01 -0.01 -0.01" maxNoise="0.01 0.01 0.01"/>
         <updater type="size" initialSize="0.02" finalSize="0.04"/>
         <renderer texture="smoke" aditive="false"/>
       </particleSystem>

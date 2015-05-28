@@ -49,7 +49,10 @@ void TParticleEmitterGenerationSphere::update(float elapsed) {
 
 	// If we have to make a new particle
 	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit) {
-		addParticle();
+		int num_new_particles = max(elapsed / rate, 1);
+		for (int i = 0; i < num_new_particles; ++i) {
+			addParticle();
+		}
 	}
 }
 
@@ -127,7 +130,10 @@ void TParticleEmitterGenerationSemiSphere::update(float elapsed) {
 
 	// If we have to make a new particle
 	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit){
-		addParticle();
+		int num_new_particles = max(elapsed / rate, 1);
+		for (int i = 0; i < num_new_particles; ++i) {
+			addParticle();
+		}
 	}
 }
 
@@ -209,7 +215,10 @@ void TParticleEmitterGenerationCone::update(float elapsed) {
 
 	// If we have to make a new particle
 	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit){
-		addParticle();
+		int num_new_particles = max(elapsed / rate, 1);
+		for (int i = 0; i < num_new_particles; ++i) {
+			addParticle();
+		}
 	}
 }
 
@@ -291,7 +300,10 @@ void TParticleEmitterGenerationRing::update(float elapsed) {
 
 	// If we have to make a new particle
 	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit){
-		addParticle();
+		int num_new_particles = max(elapsed / rate, 1);
+		for (int i = 0; i < num_new_particles; ++i) {
+			addParticle();
+		}
 	}
 }
 
@@ -372,7 +384,10 @@ void TParticleEmitterGenerationBox::update(float elapsed) {
 
 	// If we have to make a new particle
 	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit){
-		addParticle();
+		int num_new_particles = max(elapsed / rate, 1);
+		for (int i = 0; i < num_new_particles; ++i) {
+			addParticle();
+		}
 	}
 }
 
