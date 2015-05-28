@@ -14,15 +14,36 @@ struct FilterGroup
 	enum Enum
 	{
 		eUNDEFINED = (1 << 1),
-		eENEMY =     (1 << 2),
-		ePLAYER =    (1 << 3),
-		eACTOR =     (1 << 4),
-		eLEVEL =     (1 << 5),
+		eENEMY = (1 << 2),
+		ePLAYER = (1 << 3),
+		eACTOR = (1 << 4),
+		eLEVEL = (1 << 5),
 		ePLAYER_RG = (1 << 6),
-		eENEMY_RG  = (1 << 7),
+		eENEMY_RG = (1 << 7),
 		eACTOR_NON_COLLISION = (1 << 8),
 		eNON_COLLISION = (1 << 9),
+		ePARTICLES = (1 << 10)
 	};
+};
+
+class CPhysicsParticleSystem{
+public:
+	PxParticleSystem* ps;
+	PxParticleExt::IndexPool* indexPool;
+	PxParticleCreationData particleCreationData;
+	PxU32 maxParticles;
+	std::vector<PxU32> myIndexBuffer;
+	std::vector<PxVec3> myPositionBuffer;
+	std::vector<PxVec3> myVelocityBuffer;
+	std::vector<PxVec3> myParticlesForces;
+
+	void init(PxU32 numParticles);
+	bool createParticles(PxU32 numParticles);
+	void addParticles(int numNewParticles, PxU32 particlesToAdd[], PxVec3 positionsToAdd[], PxVec3 velocityToAdd[]);
+	void updateParticles();
+	void releaseParticles(PxU32 indicesToRelease);
+	void releaseAllParticles();
+	void setParticlesFilterCollision();
 };
 
 class CPhysicsManager
@@ -36,11 +57,10 @@ public:
 
 	PxReal timeStep;
 
-	static const PxU32 maxParticles = 1000;
-	PxU32 currentNumParticles;
-	PxParticleSystem* ps;
-	PxParticleCreationData particleCreationData;
-	PxParticleExt::IndexPool* indexPool;
+	//static const PxU32 maxParticles = 3000;
+	//PxU32 currentNumParticles;
+	//PxParticleSystem* ps;
+	//PxParticleExt::IndexPool* indexPool;
 
 	static CPhysicsManager& get();
 
@@ -55,11 +75,6 @@ public:
 
 	void addCollisionFilter(physx::PxU32 s, physx::PxU32 filter);
 	void loadCollisions();
-
-	bool createParticles(PxU32 newNumPaticles, PxVec3 myPositionBuffer[], PxVec3 myVelocityBuffer[]);
-	void updateParticles(PxU32 indicesToMove[], PxVec3 appParticlesForces[], PxU32 numAppParticlesForce);
-	void releaseParticles(PxU32 numAppParticleIndices, PxU32 indicesToRelease[]);
-	void releaseAllParticles();
 
 	PxVec3 XMVECTORToPxVec3(XMVECTOR vector);
 	XMVECTOR PxVec3ToXMVECTOR(PxVec3 vector);

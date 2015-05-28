@@ -102,6 +102,15 @@ int getRandomNumber(int num1, int num2){
 	return rand() % num2 + num1;
 }
 
+XMVECTOR getRandomVector3(float minXYZ, float maxXYZ) {
+	return XMVectorSet(
+		  getRandomNumber(minXYZ, maxXYZ)
+		, getRandomNumber(minXYZ, maxXYZ)
+		, getRandomNumber(minXYZ, maxXYZ)
+		, 0
+		);
+}
+
 float getRandomNumber(float min, float max){
 	//srand(static_cast<float>(time(NULL)));
 	float rand_num = (max - min) * ((((float)rand()) / (float)RAND_MAX)) + min;
@@ -130,4 +139,10 @@ std::vector<std::string> split_string(const std::string& str,
 	strings.push_back(str.substr(prev));
 
 	return strings;
+}
+
+
+float lerp(float a, float b, float f)
+{
+	return a + f * (b - a);
 }

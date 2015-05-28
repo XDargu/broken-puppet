@@ -59,4 +59,5 @@ DECL_OBJ_MANAGER(TCompRagdoll, "ragdoll");
 DECL_OBJ_MANAGER(TCompShadows, "shadows");
 DECL_OBJ_MANAGER(TCompAudioListener, "audioListener");
 DECL_OBJ_MANAGER(TCompAudioSource, "audioSource");
+DECL_OBJ_MANAGER(TCompParticleGroup, "particleGroup");
 

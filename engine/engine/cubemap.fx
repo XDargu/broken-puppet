@@ -12,7 +12,7 @@
 float PI = 3.14159;
 
 Texture2D txDiffuse : register(t0);
-TextureCube txCubemap : register(t3);
+TextureCube txCubemap : register(t8);
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
 SamplerState samCube : TEXUNIT3 {
@@ -61,7 +61,7 @@ VS_TEXTURED_OUTPUT VSNormal(float4 Pos : POSITION
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 {
 	// Luz inicial
-	float4 lightAccum = AmbientLight * AmbientLight.w;
+	/*float4 lightAccum = AmbientLight * AmbientLight.w;
 
 		// Luz direccional
 		for (int i = 0; i < LightCount; i++)
@@ -84,17 +84,21 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 			lightAccum += max(dot(input.Normal, normalizedLightDirection), 0) * OmniLightColors[i] * (OmniLightColors[i].w * 10) * attenuation;
 		}
 	}
-
+	*/
 	float3 N = normalize(input.Normal);
-	float3 I = input.WorldPos - CameraPosition;
+	float3 I = input.WorldPos - cameraWorldPos.xyz;
 	I = normalize(I);
 	float3 R = reflect(I, N);
 	
 	float3 reflectedColor = txCubemap.Sample(samCube, R);
 
-	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
+	//float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 
-	float4 finalColor = float4(reflectedColor * color, 1) * lightAccum * 10;
+	//float4 finalColor = float4(reflectedColor * color, 1) * lightAccum * 10;
 
-	return finalColor;
+	// A bit of fresnel
+	float fresnel = 1 - dot(N, -I);
+	fresnel = pow(fresnel, 4);
+
+	return float4(reflectedColor * (1-fresnel), 0);
 }

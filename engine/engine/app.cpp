@@ -117,7 +117,9 @@ TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
 
-CRenderInstances  particles;
+CRenderInstances instances;
+
+CPhysicsParticleSystem ps;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -207,6 +209,8 @@ void createManagers() {
 	getObjManager<TCompRagdoll>()->init(64);
 	getObjManager<TCompShadows>()->init(8);
 
+	getObjManager<TCompParticleGroup>()->init(64);
+
 
 	registerAllComponentMsgs();
 }
@@ -214,6 +218,7 @@ void createManagers() {
 void initManagers() {
 	CErrorContext ec("Initializing", "managers");
 
+	getObjManager<TCompTransform>()->initHandlers();
 	getObjManager<TCompCamera>()->initHandlers();
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
@@ -255,6 +260,9 @@ void initManagers() {
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
 
+	getObjManager<TCompParticleGroup>()->initHandlers();
+
+
 }
 
 bool CApp::create() {
@@ -294,7 +302,7 @@ bool CApp::create() {
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-	is_ok &= particles.create(300, &mesh_textured_quad_xy_centered);
+	
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -332,7 +340,7 @@ bool CApp::create() {
 	
 	cubemap->activate(3);
 
-	texture_manager.getByName("storm")->activate(8);
+	texture_manager.getByName("desertcube1024")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 	is_ok &= ssao.create("ssao", xres, yres, 1);
@@ -381,6 +389,26 @@ bool CApp::create() {
 		PxStrideIterator<const PxVec3>(myVelocityBuffer);*/
 	//bool success=CPhysicsManager::get().createParticles();
 	//---------------------------------------------
+	instances.create(300, &mesh_textured_quad_xy_centered);
+
+
+	/*PxU32 myIndexBuffer[] = { 0, 1, 2, 3, 4, 5 };
+	PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f))};
+	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };*/
+	//ps.init(4);
+	/*ps_prueba.myIndexBuffer = myIndexBuffer;
+	ps_prueba.myPositionBuffer = myPositionBuffer;
+	ps_prueba.myVelocityBuffer = myVelocityBuffer;*/
+	PxU32 indices[4] = { 0, 1, 2, 3 };
+	PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
+		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
+		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
+		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
+	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
+	ps.addParticles(4, indices, positions, myVelocityBuffer);
+	bool success = ps.createParticles(4);
+
+
 
 	return true;
 }
@@ -460,7 +488,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");*/
-		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("particles");
 		render_techniques_manager.reload("light_shaft");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
@@ -531,14 +559,18 @@ void CApp::update(float elapsed) {
 	TCompNeedle* needle = e->get<TCompNeedle>();
 	Citem_manager::get().removeNeedle(needle);*/
 
-	PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
+	/*PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
 		 };
 	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
 		PxVec3(0, 0, 0) };
-	bool success = CPhysicsManager::get().createParticles(3, myPositionBuffer, myVelocityBuffer);
+	bool success = CPhysicsManager::get().createParticles(3, myPositionBuffer, myVelocityBuffer);*/
 
 
-	CPhysicsManager::get().updateParticles();
+	//CPhysicsManager::get().updateParticles();
+
+	/*if (io.becomesPressed(CIOStatus::EXTRA)) {
+		physics_manager.ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
+	}*/
 
 
 	// Update ---------------------
@@ -570,8 +602,11 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
+	// PARTICLES
+	getObjManager<TCompParticleGroup>()->update(elapsed);
+
 	logic_manager.update(elapsed);
-	particles.update(elapsed);
+	instances.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -629,7 +664,8 @@ void CApp::render() {
 	scope.end();
 
 	deferred.render(&camera, *rt_base);
-	particles.render();
+	instances.render();
+	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
 
 	texture_manager.getByName("noise")->activate(9);
 	ssao.apply(rt_base);	
@@ -845,6 +881,7 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
+	getObjManager<TCompParticleGroup>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
@@ -857,8 +894,7 @@ void CApp::renderDebugEntities() {
 
 	CNav_mesh_manager::get().pathRender();
 
-
-	PxParticleReadData* rd = CPhysicsManager::get().ps->lockParticleReadData();
+	PxParticleReadData* rd = ps.ps->lockParticleReadData();
 	if (rd)
 	{
 		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
@@ -867,8 +903,13 @@ void CApp::renderDebugEntities() {
 		{
 			// access particle position
 			const PxVec3& position = *positionIt;
-			setWorldMatrix(XMMatrixTranslation(position.x, position.y, position.z));
-			axis.activateAndRender();
+			XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 1);
+			XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
+			XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
+			XMVECTOR scale = XMVectorSet(0.02, 0.02, 0.02, 1);
+			setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
+			//setWorldMatrix(XMMatrixTranslation(position.x, position.y, position.z));			
+			mesh_icosahedron.activateAndRender();
 		}
 
 		// return ownership of the buffers back to the SDK
@@ -972,7 +1013,6 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
-	particles.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }

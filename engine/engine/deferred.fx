@@ -267,10 +267,62 @@ float3 getWorldCoords( float2 screen_coords, float depth ) {
   return wPos;
 }
 
+float2 LightingFuncGGX_FV(float dotLH, float roughness)
+{
+	float alpha = roughness*roughness;
+
+	// F
+	float F_a, F_b;
+	float dotLH5 = pow(1.0f - dotLH, 5);
+	F_a = 1.0f;
+	F_b = dotLH5;
+
+	// V
+	float vis;
+	float k = alpha / 2.0f;
+	float k2 = k*k;
+	float invK2 = 1.0f - k2;
+	vis = rcp(dotLH*dotLH*invK2 + k2);
+
+	return float2(F_a*vis, F_b*vis);
+}
+
+float LightingFuncGGX_D(float dotNH, float roughness)
+{
+	float alpha = roughness*roughness;
+	float alphaSqr = alpha*alpha;
+	float pi = 3.14159f;
+	float denom = dotNH * dotNH *(alphaSqr - 1.0) + 1.0f;
+
+	float D = alphaSqr / (pi * denom * denom);
+	return D;
+}
+
+float LightingFuncGGX_OPT3(float3 N, float3 V, float3 L, float roughness, float F0)
+{
+	float3 H = normalize(V + L);
+
+	float dotNL = saturate(dot(N, L));
+	float dotLH = saturate(dot(L, H));
+	float dotNH = saturate(dot(N, H));
+
+	float D = LightingFuncGGX_D(dotNH, roughness);
+	float2 FV_helper = LightingFuncGGX_FV(dotLH, roughness);
+	float FV = F0*FV_helper.x + (1.0f - F0)*FV_helper.y;
+	float specular = dotNL * D * FV;
+
+	return specular;
+}
+
 // -------------------------------------------------
-float getSpecular(float3 wPos, float3 L, float3 N) {
+float getSpecular(float3 wPos, float3 L, float3 N, float3 ss_load_coords) {
 	float3 V = normalize(cameraWorldPos.xyz - wPos);
 	float3 R = reflect(normalize(-L), normalize(N));
+	float fresnel = dot(N, V);
+
+	float4 gloss = txGloss.Load(ss_load_coords);
+	return LightingFuncGGX_OPT3(N, V, L, 1 - gloss, fresnel);
+
 	//float spec_amount = pow(saturate(dot(R, V)), 50);
 	float spec_amount = saturate(dot(R, V));
 	return spec_amount;
@@ -299,7 +351,7 @@ float4 PSPointLights(
   L = L / distance_to_light;
   float  diffuse_amount = saturate(dot(N, L));
 
-  float spec_amount = getSpecular(wPos, L, N);
+  float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
 
   // Attenuation based on distance:   1 - [( r - rmin ) / ( rmax - rmin )]
   float  att_factor = saturate((plight_max_radius -  distance_to_light) * plight_inv_delta_radius * 0.4);
@@ -333,7 +385,7 @@ float4 PSDirLights(
   float  diffuse_amount = saturate(dot(N, L));
 
   float angle_cos = dot(L, -dir_light_direction);
-  float max_cos = cos(dir_light_angle * 0.45);
+  float max_cos = cos(dir_light_angle * 0.2);
 
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap
@@ -346,7 +398,7 @@ float4 PSDirLights(
 
  // return angle_cos.xxxx;
 
-  float spec_amount = getSpecular(wPos, L, N);
+  float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
   return float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
 }
 
@@ -381,7 +433,7 @@ in float4 iPosition : SV_Position
 		att_factor = getShadowAt(float4(wPos, 1));
 	}
 
-	float spec_amount = getSpecular(wPos, L, N);
+	float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
 	return float4(spot_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
 }
 
@@ -405,10 +457,11 @@ float4 PSResolve(
 	float ambient_color = float4(0.98, 0.85, 0.8, 0);
 	
 	//float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
-	float dot_product = diffuse.a;	
-	float4 specular = specular_color * saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
+	float spec_intensity = diffuse.a;
+	
+	float4 specular = specular_color * spec_intensity;// saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
 		//return specular;
-	return (albedo * diffuse + saturate(specular) * 0.7) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	return (albedo * diffuse + saturate(specular)) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 

@@ -20,7 +20,10 @@ VS_TEXTURED_OUTPUT VS(
   float4 Pos : POSITION0              // Stream 0
 , float2 UV : TEXCOORD0
 , float3 InstancePos : POSITION1      // Stream 1
-, float  InstanceFrame : TEXCOORD1    // Stream 1
+, float3 InstanceAgeLifeSpanSize : TEXCOORD1
+/*, float  InstanceAge : TEXCOORD1    // Stream 1
+, float  InstanceLifespan : COLOR0    // Stream 1
+, float  InstanceSize : POSITION2    // Stream 1*/
 )
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
@@ -31,7 +34,8 @@ VS_TEXTURED_OUTPUT VS(
   output.Pos = mul(float4( wpos, 1 ), ViewProjection);
   
   // Animate the UV's. Assuming 4x4 frames
-  float nmod16 = fmod(InstanceFrame*32, 16.0);
+  float nmod16 = fmod(InstanceAgeLifeSpanSize.x* 32, 16.0);
+  //float nmod16 = 1;
   int   idx = int(nmod16);
   float coords_x = fmod(idx, 4);
   float coords_y = int( idx / 4);
@@ -40,6 +44,9 @@ VS_TEXTURED_OUTPUT VS(
   output.UV.y = (coords_y + UV.y) / 4.0;
 
   output.wPos = wpos;
+
+  if (InstanceAgeLifeSpanSize.z == -1)
+	  output.Pos.w = 0.0;
 
   return output;
 }

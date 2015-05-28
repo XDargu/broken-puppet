@@ -30,8 +30,9 @@ bool isKeyPressed(int key);
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
 int getRandomNumber(int num1, int num2);
 float getRandomNumber(float min,float max);
+XMVECTOR getRandomVector3(float minXYZ, float maxXYZ);
 
-
+float lerp(float a, float b, float f);
 // Strings
 bool stringEndsWith(std::string const &value, std::string const &ending);
 std::vector<std::string> split_string(const std::string& str, const std::string& delimiter);
@@ -41,5 +42,8 @@ std::vector<std::string> split_string(const std::string& str, const std::string&
 #define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length((x) - (y)))
 
 #define V4COMPARE(v1, v2) memcmp(&v1, &v2, 16)
+
+#define SAFE_DELETE(x) if (x != nullptr) { delete x; x = nullptr; }
+
 
 #endif
