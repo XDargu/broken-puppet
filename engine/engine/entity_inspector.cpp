@@ -315,6 +315,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	// Logic
 	TCompTrigger* e_trigger = inspectedEntity->get<TCompTrigger>();
 
+	// Particle group
+	TCompParticleGroup* e_particle_group = inspectedEntity->get<TCompParticleGroup>();
+
 	TwAddVarRW(bar, "ETag", TW_TYPE_CSSTRING(sizeof(inspectedEntity->tag)), &inspectedEntity->tag, " label='Tag'");
 
 	if (e_name) {
@@ -468,6 +471,93 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_skel_ik) {
 		TwAddVarRW(bar, "SkeletonIKActive", TW_TYPE_BOOL8, &e_skel_ik->active, " group='Skeleton IK' label='Active' ");
+	}
+
+	if (e_particle_group) {
+		TwAddVarRW(bar, "PGActive", TW_TYPE_BOOL8, &e_particle_group->active, " group=PG label='Active'");		
+		std::string aux = "";
+
+		// For each particle system
+		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {
+			
+			aux = "ParticleSystem" + i;
+			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Particle system'");
+
+			// Emitter
+			aux = "Emitter" + i;
+			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Emitter'");
+			aux = "PGEmitterLimit" + i;
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->limit, " group=PG label='Limit'");
+			aux = "PGEmitterRate" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->rate, " group=PG label='Rate'");
+			aux = "PGEmitterMinLT" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->min_life_time, " group=PG label='Min lifeTime'");
+			aux = "PGEmitterMaxLT" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->max_life_time, " group=PG label='Max lifeTime'");
+			aux = "PGEmitterBurstTime" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->burst_time, " group=PG label='Burst Time'");
+			aux = "PGEmitterBurstAmount" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->burst_amount, " group=PG label='Burst Amount'");
+
+			// Updaters
+			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {
+				aux = "Lifetime" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Lifetime'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_color != nullptr) {
+				aux = "Color over life" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Color over life'");
+				aux = "PGUpdaterColorIC" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->initial_color, " group=PG label='Initial Color'");
+				aux = "PGUpdaterColorFC" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->final_color, " group=PG label='Final Color'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_size != nullptr) {
+				aux = "Size over life" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Size over life'");
+				aux = "PGUpdaterSizeIS" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->initial_size, " group=PG label='Initial Size'");
+				aux = "PGUpdaterSizeFS" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->final_size, " group=PG label='Final Size'");
+			}			
+
+			if (e_particle_group->particle_systems[i].updater_movement != nullptr) {
+				aux = "Initial movement" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Initial movement'");
+				aux = "PGUpdaterMovementSpeed" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_noise != nullptr) {
+				aux = "Random speed over time" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Random speed over time'");
+				aux = "PGUpdaterNoiseMinNoise" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &e_particle_group->particle_systems[i].updater_noise->min_noise, " group=PG label='Min Speed'");
+				aux = "PGUpdaterNoiseMaxNoise" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &e_particle_group->particle_systems[i].updater_noise->max_noise, " group=PG label='Max Speed'");
+			}
+			
+			if (e_particle_group->particle_systems[i].updater_gravity != nullptr) {
+				aux = "Gravity" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Gravity'");
+				aux = "PGUpdaterGravityForce" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_gravity->gravity, " group=PG label='Force'");
+			}
+
+			// Renderer
+			aux = "Renderer" + i;
+			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Renderer'");
+			aux = "PGRendererTexture" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_CSSTRING(sizeof(e_particle_group->particle_systems[i].renderer->texture)), &e_particle_group->particle_systems[i].renderer->texture, " group=PG label='Texture'");
+			aux = "PGRendererAdditive" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
+
+			if (i < e_particle_group->particle_systems.size() - 1) {
+				TwAddSeparator(bar, "", "group=PG");
+			}
+		}
 	}
 
 	TwAddSeparator(bar, "", "");
