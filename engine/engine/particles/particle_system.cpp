@@ -113,6 +113,10 @@ void TParticleSystem::update(float elapsed) {
 		emitter_generation->update(elapsed);
 	}
 
+	if (isKeyPressed('T')) {
+		changeLimit(100);
+	}
+
 	VParticles::iterator it = particles.begin();
 
 	int delete_counter = 0;
@@ -203,4 +207,35 @@ void TParticleSystem::renderDebug3D() const {
 		setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
 		axis.activateAndRender();
 	}
+}
+
+void TParticleSystem::changeLimit(int the_limit) {
+	// Set the new limit
+	emitter_generation->limit = the_limit;
+
+	// Remove extra particles, if needed
+	int amount_to_erase = max(0, particles.size() - the_limit);
+
+	for (int i = 0; i < amount_to_erase; ++i) {
+		particles.pop_back();
+	}
+
+	// If the capacity is less than the new limit, reserve more memory
+	if (particles.capacity() < the_limit) {
+		particles.reserve(the_limit - particles.capacity());
+	}
+
+	// Change the buffer mesh
+	if (instances_data) {
+		instances_data->destroy();
+		delete instances_data;
+	}
+
+	instances_data = new CMesh;
+	bool is_ok = instances_data->create(the_limit, &particles
+		, 0, nullptr        // No indices
+		, CMesh::POINTS     // We are not using this
+		, &vdcl_particle_data    // Type of vertex
+		, true              // the buffer IS dynamic
+		);
 }
