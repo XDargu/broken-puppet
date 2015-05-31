@@ -65,6 +65,8 @@ bool CEntityManager::clear() {
 		entity_event_count++;
 	}
 
+	rigid_list.clear();
+
 	entity_event_count = 0;
 	entities.clear();
 	return true;

@@ -282,9 +282,10 @@ bool CApp::create() {
 
 	physics_manager.init();
 	bool is_ok = true;
+
+	rt_base = nullptr;
+
 	// Boot LUA
-
-
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
@@ -306,7 +307,6 @@ bool CApp::create() {
 	XASSERT(is_ok, "Error creating debug meshes");
 
 	logic_manager.init();
-	render_manager.init();
 
 #ifdef _DEBUG
 	// Init AntTweakBar
@@ -334,26 +334,6 @@ bool CApp::create() {
 
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
-
-	cubemap = texture_manager.getByName("OutputCube");
-	
-	cubemap->activate(3);
-
-	texture_manager.getByName("OutputCube")->activate(8);
-
-	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
-	is_ok &= ssao.create("ssao", xres, yres, 1);
-	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
-	is_ok &= blur.create("blur", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 1);
-	is_ok &= underwater.create("underwater", xres, yres, 1);
-
-	water_level = -1000;
-	CEntity* water = entity_manager.getByName("water");
-	if (water) {
-		TCompTransform* water_t = water->get<TCompTransform>();
-		water_level = XMVectorGetY(water_t->position);
-	}
 
 	assert(is_ok);
 
@@ -444,9 +424,9 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}
 
-	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/milestone2.xml");
-	}*/
+	if (io.becomesReleased(CIOStatus::EXTRA)) {
+		loadScene("data/scenes/escena_ms2.xml");
+	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		/*render_techniques_manager.reload("deferred_gbuffer");
@@ -979,7 +959,7 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
-
+	
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 
@@ -1039,6 +1019,24 @@ void CApp::loadScene(std::string scene_name) {
 	CPhysicsManager::get().m_collision->clear();
 
 	h_player = entity_manager.getByName("Player");
+
+	texture_manager.getByName("OutputCube")->activate(8);
+
+	is_ok &= sharpen.create("sharpen", xres, yres, 1);
+	is_ok &= ssao.create("ssao", xres, yres, 1);
+	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
+	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 1);
+	is_ok &= underwater.create("underwater", xres, yres, 1);
+
+	water_level = -1000;
+	CEntity* water = entity_manager.getByName("water");
+	if (water) {
+		TCompTransform* water_t = water->get<TCompTransform>();
+		water_level = XMVectorGetY(water_t->position);
+	}
+
+	render_manager.init();
 }
 
 void CApp::loadPrefab(std::string prefab_name) {
