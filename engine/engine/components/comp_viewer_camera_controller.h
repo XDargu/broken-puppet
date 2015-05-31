@@ -43,6 +43,8 @@ public:
 
 	void init() {
 		CApp::get().activateInspectorMode(true);
+		CApp::get().renderAABB = false;
+		CApp::get().renderAxis = false;
 	}
 
 	void update(float elapsed) {
