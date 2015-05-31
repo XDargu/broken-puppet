@@ -109,7 +109,11 @@ void CMesh::activate() const {
 	::render.ctx->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
 
 	// Set primitive topology (LINES,POINTS,..)
+#ifdef _DEBUG
+	::render.ctx->IASetPrimitiveTopology(CApp::get().renderWireframeCurrent && topology == D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ? D3D10_PRIMITIVE_TOPOLOGY_LINELIST : topology);
+#else
 	::render.ctx->IASetPrimitiveTopology(topology);
+#endif
 
 	// Set index buffer
 	if (ib)

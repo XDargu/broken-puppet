@@ -428,6 +428,18 @@ void CApp::update(float elapsed) {
 		loadScene("data/scenes/escena_ms2.xml");
 	}
 
+	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
+	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
+	if (io.becomesReleased(CIOStatus::NUM2)) { debug_map = 2; }
+	if (io.becomesReleased(CIOStatus::NUM3)) { debug_map = 3; }
+	if (io.becomesReleased(CIOStatus::NUM4)) { debug_map = 4; }
+	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
+	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
+
+	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+		renderWireframe = !renderWireframe;
+	}
+
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
@@ -630,6 +642,11 @@ void CApp::render() {
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	*/
+
+	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
+	
+#ifdef _DEBUG
+
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
@@ -637,7 +654,15 @@ void CApp::render() {
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	drawTexture2D(sz * 2, 0 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_specular"));
 	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));
-	
+
+	if (debug_map == 1) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo")); }
+	if (debug_map == 2) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals")); }
+	if (debug_map == 3) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_specular")); }
+	if (debug_map == 4) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_gloss")); }
+	if (debug_map == 5) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights")); }
+	if (debug_map == 6) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); }
+#endif
+
 	/*render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);*/
@@ -664,7 +689,26 @@ void CApp::render() {
 
 #ifdef _DEBUG
 	renderDebugEntities();
-	TwDraw();
+
+	if (renderWireframe) {
+		debugTech.activate();
+		renderWireframeCurrent = true;
+		render_manager.renderAll(&camera, true);
+		renderWireframeCurrent = false;
+	}
+
+	std::string mode = "Render output";
+
+	if (debug_map == 1) { mode = "Albedo"; }
+	if (debug_map == 2) { mode = "Normal"; }
+	if (debug_map == 3) { mode = "Specular"; }
+	if (debug_map == 4) { mode = "Gloss"; }
+	if (debug_map == 5) { mode = "Lights"; }
+	if (debug_map == 6) { mode = "Depth"; }
+
+	font.print(xres / 2 - 30, 10, mode.c_str());
+
+	TwDraw();	
 #endif
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
@@ -975,6 +1019,9 @@ void CApp::loadScene(std::string scene_name) {
 	renderGrid = false;
 	renderNames = false;
 	debug_mode = false;
+	renderWireframe = false;
+	renderWireframeCurrent = false;
+	debug_map = 0;
 
 	//physics_manager.init();
 

@@ -25,6 +25,10 @@ public:
 	bool renderNames;
 	bool renderNavMesh;
 
+	int debug_map; // 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
+	bool renderWireframe;
+	bool renderWireframeCurrent;
+
 	//Variables usadas para limitar el número de tramas de hilo disponibles
 	static const unsigned int max_num_string = 4;
 

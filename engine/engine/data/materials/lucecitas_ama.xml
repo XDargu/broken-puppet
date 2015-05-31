@@ -1,1 +1,1 @@
-<std_material name="lucecitas_ama" diffuse="lamparas_difusiemi_bombilla" normal="lamparas_normal" emissive="lamparas_emissive"/>
+<std_material name="lucecitas_ama" diffuse="lamparas_difusiemi_bombilla" normal="lamparas_normal" specular="" gloss="" emissive="lamparas_emissive"/>

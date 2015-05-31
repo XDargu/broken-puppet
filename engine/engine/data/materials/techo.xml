@@ -1,1 +1,1 @@
-<std_material name="techo" diffuse="techo_diffuse" normal="techo_normal" emissive=""/>
+<std_material name="techo" diffuse="techo_diffuse" normal="techo_normal" specular="" gloss="" emissive=""/>

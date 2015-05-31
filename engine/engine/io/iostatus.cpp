@@ -35,9 +35,19 @@ CIOStatus::CIOStatus( ) {
 	buttons[RUN].key = VK_LSHIFT;
 
 	buttons[VIEWER_MOVE_CAM].key = VK_RBUTTON;
-	buttons[VIEWER_ZOOM].key = VK_MBUTTON;
+	buttons[VIEWER_PAN].key = VK_MBUTTON;
 
 	buttons[F8_KEY].key = VK_F8;
+	buttons[F8_KEY].key = VK_F4;
+	buttons[ALT].key = VK_MENU;
+
+	buttons[NUM0].key = '0';
+	buttons[NUM1].key = '1';
+	buttons[NUM2].key = '2';
+	buttons[NUM3].key = '3';
+	buttons[NUM4].key = '4';
+	buttons[NUM5].key = '5';
+	buttons[NUM6].key = '6';
 
 	mouse.dx = 0;
 	mouse.dy = 0;

@@ -1,1 +1,1 @@
-<std_material name="armario" diffuse="armario_diffuse" normal="armario_normal" emissive=""/>
+<std_material name="armario" diffuse="armario_diffuse" normal="armario_normal" specular="" gloss="" emissive=""/>
