@@ -56,8 +56,10 @@ void TCompCameraPivotController::update(float elapsed) {
 
 	float distance_normalized = 1;
 
-	if (camera_dist != 0)
+	if (camera_dist != 0) {
 		distance_normalized = collision_dist / camera_dist;
+		distance_normalized -= 0.1f;
+	}
 	
 
 	XMVECTOR target_pos = XMVectorLerp(player_pivot_trans->position, desired_pos, distance_normalized);
