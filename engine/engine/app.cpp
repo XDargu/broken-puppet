@@ -117,8 +117,6 @@ TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
 
-CRenderInstances instances;
-
 //---------------------------------------------------
 //CNavmesh nav_prueba;
 //---------------------------------------------------
@@ -237,6 +235,7 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 	getObjManager<TCompSensorTied>()->initHandlers();
+	getObjManager<TCompViewerCameraController>()->initHandlers();
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();
@@ -291,7 +290,9 @@ bool CApp::create() {
 	XASSERT(font.create(), "Error creating the font");
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/viewer.xml");
+	loadScene("data/scenes/my_file.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -353,7 +354,6 @@ bool CApp::create() {
 	
 	logic_manager.addRigidAnimation(anim);	*/
 
-	instances.create(300, &mesh_textured_quad_xy_centered);
 
 	return true;
 }
@@ -539,7 +539,6 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompParticleGroup>()->update(elapsed);
 
 	logic_manager.update(elapsed);
-	instances.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -597,7 +596,6 @@ void CApp::render() {
 	scope.end();
 
 	deferred.render(&camera, *rt_base);
-	instances.render();
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
 
 	texture_manager.getByName("noise")->activate(9);
@@ -669,9 +667,9 @@ void CApp::render() {
 	TwDraw();
 #endif
 
-	int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
+	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
-	font.print(15, 15, life_text.c_str());
+	font.print(15, 15, life_text.c_str());*/
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
@@ -980,10 +978,6 @@ void CApp::loadScene(std::string scene_name) {
 
 	//physics_manager.init();
 
-	initManagers();
-
-
-	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
@@ -1012,8 +1006,11 @@ void CApp::loadScene(std::string scene_name) {
 #endif
 
 	activateInspectorMode(false);
+
+	initManagers();
+
 	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
-	logic_manager.onSceneLoad(name);
+	logic_manager.onSceneLoad(name);	
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();

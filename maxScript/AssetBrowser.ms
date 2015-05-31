@@ -458,6 +458,7 @@ macroScript MCVAssetBrowser
 				checkbox exportMaterial "Exportar materiales"
 				button exportAll "Exportar todo" width:110 height:25 toolTip:"" across: 2 
 				button exportSel "Exportar selección" width:110 height:25 toolTip:"" 
+				button preView "Previsualizar" width:135 height:25 toolTip:""
 				button validScn "Validar escena" width:135 height:25 toolTip:""
 				button exportMod "Exportar módulos" width:135 height:25 toolTip:""
 				button exportPref "Exportar prefabs" width:135 height:25 toolTip:""
@@ -507,6 +508,21 @@ macroScript MCVAssetBrowser
 					messageBox ("No se ha podido exportar correctamente:\n " + getCurrentException() as string) 
 					enableSceneRedraw()
 				)
+			)
+			
+			on preView pressed do (
+				try (
+						addObjectsID()
+						exportViewer progress: progress
+						--funcion que abre y cierra una última cosa para poder trabajar, a depurar
+						openCloseFile()
+						removeObjectsID()
+						ShellLaunch  (engine_path + "engined.exe") ""
+					)
+					catch ( 
+						format "*** % ***\n" (getCurrentException())
+						messageBox ("No se ha podido exportar correctamente:\n " + getCurrentException() as string) 
+					)
 			)
 			
 			on play pressed do (

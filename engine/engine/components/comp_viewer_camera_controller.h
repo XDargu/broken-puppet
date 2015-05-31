@@ -36,6 +36,10 @@ public:
 		o_transform->position = o_transform->getFront() * -camera_radius;
 	}
 
+	void init() {
+		CApp::get().activateInspectorMode(true);
+	}
+
 	void update(float elapsed) {
 		CIOStatus &io = CIOStatus::get();
 		CIOStatus::TMouse mouse = io.getMouse();
@@ -74,6 +78,37 @@ public:
 
 		// Update position
 		o_transform->position = o_transform->getFront() * -camera_radius;
+
+		// Rotate light position, if exists
+		CEntity* e_light = CEntityManager::get().getByName("the_light");
+		if (e_light) {
+			TCompTransform* l_transform = e_light->get<TCompTransform>();
+			
+			if (io.isPressed(CIOStatus::MOUSE_LEFT)) {
+
+				XMVECTOR rot = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), -h_speed * mouse.dx * elapsed);
+				//XMVECTOR rot2 = XMQuaternionRotationAxis(l_transform->getLeft(), v_speed * mouse.dy * elapsed);
+				XMVECTOR rot2 = XMQuaternionIdentity();
+
+				//o_transform->rotation = XMQuaternionMultiply(o_transform->rotation, rot);
+				l_transform->rotation = XMQuaternionMultiply(XMQuaternionMultiply(l_transform->rotation, rot2), rot);
+
+				// Clamp max and min camera Tilt
+				float m_pitch = getPitchFromVector(l_transform->getFront());
+				if (m_pitch > max_tilt)
+					m_pitch = max_tilt;
+				if (m_pitch < min_tilt)
+					m_pitch = min_tilt;
+
+				float m_yaw = getYawFromVector(l_transform->getFront());
+
+				XMVECTOR m_rotation = XMQuaternionRotationRollPitchYaw(m_pitch, m_yaw, 0);
+				l_transform->rotation = m_rotation;
+
+				l_transform->position = l_transform->getFront() * -30;
+
+			}
+		}
 	}
 };
 

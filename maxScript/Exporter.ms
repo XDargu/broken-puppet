@@ -876,7 +876,7 @@ clearlistener()
 	/**********************************************************************************************
 												COMPONENT FUNCTIONS
 	**********************************************************************************************/
-
+	
 	/**********************************************************************************************
 	Gets the object transform
 	Params:
@@ -2191,6 +2191,159 @@ fn getPlatformPath obj = (
 
 		-- Adding prefabs to the prefabs list
 		ex_prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab, pullIntPrefab)
+	)
+	
+	/**********************************************************************************************
+	Export one object with the viewer
+	***********************************************************************************************/
+	fn exportViewer progress:undefined = (
+		local logicObjs = #()
+		expNames = #()
+		expObjects = #()
+		expShapesNames = #()
+		expDiff = #()
+		expNormal = #()
+		expJoints = #()
+		
+		initializePrefabs()
+		
+		/*if (validateScene true == false) then (
+			return false;
+		)*/
+		
+		-- Array with all the component functions
+		/* Order:
+		  - Name
+		  - Transform
+		  - Mesh
+		  - AABB
+		  - Collider
+		  - Rigidbody
+		  - StaticBody
+		  - Camera
+		  - PlayerController
+		  - CameraController
+		*/
+		functions = #(
+			getName, 
+			getTransform,
+			--getMesh,
+			getRender,
+			getAABB,			
+			getPointLight,
+			getAmbientLight,
+			getDirectionalLight,
+			getDistanceText	
+		)
+
+		-- Initialize XML
+		mXML = "<scene><entity>"
+		mXML += "<name name=\"the_light\"/>"
+		mXML += "<transform position=\"0 7 30\" rotation=\"0.8 -0.59 0.05 0.12\" scale=\"1 1 1\"/>"
+		mXML += "<shadows res=\"1024\" intensity=\"1.0\" color=\"1 1 1 1\"/>"
+		mXML += "<camera fov=\"120.0\" znear=\"5\" zfar=\"2500\"/>"		
+		mXML += "</entity>"
+		mXML += "<entity>"
+		mXML += "<name name=\"PlayerCamera\" />"
+		mXML += "<transform position=\"-1.5 2.5 3.0\" rotation=\"-0.44 -0.83 0.13 -0.32\"/>"
+		mXML += "<camera fov=\"75.0\" znear=\"0.1\" zfar=\"1000.0\"/>"
+		mXML += "<viewerCameraController/>"
+		mXML += "</entity>"
+
+		if (progress != undefined) then
+			progress.value = 0
+		count = 1
+		
+		if ($ == undefined) then (
+			throw "No hay nada seleccionado"
+			return 0
+		)
+		
+		local firstObj = #()
+		for obj in $ do ( append firstObj obj )
+			
+		local t_ref = firstObj[1].position
+		
+		-- Calls every function in the function arrays
+		for obj in firstObj do 
+		(
+			obj.position = obj.position - t_ref
+			
+			-- Check if needs to be evaluate
+			if(validateEntity obj)then
+			(
+				-- Check if needs to check this after
+				if (validateLogicObj obj == false) then
+				(
+					local mPrefab = validatePrefabList obj
+					
+					if (mPrefab == false) then 
+					(
+						local collisionTag = getEntityCollisionTag obj
+						local tag = getEntityTag obj
+						mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+						for func in functions do (
+							mXML += "" + func obj
+						)
+						mXML += "\t</entity>\n"		
+					)
+					else
+					(
+						local tag = getEntityTag obj
+						mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+						for func in mPrefab.components do (
+							mXML += "" + func obj
+						)
+						mXML += "\t</entity>\n"	
+					)
+				)
+				else
+				(
+					-- add nuevas cosas					 
+					append logicObjs obj
+				)
+
+			)
+			
+			if (progress != undefined) then
+				progress.value = (100.0 / firstObj.count) * count
+			count +=1
+			
+			obj.position = obj.position + t_ref
+		)
+		for obj in logicObjs do 
+		(
+			local mPrefab = validatePrefabList obj
+			
+			if (mPrefab == false) then 
+			(
+				local collisionTag = getEntityCollisionTag obj
+				local tag = getEntityTag obj
+				mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+				for func in functions do (
+					mXML += "" + func obj
+				)
+				mXML += "\t</entity>\n"		
+			)
+			else
+			(
+				local tag = getEntityTag obj
+				mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+				for func in mPrefab.components do (
+					mXML += "" + func obj
+				)
+				mXML += "\t</entity>\n"	
+			)
+		
+		)
+		
+		--mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
+		
+		mXML += "</scene>"
+		
+		-- print result XML
+		--print mXML
+		saveXMLArchive mXML
 	)
 
 	/**********************************************************************************************

@@ -1,1 +1,1 @@
-<std_material name="mecanismo_mat" diffuse="mecanismo_diffuse" normal="mecanismo_normal" emissive=""/>
+<std_material name="mecanismo_mat" diffuse="mecanismo_diffuse" normal="mecanismo_normal" specular="" gloss="" emissive=""/>
