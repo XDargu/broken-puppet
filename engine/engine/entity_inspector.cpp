@@ -29,6 +29,10 @@ XMVECTOR size;
 PxVec3 linearVelocity;
 PxVec3 angularVelocity;
 
+// Particles
+TwEnumVal particleEmitterShapeEV[] = { { TParticleEmitterShape::SPHERE, "Sphere" }, { TParticleEmitterShape::SEMISPHERE, "Semisphere" }, { TParticleEmitterShape::RING, "Ring" }, { TParticleEmitterShape::CONE, "Cone" }, { TParticleEmitterShape::BOX, "Box" } };
+TwType particleEmitterShape;
+
 static CEntityInspector entity_inspector;
 
 CEntityInspector& CEntityInspector::get() {
@@ -48,6 +52,9 @@ void CEntityInspector::init() {
 	TwDefine(" Inspector label='Entity inspector' ");
 	TwDefine(" Inspector refresh='0.1' ");
 	TwDefine(" TW_HELP visible=false ");
+
+	// Particles
+	particleEmitterShape = TwDefineEnum("ParticlEmitterShape", particleEmitterShapeEV, 5);
 
 }
 
@@ -211,6 +218,29 @@ void TW_CALL GetPlayerFSMTorsoState(void *value, void *clientData)
 
 }
 
+
+// ---------------------------- PARTICLES CALLBACKS --------------------------
+void TW_CALL SetParticleSystemLimit(const void *value, void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->changeLimit(*static_cast<const int *>(value));
+}
+
+void TW_CALL GetParticleSystemLimit(void *value, void *clientData)
+{
+	*static_cast<int *>(value) = static_cast<TParticleSystem *>(clientData)->getLimit();
+}
+
+void TW_CALL SetParticleSystemShape(const void *value, void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->emitter_generation->shape = (*static_cast<const TParticleEmitterShape *>(value));
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL GetParticleSystemShape(void *value, void *clientData)
+{
+	*static_cast<TParticleEmitterShape *>(value) = static_cast<TParticleSystem *>(clientData)->emitter_generation->shape;
+}
+
 // ---------------------------- ADD COMPONENT CALLBACKS --------------------------
 void TW_CALL AddTransform(void *clientData) {
 
@@ -238,6 +268,8 @@ void TW_CALL AddPointLight(void *clientData) {
 	static_cast<CEntity *>(clientData)->add(l);
 	entity_inspector.inspectEntity(static_cast<CEntity *>(clientData));
 }
+
+
 
 void CEntityInspector::update() {	
 	if (!CHandle(target_entity).isValid()) {
@@ -483,11 +515,35 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "ParticleSystem" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Particle system'");
 
+			typedef enum { SPHERE, SEMISPHERE, CONE, RING, BOX } EmitterShapes;
+
 			// Emitter
 			aux = "Emitter" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Emitter'");
+			aux = "PGEmitterShape" + i;
+			TwAddVarCB(bar, aux.c_str(), particleEmitterShape, SetParticleSystemShape, GetParticleSystemShape, &e_particle_group->particle_systems[i], " group=PG label='Shape'");
+
+			TParticleEmitterShape m_shape = e_particle_group->particle_systems[i].emitter_generation->shape;
+
+			if (m_shape == TParticleEmitterShape::SPHERE || m_shape == TParticleEmitterShape::SEMISPHERE || m_shape == TParticleEmitterShape::CONE || m_shape == TParticleEmitterShape::RING) {
+				aux = "PGEmitterRadius" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->radius, " group=PG label='Radius'");
+			}
+			if (m_shape == TParticleEmitterShape::CONE) {
+				aux = "PGEmitterAngle" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->angle, " group=PG label='Angle'");
+			}
+			if (m_shape == TParticleEmitterShape::BOX) {
+				aux = "PGEmitterBoxSize" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->box_size, " group=PG label='Box Size'");
+			}
+			if (m_shape == TParticleEmitterShape::RING) {
+				aux = "PGEmitterInnerRadius" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->inner_radius, " group=PG label='Inner Radius'");
+			}
 			aux = "PGEmitterLimit" + i;
-			TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->limit, " group=PG label='Limit'");
+			//TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->limit, " group=PG label='Limit'");
+			TwAddVarCB(bar, aux.c_str(), TW_TYPE_INT32, SetParticleSystemLimit, GetParticleSystemLimit, &e_particle_group->particle_systems[i], " group=PG label='Limit'");
 			aux = "PGEmitterRate" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->rate, " group=PG label='Rate'");
 			aux = "PGEmitterMinLT" + i;
