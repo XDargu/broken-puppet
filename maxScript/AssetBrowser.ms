@@ -404,13 +404,13 @@ macroScript MCVAssetBrowser
 			on botonA pressed do	( 
 				objs = $*
 				for o in objs do (
-					o.pos.z += 8
+					o.pos.z += getGridSpacing()
 				)
 			) -- A message pop up when you click the button
 			on botonB pressed do	(
 				objs = $*
 				for o in objs do (
-					o.pos.z -= 8
+					o.pos.z -= getGridSpacing()
 				)
 				--filein "box.ms"
 			)	-- box.ms is the name of an external Script we execute when the button is clicked	
