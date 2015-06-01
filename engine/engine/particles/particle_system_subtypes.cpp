@@ -72,12 +72,12 @@ void TParticleEmitterGeneration::addParticle() {
 		break;
 
 	case TParticleEmitterShape::RING:
-		XMStoreFloat3(&pos, getRandomVector3(-radius, 0, -radius, radius, 0, radius));
+		XMStoreFloat3(&pos, m_transform->getUp() * getRandomNumber(-radius, radius) + m_transform->getLeft() * getRandomNumber(-radius, radius));
 		inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 		inside_condition &= ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) > (inner_radius*inner_radius));
 
 		while (!inside_condition) {
-			XMStoreFloat3(&pos, getRandomVector3(-radius, 0, -radius, radius, 0, radius));
+			XMStoreFloat3(&pos, m_transform->getUp() * getRandomNumber(-radius, radius) + m_transform->getLeft() * getRandomNumber(-radius, radius));
 			inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 			inside_condition &= ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) > (inner_radius*inner_radius));
 		}

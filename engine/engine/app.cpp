@@ -425,7 +425,7 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/escena_ms2.xml");
+		//loadScene("data/scenes/escena_ms2.xml");
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }

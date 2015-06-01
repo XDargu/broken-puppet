@@ -551,7 +551,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGEmitterMaxLT" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->max_life_time, " group=PG label='Max lifeTime' min=0.01 step=0.1");
 			aux = "PGEmitterBurstTime" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->burst_time, " group=PG label='Burst Time' min=0.01 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->burst_time, " group=PG label='Burst Time' min=0 step=0.1");
 			aux = "PGEmitterBurstAmount" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->burst_amount, " group=PG label='Burst Amount' min=1");
 
