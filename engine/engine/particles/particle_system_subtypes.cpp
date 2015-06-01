@@ -198,6 +198,16 @@ void TParticleUpdaterSize::update(TParticle* particle, float elapsed) {
 	particle->size = lerp(initial_size, final_size, particle->age / particle->lifespan);
 }
 
+TParticleUpdaterColor::TParticleUpdaterColor() {
+	initial_color = XMVectorSet(1, 1, 1, 1);
+	final_color = XMVectorSet(1, 1, 1, 1);
+}
+
+TParticleUpdaterColor::TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color) {
+	initial_color = the_initial_color;
+	final_color = the_final_color;
+}
+
 void TParticleUpdaterColor::update(TParticle* particle, float elapsed) {
 	XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
 }

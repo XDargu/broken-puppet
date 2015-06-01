@@ -107,6 +107,9 @@ struct TParticleUpdaterColor {
 	XMVECTOR initial_color;
 	XMVECTOR final_color;
 
+	TParticleUpdaterColor();
+	TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color);
+
 	void update(TParticle* particle, float elapsed);
 };
 

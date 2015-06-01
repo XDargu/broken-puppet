@@ -241,6 +241,84 @@ void TW_CALL GetParticleSystemShape(void *value, void *clientData)
 	*static_cast<TParticleEmitterShape *>(value) = static_cast<TParticleSystem *>(clientData)->emitter_generation->shape;
 }
 
+void TW_CALL CallbackRemoveUpdaterNoise(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_noise);
+	static_cast<TParticleSystem *>(clientData)->updater_noise = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackRemoveUpdaterColor(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_color);
+	static_cast<TParticleSystem *>(clientData)->updater_color = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackRemoveUpdaterSize(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_size);
+	static_cast<TParticleSystem *>(clientData)->updater_size = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackRemoveUpdaterGravity(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_gravity);
+	static_cast<TParticleSystem *>(clientData)->updater_gravity = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackRemoveUpdaterMovement(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_movement);
+	static_cast<TParticleSystem *>(clientData)->updater_movement = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackRemoveUpdaterLifetime(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_lifetime);
+	static_cast<TParticleSystem *>(clientData)->updater_lifetime = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterNoise(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_noise = new TParticleUpdaterNoise(XMVectorSet(-0.1, -0.1, -0.1, 0), XMVectorSet(0.1, 0.1, 0.1, 0));
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterColor(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_color = new TParticleUpdaterColor();
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterSize(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_size = new TParticleUpdaterSize(1, 2);
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterGravity(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_gravity = new TParticleUpdaterGravity(0.001f);
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterMovement(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_movement = new TParticleUpdaterMovement();
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterLifetime(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_lifetime = new TParticleUpdaterLifeTime();
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
 // ---------------------------- ADD COMPONENT CALLBACKS --------------------------
 void TW_CALL AddTransform(void *clientData) {
 
@@ -512,8 +590,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		// For each particle system
 		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {
 			
+			TwAddSeparator(bar, "", "group=PG");
 			aux = "ParticleSystem" + i;
-			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Particle system'");
+			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='PARTICLE SYSTEM'");
+			TwAddSeparator(bar, "", "group=PG");
 
 			typedef enum { SPHERE, SEMISPHERE, CONE, RING, BOX } EmitterShapes;
 
@@ -545,7 +625,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			//TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->limit, " group=PG label='Limit'");
 			TwAddVarCB(bar, aux.c_str(), TW_TYPE_INT32, SetParticleSystemLimit, GetParticleSystemLimit, &e_particle_group->particle_systems[i], " group=PG label='Limit' min=1");
 			aux = "PGEmitterRate" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->rate, " group=PG label='Rate' min=0.01 step=0.01");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->rate, " group=PG label='Rate' min=0.0001 step=0.01");
 			aux = "PGEmitterMinLT" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->min_life_time, " group=PG label='Min lifeTime' min=0.01 step=0.1");
 			aux = "PGEmitterMaxLT" + i;
@@ -559,6 +639,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {
 				aux = "Lifetime" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Lifetime'");
+				aux = "RemoveLifetime" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterLifetime, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_color != nullptr) {
@@ -568,6 +650,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->initial_color, " group=PG label='Initial Color'");
 				aux = "PGUpdaterColorFC" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->final_color, " group=PG label='Final Color'");
+				aux = "RemovePGUpdaterColor" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterColor, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_size != nullptr) {
@@ -577,6 +661,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->initial_size, " group=PG label='Initial Size' min=0.01 step=0.1");
 				aux = "PGUpdaterSizeFS" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->final_size, " group=PG label='Final Size' min=0.01 step=0.1");
+				aux = "RemovePGUpdaterSize" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterSize, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}			
 
 			if (e_particle_group->particle_systems[i].updater_movement != nullptr) {
@@ -584,6 +670,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Initial movement'");
 				aux = "PGUpdaterMovementSpeed" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed' min=0.01 step=0.1");
+				aux = "RemovePGUpdaterMovement" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_noise != nullptr) {
@@ -593,6 +681,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &e_particle_group->particle_systems[i].updater_noise->min_noise, " group=PG label='Min Speed' min=0.01 step=0.01");
 				aux = "PGUpdaterNoiseMaxNoise" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &e_particle_group->particle_systems[i].updater_noise->max_noise, " group=PG label='Max Speed' min=0.01 step=0.01");
+				aux = "RemovePGUpdaterNoise" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterNoise, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 			
 			if (e_particle_group->particle_systems[i].updater_gravity != nullptr) {
@@ -600,6 +690,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Gravity'");
 				aux = "PGUpdaterGravityForce" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_gravity->gravity, " group=PG label='Force' step=0.005");
+				aux = "RemovePGUpdaterGravity" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
 			// Renderer
@@ -610,9 +702,41 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGRendererAdditive" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
 
-			if (i < e_particle_group->particle_systems.size() - 1) {
-				TwAddSeparator(bar, "", "group=PG");
+			TwAddSeparator(bar, "", "group=PG");
+
+			if (e_particle_group->particle_systems[i].updater_lifetime == nullptr) {
+				aux = "AddPGLifetime" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterLifetime, &e_particle_group->particle_systems[i], "group=PG label='Add lifetime updater'");
 			}
+
+			if (e_particle_group->particle_systems[i].updater_color == nullptr) {
+				aux = "AddPGColor" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterColor, &e_particle_group->particle_systems[i], "group=PG label='Add color updater'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_size == nullptr) {
+				aux = "AddPGSize" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterSize, &e_particle_group->particle_systems[i], "group=PG label='Add size updater'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_movement == nullptr) {
+				aux = "AddPGMovement" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Add movement updater'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_noise == nullptr) {
+				aux = "AddPGNoise" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterNoise, &e_particle_group->particle_systems[i], "group=PG label='Add noise updater'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_gravity == nullptr) {
+				aux = "AddPGGravity" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Add gravity updater'");
+			}
+
+			/*if (i < e_particle_group->particle_systems.size() - 1) {
+				TwAddSeparator(bar, "", "group=PG");
+			}*/
 		}
 	}
 
