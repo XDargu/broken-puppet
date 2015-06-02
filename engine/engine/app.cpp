@@ -387,7 +387,8 @@ bool CApp::create() {
 	PxU32 indexAllocated[4];
 	ps.addParticle(4, positions, myVelocityBuffer, indexAllocated);*/
 	bool success = ps.createParticles(250);
-	ps.setParticlesNoGravity(true);
+	ps.setParticlesNoGravity(false);
+	ps.setParticlesFilterCollision();
 	return true;
 }
 

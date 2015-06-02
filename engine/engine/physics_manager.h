@@ -39,7 +39,7 @@ public:
 
 	void init(PxU32 numParticles);
 	bool createParticles(PxU32 numParticles);
-	void addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], PxU32 indexAllocated[]);
+	void addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32> indexAllocated);
 	void updateParticles();
 	void releaseParticles(PxU32 indicesToRelease);
 	void releaseAllParticles();
