@@ -1,4 +1,12 @@
 <particleGroups>
+	<particleGroup name="Default">
+	  <particleSystem>
+        <emitter type="box" size="0.15" limit="15" rate="0.1" fillInitial="true" minLifeTime="0.3" maxLifeTime="2"/>
+        <updater type="lifeTime"/>
+        <updater type="movement" speed="0.5"/>
+        <renderer texture="smoke" aditive="false"/>
+      </particleSystem>
+	</particleGroup>
     <particleGroup name="Fuego raro">
       <particleSystem>
         <emitter type="ring" size="0.3" limit="800" rate="0.0015" fillInitial="false" minLifeTime="2" maxLifeTime="4" burstTime="1" burstAmount="200"/>

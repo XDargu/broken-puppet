@@ -3,6 +3,24 @@
 #include "render\render_utils.h"
 #include "components\comp_transform.h"
 
+TParticleSystem::TParticleSystem() : updater_lifetime(nullptr)
+, updater_size(nullptr)
+, updater_color(nullptr)
+, updater_movement(nullptr)
+, updater_gravity(nullptr)
+, updater_noise(nullptr)
+
+, emitter_generation(nullptr)
+
+, renderer(nullptr)
+
+, h_transform(CHandle())
+
+, instanced_mesh(nullptr)
+, instances_data(nullptr)
+{	
+}
+
 void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	TCompTransform* m_transform = h_transform;
@@ -242,4 +260,27 @@ void TParticleSystem::changeLimit(int the_limit) {
 
 int TParticleSystem::getLimit() {
 	return emitter_generation->limit;
+}
+
+void TParticleSystem::loadDefaultPS() {
+
+	TCompTransform* m_transform = h_transform;
+
+	emitter_generation = new TParticleEmitterGeneration(
+		&particles, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0);
+	renderer = new TParticleRenderer(&particles, "smoke", false);
+
+	// Instancing
+	instanced_mesh = &mesh_textured_quad_xy_centered;
+
+	// This mesh has not been registered in the mesh manager
+	instances_data = new CMesh;
+	bool is_ok = instances_data->create(100, &particles
+		, 0, nullptr        // No indices
+		, CMesh::POINTS     // We are not using this
+		, &vdcl_particle_data    // Type of vertex
+		, true              // the buffer IS dynamic
+		);
+
+	particles.reserve(100);
 }

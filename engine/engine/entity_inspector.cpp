@@ -12,6 +12,7 @@
 #include "render\sharpen_step.h"
 #include "render\blur_step.h"
 #include "render\chromatic_aberration_step.h"
+#include "particles\particle_system_subtypes.h"
 
 using namespace physx;
 
@@ -220,6 +221,18 @@ void TW_CALL GetPlayerFSMTorsoState(void *value, void *clientData)
 
 
 // ---------------------------- PARTICLES CALLBACKS --------------------------
+
+void TW_CALL CallBackParticleSystemCreate(void *clientData) {
+	CEntity* e = CHandle(static_cast<TCompParticleGroup *>(clientData)).getOwner();
+	TCompTransform* m_trans = e->get<TCompTransform>();
+
+	TParticleSystem ps;
+	ps.h_transform = m_trans;
+	ps.loadDefaultPS();
+	static_cast<TCompParticleGroup *>(clientData)->particle_systems.push_back(ps);
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
 void TW_CALL SetParticleSystemLimit(const void *value, void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->changeLimit(*static_cast<const int *>(value));
@@ -585,7 +598,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (e_particle_group) {
 		TwAddVarRW(bar, "PGActive", TW_TYPE_BOOL8, &e_particle_group->active, " group=PG label='Active'");		
-		std::string aux = "";
+		std::string aux = "PGNewBtn";
+
+		TwAddButton(bar, aux.c_str(), CallBackParticleSystemCreate, e_particle_group, "group=PG label='Add particle system'");
 
 		// For each particle system
 		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {

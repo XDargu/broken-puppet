@@ -34,25 +34,8 @@ struct TParticleSystem {
 	CMesh* instances_data;      // The positions of each instance
 public:
 
-	TParticleSystem() : updater_lifetime(nullptr)
-		, updater_size(nullptr)
-		, updater_color(nullptr)
-		, updater_movement(nullptr)
-		, updater_gravity(nullptr)
-		, updater_noise(nullptr)
-
-		, emitter_generation(nullptr)
-
-		, renderer(nullptr)
-
-		, h_transform(CHandle())
-
-		, instanced_mesh(nullptr)
-		, instances_data(nullptr)
-
-	{
+	TParticleSystem();
 		
-	}
 
 	void destroy() {
 		SAFE_DELETE(updater_lifetime);
@@ -84,6 +67,8 @@ public:
 	void changeLimit(int the_limit);
 
 	int getLimit();
+
+	void loadDefaultPS();
 };
 
 #endif

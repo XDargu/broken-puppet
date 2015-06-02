@@ -192,6 +192,7 @@
     <ClInclude Include="components\all_components.h" />
     <ClInclude Include="components\comp_audio_listener.h" />
     <ClInclude Include="components\comp_audio_source.h" />
+    <ClInclude Include="components\comp_particle_editor.h" />
     <ClInclude Include="components\comp_sensor_tied.h" />
     <ClInclude Include="ai\moving_platform.h" />
     <ClInclude Include="components\comp_particle_group.h" />
@@ -370,6 +371,7 @@
     <ClCompile Include="components\comp_joint_hinge.cpp" />
     <ClCompile Include="components\comp_joint_prismatic.cpp" />
     <ClCompile Include="components\comp_needle.cpp" />
+    <ClCompile Include="components\comp_particle_editor.cpp" />
     <ClCompile Include="components\comp_platform_path.cpp" />
     <ClCompile Include="components\comp_player_controller.cpp" />
     <ClCompile Include="components\comp_player_pivot_controller.cpp" />

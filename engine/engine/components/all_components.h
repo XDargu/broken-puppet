@@ -77,5 +77,6 @@ using namespace DirectX;
 #include "comp_distance_text.h"
 #include "comp_audio_listener.h"
 #include "comp_audio_source.h"
+#include "comp_particle_editor.h"
 
 #endif

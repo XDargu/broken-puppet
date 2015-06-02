@@ -13,7 +13,7 @@
 	<viewerCameraController/>
 </entity>
 <entity>
-    <name name="fire_ps"/>
+    <name name="edited_ps"/>
     <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
     <aabb min="-1 -1 -1" max="1 10 1"/>
     <particleGroup>
@@ -35,5 +35,10 @@
       </particleSystem>
 
     </particleGroup>
+  </entity>
+  <entity>
+	<name name="ParticleEditor"/>
+	<transform position="0 0 0" rotation="0.16 0.14 -0.06 0.98"/>
+	<particleEditor/>
   </entity>
 </scene>

@@ -207,6 +207,7 @@ void createManagers() {
 	getObjManager<TCompShadows>()->init(8);
 
 	getObjManager<TCompParticleGroup>()->init(64);
+	getObjManager<TCompParticleEditor>()->init(1);
 
 
 	registerAllComponentMsgs();
@@ -259,6 +260,7 @@ void initManagers() {
 	getObjManager<TCompShadows>()->initHandlers();
 
 	getObjManager<TCompParticleGroup>()->initHandlers();
+	getObjManager<TCompParticleEditor>()->initHandlers();
 
 
 }
@@ -279,6 +281,12 @@ bool CApp::create() {
 	srand((unsigned int)time(NULL));
 	
 	createManagers();
+
+#ifdef _DEBUG
+	// Init AntTweakBar
+	TwInit(TW_DIRECT3D11, ::render.device);
+	TwWindowSize(xres, yres);
+#endif
 
 	bool is_ok = true;
 
@@ -310,9 +318,6 @@ bool CApp::create() {
 	logic_manager.init();
 
 #ifdef _DEBUG
-	// Init AntTweakBar
-	TwInit(TW_DIRECT3D11, ::render.device);
-	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
 	entity_inspector.inspectEntity(CHandle());
@@ -426,9 +431,8 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/escena_ms2.xml");
-		CEntity* e = entity_manager.getByName("fire_ps");
-
-		particle_groups_manager.addParticleGroupToEntity(e, "Humo");
+		//CEntity* e = entity_manager.getByName("fire_ps");
+		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -552,6 +556,7 @@ void CApp::update(float elapsed) {
 
 	// PARTICLES
 	getObjManager<TCompParticleGroup>()->update(elapsed);
+	getObjManager<TCompParticleEditor>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
