@@ -622,7 +622,7 @@ clearlistener()
 		local out_filename = out_path + "materials\\" + m.name + ".xml"
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
-		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" gloss=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name specular_name gloss_name emissive_name to:mfs
+		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" glossiness=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name specular_name gloss_name emissive_name to:mfs
 		print ("Exported material: " + (m.name as string))
 		close mfs
 	)
@@ -2194,6 +2194,13 @@ fn getPlatformPath obj = (
 	)
 	
 	/**********************************************************************************************
+	Returns a transform relative to a parent
+	***********************************************************************************************/
+	fn getRelativeTransform obj parent = (	
+		return (obj.transform * (inverse parent.transform))
+	)	
+	
+	/**********************************************************************************************
 	Export one object with the viewer
 	***********************************************************************************************/
 	fn exportViewer progress:undefined = (
@@ -2260,14 +2267,19 @@ fn getPlatformPath obj = (
 		)
 		
 		local firstObj = #()
-		for obj in $ do ( append firstObj obj )
-			
-		local t_ref = firstObj[1].position
+		for obj in $ do ( 
+			if (findItem mandatoryNames obj.name == 0) then (
+				append firstObj obj 
+			)
+		)
+		
+		
+		local t_ref = firstObj[1].transform
 		
 		-- Calls every function in the function arrays
 		for obj in firstObj do 
 		(
-			obj.position = obj.position - t_ref
+			obj.transform = (obj.transform * (inverse t_ref))
 			
 			-- Check if needs to be evaluate
 			if(validateEntity obj)then
@@ -2309,7 +2321,7 @@ fn getPlatformPath obj = (
 				progress.value = (100.0 / firstObj.count) * count
 			count +=1
 			
-			obj.position = obj.position + t_ref
+			obj.transform = (obj.transform * (t_ref))
 		)
 		for obj in logicObjs do 
 		(
