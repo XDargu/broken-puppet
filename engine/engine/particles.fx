@@ -10,7 +10,9 @@ struct VS_TEXTURED_OUTPUT
 {
   float4 Pos    : SV_POSITION;
   float2 UV     : TEXCOORD0;
-  float3 wPos : TEXCOORD1;
+  float3 wPos   : TEXCOORD1;
+  float2 ageLife: TEXCOORD2;
+  float3 color	: COLOR0;
 };
 
 //--------------------------------------------------------------------------------------
@@ -20,7 +22,10 @@ VS_TEXTURED_OUTPUT VS(
   float4 Pos : POSITION0              // Stream 0
 , float2 UV : TEXCOORD0
 , float3 InstancePos : POSITION1      // Stream 1
+, float3 InstanceDir : POSITION2      // Stream 1
+, float3 InstanceSpeed : POSITION3      // Stream 1
 , float3 InstanceAgeLifeSpanSize : TEXCOORD1
+, float3 Color : COLOR0
 /*, float  InstanceAge : TEXCOORD1    // Stream 1
 , float  InstanceLifespan : COLOR0    // Stream 1
 , float  InstanceSize : POSITION2    // Stream 1*/
@@ -28,25 +33,28 @@ VS_TEXTURED_OUTPUT VS(
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
   float3 wpos = InstancePos
-    + ( cameraWorldUp.xyz * Pos.y
-      + cameraWorldLeft.xyz * Pos.x
+	  + (cameraWorldUp.xyz * Pos.y * InstanceAgeLifeSpanSize.z
+	  + cameraWorldLeft.xyz * Pos.x * InstanceAgeLifeSpanSize.z
       );
   output.Pos = mul(float4( wpos, 1 ), ViewProjection);
   
   // Animate the UV's. Assuming 4x4 frames
-  float nmod16 = fmod(InstanceAgeLifeSpanSize.x* 32, 16.0);
+  float nmod16 = fmod(InstanceAgeLifeSpanSize.x * 32, 16.0);
   //float nmod16 = 1;
   int   idx = int(nmod16);
-  float coords_x = fmod(idx, 4);
+  float coords_x = 0;// fmod(idx, 4);
   float coords_y = int( idx / 4);
 
   output.UV.x = (coords_x + UV.x) / 4.0;
   output.UV.y = (coords_y + UV.y) / 4.0;
 
   output.wPos = wpos;
+  output.color = Color;
 
   if (InstanceAgeLifeSpanSize.z == -1)
 	  output.Pos.w = 0.0;
+  
+  output.ageLife = InstanceAgeLifeSpanSize.xy;
 
   return output;
 }
@@ -69,6 +77,17 @@ float4 PS(VS_TEXTURED_OUTPUT input
 
   float4 color = txDiffuse.Sample(samClampLinear, input.UV);
   color.a *= delta_z;
+
+  // 0.2 = % of life during the begining and the end of the particle with opacity fade in/out
+  float opacity_change = input.ageLife.y * 0.2;
+  float begining_opacity_modifier = saturate(input.ageLife.x / opacity_change);
+  float end_opacity_modifier = 1 - saturate((input.ageLife.x - opacity_change) / (input.ageLife.y - opacity_change));
+
+  color.a *= begining_opacity_modifier; // Begining of life opacity change
+  color.a *= end_opacity_modifier; // End of life opacity change
+
+  color.xyz *= input.color;
+  
   return color;
 }
 

@@ -46,7 +46,6 @@ void TCompParticleGroup::render() {
 }
 
 void TCompParticleGroup::renderDebug3D() const {
-	return;
 	for (auto& ps : particle_systems) {
 		ps.renderDebug3D();
 	}

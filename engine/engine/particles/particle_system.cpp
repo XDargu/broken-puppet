@@ -13,62 +13,113 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			updater_lifetime = new TParticleUpdaterLifeTime();
 		}
 		if (updater_type == "size") {
-			updater_size = new TParticleUpdaterSize();
+			float initial_size = atts.getFloat("initialSize", 1);
+			float final_size = atts.getFloat("finalSize", 1);
+			updater_size = new TParticleUpdaterSize(initial_size, final_size);
 		}
 		if (updater_type == "color") {
+			XMVECTOR initial_color = atts.getPoint("initialColor");
+			XMVECTOR final_color = atts.getPoint("finalColor");
 			updater_color = new TParticleUpdaterColor();
+			updater_color->initial_color = initial_color;
+			updater_color->final_color = final_color;
 		}
 		if (updater_type == "movement") {
 			updater_movement = new TParticleUpdaterMovement();
-			updater_movement->speed = atts.getPoint("speed");
+			updater_movement->speed = atts.getFloat("speed", 1);
+		}
+		if (updater_type == "gravity") {
+			float gravity = atts.getFloat("gravity", 1);
+			updater_gravity = new TParticleUpdaterGravity(gravity);
+		}
+		if (updater_type == "noise") {
+			XMVECTOR min_noise = atts.getPoint("minNoise");
+			XMVECTOR max_noise = atts.getPoint("maxNoise");
+			updater_noise = new TParticleUpdaterNoise(min_noise, max_noise);
 		}
 	}
 
 	if (elem == "emitter") {
+		XASSERT(emitter_generation == nullptr, "Emitter already declared, a particle system can't have two different emitters");
 		std::string emitter_type = atts.getString("type", "");
 
-		XMVECTOR position = m_transform->position;
+		float rate = atts.getFloat("rate", 0.1);
+		float min_life_time = atts.getFloat("minLifeTime", 5);
+		float max_life_time = atts.getFloat("maxLifeTime", 5);
+		bool fill_initial = atts.getBool("fillInitial", false);
+		int limit = atts.getInt("limit", 1000);
+		float burst_time = atts.getFloat("burstTime", 0);
+		int burst_amount = atts.getInt("burstAmount", 100);
+		particles.reserve(limit);
+		
+		// Instancing
+		instanced_mesh = &mesh_textured_quad_xy_centered;
+
+		// This mesh has not been registered in the mesh manager
+		instances_data = new CMesh;
+		bool is_ok = instances_data->create(limit, &particles
+			, 0, nullptr        // No indices
+			, CMesh::POINTS     // We are not using this
+			, &vdcl_particle_data    // Type of vertex
+			, true              // the buffer IS dynamic
+			);
 
 		if (emitter_type == "sphere") {
+			float radius = atts.getFloat("radius", 1);			
+			emitter_generation = new TParticleEmitterGenerationSphere(&particles, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "semiSphere") {
 			float radius = atts.getFloat("radius", 1);
-			float rate = atts.getFloat("rate", 0.1);
-			float min_life_time = atts.getFloat("minLifeTime", 5);
-			float max_life_time = atts.getFloat("maxLifeTime", 5);
-			bool fill_initial = atts.getBool("fillInitial", false);
-			int limit = atts.getInt("limit", 1000);
-			particles.reserve(limit);
-			emitter_generation = new TParticleEmitterGenerationSphere(&particles, position, rate, min_life_time, max_life_time, radius, fill_initial, limit);
+			emitter_generation = new TParticleEmitterGenerationSemiSphere(&particles, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "cone") {
+			float radius = atts.getFloat("radius", 1);
+			float angle = deg2rad(atts.getFloat("angle", 30));
+			emitter_generation = new TParticleEmitterGenerationCone(&particles, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "ring") {
+			float inner_radius = atts.getFloat("innerRadius", 0.5);
+			float outer_radius = atts.getFloat("outerRadius", 1);
+			emitter_generation = new TParticleEmitterGenerationRing(&particles, h_transform, rate, min_life_time, max_life_time, inner_radius, outer_radius, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "box") {
+			float size = atts.getFloat("size", 1);			
+			emitter_generation = new TParticleEmitterGenerationBox(&particles, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
+		}
+
+		if (emitter_type == "physx") {
+			float size = atts.getFloat("size", 1);
+			emitter_generation = new TParticleEmitterGenerationPhysX(&particles, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
 		}
 	}
 
 	if (elem == "renderer") {
-
+		std::string texture_name = atts.getString("texture", "unknown");
+		bool is_aditive = atts.getBool("aditive", true);
+		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive);
+		
 	}
-
-	// Instancing
-	instanced_mesh = &mesh_textured_quad_xy_centered;
-
-	// This mesh has not been registered in the mesh manager
-	instances_data = new CMesh;
-	bool is_ok = instances_data->create(emitter_generation->limit, &particles[0]
-	, 0, nullptr        // No indices
-	, CMesh::POINTS     // We are not using this
-	, &vdcl_particle_data    // Type of vertex
-	, true              // the buffer IS dynamic
-	);
 	
 }
 
 void TParticleSystem::init() {
-
+	if (particles.capacity() < emitter_generation->limit) {
+		particles.reserve(emitter_generation->limit - particles.capacity());
+	}
 }
 
 void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
-		TCompTransform* m_transform = h_transform;
 		emitter_generation->particles = &particles;
-		emitter_generation->position = m_transform->position;
 		emitter_generation->update(elapsed);
+	}
+
+	if (isKeyPressed('T')) {
+		changeLimit(100);
 	}
 
 	VParticles::iterator it = particles.begin();
@@ -77,9 +128,16 @@ void TParticleSystem::update(float elapsed) {
 	while (it != particles.end()) {
 
 		if (it->size != -1) {
+			// Update the position, no updater needed
+			it->position.x += it->speed.x;
+			it->position.y += it->speed.y;
+			it->position.z += it->speed.z;
 
 			if (updater_movement != nullptr) {
 				updater_movement->update(&(*it), elapsed);
+			}
+			if (updater_gravity != nullptr) {
+				updater_gravity->update(&(*it), elapsed);
 			}
 			if (updater_color != nullptr) {
 				updater_color->update(&(*it), elapsed);
@@ -90,7 +148,9 @@ void TParticleSystem::update(float elapsed) {
 			if (updater_size != nullptr) {
 				updater_size->update(&(*it), elapsed);
 			}
-
+			if (updater_noise != nullptr) {
+				updater_noise->update(&(*it), elapsed);
+			}
 			if (it->lifespan != 0 && it->age > it->lifespan) {
 				it = particles.erase(it);
 				delete_counter++;
@@ -128,9 +188,12 @@ void TParticleSystem::render() {
 	if (instances_data != nullptr) {
 		setWorldMatrix(XMMatrixIdentity());
 		CTraceScoped t0("instances");
-		render_techniques_manager.getByName("particles")->activate();
-		texture_manager.getByName("fire")->activate(0);
-		activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+		render_techniques_manager.getByName("particles")->activate();		
+		texture_manager.getByName(renderer->texture)->activate(0);
+		if (renderer->additive)
+			activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+		else
+			activateBlendConfig(BLEND_CFG_COMBINATIVE);
 		activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 		instanced_mesh->renderInstanced(*instances_data, particles.size());
 		activateZConfig(ZCFG_DEFAULT);
@@ -140,13 +203,44 @@ void TParticleSystem::render() {
 
 void TParticleSystem::renderDebug3D() const {
 	render_techniques_manager.getByName("basic")->activate();
-
+	return;
 	for (auto& particle : particles) {
 		XMVECTOR pos = XMLoadFloat3(&particle.position);
 		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
 		XMVECTOR scale = XMVectorSet(0.1, 0.1, 0.1, 0.1);
 		XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
 		setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
-		mesh_icosahedron.activateAndRender();
+		axis.activateAndRender();
 	}
+}
+
+void TParticleSystem::changeLimit(int the_limit) {
+	// Set the new limit
+	emitter_generation->limit = the_limit;
+
+	// Remove extra particles, if needed
+	int amount_to_erase = max(0, particles.size() - the_limit);
+
+	for (int i = 0; i < amount_to_erase; ++i) {
+		particles.pop_back();
+	}
+
+	// If the capacity is less than the new limit, reserve more memory
+	if (particles.capacity() < the_limit) {
+		particles.reserve(the_limit - particles.capacity());
+	}
+
+	// Change the buffer mesh
+	if (instances_data) {
+		instances_data->destroy();
+		delete instances_data;
+	}
+
+	instances_data = new CMesh;
+	bool is_ok = instances_data->create(the_limit, &particles
+		, 0, nullptr        // No indices
+		, CMesh::POINTS     // We are not using this
+		, &vdcl_particle_data    // Type of vertex
+		, true              // the buffer IS dynamic
+		);
 }

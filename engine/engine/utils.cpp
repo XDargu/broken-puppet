@@ -53,7 +53,7 @@ int fatal(const char* fmt, ...) {
 
 // -----------------------------------------
 void dbg(const char* fmt, ...) {
-	return;
+	//return;
 	va_list ap;
 	va_start(ap, fmt);
 	char buf[512];
@@ -79,7 +79,7 @@ void error(int line, char* file, char* method, char* msg, ...) {
 }
 
 void debug(int line, char* file, char* method, char* msg, ...) {
-	return;
+	//return;
 	va_list ap;
 	va_start(ap, msg);
 	char buf[512];
@@ -110,6 +110,25 @@ XMVECTOR getRandomVector3(float minXYZ, float maxXYZ) {
 		, 0
 		);
 }
+
+XMVECTOR getRandomVector3(float minX, float minY, float minZ, float maX, float maxY, float maxZ) {
+	return XMVectorSet(
+		getRandomNumber(minX, maX)
+		, getRandomNumber(minY, maxY)
+		, getRandomNumber(minZ, maxZ)
+		, 0
+		);
+}
+
+XMVECTOR getRandomVector3(XMFLOAT3 minXYZ, XMFLOAT3 maxXYZ) {
+	return XMVectorSet(
+		getRandomNumber(minXYZ.x, maxXYZ.x)
+		, getRandomNumber(minXYZ.y, maxXYZ.y)
+		, getRandomNumber(minXYZ.z, maxXYZ.z)
+		, 0
+		);
+}
+
 
 float getRandomNumber(float min, float max){
 	//srand(static_cast<float>(time(NULL)));

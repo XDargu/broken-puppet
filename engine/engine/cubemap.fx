@@ -100,5 +100,5 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	float fresnel = 1 - dot(N, -I);
 	fresnel = pow(fresnel, 4);
 
-	return float4(reflectedColor * (1-fresnel), 0);
+	return float4(reflectedColor, 0);
 }

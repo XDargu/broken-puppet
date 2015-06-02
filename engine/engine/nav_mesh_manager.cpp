@@ -8,6 +8,7 @@ CNavmesh* nav_mesh;
 CNavmesh 	nav_A;		// temporal 1
 CNavmesh 	nav_B;		// temporal 2
 std::mutex	generating_navmesh;	// mutex de control
+static CNavmeshQuery navMeshQuery(nullptr);
 
 CNav_mesh_manager& CNav_mesh_manager::get() {
 	return the_nav_mesh_manager;
@@ -149,7 +150,7 @@ void CNav_mesh_manager::render_tile(const dtMeshTile* tile){
 
 void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector<XMVECTOR> &straightPath){
 	if (keep_updating_navmesh){
-		CNavmeshQuery navMeshQuery(nav_mesh);
+		navMeshQuery.data=nav_mesh;
 		if (nav_mesh){
 			const dtNavMesh* navmesh = nav_mesh->m_navMesh;
 			if (navmesh){
@@ -188,7 +189,7 @@ void CNav_mesh_manager::clearNavMesh(){
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
-	static CNavmeshQuery navMeshQuery(nullptr);
+
 	navMeshQuery.data = nav_mesh;
 	if (keep_updating_navmesh){
 		if (nav_mesh){
@@ -214,7 +215,7 @@ XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius,
 
 bool CNav_mesh_manager::rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos){
 	bool hit = false;
-	CNavmeshQuery navMeshQuery(nav_mesh);
+	navMeshQuery.data=nav_mesh;
 	navMeshQuery.resetTools();
 	navMeshQuery.updatePos(pos, wanted_pos);
 	navMeshQuery.setTool(CNavmeshQuery::ETool::RAYCAST);

@@ -197,6 +197,7 @@
     <ClInclude Include="components\comp_particle_group.h" />
     <ClInclude Include="particles\particle.h" />
     <ClInclude Include="particles\particle_system.h" />
+    <ClInclude Include="particles\particle_system_subtypes.h" />
     <ClInclude Include="render\all_post_process_effects.h" />
     <ClInclude Include="render\blur_step.h" />
     <ClInclude Include="components\collider.h" />
@@ -324,6 +325,7 @@
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\underwater_step.h" />
     <ClInclude Include="render\vertex_declarations.h" />
+    <ClInclude Include="rope_manager.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
     <ClInclude Include="skeletons\skeleton_manager.h" />
     <ClInclude Include="ssb.h" />
@@ -440,6 +442,7 @@
     <ClCompile Include="options_parser.cpp" />
     <ClCompile Include="particles\particle.cpp" />
     <ClCompile Include="particles\particle_system.cpp" />
+    <ClCompile Include="particles\particle_system_subtypes.cpp" />
     <ClCompile Include="physics_manager.cpp" />
     <ClCompile Include="ragdoll_manager.cpp" />
     <ClCompile Include="recast\source\DebugDraw.cpp">
@@ -575,6 +578,7 @@
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\underwater_step.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
+    <ClCompile Include="rope_manager.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />
     <ClCompile Include="ssb.cpp" />
     <ClCompile Include="utils.cpp" />

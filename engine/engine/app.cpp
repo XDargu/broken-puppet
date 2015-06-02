@@ -336,11 +336,11 @@ bool CApp::create() {
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
 
-	cubemap = texture_manager.getByName("sunsetcube1024");
+	cubemap = texture_manager.getByName("OutputCube");
 	
 	cubemap->activate(3);
 
-	texture_manager.getByName("desertcube1024")->activate(8);
+	texture_manager.getByName("OutputCube")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
 	is_ok &= ssao.create("ssao", xres, yres, 1);
@@ -405,10 +405,8 @@ bool CApp::create() {
 		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
 		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
 	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
-	ps.addParticles(4, indices, positions, myVelocityBuffer);
-	bool success = ps.createParticles(4);
-
-
+	ps.addParticles(100, indices, positions, myVelocityBuffer);
+	bool success = ps.createParticles(100);
 
 	return true;
 }
@@ -577,6 +575,9 @@ void CApp::update(float elapsed) {
 	ctes_global.get()->world_time += elapsed;
 	
 	getObjManager<TCompTransform>()->update(elapsed);
+	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	getObjManager<TCompUnityCharacterController>()->update(elapsed);
+	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
 	getObjManager<TCompSkeletonLookAt>()->update(elapsed);
 	getObjManager<TCompSkeletonIK>()->update(elapsed);
@@ -586,11 +587,9 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
-	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
-	getObjManager<TCompUnityCharacterController>()->update(elapsed);
-	getObjManager<TCompCharacterController>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
@@ -894,6 +893,8 @@ void CApp::renderDebugEntities() {
 
 	CNav_mesh_manager::get().pathRender();
 
+
+
 	PxParticleReadData* rd = ps.ps->lockParticleReadData();
 	if (rd)
 	{
@@ -1033,6 +1034,9 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+
+	bool is_ok = true;
+
 	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
 	entity_manager.clear();
@@ -1049,6 +1053,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
+
+	is_ok &= renderUtilsCreate();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 
@@ -1082,7 +1088,7 @@ void CApp::loadScene(std::string scene_name) {
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
-	bool is_ok = renderUtilsCreate();
+	
 	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);

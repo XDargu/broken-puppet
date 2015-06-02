@@ -4,6 +4,7 @@
 #include "aifsmcontroller.h"
 #include "physics_manager.h"
 #include "handle\handle.h"
+#include "rope_manager.h"
 
 class FSMPlayerLegs;
 

@@ -195,7 +195,7 @@
 <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-6.15881 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-6.15881 1.74846e-007 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="PlayerPivot">
 <transform position="-6.15881 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -581,4 +581,67 @@
 </render>
 <aabb min="-0.593201 0.0 -5.04233" max="0.593201 0.0 5.04233"/>
 	</entity>
+  <!--<entity>
+    <name name="fire_ps"/>
+    <transform position="-6.15881 2 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
+    <aabb min="-1 -1 -1" max="1 10 1"/>
+    <particleGroup>
+      <particleSystem>
+        <emitter type="ring" size="0.3" limit="800" rate="0.0015" fillInitial="false" minLifeTime="2" maxLifeTime="4" burstTime="1" burstAmount="200"/>
+        <updater type="lifeTime"/>
+        <updater type="gravity" gravity="-0.01"/>
+        <updater type="noise" minNoise="-0.05 -0.05 -0.05" maxNoise="0.05 0.05 0.05"/>
+        <updater type="size" initialSize="0.1" finalSize="2"/>
+        <updater type="movement" speed="3.5"/>
+        <renderer texture="smoke" aditive="false"/>
+      </particleSystem>
+      <particleSystem>
+        <emitter type="cone" size="0.15" limit="15" rate="0.1" fillInitial="true" minLifeTime="0.3" maxLifeTime="2"/>
+        <updater type="lifeTime"/>
+        <updater type="movement" speed="0.5"/>
+        <updater type="size" initialSize="0.1" finalSize="1"/>
+        <renderer texture="fire"/>
+      </particleSystem>
+      
+    </particleGroup>
+  </entity>-->
+
+  <!--<entity>
+    <name name="dust_test"/>
+    <transform position="-6.15881 2 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
+    <aabb min="-1 -1 -1" max="1 10 1"/>
+    <particleGroup>
+      <particleSystem>
+        <emitter type="physx" size="6" limit="1000" rate="0.0005" fillInitial="true" minLifeTime="2" maxLifeTime="4" />
+        <updater type="lifeTime"/>
+        <updater type="noise" minNoise="-0.01 -0.01 -0.01" maxNoise="0.01 0.01 0.01"/>
+        <updater type="size" initialSize="0.02" finalSize="0.04"/>
+        <renderer texture="smoke" aditive="false"/>
+      </particleSystem>
+    </particleGroup>
+  </entity>-->
+
+  <!--<entity>
+    <name name="smoke_ps_test"/>
+    <transform position="-6.15881 0 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="Player"/>
+    <aabb min="-1 -1 -1" max="1 10 1"/>
+    <particleGroup>
+      <particleSystem>
+        <emitter type="sphere" radius="0.1" limit="90" rate="0.03" fillInitial="true" minLifeTime="1" maxLifeTime="2"/>
+        <updater type="lifeTime"/>
+        <updater type="size" initialSize="0.5" finalSize="1"/>
+        <updater type="movement" speed="0 0.001 0"/>
+        <renderer texture="fire" aditive="true"/>
+      </particleSystem>
+      <particleSystem>
+        <emitter type="sphere" radius="0.1" limit="150" rate="0.01" fillInitial="false" minLifeTime="2" maxLifeTime="4"/>
+        <updater type="lifeTime"/>
+        <updater type="size" initialSize="0.2" finalSize="2"/>
+        <updater type="movement" speed="0 0.001 0"/>
+        <updater type="color" initialColor="1 1 1" finalColor="0 0 0"/>
+        <renderer texture="smoke" aditive="false"/>
+      </particleSystem>
+    </particleGroup>
+  </entity>-->
+  
 </scene>

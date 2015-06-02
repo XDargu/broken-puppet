@@ -16,7 +16,6 @@ class CNav_mesh_manager
 {
 private:
 	//CNavmesh nav_mesh;
-	//dtNavMeshQuery navMeshQuery;
 	float* prue;
 	int num;
 	bool first;

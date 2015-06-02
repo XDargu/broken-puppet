@@ -73,14 +73,14 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				first_position = blockHit.position;
 				first_offset = first_actor->getGlobalPose().q.rotateInv(blockHit.position - first_actor->getGlobalPose().p);
 
-				unsigned int num_strings = getStringCount();
+				/*unsigned int num_strings = getStringCount();
 
 				// If there are more strings than the maximun available, remove the oldest one
 				if (num_strings >= max_num_string){
 					CHandle c_rope = strings.front();
 					strings.pop_front();
 					entity_manager.remove(c_rope.getOwner());
-				}
+				}*/
 
 				// Get the needle prefab
 				CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
@@ -170,7 +170,8 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				current_rope_entity = new_e;
 
 				// Add the string to the strings vector
-				strings.push_back(CHandle(new_e_r));
+				//strings.push_back(CHandle(new_e_r));
+				CRope_manager::get().addString(new_e_r);
 
 				entitycount++;
 
@@ -357,9 +358,10 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		camera_controller->offset = standard_camera_offset;
 
 		// Remove the rope
-		CHandle c_rope = strings.back();
+		/*CHandle c_rope = strings.back();
 		strings.pop_front();
-		CEntityManager::get().remove(c_rope.getOwner());
+		CEntityManager::get().remove(c_rope.getOwner());*/
+		CRope_manager::get().removeString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -379,9 +381,10 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	if (!current_rope_entity.isValid()) {
 
 		// Remove the current string
-		CHandle c_rope = strings.back();
-		strings.pop_back();
-		CEntityManager::get().remove(c_rope.getOwner());
+		//CHandle c_rope = strings.back();
+		//strings.pop_back();
+		//CEntityManager::get().remove(c_rope.getOwner());
+		CRope_manager::get().removeString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -420,9 +423,10 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
 		// Remove the current string
-		CHandle c_rope = strings.back();
+		/*CHandle c_rope = strings.back();
 		strings.pop_back();
-		CEntityManager::get().remove(c_rope.getOwner());
+		CEntityManager::get().remove(c_rope.getOwner());*/
+		CRope_manager::get().removeString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -460,7 +464,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	CEntityManager &entity_manager = CEntityManager::get();
 
 	//Calculate the current number of strings
-	unsigned int num_strings = getStringCount();
+	//unsigned int num_strings = getStringCount();
 
 	// Mimic the legs animation
 
@@ -468,17 +472,19 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Simple cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f  && num_strings > 0) {
-			CHandle c_rope = strings.back();
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f ){ //&& num_strings > 0) {
+			/*CHandle c_rope = strings.back();
 			strings.pop_back();
-			entity_manager.remove(c_rope.getOwner());
+			entity_manager.remove(c_rope.getOwner());*/
+			CRope_manager::get().removeString();
 		}
 	}
 
 	// Multiple cancel
 	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && num_strings > 0) {
-			strings.clear();
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
+			CRope_manager::get().clearStrings();
+			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
 				TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
@@ -486,7 +492,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 				if (rope) {
 					entity_manager.remove(CHandle(rope).getOwner());
 				}
-			}
+			}*/
 		}
 	}
 

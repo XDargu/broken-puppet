@@ -21,7 +21,7 @@
   </entity>
 
   <entity tag = "player" prefab="Player">
-    <transform position="2 1 -20" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="2 1 -4" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <ragdoll name="prota"/>
   </entity>
   <entity  prefab="PlayerPivot">
