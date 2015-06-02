@@ -156,14 +156,32 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	mJoint->setMotion(PxD6Axis::eSWING2, swing2_motion);
 	mJoint->setMotion(PxD6Axis::eTWIST, twist_motion);
 
+	float swing1_spring_val = atts.getFloat("swing1Spring", 0);
+	float swing2_spring_val = atts.getFloat("swing2Spring", 0);
+	float twist_spring_val = atts.getFloat("twistSpring", 0);
+
+	float swing1_damping_val = atts.getFloat("swing1Damping", 0);
+	float swing2_damping_val = atts.getFloat("swing2Damping", 0);
+	float twist_damping_val = atts.getFloat("twistDamping", 0);
+
+	PxSpring swing1_spring = PxSpring(swing1_spring_val, swing1_damping_val);
+	PxSpring swing2_spring = PxSpring(swing2_spring_val, swing2_damping_val);
+	PxSpring twist_spring = PxSpring(twist_spring_val, twist_damping_val);
+
 	// Primer valor: Swing 1 angle / 2, segundo valor: Swing 2 angle / 2
-	mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), -1));
+	if (swing1_spring_val == 0)
+		mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), -1));
+	else
+		mJoint->setSwingLimit(PxJointLimitCone(deg2rad(swing1Angle), deg2rad(swing2Angle), swing1_spring));
 	
 	// Twist limit
-	mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), -1));
+	if (twist_spring_val == 0)
+		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), -1));
+	else
+		mJoint->setTwistLimit(PxJointAngularLimitPair(deg2rad(-twistAngle), deg2rad(twistAngle), twist_spring));
 	
 	//mJoint->setMotion(PxD6Axis::eX, PxD6Motion::eLIMITED);
-	//mJoint->setDrive(PxD6Drive::eX, PxD6JointDrive(stiffness, damping, 10000, false));
+	//mJoint->setDrive(PxD6Drive::eX, PxD6JointDrive(stiffness, damping, 10000, false));	
 
 	// Set the axis to locked, limited or free  mode 1 = Locked, 2 = Limited, 3 = Free
 

@@ -117,8 +117,6 @@ TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
 
-CRenderInstances instances;
-
 CPhysicsParticleSystem ps;
 
 //---------------------------------------------------
@@ -239,6 +237,7 @@ void initManagers() {
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 	getObjManager<TCompSensorTied>()->initHandlers();
+	getObjManager<TCompViewerCameraController>()->initHandlers();
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();
@@ -282,16 +281,18 @@ bool CApp::create() {
 	
 	createManagers();
 
-	physics_manager.init();
 	bool is_ok = true;
-	// Boot LUA
 
+	rt_base = nullptr;
+	// Boot LUA
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/viewer.xml");
+	loadScene("data/scenes/my_file.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -307,7 +308,6 @@ bool CApp::create() {
 	XASSERT(is_ok, "Error creating debug meshes");
 
 	logic_manager.init();
-	render_manager.init();
 
 #ifdef _DEBUG
 	// Init AntTweakBar
@@ -335,26 +335,6 @@ bool CApp::create() {
 
 	// Timer test
 	logic_manager.setTimer("TestTimer", 10);
-
-	cubemap = texture_manager.getByName("OutputCube");
-	
-	cubemap->activate(3);
-
-	texture_manager.getByName("OutputCube")->activate(8);
-
-	is_ok &= sharpen.create("sharpen", xres, yres, 1);	
-	is_ok &= ssao.create("ssao", xres, yres, 1);
-	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
-	is_ok &= blur.create("blur", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 1);
-	is_ok &= underwater.create("underwater", xres, yres, 1);
-
-	water_level = -1000;
-	CEntity* water = entity_manager.getByName("water");
-	if (water) {
-		TCompTransform* water_t = water->get<TCompTransform>();
-		water_level = XMVectorGetY(water_t->position);
-	}
 
 	assert(is_ok);
 
@@ -389,7 +369,6 @@ bool CApp::create() {
 		PxStrideIterator<const PxVec3>(myVelocityBuffer);*/
 	//bool success=CPhysicsManager::get().createParticles();
 	//---------------------------------------------
-	instances.create(300, &mesh_textured_quad_xy_centered);
 
 
 	/*PxU32 myIndexBuffer[] = { 0, 1, 2, 3, 4, 5 };
@@ -477,15 +456,27 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}
 
-	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/milestone2.xml");
-	}*/
+	if (io.becomesReleased(CIOStatus::EXTRA)) {
+		loadScene("data/scenes/escena_ms2.xml");
+	}
+
+	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
+	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
+	if (io.becomesReleased(CIOStatus::NUM2)) { debug_map = 2; }
+	if (io.becomesReleased(CIOStatus::NUM3)) { debug_map = 3; }
+	if (io.becomesReleased(CIOStatus::NUM4)) { debug_map = 4; }
+	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
+	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		/*render_techniques_manager.reload("deferred_gbuffer");
+		renderWireframe = !renderWireframe;
+	}
+
+	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
-		render_techniques_manager.reload("deferred_resolve");*/
+		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("particles");
 		render_techniques_manager.reload("light_shaft");
 		/*render_techniques_manager.reload("chromatic_aberration");
@@ -605,7 +596,6 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompParticleGroup>()->update(elapsed);
 
 	logic_manager.update(elapsed);
-	instances.update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -663,7 +653,6 @@ void CApp::render() {
 	scope.end();
 
 	deferred.render(&camera, *rt_base);
-	instances.render();
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
 
 	texture_manager.getByName("noise")->activate(9);
@@ -690,7 +679,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, ssao.getOutput());
+	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
@@ -698,6 +687,11 @@ void CApp::render() {
 	TCompShadows* shadow = e_light->get<TCompShadows>();
 	
 	*/
+
+	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
+	
+#ifdef _DEBUG
+
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
@@ -705,7 +699,15 @@ void CApp::render() {
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	drawTexture2D(sz * 2, 0 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_specular"));
 	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));
-	
+
+	if (debug_map == 1) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo")); }
+	if (debug_map == 2) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals")); }
+	if (debug_map == 3) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_specular")); }
+	if (debug_map == 4) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_gloss")); }
+	if (debug_map == 5) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights")); }
+	if (debug_map == 6) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); }
+#endif
+
 	/*render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
 	activateCamera(camera, 1);*/
@@ -732,12 +734,33 @@ void CApp::render() {
 
 #ifdef _DEBUG
 	renderDebugEntities();
+
+	if (renderWireframe) {
+		debugTech.activate();
+		renderWireframeCurrent = true;
+		render_manager.renderAll(&camera, true);
+		renderWireframeCurrent = false;
+	}
+
+	std::string mode = "Render output";
+
+	if (debug_map == 1) { mode = "Albedo"; }
+	if (debug_map == 2) { mode = "Normal"; }
+	if (debug_map == 3) { mode = "Specular"; }
+	if (debug_map == 4) { mode = "Gloss"; }
+	if (debug_map == 5) { mode = "Lights"; }
+	if (debug_map == 6) { mode = "Depth"; }
+
+	font.print(xres / 2 - 30, 10, mode.c_str());
+
+	CTraceScoped t0("AntTweak");
 	TwDraw();
+	t0.end();
 #endif
 
-	int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
+	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
-	font.print(15, 15, life_text.c_str());
+	font.print(15, 15, life_text.c_str());*/
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
@@ -1050,6 +1073,9 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
+	/*physics_manager.gScene->release();*/	
+	physics_manager.loadCollisions();
+	physics_manager.init();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
@@ -1068,13 +1094,12 @@ void CApp::loadScene(std::string scene_name) {
 	renderGrid = false;
 	renderNames = false;
 	debug_mode = false;
+	renderWireframe = false;
+	renderWireframeCurrent = false;
+	debug_map = 0;
 
 	//physics_manager.init();
 
-	initManagers();
-
-
-	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
@@ -1103,13 +1128,34 @@ void CApp::loadScene(std::string scene_name) {
 #endif
 
 	activateInspectorMode(false);
+
+	initManagers();
+
 	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
-	logic_manager.onSceneLoad(name);
+	logic_manager.onSceneLoad(name);	
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();
 
 	h_player = entity_manager.getByName("Player");
+
+	texture_manager.getByName("desertcube1024")->activate(8);
+
+	is_ok &= sharpen.create("sharpen", xres, yres, 1);
+	is_ok &= ssao.create("ssao", xres, yres, 1);
+	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
+	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 1);
+	is_ok &= underwater.create("underwater", xres, yres, 1);
+
+	water_level = -1000;
+	CEntity* water = entity_manager.getByName("water");
+	if (water) {
+		TCompTransform* water_t = water->get<TCompTransform>();
+		water_level = XMVectorGetY(water_t->position);
+	}
+
+	render_manager.init();
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

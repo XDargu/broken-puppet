@@ -82,6 +82,8 @@ public:
 	void renderDebug3D() const;
 
 	void changeLimit(int the_limit);
+
+	int getLimit();
 };
 
 #endif

@@ -66,29 +66,29 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		if (emitter_type == "sphere") {
 			float radius = atts.getFloat("radius", 1);			
-			emitter_generation = new TParticleEmitterGenerationSphere(&particles, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
 		}
 
 		if (emitter_type == "semiSphere") {
 			float radius = atts.getFloat("radius", 1);
-			emitter_generation = new TParticleEmitterGenerationSemiSphere(&particles, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
 		}
 
 		if (emitter_type == "cone") {
 			float radius = atts.getFloat("radius", 1);
 			float angle = deg2rad(atts.getFloat("angle", 30));
-			emitter_generation = new TParticleEmitterGenerationCone(&particles, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount);
 		}
 
 		if (emitter_type == "ring") {
 			float inner_radius = atts.getFloat("innerRadius", 0.5);
 			float outer_radius = atts.getFloat("outerRadius", 1);
-			emitter_generation = new TParticleEmitterGenerationRing(&particles, h_transform, rate, min_life_time, max_life_time, inner_radius, outer_radius, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount);
 		}
 
 		if (emitter_type == "box") {
 			float size = atts.getFloat("size", 1);			
-			emitter_generation = new TParticleEmitterGenerationBox(&particles, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
 		}
 
 		if (emitter_type == "physx") {
@@ -243,4 +243,8 @@ void TParticleSystem::changeLimit(int the_limit) {
 		, &vdcl_particle_data    // Type of vertex
 		, true              // the buffer IS dynamic
 		);
+}
+
+int TParticleSystem::getLimit() {
+	return emitter_generation->limit;
 }

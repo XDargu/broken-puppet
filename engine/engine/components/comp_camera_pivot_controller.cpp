@@ -35,8 +35,9 @@ void TCompCameraPivotController::update(float elapsed) {
 	
 	XMVECTOR desired_pos = player_pivot_trans->position + player_pivot_trans->getLeft() * -offset.x + player_pivot_trans->getUp() * offset.y + player_pivot_trans->getFront() * -offset.z;
 
+	float y_diff = XMVectorGetY(player_pivot_trans->position) - XMVectorGetY(transform->position);
 	// Raycast camera
-	float camera_dist = V3DISTANCE(desired_pos, player_pivot_trans->position);
+	float camera_dist = V3DISTANCE(desired_pos, player_pivot_trans->position + XMVectorSet(0, y_diff, 0, 0));
 	float collision_dist = camera_dist;
 
 	physx::PxRaycastBuffer buf;
@@ -56,8 +57,10 @@ void TCompCameraPivotController::update(float elapsed) {
 
 	float distance_normalized = 1;
 
-	if (camera_dist != 0)
+	if (camera_dist != 0) {
 		distance_normalized = collision_dist / camera_dist;
+		distance_normalized -= 0.1f;
+	}
 	
 
 	XMVECTOR target_pos = XMVectorLerp(player_pivot_trans->position, desired_pos, distance_normalized);

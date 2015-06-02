@@ -6,8 +6,8 @@
 
 
 TCompParticleGroup::~TCompParticleGroup() {
-	for (auto& ps : particle_systems) {
-		ps.destroy();
+	for (int i = 0; i < particle_systems.size(); ++i) {
+		particle_systems[i].destroy();
 	}
 }
 

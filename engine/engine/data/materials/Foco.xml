@@ -1,1 +1,1 @@
-<std_material name="foco" diffuse="foco_diffuseemisi_motor" normal="foco_normal" emissive="foco_emisi"/>
+<std_material name="foco" diffuse="foco_diffuseemisi_motor" normal="foco_normal" specular="" gloss="" emissive="foco_emisi"/>

@@ -1,587 +1,845 @@
 <scene>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_02_1.0" />
-<transform position="0.0 -2.04648e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_02_2.0" />
-<transform position="4.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_02_3.0" />
-<transform position="-4.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_end_L_02_4.0" />
-<transform position="-8.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="1" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="2" mat="rodapie"/>
-</render>
-<aabb min="-2.0 0.0 -1.48932e-005" max="7.15258e-007 8.00026 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_end_L_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_5.0" />
-<transform position="-8.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_6.0" />
-<transform position="-4.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_7.0" />
-<transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_8.0" />
-<transform position="4.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_9.0" />
-<transform position="-8.0 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_10.0" />
-<transform position="-4.0 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_11.0" />
-<transform position="0.0 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_12.0" />
-<transform position="4.0 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_esqui_in_half_02_13.0" />
-<transform position="4.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_02" sub_mesh="0" mat="rodapie"/>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_02" sub_mesh="1" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_02" sub_mesh="2" mat="suelo_tileable"/>
-</render>
-<aabb min="-2.0 0.0 -2.00003" max="8.34465e-007 8.0 1.39475e-005"/>
-<colliderMesh path="dvn_arqui_suelo_esqui_in_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_02_14.0" />
-<transform position="4.0 0.0 0.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
-<draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_end_R_02_15.0" />
-<transform position="4.0 1.74846e-007 4.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_end_R_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_end_R_02" sub_mesh="1" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_pared_half_end_R_02" sub_mesh="2" mat="rodapie"/>
-</render>
-<aabb min="-2.0 0.0 -8.26528e-007" max="1.41464e-006 8.00026 4.00001"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_end_R_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_16.0" />
-<transform position="-8.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_17.0" />
-<transform position="-4.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_18.0" />
-<transform position="0.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_19.0" />
-<transform position="4.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_20.0" />
-<transform position="4.0 4.689e-007 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "player" prefab="Player">
-<transform position="-6.15881 1.74846e-007 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-	</entity>
-	<entity  prefab="PlayerPivot">
-<transform position="-6.15881 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-	</entity>
-	<entity  prefab="CameraPivot">
-<transform position="-7.0 2.0 3.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-	</entity>
-	<entity  prefab="PlayerCamera">
-<transform position="0.0 6.0 4.0"/>
-	</entity>
-	<entity  >
-<name name="ventana_26.0" />
-<transform position="5.97705 3.81539 5.59391" rotation="0.0 -0.707107 0.0 0.707107" scale="0.498455 0.498455 0.498455"/>
-<render>
-<draw mesh="ventana" sub_mesh="0" mat="ventana"/>
-</render>
-<aabb min="-3.72505 -3.30934 -0.323786" max="3.72505 3.30934 0.323786"/>
-	</entity>
-	<entity  >
-<name name="light_shaft_27.0" />
-<transform position="2.39863 -1.84007 5.54715" rotation="-0.240571 -0.66813 -0.24327 0.660718" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="light_shaft" sub_mesh="0" mat="light_shaft"/>
-</render>
-<aabb min="-1.67781 -0.0329556 0.0698507" max="1.64377 10.8274 1.79633"/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_28.0" />
-<transform position="4.0 5.24537e-007 12.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_29.0" />
-<transform position="4.0 6.99382e-007 16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_30.0" />
-<transform position="0.0 5.24537e-007 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_31.0" />
-<transform position="4.0 5.24537e-007 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_32.0" />
-<transform position="4.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_33.0" />
-<transform position="-4.0 5.24537e-007 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_34.0" />
-<transform position="-8.0 5.24537e-007 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_35.0" />
-<transform position="-8.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_36.0" />
-<transform position="-4.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity  >
-<name name="ventana_37.0" />
-<transform position="5.97705 3.81539 12.0025" rotation="0.0 -0.707107 0.0 0.707107" scale="0.498455 0.498455 0.498455"/>
-<render>
-<draw mesh="ventana" sub_mesh="0" mat="ventana"/>
-</render>
-<aabb min="-3.72505 -3.30934 -0.323786" max="3.72505 3.30934 0.323786"/>
-	</entity>
-	<entity  >
-<name name="light_shaft2_38.0" />
-<transform position="2.00597 -2.22232 11.9778" rotation="-0.240571 -0.66813 -0.24327 0.660718" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="light_shaft2" sub_mesh="0" mat="light_shaft"/>
-</render>
-<aabb min="-2.40141 -0.463149 -0.28331" max="2.42328 9.72549 3.89578"/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_39.0" />
-<transform position="-2.0 -1.45043e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_tileable"/>
-</render>
-<aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_40.0" />
-<transform position="4.0 0.0 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_41.0" />
-<transform position="4.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_26g_doble_01_42.0" />
-<transform position="-12.0 0.0 4.0" rotation="0.0 1.0 0.0 5.52734e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -4.0" max="2.0 4.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_26g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_doble_01_43.0" />
-<transform position="-12.0 0.0 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -4.0" max="2.0 4.0 4.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity  >
-<name name="foco_colgar_44.0" />
-<transform position="-7.27441 7.14893 -4.50317" rotation="0.262109 0.0 0.0 0.965038" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="foco_colgar" sub_mesh="0" mat="foco"/>
-</render>
-<aabb min="-0.557726 -0.62942 -0.721923" max="0.557727 0.62942 0.72192"/>
-	</entity>
-	<entity  >
-<name name="light_shaft_foco_inner_45.0" />
-<transform position="-7.31748 2.96796 2.35582" rotation="-0.485172 0.15957 -0.0946519 0.85451" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="light_shaft_foco_inner" sub_mesh="0" mat="light_shaft"/>
-</render>
-<aabb min="-2.46532 -1.48663e-007 -2.42786" max="2.46532 7.57146 2.42786"/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_46.0" />
-<transform position="0.0 6.39778e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity  >
-<name name="plataforma_madera_47.0" />
-<transform position="-2.0 1.47913 18.0" rotation="-0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="plataforma_madera" sub_mesh="0" mat="tablones"/>
-</render>
-<aabb min="-3.05626 0.03756 -2.82433" max="3.05625 0.098333 2.82433"/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_esqui_in_half_01_48.0" />
-<transform position="4.0 6.99382e-007 16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="1" mat="suelo_tileable"/>
-</render>
-<aabb min="-2.0 0.0 -2.0" max="0.0 8.0 0.0"/>
-<colliderMesh path="dvn_arqui_suelo_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_49.0" />
-<transform position="0.0 6.99382e-007 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_50.0" />
-<transform position="-8.0 6.99382e-007 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_end_L_02_51.0" />
-<transform position="-12.0 6.99382e-007 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="1" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="2" mat="rodapie"/>
-</render>
-<aabb min="-2.0 0.0 -1.48932e-005" max="7.15258e-007 8.00026 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_end_L_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_esqui_in_half_end_R_02_52.0" />
-<transform position="-12.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_end_R_02" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_end_R_02" sub_mesh="1" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_end_R_02" sub_mesh="2" mat="rodapie"/>
-</render>
-<aabb min="-2.0 -5.26563e-007 -1.39876e-006" max="1.40572e-005 8.0 2.0"/>
-<colliderMesh path="dvn_arqui_suelo_esqui_in_half_end_R_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_53.0" />
-<transform position="-12.0 5.24537e-007 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_54.0" />
-<transform position="-12.0 3.49691e-007 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_55.0" />
-<transform position="-12.0 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_56.0" />
-<transform position="-12.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_pared_half_01_57.0" />
-<transform position="-12.0 -1.74846e-007 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
-<draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
-</render>
-<aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
-<colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_esqui_in_half_01_58.0" />
-<transform position="-12.0 -1.74846e-007 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="1" mat="suelo_tileable"/>
-</render>
-<aabb min="-2.0 0.0 -2.0" max="0.0 8.0 0.0"/>
-<colliderMesh path="dvn_arqui_suelo_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_suelo_half_01_59.0" />
-<transform position="-4.76837e-007 8.74228e-007 20.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
-</render>
-<aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
-<colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity  >
-<name name="plataforma_madera_60.0" />
-<transform position="-2.0 7.89124 18.0" rotation="-0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="plataforma_madera" sub_mesh="0" mat="tablones"/>
-</render>
-<aabb min="-3.05626 0.03756 -2.82433" max="3.05625 0.098333 2.82433"/>
-	</entity>
-	<entity  >
-<name name="light_shafts_madera_61.0" />
-<transform position="-2.00566 4.67615 16.0066" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="light_shafts_madera" sub_mesh="0" mat="light_shaft"/>
-<draw mesh="light_shafts_madera" sub_mesh="1" mat="light_shaft"/>
-<draw mesh="light_shafts_madera" sub_mesh="2" mat="light_shaft"/>
-<draw mesh="light_shafts_madera" sub_mesh="3" mat="light_shaft"/>
-</render>
-<aabb min="-5.23632 -5.10944 -0.994793" max="5.27511 1.98335 4.78621"/>
-	</entity>
-	<entity  >
-<name name="ventana_62.0" />
-<transform position="-2.09516 4.58865 18.2124" rotation="0.0 1.0 0.0 1.83185e-006" scale="2.89809 0.824192 0.498455"/>
-<render>
-<draw mesh="ventana" sub_mesh="0" mat="ventana"/>
-</render>
-<aabb min="-3.72505 -3.30934 -0.323787" max="3.72505 3.30934 0.323787"/>
-	</entity>
-	<entity  >
-<name name="Omni001_63.0" />
-<transform position="5.01403 3.15531 12.0351" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<pointLight radius="5.6" intensity="1.0" color="0.713726 0.34902 0.0431373 1"/>
-	</entity>
-	<entity  >
-<name name="Omni002_64.0" />
-<transform position="5.01403 3.15531 5.60249" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<pointLight radius="5.6" intensity="1.0" color="0.713726 0.34902 0.0431373 1"/>
-	</entity>
-	<entity  >
-<name name="Omni003_65.0" />
-<transform position="-2.15264 4.5347 17.137" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<pointLight radius="7.952" intensity="1.0" color="0.713726 0.34902 0.0431373 1"/>
-	</entity>
-	<entity  >
-<name name="FDirect001_66.0" />
-<transform position="-7.17616 7.20682 -4.76241" rotation="-0.488813 0.0 0.0 0.872389" scale="1.0 1.0 1.0"/>
-<shadows intensity="1.0" color="0.713726 0.34902 0.0431373 1" correction="true"/>
-<camera fov="20.0" znear="1" zfar="50"/>
-	</entity>
-	<entity  >
-<name name="light_ray_67.0" />
-<transform position="-7.92145 2.08648 17.002" rotation="0.77685 0.0 0.0 0.629686" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="light_ray" sub_mesh="0" mat="light_shaft2"/>
-</render>
-<aabb min="-0.593201 0.0 -5.04233" max="0.593201 0.0 5.04233"/>
-	</entity>
-  <!--<entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_02_1.0" />
+    <transform position="0.0 -2.04648e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_02_2.0" />
+    <transform position="4.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_02_3.0" />
+    <transform position="-4.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_end_L_02_4.0" />
+    <transform position="-8.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="1" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="2" mat="rodapie"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.48932e-005" max="7.15258e-007 8.00026 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_end_L_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_5.0" />
+    <transform position="-8.0 0.0 0.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_6.0" />
+    <transform position="-4.0 0.0 0.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_7.0" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_8.0" />
+    <transform position="4.0 0.0 0.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_9.0" />
+    <transform position="-8.0 1.74846e-007 4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_esqui_in_half_02_10.0" />
+    <transform position="4.0 -1.74846e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_02" sub_mesh="0" mat="rodapie"/>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_02" sub_mesh="1" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_02" sub_mesh="2" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-2.0 0.0 -2.00003" max="8.34465e-007 8.0 1.39475e-005"/>
+    <colliderMesh path="dvn_arqui_suelo_esqui_in_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_02_11.0" />
+    <transform position="4.0 0.0 0.0" rotation="0.0 1.0 0.0 9.97386e-007" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="1" mat="rodapie"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_02" sub_mesh="2" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_end_R_02_12.0" />
+    <transform position="4.0 1.74846e-007 4.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_R_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_R_02" sub_mesh="1" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_R_02" sub_mesh="2" mat="rodapie"/>
+    </render>
+    <aabb min="-2.0 0.0 -8.26528e-007" max="1.41464e-006 8.00026 4.00001"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_end_R_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_13.0" />
+    <transform position="-8.0 3.49691e-007 8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_14.0" />
+    <transform position="4.0 4.689e-007 8.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "player" prefab="Player">
+    <transform position="-6.15881 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="PlayerPivot">
+    <transform position="-6.15881 1.74846e-007 4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="CameraPivot">
+    <transform position="-7.0 2.0 3.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="PlayerCamera">
+    <transform position="0.0 6.0 4.0"/>
+  </entity>
+  <entity  >
+    <name name="ventana_20.0" />
+    <transform position="5.97705 3.81539 5.59391" rotation="0.0 -0.707107 0.0 0.707107" scale="0.498455 0.498455 0.498455"/>
+    <render>
+      <draw mesh="ventana" sub_mesh="0" mat="ventana"/>
+    </render>
+    <aabb min="-3.72505 -3.30934 -0.323786" max="3.72505 3.30934 0.323786"/>
+  </entity>
+  <entity  >
+    <name name="light_shaft_21.0" />
+    <transform position="2.39863 -1.84007 5.54715" rotation="-0.240571 -0.66813 -0.24327 0.660717" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="light_shaft" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-1.67781 -0.0329556 0.0698507" max="1.64377 7.79479 1.79633"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_22.0" />
+    <transform position="4.0 5.24537e-007 12.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_23.0" />
+    <transform position="4.0 6.99382e-007 16.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_24.0" />
+    <transform position="4.0 6.99382e-007 16.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_25.0" />
+    <transform position="-8.0 5.24537e-007 12.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_26.0" />
+    <transform position="-8.0 6.99382e-007 16.0" rotation="0.0 -1.27952e-006 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_27.0" />
+    <transform position="-4.0 6.99382e-007 16.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="ventana_28.0" />
+    <transform position="5.97705 3.81539 12.0025" rotation="0.0 -0.707107 0.0 0.707107" scale="0.498455 0.498455 0.498455"/>
+    <render>
+      <draw mesh="ventana" sub_mesh="0" mat="ventana"/>
+    </render>
+    <aabb min="-3.72505 -3.30934 -0.323786" max="3.72505 3.30934 0.323786"/>
+  </entity>
+  <entity  >
+    <name name="light_shaft2_29.0" />
+    <transform position="2.00597 -2.22232 11.9778" rotation="-0.240571 -0.66813 -0.24327 0.660717" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="light_shaft2" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-2.40141 -0.463149 -0.28331" max="2.42328 8.20788 3.89578"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_rampa_rampa_14g_doble_01_30.0" />
+    <transform position="-2.0 -1.45043e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
+      <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
+    <colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_rampa_bloque_2m_simple_01_31.0" />
+    <transform position="4.0 0.0 -4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
+    <colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_rampa_bloque_2m_simple_01_32.0" />
+    <transform position="4.0 0.0 0.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
+    <colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_rampa_rampa_26g_doble_01_33.0" />
+    <transform position="-12.0 0.0 4.0" rotation="0.0 1.0 0.0 9.81887e-006" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_rampa_rampa_26g_doble_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -4.0" max="2.0 4.0 4.0"/>
+    <colliderMesh path="dvn_rampa_rampa_26g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_rampa_bloque_4m_doble_01_34.0" />
+    <transform position="-12.0 0.0 12.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_rampa_bloque_4m_doble_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -4.0" max="2.0 4.0 4.0"/>
+    <colliderMesh path="dvn_rampa_bloque_4m_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="foco_colgar_35.0" />
+    <transform position="-7.27441 7.14893 -4.50317" rotation="0.262109 0.0 0.0 0.965038" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="foco_colgar" sub_mesh="0" mat="foco"/>
+    </render>
+    <aabb min="-0.557726 -0.62942 -0.721923" max="0.557727 0.62942 0.72192"/>
+  </entity>
+  <entity  >
+    <name name="light_shaft_foco_inner_36.0" />
+    <transform position="-7.31748 2.96796 2.35582" rotation="-0.485172 0.15957 -0.094652 0.85451" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="light_shaft_foco_inner" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-2.46532 -1.48663e-007 -2.42786" max="2.46532 7.57146 2.42786"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_37.0" />
+    <transform position="0.0 6.39778e-007 16.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="plataforma_madera_38.0" />
+    <transform position="-2.0 1.47913 18.0" rotation="-0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="plataforma_madera" sub_mesh="0" mat="tablones"/>
+    </render>
+    <aabb min="-3.05626 0.03756 -2.82433" max="3.05625 0.098333 2.82433"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_esqui_in_half_01_39.0" />
+    <transform position="4.0 6.99382e-007 16.0" rotation="0.0 1.0 0.0 -1.94707e-007" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="0" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="1" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-2.0 0.0 -2.0" max="0.0 8.0 0.0"/>
+    <colliderMesh path="dvn_arqui_suelo_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_40.0" />
+    <transform position="0.0 6.99382e-007 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_41.0" />
+    <transform position="-8.0 6.99382e-007 16.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_end_L_02_42.0" />
+    <transform position="-12.0 6.99382e-007 16.0" rotation="0.0 0.707106 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="1" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_end_L_02" sub_mesh="2" mat="rodapie"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.48932e-005" max="7.15258e-007 8.00026 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_end_L_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_esqui_in_half_end_R_02_43.0" />
+    <transform position="-12.0 6.99382e-007 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_end_R_02" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_end_R_02" sub_mesh="1" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_end_R_02" sub_mesh="2" mat="rodapie"/>
+    </render>
+    <aabb min="-2.0 -5.26563e-007 -1.39876e-006" max="1.40572e-005 8.0 2.0"/>
+    <colliderMesh path="dvn_arqui_suelo_esqui_in_half_end_R_02" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_44.0" />
+    <transform position="-12.0 5.24537e-007 12.0" rotation="0.0 -1.27952e-006 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_45.0" />
+    <transform position="-12.0 3.49691e-007 8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_46.0" />
+    <transform position="-12.0 1.74846e-007 4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_47.0" />
+    <transform position="-12.0 0.0 0.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_pared_half_01_48.0" />
+    <transform position="-12.0 -1.74846e-007 -4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_suelo_pared_half_01" sub_mesh="1" mat="pared"/>
+    </render>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.0"/>
+    <colliderMesh path="dvn_arqui_suelo_pared_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_esqui_in_half_01_49.0" />
+    <transform position="-12.0 -1.74846e-007 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="0" mat="pared"/>
+      <draw mesh="dvn_arqui_suelo_esqui_in_half_01" sub_mesh="1" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-2.0 0.0 -2.0" max="0.0 8.0 0.0"/>
+    <colliderMesh path="dvn_arqui_suelo_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_suelo_suelo_half_01_50.0" />
+    <transform position="-4.76837e-007 8.74228e-007 20.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo_tileable"/>
+    </render>
+    <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
+    <colliderMesh path="dvn_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="plataforma_madera_51.0" />
+    <transform position="-2.0 7.89124 18.0" rotation="-0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="plataforma_madera" sub_mesh="0" mat="tablones"/>
+    </render>
+    <aabb min="-3.05626 0.03756 -2.82433" max="3.05625 0.098333 2.82433"/>
+  </entity>
+  <entity  >
+    <name name="light_shafts_madera_52.0" />
+    <transform position="-2.00566 4.67615 16.0066" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="light_shafts_madera" sub_mesh="0" mat="light_shaft"/>
+      <draw mesh="light_shafts_madera" sub_mesh="1" mat="light_shaft"/>
+      <draw mesh="light_shafts_madera" sub_mesh="2" mat="light_shaft"/>
+      <draw mesh="light_shafts_madera" sub_mesh="3" mat="light_shaft"/>
+    </render>
+    <aabb min="-5.23632 -5.10944 -0.994793" max="5.27511 1.98335 4.78621"/>
+  </entity>
+  <entity  >
+    <name name="ventana_53.0" />
+    <transform position="-2.09516 4.58865 18.2124" rotation="0.0 1.0 0.0 4.09683e-006" scale="2.89809 0.824192 0.498455"/>
+    <render>
+      <draw mesh="ventana" sub_mesh="0" mat="ventana"/>
+    </render>
+    <aabb min="-3.72505 -3.30934 -0.323787" max="3.72505 3.30934 0.323787"/>
+  </entity>
+  <entity  >
+    <name name="Omni001_54.0" />
+    <transform position="5.01404 3.15531 12.0351" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="5.6" intensity="1.0" color="0.713726 0.34902 0.0431373 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni002_55.0" />
+    <transform position="5.01404 3.15531 5.60249" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="5.6" intensity="1.0" color="0.713726 0.34902 0.0431373 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni003_56.0" />
+    <transform position="-2.15264 4.5347 17.137" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="7.952" intensity="1.0" color="0.713726 0.34902 0.0431373 1"/>
+  </entity>
+  <entity  >
+    <name name="light_ray_57.0" />
+    <transform position="-7.92145 2.08648 17.002" rotation="0.77685 0.0 0.0 0.629686" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="light_ray" sub_mesh="0" mat="light_shaft2"/>
+    </render>
+    <aabb min="-0.593201 0.0 -5.04233" max="0.593201 0.0 5.04233"/>
+  </entity>
+  <entity  >
+    <name name="Fspot001_58.0" />
+    <transform position="-7.2869 7.28764 -4.94376" rotation="-0.496767 1.60656e-007 0.0 0.867884" scale="1.0 1.0 1.0"/>
+    <shadows intensity="1.0" color="0.713726 0.34902 0.0431373 1" correction="true"/>
+    <camera fov="31.5" znear="2.07662" zfar="50" width="30" height="30" />
+  </entity>
+  <entity  >
+    <name name="dvn_arco_pilar_01_59.0" />
+    <transform position="-2.0 1.72861e-007 6.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 0.0 -0.225" max="0.225 8.0 0.225"/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_pilar_01_60.0" />
+    <transform position="-6.0 0.0 6.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 0.0 -0.225" max="0.225 8.0 0.225"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_61.0" />
+    <transform position="0.0 3.04988e-007 8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_62.0" />
+    <transform position="-4.0 3.49691e-007 8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_63.0" />
+    <transform position="0.0 1.74846e-007 4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_64.0" />
+    <transform position="-4.0 1.74846e-007 4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_65.0" />
+    <transform position="-4.0 5.24537e-007 12.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_66.0" />
+    <transform position="0.0 5.24537e-007 12.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_67.0" />
+    <transform position="4.0 5.24537e-007 12.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_68.0" />
+    <transform position="4.0 3.49691e-007 8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arqui_ambos_ambos_half_01_69.0" />
+    <transform position="4.0 1.74846e-007 4.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
+      <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="1" mat="techo"/>
+    </render>
+    <aabb min="-4.00001 -9.18706e-006 -4.00001" max="2.12034e-005 8.00001 1.64509e-005"/>
+    <colliderMesh path="dvn_arqui_ambos_ambos_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_arco_medio_01_70.0" />
+    <transform position="-6.0 2.62268e-007 6.0" rotation="0.0 0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.99999"/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_arco_medio_01_71.0" />
+    <transform position="-2.0 2.62268e-007 6.0" rotation="0.0 -0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.99999"/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_viga_01_72.0" />
+    <transform position="4.0 4.56915e-007 6.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225001 7.55 6.06477e-006" max="0.225 8.0 3.99996"/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_arco_medio_01_73.0" />
+    <transform position="-2.0 2.62268e-007 6.0" rotation="0.0 0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.99999"/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_pilar_01_74.0" />
+    <transform position="5.775 2.62268e-007 6.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 0.0 -0.225" max="0.225 8.0 0.225"/>
+  </entity>
+  <entity  >
+    <name name="dvn_arco_arco_corto_01_75.0" />
+    <transform position="5.775 2.62268e-007 6.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_arco_corto_01" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.77497"/>
+  </entity>
+
+  <entity  >
+    <name name="dvn_arco_viga_01_77.0" />
+    <transform position="2.0 -0.45 6.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225001 7.55 6.06477e-006" max="0.225 8.0 3.99996"/>
+  </entity>
+  <entity tag = "actor" >
+    <name name="liana_test_78.0" />
+    <transform position="2.08411 4.57869 7.69519" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="liana_test" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.025 -0.5 -0.025" max="0.025 0.5 0.025"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.025" boxY="0.5" boxZ="0.025"/>
+    <rigidbody density="40000.0"  />
+  </entity>
+  <entity tag = "actor" >
+    <name name="liana_test2_79.0" />
+    <transform position="2.08411 5.58455 7.69519" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="liana_test" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.025 -0.5 -0.025" max="0.025 0.5 0.025"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.025" boxY="0.5" boxZ="0.025"/>
+    <rigidbody density="40000.0"  />
+    <jointD6 actor1 = "liana_test2_79.0" actor2 = "liana_test_78.0"  jointPosition="2.08411 5.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+  </entity>
+  <entity tag = "actor" >
+    <name name="liana_test3_81.0" />
+    <transform position="2.08411 6.59895 7.69519" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="liana_test" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.025 -0.5 -0.025" max="0.025 0.5 0.025"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.025" boxY="0.5" boxZ="0.025"/>
+    <rigidbody density="40000.0"  />
+    <jointD6 actor1 = "liana_test3_81.0" actor2 = "liana_test2_79.0"  jointPosition="2.08411 6.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+  </entity>
+
+  <entity tag = "actor" >
+    <name name="liana_test3_82.0" />
+    <transform position="2.08411 3.59895 7.69519" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="liana_test" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.025 -0.5 -0.025" max="0.025 0.5 0.025"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.025" boxY="0.5" boxZ="0.025"/>
+    <rigidbody density="40000.0"  />
+    <jointD6 actor1 = "liana_test3_82.0" actor2 = "liana_test_78.0"  jointPosition="2.08411 4.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+  </entity>
+
+  <entity tag = "actor" >
+    <name name="liana_test3_83.0" />
+    <transform position="2.08411 2.59895 7.69519" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="liana_test" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.025 -0.5 -0.025" max="0.025 0.5 0.025"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.025" boxY="0.5" boxZ="0.025"/>
+    <rigidbody density="40000.0"  />
+    <jointD6 actor1 = "liana_test3_83.0" actor2 = "liana_test3_82.0"  jointPosition="2.08411 3.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+  </entity>
+
+  <entity tag = "actor" >
+    <name name="liana_test3_84.0" />
+    <transform position="2.08411 1.59895 7.69519" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="liana_test" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="liana_test" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.025 -0.5 -0.025" max="0.025 0.5 0.025"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.025" boxY="0.5" boxZ="0.025"/>
+    <rigidbody density="40000.0"  />
+    <jointD6 actor1 = "liana_test3_83.0" actor2 = "liana_test3_84.0"  jointPosition="2.08411 2.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+  </entity>
+
+  <entity tag = "level" collisionTag = "Level">
+    <name name="dvn_arco_viga_01_76.0" />
+    <transform position="2.0 -0.45 10.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.225001 7.55 6.06477e-006" max="0.225 8.0 3.99996"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.225" boxY="0.224999" boxZ="1.99998"/>
+    <staticbody/>
+    <jointD6 actor1 = "liana_test3_81.0" actor2 = "dvn_arco_viga_01_76.0"  jointPosition="2.08411 7.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+  </entity>
+
+  <entity>
     <name name="fire_ps"/>
     <transform position="-6.15881 2 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
     <aabb min="-1 -1 -1" max="1 10 1"/>
@@ -602,24 +860,24 @@
         <updater type="size" initialSize="0.1" finalSize="1"/>
         <renderer texture="fire"/>
       </particleSystem>
-      
-    </particleGroup>
-  </entity>-->
 
-  <!--<entity>
+    </particleGroup>
+  </entity>
+
+  <entity>
     <name name="dust_test"/>
     <transform position="-6.15881 2 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
     <aabb min="-1 -1 -1" max="1 10 1"/>
     <particleGroup>
       <particleSystem>
-        <emitter type="physx" size="6" limit="1000" rate="0.0005" fillInitial="true" minLifeTime="2" maxLifeTime="4" />
+        <emitter type="box" size="6" limit="1000" rate="0.0005" fillInitial="true" minLifeTime="2" maxLifeTime="4" />
         <updater type="lifeTime"/>
         <updater type="noise" minNoise="-0.01 -0.01 -0.01" maxNoise="0.01 0.01 0.01"/>
         <updater type="size" initialSize="0.02" finalSize="0.04"/>
         <renderer texture="smoke" aditive="false"/>
       </particleSystem>
     </particleGroup>
-  </entity>-->
+  </entity>
 
   <!--<entity>
     <name name="smoke_ps_test"/>
@@ -643,5 +901,4 @@
       </particleSystem>
     </particleGroup>
   </entity>-->
-  
 </scene>

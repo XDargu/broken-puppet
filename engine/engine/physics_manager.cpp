@@ -121,6 +121,26 @@ void CPhysicsManager::init() {
 
 	// Crear el controller manager
 	gManager = PxCreateControllerManager(*gScene);
+
+
+	PxParticleSystem* ps;
+
+	ps = gPhysicsSDK->createParticleSystem(100);
+
+	PxU32 array[] = { 1, 2, 3, 4 };
+	PxStrideIterator<const PxU32> indexBuffer(array);
+	ps->releaseParticles(4, indexBuffer);
+
+	
+	PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(100);
+
+	PxStrideIterator<PxU32> buf(array);
+	PxU32 numAllocated = indexPool->allocateIndices(4, buf);
+
+
+
+	// Borrar
+	indexPool->freeIndices(4, PxStrideIterator<PxU32>(array));
 }
 
 void CPhysicsParticleSystem::init(PxU32 numParticles){

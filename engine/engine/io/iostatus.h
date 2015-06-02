@@ -46,8 +46,17 @@ public:
 		, EXIT
 		, RUN
 		, VIEWER_MOVE_CAM
-		, VIEWER_ZOOM
+		, VIEWER_PAN
+		, ALT
 		, F8_KEY
+		, F4_KEY
+		, NUM0
+		, NUM1
+		, NUM2
+		, NUM3
+		, NUM4
+		, NUM5
+		, NUM6
 		, BUTTONS_COUNT
 		
 	};

@@ -404,6 +404,7 @@ void renderUtilsDestroy() {
 	mesh_textured_quad_xy.destroy();
 	mesh_textured_quad_xy_centered.destroy();
 	mesh_view_volume.destroy();
+	mesh_icosahedron.destroy();
 	wire_cube.destroy();
 }
 
