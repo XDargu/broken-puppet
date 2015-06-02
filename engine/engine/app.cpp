@@ -30,6 +30,7 @@ using namespace DirectX;
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
 #include "audio\sound_manager.h"
+#include "particles\importer_particle_groups.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -291,8 +292,8 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
-	
+	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -424,7 +425,10 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/escena_ms2.xml");
+		//loadScene("data/scenes/escena_ms2.xml");
+		CEntity* e = entity_manager.getByName("fire_ps");
+
+		particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -966,6 +970,7 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
+	particle_groups_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }
@@ -1012,6 +1017,9 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= renderUtilsCreate();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
+
+	particle_groups_manager.destroy();
+	XASSERT(particle_groups_manager.xmlParseFile("data/particles/particle_groups.xml"), "Error loading the particle groups");
 
 	// public delta time inicialization
 	delta_time = 0.f;

@@ -23,6 +23,8 @@ public:
 
 	void render();
 	void renderDebug3D() const;
+
+	void clearParticleSystems();
 };
 
 #endif

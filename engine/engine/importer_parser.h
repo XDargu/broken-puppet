@@ -19,8 +19,9 @@ public:
 
 	// Cuando se acaba el tag de xml
 	void onEndElement(const std::string &elem);
-
+	
 	CHandle getRootHandle() const { return root_handle; }
+	void setCurrentEntity(CHandle entity);
 };
 
 #endif

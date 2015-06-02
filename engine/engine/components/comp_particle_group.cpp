@@ -50,3 +50,10 @@ void TCompParticleGroup::renderDebug3D() const {
 		ps.renderDebug3D();
 	}
 }
+
+void TCompParticleGroup::clearParticleSystems() {
+	for (int i = 0; i < particle_systems.size(); ++i) {
+		particle_systems[i].destroy();
+	}
+	particle_systems.clear();
+}
