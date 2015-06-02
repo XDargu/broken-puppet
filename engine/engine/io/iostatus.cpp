@@ -38,7 +38,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[VIEWER_PAN].key = VK_MBUTTON;
 
 	buttons[F8_KEY].key = VK_F8;
-	buttons[F8_KEY].key = VK_F4;
+	buttons[F4_KEY].key = VK_F4;
 	buttons[ALT].key = VK_MENU;
 
 	buttons[NUM0].key = '0';

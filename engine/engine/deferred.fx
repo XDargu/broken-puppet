@@ -17,6 +17,12 @@ SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
 SamplerState samBorderLinear : register(s2);
 SamplerComparisonState samPCFShadows : register(s3);
+SamplerState samCube : TEXUNIT3{
+	Texture = txCubemap;
+	MIPFILTER = LINEAR;
+	MINFILTER = LINEAR;
+	MAGFILTER = LINEAR;
+};
 
 //--------------------------------------------------------------------------------------
 struct VS_TEXTURED_OUTPUT
@@ -267,6 +273,27 @@ float3 getWorldCoords( float2 screen_coords, float depth ) {
   return wPos;
 }
 
+float2 coord2D(float2 coord)
+{
+	return float2((coord.x - cameraHalfXRes) / cameraHalfXRes, -(coord.y - cameraHalfYRes) / cameraHalfYRes);
+}
+
+float2 perspective_correction(float2 coord)
+{
+	float camera_aspect_ratio = cameraHalfXRes / cameraHalfYRes;
+	coord.x *= camera_aspect_ratio;
+	// tan( fov/2 ) = ( yres/2 ) / view_d
+	float tan_half_fov = cameraHalfYRes / cameraViewD;
+
+	return coord * tan_half_fov;
+}
+
+float3 getViewSpace(float2 screen_coords, float depth) {
+	//return getWorldCoords(screen_coords, depth);
+	//return float3(perspective_correction(screen_coords), -1) * depth * cameraZFar;
+	return float3(perspective_correction(coord2D(screen_coords)), -1) * depth * cameraZFar;
+}
+
 float2 LightingFuncGGX_FV(float dotLH, float roughness)
 {
 	float alpha = roughness*roughness;
@@ -487,19 +514,35 @@ float4 PSResolve(
 	float4 albedo = txDiffuse.Load(ss_load_coords);
 	float4 specular_color = txSpecular.Load(ss_load_coords);
 	float4 gloss = txGloss.Load(ss_load_coords);
-	float3 N = -txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+	float depth = txDepth.Load(ss_load_coords).x;
+	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
 	float4 diffuse = txAccLight.Load(ss_load_coords);
-	//float4 env = txEnvironment.Sample(samWrapLinear, N);
+
+
+	float3 wPos = getWorldCoords(iPosition.xy, depth);
+	float3 I = wPos - cameraWorldPos.xyz;
+	I = normalize(I);
+	float3 R = reflect(I, N);
+
+	//float3 reflectedColor = txCubemap.Sample(samCube, R);
+	float4 env = txEnvironment.Sample(samCube, R);
 
 	float ambient_val = 0.15;
 	float4 ambient_color = float4(0.98, 0.85, 0.8, 0);
 
-		//float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
-		float spec_intensity = diffuse.a;
+	//float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
+	float spec_intensity = diffuse.a;
 	
 	float4 specular = specular_color * spec_intensity;// saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
 		//return specular;
-	return (albedo * diffuse + saturate(specular)) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+		
+	if (length(N) > 1.73) {
+		R = reflect(I, float3(0,0,0));
+		env = txEnvironment.Sample(samCube, R);
+		return env;
+	}
+	
+	return (albedo * diffuse + saturate(specular) ) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 
