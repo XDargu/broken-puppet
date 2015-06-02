@@ -279,7 +279,6 @@ bool CApp::create() {
 	
 	createManagers();
 
-	physics_manager.init();
 	bool is_ok = true;
 
 	rt_base = nullptr;
@@ -425,7 +424,7 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		//loadScene("data/scenes/escena_ms2.xml");
+		loadScene("data/scenes/escena_ms2.xml");
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -708,7 +707,9 @@ void CApp::render() {
 
 	font.print(xres / 2 - 30, 10, mode.c_str());
 
-	TwDraw();	
+	CTraceScoped t0("AntTweak");
+	TwDraw();
+	t0.end();
 #endif
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
@@ -1001,7 +1002,10 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
-	
+	/*physics_manager.gScene->release();*/	
+	physics_manager.loadCollisions();
+	physics_manager.init();
+
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 

@@ -18,9 +18,10 @@ void TParticleEmitterGeneration::update(float elapsed) {
 	// If we have to make a new particle
 	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit) {
 		int num_new_particles = max(elapsed / rate, 1);
+		rate_counter = 0;
 		for (int i = 0; i < num_new_particles; ++i) {
 			addParticle();
-		}
+		}		
 	}
 }
 
@@ -106,10 +107,10 @@ void TParticleEmitterGeneration::addParticle() {
 		, life_time
 		, XMVectorSet(1, 1, 1, 1)
 		, 1
+		, (int)particles->size()
 		);
 	//particles->erase(particles->begin());
 	particles->push_back(n_particle);
-	rate_counter = 0;
 }
 
 // Sphere / Semisphere / Box

@@ -26,6 +26,7 @@ VS_TEXTURED_OUTPUT VS(
 , float3 InstanceSpeed : POSITION3      // Stream 1
 , float3 InstanceAgeLifeSpanSize : TEXCOORD1
 , float3 Color : COLOR0
+, int index : TEXCOORD2
 /*, float  InstanceAge : TEXCOORD1    // Stream 1
 , float  InstanceLifespan : COLOR0    // Stream 1
 , float  InstanceSize : POSITION2    // Stream 1*/
@@ -43,7 +44,7 @@ VS_TEXTURED_OUTPUT VS(
   //float nmod16 = 1;
   int   idx = int(nmod16);
   float coords_x = 0;// fmod(idx, 4);
-  float coords_y = int( idx / 4);
+  float coords_y = uint( idx / 4);
 
   output.UV.x = (coords_x + UV.x) / 4.0;
   output.UV.y = (coords_y + UV.y) / 4.0;
