@@ -154,13 +154,44 @@ void CPhysicsParticleSystem::init(PxU32 numParticles){
 	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
 }
 
-void CPhysicsParticleSystem::addParticles(int numNewParticles, PxU32 particlesToAdd[], PxVec3 positionsToAdd[], PxVec3 velocityToAdd[]){
+void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], PxU32 indexAllocated[]){
+	//IN --> int numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[]
+	//OUT --> PxU32 indexAllocated[]
 	//Adding one or more particles to the particle system
+
+	std::vector<PxU32> newIndexBuffer;
+	std::vector<PxVec3> newPositionBuffer;
+	std::vector<PxVec3> newVelocityBuffer;
+
+	std::vector<PxU32> mTmpIndexArray;
+	mTmpIndexArray.resize(numNewParticles);
+	PxStrideIterator<PxU32> indexData(&mTmpIndexArray[0]);
+	PxU32 numAllocated = indexPool->allocateIndices(numNewParticles, indexData);
 	for (int i = 0; i < numNewParticles; i++){
-		myIndexBuffer.push_back(particlesToAdd[i]);
+		myIndexBuffer.push_back(mTmpIndexArray[i]);
+		newIndexBuffer.push_back(mTmpIndexArray[i]);
 		myPositionBuffer.push_back(positionsToAdd[i]);
+		newPositionBuffer.push_back(positionsToAdd[i]);
 		myVelocityBuffer.push_back(velocityToAdd[i]);
+		newVelocityBuffer.push_back(velocityToAdd[i]);
 	}
+
+	PxParticleCreationData newparticleCreationData;
+	newparticleCreationData.numParticles = numNewParticles;
+	newparticleCreationData.indexBuffer =
+		PxStrideIterator<const PxU32>(&newIndexBuffer[0]);
+	newparticleCreationData.positionBuffer =
+		PxStrideIterator<const PxVec3>(&newPositionBuffer[0]);
+	newparticleCreationData.velocityBuffer =
+		PxStrideIterator<const PxVec3>(&newVelocityBuffer[0]);
+
+	bool success = ps->createParticles(newparticleCreationData);
+	int prueba;
+	prueba = myIndexBuffer.size();
+}
+
+void CPhysicsParticleSystem::setParticlesNoGravity(bool gravity){
+	ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, gravity);
 }
 
 bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){
@@ -171,8 +202,6 @@ bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){
 	//declare particle descriptor for creating new particles
 	//PxParticleCreationData particleCreationData;
 
-	//PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
-
 	// create an index pool for a particle system with maximum particle count of maxParticles
 
 	// use the indexPool for allocating numNewAppParticles indices that can be used
@@ -182,10 +211,12 @@ bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){
 
 	maxParticles = numParticles;
 	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
+	
+	indexPool = PxParticleExt::createIndexPool(maxParticles);
 
 	bool success = false;
 
-	if (!myIndexBuffer.empty()){
+	/*if (!myIndexBuffer.empty()){
 		particleCreationData.numParticles = maxParticles;
 		particleCreationData.indexBuffer =
 			PxStrideIterator<const PxU32>(&myIndexBuffer[0]);
@@ -193,18 +224,13 @@ bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){
 			PxStrideIterator<const PxVec3>(&myPositionBuffer[0]);
 		particleCreationData.velocityBuffer =
 			PxStrideIterator<const PxVec3>(&myVelocityBuffer[0]);
+	}*/
 
+	// create particles in *PxParticleSystem* ps
+	success = ps->createParticles(particleCreationData);
 
-
-		// create particles in *PxParticleSystem* ps
-		success = ps->createParticles(particleCreationData);
-
-		if (ps)
-			CPhysicsManager::get().gScene->addActor(*ps);
-	}
-
-	// create an index pool for a particle system with maximum particle count of maxParticles
-	//PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
+	if (ps)
+		CPhysicsManager::get().gScene->addActor(*ps);
 
 	return success;
 }

@@ -91,10 +91,6 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
 		}
 
-		if (emitter_type == "physx") {
-			float size = atts.getFloat("size", 1);
-			emitter_generation = new TParticleEmitterGenerationPhysX(&particles, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
-		}
 	}
 
 	if (elem == "renderer") {

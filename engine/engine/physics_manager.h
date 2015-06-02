@@ -39,11 +39,12 @@ public:
 
 	void init(PxU32 numParticles);
 	bool createParticles(PxU32 numParticles);
-	void addParticles(int numNewParticles, PxU32 particlesToAdd[], PxVec3 positionsToAdd[], PxVec3 velocityToAdd[]);
+	void addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], PxU32 indexAllocated[]);
 	void updateParticles();
 	void releaseParticles(PxU32 indicesToRelease);
 	void releaseAllParticles();
 	void setParticlesFilterCollision();
+	void setParticlesNoGravity(bool gravity);
 };
 
 class CPhysicsManager

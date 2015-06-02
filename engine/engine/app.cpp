@@ -290,9 +290,9 @@ bool CApp::create() {
 	XASSERT(font.create(), "Error creating the font");
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/scene_volum_light.xml");
+	loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -378,15 +378,16 @@ bool CApp::create() {
 	/*ps_prueba.myIndexBuffer = myIndexBuffer;
 	ps_prueba.myPositionBuffer = myPositionBuffer;
 	ps_prueba.myVelocityBuffer = myVelocityBuffer;*/
-	PxU32 indices[4] = { 0, 1, 2, 3 };
-	PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
+	
+	/*PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
 		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
 		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
 		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
 	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
-	ps.addParticles(100, indices, positions, myVelocityBuffer);
-	bool success = ps.createParticles(100);
-
+	PxU32 indexAllocated[4];
+	ps.addParticle(4, positions, myVelocityBuffer, indexAllocated);*/
+	bool success = ps.createParticles(250);
+	ps.setParticlesNoGravity(true);
 	return true;
 }
 
@@ -561,6 +562,13 @@ void CApp::update(float elapsed) {
 		physics_manager.ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
 	}*/
 
+	PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
+		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
+		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
+		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
+	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
+	PxU32 indexAllocated[4];
+	ps.addParticle(4, positions, myVelocityBuffer, indexAllocated);
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
