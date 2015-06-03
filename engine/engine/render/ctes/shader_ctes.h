@@ -61,6 +61,7 @@ cbuffer TCtesParticleSystem SHADER_REGISTER(b5)   // using the same register as 
 	int n_imgs_y;
 	int stretch;
 	int render_mode;
+	matrix particle_gen_rotation;
 };
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)

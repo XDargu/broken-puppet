@@ -68,6 +68,11 @@ void TCompParticleEditor::init() {
 
 	reloadParticleGroups();
 
+	CEntity* ps_e = CEntityManager::get().getByName("edited_ps");
+	TCompTransform* ps_t = ps_e->get<TCompTransform>();
+
+	ps_t->rotation = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
+
 }
 
 void TCompParticleEditor::update(float elapsed) {

@@ -220,6 +220,7 @@ void TParticleSystem::render() {
 		ps_ctes->n_imgs_y = renderer->n_anim_y;
 		ps_ctes->stretch = renderer->stretch;
 		ps_ctes->render_mode = renderer->render_type;
+		ps_ctes->particle_gen_rotation = XMMatrixRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(renderer->stretch));
 		ctes_particle_system.uploadToGPU();
 		ctes_particle_system.activateInVS(5);
 
