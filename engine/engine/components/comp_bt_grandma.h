@@ -10,6 +10,7 @@ struct TCompBtGrandma : TBaseComponent {
 	bt_grandma* m_ai_controller;
 
 	TCompBtGrandma();
+	~TCompBtGrandma();
 	TCompBtGrandma(bt_grandma* ai_controller);
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);

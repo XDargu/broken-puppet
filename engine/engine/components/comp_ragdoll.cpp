@@ -65,18 +65,26 @@ void TCompRagdoll::setActive(bool active) {
 
 	// Make all the rigidboies kinematic if the ragdoll is not active, and make them not kinematic if active
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
+	if (e->hasTag("player")){
+		setCollisonPlayer(active);
+	}else if(e->hasTag("enemy")){
+		setCollisonEnemy(active);
+	}
+}
+
+void TCompRagdoll::setCollisonPlayer(bool active){
+	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
 		PxU32 notCollide = FilterGroup::ePLAYER;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
-			if (e->hasTag("player")){
-				it.second->getShapes(&collider, 1);
-				setupFiltering(collider, myMask, notCollide);
-			}
+			it.second->getShapes(&collider, 1);
+			setupFiltering(collider, myMask, notCollide);
 		}
-	}else{
+	}
+	else{
 		PxU32 myMask = FilterGroup::eNON_COLLISION;
 		PxU32 notCollide = FilterGroup::eACTOR
 			| FilterGroup::eACTOR_NON_COLLISION
@@ -88,10 +96,38 @@ void TCompRagdoll::setActive(bool active) {
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
-			if (e->hasTag("player")){
-				it.second->getShapes(&collider, 1);
-				setupFiltering(collider, myMask, notCollide);
-			}
+			it.second->getShapes(&collider, 1);
+			setupFiltering(collider, myMask, notCollide);
+		}
+	}
+}
+
+void TCompRagdoll::setCollisonEnemy(bool active){
+	CEntity* e = (CEntity*)CHandle(this).getOwner();
+	if (active){
+		PxU32 myMask = FilterGroup::eENEMY_RG;
+		PxU32 notCollide = FilterGroup::eENEMY;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+			it.second->getShapes(&collider, 1);
+			setupFiltering(collider, myMask, notCollide);
+		}
+	}
+	else{
+		PxU32 myMask = FilterGroup::eNON_COLLISION;
+		PxU32 notCollide = FilterGroup::eACTOR
+			| FilterGroup::eACTOR_NON_COLLISION
+			| FilterGroup::ePLAYER
+			| FilterGroup::eENEMY
+			| FilterGroup::ePLAYER_RG
+			| FilterGroup::eLEVEL
+			| FilterGroup::eNON_COLLISION;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+			it.second->getShapes(&collider, 1);
+			setupFiltering(collider, myMask, notCollide);
 		}
 	}
 }

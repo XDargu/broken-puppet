@@ -2,6 +2,7 @@
 #include "particle_system_subtypes.h"
 #include "components\comp_transform.h"
 #include "physics_manager.h"
+#include "particle_system.h"
 
 void TParticleEmitterGeneration::update(float elapsed) {
 	delay_counter += elapsed;
@@ -16,7 +17,7 @@ void TParticleEmitterGeneration::update(float elapsed) {
 			loop_condition = false;
 
 		if (loop_condition && burst_time > 0 && burst_counter > burst_time) {
-			int amount = min(burst_amount, (limit - particles->size()));
+			int amount = min(burst_amount, (limit - ps->particles.size()));
 			burst_counter = 0;
 			for (int i = 0; i < amount; ++i) {
 				addParticle();
@@ -24,7 +25,7 @@ void TParticleEmitterGeneration::update(float elapsed) {
 		}
 
 		// If we have to make a new particle
-		if (loop_condition && burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit) {
+		if (loop_condition && burst_time == 0 && rate != 0 && rate_counter > rate && ps->particles.size() < limit) {
 			int num_new_particles = max(elapsed / rate, 1);
 			rate_counter = 0;
 			for (int i = 0; i < num_new_particles; ++i) {
@@ -35,7 +36,7 @@ void TParticleEmitterGeneration::update(float elapsed) {
 }
 
 void TParticleEmitterGeneration::addParticle() {
-	if (particles->size() >= limit) { return; }
+	if (ps->particles.size() >= limit) { return; }
 
 	if (!loop) { emitter_counter++; if (emitter_counter > limit) { return; } }
 
@@ -118,14 +119,27 @@ void TParticleEmitterGeneration::addParticle() {
 		, life_time
 		, XMVectorSet(1, 1, 1, 1)
 		, 1
-		, (int)particles->size()
+		, (int)ps->particles.size()
 		);
 	//particles->erase(particles->begin());
-	particles->push_back(n_particle);
+	if (ps->use_physx){
+		float speed = 1;
+		if (ps->updater_movement != nullptr) {
+			speed = ps->updater_movement->speed;
+		}
+		PxVec3 array_pos[1];
+		array_pos[0] = PxVec3(pos.x, pos.y, pos.z);
+		PxVec3 array_velocity[1];
+		array_velocity[0] = PxVec3(direction.x, direction.y, direction.z) * speed;
+		std::vector<PxU32> indexAdded;
+		ps->psx->addParticle(1, array_pos, array_velocity, &indexAdded);
+		n_particle.index = indexAdded[0];
+	}
+	ps->particles.push_back(n_particle);
 }
 
 // Sphere / Semisphere / Box
-TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
 	shape = the_shape;
 	radius = the_radius_or_box_size;
 	h_transform = the_transform;
@@ -135,7 +149,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	rate_counter = 0;
 	fill_initial = the_fill_initial;
 	limit = the_limit;
-	particles = the_particles;
+	ps = the_ps;
 	burst_time = the_burst_time;
 	burst_amount = the_burst_amount;
 	burst_counter = 0;
@@ -152,7 +166,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	fillInitial();
 }
 // Cone / Ring
-TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
 	shape = the_shape;
 	radius = the_radius;
 	h_transform = the_transform;
@@ -162,7 +176,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	rate_counter = 0;
 	fill_initial = the_fill_initial;
 	limit = the_limit;
-	particles = the_particles;
+	ps = the_ps;
 	burst_time = the_burst_time;
 	burst_amount = the_burst_amount;
 	burst_counter = 0;
@@ -345,6 +359,23 @@ std::string TParticleRenderer::getXMLDefinition() {
 	def += "/>";
 
 	return def;
+}
+
+void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
+	//XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + XMLoadFloat3(&particle->direction) * speed * elapsed)
+	int index=particle->index;
+	PxVec3 position;
+	PxParticleReadData* rd = ps->psx->ps->lockParticleReadData();
+	if (rd)
+	{
+		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
+		position=positionIt[index];
+		rd->unlock();
+	}
+	//ps->psx
+	particle->position.x = position.x;
+	particle->position.y = position.y;
+	particle->position.z = position.z;
 }
 
 void TParticleUpdaterMovement::update(TParticle* particle, float elapsed) {

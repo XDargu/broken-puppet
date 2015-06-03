@@ -839,11 +839,37 @@
     <jointD6 actor1 = "liana_test3_81.0" actor2 = "dvn_arco_viga_01_76.0"  jointPosition="2.08411 7.08455 7.69519" jointRotation="0.0 0.0 -0.707107 0.707107" linearModeX="1" linearModeY="1" linearModeZ="1" linearPosition="100.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" swing1Mode="1" swing1Angle="45.0" swing1Restitution="0.0" swing1Spring="10000.0" swing1Damping="1000.0" swing2Mode="2" swing2Angle="45.0" swing2Restitution="0.1" swing2Spring="0.0" swing2Damping="0.0" twistMode="2" twistAngle="45.0" twistRestitution="0.1" twistSpring="10000.0" twistDamping="1000.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
   </entity>
 
-  <entity>
+  <!--<entity>
     <name name="fire_ps"/>
     <transform position="-6.15881 2 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
     <aabb min="-1 -1 -1" max="1 10 1"/>
-    <particleGroup name="ps_sparks"/>
+    <particleGroup>
+      <particleSystem>
+        <emitter type="ring" size="0.3" limit="800" rate="0.0015" fillInitial="false" minLifeTime="2" maxLifeTime="4" burstTime="1" burstAmount="200"/>
+        <updater type="lifeTime"/>
+        <updater type="gravity" gravity="-0.01"/>
+        <updater type="noise" minNoise="-0.05 -0.05 -0.05" maxNoise="0.05 0.05 0.05"/>
+        <updater type="size" initialSize="0.1" finalSize="2"/>
+        <updater type="movement" speed="3.5"/>
+        <renderer texture="smoke" aditive="false"/>
+      </particleSystem>
+      <particleSystem>
+        <emitter type="cone" size="0.15" limit="15" rate="0.1" fillInitial="true" minLifeTime="0.3" maxLifeTime="2"/>
+        <updater type="lifeTime"/>
+        <updater type="movement" speed="0.5"/>
+        <updater type="size" initialSize="0.1" finalSize="1"/>
+        <renderer texture="fire"/>
+      </particleSystem>
+
+    </particleGroup>
+  </entity>-->
+
+  <entity>
+    <name name="dust_test"/>
+    <transform position="-6.15881 2 4.2" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" />
+    <aabb min="-1 -1 -1" max="1 10 1"/>
+    <particleGroup name="ps_sparks">
+    </particleGroup>
   </entity>
 
   <!--<entity>

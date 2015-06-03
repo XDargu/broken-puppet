@@ -327,6 +327,7 @@
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\underwater_step.h" />
     <ClInclude Include="render\vertex_declarations.h" />
+    <ClInclude Include="rope_manager.h" />
     <ClInclude Include="skeletons\ik_handler.h" />
     <ClInclude Include="skeletons\skeleton_manager.h" />
     <ClInclude Include="ssb.h" />
@@ -581,6 +582,7 @@
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\underwater_step.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
+    <ClCompile Include="rope_manager.cpp" />
     <ClCompile Include="skeletons\skeleton_manager.cpp" />
     <ClCompile Include="ssb.cpp" />
     <ClCompile Include="utils.cpp" />

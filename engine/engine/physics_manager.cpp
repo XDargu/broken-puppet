@@ -28,6 +28,8 @@ CPhysicsManager::CPhysicsManager() : gScene(NULL), timeStep( 1.f / 60.f ) // 60 
 
 CPhysicsManager::~CPhysicsManager()
 {
+	delete m_collision;
+	m_collision = nullptr;
 }
 
 void CPhysicsManager::loadCollisions() {
@@ -106,8 +108,151 @@ void CPhysicsManager::init() {
 	/*PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	gScene->addActor(*plane);*/
 
+	//Particulas 
+	// create particle system in PhysX SDKs
+	//ps->setSimulationFilterData();
+	//ps = gPhysicsSDK->createParticleSystem(maxParticles);
+	// add particle system to scene, in case creation was successful
+	//if (ps)
+		//gScene->addActor(*ps);
+	//particleCreationData.numParticles = 0;
+	//ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+	//indexPool = PxParticleExt::createIndexPool(maxParticles);
+
 	// Crear el controller manager
 	gManager = PxCreateControllerManager(*gScene);
+}
+
+void CPhysicsParticleSystem::init(PxU32 numParticles){
+	maxParticles = numParticles;
+
+	/*myIndexBuffer = new PxU32[maxParticles];
+	myPositionBuffer = new PxVec3[maxParticles];
+	myVelocityBuffer = new PxVec3[maxParticles];
+	myParticlesForces = new PxVec3[maxParticles];*/
+
+	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
+}
+
+void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices){
+	//IN --> int numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[]
+	//OUT --> PxU32 indexAllocated[]
+	//Adding one or more particles to the particle system
+
+	std::vector<PxU32> newIndexBuffer;
+	std::vector<PxVec3> newPositionBuffer;
+	std::vector<PxVec3> newVelocityBuffer;
+
+	std::vector<PxU32> mTmpIndexArray;
+	mTmpIndexArray.resize(numNewParticles);
+	PxStrideIterator<PxU32> indexData(&mTmpIndexArray[0]);
+	PxU32 numAllocated = indexPool->allocateIndices(numNewParticles, indexData);
+	for (int i = 0; i < numNewParticles; i++){
+		myIndexBuffer.push_back(mTmpIndexArray[i]);
+		newIndexBuffer.push_back(mTmpIndexArray[i]);
+		newIndices->push_back(mTmpIndexArray[i]);
+		myPositionBuffer.push_back(positionsToAdd[i]);
+		newPositionBuffer.push_back(positionsToAdd[i]);
+		myVelocityBuffer.push_back(velocityToAdd[i]);
+		newVelocityBuffer.push_back(velocityToAdd[i]);
+	}
+
+	PxParticleCreationData newparticleCreationData;
+	newparticleCreationData.numParticles = numNewParticles;
+	newparticleCreationData.indexBuffer =
+		PxStrideIterator<const PxU32>(&newIndexBuffer[0]);
+	newparticleCreationData.positionBuffer =
+		PxStrideIterator<const PxVec3>(&newPositionBuffer[0]);
+	newparticleCreationData.velocityBuffer =
+		PxStrideIterator<const PxVec3>(&newVelocityBuffer[0]);
+
+	bool success = ps->createParticles(newparticleCreationData);
+
+	int prueba;
+	prueba = myIndexBuffer.size();
+}
+
+void CPhysicsParticleSystem::setParticlesNoGravity(bool gravity){
+	ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, gravity);
+}
+
+bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){
+	//IMP: It should be noted that access to particles such as creating, updating, releasing, and
+	//reading particle - related properties can only be done when the PhysX scene is not
+	//being simulated
+
+	//declare particle descriptor for creating new particles
+	//PxParticleCreationData particleCreationData;
+
+	// create an index pool for a particle system with maximum particle count of maxParticles
+
+	// use the indexPool for allocating numNewAppParticles indices that can be used
+	// for particle creation throughout the particle system lifetime. If numAllocated
+	// is smaller than numNewAppParticles, the maxParticles limit was exceeded
+	//PxU32 numAllocated = indexPool->allocateIndices(maxParticles, PxStrideIterator<PxU32>(myIndexBuffer));
+
+	maxParticles = numParticles;
+	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
+	
+	indexPool = PxParticleExt::createIndexPool(maxParticles);
+
+	bool success = false;
+
+	/*if (!myIndexBuffer.empty()){
+		particleCreationData.numParticles = maxParticles;
+		particleCreationData.indexBuffer =
+			PxStrideIterator<const PxU32>(&myIndexBuffer[0]);
+		particleCreationData.positionBuffer =
+			PxStrideIterator<const PxVec3>(&myPositionBuffer[0]);
+		particleCreationData.velocityBuffer =
+			PxStrideIterator<const PxVec3>(&myVelocityBuffer[0]);
+	}*/
+
+	// create particles in *PxParticleSystem* ps
+	success = ps->createParticles(particleCreationData);
+
+	if (ps)
+		CPhysicsManager::get().gScene->addActor(*ps);
+
+	return success;
+}
+
+void CPhysicsParticleSystem::updateParticles(){
+	// declare strided iterator for providing array of indices corresponding to
+	// particles that should be removed
+	//PxU32 myIndexBuffer[] = { 0, 1, 2 };
+	//PxVec3 appParticleForces[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
+		//PxVec3(0, 0, 0) };
+	// specify strided iterator to provide update forces
+	PxStrideIterator<const PxVec3> forceBuffer(&myParticlesForces[0]);
+
+	// specify strided iterator to provide indices of particles that need to be updated
+	PxStrideIterator<const PxU32> indexBuffer(&myIndexBuffer[0]);
+
+	// specify force update on PxParticleSystem ps choosing the "force" unit
+	ps->addForces(maxParticles, indexBuffer, forceBuffer, PxForceMode::eFORCE);
+}
+
+void CPhysicsParticleSystem::releaseParticles(int numParticlesReleased, PxU32 indicesToRelease[]){
+	//PxU32 myIndexBuffer[] = { 0, 1, 2 };
+	//PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
+	PxStrideIterator<const PxU32> indexBuffer(indicesToRelease);
+
+	indexPool->freeIndices(numParticlesReleased, indexBuffer);
+
+	// release particles in *PxParticleSystem* ps
+	ps->releaseParticles(numParticlesReleased, indexBuffer);
+}
+
+void CPhysicsParticleSystem::releaseAllParticles(){
+	//indexPool->release();
+	ps->releaseParticles();
+}
+
+void CPhysicsParticleSystem::setParticlesFilterCollision(){
+	PxFilterData filterData;
+	filterData.word0 = FilterGroup::ePARTICLES;
+	ps->setSimulationFilterData(filterData);
 }
 
 PxVec3 CPhysicsManager::XMVECTORToPxVec3(XMVECTOR vector) {

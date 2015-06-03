@@ -12,6 +12,12 @@
 #include "font\font.h"
 
 TCompBtGrandma::TCompBtGrandma(){ }
+
+TCompBtGrandma::~TCompBtGrandma(){
+	delete m_ai_controller;
+	m_ai_controller = nullptr;
+}
+
 TCompBtGrandma::TCompBtGrandma(bt_grandma* ai_controller) {
 
 	m_ai_controller = new bt_grandma;
@@ -45,7 +51,7 @@ void TCompBtGrandma::init(){
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	TCompRigidBody* rigidBody = getSibling<TCompRigidBody>(this);
 
-	physx::PxReal threshold = 1000.f;
+	physx::PxReal threshold = 300.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 }
 

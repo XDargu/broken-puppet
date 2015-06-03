@@ -13,12 +13,15 @@ TParticleSystem::TParticleSystem() : updater_lifetime(nullptr)
 , updater_movement(nullptr)
 , updater_gravity(nullptr)
 , updater_noise(nullptr)
+, updater_physx(nullptr)
 
 , emitter_generation(nullptr)
 
 , renderer(nullptr)
+, psx(nullptr)
 
 , h_transform(CHandle())
+, use_physx(false)
 
 , instanced_mesh(nullptr)
 , instances_data(nullptr)
@@ -60,6 +63,11 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			XMVECTOR max_noise = atts.getPoint("maxNoise");
 			updater_noise = new TParticleUpdaterNoise(min_noise, max_noise);
 		}
+		if (updater_type == "physx") {
+			bool gravity = atts.getBool("gravity", true);
+			updater_physx = new TParticleUpdaterPhysx(this);
+			psx->setParticlesNoGravity(!gravity);			
+		}
 	}
 
 	if (elem == "emitter") {
@@ -76,6 +84,11 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		bool loop = atts.getBool("loop", true);
 		float delay = atts.getFloat("delay", 0);
 		particles.reserve(limit);
+
+		// Physx
+		use_physx = atts.getBool("use_physx", false);
+		psx = new CPhysicsParticleSystem();
+		psx->createParticles(limit);
 		
 		// Instancing
 		instanced_mesh = &mesh_textured_quad_xy_centered;
@@ -91,30 +104,31 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		if (emitter_type == "sphere") {
 			float radius = atts.getFloat("radius", 1);			
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "semiSphere") {
 			float radius = atts.getFloat("radius", 1);
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "cone") {
 			float radius = atts.getFloat("radius", 1);
 			float angle = deg2rad(atts.getFloat("angle", 30));
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "ring") {
 			float inner_radius = atts.getFloat("innerRadius", 0.5);
 			float outer_radius = atts.getFloat("outerRadius", 1);
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "box") {
 			float size = atts.getFloat("size", 1);			
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
+
 	}
 
 	if (elem == "renderer") {
@@ -138,13 +152,16 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 void TParticleSystem::init() {
 	if (particles.capacity() < emitter_generation->limit) {
 		particles.reserve(emitter_generation->limit - particles.capacity());
-	}
+	}	
 }
 
 void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
-		emitter_generation->particles = &particles;
+		emitter_generation->ps = this;
 		emitter_generation->update(elapsed);
+	}
+	if (updater_physx != nullptr) {
+		updater_physx->ps = this;
 	}
 
 	if (isKeyPressed('T')) {
@@ -180,7 +197,15 @@ void TParticleSystem::update(float elapsed) {
 			if (updater_noise != nullptr) {
 				updater_noise->update(&(*it), elapsed);
 			}
+			if (updater_physx != nullptr) {
+				// Unlock
+				updater_physx->update(&(*it), elapsed);
+				// Lock
+			}
 			if (it->lifespan != 0 && it->age > it->lifespan) {
+				PxU32 indicesToRelease[1];
+				indicesToRelease[0] = it->index;
+				psx->releaseParticles(1, indicesToRelease);
 				it = particles.erase(it);
 				delete_counter++;
 			}
@@ -292,7 +317,7 @@ void TParticleSystem::loadDefaultPS() {
 	TCompTransform* m_transform = h_transform;
 
 	emitter_generation = new TParticleEmitterGeneration(
-		&particles, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false);
+		this, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false);
 	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1);
 
 	updater_lifetime = new TParticleUpdaterLifeTime();

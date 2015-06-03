@@ -13,6 +13,10 @@ struct TParticleSystem {
 	// Vector of particles
 	VParticles particles;
 
+	//Physx Particles
+	CPhysicsParticleSystem* psx;
+	bool use_physx;
+
 	// Updaters
 	TParticleUpdaterLifeTime* updater_lifetime;
 	TParticleUpdaterSize* updater_size;
@@ -20,6 +24,7 @@ struct TParticleSystem {
 	TParticleUpdaterGravity* updater_gravity;
 	TParticleUpdaterMovement* updater_movement;
 	TParticleUpdaterNoise* updater_noise;
+	TParticleUpdaterPhysx* updater_physx;
 
 	// Emitter shape
 	TParticleEmitterGeneration* emitter_generation;
@@ -44,10 +49,12 @@ public:
 		SAFE_DELETE(updater_movement);
 		SAFE_DELETE(updater_gravity);
 		SAFE_DELETE(updater_noise);
+		SAFE_DELETE(updater_physx);
 
 		SAFE_DELETE(emitter_generation);
 
 		SAFE_DELETE(renderer);
+		SAFE_DELETE(psx);
 
 		if (instances_data) {
 			instances_data->destroy();

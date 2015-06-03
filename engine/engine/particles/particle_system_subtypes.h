@@ -4,6 +4,9 @@
 #include "utils.h"
 #include "handle\handle.h"
 #include "particle.h"
+#include "physics_manager.h"
+
+struct TParticleSystem;
 
 typedef std::vector<TParticle> VParticles;
 
@@ -30,7 +33,8 @@ protected:
 	float delay_counter;
 	int emitter_counter;
 public:
-	VParticles* particles;
+	TParticleSystem* ps;
+
 	// Emitter shape
 	TParticleEmitterShape shape;
 	// Emission rate (particles / second)
@@ -61,9 +65,9 @@ public:
 	float box_size;
 
 	// Sphere / Semisphere
-	TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
+	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
 	// Cone
-	TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
+	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
 
 	void fillInitial();
 
@@ -107,6 +111,11 @@ struct TParticleUpdaterMovement {
 };
 
 struct TParticleUpdaterPhysx {
+	TParticleSystem* ps;
+
+	TParticleUpdaterPhysx(TParticleSystem* the_ps) : ps(the_ps) {}
+
+	void update(TParticle* particle, float elapsed);
 };
 
 struct TParticleUpdaterGravity {

@@ -14,15 +14,37 @@ struct FilterGroup
 	enum Enum
 	{
 		eUNDEFINED = (1 << 1),
-		eENEMY =     (1 << 2),
-		ePLAYER =    (1 << 3),
-		eACTOR =     (1 << 4),
-		eLEVEL =     (1 << 5),
+		eENEMY = (1 << 2),
+		ePLAYER = (1 << 3),
+		eACTOR = (1 << 4),
+		eLEVEL = (1 << 5),
 		ePLAYER_RG = (1 << 6),
-		eENEMY_RG  = (1 << 7),
+		eENEMY_RG = (1 << 7),
 		eACTOR_NON_COLLISION = (1 << 8),
 		eNON_COLLISION = (1 << 9),
+		ePARTICLES = (1 << 10)
 	};
+};
+
+class CPhysicsParticleSystem{
+public:
+	PxParticleSystem* ps;
+	PxParticleExt::IndexPool* indexPool;
+	PxParticleCreationData particleCreationData;
+	PxU32 maxParticles;
+	std::vector<PxU32> myIndexBuffer;
+	std::vector<PxVec3> myPositionBuffer;
+	std::vector<PxVec3> myVelocityBuffer;
+	std::vector<PxVec3> myParticlesForces;
+
+	void init(PxU32 numParticles);
+	bool createParticles(PxU32 numParticles);
+	void addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices);
+	void updateParticles();
+	void releaseParticles(int numParticlesReleased, PxU32 indicesToRelease[]);
+	void releaseAllParticles();
+	void setParticlesFilterCollision();
+	void setParticlesNoGravity(bool gravity);
 };
 
 class CPhysicsManager
@@ -35,6 +57,11 @@ public:
 	PxControllerManager* gManager;
 
 	PxReal timeStep;
+
+	//static const PxU32 maxParticles = 3000;
+	//PxU32 currentNumParticles;
+	//PxParticleSystem* ps;
+	//PxParticleExt::IndexPool* indexPool;
 
 	static CPhysicsManager& get();
 

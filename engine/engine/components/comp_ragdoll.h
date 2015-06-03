@@ -25,6 +25,10 @@ public:
 
 	PxRigidDynamic* getBoneRigid(int id);
 
+	void setCollisonPlayer(bool active);
+
+	void setCollisonEnemy(bool active);
+
 	void setCollisionGroups();
 
 	void breakJoints();
