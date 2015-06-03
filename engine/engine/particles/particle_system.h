@@ -70,6 +70,8 @@ public:
 
 	void loadDefaultPS();
 
+	void restart();
+
 	std::string getXMLDefinition();
 };
 

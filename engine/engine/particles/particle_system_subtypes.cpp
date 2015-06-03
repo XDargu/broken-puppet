@@ -4,29 +4,40 @@
 #include "physics_manager.h"
 
 void TParticleEmitterGeneration::update(float elapsed) {
-	rate_counter += elapsed;
-	burst_counter += elapsed;
+	delay_counter += elapsed;
 
-	if (burst_time > 0 && burst_counter > burst_time) {
-		int amount = min(burst_amount, (limit - particles->size()));
-		burst_counter = 0;
-		for (int i = 0; i < amount; ++i) {
-			addParticle();
+	if (delay_counter > delay) {
+
+		rate_counter += elapsed;
+		burst_counter += elapsed;
+
+		bool loop_condition = true;
+		if (!loop && emitter_counter > limit)
+			loop_condition = false;
+
+		if (loop_condition && burst_time > 0 && burst_counter > burst_time) {
+			int amount = min(burst_amount, (limit - particles->size()));
+			burst_counter = 0;
+			for (int i = 0; i < amount; ++i) {
+				addParticle();
+			}
 		}
-	}
 
-	// If we have to make a new particle
-	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit) {
-		int num_new_particles = max(elapsed / rate, 1);
-		rate_counter = 0;
-		for (int i = 0; i < num_new_particles; ++i) {
-			addParticle();
-		}		
+		// If we have to make a new particle
+		if (loop_condition && burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit) {
+			int num_new_particles = max(elapsed / rate, 1);
+			rate_counter = 0;
+			for (int i = 0; i < num_new_particles; ++i) {
+				addParticle();
+			}
+		}
 	}
 }
 
 void TParticleEmitterGeneration::addParticle() {
 	if (particles->size() >= limit) { return; }
+
+	if (!loop) { emitter_counter++; if (emitter_counter > limit) { return; } }
 
 	TCompTransform* m_transform = h_transform;
 	XMFLOAT3 pos;
@@ -114,7 +125,7 @@ void TParticleEmitterGeneration::addParticle() {
 }
 
 // Sphere / Semisphere / Box
-TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
 	shape = the_shape;
 	radius = the_radius_or_box_size;
 	h_transform = the_transform;
@@ -128,15 +139,20 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	burst_time = the_burst_time;
 	burst_amount = the_burst_amount;
 	burst_counter = 0;
+	delay_counter = 0;
+	emitter_counter = 0;
 
 	inner_radius = 0.5;
 	box_size = the_radius_or_box_size;
 	angle = deg2rad(30);
 
+	delay = the_delay;
+	loop = the_loop;
+
 	fillInitial();
 }
 // Cone / Ring
-TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
 	shape = the_shape;
 	radius = the_radius;
 	h_transform = the_transform;
@@ -150,10 +166,15 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	burst_time = the_burst_time;
 	burst_amount = the_burst_amount;
 	burst_counter = 0;
+	delay_counter = 0;
+	emitter_counter = 0;
 
 	inner_radius = the_angle_or_inner_radius;
 	box_size = 1;
 	angle = the_angle_or_inner_radius;
+
+	delay = the_delay;
+	loop = the_loop;
 
 	fillInitial();
 }
@@ -165,6 +186,15 @@ void TParticleEmitterGeneration::fillInitial() {
 			addParticle();
 		}
 	}
+}
+
+void TParticleEmitterGeneration::restart() {
+	delay_counter = 0;
+	burst_counter = 0;
+	rate_counter = 0;
+	emitter_counter = 0;
+
+	fillInitial();
 }
 
 std::string TParticleEmitterGeneration::getXMLDefinition() {
@@ -240,20 +270,34 @@ std::string TParticleEmitterGeneration::getXMLDefinition() {
 	def += "burstAmount=\"";
 	def += std::to_string(burst_amount) + "\" ";
 
+	def += "delay=\"";
+	def += std::to_string(delay) + "\" ";
+
+	def += "loop=\"";
+	def += (loop ? "true" : "false");
+	def += "\" ";
+
 	def += "/>";
 
 	return def;
 }
 
-TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive) {
+TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch) {
 	particles = the_particles;
 	strcpy(texture, the_texture);
 	additive = is_aditive;
-
+	render_type = the_render_type;
+	n_anim_x = the_n_anim_x;
+	n_anim_y = the_n_anim_y;
+	stretch = the_stretch;
 }
 
 void TParticleRenderer::update(TParticle* particle, float elapsed) {
 	particle->age += elapsed;
+}
+
+void TParticleRenderer::render() {
+	
 }
 
 std::string TParticleRenderer::getXMLDefinition() {
@@ -267,6 +311,36 @@ std::string TParticleRenderer::getXMLDefinition() {
 	def += "aditive=\"";
 	def += (additive ? "true" : "false");
 	def += "\" ";
+
+	def += "n_anim_x=\"";
+	def += std::to_string(n_anim_x) + "\" ";
+
+	def += "n_anim_y=\"";
+	def += std::to_string(n_anim_y) + "\" ";
+
+	def += "stretch=\"";
+	def += std::to_string(stretch) + "\" ";
+
+	def += "type=\"";
+	switch (render_type)
+	{
+	case BILLBOARD:
+		def += "billboard";
+		def += "\" ";
+		break;
+	case H_BILLBOARD:
+		def += "h_billboard";
+		def += "\" ";
+		break;
+	case V_BILLBOARD:
+		def += "v_billboard";
+		def += "\" ";
+		break;
+	case STRETCHED_BILLBOARD:
+		def += "stretched_billboard";
+		def += "\" ";
+		break;
+	}
 
 	def += "/>";
 

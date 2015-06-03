@@ -78,6 +78,12 @@ void TCompParticleGroup::clearParticleSystems() {
 	particle_systems.clear();
 }
 
+void TCompParticleGroup::restart() {
+	for (auto& ps : particle_systems) {
+		ps.restart();
+	}
+}
+
 std::string TCompParticleGroup::getXMLDefinition() {
 	std::string def = "";
 

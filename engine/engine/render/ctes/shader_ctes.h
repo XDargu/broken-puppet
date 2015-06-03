@@ -55,6 +55,14 @@ cbuffer TCtesSpotLight SHADER_REGISTER(b5)   // using the same register as the p
 	float  spot_light_dummy1, spot_light_dummy2, spot_light_dummy3;
 };
 
+cbuffer TCtesParticleSystem SHADER_REGISTER(b5)   // using the same register as the lights
+{
+	int n_imgs_x;
+	int n_imgs_y;
+	int stretch;
+	int render_mode;
+};
+
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
   float  world_time;

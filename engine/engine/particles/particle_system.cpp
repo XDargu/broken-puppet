@@ -2,6 +2,10 @@
 #include "particle_system.h"
 #include "render\render_utils.h"
 #include "components\comp_transform.h"
+#include "render\ctes\shader_ctes.h"
+#include "render\render_utils.h"
+
+extern CShaderCte<TCtesParticleSystem> ctes_particle_system;
 
 TParticleSystem::TParticleSystem() : updater_lifetime(nullptr)
 , updater_size(nullptr)
@@ -68,6 +72,8 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		int limit = atts.getInt("limit", 1000);
 		float burst_time = atts.getFloat("burstTime", 0);
 		int burst_amount = atts.getInt("burstAmount", 100);
+		bool loop = atts.getBool("loop", true);
+		float delay = atts.getFloat("delay", 0);
 		particles.reserve(limit);
 		
 		// Instancing
@@ -84,37 +90,46 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		if (emitter_type == "sphere") {
 			float radius = atts.getFloat("radius", 1);			
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "semiSphere") {
 			float radius = atts.getFloat("radius", 1);
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "cone") {
 			float radius = atts.getFloat("radius", 1);
 			float angle = deg2rad(atts.getFloat("angle", 30));
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "ring") {
 			float inner_radius = atts.getFloat("innerRadius", 0.5);
 			float outer_radius = atts.getFloat("outerRadius", 1);
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 
 		if (emitter_type == "box") {
 			float size = atts.getFloat("size", 1);			
-			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount);
+			emitter_generation = new TParticleEmitterGeneration(&particles, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount, delay, loop);
 		}
 	}
 
 	if (elem == "renderer") {
 		std::string texture_name = atts.getString("texture", "unknown");
 		bool is_aditive = atts.getBool("aditive", true);
-		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive);
-		
+		int n_anim_x = atts.getInt("n_anim_x", 1);
+		int n_anim_y = atts.getInt("n_anim_y", 1);
+		float stretch = atts.getFloat("stretch", 2);
+		std::string str_mode = atts.getString("render_mode", "billboard");
+		TParticleRenderType type = TParticleRenderType::BILLBOARD;
+		if (str_mode == "billboard") { type = TParticleRenderType::BILLBOARD; }
+		if (str_mode == "h_billboard") { type = TParticleRenderType::H_BILLBOARD; }
+		if (str_mode == "v_billboard") { type = TParticleRenderType::V_BILLBOARD; }
+		if (str_mode == "stretched_billboard") { type = TParticleRenderType::STRETCHED_BILLBOARD; }
+
+		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, TParticleRenderType::BILLBOARD, n_anim_x, n_anim_y, stretch);		
 	}
 	
 }
@@ -199,8 +214,16 @@ void TParticleSystem::update(float elapsed) {
 
 void TParticleSystem::render() {
 	if (instances_data != nullptr) {
+		TCtesParticleSystem* ps_ctes = ctes_particle_system.get();
+		ps_ctes->n_imgs_x = renderer->n_anim_x;
+		ps_ctes->n_imgs_y = renderer->n_anim_y;
+		ps_ctes->stretch = renderer->stretch;
+		ps_ctes->render_mode = renderer->render_type;
+		ctes_particle_system.uploadToGPU();
+		ctes_particle_system.activateInVS(5);
+
 		setWorldMatrix(XMMatrixIdentity());
-		CTraceScoped t0("instances");
+		CTraceScoped t0("Particle system");
 		render_techniques_manager.getByName("particles")->activate();		
 		texture_manager.getByName(renderer->texture)->activate(0);
 		if (renderer->additive)
@@ -267,8 +290,8 @@ void TParticleSystem::loadDefaultPS() {
 	TCompTransform* m_transform = h_transform;
 
 	emitter_generation = new TParticleEmitterGeneration(
-		&particles, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0);
-	renderer = new TParticleRenderer(&particles, "smoke", false);
+		&particles, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false);
+	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1);
 
 	updater_lifetime = new TParticleUpdaterLifeTime();
 	updater_movement = new TParticleUpdaterMovement();
@@ -286,6 +309,11 @@ void TParticleSystem::loadDefaultPS() {
 		);
 
 	particles.reserve(100);
+}
+
+void TParticleSystem::restart() {
+	particles.clear();
+	emitter_generation->restart();
 }
 
 std::string TParticleSystem::getXMLDefinition() {

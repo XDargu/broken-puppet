@@ -29,6 +29,8 @@ public:
 	void removeParticleSystem(TParticleSystem* ps);
 	void clearParticleSystems();
 
+	void restart();
+
 	std::string getXMLDefinition();
 	std::string getXMLDefinitionWithName(std::string name);
 };

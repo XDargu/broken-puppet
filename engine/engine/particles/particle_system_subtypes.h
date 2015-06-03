@@ -15,12 +15,20 @@ enum TParticleEmitterShape {
 	CONE = 2,
 	RING = 3,
 	BOX = 4,
-	COUNT
+};
+
+enum TParticleRenderType {
+	BILLBOARD = 0,
+	V_BILLBOARD = 1,
+	H_BILLBOARD = 2,
+	STRETCHED_BILLBOARD = 3,
 };
 
 struct TParticleEmitterGeneration {
 protected:
 	float rate_counter;
+	float delay_counter;
+	int emitter_counter;
 public:
 	VParticles* particles;
 	// Emitter shape
@@ -36,6 +44,10 @@ public:
 	bool fill_initial;
 	// Max amount of particles
 	int limit;
+	// Delay before start emitting
+	float delay;
+	// Check if the emitter must loop
+	bool loop;
 
 	// Time between bursts
 	float burst_time;
@@ -49,9 +61,9 @@ public:
 	float box_size;
 
 	// Sphere / Semisphere
-	TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount);
+	TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
 	// Cone
-	TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount);
+	TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
 
 	void fillInitial();
 
@@ -60,6 +72,8 @@ public:
 	void addParticle();
 
 	std::string getXMLDefinition();
+
+	void restart();
 };
 
 // --------------------------------- RENDERER ------------------------------
@@ -67,11 +81,16 @@ public:
 struct TParticleRenderer {
 	VParticles* particles;
 	char texture[64];
+	TParticleRenderType render_type;
 	bool additive;
+	int n_anim_x;
+	int n_anim_y;
+	float stretch;
 
-	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive);
+	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch);
 
 	void update(TParticle* particle, float elapsed);
+	void render();
 
 	std::string getXMLDefinition();
 };
