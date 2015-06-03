@@ -365,7 +365,10 @@ std::string TParticleUpdaterMovement::getXMLDefinition() {
 }
 
 void TParticleUpdaterGravity::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+	if (constant)
+		XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+	else
+		XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
 }
 
 std::string TParticleUpdaterGravity::getXMLDefinition() {
@@ -375,6 +378,10 @@ std::string TParticleUpdaterGravity::getXMLDefinition() {
 
 	def += "gravity=\"";
 	def += std::to_string(gravity) + "\" ";
+
+	def += "constant=\"";
+	def += (constant ? "true" : "false");
+	def += "\" ";
 
 	def += "/>";
 

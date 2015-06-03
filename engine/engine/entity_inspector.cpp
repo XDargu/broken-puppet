@@ -346,7 +346,7 @@ void TW_CALL CallbackAddUpdaterSize(void *clientData)
 
 void TW_CALL CallbackAddUpdaterGravity(void *clientData)
 {
-	static_cast<TParticleSystem *>(clientData)->updater_gravity = new TParticleUpdaterGravity(0.001f);
+	static_cast<TParticleSystem *>(clientData)->updater_gravity = new TParticleUpdaterGravity(0.001f, false);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -743,6 +743,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Gravity'");
 				aux = "PGUpdaterGravityForce" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_gravity->gravity, " group=PG label='Force' step=0.005");
+				aux = "PGUpdaterGravityConstant" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].updater_gravity->constant, " group=PG label='Constant'");
 				aux = "RemovePGUpdaterGravity" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}

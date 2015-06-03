@@ -52,7 +52,8 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		}
 		if (updater_type == "gravity") {
 			float gravity = atts.getFloat("gravity", 1);
-			updater_gravity = new TParticleUpdaterGravity(gravity);
+			bool constant = atts.getBool("constant", false);
+			updater_gravity = new TParticleUpdaterGravity(gravity, constant);
 		}
 		if (updater_type == "noise") {
 			XMVECTOR min_noise = atts.getPoint("minNoise");

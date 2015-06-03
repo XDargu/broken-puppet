@@ -111,8 +111,9 @@ struct TParticleUpdaterPhysx {
 
 struct TParticleUpdaterGravity {
 	float gravity;
+	bool constant;
 
-	TParticleUpdaterGravity(float the_gravity) : gravity(the_gravity) {}
+	TParticleUpdaterGravity(float the_gravity, bool is_constant) : gravity(the_gravity) , constant(is_constant) {}
 	void update(TParticle* particle, float elapsed);
 	std::string getXMLDefinition();
 };
