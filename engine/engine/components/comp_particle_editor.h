@@ -9,6 +9,9 @@ private:
 	TwBar *particle_list_bar;
 public:
 
+	std::string aux_pg_name;
+	std::string pg_selected_name;
+
 	TCompParticleEditor() {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue& atts) {}
@@ -16,6 +19,8 @@ public:
 	void init();
 
 	void update(float elapsed);
+
+	void reloadParticleGroups();
 };
 
 #endif

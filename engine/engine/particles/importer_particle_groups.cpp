@@ -7,6 +7,7 @@
 #include "handle/prefabs_manager.h"
 #include "entity_manager.h"
 #include "components\comp_particle_group.h"
+#include "memory\data_saver.h"
 
 CImporterParticleGroups particle_groups_manager;
 
@@ -46,6 +47,7 @@ void CImporterParticleGroups::addParticleGroupToEntity(CEntity* entity, std::str
 			CImporterParser p;
 			p.setCurrentEntity(entity);
 			TCompParticleGroup* e_pg = entity->get<TCompParticleGroup>();
+			e_pg->def_name = name;
 			if (e_pg) {
 				e_pg->clearParticleSystems();
 			}				
@@ -56,6 +58,64 @@ void CImporterParticleGroups::addParticleGroupToEntity(CEntity* entity, std::str
 	}
 }
 
+void CImporterParticleGroups::updateParticleGroupFromEntity(CEntity* entity, std::string name) {
+	for (auto& pg : particle_group_definitions) {
+		if (pg.name == name) {
+			TCompParticleGroup* e_pg = entity->get<TCompParticleGroup>();
+			pg.xml_as_text = e_pg->getXMLDefinitionWithName(name);
+		}
+	}
+}
+
 void CImporterParticleGroups::destroy() {
 	particle_group_definitions.clear();
+}
+
+bool CImporterParticleGroups::validateName(std::string name) {
+	if (name.empty())
+		return false;
+
+	for (auto& pg : particle_group_definitions) {
+		if (pg.name == name) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+std::string CImporterParticleGroups::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<particleGroups>";
+
+	for (auto& pg : particle_group_definitions) {
+		def += pg.xml_as_text;
+	}
+
+	def += "</particleGroups>";
+
+	return def;
+}
+
+void CImporterParticleGroups::saveToDisk() {
+	// Virtual file
+	CStringDataSaver mds;
+	std::string def = getXMLDefinition();	
+	mds.write(&def, def.size());
+
+	mds.saveToFile("data/particles/particle_groups.xml");
+}
+
+void CImporterParticleGroups::removeByName(std::string name) {
+
+	std::vector<CParticleGroupDef>::iterator it = particle_group_definitions.begin();
+
+	while (it != particle_group_definitions.end()) {
+
+		if (it->name == name) {
+			it = particle_group_definitions.erase(it);
+		}
+		else ++it;
+	}
 }

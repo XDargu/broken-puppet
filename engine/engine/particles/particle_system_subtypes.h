@@ -58,6 +58,8 @@ public:
 	virtual void update(float elapsed);
 
 	void addParticle();
+
+	std::string getXMLDefinition();
 };
 
 // --------------------------------- RENDERER ------------------------------
@@ -70,6 +72,8 @@ struct TParticleRenderer {
 	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive);
 
 	void update(TParticle* particle, float elapsed);
+
+	std::string getXMLDefinition();
 };
 
 // --------------------------------- UPDATERS ------------------------------
@@ -78,6 +82,7 @@ struct TParticleUpdaterMovement {
 	float speed;
 
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 struct TParticleUpdaterPhysx {
@@ -88,10 +93,12 @@ struct TParticleUpdaterGravity {
 
 	TParticleUpdaterGravity(float the_gravity) : gravity(the_gravity) {}
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 struct TParticleUpdaterLifeTime {
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 struct TParticleUpdaterSize {
@@ -101,6 +108,7 @@ struct TParticleUpdaterSize {
 	TParticleUpdaterSize(float the_initial_size, float the_final_size);
 
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 struct TParticleUpdaterColor {
@@ -111,6 +119,7 @@ struct TParticleUpdaterColor {
 	TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color);
 
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 struct TParticleUpdaterNoise {
@@ -119,6 +128,7 @@ struct TParticleUpdaterNoise {
 
 	TParticleUpdaterNoise(XMVECTOR the_min_noise, XMVECTOR the_max_noise) { XMStoreFloat3(&min_noise, the_min_noise); XMStoreFloat3(&max_noise, the_max_noise); };
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 #endif

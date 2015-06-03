@@ -69,6 +69,8 @@ public:
 	int getLimit();
 
 	void loadDefaultPS();
+
+	std::string getXMLDefinition();
 };
 
 #endif

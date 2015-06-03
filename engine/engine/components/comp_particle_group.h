@@ -11,7 +11,9 @@ struct TCompParticleGroup : TBaseComponent {
 
 public:
 
-	TCompParticleGroup() {};
+	std::string def_name;
+
+	TCompParticleGroup() { def_name = ""; };
 
 	~TCompParticleGroup();
 
@@ -25,6 +27,9 @@ public:
 	void renderDebug3D() const;
 
 	void clearParticleSystems();
+
+	std::string getXMLDefinition();
+	std::string getXMLDefinitionWithName(std::string name);
 };
 
 #endif

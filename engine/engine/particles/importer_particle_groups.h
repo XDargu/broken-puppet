@@ -30,8 +30,16 @@ public:
 	void onEndElement(const std::string &elem);
 
 	void addParticleGroupToEntity(CEntity* entity, std::string name);
+	void updateParticleGroupFromEntity(CEntity* entity, std::string name);
+
+	bool validateName(std::string name);
 
 	void destroy();
+
+	std::string getXMLDefinition();
+
+	void removeByName(std::string name);
+	void saveToDisk();
 };
 
 extern CImporterParticleGroups particle_groups_manager;

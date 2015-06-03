@@ -13,6 +13,7 @@
 #include "render\blur_step.h"
 #include "render\chromatic_aberration_step.h"
 #include "particles\particle_system_subtypes.h"
+#include "particles\importer_particle_groups.h"
 
 using namespace physx;
 
@@ -231,6 +232,14 @@ void TW_CALL CallBackParticleSystemCreate(void *clientData) {
 	ps.loadDefaultPS();
 	static_cast<TCompParticleGroup *>(clientData)->particle_systems.push_back(ps);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallBackParticleSystemSave(void *clientData) {
+	TCompParticleGroup* pg = static_cast<TCompParticleGroup *>(clientData);
+	CEntity* e = CHandle(pg).getOwner();
+
+	particle_groups_manager.updateParticleGroupFromEntity(e, pg->def_name);
+	particle_groups_manager.saveToDisk();
 }
 
 void TW_CALL SetParticleSystemLimit(const void *value, void *clientData)
@@ -598,9 +607,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (e_particle_group) {
 		TwAddVarRW(bar, "PGActive", TW_TYPE_BOOL8, &e_particle_group->active, " group=PG label='Active'");		
-		std::string aux = "PGNewBtn";
+		std::string aux = "";
 
-		TwAddButton(bar, aux.c_str(), CallBackParticleSystemCreate, e_particle_group, "group=PG label='Add particle system'");
+		TwAddButton(bar, "PGAddBtn", CallBackParticleSystemCreate, e_particle_group, "group=PG label='Add particle system'");
+		TwAddButton(bar, "PGSaveBtn", CallBackParticleSystemSave, e_particle_group, "group=PG label='Save particle group'");
 
 		// For each particle system
 		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {

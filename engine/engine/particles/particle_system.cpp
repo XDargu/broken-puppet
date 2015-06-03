@@ -284,3 +284,37 @@ void TParticleSystem::loadDefaultPS() {
 
 	particles.reserve(100);
 }
+
+std::string TParticleSystem::getXMLDefinition() {
+
+	std::string def = "";
+
+	def += "<particleSystem>";
+
+	def += emitter_generation->getXMLDefinition();
+
+	if (updater_movement != nullptr) {
+		def += updater_movement->getXMLDefinition();
+	}
+	if (updater_gravity != nullptr) {
+		def += updater_gravity->getXMLDefinition();
+	}
+	if (updater_color != nullptr) {
+		def += updater_color->getXMLDefinition();
+	}
+	if (updater_lifetime != nullptr) {
+		def += updater_lifetime->getXMLDefinition();
+	}
+	if (updater_size != nullptr) {
+		def += updater_size->getXMLDefinition();
+	}
+	if (updater_noise != nullptr) {
+		def += updater_noise->getXMLDefinition();
+	}
+
+	def += renderer->getXMLDefinition();
+
+	def += "</particleSystem>";
+
+	return def;
+}
