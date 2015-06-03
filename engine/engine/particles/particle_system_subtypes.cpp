@@ -2,31 +2,43 @@
 #include "particle_system_subtypes.h"
 #include "components\comp_transform.h"
 #include "physics_manager.h"
+#include "particle_system.h"
 
 void TParticleEmitterGeneration::update(float elapsed) {
-	rate_counter += elapsed;
-	burst_counter += elapsed;
+	delay_counter += elapsed;
 
-	if (burst_time > 0 && burst_counter > burst_time) {
-		int amount = min(burst_amount, (limit - particles->size()));
-		burst_counter = 0;
-		for (int i = 0; i < amount; ++i) {
-			addParticle();
+	if (delay_counter > delay) {
+
+		rate_counter += elapsed;
+		burst_counter += elapsed;
+
+		bool loop_condition = true;
+		if (!loop && emitter_counter > limit)
+			loop_condition = false;
+
+		if (loop_condition && burst_time > 0 && burst_counter > burst_time) {
+			int amount = min(burst_amount, (limit - ps->particles.size()));
+			burst_counter = 0;
+			for (int i = 0; i < amount; ++i) {
+				addParticle();
+			}
 		}
-	}
 
-	// If we have to make a new particle
-	if (burst_time == 0 && rate != 0 && rate_counter > rate && particles->size() < limit) {
-		int num_new_particles = max(elapsed / rate, 1);
-		rate_counter = 0;
-		for (int i = 0; i < num_new_particles; ++i) {
-			addParticle();
-		}		
+		// If we have to make a new particle
+		if (loop_condition && burst_time == 0 && rate != 0 && rate_counter > rate && ps->particles.size() < limit) {
+			int num_new_particles = max(elapsed / rate, 1);
+			rate_counter = 0;
+			for (int i = 0; i < num_new_particles; ++i) {
+				addParticle();
+			}
+		}
 	}
 }
 
 void TParticleEmitterGeneration::addParticle() {
-	if (particles->size() >= limit) { return; }
+	if (ps->particles.size() >= limit) { return; }
+
+	if (!loop) { emitter_counter++; if (emitter_counter > limit) { return; } }
 
 	TCompTransform* m_transform = h_transform;
 	XMFLOAT3 pos;
@@ -107,14 +119,27 @@ void TParticleEmitterGeneration::addParticle() {
 		, life_time
 		, XMVectorSet(1, 1, 1, 1)
 		, 1
-		, (int)particles->size()
+		, (int)ps->particles.size()
 		);
 	//particles->erase(particles->begin());
-	particles->push_back(n_particle);
+	if (ps->use_physx){
+		float speed = 1;
+		if (ps->updater_movement != nullptr) {
+			speed = ps->updater_movement->speed;
+		}
+		PxVec3 array_pos[1];
+		array_pos[0] = PxVec3(pos.x, pos.y, pos.z);
+		PxVec3 array_velocity[1];
+		array_velocity[0] = PxVec3(direction.x, direction.y, direction.z) * speed;
+		std::vector<PxU32> indexAdded;
+		ps->psx->addParticle(1, array_pos, array_velocity, &indexAdded);
+		n_particle.index = indexAdded[0];
+	}
+	ps->particles.push_back(n_particle);
 }
 
 // Sphere / Semisphere / Box
-TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
 	shape = the_shape;
 	radius = the_radius_or_box_size;
 	h_transform = the_transform;
@@ -124,19 +149,24 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	rate_counter = 0;
 	fill_initial = the_fill_initial;
 	limit = the_limit;
-	particles = the_particles;
+	ps = the_ps;
 	burst_time = the_burst_time;
 	burst_amount = the_burst_amount;
 	burst_counter = 0;
+	delay_counter = 0;
+	emitter_counter = 0;
 
 	inner_radius = 0.5;
 	box_size = the_radius_or_box_size;
 	angle = deg2rad(30);
 
+	delay = the_delay;
+	loop = the_loop;
+
 	fillInitial();
 }
 // Cone / Ring
-TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
 	shape = the_shape;
 	radius = the_radius;
 	h_transform = the_transform;
@@ -146,14 +176,19 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(VParticles* the_particles
 	rate_counter = 0;
 	fill_initial = the_fill_initial;
 	limit = the_limit;
-	particles = the_particles;
+	ps = the_ps;
 	burst_time = the_burst_time;
 	burst_amount = the_burst_amount;
 	burst_counter = 0;
+	delay_counter = 0;
+	emitter_counter = 0;
 
 	inner_radius = the_angle_or_inner_radius;
 	box_size = 1;
 	angle = the_angle_or_inner_radius;
+
+	delay = the_delay;
+	loop = the_loop;
 
 	fillInitial();
 }
@@ -167,27 +202,235 @@ void TParticleEmitterGeneration::fillInitial() {
 	}
 }
 
-TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive) {
+void TParticleEmitterGeneration::restart() {
+	delay_counter = 0;
+	burst_counter = 0;
+	rate_counter = 0;
+	emitter_counter = 0;
+
+	fillInitial();
+}
+
+std::string TParticleEmitterGeneration::getXMLDefinition() {
+	std::string def = "";
+	def += "<emitter ";
+
+	// Sepecific atts
+	def += "type=\"";
+	switch (shape)
+	{
+		case SPHERE: 
+			def += "sphere"; 
+			def += "\" ";
+
+			def += "radius=\"";
+			def += std::to_string(radius) + "\" ";
+			break;
+		case SEMISPHERE: 
+			def += "semisphere"; 
+			def += "\" ";
+
+			def += "radius=\"";
+			def += std::to_string(radius) + "\" ";
+			break;
+		case CONE: 
+			def += "cone"; 
+			def += "\" ";
+
+			def += "radius=\"";
+			def += std::to_string(radius) + "\" ";
+			
+			def += "angle=\"";
+			def += std::to_string(rad2deg(angle)) + "\" ";
+			break;
+		case BOX: 
+			def += "box"; 
+			def += "\" ";
+
+			def += "size=\"";
+			def += std::to_string(box_size) + "\" ";
+			break;
+		case RING: 
+			def += "ring"; 
+			def += "\" ";
+
+			def += "innerRadius=\"";
+			def += std::to_string(inner_radius) + "\" ";
+
+			def += "outerRadius=\"";
+			def += std::to_string(radius) + "\" ";
+			break;
+	}
+
+	// General atts
+	def += "rate=\"";
+	def += std::to_string(rate) + "\" ";
+
+	def += "minLifeTime=\"";
+	def += std::to_string(min_life_time) + "\" ";
+
+	def += "maxLifeTime=\"";
+	def += std::to_string(max_life_time) + "\" ";
+
+	def += "fillInitial=\"";
+	def += std::to_string(fill_initial) + "\" ";
+
+	def += "limit=\"";
+	def += std::to_string(limit) + "\" ";
+
+	def += "burstTime=\"";
+	def += std::to_string(burst_time) + "\" ";
+
+	def += "burstAmount=\"";
+	def += std::to_string(burst_amount) + "\" ";
+
+	def += "delay=\"";
+	def += std::to_string(delay) + "\" ";
+
+	def += "loop=\"";
+	def += (loop ? "true" : "false");
+	def += "\" ";
+
+	def += "/>";
+
+	return def;
+}
+
+TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch) {
 	particles = the_particles;
 	strcpy(texture, the_texture);
 	additive = is_aditive;
-
+	render_type = the_render_type;
+	n_anim_x = the_n_anim_x;
+	n_anim_y = the_n_anim_y;
+	stretch = the_stretch;
 }
 
 void TParticleRenderer::update(TParticle* particle, float elapsed) {
 	particle->age += elapsed;
 }
 
+void TParticleRenderer::render() {
+	
+}
+
+std::string TParticleRenderer::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<renderer ";
+
+	def += "texture=\"";
+	def += std::string(texture) + "\" ";
+
+	def += "aditive=\"";
+	def += (additive ? "true" : "false");
+	def += "\" ";
+
+	def += "n_anim_x=\"";
+	def += std::to_string(n_anim_x) + "\" ";
+
+	def += "n_anim_y=\"";
+	def += std::to_string(n_anim_y) + "\" ";
+
+	def += "stretch=\"";
+	def += std::to_string(stretch) + "\" ";
+
+	def += "type=\"";
+	switch (render_type)
+	{
+	case BILLBOARD:
+		def += "billboard";
+		def += "\" ";
+		break;
+	case H_BILLBOARD:
+		def += "h_billboard";
+		def += "\" ";
+		break;
+	case V_BILLBOARD:
+		def += "v_billboard";
+		def += "\" ";
+		break;
+	case STRETCHED_BILLBOARD:
+		def += "stretched_billboard";
+		def += "\" ";
+		break;
+	}
+
+	def += "/>";
+
+	return def;
+}
+
+void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
+	//XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + XMLoadFloat3(&particle->direction) * speed * elapsed)
+	int index=particle->index;
+	PxVec3 position;
+	PxParticleReadData* rd = ps->psx->ps->lockParticleReadData();
+	if (rd)
+	{
+		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
+		position=positionIt[index];
+		rd->unlock();
+	}
+	//ps->psx
+	particle->position.x = position.x;
+	particle->position.y = position.y;
+	particle->position.z = position.z;
+}
+
 void TParticleUpdaterMovement::update(TParticle* particle, float elapsed) {
 	XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + XMLoadFloat3(&particle->direction) * speed * elapsed);
 }
 
+std::string TParticleUpdaterMovement::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"movement\" ";
+
+	def += "speed=\"";
+	def += std::to_string(speed) + "\" ";
+
+	def += "/>";
+
+	return def;
+}
+
 void TParticleUpdaterGravity::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+	if (constant)
+		XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+	else
+		XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+}
+
+std::string TParticleUpdaterGravity::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"gravity\" ";
+
+	def += "gravity=\"";
+	def += std::to_string(gravity) + "\" ";
+
+	def += "constant=\"";
+	def += (constant ? "true" : "false");
+	def += "\" ";
+
+	def += "/>";
+
+	return def;
 }
 
 void TParticleUpdaterLifeTime::update(TParticle* particle, float elapsed) {
 	particle->age += elapsed;
+}
+
+std::string TParticleUpdaterLifeTime::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"lifeTime\" ";
+
+	def += "/>";
+
+	return def;
 }
 
 TParticleUpdaterSize::TParticleUpdaterSize(float the_initial_size, float the_final_size) {
@@ -197,6 +440,22 @@ TParticleUpdaterSize::TParticleUpdaterSize(float the_initial_size, float the_fin
 
 void TParticleUpdaterSize::update(TParticle* particle, float elapsed) {
 	particle->size = lerp(initial_size, final_size, particle->age / particle->lifespan);
+}
+
+std::string TParticleUpdaterSize::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"size\" ";
+
+	def += "initialSize=\"";
+	def += std::to_string(initial_size) + "\" ";
+
+	def += "finalSize=\"";
+	def += std::to_string(final_size) + "\" ";
+
+	def += "/>";
+
+	return def;
 }
 
 TParticleUpdaterColor::TParticleUpdaterColor() {
@@ -213,6 +472,38 @@ void TParticleUpdaterColor::update(TParticle* particle, float elapsed) {
 	XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
 }
 
+std::string TParticleUpdaterColor::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"color\" ";
+
+	def += "initialColor=\"";
+	def += V3ToString(initial_color) + "\" ";
+
+	def += "finalColor=\"";
+	def += V3ToString(final_color) + "\" ";
+
+	def += "/>";
+
+	return def;
+}
+
 void TParticleUpdaterNoise::update(TParticle* particle, float elapsed) {	
 	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + getRandomVector3(min_noise, max_noise) * elapsed);
+}
+
+std::string TParticleUpdaterNoise::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"noise\" ";
+
+	def += "minNoise=\"";
+	def += V3ToString(XMLoadFloat3(&min_noise)) + "\" ";
+
+	def += "maxNoise=\"";
+	def += V3ToString(XMLoadFloat3(&max_noise)) + "\" ";
+
+	def += "/>";
+
+	return def;
 }

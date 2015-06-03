@@ -30,6 +30,7 @@ using namespace DirectX;
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
 #include "audio\sound_manager.h"
+#include "particles\importer_particle_groups.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -117,8 +118,6 @@ TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
 
-CPhysicsParticleSystem ps;
-
 //---------------------------------------------------
 //CNavmesh nav_prueba;
 //---------------------------------------------------
@@ -185,7 +184,7 @@ void createManagers() {
 	getObjManager<TCompSwitchPushController>()->init(32);
 
 	// Plataformas
-	getObjManager<TCompPlatformPath>()->init(32);	
+	getObjManager<TCompPlatformPath>()->init(32);
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -208,6 +207,7 @@ void createManagers() {
 	getObjManager<TCompShadows>()->init(8);
 
 	getObjManager<TCompParticleGroup>()->init(64);
+	getObjManager<TCompParticleEditor>()->init(1);
 
 
 	registerAllComponentMsgs();
@@ -260,6 +260,7 @@ void initManagers() {
 	getObjManager<TCompShadows>()->initHandlers();
 
 	getObjManager<TCompParticleGroup>()->initHandlers();
+	getObjManager<TCompParticleEditor>()->initHandlers();
 
 
 }
@@ -278,12 +279,19 @@ bool CApp::create() {
 
 	// Start random seed
 	srand((unsigned int)time(NULL));
-	
+
 	createManagers();
+
+#ifdef _DEBUG
+	// Init AntTweakBar
+	TwInit(TW_DIRECT3D11, ::render.device);
+	TwWindowSize(xres, yres);
+#endif
 
 	bool is_ok = true;
 
 	rt_base = nullptr;
+
 	// Boot LUA
 	logic_manager.bootLUA();
 
@@ -293,7 +301,7 @@ bool CApp::create() {
 	loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	
+	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -303,16 +311,13 @@ bool CApp::create() {
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-	
+
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
 	logic_manager.init();
 
 #ifdef _DEBUG
-	// Init AntTweakBar
-	TwInit(TW_DIRECT3D11, ::render.device);
-	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
 	entity_inspector.inspectEntity(CHandle());
@@ -326,11 +331,11 @@ bool CApp::create() {
 	post_process_optioner.blur = &blur;
 
 	post_process_optioner.init();
-	
 
-	entity_lister.update();	
+
+	entity_lister.update();
 #endif
-	
+
 	fps = 0;
 
 	// Timer test
@@ -351,44 +356,10 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
-	
+
 	logic_manager.addRigidAnimation(anim);	*/
 
-	//PRUEBAS PARTICULAS --------------------------
-	/*PxParticleCreationData particleCreationData;
-	PxU32 myIndexBuffer[] = { 0, 1, 2 };
-	PxVec3 myPositionBuffer[] = { PxVec3(0, 0.2, 0), PxVec3(0.5, 1, 0),
-		PxVec3(0, 2, .7) };
-	PxVec3 myVelocityBuffer[] = { PxVec3(0.1, 0, 0), PxVec3(0, 0.1, 0),
-		PxVec3(0, 0, 0.1) };
-	particleCreationData.indexBuffer =
-		PxStrideIterator<const PxU32>(myIndexBuffer);
-	particleCreationData.positionBuffer =
-		PxStrideIterator<const PxVec3>(myPositionBuffer);
-	particleCreationData.velocityBuffer =
-		PxStrideIterator<const PxVec3>(myVelocityBuffer);*/
-	//bool success=CPhysicsManager::get().createParticles();
-	//---------------------------------------------
 
-
-	/*PxU32 myIndexBuffer[] = { 0, 1, 2, 3, 4, 5 };
-	PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f))};
-	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };*/
-	//ps.init(4);
-	/*ps_prueba.myIndexBuffer = myIndexBuffer;
-	ps_prueba.myPositionBuffer = myPositionBuffer;
-	ps_prueba.myVelocityBuffer = myVelocityBuffer;*/
-	
-	/*PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
-	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
-	PxU32 indexAllocated[4];
-	ps.addParticle(4, positions, myVelocityBuffer, indexAllocated);*/
-	bool success = ps.createParticles(550);
-	ps.setParticlesNoGravity(false);
-	//ps.setParticlesFilterCollision();
 	return true;
 }
 
@@ -418,9 +389,9 @@ void CApp::doFrame() {
 	if (delta_secs < 0.5) {
 
 		/*if (isKeyPressed('Q')) {
-			time_modifier = 0.05f;
+		time_modifier = 0.05f;
 		}*/
-		
+
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
 			if (slow_motion_counter <= 0) {
@@ -459,7 +430,9 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/escena_ms2.xml");
+		//loadScene("data/scenes/escena_ms2.xml");
+		//CEntity* e = entity_manager.getByName("fire_ps");
+		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -501,7 +474,7 @@ void CApp::update(float elapsed) {
 			TCompTransform* player_t = player->get<TCompTransform>();
 			float p_y = XMVectorGetY(player_t->position);
 			underwater.amount = p_y > water_level ? 0 : 1;
-		}		
+		}
 	}
 	else
 	{
@@ -542,7 +515,7 @@ void CApp::update(float elapsed) {
 	//Insertamos aguja en vector agujas del item manager
 	/*Citem_manager::get().addNeedle(new_e_needle);
 
-	//Insertamos aguja en vector agujas del item manager					
+	//Insertamos aguja en vector agujas del item manager
 	Citem_manager::get().addNeedle(new_e_needle2);
 
 	//borrado de la aguja también del item manager
@@ -550,27 +523,10 @@ void CApp::update(float elapsed) {
 	TCompNeedle* needle = e->get<TCompNeedle>();
 	Citem_manager::get().removeNeedle(needle);*/
 
-	/*PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		 };
-	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
-		PxVec3(0, 0, 0) };
-	bool success = CPhysicsManager::get().createParticles(3, myPositionBuffer, myVelocityBuffer);*/
-
-
-	//CPhysicsManager::get().updateParticles();
-
-	/*if (io.becomesPressed(CIOStatus::EXTRA)) {
-		physics_manager.ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
-	}*/
-
-	PxVec3 positions[1] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.6f, 1.5f), getRandomNumber(0.1f, 0.5f))};
-	PxVec3 myVelocityBuffer[1] = { PxVec3(0, 0, 0)};
-	vector<PxU32> indexAllocated;
-	ps.addParticle(1, positions, myVelocityBuffer, &indexAllocated);
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
-	
+
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
@@ -584,7 +540,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
-	
+
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
 
@@ -600,6 +556,7 @@ void CApp::update(float elapsed) {
 
 	// PARTICLES
 	getObjManager<TCompParticleGroup>()->update(elapsed);
+	getObjManager<TCompParticleEditor>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
@@ -622,10 +579,10 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
-	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);	
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
-	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);	
+	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -644,12 +601,12 @@ void CApp::render() {
 	/*CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	if (e_light) {
-		TCompCamera* cam_light = e_light->get<TCompCamera>();
-		activateLight(*cam_light, 4);
+	TCompCamera* cam_light = e_light->get<TCompCamera>();
+	activateLight(*cam_light, 4);
 	}*/
 
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
-	
+
 	// Generate the culling for the active camera
 	render_manager.cullActiveCamera();
 
@@ -662,20 +619,20 @@ void CApp::render() {
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
 
 	texture_manager.getByName("noise")->activate(9);
-	ssao.apply(rt_base);	
+	ssao.apply(rt_base);
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
-	
+
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
 	static int sz = 150;
-	
+
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
-	
+
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 	//ssao.getOutput()->activate(1);
 
@@ -691,11 +648,11 @@ void CApp::render() {
 	CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
-	
+
 	*/
 
 	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
-	
+
 #ifdef _DEBUG
 
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
@@ -729,14 +686,14 @@ void CApp::render() {
 	renderEntities();
 
 	activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
-	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);	
+	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 	render_manager.renderAll(&camera, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
 	render_manager.renderAll(&camera, false);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
 	activateBlendConfig(BLEND_CFG_DEFAULT);
-	
+
 
 #ifdef _DEBUG
 	renderDebugEntities();
@@ -779,7 +736,7 @@ void CApp::renderEntities() {
 
 	debugTech.activate();
 	const CTexture *t = texture_manager.getByName("grass");
-	t->activate(0);	
+	t->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -811,34 +768,34 @@ void CApp::renderEntities() {
 			XMVECTOR rot2 = XMQuaternionIdentity();
 
 			if (a1) {
-				XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
 
-				XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
-				rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
+			XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
+			rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
 
-				XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+			XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
 
-				//   RECREATE ROPE   
-				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-				initialPos = pos1 + offset_rotado_1;
+			//   RECREATE ROPE
+			// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+			initialPos = pos1 + offset_rotado_1;
 			}
 			else {
-				initialPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			initialPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
 			}
 			if (a2) {
-				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 
-				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
-				rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+			XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+			rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
 
-				XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
+			XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
-				//   RECREATE ROPE   
-				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-				finalPos = pos2 + offset_rotado_2;
+			//   RECREATE ROPE
+			// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+			finalPos = pos2 + offset_rotado_2;
 			}
 			else {
-				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 			}*/
 
 			XMVECTOR initialPos = c_rope->pos_1;
@@ -878,7 +835,7 @@ void CApp::renderEntities() {
 			continue;
 
 		/*if (mesh)
-			setTint(mesh->color);*/
+		setTint(mesh->color);*/
 
 		setWorldMatrix(t->getWorld());
 
@@ -901,8 +858,6 @@ void CApp::renderEntities() {
 
 void CApp::renderDebugEntities() {
 
-	debugTech.activate();
-
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(300, 30, s_fps.c_str());
 
@@ -922,30 +877,7 @@ void CApp::renderDebugEntities() {
 
 	CNav_mesh_manager::get().pathRender();
 
-
-
-	PxParticleReadData* rd = ps.ps->lockParticleReadData();
-	if (rd)
-	{
-		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
-
-		for (unsigned i = 0; i < rd->nbValidParticles; ++i, ++positionIt)
-		{
-			// access particle position
-			const PxVec3& position = *positionIt;
-			XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 1);
-			XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
-			XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
-			XMVECTOR scale = XMVectorSet(0.02, 0.02, 0.02, 1);
-			setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
-			//setWorldMatrix(XMMatrixTranslation(position.x, position.y, position.z));			
-			mesh_icosahedron.activateAndRender();
-		}
-
-		// return ownership of the buffers back to the SDK
-		rd->unlock();
-	}
-
+	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
 		grid.activateAndRender();
@@ -1043,6 +975,7 @@ void CApp::destroy() {
 	renderUtilsDestroy();
 	debugTech.destroy();
 	font.destroy();
+	particle_groups_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }
@@ -1051,7 +984,7 @@ unsigned int CApp::numStrings(){
 	int num_strings = 0;
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i){
 		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
-		if (c_rope){			
+		if (c_rope){
 			num_strings++;
 		}
 	}
@@ -1079,7 +1012,7 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
-	/*physics_manager.gScene->release();*/	
+	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	physics_manager.init();
 
@@ -1089,6 +1022,9 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= renderUtilsCreate();
 
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
+
+	particle_groups_manager.destroy();
+	XASSERT(particle_groups_manager.xmlParseFile("data/particles/particle_groups.xml"), "Error loading the particle groups");
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -1119,7 +1055,7 @@ void CApp::loadScene(std::string scene_name) {
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
-	
+
 	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
@@ -1138,7 +1074,7 @@ void CApp::loadScene(std::string scene_name) {
 	initManagers();
 
 	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
-	logic_manager.onSceneLoad(name);	
+	logic_manager.onSceneLoad(name);
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();

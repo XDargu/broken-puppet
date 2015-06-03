@@ -43,7 +43,31 @@ public:
 		fclose(f);
 		return true;
 	}
+};
 
+// -------------------------------------------
+// A class to save text
+class CStringDataSaver : public CDataSaver {
+	std::string buffer;
+
+public:
+	CStringDataSaver() {
+	}
+	void write(const void *data, size_t nbytes) override {
+		size_t old_size = buffer.size();
+		buffer = *((std::string*)(data));
+	}
+	size_t size() const { return buffer.size(); }
+	const void* data() const { return &buffer[0]; }
+
+	bool saveToFile(const char* filename) {
+		FILE *f = fopen(filename, "w+");
+		if (!f)
+			return false;
+		fputs(&buffer[0], f);
+		fclose(f);
+		return true;
+	}
 };
 
 

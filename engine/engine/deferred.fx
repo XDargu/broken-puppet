@@ -462,8 +462,7 @@ float4 PSDirLights(
  // return angle_cos.xxxx;
 
   float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
-  float4 output = float4(dir_light_color.xyz * diffuse_amount, 0) * att_factor;
-  output.a = spec_amount;
+  float4 output = float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
   return output;
 }
 
@@ -539,7 +538,7 @@ float4 PSResolve(
 	if (length(N) > 1.73) {
 		R = reflect(I, float3(0,0,0));
 		env = txEnvironment.Sample(samCube, R);
-		return env;
+		//return env;
 	}
 	
 	return (albedo * diffuse + saturate(specular) ) * (1 - ambient_val) + albedo * ambient_color * ambient_val;

@@ -160,6 +160,14 @@ std::vector<std::string> split_string(const std::string& str,
 	return strings;
 }
 
+std::string V3ToString(XMVECTOR vector) {
+	return std::to_string(XMVectorGetX(vector)) + " " + std::to_string(XMVectorGetY(vector)) + " " + std::to_string(XMVectorGetZ(vector));
+}
+
+std::string V4ToString(XMVECTOR vector) {
+	return std::to_string(XMVectorGetX(vector)) + " " + std::to_string(XMVectorGetY(vector)) + " " + std::to_string(XMVectorGetZ(vector)) + " " + std::to_string(XMVectorGetW(vector));
+}
+
 
 float lerp(float a, float b, float f)
 {

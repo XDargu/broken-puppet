@@ -474,7 +474,12 @@
     <ClInclude Include="particles\particle_system_subtypes.h">
       <Filter>particles</Filter>
     </ClInclude>
-    <ClInclude Include="rope_manager.h" />
+    <ClInclude Include="particles\importer_particle_groups.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_particle_editor.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -875,6 +880,12 @@
     </ClCompile>
     <ClCompile Include="particles\particle_system_subtypes.cpp">
       <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\importer_particle_groups.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_particle_editor.cpp">
+      <Filter>components\misc</Filter>
     </ClCompile>
     <ClCompile Include="rope_manager.cpp" />
   </ItemGroup>

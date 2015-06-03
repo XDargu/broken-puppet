@@ -121,26 +121,6 @@ void CPhysicsManager::init() {
 
 	// Crear el controller manager
 	gManager = PxCreateControllerManager(*gScene);
-
-
-	PxParticleSystem* ps;
-
-	ps = gPhysicsSDK->createParticleSystem(100);
-
-	PxU32 array[] = { 1, 2, 3, 4 };
-	PxStrideIterator<const PxU32> indexBuffer(array);
-	ps->releaseParticles(4, indexBuffer);
-
-	
-	PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(100);
-
-	PxStrideIterator<PxU32> buf(array);
-	PxU32 numAllocated = indexPool->allocateIndices(4, buf);
-
-
-
-	// Borrar
-	indexPool->freeIndices(4, PxStrideIterator<PxU32>(array));
 }
 
 void CPhysicsParticleSystem::init(PxU32 numParticles){
@@ -253,14 +233,15 @@ void CPhysicsParticleSystem::updateParticles(){
 	ps->addForces(maxParticles, indexBuffer, forceBuffer, PxForceMode::eFORCE);
 }
 
-void CPhysicsParticleSystem::releaseParticles(PxU32 indicesToRelease){
+void CPhysicsParticleSystem::releaseParticles(int numParticlesReleased, PxU32 indicesToRelease[]){
 	//PxU32 myIndexBuffer[] = { 0, 1, 2 };
 	//PxParticleExt::IndexPool* indexPool = PxParticleExt::createIndexPool(maxParticles);
-	//indexPool->freeIndices(numAppParticleIndices, PxStrideIterator<PxU32>(indicesToRelease));
-	PxStrideIterator<const PxU32> indexBuffer(&myIndexBuffer[0]);
+	PxStrideIterator<const PxU32> indexBuffer(indicesToRelease);
+
+	indexPool->freeIndices(numParticlesReleased, indexBuffer);
 
 	// release particles in *PxParticleSystem* ps
-	ps->releaseParticles(indicesToRelease, indexBuffer);
+	ps->releaseParticles(numParticlesReleased, indexBuffer);
 }
 
 void CPhysicsParticleSystem::releaseAllParticles(){

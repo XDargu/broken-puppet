@@ -12,6 +12,8 @@
 #include "render\sharpen_step.h"
 #include "render\blur_step.h"
 #include "render\chromatic_aberration_step.h"
+#include "particles\particle_system_subtypes.h"
+#include "particles\importer_particle_groups.h"
 
 using namespace physx;
 
@@ -32,6 +34,9 @@ PxVec3 angularVelocity;
 // Particles
 TwEnumVal particleEmitterShapeEV[] = { { TParticleEmitterShape::SPHERE, "Sphere" }, { TParticleEmitterShape::SEMISPHERE, "Semisphere" }, { TParticleEmitterShape::RING, "Ring" }, { TParticleEmitterShape::CONE, "Cone" }, { TParticleEmitterShape::BOX, "Box" } };
 TwType particleEmitterShape;
+
+TwEnumVal particleRenderModeEV[] = { { TParticleRenderType::BILLBOARD, "Billboard" }, { TParticleRenderType::H_BILLBOARD, "H-Billboard" }, { TParticleRenderType::V_BILLBOARD, "V-Billboard" }, { TParticleRenderType::STRETCHED_BILLBOARD, "Stretched Billboard" }};
+TwType particleRenderMode;
 
 static CEntityInspector entity_inspector;
 
@@ -55,6 +60,7 @@ void CEntityInspector::init() {
 
 	// Particles
 	particleEmitterShape = TwDefineEnum("ParticlEmitterShape", particleEmitterShapeEV, 5);
+	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 4);
 
 }
 
@@ -220,6 +226,43 @@ void TW_CALL GetPlayerFSMTorsoState(void *value, void *clientData)
 
 
 // ---------------------------- PARTICLES CALLBACKS --------------------------
+
+void TW_CALL CallBackParticleSystemCreate(void *clientData) {
+	CEntity* e = CHandle(static_cast<TCompParticleGroup *>(clientData)).getOwner();
+	TCompTransform* m_trans = e->get<TCompTransform>();
+
+	TParticleSystem ps;
+	ps.h_transform = m_trans;
+	ps.loadDefaultPS();
+	static_cast<TCompParticleGroup *>(clientData)->particle_systems.push_back(ps);
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallBackParticleSystemSave(void *clientData) {
+	TCompParticleGroup* pg = static_cast<TCompParticleGroup *>(clientData);
+	CEntity* e = CHandle(pg).getOwner();
+
+	particle_groups_manager.updateParticleGroupFromEntity(e, pg->def_name);
+	particle_groups_manager.saveToDisk();
+}
+
+void TW_CALL CallBackParticleSystemRestart(void *clientData) {
+	TCompParticleGroup* pg = static_cast<TCompParticleGroup *>(clientData);
+	
+	pg->restart();
+}
+
+void TW_CALL CallBackParticleSystemRemove(void *clientData) {
+	TParticleSystem* ps = static_cast<TParticleSystem *>(clientData);
+	TCompTransform* e_transform = ps->h_transform;		
+	CEntity* e = CHandle(e_transform).getOwner();
+	TCompParticleGroup* pg = e->get<TCompParticleGroup>();
+
+	pg->removeParticleSystem(ps);
+
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
 void TW_CALL SetParticleSystemLimit(const void *value, void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->changeLimit(*static_cast<const int *>(value));
@@ -303,7 +346,7 @@ void TW_CALL CallbackAddUpdaterSize(void *clientData)
 
 void TW_CALL CallbackAddUpdaterGravity(void *clientData)
 {
-	static_cast<TParticleSystem *>(clientData)->updater_gravity = new TParticleUpdaterGravity(0.001f);
+	static_cast<TParticleSystem *>(clientData)->updater_gravity = new TParticleUpdaterGravity(0.001f, false);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -586,16 +629,22 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	if (e_particle_group) {
 		TwAddVarRW(bar, "PGActive", TW_TYPE_BOOL8, &e_particle_group->active, " group=PG label='Active'");		
 		std::string aux = "";
+		std::string aux2 = "";
+
+		TwAddButton(bar, "PGAddBtn", CallBackParticleSystemCreate, e_particle_group, "group=PG label='Add particle system'");
+		TwAddButton(bar, "PGSaveBtn", CallBackParticleSystemSave, e_particle_group, "group=PG label='Save particle group'");
+		TwAddButton(bar, "PGRestartBtn", CallBackParticleSystemRestart, e_particle_group, "group=PG label='Restart particle group'");
 
 		// For each particle system
 		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {
 			
 			TwAddSeparator(bar, "", "group=PG");
 			aux = "ParticleSystem" + i;
-			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='PARTICLE SYSTEM'");
-			TwAddSeparator(bar, "", "group=PG");
-
-			typedef enum { SPHERE, SEMISPHERE, CONE, RING, BOX } EmitterShapes;
+			aux2 = "group=PG label='PARTICLE SYSTEM " + std::to_string(i) + "'";
+			TwAddButton(bar, aux.c_str(), NULL, NULL, aux2.c_str());
+			aux = "ParticleSystemRemove" + i;
+			TwAddButton(bar, aux.c_str(), CallBackParticleSystemRemove, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+			TwAddSeparator(bar, "", "group=PG");			
 
 			// Emitter
 			aux = "Emitter" + i;
@@ -634,6 +683,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->burst_time, " group=PG label='Burst Time' min=0 step=0.1");
 			aux = "PGEmitterBurstAmount" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->burst_amount, " group=PG label='Burst Amount' min=1");
+			aux = "PGEmitterDelay" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->delay, " group=PG label='Delay' min=0 step=0.01");
+			aux = "PGEmitterLoop" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->loop, " group=PG label='Loop'");
 
 			// Updaters
 			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {
@@ -658,9 +711,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				aux = "Size over life" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Size over life'");
 				aux = "PGUpdaterSizeIS" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->initial_size, " group=PG label='Initial Size' min=0.01 step=0.1");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->initial_size, " group=PG label='Initial Size' min=0.01 step=0.01");
 				aux = "PGUpdaterSizeFS" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->final_size, " group=PG label='Final Size' min=0.01 step=0.1");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->final_size, " group=PG label='Final Size' min=0.01 step=0.01");
 				aux = "RemovePGUpdaterSize" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterSize, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}			
@@ -669,7 +722,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				aux = "Initial movement" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Initial movement'");
 				aux = "PGUpdaterMovementSpeed" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed' min=0.01 step=0.1");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed' step=0.1");
 				aux = "RemovePGUpdaterMovement" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
@@ -690,6 +743,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Gravity'");
 				aux = "PGUpdaterGravityForce" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_gravity->gravity, " group=PG label='Force' step=0.005");
+				aux = "PGUpdaterGravityConstant" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].updater_gravity->constant, " group=PG label='Constant'");
 				aux = "RemovePGUpdaterGravity" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
@@ -702,7 +757,21 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGRendererAdditive" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
 
+			aux = "PGRendererNAnimX" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->n_anim_x, " group=PG label='Animation columns'");
+			aux = "PGRendererNAnimY" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->n_anim_y, " group=PG label='Animation rows'");
+
+			aux = "PGRendererMode" + i;
+			TwAddVarRW(bar, aux.c_str(), particleRenderMode, &e_particle_group->particle_systems[i].renderer->render_type, " group=PG label='Render mode'");
+
+			// TODO: Hacer que solo aparezca en modo stretch
+			aux = "PGRendererStretch" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' min=1 step=0.1");
+						
 			TwAddSeparator(bar, "", "group=PG");
+
+			// Updaters
 
 			if (e_particle_group->particle_systems[i].updater_lifetime == nullptr) {
 				aux = "AddPGLifetime" + i;

@@ -15,6 +15,7 @@ CShaderCte<TCtesPointLight>  ctes_point_light;
 CShaderCte<TCtesDirLight>    ctes_dir_light;
 CShaderCte<TCtesSpotLight>    ctes_spot_light;
 CShaderCte<TCtesBones>  ctes_bones;
+CShaderCte<TCtesParticleSystem>  ctes_particle_system;
 
 // Post process
 CShaderCte<TCtesBlur> ctes_blur;
@@ -355,6 +356,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_dir_light.create();
 	is_ok &= ctes_spot_light.create();
 	is_ok &= ctes_bones.create();
+	is_ok &= ctes_particle_system.create();
 
 	is_ok &= ctes_blur.create();
 	is_ok &= ctes_sharpen.create();
@@ -390,6 +392,7 @@ void renderUtilsDestroy() {
 	ctes_light.destroy();
 	ctes_camera.destroy();
 	ctes_bones.destroy();
+	ctes_particle_system.destroy();
 
 	ctes_blur.destroy();
 	ctes_sharpen.destroy();

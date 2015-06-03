@@ -41,7 +41,7 @@ public:
 	bool createParticles(PxU32 numParticles);
 	void addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices);
 	void updateParticles();
-	void releaseParticles(PxU32 indicesToRelease);
+	void releaseParticles(int numParticlesReleased, PxU32 indicesToRelease[]);
 	void releaseAllParticles();
 	void setParticlesFilterCollision();
 	void setParticlesNoGravity(bool gravity);

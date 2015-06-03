@@ -447,14 +447,43 @@
     <ClInclude Include="render\underwater_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
-<<<<<<< .merge_file_a22976
-    <ClInclude Include="components\comp_spot_light.h">
-      <Filter>components\render</Filter>
-=======
     <ClInclude Include="ai\hinge_joint.h">
       <Filter>ai\logic</Filter>
->>>>>>> .merge_file_a02664
     </ClInclude>
+    <ClInclude Include="render\render_instances.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\sound.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_audio_listener.h">
+      <Filter>components\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_audio_source.h">
+      <Filter>components\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle_system.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_particle_group.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle_system_subtypes.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="rope_manager.h" />
+=======
+    <ClInclude Include="particles\importer_particle_groups.h">
+      <Filter>particles</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_particle_editor.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+>>>>>>> f1058f82f5a998f0e4782ff9469570883f86575a
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -817,14 +846,55 @@
     <ClCompile Include="render\underwater_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
-<<<<<<< .merge_file_a22976
-    <ClCompile Include="components\comp_spot_light.cpp">
-      <Filter>components\render</Filter>
-=======
     <ClCompile Include="ai\hinge_joint.cpp">
       <Filter>ai\logic</Filter>
->>>>>>> .merge_file_a02664
     </ClCompile>
+    <ClCompile Include="components\comp_player_controller.cpp">
+      <Filter>components\ai\player</Filter>
+    </ClCompile>
+    <ClCompile Include="render\render_instances.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_player_pivot_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_third_person_camera_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_camera_pivot_controller.cpp">
+      <Filter>components\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\sound.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_audio_listener.cpp">
+      <Filter>components\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_audio_source.cpp">
+      <Filter>components\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle_system.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_particle_group.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle_system_subtypes.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="rope_manager.cpp" />
+=======
+    <ClCompile Include="particles\importer_particle_groups.cpp">
+      <Filter>particles</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_particle_editor.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+>>>>>>> f1058f82f5a998f0e4782ff9469570883f86575a
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -916,6 +986,12 @@
     </Filter>
     <Filter Include="audio">
       <UniqueIdentifier>{cf303c48-915a-4b05-8758-0eaf69bf6d35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\audio">
+      <UniqueIdentifier>{5e035253-ef1f-4caa-a8ca-bbe1e1503d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="particles">
+      <UniqueIdentifier>{b66cdcab-9d81-457d-85e6-0c2377b87c59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

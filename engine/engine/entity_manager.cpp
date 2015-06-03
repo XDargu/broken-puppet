@@ -26,7 +26,7 @@ void CEntityManager::add(CHandle the_entity) {
 		rigid_list.push_back(the_entity);
 }
 
-bool CEntityManager::remove(CHandle the_handle) {
+bool CEntityManager::remove(CHandle the_handle) {	
 	// If the entity is already in the destroy list, do not add it
 	auto it = std::find(handles_to_destroy.begin(), handles_to_destroy.end(), the_handle);
 	if (it == handles_to_destroy.end() && the_handle.isValid()) {

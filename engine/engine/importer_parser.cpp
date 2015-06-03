@@ -99,3 +99,7 @@ void CImporterParser::onEndElement(const std::string &elem) {
 		current_chunk = nullptr;
 	}
 }
+
+void CImporterParser::setCurrentEntity(CHandle entity) {
+	current_entity = entity;
+}

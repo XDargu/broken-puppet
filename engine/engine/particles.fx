@@ -33,21 +33,26 @@ VS_TEXTURED_OUTPUT VS(
 )
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+
+  float real_stretch = 1;
+  if (render_mode == 3)
+	  real_stretch = stretch;
+
   float3 wpos = InstancePos
-	  + (cameraWorldUp.xyz * Pos.y * InstanceAgeLifeSpanSize.z
+	  + (cameraWorldUp.xyz * Pos.y * InstanceAgeLifeSpanSize.z * real_stretch
 	  + cameraWorldLeft.xyz * Pos.x * InstanceAgeLifeSpanSize.z
       );
   output.Pos = mul(float4( wpos, 1 ), ViewProjection);
   
   // Animate the UV's. Assuming 4x4 frames
-  float nmod16 = fmod(InstanceAgeLifeSpanSize.x * 32, 16.0);
+  float nmod16 = fmod(InstanceAgeLifeSpanSize.x * 32, n_imgs_x * n_imgs_y);
   //float nmod16 = 1;
   int   idx = int(nmod16);
   float coords_x = 0;// fmod(idx, 4);
-  float coords_y = uint( idx / 4);
+  float coords_y = uint(idx / n_imgs_y);
 
-  output.UV.x = (coords_x + UV.x) / 4.0;
-  output.UV.y = (coords_y + UV.y) / 4.0;
+  output.UV.x = (coords_x + UV.x) / n_imgs_x;
+  output.UV.y = (coords_y + UV.y) / n_imgs_y;
 
   output.wPos = wpos;
   output.color = Color;
