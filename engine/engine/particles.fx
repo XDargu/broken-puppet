@@ -33,8 +33,13 @@ VS_TEXTURED_OUTPUT VS(
 )
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+
+  float real_stretch = 1;
+  if (render_mode == 3)
+	  real_stretch = stretch;
+
   float3 wpos = InstancePos
-	  + (cameraWorldUp.xyz * Pos.y * InstanceAgeLifeSpanSize.z
+	  + (cameraWorldUp.xyz * Pos.y * InstanceAgeLifeSpanSize.z * real_stretch
 	  + cameraWorldLeft.xyz * Pos.x * InstanceAgeLifeSpanSize.z
       );
   output.Pos = mul(float4( wpos, 1 ), ViewProjection);
