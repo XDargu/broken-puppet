@@ -87,12 +87,22 @@ void TCompParticleEditor::reloadParticleGroups() {
 	for (auto& pg : particle_groups_manager.particle_group_definitions) {
 
 		if (pg.getName() != "Default") {
+
 			aux = "group='" + pg.getName() + "' label='Edit'";
 			aux2 = pg.getName() + "Edit";
 			TwAddButton(particle_list_bar, aux2.c_str(), CallBackParticleGroupSelected, &pg.name, aux.c_str());
+
+			aux = "group='" + pg.getName() + "'";
+			aux2 = pg.getName() + "Separator1";
+			TwAddSeparator(particle_list_bar, aux2.c_str(), aux.c_str());
+
 			aux = "group='" + pg.getName() + "' label='Delete'";
 			aux2 = pg.getName() + "Delete";
 			TwAddButton(particle_list_bar, aux2.c_str(), CallBackParticleGroupDelete, &pg.name, aux.c_str());
+
+			aux = "group='" + pg.getName() + "'";
+			aux2 = pg.getName() + "Separator2";
+			TwAddSeparator(particle_list_bar, aux2.c_str(), aux.c_str());
 		}
 	}
 }
