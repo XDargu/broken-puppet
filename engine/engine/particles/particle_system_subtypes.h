@@ -81,6 +81,7 @@ struct TParticleUpdaterMovement {
 };
 
 struct TParticleUpdaterPhysx {
+
 };
 
 struct TParticleUpdaterGravity {

@@ -386,9 +386,9 @@ bool CApp::create() {
 	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
 	PxU32 indexAllocated[4];
 	ps.addParticle(4, positions, myVelocityBuffer, indexAllocated);*/
-	bool success = ps.createParticles(250);
+	bool success = ps.createParticles(550);
 	ps.setParticlesNoGravity(false);
-	ps.setParticlesFilterCollision();
+	//ps.setParticlesFilterCollision();
 	return true;
 }
 
@@ -563,13 +563,10 @@ void CApp::update(float elapsed) {
 		physics_manager.ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
 	}*/
 
-	PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
-	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
-	PxU32 indexAllocated[4];
-	ps.addParticle(4, positions, myVelocityBuffer, indexAllocated);
+	PxVec3 positions[1] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.6f, 1.5f), getRandomNumber(0.1f, 0.5f))};
+	PxVec3 myVelocityBuffer[1] = { PxVec3(0, 0, 0)};
+	vector<PxU32> indexAllocated;
+	ps.addParticle(1, positions, myVelocityBuffer, &indexAllocated);
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;

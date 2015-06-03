@@ -154,7 +154,7 @@ void CPhysicsParticleSystem::init(PxU32 numParticles){
 	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
 }
 
-void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32> indexAllocated){
+void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices){
 	//IN --> int numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[]
 	//OUT --> PxU32 indexAllocated[]
 	//Adding one or more particles to the particle system
@@ -170,6 +170,7 @@ void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positions
 	for (int i = 0; i < numNewParticles; i++){
 		myIndexBuffer.push_back(mTmpIndexArray[i]);
 		newIndexBuffer.push_back(mTmpIndexArray[i]);
+		newIndices->push_back(mTmpIndexArray[i]);
 		myPositionBuffer.push_back(positionsToAdd[i]);
 		newPositionBuffer.push_back(positionsToAdd[i]);
 		myVelocityBuffer.push_back(velocityToAdd[i]);
@@ -186,8 +187,6 @@ void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positions
 		PxStrideIterator<const PxVec3>(&newVelocityBuffer[0]);
 
 	bool success = ps->createParticles(newparticleCreationData);
-	if (success)
-		indexAllocated = newIndexBuffer;
 
 	int prueba;
 	prueba = myIndexBuffer.size();
