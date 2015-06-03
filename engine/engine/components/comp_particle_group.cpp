@@ -60,6 +60,17 @@ void TCompParticleGroup::renderDebug3D() const {
 	}
 }
 
+void TCompParticleGroup::removeParticleSystem(TParticleSystem* ps) {
+	std::vector<TParticleSystem>::iterator it = particle_systems.begin();
+
+	while (it != particle_systems.end()) {
+		if (&it->emitter_generation == &ps->emitter_generation) {
+			it = particle_systems.erase(it);
+		}
+		else ++it;
+	}
+}
+
 void TCompParticleGroup::clearParticleSystems() {
 	for (int i = 0; i < particle_systems.size(); ++i) {
 		particle_systems[i].destroy();

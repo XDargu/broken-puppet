@@ -270,6 +270,9 @@ void TParticleSystem::loadDefaultPS() {
 		&particles, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0);
 	renderer = new TParticleRenderer(&particles, "smoke", false);
 
+	updater_lifetime = new TParticleUpdaterLifeTime();
+	updater_movement = new TParticleUpdaterMovement();
+
 	// Instancing
 	instanced_mesh = &mesh_textured_quad_xy_centered;
 

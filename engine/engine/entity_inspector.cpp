@@ -242,6 +242,17 @@ void TW_CALL CallBackParticleSystemSave(void *clientData) {
 	particle_groups_manager.saveToDisk();
 }
 
+void TW_CALL CallBackParticleSystemRemove(void *clientData) {
+	TParticleSystem* ps = static_cast<TParticleSystem *>(clientData);
+	TCompTransform* e_transform = ps->h_transform;		
+	CEntity* e = CHandle(e_transform).getOwner();
+	TCompParticleGroup* pg = e->get<TCompParticleGroup>();
+
+	pg->removeParticleSystem(ps);
+
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
 void TW_CALL SetParticleSystemLimit(const void *value, void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->changeLimit(*static_cast<const int *>(value));
@@ -608,6 +619,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	if (e_particle_group) {
 		TwAddVarRW(bar, "PGActive", TW_TYPE_BOOL8, &e_particle_group->active, " group=PG label='Active'");		
 		std::string aux = "";
+		std::string aux2 = "";
 
 		TwAddButton(bar, "PGAddBtn", CallBackParticleSystemCreate, e_particle_group, "group=PG label='Add particle system'");
 		TwAddButton(bar, "PGSaveBtn", CallBackParticleSystemSave, e_particle_group, "group=PG label='Save particle group'");
@@ -617,7 +629,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			
 			TwAddSeparator(bar, "", "group=PG");
 			aux = "ParticleSystem" + i;
-			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='PARTICLE SYSTEM'");
+			aux2 = "group=PG label='PARTICLE SYSTEM " + std::to_string(i) + "'";
+			TwAddButton(bar, aux.c_str(), NULL, NULL, aux2.c_str());
+			aux = "ParticleSystemRemove" + i;
+			TwAddButton(bar, aux.c_str(), CallBackParticleSystemRemove, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			TwAddSeparator(bar, "", "group=PG");
 
 			typedef enum { SPHERE, SEMISPHERE, CONE, RING, BOX } EmitterShapes;

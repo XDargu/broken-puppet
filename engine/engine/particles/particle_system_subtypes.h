@@ -81,6 +81,8 @@ struct TParticleRenderer {
 struct TParticleUpdaterMovement {
 	float speed;
 
+	TParticleUpdaterMovement() { speed = 1; }
+
 	void update(TParticle* particle, float elapsed);
 	std::string getXMLDefinition();
 };

@@ -26,6 +26,7 @@ public:
 	void render();
 	void renderDebug3D() const;
 
+	void removeParticleSystem(TParticleSystem* ps);
 	void clearParticleSystems();
 
 	std::string getXMLDefinition();
