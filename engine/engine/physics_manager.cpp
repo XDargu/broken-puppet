@@ -151,6 +151,7 @@ void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positions
 	PxStrideIterator<PxU32> indexData(&mTmpIndexArray[0]);
 	PxU32 numAllocated = indexPool->allocateIndices(numNewParticles, indexData);
 	for (int i = 0; i < numNewParticles; i++){
+		myIndexBuffer.push_back(mTmpIndexArray[i]);
 		newIndexBuffer.push_back(mTmpIndexArray[i]);
 		newIndices->push_back(mTmpIndexArray[i]);
 		newPositionBuffer.push_back(positionsToAdd[i]);
@@ -215,13 +216,13 @@ void CPhysicsParticleSystem::updateParticles(){
 	//PxVec3 appParticleForces[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
 		//PxVec3(0, 0, 0) };
 	// specify strided iterator to provide update forces
-	//PxStrideIterator<const PxVec3> forceBuffer(&myParticlesForces[0]);
+	PxStrideIterator<const PxVec3> forceBuffer(&myParticlesForces[0]);
 
 	// specify strided iterator to provide indices of particles that need to be updated
-	//PxStrideIterator<const PxU32> indexBuffer(&myIndexBuffer[0]);
+	PxStrideIterator<const PxU32> indexBuffer(&myIndexBuffer[0]);
 
 	// specify force update on PxParticleSystem ps choosing the "force" unit
-	//ps->addForces(maxParticles, indexBuffer, forceBuffer, PxForceMode::eFORCE);
+	ps->addForces(maxParticles, indexBuffer, forceBuffer, PxForceMode::eFORCE);
 }
 
 void CPhysicsParticleSystem::releaseParticles(int numParticlesReleased, PxU32 indicesToRelease[]){
@@ -236,6 +237,9 @@ void CPhysicsParticleSystem::releaseParticles(int numParticlesReleased, PxU32 in
 
 		// release particles in *PxParticleSystem* ps
 		ps->releaseParticles(numParticlesReleased, indexBuffer);
+
+		myIndexBuffer.erase(std::remove(myIndexBuffer.begin(), myIndexBuffer.end(), indexBuffer[0]), myIndexBuffer.end());
+
 		numParticlesStored--;
 	}
 }

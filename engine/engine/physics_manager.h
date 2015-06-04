@@ -33,6 +33,7 @@ public:
 	PxParticleCreationData particleCreationData;
 	PxU32 maxParticles;
 	int numParticlesStored;
+	std::vector<PxU32> myIndexBuffer;
 	std::vector<PxVec3> myParticlesForces;
 
 	void init(PxU32 numParticles);
@@ -43,6 +44,7 @@ public:
 	void releaseAllParticles();
 	void setParticlesFilterCollision();
 	void setParticlesGravity(bool gravity);
+	void releaseParticleFromBuffer(int index);
 };
 
 class CPhysicsManager
