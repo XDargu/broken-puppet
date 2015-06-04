@@ -38,6 +38,9 @@ TwType particleEmitterShape;
 TwEnumVal particleRenderModeEV[] = { { TParticleRenderType::BILLBOARD, "Billboard" }, { TParticleRenderType::H_BILLBOARD, "H-Billboard" }, { TParticleRenderType::V_BILLBOARD, "V-Billboard" }, { TParticleRenderType::STRETCHED_BILLBOARD, "Stretched Billboard" }};
 TwType particleRenderMode;
 
+TwEnumVal particleRenderAnimationModeEV[] = { { 0, "Animation" }, { 1, "Random particle" }, { 2, "Random row animation" } };
+TwType particleRenderAnimationMode;
+
 static CEntityInspector entity_inspector;
 
 CEntityInspector& CEntityInspector::get() {
@@ -61,6 +64,7 @@ void CEntityInspector::init() {
 	// Particles
 	particleEmitterShape = TwDefineEnum("ParticlEmitterShape", particleEmitterShapeEV, 5);
 	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 4);
+	particleRenderAnimationMode = TwDefineEnum("particleRenderAnimationMode", particleRenderAnimationModeEV, 3);
 
 }
 
@@ -766,7 +770,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			TwAddVarRW(bar, aux.c_str(), particleRenderMode, &e_particle_group->particle_systems[i].renderer->render_type, " group=PG label='Render mode'");
 
 			aux = "PGRendererAnimMode" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->particle_animation_mode, " group=PG label='Animation mode'");
+			TwAddVarRW(bar, aux.c_str(), particleRenderAnimationMode, &e_particle_group->particle_systems[i].renderer->particle_animation_mode, " group=PG label='Animation mode'");
 
 			// TODO: Hacer que solo aparezca en modo stretch
 			aux = "PGRendererStretch" + i;
