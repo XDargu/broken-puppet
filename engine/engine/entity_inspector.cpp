@@ -691,6 +691,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->delay, " group=PG label='Delay' min=0 step=0.01");
 			aux = "PGEmitterLoop" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->loop, " group=PG label='Loop'");
+			aux = "PGEmitterFillInitial" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->fill_initial, " group=PG label='Fill initial'");
 
 			// Updaters
 			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {

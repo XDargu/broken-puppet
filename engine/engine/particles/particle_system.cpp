@@ -165,10 +165,6 @@ void TParticleSystem::update(float elapsed) {
 		updater_physx->ps = this;
 	}
 
-	if (isKeyPressed('T')) {
-		changeLimit(100);
-	}
-
 	VParticles::iterator it = particles.begin();
 
 	int delete_counter = 0;
@@ -176,9 +172,11 @@ void TParticleSystem::update(float elapsed) {
 
 		if (it->size != -1) {
 			// Update the position, no updater needed
-			it->position.x += it->speed.x;
-			it->position.y += it->speed.y;
-			it->position.z += it->speed.z;
+			it->position.x += it->speed.x * 1;
+			it->position.y += it->speed.y * 1;
+			it->position.z += it->speed.z *1 ;
+
+			it->rotation += 5 * elapsed;
 
 			if (updater_movement != nullptr) {
 				updater_movement->update(&(*it), elapsed);
@@ -237,7 +235,7 @@ void TParticleSystem::update(float elapsed) {
 	}*/
 
 	if (instances_data != nullptr && particles.size() > 0) {
-		instances_data->updateFromCPU(&particles[0]);
+		instances_data->updateFromCPU(&particles[0], particles.size() * sizeof(TParticle));
 	}
 }
 
@@ -248,7 +246,8 @@ void TParticleSystem::render() {
 		ps_ctes->n_imgs_y = renderer->n_anim_y;
 		ps_ctes->stretch = renderer->stretch;
 		ps_ctes->render_mode = renderer->render_type;
-		ps_ctes->particle_gen_rotation = XMMatrixRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(renderer->stretch));
+		ps_ctes->axis_1 = XMVectorSet(0, 0, 1, 0);
+		ps_ctes->axis_2 = XMVectorSet(1, 0, 0, 0);
 		ps_ctes->animation_mode = renderer->particle_animation_mode;
 		ctes_particle_system.uploadToGPU();
 		ctes_particle_system.activateInVS(5);
@@ -294,7 +293,7 @@ void TParticleSystem::changeLimit(int the_limit) {
 
 	// If the capacity is less than the new limit, reserve more memory
 	if (particles.capacity() < the_limit) {
-		particles.reserve(the_limit - particles.capacity());
+		particles.reserve(the_limit);
 	}
 
 	// Change the buffer mesh
@@ -303,8 +302,18 @@ void TParticleSystem::changeLimit(int the_limit) {
 		delete instances_data;
 	}
 
+	void *data = nullptr;
+	if (particles.empty()) {
+		particles.resize(1);
+		data = &particles[0];
+		particles.clear();
+	}
+	else {
+		data = &particles[0];
+	}
+
 	instances_data = new CMesh;
-	bool is_ok = instances_data->create(the_limit, &particles
+	bool is_ok = instances_data->create(the_limit, data
 		, 0, nullptr        // No indices
 		, CMesh::POINTS     // We are not using this
 		, &vdcl_particle_data    // Type of vertex

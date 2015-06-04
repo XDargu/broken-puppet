@@ -10,6 +10,7 @@ TParticle::TParticle(XMFLOAT3 the_position, XMFLOAT3 the_direction, float the_ag
 	XMStoreFloat3(&color, the_color);
 	size = the_size;
 	index = the_index;
+	rotation = 0;
 }
 
 TParticle::TParticle() {

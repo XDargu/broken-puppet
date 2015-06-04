@@ -443,9 +443,9 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
 
-	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
-	}
+	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("deferred_gbuffer");
@@ -453,6 +453,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("particles");
+		render_techniques_manager.reload("gen_shadows");
+		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
@@ -623,7 +625,6 @@ void CApp::render() {
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
-	underwater.apply(chromatic_aberration.getOutput());
 
 	//glow.apply(blur.getOutput());
 
@@ -693,6 +694,9 @@ void CApp::render() {
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
 	activateBlendConfig(BLEND_CFG_DEFAULT);
+
+	underwater.apply(chromatic_aberration.getOutput());
+
 
 
 #ifdef _DEBUG

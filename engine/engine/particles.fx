@@ -33,6 +33,7 @@ VS_TEXTURED_OUTPUT VS(
 , float3 InstanceAgeLifeSpanSize : TEXCOORD1
 , float3 Color : COLOR0
 , int index : TEXCOORD2
+, float rotation : TEXCOORD3
 /*, float  InstanceAge : TEXCOORD1    // Stream 1
 , float  InstanceLifespan : COLOR0    // Stream 1
 , float  InstanceSize : POSITION2    // Stream 1*/
@@ -40,16 +41,42 @@ VS_TEXTURED_OUTPUT VS(
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
 
-  float real_stretch = 1;
+  float real_stretch = 4;
   if (render_mode == 3)
 	  real_stretch = stretch;
 
+  rotation = 0;
+
+  float s, c;
+  sincos(rotation, s, c);
+  
+  /*float3 wpos = InstancePos
+	  + (axis_1.xyz * Pos.y * InstanceAgeLifeSpanSize.z * real_stretch
+	  + axis_2.xyz * Pos.x * InstanceAgeLifeSpanSize.z
+	  );*/
+
+
+  // cameraWorldLeft
+
+
+
+  float3 particles_left = normalize(InstanceSpeed);
+	  float3 aux = float3(0, 1, 0); // cameraWorldLeft;
+	  float3 left = normalize(cross(aux, particles_left));
+	  float3 particles_up = -cross(particles_left, left); // normalize(cross(particles_up, aux));
+
+	  particles_up = cross(cameraWorldFront, particles_left); // float3(1, 0, 0);
+  //particles_left = float3(0,1,0);
+
+  //Pos.y *= real_stretch;
+
   float3 wpos = InstancePos
-	  + (cameraWorldUp.xyz * Pos.y * InstanceAgeLifeSpanSize.z * real_stretch
-	  + cameraWorldLeft.xyz * Pos.x * InstanceAgeLifeSpanSize.z
-      );
+	  + ((particles_up.xyz * (Pos.y * c + Pos.x * s)) * real_stretch
+	  + (particles_left.xyz * (Pos.x * c - Pos.y * s))
+	  ) * InstanceAgeLifeSpanSize.z
+	  ; 
+
   output.Pos = mul(float4(wpos, 1), ViewProjection);
-  //output.Pos = mul(output.Pos, ViewProjection);
   
   int idx = 0;
 

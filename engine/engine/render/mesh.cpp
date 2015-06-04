@@ -255,6 +255,7 @@ void CMesh::updateFromCPU(const void *new_cpu_data, size_t num_bytes_to_update) 
 		, 0
 		, &mapped_resource);
 	assert(hr == D3D_OK);
+	assert(num_bytes_to_update <= vtxs_decl->bytes_per_vertex * nvertexs);
 
 	// Copy from CPU to GPU
 	memcpy(mapped_resource.pData, new_cpu_data, num_bytes_to_update);
