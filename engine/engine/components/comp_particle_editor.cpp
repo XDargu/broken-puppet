@@ -59,8 +59,11 @@ void TW_CALL CallBackParticleGroupCreate(void *clientData) {
 void TCompParticleEditor::init() {
 	particle_list_bar = TwNewBar("ParticleEditor");
 
-	int barSize[2] = { 224, 120 };
-	int varPosition[2] = { 500, 320 };
+	CApp &app = CApp::get();
+
+	// AntTweakBar test
+	int barSize[2] = { 224, app.yres };
+	int varPosition[2] = { 0, 0 };
 	TwSetParam(particle_list_bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	TwSetParam(particle_list_bar, NULL, "position", TW_PARAM_INT32, 2, varPosition);
 	TwDefine(" ParticleEditor label='Particle list' ");
@@ -72,11 +75,14 @@ void TCompParticleEditor::init() {
 	TCompTransform* ps_t = ps_e->get<TCompTransform>();
 
 	ps_t->rotation = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
-
 }
 
 void TCompParticleEditor::update(float elapsed) {
-
+	// Hide console, listener and actioner bars
+	TwDefine(" Lister visible=false ");
+	TwDefine(" Actioner visible=false ");
+	TwDefine(" Console visible=false ");
+	TwDefine(" ConsoleInput visible=false ");
 }
 
 void TCompParticleEditor::reloadParticleGroups() {

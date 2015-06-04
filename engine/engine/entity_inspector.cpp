@@ -765,6 +765,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGRendererMode" + i;
 			TwAddVarRW(bar, aux.c_str(), particleRenderMode, &e_particle_group->particle_systems[i].renderer->render_type, " group=PG label='Render mode'");
 
+			aux = "PGRendererAnimMode" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->particle_animation_mode, " group=PG label='Animation mode'");
+
 			// TODO: Hacer que solo aparezca en modo stretch
 			aux = "PGRendererStretch" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' min=1 step=0.1");

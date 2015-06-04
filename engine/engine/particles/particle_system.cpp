@@ -136,6 +136,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		bool is_aditive = atts.getBool("aditive", true);
 		int n_anim_x = atts.getInt("n_anim_x", 1);
 		int n_anim_y = atts.getInt("n_anim_y", 1);
+		int animation_mode = atts.getInt("animationMode", 0);
 		float stretch = atts.getFloat("stretch", 2);
 		std::string str_mode = atts.getString("render_mode", "billboard");
 		TParticleRenderType type = TParticleRenderType::BILLBOARD;
@@ -144,7 +145,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		if (str_mode == "v_billboard") { type = TParticleRenderType::V_BILLBOARD; }
 		if (str_mode == "stretched_billboard") { type = TParticleRenderType::STRETCHED_BILLBOARD; }
 
-		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, TParticleRenderType::BILLBOARD, n_anim_x, n_anim_y, stretch);		
+		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, TParticleRenderType::BILLBOARD, n_anim_x, n_anim_y, stretch, animation_mode);
 	}
 	
 }
@@ -203,9 +204,11 @@ void TParticleSystem::update(float elapsed) {
 				// Lock
 			}
 			if (it->lifespan != 0 && it->age > it->lifespan) {
-				PxU32 indicesToRelease[1];
-				indicesToRelease[0] = it->index;
-				psx->releaseParticles(1, indicesToRelease);
+				if (use_physx) {
+					PxU32 indicesToRelease[1];
+					indicesToRelease[0] = it->index;
+					psx->releaseParticles(1, indicesToRelease);
+				}
 				it = particles.erase(it);
 				delete_counter++;
 			}
@@ -246,6 +249,7 @@ void TParticleSystem::render() {
 		ps_ctes->stretch = renderer->stretch;
 		ps_ctes->render_mode = renderer->render_type;
 		ps_ctes->particle_gen_rotation = XMMatrixRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(renderer->stretch));
+		ps_ctes->animation_mode = renderer->particle_animation_mode;
 		ctes_particle_system.uploadToGPU();
 		ctes_particle_system.activateInVS(5);
 
@@ -318,7 +322,7 @@ void TParticleSystem::loadDefaultPS() {
 
 	emitter_generation = new TParticleEmitterGeneration(
 		this, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false);
-	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1);
+	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1, 0);
 
 	updater_lifetime = new TParticleUpdaterLifeTime();
 	updater_movement = new TParticleUpdaterMovement();

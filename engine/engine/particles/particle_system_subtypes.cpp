@@ -296,7 +296,7 @@ std::string TParticleEmitterGeneration::getXMLDefinition() {
 	return def;
 }
 
-TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch) {
+TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode) {
 	particles = the_particles;
 	strcpy(texture, the_texture);
 	additive = is_aditive;
@@ -304,6 +304,7 @@ TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_
 	n_anim_x = the_n_anim_x;
 	n_anim_y = the_n_anim_y;
 	stretch = the_stretch;
+	particle_animation_mode = the_particle_animation_mode;
 }
 
 void TParticleRenderer::update(TParticle* particle, float elapsed) {
@@ -355,6 +356,9 @@ std::string TParticleRenderer::getXMLDefinition() {
 		def += "\" ";
 		break;
 	}
+
+	def += "animationMode=\"";
+	def += std::to_string(particle_animation_mode) + "\" ";
 
 	def += "/>";
 

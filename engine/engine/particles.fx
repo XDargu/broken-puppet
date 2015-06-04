@@ -15,6 +15,12 @@ struct VS_TEXTURED_OUTPUT
   float3 color	: COLOR0;
 };
 
+float rand_1_05(in float2 uv)
+{
+	float2 noise = (frac(sin(dot(uv, float2(12.9898, 78.233)*2.0)) * 43758.5453));
+		return abs(noise.x + noise.y) * 0.5;
+}
+
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
@@ -45,15 +51,24 @@ VS_TEXTURED_OUTPUT VS(
   output.Pos = mul(float4(wpos, 1), ViewProjection);
   //output.Pos = mul(output.Pos, ViewProjection);
   
-  // Animate the UV's. Assuming 4x4 frames
-  float nmod16 = fmod(InstanceAgeLifeSpanSize.x * 32, n_imgs_x * n_imgs_y);
-  //float nmod16 = 1;
-  int   idx = int(nmod16);
-  float coords_x = 0;// fmod(idx, 4);
-  float coords_y = uint(idx / n_imgs_y);
+  int idx = 0;
+
+  if (animation_mode == 0) {
+	  // Animate the UV's. Assuming 4x4 frames
+	  float nmod16 = fmod(InstanceAgeLifeSpanSize.x * 16, n_imgs_x * n_imgs_y);
+	  //float nmod16 = 1;
+	  idx = int(nmod16);
+  }
+
+  if (animation_mode == 1) {
+	  idx = fmod(index, n_imgs_x * n_imgs_y);
+  }
+
+  float coords_x = (int)fmod(idx, n_imgs_x);
+  float coords_y = uint(idx / n_imgs_x);
 
   output.UV.x = (coords_x + UV.x) / n_imgs_x;
-  output.UV.y = (coords_y + UV.y) / n_imgs_y;
+  output.UV.y = 1 - (coords_y + UV.y) / n_imgs_y;
 
   output.wPos = wpos;
   output.color = Color;
