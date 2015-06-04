@@ -64,6 +64,12 @@ VS_TEXTURED_OUTPUT VS(
 	  idx = fmod(index, n_imgs_x * n_imgs_y);
   }
 
+  if (animation_mode == 2) {
+	  int rnd_row = fmod(index, n_imgs_y);
+	  int rnd_col = fmod(InstanceAgeLifeSpanSize.x * 16, n_imgs_x);
+	  idx = rnd_row * n_imgs_x + rnd_col;
+  }
+
   float coords_x = (int)fmod(idx, n_imgs_x);
   float coords_y = uint(idx / n_imgs_x);
 
