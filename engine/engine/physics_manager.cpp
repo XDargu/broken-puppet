@@ -44,7 +44,6 @@ void CPhysicsManager::loadCollisions() {
 
 void CPhysicsManager::addCollisionFilter(physx::PxU32 s, physx::PxU32 filter){
 	m_collision->operator[](s).push_back(filter);
-	int prueba = 1;
 }
 
 void CPhysicsManager::init() {
@@ -108,30 +107,8 @@ void CPhysicsManager::init() {
 	/*PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
 	gScene->addActor(*plane);*/
 
-	//Particulas 
-	// create particle system in PhysX SDKs
-	//ps->setSimulationFilterData();
-	//ps = gPhysicsSDK->createParticleSystem(maxParticles);
-	// add particle system to scene, in case creation was successful
-	//if (ps)
-		//gScene->addActor(*ps);
-	//particleCreationData.numParticles = 0;
-	//ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
-	//indexPool = PxParticleExt::createIndexPool(maxParticles);
-
 	// Crear el controller manager
 	gManager = PxCreateControllerManager(*gScene);
-}
-
-void CPhysicsParticleSystem::init(PxU32 numParticles){
-	maxParticles = numParticles;
-
-	/*myIndexBuffer = new PxU32[maxParticles];
-	myPositionBuffer = new PxVec3[maxParticles];
-	myVelocityBuffer = new PxVec3[maxParticles];
-	myParticlesForces = new PxVec3[maxParticles];*/
-
-	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
 }
 
 void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices){
@@ -176,6 +153,14 @@ void CPhysicsParticleSystem::setParticlesGravity(bool gravity){
 		ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
 	else
 		ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+}
+
+void CPhysicsParticleSystem::setParticlesSystemMass(PxReal mass){
+	ps->setParticleMass(mass);
+}
+
+void CPhysicsParticleSystem::setParticlesSystemDamping(PxReal damping){
+	ps->setDamping(damping);
 }
 
 bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){

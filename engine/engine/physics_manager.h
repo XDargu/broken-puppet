@@ -36,7 +36,6 @@ public:
 	std::vector<PxU32> myIndexBuffer;
 	std::vector<PxVec3> myParticlesForces;
 
-	void init(PxU32 numParticles);
 	bool createParticles(PxU32 numParticles);
 	void addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices);
 	void updateParticles();
@@ -44,6 +43,8 @@ public:
 	void releaseAllParticles();
 	void setParticlesFilterCollision();
 	void setParticlesGravity(bool gravity);
+	void setParticlesSystemMass(PxReal mass);
+	void setParticlesSystemDamping(PxReal damping);
 	void releaseParticleFromBuffer(int index);
 };
 
