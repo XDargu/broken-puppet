@@ -66,7 +66,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		if (updater_type == "physx") {
 			bool gravity = atts.getBool("gravity", true);
 			updater_physx = new TParticleUpdaterPhysx(this);
-			psx->setParticlesNoGravity(!gravity);			
+			psx->setParticlesGravity(gravity);			
 		}
 	}
 
