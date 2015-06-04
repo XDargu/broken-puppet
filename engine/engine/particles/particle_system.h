@@ -22,6 +22,7 @@ struct TParticleSystem {
 	TParticleUpdaterSize* updater_size;
 	TParticleUpdaterColor* updater_color;
 	TParticleUpdaterGravity* updater_gravity;
+	TParticleUpdaterRotation* updater_rotation;
 	TParticleUpdaterMovement* updater_movement;
 	TParticleUpdaterNoise* updater_noise;
 	TParticleUpdaterPhysx* updater_physx;
@@ -47,6 +48,7 @@ public:
 		SAFE_DELETE(updater_size);
 		SAFE_DELETE(updater_color);
 		SAFE_DELETE(updater_movement);
+		SAFE_DELETE(updater_rotation);
 		SAFE_DELETE(updater_gravity);
 		SAFE_DELETE(updater_noise);
 		SAFE_DELETE(updater_physx);

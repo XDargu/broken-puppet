@@ -316,6 +316,13 @@ void TW_CALL CallbackRemoveUpdaterGravity(void *clientData)
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
+void TW_CALL CallbackRemoveUpdaterRotation(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_rotation);
+	static_cast<TParticleSystem *>(clientData)->updater_rotation = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
 void TW_CALL CallbackRemoveUpdaterMovement(void *clientData)
 {
 	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_movement);
@@ -357,6 +364,12 @@ void TW_CALL CallbackAddUpdaterGravity(void *clientData)
 void TW_CALL CallbackAddUpdaterMovement(void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->updater_movement = new TParticleUpdaterMovement();
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterRotation(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_rotation = new TParticleUpdaterRotation(0.01f);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -693,6 +706,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->loop, " group=PG label='Loop'");
 			aux = "PGEmitterFillInitial" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->fill_initial, " group=PG label='Fill initial'");
+			aux = "PGEmitterRandomRot" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->random_rotation, " group=PG label='Random rotation'");
 
 			// Updaters
 			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {
@@ -731,6 +746,15 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed' step=0.1");
 				aux = "RemovePGUpdaterMovement" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_rotation != nullptr) {
+				aux = "PGRotation" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Rotation'");
+				aux = "PGUpdaterRotationSpeed" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_rotation->angular_speed, " group=PG label='Speed' step=0.005");
+				aux = "RemovePGUpdaterRotation" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterRotation, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_noise != nullptr) {
@@ -800,6 +824,11 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			if (e_particle_group->particle_systems[i].updater_movement == nullptr) {
 				aux = "AddPGMovement" + i;
 				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Add movement updater'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_rotation == nullptr) {
+				aux = "AddPGRotation" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterRotation, &e_particle_group->particle_systems[i], "group=PG label='Add rotation updater'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_noise == nullptr) {

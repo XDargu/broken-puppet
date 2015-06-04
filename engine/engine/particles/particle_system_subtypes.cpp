@@ -111,7 +111,7 @@ void TParticleEmitterGeneration::addParticle() {
 	}
 
 	float life_time = getRandomNumber(min_life_time, max_life_time);
-
+	float rotation = random_rotation ? getRandomNumber(0.0f, PxTwoPi) : 0;
 	TParticle n_particle = TParticle(
 		pos
 		, direction
@@ -120,7 +120,9 @@ void TParticleEmitterGeneration::addParticle() {
 		, XMVectorSet(1, 1, 1, 1)
 		, 1
 		, (int)ps->particles.size()
+		, rotation
 		);
+	
 	//particles->erase(particles->begin());
 	if (ps->use_physx){
 		float speed = 1;
@@ -139,7 +141,7 @@ void TParticleEmitterGeneration::addParticle() {
 }
 
 // Sphere / Semisphere / Box
-TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation) {
 	shape = the_shape;
 	radius = the_radius_or_box_size;
 	h_transform = the_transform;
@@ -155,6 +157,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	burst_counter = 0;
 	delay_counter = 0;
 	emitter_counter = 0;
+	random_rotation = the_random_rotation;
 
 	inner_radius = 0.5;
 	box_size = the_radius_or_box_size;
@@ -166,7 +169,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	fillInitial();
 }
 // Cone / Ring
-TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation) {
 	shape = the_shape;
 	radius = the_radius;
 	h_transform = the_transform;
@@ -182,6 +185,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	burst_counter = 0;
 	delay_counter = 0;
 	emitter_counter = 0;
+	random_rotation = the_random_rotation;
 
 	inner_radius = the_angle_or_inner_radius;
 	box_size = 1;
@@ -289,6 +293,10 @@ std::string TParticleEmitterGeneration::getXMLDefinition() {
 
 	def += "loop=\"";
 	def += (loop ? "true" : "false");
+	def += "\" ";
+
+	def += "randomRotation=\"";
+	def += (random_rotation ? "true" : "false");
 	def += "\" ";
 
 	def += "/>";
@@ -417,6 +425,23 @@ std::string TParticleUpdaterGravity::getXMLDefinition() {
 	def += "constant=\"";
 	def += (constant ? "true" : "false");
 	def += "\" ";
+
+	def += "/>";
+
+	return def;
+}
+
+void TParticleUpdaterRotation::update(TParticle* particle, float elapsed) {
+	particle->rotation += angular_speed * elapsed;
+}
+
+std::string TParticleUpdaterRotation::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"rotation\" ";
+
+	def += "angular_speed=\"";
+	def += std::to_string(angular_speed) + "\" ";
 
 	def += "/>";
 

@@ -41,12 +41,10 @@ VS_TEXTURED_OUTPUT VS(
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
 
-  float real_stretch = 4;
+  float real_stretch = 1;
   if (render_mode == 3)
 	  real_stretch = stretch;
-
-  rotation = 0;
-
+  
   float s, c;
   sincos(rotation, s, c);
   
@@ -54,21 +52,27 @@ VS_TEXTURED_OUTPUT VS(
 	  + (axis_1.xyz * Pos.y * InstanceAgeLifeSpanSize.z * real_stretch
 	  + axis_2.xyz * Pos.x * InstanceAgeLifeSpanSize.z
 	  );*/
+    
+  float3 particles_left = cameraWorldLeft.xyz;
+  float3 particles_up = cameraWorldUp.xyz;
 
+  if (render_mode == 2) {
+	  particles_left = float3(0, 0, 1);
+	  particles_up = -float3(1, 0, 0);
+  }
+  if (render_mode == 1) {
+	  particles_up = float3(0, 1, 0);
+  }
 
-  // cameraWorldLeft
+  // BILLBOARDS DIRECCIONALES
+  /*float3 particles_left = normalize(InstanceSpeed);
+  float3 aux = float3(0, 1, 0); // cameraWorldLeft;
+  float3 left = normalize(cross(aux, particles_left));
+  float3 particles_up = -cross(particles_left, left); // normalize(cross(particles_up, aux));
 
-
-
-  float3 particles_left = normalize(InstanceSpeed);
-	  float3 aux = float3(0, 1, 0); // cameraWorldLeft;
-	  float3 left = normalize(cross(aux, particles_left));
-	  float3 particles_up = -cross(particles_left, left); // normalize(cross(particles_up, aux));
-
-	  particles_up = cross(cameraWorldFront, particles_left); // float3(1, 0, 0);
+  particles_up = cross(cameraWorldFront, particles_left); // float3(1, 0, 0);
   //particles_left = float3(0,1,0);
-
-  //Pos.y *= real_stretch;
+  */
 
   float3 wpos = InstancePos
 	  + ((particles_up.xyz * (Pos.y * c + Pos.x * s)) * real_stretch

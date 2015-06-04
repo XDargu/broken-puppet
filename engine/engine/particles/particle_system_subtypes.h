@@ -52,6 +52,8 @@ public:
 	float delay;
 	// Check if the emitter must loop
 	bool loop;
+	// Random rotation
+	bool random_rotation;
 
 	// Time between bursts
 	float burst_time;
@@ -65,9 +67,9 @@ public:
 	float box_size;
 
 	// Sphere / Semisphere
-	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
+	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation);
 	// Cone
-	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
+	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation);
 
 	void fillInitial();
 
@@ -119,6 +121,15 @@ struct TParticleUpdaterPhysx {
 	void update(TParticle* particle, float elapsed);
 };
 
+struct TParticleUpdaterRotation {
+
+	float angular_speed;
+
+	TParticleUpdaterRotation(float the_angular_speed) : angular_speed(the_angular_speed) {}
+
+	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
+};
 struct TParticleUpdaterGravity {
 	float gravity;
 	bool constant;
