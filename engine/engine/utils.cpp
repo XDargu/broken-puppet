@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "error\log.h"
 #include <time.h>
+#include <windows.h>
 
 using namespace DirectX;
 
@@ -172,4 +173,22 @@ std::string V4ToString(XMVECTOR vector) {
 float lerp(float a, float b, float f)
 {
 	return a + f * (b - a);
+}
+
+void files_in_directory(std::string directory, std::vector<std::string>& list) {
+	WIN32_FIND_DATA search_data;
+
+	memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
+
+	std::string s = directory + "\\*.dds";
+	LPCSTR sw = s.c_str();
+	HANDLE handle = FindFirstFile(sw, &search_data);
+
+	while (handle != INVALID_HANDLE_VALUE)
+	{
+		list.push_back(search_data.cFileName);
+
+		if (FindNextFile(handle, &search_data) == FALSE)
+			break;
+	}
 }

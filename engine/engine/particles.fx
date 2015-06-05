@@ -42,8 +42,6 @@ VS_TEXTURED_OUTPUT VS(
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
 
   float real_stretch = 1;
-  if (render_mode == 3)
-	  real_stretch = stretch;
   
   float s, c;
   sincos(rotation, s, c);
@@ -56,12 +54,36 @@ VS_TEXTURED_OUTPUT VS(
   float3 particles_left = cameraWorldLeft.xyz;
   float3 particles_up = cameraWorldUp.xyz;
 
+  // V-BILLBOARD
+  if (render_mode == 1) {
+	  particles_up = float3(0, 1, 0);
+  }
+  // H-BILLBOARD
   if (render_mode == 2) {
 	  particles_left = float3(0, 0, 1);
 	  particles_up = -float3(1, 0, 0);
   }
-  if (render_mode == 1) {
-	  particles_up = float3(0, 1, 0);
+  // H-DIR-BILLBOARD
+  if (render_mode == 3) {
+	  particles_up = normalize(InstanceSpeed);
+	  particles_left = normalize(cross(particles_up, float3(0, -1, 0)));
+  }
+  // STRETCHED-BILLBOARD
+  if (render_mode == 4) {	  
+	  particles_up = InstanceSpeed;
+
+	  // STRETCH WITH SPEED
+	  if (stretch_mode == 1) {
+		  real_stretch = stretch * length(particles_up);
+	  }
+
+	  // STRETCH NORMAL
+	  if (stretch_mode == 0) {
+		  particles_up = normalize(particles_up);
+		  real_stretch = stretch;
+	  }
+	  particles_left = normalize(cross(particles_up, cameraWorldFront));
+	  
   }
 
   // BILLBOARDS DIRECCIONALES
@@ -74,8 +96,10 @@ VS_TEXTURED_OUTPUT VS(
   //particles_left = float3(0,1,0);
   */
 
+  Pos.y = Pos.y * real_stretch;
+
   float3 wpos = InstancePos
-	  + ((particles_up.xyz * (Pos.y * c + Pos.x * s)) * real_stretch
+	  + ((particles_up.xyz * (Pos.y * c + Pos.x * s))
 	  + (particles_left.xyz * (Pos.x * c - Pos.y * s))
 	  ) * InstanceAgeLifeSpanSize.z
 	  ; 

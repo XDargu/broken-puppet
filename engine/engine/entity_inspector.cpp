@@ -17,10 +17,6 @@
 
 using namespace physx;
 
-CEntityInspector::CEntityInspector() { }
-
-CEntityInspector::~CEntityInspector() { }
-
 TwBar *bar;
 
 XMVECTOR center;
@@ -35,11 +31,20 @@ PxVec3 angularVelocity;
 TwEnumVal particleEmitterShapeEV[] = { { TParticleEmitterShape::SPHERE, "Sphere" }, { TParticleEmitterShape::SEMISPHERE, "Semisphere" }, { TParticleEmitterShape::RING, "Ring" }, { TParticleEmitterShape::CONE, "Cone" }, { TParticleEmitterShape::BOX, "Box" } };
 TwType particleEmitterShape;
 
-TwEnumVal particleRenderModeEV[] = { { TParticleRenderType::BILLBOARD, "Billboard" }, { TParticleRenderType::H_BILLBOARD, "H-Billboard" }, { TParticleRenderType::V_BILLBOARD, "V-Billboard" }, { TParticleRenderType::STRETCHED_BILLBOARD, "Stretched Billboard" }};
+TwEnumVal particleRenderModeEV[] = { { TParticleRenderType::BILLBOARD, "Billboard" }, { TParticleRenderType::H_DIR_BILLBOARD, "H-Dir-Billboard" }, { TParticleRenderType::H_BILLBOARD, "H-Billboard" }, { TParticleRenderType::V_BILLBOARD, "V-Billboard" }, { TParticleRenderType::STRETCHED_BILLBOARD, "Stretched Billboard" } };
 TwType particleRenderMode;
 
 TwEnumVal particleRenderAnimationModeEV[] = { { 0, "Animation" }, { 1, "Random particle" }, { 2, "Random row animation" } };
 TwType particleRenderAnimationMode;
+
+TwEnumVal particleRenderStretchModeEV[] = { { 0, "Normal" }, { 1, "Stretch with speed" } };
+TwType particleRenderStretchMode;
+
+CEntityInspector::CEntityInspector() { }
+
+CEntityInspector::~CEntityInspector() {
+	SAFE_DELETE(particleRenderTextureListEV);
+}
 
 static CEntityInspector entity_inspector;
 
@@ -63,8 +68,21 @@ void CEntityInspector::init() {
 
 	// Particles
 	particleEmitterShape = TwDefineEnum("ParticlEmitterShape", particleEmitterShapeEV, 5);
-	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 4);
+	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 5);
 	particleRenderAnimationMode = TwDefineEnum("particleRenderAnimationMode", particleRenderAnimationModeEV, 3);
+	particleRenderStretchMode = TwDefineEnum("particleRenderStretchMode", particleRenderStretchModeEV, 2);
+
+	// List of textures
+	files_in_directory("data/textures/particles", texture_list);
+
+	particleRenderTextureListEV = new TwEnumVal[texture_list.size()];
+	for (int j = 0; j < texture_list.size(); ++j) {
+		texture_list[j] = texture_list[j].substr(0, texture_list[j].size() - 4);
+		TwEnumVal val;
+		val.Label = texture_list[j].c_str();
+		val.Value = j;
+		particleRenderTextureListEV[j] = val;
+	}
 
 }
 
@@ -286,6 +304,28 @@ void TW_CALL SetParticleSystemShape(const void *value, void *clientData)
 void TW_CALL GetParticleSystemShape(void *value, void *clientData)
 {
 	*static_cast<TParticleEmitterShape *>(value) = static_cast<TParticleSystem *>(clientData)->emitter_generation->shape;
+}
+
+void TW_CALL SetParticleRenderTexture(const void *value, void *clientData)
+{	
+	std::string path = "particles/" + std::string(CEntityInspector::get().particleRenderTextureListEV[*static_cast<const int *>(value)].Label);
+	std::strcpy(
+		static_cast<TParticleSystem *>(clientData)->renderer->texture,
+		path.c_str()
+		);
+	 
+}
+void TW_CALL GetParticleRenderTexture(void *value, void *clientData)
+{
+	CEntityInspector &inspector = CEntityInspector::get();
+	int m_value = 0;
+	for (int i = 0; i < inspector.texture_list.size(); ++i) {
+		if (std::strcmp(inspector.particleRenderTextureListEV[i].Label, static_cast<TParticleSystem *>(clientData)->renderer->texture) == 0) {
+			m_value = inspector.particleRenderTextureListEV[i].Value;
+			break;
+		}
+	}
+	*static_cast<int *>(value) = m_value;
 }
 
 void TW_CALL CallbackRemoveUpdaterNoise(void *clientData)
@@ -782,8 +822,12 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			// Renderer
 			aux = "Renderer" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Renderer'");
-			aux = "PGRendererTexture" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_CSSTRING(sizeof(e_particle_group->particle_systems[i].renderer->texture)), &e_particle_group->particle_systems[i].renderer->texture, " group=PG label='Texture'");
+			
+			particleRenderTextureList = TwDefineEnum("ParticleRenderTextureList", particleRenderTextureListEV, texture_list.size());
+
+			aux = "PGRendererTextureList" + i;
+			TwAddVarCB(bar, aux.c_str(), particleRenderTextureList, SetParticleRenderTexture, GetParticleRenderTexture, &e_particle_group->particle_systems[i], " group=PG label='Texture'");
+
 			aux = "PGRendererAdditive" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
 
@@ -800,7 +844,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 			// TODO: Hacer que solo aparezca en modo stretch
 			aux = "PGRendererStretch" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' min=1 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' ==1 step=0.1");
+
+			aux = "PGRendererStretchMode" + i;
+			TwAddVarRW(bar, aux.c_str(), particleRenderStretchMode, &e_particle_group->particle_systems[i].renderer->stretch_mode, " group=PG label='Stretch mode'");
 						
 			TwAddSeparator(bar, "", "group=PG");
 

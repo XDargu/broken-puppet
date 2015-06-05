@@ -144,14 +144,16 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		int n_anim_y = atts.getInt("n_anim_y", 1);
 		int animation_mode = atts.getInt("animationMode", 0);
 		float stretch = atts.getFloat("stretch", 2);
+		int stretch_mode = atts.getInt("stretchMode", 0);
 		std::string str_mode = atts.getString("render_mode", "billboard");
 		TParticleRenderType type = TParticleRenderType::BILLBOARD;
 		if (str_mode == "billboard") { type = TParticleRenderType::BILLBOARD; }
 		if (str_mode == "h_billboard") { type = TParticleRenderType::H_BILLBOARD; }
+		if (str_mode == "h_dir_billboard") { type = TParticleRenderType::H_DIR_BILLBOARD; }
 		if (str_mode == "v_billboard") { type = TParticleRenderType::V_BILLBOARD; }
 		if (str_mode == "stretched_billboard") { type = TParticleRenderType::STRETCHED_BILLBOARD; }
 
-		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, TParticleRenderType::BILLBOARD, n_anim_x, n_anim_y, stretch, animation_mode);
+		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, type, n_anim_x, n_anim_y, stretch, animation_mode, stretch_mode);
 	}
 	
 }
@@ -178,9 +180,9 @@ void TParticleSystem::update(float elapsed) {
 
 		if (it->size != -1) {
 			// Update the position, no updater needed
-			it->position.x += it->speed.x * 1;
-			it->position.y += it->speed.y * 1;
-			it->position.z += it->speed.z *1 ;
+			it->position.x += it->speed.x * elapsed;
+			it->position.y += it->speed.y * elapsed;
+			it->position.z += it->speed.z * elapsed;
 
 			if (updater_rotation != nullptr) {
 				updater_rotation->update(&(*it), elapsed);
@@ -253,8 +255,7 @@ void TParticleSystem::render() {
 		ps_ctes->n_imgs_y = renderer->n_anim_y;
 		ps_ctes->stretch = renderer->stretch;
 		ps_ctes->render_mode = renderer->render_type;
-		ps_ctes->axis_1 = XMVectorSet(0, 0, 1, 0);
-		ps_ctes->axis_2 = XMVectorSet(1, 0, 0, 0);
+		ps_ctes->stretch_mode = renderer->stretch_mode;
 		ps_ctes->animation_mode = renderer->particle_animation_mode;
 		ctes_particle_system.uploadToGPU();
 		ctes_particle_system.activateInVS(5);
@@ -338,7 +339,7 @@ void TParticleSystem::loadDefaultPS() {
 
 	emitter_generation = new TParticleEmitterGeneration(
 		this, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false, true);
-	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1, 0);
+	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1, 0, 0);
 
 	updater_lifetime = new TParticleUpdaterLifeTime();
 	updater_movement = new TParticleUpdaterMovement();

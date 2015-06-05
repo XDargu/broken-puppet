@@ -41,6 +41,9 @@ std::vector<std::string> split_string(const std::string& str, const std::string&
 std::string V3ToString(XMVECTOR vector);
 std::string V4ToString(XMVECTOR vector);
 
+// Files
+void files_in_directory(std::string directory, std::vector<std::string>& list);
+
 // XMVECTOR definitions
 #define V3COMPARE(v1, v2) memcmp(&v1, &v2, 12)
 #define V3DISTANCE(x, y) XMVectorGetX(XMVector3Length((x) - (y)))

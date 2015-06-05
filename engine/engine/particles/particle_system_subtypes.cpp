@@ -122,6 +122,9 @@ void TParticleEmitterGeneration::addParticle() {
 		, (int)ps->particles.size()
 		, rotation
 		);
+	if (ps->updater_movement != nullptr) {
+		XMStoreFloat3(&n_particle.speed, XMLoadFloat3(&direction) * ps->updater_movement->speed);
+	}
 	
 	//particles->erase(particles->begin());
 	if (ps->use_physx){
@@ -304,7 +307,7 @@ std::string TParticleEmitterGeneration::getXMLDefinition() {
 	return def;
 }
 
-TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode) {
+TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode, int the_stretch_mode) {
 	particles = the_particles;
 	strcpy(texture, the_texture);
 	additive = is_aditive;
@@ -313,6 +316,7 @@ TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_
 	n_anim_y = the_n_anim_y;
 	stretch = the_stretch;
 	particle_animation_mode = the_particle_animation_mode;
+	stretch_mode = the_stretch_mode;
 }
 
 void TParticleRenderer::update(TParticle* particle, float elapsed) {
@@ -344,7 +348,10 @@ std::string TParticleRenderer::getXMLDefinition() {
 	def += "stretch=\"";
 	def += std::to_string(stretch) + "\" ";
 
-	def += "type=\"";
+	def += "stretchMode=\"";
+	def += std::to_string(stretch_mode) + "\" ";
+
+	def += "render_mode=\"";
 	switch (render_type)
 	{
 	case BILLBOARD:
@@ -353,6 +360,10 @@ std::string TParticleRenderer::getXMLDefinition() {
 		break;
 	case H_BILLBOARD:
 		def += "h_billboard";
+		def += "\" ";
+		break;
+	case H_DIR_BILLBOARD:
+		def += "h_dir_billboard";
 		def += "\" ";
 		break;
 	case V_BILLBOARD:
@@ -391,7 +402,7 @@ void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
 }
 
 void TParticleUpdaterMovement::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + XMLoadFloat3(&particle->direction) * speed * elapsed);
+	//XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + XMLoadFloat3(&particle->direction) * speed);
 }
 
 std::string TParticleUpdaterMovement::getXMLDefinition() {
@@ -411,7 +422,7 @@ void TParticleUpdaterGravity::update(TParticle* particle, float elapsed) {
 	if (constant)
 		XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
 	else
-		XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+		XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * gravity);
 }
 
 std::string TParticleUpdaterGravity::getXMLDefinition() {
@@ -518,7 +529,7 @@ std::string TParticleUpdaterColor::getXMLDefinition() {
 }
 
 void TParticleUpdaterNoise::update(TParticle* particle, float elapsed) {	
-	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + getRandomVector3(min_noise, max_noise) * elapsed);
+	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + getRandomVector3(min_noise, max_noise));
 }
 
 std::string TParticleUpdaterNoise::getXMLDefinition() {

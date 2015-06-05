@@ -24,7 +24,8 @@ enum TParticleRenderType {
 	BILLBOARD = 0,
 	V_BILLBOARD = 1,
 	H_BILLBOARD = 2,
-	STRETCHED_BILLBOARD = 3,
+	H_DIR_BILLBOARD = 3,
+	STRETCHED_BILLBOARD = 4,
 };
 
 struct TParticleEmitterGeneration {
@@ -93,8 +94,9 @@ struct TParticleRenderer {
 	int n_anim_y;
 	float stretch;
 	int particle_animation_mode;
+	int stretch_mode;
 
-	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode);
+	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode, int the_stretch_mode);
 
 	void update(TParticle* particle, float elapsed);
 	void render();

@@ -62,9 +62,8 @@ cbuffer TCtesParticleSystem SHADER_REGISTER(b5)   // using the same register as 
 	int stretch;
 	int render_mode;
 	int animation_mode;
-	float dummy_ps1, dummy_ps2, dummy_ps3;
-	float4 axis_1;
-	float4 axis_2;
+	int stretch_mode;
+	float dummy_ps1, dummy_ps2;
 };
 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
