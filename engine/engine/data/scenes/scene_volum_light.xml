@@ -535,19 +535,19 @@
   <entity  >
     <name name="Fspot001_58.0" />
     <transform position="-7.2869 7.28764 -4.94376" rotation="-0.496767 1.60656e-007 0.0 0.867884" scale="1.0 1.0 1.0"/>
-    <shadows intensity="1.0" color="0.713726 0.34902 0.0431373 1" correction="true"/>
+    <shadows intensity="1.0" color="0.713726 0.34902 0.0431373 1" correction="true" res="2048"/>
     <camera fov="31.5" znear="2.07662" zfar="50" width="30" height="30" />
   </entity>
   <entity  >
     <name name="dvn_arco_pilar_01_59.0" />
     <transform position="-2.0 1.72861e-007 6.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="distorsion"/>
     </render>
     <aabb min="-0.225 0.0 -0.225" max="0.225 8.0 0.225"/>
   </entity>
@@ -555,17 +555,17 @@
     <name name="dvn_arco_pilar_01_60.0" />
     <transform position="-6.0 0.0 6.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="distorsion"/>
     </render>
     <aabb min="-0.225 0.0 -0.225" max="0.225 8.0 0.225"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
-    <name name="dvn_arqui_ambos_ambos_half_01_61.0" />
+    <name name="water" />
     <transform position="0.0 3.04988e-007 8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
       <draw mesh="dvn_arqui_ambos_ambos_half_01" sub_mesh="0" mat="suelo_tileable"/>
@@ -667,7 +667,7 @@
     <name name="dvn_arco_arco_medio_01_70.0" />
     <transform position="-6.0 2.62268e-007 6.0" rotation="0.0 0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="distorsion"/>
     </render>
     <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.99999"/>
   </entity>
@@ -675,7 +675,7 @@
     <name name="dvn_arco_arco_medio_01_71.0" />
     <transform position="-2.0 2.62268e-007 6.0" rotation="0.0 -0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="distorsion"/>
     </render>
     <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.99999"/>
   </entity>
@@ -683,8 +683,8 @@
     <name name="dvn_arco_viga_01_72.0" />
     <transform position="4.0 4.56915e-007 6.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="distorsion"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="distorsion"/>
     </render>
     <aabb min="-0.225001 7.55 6.06477e-006" max="0.225 8.0 3.99996"/>
   </entity>
@@ -692,7 +692,7 @@
     <name name="dvn_arco_arco_medio_01_73.0" />
     <transform position="-2.0 2.62268e-007 6.0" rotation="0.0 0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_arco_medio_01" sub_mesh="0" mat="distorsion"/>
     </render>
     <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.99999"/>
   </entity>
@@ -700,12 +700,12 @@
     <name name="dvn_arco_pilar_01_74.0" />
     <transform position="5.775 2.62268e-007 6.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="0" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="1" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="2" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="3" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="4" mat="distorsion"/>
+      <draw mesh="dvn_arco_pilar_01" sub_mesh="5" mat="distorsion"/>
     </render>
     <aabb min="-0.225 0.0 -0.225" max="0.225 8.0 0.225"/>
   </entity>
@@ -713,7 +713,7 @@
     <name name="dvn_arco_arco_corto_01_75.0" />
     <transform position="5.775 2.62268e-007 6.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_arco_corto_01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_arco_corto_01" sub_mesh="0" mat="distorsion"/>
     </render>
     <aabb min="-0.225 6.0 0.224985" max="0.225 8.0 1.77497"/>
   </entity>
@@ -722,8 +722,8 @@
     <name name="dvn_arco_viga_01_77.0" />
     <transform position="2.0 -0.45 6.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
     <render>
-      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="Standardmaterial"/>
-      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="0" mat="distorsion"/>
+      <draw mesh="dvn_arco_viga_01" sub_mesh="1" mat="distorsion"/>
     </render>
     <aabb min="-0.225001 7.55 6.06477e-006" max="0.225 8.0 3.99996"/>
   </entity>

@@ -171,7 +171,7 @@ float getShadowAt(float4 wPos) {
     return 0;
 
   float2 center = light_proj_coords.xy;
-  float depth = light_proj_coords.z - 0.002;
+  float depth = light_proj_coords.z - 0.0005;
 
   float amount = tapAt(center, depth) * 0.2;
 

@@ -24,8 +24,18 @@ enum TParticleRenderType {
 	BILLBOARD = 0,
 	V_BILLBOARD = 1,
 	H_BILLBOARD = 2,
-	STRETCHED_BILLBOARD = 3,
+	H_DIR_BILLBOARD = 3,
+	STRETCHED_BILLBOARD = 4,
 };
+
+enum TParticleCurve {
+	LINEAL = 0,
+	LOGARITHM = 1,
+	EXPONENTIAL = 2
+};
+
+float getCurveVal(TParticleCurve curve, float curve_val, float min, float max, float t);
+XMFLOAT3 getCurveVal(TParticleCurve curve, float curve_val, XMFLOAT3 min, XMFLOAT3 max, float t);
 
 struct TParticleEmitterGeneration {
 protected:
@@ -52,6 +62,8 @@ public:
 	float delay;
 	// Check if the emitter must loop
 	bool loop;
+	// Random rotation
+	bool random_rotation;
 
 	// Time between bursts
 	float burst_time;
@@ -65,9 +77,9 @@ public:
 	float box_size;
 
 	// Sphere / Semisphere
-	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
+	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation);
 	// Cone
-	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop);
+	TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation);
 
 	void fillInitial();
 
@@ -90,8 +102,10 @@ struct TParticleRenderer {
 	int n_anim_x;
 	int n_anim_y;
 	float stretch;
+	int particle_animation_mode;
+	int stretch_mode;
 
-	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch);
+	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode, int the_stretch_mode);
 
 	void update(TParticle* particle, float elapsed);
 	void render();
@@ -118,6 +132,15 @@ struct TParticleUpdaterPhysx {
 	void update(TParticle* particle, float elapsed);
 };
 
+struct TParticleUpdaterRotation {
+
+	float angular_speed;
+
+	TParticleUpdaterRotation(float the_angular_speed) : angular_speed(the_angular_speed) {}
+
+	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
+};
 struct TParticleUpdaterGravity {
 	float gravity;
 	bool constant;
@@ -143,11 +166,13 @@ struct TParticleUpdaterSize {
 };
 
 struct TParticleUpdaterColor {
-	XMVECTOR initial_color;
-	XMVECTOR final_color;
+	XMFLOAT3 initial_color;
+	XMFLOAT3 final_color;
+	TParticleCurve curve;
+	float curve_val;
 
 	TParticleUpdaterColor();
-	TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color);
+	TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color, TParticleCurve the_curve, float the_curve_val);
 
 	void update(TParticle* particle, float elapsed);
 	std::string getXMLDefinition();

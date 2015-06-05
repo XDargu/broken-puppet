@@ -17,10 +17,6 @@
 
 using namespace physx;
 
-CEntityInspector::CEntityInspector() { }
-
-CEntityInspector::~CEntityInspector() { }
-
 TwBar *bar;
 
 XMVECTOR center;
@@ -35,8 +31,23 @@ PxVec3 angularVelocity;
 TwEnumVal particleEmitterShapeEV[] = { { TParticleEmitterShape::SPHERE, "Sphere" }, { TParticleEmitterShape::SEMISPHERE, "Semisphere" }, { TParticleEmitterShape::RING, "Ring" }, { TParticleEmitterShape::CONE, "Cone" }, { TParticleEmitterShape::BOX, "Box" } };
 TwType particleEmitterShape;
 
-TwEnumVal particleRenderModeEV[] = { { TParticleRenderType::BILLBOARD, "Billboard" }, { TParticleRenderType::H_BILLBOARD, "H-Billboard" }, { TParticleRenderType::V_BILLBOARD, "V-Billboard" }, { TParticleRenderType::STRETCHED_BILLBOARD, "Stretched Billboard" }};
+TwEnumVal particleRenderModeEV[] = { { TParticleRenderType::BILLBOARD, "Billboard" }, { TParticleRenderType::H_DIR_BILLBOARD, "H-Dir-Billboard" }, { TParticleRenderType::H_BILLBOARD, "H-Billboard" }, { TParticleRenderType::V_BILLBOARD, "V-Billboard" }, { TParticleRenderType::STRETCHED_BILLBOARD, "Stretched Billboard" } };
 TwType particleRenderMode;
+
+TwEnumVal particleRenderAnimationModeEV[] = { { 0, "Animation" }, { 1, "Random particle" }, { 2, "Random row animation" } };
+TwType particleRenderAnimationMode;
+
+TwEnumVal particleRenderStretchModeEV[] = { { 0, "Normal" }, { 1, "Stretch with speed" } };
+TwType particleRenderStretchMode;
+
+TwEnumVal particleCurveEV[] = { { TParticleCurve::LINEAL, "Linear" }, { TParticleCurve::EXPONENTIAL, "Exponential" }, { TParticleCurve::LOGARITHM, "Logarithmic" } };
+TwType particleCurve;
+
+CEntityInspector::CEntityInspector() { }
+
+CEntityInspector::~CEntityInspector() {
+	SAFE_DELETE(particleRenderTextureListEV);
+}
 
 static CEntityInspector entity_inspector;
 
@@ -60,7 +71,22 @@ void CEntityInspector::init() {
 
 	// Particles
 	particleEmitterShape = TwDefineEnum("ParticlEmitterShape", particleEmitterShapeEV, 5);
-	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 4);
+	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 5);
+	particleRenderAnimationMode = TwDefineEnum("particleRenderAnimationMode", particleRenderAnimationModeEV, 3);
+	particleRenderStretchMode = TwDefineEnum("particleRenderStretchMode", particleRenderStretchModeEV, 2);
+	particleCurve = TwDefineEnum("particleCurve", particleCurveEV, 3);
+
+	// List of textures
+	files_in_directory("data/textures/particles", texture_list);
+
+	particleRenderTextureListEV = new TwEnumVal[texture_list.size()];
+	for (int j = 0; j < texture_list.size(); ++j) {
+		texture_list[j] = texture_list[j].substr(0, texture_list[j].size() - 4);
+		TwEnumVal val;
+		val.Label = texture_list[j].c_str();
+		val.Value = j;
+		particleRenderTextureListEV[j] = val;
+	}
 
 }
 
@@ -284,6 +310,30 @@ void TW_CALL GetParticleSystemShape(void *value, void *clientData)
 	*static_cast<TParticleEmitterShape *>(value) = static_cast<TParticleSystem *>(clientData)->emitter_generation->shape;
 }
 
+void TW_CALL SetParticleRenderTexture(const void *value, void *clientData)
+{	
+	std::string path = "particles/" + std::string(CEntityInspector::get().particleRenderTextureListEV[*static_cast<const int *>(value)].Label);
+	std::strcpy(
+		static_cast<TParticleSystem *>(clientData)->renderer->texture,
+		path.c_str()
+		);
+	 
+}
+void TW_CALL GetParticleRenderTexture(void *value, void *clientData)
+{
+	CEntityInspector &inspector = CEntityInspector::get();
+	std::string name = std::string(static_cast<TParticleSystem *>(clientData)->renderer->texture);
+	int m_value = 0;
+	for (int i = 0; i < inspector.texture_list.size(); ++i) {
+		std::string label_name = "particles/" + std::string(inspector.particleRenderTextureListEV[i].Label);
+		if (name == label_name) {
+			m_value = inspector.particleRenderTextureListEV[i].Value;
+			break;
+		}
+	}
+	*static_cast<int *>(value) = m_value;
+}
+
 void TW_CALL CallbackRemoveUpdaterNoise(void *clientData)
 {
 	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_noise);
@@ -309,6 +359,13 @@ void TW_CALL CallbackRemoveUpdaterGravity(void *clientData)
 {
 	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_gravity);
 	static_cast<TParticleSystem *>(clientData)->updater_gravity = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackRemoveUpdaterRotation(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->updater_rotation);
+	static_cast<TParticleSystem *>(clientData)->updater_rotation = nullptr;
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -353,6 +410,12 @@ void TW_CALL CallbackAddUpdaterGravity(void *clientData)
 void TW_CALL CallbackAddUpdaterMovement(void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->updater_movement = new TParticleUpdaterMovement();
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddUpdaterRotation(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->updater_rotation = new TParticleUpdaterRotation(0.01f);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -687,6 +750,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->delay, " group=PG label='Delay' min=0 step=0.01");
 			aux = "PGEmitterLoop" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->loop, " group=PG label='Loop'");
+			aux = "PGEmitterFillInitial" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->fill_initial, " group=PG label='Fill initial'");
+			aux = "PGEmitterRandomRot" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->random_rotation, " group=PG label='Random rotation'");
 
 			// Updaters
 			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {
@@ -703,6 +770,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->initial_color, " group=PG label='Initial Color'");
 				aux = "PGUpdaterColorFC" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->final_color, " group=PG label='Final Color'");
+				aux = "PGUpdaterColorCurve" + i;
+				TwAddVarRW(bar, aux.c_str(), particleCurve, &e_particle_group->particle_systems[i].updater_color->curve, " group=PG label='Curve'");
+				aux = "PGUpdaterColorCurveVal" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_color->curve_val, " group=PG label='Curve value' min=0.01 step=0.01");
 				aux = "RemovePGUpdaterColor" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterColor, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
@@ -725,6 +796,15 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed' step=0.1");
 				aux = "RemovePGUpdaterMovement" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_rotation != nullptr) {
+				aux = "PGRotation" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Rotation'");
+				aux = "PGUpdaterRotationSpeed" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_rotation->angular_speed, " group=PG label='Speed' step=0.005");
+				aux = "RemovePGUpdaterRotation" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterRotation, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_noise != nullptr) {
@@ -752,8 +832,12 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			// Renderer
 			aux = "Renderer" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Renderer'");
-			aux = "PGRendererTexture" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_CSSTRING(sizeof(e_particle_group->particle_systems[i].renderer->texture)), &e_particle_group->particle_systems[i].renderer->texture, " group=PG label='Texture'");
+			
+			particleRenderTextureList = TwDefineEnum("ParticleRenderTextureList", particleRenderTextureListEV, texture_list.size());
+
+			aux = "PGRendererTextureList" + i;
+			TwAddVarCB(bar, aux.c_str(), particleRenderTextureList, SetParticleRenderTexture, GetParticleRenderTexture, &e_particle_group->particle_systems[i], " group=PG label='Texture'");
+
 			aux = "PGRendererAdditive" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
 
@@ -765,9 +849,15 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGRendererMode" + i;
 			TwAddVarRW(bar, aux.c_str(), particleRenderMode, &e_particle_group->particle_systems[i].renderer->render_type, " group=PG label='Render mode'");
 
+			aux = "PGRendererAnimMode" + i;
+			TwAddVarRW(bar, aux.c_str(), particleRenderAnimationMode, &e_particle_group->particle_systems[i].renderer->particle_animation_mode, " group=PG label='Animation mode'");
+
 			// TODO: Hacer que solo aparezca en modo stretch
 			aux = "PGRendererStretch" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' min=1 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' ==1 step=0.1");
+
+			aux = "PGRendererStretchMode" + i;
+			TwAddVarRW(bar, aux.c_str(), particleRenderStretchMode, &e_particle_group->particle_systems[i].renderer->stretch_mode, " group=PG label='Stretch mode'");
 						
 			TwAddSeparator(bar, "", "group=PG");
 
@@ -791,6 +881,11 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			if (e_particle_group->particle_systems[i].updater_movement == nullptr) {
 				aux = "AddPGMovement" + i;
 				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Add movement updater'");
+			}
+
+			if (e_particle_group->particle_systems[i].updater_rotation == nullptr) {
+				aux = "AddPGRotation" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterRotation, &e_particle_group->particle_systems[i], "group=PG label='Add rotation updater'");
 			}
 
 			if (e_particle_group->particle_systems[i].updater_noise == nullptr) {

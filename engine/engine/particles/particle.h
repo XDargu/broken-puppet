@@ -13,8 +13,9 @@ struct TParticle {
 	float size;
 	XMFLOAT3 color;
 	int index;
+	float rotation;
 
-	TParticle(XMFLOAT3 the_position, XMFLOAT3 the_direction, float the_age, float the_lifespan, XMVECTOR the_color, float the_size, int the_index);
+	TParticle(XMFLOAT3 the_position, XMFLOAT3 the_direction, float the_age, float the_lifespan, XMVECTOR the_color, float the_size, int the_index, float the_rotation);
 
 	TParticle();
 

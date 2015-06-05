@@ -12,6 +12,7 @@ TParticleSystem::TParticleSystem() : updater_lifetime(nullptr)
 , updater_color(nullptr)
 , updater_movement(nullptr)
 , updater_gravity(nullptr)
+, updater_rotation(nullptr)
 , updater_noise(nullptr)
 , updater_physx(nullptr)
 
@@ -45,13 +46,21 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		if (updater_type == "color") {
 			XMVECTOR initial_color = atts.getPoint("initialColor");
 			XMVECTOR final_color = atts.getPoint("finalColor");
-			updater_color = new TParticleUpdaterColor();
-			updater_color->initial_color = initial_color;
-			updater_color->final_color = final_color;
+			float curve_val = atts.getFloat("curveVal", 2);
+			std::string curve_mode = atts.getString("curveType", "linear");
+			TParticleCurve type = TParticleCurve::LINEAL;
+			if (curve_mode == "linear") { type = TParticleCurve::LINEAL; }
+			if (curve_mode == "log") { type = TParticleCurve::LOGARITHM; }
+			if (curve_mode == "exp") { type = TParticleCurve::EXPONENTIAL; }
+			updater_color = new TParticleUpdaterColor(initial_color, final_color, type, curve_val);
 		}
 		if (updater_type == "movement") {
 			updater_movement = new TParticleUpdaterMovement();
 			updater_movement->speed = atts.getFloat("speed", 1);
+		}
+		if (updater_type == "rotation") {
+			float angular_speed = atts.getFloat("angular_speed", 0.5f);
+			updater_rotation = new TParticleUpdaterRotation(angular_speed);
 		}
 		if (updater_type == "gravity") {
 			float gravity = atts.getFloat("gravity", 1);
@@ -82,6 +91,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		float burst_time = atts.getFloat("burstTime", 0);
 		int burst_amount = atts.getInt("burstAmount", 100);
 		bool loop = atts.getBool("loop", true);
+		bool random_rotation = atts.getBool("randomRotation", true);
 		float delay = atts.getFloat("delay", 0);
 		particles.reserve(limit);
 
@@ -104,29 +114,29 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		if (emitter_type == "sphere") {
 			float radius = atts.getFloat("radius", 1);			
-			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
 
 		if (emitter_type == "semiSphere") {
 			float radius = atts.getFloat("radius", 1);
-			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
 
 		if (emitter_type == "cone") {
 			float radius = atts.getFloat("radius", 1);
 			float angle = deg2rad(atts.getFloat("angle", 30));
-			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::CONE, h_transform, rate, min_life_time, max_life_time, radius, angle, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
 
 		if (emitter_type == "ring") {
 			float inner_radius = atts.getFloat("innerRadius", 0.5);
 			float outer_radius = atts.getFloat("outerRadius", 1);
-			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::RING, h_transform, rate, min_life_time, max_life_time, outer_radius, inner_radius, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
 
 		if (emitter_type == "box") {
 			float size = atts.getFloat("size", 1);			
-			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount, delay, loop);
+			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::BOX, h_transform, rate, min_life_time, max_life_time, size, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
 
 	}
@@ -136,15 +146,18 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		bool is_aditive = atts.getBool("aditive", true);
 		int n_anim_x = atts.getInt("n_anim_x", 1);
 		int n_anim_y = atts.getInt("n_anim_y", 1);
+		int animation_mode = atts.getInt("animationMode", 0);
 		float stretch = atts.getFloat("stretch", 2);
+		int stretch_mode = atts.getInt("stretchMode", 0);
 		std::string str_mode = atts.getString("render_mode", "billboard");
 		TParticleRenderType type = TParticleRenderType::BILLBOARD;
 		if (str_mode == "billboard") { type = TParticleRenderType::BILLBOARD; }
 		if (str_mode == "h_billboard") { type = TParticleRenderType::H_BILLBOARD; }
+		if (str_mode == "h_dir_billboard") { type = TParticleRenderType::H_DIR_BILLBOARD; }
 		if (str_mode == "v_billboard") { type = TParticleRenderType::V_BILLBOARD; }
 		if (str_mode == "stretched_billboard") { type = TParticleRenderType::STRETCHED_BILLBOARD; }
 
-		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, TParticleRenderType::BILLBOARD, n_anim_x, n_anim_y, stretch);		
+		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, type, n_anim_x, n_anim_y, stretch, animation_mode, stretch_mode);
 	}
 	
 }
@@ -164,10 +177,6 @@ void TParticleSystem::update(float elapsed) {
 		updater_physx->ps = this;
 	}
 
-	if (isKeyPressed('T')) {
-		changeLimit(100);
-	}
-
 	VParticles::iterator it = particles.begin();
 
 	int delete_counter = 0;
@@ -175,10 +184,13 @@ void TParticleSystem::update(float elapsed) {
 
 		if (it->size != -1) {
 			// Update the position, no updater needed
-			it->position.x += it->speed.x;
-			it->position.y += it->speed.y;
-			it->position.z += it->speed.z;
+			it->position.x += it->speed.x * elapsed;
+			it->position.y += it->speed.y * elapsed;
+			it->position.z += it->speed.z * elapsed;
 
+			if (updater_rotation != nullptr) {
+				updater_rotation->update(&(*it), elapsed);
+			}
 			if (updater_movement != nullptr) {
 				updater_movement->update(&(*it), elapsed);
 			}
@@ -203,9 +215,11 @@ void TParticleSystem::update(float elapsed) {
 				// Lock
 			}
 			if (it->lifespan != 0 && it->age > it->lifespan) {
-				PxU32 indicesToRelease[1];
-				indicesToRelease[0] = it->index;
-				psx->releaseParticles(1, indicesToRelease);
+				if (use_physx) {
+					PxU32 indicesToRelease[1];
+					indicesToRelease[0] = it->index;
+					psx->releaseParticles(1, indicesToRelease);
+				}
 				it = particles.erase(it);
 				delete_counter++;
 			}
@@ -234,7 +248,7 @@ void TParticleSystem::update(float elapsed) {
 	}*/
 
 	if (instances_data != nullptr && particles.size() > 0) {
-		instances_data->updateFromCPU(&particles[0]);
+		instances_data->updateFromCPU(&particles[0], particles.size() * sizeof(TParticle));
 	}
 }
 
@@ -245,6 +259,8 @@ void TParticleSystem::render() {
 		ps_ctes->n_imgs_y = renderer->n_anim_y;
 		ps_ctes->stretch = renderer->stretch;
 		ps_ctes->render_mode = renderer->render_type;
+		ps_ctes->stretch_mode = renderer->stretch_mode;
+		ps_ctes->animation_mode = renderer->particle_animation_mode;
 		ctes_particle_system.uploadToGPU();
 		ctes_particle_system.activateInVS(5);
 
@@ -289,7 +305,7 @@ void TParticleSystem::changeLimit(int the_limit) {
 
 	// If the capacity is less than the new limit, reserve more memory
 	if (particles.capacity() < the_limit) {
-		particles.reserve(the_limit - particles.capacity());
+		particles.reserve(the_limit);
 	}
 
 	// Change the buffer mesh
@@ -298,8 +314,18 @@ void TParticleSystem::changeLimit(int the_limit) {
 		delete instances_data;
 	}
 
+	void *data = nullptr;
+	if (particles.empty()) {
+		particles.resize(1);
+		data = &particles[0];
+		particles.clear();
+	}
+	else {
+		data = &particles[0];
+	}
+
 	instances_data = new CMesh;
-	bool is_ok = instances_data->create(the_limit, &particles
+	bool is_ok = instances_data->create(the_limit, data
 		, 0, nullptr        // No indices
 		, CMesh::POINTS     // We are not using this
 		, &vdcl_particle_data    // Type of vertex
@@ -316,8 +342,8 @@ void TParticleSystem::loadDefaultPS() {
 	TCompTransform* m_transform = h_transform;
 
 	emitter_generation = new TParticleEmitterGeneration(
-		this, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false);
-	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1);
+		this, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false, true);
+	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1, 0, 0);
 
 	updater_lifetime = new TParticleUpdaterLifeTime();
 	updater_movement = new TParticleUpdaterMovement();
@@ -352,6 +378,9 @@ std::string TParticleSystem::getXMLDefinition() {
 
 	if (updater_movement != nullptr) {
 		def += updater_movement->getXMLDefinition();
+	}
+	if (updater_rotation != nullptr) {
+		def += updater_rotation->getXMLDefinition();
 	}
 	if (updater_gravity != nullptr) {
 		def += updater_gravity->getXMLDefinition();

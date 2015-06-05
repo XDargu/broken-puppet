@@ -167,23 +167,27 @@ bool CRender::compileShaderFromFile(const char* szFileName, const char* szEntryP
 	wchar_t wFilename[MAX_PATH];
 	mbstowcs(wFilename, szFileName, MAX_PATH);
 
-	ID3DBlob* pErrorBlob = nullptr;
-	hr = D3DCompileFromFile(wFilename, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, szEntryPoint, szShaderModel,
-		dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
+	while (true) {
 
-	if (pErrorBlob) {
-		dbg("Compiling %s: %s", szFileName, pErrorBlob->GetBufferPointer());
-	}
+		ID3DBlob* pErrorBlob = nullptr;
+		hr = D3DCompileFromFile(wFilename, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, szEntryPoint, szShaderModel,
+			dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
 
-	if (FAILED(hr))
-	{
-		if (pErrorBlob != NULL) {
-			MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "Compiler Error", MB_OK);
+		if (pErrorBlob) {
+			dbg("Compiling %s: %s", szFileName, pErrorBlob->GetBufferPointer());
+		}
+
+		if (FAILED(hr))
+		{
+			if (pErrorBlob != NULL) {
+				MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "Compiler Error", MB_OK);
+			}
+			if (pErrorBlob) pErrorBlob->Release();
+			continue;
 		}
 		if (pErrorBlob) pErrorBlob->Release();
-		return false;
+		break;
 	}
-	if (pErrorBlob) pErrorBlob->Release();
 
 	return true;
 }

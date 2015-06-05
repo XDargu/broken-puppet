@@ -13,6 +13,10 @@ private:
 public:
 	static CEntityInspector& get();
 
+	std::vector<std::string> texture_list;
+	TwEnumVal* particleRenderTextureListEV;
+	TwType particleRenderTextureList;
+
 	CEntityInspector();
 	~CEntityInspector();
 	void init();

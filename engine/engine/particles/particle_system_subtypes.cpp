@@ -4,6 +4,52 @@
 #include "physics_manager.h"
 #include "particle_system.h"
 
+float getCurveVal(TParticleCurve curve, float curve_val, float min, float max, float t) {
+	switch (curve)
+	{
+	case LINEAL:
+		return min + (max - min) * t;
+		break;
+	case LOGARITHM:
+		return min + (max - min) * (1 - pow(t, curve_val));
+		break;
+	case EXPONENTIAL:
+		return min + (max - min) * (pow(t, curve_val));
+		break;
+	}
+
+	return 0;
+}
+
+XMFLOAT3 getCurveVal(TParticleCurve curve, float curve_val, XMFLOAT3 min, XMFLOAT3 max, float t) {
+	switch (curve)
+	{
+	case LINEAL:
+		return XMFLOAT3(
+				  min.x + (max.x - min.x) * t
+				, min.y + (max.y - min.y) * t
+				, min.z + (max.z - min.z) * t
+			);
+		break;
+	case LOGARITHM:
+		return XMFLOAT3(
+			  min.x + (max.x - min.x) * (1 - pow(1 - t, curve_val))
+			, min.y + (max.y - min.y) * (1 - pow(1 - t, curve_val))
+			, min.z + (max.z - min.z) * (1 - pow(1 - t, curve_val))
+			);
+		break;
+	case EXPONENTIAL:
+		return XMFLOAT3(
+			  min.x + (max.x - min.x) * (pow(t, curve_val))
+			, min.y + (max.y - min.y) * (pow(t, curve_val))
+			, min.z + (max.z - min.z) * (pow(t, curve_val))
+			);
+		break;
+	}
+
+	return XMFLOAT3(0, 0, 0);
+}
+
 void TParticleEmitterGeneration::update(float elapsed) {
 	delay_counter += elapsed;
 
@@ -111,7 +157,7 @@ void TParticleEmitterGeneration::addParticle() {
 	}
 
 	float life_time = getRandomNumber(min_life_time, max_life_time);
-
+	float rotation = random_rotation ? getRandomNumber(0.0f, PxTwoPi) : 0;
 	TParticle n_particle = TParticle(
 		pos
 		, direction
@@ -120,7 +166,12 @@ void TParticleEmitterGeneration::addParticle() {
 		, XMVectorSet(1, 1, 1, 1)
 		, 1
 		, (int)ps->particles.size()
+		, rotation
 		);
+	if (ps->updater_movement != nullptr) {
+		XMStoreFloat3(&n_particle.speed, XMLoadFloat3(&direction) * ps->updater_movement->speed);
+	}
+	
 	//particles->erase(particles->begin());
 	if (ps->use_physx){
 		float speed = 1;
@@ -139,7 +190,7 @@ void TParticleEmitterGeneration::addParticle() {
 }
 
 // Sphere / Semisphere / Box
-TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius_or_box_size, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation) {
 	shape = the_shape;
 	radius = the_radius_or_box_size;
 	h_transform = the_transform;
@@ -155,8 +206,9 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	burst_counter = 0;
 	delay_counter = 0;
 	emitter_counter = 0;
+	random_rotation = the_random_rotation;
 
-	inner_radius = 0.5;
+	inner_radius = 0.05;
 	box_size = the_radius_or_box_size;
 	angle = deg2rad(30);
 
@@ -166,7 +218,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	fillInitial();
 }
 // Cone / Ring
-TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop) {
+TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, TParticleEmitterShape the_shape, CHandle the_transform, float the_rate, float the_min_life_time, float the_max_life_time, float the_radius, float the_angle_or_inner_radius, bool the_fill_initial, int the_limit, float the_burst_time, int the_burst_amount, float the_delay, bool the_loop, bool the_random_rotation) {
 	shape = the_shape;
 	radius = the_radius;
 	h_transform = the_transform;
@@ -182,6 +234,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	burst_counter = 0;
 	delay_counter = 0;
 	emitter_counter = 0;
+	random_rotation = the_random_rotation;
 
 	inner_radius = the_angle_or_inner_radius;
 	box_size = 1;
@@ -291,12 +344,16 @@ std::string TParticleEmitterGeneration::getXMLDefinition() {
 	def += (loop ? "true" : "false");
 	def += "\" ";
 
+	def += "randomRotation=\"";
+	def += (random_rotation ? "true" : "false");
+	def += "\" ";
+
 	def += "/>";
 
 	return def;
 }
 
-TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch) {
+TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode, int the_stretch_mode) {
 	particles = the_particles;
 	strcpy(texture, the_texture);
 	additive = is_aditive;
@@ -304,6 +361,8 @@ TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_
 	n_anim_x = the_n_anim_x;
 	n_anim_y = the_n_anim_y;
 	stretch = the_stretch;
+	particle_animation_mode = the_particle_animation_mode;
+	stretch_mode = the_stretch_mode;
 }
 
 void TParticleRenderer::update(TParticle* particle, float elapsed) {
@@ -335,7 +394,10 @@ std::string TParticleRenderer::getXMLDefinition() {
 	def += "stretch=\"";
 	def += std::to_string(stretch) + "\" ";
 
-	def += "type=\"";
+	def += "stretchMode=\"";
+	def += std::to_string(stretch_mode) + "\" ";
+
+	def += "render_mode=\"";
 	switch (render_type)
 	{
 	case BILLBOARD:
@@ -344,6 +406,10 @@ std::string TParticleRenderer::getXMLDefinition() {
 		break;
 	case H_BILLBOARD:
 		def += "h_billboard";
+		def += "\" ";
+		break;
+	case H_DIR_BILLBOARD:
+		def += "h_dir_billboard";
 		def += "\" ";
 		break;
 	case V_BILLBOARD:
@@ -355,6 +421,9 @@ std::string TParticleRenderer::getXMLDefinition() {
 		def += "\" ";
 		break;
 	}
+
+	def += "animationMode=\"";
+	def += std::to_string(particle_animation_mode) + "\" ";
 
 	def += "/>";
 
@@ -379,7 +448,7 @@ void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
 }
 
 void TParticleUpdaterMovement::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + XMLoadFloat3(&particle->direction) * speed * elapsed);
+	//XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + XMLoadFloat3(&particle->direction) * speed);
 }
 
 std::string TParticleUpdaterMovement::getXMLDefinition() {
@@ -399,7 +468,7 @@ void TParticleUpdaterGravity::update(TParticle* particle, float elapsed) {
 	if (constant)
 		XMStoreFloat3(&particle->position, XMLoadFloat3(&particle->position) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
 	else
-		XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * elapsed * gravity);
+		XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + Physics.PxVec3ToXMVECTOR(Physics.gScene->getGravity()) * gravity);
 }
 
 std::string TParticleUpdaterGravity::getXMLDefinition() {
@@ -413,6 +482,23 @@ std::string TParticleUpdaterGravity::getXMLDefinition() {
 	def += "constant=\"";
 	def += (constant ? "true" : "false");
 	def += "\" ";
+
+	def += "/>";
+
+	return def;
+}
+
+void TParticleUpdaterRotation::update(TParticle* particle, float elapsed) {
+	particle->rotation += angular_speed * elapsed;
+}
+
+std::string TParticleUpdaterRotation::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"rotation\" ";
+
+	def += "angular_speed=\"";
+	def += std::to_string(angular_speed) + "\" ";
 
 	def += "/>";
 
@@ -459,17 +545,22 @@ std::string TParticleUpdaterSize::getXMLDefinition() {
 }
 
 TParticleUpdaterColor::TParticleUpdaterColor() {
-	initial_color = XMVectorSet(1, 1, 1, 1);
-	final_color = XMVectorSet(1, 1, 1, 1);
+	initial_color = XMFLOAT3(1, 1, 1);
+	final_color = XMFLOAT3(1, 1, 1);
+	curve = TParticleCurve::LINEAL;
+	curve_val = 2;
 }
 
-TParticleUpdaterColor::TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color) {
-	initial_color = the_initial_color;
-	final_color = the_final_color;
+TParticleUpdaterColor::TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color, TParticleCurve the_curve, float the_curve_val) {
+	XMStoreFloat3(&initial_color, the_initial_color);
+	XMStoreFloat3(&final_color, the_final_color);
+	curve = the_curve;
+	curve_val = the_curve_val;
 }
 
 void TParticleUpdaterColor::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
+	//XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
+	particle->color = getCurveVal(curve, curve_val, initial_color, final_color, particle->age / particle->lifespan);
 }
 
 std::string TParticleUpdaterColor::getXMLDefinition() {
@@ -478,10 +569,30 @@ std::string TParticleUpdaterColor::getXMLDefinition() {
 	def += "<updater type=\"color\" ";
 
 	def += "initialColor=\"";
-	def += V3ToString(initial_color) + "\" ";
+	def += V3ToString(XMLoadFloat3(&initial_color)) + "\" ";
 
 	def += "finalColor=\"";
-	def += V3ToString(final_color) + "\" ";
+	def += V3ToString(XMLoadFloat3(&final_color)) + "\" ";
+
+	def += "curveVal=\"";
+	def += std::to_string(curve_val) + "\" ";
+
+	def += "curveType=\"";
+	switch (curve)
+	{
+	case LINEAL:
+		def += "linear";
+		def += "\" ";
+		break;
+	case EXPONENTIAL:
+		def += "exp";
+		def += "\" ";
+		break;
+	case LOGARITHM:
+		def += "log";
+		def += "\" ";
+		break;
+	}
 
 	def += "/>";
 
@@ -489,7 +600,7 @@ std::string TParticleUpdaterColor::getXMLDefinition() {
 }
 
 void TParticleUpdaterNoise::update(TParticle* particle, float elapsed) {	
-	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + getRandomVector3(min_noise, max_noise) * elapsed);
+	XMStoreFloat3(&particle->speed, XMLoadFloat3(&particle->speed) + getRandomVector3(min_noise, max_noise));
 }
 
 std::string TParticleUpdaterNoise::getXMLDefinition() {
