@@ -14,16 +14,15 @@ CRope_manager::~CRope_manager()
 }
 
 void CRope_manager::addString(CHandle string){
-	if (strings.size() <= max_strings){
-		strings.push_back(CHandle(string));
-	}else{
+	strings.push_back(CHandle(string));
+	if (strings.size() > max_strings){
 		removeString();
 	}
 }
 
 void CRope_manager::removeString(){
 	if (strings.size() > 0){
-		CHandle c_rope = strings.back();
+		CHandle c_rope = strings.front();
 		strings.pop_front();
 		if (c_rope.isValid())
 			CEntityManager::get().remove(c_rope.getOwner());
