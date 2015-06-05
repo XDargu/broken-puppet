@@ -20,6 +20,15 @@ void CRope_manager::addString(CHandle string){
 	}
 }
 
+void CRope_manager::removeBackString(){
+	if (strings.size() > 0){
+		CHandle c_rope = strings.back();
+		strings.pop_back();
+		if (c_rope.isValid())
+			CEntityManager::get().remove(c_rope.getOwner());
+	}
+}
+
 void CRope_manager::removeString(){
 	if (strings.size() > 0){
 		CHandle c_rope = strings.front();

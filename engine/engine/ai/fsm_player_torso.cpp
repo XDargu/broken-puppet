@@ -361,7 +361,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		/*CHandle c_rope = strings.back();
 		strings.pop_front();
 		CEntityManager::get().remove(c_rope.getOwner());*/
-		CRope_manager::get().removeString();
+		CRope_manager::get().removeBackString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -476,7 +476,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			/*CHandle c_rope = strings.back();
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());*/
-			CRope_manager::get().removeString();
+			CRope_manager::get().removeBackString();
 		}
 	}
 

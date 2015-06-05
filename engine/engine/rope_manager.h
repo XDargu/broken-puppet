@@ -15,6 +15,7 @@ public:
 	~CRope_manager();
 	void addString(CHandle string);
 	void removeString();
+	void removeBackString();
 	void clearStrings();
 	static CRope_manager& get();
 };

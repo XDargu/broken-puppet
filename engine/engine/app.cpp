@@ -297,11 +297,11 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	//loadScene("data/scenes/escena_ms2.xml");
+	loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/viewer_test.xml");
+	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
