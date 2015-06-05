@@ -12,6 +12,14 @@ void TW_CALL CallBackParticleGroupSelected(void *clientData) {
 	CEntityInspector::get().inspectEntity(new_e);
 }
 
+void TW_CALL CallBackParticleReset(void *clientData) {
+	CEntity* ps_e = CEntityManager::get().getByName("edited_ps");
+	TCompTransform* ps_t = ps_e->get<TCompTransform>();
+
+	ps_t->position = XMVectorSet(0, 0, 0, 1);
+	ps_t->rotation = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
+}
+
 void TW_CALL CallBackParticleGroupDelete(void *clientData) {
 
 	CEntity* e_editor = CEntityManager::get().getByName("ParticleEditor");
@@ -83,6 +91,16 @@ void TCompParticleEditor::update(float elapsed) {
 	TwDefine(" Actioner visible=false ");
 	TwDefine(" Console visible=false ");
 	TwDefine(" ConsoleInput visible=false ");
+
+	CEntity* ps_e = CEntityManager::get().getByName("edited_ps");
+	TCompTransform* ps_t = ps_e->get<TCompTransform>();
+
+	if (random_move) {
+		ps_t->position += getRandomVector3(-10, 10) * elapsed;
+	}
+	if (random_rotate) {
+		ps_t->rotation = XMQuaternionMultiply(ps_t->rotation, XMQuaternionRotationRollPitchYawFromVector(getRandomVector3(-10 * elapsed, 10 * elapsed)));
+	}
 }
 
 void TCompParticleEditor::reloadParticleGroups() {
@@ -92,6 +110,12 @@ void TCompParticleEditor::reloadParticleGroups() {
 	TwAddVarRW(particle_list_bar, "CreationName", TW_TYPE_STDSTRING, &aux_pg_name, "group='Creation' label='Name'");
 	TwAddButton(particle_list_bar, "Create new Particle Group", CallBackParticleGroupCreate, ((TCompParticleEditor*)this), "group='Creation'");
 	TwAddSeparator(particle_list_bar, "CreationSeparator", "group='Creation'");
+
+	TwAddSeparator(particle_list_bar, "MiscSeparator", "group='Misc'");
+	TwAddVarRW(particle_list_bar, "Random movement", TW_TYPE_BOOL8, &random_move, "group='Misc'");
+	TwAddVarRW(particle_list_bar, "Random rotation", TW_TYPE_BOOL8, &random_rotate, "group='Misc'");
+	TwAddButton(particle_list_bar, "Reset", CallBackParticleReset, NULL, "group='Misc'");
+
 
 	std::string aux = "";
 	std::string aux2 = "";

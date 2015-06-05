@@ -7,12 +7,14 @@
 struct TCompParticleEditor : TBaseComponent {
 private:
 	TwBar *particle_list_bar;
+	bool random_move;
+	bool random_rotate;
 public:
 
 	std::string aux_pg_name;
 	std::string pg_selected_name;
 
-	TCompParticleEditor() {}
+	TCompParticleEditor() : random_move(false), random_rotate(false), particle_list_bar(nullptr) {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue& atts) {}
 

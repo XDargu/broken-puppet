@@ -46,9 +46,13 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		if (updater_type == "color") {
 			XMVECTOR initial_color = atts.getPoint("initialColor");
 			XMVECTOR final_color = atts.getPoint("finalColor");
-			updater_color = new TParticleUpdaterColor();
-			updater_color->initial_color = initial_color;
-			updater_color->final_color = final_color;
+			float curve_val = atts.getFloat("curveVal", 2);
+			std::string curve_mode = atts.getString("curveType", "linear");
+			TParticleCurve type = TParticleCurve::LINEAL;
+			if (curve_mode == "linear") { type = TParticleCurve::LINEAL; }
+			if (curve_mode == "log") { type = TParticleCurve::LOGARITHM; }
+			if (curve_mode == "exp") { type = TParticleCurve::EXPONENTIAL; }
+			updater_color = new TParticleUpdaterColor(initial_color, final_color, type, curve_val);
 		}
 		if (updater_type == "movement") {
 			updater_movement = new TParticleUpdaterMovement();

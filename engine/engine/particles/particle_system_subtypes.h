@@ -28,6 +28,15 @@ enum TParticleRenderType {
 	STRETCHED_BILLBOARD = 4,
 };
 
+enum TParticleCurve {
+	LINEAL = 0,
+	LOGARITHM = 1,
+	EXPONENTIAL = 2
+};
+
+float getCurveVal(TParticleCurve curve, float curve_val, float min, float max, float t);
+XMFLOAT3 getCurveVal(TParticleCurve curve, float curve_val, XMFLOAT3 min, XMFLOAT3 max, float t);
+
 struct TParticleEmitterGeneration {
 protected:
 	float rate_counter;
@@ -157,11 +166,13 @@ struct TParticleUpdaterSize {
 };
 
 struct TParticleUpdaterColor {
-	XMVECTOR initial_color;
-	XMVECTOR final_color;
+	XMFLOAT3 initial_color;
+	XMFLOAT3 final_color;
+	TParticleCurve curve;
+	float curve_val;
 
 	TParticleUpdaterColor();
-	TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color);
+	TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color, TParticleCurve the_curve, float the_curve_val);
 
 	void update(TParticle* particle, float elapsed);
 	std::string getXMLDefinition();

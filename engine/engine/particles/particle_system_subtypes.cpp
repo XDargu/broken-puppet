@@ -4,6 +4,52 @@
 #include "physics_manager.h"
 #include "particle_system.h"
 
+float getCurveVal(TParticleCurve curve, float curve_val, float min, float max, float t) {
+	switch (curve)
+	{
+	case LINEAL:
+		return min + (max - min) * t;
+		break;
+	case LOGARITHM:
+		return min + (max - min) * (1 - pow(t, curve_val));
+		break;
+	case EXPONENTIAL:
+		return min + (max - min) * (pow(t, curve_val));
+		break;
+	}
+
+	return 0;
+}
+
+XMFLOAT3 getCurveVal(TParticleCurve curve, float curve_val, XMFLOAT3 min, XMFLOAT3 max, float t) {
+	switch (curve)
+	{
+	case LINEAL:
+		return XMFLOAT3(
+				  min.x + (max.x - min.x) * t
+				, min.y + (max.y - min.y) * t
+				, min.z + (max.z - min.z) * t
+			);
+		break;
+	case LOGARITHM:
+		return XMFLOAT3(
+			  min.x + (max.x - min.x) * (1 - pow(1 - t, curve_val))
+			, min.y + (max.y - min.y) * (1 - pow(1 - t, curve_val))
+			, min.z + (max.z - min.z) * (1 - pow(1 - t, curve_val))
+			);
+		break;
+	case EXPONENTIAL:
+		return XMFLOAT3(
+			  min.x + (max.x - min.x) * (pow(t, curve_val))
+			, min.y + (max.y - min.y) * (pow(t, curve_val))
+			, min.z + (max.z - min.z) * (pow(t, curve_val))
+			);
+		break;
+	}
+
+	return XMFLOAT3(0, 0, 0);
+}
+
 void TParticleEmitterGeneration::update(float elapsed) {
 	delay_counter += elapsed;
 
@@ -162,7 +208,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	emitter_counter = 0;
 	random_rotation = the_random_rotation;
 
-	inner_radius = 0.5;
+	inner_radius = 0.05;
 	box_size = the_radius_or_box_size;
 	angle = deg2rad(30);
 
@@ -499,17 +545,22 @@ std::string TParticleUpdaterSize::getXMLDefinition() {
 }
 
 TParticleUpdaterColor::TParticleUpdaterColor() {
-	initial_color = XMVectorSet(1, 1, 1, 1);
-	final_color = XMVectorSet(1, 1, 1, 1);
+	initial_color = XMFLOAT3(1, 1, 1);
+	final_color = XMFLOAT3(1, 1, 1);
+	curve = TParticleCurve::LINEAL;
+	curve_val = 2;
 }
 
-TParticleUpdaterColor::TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color) {
-	initial_color = the_initial_color;
-	final_color = the_final_color;
+TParticleUpdaterColor::TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTOR the_final_color, TParticleCurve the_curve, float the_curve_val) {
+	XMStoreFloat3(&initial_color, the_initial_color);
+	XMStoreFloat3(&final_color, the_final_color);
+	curve = the_curve;
+	curve_val = the_curve_val;
 }
 
 void TParticleUpdaterColor::update(TParticle* particle, float elapsed) {
-	XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
+	//XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
+	particle->color = getCurveVal(curve, curve_val, initial_color, final_color, particle->age / particle->lifespan);
 }
 
 std::string TParticleUpdaterColor::getXMLDefinition() {
@@ -518,10 +569,30 @@ std::string TParticleUpdaterColor::getXMLDefinition() {
 	def += "<updater type=\"color\" ";
 
 	def += "initialColor=\"";
-	def += V3ToString(initial_color) + "\" ";
+	def += V3ToString(XMLoadFloat3(&initial_color)) + "\" ";
 
 	def += "finalColor=\"";
-	def += V3ToString(final_color) + "\" ";
+	def += V3ToString(XMLoadFloat3(&final_color)) + "\" ";
+
+	def += "curveVal=\"";
+	def += std::to_string(curve_val) + "\" ";
+
+	def += "curveType=\"";
+	switch (curve)
+	{
+	case LINEAL:
+		def += "linear";
+		def += "\" ";
+		break;
+	case EXPONENTIAL:
+		def += "exp";
+		def += "\" ";
+		break;
+	case LOGARITHM:
+		def += "log";
+		def += "\" ";
+		break;
+	}
 
 	def += "/>";
 

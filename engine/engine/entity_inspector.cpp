@@ -40,6 +40,9 @@ TwType particleRenderAnimationMode;
 TwEnumVal particleRenderStretchModeEV[] = { { 0, "Normal" }, { 1, "Stretch with speed" } };
 TwType particleRenderStretchMode;
 
+TwEnumVal particleCurveEV[] = { { TParticleCurve::LINEAL, "Linear" }, { TParticleCurve::EXPONENTIAL, "Exponential" }, { TParticleCurve::LOGARITHM, "Logarithmic" } };
+TwType particleCurve;
+
 CEntityInspector::CEntityInspector() { }
 
 CEntityInspector::~CEntityInspector() {
@@ -71,6 +74,7 @@ void CEntityInspector::init() {
 	particleRenderMode = TwDefineEnum("particleRenderMode", particleRenderModeEV, 5);
 	particleRenderAnimationMode = TwDefineEnum("particleRenderAnimationMode", particleRenderAnimationModeEV, 3);
 	particleRenderStretchMode = TwDefineEnum("particleRenderStretchMode", particleRenderStretchModeEV, 2);
+	particleCurve = TwDefineEnum("particleCurve", particleCurveEV, 3);
 
 	// List of textures
 	files_in_directory("data/textures/particles", texture_list);
@@ -766,6 +770,10 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->initial_color, " group=PG label='Initial Color'");
 				aux = "PGUpdaterColorFC" + i;
 				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->final_color, " group=PG label='Final Color'");
+				aux = "PGUpdaterColorCurve" + i;
+				TwAddVarRW(bar, aux.c_str(), particleCurve, &e_particle_group->particle_systems[i].updater_color->curve, " group=PG label='Curve'");
+				aux = "PGUpdaterColorCurveVal" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_color->curve_val, " group=PG label='Curve value' min=0.01 step=0.01");
 				aux = "RemovePGUpdaterColor" + i;
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterColor, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
