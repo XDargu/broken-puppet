@@ -625,7 +625,7 @@ void CApp::render() {
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
-
+	underwater.apply(chromatic_aberration.getOutput());
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
@@ -694,10 +694,6 @@ void CApp::render() {
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
 	activateBlendConfig(BLEND_CFG_DEFAULT);
-
-	underwater.apply(chromatic_aberration.getOutput());
-
-
 
 #ifdef _DEBUG
 	renderDebugEntities();

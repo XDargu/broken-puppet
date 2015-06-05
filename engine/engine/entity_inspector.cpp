@@ -318,9 +318,11 @@ void TW_CALL SetParticleRenderTexture(const void *value, void *clientData)
 void TW_CALL GetParticleRenderTexture(void *value, void *clientData)
 {
 	CEntityInspector &inspector = CEntityInspector::get();
+	std::string name = std::string(static_cast<TParticleSystem *>(clientData)->renderer->texture);
 	int m_value = 0;
 	for (int i = 0; i < inspector.texture_list.size(); ++i) {
-		if (std::strcmp(inspector.particleRenderTextureListEV[i].Label, static_cast<TParticleSystem *>(clientData)->renderer->texture) == 0) {
+		std::string label_name = "particles/" + std::string(inspector.particleRenderTextureListEV[i].Label);
+		if (name == label_name) {
 			m_value = inspector.particleRenderTextureListEV[i].Value;
 			break;
 		}
