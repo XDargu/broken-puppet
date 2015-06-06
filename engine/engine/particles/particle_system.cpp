@@ -4,6 +4,8 @@
 #include "components\comp_transform.h"
 #include "render\ctes\shader_ctes.h"
 #include "render\render_utils.h"
+#include "components\comp_particle_group.h"
+#include "entity_manager.h"
 
 extern CShaderCte<TCtesParticleSystem> ctes_particle_system;
 
@@ -16,13 +18,17 @@ TParticleSystem::TParticleSystem() : updater_lifetime(nullptr)
 , updater_noise(nullptr)
 , updater_physx(nullptr)
 
+, subemitter(nullptr)
+
 , emitter_generation(nullptr)
 
 , renderer(nullptr)
 , psx(nullptr)
 
 , h_transform(CHandle())
+, h_pg(CHandle())
 , use_physx(false)
+, dirty_destroy_group(false)
 
 , instanced_mesh(nullptr)
 , instances_data(nullptr)
@@ -77,6 +83,12 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			updater_physx = new TParticleUpdaterPhysx(this);
 			psx->setParticlesGravity(gravity);			
 		}
+	}
+
+	if (elem == "subemitter") {
+		std::string death_name = atts.getString("deathName", "unnamed");
+		subemitter = new TParticleSubemitter();
+		std::strcpy(subemitter->death_emitter, death_name.c_str());
 	}
 
 	if (elem == "emitter") {
@@ -163,6 +175,10 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 }
 
 void TParticleSystem::init() {
+	TCompTransform* m_transform = h_transform;
+	CEntity* owner = h_transform.getOwner();
+	h_pg = owner->get<TCompParticleGroup>();
+
 	if (particles.capacity() < emitter_generation->limit) {
 		particles.reserve(emitter_generation->limit - particles.capacity());
 	}	
@@ -172,7 +188,19 @@ void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
 		emitter_generation->ps = this;
 		emitter_generation->update(elapsed);
+
+		// If it has to be destroyed
+		if (emitter_generation->emitter_counter > emitter_generation->limit) {
+			if (((TCompParticleGroup*)h_pg)->destroy_on_death) {
+				dirty_destroy_group = true;
+				//((TCompParticleGroup*)h_pg)->removeParticleSystem(this);
+			}
+		}
 	}
+
+	if (emitter_generation == nullptr)
+		return;
+
 	if (updater_physx != nullptr) {
 		updater_physx->ps = this;
 	}
@@ -219,6 +247,12 @@ void TParticleSystem::update(float elapsed) {
 					PxU32 indicesToRelease[1];
 					indicesToRelease[0] = it->index;
 					psx->releaseParticles(1, indicesToRelease);
+				}
+				if (subemitter != nullptr)
+				{
+					if (strlen(subemitter->death_emitter) != 0) {
+						subemitter->onParticleDeath(&(*it));
+					}
 				}
 				it = particles.erase(it);
 				delete_counter++;
@@ -343,7 +377,9 @@ void TParticleSystem::loadDefaultPS() {
 
 	emitter_generation = new TParticleEmitterGeneration(
 		this, TParticleEmitterShape::BOX, m_transform, 0.05f, 1, 2, 1, false, 100, 0, 0, 0, false, true);
+
 	renderer = new TParticleRenderer(&particles, "smoke", false, TParticleRenderType::BILLBOARD, 4, 4, 1, 0, 0);
+
 
 	updater_lifetime = new TParticleUpdaterLifeTime();
 	updater_movement = new TParticleUpdaterMovement();
@@ -351,9 +387,19 @@ void TParticleSystem::loadDefaultPS() {
 	// Instancing
 	instanced_mesh = &mesh_textured_quad_xy_centered;
 
+	void *data = nullptr;
+	if (particles.empty()) {
+		particles.resize(1);
+		data = &particles[0];
+		particles.clear();
+	}
+	else {
+		data = &particles[0];
+	}
+
 	// This mesh has not been registered in the mesh manager
 	instances_data = new CMesh;
-	bool is_ok = instances_data->create(100, &particles
+	bool is_ok = instances_data->create(100, data
 		, 0, nullptr        // No indices
 		, CMesh::POINTS     // We are not using this
 		, &vdcl_particle_data    // Type of vertex
@@ -361,6 +407,8 @@ void TParticleSystem::loadDefaultPS() {
 		);
 
 	particles.reserve(100);
+
+	init();
 }
 
 void TParticleSystem::restart() {
@@ -396,6 +444,10 @@ std::string TParticleSystem::getXMLDefinition() {
 	}
 	if (updater_noise != nullptr) {
 		def += updater_noise->getXMLDefinition();
+	}
+
+	if (subemitter != nullptr) {
+		def += subemitter->getXMLDefinition();
 	}
 
 	def += renderer->getXMLDefinition();

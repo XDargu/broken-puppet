@@ -13,7 +13,7 @@ private:
 	char parent_name[64];
 	TTransform parent_offset;
 public:
-	TCompTransform() : TTransform(), parent(CHandle()) { parent_name[0] = 0x00; }
+	TCompTransform() : TTransform(), parent(CHandle()) { parent_name[0] = 0x00; prev_transform = TTransform(); }
 	TCompTransform(XMVECTOR np, XMVECTOR nr, XMVECTOR ns) : TTransform(np, nr, ns), parent(CHandle()) { parent_name[0] = 0x00; }
 
 	void loadFromAtts(const std::string& elem, MKeyValue& atts);

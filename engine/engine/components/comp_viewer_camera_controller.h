@@ -69,8 +69,8 @@ public:
 				XMVECTOR right = -o_transform->getLeft();
 				right = XMVector3Normalize(XMVectorSetY(right, 0));
 
-				target += front * mouse.dy * pan_speed * elapsed;
-				target += -right * mouse.dx * pan_speed * elapsed;
+				target += front * (float)mouse.dy * pan_speed * elapsed;
+				target += -right * (float)mouse.dx * pan_speed * elapsed;
 			}
 		}
 

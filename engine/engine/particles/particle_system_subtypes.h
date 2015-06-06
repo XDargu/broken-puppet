@@ -41,8 +41,9 @@ struct TParticleEmitterGeneration {
 protected:
 	float rate_counter;
 	float delay_counter;
-	int emitter_counter;
 public:
+	int emitter_counter;
+
 	TParticleSystem* ps;
 
 	// Emitter shape
@@ -183,6 +184,16 @@ struct TParticleUpdaterNoise {
 	XMFLOAT3 max_noise;
 
 	TParticleUpdaterNoise(XMVECTOR the_min_noise, XMVECTOR the_max_noise) { XMStoreFloat3(&min_noise, the_min_noise); XMStoreFloat3(&max_noise, the_max_noise); };
+	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
+};
+
+struct TParticleSubemitter {
+public:
+	char death_emitter[64];
+	
+	TParticleSubemitter() { death_emitter[0] = 0; }
+	void onParticleDeath(TParticle* particle);
 	void update(TParticle* particle, float elapsed);
 	std::string getXMLDefinition();
 };

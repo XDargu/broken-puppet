@@ -259,6 +259,7 @@ void TW_CALL CallBackParticleSystemCreate(void *clientData) {
 
 	TParticleSystem ps;
 	ps.h_transform = m_trans;
+	ps.h_pg = CHandle(static_cast<TCompParticleGroup *>(clientData));
 	ps.loadDefaultPS();
 	static_cast<TCompParticleGroup *>(clientData)->particle_systems.push_back(ps);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
@@ -383,6 +384,13 @@ void TW_CALL CallbackRemoveUpdaterLifetime(void *clientData)
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
+void TW_CALL CallbackRemoveSubemitter(void *clientData)
+{
+	SAFE_DELETE(static_cast<TParticleSystem *>(clientData)->subemitter);
+	static_cast<TParticleSystem *>(clientData)->subemitter = nullptr;
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
 void TW_CALL CallbackAddUpdaterNoise(void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->updater_noise = new TParticleUpdaterNoise(XMVectorSet(-0.1, -0.1, -0.1, 0), XMVectorSet(0.1, 0.1, 0.1, 0));
@@ -422,6 +430,12 @@ void TW_CALL CallbackAddUpdaterRotation(void *clientData)
 void TW_CALL CallbackAddUpdaterLifetime(void *clientData)
 {
 	static_cast<TParticleSystem *>(clientData)->updater_lifetime = new TParticleUpdaterLifeTime();
+	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
+}
+
+void TW_CALL CallbackAddSubemitter(void *clientData)
+{
+	static_cast<TParticleSystem *>(clientData)->subemitter = new TParticleSubemitter();
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -700,6 +714,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 		// For each particle system
 		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {
+
+			if (e_particle_group->particle_systems[i].dirty_destroy_group) { continue; }
 			
 			TwAddSeparator(bar, "", "group=PG");
 			aux = "ParticleSystem" + i;
@@ -829,6 +845,16 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
 			}
 
+			// Subemitter
+			if (e_particle_group->particle_systems[i].subemitter != nullptr) {
+				aux = "Subemitter" + i;
+				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Subemitters'");
+				aux = "SubemitterDeath" + i;
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_CSSTRING(sizeof(e_particle_group->particle_systems[i].subemitter->death_emitter)), &e_particle_group->particle_systems[i].subemitter->death_emitter, " group=PG label='onDeath'");
+				aux = "RemovePGSubemitter" + i;
+				TwAddButton(bar, aux.c_str(), CallbackRemoveSubemitter, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+			}
+
 			// Renderer
 			aux = "Renderer" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Renderer'");
@@ -854,7 +880,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 			// TODO: Hacer que solo aparezca en modo stretch
 			aux = "PGRendererStretch" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' ==1 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' step=0.1");
 
 			aux = "PGRendererStretchMode" + i;
 			TwAddVarRW(bar, aux.c_str(), particleRenderStretchMode, &e_particle_group->particle_systems[i].renderer->stretch_mode, " group=PG label='Stretch mode'");
@@ -896,6 +922,12 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			if (e_particle_group->particle_systems[i].updater_gravity == nullptr) {
 				aux = "AddPGGravity" + i;
 				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Add gravity updater'");
+			}
+
+			// Subemitter
+			if (e_particle_group->particle_systems[i].subemitter == nullptr) {
+				aux = "AddPGSubemitter" + i;
+				TwAddButton(bar, aux.c_str(), CallbackAddSubemitter, &e_particle_group->particle_systems[i], "group=PG label='Add subemitters'");
 			}
 
 			/*if (i < e_particle_group->particle_systems.size() - 1) {

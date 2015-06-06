@@ -65,6 +65,7 @@ void TW_CALL CallBackParticleGroupCreate(void *clientData) {
 }
 
 void TCompParticleEditor::init() {
+#ifdef _DEBUG
 	particle_list_bar = TwNewBar("ParticleEditor");
 
 	CApp &app = CApp::get();
@@ -77,8 +78,9 @@ void TCompParticleEditor::init() {
 	TwDefine(" ParticleEditor label='Particle list' ");
 	TwDefine(" ParticleEditor refresh='60' ");
 
-	reloadParticleGroups();
 
+	reloadParticleGroups();
+#endif
 	CEntity* ps_e = CEntityManager::get().getByName("edited_ps");
 	TCompTransform* ps_t = ps_e->get<TCompTransform>();
 
@@ -86,6 +88,8 @@ void TCompParticleEditor::init() {
 }
 
 void TCompParticleEditor::update(float elapsed) {
+#ifdef _DEBUG
+
 	// Hide console, listener and actioner bars
 	TwDefine(" Lister visible=false ");
 	TwDefine(" Actioner visible=false ");
@@ -101,6 +105,7 @@ void TCompParticleEditor::update(float elapsed) {
 	if (random_rotate) {
 		ps_t->rotation = XMQuaternionMultiply(ps_t->rotation, XMQuaternionRotationRollPitchYawFromVector(getRandomVector3(-10 * elapsed, 10 * elapsed)));
 	}
+#endif
 }
 
 void TCompParticleEditor::reloadParticleGroups() {

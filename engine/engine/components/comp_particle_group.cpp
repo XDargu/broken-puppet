@@ -4,6 +4,7 @@
 #include "physics_manager.h"
 #include "render\render_utils.h"
 #include "particles\importer_particle_groups.h"
+#include "entity_manager.h"
 
 TCompParticleGroup::~TCompParticleGroup() {
 	for (int i = 0; i < particle_systems.size(); ++i) {
@@ -22,6 +23,7 @@ void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 	if (elem == "particleSystem") {
 		TParticleSystem ps = TParticleSystem();
 		ps.h_transform = h_transform;
+		ps.h_pg = CHandle(this);
 		particle_systems.push_back(ps);		
 	}
 	else if (particle_systems.size() > 0) {
@@ -42,16 +44,47 @@ void TCompParticleGroup::init() {
 }
 
 void TCompParticleGroup::update(float elapsed) {
+
+	/*if (destroy_on_death && particle_systems.size() == 0) {
+		CEntityManager::get().remove(CHandle(this).getOwner());
+	}*/
+
+	bool all_dirty = true;
 	for (auto& ps : particle_systems) {
 		ps.update(elapsed);
+		all_dirty &= ps.dirty_destroy_group;
+	}
+
+	if (destroy_on_death && all_dirty) {
+		clearParticleSystems();
+
+		/*CEntity* e = CHandle(this).getOwner();
+		CEntityManager::get().remove(e);*/
+	}
+
+	for (auto& it : particle_systems_to_destroy) {
+
+		auto it2 = std::find(particle_systems.begin(), particle_systems.end(), it);
+		
+		if (it2 == particle_systems.end()) { fatal("Trying to destroy not registered particle system"); }
+		it2->destroy();
+		particle_systems.erase(it2);
+		
+	};
+
+	particle_systems_to_destroy.clear();
+
+	if (destroy_on_death && all_dirty) {
+
+		CEntity* e = CHandle(this).getOwner();
+		CEntityManager::get().remove(e);
 	}
 }
 
 void TCompParticleGroup::render() {
 	for (auto& ps : particle_systems) {
 		ps.render();
-	}
-	
+	}	
 }
 
 void TCompParticleGroup::renderDebug3D() const {
@@ -61,13 +94,11 @@ void TCompParticleGroup::renderDebug3D() const {
 }
 
 void TCompParticleGroup::removeParticleSystem(TParticleSystem* ps) {
-	std::vector<TParticleSystem>::iterator it = particle_systems.begin();
-
-	while (it != particle_systems.end()) {
-		if (&it->emitter_generation == &ps->emitter_generation) {
-			it = particle_systems.erase(it);
+	for (auto& ps_2 : particle_systems) {
+		if (ps_2.emitter_generation == ps->emitter_generation) {
+			ps_2.dirty_destroy_group = true;
+			particle_systems_to_destroy.push_back(ps_2);
 		}
-		else ++it;
 	}
 }
 

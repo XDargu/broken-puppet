@@ -3,6 +3,11 @@
 #include "components\comp_transform.h"
 #include "physics_manager.h"
 #include "particle_system.h"
+#include "importer_particle_groups.h"
+#include "entity_manager.h"
+#include "components\comp_aabb.h"
+#include "components\comp_particle_group.h"
+#include "handle\prefabs_manager.h"
 
 float getCurveVal(TParticleCurve curve, float curve_val, float min, float max, float t) {
 	switch (curve)
@@ -84,7 +89,12 @@ void TParticleEmitterGeneration::update(float elapsed) {
 void TParticleEmitterGeneration::addParticle() {
 	if (ps->particles.size() >= limit) { return; }
 
-	if (!loop) { emitter_counter++; if (emitter_counter > limit) { return; } }
+	emitter_counter++;
+	if (emitter_counter > limit) {
+		// Don't make more particles is the limit is reached
+		if (!loop) { return; }		
+	}
+	
 
 	TCompTransform* m_transform = h_transform;
 	XMFLOAT3 pos;
@@ -613,6 +623,36 @@ std::string TParticleUpdaterNoise::getXMLDefinition() {
 
 	def += "maxNoise=\"";
 	def += V3ToString(XMLoadFloat3(&max_noise)) + "\" ";
+
+	def += "/>";
+
+	return def;
+}
+
+void TParticleSubemitter::update(TParticle* particle, float elapsed) {
+
+}
+
+void TParticleSubemitter::onParticleDeath(TParticle* particle) {
+
+	if (particle_groups_manager.existsParticleGroup(death_emitter)) {
+		CEntity* new_e = prefabs_manager.getInstanceByName("ParticleGroup");
+
+		particle_groups_manager.addParticleGroupToEntity(new_e, death_emitter);
+		TCompParticleGroup* e_pg = new_e->get<TCompParticleGroup>();
+		TCompTransform* e_trans = new_e->get<TCompTransform>();
+		e_trans->position = XMLoadFloat3(&particle->position);
+		e_pg->destroy_on_death = true;
+	}
+}
+
+std::string TParticleSubemitter::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<subemitter ";
+
+	def += "deathName=\"";
+	def += std::string(death_emitter) + "\" ";
 
 	def += "/>";
 

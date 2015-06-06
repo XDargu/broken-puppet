@@ -84,6 +84,19 @@ bool CImporterParticleGroups::validateName(std::string name) {
 	return true;
 }
 
+bool CImporterParticleGroups::existsParticleGroup(std::string name) {
+	if (name.empty())
+		return false;
+
+	for (auto& pg : particle_group_definitions) {
+		if (pg.name == name) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 std::string CImporterParticleGroups::getXMLDefinition() {
 	std::string def = "";
 

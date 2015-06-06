@@ -16,6 +16,7 @@ struct TParticleSystem {
 	//Physx Particles
 	CPhysicsParticleSystem* psx;
 	bool use_physx;
+	bool dirty_destroy_group;
 
 	// Updaters
 	TParticleUpdaterLifeTime* updater_lifetime;
@@ -27,6 +28,9 @@ struct TParticleSystem {
 	TParticleUpdaterNoise* updater_noise;
 	TParticleUpdaterPhysx* updater_physx;
 
+	// Subemitter
+	TParticleSubemitter* subemitter;
+
 	// Emitter shape
 	TParticleEmitterGeneration* emitter_generation;
 
@@ -35,6 +39,8 @@ struct TParticleSystem {
 
 	// Transform reference
 	CHandle h_transform;
+	// Group reference
+	CHandle h_pg;
 
 	const CMesh* instanced_mesh;      // The particle mesh
 	CMesh* instances_data;      // The positions of each instance
@@ -52,6 +58,8 @@ public:
 		SAFE_DELETE(updater_gravity);
 		SAFE_DELETE(updater_noise);
 		SAFE_DELETE(updater_physx);
+		
+		SAFE_DELETE(subemitter);
 
 		SAFE_DELETE(emitter_generation);
 
@@ -82,6 +90,10 @@ public:
 	void restart();
 
 	std::string getXMLDefinition();
+
+	bool operator==(const TParticleSystem ps) const {
+		return ps.emitter_generation == emitter_generation;
+	}
 };
 
 #endif

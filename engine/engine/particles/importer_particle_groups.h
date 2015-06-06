@@ -31,9 +31,9 @@ public:
 
 	void addParticleGroupToEntity(CEntity* entity, std::string name);
 	void updateParticleGroupFromEntity(CEntity* entity, std::string name);
-
+	
 	bool validateName(std::string name);
-
+	bool existsParticleGroup(std::string name);
 	void destroy();
 
 	std::string getXMLDefinition();

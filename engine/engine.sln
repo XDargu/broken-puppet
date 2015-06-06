@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance5.psess = Performance5.psess
 		Performance6.psess = Performance6.psess
 		Performance7.psess = Performance7.psess
+		Performance8.psess = Performance8.psess
+		Performance9.psess = Performance9.psess
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SLB", "engine\SLB\SLB.vcxproj", "{AEDCE6E7-B121-41BB-AFBA-CC1DE30883A8}"
@@ -44,5 +46,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
