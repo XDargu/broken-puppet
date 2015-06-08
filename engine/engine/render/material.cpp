@@ -7,6 +7,7 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 	if (elem == "std_material") {
 		casts_shadows = atts.getBool("casts_shadows", true);
 		solid = atts.getBool("solid", true);
+		double_sided = atts.getBool("doubleSided", false);
 		std::string diffuse_name = atts["diffuse"];
 		std::string ao_name = atts["ao"];
 		std::string normal_name = atts["normal"];

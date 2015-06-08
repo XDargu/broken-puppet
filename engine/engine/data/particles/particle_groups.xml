@@ -75,12 +75,12 @@
   </particleGroup>
   <particleGroup name="ps_sparks">
     <particleSystem>
-      <emitter use_physx="true" type="cone" radius="0.150000" angle="114.591553" rate="0.000100" minLifeTime="0.300000" maxLifeTime="2.000000" fillInitial="0" limit="100" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="false" />
-      <updater type="movement" speed="2.100000" />
+      <emitter use_physx="false" type="cone" radius="0.150000" angle="114.591553" rate="0.000100" minLifeTime="0.300000" maxLifeTime="2.000000" fillInitial="0" limit="100" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="false" />
+      <updater type="movement" speed="3.999998" />
       <updater type="gravity" gravity="0.011000" constant="false" />
       <updater type="color" initialColor="1.000000 1.000000 0.709804" finalColor="1.000000 0.364706 0.000000" curveVal="2.000000" curveType="linear" />
       <updater type="lifeTime" />
-      <updater type="physx" />
+      <!--<updater type="physx"/>-->
       <updater type="size" initialSize="0.010000" finalSize="0.010000" />
       <renderer texture="particles/part_spark_dff" aditive="true" n_anim_x="1" n_anim_y="1" stretch="1.000000" stretchMode="1" render_mode="stretched_billboard" animationMode="0" />
     </particleSystem>

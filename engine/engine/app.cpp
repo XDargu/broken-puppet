@@ -298,9 +298,9 @@ bool CApp::create() {
 	XASSERT(font.create(), "Error creating the font");
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -655,7 +655,6 @@ void CApp::render() {
 	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
 
 #ifdef _DEBUG
-
 	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
@@ -688,9 +687,9 @@ void CApp::render() {
 
 	activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
 	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
-	render_manager.renderAll(&camera, false);
+	render_manager.renderAll(&camera, false, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
-	render_manager.renderAll(&camera, false);
+	render_manager.renderAll(&camera, false, true);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
 	activateBlendConfig(BLEND_CFG_DEFAULT);
@@ -701,7 +700,7 @@ void CApp::render() {
 	if (renderWireframe) {
 		debugTech.activate();
 		renderWireframeCurrent = true;
-		render_manager.renderAll(&camera, true);
+		render_manager.renderAll(&camera, true, false);
 		renderWireframeCurrent = false;
 	}
 
@@ -720,6 +719,20 @@ void CApp::render() {
 	TwDraw();
 	t0.end();
 #endif
+
+	if (h_player.isValid()) {
+		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
+		life_val /= 10;
+		int leng = 50;
+		for (int i = 0; i < life_val; ++i) {		
+			activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
+			activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
+			activateZConfig(ZConfig::ZCFG_DEFAULT);
+			activateBlendConfig(BLEND_CFG_DEFAULT);
+
+		}
+	}
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";

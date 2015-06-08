@@ -84,6 +84,7 @@ void activateRSConfig(enum RSConfig cfg);
 // ---------------------------------------
 enum BlendConfig {
 	BLEND_CFG_DEFAULT
+	, BLEND_CFG_BY_SRC_ALPHA
 	, BLEND_CFG_ADDITIVE
 	, BLEND_CFG_ADDITIVE_BY_SRC_ALPHA
 	, BLEND_CFG_COMBINATIVE

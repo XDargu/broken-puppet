@@ -17,10 +17,11 @@ class CMaterial : public CXMLParser {
 	std::string               name;
 	bool                      casts_shadows;
 	bool                      solid;
+	bool                      double_sided;
 	void onStartElement(const std::string &elem, MKeyValue &atts);
 
 public:
-	CMaterial() : diffuse(nullptr), normal(nullptr), specular(nullptr), tech(nullptr), casts_shadows(true), solid(true) {}
+	CMaterial() : diffuse(nullptr), normal(nullptr), specular(nullptr), tech(nullptr), casts_shadows(true), solid(true), double_sided(false) {}
 	bool load(const char* name);
 	void setName(const char *new_name) {
 		name = new_name;
@@ -31,6 +32,7 @@ public:
 	const CRenderTechnique* getTech() const { return tech; }
 	bool castsShadows() const { return casts_shadows; }
 	bool isSolid() const { return solid; }
+	bool isDoubleSided() const { return double_sided; }
 
 };
 

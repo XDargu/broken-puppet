@@ -59,7 +59,7 @@ void CDeferredRender::generateGBuffer(const CCamera* camera) {
 
 	//texture_manager.getByName("Zthe_light")->activate(6);
 
-	render_manager.renderAll(camera, true);
+	render_manager.renderAll(camera, true, false);
 }
 
 // ----------------------------------------------------------

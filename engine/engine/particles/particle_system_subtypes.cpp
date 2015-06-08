@@ -448,10 +448,14 @@ void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
 	if (rd)
 	{
 		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
-		position=positionIt[index];
+		position = positionIt[index];
 		rd->unlock();
 	}
 	//ps->psx
+	particle->speed.x = position.x - particle->position.x;
+	particle->speed.y = position.y - particle->position.y;
+	particle->speed.z = position.z - particle->position.z;	
+
 	particle->position.x = position.x;
 	particle->position.y = position.y;
 	particle->position.z = position.z;

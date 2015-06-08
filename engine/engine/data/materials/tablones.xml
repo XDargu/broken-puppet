@@ -1,1 +1,1 @@
-<std_material name="tablones" diffuse="tablones_diffuse" normal="tablones_normal" specular="" gloss="" emissive=""/>
+<std_material name="tablones" diffuse="tablones_diffuse" normal="tablones_normal" specular="" glossiness="" emissive=""/>

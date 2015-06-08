@@ -280,6 +280,21 @@ bool createBlendStates() {
 	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	hr = render.device->CreateBlendState(&desc, &blend_states[BLEND_CFG_BY_SRC_ALPHA]);
+	if (FAILED(hr))
+		return false;
+	setDbgName(blend_states[BLEND_CFG_BY_SRC_ALPHA], "BLEND_BY_SRC_ALPHA");
+
+	// Combinative blending
+	memset(&desc, 0x00, sizeof(desc));
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
 	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 	hr = render.device->CreateBlendState(&desc, &blend_states[BLEND_CFG_COMBINATIVE]);

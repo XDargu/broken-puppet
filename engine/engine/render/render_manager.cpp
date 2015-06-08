@@ -64,11 +64,11 @@ void CRenderManager::addKey(const CMesh*      mesh
 	}
 }
 
-void CRenderManager::renderAll(const CCamera* camera, bool solids) {
-	renderAll(camera, &TTransform(), solids);
+void CRenderManager::renderAll(const CCamera* camera, bool solids, bool double_sided) {
+	renderAll(camera, &TTransform(), solids, double_sided);
 }
 
-void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform, bool solids) {
+void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transform, bool solids, bool double_sided) {
 	SET_ERROR_CONTEXT("Rendering entities", "")
 
 	if (sort_required) {
@@ -98,6 +98,10 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	int render_count = 0;
 
 	while (it != keys.end()) {
+		if (!it->material->isDoubleSided() && double_sided) {
+			it++;
+			continue; 			
+		}
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
 		TCompTransform* tmx = it->transform;
