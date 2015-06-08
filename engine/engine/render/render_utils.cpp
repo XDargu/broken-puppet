@@ -16,6 +16,7 @@ CShaderCte<TCtesDirLight>    ctes_dir_light;
 CShaderCte<TCtesSpotLight>    ctes_spot_light;
 CShaderCte<TCtesBones>  ctes_bones;
 CShaderCte<TCtesParticleSystem>  ctes_particle_system;
+CShaderCte<TCtesGUI>  ctes_gui;
 
 // Post process
 CShaderCte<TCtesBlur> ctes_blur;
@@ -33,6 +34,7 @@ CMesh        mesh_textured_quad_xy_centered;
 CMesh        mesh_icosahedron;
 CMesh        grid;
 CMesh        axis;
+CMesh        plane3x3;
 
 bool createLine(CMesh& mesh);
 bool createTexturedQuadXYCentered(CMesh& mesh);
@@ -372,6 +374,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_spot_light.create();
 	is_ok &= ctes_bones.create();
 	is_ok &= ctes_particle_system.create();
+	is_ok &= ctes_gui.create();
 
 	ctes_object.activateInVS(0);
 	ctes_camera.activateInVS(1);
@@ -392,6 +395,8 @@ bool renderUtilsCreate() {
 	is_ok &= createTexturedQuadXY(mesh_textured_quad_xy);
 	is_ok &= createTexturedQuadXYCentered(mesh_textured_quad_xy_centered);
 	is_ok &= createIcosahedron(mesh_icosahedron);
+	is_ok &= create3x3Plane(plane3x3);
+
 	is_ok &= createSamplers();
 	is_ok &= createDepthStencilStates();
 	is_ok &= createRasterizationStates();
@@ -412,6 +417,7 @@ void renderUtilsDestroy() {
 	ctes_camera.destroy();
 	ctes_bones.destroy();
 	ctes_particle_system.destroy();
+	ctes_gui.destroy();
 
 	ctes_blur.destroy();
 	ctes_sharpen.destroy();
@@ -428,6 +434,7 @@ void renderUtilsDestroy() {
 	mesh_view_volume.destroy();
 	mesh_icosahedron.destroy();
 	wire_cube.destroy();
+	plane3x3.destroy();
 }
 
 void activateWorldMatrix( int slot ) {
@@ -668,6 +675,39 @@ bool createIcosahedron(CMesh& mesh) {
 		{ 7, 10, 3 }, { 7, 6, 10 }, { 7, 11, 6 }, { 11, 0, 6 }, { 0, 1, 6 },
 		{ 6, 1, 10 }, { 9, 0, 11 }, { 9, 11, 2 }, { 9, 2, 5 }, { 7, 2, 11 } };
 	return mesh.create(12, (const CVertexPos*)vs, 20 * 3, &idxs[0][0], CMesh::TRIANGLE_LIST);
+}
+
+bool create3x3Plane(CMesh& mesh) {
+	std::vector< CVertexPosUV > vtxs;
+	vtxs.resize(16);
+	CVertexPosUV *v = &vtxs[0];
+	v->Pos = XMFLOAT3(0, 0, 0); v->UV = XMFLOAT2(0, 0); ++v;
+	v->Pos = XMFLOAT3(0.33f, 0, 0); v->UV = XMFLOAT2(0.33f, 0); ++v;
+	v->Pos = XMFLOAT3(0.66f, 0, 0); v->UV = XMFLOAT2(0.66f, 0); ++v;
+	v->Pos = XMFLOAT3(1, 0, 0); v->UV = XMFLOAT2(1, 0); ++v;
+
+	v->Pos = XMFLOAT3(0, 0.33f, 0); v->UV = XMFLOAT2(0, 0.33f); ++v;
+	v->Pos = XMFLOAT3(0.33f, 0.33f, 0); v->UV = XMFLOAT2(0.33f, 0.33f); ++v;
+	v->Pos = XMFLOAT3(0.66f, 0.33f, 0); v->UV = XMFLOAT2(0.66f, 0.33f); ++v;
+	v->Pos = XMFLOAT3(1, 0.33f, 0); v->UV = XMFLOAT2(1, 0.33f); ++v;
+
+	v->Pos = XMFLOAT3(0, 0.66f, 0); v->UV = XMFLOAT2(0, 0.66f); ++v;
+	v->Pos = XMFLOAT3(0.33f, 0.66f, 0); v->UV = XMFLOAT2(0.33f, 0.66f); ++v;
+	v->Pos = XMFLOAT3(0.66f, 0.66f, 0); v->UV = XMFLOAT2(0.66f, 0.66f); ++v;
+	v->Pos = XMFLOAT3(1, 0.66f, 0); v->UV = XMFLOAT2(1, 0.66f); ++v;
+
+	v->Pos = XMFLOAT3(0, 1, 0); v->UV = XMFLOAT2(0, 1); ++v;
+	v->Pos = XMFLOAT3(0.33f, 1, 0); v->UV = XMFLOAT2(0.33f, 1); ++v;
+	v->Pos = XMFLOAT3(0.66f, 1, 0); v->UV = XMFLOAT2(0.66f, 1); ++v;
+	v->Pos = XMFLOAT3(1, 1, 0); v->UV = XMFLOAT2(1, 1); ++v;
+
+	static const CMesh::TIndex idxs[18][3] = {
+		{ 4, 0, 1 }, { 4, 1, 5 }, { 1, 2, 5 }, { 5, 2, 6 }, { 2, 3, 6 }, { 6, 3, 7 },
+		{ 8, 4, 5 }, { 8, 5, 9 }, { 5, 6, 9 }, { 9, 6, 10 }, { 6, 7, 10 }, { 10, 7, 11 },
+		{ 12, 8, 9 }, { 12, 9, 13 }, { 9, 10, 13 }, { 13, 10, 14 }, { 10, 11, 14 }, { 14, 11, 15 },
+	};
+
+	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 18 * 3, &idxs[0][0], CMesh::TRIANGLE_LIST);
 }
 
 // -----------------------------------------------------
@@ -1162,4 +1202,41 @@ void drawTexture3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, con
 		ctes_camera.get()->ViewProjection = prev_view_proj;
 		ctes_camera.uploadToGPU();
 	}
+}
+
+void drawDialogBox(int x0, int y0, int w, int h, const CTexture* texture, const char* tech_name) {
+
+	if (tech_name == nullptr)
+		tech_name = "textured";
+
+	render_techniques_manager.getByName(tech_name)->activate();
+
+	// Activate the texture
+	texture->activate(0);
+
+	// Activate a ortho camera view projection matrix
+	XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
+	ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
+		0, render.xres,
+		render.yres, 0.f,
+		-1.f, 1.f);
+	ctes_camera.uploadToGPU();
+
+	// Update the world matrix to match the params
+	ctes_object.get()->World = XMMatrixScaling(w, h, 1) * XMMatrixTranslation(x0, y0, 0);
+	ctes_object.uploadToGPU();
+
+	// Update gui constants
+	ctes_gui.get()->gui_height = h;
+	ctes_gui.get()->gui_width = w;
+	ctes_gui.get()->gui_offset = 32;
+
+	ctes_gui.uploadToGPU();
+	ctes_gui.activateInVS(5);
+
+	plane3x3.activateAndRender();
+
+	// Restore old view proj
+	ctes_camera.get()->ViewProjection = prev_view_proj;
+	ctes_camera.uploadToGPU();
 }

@@ -76,6 +76,39 @@ float4 PS( VS_OUTPUT input ) : SV_Target
 }
 
 //--------------------------------------------------------------------------------------
+// Vertex Shader
+//--------------------------------------------------------------------------------------
+VS_TEXTURED_OUTPUT VSGUIDialogBox(float4 Pos : POSITION
+, float2 UV : TEXCOORD0
+, float3 Normal : NORMAL
+)
+{
+	VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+
+	if (UV.x == 0.33) {
+		Pos.x = gui_offset / gui_width;
+	}
+	if (UV.x == 0.66) {
+		Pos.x = 1 - (gui_offset / gui_width);
+	}
+
+	if (UV.y == 0.33) {
+		Pos.y = gui_offset / gui_height;
+	}
+	if (UV.y == 0.66) {
+		Pos.y = 1 - (gui_offset / gui_height);
+	}
+
+	output.Pos = mul(Pos, World);
+	output.Pos = mul(output.Pos, ViewProjection);
+	output.Normal = mul(Normal, (float3x3)World);
+	output.UV = UV /*+ world_time * Normal.xz*/;
+	output.WorldPos = mul(Pos, World);
+	return output;
+}
+
+
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 float4 PSGUIDialogBox(
@@ -83,8 +116,8 @@ float4 PSGUIDialogBox(
 	, in float4 iPosition : SV_Position
 ) : SV_Target
 {
-	float color = txDiffuse.Sample(samWrapLinear, input.UV);
-
+	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
+	return color;
 	// Test Initial positions
 	int X = 200;
 	int Y = 200;
@@ -100,7 +133,7 @@ float4 PSGUIDialogBox(
 
 	float2 m_uv = pos;
 
-	return txDiffuse.Sample(samWrapLinear, m_uv);;
+	return txDiffuse.Sample(samWrapLinear, input.UV);
 }
 
 //--------------------------------------------------------------------------------------

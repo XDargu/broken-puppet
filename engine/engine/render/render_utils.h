@@ -38,6 +38,7 @@ bool createViewVolume(CMesh& mesh);
 bool createUnitWiredCube(CMesh& mesh, XMFLOAT4 color);
 bool createTexturedQuadXY(CMesh& mesh);
 bool createIcosahedron(CMesh& mesh);
+bool create3x3Plane(CMesh& mesh);
 
 bool createCube(CMesh& mesh, float size);
 bool createCamera(CMesh& mesh);
@@ -49,6 +50,7 @@ void drawLine(XMVECTOR src, XMVECTOR target);
 void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 void drawTexture3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 void drawTexture3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
+void drawDialogBox(int x0, int y0, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 
 // Render world
 void setWorldMatrix(XMMATRIX world);
@@ -102,6 +104,7 @@ extern CMesh        axis;
 extern CMesh        mesh_icosahedron;
 extern CMesh        mesh_view_volume;
 extern CMesh        mesh_textured_quad_xy_centered;
+extern CMesh        plane3x3;
 
 // Post process
 extern	CShaderCte<TCtesBlur> ctes_blur;

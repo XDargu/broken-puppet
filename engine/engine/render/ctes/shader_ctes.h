@@ -66,6 +66,14 @@ cbuffer TCtesParticleSystem SHADER_REGISTER(b5)   // using the same register as 
 	float dummy_ps1, dummy_ps2;
 };
 
+cbuffer TCtesGUI SHADER_REGISTER(b5)   // using the same register as the lights and particles
+{
+	float gui_height;
+	float gui_width;
+	float gui_offset;
+	float gui_dummy;
+};
+
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
   float  world_time;
