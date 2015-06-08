@@ -18,8 +18,12 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	std::string ragdoll_name = atts["name"];
 
+	CDBGTimer tm;
+
 	ragdoll = (CCoreRagdoll*)ragdoll_manager.getByName(ragdoll_name.c_str());
 
+	dbg("Load ragdoll %s took %g seconds. Seconds since scene load: %g\n", ragdoll_name, tm.seconds(), CApp::get().load_timer.seconds());
+	CApp::get().load_ragdoll_time += tm.seconds();
 	TCompName* name = assertRequiredComponent<TCompName>(this);
 
 	for (auto& rigid : ragdoll->bone_map) {

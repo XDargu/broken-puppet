@@ -1,6 +1,8 @@
 #ifndef INC_APP_H_
 #define INC_APP_H_
 
+#include "utils.h"
+
 class CEntity;
 
 class CApp {
@@ -13,6 +15,14 @@ class CApp {
 	void activateDebugMode(bool active);
 	float slow_motion_counter;
 public:
+
+	// Timer and stats
+	CDBGTimer load_timer;
+	CDBGTimer aux_timer;
+	double load_mesh_time;
+	double load_text_time;
+	double load_skel_time;
+	double load_ragdoll_time;
 
 	float time_modifier;
 	float water_level;

@@ -19,6 +19,8 @@ bool CTexture::load(const char* name) {
 	wchar_t wname[MAX_PATH];
 	mbstowcs(wname, full_name, MAX_PATH);
 
+	CDBGTimer tm;
+
 	// Load the Texture
 	HRESULT hr = DirectX::CreateDDSTextureFromFile(
 		render.device,
@@ -29,6 +31,10 @@ bool CTexture::load(const char* name) {
 		);
 	if (FAILED(hr))
 		return false;
+
+	
+	dbg("Load texture %s took %g seconds. Seconds since scene load: %g\n", name, tm.seconds(), CApp::get().load_timer.seconds());
+	CApp::get().load_text_time += tm.seconds();
 
 	return true;
 }

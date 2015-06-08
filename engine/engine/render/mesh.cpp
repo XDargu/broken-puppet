@@ -156,6 +156,8 @@ void CMesh::renderGroup(int group_id) const {
 // --------------------------------------
 bool CMesh::load(CDataProvider& dp) {
 
+	CDBGTimer tm;
+
 	assert(dp.isValid());
 
 	THeader header;
@@ -220,6 +222,9 @@ bool CMesh::load(CDataProvider& dp) {
 
 	std::vector<int>vec_cast_int(idxs.begin(), idxs.end());
 	v_tris = vec_cast_int;
+
+	dbg("Load mesh %s took %g seconds. Seconds since scene load: %g\n", dp.getName(), tm.seconds(), CApp::get().load_timer.seconds());
+	CApp::get().load_mesh_time += tm.seconds();
 
 	// Use our create mesh function
 	return create(header.nvertexs

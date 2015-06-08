@@ -192,3 +192,5 @@ void files_in_directory(std::string directory, std::vector<std::string>& list) {
 			break;
 	}
 }
+
+// Timers

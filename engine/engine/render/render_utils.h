@@ -47,6 +47,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 void drawViewVolume(const CCamera& camera);
 void drawLine(XMVECTOR src, XMVECTOR target);
 void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
+void drawTexture3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 
 // Render world
 void setWorldMatrix(XMMATRIX world);
