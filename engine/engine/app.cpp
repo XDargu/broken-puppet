@@ -305,7 +305,8 @@ bool CApp::create() {
 	activateTextureSamplers();
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DISABLE_ALL);
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));	
+
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
 	//loadScene("data/scenes/escena_ms2.xml");
@@ -741,12 +742,13 @@ void CApp::render() {
 			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
 			activateZConfig(ZConfig::ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);
-
 		}
 	}
 
-	
-	drawTexture3D(camera, XMVectorSet(0, 3, 0, 0) , 200, 80, texture_manager.getByName("vida"));
+	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+	drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	activateBlendConfig(BLEND_CFG_DEFAULT);
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
