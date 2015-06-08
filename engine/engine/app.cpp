@@ -720,6 +720,9 @@ void CApp::render() {
 	t0.end();
 #endif
 
+	// Test GUI
+	drawTexture2D(200, 200, 300, 100, texture_manager.getByName("vida"), "gui_dialog_box");
+
 	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 		life_val /= 10;

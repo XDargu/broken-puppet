@@ -78,9 +78,40 @@ float4 PS( VS_OUTPUT input ) : SV_Target
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
+float4 PSGUIDialogBox(
+	VS_TEXTURED_OUTPUT input
+	, in float4 iPosition : SV_Position
+) : SV_Target
+{
+	float color = txDiffuse.Sample(samWrapLinear, input.UV);
+
+	// Test Initial positions
+	int X = 200;
+	int Y = 200;
+
+	// Test W and H
+	int W = 300;
+	int H = 100;
+
+	// Test seam offsets
+	int offset = 32;
+
+	float2 pos = iPosition.xy;
+
+	float2 m_uv = pos;
+
+	return txDiffuse.Sample(samWrapLinear, m_uv);;
+}
+
+//--------------------------------------------------------------------------------------
+// Pixel Shader
+//--------------------------------------------------------------------------------------
 float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 {
-	float4 lightAccum = float4(1, 1, 1, 1);
+
+	return txDiffuse.Sample(samWrapLinear, input.UV);
+
+	//float4 lightAccum = float4(1, 1, 1, 1);
 	/*
 	// Luz inicial
 	float4 lightAccum = AmbientLight * AmbientLight.w;
@@ -107,10 +138,10 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 		}
 	}
 	*/
-	float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
+	//float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 
 	// Blur
-	float pixelInc = 0.001;
+	//float pixelInc = 0.001;
 	/*float4 sum = float4(0, 0, 0, 0);
 	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x - pixelInc, input.UV.y - pixelInc));
 	sum += txDiffuse.Sample(samWrapLinear, float2(input.UV.x + 0, input.UV.y - pixelInc));
@@ -149,7 +180,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	color = sum / 9 + sum2 / 9;*/
 
 
-	float4 result = lightAccum * color /* Tint*/;
+	//float4 result = lightAccum * color /* Tint*/;
 
 	// Pruebas de cámara
 	/*float3 normalizeCameraDirection = normalize(CameraPosition - input.WorldPos);
@@ -178,8 +209,8 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	rim = smoothstep(0.5, 1.0, rim);
 	float4 finalRim = float4(1, 1, 1, 1) * float4(rim, rim, rim, 1);*/
 
-	float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
-	return result /* checker /*+ finalRim*/;
+	//float checker = (fmod(floor(input.UV.x * 10) + floor(input.UV.y * 10), 2) < 1) ? 0.5 : 1;
+//return result /* checker /*+ finalRim*/;
 	
   //return txDiffuse.Sample(samWrapLinear, input.UV);
 }
