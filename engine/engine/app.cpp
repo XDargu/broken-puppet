@@ -733,7 +733,7 @@ void CApp::render() {
 #endif
 
 	// Test GUI
-	drawDialogBox(200, 200, 500, 100, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	
 
 	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
@@ -749,8 +749,10 @@ void CApp::render() {
 	}
 
 	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
-	drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
 	activateBlendConfig(BLEND_CFG_DEFAULT);
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;

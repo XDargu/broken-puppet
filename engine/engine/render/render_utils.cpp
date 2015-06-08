@@ -1140,31 +1140,7 @@ void drawTexture3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTex
 	float x, y;
 	if (camera.getScreenCoords(world_p3d, &x, &y)) {
 
-		if (tech_name == nullptr)
-			tech_name = "textured";
-
-		render_techniques_manager.getByName(tech_name)->activate();
-
-		// Activate the texture
-		texture->activate(0);
-
-		// Activate a ortho camera view projection matrix
-		XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
-		ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
-			0, render.xres,
-			render.yres, 0.f,
-			-1.f, 1.f);
-		ctes_camera.uploadToGPU();
-
-		// Update the world matrix to match the params
-		ctes_object.get()->World = XMMatrixScaling(w, h, 1) * XMMatrixTranslation(x, y, 0);
-		ctes_object.uploadToGPU();
-
-		mesh_textured_quad_xy.activateAndRender();
-
-		// Restore old view proj
-		ctes_camera.get()->ViewProjection = prev_view_proj;
-		ctes_camera.uploadToGPU();
+		drawTexture2D(x, y, w, h, texture, tech_name);
 	}
 }
 
@@ -1176,31 +1152,7 @@ void drawTexture3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, con
 	float x, y;
 	if (camera.getScreenCoords(world_p3d, &x, &y)) {
 
-		if (tech_name == nullptr)
-			tech_name = "textured";
-
-		render_techniques_manager.getByName(tech_name)->activate();
-
-		// Activate the texture
-		texture->activate(0);
-
-		// Activate a ortho camera view projection matrix
-		XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
-		ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
-			0, render.xres,
-			render.yres, 0.f,
-			-1.f, 1.f);
-		ctes_camera.uploadToGPU();
-
-		// Update the world matrix to match the params
-		ctes_object.get()->World = XMMatrixScaling(w * dist, h * dist, 1) * XMMatrixTranslation(x, y, 0);
-		ctes_object.uploadToGPU();
-
-		mesh_textured_quad_xy.activateAndRender();
-
-		// Restore old view proj
-		ctes_camera.get()->ViewProjection = prev_view_proj;
-		ctes_camera.uploadToGPU();
+		drawTexture2D(x, y, w * dist, h * dist, texture, tech_name);
 	}
 }
 
@@ -1239,4 +1191,25 @@ void drawDialogBox(int x0, int y0, int w, int h, const CTexture* texture, const 
 	// Restore old view proj
 	ctes_camera.get()->ViewProjection = prev_view_proj;
 	ctes_camera.uploadToGPU();
+}
+
+void drawDialogBox3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name){
+
+	float x, y;
+	if (camera.getScreenCoords(world_p3d, &x, &y)) {
+
+		drawDialogBox(x, y, w, h, texture, tech_name);
+	}
+}
+
+void drawDialogBox3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name){
+
+	float dist = V3DISTANCE(camera.getPosition(), world_p3d);
+	dist = 1 / dist;
+
+	float x, y;
+	if (camera.getScreenCoords(world_p3d, &x, &y)) {
+
+		drawDialogBox(x, y, w * dist, h * dist, texture, tech_name);
+	}
 }

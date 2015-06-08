@@ -51,6 +51,8 @@ void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const 
 void drawTexture3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 void drawTexture3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 void drawDialogBox(int x0, int y0, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
+void drawDialogBox3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
+void drawDialogBox3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 
 // Render world
 void setWorldMatrix(XMMATRIX world);
