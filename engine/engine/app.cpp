@@ -297,11 +297,23 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
+	// Load picture
+	renderUtilsCreate();
+	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
+	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	activateTextureSamplers();
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DISABLE_ALL);
+
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
+	::render.swap_chain->Present(0, 0);
+
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/viewer_test.xml");
+	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -733,9 +745,13 @@ void CApp::render() {
 			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
 			activateZConfig(ZConfig::ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);
-
 		}
 	}
+
+	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+	drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	activateBlendConfig(BLEND_CFG_DEFAULT);
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
@@ -1015,6 +1031,13 @@ void CApp::loadScene(std::string scene_name) {
 
 	bool is_ok = true;
 
+	load_timer.reset();
+	aux_timer.reset();
+	load_mesh_time = 0;
+	load_text_time = 0;
+	load_skel_time = 0;
+	load_ragdoll_time = 0;
+
 	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
 	entity_manager.clear();
@@ -1037,10 +1060,20 @@ void CApp::loadScene(std::string scene_name) {
 
 	is_ok &= renderUtilsCreate();
 
+	dbg("Init loads: %g\n", aux_timer.seconds());
+
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 
+	dbg("Total texture load time: %g\n", load_text_time);
+	dbg("Total mesh load time: %g\n", load_mesh_time);
+	dbg("Total skeleton load time: %g\n", load_skel_time);
+	dbg("Total ragdoll load time: %g\n", load_ragdoll_time);
+
+	aux_timer.reset();
 	particle_groups_manager.destroy();
 	XASSERT(particle_groups_manager.xmlParseFile("data/particles/particle_groups.xml"), "Error loading the particle groups");
+	dbg("Total particle load time: %g\n", aux_timer.seconds());
+	aux_timer.reset();
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -1114,6 +1147,9 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
+
+	dbg("Misc loads: %g\n", aux_timer.seconds());
+	dbg("Total load time: %g\n", load_timer.seconds());
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

@@ -100,7 +100,10 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 
   std::string skel_name = atts["name"];
+  CDBGTimer tm;
   core_model = (CCoreModel*) skeleton_manager.getByName(skel_name.c_str());
+  dbg("Load skeleton %s took %g seconds. Seconds since scene load: %g\n", skel_name, tm.seconds(), CApp::get().load_timer.seconds());
+  CApp::get().load_skel_time += tm.seconds();
   model = new CalModel(core_model);
   model->getMixer()->blendCycle(0, 1.0, 0.f);
 

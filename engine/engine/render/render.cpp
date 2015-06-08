@@ -182,6 +182,9 @@ bool CRender::compileShaderFromFile(const char* szFileName, const char* szEntryP
 			if (pErrorBlob != NULL) {
 				MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "Compiler Error", MB_OK);
 			}
+			else {
+				MessageBox(NULL, "Unknown error. Probably missing file\n", "Compiler Error", MB_OK);
+			}
 			if (pErrorBlob) pErrorBlob->Release();
 			continue;
 		}
