@@ -751,8 +751,12 @@ void CApp::render() {
 		activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 		drawDialogBox3D(camera, ((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), 100, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 		float x, y;		
-		camera.getScreenCoords(((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), &x, &y);
-		font.print(x + 20, y + 20, "Aguja");
+		if (camera.getScreenCoords(((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), &x, &y))
+			font.print(x + 20, y + 20, "Aguja");
+
+		drawDialogBox3D(camera, XMVectorSet(-9.98f, 1.14f, 2.96f, 0), 150, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		if (camera.getScreenCoords(XMVectorSet(-9.98f, 1.14f, 2.96f, 0), &x, &y))
+			font.print(x + 20, y + 20, "Partículas");
 		activateBlendConfig(BLEND_CFG_DEFAULT);
 	}
 
