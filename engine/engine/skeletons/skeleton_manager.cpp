@@ -53,6 +53,8 @@ void CCoreModel::onStartElement(const std::string &elem, MKeyValue &atts) {
   }
   else if (elem == "anim") {
     std::string caf = atts["name"];
+	float blend_time = atts.getFloat("blend", 0.3f);
+	animation_blend_times.push_back(blend_time);
     caf = root_path + caf + ".caf";
     int id = loadCoreAnimation(caf);
     assert(id >= 0);

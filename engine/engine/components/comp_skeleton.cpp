@@ -453,15 +453,24 @@ void TCompSkeleton::uploadBonesToGPU() const {
 }
 
 void TCompSkeleton::stopAnimation(int id) {
-	model->getMixer()->clearCycle(id, 0.3);
+	if (id >= 0) {
+		float blend = core_model->animation_blend_times[id];
+		model->getMixer()->clearCycle(id, blend);
+	}
 }
 
 void TCompSkeleton::loopAnimation(int id) {
-	model->getMixer()->blendCycle(id, 1.0, 0.3);
+	if (id >= 0) {
+		float blend = core_model->animation_blend_times[id];
+		model->getMixer()->blendCycle(id, 1.0, blend);
+	}
 }
 
 void TCompSkeleton::playAnimation(int id) {
-	model->getMixer()->executeAction(id, 0.0f, 0.3f, 1.0f, false);
+	if (id >= 0) {
+		float blend = core_model->animation_blend_times[id];
+		model->getMixer()->executeAction(id, 0.0f, blend, 1.0f, false);
+	}
 }
 
 float TCompSkeleton::getAnimationDuration(int id) {

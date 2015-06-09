@@ -310,10 +310,10 @@ bool CApp::create() {
 	::render.swap_chain->Present(0, 0);
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/scene_volum_light.xml");
+	loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/viewer_test.xml");
+	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -746,6 +746,14 @@ void CApp::render() {
 			activateZConfig(ZConfig::ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);
 		}
+
+		
+		activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+		drawDialogBox3D(camera, ((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), 100, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		float x, y;		
+		camera.getScreenCoords(((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), &x, &y);
+		font.print(x + 20, y + 20, "Aguja");
+		activateBlendConfig(BLEND_CFG_DEFAULT);
 	}
 
 	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);

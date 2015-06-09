@@ -42,6 +42,9 @@ public:
 
   typedef std::vector <int> VBoneIds;
   VBoneIds         bone_ids_to_debug;
+
+  typedef std::vector <float> VAnimBlendTimes;
+  VAnimBlendTimes  animation_blend_times;
 };
 
 typedef CItemsByName< CCoreModel > CSkeletonManager;
