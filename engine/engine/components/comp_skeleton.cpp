@@ -325,7 +325,7 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-	return;
+	/*return;
 	int id_bones[] = { 10, 23, 21, 8 };
 	CalSkeleton* skel = model->getSkeleton();
 	auto& cal_bones = skel->getVectorBone();
@@ -337,10 +337,10 @@ void TCompSkeleton::renderDebug3D() const {
 		XMVECTOR bone_pos = Cal2DX(bone->getTranslationAbsolute());
 
 		drawLine(bone_pos, bone_pos + XMVectorSet(0, 10, 0, 0));
-	}
+	}*/
 	
 
-	return;
+	//return;
 	/*bool draw_ragdoll = h_ragdoll.isValid();
 
 	if (draw_ragdoll) {
@@ -373,7 +373,7 @@ void TCompSkeleton::renderDebug3D() const {
 	}
 	*/
 
-  CCoreModel *core = (CCoreModel*) model->getCoreModel();
+  /*CCoreModel *core = (CCoreModel*) model->getCoreModel();
   for (auto bc : core->bone_ids_to_debug) {
     renderBoneAxis(bc);
   }
@@ -394,10 +394,10 @@ void TCompSkeleton::renderDebug3D() const {
       XMVECTOR dst = DirectX::XMVectorSet(parent_pos.x, parent_pos.y, parent_pos.z, 1);
       drawLine(src, dst);
     }
-  }
+  }*/
 
   // 
-  /*auto actions = model->getMixer()->getAnimationActionList();
+  auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
   float y0 = 20.f;
   for (auto a : actions) {
@@ -413,7 +413,7 @@ void TCompSkeleton::renderDebug3D() const {
       , a->getWeight()
       , a->getCoreAnimation()->getDuration()
       );
-  }*/
+  }
 
 }
 
@@ -454,7 +454,7 @@ void TCompSkeleton::uploadBonesToGPU() const {
 
 void TCompSkeleton::stopAnimation(int id) {
 	if (id >= 0) {
-		float blend = core_model->animation_blend_times[id];
+		float blend = core_model->animation_blend_out_times[id];
 		model->getMixer()->clearCycle(id, blend);
 	}
 }

@@ -77,6 +77,7 @@ public:
 	void init();
 
 	void update(float elapsed);
+	void fixedUpdate(float elapsed);
 
 	void render();
 	void renderDebug3D() const;

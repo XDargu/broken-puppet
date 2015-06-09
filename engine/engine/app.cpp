@@ -447,6 +447,14 @@ void CApp::update(float elapsed) {
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 	}
 
+	// Slow motion
+	if (io.becomesReleased(CIOStatus::Q)) {
+		if (time_modifier == 1)
+			time_modifier = 0.05f;
+		else
+			time_modifier = 1;
+	}
+
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
 	if (io.becomesReleased(CIOStatus::NUM2)) { debug_map = 2; }
@@ -597,6 +605,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
+	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -735,7 +744,7 @@ void CApp::render() {
 	// Test GUI
 	
 
-	if (h_player.isValid()) {
+	/*if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 		life_val /= 10;
 		int leng = 50;
@@ -761,11 +770,11 @@ void CApp::render() {
 	}
 
 	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
-	drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-	drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
 	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	activateBlendConfig(BLEND_CFG_DEFAULT);
+	activateBlendConfig(BLEND_CFG_DEFAULT);*/
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
@@ -773,7 +782,7 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
+	//font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }

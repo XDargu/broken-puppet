@@ -45,6 +45,7 @@ public:
 
   typedef std::vector <float> VAnimBlendTimes;
   VAnimBlendTimes  animation_blend_times;
+  VAnimBlendTimes  animation_blend_out_times;
 };
 
 typedef CItemsByName< CCoreModel > CSkeletonManager;

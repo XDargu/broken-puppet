@@ -2,7 +2,7 @@
     <mesh name="prota"/>
 	
 	<anim name="idle"/>0	
-	<anim name="walk"/>1
+	<anim name="walk" blend="0.3"/>1
 	<anim name="run"/>2
         <anim name="dance"/>3
 	<anim name="throw"/>4
