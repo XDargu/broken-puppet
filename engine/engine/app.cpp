@@ -42,6 +42,9 @@ using namespace physx;
 #include "render\all_post_process_effects.h"
 #include "render/render_instances.h"
 
+#include "audio\sound.h"
+#include "audio\sound_manager.h"
+
 
 static CApp the_app;
 
@@ -52,6 +55,7 @@ CEntityActioner			 &entity_actioner = CEntityActioner::get();
 CDebugOptioner			 &debug_optioner = CDebugOptioner::get();
 CConsole				 &console = CConsole::get();
 CPostProcessOptioner	 &post_process_optioner = CPostProcessOptioner::get();
+CSoundManager            &sm = CSoundManager::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
@@ -103,7 +107,6 @@ CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
-CSoundManager sm;
 
 const CTexture* cubemap;
 
@@ -210,6 +213,10 @@ void createManagers() {
 	getObjManager<TCompParticleEditor>()->init(1);
 	getObjManager<TCompAnimEditor>()->init(1);
 
+	//Audio
+	getObjManager<TCompAudioListener>()->init(1024);
+	getObjManager<TCompAudioSource>()->init(1024);
+
 
 	registerAllComponentMsgs();
 }
@@ -263,6 +270,10 @@ void initManagers() {
 	getObjManager<TCompParticleGroup>()->initHandlers();
 	getObjManager<TCompParticleEditor>()->initHandlers();
 	getObjManager<TCompAnimEditor>()->initHandlers();
+
+	//AUDIO
+	getObjManager<TCompAudioListener>()->initHandlers();
+	getObjManager<TCompAudioSource>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -309,15 +320,17 @@ bool CApp::create() {
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
-	//loadScene("data/scenes/escena_ms2.xml");
+	loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/anim_test.xml");
+	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	sm.addFXTrack("light.wav", "light");
+	sm.addFXTrack("steam.wav", "steam");
 
 	sm.playTrack(0);
 
@@ -581,6 +594,10 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompParticleGroup>()->update(elapsed);
 	getObjManager<TCompParticleEditor>()->update(elapsed);
 	getObjManager<TCompAnimEditor>()->update(elapsed);
+
+	//AUDIO
+	getObjManager<TCompAudioListener>()->update(elapsed);
+	getObjManager<TCompAudioSource>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 

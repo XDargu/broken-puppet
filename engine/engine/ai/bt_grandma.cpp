@@ -142,6 +142,8 @@ void bt_grandma::create(string s)
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
 	lastNumNeedlesViewed = 0;
+
+	audioSource = ((CEntity*)entity)->get<TCompAudioSource>();
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -415,12 +417,15 @@ int bt_grandma::actionIdle()
 
 	if (on_enter) {
 		playAnimationIfNotPlaying(0);
+		((TCompAudioSource*)audioSource)->setSoundAsociated("light", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	if (state_time >= 2){
+		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 
 	}else{
+		((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 		return STAY;
 	}
 
@@ -454,6 +459,8 @@ int bt_grandma::actionWander()
 
 		m_char_controller->moveSpeedMultiplier = walk_speed;
 		m_char_controller->airSpeed = walk_speed * 0.8f;
+
+		((TCompAudioSource*)audioSource)->setSoundAsociated("steam", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	jump = false;
@@ -475,16 +482,20 @@ int bt_grandma::actionWander()
 			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 				ind_path++;
+				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}else{
+				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}
 		}
 		else{
+			((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}else{
+		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 	}
 }
