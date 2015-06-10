@@ -59,6 +59,7 @@ public:
 		, NUM6
 		, SPACEBAR
 		, Q
+		, E
 		, BUTTONS_COUNT
 		
 	};

@@ -456,6 +456,9 @@ void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
 	particle->speed.y = position.y - particle->position.y;
 	particle->speed.z = position.z - particle->position.z;	
 
+	if (particle->index == 0)
+		dbg((V3ToString(XMLoadFloat3(&particle->position)) + "\n").c_str());
+
 	particle->position.x = position.x;
 	particle->position.y = position.y;
 	particle->position.z = position.z;
