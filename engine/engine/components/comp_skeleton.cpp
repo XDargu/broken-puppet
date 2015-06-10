@@ -325,7 +325,7 @@ void TCompSkeleton::renderBoneAxis(int bone_id) const {
 }
 
 void TCompSkeleton::renderDebug3D() const {
-	return;
+	/*return;
 	int id_bones[] = { 10, 23, 21, 8 };
 	CalSkeleton* skel = model->getSkeleton();
 	auto& cal_bones = skel->getVectorBone();
@@ -337,10 +337,10 @@ void TCompSkeleton::renderDebug3D() const {
 		XMVECTOR bone_pos = Cal2DX(bone->getTranslationAbsolute());
 
 		drawLine(bone_pos, bone_pos + XMVectorSet(0, 10, 0, 0));
-	}
+	}*/
 	
 
-	return;
+	//return;
 	/*bool draw_ragdoll = h_ragdoll.isValid();
 
 	if (draw_ragdoll) {
@@ -373,7 +373,7 @@ void TCompSkeleton::renderDebug3D() const {
 	}
 	*/
 
-  CCoreModel *core = (CCoreModel*) model->getCoreModel();
+  /*CCoreModel *core = (CCoreModel*) model->getCoreModel();
   for (auto bc : core->bone_ids_to_debug) {
     renderBoneAxis(bc);
   }
@@ -394,26 +394,28 @@ void TCompSkeleton::renderDebug3D() const {
       XMVECTOR dst = DirectX::XMVectorSet(parent_pos.x, parent_pos.y, parent_pos.z, 1);
       drawLine(src, dst);
     }
-  }
+  }*/
 
   // 
-  /*auto actions = model->getMixer()->getAnimationActionList();
+  auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
   float y0 = 20.f;
+  y0 += font.print(x0, y0, "Player Mixer:");
   for (auto a : actions) {
-    y0 += font.printf(x0, y0, "Action: S:%d W:%1.3f T:%1.3f/%1.3f"
-      , a->getState(), a->getWeight()
+    y0 += font.printf(x0, y0, "Action: %s Weigth: %1.3f Time:%1.3f/%1.3f"
+		, a->getCoreAnimation()->getName().c_str()
+      , a->getWeight()
       , a->getTime(), a->getCoreAnimation()->getDuration()
       );
   }
   auto cycles = model->getMixer()->getAnimationCycle();
   for (auto a : cycles) {
-    y0 += font.printf(x0, y0, "Cycle: S:%d W:%1.3f T:%1.3f"
-      , a->getState()
+    y0 += font.printf(x0, y0, "Cycle: %s  Weigth: %1.3f Time:%1.3f"
+		, a->getCoreAnimation()->getName().c_str()
       , a->getWeight()
       , a->getCoreAnimation()->getDuration()
       );
-  }*/
+  }
 
 }
 
@@ -454,7 +456,7 @@ void TCompSkeleton::uploadBonesToGPU() const {
 
 void TCompSkeleton::stopAnimation(int id) {
 	if (id >= 0) {
-		float blend = core_model->animation_blend_times[id];
+		float blend = core_model->animation_blend_out_times[id];
 		model->getMixer()->clearCycle(id, blend);
 	}
 }

@@ -9,6 +9,7 @@ class CSound
 private:
 	HSAMPLE own_sample;
 	HCHANNEL own_channel;
+	bool loop;
 
 public:
 	CSound();
@@ -22,5 +23,7 @@ public:
 	void stopSound();
 	void setSoundPosition(BASS_3DVECTOR* pos_source, BASS_3DVECTOR* orient, BASS_3DVECTOR* vel);
 	bool Set3DSampleAttributes(DWORD handle, DWORD mode, float min, float max);
+	void setLoop(bool looped);
+	bool getLoop();
 };
 #endif

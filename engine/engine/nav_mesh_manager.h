@@ -4,6 +4,7 @@
 #include "navmesh\navmesh_query.h"
 #include "render\render_utils.h"
 #include "components\comp_collider_mesh.h"
+#include "components\comp_collider_convex.h"
 #include "components\comp_collider_box.h"
 #include "components\comp_collider_sphere.h"
 #include "components\comp_collider_capsule.h"
@@ -39,6 +40,7 @@ public:
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	std::vector<TCompColliderMesh*>     colMeshes;
+	std::vector<TCompColliderConvex*>   colConvex;
 	std::vector<TCompColliderBox*>      colBoxes;
 	std::vector<TCompColliderSphere*>   colSpheres;
 	bool keep_updating_navmesh;

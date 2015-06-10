@@ -28,6 +28,7 @@ DECL_OBJ_MANAGER(TCompDirectionalLight, "directionalLight");
 DECL_OBJ_MANAGER(TCompAmbientLight, "ambientLight");
 DECL_OBJ_MANAGER(TCompPointLight, "pointLight");
 DECL_OBJ_MANAGER(TCompColliderMesh, "colliderMesh");
+DECL_OBJ_MANAGER(TCompColliderConvex, "colliderConvex");
 DECL_OBJ_MANAGER(TCompAABB, "aabb");
 DECL_OBJ_MANAGER(TCompAiFsmBasic, "aiFSMBasic");
 DECL_OBJ_MANAGER(TCompAiBT, "aiBT");
@@ -61,4 +62,5 @@ DECL_OBJ_MANAGER(TCompAudioListener, "audioListener");
 DECL_OBJ_MANAGER(TCompAudioSource, "audioSource");
 DECL_OBJ_MANAGER(TCompParticleGroup, "particleGroup");
 DECL_OBJ_MANAGER(TCompParticleEditor, "particleEditor");
+DECL_OBJ_MANAGER(TCompAnimEditor, "animEditor");
 

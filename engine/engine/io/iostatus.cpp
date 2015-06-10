@@ -23,6 +23,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[DIGITAL_RIGHT].key = 'D';
 	buttons[DIGITAL_UP].key = 'W';
 	buttons[DIGITAL_DOWN].key = 'S';
+	buttons[Q].key = 'Q';
 
 	buttons[THROW_STRING].key = VK_LBUTTON;
 	buttons[TENSE_STRING].key = VK_RBUTTON;
@@ -48,6 +49,8 @@ CIOStatus::CIOStatus( ) {
 	buttons[NUM4].key = '4';
 	buttons[NUM5].key = '5';
 	buttons[NUM6].key = '6';
+
+	buttons[SPACEBAR].key = VK_SPACE;
 
 	mouse.dx = 0;
 	mouse.dy = 0;

@@ -48,17 +48,17 @@ void CSoundManager::addMusicTrack(int trackID, const char* file) {
 	music_tracks[trackID] = TMusicTrack("data/music/" + std::string(file));
 }
 
-void CSoundManager::playTrack(int trackID) {
+void CSoundManager::playTrack(int trackID, bool loop) {
 	// Unload the curren track, if needed
 	if (currentTrack != trackID) {
 		if (music_tracks[currentTrack].is_loaded())
 			music_tracks[currentTrack].unload();
 	}
 	currentTrack = trackID;
-	playMusic();
+	playMusic(loop);
 }
 
-void CSoundManager::playMusic() {
+void CSoundManager::playMusic(bool loop) {
 	//BASS_ChannelPlay(musicTracks[currentTrack], 0);
 
 	// Load the stream if needed
@@ -66,7 +66,9 @@ void CSoundManager::playMusic() {
 		music_tracks[currentTrack].load();
 
 	// Play it
-	BASS_ChannelPlay(music_tracks[currentTrack].stream, 0);
+	if(loop)
+		BASS_ChannelFlags(music_tracks[currentTrack].stream, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
+		BASS_ChannelPlay(music_tracks[currentTrack].stream, 0);
 }
 
 void CSoundManager::stopMusic() {
@@ -80,7 +82,7 @@ void CALLBACK StopCrossFade(HSYNC handle, DWORD channel, DWORD data, void *user)
 	BASS_ChannelStop(handle);
 }
 
-void CSoundManager::crossFade(int trackID, float timeInSeconds) {
+void CSoundManager::crossFade(int trackID, float timeInSeconds, bool loop) {
 	// Only crossFade if the track is different
 	if (trackID != currentTrack) {
 
@@ -88,6 +90,9 @@ void CSoundManager::crossFade(int trackID, float timeInSeconds) {
 		music_tracks[trackID].load();
 
 		// Play the new track
+		if (loop)
+			BASS_ChannelFlags(music_tracks[trackID].stream, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
+
 		BASS_ChannelPlay(music_tracks[trackID].stream, true);
 
 		// Set the slides to change the volume
@@ -122,7 +127,7 @@ void CSoundManager::playFX(std::string name){
 	// Play FX
 	HSTREAM stream = sounds->operator[](name);
 	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
-
+	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_ChannelPlay(channel, 0);
 }
 

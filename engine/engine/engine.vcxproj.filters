@@ -480,6 +480,16 @@
     <ClInclude Include="components\comp_particle_editor.h">
       <Filter>components\misc</Filter>
     </ClInclude>
+    <ClInclude Include="rope_manager.h" />
+    <ClInclude Include="components\comp_anim_editor.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="render\collision_convex.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_convex.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -888,6 +898,15 @@
       <Filter>components\misc</Filter>
     </ClCompile>
     <ClCompile Include="rope_manager.cpp" />
+    <ClCompile Include="components\comp_anim_editor.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="render\collision_convex.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_collider_convex.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

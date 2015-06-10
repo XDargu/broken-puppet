@@ -118,15 +118,7 @@ bool CCollision_Mesh::load(CDataProvider& dp) {
 	}
 	assert(vtx_decl);
 
-	/*for (int i = 0; i < header.nvertexs; ++i){
-		vtxs_copy.push_back(vtxs[i]);
-	}
-
-	for (int i = 0; i < header.nidxs; ++i){
-		idxs_copy.push_back(idxs[i]);
-	}*/
-
-	//Probando a sacar informacion casteada para nav meshes
+	//Informacion casteada para nav meshes
 	std::vector<float>vec_cast_float(vtxs.begin(), vtxs.end());
 	v_vertex = vec_cast_float;
 	std::vector<int>vec_cast_int(idxs.begin(), idxs.end());

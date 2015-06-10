@@ -43,6 +43,12 @@ void TCompParticleGroup::init() {
 	}
 }
 
+void TCompParticleGroup::fixedUpdate(float elapsed) {
+	for (auto& ps : particle_systems) {
+		ps.fixedUpdate(elapsed);
+	}
+}
+
 void TCompParticleGroup::update(float elapsed) {
 
 	/*if (destroy_on_death && particle_systems.size() == 0) {

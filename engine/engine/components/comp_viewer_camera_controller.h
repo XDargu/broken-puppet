@@ -55,11 +55,24 @@ public:
 
 		if (io.isPressed(CIOStatus::VIEWER_PAN)) {
 			if (io.isPressed(CIOStatus::ALT)) {
-				camera_radius += mouse.dy * elapsed * zoom_speed;
-				if (camera_radius > 15)
-					camera_radius = 15;
-				if (camera_radius < 1)
-					camera_radius = 1;
+
+				XMVECTOR rot = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), -h_speed * mouse.dx * elapsed);
+				XMVECTOR rot2 = XMQuaternionRotationAxis(o_transform->getLeft(), v_speed * mouse.dy * elapsed);
+
+				//o_transform->rotation = XMQuaternionMultiply(o_transform->rotation, rot);
+				o_transform->rotation = XMQuaternionMultiply(XMQuaternionMultiply(o_transform->rotation, rot2), rot);
+
+				// Clamp max and min camera Tilt
+				float m_pitch = getPitchFromVector(o_transform->getFront());
+				if (m_pitch > max_tilt)
+					m_pitch = max_tilt;
+				if (m_pitch < min_tilt)
+					m_pitch = min_tilt;
+
+				float m_yaw = getYawFromVector(o_transform->getFront());
+
+				XMVECTOR m_rotation = XMQuaternionRotationRollPitchYaw(m_pitch, m_yaw, 0);
+				o_transform->rotation = m_rotation;
 			}
 			else {
 				// Pan
@@ -75,24 +88,13 @@ public:
 		}
 
 		if (io.isPressed(CIOStatus::VIEWER_MOVE_CAM)) {			
-
-			XMVECTOR rot = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), -h_speed * mouse.dx * elapsed);
-			XMVECTOR rot2 = XMQuaternionRotationAxis(o_transform->getLeft(), v_speed * mouse.dy * elapsed);
-
-			//o_transform->rotation = XMQuaternionMultiply(o_transform->rotation, rot);
-			o_transform->rotation = XMQuaternionMultiply(XMQuaternionMultiply(o_transform->rotation, rot2), rot);
-
-			// Clamp max and min camera Tilt
-			float m_pitch = getPitchFromVector(o_transform->getFront());
-			if (m_pitch > max_tilt)
-				m_pitch = max_tilt;
-			if (m_pitch < min_tilt)
-				m_pitch = min_tilt;
-
-			float m_yaw = getYawFromVector(o_transform->getFront());
-
-			XMVECTOR m_rotation = XMQuaternionRotationRollPitchYaw(m_pitch, m_yaw, 0);
-			o_transform->rotation = m_rotation;
+			if (io.isPressed(CIOStatus::ALT)) {
+				camera_radius += mouse.dy * elapsed * zoom_speed;
+				if (camera_radius > 15)
+					camera_radius = 15;
+				if (camera_radius < 1)
+					camera_radius = 1;
+			}
 
 		}
 

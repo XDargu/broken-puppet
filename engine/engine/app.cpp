@@ -42,6 +42,9 @@ using namespace physx;
 #include "render\all_post_process_effects.h"
 #include "render/render_instances.h"
 
+#include "audio\sound.h"
+#include "audio\sound_manager.h"
+
 
 static CApp the_app;
 
@@ -52,6 +55,7 @@ CEntityActioner			 &entity_actioner = CEntityActioner::get();
 CDebugOptioner			 &debug_optioner = CDebugOptioner::get();
 CConsole				 &console = CConsole::get();
 CPostProcessOptioner	 &post_process_optioner = CPostProcessOptioner::get();
+CSoundManager            &sm = CSoundManager::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
@@ -103,7 +107,6 @@ CFont         font;
 CDeferredRender deferred;
 CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
-CSoundManager sm;
 
 const CTexture* cubemap;
 
@@ -150,6 +153,7 @@ void createManagers() {
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(512);
+	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
@@ -208,6 +212,11 @@ void createManagers() {
 
 	getObjManager<TCompParticleGroup>()->init(256);
 	getObjManager<TCompParticleEditor>()->init(1);
+	getObjManager<TCompAnimEditor>()->init(1);
+
+	//Audio
+	getObjManager<TCompAudioListener>()->init(1024);
+	getObjManager<TCompAudioSource>()->init(1024);
 
 
 	registerAllComponentMsgs();
@@ -261,8 +270,11 @@ void initManagers() {
 
 	getObjManager<TCompParticleGroup>()->initHandlers();
 	getObjManager<TCompParticleEditor>()->initHandlers();
+	getObjManager<TCompAnimEditor>()->initHandlers();
 
-
+	//AUDIO
+	getObjManager<TCompAudioListener>()->initHandlers();
+	getObjManager<TCompAudioSource>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -309,16 +321,20 @@ bool CApp::create() {
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
-	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/scene_volum_light.xml");
+	loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	sm.addFXTrack("light.wav", "light");
+	sm.addFXTrack("steam.wav", "steam");
+	sm.addFXTrack("sonar.wav", "sonar");
 
-	sm.playTrack(0);
+	sm.playTrack(0,false);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -441,10 +457,22 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}
 
+
+
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/escena_ms2.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
+		sm.playFX("sonar");
+	}
+
+	//sm.StopLoopedFX("sonar");
+	// Slow motion
+	if (io.becomesReleased(CIOStatus::Q)) {
+		if (time_modifier == 1)
+			time_modifier = 0.05f;
+		else
+			time_modifier = 1;
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -571,6 +599,11 @@ void CApp::update(float elapsed) {
 	// PARTICLES
 	getObjManager<TCompParticleGroup>()->update(elapsed);
 	getObjManager<TCompParticleEditor>()->update(elapsed);
+	getObjManager<TCompAnimEditor>()->update(elapsed);
+
+	//AUDIO
+	getObjManager<TCompAudioListener>()->update(elapsed);
+	getObjManager<TCompAudioSource>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
@@ -597,6 +630,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
+	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -667,13 +701,13 @@ void CApp::render() {
 	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
 
 #ifdef _DEBUG
-	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+	/*drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	drawTexture2D(sz * 2, 0 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_specular"));
-	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));
+	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));*/
 
 	if (debug_map == 1) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo")); }
 	if (debug_map == 2) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals")); }
@@ -735,7 +769,7 @@ void CApp::render() {
 	// Test GUI
 	
 
-	if (h_player.isValid()) {
+	/*if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 		life_val /= 10;
 		int leng = 50;
@@ -761,11 +795,11 @@ void CApp::render() {
 	}
 
 	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
-	drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-	drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
 	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	activateBlendConfig(BLEND_CFG_DEFAULT);
+	activateBlendConfig(BLEND_CFG_DEFAULT);*/
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
@@ -773,7 +807,7 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
+	//font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -905,7 +939,7 @@ void CApp::renderEntities() {
 void CApp::renderDebugEntities() {
 
 	std::string s_fps = "FPS: " + std::to_string(fps);
-	font.print(300, 30, s_fps.c_str());
+	font.print(500, 30, s_fps.c_str());
 
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
@@ -918,10 +952,10 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	//if (renderNavMesh)
-	CNav_mesh_manager::get().render_nav_mesh();
+	//CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
-	CNav_mesh_manager::get().pathRender();
+	//CNav_mesh_manager::get().pathRender();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());

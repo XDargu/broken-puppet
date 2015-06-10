@@ -184,6 +184,23 @@ void TParticleSystem::init() {
 	}	
 }
 
+void TParticleSystem::fixedUpdate(float elapsed) {
+	VParticles::iterator it = particles.begin();
+
+	int delete_counter = 0;
+	while (it != particles.end()) {
+		if (it->size != -1) {
+			if (updater_physx != nullptr) {
+				// Unlock
+				updater_physx->update(&(*it), elapsed);
+				// Lock
+			}
+		}
+		++it;
+	}
+}
+
+
 void TParticleSystem::update(float elapsed) {
 	if (emitter_generation != nullptr) {
 		emitter_generation->ps = this;
@@ -237,11 +254,9 @@ void TParticleSystem::update(float elapsed) {
 			if (updater_noise != nullptr) {
 				updater_noise->update(&(*it), elapsed);
 			}
-			if (updater_physx != nullptr) {
-				// Unlock
+			/*if (updater_physx != nullptr) {
 				updater_physx->update(&(*it), elapsed);
-				// Lock
-			}
+			}*/
 			if (it->lifespan != 0 && it->age > it->lifespan) {
 				if (use_physx) {
 					PxU32 indicesToRelease[1];
