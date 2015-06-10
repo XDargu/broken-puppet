@@ -208,6 +208,7 @@ void createManagers() {
 
 	getObjManager<TCompParticleGroup>()->init(256);
 	getObjManager<TCompParticleEditor>()->init(1);
+	getObjManager<TCompAnimEditor>()->init(1);
 
 
 	registerAllComponentMsgs();
@@ -261,8 +262,7 @@ void initManagers() {
 
 	getObjManager<TCompParticleGroup>()->initHandlers();
 	getObjManager<TCompParticleEditor>()->initHandlers();
-
-
+	getObjManager<TCompAnimEditor>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -313,7 +313,8 @@ bool CApp::create() {
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/viewer_test.xml");
+	loadScene("data/scenes/anim_test.xml");
+	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -579,6 +580,7 @@ void CApp::update(float elapsed) {
 	// PARTICLES
 	getObjManager<TCompParticleGroup>()->update(elapsed);
 	getObjManager<TCompParticleEditor>()->update(elapsed);
+	getObjManager<TCompAnimEditor>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
@@ -676,13 +678,13 @@ void CApp::render() {
 	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
 
 #ifdef _DEBUG
-	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+	/*drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	drawTexture2D(sz * 2, 0 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_specular"));
-	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));
+	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));*/
 
 	if (debug_map == 1) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo")); }
 	if (debug_map == 2) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals")); }
@@ -927,10 +929,10 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	//if (renderNavMesh)
-	CNav_mesh_manager::get().render_nav_mesh();
+	//CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
-	CNav_mesh_manager::get().pathRender();
+	//CNav_mesh_manager::get().pathRender();
 
 	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());

@@ -190,6 +190,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
+    <ClInclude Include="components\comp_anim_editor.h" />
     <ClInclude Include="components\comp_audio_listener.h" />
     <ClInclude Include="components\comp_audio_source.h" />
     <ClInclude Include="components\comp_particle_editor.h" />
@@ -363,6 +364,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
+    <ClCompile Include="components\comp_anim_editor.cpp" />
     <ClCompile Include="components\comp_audio_listener.cpp" />
     <ClCompile Include="components\comp_audio_source.cpp" />
     <ClCompile Include="components\comp_camera_pivot_controller.cpp" />

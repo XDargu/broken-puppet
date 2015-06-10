@@ -78,5 +78,6 @@ using namespace DirectX;
 #include "comp_audio_listener.h"
 #include "comp_audio_source.h"
 #include "comp_particle_editor.h"
+#include "comp_anim_editor.h"
 
 #endif

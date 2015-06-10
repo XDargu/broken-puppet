@@ -61,4 +61,5 @@ DECL_OBJ_MANAGER(TCompAudioListener, "audioListener");
 DECL_OBJ_MANAGER(TCompAudioSource, "audioSource");
 DECL_OBJ_MANAGER(TCompParticleGroup, "particleGroup");
 DECL_OBJ_MANAGER(TCompParticleEditor, "particleEditor");
+DECL_OBJ_MANAGER(TCompAnimEditor, "animEditor");
 
