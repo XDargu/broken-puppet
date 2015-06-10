@@ -4,6 +4,7 @@
 #include "render/render_utils.h"
 #include "components/comp_point_light.h"
 #include "components/comp_shadows.h"
+#include "physics_manager.h"
 
 using namespace DirectX;
 
@@ -893,7 +894,7 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float ten
 			y += noise * noise;
 
 		y -= 1;
-
+		
 		y *= tension;
 
 		ropeVertices[i].Color = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
@@ -912,18 +913,18 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 {
 	float dist = XMVectorGetX(XMVector3Length(initialPos - finalPos));
 
-	const int epsilon = 15;
+	const int epsilon = 50;
 	const int sizes = 4;
 	//float width = 0.1;
 	XMFLOAT3 ropeReferences[epsilon];
 	CVertexPosUVNormal ropeVertices[epsilon * sizes];
 	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * 6];
 	float y = 0;
-	float pow_r = 2;	// Suavidad de la onda
+	float pow_r = 4;	// Suavidad de la onda
 	int velocity = 10;	// Velocidad de movimiento
-	float wave_freq = 0.9f;	// frecuencia del ruido de la onda
-	float amplitude = 0.05f;	// amplitud del ruido de la onda
-	float elapsed = 1 / 60.0f;
+	float wave_freq = 0.5f;	// frecuencia del ruido de la onda
+	float amplitude = 0.0f;	// amplitud del ruido de la onda
+	float elapsed = CApp::get().total_time;
 
 	for (int i = 0; i < epsilon; i++)
 	{
@@ -936,11 +937,26 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 
 		float noise = (sin(elapsed*velocity + i*wave_freq) + 1) * amplitude;
 		if (i != 0 && i != epsilon - 1)
-			y += noise * noise;
+			y += noise;
 
 		y -= 1;
 
-		y *= tension;
+		PxRaycastBuffer hit;
+		float y_offset = 1;
+		Physics.raycast(midPos + XMVectorSet(0, y_offset, 0, 0), XMVectorSet(0, -1, 0, 0), 2, hit);
+
+		if (hit.hasBlock) {
+			PxRaycastHit blockHit = hit.block;
+			
+			if (std::strcmp(hit.block.actor->getName(), "Player") != 0) {
+				float m_dist = blockHit.distance - y_offset;
+				if (m_dist < abs(y))
+					y = -m_dist;
+			}
+			
+		}
+
+		//y *= tension;
 		// Guardar la referencia de posición de la cuerda
 		ropeReferences[i] = XMFLOAT3(XMVectorGetX(midPos), XMVectorGetY(midPos) + y, XMVectorGetZ(midPos));
 	}
@@ -1021,6 +1037,8 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 		for (int j = 0; j < sizes; j++) {
 			// Posiciones extra, siguiendo un círculo
 			// Se rota la normal en el eje de dirección
+			if (XMVectorGetX(XMVector3Length(dir)) == 0)
+				dir = XMVectorSet(0, 1, 0, 0);
 			XMVECTOR quat = XMQuaternionRotationAxis(dir, angle * j);
 			XMVECTOR pos = normal * width;
 			pos = XMVector3Rotate(pos, quat);

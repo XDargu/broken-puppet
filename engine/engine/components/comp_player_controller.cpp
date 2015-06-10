@@ -40,9 +40,9 @@ void TCompPlayerController::fixedUpdate(float elapsed) {
 
 }
 
-unsigned int TCompPlayerController::getStringCount() {
-	return fsm_player_torso.getStringCount();
-}
+//unsigned int TCompPlayerController::getStringCount() {
+	//return fsm_player_torso.getStringCount();
+//}
 
 void TCompPlayerController::actorHit(const TActorHit& msg) {
 

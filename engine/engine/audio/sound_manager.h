@@ -36,14 +36,13 @@ public:
 
 	void addMusicTrack(int trackID, const char* file);
 
-	void playTrack(int trackID);
+	void playTrack(int trackID, bool loop);
 	void playFXTrack(std::string name);
 	void addFXTrack(const char* file, std::string name);
-	void playMusic();
-	void playLoopedMusic();
+	void playMusic(bool loop);
 	void stopMusic();
 
-	void crossFade(int trackID, float timeInSeconds);
+	void crossFade(int trackID, float timeInSeconds, bool loop);
 
 	void playFX(std::string name);
 	void stopFX(std::string name);

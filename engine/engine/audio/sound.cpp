@@ -7,6 +7,7 @@ CSound::CSound()
 {
 	own_sample = 0;
 	own_channel = 0;
+	loop = false;
 }
 
 void CSound::init_sound(std::string name, DWORD mode, float min, float max){
@@ -54,6 +55,8 @@ CSound::~CSound()
 
 void CSound::playSound(){
 	if (!is_playing()){
+		if (loop)
+			BASS_ChannelFlags(own_channel, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
 		bool success=BASS_ChannelPlay(own_channel, 0);
 		if (!success){
 			XASSERT(success, "error play channel");
@@ -61,33 +64,32 @@ void CSound::playSound(){
 	}
 }
 
-void CSound::playLoopedSound(){
-	if (!is_playing()){
-		BASS_ChannelFlags(own_channel, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
-		bool success = BASS_ChannelPlay(own_channel, 0);
-		if (!success){
-			XASSERT(success, "error play channel");
-		}
-	}
+void CSound::setLoop(bool looped){
+	loop = looped;
 }
 
-void CSound::stopLoopedSound(){
-	bool success = BASS_ChannelStop(own_channel);
-	if (!success){
-		XASSERT(success, "error stop channel");
-	}
+bool CSound::getLoop(){
+	return loop;
 }
 
 void CSound::stopSound(){
-	if (is_playing()){
-		bool success=BASS_ChannelStop(own_channel);
+	if (!loop){
+		if (is_playing()){
+			bool success = BASS_ChannelStop(own_channel);
+			if (!success){
+				XASSERT(success, "error stop channel");
+			}
+			else{
+				bool success = BASS_SampleFree(own_channel);
+				if (!success){
+					XASSERT(success, "error free channel");
+				}
+			}
+		}
+	}else{
+		bool success = BASS_ChannelStop(own_channel);
 		if (!success){
 			XASSERT(success, "error stop channel");
-		}else{
-			bool success=BASS_SampleFree(own_channel);
-			if (!success){
-				XASSERT(success, "error free channel");
-			}
 		}
 	}
 }

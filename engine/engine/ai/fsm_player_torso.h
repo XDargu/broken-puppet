@@ -11,7 +11,7 @@ class FSMPlayerLegs;
 class FSMPlayerTorso : public aifsmcontroller
 {
 private:
-	deque<CHandle> strings;
+	//deque<CHandle> strings;
 
 	int entitycount;
 	PxRigidActor* first_actor;
@@ -46,7 +46,6 @@ public:
 
 	void ProcessHit(float elapsed);
 
-	unsigned int getStringCount();	
 };
 
 #endif

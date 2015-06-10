@@ -29,6 +29,8 @@ public:
 	float delta_time;
 	double total_time;
 
+	bool pause;
+
 	bool renderAABB;
 	bool renderAxis;
 	bool renderGrid;

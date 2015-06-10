@@ -153,6 +153,7 @@ void createManagers() {
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompColliderMesh>()->init(512);
+	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
@@ -320,11 +321,11 @@ bool CApp::create() {
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
-	loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/anim_test.xml");
+	loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -333,7 +334,7 @@ bool CApp::create() {
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
 
-	sm.playTrack(0);
+	sm.playTrack(0,false);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -415,9 +416,13 @@ void CApp::doFrame() {
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
 
-		/*if (isKeyPressed('Q')) {
-		time_modifier = 0.05f;
-		}*/
+		CIOStatus& io = CIOStatus::get();
+		// Update input
+		io.update(delta_secs);
+
+		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+			pause = !pause;
+		}
 
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
@@ -447,9 +452,11 @@ void CApp::doFrame() {
 
 void CApp::update(float elapsed) {
 
+	if (pause)
+		return;
+
 	CIOStatus& io = CIOStatus::get();
 	// Update input
-	io.update(elapsed);
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
@@ -615,6 +622,9 @@ void CApp::update(float elapsed) {
 
 // Physics update
 void CApp::fixedUpdate(float elapsed) {
+	if (pause)
+		return;
+
 	physics_manager.gScene->simulate(elapsed);
 	physics_manager.gScene->fetchResults(true);
 
@@ -766,7 +776,6 @@ void CApp::render() {
 #endif
 
 	// Test GUI
-	
 
 	/*if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
@@ -1077,6 +1086,7 @@ void CApp::activateVictory(){
 void CApp::loadScene(std::string scene_name) {
 
 	bool is_ok = true;
+	pause = false;
 
 	load_timer.reset();
 	aux_timer.reset();
