@@ -185,7 +185,7 @@ void TParticleSystem::init() {
 }
 
 void TParticleSystem::fixedUpdate(float elapsed) {
-	VParticles::iterator it = particles.begin();
+	/*VParticles::iterator it = particles.begin();
 
 	int delete_counter = 0;
 	while (it != particles.end()) {
@@ -197,7 +197,7 @@ void TParticleSystem::fixedUpdate(float elapsed) {
 			}
 		}
 		++it;
-	}
+	}*/
 }
 
 
@@ -231,7 +231,7 @@ void TParticleSystem::update(float elapsed) {
 			// Update the position, no updater needed
 			it->position.x += it->speed.x * elapsed;
 			it->position.y += it->speed.y * elapsed;
-			it->position.z += it->speed.z * elapsed;
+			it->position.z += it->speed.z * elapsed;			
 
 			if (updater_rotation != nullptr) {
 				updater_rotation->update(&(*it), elapsed);
@@ -254,9 +254,9 @@ void TParticleSystem::update(float elapsed) {
 			if (updater_noise != nullptr) {
 				updater_noise->update(&(*it), elapsed);
 			}
-			/*if (updater_physx != nullptr) {
+			if (updater_physx != nullptr) {
 				updater_physx->update(&(*it), elapsed);
-			}*/
+			}
 			if (it->lifespan != 0 && it->age > it->lifespan) {
 				if (use_physx) {
 					PxU32 indicesToRelease[1];
