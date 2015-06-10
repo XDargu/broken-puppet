@@ -331,6 +331,7 @@ bool CApp::create() {
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 	sm.addFXTrack("light.wav", "light");
 	sm.addFXTrack("steam.wav", "steam");
+	sm.addFXTrack("sonar.wav", "sonar");
 
 	sm.playTrack(0);
 
@@ -456,6 +457,7 @@ void CApp::update(float elapsed) {
 	}
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
+		sm.playFX("sonar");
 		//loadScene("data/scenes/escena_ms2.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
