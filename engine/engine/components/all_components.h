@@ -10,6 +10,7 @@ using namespace DirectX;
 #include "handle/handle.h"
 #include "../entity_manager.h"
 #include "../render/collision_mesh.h"
+#include "../render/collision_convex.h"
 
 // Basic
 #include "comp_name.h"
@@ -33,6 +34,7 @@ using namespace DirectX;
 #include "comp_collider_sphere.h"
 #include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
+#include "comp_collider_convex.h"
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"

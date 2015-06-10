@@ -1,24 +1,24 @@
 #include "mcv_platform.h"
-#include "collision_mesh.h"
+#include "collision_convex.h"
 #include "physics_manager.h"
 
-CMeshCollisionManager mesh_collision_manager;
+CConvexCollisionManager convex_collision_manager;
 
 // Just to check we are not rendering a mesh we have not previously activated
-const CCollision_Mesh* CCollision_Mesh::mesh_collision = nullptr;
+const CCollision_Convex* CCollision_Convex::convex_collision = nullptr;
 
-CCollision_Mesh::CCollision_Mesh()
+CCollision_Convex::CCollision_Convex()
 	:nvertexs(0)
 	, nindices(0)
 	, topology(D3D10_PRIMITIVE_TOPOLOGY_UNDEFINED)
 	, vtxs_decl(nullptr)
 { }
 
-CCollision_Mesh::~CCollision_Mesh() {
+CCollision_Convex::~CCollision_Convex() {
 }
 
 // -------------------------------------------
-bool CCollision_Mesh::create(
+bool CCollision_Convex::create(
 	unsigned anvertexs
 	, const void* the_vertexs       // Can't be null
 	, unsigned anindices
@@ -46,13 +46,13 @@ bool CCollision_Mesh::create(
 	}
 
 	size_t total_bytes_for_vertex = avtxs_decl->bytes_per_vertex * anvertexs;
-	
+
 	vertexs = new u8[total_bytes_for_vertex];
 	memcpy(vertexs, the_vertexs, total_bytes_for_vertex);
 
 	//Copiamos el vector de vertices a un vector de floats
 	vertex_floats = new float[total_bytes_for_vertex];
-	memcpy(vertex_floats,the_vertexs, total_bytes_for_vertex);
+	memcpy(vertex_floats, the_vertexs, total_bytes_for_vertex);
 
 	indices = new TIndex[anindices];
 	memcpy(indices, the_indices, anindices * sizeof(TIndex));
@@ -68,7 +68,7 @@ bool CCollision_Mesh::create(
 }
 
 // --------------------------------------
-bool CCollision_Mesh::load(CDataProvider& dp) {
+bool CCollision_Convex::load(CDataProvider& dp) {
 
 	assert(dp.isValid());
 
@@ -134,64 +134,56 @@ bool CCollision_Mesh::load(CDataProvider& dp) {
 		, vtx_decl);
 }
 
-bool CCollision_Mesh::load(const char* name){//, PxCooking* mCooking, PxPhysics* gPhysicsSDK) {
+bool CCollision_Convex::load(const char* name){//, PxCooking* mCooking, PxPhysics* gPhysicsSDK) {
 	char full_name[MAX_PATH];
 	sprintf(full_name, "data/meshes/%s.mesh", name);
 	CFileDataProvider fdp(full_name);
 	if (load(fdp)){
-		physx::PxTriangleMeshDesc meshDesc;
-		meshDesc.points.count = getNvertexs();
-		meshDesc.points.stride = vtxs_decl->bytes_per_vertex; // del header sacar los bytes per vertex
-		meshDesc.points.data = vertexs;
+		physx::PxConvexMeshDesc  convexDesc;
+		convexDesc.points.count = getNvertexs();
+		convexDesc.points.stride = vtxs_decl->bytes_per_vertex; // del header sacar los bytes per vertex
+		convexDesc.points.data = vertexs;
+		convexDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
+		convexDesc.vertexLimit = 256;
 
-		assert(getNindices() % 3 == 0);
+		/*assert(getNindices() % 3 == 0);
 		meshDesc.triangles.count = getNindices() / 3;
 		meshDesc.triangles.stride = sizeof(TIndex) * 3;
 		meshDesc.triangles.data = indices;
-		meshDesc.flags = physx::PxMeshFlags(physx::PxMeshFlag::e16_BIT_INDICES) | (physx::PxMeshFlag::eFLIPNORMALS);
-		
-		bool valid = meshDesc.isValid();
+		meshDesc.flags = physx::PxMeshFlags(physx::PxMeshFlag::e16_BIT_INDICES) | (physx::PxMeshFlag::eFLIPNORMALS);*/
+
+		bool valid = convexDesc.isValid();
 		physx::PxDefaultMemoryOutputStream stream;
 
-		bool sucess = CPhysicsManager::get().gCooking->cookTriangleMesh(meshDesc, stream);
+		bool sucess = CPhysicsManager::get().gCooking->cookConvexMesh(convexDesc, stream);
 		if (sucess){
 			physx::PxDefaultMemoryInputData rb(stream.getData(), stream.getSize());
-			collision_mesh = CPhysicsManager::get().gPhysicsSDK->createTriangleMesh(rb);
+			collision_convex = CPhysicsManager::get().gPhysicsSDK->createConvexMesh(rb);
 			return true;
-		}else{
-			collision_mesh = nullptr;
+		}
+		else{
+			collision_convex = nullptr;
 			return false;
 		}
-	}else{
-		collision_mesh = nullptr;
+	}
+	else{
+		collision_convex = nullptr;
 		return NULL;
 	}
 }
 
-void CCollision_Mesh::destroy() {
-	collision_mesh->release();
+void CCollision_Convex::destroy() {
+	collision_convex->release();
 }
 
-unsigned CCollision_Mesh::getNvertexs(){
+unsigned CCollision_Convex::getNvertexs(){
 	return nvertexs;
 }
 
-unsigned CCollision_Mesh::getNindices(){
+unsigned CCollision_Convex::getNindices(){
 	return nindices;
 }
 
-D3D_PRIMITIVE_TOPOLOGY CCollision_Mesh::getTopology(){
+D3D_PRIMITIVE_TOPOLOGY CCollision_Convex::getTopology(){
 	return topology;
 }
-
-/*float* CCollision_Mesh::getVertexPointerNav(){
-	return vertex_floats;
-}
-
-int* CCollision_Mesh::getIndexPointerNav(){
-	return index_int;
-}*/
-
-
-
-
