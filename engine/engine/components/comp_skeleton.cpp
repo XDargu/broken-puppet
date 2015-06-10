@@ -400,16 +400,18 @@ void TCompSkeleton::renderDebug3D() const {
   auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
   float y0 = 20.f;
+  y0 += font.print(x0, y0, "Player Mixer:");
   for (auto a : actions) {
-    y0 += font.printf(x0, y0, "Action: S:%d W:%1.3f T:%1.3f/%1.3f"
-      , a->getState(), a->getWeight()
+    y0 += font.printf(x0, y0, "Action: %s Weigth: %1.3f Time:%1.3f/%1.3f"
+		, a->getCoreAnimation()->getName().c_str()
+      , a->getWeight()
       , a->getTime(), a->getCoreAnimation()->getDuration()
       );
   }
   auto cycles = model->getMixer()->getAnimationCycle();
   for (auto a : cycles) {
-    y0 += font.printf(x0, y0, "Cycle: S:%d W:%1.3f T:%1.3f"
-      , a->getState()
+    y0 += font.printf(x0, y0, "Cycle: %s  Weigth: %1.3f Time:%1.3f"
+		, a->getCoreAnimation()->getName().c_str()
       , a->getWeight()
       , a->getCoreAnimation()->getDuration()
       );

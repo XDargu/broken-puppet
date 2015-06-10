@@ -4,6 +4,7 @@
 #include "handle\handle.h"
 #include "components\all_components.h"
 #include "components\comp_skeleton.h"
+#include "skeletons\skeleton_manager.h"
 #include "components\comp_skeleton_ik.h"
 #include "importer_parser.h"
 #include "ai\logic_manager.h"
@@ -698,6 +699,20 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_skel) {
 		TwAddVarRW(bar, "SkeletonActive", TW_TYPE_BOOL8, &e_skel->active, " group='Skeleton' label='Active' ");
+
+		std::string aux = "";
+		std::string aux2 = "";
+
+		// Blend times		
+		for (int i = 0; i < e_skel->getCCoreModel()->animation_names.size(); ++i) {
+			aux = "SkeletonAnim" + i;
+			aux2 = "group=Skeleton label=' " + e_skel->getCCoreModel()->animation_names[i] + "'";
+			TwAddButton(bar, aux.c_str(), NULL, NULL, aux2.c_str());
+			aux = "SkeletonAnimBlendIn" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_skel->getCCoreModel()->animation_blend_times[i], "group='Skeleton' label='Blend in'");
+			aux = "SkeletonAnimBlendOut" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_skel->getCCoreModel()->animation_blend_out_times[i], "group='Skeleton' label='Blend out'");
+		}
 	}
 	if (e_skel_ik) {
 		TwAddVarRW(bar, "SkeletonIKActive", TW_TYPE_BOOL8, &e_skel_ik->active, " group='Skeleton IK' label='Active' ");
