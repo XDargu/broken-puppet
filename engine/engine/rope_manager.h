@@ -16,6 +16,7 @@ public:
 	void addString(CHandle string);
 	void removeString();
 	void removeBackString();
+	void removeString(CHandle rope);
 	void clearStrings();
 	static CRope_manager& get();
 };
