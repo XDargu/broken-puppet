@@ -69,6 +69,18 @@ void CSoundManager::playMusic() {
 	BASS_ChannelPlay(music_tracks[currentTrack].stream, 0);
 }
 
+void CSoundManager::playLoopedMusic() {
+	//BASS_ChannelPlay(musicTracks[currentTrack], 0);
+
+	// Load the stream if needed
+	if (!music_tracks[currentTrack].is_loaded())
+		music_tracks[currentTrack].load();
+
+	// Play it
+	BASS_ChannelFlags(music_tracks[currentTrack].stream, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
+	BASS_ChannelPlay(music_tracks[currentTrack].stream, 0);
+}
+
 void CSoundManager::stopMusic() {
 	//BASS_ChannelStop(musicTracks[currentTrack]);
 	BASS_ChannelStop(music_tracks[currentTrack].stream);
@@ -122,7 +134,7 @@ void CSoundManager::playFX(std::string name){
 	// Play FX
 	HSTREAM stream = sounds->operator[](name);
 	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
-
+	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_ChannelPlay(channel, 0);
 }
 

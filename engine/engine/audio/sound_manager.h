@@ -40,10 +40,10 @@ public:
 	void playFXTrack(std::string name);
 	void addFXTrack(const char* file, std::string name);
 	void playMusic();
+	void playLoopedMusic();
 	void stopMusic();
 
 	void crossFade(int trackID, float timeInSeconds);
-
 
 	void playFX(std::string name);
 	void stopFX(std::string name);

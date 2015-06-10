@@ -18,8 +18,10 @@ public:
 	/*void setStream(std::string name);
 	void setChannel();*/
 	void playSound();
+	void playLoopedSound();
 	bool is_playing();
 	void stopSound();
+	void stopLoopedSound();
 	void setSoundPosition(BASS_3DVECTOR* pos_source, BASS_3DVECTOR* orient, BASS_3DVECTOR* vel);
 	bool Set3DSampleAttributes(DWORD handle, DWORD mode, float min, float max);
 };

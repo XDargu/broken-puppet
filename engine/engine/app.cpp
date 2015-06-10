@@ -456,13 +456,16 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}
 
+
+
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		sm.playFX("sonar");
 		//loadScene("data/scenes/escena_ms2.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
+		sm.playFX("sonar");
 	}
 
+	//sm.StopLoopedFX("sonar");
 	// Slow motion
 	if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1)

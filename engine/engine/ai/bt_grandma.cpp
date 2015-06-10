@@ -417,7 +417,7 @@ int bt_grandma::actionIdle()
 
 	if (on_enter) {
 		playAnimationIfNotPlaying(0);
-		((TCompAudioSource*)audioSource)->setSoundAsociated("light", BASS_SAMPLE_3D, 1.5f, 2.0f);
+		((TCompAudioSource*)audioSource)->setSoundAsociated("sonar", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	if (state_time >= 2){

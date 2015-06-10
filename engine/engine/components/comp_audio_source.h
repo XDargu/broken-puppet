@@ -32,6 +32,7 @@ public:
 
 	void set3DAttributes(DWORD mode, float min, float max);
 
+
 };
 
 #endif

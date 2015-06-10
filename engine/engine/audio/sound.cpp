@@ -61,6 +61,23 @@ void CSound::playSound(){
 	}
 }
 
+void CSound::playLoopedSound(){
+	if (!is_playing()){
+		BASS_ChannelFlags(own_channel, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
+		bool success = BASS_ChannelPlay(own_channel, 0);
+		if (!success){
+			XASSERT(success, "error play channel");
+		}
+	}
+}
+
+void CSound::stopLoopedSound(){
+	bool success = BASS_ChannelStop(own_channel);
+	if (!success){
+		XASSERT(success, "error stop channel");
+	}
+}
+
 void CSound::stopSound(){
 	if (is_playing()){
 		bool success=BASS_ChannelStop(own_channel);
