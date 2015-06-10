@@ -14,6 +14,7 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	TCompTransform* t = h_transform;
 	TCompColliderBox* c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
+	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
 
 	assert(t || fatal("TStaticBody requieres a TTransform component"));
 	assert((c || mesh_c) || fatal("TStaticBody requieres a TCollider or a TColliderMesh component"));
@@ -37,6 +38,15 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			);
 	}
 
+	if (capsule_cvx) {
+		staticBody = physx::PxCreateStatic(
+			*Physics.gPhysicsSDK
+			, physx::PxTransform(
+			Physics.XMVECTORToPxVec3(t->position),
+			Physics.XMVECTORToPxQuat(t->rotation))
+			, *capsule_cvx->collider
+			);
+	}
 	Physics.gScene->addActor(*staticBody);
 
 	staticBody->setName(e->getName());

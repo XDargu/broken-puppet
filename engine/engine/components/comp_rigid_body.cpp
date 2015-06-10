@@ -15,6 +15,7 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
+	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
@@ -27,6 +28,8 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 		col = sphere_c;
 	if (capsule_c)
 		col = capsule_c;
+	if (capsule_cvx)
+		col = capsule_cvx;
 
 	XASSERT(col != nullptr, "TRigidBody requieres a TCollider or TMeshCollider component");
 
@@ -66,6 +69,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
+	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
@@ -78,7 +82,8 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		col = sphere_c;
 	if (capsule_c)
 		col = capsule_c;
-
+	if (capsule_cvx)
+		col = capsule_cvx;
 	
 
 

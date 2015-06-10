@@ -1009,16 +1009,16 @@
     <colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
     <staticbody/>
   </entity>
-  <entity tag = "level" collisionTag = "Level">
+  <entity tag = "actor" collisionTag = "Actor">
     <name name="dvn_rampa_rampa_14g_doble_01_88.0" />
-    <transform position="-12.0 -6.71564e-007 -14.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <transform position="-4.0 5 4.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render>
       <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
       <draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_tileable"/>
     </render>
     <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-    <colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
+    <colliderConvex path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <rigidbody density="10"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="dvn_selev_suelo_half_01_89.0" />
