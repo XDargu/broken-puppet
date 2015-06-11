@@ -2,6 +2,9 @@
 
 Texture2D txDiffuse : register(t0);
 Texture2D txDepth   : register(t2);
+Texture2D txParticle   : register(t7);
+Texture2D txNoise    : register(t9);
+
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
 
@@ -158,7 +161,7 @@ float4 PS(VS_TEXTURED_OUTPUT input
   float delta_z = abs(pixel_detph - my_depth);
   delta_z = saturate(delta_z * 1000);
 
-  float4 color = txDiffuse.Sample(samClampLinear, input.UV);
+  float4 color = txParticle.Sample(samClampLinear, input.UV);
   color.a *= delta_z;
 
   // 0.2 = % of life during the begining and the end of the particle with opacity fade in/out
@@ -170,6 +173,33 @@ float4 PS(VS_TEXTURED_OUTPUT input
   color.a *= end_opacity_modifier; // End of life opacity change
 
   color.xyz *= input.color;
+
+  // Noise test
+  float3 wpos = input.wPos.xyz;
+  float4 noise = txNoise.Sample(samWrapLinear, input.UV * 10 + world_time.xx*0.9) * 2 - 1;
+  float4 noise2 = txNoise.Sample(samWrapLinear, float2(1, 1) - input.UV * 2.32) * 2 - 1;
+
+  noise *= 0.06;
+  noise2 *= 0.06;
+
+  //wpos.x += noise.x * cos(world_time * 0.1) * 30;
+  //wpos.z += noise.y * sin(world_time  * 0.12) * 30;
+  //wpos.y += noise2.x * cos(world_time*0.23) * 30;
+  //wpos.z += noise2.y * sin(world_time*1.7 + .123f);
+  wpos += float3(noise.x, noise2.y * 3, noise.y);
+
+  // ++add noise
+  float4 hpos = mul(float4(wpos, 1), ViewProjection);
+	  hpos.xyz /= hpos.w;   // -1 .. 1
+  hpos.x = (hpos.x + 1) * 0.5;
+  hpos.y = (1 - hpos.y) * 0.5;
+  float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
+
+  color.xyz = albedo.xyz;
+  
+  
+  //color.a = 0.5;
+  //color.xyz = txDiffuse.Load(ss_load_coords).xyz;
   
   return color;
 }

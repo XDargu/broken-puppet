@@ -316,7 +316,7 @@ void TParticleSystem::render() {
 		setWorldMatrix(XMMatrixIdentity());
 		CTraceScoped t0("Particle system");
 		render_techniques_manager.getByName("particles")->activate();		
-		texture_manager.getByName(renderer->texture)->activate(0);
+		texture_manager.getByName(renderer->texture)->activate(7);
 		if (renderer->additive)
 			activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
 		else

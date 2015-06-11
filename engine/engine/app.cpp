@@ -322,10 +322,10 @@ bool CApp::create() {
 	::render.swap_chain->Present(0, 0);
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/scene_volum_light.xml");
+	loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/anim_test.xml");
+	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
 	sm.addMusicTrack(0, "CANCION.mp3");
@@ -673,9 +673,11 @@ void CApp::render() {
 	scope.end();
 
 	deferred.render(&camera, *rt_base);
-	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
-
+	
+	//((CTexture*)rt_base)->activate(0);
 	texture_manager.getByName("noise")->activate(9);
+	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
+	
 	ssao.apply(rt_base);
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());
