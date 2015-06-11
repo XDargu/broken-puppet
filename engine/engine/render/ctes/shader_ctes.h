@@ -63,7 +63,8 @@ cbuffer TCtesParticleSystem SHADER_REGISTER(b5)   // using the same register as 
 	int render_mode;
 	int animation_mode;
 	int stretch_mode;
-	float dummy_ps1, dummy_ps2;
+	float distorsion_amount;
+	float dummy_ps1;
 };
 
 cbuffer TCtesGUI SHADER_REGISTER(b5)   // using the same register as the lights and particles

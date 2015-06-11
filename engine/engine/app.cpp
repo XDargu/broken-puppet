@@ -499,6 +499,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("particles");
+		render_techniques_manager.reload("particles_dist");
 		render_techniques_manager.reload("gen_shadows");
 		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
@@ -684,6 +685,16 @@ void CApp::render() {
 	texture_manager.getByName("rt_albedo")->activate(0);
 	texture_manager.getByName("noise")->activate(9);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
+
+	deferred.rt_albedo->activate();
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, rt_base);
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+
+	rt_base->activate();
+	texture_manager.getByName("rt_albedo")->activate(0);
+	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
 	ssao.apply(rt_base);
 	sharpen.apply(rt_base);

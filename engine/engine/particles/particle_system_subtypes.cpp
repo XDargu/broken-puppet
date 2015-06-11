@@ -373,6 +373,8 @@ TParticleRenderer::TParticleRenderer(VParticles* the_particles, const char* the_
 	stretch = the_stretch;
 	particle_animation_mode = the_particle_animation_mode;
 	stretch_mode = the_stretch_mode;
+	distorsion = false;
+	distorsion_amount = 0.6f;
 }
 
 void TParticleRenderer::update(TParticle* particle, float elapsed) {
@@ -394,6 +396,13 @@ std::string TParticleRenderer::getXMLDefinition() {
 	def += "aditive=\"";
 	def += (additive ? "true" : "false");
 	def += "\" ";
+
+	def += "distorsion=\"";
+	def += (distorsion ? "true" : "false");
+	def += "\" ";
+
+	def += "distorsionAmount=\"";
+	def += std::to_string(distorsion_amount) + "\" ";
 
 	def += "n_anim_x=\"";
 	def += std::to_string(n_anim_x) + "\" ";

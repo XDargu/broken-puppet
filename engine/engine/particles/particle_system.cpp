@@ -156,6 +156,8 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (elem == "renderer") {
 		std::string texture_name = atts.getString("texture", "unknown");
 		bool is_aditive = atts.getBool("aditive", true);
+		bool distorsion = atts.getBool("distorsion", false);
+		float distorsion_amount = atts.getFloat("distorsionAmount", 0.5f);
 		int n_anim_x = atts.getInt("n_anim_x", 1);
 		int n_anim_y = atts.getInt("n_anim_y", 1);
 		int animation_mode = atts.getInt("animationMode", 0);
@@ -170,6 +172,8 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		if (str_mode == "stretched_billboard") { type = TParticleRenderType::STRETCHED_BILLBOARD; }
 
 		renderer = new TParticleRenderer(&particles, texture_name.c_str(), is_aditive, type, n_anim_x, n_anim_y, stretch, animation_mode, stretch_mode);
+		renderer->distorsion = distorsion;
+		renderer->distorsion_amount = distorsion_amount;
 	}
 	
 }
@@ -301,7 +305,8 @@ void TParticleSystem::update(float elapsed) {
 	}
 }
 
-void TParticleSystem::render() {
+void TParticleSystem::render(bool distorsion) {
+	if (renderer->distorsion != distorsion) { return; }
 	if (instances_data != nullptr) {
 		TCtesParticleSystem* ps_ctes = ctes_particle_system.get();
 		ps_ctes->n_imgs_x = renderer->n_anim_x;
@@ -310,12 +315,19 @@ void TParticleSystem::render() {
 		ps_ctes->render_mode = renderer->render_type;
 		ps_ctes->stretch_mode = renderer->stretch_mode;
 		ps_ctes->animation_mode = renderer->particle_animation_mode;
+		ps_ctes->distorsion_amount = renderer->distorsion_amount;
 		ctes_particle_system.uploadToGPU();
 		ctes_particle_system.activateInVS(5);
+		ctes_particle_system.activateInPS(5);
 
 		setWorldMatrix(XMMatrixIdentity());
 		CTraceScoped t0("Particle system");
-		render_techniques_manager.getByName("particles")->activate();		
+
+		if (renderer->distorsion)
+			render_techniques_manager.getByName("particles_dist")->activate();
+		else
+			render_techniques_manager.getByName("particles")->activate();
+
 		texture_manager.getByName(renderer->texture)->activate(7);
 		if (renderer->additive)
 			activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
