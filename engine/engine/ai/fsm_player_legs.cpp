@@ -153,29 +153,59 @@ void FSMPlayerLegs::Walk(float elapsed){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(13);
+			skeleton->stopAnimation(24);
+			skeleton->stopAnimation(12);
+			skeleton->stopAnimation(22);
+			skeleton->stopAnimation(16);
 			ChangeState("fbp_Jump");
 			return;
 		}
 		if (!EvaluateMovement(true, elapsed)){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(13);
+			skeleton->stopAnimation(24);
+			skeleton->stopAnimation(12);
+			skeleton->stopAnimation(22);
+			skeleton->stopAnimation(16);
 			ChangeState("fbp_Idle");
 			return;
 		}
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(13);
+			skeleton->stopAnimation(24);
+			skeleton->stopAnimation(12);
+			skeleton->stopAnimation(22);
+			skeleton->stopAnimation(16);
 			ChangeState("fbp_ThrowStringPartial");
 		}
 		if (falling){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(13);
+			skeleton->stopAnimation(24);
+			skeleton->stopAnimation(12);
+			skeleton->stopAnimation(22);
+			skeleton->stopAnimation(16);
 			ChangeState("fbp_Fall");
 		}
 	}
 	else{
 		skeleton->stopAnimation(9);
 		skeleton->stopAnimation(1);
+		skeleton->stopAnimation(25);
+		skeleton->stopAnimation(13);
+		skeleton->stopAnimation(24);
+		skeleton->stopAnimation(12);
+		skeleton->stopAnimation(22);
+		skeleton->stopAnimation(16);
 		ChangeState("fbp_Run");
 	}
 }
@@ -216,29 +246,59 @@ void FSMPlayerLegs::Run(float elapsed){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(15);
+			skeleton->stopAnimation(26);
+			skeleton->stopAnimation(14);
+			skeleton->stopAnimation(23);
+			skeleton->stopAnimation(21);
 			ChangeState("fbp_Jump");
 			return;
 		}
 		if (!EvaluateMovement(true, elapsed)){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(15);
+			skeleton->stopAnimation(26);
+			skeleton->stopAnimation(14);
+			skeleton->stopAnimation(23);
+			skeleton->stopAnimation(21);
 			ChangeState("fbp_Idle");
 			return;
 		}
 		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(15);
+			skeleton->stopAnimation(26);
+			skeleton->stopAnimation(14);
+			skeleton->stopAnimation(23);
+			skeleton->stopAnimation(21);
 			ChangeState("fbp_ThrowStringPartial");
 		}
 		if (falling){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(15);
+			skeleton->stopAnimation(26);
+			skeleton->stopAnimation(14);
+			skeleton->stopAnimation(23);
+			skeleton->stopAnimation(21);
 			ChangeState("fbp_Fall");
 		}
 	}
 	else{
 		skeleton->stopAnimation(10);
 		skeleton->stopAnimation(2);
+		skeleton->stopAnimation(25);
+		skeleton->stopAnimation(15);
+		skeleton->stopAnimation(26);
+		skeleton->stopAnimation(14);
+		skeleton->stopAnimation(23);
+		skeleton->stopAnimation(21);
 		ChangeState("fbp_Walk");
 	}
 
@@ -250,7 +310,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 	canThrow = true;
 
 	if (on_enter) {
-		skeleton->loopAnimation(6);
+		//skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
 	}
 

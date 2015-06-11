@@ -7,13 +7,7 @@ class CCamera;
 
 class CDeferredRender {
 
-	CRenderToTexture*  rt_lights;
-	CRenderToTexture*  rt_albedo;
-	CRenderToTexture*  rt_normals;
-	CRenderToTexture*  rt_specular;
-	CRenderToTexture*  rt_gloss;
-	CRenderToTexture*  rt_depth;
-
+	
 	const CRenderTechnique* technique_deferred_point_lights;
 	const CRenderTechnique* technique_deferred_dir_lights;
 
@@ -23,6 +17,13 @@ class CDeferredRender {
 	void resolve(const CCamera* camera, CRenderToTexture& rt_out);
 
 public:
+
+	CRenderToTexture*  rt_lights;
+	CRenderToTexture*  rt_albedo;
+	CRenderToTexture*  rt_normals;
+	CRenderToTexture*  rt_specular;
+	CRenderToTexture*  rt_gloss;
+	CRenderToTexture*  rt_depth;
 
 	bool create(int xres, int yres);
 	void render(const CCamera* camera, CRenderToTexture& rt_out);

@@ -33,6 +33,13 @@ void TCompPlayerController::init() {
 void TCompPlayerController::update(float elapsed) {
 	time_since_last_hit += elapsed;
 	fsm_player_torso.update(elapsed);
+
+	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
+	/*dbg((
+		"X:" + std::to_string(XMVectorGetX(trans->position)) + ", "
+		+ "Y:" + std::to_string(XMVectorGetY(trans->position)) + ", "
+		+ "Z:" + std::to_string(XMVectorGetZ(trans->position)) + "\n"
+		).c_str());*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

@@ -410,10 +410,10 @@ void TCompSkeleton::renderDebug3D() const {
   }
   auto cycles = model->getMixer()->getAnimationCycle();
   for (auto a : cycles) {
-    y0 += font.printf(x0, y0, "Cycle: %s  Weigth: %1.3f Time:%1.3f"
+    y0 += font.printf(x0, y0, "Cycle: %s  Weigth: %1.3f Time:%1.3f/%1.3f"
 		, a->getCoreAnimation()->getName().c_str()
       , a->getWeight()
-      , a->getCoreAnimation()->getDuration()
+      , a->getTime(), a->getCoreAnimation()->getDuration()
       );
   }
 
