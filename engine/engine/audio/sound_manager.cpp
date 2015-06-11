@@ -131,6 +131,25 @@ void CSoundManager::playFX(std::string name){
 	BASS_ChannelPlay(channel, 0);
 }
 
+void CSoundManager::play3DFX(std::string name, TTransform* trans){
+	HSTREAM stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
+	BASS_3DVECTOR pos_ref;
+	BASS_3DVECTOR front_ref;
+	pos_ref.x = XMVectorGetX(trans->position);
+	pos_ref.y = XMVectorGetY(trans->position);
+	pos_ref.z = XMVectorGetZ(trans->position);
+	front_ref.x = XMVectorGetX(trans->position + trans->getFront());
+	front_ref.y = XMVectorGetY(trans->position + trans->getFront());
+	front_ref.z = XMVectorGetZ(trans->position + trans->getFront());
+	BASS_3DVECTOR* pos;
+	BASS_3DVECTOR* front;
+	pos = &pos_ref;
+	front = &front_ref;
+	BASS_ChannelSet3DPosition(channel, pos, front, NULL);
+}
+
 void CSoundManager::setSound3DFactors(float distance, float roll, float doppler){
 	BASS_Set3DFactors(distance, roll, doppler);
 }

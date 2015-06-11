@@ -2,6 +2,7 @@
 #define _SOUND_MANAGER_H_
 
 #include "bass.h" 
+#include "components\comp_transform.h"
 
 class CSoundManager
 {
@@ -46,6 +47,8 @@ public:
 
 	void playFX(std::string name);
 	void stopFX(std::string name);
+
+	void play3DFX(std::string name, TTransform* trans);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 	//bool set3DPosition(std::string name);
