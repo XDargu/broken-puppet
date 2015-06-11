@@ -536,7 +536,3 @@ void FSMPlayerTorso::ProcessHit(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
 }
-
-unsigned int FSMPlayerTorso::getStringCount() {
-	return (int)strings.size();
-}

@@ -9,6 +9,7 @@ private:
 	CHandle transform_2;
 
 	CHandle joint;
+	float remove_counter;
 public:
 
 	XMVECTOR pos_1;
@@ -16,8 +17,9 @@ public:
 
 	float max_distance;
 	float width;
+	
 
-	TCompRope() : max_distance( 20 ) , width ( 0.02f ) {}
+	TCompRope() : max_distance(20), width(0.02f), remove_counter(0) {}
 
 	void setPositions(CHandle the_transform_1, XMVECTOR the_pos_2);
 

@@ -25,7 +25,7 @@ public:
 	void fixedUpdate(float elapsed);
 	
 
-	unsigned int getStringCount();
+	//unsigned int getStringCount();
 
 	void actorHit(const TActorHit& msg);
 

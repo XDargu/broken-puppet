@@ -673,9 +673,11 @@ void CApp::render() {
 	scope.end();
 
 	deferred.render(&camera, *rt_base);
-	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
-
+	
+	//((CTexture*)rt_base)->activate(0);
 	texture_manager.getByName("noise")->activate(9);
+	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
+	
 	ssao.apply(rt_base);
 	sharpen.apply(rt_base);
 	chromatic_aberration.apply(sharpen.getOutput());

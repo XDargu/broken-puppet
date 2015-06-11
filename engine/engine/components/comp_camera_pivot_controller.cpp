@@ -37,11 +37,11 @@ void TCompCameraPivotController::update(float elapsed) {
 
 	float y_diff = XMVectorGetY(player_pivot_trans->position) - XMVectorGetY(transform->position);
 	// Raycast camera
-	float camera_dist = V3DISTANCE(desired_pos, player_pivot_trans->position + XMVectorSet(0, y_diff, 0, 0));
+	float camera_dist = V3DISTANCE(desired_pos, player_pivot_trans->position + player_pivot_trans->getUp() * offset.y);
 	float collision_dist = camera_dist;
 
 	physx::PxRaycastBuffer buf;
-	XMVECTOR ray_position = player_pivot_trans->position;
+	XMVECTOR ray_position = player_pivot_trans->position + player_pivot_trans->getUp() * offset.y;
 	XMVECTOR ray_dir = XMVector3Normalize(desired_pos - ray_position);
 	Physics.raycastAll(ray_position, ray_dir, camera_dist, buf);
 

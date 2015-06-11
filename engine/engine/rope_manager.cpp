@@ -38,6 +38,16 @@ void CRope_manager::removeString(){
 	}
 }
 
+void CRope_manager::removeString(CHandle rope){
+	if (!strings.empty()){
+		//TCompRope* rope_to_remove = (TCompRope*)rope;
+		if (rope.isValid()){
+			strings.erase(std::remove(strings.begin(), strings.end(), rope), strings.end());
+			CEntityManager::get().remove(rope.getOwner());
+		}
+	}
+}
+
 void CRope_manager::clearStrings(){
 	if (!strings.empty()){
 		strings.clear();
