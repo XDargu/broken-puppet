@@ -159,7 +159,7 @@ float4 PS(VS_TEXTURED_OUTPUT input
   float pixel_detph = txDepth.Load(ss_load_coords).x;
 
   float delta_z = abs(pixel_detph - my_depth);
-  delta_z = saturate(delta_z * 1000);
+  delta_z = saturate(delta_z * 100);
 
   float4 color = txParticle.Sample(samClampLinear, input.UV);
   color.a *= delta_z;
