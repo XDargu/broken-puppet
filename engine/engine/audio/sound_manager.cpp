@@ -148,6 +148,7 @@ void CSoundManager::play3DFX(std::string name, TTransform* trans){
 	pos = &pos_ref;
 	front = &front_ref;
 	BASS_ChannelSet3DPosition(channel, pos, front, NULL);
+	BASS_ChannelPlay(channel, 0);
 }
 
 void CSoundManager::setSound3DFactors(float distance, float roll, float doppler){

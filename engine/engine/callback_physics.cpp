@@ -68,6 +68,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("level"))){
 				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
 				CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform);
+				//CSoundManager::get().playFX("sonar");
 			}
 		}
 	}
@@ -125,6 +126,16 @@ PxFilterFlags FilterShader(
 			}
 			else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eACTOR)){
 				//Colisiones entre actores (cajas) y enemigos
+				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+				return PxFilterFlag::eDEFAULT;
+			}
+			else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
+				//Colisiones entre actores (cajas) y enemigos
+				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+				return PxFilterFlag::eDEFAULT;
+			}
+			else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eLEVEL)){
+				//Colisiones entre actores (cajas) y el escenario
 				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 				return PxFilterFlag::eDEFAULT;
 			}
