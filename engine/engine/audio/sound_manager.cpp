@@ -148,6 +148,7 @@ void CSoundManager::play3DFX(std::string name, TTransform* trans){
 	pos = &pos_ref;
 	front = &front_ref;
 	BASS_ChannelSet3DPosition(channel, pos, front, NULL);
+	BASS_Apply3D();
 	BASS_ChannelPlay(channel, 0);
 }
 
