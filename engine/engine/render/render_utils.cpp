@@ -944,11 +944,13 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 		PxRaycastBuffer hit;
 		float y_offset = 1;
 		Physics.raycast(midPos + XMVectorSet(0, y_offset, 0, 0), XMVectorSet(0, -1, 0, 0), 2, hit);
+		CEntity* entity;
 
 		if (hit.hasBlock) {
 			PxRaycastHit blockHit = hit.block;
-			
-			if (std::strcmp(hit.block.actor->getName(), "Player") != 0) {
+			entity = CHandle(hit.block.actor->userData);			
+
+			if ((!entity->hasTag("enemy")) && (!entity->hasTag("player"))) {
 				float m_dist = blockHit.distance - y_offset;
 				if (m_dist < abs(y))
 					y = -m_dist;
@@ -956,7 +958,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 			
 		}
 
-		//y *= tension;
+		y *= tension;
 		// Guardar la referencia de posición de la cuerda
 		ropeReferences[i] = XMFLOAT3(XMVectorGetX(midPos), XMVectorGetY(midPos) + y, XMVectorGetZ(midPos));
 	}

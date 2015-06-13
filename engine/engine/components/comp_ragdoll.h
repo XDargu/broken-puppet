@@ -32,6 +32,10 @@ public:
 	void setCollisionGroups();
 
 	void breakJoints();
+
+	PxRigidDynamic* getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir);
+
+	void disableBoneTree(PxRigidDynamic* bone);
 };
 
 #endif

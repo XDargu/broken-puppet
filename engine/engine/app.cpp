@@ -134,6 +134,8 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
+	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
+
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
@@ -922,6 +924,7 @@ void CApp::renderEntities() {
 			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+			tension = maxDist < 0.2 ? 0 : 1;
 
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
