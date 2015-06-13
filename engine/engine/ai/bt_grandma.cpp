@@ -1107,6 +1107,7 @@ int bt_grandma::conditionfalling_event()
 //Check if is a tied event
 int bt_grandma::conditiontied_event()
 {
+	return false;
 	return tied_event;
 }
 

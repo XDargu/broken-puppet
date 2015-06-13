@@ -6,6 +6,9 @@
 #include "rope_manager.h"
 #include "physics_manager.h"
 
+TCompRope::~TCompRope() {
+}
+
 void TCompRope::setPositions(CHandle the_transform_1, XMVECTOR the_pos_2) {
 
 	transform_1 = the_transform_1;
@@ -35,9 +38,12 @@ void TCompRope::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 
 void TCompRope::fixedUpdate(float elapsed) {
 
+	CHandle valid_trans_1 = transform_1_aux.isValid() ? transform_1_aux : transform_1;
+	CHandle valid_trans_2 = transform_2_aux.isValid() ? transform_2_aux : transform_2;
+
 	// Update the first pos
-	if (transform_1.isValid()) {
-		TCompTransform* trans_1 = transform_1;
+	if (valid_trans_1.isValid()) {
+		TCompTransform* trans_1 = valid_trans_1;
 
 		XMVECTOR normal_dir = trans_1->position - pos_1;
 		normal_dir = XMVector3Normalize(normal_dir);
@@ -50,8 +56,8 @@ void TCompRope::fixedUpdate(float elapsed) {
 	}
 
 	// Update the second pos
-	if (transform_2.isValid()) {
-		TCompTransform* trans_2 = transform_2;
+	if (valid_trans_2.isValid()) {
+		TCompTransform* trans_2 = valid_trans_2;
 
 		XMVECTOR normal_dir = trans_2->position - pos_2;
 		normal_dir = XMVector3Normalize(normal_dir);
@@ -65,15 +71,19 @@ void TCompRope::fixedUpdate(float elapsed) {
 
 
 	// Rope collisions
+	
+	return;
+
+
 	CHandle e1 = CHandle();
 	CHandle e2 = CHandle();
 	CHandle e3 = CEntityManager::get().getByName("Player");
 
-	if (transform_1.isValid()) {
-		e1 = transform_1.getOwner();
+	if (valid_trans_1.isValid()) {
+		e1 = valid_trans_1.getOwner();
 	}
-	if (transform_2.isValid()) {
-		e2 = transform_2.getOwner();
+	if (valid_trans_2.isValid()) {
+		e2 = valid_trans_2.getOwner();
 	}
 
 	XMVECTOR initialPos = pos_1;
