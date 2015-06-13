@@ -189,6 +189,7 @@
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
+    <ClInclude Include="components\comp_joint_fixed.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
@@ -365,6 +366,7 @@
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
+    <ClCompile Include="components\comp_joint_fixed.cpp" />
     <ClCompile Include="render\collision_convex.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />

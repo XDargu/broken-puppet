@@ -490,6 +490,9 @@
     <ClInclude Include="components\comp_collider_convex.h">
       <Filter>components\physics</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_joint_fixed.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -905,6 +908,9 @@
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="components\comp_collider_convex.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_joint_fixed.cpp">
       <Filter>components\physics</Filter>
     </ClCompile>
   </ItemGroup>

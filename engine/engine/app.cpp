@@ -170,6 +170,7 @@ void createManagers() {
 	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompJointHinge>()->init(32);
 	getObjManager<TCompJointD6>()->init(512);
+	getObjManager<TCompJointFixed>()->init(64);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
@@ -241,6 +242,7 @@ void initManagers() {
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompJointPrismatic>()->initHandlers();
 	getObjManager<TCompJointD6>()->initHandlers();
+	getObjManager<TCompJointFixed>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
@@ -322,9 +324,9 @@ bool CApp::create() {
 	::render.swap_chain->Present(0, 0);
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
@@ -334,7 +336,7 @@ bool CApp::create() {
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
 
-	sm.playTrack(0,false);
+	//sm.playTrack(0,false);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));

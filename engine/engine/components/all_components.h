@@ -41,6 +41,7 @@ using namespace DirectX;
 #include "comp_joint_prismatic.h"
 #include "comp_joint_hinge.h"
 #include "comp_joint_d6.h"
+#include "comp_joint_fixed.h"
 #include "comp_ragdoll.h"
 
 // Render
