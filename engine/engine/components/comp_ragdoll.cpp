@@ -208,3 +208,11 @@ PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir)
 	return ragdoll->bone_map.begin()->second;
 	return nullptr;
 }
+
+void TCompRagdoll::disableBoneTree(PxRigidDynamic* bone) {
+	for (auto& rigid : ragdoll->bone_map) {
+		if (bone == rigid.second) {
+			// TODO: Activate the bone and its parents
+		}
+	}
+}

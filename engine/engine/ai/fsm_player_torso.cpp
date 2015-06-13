@@ -647,14 +647,18 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 				djoint->joint->getActors(a1, a2);
 				// Wake up the actors, if dynamic
 				if (a1 && a1->isRigidDynamic()) {
-					((physx::PxRigidDynamic*)a1)->wakeUp();
+					if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
+						((physx::PxRigidDynamic*)a1)->wakeUp();
+					}
 
 					((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 
 					//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
 				if (a2 && a2->isRigidDynamic()) {
-					((physx::PxRigidDynamic*)a2)->wakeUp();
+					if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
+						((physx::PxRigidDynamic*)a2)->wakeUp();
+					}
 					((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 					//((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 				}
