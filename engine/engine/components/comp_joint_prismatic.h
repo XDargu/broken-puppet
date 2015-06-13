@@ -14,7 +14,7 @@ public:
 	CHandle e_a1;
 	CHandle e_a2; 
 	PxD6Joint* mJoint;
-	PxReal linearPosition;
+	PxReal linear_position;
 
 	TCompJointPrismatic() : mJoint(nullptr) {}
 	~TCompJointPrismatic();

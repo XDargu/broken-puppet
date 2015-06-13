@@ -32,10 +32,8 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	PxReal linearModeY = atts.getFloat("linearModeY", 1);
 	PxReal linearModeZ = atts.getFloat("linearModeZ", 1);
 
-	linearPosition = atts.getFloat("linearPosition", 0);
-
-	PxReal lower_limit = atts.getFloat("linearPosition", 0.1f) / 2.f;
-	PxReal upper_limit = atts.getFloat("linearPosition", 0.1f) / 2.f;
+	linear_position = atts.getFloat("linearPosition", 0);
+	PxReal linear_restitution = atts.getFloat("linearRestitution", 0);
 
 	PxReal stiffness = atts.getFloat("posSpring", 0);
 	PxReal damping = atts.getFloat("posDamping", 0);
@@ -48,6 +46,9 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	bool breakable = atts.getBool("breakable", false);
 	float breakForce = atts.getFloat("maxBreakForce", 1000);
 	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
+
+	
+
 
 	CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 	const char* nombre = owner_entity->getName();
@@ -189,7 +190,7 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 		/*set de axis as locked*/
 		break;
 	}
-	mJoint->setLinearLimit(PxJointLinearLimit(linearPosition, PxSpring(0, 0)));
+	mJoint->setLinearLimit(PxJointLinearLimit(linear_position, PxSpring(0, 0)));
 	//mJoint->setDrivePosition(drive_position);
 }
 
@@ -207,7 +208,7 @@ CHandle TCompJointPrismatic::getActor2(){
 	return e_a2;
 }
 PxReal TCompJointPrismatic::getLinealPosition(){
-	return linearPosition;
+	return linear_position;
 }
 
 
