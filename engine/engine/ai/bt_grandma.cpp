@@ -60,9 +60,9 @@ void bt_grandma::create(string s)
 	addChild("Angry", "Warcry11", ACTION, (btcondition)&bt_grandma::conditionhave_to_warcry, (btaction)&bt_grandma::actionWarcry);
 	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_grandma::conditionplayer_lost, NULL);
 	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_grandma::conditionsee_player, (btaction)&bt_grandma::actionPlayerAlert);
-	
+
 	addChild("LookForPlayer", "CalmDown13", ACTION, (btcondition)&bt_grandma::conditionLook_for_timeout, (btaction)&bt_grandma::actionCalmDown);
-	
+
 	addChild("LookForPlayer", "LookAroundSequence", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_grandma::actionSearchArroundLastPoint);
 	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_grandma::actionLookAround);
@@ -71,16 +71,16 @@ void bt_grandma::create(string s)
 	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_grandma::actionSelectRole);
 	addChild("TryAttack", "ExecuteRole", PRIORITY, NULL, NULL);
 	addChild("ExecuteRole", "AttackRoutine", PRIORITY, (btcondition)&bt_grandma::conditionis_attacker, NULL);
-	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL,(btcondition)&bt_grandma::conditioninitial_attack, (btaction)&bt_grandma::actionInitialAttack);
+	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL, (btcondition)&bt_grandma::conditioninitial_attack, (btaction)&bt_grandma::actionInitialAttack);
 	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_grandma::conditionnormal_attack, (btaction)&bt_grandma::actionNormalAttack);
 	addChild("AttackRoutine", "Situate18", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("AttackRoutine", "IdleWa19r", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionIdleWar);
 	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
 	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
-	
+
 	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
-	
+
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
 	addChild("XSecAttack", "TooCloseAttack23", ACTION, INTERNAL, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
@@ -95,7 +95,7 @@ void bt_grandma::create(string s)
 	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseNeedlePosition);
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionIdle, 70);
-	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL,30);
+	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL, 30);
 
 	addChild("Wander30", "SearchPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSearchPoint);
 	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander);
@@ -150,11 +150,11 @@ void bt_grandma::create(string s)
 int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
-	
+
 
 	if (!m_ragdoll->isRagdollActive()) {
 		m_ragdoll->setActive(true);
-		
+
 		TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
 		if (m_life->life <= 0) {
 			TCompRagdoll* m_ragdoll = enemy_ragdoll;
@@ -180,7 +180,7 @@ int bt_grandma::actionRagdoll()
 			}
 
 		}
-			
+
 	}
 
 	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
@@ -197,7 +197,8 @@ int bt_grandma::actionRagdoll()
 
 	if (state_time < max_time_ragdoll){
 		return STAY;
-	}else{
+	}
+	else{
 		return LEAVE;
 	}
 }
@@ -211,19 +212,19 @@ int bt_grandma::actionWakeUp()
 		TCompSkeleton* m_skeleton = enemy_skeleton;
 		m_ragdoll->setActive(false);
 		m_skeleton->playAnimation(16);
-		
+
 	}
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
 
-	if (state_time > getAnimationDuration(16)) {		
+	if (state_time > getAnimationDuration(16)) {
 		playAnimationIfNotPlaying(0);
 		return LEAVE;
 	}
 	else
 		return STAY;
-	
+
 }
 
 //Corta todas las cuerdas a la que est atada
@@ -257,14 +258,14 @@ int bt_grandma::actionTooCloseAttack()
 	look_direction = last_look_direction;
 
 	if (state_time >= getAnimationDuration(7)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 5000.f));
+		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
 		return LEAVE;
 	}
 	else
 	{
 		return STAY;
 	}
-	
+
 }
 
 //Go to the needle position (leave if cant reach)
@@ -285,14 +286,16 @@ int bt_grandma::actionChaseNeedlePosition()
 
 			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, n_transform->position, path);
 			if (path.size() > 0){
-				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle-distance_change_way_point){
+				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle - distance_change_way_point){
 					ind_path = 0;
 					return STAY;
-				}else{
+				}
+				else{
 					return LEAVE;
 				}
 			}
-		}else{
+		}
+		else{
 			if (path.size() > 0){
 				if (ind_path < path.size()){
 					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle - distance_change_way_point){
@@ -304,20 +307,24 @@ int bt_grandma::actionChaseNeedlePosition()
 						else{
 							return STAY;
 						}
-					}else{
+					}
+					else{
 						last_look_direction = look_direction;
 						return LEAVE;
 					}
-				}else{
+				}
+				else{
 					last_look_direction = look_direction;
 					return LEAVE;
 				}
-			}else{
+			}
+			else{
 				last_look_direction = look_direction;
 				return LEAVE;
 			}
 		}
-	}else{
+	}
+	else{
 		last_look_direction = look_direction;
 		return LEAVE;
 	}
@@ -370,7 +377,7 @@ int bt_grandma::actionCutRope()
 		}
 
 		// When the animation finish, leave state and clean bools
-		if (state_time >= getAnimationDuration(8) + getAnimationDuration(7)) {			
+		if (state_time >= getAnimationDuration(8) + getAnimationDuration(7)) {
 			needle_to_take = false;
 			needle_is_valid = false;
 			animation_done = false;
@@ -378,7 +385,7 @@ int bt_grandma::actionCutRope()
 			return LEAVE;
 		}
 	}
-		return STAY;
+	return STAY;
 
 }
 
@@ -424,7 +431,8 @@ int bt_grandma::actionIdle()
 		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 
-	}else{
+	}
+	else{
 		((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 		return STAY;
 	}
@@ -470,7 +478,8 @@ int bt_grandma::actionWander()
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
 		ind_path = 0;
-	}else{
+	}
+	else{
 		if ((state_time - find_path_time) > 1.f){
 			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 			find_path_time = state_time;
@@ -484,7 +493,8 @@ int bt_grandma::actionWander()
 				ind_path++;
 				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
-			}else{
+			}
+			else{
 				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}
@@ -494,7 +504,8 @@ int bt_grandma::actionWander()
 			last_look_direction = look_direction;
 			return LEAVE;
 		}
-	}else{
+	}
+	else{
 		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 	}
@@ -541,7 +552,7 @@ int bt_grandma::actionPlayerAlert()
 		return LEAVE;
 	}
 	else
-		return STAY;	
+		return STAY;
 }
 
 //Leave the angry state, go to peacefull
@@ -571,46 +582,46 @@ int bt_grandma::actionLookAround()
 	bool aux_on_enter = on_enter;
 	jump = false;
 	time_searching_player += CApp::get().delta_time;
-//Tratamos de evitar cambios demasiado repentinos de ruta
-if (on_enter){
+	//Tratamos de evitar cambios demasiado repentinos de ruta
+	if (on_enter){
 
-	TCompCharacterController* m_char_controller = character_controller;
+		TCompCharacterController* m_char_controller = character_controller;
 
-	m_char_controller->moveSpeedMultiplier = run_speed;
-	m_char_controller->airSpeed = run_speed * 0.8f;
+		m_char_controller->moveSpeedMultiplier = run_speed;
+		m_char_controller->airSpeed = run_speed * 0.8f;
 
-	playAnimationIfNotPlaying(14);
-	
-	CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
-	find_path_time = state_time;
-	ind_path = 0;
-}
-else{
-	if ((state_time - find_path_time) > 1.f){
+		playAnimationIfNotPlaying(14);
+
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
+		ind_path = 0;
 	}
-}
+	else{
+		if ((state_time - find_path_time) > 1.f){
+			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
+			find_path_time = state_time;
+		}
+	}
 
-if (path.size() > 0){
-	if (ind_path < path.size()){
-		chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-		if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
-			ind_path++;
-			return STAY;
+	if (path.size() > 0){
+		if (ind_path < path.size()){
+			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
+			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
+				ind_path++;
+				return STAY;
+			}
+			else{
+				return STAY;
+			}
 		}
 		else{
-			return STAY;
+			last_look_direction = look_direction;
+			return LEAVE;
 		}
 	}
 	else{
-		last_look_direction = look_direction;
 		return LEAVE;
 	}
-}
-else{
-	return LEAVE;
-}
 }
 
 //Takes a roll, attacker or taunter and a poisition to go
@@ -628,15 +639,16 @@ int bt_grandma::actionSelectRole()
 		aimanager::get().setEnemyRol(this);
 		if (rol == role::ATTACKER){
 			if (slot == attacker_slots::NORTH){
-				slot_position = right * max_distance_to_attack;
+				slot_position = front * max_distance_to_attack;
 			}
 			else if (slot == attacker_slots::EAST){
 				slot_position = left * max_distance_to_attack;
 			}
 			else if (slot == attacker_slots::WEST){
-				slot_position = front * max_distance_to_attack;
+				slot_position = right * max_distance_to_attack;
 			}
-		}else if (rol == role::TAUNTER){
+		}
+		else if (rol == role::TAUNTER){
 			slot_position = -(p_transform->position - m_transform->position);
 			slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
 		}
@@ -706,12 +718,12 @@ int bt_grandma::actionInitialAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time > getAnimationDuration(11)/5)&& (!attacked)) {
+	if ((state_time > getAnimationDuration(11) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));			
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 300.f));
 		}
 		attacked = true;
 		return LEAVE;
@@ -740,7 +752,7 @@ int bt_grandma::actionSituate()
 		ind_path = 0;
 	}
 
-	float distance=V3DISTANCE(m_transform->position, wander_target);
+	float distance = V3DISTANCE(m_transform->position, wander_target);
 	if (distance < 0.5f) {
 		return LEAVE;
 	}
@@ -782,12 +794,12 @@ int bt_grandma::actionNormalAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time  > getAnimationDuration(4)/5) && (!attacked)) {
+	if ((state_time  > getAnimationDuration(4) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 10000.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 250.f));
 		}
 		attacked = true;
 		return LEAVE;
@@ -870,7 +882,8 @@ int bt_grandma::actionNeedleAppearsEvent()
 				return LEAVE;
 			}
 		}
-	}else{
+	}
+	else{
 		return LEAVE;
 	}
 }
@@ -918,7 +931,7 @@ int bt_grandma::actionTiedEvent()
 		have_to_warcry = true;
 		return LEAVE;
 	}
-	
+
 }
 
 //Keeps in falling state till ti
@@ -955,7 +968,7 @@ int bt_grandma::conditionis_ragdoll()
 //
 int bt_grandma::conditionis_grounded()
 {
-	TCompCharacterController* me_controller=((CEntity*)entity)->get<TCompCharacterController>();
+	TCompCharacterController* me_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	if (me_controller->OnGround()){
 		return true;
 	}
@@ -983,7 +996,8 @@ int bt_grandma::conditiontoo_close_attack()
 	if ((V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position) < max_dist_close_attack) && ((timer - last_time) >= delta_time_close_attack)){
 		too_close_attack = true;
 		last_time = timer;
-	}else{
+	}
+	else{
 		too_close_attack = false;
 	}
 	return too_close_attack;
@@ -995,7 +1009,8 @@ int bt_grandma::conditionneedle_to_take()
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);
 	if (currentNumNeedlesViewed > 0){
 		needle_to_take = true;
-	}else{
+	}
+	else{
 		needle_to_take = false;
 	}
 
@@ -1007,9 +1022,10 @@ int bt_grandma::conditionis_needle_tied()
 {
 	CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
 	if (target_rope.isValid()){
-		is_needle_tied=true;
-	}else{
-		is_needle_tied=false;
+		is_needle_tied = true;
+	}
+	else{
+		is_needle_tied = false;
 	}
 	return is_needle_tied;
 }
@@ -1038,7 +1054,8 @@ int bt_grandma::conditionsee_player()
 	if ((findPlayer()) && (player_previously_lost)){
 		see_player = true;
 		player_previously_lost = false;
-	}else{
+	}
+	else{
 		see_player = false;
 	}
 	return see_player;
@@ -1049,7 +1066,8 @@ int bt_grandma::conditionLook_for_timeout()
 {
 	if (time_searching_player > max_time_player_search){
 		return true;
-	}else{
+	}
+	else{
 		return false;
 	}
 	//return Look_for_timeout;
@@ -1064,7 +1082,8 @@ int bt_grandma::conditionis_attacker()
 	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
 	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) <= 4.5f)){
 		return true;
-	}else{
+	}
+	else{
 		return false;
 	}
 }
@@ -1078,7 +1097,8 @@ int bt_grandma::conditionnormal_attack()
 	if (((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
 		last_time = timer;
 		return true;
-	}else{
+	}
+	else{
 		return false;
 	}
 	//return normal_attack;
@@ -1107,6 +1127,7 @@ int bt_grandma::conditionfalling_event()
 //Check if is a tied event
 int bt_grandma::conditiontied_event()
 {
+	return false;
 	return tied_event;
 }
 
@@ -1129,7 +1150,8 @@ int bt_grandma::conditioncan_reach_needle()
 		else{
 			can_reach_needle = false;
 		}
-	}else{
+	}
+	else{
 		can_reach_needle = false;
 	}
 
@@ -1157,7 +1179,8 @@ int bt_grandma::conditioninitial_attack()
 
 	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.f))){
 		return true;
-	}else{
+	}
+	else{
 		return false;
 	}
 }
@@ -1173,7 +1196,8 @@ int bt_grandma::conditionfar_from_target_pos()
 	float distance = V3DISTANCE(m_transform->position, target);
 	if (distance > 2.f){
 		return true;
-	}else{
+	}
+	else{
 		return false;
 	}
 }
@@ -1194,10 +1218,12 @@ void bt_grandma::playerViewedSensor(){
 					player_viewed_sensor = true;
 				}
 			}
-		}else{
+		}
+		else{
 			player_viewed_sensor = false;
 		}
-	}else{
+	}
+	else{
 		last_time_player_saw += CApp::get().delta_time;
 	}
 }
@@ -1214,19 +1240,19 @@ void bt_grandma::needleViewedSensor(){
 
 	//if (!needle_to_take){
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
-		if (currentNumNeedlesViewed > lastNumNeedlesViewed){
-			//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
-			//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-			if (current != NULL){
-				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-					//TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-					//m_sensor->asociateGrandmaTargetNeedle(entity);
-					//needle_to_take = true;
-					setCurrent(NULL);
-				}
+	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
+		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
+		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
+		if (current != NULL){
+			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+				//TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+				//m_sensor->asociateGrandmaTargetNeedle(entity);
+				//needle_to_take = true;
+				setCurrent(NULL);
 			}
 		}
-		lastNumNeedlesViewed = currentNumNeedlesViewed;
+	}
+	lastNumNeedlesViewed = currentNumNeedlesViewed;
 	//}
 	//}
 }
@@ -1242,7 +1268,8 @@ void bt_grandma::tiedSensor(){
 				event_detected = true;
 			}
 		}
-	}else{
+	}
+	else{
 		if (!((TCompSensorTied*)tied_sensor)->getTiedState()){
 			tied_succesfull = false;
 			tied_event = false;
@@ -1263,9 +1290,11 @@ void bt_grandma::hurtSensor(float damage){
 		is_ragdoll = true;
 		setCurrent(NULL);
 
-	}else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
+	}
+	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		is_ragdoll = true;
-	}else if (damage < force_medium_impact){
+	}
+	else if (damage < force_medium_impact){
 		hurt_event = true;
 	}
 }
@@ -1292,15 +1321,16 @@ void bt_grandma::update(float elapsed){
 		needleViewedSensor();
 		sensor_acum = 0;
 	}
-	
+
 
 	playerViewedSensor();
 	tiedSensor();
 	if (findPlayer()){
 		last_point_player_saw = ((TCompTransform*)player_transform)->position;
 		last_time_player_saw = 0;
-	}/*else{
-		float prueba=V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+	}
+	/*else{
+		float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
 		if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
 			if (rol == role::ATTACKER)
 				aimanager::get().RemoveEnemyAttacker(this);
@@ -1334,7 +1364,8 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 		TCompRigidBody* own_rigid = character_cntrl->getRigidBody();
 		if (buf.touches[i].actor != (own_rigid->rigidBody)) {
 			jump = true;
-		}else{
+		}
+		else{
 			jump = false;
 		}
 	}
@@ -1357,7 +1388,8 @@ CHandle bt_grandma::getPlayerTransform(){
 bool bt_grandma::findPlayer(){
 	if (((TCompPlayerPosSensor*)player_pos_sensor)->playerInRange()) {
 		return true;
-	}else{
+	}
+	else{
 		return false;
 	}
 }
@@ -1376,9 +1408,11 @@ void bt_grandma::setRol(int r){
 void bt_grandma::setAttackerSlot(int s){
 	if (s == 1){
 		slot = attacker_slots::NORTH;
-	}else if (s == 2){
+	}
+	else if (s == 2){
 		slot = attacker_slots::EAST;
-	}else if (s == 3){
+	}
+	else if (s == 3){
 		slot = attacker_slots::WEST;
 	}
 }
@@ -1392,17 +1426,68 @@ int bt_grandma::getRol(){
 }
 
 float bt_grandma::getDistanceToPlayer(){
-	return V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+	if (own_transform.isValid())
+		return V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+	else
+		return 0.f;
+}
+
+int bt_grandma::getNearestSlot(bool free_north, bool free_east, bool free_west){
+	float distanceToNorth = 1000.f;
+	float distanceToEast = 1000.f;
+	float distanceToWest = 1000.f;
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR left = XMVectorSet(-1, 0, 0, 0);
+	XMVECTOR right = XMVectorSet(1, 0, 0, 0);
+	XMVECTOR front = XMVectorSet(0, 0, 1, 0);
+
+	if (free_north){
+		XMVECTOR slot_positionNorth = front * max_distance_to_attack;
+		XMVECTOR pos = (p_transform->position + slot_positionNorth);
+		distanceToNorth = V3DISTANCE(pos, m_transform->position);
+	}
+
+	if (free_east){
+		XMVECTOR slot_positionEast = left * max_distance_to_attack;
+		XMVECTOR pos = (p_transform->position + slot_positionEast);
+		distanceToEast = V3DISTANCE(pos, m_transform->position);
+	}
+
+	if (free_west){
+		XMVECTOR slot_positionWest = right * max_distance_to_attack;
+		XMVECTOR pos = (p_transform->position + slot_positionWest);
+		distanceToWest = V3DISTANCE(pos, m_transform->position);
+	}
+
+	if ((distanceToNorth <= distanceToEast) && (distanceToNorth <= distanceToWest)){
+		//devolvemos north
+		return 0;
+	}
+	else if ((distanceToEast <= distanceToNorth) && (distanceToEast <= distanceToWest)){
+		//devolvemos east
+		return 1;
+	}
+	else if ((distanceToWest <= distanceToNorth) && (distanceToWest <= distanceToEast)){
+		//devolvemos west
+		return 2;
+	}
 }
 
 
 void bt_grandma::drawdebug() {
 	font.print3D(wander_target, "Destino");
+	if (slot == attacker_slots::NORTH)
+		font.print3D(wander_target + XMVectorSet(0.f, 0.5f, 0.f, 0.f), "NORTH");
+	if (slot == attacker_slots::WEST)
+		font.print3D(wander_target + XMVectorSet(0.f, 0.5f, 0.f, 0.f), "WEST");
+	if (slot == attacker_slots::EAST)
+		font.print3D(wander_target + XMVectorSet(0.f, 0.5f, 0.f, 0.f), "EAST");
 }
 
 void bt_grandma::stopAllAnimations() {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
-	
+
 	for (int i = 0; i < 20; ++i) {
 		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
 	}
@@ -1419,7 +1504,7 @@ void bt_grandma::playAnimationIfNotPlaying(int id) {
 }
 
 void bt_grandma::stopAnimation(int id) {
-	TCompSkeleton* m_skeleton = enemy_skeleton;	
+	TCompSkeleton* m_skeleton = enemy_skeleton;
 	m_skeleton->stopAnimation(id);
 }
 

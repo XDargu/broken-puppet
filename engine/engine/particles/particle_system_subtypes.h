@@ -105,6 +105,8 @@ struct TParticleRenderer {
 	float stretch;
 	int particle_animation_mode;
 	int stretch_mode;
+	bool distorsion;
+	float distorsion_amount;
 
 	TParticleRenderer(VParticles* the_particles, const char* the_texture, bool is_aditive, TParticleRenderType the_render_type, int the_n_anim_x, int the_n_anim_y, float the_stretch, int the_particle_animation_mode, int the_stretch_mode);
 

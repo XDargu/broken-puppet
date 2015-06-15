@@ -27,6 +27,7 @@ public:
 	void fixedUpdate(float elapsed);
 
 	void render();
+	void renderDistorsion();
 	void renderDebug3D() const;
 
 	void removeParticleSystem(TParticleSystem* ps);

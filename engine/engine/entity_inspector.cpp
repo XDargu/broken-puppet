@@ -882,6 +882,12 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGRendererAdditive" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
 
+			aux = "PGRendererDistorsion" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->distorsion, " group=PG label='Distorsion'");
+
+			aux = "PGRendererDistorsionAmount" + i;
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->distorsion_amount, " group=PG label='Distorsion amount' min=0 step=0.01");
+
 			aux = "PGRendererNAnimX" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->n_anim_x, " group=PG label='Animation columns'");
 			aux = "PGRendererNAnimY" + i;

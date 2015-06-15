@@ -185,3 +185,34 @@ void TCompRagdoll::breakJoints() {
 		}
 	}
 }
+
+PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir) {
+
+	PxRaycastBuffer buf;
+
+	Physics.raycastAll(origin, dir, 10, buf);
+
+	// TODO: Return the nearest if no raycast collision
+	PxRigidDynamic* nearest;
+	float nearest_dist;
+
+	for (int i = 0; i < buf.nbTouches; i++)
+	{
+		for (auto& rigid : ragdoll->bone_map) {
+			if (buf.touches[i].actor == rigid.second) {
+				return rigid.second;
+			}
+		}		
+	}
+
+	return ragdoll->bone_map.begin()->second;
+	return nullptr;
+}
+
+void TCompRagdoll::disableBoneTree(PxRigidDynamic* bone) {
+	for (auto& rigid : ragdoll->bone_map) {
+		if (bone == rigid.second) {
+			// TODO: Activate the bone and its parents
+		}
+	}
+}

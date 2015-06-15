@@ -79,7 +79,7 @@ public:
 	void update(float elapsed);
 	void fixedUpdate(float elapsed);
 
-	void render();
+	void render(bool distorsion);
 	void renderDebug3D() const;
 
 	void changeLimit(int the_limit);

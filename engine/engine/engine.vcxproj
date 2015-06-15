@@ -177,6 +177,7 @@
     <ClInclude Include="ai\hinge_joint.h" />
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
+    <ClInclude Include="ai\mcv_object.h" />
     <ClInclude Include="ai\prismatic_joint.h" />
     <ClInclude Include="ai\rigid_animation.h" />
     <ClInclude Include="ai\timer.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
+    <ClInclude Include="components\comp_joint_fixed.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
@@ -355,6 +357,7 @@
     <ClCompile Include="ai\hinge_joint.cpp" />
     <ClCompile Include="ai\key_frame.cpp" />
     <ClCompile Include="ai\logic_manager.cpp" />
+    <ClCompile Include="ai\mcv_object.cpp" />
     <ClCompile Include="ai\prismatic_joint.cpp" />
     <ClCompile Include="ai\rigid_animation.cpp" />
     <ClCompile Include="ai\timer.cpp" />
@@ -365,6 +368,7 @@
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
+    <ClCompile Include="components\comp_joint_fixed.cpp" />
     <ClCompile Include="render\collision_convex.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />

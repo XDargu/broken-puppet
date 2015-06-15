@@ -82,8 +82,8 @@ void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 	}
 }
 
-void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
-	//m_ai_controller.ChangeState("aibe_Ragdoll");		
+void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {	
+	m_ai_controller->setRagdoll();
 }
 
 

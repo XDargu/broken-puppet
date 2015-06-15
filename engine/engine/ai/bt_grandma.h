@@ -69,7 +69,7 @@ private:
 	
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;
-	enum attacker_slots{ NO_SLOT, NORTH, WEST, EAST };
+	enum attacker_slots{ NO_SLOT, NORTH, EAST, WEST};
 	attacker_slots slot;
 
 public:
@@ -208,6 +208,7 @@ public:
 	void setAttackerSlot(int s);
 	int getAttackerSlot();
 	float getDistanceToPlayer();
+	int getNearestSlot(bool free_north, bool free_east, bool free_west);
 
 	void drawdebug();
 
@@ -215,6 +216,8 @@ public:
 	void playAnimationIfNotPlaying(int id);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+
+	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };
 
 #endif

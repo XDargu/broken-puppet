@@ -32,6 +32,7 @@ void TCompPlayerController::init() {
 
 void TCompPlayerController::update(float elapsed) {
 	time_since_last_hit += elapsed;
+
 	fsm_player_torso.update(elapsed);
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);

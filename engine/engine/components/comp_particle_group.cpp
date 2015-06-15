@@ -89,8 +89,14 @@ void TCompParticleGroup::update(float elapsed) {
 
 void TCompParticleGroup::render() {
 	for (auto& ps : particle_systems) {
-		ps.render();
+		ps.render(false);
 	}	
+}
+
+void TCompParticleGroup::renderDistorsion() {
+	for (auto& ps : particle_systems) {
+		ps.render(true);
+	}
 }
 
 void TCompParticleGroup::renderDebug3D() const {

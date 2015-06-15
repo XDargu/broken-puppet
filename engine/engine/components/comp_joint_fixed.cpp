@@ -1,33 +1,32 @@
 #include "mcv_platform.h"
-#include "comp_joint_hinge.h"
+#include "comp_joint_fixed.h"
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
 #include "entity_manager.h"
 
-TCompJointHinge::~TCompJointHinge() {
+	
+TCompJointFixed::~TCompJointFixed() {
 
 	// Awake the actors
 	PxRigidActor* a1 = nullptr;
 	PxRigidActor* a2 = nullptr;
-	
+
 
 	mJoint->getActors(a1, a2);
 	// Call the addForce method to awake the bodies, if dynamic
 	if (a1 && a1->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((PxRigidDynamic*)a1)->wakeUp();
+		((PxRigidDynamic*)a1)->wakeUp();
 	}
 	if (a2 && a2->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((PxRigidDynamic*)a2)->wakeUp();
+		((PxRigidDynamic*)a2)->wakeUp();
 	}
 
 	// Release the joint
 	mJoint->release();
 }
 
-void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	actor1 = atts.getString("actor1","");
+void TCompJointFixed::loadFromAtts(const std::string& elem, MKeyValue &atts) {
+	actor1 = atts.getString("actor1", "");
 	actor2 = atts.getString("actor2", "");
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
@@ -49,7 +48,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 	const char* nombre = owner_entity->getName();
-	// Sustituir los static por null y poner una posicion en la que deberían estar
+	// Sustituir los static por null y poner una posicion en la que deber?an estar
 	if (nombre == actor1){
 		e_a1 = owner_entity;
 	}
@@ -86,7 +85,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxRigidActor* m_ridig_Actor2 = NULL;
 
 	if (r1.isValid()) {
-		m_ridig_Actor1 = ((TCompRigidBody*)r1)->rigidBody;	
+		m_ridig_Actor1 = ((TCompRigidBody*)r1)->rigidBody;
 	}
 	else if (s1.isValid()){
 		m_ridig_Actor1 = ((TCompStaticBody*)s1)->staticBody;
@@ -108,7 +107,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	PxTransform r1_abs = m_ridig_Actor1->getGlobalPose();
 	PxTransform r2_abs = m_ridig_Actor2->getGlobalPose();
-	
+
 	r1_abs = r1_abs.getInverse();
 	r2_abs = r2_abs.getInverse();
 
@@ -116,60 +115,53 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	PxTransform t_1 = r2_abs.transform(joint_abs);
 
 	// Create a joint
-	mJoint = PxRevoluteJointCreate(
+	mJoint = PxFixedJointCreate(
 		*Physics.gPhysicsSDK
 		, m_ridig_Actor1
 		, t_0
 		, m_ridig_Actor2
 		, t_1
 		);
-	
-	if (angle_limit != 0)
-	{
-		PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * angle_limit), deg2rad(angle_limit));
-		mJoint->setLimit(limit);
-		mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
 
-	}
 
 	if (breakable) {
 		mJoint->setBreakForce(breakForce, breakTorque);
 	}
-	
+
 	//mJoint->setDriveForceLimit(100000);
 	//mJoint->setDriveVelocity(-1);
 	//mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
-	
+
 }
 
 /*
-	Cuando el joint cuenta con un solo actor, la primera posición (pos3) determina donde está el joint de forma relativa al actor
-	y la segunda posición determina donde está situado el joint y mueve el actor a esa posición.
+Cuando el joint cuenta con un solo actor, la primera posici?n (pos3) determina donde est? el joint de forma relativa al actor
+y la segunda posici?n determina donde est? situado el joint y mueve el actor a esa posici?n.
 
 
-	A tener en cuenta al modificar la posición relativa del joint es necesario quitar la diferencia de posición y rotación a la posicion 
-	del joint
+A tener en cuenta al modificar la posici?n relativa del joint es necesario quitar la diferencia de posici?n y rotaci?n a la posicion
+del joint
 
-	en el exportador tendríamos que pasar la posición del joint como segundo actor para poder situar
+en el exportador tendr?amos que pasar la posici?n del joint como segundo actor para poder situar
 */
-void TCompJointHinge::init() {
+void TCompJointFixed::init() {
 
 }
 
-PxRevoluteJoint* TCompJointHinge::getJoint(){
+PxFixedJoint* TCompJointFixed::getJoint(){
 	return mJoint;
 }
-CHandle TCompJointHinge::getActor1(){
+CHandle TCompJointFixed::getActor1(){
 	return e_a1;
 }
-CHandle TCompJointHinge::getActor2(){
+CHandle TCompJointFixed::getActor2(){
 	return e_a2;
 }
-PxReal TCompJointHinge::getLinealPosition(){
+PxReal TCompJointFixed::getLinealPosition(){
 	return linearPosition;
 }
 
-PxTransform TCompJointHinge::getAnchorConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot) {
+PxTransform TCompJointFixed::getAnchorConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot) {
 	PxVec3 diff_pos;
 
 	PxTransform anchor = PxTransform(0, 0, 0);
@@ -182,7 +174,7 @@ PxTransform TCompJointHinge::getAnchorConfiguration(PxTransform body_transform, 
 	return anchor;
 }
 
-PxTransform TCompJointHinge::getAxisConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot) {
+PxTransform TCompJointFixed::getAxisConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot) {
 
 	TTransform j_trans = TTransform(Physics.PxVec3ToXMVECTOR(joint_pos), Physics.PxQuatToXMVECTOR(joint_rot), XMVectorSet(1, 1, 1, 0));
 

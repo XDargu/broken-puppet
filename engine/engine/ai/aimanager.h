@@ -16,6 +16,7 @@ public:
 	void warningToClose(aicontroller* me, float warning_distance);
 	void warningPlayerFound(aicontroller* me);
 	void setEnemyRol(aicontroller* enemy);
+	bool attackRolEmptySlot();
 	void RemoveEnemyAttacker(aicontroller* enemy);
 	void changeEnemyRol(aicontroller* enemy);
 private:

@@ -167,6 +167,8 @@ CHandle Citem_manager::getNeedleAsociated(CHandle grandma){
 			return element.needleRef;
 		}
 	}
+
+	return CHandle();
 }
 
 CHandle Citem_manager::getRopeAsociated(CHandle grandma){
@@ -176,6 +178,8 @@ CHandle Citem_manager::getRopeAsociated(CHandle grandma){
 			return element.rope_asociated;
 		}
 	}
+
+	return CHandle();
 }
 
 /*std::vector<TCompNeedle*> Citem_manager::needleInRange(XMVECTOR pos, float radius){

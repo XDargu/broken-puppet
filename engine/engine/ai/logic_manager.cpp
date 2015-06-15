@@ -315,6 +315,7 @@ void CLogicManager::bootLUA() {
 		.set("loadScene", &CLogicManager::loadScene)
 		.set("setTimer", &CLogicManager::setTimer)
 		.set("getBot", &CLogicManager::getBot)
+		.set("getObject", &CLogicManager::getObject)
 		.set("getPrismaticJoint", &CLogicManager::getPrismaticJoint)
 		.set("getHingeJoint", &CLogicManager::getHingeJoint)
 		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
@@ -336,6 +337,13 @@ void CLogicManager::bootLUA() {
 		.set("teleportToPos", (void (CBot::*)(CVector)) &CBot::teleport)
 		.set("help", &CBot::help)
 	;
+
+	// Register the object class
+	SLB::Class< CMCVObject >("Object")
+		.set("getPos", &CMCVObject::getPosition)
+		.set("setPos", (void (CMCVObject::*)(CVector)) &CMCVObject::setPosition)
+		.set("move", (void (CMCVObject::*)(CVector, float)) &CMCVObject::moveToPosition)
+		;
 
 	SLB::Class<CVector>("Vector")
 		.constructor()
@@ -382,7 +390,16 @@ CBot CLogicManager::getBot(std::string name) {
 	if (!entity.isValid())
 		execute("error(\"Invalid bot name: " + name + "\")");
 
+	//CMCVObject e(entity);
 	return CBot(entity);
+}
+
+CMCVObject CLogicManager::getObject(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid object name: " + name + "\")");
+
+	return CMCVObject(entity);
 }
 
 CMovingPlatform CLogicManager::getMovingPlatform(std::string name) {
