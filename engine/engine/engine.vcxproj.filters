@@ -493,6 +493,9 @@
     <ClInclude Include="components\comp_joint_fixed.h">
       <Filter>components\physics</Filter>
     </ClInclude>
+    <ClInclude Include="ai\mcv_object.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -912,6 +915,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_joint_fixed.cpp">
       <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\mcv_object.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

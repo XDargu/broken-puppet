@@ -7,6 +7,7 @@ using DirectX::XMFLOAT3;
 
 struct TKeyFrame {
 	CHandle target_transform;
+	CHandle target_kinematic;
 	XMFLOAT3 initial_position;
 	XMFLOAT4 initial_rotation;
 	XMFLOAT3 target_position;

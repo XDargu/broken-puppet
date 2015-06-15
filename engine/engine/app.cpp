@@ -344,7 +344,6 @@ bool CApp::create() {
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
-
 	XASSERT(is_ok, "Error creating debug meshes");
 
 	logic_manager.init();
