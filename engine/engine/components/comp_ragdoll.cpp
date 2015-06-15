@@ -117,8 +117,7 @@ void TCompRagdoll::setCollisonEnemy(bool active){
 			it.second->getShapes(&collider, 1);
 			setupFiltering(collider, myMask, notCollide);
 		}
-	}
-	else{
+	}else{
 		PxU32 myMask = FilterGroup::eNON_COLLISION;
 		PxU32 notCollide = FilterGroup::eACTOR
 			| FilterGroup::eACTOR_NON_COLLISION

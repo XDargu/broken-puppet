@@ -595,6 +595,10 @@ int bt_grandma::actionLookAround()
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
 		ind_path = 0;
+
+		//Aqui tendría que borrar el enemigo de los slots del aiManager para su posterior re-asignacion
+		aimanager::get().RemoveEnemyAttacker(this);
+		//----------------------------------------------------------------------------------------------
 	}
 	else{
 		if ((state_time - find_path_time) > 1.f){
@@ -1127,7 +1131,7 @@ int bt_grandma::conditionfalling_event()
 //Check if is a tied event
 int bt_grandma::conditiontied_event()
 {
-	return false;
+	//return false;
 	return tied_event;
 }
 
