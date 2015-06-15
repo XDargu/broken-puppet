@@ -151,6 +151,7 @@ int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
+	stopAllAnimations();
 
 	if (!m_ragdoll->isRagdollActive()) {
 		m_ragdoll->setActive(true);
