@@ -48,7 +48,8 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	bool breakable = atts.getBool("breakable", false);
 	float breakForce = atts.getFloat("maxBreakForce", 1000);
 	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
-
+	
+	bool parent_collition = atts.getBool("parentCollition", false);
 	
 
 
@@ -194,6 +195,7 @@ void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	}
 	mJoint->setLinearLimit(PxJointLinearLimit(linear_position, PxSpring(0, 0)));
 	//mJoint->setDrivePosition(drive_position);
+	mJoint->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, parent_collition);
 }
 
 void TCompJointPrismatic::init() {

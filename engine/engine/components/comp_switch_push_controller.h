@@ -31,17 +31,18 @@ struct TCompSwitchPushController : TBaseComponent{
 
 		// This switch needs an actor1
 		CHandle actor1 = joint->getActor1();
-		XASSERT((actor1.isValid()), "The comp push switch needs an actor1.");
-		if (actor1.isValid() == false) assert("The comp push switch needs an actor1.");
-
-		// This switch needs just one actor
 		CHandle actor2 = joint->getActor2();
-		if (actor2.isValid()) assert("The comp push switch just needs one actor, but have two.");
 
 		// check if there are two actors
 		CHandle r1 = ((CEntity*)actor1)->get<TCompRigidBody>();
+		CHandle r2 = ((CEntity*)actor2)->get<TCompRigidBody>();
 		
-		if (r1.isValid() == false) assert("The comp push switch needs a rigidbody actor");
+		if (r1.isValid() == false) {
+			if (r2.isValid()){
+				actor1 = actor2;
+			}
+			else{ assert("An dinamic body is necesary"); }
+		}
 		px_actor1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody;
 
 		// If all it´s ok, init the limit, pressed and init_pos
@@ -66,12 +67,12 @@ struct TCompSwitchPushController : TBaseComponent{
 		bool pushing = init_up_distance < aux_distance;
 
 		float distance_squared = (init_pos.p - actual_pos.p).magnitudeSquared();
-		if (pushing && (pressed == false) && (distance_squared >= (limit*limit) * 3 / 5)){
+		if (pushing && (pressed == false) && (distance_squared >= (limit*limit) * 3 / 8)){
 			// Call onPress function
 			onPress();
 			pressed = true;
 		}
-		else if ((pressed == true) && (distance_squared < (limit*limit) * 3 / 5)){
+		else if ((pressed == true) && (distance_squared < (limit*limit) * 3 / 8)){
 			// Call onPress function
 			onLeave();
 			pressed = false;
