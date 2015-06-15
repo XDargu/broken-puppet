@@ -21,10 +21,12 @@ void CHingeJoint::setMotor(float velocity, float force_limit){
 
 		// Call the addForce method to awake the bodies, if dynamic
 		if (a1 && a1->isRigidDynamic()) {
-			((PxRigidDynamic*)a1)->wakeUp();
+			if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
+				((PxRigidDynamic*)a1)->wakeUp();
 		}
 		if (a2 && a2->isRigidDynamic()) {
-			((PxRigidDynamic*)a2)->wakeUp();
+			if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
+				((PxRigidDynamic*)a2)->wakeUp();
 		}
 
 		joint->mJoint->setDriveForceLimit(force_limit);
@@ -56,10 +58,12 @@ void CHingeJoint::setLimit(float angle_limit){
 
 		// Call the addForce method to awake the bodies, if dynamic
 		if (a1 && a1->isRigidDynamic()) {
-			((PxRigidDynamic*)a1)->wakeUp();
+			if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
+				((PxRigidDynamic*)a1)->wakeUp();
 		}
 		if (a2 && a2->isRigidDynamic()) {
-			((PxRigidDynamic*)a2)->wakeUp();
+			if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
+				((PxRigidDynamic*)a2)->wakeUp();
 		}
 
 		if (angle_limit != 0)

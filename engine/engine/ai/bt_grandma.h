@@ -216,6 +216,8 @@ public:
 	void playAnimationIfNotPlaying(int id);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+
+	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };
 
 #endif

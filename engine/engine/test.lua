@@ -25,6 +25,10 @@ function getRnd()
 end
 
 function onSceneLoad_my_file()
+
+	-- Test anim
+	obj = logicManager:getObject("dvn_rampa_bloque_2m_simple_01_109.0")
+	obj:move(Vector(0, 0, 0), 1)
 	
 	-- Get the player 
 	player = getBot("Player");

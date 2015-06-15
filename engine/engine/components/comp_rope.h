@@ -2,6 +2,7 @@
 #define INC_COMP_ROPE_H
 
 #include "base_component.h"
+#include "physics_manager.h"
 
 struct TCompRope : TBaseComponent {
 private:
@@ -9,8 +10,13 @@ private:
 	CHandle transform_2;
 
 	CHandle joint;
+
 	float remove_counter;
 public:
+
+	CHandle transform_1_aux;
+	CHandle transform_2_aux;
+	CHandle joint_aux;
 
 	XMVECTOR pos_1;
 	XMVECTOR pos_2;
@@ -20,6 +26,8 @@ public:
 	
 
 	TCompRope() : max_distance(20), width(0.02f), remove_counter(0) {}
+
+	~TCompRope();
 
 	void setPositions(CHandle the_transform_1, XMVECTOR the_pos_2);
 

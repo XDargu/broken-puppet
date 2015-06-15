@@ -134,6 +134,8 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
+	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
+
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
@@ -170,6 +172,7 @@ void createManagers() {
 	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompJointHinge>()->init(32);
 	getObjManager<TCompJointD6>()->init(512);
+	getObjManager<TCompJointFixed>()->init(64);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
@@ -241,6 +244,7 @@ void initManagers() {
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompJointPrismatic>()->initHandlers();
 	getObjManager<TCompJointD6>()->initHandlers();
+	getObjManager<TCompJointFixed>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
@@ -321,10 +325,11 @@ bool CApp::create() {
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
-	loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
@@ -334,12 +339,11 @@ bool CApp::create() {
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
 
-	sm.playTrack(0,false);
+	//sm.playTrack(0,false);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
@@ -920,6 +924,7 @@ void CApp::renderEntities() {
 			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+			tension = maxDist < 0.2 ? 0 : 1;
 
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
