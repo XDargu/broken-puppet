@@ -56,12 +56,17 @@ void FSMPlayerLegs::Init()
 	canThrow = false;
 	dead_counter = 0.f;
 
+	TCompCharacterController* character_controller = comp_character_controller;
+
 	//run_speed = ((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier;
 	run_speed = 6;
-	((TCompCharacterController*)comp_character_controller)->jumpPower = 7;
+	character_controller->jumpPower = 7;
 	walk_speed = 1.5f;
 
-	((TCompCharacterController*)comp_character_controller)->lerpRotation = 0.15;
+	character_controller->lerpRotation = 0.15;
+
+	character_controller->gravityMultiplier = 32;
+	character_controller->jumpPower = 9.2f;
 
 	current_animation_id = -1;
 

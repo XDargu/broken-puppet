@@ -508,8 +508,9 @@ void CalMixer::updateSkeleton()
           logic_prev_translation_is_valid = true;
         }
 
+		// TODO: ¿Hacer que se aplique traslación?
         // Get real delta since last update
-        logic_delta_translation = translation - logic_prev_translation;
+        /*logic_delta_translation = translation - logic_prev_translation;
         logic_delta_translation *= (*iteratorAnimationAction)->getWeight();
 
         //dbg("logic_delta_translation is %f %f\n", logic_delta_translation.x, logic_delta_translation.z);
@@ -518,7 +519,7 @@ void CalMixer::updateSkeleton()
         logic_prev_translation = translation;
        
         // Remove local translation from the animation in the XZ
-        translation.x = translation.z = 0.f;
+        translation.x = translation.z = 0.f;*/
         logic_delta_translation.y = 0.f;
       }
 
