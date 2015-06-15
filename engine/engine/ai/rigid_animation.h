@@ -11,6 +11,7 @@ public:
 	std::vector<TKeyFrame> keyframes;
 
 	CHandle target_transform;
+	CHandle target_kinematic;
 	int current_keyframe;
 	bool loop;
 
@@ -20,7 +21,9 @@ public:
 
 	void addKeyframe(TKeyFrame keyframe);
 	void addKeyframe(XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time);
+	void addKeyframe(XMVECTOR the_target_position, float the_time); // Position only, mantain rotation
 	void addRelativeKeyframe(XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time);
+	void addRelativeKeyframe(XMVECTOR the_target_position, float the_time); // Position only, mantain rotation
 
 	void play();
 	void pause();

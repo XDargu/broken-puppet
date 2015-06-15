@@ -9,6 +9,7 @@
 #include "prismatic_joint.h"
 #include "hinge_joint.h"
 #include "lua_vector.h"
+#include "mcv_object.h"
 
 class CLogicManager
 {
@@ -66,6 +67,7 @@ public:
 	void loadScene(std::string scene_name);
 	void onSceneLoad(std::string scene_name);
 	CBot getBot(std::string name);
+	CMCVObject getObject(std::string name);
 	CMovingPlatform getMovingPlatform(std::string name);
 	CPrismaticJoint getPrismaticJoint(std::string name);
 	CHingeJoint getHingeJoint(std::string name);

@@ -24,6 +24,15 @@ bool TKeyFrame::update(float elapsed) {
 	transform->rotation = XMQuaternionSlerp(XMLoadFloat4(&initial_rotation), XMLoadFloat4(&target_rotation), elapsed_time / time);
 	elapsed_time += elapsed;
 
+	// Update the rigid position, if needed
+	if (target_kinematic.isValid()) {
+		TCompRigidBody* rigid = target_kinematic;
+
+		if (rigid->isKinematic()) {
+			rigid->rigidBody->setKinematicTarget(PxTransform(Physics.XMVECTORToPxVec3(transform->position), Physics.XMVECTORToPxQuat(transform->rotation)));
+		}
+	}
+
 	// If the keyFrame has reached the destiny, then leave
 	if (elapsed_time >= time) {
 		elapsed_time = 0;
