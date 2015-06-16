@@ -63,12 +63,15 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))){
 			//Colision entre enemigo y escenario
-				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				CSoundManager::get().play3DFX("sonar", (TTransform*) entity_transform);
+				//TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+				//CSoundManager::get().play3DFX("sonar", (TTransform*) entity_transform);
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("level"))){
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(first_rigid->getMass(), pairs, i);
+				float force_float = force;
 				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform);
-				//CSoundManager::get().playFX("sonar");
+				CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform, force_float);
 			}
 		}
 	}

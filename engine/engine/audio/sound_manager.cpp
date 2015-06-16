@@ -3,6 +3,7 @@
 #include "bass.h"
 
 static CSoundManager the_sound_manager;
+static float volume_factor = 1000;
 
 CSoundManager::TMusicTrack::TMusicTrack(std::string the_name) {
 	name = the_name;
@@ -131,7 +132,7 @@ void CSoundManager::playFX(std::string name){
 	BASS_ChannelPlay(channel, 0);
 }
 
-void CSoundManager::play3DFX(std::string name, TTransform* trans){
+void CSoundManager::play3DFX(std::string name, TTransform* trans, float volume_lambda){
 	HSTREAM stream = sounds->operator[](name);
 	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
@@ -149,6 +150,10 @@ void CSoundManager::play3DFX(std::string name, TTransform* trans){
 	front = &front_ref;
 	BASS_ChannelSet3DPosition(channel, pos, front, NULL);
 	BASS_Apply3D();
+	float volume;
+	BASS_ChannelGetAttribute(channel, BASS_ATTRIB_VOL, &volume);
+	float final_volume = volume + volume_lambda / volume_factor;
+	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, final_volume);
 	BASS_ChannelPlay(channel, 0);
 }
 
