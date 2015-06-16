@@ -46,6 +46,7 @@ private:
 	bool see_player;
 	bool initial_attack;
 	bool animation_done;
+	bool player_touch;
 	int last_anim_id;
 
 	//Bool ñapa a quitar en un futuro -----
@@ -69,7 +70,7 @@ private:
 	
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;
-	enum attacker_slots{ NO_SLOT, NORTH, WEST, EAST };
+	enum attacker_slots{ NO_SLOT, NORTH, EAST, WEST};
 	attacker_slots slot;
 
 public:
@@ -158,7 +159,7 @@ public:
 	int conditionsee_player();
 	//Check the look for timer
 	int conditionLook_for_timeout();
-	//Search random point around the last place player was saw
+	//Search random point around the last place player wasnotify saw
 	int actionSearchArroundLastPoint();
 	//Check if the role is attacker and is close enought
 	int conditionis_attacker();
@@ -191,6 +192,7 @@ public:
 	void tiedSensor();
 	void hurtSensor(float damage);
 	void PlayerFoundSensor();
+	void PlayerTouchSensor(bool touch);
 	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
 	unsigned getId();
@@ -208,6 +210,7 @@ public:
 	void setAttackerSlot(int s);
 	int getAttackerSlot();
 	float getDistanceToPlayer();
+	int getNearestSlot(bool free_north, bool free_east, bool free_west);
 
 	void drawdebug();
 

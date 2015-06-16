@@ -48,7 +48,7 @@ public:
 	void playFX(std::string name);
 	void stopFX(std::string name);
 
-	void play3DFX(std::string name, TTransform* trans);
+	void play3DFX(std::string name, TTransform* trans, float volume_lambda);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 	//bool set3DPosition(std::string name);

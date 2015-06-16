@@ -178,7 +178,11 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		// Break bones
 		if (breakable) {
 			mJoint->setBreakForce(10000, 10000);
-		}
+		}		
+
+		/*mJoint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);
+		mJoint->setConstraintFlag(PxConstraintFlag::ePROJECT_TO_ACTOR0, true);
+		mJoint->setConstraintFlag(PxConstraintFlag::ePROJECT_TO_ACTOR1, true);*/
 
 		articulations.push_back(mJoint);
 	}

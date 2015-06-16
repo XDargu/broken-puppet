@@ -45,6 +45,11 @@ struct TCompAiBT : TBaseComponent {
 		//m_ai_controller->EvaluateHit(msg.damage);
 	}
 
+	void PlayerTouch(const TPlayerTouch& msg) {
+		dbg("Force recieved is  %f\n", msg.touch);
+		//m_ai_controller->EvaluateHit(msg.damage);
+	}
+
 	void groundHit(const TGroundHit& msg) {
 		dbg("ground hit recieved is  %f\n", msg.vel);
 		if (msg.vel > -15.f){
