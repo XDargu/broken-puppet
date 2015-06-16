@@ -122,7 +122,33 @@ function onTriggerEnter_GrandmaCrasher003_Trigger(who)
 	logicManager:setTimer("GrandmaCrasher003Restore", 3)
 end
 
+-------------------------- MS3 ---------------------------
 
+------- Escene 1 ------- Escene 1 ------- Escene 1 -------
+
+------- Escene 2 ------- Escene 2 ------- Escene 2 -------
+
+------- Escene 3 ------- Escene 3 ------- Escene 3 -------
+
+------- Escene 4 ------- Escene 4 ------- Escene 4 -------
+
+function onSwitchPressed_interruptor_pulsar_plataforma_01(who)
+	print(tostring(who) .. " Interruptor plataforma_01 pulsado");
+end
+
+
+------- Escene 5 ------- Escene 5 ------- Escene 5 -------
+
+
+
+
+
+
+
+
+
+
+-------------------------- MS2 --------------------------
 					-- WATER ROOM --
 
 function onSwitchPressed_InterruptorTirarAgua(who)
@@ -274,3 +300,6 @@ function onPlayerDead()
 	local player = logicManager:getBot("Player");
 	player:teleport(5.008, 0.479939, 47.0041);
 end
+
+
+

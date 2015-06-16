@@ -11,13 +11,13 @@
 struct TCompSwitchPushController : TBaseComponent{
 	
 	PxActor* px_actor1;
+	PxActor* px_actor2;
 
 	float limit;
 	PxReal init_up_distance;
 	bool pressed;
 	
-	PxTransform init_pos;
-	PxTransform actual_pos;
+	PxVec3 init_offset;
 
 	TCompSwitchPushController() { }
 
@@ -29,50 +29,53 @@ struct TCompSwitchPushController : TBaseComponent{
 		// This needs a joint component in the owner entity
 		TCompJointPrismatic* joint = assertRequiredComponent<TCompJointPrismatic>(this);
 
+		PxD6Joint* mPrismaticJoint = joint->getJoint();
+
 		// This switch needs an actor1
 		CHandle actor1 = joint->getActor1();
-		CHandle actor2 = joint->getActor2();
+		CHandle actor2 = joint->getActor2();			
 
-		// check if there are two actors
-		CHandle r1 = ((CEntity*)actor1)->get<TCompRigidBody>();
-		CHandle r2 = ((CEntity*)actor2)->get<TCompRigidBody>();
-		
-		if (r1.isValid() == false) {
-			if (r2.isValid()){
-				actor1 = actor2;
-			}
-			else{ assert("An dinamic body is necesary"); }
+		// In case the switch is in the actor1
+		if ((CHandle(this).getOwner() == actor1) == false) {
+			CHandle actor_aux = actor1;
+			actor1 = actor2;
+			actor2 = actor_aux;
 		}
+
+		CHandle r2 = ((CEntity*)actor2)->get<TCompRigidBody>();
+		CHandle s2 = ((CEntity*)actor2)->get<TCompStaticBody>();
+
 		px_actor1 = ((TCompRigidBody*)(((CEntity*)actor1)->get<TCompRigidBody>()))->rigidBody;
+
+		if (r2.isValid()){
+			px_actor2 = ((TCompRigidBody*)(((CEntity*)actor2)->get<TCompRigidBody>()))->rigidBody;
+		}
+		else{
+			px_actor2 = ((TCompStaticBody*)(((CEntity*)actor2)->get<TCompStaticBody>()))->staticBody;
+		}
+		
 
 		// If all it´s ok, init the limit, pressed and init_pos
 		limit = joint->getLinealPosition();
 		pressed = false;
-		init_pos = ((PxRigidBody*)px_actor1)->getGlobalPose();
+		
+		init_offset = (((PxRigidBody*)px_actor1)->getGlobalPose().p - ((PxRigidBody*)px_actor2)->getGlobalPose().p);
 
-		PxVec3 aux_up = init_pos.q.getBasisVector1();
-		PxVec3 aux_p = init_pos.p + aux_up;
-		init_up_distance = (init_pos.p - aux_p).magnitude();
 	}
 
 	void update(float elapsed) {
 
 		// Have to be a valid rigidbody
-		actual_pos = ((PxRigidBody*)px_actor1)->getGlobalPose();
+		PxVec3 actual_offset = (((PxRigidBody*)px_actor1)->getGlobalPose().p - ((PxRigidBody*)px_actor2)->getGlobalPose().p);
 
-		// Check if pulling or pushing
-		PxVec3 aux_up =  init_pos.q.getBasisVector1();
-		PxVec3 aux_p = init_pos.p + aux_up;
-		PxReal aux_distance = (actual_pos.p - aux_p).magnitude();
-		bool pushing = init_up_distance < aux_distance;
+		float dist_actual = (init_offset - actual_offset).magnitude();
 
-		float distance_squared = (init_pos.p - actual_pos.p).magnitudeSquared();
-		if (pushing && (pressed == false) && (distance_squared >= (limit*limit) * 3 / 8)){
+		if ((pressed == false) && (dist_actual >= limit / 3 * 2)){
 			// Call onPress function
 			onPress();
 			pressed = true;
 		}
-		else if ((pressed == true) && (distance_squared < (limit*limit) * 3 / 8)){
+		else if ((pressed == true) && (dist_actual < limit / 3 * 2)){
 			// Call onPress function
 			onLeave();
 			pressed = false;
