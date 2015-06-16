@@ -25,6 +25,8 @@ struct TCompBtGrandma : TBaseComponent {
 
 	void notifyPlayerFound(const TPlayerFound& msg);
 
+	void notifyPlayerTouch(const TPlayerTouch& msg);
+
 	void groundHit(const TGroundHit& msg);
 
 	void onRopeTensed(const TMsgRopeTensed& msg);

@@ -48,6 +48,13 @@ struct TPlayerFound {
 	DECLARE_MSG_ID();
 };
 
+struct TPlayerTouch {
+	CEntity* who;
+	bool touch;
+	TPlayerTouch(CEntity* awho, bool touched) :who(awho), touch(touched){}
+	DECLARE_MSG_ID();
+};
+
 /*struct TMsgEnemyTied {
 	CEntity* rope;
 	TMsgEnemyTied(CHandle arope) :rope(arope) { }
