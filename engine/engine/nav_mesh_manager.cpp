@@ -159,7 +159,7 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 				navMeshQuery.setTool(CNavmeshQuery::ETool::FIND_PATH);
 				navMeshQuery.findStraightPath();
 				num = navMeshQuery.numPointsStraightPath;
-				prue = navMeshQuery.straightPath;
+				polys = navMeshQuery.straightPath;
 				straightPath.clear();
 				XMFLOAT3* aux_array = new XMFLOAT3[navMeshQuery.numPointsStraightPath];
 				for (int i = 0; i < navMeshQuery.numPointsStraightPath; ++i){
@@ -172,11 +172,11 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 }
 
 void CNav_mesh_manager::pathRender(){
-	if (prue) {
+	if (polys) {
 		for (int i = 0; i <num; ++i){
 			if (i>0){
-				XMVECTOR p1 = XMVectorSet(prue[(i - 1) * 3], prue[((i - 1) * 3) + 1]+0.10f, prue[((i - 1) * 3) + 2], 1);
-				XMVECTOR p2 = XMVectorSet(prue[i * 3], prue[i * 3 + 1] + 0.10f, prue[i * 3 + 2], 1);
+				XMVECTOR p1 = XMVectorSet(polys[(i - 1) * 3], polys[((i - 1) * 3) + 1] + 0.10f, polys[((i - 1) * 3) + 2], 1);
+				XMVECTOR p2 = XMVectorSet(polys[i * 3], polys[i * 3 + 1] + 0.10f, polys[i * 3 + 2], 1);
 				drawLine(p1, p2);
 			}
 		}

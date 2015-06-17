@@ -17,7 +17,7 @@ class CNav_mesh_manager
 {
 private:
 	//CNavmesh nav_mesh;
-	float* prue;
+	float* polys;
 	int num;
 	bool first;
 	bool need_update;
@@ -43,6 +43,7 @@ public:
 	std::vector<TCompColliderConvex*>   colConvex;
 	std::vector<TCompColliderBox*>      colBoxes;
 	std::vector<TCompColliderSphere*>   colSpheres;
+	std::vector<CHandle> recastAABBs;
 	bool keep_updating_navmesh;
 	//std::vector<TCompColliderCapsule*>  colCapsules;
 };

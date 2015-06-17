@@ -134,7 +134,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
-	SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
+	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
 
 
@@ -180,8 +180,8 @@ void createManagers() {
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
 	getObjManager<TCompSensorDistPlayer>()->init(64);
-	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
+	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
 	//
@@ -260,9 +260,8 @@ void initManagers() {
 	getObjManager<TCompSwitchPullController>()->initHandlers();
 	getObjManager<TCompSwitchPushController>()->initHandlers();
 
-	//PRUEBA TRIGGER
-
 	getObjManager<TCompTrigger>()->initHandlers();
+	getObjManager<TCompRecastAABB>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
 
@@ -603,8 +602,8 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompSwitchPullController>()->update(elapsed);
 	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
-	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
+	getObjManager<TCompRecastAABB>()->update(elapsed);
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 

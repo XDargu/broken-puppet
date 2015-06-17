@@ -496,6 +496,9 @@
     <ClInclude Include="ai\mcv_object.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_recast_aabb.h">
+      <Filter>components\ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -918,6 +921,9 @@
     </ClCompile>
     <ClCompile Include="ai\mcv_object.cpp">
       <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_recast_aabb.cpp">
+      <Filter>components\ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

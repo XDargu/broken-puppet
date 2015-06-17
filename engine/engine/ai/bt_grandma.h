@@ -46,7 +46,7 @@ private:
 	bool see_player;
 	bool initial_attack;
 	bool animation_done;
-	bool player_touch;
+	//bool player_touch;
 	int last_anim_id;
 
 	//Bool ñapa a quitar en un futuro -----
@@ -192,7 +192,7 @@ public:
 	void tiedSensor();
 	void hurtSensor(float damage);
 	void PlayerFoundSensor();
-	void PlayerTouchSensor(bool touch);
+	//void PlayerTouchSensor(bool touch);
 	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
 	unsigned getId();

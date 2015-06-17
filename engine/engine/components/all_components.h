@@ -65,6 +65,7 @@ using namespace DirectX;
 #include "comp_sensor_tied.h"
 #include "comp_sensor_distance_player.h"
 #include "comp_bt_grandma.h"
+#include "comp_recast_aabb.h"
 
 // Logic
 #include "comp_platform_path.h"

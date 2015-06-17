@@ -72,9 +72,9 @@ void TCompBtGrandma::notifyPlayerFound(const TPlayerFound& msg){
 	m_ai_controller->PlayerFoundSensor();
 }
 
-void TCompBtGrandma::notifyPlayerTouch(const TPlayerTouch& msg){
+/*void TCompBtGrandma::notifyPlayerTouch(const TPlayerTouch& msg){
 	m_ai_controller->PlayerTouchSensor(msg.touch);
-}
+}*/
 
 void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 	dbg("ground hit recieved is  %f\n", msg.vel);
