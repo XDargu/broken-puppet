@@ -187,6 +187,15 @@ void CLogicManager::onSwitchReleased(CHandle the_switch) {
 }
 
 void CLogicManager::addRigidAnimation(CRigidAnimation animation) {
+	// Remove previous animations
+	auto it = animations.begin();
+	while (it != animations.end()) {
+		if (animation.target_transform == it->target_transform) {
+			it = animations.erase(it);			
+		}
+		else ++it;		
+	}
+
 	animations.push_back(animation);
 }
 
