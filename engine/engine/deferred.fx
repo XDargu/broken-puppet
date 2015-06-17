@@ -12,6 +12,7 @@ Texture2D txEmissive    : register(t7);
 Texture2D txShadowMap : register(t6);
 
 TextureCube  txEnvironment : register(t8);
+Texture2D  txLightmap : register(t9);
 
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
@@ -32,6 +33,7 @@ struct VS_TEXTURED_OUTPUT
   float4 wPos    : TEXCOORD1;
   float3 wNormal : NORMAL;
   float4 wTangent : TANGENT;
+  float2 UVL      : TEXCOORD2;
 };
 
 //--------------------------------------------------------------------------------------
@@ -50,7 +52,8 @@ VS_TEXTURED_OUTPUT VS(
     float4 Pos : POSITION
   , float2 UV : TEXCOORD0
   , float3 Normal : NORMAL
-  , float4 Tangent : TANGENT
+  , float2 UVL : TEXCOORD1
+  , float4 Tangent : TANGENT  
   )
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
@@ -58,6 +61,7 @@ VS_TEXTURED_OUTPUT VS(
   output.Pos = mul(world_pos, ViewProjection);
   output.wNormal = mul(Normal, (float3x3)World);
   output.UV = UV * 1;
+  output.UVL = UVL;
   output.wPos = world_pos;
   // Rotate the tangent and keep the w value
   output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
@@ -215,6 +219,7 @@ void PSGBuffer(
 )
 {
 
+  float4 lightmap = txLightmap.Sample(samWrapLinear, input.UVL);
   albedo = txDiffuse.Sample(samWrapLinear, input.UV);
   specular = txSpecular.Sample(samWrapLinear, input.UV);
   gloss = txGloss.Sample(samWrapLinear, input.UV);
@@ -255,6 +260,8 @@ void PSGBuffer(
 
   float4 emis = txEmissive.Sample(samWrapLinear, input.UV); 
   acc_light = float4(emis.xyz, 0);
+
+  acc_light += lightmap;
   
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);

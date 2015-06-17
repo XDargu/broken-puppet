@@ -73,8 +73,8 @@ float2 perspective_correction(float2 coord)
 
 float3 getViewSpace(float2 screen_coords, float depth) {
 	float3 world_pos = getWorldCoords(screen_coords, depth);
-		float3 pos_vs = mul(world_pos, cameraView);
-		return pos_vs;
+	float3 pos_vs = mul(world_pos, cameraView);
+	return pos_vs;
 
 	//return getWorldCoords(screen_coords, depth);
 	//return float3(perspective_correction(screen_coords), -1) * depth * cameraZFar;
@@ -91,13 +91,13 @@ float GetAmbientOcclusion(
 	, in float depth
 	)
 {
-	float2 coords = textureCoords + uv * 20;
-		return textureCoords.x;
+	float2 coords = textureCoords + uv;
 
-	float3 diff = getViewSpace(coords, depth) - position;
+		//float3 diff = (float3(perspective_correction(coord2D(coords)), -1) * depth * cameraZFar) - position;
+		float3 diff = getViewSpace(coords, depth) - position;
 
-	float AmbientOcclusionDepthClamp = 0.5;
-	float AmbientOcclusionScale = 0.5;
+	float AmbientOcclusionDepthClamp = 0.5 * 1;
+	float AmbientOcclusionScale = 0.5 * 1;
 	float AmbientOcclusionBias = 0.1;
 	float AmbientOcclusionIntensity = 1;
 
@@ -127,13 +127,14 @@ float4 PSSSAO(
 	normal = normalize(normal * 2.0f - 1.0f);
 	float depth = txDepth.Sample(samClampLinear, input.UV).x;
 
-	//float3 world_pos = getWorldCoords(screenCoords, depth);
+	float3 world_pos = getWorldCoords(screenCoords, depth);
 
 	float3 normal_vs = mul(normal, (float3x3) cameraView);
-		//float3 pos_vs = mul(world_pos, cameraView);
+	float3 pos_vs = mul(world_pos, cameraView);
 
-		float3 positionViewSpace = getViewSpace(screenCoords, depth);
-		float3 pos_vs = positionViewSpace;
+	float3 positionViewSpace = getViewSpace(iPosition.xy, depth);
+	//positionViewSpace = float3(perspective_correction(coord2D(screenCoords)), -1) * depth * cameraZFar;
+	//return float4(positionViewSpace, 0);
 	//return float4(normal, 0);
 	//return float4(normal_vs, 0);
 	//return float4(pos_vs.y - (int)pos_vs.y, 0, 0, 0);
@@ -155,7 +156,7 @@ float4 PSSSAO(
 
 	// SSAO
 	float ambientOcclusion = 0.0f;
-	int iterations = 1;
+	int iterations = 4;
 	const float2 vec[4] = { float2(1.0f, 0.0f), float2(-1.0f, 0.0f), float2(0.0f, 1.0f), float2(0.0f, -1.0f) };
 
 	for (int i = 0; i < iterations; ++i)
@@ -163,14 +164,14 @@ float4 PSSSAO(
 		float2 coord1 = reflect(vec[i], randomCoords) * ssao_radius;
 		float2 coord2 = float2(coord1.x * 0.707f - coord1.y * 0.707f,
 		                       coord1.x * 0.707f + coord1.y * 0.707f);
-		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord1 * 0.25f, positionViewSpace, normal, depth);
-		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord2 * 0.5f, positionViewSpace, normal, depth);
-		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord1 * 0.75f, positionViewSpace, normal, depth);
-		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord2 * 1.0f, positionViewSpace, normal, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord1 * 0.25f, positionViewSpace, normal_vs, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord2 * 0.5f, positionViewSpace, normal_vs, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord1 * 0.75f, positionViewSpace, normal_vs, depth);
+		ambientOcclusion += GetAmbientOcclusion(iPosition.xy, coord2 * 1.0f, positionViewSpace, normal_vs, depth);
 	}
 
 	ambientOcclusion /= (float)iterations * 4.0f;
 	
-	//return float4(diffuse, 0);// *(1 - ambientOcclusion);
+	return float4(diffuse, 0);// *(1 - ambientOcclusion);
 	return 1.0 - ambientOcclusion;
 }

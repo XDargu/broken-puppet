@@ -29,10 +29,14 @@ public:
 		// create new obj
 		TItem *t = new TItem;
 		bool is_ok = t->load(name);
-		assert(is_ok);
+		//assert(is_ok);
+		if (is_ok) {
 
-		registerNew(name, t);
-		return t;
+			registerNew(name, t);
+			return t;
+		}
+		else
+			return nullptr;
 	}
 
 	bool registerNew(const char* name, TItem *t) {

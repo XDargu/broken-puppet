@@ -15,6 +15,7 @@ extern CVertexDecl vdcl_position_uv;
 extern CVertexDecl vdcl_position_uv_normal;
 extern CVertexDecl vdcl_position_uv_normal_skin;
 extern CVertexDecl vdcl_position_uv_normal_tangent;
+extern CVertexDecl vdcl_position_uv_normal_tangent_uvl;
 extern CVertexDecl vdcl_position_uv_normal_skin_tangent;
 
 extern CVertexDecl vdcl_instanced_position_uv;

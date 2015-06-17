@@ -18,7 +18,8 @@ macroScript MCVAssetBrowser
 
 	-- Prefabs
 	 PrefabPath = AssetPath + "Prefabs\\"
-	 PrefabList = #()
+	 PrefabList = #()	
+	
 
 
 	--clearListener()
@@ -460,6 +461,7 @@ macroScript MCVAssetBrowser
 				button exportSel "Exportar selección" width:110 height:25 toolTip:"" 
 				button preView "Previsualizar" width:135 height:25 toolTip:""
 				button validScn "Validar escena" width:135 height:25 toolTip:""
+				button exportLightmaps "Exportar lightmaps" width:135 height:25 toolTip:""
 				button exportMod "Exportar módulos" width:135 height:25 toolTip:""
 				button exportPref "Exportar prefabs" width:135 height:25 toolTip:""
 				button buildAndPlay "Exportar y ejecutar" width:135 height:25 toolTip:""
@@ -527,6 +529,22 @@ macroScript MCVAssetBrowser
 			
 			on play pressed do (
 				ShellLaunch  (engine_path + "engined.exe") ""
+			)
+			
+			on exportLightmaps pressed do (
+				addObjectsID()
+				objs = geometry as array
+				for o in objs do (
+					if (o.modifiers[#PhysX_Rigid_Body] == undefined) then (
+						BakeLightmap o 256
+					)
+					else (
+						if (o.modifiers[#PhysX_Rigid_Body].type != 1) then (
+							BakeLightmap o 256
+						)
+					)
+				)
+				removeObjectsID()
 			)
 			
 			on exportAll pressed do (

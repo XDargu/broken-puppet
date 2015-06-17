@@ -112,6 +112,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		}
 		
 		TCompAABB* m_aabb = it->aabb;
+		TCompName* m_name = ((CEntity*)it->transform.getOwner())->get<TCompName>();
 		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes_active_camera.isVisible(m_aabb);
 
@@ -122,6 +123,14 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		{			
 			CTraceScoped scope(((TCompName*)((CEntity*)it->transform.getOwner())->get<TCompName>())->name);
 			render_count++;
+
+			std::string lightmap = "/lightmaps/" + std::string(m_name->name) + "_lighting";
+			const CTexture* light = texture_manager.getByName(lightmap.c_str());
+			if (light != nullptr)
+				light->activate(9);
+			else
+				texture_manager.getByName("black")->activate(9);
+
 			if (it->material != prev_it->material || is_first) {
 				
 				// La tech
@@ -132,7 +141,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 					uploading_bones = it->material->getTech()->usesBones();
 				}
-
+				
 				// Activar shader y material de it
 				it->material->activateTextures();
 			}

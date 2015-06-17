@@ -61,6 +61,8 @@ class CMesh
 		, POSITION_UV_NORMAL_SKIN
 		, POSITION_UV_NORMAL_TANGENT    // 1006 as in maxscript
 		, POSITION_UV_NORMAL_SKIN_TANGENT
+		, POSITION_UV_NORMAL_TANGENT_UVL    // 1008 as in maxscript
+
 	};
 
 	// ------------------------------------
