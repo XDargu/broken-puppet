@@ -63,12 +63,19 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))){
 			//Colision entre enemigo y escenario
-				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				CSoundManager::get().play3DFX("sonar", (TTransform*) entity_transform);
+				//TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+				//CSoundManager::get().play3DFX("sonar", (TTransform*) entity_transform);
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("level"))){
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(first_rigid->getMass(), pairs, i);
+				float force_float = force;
 				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform);
-				//CSoundManager::get().playFX("sonar");
+				CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform, force_float);
+			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("player"))){
+				firstActorEntity->sendMsg(TPlayerTouch(firstActorEntity, true));
+			}else if ((firstActorEntity->hasTag("player")) && (secondActorEntity->hasTag("enemy"))){
+				secondActorEntity->sendMsg(TPlayerTouch(secondActorEntity, true));
 			}
 		}
 	}
@@ -140,6 +147,14 @@ PxFilterFlags FilterShader(
 				return PxFilterFlag::eDEFAULT;
 			}
 			else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
+				//Colisiones entre actores (cajas) y enemigos
+				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+				return PxFilterFlag::eDEFAULT;
+			}else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::ePLAYER)){
+				//Colisiones entre actores (cajas) y enemigos
+				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+				return PxFilterFlag::eDEFAULT;
+			}else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eENEMY)){
 				//Colisiones entre actores (cajas) y enemigos
 				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 				return PxFilterFlag::eDEFAULT;

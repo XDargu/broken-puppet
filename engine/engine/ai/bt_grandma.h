@@ -46,6 +46,7 @@ private:
 	bool see_player;
 	bool initial_attack;
 	bool animation_done;
+	bool player_touch;
 	int last_anim_id;
 
 	//Bool ñapa a quitar en un futuro -----
@@ -158,7 +159,7 @@ public:
 	int conditionsee_player();
 	//Check the look for timer
 	int conditionLook_for_timeout();
-	//Search random point around the last place player was saw
+	//Search random point around the last place player wasnotify saw
 	int actionSearchArroundLastPoint();
 	//Check if the role is attacker and is close enought
 	int conditionis_attacker();
@@ -191,6 +192,7 @@ public:
 	void tiedSensor();
 	void hurtSensor(float damage);
 	void PlayerFoundSensor();
+	void PlayerTouchSensor(bool touch);
 	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
 	unsigned getId();

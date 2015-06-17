@@ -131,6 +131,9 @@ void bt_grandma::create(string s)
 	initial_attack = false;
 	see_player = false;
 	animation_done = false;
+
+	player_touch = false;
+
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	previous_point_search = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -151,6 +154,7 @@ int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
+	stopAllAnimations();
 
 	if (!m_ragdoll->isRagdollActive()) {
 		m_ragdoll->setActive(true);
@@ -1098,8 +1102,9 @@ int bt_grandma::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	if ((player_touch)||((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
 		last_time = timer;
+		player_touch = false;
 		return true;
 	}
 	else{
@@ -1314,6 +1319,11 @@ void bt_grandma::PlayerFoundSensor(){
 
 	last_time_player_saw = 0;
 	setCurrent(NULL);
+}
+
+void bt_grandma::PlayerTouchSensor(bool touch){
+	player_touch = touch;
+	//setCurrent(NULL);
 }
 
 void bt_grandma::update(float elapsed){

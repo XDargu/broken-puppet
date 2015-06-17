@@ -134,6 +134,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
+	SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
 
 
@@ -326,10 +327,10 @@ bool CApp::create() {
 	::render.swap_chain->Present(0, 0);
 
 	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/escena_ms2.xml");
+	loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
@@ -496,18 +497,17 @@ void CApp::update(float elapsed) {
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
 	}*/
-	
+
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
-		/*render_techniques_manager.reload("particles");
+		render_techniques_manager.reload("particles");
 		render_techniques_manager.reload("particles_dist");
 		render_techniques_manager.reload("gen_shadows");
 		render_techniques_manager.reload("gen_shadows_skel");
-		render_techniques_manager.reload("light_shaft");*/
-		render_techniques_manager.reload("ssao"); 
+		render_techniques_manager.reload("light_shaft");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -723,7 +723,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, ssao.getOutput());
+	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
