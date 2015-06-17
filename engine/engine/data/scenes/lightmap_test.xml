@@ -547,7 +547,7 @@
 	</entity>
 	<entity  >
 <name name="Omni005_62.0" />
-<transform position="-12.7, 5.92, 9.33" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-12.7 5.92 9.33" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="2.5" intensity="1.0" color="1.0 0.145098 0.145098 1"/>
 	</entity>
 </scene>

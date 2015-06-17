@@ -22,6 +22,7 @@ class CRenderManager {
 		CHandle            transform;
 		CHandle            aabb;
 		bool*			   active;
+		const CTexture*	   lightmap;
 
 		bool operator==(const TKey &key) const {
 			return key.owner == owner && key.mesh_id == mesh_id && key.material == material && key.mesh == mesh;

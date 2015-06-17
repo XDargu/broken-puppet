@@ -45,6 +45,17 @@ void CRenderManager::addKey(const CMesh*      mesh
 
 	// Pasar de comp_render a entity
 	CEntity* e = owner.getOwner();
+	TCompName* c_name = e->get< TCompName >();
+
+	if (c_name) {
+		std::string lightmap = "/lightmaps/" + std::string(c_name->name) + "_lighting";
+		const CTexture* light = texture_manager.getByName(lightmap.c_str());
+		if (light != nullptr)
+			k.lightmap = light;
+		else
+			k.lightmap = texture_manager.getByName("black");
+	}
+
 	k.transform = e->get< TCompTransform >();
 	k.aabb = e->get< TCompAABB >();
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
@@ -124,12 +135,13 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			CTraceScoped scope(((TCompName*)((CEntity*)it->transform.getOwner())->get<TCompName>())->name);
 			render_count++;
 
-			std::string lightmap = "/lightmaps/" + std::string(m_name->name) + "_lighting";
+			it->lightmap->activate(9);
+			/*std::string lightmap = "/lightmaps/" + std::string(m_name->name) + "_lighting";
 			const CTexture* light = texture_manager.getByName(lightmap.c_str());
 			if (light != nullptr)
 				light->activate(9);
 			else
-				texture_manager.getByName("black")->activate(9);
+				texture_manager.getByName("black")->activate(9);*/
 
 			if (it->material != prev_it->material || is_first) {
 				
