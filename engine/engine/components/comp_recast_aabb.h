@@ -6,7 +6,6 @@
 
 struct TCompRecastAABB : TBaseComponent {
 
-	CHandle m_transform;
 	AABB m_aabb;
 	XMVECTOR min;
 	XMVECTOR max;
@@ -17,8 +16,6 @@ struct TCompRecastAABB : TBaseComponent {
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
 	void init();
-
-	void update(float elapsed);
 
 };
 #endif

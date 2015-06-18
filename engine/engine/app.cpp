@@ -604,7 +604,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
 	getObjManager<TCompTrigger>()->update(elapsed);
-	getObjManager<TCompRecastAABB>()->update(elapsed);
+	//getObjManager<TCompRecastAABB>()->update(elapsed);
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 

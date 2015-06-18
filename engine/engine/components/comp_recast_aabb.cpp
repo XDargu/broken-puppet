@@ -1,7 +1,6 @@
 #include "mcv_platform.h"
 #include "comp_recast_aabb.h"
 #include "aabb.h"
-#include "components\comp_transform.h"
 #include "nav_mesh_manager.h"
 
 TCompRecastAABB::TCompRecastAABB() {
@@ -13,9 +12,6 @@ TCompRecastAABB::~TCompRecastAABB() {
 }
 
 void TCompRecastAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-    m_transform = assertRequiredComponent<TCompTransform>(this);
-
-	TCompTransform* transform = (TCompTransform*)m_transform;
 
 	min = atts.getPoint("min");
 	max = atts.getPoint("max");
@@ -29,5 +25,3 @@ void TCompRecastAABB::init() {
 
 }
 
-void TCompRecastAABB::update(float elapsed){
-}
