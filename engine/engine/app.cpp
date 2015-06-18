@@ -330,8 +330,8 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/lightmap_test.xml");
+	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
@@ -509,6 +509,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("gen_shadows");
 		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
+		render_techniques_manager.reload("distorsion");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -678,7 +679,7 @@ void CApp::render() {
 	CTraceScoped scope("gen_shadows");
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
 	scope.end();
-
+	
 	deferred.render(&camera, *rt_base);
 
 	deferred.rt_albedo->activate();
@@ -1214,7 +1215,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	h_player = entity_manager.getByName("Player");
 
-	texture_manager.getByName("desertcube1024")->activate(8);
+	texture_manager.getByName("room_env_test")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
 	is_ok &= ssao.create("ssao", xres, yres, 1);

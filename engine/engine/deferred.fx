@@ -243,7 +243,6 @@ void PSGBuffer(
   bool test = length(in_tangent) < 2;
   float3 m_norm = test ? wnormal_per_pixel : in_normal;
   normal = (float4(m_norm, 1) + 1.) * 0.5;
-
   
   // Basic diffuse lighting
   float3 L = LightWorldPos.xyz - input.wPos.xyz;
@@ -514,6 +513,105 @@ in float4 iPosition : SV_Position
 	return float4(spot_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
 }
 
+// SSRR
+float4 rainbow(float x) {
+	float level = x * 2.0;
+	float r, g, b;
+	if (level <= 0) {
+		r = g = b = 0;
+	}
+	else if (level <= 1) {
+		r = lerp(1, 0, level);
+		g = lerp(0, 1, level);
+		b = 0;
+	}
+	else if (level > 1) {
+		r = 0;
+		g = lerp(1, 0, level - 1);
+		b = lerp(0, 1, level - 1);
+	}
+	return float4(r, g, b, 1);
+}
+
+float4 ssrrColor(float2 iPosition, matrix viewproj) {
+	// SSRR test
+	float4 color = float4(0, 0, 0, 0);
+		
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float4 albedo = txDiffuse.Load(ss_load_coords);
+	float4 specular_color = txSpecular.Load(ss_load_coords);
+	float4 gloss = txGloss.Load(ss_load_coords);
+	float depth = txDepth.Load(ss_load_coords).x;
+	float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
+	float4 diffuse = txAccLight.Load(ss_load_coords);
+
+	float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
+
+	float3 cameraToWorld = worldStartingPos - cameraWorldPos.xyz;
+	float cameraToWorldDist = length(cameraToWorld);
+	float3 cameraToWorldNorm = normalize(cameraToWorld);
+	float3 refl = normalize(reflect(cameraToWorldNorm, normal)); // This is the reflection vector
+	
+	float4 sc;
+	sc = mul(float4(worldStartingPos, 1), viewproj);
+	sc.xyz /= sc.w;
+	sc.x = (sc.x + 1) * 0.5;
+	sc.y = (1 - sc.y) * 0.5;
+
+	return txDiffuse.Sample(samClampLinear, sc.xy);
+
+	float2 m_coords = sc.xy;
+	return txDiffuse.Load(uint3(m_coords, 0));
+
+	if (dot(refl, cameraToWorldNorm) < 0) {
+		// Ignore reflections going backwards towards the camera, indicate with white
+		color = float4(1, 1, 1, 1);
+		return color;
+	}
+
+	float3 newPos;
+	float4 newScreen;
+	float i = 0;
+	float3 rayTrace = worldStartingPos;
+	float currentWorldDist, rayDist;
+	float incr = 0.4;
+	do {
+		i += 0.05;
+		rayTrace += refl*incr;
+		incr *= 1.3;
+		newScreen = mul(float4(rayTrace, 1), ViewProjection);
+		newScreen /= newScreen.w;
+		newScreen * 0.5 + 0.5; // From 0 to 1
+		newScreen.x *= cameraHalfXRes * 2;
+		newScreen.y *= cameraHalfYRes * 2;
+		
+		float2 coords = newScreen.xy;
+		//float2 coords = newScreen.xy / 2.0 + 0.5;
+		
+		//return float4(coords * float2(cameraHalfXRes, cameraHalfYRes) * 0.5, 0, 0);
+		float n_depth = txDepth.Load(uint3(coords, 0)).x;
+		newPos = getWorldCoords(coords, n_depth);
+
+		//newPos = rayTrace;
+		
+		currentWorldDist = length(newPos.xyz - cameraWorldPos.xyz);
+		rayDist = length(rayTrace.xyz - cameraWorldPos.xyz);
+		if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1 || newScreen.z > 1 || newScreen.z < -1 || i >= 1.0 || cameraToWorldDist > currentWorldDist) {
+			break; // This is a failure mode.
+		}
+	} while (rayDist < currentWorldDist);
+
+	if (cameraToWorldDist > currentWorldDist)
+		color = float4(1, 1, 0, 1); // Yellow indicates we found a pixel hidden behind another object
+	else if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1)
+		color = float4(0, 0, 0, 1); // Black used for outside of screen
+	else if (newScreen.z > 1 && newScreen.z < -1)
+		color = float4(1, 1, 1, 1); // White outside of frustum
+	else
+		color = rainbow(i); // Encode number of iterations as a color. Red, then green and last blue
+	
+	return color;
+}
 
 // -------------------------------------------------
 // Resolve lights
@@ -527,9 +625,9 @@ float4 PSResolve(
 	float4 specular_color = txSpecular.Load(ss_load_coords);
 	float4 gloss = txGloss.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
-	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
-
+		
 
 	float3 wPos = getWorldCoords(iPosition.xy, depth);
 	float3 I = wPos - cameraWorldPos.xyz;
@@ -547,7 +645,17 @@ float4 PSResolve(
 	
 	float4 specular = specular_color * spec_intensity;// saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
 		//return specular;
+
+	//return ssrrColor(iPosition.xy, ViewProjection);
 		
+	//R = reflect(float3(I.x, -I.y, -I.z), normalize(N) * 0.3);
+	//R = reflect(I, normalize(N) * 0.3);
+	//R = reflect(I, float3(0, 0, 0));
+	
+		/*env = txEnvironment.Sample(samCube, R);
+		if (wPos.y <= 0.01)
+			return env;*/
+
 	if (length(N) > 1.73) {
 		R = reflect(I, float3(0,0,0));
 		env = txEnvironment.Sample(samCube, R);
@@ -561,11 +669,16 @@ float4 PSResolve(
 // -------------------------------------------------
 // Distorsion
 // -------------------------------------------------
+
+
+
 float4 PSDistorsion(
 VS_TEXTURED_OUTPUT vin
 , in float4 iPosition : SV_Position
 
-) : SV_Target0{
+) : SV_Target0{	
+
+	//return ssrrColor(iPosition.xy);
 
 	float3 wpos = vin.wPos.xyz;
 	float4 noise = txNormal.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
@@ -587,17 +700,27 @@ VS_TEXTURED_OUTPUT vin
 	hpos.y = (1 - hpos.y) * 0.5;
 	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
 
-		// A bit of fresnel
-		float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
-		float3 N = normalize(vin.wNormal.xyz);
-		float fresnel = 1 - dot(N, dir_to_eye);
+	// A bit of fresnel
+	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
+	float3 N = normalize(vin.wNormal.xyz);
+	float fresnel = 1 - dot(N, dir_to_eye);
 	fresnel = pow(fresnel, 4);
 
+	//float3 dir_ref_corrected = normalize(float3(cameraWorldPos.x, cameraWorldPos.y, cameraWorldPos.z) - vin.wPos.xyz);
+	float3 cam_pos = cameraWorldPos.xyz;
+	float3 cam_origin = float3(-4.22, 1.19, 5.66);
+	float3 pos = vin.wPos.xyz;
+	float3 dir_ref_corrected = normalize(cam_pos - pos);
+	float3 r = float3(-dir_ref_corrected.x, dir_ref_corrected.y, dir_ref_corrected.z);
+	//r += cameraWorldPos.xyz;
+	
 	float3 N_reflected = reflect(-dir_to_eye, N);
-		float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
-		float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
+	N_reflected = reflect(r, normalize(N) * 0.3);
 
-		return env*fresnel + new_color*(1 - fresnel);
+	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
+	float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
+		//return env;
+	return env*fresnel + new_color*(1 - fresnel);
 }
 
 // -------------------------------------------------
