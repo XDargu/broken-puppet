@@ -644,6 +644,53 @@ clearlistener()
 		throw ("No se exportar materiales de tipo " + ( classof(  sm )  as string ))
 		return m
 	)
+	
+	fn FlattenMap obj = (
+		max modify mode    
+		convertto obj editable_mesh
+		modPanel.setCurrentObject obj
+		subObjectLevel = 4
+		Unwrapper = Unwrap_UVW name: "MCVAutomap"
+		Unwrapper.setApplyToWholeObject true
+		addModifier obj Unwrapper
+		Temp = obj.modifiers[ "MCVAutomap"]
+		Temp.setMapChannel 3
+		Temp.setTVSubObjectMode 3
+		Temp.flattenMap 45.0  #() 0.02 true 0 true true     
+		subObjectLevel = 0
+	 
+		convertto obj editable_mesh
+		--deleteModifier obj Unwrapper
+)
+	
+	fn BakeLightmap obj size =
+	(
+		FlattenMap obj
+		--Clear all render elements 
+		obj.iNodeBakeProperties.removeAllBakeElements() 	
+		be2 = LightingMap() -- instance of the bake element class
+		be2.outputSzX =be2.outputSzY = size --set the size of the baked map --specifythe full file path, name and type:
+		local mName = getIdName obj
+		local f_path = out_path + "textures\\lightmaps\\"
+		be2.fileType = (f_path + mName + "_lighting.tga")
+		be2.fileName = filenameFromPath be2.fileType
+		be2.filterOn = true --enable filtering
+		be2.shadowsOn =true --enable shadows
+		be2.enabled = true --enable baking --Preparing theobjectfor baking:
+		obj.INodeBakeProperties.addBakeElement be2 --add second element
+		obj.INodeBakeProperties.bakeEnabled = true --enabling baking
+		obj.INodeBakeProperties.bakeChannel = 3 --channel to bake
+		obj.INodeBakeProperties.nDilations = 1 --expand the texturea bit
+		select obj --we are baking the selection, so we select the object --Call the renderer to bake both elements:
+		render rendertype:#bakeSelected vfb:off progressBar:true outputSize:[size,size]
+		
+		-- Convert to dds using texconv.exe por ejemplo
+		--copyFile infile full_target
+		local infile = (f_path + mName + "_lighting.tga");
+		local cmd = tools_path + "texconv.exe -f DXT5 " + infile + " -o " + out_path + "textures\\lightmaps\\"
+		format "Executing: --%--\n" cmd
+		local rc = DOSCommand (cmd)
+	)
 
 	fn exportMesh obj_to_export = (
 		
@@ -664,6 +711,10 @@ clearlistener()
 		local nfaces = getNumFaces obj
 			
 		local channelA = 1
+		local channelL = 3
+		if not (meshop.getMapSupport obj channelL) then (
+			channelL = 1
+		)
 		
 		local world2local = inverse obj.transform
 		local max2mcv = rotateXMatrix -90
@@ -688,8 +739,8 @@ clearlistener()
 				-- Position
 				local face_pos = getFace obj face_id
 				local face_mapA = meshop.getMapFace obj channelA face_id
+				local face_mapL = meshop.getMapFace obj channelL face_id
 				local face_normals = meshop.getFaceRNormals obj face_id
-				
 				--format "face_pos[%] = %\n" face_id face_pos
 				
 				-- For the 3 vtxs of each face
@@ -697,13 +748,14 @@ clearlistener()
 				for vid in #(1,3,2) do (
 					local wpos = meshop.getVert obj face_pos[ vid ]
 					local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+					local uvL = meshop.getMapVert obj channelL face_mapL[ vid ]
 					local wn = face_normals[ vid ]
 					
 					local mpos = wpos * _world2mcv 
 					local n = wn * _world2mcv.rotationpart 
 					
 					-- Collect all data associated to this vtx
-					local v = #( mpos.x, mpos.y, mpos.z, uvA.x, 1-uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
+					local v = #( mpos.x, mpos.y, mpos.z, uvA.x, 1-uvA.y, n.x, n.y, n.z, uvL.x, 1-uvL.y) -- , N.x, N.y, N.z )...
 					
 					-- Index the vtx or get the index if the vtx has already been defined
 					local idx_of_v = findIndexOfVertex all_vtxs all_str_vtxs v
@@ -721,7 +773,7 @@ clearlistener()
 		computeTangentSpace all_vtxs all_idxs
 		
 		-- Save in binary form to file
-		saveBinaryMesh obj all_vtxs all_idxs all_groups 1006		-- Positions+UV2 only
+		saveBinaryMesh obj all_vtxs all_idxs all_groups 1008		-- Positions+UV2 only
 		
 		-- Delete the temp mesh
 		if obj != obj_to_export then delete obj

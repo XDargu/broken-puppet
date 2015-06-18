@@ -1,1 +1,1 @@
-<std_material name="ventana" diffuse="ventana_diffuse_2" normal="ventana_normal" specular="" gloss="" emissive="ventana_emisive"/>
+<std_material name="ventana" diffuse="ventana_diffuse_2" normal="ventana_normal" specular="" glossiness="" emissive="ventana_emisive"/>

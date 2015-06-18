@@ -56,6 +56,7 @@ void CMaterial::activateTextures() const {
 		specular->activate(4);
 	if (glossiness)
 		glossiness->activate(5);
+
 	/*if (emissive)
 		emissive->activate(4);
 	if (ao)
