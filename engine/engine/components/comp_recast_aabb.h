@@ -2,11 +2,14 @@
 #define INC_COMP_RECAST_AABB_H
 
 #include "base_component.h"
+#include "aabb.h"
 
 struct TCompRecastAABB : TBaseComponent {
 
 	CHandle m_transform;
-	CHandle m_aabb;
+	AABB m_aabb;
+	XMVECTOR min;
+	XMVECTOR max;
 
 	TCompRecastAABB();
 	~TCompRecastAABB();

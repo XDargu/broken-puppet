@@ -27,8 +27,7 @@ void TCompColliderConvex::loadFromAtts(const std::string& elem, MKeyValue &atts)
 
 	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
 		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
-		TCompAABB* AABB_comp = (TCompAABB*)recast_AABB->m_aabb;
-		AABB recast_aabb = AABB(AABB_comp->min, AABB_comp->max);
+		AABB recast_aabb = recast_AABB->m_aabb;
 		if (recast_aabb.intersects(m_aabb)) {
 			addInputNavMesh();
 			CNav_mesh_manager::get().colConvex.push_back(this);

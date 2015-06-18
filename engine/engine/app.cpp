@@ -155,6 +155,7 @@ void createManagers() {
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
+	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompColliderMesh>()->init(512);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
@@ -181,7 +182,6 @@ void createManagers() {
 	getObjManager<TCompSensorTied>()->init(64);
 	getObjManager<TCompSensorDistPlayer>()->init(64);
 	getObjManager<TCompTrigger>()->init(1024);
-	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
 	//
@@ -231,6 +231,7 @@ void initManagers() {
 
 	getObjManager<TCompTransform>()->initHandlers();
 	getObjManager<TCompCamera>()->initHandlers();
+	getObjManager<TCompRecastAABB>()->initHandlers();
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
@@ -261,7 +262,6 @@ void initManagers() {
 	getObjManager<TCompSwitchPushController>()->initHandlers();
 
 	getObjManager<TCompTrigger>()->initHandlers();
-	getObjManager<TCompRecastAABB>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
 
@@ -984,8 +984,8 @@ void CApp::renderDebugEntities() {
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
-	//if (renderNavMesh)
-	//CNav_mesh_manager::get().render_nav_mesh();
+	if (renderNavMesh)
+	CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();

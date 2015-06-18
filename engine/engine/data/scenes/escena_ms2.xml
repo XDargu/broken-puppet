@@ -33,6 +33,11 @@
   <entity  prefab="PlayerCamera">
     <transform position="-7.95658 -7.07506 -13.7756"/>
   </entity>
+  <entity>
+    <transform position="-18.7392 9.38858 -37.4655" rotation="0.0 0.0351602 0.0 0.999382" scale="1.0 1.0 1.0"/>
+    <!---<aabb min="-22.0 0.0 -33.0" max="5.0 1.0 -8.0"/>-->
+    <recastAABB min="-22.0 0.0 -33.0" max="5.0 1.0 -8.0"/>
+  </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="dvn_arqui_suelo_suelo_01_6.0" />
     <transform position="0.0 -3.49691e-007 -8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
