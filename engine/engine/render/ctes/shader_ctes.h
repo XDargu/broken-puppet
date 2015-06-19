@@ -12,6 +12,7 @@ cbuffer TCtesObject SHADER_REGISTER(b0)
 cbuffer TCtesCamera SHADER_REGISTER(b1)
 {
 	matrix ViewProjection;
+	matrix GameViewProjection;
 	matrix cameraView;
 	float4 cameraWorldPos;
 	float4 cameraWorldFront;
@@ -131,6 +132,13 @@ cbuffer TCtesUnderwater SHADER_REGISTER(b3)
 	float uw_amount;
 	float water_level;
 	float dummy_uw, dummy_uw2;
+};
+
+cbuffer TCtesSSRR SHADER_REGISTER(b3)
+{
+	float ssrr_amount;
+	float ssrr_quality;
+	float dummy_ssrr, dummy_ssrr2;
 };
 
 #endif

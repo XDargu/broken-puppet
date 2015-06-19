@@ -555,9 +555,11 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 	sc = mul(float4(worldStartingPos, 1), viewproj);
 	sc.xyz /= sc.w;
 	sc.x = (sc.x + 1) * 0.5;
-	sc.y = (1 - sc.y) * 0.5;*/
+	sc.y = (1 - sc.y) * 0.5;
 
-	//return txDiffuse.Sample(samClampLinear, sc.xy);
+	return float4(sc.xy, 0, 0);
+
+	return txDiffuse.Sample(samClampLinear, sc.xy);*/
 	//return float4(refl, 1);
 	//float2 m_coords = sc.xy;
 	
@@ -652,7 +654,6 @@ float4 PSResolve(
 	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
 		
-
 	float3 wPos = getWorldCoords(iPosition.xy, depth);
 	float3 I = wPos - cameraWorldPos.xyz;
 	I = normalize(I);

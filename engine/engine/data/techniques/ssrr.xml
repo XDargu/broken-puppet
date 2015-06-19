@@ -1,0 +1,6 @@
+<technique 
+	fx="ssrr.fx"
+	vs="VSSSRR"
+	vs_decl="vdcl_position_uv"
+	ps="PSSSRR"
+	/>

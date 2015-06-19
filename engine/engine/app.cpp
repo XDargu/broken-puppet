@@ -120,6 +120,7 @@ TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
+TSSRRStep ssrr;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -363,6 +364,7 @@ bool CApp::create() {
 	post_process_optioner.sharpen = &sharpen;
 	post_process_optioner.chromatic_aberration = &chromatic_aberration;
 	post_process_optioner.blur = &blur;
+	post_process_optioner.ssrr = &ssrr;
 
 	post_process_optioner.init();
 
@@ -512,6 +514,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
 		render_techniques_manager.reload("distorsion");
+		render_techniques_manager.reload("ssrr");
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -705,8 +708,10 @@ void CApp::render() {
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
+	activateCamera(camera, 1);
+	ssrr.apply(rt_base);
 	ssao.apply(rt_base);
-	sharpen.apply(rt_base);
+	sharpen.apply(ssrr.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
@@ -1225,6 +1230,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
+	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");
