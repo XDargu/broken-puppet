@@ -504,7 +504,8 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("ssao");
+		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -514,7 +515,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
 		render_techniques_manager.reload("distorsion");
-		render_techniques_manager.reload("ssrr");
+		render_techniques_manager.reload("ssrr");*/
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -710,8 +711,8 @@ void CApp::render() {
 	
 	activateCamera(camera, 1);
 	ssrr.apply(rt_base);
-	ssao.apply(rt_base);
-	sharpen.apply(ssrr.getOutput());
+	ssao.apply(ssrr.getOutput());
+	sharpen.apply(ssao.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
