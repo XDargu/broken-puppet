@@ -533,16 +533,18 @@ float4 rainbow(float x) {
 	return float4(r, g, b, 1);
 }
 
-float4 ssrrColor(float2 iPosition, matrix viewproj) {
+
+
+float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 worldStartingPos, float3 normal) {
 	// SSRR test
 	float4 color = float4(0, 0, 0, 0);
 		
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
-	float4 origColor = txDiffuse.Load(ss_load_coords);
+	//float4 origColor = txDiffuse.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
-	float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
+	//float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 
-	float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
+	//float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
 
 	float3 cameraToWorld = worldStartingPos - cameraWorldPos.xyz;
 	float cameraToWorldDist = length(cameraToWorld);
@@ -568,7 +570,7 @@ float4 ssrrColor(float2 iPosition, matrix viewproj) {
 
 	float cosAngle = abs(dot(normal, cameraToWorldNorm)); // Will be a value between 0 and 1
 	float fact = 1 - cosAngle;
-	fact = min(1, 1 - fact*fact);
+	fact = min(1, 0.8 - fact*fact);
 
 	float3 newPos;
 	float4 newScreen;
@@ -622,6 +624,17 @@ float4 ssrrColor(float2 iPosition, matrix viewproj) {
 		color = rainbow(i); // Encode number of iterations as a color. Red, then green and last blue*/
 	
 	return color;
+}
+
+float4 ssrrColor(float2 iPosition, matrix viewproj) {
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float4 origColor = txDiffuse.Load(ss_load_coords);
+	float depth = txDepth.Load(ss_load_coords).x;
+	float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
+
+	float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
+
+	return ssrrColor(iPosition, viewproj, origColor, worldStartingPos, normal);
 }
 
 // -------------------------------------------------
@@ -689,13 +702,11 @@ VS_TEXTURED_OUTPUT vin
 
 ) : SV_Target0{	
 
-	float4 refl = float4(ssrrColor(iPosition.xy, ViewProjection).xyz, 1);
 
-	//return txSpecular.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
-
+	//vin.UV *= 0.5;
 	float3 wpos = vin.wPos.xyz;
-	float4 noise = txGloss.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
-	float4 noise2 = txGloss.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
+	float4 noise = txEmissive.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
+	float4 noise2 = txEmissive.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
 	noise2 *= 1;
 	//return noise;
 	noise *= 0.9;
@@ -705,7 +716,6 @@ VS_TEXTURED_OUTPUT vin
 	wpos.z += noise.x * sin(world_time + .123f);
 	wpos.x += noise2.x * cos(world_time*0.23);
 	wpos.z += noise2.x * sin(world_time*1.7 + .123f);
-
 	// ++add noise
 	float4 hpos = mul(float4(wpos, 1), ViewProjection);
 	hpos.xyz /= hpos.w;   // -1 .. 1
@@ -717,10 +727,10 @@ VS_TEXTURED_OUTPUT vin
 	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
 	float3 N = normalize(vin.wNormal.xyz);
 	float fresnel = 1 - dot(N, dir_to_eye);
-	fresnel = pow(fresnel, 4);
+	fresnel = pow(fresnel, 2);
 
 	//float3 dir_ref_corrected = normalize(float3(cameraWorldPos.x, cameraWorldPos.y, cameraWorldPos.z) - vin.wPos.xyz);
-	float3 cam_pos = cameraWorldPos.xyz;
+	/*float3 cam_pos = cameraWorldPos.xyz;
 	float3 cam_origin = float3(-4.22, 1.19, 5.66);
 	float3 pos = vin.wPos.xyz;
 	float3 dir_ref_corrected = normalize(cam_pos - pos);
@@ -730,10 +740,21 @@ VS_TEXTURED_OUTPUT vin
 	float3 N_reflected = reflect(-dir_to_eye, N);
 	N_reflected = reflect(r, normalize(N) * 0.3);
 
-	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
+	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);*/
 	float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
-		return refl;
-		return refl*fresnel + new_color*(1 - fresnel);
+
+	//float4 refl = float4(ssrrColor(iPosition.xy, ViewProjection).xyz, 1);
+	float4 refl = float4(ssrrColor(iPosition.xy, ViewProjection, albedo, wpos, N).xyz, 1);
+
+	//float refl_val = length(txGloss.Load(uint3(iPosition.xy, 0)).xyz);	
+	//refl *= float4(0.25, 0.29, 0.21, 1);
+	//refl *= refl_val;
+	//return refl;
+	//refl = float4(1, 0, 0, 1);
+	new_color = refl*fresnel + new_color*(1 - fresnel);
+	//new_color = float4(new_color.x*0.4, new_color.y*0.5, new_color.z*0.35, 1);
+	
+	return new_color;
 }
 
 // -------------------------------------------------
