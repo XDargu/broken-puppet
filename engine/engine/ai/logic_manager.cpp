@@ -7,6 +7,7 @@
 #include "components\comp_player_controller.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
+#include "components\comp_golden_needle_logic.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -148,6 +149,10 @@ void CLogicManager::setTimer(std::string the_name, float time) {
 	timers[the_name] = CTimer(time);
 }
 
+void CLogicManager::registerGNLogic(CHandle golden_logic){
+	GNLogic.push_back(golden_logic);
+}
+
 void CLogicManager::registerTrigger(CHandle trigger) {
 	triggers.push_back(trigger);
 }
@@ -165,6 +170,11 @@ void CLogicManager::onTriggerExit(CHandle trigger, CHandle who) {
 
 	if (c_name && c_name_who)
 		execute("onTriggerExit_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+}
+
+void CLogicManager::unregisterGNLogic(CHandle golden_logic) {
+	auto it = std::find(GNLogic.begin(), GNLogic.end(), golden_logic);
+	GNLogic.erase(it);
 }
 
 void CLogicManager::unregisterTrigger(CHandle trigger) {

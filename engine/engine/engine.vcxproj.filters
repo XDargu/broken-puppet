@@ -499,6 +499,9 @@
     <ClInclude Include="components\comp_recast_aabb.h">
       <Filter>components\ai</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_golden_needle_logic.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -924,6 +927,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_recast_aabb.cpp">
       <Filter>components\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_golden_needle_logic.cpp">
+      <Filter>components\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

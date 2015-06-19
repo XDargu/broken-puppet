@@ -30,15 +30,15 @@ bool CNav_mesh_manager::build_nav_mesh(){
 void CNav_mesh_manager::prepareInputNavMesh(){
 
 	for (int i = 0; i < colMeshes.size(); ++i){
-		colMeshes[i]->addInputNavMesh();
+		((TCompColliderMesh*)colMeshes[i])->addInputNavMesh();
 	}
 
 	for (int i = 0; i < colBoxes.size(); ++i){
-		colBoxes[i]->addInputNavMesh();
+		((TCompColliderBox*)colBoxes[i])->addInputNavMesh();
 	}
 
 	for (int i = 0; i < colSpheres.size(); ++i){
-		colSpheres[i]->addInputNavMesh();
+		((TCompColliderSphere*)colSpheres[i])->addInputNavMesh();
 	}
 
 	/*for (int i = 0; i < colCapsules.size(); ++i){
@@ -55,14 +55,14 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 	int i = 0;
 	bool updatedChecked = false;
 	while ((!updatedChecked) && (i < colBoxes.size())){
-		updatedChecked = colBoxes[i]->getIfUpdated();
+		updatedChecked = ((TCompColliderBox*)colBoxes[i])->getIfUpdated();
 		i++;
 	}
 	
 	if (!updatedChecked){
 		i = 0;
 		while ((!updatedChecked) && (i < colSpheres.size())){
-			updatedChecked = colSpheres[i]->getIfUpdated();
+			updatedChecked = ((TCompColliderSphere*)colSpheres[i])->getIfUpdated();
 			i++;
 		}
 	}

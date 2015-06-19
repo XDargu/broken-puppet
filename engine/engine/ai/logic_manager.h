@@ -16,6 +16,7 @@ class CLogicManager
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;
+	std::vector<CHandle> GNLogic;
 
 	std::vector<CRigidAnimation> animations;
 
@@ -42,9 +43,11 @@ public:
 	void setTimer(std::string, float time);
 
 	void registerTrigger(CHandle trigger);
+	void registerGNLogic(CHandle golden_logic);
 	void onTriggerEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
+	void unregisterGNLogic(CHandle golden_logic);
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);

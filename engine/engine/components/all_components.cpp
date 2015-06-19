@@ -34,6 +34,7 @@ DECL_OBJ_MANAGER(TCompAiFsmBasic, "aiFSMBasic");
 DECL_OBJ_MANAGER(TCompAiBT, "aiBT");
 DECL_OBJ_MANAGER(TCompBtGrandma, "btGrandma");
 DECL_OBJ_MANAGER(TCompRecastAABB, "recastAABB");
+DECL_OBJ_MANAGER(TCompGNLogic, "logicGoldenNeedle");
 DECL_OBJ_MANAGER(TCompEnemyController, "enemyController");
 DECL_OBJ_MANAGER(TCompNeedle, "needle");
 DECL_OBJ_MANAGER(TCompRope, "rope");

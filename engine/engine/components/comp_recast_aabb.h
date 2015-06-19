@@ -6,9 +6,8 @@
 
 struct TCompRecastAABB : TBaseComponent {
 
-	AABB m_aabb;
-	XMVECTOR min;
-	XMVECTOR max;
+	CHandle m_transform;
+	CHandle m_aabb;
 
 	TCompRecastAABB();
 	~TCompRecastAABB();

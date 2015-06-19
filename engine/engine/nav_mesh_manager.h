@@ -39,10 +39,10 @@ public:
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
-	std::vector<TCompColliderMesh*>     colMeshes;
-	std::vector<TCompColliderConvex*>   colConvex;
-	std::vector<TCompColliderBox*>      colBoxes;
-	std::vector<TCompColliderSphere*>   colSpheres;
+	std::vector<CHandle>     colMeshes;
+	std::vector<CHandle>   colConvex;
+	std::vector<CHandle>      colBoxes;
+	std::vector<CHandle>   colSpheres;
 	std::vector<CHandle> recastAABBs;
 	bool keep_updating_navmesh;
 	//std::vector<TCompColliderCapsule*>  colCapsules;

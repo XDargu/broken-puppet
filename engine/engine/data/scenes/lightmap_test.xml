@@ -1,4 +1,14 @@
 <scene>
+  <entity tag = "enemy"  prefab="EnemyGrandma">
+    <name name="Grandma1" />
+    <transform position="-6.16 -0.10 9.30" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="abuela#1"/>
+  </entity>
+  <entity  >
+    <transform position="-18.7392 9.38858 -37.4655" rotation="0.0 0.0351602 0.0 0.999382" scale="1.0 1.0 1.0"/>
+    <aabb min="-0.285729 0.0 -0.24946" max="0.285729 0.0840727 0.24946"/>
+    <recastAABB/>
+  </entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_arqui_suelo_pared_half_02_1.0" />
 <transform position="0.0 -2.04648e-007 -4.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>

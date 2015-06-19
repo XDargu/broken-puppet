@@ -165,6 +165,7 @@ void createManagers() {
 	getObjManager<TCompRigidBody>()->init(512);
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
+	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
 	getObjManager<TCompCameraPivotController>()->init(1);
@@ -238,6 +239,7 @@ void initManagers() {
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
+	getObjManager<TCompGNLogic>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
@@ -325,12 +327,12 @@ bool CApp::create() {
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
-	loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/lightmap_test.xml");
+	loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
 
@@ -583,6 +585,7 @@ void CApp::update(float elapsed) {
 
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	getObjManager<TCompGNLogic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -1005,6 +1008,7 @@ void CApp::renderDebugEntities() {
 		TCompTransform* t = e->get<TCompTransform>();
 		TCompName* name = e->get<TCompName>();
 		TCompAABB* aabb = e->get<TCompAABB>();
+		TCompGNLogic* golden_needle = e->get<TCompGNLogic>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
