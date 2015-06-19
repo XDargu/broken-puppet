@@ -176,7 +176,7 @@ float getShadowAt(float4 wPos) {
     return 0;
 
   float2 center = light_proj_coords.xy;
-  float depth = light_proj_coords.z - 0.0002;
+  float depth = light_proj_coords.z - 0.002;
 
   float amount = tapAt(center, depth) * 0.2;
 
@@ -265,7 +265,7 @@ void PSGBuffer(
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y)
 	  acc_light += float4(0.98, 0.85, 0.8, 0) * 0.15;
   else
-	  acc_light += lightmap * 0.5;
+	  acc_light += float4(lightmap.xyz * 0.5, 0);
   
   
   //acc_light *= diffuse_amount2;
@@ -538,12 +538,9 @@ float4 ssrrColor(float2 iPosition, matrix viewproj) {
 	float4 color = float4(0, 0, 0, 0);
 		
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
-	float4 albedo = txDiffuse.Load(ss_load_coords);
-	float4 specular_color = txSpecular.Load(ss_load_coords);
-	float4 gloss = txGloss.Load(ss_load_coords);
+	float4 origColor = txDiffuse.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
 	float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
-	float4 diffuse = txAccLight.Load(ss_load_coords);
 
 	float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
 
@@ -551,23 +548,27 @@ float4 ssrrColor(float2 iPosition, matrix viewproj) {
 	float cameraToWorldDist = length(cameraToWorld);
 	float3 cameraToWorldNorm = normalize(cameraToWorld);
 	float3 refl = normalize(reflect(cameraToWorldNorm, normal)); // This is the reflection vector
-	
-	float4 sc;
+	//return float4(normal, 1);
+	/*float4 sc;
 	sc = mul(float4(worldStartingPos, 1), viewproj);
 	sc.xyz /= sc.w;
 	sc.x = (sc.x + 1) * 0.5;
-	sc.y = (1 - sc.y) * 0.5;
+	sc.y = (1 - sc.y) * 0.5;*/
 
-	return txDiffuse.Sample(samClampLinear, sc.xy);
-
-	float2 m_coords = sc.xy;
-	return txDiffuse.Load(uint3(m_coords, 0));
+	//return txDiffuse.Sample(samClampLinear, sc.xy);
+	//return float4(refl, 1);
+	//float2 m_coords = sc.xy;
+	
 
 	if (dot(refl, cameraToWorldNorm) < 0) {
 		// Ignore reflections going backwards towards the camera, indicate with white
 		color = float4(1, 1, 1, 1);
-		return color;
+		return origColor;
 	}
+
+	float cosAngle = abs(dot(normal, cameraToWorldNorm)); // Will be a value between 0 and 1
+	float fact = 1 - cosAngle;
+	fact = min(1, 1 - fact*fact);
 
 	float3 newPos;
 	float4 newScreen;
@@ -579,19 +580,18 @@ float4 ssrrColor(float2 iPosition, matrix viewproj) {
 		i += 0.05;
 		rayTrace += refl*incr;
 		incr *= 1.3;
-		newScreen = mul(float4(rayTrace, 1), ViewProjection);
-		newScreen /= newScreen.w;
-		newScreen * 0.5 + 0.5; // From 0 to 1
-		newScreen.x *= cameraHalfXRes * 2;
-		newScreen.y *= cameraHalfYRes * 2;
+		newScreen = mul(float4(rayTrace, 1), viewproj);
+		newScreen.xyz /= newScreen.w;
+		newScreen.x = (newScreen.x + 1) * 0.5;
+		newScreen.y = (1 - newScreen.y) * 0.5;
 		
 		float2 coords = newScreen.xy;
 		//float2 coords = newScreen.xy / 2.0 + 0.5;
 		
 		//return float4(coords * float2(cameraHalfXRes, cameraHalfYRes) * 0.5, 0, 0);
-		float n_depth = txDepth.Load(uint3(coords, 0)).x;
-		newPos = getWorldCoords(coords, n_depth);
-
+		float n_depth = txDepth.Sample(samClampLinear, coords);
+		newPos = getWorldCoords(coords * float2(cameraHalfXRes * 2, cameraHalfYRes * 2), n_depth);
+		//return txDiffuse.Sample(samClampLinear, coords);
 		//newPos = rayTrace;
 		
 		currentWorldDist = length(newPos.xyz - cameraWorldPos.xyz);
@@ -601,14 +601,25 @@ float4 ssrrColor(float2 iPosition, matrix viewproj) {
 		}
 	} while (rayDist < currentWorldDist);
 
-	if (cameraToWorldDist > currentWorldDist)
+	color = txDiffuse.Sample(samClampLinear, newScreen.xy);
+
+	if (dot(refl, cameraToWorldNorm) < 0)
+		fact = 1.0; // Ignore reflections going backwards towards the camera
+	else if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1)
+		fact = 1.0; // Falling outside of screen
+	else if (cameraToWorldDist > currentWorldDist)
+		fact = 1.0;
+	
+	color = origColor*fact + color*(1 - fact);
+	 
+	/*if (cameraToWorldDist > currentWorldDist)
 		color = float4(1, 1, 0, 1); // Yellow indicates we found a pixel hidden behind another object
 	else if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1)
 		color = float4(0, 0, 0, 1); // Black used for outside of screen
 	else if (newScreen.z > 1 && newScreen.z < -1)
 		color = float4(1, 1, 1, 1); // White outside of frustum
 	else
-		color = rainbow(i); // Encode number of iterations as a color. Red, then green and last blue
+		color = rainbow(i); // Encode number of iterations as a color. Red, then green and last blue*/
 	
 	return color;
 }
@@ -678,13 +689,15 @@ VS_TEXTURED_OUTPUT vin
 
 ) : SV_Target0{	
 
-	//return ssrrColor(iPosition.xy);
+	float4 refl = float4(ssrrColor(iPosition.xy, ViewProjection).xyz, 1);
+
+	//return txSpecular.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
 
 	float3 wpos = vin.wPos.xyz;
-	float4 noise = txNormal.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
-	float4 noise2 = txNormal.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
+	float4 noise = txGloss.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
+	float4 noise2 = txGloss.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
 	noise2 *= 1;
-
+	//return noise;
 	noise *= 0.9;
 	noise2 *= 0.9;
 
@@ -719,8 +732,8 @@ VS_TEXTURED_OUTPUT vin
 
 	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
 	float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
-		//return env;
-	return env*fresnel + new_color*(1 - fresnel);
+		return refl;
+		return refl*fresnel + new_color*(1 - fresnel);
 }
 
 // -------------------------------------------------

@@ -22,8 +22,8 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		diffuse = texture_manager.getByName(diffuse_name.c_str());
 		if (normal_name != "")
 			normal = texture_manager.getByName(normal_name.c_str());
-		else 
-			normal = texture_manager.getByName("black");
+		/*else 
+			normal = texture_manager.getByName("black");*/
 		if (ao_name != "")
 			ao = texture_manager.getByName(ao_name.c_str());
 		if (specular_name != "")

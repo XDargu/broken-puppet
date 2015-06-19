@@ -475,7 +475,9 @@ void CApp::update(float elapsed) {
 		//loadScene("data/scenes/escena_ms2.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
-		sm.playFX("sonar");
+		//sm.playFX("sonar");
+		/*CEntity* e = entity_manager.getByName("Fspot001_49.0");		
+		render_manager.activeCamera = e->get<TCompCamera>();*/
 	}
 
 	//sm.StopLoopedFX("sonar");
