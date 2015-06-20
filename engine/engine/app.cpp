@@ -315,18 +315,6 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	// Load picture
-	renderUtilsCreate();
-	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
-	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
-	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	activateTextureSamplers();
-	activateRSConfig(RSCFG_DEFAULT);
-	activateZConfig(ZCFG_DISABLE_ALL);
-
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
-	::render.swap_chain->Present(0, 0);
-
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
@@ -474,7 +462,7 @@ void CApp::update(float elapsed) {
 
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		//loadScene("data/scenes/escena_ms2.xml");
+		loadScene("data/scenes/anim_test.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 		//sm.playFX("sonar");
@@ -1120,6 +1108,19 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+
+	// Load picture
+	renderUtilsDestroy();
+	renderUtilsCreate();
+	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
+	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	activateTextureSamplers();
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DISABLE_ALL);
+
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
+	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;
 	pause = false;
