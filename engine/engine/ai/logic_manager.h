@@ -64,6 +64,9 @@ public:
 
 	void bootLUA();
 
+	//Golden Needle
+	bool getPointIfInside(XMVECTOR& vector);
+
 	// LUA
 	void execute(std::string text);
 
