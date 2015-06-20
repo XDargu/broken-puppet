@@ -1534,3 +1534,11 @@ float bt_grandma::getAnimationDuration(int id) {
 void bt_grandma::setActive(bool act){
 	active = act;
 }
+
+void bt_grandma::setIndRecastAABB(int ind){
+	ind_recast_aabb = ind;
+}
+
+int bt_grandma::getIndRecastAABB(){
+	return ind_recast_aabb;
+}

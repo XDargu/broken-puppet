@@ -21,7 +21,8 @@ private:
 	int num;
 	bool first;
 	bool need_update;
-
+	int recast_aabb_index;
+	CHandle player;
 public:
 	CNav_mesh_manager();
 	~CNav_mesh_manager();
@@ -36,6 +37,9 @@ public:
 	bool rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos);
 	void clearNavMesh();
 	void checkUpdates();
+	int getLastRecastAABBIndex();
+	void registerRecastAABB(CHandle recastAABB);
+	void checkDistaceToEnemies();
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;

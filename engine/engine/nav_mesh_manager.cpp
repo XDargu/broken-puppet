@@ -2,8 +2,11 @@
 #include "nav_mesh_manager.h"
 #include "entity_manager.h"
 #include "physics_manager.h"
+#include "ai\aimanager.h"
+#include "components\comp_recast_aabb.h"
 
 static CNav_mesh_manager the_nav_mesh_manager;
+static float max_distance_act_enemies = 4.f;
 CNavmesh* nav_mesh;
 CNavmesh 	nav_A;		// temporal 1
 CNavmesh 	nav_B;		// temporal 2
@@ -23,6 +26,7 @@ bool CNav_mesh_manager::build_nav_mesh(){
 	nav_A.build();
 	nav_mesh = &nav_A;
 	keep_updating_navmesh = true;
+	player = CEntityManager::get().getByName("Player");
 	new std::thread(&CNav_mesh_manager::updateNavmesh, this);
 	return true;
 }
@@ -222,8 +226,32 @@ bool CNav_mesh_manager::rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos){
 	return navMeshQuery.m_hitResult;
 }
 
+int CNav_mesh_manager::getLastRecastAABBIndex(){
+	return recast_aabb_index;
+}
+
+void CNav_mesh_manager::registerRecastAABB(CHandle recastAABB){
+	recastAABBs.push_back(recastAABB);
+	recast_aabb_index++;
+}
+
+void CNav_mesh_manager::checkDistaceToEnemies(){
+	for (int i = 0; i < recastAABBs.size(); ++i){
+		TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
+		int ind=aux_recast_aabb->getIndex();
+		AABB aabb_struct = AABB(((TCompAABB*)aux_recast_aabb->m_aabb)->min, ((TCompAABB*)aux_recast_aabb->m_aabb)->max);
+		CHandle p_transform=((CEntity*)player)->get<TCompTransform>();
+		TCompTransform* player_transform = (TCompTransform*)p_transform;
+		float distance = aabb_struct.sqrDistance(player_transform->position);
+		if (distance < max_distance_act_enemies*2.f){
+			aimanager::get().recastAABBActivate(ind);
+		}
+	}
+}
+
 CNav_mesh_manager::CNav_mesh_manager()
 {
+	recast_aabb_index = 0;
 }
 
 

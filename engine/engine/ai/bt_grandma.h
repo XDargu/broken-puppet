@@ -24,6 +24,7 @@ private:
 	CHandle character_controller;
 	CHandle player;
 	int ind_path;
+	int ind_recast_aabb;
 	physx::PxVec3 last_look_direction;
 	physx::PxVec3 mov_direction;
 	physx::PxVec3 look_direction;
@@ -221,6 +222,9 @@ public:
 	float getAnimationDuration(int id);
 
 	void setActive(bool act);
+
+	void setIndRecastAABB(int ind);
+	int getIndRecastAABB();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };

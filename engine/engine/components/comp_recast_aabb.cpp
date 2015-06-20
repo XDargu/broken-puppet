@@ -4,6 +4,7 @@
 #include "nav_mesh_manager.h"
 
 TCompRecastAABB::TCompRecastAABB() {
+	index = -1;
 }
 
 TCompRecastAABB::~TCompRecastAABB() {
@@ -17,7 +18,13 @@ void TCompRecastAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	TCompTransform* transform = (TCompTransform*)m_transform;
 	TCompAABB* aabb = (TCompAABB*)m_aabb;
 
-	CNav_mesh_manager::get().recastAABBs.push_back(this);
+	CNav_mesh_manager::get().registerRecastAABB(this);
+	index=CNav_mesh_manager::get().getLastRecastAABBIndex();
+
+}
+
+int TCompRecastAABB::getIndex(){
+	return index;
 }
 
 void TCompRecastAABB::init() {

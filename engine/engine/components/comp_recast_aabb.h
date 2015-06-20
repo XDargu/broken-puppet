@@ -8,11 +8,14 @@ struct TCompRecastAABB : TBaseComponent {
 
 	CHandle m_transform;
 	CHandle m_aabb;
+	int index;
 
 	TCompRecastAABB();
 	~TCompRecastAABB();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
+
+	int getIndex();
 
 	void init();
 
