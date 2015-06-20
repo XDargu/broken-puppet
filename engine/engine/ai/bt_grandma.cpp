@@ -131,6 +131,7 @@ void bt_grandma::create(string s)
 	initial_attack = false;
 	see_player = false;
 	animation_done = false;
+	active = false;
 
 	//player_touch = false;
 
@@ -1327,34 +1328,36 @@ void bt_grandma::PlayerFoundSensor(){
 
 void bt_grandma::update(float elapsed){
 
-	sensor_acum += elapsed;
+	if (active){
+		sensor_acum += elapsed;
 
-	if (sensor_delay <= sensor_acum)
-	{
-		needleViewedSensor();
-		sensor_acum = 0;
-	}
-
-
-	playerViewedSensor();
-	tiedSensor();
-	if (findPlayer()){
-		last_point_player_saw = ((TCompTransform*)player_transform)->position;
-		last_time_player_saw = 0;
-	}
-	/*else{
-		float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
-		if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
-			if (rol == role::ATTACKER)
-				aimanager::get().RemoveEnemyAttacker(this);
+		if (sensor_delay <= sensor_acum)
+		{
+			needleViewedSensor();
+			sensor_acum = 0;
 		}
-	}*/
-	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
-	if (!m_ragdoll->isRagdollActive()) {
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+
+		playerViewedSensor();
+		tiedSensor();
+		if (findPlayer()){
+			last_point_player_saw = ((TCompTransform*)player_transform)->position;
+			last_time_player_saw = 0;
+		}
+		/*else{
+			float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+			if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
+			if (rol == role::ATTACKER)
+			aimanager::get().RemoveEnemyAttacker(this);
+			}
+			}*/
+		TCompRagdoll* m_ragdoll = enemy_ragdoll;
+
+		if (!m_ragdoll->isRagdollActive()) {
+			((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+		}
+		this->recalc(elapsed);
 	}
-	this->recalc(elapsed);
 }
 
 bool bt_grandma::trueEveryXSeconds(float time)
@@ -1526,4 +1529,8 @@ float bt_grandma::getAnimationDuration(int id) {
 
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
+}
+
+void bt_grandma::setActive(bool act){
+	active = act;
 }

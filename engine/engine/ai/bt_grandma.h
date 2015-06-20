@@ -46,6 +46,7 @@ private:
 	bool see_player;
 	bool initial_attack;
 	bool animation_done;
+	bool active;
 	//bool player_touch;
 	int last_anim_id;
 
@@ -218,6 +219,8 @@ public:
 	void playAnimationIfNotPlaying(int id);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+
+	void setActive(bool act);
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };
