@@ -5,11 +5,13 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
+#include "components\comp_camera.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
+#include "render\render_manager.h"
 #include "entity_inspector.h"
 //#include <SLB\include\SLB\SLB.hpp>
 #include "SLB\include\SLB\SLB.hpp"
@@ -45,6 +47,11 @@ std::vector<std::string> timers_to_delete;
 std::vector<TKeyFrame> keyframes_to_delete;
 
 void CLogicManager::update(float elapsed) {
+
+	char buffer[64];
+	sprintf(buffer, "updateCoroutines( %f )", elapsed);
+	luaL_dostring(L, buffer);
+
 	SET_ERROR_CONTEXT("Upadating timers", "");
 	// Update the timers
 	for (auto& it : timers) {
@@ -334,6 +341,7 @@ void CLogicManager::bootLUA() {
 		.set("cameraLookAtBot", (void (CLogicManager::*)(CBot)) &CLogicManager::cameraLookAtBot)
 		.set("cameraLookAtPosition", (void (CLogicManager::*)(CVector)) &CLogicManager::cameraLookAtPosition)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
+		.set("changeCamera", &CLogicManager::changeCamera)
 	;
 
 	// Register the bot class
@@ -381,7 +389,9 @@ void CLogicManager::bootLUA() {
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
-	luaL_dofile(L, "test.lua");
+	luaL_dofile(L, "data/lua/scheduler.lua");
+	luaL_dofile(L, "data/lua/test.lua");
+	
 
 	execute("onInit();");
 }
@@ -503,4 +513,15 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 		}
 	}
 
+}
+
+void CLogicManager::changeCamera(std::string name) {
+	CHandle camera_entity = CEntityManager::get().getByName(name.c_str());
+	if (camera_entity.isValid()) {
+		CEntity* e = camera_entity;
+		TCompCamera* camera = e->get<TCompCamera>();
+		if (camera) {
+			render_manager.activeCamera = camera;
+		}
+	}
 }

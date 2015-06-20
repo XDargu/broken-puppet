@@ -375,7 +375,7 @@ bool CApp::create() {
 	fps = 0;
 
 	// Timer test
-	logic_manager.setTimer("TestTimer", 10);
+	logic_manager.setTimer("TestTimer", 2);
 
 	assert(is_ok);
 
@@ -1183,7 +1183,7 @@ void CApp::loadScene(std::string scene_name) {
 	debug_map = 0;
 
 	//physics_manager.init();
-
+	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
@@ -1201,8 +1201,11 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
+	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
+	ctes_global.uploadToGPU();
+
 	XASSERT(is_ok, "Error creating global constants");
 
 	XASSERT(is_ok, "Error creating debug meshes");

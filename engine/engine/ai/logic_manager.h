@@ -79,6 +79,7 @@ public:
 	void cameraLookAt(XMVECTOR target);
 
 	void playerDead();
+	void changeCamera(std::string name);
 
 	void print(std::string text);
 	void help();

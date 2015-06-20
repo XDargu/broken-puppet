@@ -258,16 +258,20 @@ void PSGBuffer(
   // 
   //acc_light = getShadowAt(input.wPos);
 
-  float4 emis = txEmissive.Sample(samWrapLinear, input.UV); 
-  acc_light = float4(emis.xyz, 0);
-
+  
+  acc_light = float4(0, 0, 0, 0);
+	  
   //if (true)
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y)
 	  acc_light += float4(0.98, 0.85, 0.8, 0) * 0.15;
   else
 	  acc_light += float4(lightmap.xyz * 0.5, 0);
   
+  acc_light *= added_ambient_color;
   
+  float4 emis = txEmissive.Sample(samWrapLinear, input.UV);
+  acc_light += float4(emis.xyz, 0);
+
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
 }
@@ -662,7 +666,7 @@ float4 PSResolve(
 	//float3 reflectedColor = txCubemap.Sample(samCube, R);
 	float4 env = txEnvironment.Sample(samCube, R);
 
-	float ambient_val = 0.15;
+	float ambient_val = 0;
 	float4 ambient_color = float4(0.98, 0.85, 0.8, 0) * 0;
 
 	//float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
@@ -687,7 +691,7 @@ float4 PSResolve(
 		//return env;
 	}
 	
-	return (albedo * diffuse + saturate(specular) ) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	return (albedo * diffuse + saturate(specular)) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 

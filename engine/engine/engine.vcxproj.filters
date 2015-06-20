@@ -1023,6 +1023,9 @@
     <Filter Include="particles">
       <UniqueIdentifier>{b66cdcab-9d81-457d-85e6-0c2377b87c59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{c8ce8d06-87ff-4d58-8520-d4025cd9cd37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="render\notes.txt" />
@@ -1033,6 +1036,11 @@
     <Xml Include="collision_table.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.lua" />
+    <None Include="data\lua\test.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="data\lua\scheduler.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
 </Project>
