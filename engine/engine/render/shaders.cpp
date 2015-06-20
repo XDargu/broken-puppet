@@ -141,7 +141,8 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 		std::string fx_name = atts["fx"];
 		if (fx_name.empty())
 			fx_name = "deferred_gbuffer.fx";
-
+		
+		fx_name = "data/shaders/" + fx_name;
 		bool is_ok = vs.compile(fx_name.c_str(), vs_name.c_str(), *decl);
 
 		if (!ps_name.empty())
