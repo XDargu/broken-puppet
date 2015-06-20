@@ -47,68 +47,64 @@ void CPhysicsManager::addCollisionFilter(physx::PxU32 s, physx::PxU32 filter){
 }
 
 void CPhysicsManager::init() {
-	PxFoundation* foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-	
-	assert(foundation || fatal("Fatal error creating Physx foundation"));
+	if (gPhysicsSDK == nullptr) {
+		PxFoundation* foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 
-	gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, PxTolerancesScale());
+		assert(foundation || fatal("Fatal error creating Physx foundation"));
 
-	physx::PxVisualDebuggerConnectionFlags flags =
-		physx::PxVisualDebuggerConnectionFlag::eDEBUG
-		| physx::PxVisualDebuggerConnectionFlag::ePROFILE
-		| physx::PxVisualDebuggerConnectionFlag::eMEMORY;
+		gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, PxTolerancesScale());
 
-	// Visual debugger
-	if (gPhysicsSDK->getPvdConnectionManager())
-	{
-		PxVisualDebuggerConnection* gConnection = PxVisualDebuggerExt::createConnection(gPhysicsSDK->getPvdConnectionManager(), "127.0.0.1", 5425, 1000, flags);
+		physx::PxVisualDebuggerConnectionFlags flags =
+			physx::PxVisualDebuggerConnectionFlag::eDEBUG
+			| physx::PxVisualDebuggerConnectionFlag::ePROFILE
+			| physx::PxVisualDebuggerConnectionFlag::eMEMORY;
 
-		gPhysicsSDK->getVisualDebugger()->setVisualizeConstraints(true);
-		gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS, true);
-		gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS, true);
-		gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_SCENEQUERIES, true);
-	}	
+		// Visual debugger
+		if (gPhysicsSDK->getPvdConnectionManager())
+		{
+			PxVisualDebuggerConnection* gConnection = PxVisualDebuggerExt::createConnection(gPhysicsSDK->getPvdConnectionManager(), "127.0.0.1", 5425, 1000, flags);
 
-	PxInitExtensions(*gPhysicsSDK);
+			gPhysicsSDK->getVisualDebugger()->setVisualizeConstraints(true);
+			gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS, true);
+			gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS, true);
+			gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_SCENEQUERIES, true);
+		}
 
-	PxSceneDesc sceneDesc(gPhysicsSDK->getTolerancesScale());
+		PxInitExtensions(*gPhysicsSDK);
 
-	// Gravedad terrestre
-	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+		PxSceneDesc sceneDesc(gPhysicsSDK->getTolerancesScale());
 
-	if (!sceneDesc.cpuDispatcher){
-		PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1);
-		sceneDesc.cpuDispatcher = mCpuDispatcher;
+		// Gravedad terrestre
+		sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+
+		if (!sceneDesc.cpuDispatcher){
+			PxDefaultCpuDispatcher* mCpuDispatcher = PxDefaultCpuDispatcherCreate(1);
+			sceneDesc.cpuDispatcher = mCpuDispatcher;
+		}
+
+		// Filtro de colisiones
+		if (!sceneDesc.filterShader)
+			sceneDesc.filterShader = gDefaultFilterShader;
+
+		// Asignación de callback de colisiones
+		sceneDesc.simulationEventCallback = &gContactReportCallBack;
+		sceneDesc.filterCallback = &gFilterCallback;
+
+		gScene = gPhysicsSDK->createScene(sceneDesc);
+		gScene->setFlag(PxSceneFlag::eENABLE_CCD, true);
+
+		// Inicializar Cooking para colliders
+		PxTolerancesScale toleranceScale;
+		toleranceScale.mass = 1000;
+		toleranceScale.speed = sceneDesc.gravity.y;
+		bool value = toleranceScale.isValid(); // make sure this value is always true
+		gCooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(toleranceScale));
+		if (!gCooking)
+			fatal("PxCreateCooking failed!\n");
+
+		// Crear el controller manager
+		gManager = PxCreateControllerManager(*gScene);
 	}
-
-	// Filtro de colisiones
-	if (!sceneDesc.filterShader)
-		sceneDesc.filterShader = gDefaultFilterShader;
-
-	// Asignación de callback de colisiones
-	sceneDesc.simulationEventCallback = &gContactReportCallBack;
-	sceneDesc.filterCallback = &gFilterCallback;
-
-	gScene = gPhysicsSDK->createScene(sceneDesc);
-	gScene->setFlag(PxSceneFlag::eENABLE_CCD, true);
-
-	// Inicializar Cooking para colliders
-	PxTolerancesScale toleranceScale;
-	toleranceScale.mass = 1000;
-	toleranceScale.speed = sceneDesc.gravity.y;
-	bool value = toleranceScale.isValid(); // make sure this value is always true
-	gCooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, PxCookingParams(toleranceScale));
-	if (!gCooking)
-		fatal("PxCreateCooking failed!\n");
-
-	PxMaterial* mMaterial = gPhysicsSDK->createMaterial(0.5f, 0.5f, 0.1f);
-
-	// Crear un suelo
-	/*PxRigidStatic* plane = PxCreatePlane(*gPhysicsSDK, PxPlane(PxVec3(0, 1, 0), 0), *mMaterial);
-	gScene->addActor(*plane);*/
-
-	// Crear el controller manager
-	gManager = PxCreateControllerManager(*gScene);
 }
 
 void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positionsToAdd[], PxVec3 velocityToAdd[], std::vector<PxU32>* newIndices){
