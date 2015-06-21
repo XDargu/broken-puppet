@@ -17,11 +17,12 @@ class CNav_mesh_manager
 {
 private:
 	//CNavmesh nav_mesh;
-	float* prue;
+	float* polys;
 	int num;
 	bool first;
 	bool need_update;
-
+	int recast_aabb_index;
+	CHandle player;
 public:
 	CNav_mesh_manager();
 	~CNav_mesh_manager();
@@ -36,13 +37,17 @@ public:
 	bool rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos);
 	void clearNavMesh();
 	void checkUpdates();
+	int getLastRecastAABBIndex();
+	void registerRecastAABB(CHandle recastAABB);
+	void checkDistaceToEnemies();
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
-	std::vector<TCompColliderMesh*>     colMeshes;
-	std::vector<TCompColliderConvex*>   colConvex;
-	std::vector<TCompColliderBox*>      colBoxes;
-	std::vector<TCompColliderSphere*>   colSpheres;
+	std::vector<CHandle>     colMeshes;
+	std::vector<CHandle>   colConvex;
+	std::vector<CHandle>      colBoxes;
+	std::vector<CHandle>   colSpheres;
+	std::vector<CHandle> recastAABBs;
 	bool keep_updating_navmesh;
 	//std::vector<TCompColliderCapsule*>  colCapsules;
 };

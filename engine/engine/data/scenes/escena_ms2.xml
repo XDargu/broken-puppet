@@ -33,6 +33,9 @@
   <entity  prefab="PlayerCamera">
     <transform position="-7.95658 -7.07506 -13.7756"/>
   </entity>
+  <entity>
+    <recastAABB min="-22.0 0.0 -33.0" max="5.0 1.0 -8.0"/>
+  </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="dvn_arqui_suelo_suelo_01_6.0" />
     <transform position="0.0 -3.49691e-007 -8.0" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -1967,7 +1970,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.849436" boxY="1.99365" boxZ="0.103913"/>
     <rigidbody density="500.0"  />
   </entity>
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="puerta_izquierda_198.0" />
     <transform position="17.6511 2.35221 25.2739" rotation="-0.0176804 0.75643 0.0222203 0.653458" scale="1.0 1.0 1.0"/>
     <render>
@@ -1977,7 +1980,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.850951" boxY="1.99365" boxZ="0.103911"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "armario_195.0"  jointRelativePosition0="2.7771 -0.907246 1.44294" jointRelativeRotation0="0.0455198 -0.0148805 -0.65367 0.755263" actor2 = "puerta_izquierda_198.0"  jointRelativePosition1="0.830965 0.0590076 -1.015" jointRelativeRotation1="-0.0173178 0.015817 0.999724 0.00139771"  jointPosition="17.5286 1.3374 24.4496" jointRotation="0.0455198 -0.65367 0.0148805 0.755263" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <entity  >
     <name name="cartel_sustituta_grande_199.0" />
     <transform position="17.9606 3.44702 40.2993" rotation="0.0499601 0.0 0.0 0.998751" scale="1.0 1.0 1.0"/>
@@ -2002,7 +2005,7 @@
     </render>
     <aabb min="-6.26426e-007 -2.0 -1.43828" max="6.26426e-007 2.0 1.43828"/>
   </entity>
-  <entity tag = "level" collisionTag="Actor">
+  <!--<entity tag = "level" collisionTag="Actor">
     <name name="foco_colgar_202.0" />
     <transform position="16.9088 7.49612 48.464" rotation="0.38 0.85 -0.35 0.1" scale="1.0 1.0 1.0"/>
     <render>
@@ -2014,7 +2017,7 @@
     <jointHinge actor1 = "dvn_arqui_ambos_esqui_in_01_93.0"  jointRelativePosition0="-0.908787 0.463928 7.25692" jointRelativeRotation0="0.0 0.0 1.0 -2.86539e-005" actor2 = "foco_colgar_202.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0105452 0.13346 0.917719 0.37399"  jointPosition="16.9088 7.25693 48.464" jointRotation="0.0 0.0 0.0 1.0" linearPosition="100.0" linearRestitution="0.0" swingAngle="0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="true" maxBreakForce="10000.0" maxTorqueForce="10000.0" />
     <camera fov="60.0" znear="1.1" zfar="25"/>
     <shadows res="512" color="0.882 0.765 0.72"/>
-  </entity>
+  </entity>-->
   <entity  tag="actor" collisionTag="Actor">
     <name name="foco_caido_203.0" />
     <transform position="4.92433 0.29651 24.9303" rotation="0.0 0.284243 0.0 0.958752" scale="1.0 1.0 1.0"/>
@@ -4125,7 +4128,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.23838" boxY="0.256501" boxZ="0.408422"/>
     <rigidbody density="500.0"  />
   </entity>
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="tijera02_452.0" />
     <transform position="8.11975 0.947643 15.0699" rotation="-0.557248 0.0 0.0 0.830346" scale="1.0 1.0 1.0"/>
     <render>
@@ -4135,7 +4138,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.12544" boxY="0.211427" boxZ="0.0294263"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "Tijeras_362.0"  jointRelativePosition0="-0.0835018 -0.00652122 -0.0863886" jointRelativeRotation0="0.0701688 0.703617 -0.703617 0.0701688" actor2 = "tijera02_452.0"  jointRelativePosition1="-0.071291 -0.0173111 0.0433731" jointRelativeRotation1="0.403976 0.580348 -0.580348 0.403976"  jointPosition="8.04846 0.980099 15.0363" jointRotation="0.110325 -0.805287 -0.158492 0.560554" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <entity tag = "actor" >
     <name name="Tijeras_453.0" />
     <transform position="36.0196 4.5997 -2.89945" rotation="-0.649029 0.361934 0.325906 0.584423" scale="1.0 1.0 1.0"/>
@@ -4146,7 +4149,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.11767" boxY="0.207114" boxZ="0.0658168"/>
     <rigidbody density="500.0"  />
   </entity>
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="tijera02_455.0" />
     <transform position="36.1205 4.60567 -2.73938" rotation="-0.743125 0.0 0.0 0.669153" scale="1.0 1.0 1.0"/>
     <render>
@@ -4156,7 +4159,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.12544" boxY="0.211427" boxZ="0.0294263"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "Tijeras_453.0"  jointRelativePosition0="-0.0938282 -0.00433922 -0.0952778" jointRelativeRotation0="0.0701689 0.703617 -0.703617 0.0701689" actor2 = "tijera02_455.0"  jointRelativePosition1="-0.0691528 -0.0151286 0.0299158" jointRelativeRotation1="0.403976 0.580348 -0.580348 0.403976"  jointPosition="36.0514 4.61759 -2.77072" jointRotation="-0.0298831 -0.819612 0.0429298 0.570526" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <entity tag = "actor" >
     <name name="tijera02_456.0" />
     <transform position="36.4426 4.69598 7.48561" rotation="-0.753961 0.0 0.0 0.656919" scale="1.0 1.0 1.0"/>
@@ -4167,7 +4170,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.12544" boxY="0.211427" boxZ="0.0294263"/>
     <rigidbody density="500.0"  />
   </entity>
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="Tijeras_457.0" />
     <transform position="36.3417 4.68479 7.32582" rotation="-0.658493 0.367212 0.319948 0.573739" scale="1.0 1.0 1.0"/>
     <render>
@@ -4177,8 +4180,8 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.11767" boxY="0.207114" boxZ="0.0658168"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "Tijeras_457.0"  jointRelativePosition0="-0.0938263 -0.0043385 -0.0952797" jointRelativeRotation0="0.0701689 0.703617 -0.703617 0.0701689" actor2 = "tijera02_456.0"  jointRelativePosition1="-0.0691528 -0.0151284 0.0299158" jointRelativeRotation1="-0.403976 -0.580348 0.580348 -0.403976"  jointPosition="36.3735 4.70687 7.4539" jointRotation="-0.0392023 -0.818801 0.0563178 0.569961" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
-  <entity tag = "actor" >
+  </entity>-->
+  <!--<entity tag = "actor" >
     <name name="Tapa_Costurero_459.0" />
     <transform position="35.6361 5.9594 -7.02636" rotation="-0.677166 -0.203584 -0.203584 0.677166" scale="1.0 1.0 1.0"/>
     <render>
@@ -4188,7 +4191,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.24501" boxY="0.0917936" boxZ="0.765864"/>
     <rigidbody density="85.6893"  />
     <jointHinge actor1 = "costurero_317.0"  jointRelativePosition0="0.00997353 0.732174 0.451255" jointRelativeRotation0="0.0238401 -0.706705 0.0238401 0.706705" actor2 = "Tapa_Costurero_459.0"  jointRelativePosition1="-1.90735e-006 0.93396 3.8147e-006" jointRelativeRotation1="-0.516573 0.516573 0.482858 -0.482858"  jointPosition="35.6361 5.02544 -7.02636" jointRotation="-0.180638 -0.180638 0.683645 0.683645" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <!---
   <entity tag = "actor" collisionTag = "Level">
     <name name="InterruptorTirarAgua" />
@@ -4208,7 +4211,7 @@
     <switchPullController />
   </entity>
   -->
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="atrezzo_plataforma02" />
     <transform position="-3.20599 4.51985 -24.6969" rotation="-0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
     <render>
@@ -4218,7 +4221,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.11027" boxY="0.156996" boxZ="1.63419"/>
     <rigidbody density="69.2633"  />
     <jointHinge actor1 = "atrezzo_base_131.0"  jointRelativePosition0="0.160139 -0.120178 2.44983" jointRelativeRotation0="0.653282 0.270598 -0.653281 -0.270598" actor2 = "atrezzo_plataforma02"  jointRelativePosition1="0.171436 -1.56729 -0.0805988" jointRelativeRotation1="0.5 0.5 -0.5 -0.5"  jointPosition="-3.03456 5.5711 -23.5316" jointRotation="0.653282 -0.653281 -0.270598 -0.270598" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <!---
   <entity tag = "actor" collisionTag = "Level">
     <name name="PushIntIntermediate" />
@@ -4233,7 +4236,7 @@
     <switchPushController />
   </entity>
   -->
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="minutero" />
     <transform position="-18.7398 7.46242 -37.3798" rotation="0.0873116 0.0634846 0.705916 0.700021" scale="1.0 1.0 1.0"/>
     <render>
@@ -4243,8 +4246,8 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.93511" boxY="0.428744" boxZ="0.0386115"/>
     <rigidbody density="1951.01"  />
     <jointHinge actor1 = "esferaReloj_144.0"  jointRelativePosition0="-0.403648 -2.24292 -0.00747728" jointRelativeRotation0="0.507273 -0.474212 0.502088 0.515465" actor2 = "minutero"  jointRelativePosition1="-1.51231 7.62939e-006 0.00790119" jointRelativeRotation1="0.723941 0.0451261 0.00371372 0.688374"  jointPosition="-18.7404 5.95092 -37.4302" jointRotation="0.561391 0.561282 0.40871 0.450288" linearPosition="100.0" linearRestitution="0.0" swingAngle="1.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
-  <entity tag = "actor" collisionTag = "Level">
+  </entity>-->
+  <!--<entity tag = "actor" collisionTag = "Level">
     <name name="puertaIzda" />
     <transform position="-9.24537 4.49787 -41.4366" rotation="0.258819 0.0 0.0 0.965926" scale="1.0 1.0 1.0"/>
     <render>
@@ -4254,8 +4257,8 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.80525" boxY="1.26152" boxZ="0.163195"/>
     <rigidbody density="67.4735"  />
     <jointHinge actor1 = "ClockColider_138.0"  jointRelativePosition0="-0.0334034 -5.72071 -2.3103" jointRelativeRotation0="0.67737 -0.202902 0.67737 -0.202902" actor2 = "puertaIzda"  jointRelativePosition1="0.0 0.0657539 -1.19999" jointRelativeRotation1="0.706805 -0.0206724 0.706805 -0.0206724"  jointPosition="-9.24537 3.49152 -42.0935" jointRotation="0.67737 0.67737 0.202902 -0.202902" linearPosition="100.0" linearRestitution="0.0" swingAngle="35.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
-  <entity tag = "actor" >
+  </entity>-->
+  <!--<entity tag = "actor" >
     <name name="eje5" />
     <transform position="-3.69564 5.89597 -47.7992" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
@@ -4266,8 +4269,8 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.25" boxY="0.25" boxZ="1.62758"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "dvn_arqui_suelo_suelo_01_23.0"  jointRelativePosition0="0.200775 -3.69564 5.89597" jointRelativeRotation0="0.707107 7.31951e-007 0.707107 -8.86494e-007" actor2 = "eje5"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.5 -0.5 0.5 0.5"  jointPosition="-3.69564 5.89597 -47.7992" jointRotation="0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="0.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
-  <entity tag = "actor" >
+  </entity>-->
+  <!--<entity tag = "actor" >
     <name name="engraje1" />
     <transform position="-7.19582 5.8204 -52.0286" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
@@ -4283,8 +4286,8 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="2.5"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "dvn_arqui_techo_pared_02_76.0"  jointRelativePosition0="3.97137 8.80418 -2.1796" jointRelativeRotation0="0.707107 3.94776e-007 0.707107 -4.25685e-007" actor2 = "engraje1"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.5 -0.5 0.5 0.5"  jointPosition="-7.19582 5.8204 -52.0286" jointRotation="0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="0.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
-  <entity tag = "actor" >
+  </entity>-->
+  <!--<entity tag = "actor" >
     <name name="eje1" />
     <transform position="-19.7705 4.32578 -50.0014" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
@@ -4299,7 +4302,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.25" boxY="0.25" boxZ="4.37774"/>
     <rigidbody density="500.0"  />
     <jointHinge actor1 = "dvn_arqui_suelo_suelo_01_21.0"  jointRelativePosition0="-3.77053 2.00142 4.32578" jointRelativeRotation0="0.5 -0.5 0.5 0.499999" actor2 = "eje1"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.5 -0.5 0.5 0.5"  jointPosition="-19.7705 4.32578 -50.0014" jointRotation="0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="0.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <entity tag = "level" collisionTag = "Level">
     <name name="puertaDcha" />
     <transform position="-9.24537 7.48259 -41.2622" rotation="-0.252111 0.0 0.0 0.967698" scale="1.0 1.0 1.0"/>
@@ -4310,7 +4313,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.80525" boxY="1.26152" boxZ="0.163195"/>
     <staticbody/>
   </entity>
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="atrezzo_plataforma01" />
     <transform position="-8.55816 4.47508 -16.678" rotation="-0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
     <render>
@@ -4320,8 +4323,8 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.11027" boxY="0.156996" boxZ="1.63419"/>
     <rigidbody density="69.2633"  />
     <jointHinge actor1 = "atrezzo_base_153.0"  jointRelativePosition0="0.160139 -0.120178 2.44983" jointRelativeRotation0="0.653282 0.270598 -0.653281 -0.270598" actor2 = "atrezzo_plataforma01"  jointRelativePosition1="0.171436 -1.60883 -0.0628452" jointRelativeRotation1="0.5 0.5 -0.5 -0.5"  jointPosition="-8.38672 5.56826 -15.496" jointRotation="0.653282 -0.653281 -0.270598 -0.270598" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
-  <entity tag = "actor" >
+  </entity>-->
+  <!--<entity tag = "actor" >
     <name name="atrezzo_plataforma03" />
     <transform position="-9.94135 4.41668 -32.5893" rotation="-0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
     <render>
@@ -4331,7 +4334,7 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.11027" boxY="0.156996" boxZ="1.63419"/>
     <rigidbody density="69.2633"  />
     <jointHinge actor1 = "atrezzo_base_156.0"  jointRelativePosition0="0.160139 -0.120178 2.44983" jointRelativeRotation0="0.653282 0.270598 -0.653281 -0.270598" actor2 = "atrezzo_plataforma03"  jointRelativePosition1="0.171436 -1.64327 -0.0662117" jointRelativeRotation1="0.5 0.5 -0.5 -0.5"  jointPosition="-9.76992 5.53183 -31.3805" jointRotation="0.653282 -0.653281 -0.270598 -0.270598" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
   <!---
   <entity tag = "actor" collisionTag = "Level">
     <name name="InterruptorTirarReloj" />
@@ -4450,7 +4453,7 @@
     <aabb min="-2.0 0.0 -2.0" max="2.0 1.0 2.0"/>
     <trigger/>
   </entity>
-  <entity tag = "actor" >
+  <!--<entity tag = "actor" >
     <name name="armarioGatingClock" />
     <transform position="11.474 2.79018 -5.99786" rotation="0.0 -0.707107 0.0 0.707107" scale="0.72 0.72 0.72"/>
     <render>
@@ -4460,5 +4463,5 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.5" boxY="2.74882" boxZ="1.09534"/>
     <rigidbody density="10.0"  />
     <jointHinge actor1 = "dvn_arqui_ambos_ambos_half_01_220.0"  jointRelativePosition0="-3.3866 1.99786 0.0213846" jointRelativeRotation0="-0.5 -0.5 -0.5 0.5" actor2 = "armarioGatingClock"  jointRelativePosition1="0.0 1.58251 -3.84555" jointRelativeRotation1="0.0 -0.707107 0.0 0.707107"  jointPosition="12.6134 0.021384 -5.99786" jointRotation="-0.5 -0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="5.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
-  </entity>
+  </entity>-->
 </scene>

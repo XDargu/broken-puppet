@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "comp_collider_convex.h"
+#include "comp_recast_aabb.h"
 #include "../render/collision_convex.h"
 
 const CCollision_Convex* c_m;
@@ -21,12 +22,17 @@ void TCompColliderConvex::loadFromAtts(const std::string& elem, MKeyValue &atts)
 		,
 		true);
 
-	AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
+	//AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
 	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
 
-	if (recast_aabb.intersects(m_aabb)) {
-		addInputNavMesh();
-		CNav_mesh_manager::get().colConvex.push_back(this);
+	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
+		TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+		if (recast_aabb.intersects(m_aabb)) {
+			addInputNavMesh();
+			CNav_mesh_manager::get().colConvex.push_back(this);
+		}
 	}
 
 	setCollisionGroups();

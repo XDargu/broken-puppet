@@ -8,6 +8,7 @@
 #include "components\comp_camera.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
+#include "components\comp_golden_needle_logic.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -166,6 +167,10 @@ void CLogicManager::setTimer(std::string the_name, float time) {
 	timers[the_name] = CTimer(time);
 }
 
+void CLogicManager::registerGNLogic(CHandle golden_logic){
+	GNLogic.push_back(golden_logic);
+}
+
 void CLogicManager::registerTrigger(CHandle trigger) {
 	triggers.push_back(trigger);
 }
@@ -183,6 +188,11 @@ void CLogicManager::onTriggerExit(CHandle trigger, CHandle who) {
 
 	if (c_name && c_name_who)
 		execute("onTriggerExit_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+}
+
+void CLogicManager::unregisterGNLogic(CHandle golden_logic) {
+	auto it = std::find(GNLogic.begin(), GNLogic.end(), golden_logic);
+	GNLogic.erase(it);
 }
 
 void CLogicManager::unregisterTrigger(CHandle trigger) {
@@ -535,6 +545,7 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 
 }
 
+
 void CLogicManager::changeCamera(std::string name) {
 	CHandle camera_entity = CEntityManager::get().getByName(name.c_str());
 	if (camera_entity.isValid()) {
@@ -576,4 +587,14 @@ void CLogicManager::stringCancelled() {
 
 void CLogicManager::stringAllCancelled() {
 	execute("onStringCancelAll()");
+}
+
+bool CLogicManager::getPointIfInside(XMVECTOR& vector) {
+	for (int i = 0; i < GNLogic.size(); i++){
+		if (((TCompGNLogic*)GNLogic[i])->checkPlayerInside()){
+			vector = ((TCompGNLogic*)GNLogic[i])->getCluePoint();
+			return true;
+		}
+	}
+	return false;
 }

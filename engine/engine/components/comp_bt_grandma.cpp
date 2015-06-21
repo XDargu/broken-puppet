@@ -36,8 +36,11 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompSensorTied>(this);
 	assertRequiredComponent<TCompSkeleton>(this);
 
+	int ind_recast_aabb=atts.getInt("RecastAABBInd", 0);
+
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
+	m_ai_controller->setIndRecastAABB(ind_recast_aabb);
 	aimanager::get().addBot(m_ai_controller);
 }
 
@@ -72,9 +75,9 @@ void TCompBtGrandma::notifyPlayerFound(const TPlayerFound& msg){
 	m_ai_controller->PlayerFoundSensor();
 }
 
-void TCompBtGrandma::notifyPlayerTouch(const TPlayerTouch& msg){
+/*void TCompBtGrandma::notifyPlayerTouch(const TPlayerTouch& msg){
 	m_ai_controller->PlayerTouchSensor(msg.touch);
-}
+}*/
 
 void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 	dbg("ground hit recieved is  %f\n", msg.vel);

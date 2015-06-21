@@ -24,6 +24,7 @@ private:
 	CHandle character_controller;
 	CHandle player;
 	int ind_path;
+	int ind_recast_aabb;
 	physx::PxVec3 last_look_direction;
 	physx::PxVec3 mov_direction;
 	physx::PxVec3 look_direction;
@@ -46,7 +47,8 @@ private:
 	bool see_player;
 	bool initial_attack;
 	bool animation_done;
-	bool player_touch;
+	bool active;
+	//bool player_touch;
 	int last_anim_id;
 
 	//Bool ñapa a quitar en un futuro -----
@@ -192,7 +194,7 @@ public:
 	void tiedSensor();
 	void hurtSensor(float damage);
 	void PlayerFoundSensor();
-	void PlayerTouchSensor(bool touch);
+	//void PlayerTouchSensor(bool touch);
 	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
 	unsigned getId();
@@ -218,6 +220,11 @@ public:
 	void playAnimationIfNotPlaying(int id);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+
+	void setActive(bool act);
+
+	void setIndRecastAABB(int ind);
+	int getIndRecastAABB();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };

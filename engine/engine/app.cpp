@@ -134,7 +134,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
-	SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
+	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
 
 
@@ -155,6 +155,7 @@ void createManagers() {
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
+	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompColliderMesh>()->init(512);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
@@ -164,6 +165,7 @@ void createManagers() {
 	getObjManager<TCompRigidBody>()->init(512);
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
+	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
 	getObjManager<TCompCameraPivotController>()->init(1);
@@ -180,7 +182,6 @@ void createManagers() {
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
 	getObjManager<TCompSensorDistPlayer>()->init(64);
-	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
@@ -231,12 +232,14 @@ void initManagers() {
 
 	getObjManager<TCompTransform>()->initHandlers();
 	getObjManager<TCompCamera>()->initHandlers();
+	getObjManager<TCompRecastAABB>()->initHandlers();
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
+	getObjManager<TCompGNLogic>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
@@ -259,8 +262,6 @@ void initManagers() {
 	// SWITCHS
 	getObjManager<TCompSwitchPullController>()->initHandlers();
 	getObjManager<TCompSwitchPushController>()->initHandlers();
-
-	//PRUEBA TRIGGER
 
 	getObjManager<TCompTrigger>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
@@ -531,6 +532,7 @@ void CApp::update(float elapsed) {
 	}
 
 	//-----------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().checkDistaceToEnemies();
 	CNav_mesh_manager::get().checkUpdates();
 	//-----------------------------------------------------------------------------------------
 
@@ -578,6 +580,7 @@ void CApp::update(float elapsed) {
 
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	getObjManager<TCompGNLogic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -598,8 +601,8 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompSwitchPullController>()->update(elapsed);
 	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
-	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
+	//getObjManager<TCompRecastAABB>()->update(elapsed);
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
@@ -981,8 +984,8 @@ void CApp::renderDebugEntities() {
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
-	//if (renderNavMesh)
-	//CNav_mesh_manager::get().render_nav_mesh();
+	if (renderNavMesh)
+	CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();
@@ -1001,6 +1004,7 @@ void CApp::renderDebugEntities() {
 		TCompTransform* t = e->get<TCompTransform>();
 		TCompName* name = e->get<TCompName>();
 		TCompAABB* aabb = e->get<TCompAABB>();
+		TCompGNLogic* golden_needle = e->get<TCompGNLogic>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)

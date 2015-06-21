@@ -131,8 +131,9 @@ void bt_grandma::create(string s)
 	initial_attack = false;
 	see_player = false;
 	animation_done = false;
+	active = false;
 
-	player_touch = false;
+	//player_touch = false;
 
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -1102,9 +1103,9 @@ int bt_grandma::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if ((player_touch)||((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	if (/*(player_touch)||*/((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
 		last_time = timer;
-		player_touch = false;
+		//player_touch = false;
 		return true;
 	}
 	else{
@@ -1320,42 +1321,43 @@ void bt_grandma::PlayerFoundSensor(){
 	last_time_player_saw = 0;
 	setCurrent(NULL);
 }
-
-void bt_grandma::PlayerTouchSensor(bool touch){
+/*void bt_grandma::PlayerTouchSensor(bool touch){
 	player_touch = touch;
 	//setCurrent(NULL);
-}
+}*/
 
 void bt_grandma::update(float elapsed){
 
-	sensor_acum += elapsed;
+	if (active){
+		sensor_acum += elapsed;
 
-	if (sensor_delay <= sensor_acum)
-	{
-		needleViewedSensor();
-		sensor_acum = 0;
-	}
-
-
-	playerViewedSensor();
-	tiedSensor();
-	if (findPlayer()){
-		last_point_player_saw = ((TCompTransform*)player_transform)->position;
-		last_time_player_saw = 0;
-	}
-	/*else{
-		float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
-		if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
-			if (rol == role::ATTACKER)
-				aimanager::get().RemoveEnemyAttacker(this);
+		if (sensor_delay <= sensor_acum)
+		{
+			needleViewedSensor();
+			sensor_acum = 0;
 		}
-	}*/
-	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
-	if (!m_ragdoll->isRagdollActive()) {
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+
+		playerViewedSensor();
+		tiedSensor();
+		if (findPlayer()){
+			last_point_player_saw = ((TCompTransform*)player_transform)->position;
+			last_time_player_saw = 0;
+		}
+		/*else{
+			float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+			if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
+			if (rol == role::ATTACKER)
+			aimanager::get().RemoveEnemyAttacker(this);
+			}
+			}*/
+		TCompRagdoll* m_ragdoll = enemy_ragdoll;
+
+		if (!m_ragdoll->isRagdollActive()) {
+			((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+		}
+		this->recalc(elapsed);
 	}
-	this->recalc(elapsed);
 }
 
 bool bt_grandma::trueEveryXSeconds(float time)
@@ -1527,4 +1529,16 @@ float bt_grandma::getAnimationDuration(int id) {
 
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
+}
+
+void bt_grandma::setActive(bool act){
+	active = act;
+}
+
+void bt_grandma::setIndRecastAABB(int ind){
+	ind_recast_aabb = ind;
+}
+
+int bt_grandma::getIndRecastAABB(){
+	return ind_recast_aabb;
 }
