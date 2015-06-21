@@ -23,6 +23,7 @@ private:
 	bool first_throw;
 
 	PxVec3 standard_camera_offset;
+	XMVECTOR golden_needle_point;
 public:
 
 	bool up_animation;
@@ -40,6 +41,7 @@ public:
 	void Init();
 
 	void ThrowString(float elapsed);
+	void ThrowGoldenNeedle(float elapsed);
 	void PullString(float elapsed);
 	void GrabString(float elapsed);
 	void Inactive(float elapsed);

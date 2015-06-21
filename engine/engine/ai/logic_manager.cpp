@@ -515,7 +515,7 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 
 }
 
-bool CLogicManager::getPointIfInside(XMVECTOR& vector){
+bool CLogicManager::playerInsideGNZone(XMVECTOR& vector){
 	for (int i = 0; i < GNLogic.size(); i++){
 		if (((TCompGNLogic*)GNLogic[i])->checkPlayerInside()){
 			vector=((TCompGNLogic*)GNLogic[i])->getCluePoint();

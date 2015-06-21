@@ -52,6 +52,7 @@ public:
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
 
+
 	void startPathMovement(const char* name);
 
 	/*void addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time);
@@ -65,7 +66,7 @@ public:
 	void bootLUA();
 
 	//Golden Needle
-	bool getPointIfInside(XMVECTOR& vector);
+	bool playerInsideGNZone(XMVECTOR& vector);
 
 	// LUA
 	void execute(std::string text);

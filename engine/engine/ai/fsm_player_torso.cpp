@@ -23,6 +23,7 @@ FSMPlayerTorso::~FSMPlayerTorso() {}
 void FSMPlayerTorso::Init() {
 	// Insert all states in the map
 	AddState("fbp_ThrowString", (statehandler)&FSMPlayerTorso::ThrowString);
+	AddState("fbp_ThrowGoldenNeedle", (statehandler)&FSMPlayerTorso::ThrowGoldenNeedle);
 	AddState("fbp_PullString", (statehandler)&FSMPlayerTorso::PullString);
 	AddState("fbp_GrabString", (statehandler)&FSMPlayerTorso::GrabString);	
 	AddState("fbp_Inactive", (statehandler)&FSMPlayerTorso::Inactive);
@@ -45,6 +46,72 @@ void FSMPlayerTorso::Init() {
 	max_num_string = 4;
 
 	can_move = true;
+}
+
+void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
+	CIOStatus& io = CIOStatus::get();
+
+	// Throw the string
+	golden_needle_point = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
+	if (on_enter) {
+
+		CEntityManager &entity_manager = CEntityManager::get();
+		CPhysicsManager &physics_manager = CPhysicsManager::get();
+
+		TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
+
+		PxRaycastBuffer hit;
+		XMVECTOR direction = golden_needle_point - camera_transform->position;
+		direction=XMVector3Normalize(direction);
+		XMVECTOR plus_off = XMVectorSet(0.f, 0.f, 2.f, 0.f);
+		Physics.raycast(camera_transform->position + plus_off, direction, 1000, hit);
+
+		if (hit.hasBlock) {
+			PxRaycastHit blockHit = hit.block;
+
+			first_actor = blockHit.actor;
+			first_position = blockHit.position;
+			first_offset = first_actor->getGlobalPose().q.rotateInv(blockHit.position - first_actor->getGlobalPose().p);
+
+			// Get the needle prefab
+			CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
+
+			// Rename the needle
+			TCompName* new_needle_name = new_needle->get<TCompName>();
+			std::strcpy(new_needle_name->name, ("Needle" + to_string(entitycount)).c_str());
+
+			XMVECTOR rotation;
+			if (first_position == physics_manager.XMVECTORToPxVec3(camera_transform->position)) {
+				XMMATRIX view = XMMatrixLookAtRH(camera_transform->position, camera_transform->position - (physics_manager.PxVec3ToXMVECTOR(first_position + physics_manager.XMVECTORToPxVec3(camera_transform->getFront() * 0.01f)) - camera_transform->position), XMVectorSet(0, 1, 0, 0));
+				rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+			}
+			else {
+				XMMATRIX view = XMMatrixLookAtRH(camera_transform->position, camera_transform->position - (physics_manager.PxVec3ToXMVECTOR(first_position) - camera_transform->position), XMVectorSet(0, 1, 0, 0));
+				rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+			}
+
+			XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(first_position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(first_position), XMVectorSet(0, 1, 0, 0));
+			XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
+			XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+
+			TCompNeedle* new_e_needle = new_needle->get<TCompNeedle>();
+
+			new_e_needle->create(
+				first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
+				, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)))
+				, blockHit.actor
+				);
+
+			// Set the rotation of the needle according to the camera angle and normal of the surface
+			// The final rotation will be a quaternion between those two values, wigthed in one or other direction
+		}
+	}
+
+	// Animation ends
+	if (state_time >= 0.1f) {
+		ChangeState("fbp_Inactive");
+	}
+
 }
 
 void FSMPlayerTorso::ThrowString(float elapsed) {
@@ -668,8 +735,13 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	// Waits for the player to throw
 	if (io.isPressed(CIOStatus::THROW_STRING)) {
-
-		ChangeState("fbp_ThrowString");
+		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+		if (!CLogicManager::get().playerInsideGNZone(point))
+			ChangeState("fbp_ThrowGoldenNeedle");
+		else{
+			ChangeState("fbp_ThrowGoldenNeedle");
+			golden_needle_point = point;
+		}
 	}
 }
 
