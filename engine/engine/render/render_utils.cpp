@@ -9,6 +9,7 @@
 using namespace DirectX;
 
 #include "render/ctes/shader_ctes.h"
+CShaderCte<TCtesGlobal> ctes_global;
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
 CShaderCte<TCtesLight>  ctes_light;

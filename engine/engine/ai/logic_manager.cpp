@@ -16,6 +16,7 @@
 //#include <SLB\include\SLB\SLB.hpp>
 #include "SLB\include\SLB\SLB.hpp"
 #include "audio\sound_manager.h"
+#include "render\render_utils.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -40,6 +41,9 @@ void CLogicManager::init()
 		water_level_dest = XMVectorGetY(water_t->position);
 		lerp_water = 0.05f;
 	}
+
+	ambient_light = XMVectorSet(1, 1, 1, 1);
+	lerp_ambient_light = 0.05f;
 }
 
 CLogicManager::~CLogicManager() {}
@@ -48,7 +52,7 @@ std::vector<std::string> timers_to_delete;
 std::vector<TKeyFrame> keyframes_to_delete;
 
 void CLogicManager::update(float elapsed) {
-
+	
 	char buffer[64];
 	sprintf(buffer, "updateCoroutines( %f )", elapsed);
 	luaL_dostring(L, buffer);
@@ -81,6 +85,12 @@ void CLogicManager::update(float elapsed) {
 		// Update the animation
 		it.update(elapsed);		
 	};
+
+	// Update ambient light
+	
+	
+	ctes_global.get()->added_ambient_color = XMVectorLerp(ctes_global.get()->added_ambient_color, ambient_light, lerp_ambient_light* elapsed);
+	//ctes_global.uploadToGPU();
 
 	// Update water level
 	if (water_transform.isValid()) {
@@ -217,6 +227,11 @@ void CLogicManager::changeWaterLevel(float pos1, float time)
 	water_level_dest = pos1;
 }
 
+void CLogicManager::changeAmbientLight(float r, float g, float b, float time) {
+	ambient_light = XMVectorSet(r, g, b, 1);
+	lerp_ambient_light = time;
+}
+
 /*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
 	// Create the keyframe
 	TKeyFrame kf(the_target_transform, the_target_position, the_target_rotation, the_time);
@@ -346,6 +361,7 @@ void CLogicManager::bootLUA() {
 		.set("changeTrack", &CLogicManager::changeTrack)
 		.set("stopMusic", &CLogicManager::stopMusic)
 		.set("playMusic", &CLogicManager::playMusic)
+		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
 	;
 
 	// Register the bot class

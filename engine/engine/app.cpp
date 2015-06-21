@@ -105,7 +105,6 @@ CHandle		 h_player;
 
 CFont         font;
 CDeferredRender deferred;
-CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
 
 const CTexture* cubemap;

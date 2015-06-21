@@ -22,6 +22,9 @@ private:
 	float water_level_dest;
 	float lerp_water;
 
+	XMVECTOR ambient_light;
+	float lerp_ambient_light;
+
 	// Keep some usefull handles
 	CHandle water_transform;
 	CHandle water2_transform;
@@ -72,7 +75,6 @@ public:
 	CPrismaticJoint getPrismaticJoint(std::string name);
 	CHingeJoint getHingeJoint(std::string name);
 
-	void changeWaterLevel(float pos1, float time);
 	void pushPlayerLegsState(std::string state_name);
 	void cameraLookAtBot(CBot bot);
 	void cameraLookAtPosition(CVector target);
@@ -85,6 +87,10 @@ public:
 	void changeTrack(std::string name, bool loop);
 	void stopMusic();
 	void playMusic(bool loop);
+
+	// LIGHT & ENVIROMENT
+	void changeWaterLevel(float pos1, float time);
+	void changeAmbientLight(float r, float g, float b, float time);
 
 	// MISC
 	void print(std::string text);

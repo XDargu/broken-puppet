@@ -109,6 +109,7 @@ extern CMesh        mesh_textured_quad_xy_centered;
 extern CMesh        plane3x3;
 
 // Post process
+extern  CShaderCte<TCtesGlobal> ctes_global;
 extern	CShaderCte<TCtesBlur> ctes_blur;
 extern	CShaderCte<TCtesSharpen> ctes_sharpen;
 extern	CShaderCte<TCtesSSAO> ctes_ssao;
