@@ -4,6 +4,7 @@
 #include "items_by_name.h"
 #include "texture.h"
 #include "XMLParser.h"
+#include "render\render_utils.h"
 
 class CMaterial : public CXMLParser {
 	const CTexture*           diffuse;
@@ -18,6 +19,8 @@ class CMaterial : public CXMLParser {
 	bool                      casts_shadows;
 	bool                      solid;
 	bool                      double_sided;
+	BlendConfig				  blend_mode;
+	
 	void onStartElement(const std::string &elem, MKeyValue &atts);
 
 public:
@@ -33,6 +36,7 @@ public:
 	bool castsShadows() const { return casts_shadows; }
 	bool isSolid() const { return solid; }
 	bool isDoubleSided() const { return double_sided; }
+	BlendConfig getBlendMode() const { return blend_mode; }
 
 };
 

@@ -16,6 +16,7 @@ void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		std::string mat_name = atts.getString("mat", "missing_mat");
 		mesh = mesh_manager.getByName(mesh_name.c_str());
 		submesh_id = atts.getInt("sub_mesh", -1);
+
 		XASSERT(submesh_id >= 0, "Invalid submesh id: %i", submesh_id);
 		mat = material_manager.getByName(mat_name.c_str());
 

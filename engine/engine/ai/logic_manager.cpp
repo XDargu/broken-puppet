@@ -5,15 +5,19 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
+#include "components\comp_camera.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
 #include "components\comp_golden_needle_logic.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
+#include "render\render_manager.h"
 #include "entity_inspector.h"
 //#include <SLB\include\SLB\SLB.hpp>
 #include "SLB\include\SLB\SLB.hpp"
+#include "audio\sound_manager.h"
+#include "render\render_utils.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -38,6 +42,9 @@ void CLogicManager::init()
 		water_level_dest = XMVectorGetY(water_t->position);
 		lerp_water = 0.05f;
 	}
+
+	ambient_light = XMVectorSet(1, 1, 1, 1);
+	lerp_ambient_light = 0.05f;
 }
 
 CLogicManager::~CLogicManager() {}
@@ -46,6 +53,11 @@ std::vector<std::string> timers_to_delete;
 std::vector<TKeyFrame> keyframes_to_delete;
 
 void CLogicManager::update(float elapsed) {
+	
+	char buffer[64];
+	sprintf(buffer, "updateCoroutines( %f )", elapsed);
+	luaL_dostring(L, buffer);
+
 	SET_ERROR_CONTEXT("Upadating timers", "");
 	// Update the timers
 	for (auto& it : timers) {
@@ -74,6 +86,12 @@ void CLogicManager::update(float elapsed) {
 		// Update the animation
 		it.update(elapsed);		
 	};
+
+	// Update ambient light
+	
+	
+	ctes_global.get()->added_ambient_color = XMVectorLerp(ctes_global.get()->added_ambient_color, ambient_light, lerp_ambient_light* elapsed);
+	//ctes_global.uploadToGPU();
 
 	// Update water level
 	if (water_transform.isValid()) {
@@ -219,6 +237,11 @@ void CLogicManager::changeWaterLevel(float pos1, float time)
 	water_level_dest = pos1;
 }
 
+void CLogicManager::changeAmbientLight(float r, float g, float b, float time) {
+	ambient_light = XMVectorSet(r, g, b, 1);
+	lerp_ambient_light = time;
+}
+
 /*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
 	// Create the keyframe
 	TKeyFrame kf(the_target_transform, the_target_position, the_target_rotation, the_time);
@@ -344,6 +367,11 @@ void CLogicManager::bootLUA() {
 		.set("cameraLookAtBot", (void (CLogicManager::*)(CBot)) &CLogicManager::cameraLookAtBot)
 		.set("cameraLookAtPosition", (void (CLogicManager::*)(CVector)) &CLogicManager::cameraLookAtPosition)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
+		.set("changeCamera", &CLogicManager::changeCamera)
+		.set("changeTrack", &CLogicManager::changeTrack)
+		.set("stopMusic", &CLogicManager::stopMusic)
+		.set("playMusic", &CLogicManager::playMusic)
+		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
 	;
 
 	// Register the bot class
@@ -391,7 +419,9 @@ void CLogicManager::bootLUA() {
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
-	luaL_dofile(L, "test.lua");
+	luaL_dofile(L, "data/lua/scheduler.lua");
+	luaL_dofile(L, "data/lua/test.lua");
+	
 
 	execute("onInit();");
 }
@@ -518,7 +548,7 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 bool CLogicManager::playerInsideGNZone(XMVECTOR& vector){
 	for (int i = 0; i < GNLogic.size(); i++){
 		if (((TCompGNLogic*)GNLogic[i])->checkPlayerInside()){
-			vector=((TCompGNLogic*)GNLogic[i])->getCluePoint();
+			vector = ((TCompGNLogic*)GNLogic[i])->getCluePoint();
 			return true;
 		}
 	}

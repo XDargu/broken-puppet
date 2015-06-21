@@ -38,6 +38,7 @@ public:
 	void addMusicTrack(int trackID, const char* file);
 
 	void playTrack(int trackID, bool loop);
+	void playTrack(std::string name, bool loop);
 	void playFXTrack(std::string name);
 	void addFXTrack(const char* file, std::string name);
 	void playMusic(bool loop);

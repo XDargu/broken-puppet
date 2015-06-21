@@ -9,6 +9,7 @@
 using namespace DirectX;
 
 #include "render/ctes/shader_ctes.h"
+CShaderCte<TCtesGlobal> ctes_global;
 CShaderCte<TCtesObject> ctes_object;
 CShaderCte<TCtesCamera> ctes_camera;
 CShaderCte<TCtesLight>  ctes_light;
@@ -26,6 +27,7 @@ CShaderCte<TCtesSSAO> ctes_ssao;
 CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 CShaderCte<TCtesGlow> ctes_glow;
 CShaderCte<TCtesUnderwater> ctes_underwater;
+CShaderCte<TCtesSSRR> ctes_ssrr;
 
 CMesh        wire_cube;
 CMesh        mesh_view_volume;
@@ -386,7 +388,8 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_ssao.create();
 	is_ok &= ctes_chromatic_aberration.create();
 	is_ok &= ctes_glow.create();
-	is_ok &= ctes_underwater.create();	
+	is_ok &= ctes_underwater.create();
+	is_ok &= ctes_ssrr.create();
 
 	is_ok &= createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -426,6 +429,7 @@ void renderUtilsDestroy() {
 	ctes_chromatic_aberration.destroy();
 	ctes_glow.destroy();
 	ctes_underwater.destroy();
+	ctes_ssrr.destroy();
 	
 	axis.destroy();
 	grid.destroy();
@@ -439,7 +443,8 @@ void renderUtilsDestroy() {
 }
 
 void activateWorldMatrix( int slot ) {
-  ctes_object.activateInVS(slot);
+	ctes_object.activateInVS(slot);
+	ctes_object.activateInPS(slot);
 }
 
 void activateTint(int slot) {
@@ -450,6 +455,7 @@ void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
 	ctes_camera.get()->ViewProjection = camera.getViewProjection();
+	ctes_camera.get()->GameViewProjection = camera.getViewProjection();
 	ctes_camera.get()->cameraView = camera.getView();
 	ctes_camera.get()->cameraWorldPos = camera.getPosition();
 	ctes_camera.get()->cameraWorldFront = camera.getFront();

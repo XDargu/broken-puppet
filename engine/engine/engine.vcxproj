@@ -331,6 +331,7 @@
     <ClInclude Include="render\shadows.h" />
     <ClInclude Include="render\sharpen_step.h" />
     <ClInclude Include="render\ssao_step.h" />
+    <ClInclude Include="render\ssrr_step.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\underwater_step.h" />
     <ClInclude Include="render\vertex_declarations.h" />
@@ -593,6 +594,7 @@
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\sharpen_step.cpp" />
     <ClCompile Include="render\ssao_step.cpp" />
+    <ClCompile Include="render\ssrr_step.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\underwater_step.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
@@ -634,7 +636,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.lua" />
+    <None Include="data\lua\scheduler.lua" />
+    <None Include="data\lua\test.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

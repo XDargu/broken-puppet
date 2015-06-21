@@ -10,9 +10,7 @@
 #include "ai\logic_manager.h"
 #include <locale>
 #include <algorithm>
-#include "render\sharpen_step.h"
-#include "render\blur_step.h"
-#include "render\chromatic_aberration_step.h"
+#include "render\all_post_process_effects.h"
 #include "particles\particle_system_subtypes.h"
 #include "particles\importer_particle_groups.h"
 
@@ -1423,4 +1421,6 @@ void CPostProcessOptioner::init() {
 	TwAddVarRW(post_process_bar, "Sharpen", TW_TYPE_FLOAT, &sharpen->amount, "min=0 max=10 step=0.05 ");
 	TwAddVarRW(post_process_bar, "Chromatic aberration", TW_TYPE_FLOAT, &chromatic_aberration->amount, "min=0 max=2 step=0.01 ");
 	TwAddVarRW(post_process_bar, "Blur", TW_TYPE_FLOAT, &blur->amount, "min=0 max=8 step=0.01 ");
+	TwAddVarRW(post_process_bar, "SSRR Amount", TW_TYPE_FLOAT, &ssrr->amount, "min=0 max=5 step=0.01 ");
+	TwAddVarRW(post_process_bar, "SSRR Quality", TW_TYPE_FLOAT, &ssrr->quality, "min=0.2 max=10 step=0.01 ");
 }

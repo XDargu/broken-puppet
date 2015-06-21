@@ -496,6 +496,9 @@
     <ClInclude Include="ai\mcv_object.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="render\ssrr_step.h">
+      <Filter>render\postpro</Filter>
+	</ClInclude>
     <ClInclude Include="components\comp_recast_aabb.h">
       <Filter>components\ai</Filter>
     </ClInclude>
@@ -925,6 +928,9 @@
     <ClCompile Include="ai\mcv_object.cpp">
       <Filter>ai\logic</Filter>
     </ClCompile>
+    <ClCompile Include="render\ssrr_step.cpp">
+      <Filter>render\postpro</Filter>
+	</ClInclude>
     <ClCompile Include="components\comp_recast_aabb.cpp">
       <Filter>components\ai</Filter>
     </ClCompile>
@@ -1029,6 +1035,9 @@
     <Filter Include="particles">
       <UniqueIdentifier>{b66cdcab-9d81-457d-85e6-0c2377b87c59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{c8ce8d06-87ff-4d58-8520-d4025cd9cd37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="render\notes.txt" />
@@ -1039,6 +1048,11 @@
     <Xml Include="collision_table.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.lua" />
+    <None Include="data\lua\test.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="data\lua\scheduler.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -105,7 +105,6 @@ CHandle		 h_player;
 
 CFont         font;
 CDeferredRender deferred;
-CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
 
 const CTexture* cubemap;
@@ -120,6 +119,7 @@ TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
+TSSRRStep ssrr;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -315,32 +315,20 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	// Load picture
-	renderUtilsCreate();
-	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
-	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
-	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	activateTextureSamplers();
-	activateRSConfig(RSCFG_DEFAULT);
-	activateZConfig(ZCFG_DISABLE_ALL);
-
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
-	::render.swap_chain->Present(0, 0);
-
-	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/scene_volum_light.xml");
-	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/lightmap_test.xml");
-	//loadScene("data/scenes/anim_test.xml");
-	//loadScene("data/scenes/viewer_test.xml");
-
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 	sm.addFXTrack("light.wav", "light");
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
+
+	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/scene_volum_light.xml");
+	//loadScene("data/scenes/viewer.xml");
+	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/lightmap_test.xml");
+	//loadScene("data/scenes/anim_test.xml");
+	//loadScene("data/scenes/viewer_test.xml");	
 
 	//sm.playTrack(0,false);
 
@@ -364,6 +352,7 @@ bool CApp::create() {
 	post_process_optioner.sharpen = &sharpen;
 	post_process_optioner.chromatic_aberration = &chromatic_aberration;
 	post_process_optioner.blur = &blur;
+	post_process_optioner.ssrr = &ssrr;
 
 	post_process_optioner.init();
 
@@ -374,7 +363,7 @@ bool CApp::create() {
 	fps = 0;
 
 	// Timer test
-	logic_manager.setTimer("TestTimer", 10);
+	logic_manager.setTimer("TestTimer", 2);
 
 	assert(is_ok);
 
@@ -473,11 +462,14 @@ void CApp::update(float elapsed) {
 
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		//loadScene("data/scenes/escena_ms2.xml");
+		loadScene("data/scenes/anim_test.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 		XMVECTOR pos = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
 		sm.play3DFX("sonar", pos);
+		//sm.playFX("sonar");
+		/*CEntity* e = entity_manager.getByName("Fspot001_49.0");		
+		render_manager.activeCamera = e->get<TCompCamera>();*/
 	}
 
 	//sm.StopLoopedFX("sonar");
@@ -502,7 +494,8 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("ssao");
+		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -511,6 +504,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("gen_shadows");
 		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
+		render_techniques_manager.reload("distorsion");
+		render_techniques_manager.reload("ssrr");*/
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -682,7 +677,7 @@ void CApp::render() {
 	CTraceScoped scope("gen_shadows");
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
 	scope.end();
-
+	
 	deferred.render(&camera, *rt_base);
 
 	deferred.rt_albedo->activate();
@@ -706,8 +701,10 @@ void CApp::render() {
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
-	ssao.apply(rt_base);
-	sharpen.apply(rt_base);
+	activateCamera(camera, 1);
+	ssrr.apply(rt_base);
+	ssao.apply(ssrr.getOutput());
+	sharpen.apply(ssao.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
@@ -770,14 +767,13 @@ void CApp::render() {
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 
-	activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+	
 	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 	render_manager.renderAll(&camera, false, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
 	render_manager.renderAll(&camera, false, true);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
-	activateBlendConfig(BLEND_CFG_DEFAULT);
 
 #ifdef _DEBUG
 	renderDebugEntities();
@@ -1090,10 +1086,12 @@ void CApp::destroy() {
 	render_techniques_manager.destroyAll();
 	axis.destroy();
 	grid.destroy();
+	rope.destroy();
 	intersectsWiredCube.destroy();
 	wiredCube.destroy();
 	renderUtilsDestroy();
 	debugTech.destroy();
+	ropeTech.destroy();
 	font.destroy();
 	particle_groups_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
@@ -1116,6 +1114,19 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+
+	// Load picture
+	renderUtilsDestroy();
+	renderUtilsCreate();
+	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
+	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	activateTextureSamplers();
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DISABLE_ALL);
+
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
+	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;
 	pause = false;
@@ -1179,7 +1190,7 @@ void CApp::loadScene(std::string scene_name) {
 	debug_map = 0;
 
 	//physics_manager.init();
-
+	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
@@ -1197,8 +1208,11 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
+	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
+	ctes_global.uploadToGPU();
+
 	XASSERT(is_ok, "Error creating global constants");
 
 	XASSERT(is_ok, "Error creating debug meshes");
@@ -1219,7 +1233,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	h_player = entity_manager.getByName("Player");
 
-	texture_manager.getByName("desertcube1024")->activate(8);
+	texture_manager.getByName("room_env_test")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
 	is_ok &= ssao.create("ssao", xres, yres, 1);
@@ -1227,6 +1241,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
+	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");

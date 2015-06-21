@@ -108,6 +108,26 @@ float GetAmbientOcclusion(
 	return max(0.0, dot(normal, v) - AmbientOcclusionBias)*(1.0 / (1.0 + d))*AmbientOcclusionIntensity;
 }
 
+static int sample_count = 6;
+static float2 poisson16[] = {    // These are the Poisson Disk Samples
+		float2(-0.94201624, -0.39906216),
+		float2(0.94558609, -0.76890725),
+		float2(-0.094184101, -0.92938870),
+		float2(0.34495938, 0.29387760),
+		float2(-0.91588581, 0.45771432),
+		float2(-0.81544232, -0.87912464),
+		float2(-0.38277543, 0.27676845),
+		float2(0.97484398, 0.75648379),
+		float2(0.44323325, -0.97511554),
+		float2(0.53742981, -0.47373420),
+		float2(-0.26496911, -0.41893023),
+		float2(0.79197514, 0.19090188),
+		float2(-0.24188840, 0.99706507),
+		float2(-0.81409955, 0.91437590),
+		float2(0.19984126, 0.78641367),
+		float2(0.14383161, -0.14100790)
+};
+
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
@@ -116,8 +136,64 @@ float4 PSSSAO(
 	in float4 iPosition : SV_Position
 	) : SV_Target
 {
+
+	// New code
+	int3 screenCoords = uint3(iPosition.xy, 0);
+
+	float depth = txDepth.Load(screenCoords).x;
+	float3 wPos = getWorldCoords(screenCoords, depth);
+
+	float3 normal = txNormal.Load(screenCoords).xyz;
+	float3 wNormal = normalize(normal * 2.0f - 1.0f);
+
+	/*float3 viewNormal = mul(normal, (float3x3) cameraView);
+	viewPos = getViewSpace(input.UV * float2(cameraHalfXRes * 2, cameraHalfYRes * 2), depth);// mul(wPos, cameraView);*/
+
+	//float ssao_radius = 0.003;
+	float ssao_radius = 0.0006 / depth;
+	float distanceThreshold = 0.2;
+	float AmbientOcclusionBias = 0.12;
+	float AmbientOcclusionIntensity = 1;
+
+	/*float  randomSize = 64.0f;
+	float2 randomCoords = txRandom.Sample(samWrapLinear, iPosition.xy / 64).xy * 2.0f - 1.0f;
+	randomCoords = normalize(randomCoords);*/
 	
-	float2 uv0 = input.UV;
+
+	float ao = 0;
+	//return float4(input.UV, 0, 1);
+
+	//return float4(viewPos, 1);
+	float2 camRes = float2(cameraHalfXRes * 2, cameraHalfYRes * 2);
+
+	for (int i = 0; i < sample_count; ++i) {
+		// sample at an offset specified by the current Poisson-Disk sample and scale it by a radius (has to be in Texture-Space)
+		float2 sampleTexCoord = input.UV + (poisson16[i] * (ssao_radius));
+		float sampleDepth = txDepth.Sample(samClampLinear, sampleTexCoord).x;
+		float3 samplePos = getWorldCoords(sampleTexCoord * camRes, sampleDepth);
+		float3 sampleDir = normalize(samplePos - wPos);
+		//return float4(samplePos, 1);
+		// angle between SURFACE-NORMAL and SAMPLE-DIRECTION (vector from SURFACE-POSITION to SAMPLE-POSITION)
+		float NdotS = max(dot(wNormal, sampleDir), 0);
+		// distance between SURFACE-POSITION and SAMPLE-POSITION
+		float VPdistSP = distance(wPos, samplePos);
+
+		// a = distance function
+		float a = 0.9 - smoothstep(distanceThreshold, distanceThreshold * 2, VPdistSP);
+		// b = dot-Product
+		//float b = NdotS;
+		
+		ao += max(0.0, dot(wNormal, sampleDir) - AmbientOcclusionBias)*a*AmbientOcclusionIntensity;
+
+		//ao += (a * b);
+	}
+
+	
+	
+	float3 diffuse = txDiffuse.Sample(samClampLinear, input.UV).xyz;
+	return float4(diffuse, 0) * (1 - (ao / sample_count));
+	return (1 - (ao / sample_count));
+	/*float2 uv0 = input.UV;
 
 	int3 screenCoords = uint3(iPosition.xy, 0);
 
@@ -172,6 +248,6 @@ float4 PSSSAO(
 
 	ambientOcclusion /= (float)iterations * 4.0f;
 	
-	return float4(diffuse, 0);// *(1 - ambientOcclusion);
-	return 1.0 - ambientOcclusion;
+	//return float4(diffuse, 0);// *(1 - ambientOcclusion);
+	return 1.0 - ambientOcclusion;*/
 }

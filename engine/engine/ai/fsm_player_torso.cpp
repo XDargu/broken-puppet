@@ -4,6 +4,7 @@
 #include "components\all_components.h"
 #include "handle\prefabs_manager.h"
 #include "components\comp_skeleton.h"
+#include "ai\logic_manager.h"
 
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
@@ -134,6 +135,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 			// First throw
 			if (first_actor == nullptr) {
+				CLogicManager::get().stringThrown();
 				first_throw = true;
 
 				first_actor = blockHit.actor;
@@ -303,6 +305,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 			else {
 				// The string can be thrown
 				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
+					CLogicManager::get().stringThrown();
 					first_throw = false;
 
 					// -------------- Get the offsets
@@ -532,6 +535,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		TCompSkeleton* skeleton = comp_skeleton;
 
 		rope->pos_2 = skeleton->getPositionOfBone(89);
+		CLogicManager::get().stringPulled();
 
 		if (joint) {
 			// -------------- Shorten the distance joint
@@ -679,6 +683,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
+			CLogicManager::get().stringCancelled();
 		}
 	}
 
@@ -686,6 +691,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
+			CLogicManager::get().stringAllCancelled();
 			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
@@ -700,6 +706,8 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	// Tense the string
 	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
+
+		CLogicManager::get().stringsTensed();
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)

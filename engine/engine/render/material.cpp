@@ -11,8 +11,6 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		std::string diffuse_name = atts["diffuse"];
 		std::string ao_name = atts["ao"];
 		std::string normal_name = atts["normal"];
-		std::string specular_name = atts["specular"];
-		std::string glossiness_name = atts["glossiness"];
 		std::string emissive_name = atts["emissive"];
 		std::string cubemap_name = atts["cubemap"];
 		std::string tech_name = atts["tech"];
@@ -22,18 +20,25 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		diffuse = texture_manager.getByName(diffuse_name.c_str());
 		if (normal_name != "")
 			normal = texture_manager.getByName(normal_name.c_str());
-		else 
-			normal = texture_manager.getByName("black");
+		/*else 
+			normal = texture_manager.getByName("black");*/
 		if (ao_name != "")
 			ao = texture_manager.getByName(ao_name.c_str());
-		if (specular_name != "")
-			specular = texture_manager.getByName(specular_name.c_str());
-		else
-			specular = texture_manager.getByName("black");
-		if (glossiness_name != "")
-			glossiness = texture_manager.getByName(glossiness_name.c_str());
-		else
-			glossiness = texture_manager.getByName("black");
+		if (atts.has("specular")) {
+			std::string specular_name = atts["specular"];
+			if (specular_name != "")
+				specular = texture_manager.getByName(specular_name.c_str());
+			else
+				specular = texture_manager.getByName("black");
+		}
+		if (atts.has("glossiness")) {
+			std::string glossiness_name = atts["glossiness"];
+			if (glossiness_name != "")
+				glossiness = texture_manager.getByName(glossiness_name.c_str());
+			else
+				glossiness = texture_manager.getByName("black");
+		}
+		
 		if (emissive_name != "")
 			emissive = texture_manager.getByName(emissive_name.c_str());
 		else
@@ -41,6 +46,14 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		if (cubemap_name != "")
 			cubemap = texture_manager.getByName(cubemap_name.c_str());
 		tech = render_techniques_manager.getByName(tech_name.c_str());
+
+		std::string blend_config = atts.getString("blendMode", "default");
+		blend_mode = BlendConfig::BLEND_CFG_DEFAULT;
+		if (blend_config == "additive")
+			blend_mode = BlendConfig::BLEND_CFG_ADDITIVE_BY_SRC_ALPHA;
+		if (blend_config == "combinative")
+			blend_mode = BlendConfig::BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA;
+
 		assert(diffuse && tech);
 	}
 }
@@ -56,13 +69,6 @@ void CMaterial::activateTextures() const {
 		specular->activate(4);
 	if (glossiness)
 		glossiness->activate(5);
-
-	/*if (emissive)
-		emissive->activate(4);
-	if (ao)
-		ao->activate(5);
-	if (cubemap)
-		cubemap->activate(7);*/
 }
 
 

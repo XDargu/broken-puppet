@@ -1,1 +1,1 @@
-<std_material name="maleta" diffuse="maleta_diffuse" normal="maleta_normal" emissive=""/>
+<std_material name="maleta" diffuse="maleta_diffuse" normal="maleta_normal" emissive="" glossiness="StandardDiff" specular=""/>

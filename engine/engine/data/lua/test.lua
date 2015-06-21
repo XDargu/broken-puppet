@@ -9,6 +9,7 @@ function error(s)
 end
 
 _print = print
+clearCoroutines( )
 
 -- Funciones del nivel
 function f_generator()
@@ -24,12 +25,28 @@ function getRnd()
 	return out
 end
 
+function coroutineTest()
+	logicManager:print("HELLO ")
+	waitTime( 1 )
+	logicManager:print( "HOW ARE YOU, "  )
+	waitTime( 1 )
+	logicManager:print( "ALMENDRAS" )
+	waitTime(  2 )
+	logicManager:print( "chat ended" )
+end
+
 function onSceneLoad_my_file()
 
 	-- Test anim
-	obj = logicManager:getObject("dvn_rampa_bloque_2m_simple_01_109.0")
-	obj:move(Vector(0, 0, 0), 1)
-	
+	--obj = logicManager:getObject("dvn_rampa_bloque_2m_simple_01_109.0")
+	--obj:move(Vector(0, 0, 0), 1)
+
+	--startCoroutine("test", coroutineTest)
+
+	logicManager:changeTrack("CANCION.mp3", true)
+
+	--logicManager:setTimer("Test", 1)
+
 	-- Get the player 
 	player = getBot("Player");
 	-- player:teleport(0, 10, 0);

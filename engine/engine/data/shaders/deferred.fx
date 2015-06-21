@@ -176,7 +176,7 @@ float getShadowAt(float4 wPos) {
     return 0;
 
   float2 center = light_proj_coords.xy;
-  float depth = light_proj_coords.z - 0.0002;
+  float depth = light_proj_coords.z - 0.002;
 
   float amount = tapAt(center, depth) * 0.2;
 
@@ -243,7 +243,6 @@ void PSGBuffer(
   bool test = length(in_tangent) < 2;
   float3 m_norm = test ? wnormal_per_pixel : in_normal;
   normal = (float4(m_norm, 1) + 1.) * 0.5;
-
   
   // Basic diffuse lighting
   float3 L = LightWorldPos.xyz - input.wPos.xyz;
@@ -259,16 +258,20 @@ void PSGBuffer(
   // 
   //acc_light = getShadowAt(input.wPos);
 
-  float4 emis = txEmissive.Sample(samWrapLinear, input.UV); 
-  acc_light = float4(emis.xyz, 0);
-
+  
+  acc_light = float4(0, 0, 0, 0);
+	  
   //if (true)
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y)
 	  acc_light += float4(0.98, 0.85, 0.8, 0) * 0.15;
   else
-	  acc_light += lightmap * 0.5;
+	  acc_light += float4(lightmap.xyz * 0.5, 0);
   
+  acc_light *= added_ambient_color;
   
+  float4 emis = txEmissive.Sample(samWrapLinear, input.UV);
+  acc_light += float4(emis.xyz, 0);
+
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
 }
@@ -514,6 +517,131 @@ in float4 iPosition : SV_Position
 	return float4(spot_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
 }
 
+// SSRR
+float4 rainbow(float x) {
+	float level = x * 2.0;
+	float r, g, b;
+	if (level <= 0) {
+		r = g = b = 0;
+	}
+	else if (level <= 1) {
+		r = lerp(1, 0, level);
+		g = lerp(0, 1, level);
+		b = 0;
+	}
+	else if (level > 1) {
+		r = 0;
+		g = lerp(1, 0, level - 1);
+		b = lerp(0, 1, level - 1);
+	}
+	return float4(r, g, b, 1);
+}
+
+
+
+float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 worldStartingPos, float3 normal) {
+	// SSRR test
+	float4 color = float4(0, 0, 0, 0);
+		
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	//float4 origColor = txDiffuse.Load(ss_load_coords);
+	float depth = txDepth.Load(ss_load_coords).x;
+	//float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
+
+	//float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
+
+	float3 cameraToWorld = worldStartingPos - cameraWorldPos.xyz;
+	float cameraToWorldDist = length(cameraToWorld);
+	float3 cameraToWorldNorm = normalize(cameraToWorld);
+	float3 refl = normalize(reflect(cameraToWorldNorm, normal)); // This is the reflection vector
+	//return float4(normal, 1);
+	/*float4 sc;
+	sc = mul(float4(worldStartingPos, 1), viewproj);
+	sc.xyz /= sc.w;
+	sc.x = (sc.x + 1) * 0.5;
+	sc.y = (1 - sc.y) * 0.5;
+
+	return float4(sc.xy, 0, 0);
+
+	return txDiffuse.Sample(samClampLinear, sc.xy);*/
+	//return float4(refl, 1);
+	//float2 m_coords = sc.xy;
+	
+
+	if (dot(refl, cameraToWorldNorm) < 0) {
+		// Ignore reflections going backwards towards the camera, indicate with white
+		color = float4(1, 1, 1, 1);
+		return origColor;
+	}
+
+	float cosAngle = abs(dot(normal, cameraToWorldNorm)); // Will be a value between 0 and 1
+	float fact = 1 - cosAngle;
+	fact = min(1, 0.8 - fact*fact);
+
+	float3 newPos;
+	float4 newScreen;
+	float i = 0;
+	float3 rayTrace = worldStartingPos;
+	float currentWorldDist, rayDist;
+	float incr = 0.4;
+	do {
+		i += 0.05;
+		rayTrace += refl*incr;
+		incr *= 1.3;
+		newScreen = mul(float4(rayTrace, 1), viewproj);
+		newScreen.xyz /= newScreen.w;
+		newScreen.x = (newScreen.x + 1) * 0.5;
+		newScreen.y = (1 - newScreen.y) * 0.5;
+		
+		float2 coords = newScreen.xy;
+		//float2 coords = newScreen.xy / 2.0 + 0.5;
+		
+		//return float4(coords * float2(cameraHalfXRes, cameraHalfYRes) * 0.5, 0, 0);
+		float n_depth = txDepth.Sample(samClampLinear, coords);
+		newPos = getWorldCoords(coords * float2(cameraHalfXRes * 2, cameraHalfYRes * 2), n_depth);
+		//return txDiffuse.Sample(samClampLinear, coords);
+		//newPos = rayTrace;
+		
+		currentWorldDist = length(newPos.xyz - cameraWorldPos.xyz);
+		rayDist = length(rayTrace.xyz - cameraWorldPos.xyz);
+		if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1 || newScreen.z > 1 || newScreen.z < -1 || i >= 1.0 || cameraToWorldDist > currentWorldDist) {
+			break; // This is a failure mode.
+		}
+	} while (rayDist < currentWorldDist);
+
+	color = txDiffuse.Sample(samClampLinear, newScreen.xy);
+
+	if (dot(refl, cameraToWorldNorm) < 0)
+		fact = 1.0; // Ignore reflections going backwards towards the camera
+	else if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1)
+		fact = 1.0; // Falling outside of screen
+	else if (cameraToWorldDist > currentWorldDist)
+		fact = 1.0;
+	
+	color = origColor*fact + color*(1 - fact);
+	 
+	/*if (cameraToWorldDist > currentWorldDist)
+		color = float4(1, 1, 0, 1); // Yellow indicates we found a pixel hidden behind another object
+	else if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1)
+		color = float4(0, 0, 0, 1); // Black used for outside of screen
+	else if (newScreen.z > 1 && newScreen.z < -1)
+		color = float4(1, 1, 1, 1); // White outside of frustum
+	else
+		color = rainbow(i); // Encode number of iterations as a color. Red, then green and last blue*/
+	
+	return color;
+}
+
+float4 ssrrColor(float2 iPosition, matrix viewproj) {
+	int3 ss_load_coords = uint3(iPosition.xy, 0);
+	float4 origColor = txDiffuse.Load(ss_load_coords);
+	float depth = txDepth.Load(ss_load_coords).x;
+	float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
+
+	float3 worldStartingPos = getWorldCoords(iPosition.xy, depth);
+
+	return ssrrColor(iPosition, viewproj, origColor, worldStartingPos, normal);
+}
 
 // -------------------------------------------------
 // Resolve lights
@@ -527,10 +655,9 @@ float4 PSResolve(
 	float4 specular_color = txSpecular.Load(ss_load_coords);
 	float4 gloss = txGloss.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
-	float3 N = txNormal.Load(ss_load_coords).xyz * 2 - 1.;
+	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
-
-
+		
 	float3 wPos = getWorldCoords(iPosition.xy, depth);
 	float3 I = wPos - cameraWorldPos.xyz;
 	I = normalize(I);
@@ -539,7 +666,7 @@ float4 PSResolve(
 	//float3 reflectedColor = txCubemap.Sample(samCube, R);
 	float4 env = txEnvironment.Sample(samCube, R);
 
-	float ambient_val = 0.15;
+	float ambient_val = 0;
 	float4 ambient_color = float4(0.98, 0.85, 0.8, 0) * 0;
 
 	//float4 specular = float4(diffuse.a * 0.9, diffuse.a * 0.8, diffuse.a * 0.6, 0) * 1.0;
@@ -547,31 +674,46 @@ float4 PSResolve(
 	
 	float4 specular = specular_color * spec_intensity;// saturate(pow(dot_product, length(gloss))) * length(albedo) * length(specular_color);
 		//return specular;
+
+	//return ssrrColor(iPosition.xy, ViewProjection);
 		
+	//R = reflect(float3(I.x, -I.y, -I.z), normalize(N) * 0.3);
+	//R = reflect(I, normalize(N) * 0.3);
+	//R = reflect(I, float3(0, 0, 0));
+	
+		/*env = txEnvironment.Sample(samCube, R);
+		if (wPos.y <= 0.01)
+			return env;*/
+
 	if (length(N) > 1.73) {
 		R = reflect(I, float3(0,0,0));
 		env = txEnvironment.Sample(samCube, R);
 		//return env;
 	}
 	
-	return (albedo * diffuse + saturate(specular) ) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	return (albedo * diffuse + saturate(specular)) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
 }
 
 
 // -------------------------------------------------
 // Distorsion
 // -------------------------------------------------
+
+
+
 float4 PSDistorsion(
 VS_TEXTURED_OUTPUT vin
 , in float4 iPosition : SV_Position
 
-) : SV_Target0{
+) : SV_Target0{	
 
+
+	//vin.UV *= 0.5;
 	float3 wpos = vin.wPos.xyz;
-	float4 noise = txNormal.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
-	float4 noise2 = txNormal.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
+	float4 noise = txEmissive.Sample(samWrapLinear, vin.UV * 10 + world_time.xx*0.2) * 2 - 1;
+	float4 noise2 = txEmissive.Sample(samWrapLinear, float2(1, 1) - vin.UV * 2.32) * 2 - 1;
 	noise2 *= 1;
-
+	//return noise;
 	noise *= 0.9;
 	noise2 *= 0.9;
 
@@ -579,7 +721,6 @@ VS_TEXTURED_OUTPUT vin
 	wpos.z += noise.x * sin(world_time + .123f);
 	wpos.x += noise2.x * cos(world_time*0.23);
 	wpos.z += noise2.x * sin(world_time*1.7 + .123f);
-
 	// ++add noise
 	float4 hpos = mul(float4(wpos, 1), ViewProjection);
 	hpos.xyz /= hpos.w;   // -1 .. 1
@@ -587,17 +728,38 @@ VS_TEXTURED_OUTPUT vin
 	hpos.y = (1 - hpos.y) * 0.5;
 	float4 albedo = txDiffuse.Sample(samClampLinear, hpos.xy);
 
-		// A bit of fresnel
-		float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
-		float3 N = normalize(vin.wNormal.xyz);
-		float fresnel = 1 - dot(N, dir_to_eye);
-	fresnel = pow(fresnel, 4);
+	// A bit of fresnel
+	float3 dir_to_eye = normalize(cameraWorldPos.xyz - vin.wPos.xyz);
+	float3 N = normalize(vin.wNormal.xyz);
+	float fresnel = 1 - dot(N, dir_to_eye);
+	fresnel = pow(fresnel, 2);
 
+	//float3 dir_ref_corrected = normalize(float3(cameraWorldPos.x, cameraWorldPos.y, cameraWorldPos.z) - vin.wPos.xyz);
+	/*float3 cam_pos = cameraWorldPos.xyz;
+	float3 cam_origin = float3(-4.22, 1.19, 5.66);
+	float3 pos = vin.wPos.xyz;
+	float3 dir_ref_corrected = normalize(cam_pos - pos);
+	float3 r = float3(-dir_ref_corrected.x, dir_ref_corrected.y, dir_ref_corrected.z);
+	//r += cameraWorldPos.xyz;
+	
 	float3 N_reflected = reflect(-dir_to_eye, N);
-		float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);
-		float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
+	N_reflected = reflect(r, normalize(N) * 0.3);
 
-		return env*fresnel + new_color*(1 - fresnel);
+	float4 env = txEnvironment.Sample(samWrapLinear, N_reflected);*/
+	float4 new_color = float4(albedo.x*0.8, albedo.y*1.0, albedo.z*0.9, 1);
+
+	//float4 refl = float4(ssrrColor(iPosition.xy, ViewProjection).xyz, 1);
+	float4 refl = float4(ssrrColor(iPosition.xy, ViewProjection, albedo, wpos, N).xyz, 1);
+
+	//float refl_val = length(txGloss.Load(uint3(iPosition.xy, 0)).xyz);	
+	//refl *= float4(0.25, 0.29, 0.21, 1);
+	//refl *= refl_val;
+	//return refl;
+	//refl = float4(1, 0, 0, 1);
+	new_color = refl*fresnel + new_color*(1 - fresnel);
+	//new_color = float4(new_color.x*0.4, new_color.y*0.5, new_color.z*0.35, 1);
+	
+	return new_color;
 }
 
 // -------------------------------------------------
@@ -678,8 +840,8 @@ float4 PSLightShafts(VS_TEXTURED_OUTPUT input
 
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV) * float4(1, 0.5, 0.2, 1);
 		
-	color.a *= txNormal.Sample(samWrapLinear, input.wPos.xz + world_time.xx * 0.1).x;
-	color.a *= txNormal.Sample(samWrapLinear, input.wPos.yz - cos(world_time.xx) * 0.05).x;
+	color.a *= txGloss.Sample(samWrapLinear, input.wPos.xz + world_time.xx * 0.1).x;
+	color.a *= txGloss.Sample(samWrapLinear, input.wPos.yz - cos(world_time.xx) * 0.05).x;
 	//color.a *= delta_z;
 	//color.a *= pow(1 - input.UV.y, 1);
 	color.a *= 0.6f;
