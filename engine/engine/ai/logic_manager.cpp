@@ -545,12 +545,46 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 
 }
 
-bool CLogicManager::playerInsideGNZone(XMVECTOR& vector){
-	for (int i = 0; i < GNLogic.size(); i++){
-		if (((TCompGNLogic*)GNLogic[i])->checkPlayerInside()){
-			vector = ((TCompGNLogic*)GNLogic[i])->getCluePoint();
-			return true;
+void CLogicManager::changeCamera(std::string name) {
+	CHandle camera_entity = CEntityManager::get().getByName(name.c_str());
+	if (camera_entity.isValid()) {
+		CEntity* e = camera_entity;
+		TCompCamera* camera = e->get<TCompCamera>();
+		if (camera) {
+			render_manager.activeCamera = camera;
 		}
 	}
-	return false;
 }
+
+void CLogicManager::changeTrack(std::string name, bool loop) {
+	CSoundManager::get().playTrack(name, loop);
+}
+
+void CLogicManager::stopMusic() {
+	CSoundManager::get().stopMusic();
+}
+
+void CLogicManager::playMusic(bool loop) {
+	CSoundManager::get().playMusic(loop);
+}
+
+void CLogicManager::stringThrown() {
+	execute("onStringThrown()");
+}
+
+void CLogicManager::stringPulled() {
+	execute("onStringPulled()");
+}
+
+void CLogicManager::stringsTensed() {
+	execute("onStringTensed()");
+}
+
+void CLogicManager::stringCancelled() {
+	execute("onStringCancel()");
+}
+
+void CLogicManager::stringAllCancelled() {
+	execute("onStringCancelAll()");
+}
+
