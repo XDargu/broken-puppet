@@ -476,7 +476,8 @@ void CApp::update(float elapsed) {
 		//loadScene("data/scenes/escena_ms2.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
-		sm.playFX("sonar");
+		XMVECTOR pos = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
+		sm.play3DFX("sonar", pos);
 	}
 
 	//sm.StopLoopedFX("sonar");

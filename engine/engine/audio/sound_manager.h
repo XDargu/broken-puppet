@@ -50,6 +50,8 @@ public:
 
 	void play3DFX(std::string name, TTransform* trans, float volume_lambda);
 
+	void play3DFX(std::string name, XMVECTOR pos);
+
 	void setSound3DFactors(float distance, float roll, float doppler);
 	//bool set3DPosition(std::string name);
 };
