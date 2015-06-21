@@ -744,12 +744,12 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Waits for the player to throw
 	if (io.isPressed(CIOStatus::THROW_STRING)) {
 		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
-		//if ((!CLogicManager::get().playerInsideGNZone(point))||(first_throw))
+		if ((!CLogicManager::get().playerInsideGNZone(point))||(first_throw))
 			ChangeState("fbp_ThrowString");
-		//else{
-			//ChangeState("fbp_ThrowGoldenNeedle");
-			//golden_needle_point = point;
-		//}
+		else{
+			ChangeState("fbp_ThrowGoldenNeedle");
+			golden_needle_point = point;
+		}
 	}
 }
 

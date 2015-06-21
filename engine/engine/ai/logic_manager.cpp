@@ -556,6 +556,17 @@ void CLogicManager::changeCamera(std::string name) {
 	}
 }
 
+bool CLogicManager::playerInsideGNZone(XMVECTOR& vector){
+	for (int i = 0; i < GNLogic.size(); ++i){
+		TCompGNLogic* GN_comp = (TCompGNLogic*)GNLogic[i];
+		if (GN_comp->checkPlayerInside()){
+			vector = GN_comp->getCluePoint();
+			return true;
+		}
+	}
+	return false;
+}
+
 void CLogicManager::changeTrack(std::string name, bool loop) {
 	CSoundManager::get().playTrack(name, loop);
 }
