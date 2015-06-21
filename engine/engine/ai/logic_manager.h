@@ -81,6 +81,12 @@ public:
 	void playerDead();
 	void changeCamera(std::string name);
 
+	// SOUND & MUSIC
+	void changeTrack(std::string name, bool loop);
+	void stopMusic();
+	void playMusic(bool loop);
+
+	// MISC
 	void print(std::string text);
 	void help();
 };

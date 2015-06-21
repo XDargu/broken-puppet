@@ -59,6 +59,25 @@ void CSoundManager::playTrack(int trackID, bool loop) {
 	playMusic(loop);
 }
 
+void CSoundManager::playTrack(std::string name, bool loop) {
+	int trackID = currentTrack;
+	int counter = 0;
+	for (auto& music_track : music_tracks) {
+		counter++;
+		if (music_track.name == ("data/music/" + std::string(name))) {
+			trackID = counter;
+			break;
+		}
+	}
+	// Unload the curren track, if needed
+	if (currentTrack != trackID) {
+		if (music_tracks[currentTrack].is_loaded())
+			music_tracks[currentTrack].unload();
+	}
+	currentTrack = trackID;
+	playMusic(loop);
+}
+
 void CSoundManager::playMusic(bool loop) {
 	//BASS_ChannelPlay(musicTracks[currentTrack], 0);
 
@@ -69,7 +88,7 @@ void CSoundManager::playMusic(bool loop) {
 	// Play it
 	if(loop)
 		BASS_ChannelFlags(music_tracks[currentTrack].stream, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
-		BASS_ChannelPlay(music_tracks[currentTrack].stream, 0);
+	BASS_ChannelPlay(music_tracks[currentTrack].stream, 0);
 }
 
 void CSoundManager::stopMusic() {

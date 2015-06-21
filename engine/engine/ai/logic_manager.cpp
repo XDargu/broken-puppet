@@ -15,6 +15,7 @@
 #include "entity_inspector.h"
 //#include <SLB\include\SLB\SLB.hpp>
 #include "SLB\include\SLB\SLB.hpp"
+#include "audio\sound_manager.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -342,6 +343,9 @@ void CLogicManager::bootLUA() {
 		.set("cameraLookAtPosition", (void (CLogicManager::*)(CVector)) &CLogicManager::cameraLookAtPosition)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
 		.set("changeCamera", &CLogicManager::changeCamera)
+		.set("changeTrack", &CLogicManager::changeTrack)
+		.set("stopMusic", &CLogicManager::stopMusic)
+		.set("playMusic", &CLogicManager::playMusic)
 	;
 
 	// Register the bot class
@@ -524,4 +528,16 @@ void CLogicManager::changeCamera(std::string name) {
 			render_manager.activeCamera = camera;
 		}
 	}
+}
+
+void CLogicManager::changeTrack(std::string name, bool loop) {
+	CSoundManager::get().playTrack(name, loop);
+}
+
+void CLogicManager::stopMusic() {
+	CSoundManager::get().stopMusic();
+}
+
+void CLogicManager::playMusic(bool loop) {
+	CSoundManager::get().playMusic(loop);
 }

@@ -41,7 +41,9 @@ function onSceneLoad_my_file()
 	--obj = logicManager:getObject("dvn_rampa_bloque_2m_simple_01_109.0")
 	--obj:move(Vector(0, 0, 0), 1)
 
-	startCoroutine("test", coroutineTest)
+	--startCoroutine("test", coroutineTest)
+
+	logicManager:changeTrack("CANCION.mp3", true)
 
 	--logicManager:setTimer("Test", 1)
 

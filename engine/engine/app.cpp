@@ -315,6 +315,12 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
+	sm.addMusicTrack(0, "CANCION.mp3");
+	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	sm.addFXTrack("light.wav", "light");
+	sm.addFXTrack("steam.wav", "steam");
+	sm.addFXTrack("sonar.wav", "sonar");
+
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
@@ -322,13 +328,7 @@ bool CApp::create() {
 	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
-	//loadScene("data/scenes/viewer_test.xml");
-
-	sm.addMusicTrack(0, "CANCION.mp3");
-	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
-	sm.addFXTrack("light.wav", "light");
-	sm.addFXTrack("steam.wav", "steam");
-	sm.addFXTrack("sonar.wav", "sonar");
+	//loadScene("data/scenes/viewer_test.xml");	
 
 	//sm.playTrack(0,false);
 
