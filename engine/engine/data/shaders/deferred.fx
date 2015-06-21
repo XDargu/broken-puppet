@@ -840,8 +840,8 @@ float4 PSLightShafts(VS_TEXTURED_OUTPUT input
 
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV) * float4(1, 0.5, 0.2, 1);
 		
-	color.a *= txNormal.Sample(samWrapLinear, input.wPos.xz + world_time.xx * 0.1).x;
-	color.a *= txNormal.Sample(samWrapLinear, input.wPos.yz - cos(world_time.xx) * 0.05).x;
+	color.a *= txGloss.Sample(samWrapLinear, input.wPos.xz + world_time.xx * 0.1).x;
+	color.a *= txGloss.Sample(samWrapLinear, input.wPos.yz - cos(world_time.xx) * 0.05).x;
 	//color.a *= delta_z;
 	//color.a *= pow(1 - input.UV.y, 1);
 	color.a *= 0.6f;

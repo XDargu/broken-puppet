@@ -22,6 +22,10 @@ void CRenderManager::init() {
 }
 
 bool CRenderManager::sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2) {
+	// Sort first by blend mode
+	if (k1.material->getBlendMode() != k2.material->getBlendMode()) {
+		return k1.material->getBlendMode() < k2.material->getBlendMode();
+	}
 	if (k1.material != k2.material) {
 		// sort, first the solid, then the transparent
 		if (k1.material->isSolid() != k2.material->isSolid())
@@ -113,6 +117,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			it++;
 			continue; 			
 		}
+
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
 		TCompTransform* tmx = it->transform;
@@ -134,6 +139,10 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		{			
 			CTraceScoped scope(((TCompName*)((CEntity*)it->transform.getOwner())->get<TCompName>())->name);
 			render_count++;
+
+			if (it->material->getBlendMode() != prev_it->material->getBlendMode() || is_first) {
+				activateBlendConfig(it->material->getBlendMode());
+			}
 
 			it->lightmap->activate(9);
 			/*std::string lightmap = "/lightmaps/" + std::string(m_name->name) + "_lighting";
@@ -179,7 +188,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		}
 		++it;		
 	}
-
+	activateBlendConfig(BLEND_CFG_DEFAULT);
 }
 
 void CRenderManager::removeKeysFromOwner(CHandle owner) {

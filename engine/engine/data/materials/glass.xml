@@ -2,5 +2,6 @@
 diffuse="deferred_output"
 glossiness="dither_noise"
 tech="glass"
-              solid="0"
+solid="0"
+blendMode="additive"
 />

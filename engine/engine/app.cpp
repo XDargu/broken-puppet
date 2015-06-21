@@ -763,14 +763,13 @@ void CApp::render() {
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 
-	activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
+	
 	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 	render_manager.renderAll(&camera, false, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
 	render_manager.renderAll(&camera, false, true);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
-	activateBlendConfig(BLEND_CFG_DEFAULT);
 
 #ifdef _DEBUG
 	renderDebugEntities();

@@ -46,6 +46,14 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		if (cubemap_name != "")
 			cubemap = texture_manager.getByName(cubemap_name.c_str());
 		tech = render_techniques_manager.getByName(tech_name.c_str());
+
+		std::string blend_config = atts.getString("blendMode", "default");
+		blend_mode = BlendConfig::BLEND_CFG_DEFAULT;
+		if (blend_config == "additive")
+			blend_mode = BlendConfig::BLEND_CFG_ADDITIVE_BY_SRC_ALPHA;
+		if (blend_config == "combinative")
+			blend_mode = BlendConfig::BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA;
+
 		assert(diffuse && tech);
 	}
 }
