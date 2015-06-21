@@ -92,6 +92,13 @@ public:
 	void changeWaterLevel(float pos1, float time);
 	void changeAmbientLight(float r, float g, float b, float time);
 
+	// STRING EVENTS
+	void stringThrown();
+	void stringsTensed();
+	void stringPulled();
+	void stringCancelled();
+	void stringAllCancelled();
+
 	// MISC
 	void print(std::string text);
 	void help();

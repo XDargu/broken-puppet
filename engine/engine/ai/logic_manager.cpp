@@ -557,3 +557,23 @@ void CLogicManager::stopMusic() {
 void CLogicManager::playMusic(bool loop) {
 	CSoundManager::get().playMusic(loop);
 }
+
+void CLogicManager::stringThrown() {
+	execute("onStringThrown()");
+}
+
+void CLogicManager::stringPulled() {
+	execute("onStringPulled()");
+}
+
+void CLogicManager::stringsTensed() {
+	execute("onStringTensed()");
+}
+
+void CLogicManager::stringCancelled() {
+	execute("onStringCancel()");
+}
+
+void CLogicManager::stringAllCancelled() {
+	execute("onStringCancelAll()");
+}

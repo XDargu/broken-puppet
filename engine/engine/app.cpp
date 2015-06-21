@@ -1080,10 +1080,12 @@ void CApp::destroy() {
 	render_techniques_manager.destroyAll();
 	axis.destroy();
 	grid.destroy();
+	rope.destroy();
 	intersectsWiredCube.destroy();
 	wiredCube.destroy();
 	renderUtilsDestroy();
 	debugTech.destroy();
+	ropeTech.destroy();
 	font.destroy();
 	particle_groups_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;

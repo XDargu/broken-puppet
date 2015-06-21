@@ -443,7 +443,8 @@ void renderUtilsDestroy() {
 }
 
 void activateWorldMatrix( int slot ) {
-  ctes_object.activateInVS(slot);
+	ctes_object.activateInVS(slot);
+	ctes_object.activateInPS(slot);
 }
 
 void activateTint(int slot) {
