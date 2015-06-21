@@ -930,7 +930,7 @@
     </ClCompile>
     <ClCompile Include="render\ssrr_step.cpp">
       <Filter>render\postpro</Filter>
-	</ClInclude>
+	</ClCompile>
     <ClCompile Include="components\comp_recast_aabb.cpp">
       <Filter>components\ai</Filter>
     </ClCompile>
