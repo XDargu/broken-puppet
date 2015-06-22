@@ -25,9 +25,19 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 }
 
+/*float displacement;
+float counter;
+XMVECTOR prev_pos;*/
+
 void TCompPlayerController::init() {
 	fsm_player_legs.Init();
 	fsm_player_torso.Init();
+	
+	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
+
+	/*prev_pos = trans->position;
+	displacement = 0;
+	counter = 0;*/
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -41,6 +51,16 @@ void TCompPlayerController::update(float elapsed) {
 		+ "Y:" + std::to_string(XMVectorGetY(trans->position)) + ", "
 		+ "Z:" + std::to_string(XMVectorGetZ(trans->position)) + "\n"
 		).c_str());*/
+
+	
+	/*displacement += V3DISTANCE(prev_pos, trans->position);
+	counter += elapsed;
+	if (counter >= 1) {
+		XDEBUG("Displacement: %f", displacement);
+		displacement = 0;
+		counter = 0;
+	}
+	prev_pos = trans->position;*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {
