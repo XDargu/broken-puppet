@@ -30,6 +30,7 @@ void TCompGoldenNeedle::fixedUpdate(float elapsed) {
 		XMVECTOR direction = initial_position - finish_position;
 		direction = XMVector3Normalize(direction);
 		XMVECTOR new_pos = (trans->position - (direction*velocity));
+		trans->rotation = direction;
 		trans->position = new_pos;
 	}
 }
