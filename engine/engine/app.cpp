@@ -155,14 +155,14 @@ void createManagers() {
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
-	getObjManager<TCompColliderMesh>()->init(512);
+	getObjManager<TCompColliderMesh>()->init(1024);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
-	getObjManager<TCompStaticBody>()->init(512);
+	getObjManager<TCompStaticBody>()->init(1024);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
@@ -326,13 +326,26 @@ bool CApp::create() {
 	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
 	::render.swap_chain->Present(0, 0);
 
+
+
+	physics_manager.init();
+
 	//loadScene("data/scenes/escena_ms2.xml");
-	loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");
+
+
+	// XML Pruebas
+	loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_2.xml");
+	//loadScene("data/scenes/escene_3.xml");
+	//loadScene("data/scenes/escene_4.xml");
+	//loadScene("data/scenes/escene_5.xml");
+
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -1136,7 +1149,7 @@ void CApp::loadScene(std::string scene_name) {
 	logic_manager.clearAnimations();
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
-	physics_manager.init();
+	//physics_manager.init();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);

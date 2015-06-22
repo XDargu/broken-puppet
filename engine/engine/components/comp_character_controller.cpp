@@ -221,10 +221,16 @@ void TCompCharacterController::GroundCheck(float elapsed)
 						last_platform_speed = ground_velocity;
 
 						// Aply weight force
-						/*if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
-							PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass();
-							((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
-						}*/
+						
+						if (rigid->rigidBody != (PxRigidBody*)ground_actor)
+						{
+							if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+								PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 4;
+								((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
+							}
+						}
+						
+
 					}
 					else {
 						ground_velocity = PxVec3(0, 0, 0);

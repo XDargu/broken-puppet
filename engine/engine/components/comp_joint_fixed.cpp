@@ -11,18 +11,19 @@ TCompJointFixed::~TCompJointFixed() {
 	PxRigidActor* a1 = nullptr;
 	PxRigidActor* a2 = nullptr;
 
+	if (mJoint) {
+		mJoint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			((PxRigidDynamic*)a1)->wakeUp();
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			((PxRigidDynamic*)a2)->wakeUp();
+		}
 
-	mJoint->getActors(a1, a2);
-	// Call the addForce method to awake the bodies, if dynamic
-	if (a1 && a1->isRigidDynamic()) {
-		((PxRigidDynamic*)a1)->wakeUp();
+		// Release the joint
+		mJoint->release();
 	}
-	if (a2 && a2->isRigidDynamic()) {
-		((PxRigidDynamic*)a2)->wakeUp();
-	}
-
-	// Release the joint
-	mJoint->release();
 }
 
 void TCompJointFixed::loadFromAtts(const std::string& elem, MKeyValue &atts) {

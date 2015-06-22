@@ -66,7 +66,7 @@ void FSMPlayerLegs::Init()
 	character_controller->lerpRotation = 0.15;
 
 	character_controller->gravityMultiplier = 32;
-	character_controller->jumpPower = 9.2f;
+	character_controller->jumpPower = 9.2;
 
 	current_animation_id = -1;
 

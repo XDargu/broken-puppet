@@ -1,1 +1,1 @@
-<std_material name="exterior_mat" diffuse="exterior_diffuse" normal="exterior_normal" emissive=""/>
+<std_material name="exterior_mat" diffuse="exterior_diffuse" normal="exterior_normal" specular="exterior_specular" glossiness="exterior_gloss" emissive=""/>
