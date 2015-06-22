@@ -5,7 +5,7 @@
 static const float max_distance = 0.2f;
 static const float velocity = 0.1f;
 
-TCompGoldenNeedle::TCompGoldenNeedle(){}
+TCompGoldenNeedle::TCompGoldenNeedle():used(false){}
 
 
 void TCompGoldenNeedle::loadFromAtts(const std::string& elem, MKeyValue& atts) {
@@ -21,6 +21,7 @@ void TCompGoldenNeedle::create(XMVECTOR init_pos, XMVECTOR init_rot, XMVECTOR fi
 	trans->position = init_pos;
 	finish_position = finish_pos;
 	trans->rotation = init_rot;
+	used = true;
 }
 
 void TCompGoldenNeedle::fixedUpdate(float elapsed) {
@@ -33,4 +34,8 @@ void TCompGoldenNeedle::fixedUpdate(float elapsed) {
 		trans->rotation = direction;
 		trans->position = new_pos;
 	}
+}
+
+bool TCompGoldenNeedle::getUsed(){
+	return used;
 }

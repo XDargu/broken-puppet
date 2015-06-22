@@ -53,20 +53,18 @@ void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
 	CIOStatus& io = CIOStatus::get();
 
 	// Throw the string
-	golden_needle_point = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
 	if (on_enter) {
 
 		/* PRUEBA COMP GOLDEN NEEDLE*/
-		TCompTransform* p_transform = comp_transform;
-		// Get the needle prefab
-		CEntity* new_golden_needle = prefabs_manager.getInstanceByName("GoldenNeedle");
-		TCompName* new__golden_needle_name = new_golden_needle->get<TCompName>();
-		std::strcpy(new__golden_needle_name->name, ("GoldenNeedle" + to_string(entitycount)).c_str());
-		entitycount++;
 
-		TCompGoldenNeedle* new_e_golden_needle = new_golden_needle->get<TCompGoldenNeedle>();
+		//Test para saber si funciona en el componente
+		//TCompGNLogic* gn_logic = (TCompGNLogic*)CLogicManager::get().GNLogic[0];
+		//gn_logic->throwGoldenNeedle();
 
-		new_e_golden_needle->create(p_transform->position+XMVectorSet(0.f,0.6f,0.f,0.f), XMVectorSet(0.f, 0.f, 0.f, 0.f), golden_needle_point);
+		if (GNLogic.isValid()){
+			TCompGNLogic* gn_logic = (TCompGNLogic*)GNLogic;
+			gn_logic->throwGoldenNeedle();
+		}
 		/*--------------------------*/
 	}
 
@@ -706,7 +704,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Waits for the player to throw
 	if (io.isPressed(CIOStatus::THROW_STRING)) {
 		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
-		if ((!CLogicManager::get().playerInsideGNZone(point))||(first_throw))
+		if ((!CLogicManager::get().playerInsideGNZone(point, GNLogic))||(first_throw))
 			ChangeState("fbp_ThrowString");
 		else{
 			ChangeState("fbp_ThrowGoldenNeedle");

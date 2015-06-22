@@ -4,6 +4,12 @@
     <transform position="-6.16 -0.10 9.30" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <ragdoll name="abuela#1"/>
   </entity>
+  <entity>
+    <name name="GNLogic" />
+    <transform position="-6.16 -0.10 9.30" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
+    <logicGoldenNeedle cluePoint="-6.73 1.5 17.80"/>
+  </entity>
   <entity  >
     <transform position="-18.7392 9.38858 -37.4655" rotation="0.0 0.0351602 0.0 0.999382" scale="1.0 1.0 1.0"/>
     <aabb min="-0.285729 0.0 -0.24946" max="0.285729 0.0840727 0.24946"/>

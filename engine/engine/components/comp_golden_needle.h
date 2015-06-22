@@ -10,6 +10,7 @@ private:
 	XMVECTOR finish_position;
 	XMVECTOR initial_position;
 	CHandle m_transform;
+	bool used;
 public:
 
 	TCompGoldenNeedle();
@@ -26,5 +27,7 @@ public:
 	}
 
 	void fixedUpdate(float elapsed);
+
+	bool getUsed();
 };
 #endif
