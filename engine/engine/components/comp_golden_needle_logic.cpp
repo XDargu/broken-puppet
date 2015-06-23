@@ -53,7 +53,6 @@ XMVECTOR TCompGNLogic::getCluePoint(){
 }
 
 void TCompGNLogic::throwGoldenNeedle(){
-	clue_point = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
 	if (!used){
 		TCompTransform* p_transform = (TCompTransform*)player_transform;
 		CEntity* new_golden_needle = prefabs_manager.getInstanceByName("GoldenNeedle");

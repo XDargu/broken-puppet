@@ -6,8 +6,8 @@
   </entity>
   <entity>
     <name name="GNLogic" />
-    <transform position="-6.16 -0.10 9.30" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <aabb min="-2.0 0.0 -1.56085e-005" max="7.15258e-007 8.0 4.00206"/>
+    <transform position="-6.16 -0.03 3.80" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-2.0 0.0 -1.56085e-005" max="3 10.23 4.00206"/>
     <logicGoldenNeedle cluePoint="-6.73 1.5 17.80"/>
   </entity>
   <entity  >

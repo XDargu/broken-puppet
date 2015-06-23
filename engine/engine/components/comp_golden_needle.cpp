@@ -3,7 +3,7 @@
 #include "comp_transform.h"
 
 static const float max_distance = 0.2f;
-static const float velocity = 0.1f;
+static const float velocity = 6.5f;
 
 TCompGoldenNeedle::TCompGoldenNeedle():used(false){}
 

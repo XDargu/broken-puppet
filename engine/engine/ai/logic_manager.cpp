@@ -556,7 +556,7 @@ void CLogicManager::changeCamera(std::string name) {
 	}
 }
 
-bool CLogicManager::playerInsideGNZone(XMVECTOR& vector, CHandle logicGN){
+bool CLogicManager::playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN){
 	for (int i = 0; i < GNLogic.size(); ++i){
 		TCompGNLogic* GN_comp = (TCompGNLogic*)GNLogic[i];
 		if (GN_comp->checkPlayerInside()){

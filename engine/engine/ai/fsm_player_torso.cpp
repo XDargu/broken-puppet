@@ -598,6 +598,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		current_rope_entity = CHandle();
 		first_actor = nullptr;
 		first_needle = CHandle();
+		first_throw = false;
 		entitycount++;
 		
 		up_animation = false;
@@ -704,7 +705,8 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Waits for the player to throw
 	if (io.isPressed(CIOStatus::THROW_STRING)) {
 		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
-		if ((!CLogicManager::get().playerInsideGNZone(point, GNLogic))||(first_throw))
+		bool inside = CLogicManager::get().playerInsideGNZone(point, GNLogic);
+		if ((!inside) || (first_throw))
 			ChangeState("fbp_ThrowString");
 		else{
 			ChangeState("fbp_ThrowGoldenNeedle");
