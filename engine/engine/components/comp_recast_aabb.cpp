@@ -5,6 +5,7 @@
 
 TCompRecastAABB::TCompRecastAABB() {
 	index = -1;
+	active = false;
 }
 
 TCompRecastAABB::~TCompRecastAABB() {
@@ -18,6 +19,18 @@ void TCompRecastAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	CNav_mesh_manager::get().registerRecastAABB(this);
 	index=CNav_mesh_manager::get().getLastRecastAABBIndex();
 
+}
+
+void TCompRecastAABB::setIndex(int ind){
+	index = ind;
+}
+
+bool TCompRecastAABB::getActive(){
+	return active;
+}
+
+void TCompRecastAABB::setActive(bool act){
+	active = act;
 }
 
 int TCompRecastAABB::getIndex(){

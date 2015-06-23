@@ -244,7 +244,15 @@ void CNav_mesh_manager::checkDistaceToEnemies(){
 		TCompTransform* player_transform = (TCompTransform*)p_transform;
 		float distance = aabb_struct.sqrDistance(player_transform->position);
 		if (distance < max_distance_act_enemies*max_distance_act_enemies) {
-			aimanager::get().recastAABBActivate(ind);
+			if (!aux_recast_aabb->getActive()){
+				aimanager::get().recastAABBActivate(ind);
+				aux_recast_aabb->setActive(true);
+			}
+		}else{
+				if (aux_recast_aabb->getActive()){
+					aimanager::get().recastAABBDesactivate(ind);
+					aux_recast_aabb->setActive(false);
+				}
 		}
 	}
 }
