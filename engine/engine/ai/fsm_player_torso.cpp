@@ -501,10 +501,10 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 	// Animation ends
 	if (state_time >= 0.1f) {
-		if (first_throw)
-			ChangeState("fbp_GrabString");
+		if (current_rope_entity == CHandle())
+			ChangeState("fbp_Inactive"); 
 		else
-			ChangeState("fbp_Inactive");
+			ChangeState("fbp_GrabString");
 	}
 
 }
@@ -632,7 +632,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		/*CHandle c_rope = strings.back();
 		strings.pop_back();
 		CEntityManager::get().remove(c_rope.getOwner());*/
-		CRope_manager::get().removeString();
+		CRope_manager::get().removeBackString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
