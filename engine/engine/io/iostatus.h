@@ -60,6 +60,7 @@ public:
 		, SPACEBAR
 		, Q
 		, E
+		, CLUE_BUTTON
 		, BUTTONS_COUNT
 		
 	};

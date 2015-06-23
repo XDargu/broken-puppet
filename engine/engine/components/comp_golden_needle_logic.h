@@ -8,6 +8,7 @@ private:
 	CHandle m_transform;
 	CHandle m_aabb;
 	CHandle player_transform;
+	CHandle player_aabb;
 	CHandle player;
 	XMVECTOR clue_point;
 	bool used;

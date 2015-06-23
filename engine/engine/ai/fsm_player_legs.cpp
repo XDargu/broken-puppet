@@ -24,6 +24,7 @@ void FSMPlayerLegs::Init()
 	AddState("fbp_Run", (statehandler)&FSMPlayerLegs::Run);
 	AddState("fbp_ThrowString", (statehandler)&FSMPlayerLegs::ThrowString);
 	AddState("fbp_ThrowStringPartial", (statehandler)&FSMPlayerLegs::ThrowStringPartial);
+	AddState("fbp_ThrowStringGolden", (statehandler)&FSMPlayerLegs::ThrowStringGolden);
 	AddState("fbp_PullString", (statehandler)&FSMPlayerLegs::PullString);
 	AddState("fbp_Fall", (statehandler)&FSMPlayerLegs::Fall);
 	AddState("fbp_Land", (statehandler)&FSMPlayerLegs::Land);
@@ -114,6 +115,12 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowString");
 	}
+	if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+		skeleton->stopAnimation(8);
+		skeleton->stopAnimation(0);
+		skeleton_ik->active = false;
+		ChangeState("fbp_ThrowStringGolden");
+	}
 	if (falling){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
@@ -189,6 +196,17 @@ void FSMPlayerLegs::Walk(float elapsed){
 			skeleton->stopAnimation(22);
 			skeleton->stopAnimation(16);
 			ChangeState("fbp_ThrowStringPartial");
+		}
+		if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+			skeleton->stopAnimation(9);
+			skeleton->stopAnimation(1);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(13);
+			skeleton->stopAnimation(24);
+			skeleton->stopAnimation(12);
+			skeleton->stopAnimation(22);
+			skeleton->stopAnimation(16);
+			ChangeState("fbp_ThrowStringGolden");
 		}
 		if (falling){
 			skeleton->stopAnimation(9);
@@ -282,6 +300,17 @@ void FSMPlayerLegs::Run(float elapsed){
 			skeleton->stopAnimation(23);
 			skeleton->stopAnimation(21);
 			ChangeState("fbp_ThrowStringPartial");
+		}
+		if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+			skeleton->stopAnimation(10);
+			skeleton->stopAnimation(2);
+			skeleton->stopAnimation(25);
+			skeleton->stopAnimation(15);
+			skeleton->stopAnimation(26);
+			skeleton->stopAnimation(14);
+			skeleton->stopAnimation(23);
+			skeleton->stopAnimation(21);
+			ChangeState("fbp_ThrowStringGolden");
 		}
 		if (falling){
 			skeleton->stopAnimation(10);
@@ -378,6 +407,29 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= 0.1f && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
+		ChangeState("fbp_Idle");
+	}
+}
+
+void FSMPlayerLegs::ThrowStringGolden(float elapsed){
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	canThrow = false;
+
+	int animation = torso->up_animation ? 19 : 4;
+
+	if (on_enter) {
+		skeleton->loopAnimation(0);
+		skeleton->playAnimation(animation);
+	}
+
+	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
+	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+
+	if (state_time >= skeleton->getAnimationDuration(4) && !(CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON))){
+		skeleton->stopAnimation(0);
 		ChangeState("fbp_Idle");
 	}
 }
