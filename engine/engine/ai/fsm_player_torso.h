@@ -20,6 +20,7 @@ private:
 	CHandle first_needle;
 	CHandle comp_skeleton;
 	CHandle current_rope_entity;
+	CHandle GNLogic;
 	bool first_throw;
 
 	PxVec3 standard_camera_offset;

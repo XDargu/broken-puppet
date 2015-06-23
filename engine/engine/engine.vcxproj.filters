@@ -498,12 +498,15 @@
     </ClInclude>
     <ClInclude Include="render\ssrr_step.h">
       <Filter>render\postpro</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="components\comp_recast_aabb.h">
       <Filter>components\ai</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_golden_needle_logic.h">
       <Filter>components\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_golden_needle.h">
+      <Filter>components\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -930,12 +933,15 @@
     </ClCompile>
     <ClCompile Include="render\ssrr_step.cpp">
       <Filter>render\postpro</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="components\comp_recast_aabb.cpp">
       <Filter>components\ai</Filter>
     </ClCompile>
     <ClCompile Include="components\comp_golden_needle_logic.cpp">
       <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_golden_needle.cpp">
+      <Filter>components\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

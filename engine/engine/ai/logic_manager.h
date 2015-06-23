@@ -69,7 +69,7 @@ public:
 	void bootLUA();
 
 	//Golden Needle
-	bool playerInsideGNZone(XMVECTOR& vector);
+	bool playerInsideGNZone(XMVECTOR& vector, CHandle logicGN);
 
 	// LUA
 	void execute(std::string text);

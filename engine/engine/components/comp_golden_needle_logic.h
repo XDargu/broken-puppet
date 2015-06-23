@@ -10,6 +10,7 @@ private:
 	CHandle player_transform;
 	CHandle player;
 	XMVECTOR clue_point;
+	bool used;
 public:
 
 	TCompGNLogic();
@@ -24,6 +25,8 @@ public:
 	bool checkPlayerInside();
 
 	XMVECTOR getCluePoint();
+
+	void throwGoldenNeedle();
 
 	void renderDebug3D();
 };

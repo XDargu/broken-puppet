@@ -166,6 +166,7 @@ void createManagers() {
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompGNLogic>()->init(32);
+	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
 	getObjManager<TCompCameraPivotController>()->init(1);
@@ -240,6 +241,7 @@ void initManagers() {
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
 	getObjManager<TCompGNLogic>()->initHandlers();
+	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
@@ -326,8 +328,8 @@ bool CApp::create() {
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/lightmap_test.xml");
-	loadScene("data/scenes/anim_test.xml");
+	loadScene("data/scenes/lightmap_test.xml");
+	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
 	//sm.playTrack(0,false);
@@ -638,6 +640,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRope>()->fixedUpdate(elapsed);
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
+	getObjManager<TCompGoldenNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);

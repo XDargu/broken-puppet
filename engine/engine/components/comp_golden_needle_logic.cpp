@@ -3,10 +3,14 @@
 #include "entity_manager.h"
 #include "ai\logic_manager.h"
 #include "comp_transform.h"
+#include "handle\prefabs_manager.h"
+#include "comp_name.h"
+#include "comp_golden_needle.h"
 #include "comp_aabb.h"
 #include "font\font.h"
 
 TCompGNLogic::TCompGNLogic() {
+	used = false;
 	clue_point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 }
 
@@ -46,6 +50,21 @@ bool TCompGNLogic::checkPlayerInside(){
 
 XMVECTOR TCompGNLogic::getCluePoint(){
 	return clue_point;
+}
+
+void TCompGNLogic::throwGoldenNeedle(){
+	clue_point = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
+	if (!used){
+		TCompTransform* p_transform = (TCompTransform*)player_transform;
+		CEntity* new_golden_needle = prefabs_manager.getInstanceByName("GoldenNeedle");
+		TCompName* new__golden_needle_name = new_golden_needle->get<TCompName>();
+		std::strcpy(new__golden_needle_name->name, "GoldenNeedle");
+
+		TCompGoldenNeedle* new_e_golden_needle = new_golden_needle->get<TCompGoldenNeedle>();
+
+		new_e_golden_needle->create(p_transform->position + XMVectorSet(0.f, 0.6f, 0.f, 0.f), XMVectorSet(0.f, 0.f, 0.f, 0.f), clue_point);
+		used = true;
+	}
 }
 
 void TCompGNLogic::renderDebug3D() {
