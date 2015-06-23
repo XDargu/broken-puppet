@@ -15,9 +15,6 @@ void TCompRecastAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_transform = assertRequiredComponent<TCompTransform>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
 
-	TCompTransform* transform = (TCompTransform*)m_transform;
-	TCompAABB* aabb = (TCompAABB*)m_aabb;
-
 	CNav_mesh_manager::get().registerRecastAABB(this);
 	index=CNav_mesh_manager::get().getLastRecastAABBIndex();
 

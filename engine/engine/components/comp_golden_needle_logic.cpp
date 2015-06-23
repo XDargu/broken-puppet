@@ -22,8 +22,6 @@ void TCompGNLogic::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_transform = assertRequiredComponent<TCompTransform>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
 
-	TCompTransform* transform = (TCompTransform*)m_transform;
-	TCompAABB* aabb = (TCompAABB*)m_aabb;
 	clue_point = atts.getPoint("cluePoint");
 
 	CLogicManager::get().registerGNLogic(CHandle(this));

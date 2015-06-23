@@ -73,6 +73,7 @@ using namespace DirectX;
 #include "comp_switch_push_controller.h"
 #include "comp_switch_pull_controller.h"
 #include "comp_golden_needle_logic.h"
+#include "comp_zone_aabb.h"
 
 // Varios
 #include "comp_needle.h"

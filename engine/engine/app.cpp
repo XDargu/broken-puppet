@@ -166,6 +166,7 @@ void createManagers() {
 	getObjManager<TCompStaticBody>()->init(512);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompGNLogic>()->init(32);
+	getObjManager<TCompZoneAABB>()->init(32);
 	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
@@ -241,6 +242,7 @@ void initManagers() {
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
 	getObjManager<TCompGNLogic>()->initHandlers();
+	getObjManager<TCompZoneAABB>()->initHandlers();
 	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
