@@ -400,7 +400,7 @@ void TCompSkeleton::renderDebug3D() const {
   auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
   float y0 = 20.f;
-  y0 += font.print(x0, y0, "Player Mixer:");
+  y0 += XMVectorGetW(font.print(x0, y0, "Player Mixer:"));
   for (auto a : actions) {
     y0 += font.printf(x0, y0, "Action: %s Weigth: %1.3f Time:%1.3f/%1.3f"
 		, a->getCoreAnimation()->getName().c_str()

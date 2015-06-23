@@ -31,16 +31,26 @@ void CFont::destroy() {
   FW1Factory = nullptr;
 }
 
-float CFont::print(float x, float y, const char *text) const {
+XMVECTOR CFont::print(float x, float y, const char *text) const {
   SET_ERROR_CONTEXT("Printing text", text);
 
   if (!font)
-    return 0.f;
+	  return XMVectorZero();
   XASSERT(font, "Invalid font");
   WCHAR utf16[2048];
   memset(utf16, 0x80, 2048 * 2);
   size_t n = mbstowcs(utf16, text, strlen(text));
   utf16[n] = 0x00;
+  FW1_RECTF rect;
+  rect.Left = 0;
+  rect.Top = 0;
+  rect.Right = 5000;
+  rect.Bottom = 5000;
+  FW1_RECTF rect2 = font->MeasureString(utf16, L"Lucida Console", size, &rect, FW1_NOWORDWRAP);
+  rect2.Left = rect.Left - rect2.Left;
+  rect2.Right = rect.Right + rect2.Right;
+  rect2.Bottom = rect.Bottom + rect2.Bottom;
+  rect2.Top = rect.Top - rect2.Top;
   font->DrawString(
     render.ctx,
     utf16,
@@ -49,7 +59,30 @@ float CFont::print(float x, float y, const char *text) const {
     color,
     FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
     );
-  return size;
+
+  return XMVectorSet(rect2.Left, rect2.Top, rect2.Right, rect2.Bottom);
+}
+
+XMVECTOR CFont::measureString(const char *text) const {
+	if (!font)
+		return XMVectorZero();
+	XASSERT(font, "Invalid font");
+	WCHAR utf16[2048];
+	memset(utf16, 0x80, 2048 * 2);
+	size_t n = mbstowcs(utf16, text, strlen(text));
+	utf16[n] = 0x00;
+
+	FW1_RECTF rect;
+	rect.Left = 0;
+	rect.Top = 0;
+	rect.Right = 5000;
+	rect.Bottom = 5000;
+	FW1_RECTF rect2 = font->MeasureString(utf16, L"Lucida Console", size, &rect, NULL);
+	rect2.Left = rect.Left - rect2.Left;
+	rect2.Right = rect.Right + rect2.Right;
+	rect2.Bottom = rect.Bottom + rect2.Bottom;
+	rect2.Top = rect.Top - rect2.Top;
+	return XMVectorSet(rect2.Left, rect2.Top, rect2.Right, rect2.Bottom);
 }
 
 float CFont::printf(float x, float y, const char *fmt, ...) const {
@@ -63,10 +96,11 @@ float CFont::printf(float x, float y, const char *fmt, ...) const {
   if( n < 0 )
     buf[ sizeof( buf )-1 ] = 0x00;
 
-  return print( x, y, buf );
+  print( x, y, buf );
+  return size;
 }
 
-float CFont::print3D(XMVECTOR world_p3d, const char *text) const {
+XMVECTOR CFont::print3D(XMVECTOR world_p3d, const char *text) const {
 	SET_ERROR_CONTEXT("Printing 3d text", text);
 
 	XASSERT(camera.isValid(), "Invalid camera");
@@ -74,5 +108,5 @@ float CFont::print3D(XMVECTOR world_p3d, const char *text) const {
 	TCompCamera* cam = camera;
 	if( cam->getScreenCoords( world_p3d, &x, &y ) )
 		return print( x, y, text );
-	return 0.f;
+	return XMVectorZero();
 }

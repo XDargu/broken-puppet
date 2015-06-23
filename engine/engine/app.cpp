@@ -848,6 +848,8 @@ void CApp::render() {
 
 void CApp::renderEntities() {
 
+	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
+
 	debugTech.activate();
 	const CTexture *t = texture_manager.getByName("grass");
 	t->activate(0);
@@ -960,13 +962,25 @@ void CApp::renderEntities() {
 		// Draw texts
 		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
 		if (c_text && t) {
-			float old_size = font.size;
-			font.size = c_text->size;
-			unsigned int old_col = font.color;
-			font.color = c_text->color;
-			font.print3D(t->position, c_text->text);
-			font.size = old_size;
-			font.color = old_col;
+			if (c_text->in_range) {
+				float old_size = font.size;
+				font.size = c_text->size;
+				unsigned int old_col = font.color;
+				font.color = c_text->color;
+
+				XMVECTOR edges = font.measureString(c_text->text);
+				activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+				float x, y;
+				float offset = 15;
+				if (camera.getScreenCoords(t->position, &x, &y))
+					drawDialogBox(x, y, XMVectorGetZ(edges) + offset * 2, XMVectorGetW(edges) + offset * 2, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+				activateBlendConfig(BLEND_CFG_DEFAULT);
+
+				//font.print3D(t->position, c_text->text);
+				font.print(x + offset, y + offset, c_text->text);
+				font.size = old_size;
+				font.color = old_col;
+			}
 		}
 	}
 }
