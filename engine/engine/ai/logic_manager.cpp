@@ -9,6 +9,7 @@
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
 #include "components\comp_golden_needle_logic.h"
+#include "components\comp_zone_aabb.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -175,6 +176,10 @@ void CLogicManager::registerTrigger(CHandle trigger) {
 	triggers.push_back(trigger);
 }
 
+void CLogicManager::registerZoneAABB(CHandle zone_aabb){
+	ZonesAABB.push_back(zone_aabb);
+}
+
 void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
@@ -198,6 +203,22 @@ void CLogicManager::unregisterGNLogic(CHandle golden_logic) {
 void CLogicManager::unregisterTrigger(CHandle trigger) {
 	auto it = std::find(triggers.begin(), triggers.end(), trigger);
 	triggers.erase(it);
+}
+
+void CLogicManager::unregisterZoneAABB(CHandle zone_aabb) {
+	auto it = std::find(ZonesAABB.begin(), ZonesAABB.end(), zone_aabb);
+	ZonesAABB.erase(it);
+}
+
+CHandle CLogicManager::getPlayerZoneName(){
+	for (int i = 0; i < ZonesAABB.size(); ++i){
+		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
+		if (Zone_comp->isPlayerInside()){
+			CHandle name = Zone_comp->getZoneName();
+			if (name.isValid())
+				return Zone_comp->getZoneName();
+		}
+	}
 }
 
 void CLogicManager::onSwitchPressed(CHandle the_switch) {

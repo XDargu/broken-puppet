@@ -22,7 +22,17 @@ CHandle TCompZoneAABB::getZoneName(){
 	return m_name;
 }
 
-void TCompZoneAABB::init() {
+bool TCompZoneAABB::isPlayerInside(){
+	TCompTransform* p_transform = (TCompTransform*)player_transform;
+	AABB struct_aabb = AABB(((TCompAABB*)m_aabb)->min, ((TCompAABB*)m_aabb)->max);
+	if (struct_aabb.containts(p_transform->position))
+		return true;
+	else
+		return false;
+}
 
+void TCompZoneAABB::init() {
+	player = CEntityManager::get().getByName("Player");
+	player_transform = ((CEntity*)player)->get<TCompTransform>();
 }
 

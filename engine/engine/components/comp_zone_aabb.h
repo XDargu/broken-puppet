@@ -9,6 +9,8 @@ private:
 	CHandle m_transform;
 	CHandle m_aabb;
 	CHandle m_name;
+	CHandle player_transform;
+	CHandle player;
 
 public:
 	TCompZoneAABB();
@@ -17,6 +19,8 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
 	CHandle getZoneName();
+
+	bool isPlayerInside();
 
 	void init();
 

@@ -17,6 +17,7 @@ private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;
 	std::vector<CHandle> GNLogic;
+	std::vector<CHandle> ZonesAABB;
 
 	std::vector<CRigidAnimation> animations;
 
@@ -47,10 +48,12 @@ public:
 
 	void registerTrigger(CHandle trigger);
 	void registerGNLogic(CHandle golden_logic);
+	void registerZoneAABB(CHandle zone_aabb);
 	void onTriggerEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
 	void unregisterGNLogic(CHandle golden_logic);
+	void unregisterZoneAABB(CHandle zone_aabb);
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
@@ -67,6 +70,9 @@ public:
 	void clearAnimations();
 
 	void bootLUA();
+
+	//Zone AABB
+	CHandle getPlayerZoneName();
 
 	//Golden Needle
 	bool playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN);
