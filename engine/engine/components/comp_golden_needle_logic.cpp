@@ -61,7 +61,7 @@ void TCompGNLogic::throwGoldenNeedle(){
 
 		TCompGoldenNeedle* new_e_golden_needle = new_golden_needle->get<TCompGoldenNeedle>();
 
-		new_e_golden_needle->create(p_transform->position + XMVectorSet(0.f, 0.6f, 0.f, 0.f), XMVectorSet(0.f, 0.f, 0.f, 0.f), clue_point);
+		new_e_golden_needle->create(p_transform->position + XMVectorSet(0.f, 1.f, 0.f, 0.f), XMVectorSet(0.f, 0.f, 0.f, 0.f), clue_point);
 		used = true;
 	}
 }

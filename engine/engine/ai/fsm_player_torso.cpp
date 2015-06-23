@@ -57,10 +57,6 @@ void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
 
 		/* PRUEBA COMP GOLDEN NEEDLE*/
 
-		//Test para saber si funciona en el componente
-		//TCompGNLogic* gn_logic = (TCompGNLogic*)CLogicManager::get().GNLogic[0];
-		//gn_logic->throwGoldenNeedle();
-
 		if (GNLogic.isValid()){
 			TCompGNLogic* gn_logic = (TCompGNLogic*)GNLogic;
 			gn_logic->throwGoldenNeedle();
