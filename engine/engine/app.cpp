@@ -238,6 +238,8 @@ void initManagers() {
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
+	getObjManager<TCompColliderMesh>()->initHandlers();
+	getObjManager<TCompColliderConvex>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -1012,7 +1014,7 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	if (renderNavMesh)
-	CNav_mesh_manager::get().render_nav_mesh();
+		CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();

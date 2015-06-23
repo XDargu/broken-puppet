@@ -8,6 +8,7 @@
 struct TCompBtGrandma : TBaseComponent {
 
 	bt_grandma* m_ai_controller;
+	CHandle m_aabb;
 
 	TCompBtGrandma();
 	~TCompBtGrandma();

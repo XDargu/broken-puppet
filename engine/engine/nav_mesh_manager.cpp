@@ -238,15 +238,28 @@ void CNav_mesh_manager::registerRecastAABB(CHandle recastAABB){
 void CNav_mesh_manager::checkDistaceToEnemies(){
 	for (int i = 0; i < recastAABBs.size(); ++i){
 		TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
-		int ind=aux_recast_aabb->getIndex();
-		AABB aabb_struct = AABB(((TCompAABB*)aux_recast_aabb->m_aabb)->min, ((TCompAABB*)aux_recast_aabb->m_aabb)->max);
+		int ind = aux_recast_aabb->getIndex();
+		AABB aabb_struct = *((TCompAABB*)aux_recast_aabb->m_aabb);
 		CHandle p_transform=((CEntity*)player)->get<TCompTransform>();
 		TCompTransform* player_transform = (TCompTransform*)p_transform;
 		float distance = aabb_struct.sqrDistance(player_transform->position);
-		if (distance < max_distance_act_enemies*2.f){
+		if (distance < max_distance_act_enemies*max_distance_act_enemies) {
 			aimanager::get().recastAABBActivate(ind);
 		}
 	}
+}
+
+int CNav_mesh_manager::getIndexMyRecastAABB(CHandle my_aabb){
+	for (int i = 0; i < recastAABBs.size(); ++i){
+		TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
+		int ind = aux_recast_aabb->getIndex();
+		AABB aabb_struct = *((TCompAABB*)aux_recast_aabb->m_aabb);
+		TCompAABB* m_aabb = (TCompAABB*)my_aabb;
+		if (aabb_struct.intersects(m_aabb)){
+			return aux_recast_aabb->getIndex();
+		}
+	}
+	return -1;
 }
 
 CNav_mesh_manager::CNav_mesh_manager()

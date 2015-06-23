@@ -8,6 +8,7 @@
 #include "comp_player_position_sensor.h"
 #include "comp_skeleton.h"
 #include "comp_sensor_distance_player.h"
+#include "nav_mesh_manager.h"
 #include "../ai/aimanager.h"
 #include "font\font.h"
 
@@ -35,12 +36,13 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompSensorDistPlayer>(this);
 	assertRequiredComponent<TCompSensorTied>(this);
 	assertRequiredComponent<TCompSkeleton>(this);
+	m_aabb = assertRequiredComponent<TCompAABB>(this);
 
-	int ind_recast_aabb=atts.getInt("RecastAABBInd", 0);
+	//int ind_recast_aabb = atts.getInt("RecastAABBInd", 0);
+	
 
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
-	m_ai_controller->setIndRecastAABB(ind_recast_aabb);
 	aimanager::get().addBot(m_ai_controller);
 }
 
@@ -56,6 +58,14 @@ void TCompBtGrandma::init(){
 
 	physx::PxReal threshold = 300.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
+
+	TCompTransform* pos = assertRequiredComponent<TCompTransform>(this);
+	TCompAABB* aabb = m_aabb;
+	aabb->update(0);	
+
+	int ind_recast_aabb = CNav_mesh_manager::get().getIndexMyRecastAABB(m_aabb);
+	m_ai_controller->setIndRecastAABB(ind_recast_aabb);
+
 }
 
 void TCompBtGrandma::update(float elapsed){

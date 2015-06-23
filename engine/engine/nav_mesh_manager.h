@@ -34,6 +34,7 @@ public:
 	void updateNavmesh();
 	void prepareInputNavMesh();
 	bool checkIfUpdatedNavMesh();
+	int getIndexMyRecastAABB(CHandle my_aabb);
 	bool rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos);
 	void clearNavMesh();
 	void checkUpdates();
