@@ -9,8 +9,10 @@ struct TCompGoldenNeedle : TBaseComponent {
 private:
 	XMVECTOR finish_position;
 	XMVECTOR initial_position;
+	XMVECTOR first_reached_pos;
 	CHandle m_transform;
 	bool used;
+	bool first_reached;
 public:
 
 	TCompGoldenNeedle();

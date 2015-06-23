@@ -22,8 +22,6 @@ void TCompGNLogic::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_transform = assertRequiredComponent<TCompTransform>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
 
-	TCompTransform* transform = (TCompTransform*)m_transform;
-	TCompAABB* aabb = (TCompAABB*)m_aabb;
 	clue_point = atts.getPoint("cluePoint");
 
 	CLogicManager::get().registerGNLogic(CHandle(this));
@@ -53,7 +51,6 @@ XMVECTOR TCompGNLogic::getCluePoint(){
 }
 
 void TCompGNLogic::throwGoldenNeedle(){
-	clue_point = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
 	if (!used){
 		TCompTransform* p_transform = (TCompTransform*)player_transform;
 		CEntity* new_golden_needle = prefabs_manager.getInstanceByName("GoldenNeedle");
@@ -62,7 +59,7 @@ void TCompGNLogic::throwGoldenNeedle(){
 
 		TCompGoldenNeedle* new_e_golden_needle = new_golden_needle->get<TCompGoldenNeedle>();
 
-		new_e_golden_needle->create(p_transform->position + XMVectorSet(0.f, 0.6f, 0.f, 0.f), XMVectorSet(0.f, 0.f, 0.f, 0.f), clue_point);
+		new_e_golden_needle->create(p_transform->position + XMVectorSet(0.f, 1.f, 0.f, 0.f), XMVectorSet(0.f, 0.f, 0.f, 0.f), clue_point);
 		used = true;
 	}
 }

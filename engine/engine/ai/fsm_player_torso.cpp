@@ -57,10 +57,6 @@ void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
 
 		/* PRUEBA COMP GOLDEN NEEDLE*/
 
-		//Test para saber si funciona en el componente
-		//TCompGNLogic* gn_logic = (TCompGNLogic*)CLogicManager::get().GNLogic[0];
-		//gn_logic->throwGoldenNeedle();
-
 		if (GNLogic.isValid()){
 			TCompGNLogic* gn_logic = (TCompGNLogic*)GNLogic;
 			gn_logic->throwGoldenNeedle();
@@ -461,10 +457,10 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 	// Animation ends
 	if (state_time >= 0.1f) {
-		if (first_throw)
-			ChangeState("fbp_GrabString");
+		if (current_rope_entity == CHandle())
+			ChangeState("fbp_Inactive"); 
 		else
-			ChangeState("fbp_Inactive");
+			ChangeState("fbp_GrabString");
 	}
 
 }
@@ -592,12 +588,13 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		/*CHandle c_rope = strings.back();
 		strings.pop_back();
 		CEntityManager::get().remove(c_rope.getOwner());*/
-		CRope_manager::get().removeString();
+		CRope_manager::get().removeBackString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
 		first_actor = nullptr;
 		first_needle = CHandle();
+		first_throw = false;
 		entitycount++;
 		
 		up_animation = false;
@@ -704,7 +701,8 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Waits for the player to throw
 	if (io.isPressed(CIOStatus::THROW_STRING)) {
 		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
-		if ((!CLogicManager::get().playerInsideGNZone(point, GNLogic))||(first_throw))
+		bool inside = CLogicManager::get().playerInsideGNZone(point, GNLogic);
+		if ((!inside) || (first_throw))
 			ChangeState("fbp_ThrowString");
 		else{
 			ChangeState("fbp_ThrowGoldenNeedle");

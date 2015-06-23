@@ -15,9 +15,11 @@ struct CFont {
   CFont();
   bool create();
   void destroy();
-  float print(float x, float y, const char *text) const;
+  XMVECTOR print(float x, float y, const char *text) const;
   float printf(float x, float y, const char *fmt, ... ) const;
-  float print3D( XMVECTOR p3d, const char *fmt ) const;
+  XMVECTOR print3D(XMVECTOR p3d, const char *fmt) const;
+
+  XMVECTOR measureString(const char *text) const;
 };
 
 extern CFont font;

@@ -508,6 +508,9 @@
     <ClInclude Include="components\comp_golden_needle.h">
       <Filter>components\misc</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_zone_aabb.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -942,6 +945,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_golden_needle.cpp">
       <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_zone_aabb.cpp">
+      <Filter>components\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

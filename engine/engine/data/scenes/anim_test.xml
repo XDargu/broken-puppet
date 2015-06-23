@@ -1383,6 +1383,7 @@
       <draw mesh="lampara_pared" sub_mesh="0" mat="lucecitas"/>
     </render>
     <aabb min="-1.37966 -0.772843 -0.537266" max="0.00390792 0.345862 0.53727"/>
+    <distanceText distance="15" text="Texto de prueba"/>
   </entity>
   <entity  >
     <name name="Omni004_125.0" />
