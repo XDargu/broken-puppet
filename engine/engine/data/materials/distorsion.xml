@@ -1,6 +1,7 @@
 <std_material name="distorsion"
 diffuse="deferred_output"
-normal="dither_noise"
+emissive="dither_noise"
 tech="distorsion"
-              solid="0"
+solid="0"
+doubleSided="true"
 />

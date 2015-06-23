@@ -4,6 +4,7 @@
 #include "components\all_components.h"
 #include "handle\prefabs_manager.h"
 #include "components\comp_skeleton.h"
+#include "ai\logic_manager.h"
 
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
@@ -23,6 +24,7 @@ FSMPlayerTorso::~FSMPlayerTorso() {}
 void FSMPlayerTorso::Init() {
 	// Insert all states in the map
 	AddState("fbp_ThrowString", (statehandler)&FSMPlayerTorso::ThrowString);
+	AddState("fbp_ThrowGoldenNeedle", (statehandler)&FSMPlayerTorso::ThrowGoldenNeedle);
 	AddState("fbp_PullString", (statehandler)&FSMPlayerTorso::PullString);
 	AddState("fbp_GrabString", (statehandler)&FSMPlayerTorso::GrabString);	
 	AddState("fbp_Inactive", (statehandler)&FSMPlayerTorso::Inactive);
@@ -47,6 +49,32 @@ void FSMPlayerTorso::Init() {
 	can_move = true;
 }
 
+void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
+	CIOStatus& io = CIOStatus::get();
+
+	// Throw the string
+	if (on_enter) {
+
+		/* PRUEBA COMP GOLDEN NEEDLE*/
+
+		//Test para saber si funciona en el componente
+		//TCompGNLogic* gn_logic = (TCompGNLogic*)CLogicManager::get().GNLogic[0];
+		//gn_logic->throwGoldenNeedle();
+
+		if (GNLogic.isValid()){
+			TCompGNLogic* gn_logic = (TCompGNLogic*)GNLogic;
+			gn_logic->throwGoldenNeedle();
+		}
+		/*--------------------------*/
+	}
+
+	// Animation ends
+	if (state_time >= 0.1f) {
+		ChangeState("fbp_Inactive");
+	}
+
+}
+
 void FSMPlayerTorso::ThrowString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
@@ -67,6 +95,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 			// First throw
 			if (first_actor == nullptr) {
+				CLogicManager::get().stringThrown();
 				first_throw = true;
 
 				first_actor = blockHit.actor;
@@ -236,6 +265,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 			else {
 				// The string can be thrown
 				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
+					CLogicManager::get().stringThrown();
 					first_throw = false;
 
 					// -------------- Get the offsets
@@ -465,6 +495,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		TCompSkeleton* skeleton = comp_skeleton;
 
 		rope->pos_2 = skeleton->getPositionOfBone(89);
+		CLogicManager::get().stringPulled();
 
 		if (joint) {
 			// -------------- Shorten the distance joint
@@ -612,6 +643,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
+			CLogicManager::get().stringCancelled();
 		}
 	}
 
@@ -619,6 +651,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
+			CLogicManager::get().stringAllCancelled();
 			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
@@ -633,6 +666,8 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	// Tense the string
 	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
+
+		CLogicManager::get().stringsTensed();
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
@@ -668,8 +703,13 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	// Waits for the player to throw
 	if (io.isPressed(CIOStatus::THROW_STRING)) {
-
-		ChangeState("fbp_ThrowString");
+		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+		if ((!CLogicManager::get().playerInsideGNZone(point, GNLogic))||(first_throw))
+			ChangeState("fbp_ThrowString");
+		else{
+			ChangeState("fbp_ThrowGoldenNeedle");
+			golden_needle_point = point;
+		}
 	}
 }
 

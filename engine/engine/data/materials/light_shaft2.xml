@@ -1,5 +1,1 @@
-<std_material 
-tech="light_shaft" 
-solid="0"
-doubleSided="true"
-name="light_shaft2" diffuse="falloff2" normal="noise" specular="" gloss="" emissive=""/>
+<std_material name="light_shaft2" diffuse="falloff2" tech="light_shaft" solid="0" double_sided="true" glossiness="noise" blendMode="additive"/>

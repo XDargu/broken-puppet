@@ -56,6 +56,9 @@ clearlistener()
 	
 	-- List of UConstrait exported
 	expJoints = #()
+	
+	
+	jointsToExp = #()
 
 	LevelName = "Level"
 	PlayerName = "Player"
@@ -644,6 +647,53 @@ clearlistener()
 		throw ("No se exportar materiales de tipo " + ( classof(  sm )  as string ))
 		return m
 	)
+	
+	fn FlattenMap obj = (
+		max modify mode    
+		convertto obj editable_mesh
+		modPanel.setCurrentObject obj
+		subObjectLevel = 4
+		Unwrapper = Unwrap_UVW name: "MCVAutomap"
+		Unwrapper.setApplyToWholeObject true
+		addModifier obj Unwrapper
+		Temp = obj.modifiers[ "MCVAutomap"]
+		Temp.setMapChannel 3
+		Temp.setTVSubObjectMode 3
+		Temp.flattenMap 45.0  #() 0.02 true 0 true true     
+		subObjectLevel = 0
+	 
+		convertto obj editable_mesh
+		--deleteModifier obj Unwrapper
+)
+	
+	fn BakeLightmap obj size =
+	(
+		FlattenMap obj
+		--Clear all render elements 
+		obj.iNodeBakeProperties.removeAllBakeElements() 	
+		be2 = LightingMap() -- instance of the bake element class
+		be2.outputSzX =be2.outputSzY = size --set the size of the baked map --specifythe full file path, name and type:
+		local mName = getIdName obj
+		local f_path = out_path + "textures\\lightmaps\\"
+		be2.fileType = (f_path + mName + "_lighting.tga")
+		be2.fileName = filenameFromPath be2.fileType
+		be2.filterOn = true --enable filtering
+		be2.shadowsOn =true --enable shadows
+		be2.enabled = true --enable baking --Preparing theobjectfor baking:
+		obj.INodeBakeProperties.addBakeElement be2 --add second element
+		obj.INodeBakeProperties.bakeEnabled = true --enabling baking
+		obj.INodeBakeProperties.bakeChannel = 3 --channel to bake
+		obj.INodeBakeProperties.nDilations = 1 --expand the texturea bit
+		select obj --we are baking the selection, so we select the object --Call the renderer to bake both elements:
+		render rendertype:#bakeSelected vfb:off progressBar:true outputSize:[size,size]
+		
+		-- Convert to dds using texconv.exe por ejemplo
+		--copyFile infile full_target
+		local infile = (f_path + mName + "_lighting.tga");
+		local cmd = tools_path + "texconv.exe -f DXT5 " + infile + " -o " + out_path + "textures\\lightmaps\\"
+		format "Executing: --%--\n" cmd
+		local rc = DOSCommand (cmd)
+	)
 
 	fn exportMesh obj_to_export = (
 		
@@ -664,6 +714,10 @@ clearlistener()
 		local nfaces = getNumFaces obj
 			
 		local channelA = 1
+		local channelL = 3
+		if not (meshop.getMapSupport obj channelL) then (
+			channelL = 1
+		)
 		
 		local world2local = inverse obj.transform
 		local max2mcv = rotateXMatrix -90
@@ -688,8 +742,8 @@ clearlistener()
 				-- Position
 				local face_pos = getFace obj face_id
 				local face_mapA = meshop.getMapFace obj channelA face_id
+				local face_mapL = meshop.getMapFace obj channelL face_id
 				local face_normals = meshop.getFaceRNormals obj face_id
-				
 				--format "face_pos[%] = %\n" face_id face_pos
 				
 				-- For the 3 vtxs of each face
@@ -697,13 +751,14 @@ clearlistener()
 				for vid in #(1,3,2) do (
 					local wpos = meshop.getVert obj face_pos[ vid ]
 					local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+					local uvL = meshop.getMapVert obj channelL face_mapL[ vid ]
 					local wn = face_normals[ vid ]
 					
 					local mpos = wpos * _world2mcv 
 					local n = wn * _world2mcv.rotationpart 
 					
 					-- Collect all data associated to this vtx
-					local v = #( mpos.x, mpos.y, mpos.z, uvA.x, 1-uvA.y, n.x, n.y, n.z ) -- , N.x, N.y, N.z )...
+					local v = #( mpos.x, mpos.y, mpos.z, uvA.x, 1-uvA.y, n.x, n.y, n.z, uvL.x, 1-uvL.y) -- , N.x, N.y, N.z )...
 					
 					-- Index the vtx or get the index if the vtx has already been defined
 					local idx_of_v = findIndexOfVertex all_vtxs all_str_vtxs v
@@ -721,7 +776,7 @@ clearlistener()
 		computeTangentSpace all_vtxs all_idxs
 		
 		-- Save in binary form to file
-		saveBinaryMesh obj all_vtxs all_idxs all_groups 1006		-- Positions+UV2 only
+		saveBinaryMesh obj all_vtxs all_idxs all_groups 1008		-- Positions+UV2 only
 		
 		-- Delete the temp mesh
 		if obj != obj_to_export then delete obj
@@ -1553,7 +1608,119 @@ clearlistener()
 		return mString
 	)	
 	
+
+	fn validateJointFixed obj = (
 	
+	-- Get all the Uconstraints in the scene
+	list = for o in $* where (classof o == UConstraint) collect o
+	
+	local varJointReturn = undefined
+	-- check if the obj is an actor in a Uconstraint
+	for mJoint in list do (
+		
+		--jointsToExp		
+		local ownerTest = false
+		
+		if ((mJoint.constraintType == 0) == false) then continue
+		local body0 = false
+		local body1 = false
+		local undefinedTest = false
+		
+		if( mJoint.body0 != undefined) then (
+			body0 = mJoint.body0 == obj
+		)
+		else (
+			undefinedTest = true
+		)
+
+		if( mJoint.body1 != undefined) then (
+			body1 = mJoint.body1 == obj
+		)
+		else (
+			undefinedTest = true
+		)
+		
+			
+		if (body0) or (body1) then (
+			
+			local mName = getIdName mJoint
+			
+			-- If the mJoint is not in the exp list add it and return false
+			if (findItem expJoints mName ) == 0 then (
+				-- Add it				
+				append expJoints mName
+				-- If have only one actor
+				if (undefinedTest) then varJointReturn = mJoint
+			)
+			-- If there are two actor
+			-- It´s the secont time it appears
+			else (					
+				if ((varJointReturn == undefined) and (findItem jointsToExp mName) == 0) then		
+				varJointReturn = mJoint
+			)
+		)
+	)	
+	-- If didn´t exported it yet
+	if (varJointReturn != undefined) then(
+		append jointsToExp (getIdName varJointReturn)
+	)
+	
+	return varJointReturn
+)
+	
+/**********************************************************************************************
+Gets a FixedJoint
+ Params:
+  - obj: target object
+ Returns:
+  - String with the component information
+***********************************************************************************************/
+fn getJointFixed obj = (
+	local mJoint = validateJointFixed obj
+	if (mJoint == undefined) then return ""
+	
+	mString = "<jointFixed "
+	
+	local mObj = max2mcvMatrix mJoint
+	local qObj = mObj.rotationPart as quat
+	qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+	
+	-- Translations limits
+	-- mode 1 = Locked, 2 = Limited, 3 = Free
+	
+	i = 1;
+	-- Actors
+	if (mJoint.body0 != undefined) then (		
+		mString += "actor" + i as string + " = \"" +getIdName mJoint.body0 as string + "\" "
+		i += 1;
+	)
+	
+	if (mJoint.body1 != undefined) then 
+	mString += "actor" + i as string + " = \"" + getIdName mJoint.body1 as string + "\" "
+	
+	mString += " jointPosition=\"" \
+											+ mObj.row4.x as string+" " \
+											+ mObj.row4.y as string+" " \
+											+ mObj.row4.z as string+"" \
+						+ "\" jointRotation=\"" \
+											+ qObj.x as string+" "\
+											+ qObj.y as string+" "\
+											+ qObj.z as string+" "\
+											+ qObj.w as string+"\" "
+	
+	
+	-- Advanced
+	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
+	mString += "breakable=\"" + mJoint.breakable as string + "\" "
+	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
+	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
+	
+	mString += "/>\n"	
+	
+	return mString
+)
+
+
 		
 fn validateJointD6 obj = (
 	
@@ -1780,27 +1947,82 @@ Gets a Distance Text component
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
 	local mJoint = validateJointPrismatic obj
-	
 	if (mJoint == undefined) then return ""
+		
+	local mObj = max2mcvMatrix mJoint
+	local qObj = mObj.rotationPart as quat
+	qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+	
+	local hingePos = undefined
 	
 	mString = "<jointPrismatic "
 	
 	i = 1;
 	-- Actors
 	if (mJoint.body0 != undefined) then (		
-		local name1 = getIdName mJoint.body0
-		mString += "actor" + i as string + " = \"" + name1 as string + "\" "
+		
+		-- Calculate transform 
+		local body0_rel_mcv = getRelativeTransform mJoint mJoint.body0
+		local q_body0_rel_mcv = body0_rel_mcv.rotationPart as quat
+		q_body0_rel_mcv = quat -q_body0_rel_mcv.x -q_body0_rel_mcv.y -q_body0_rel_mcv.z q_body0_rel_mcv.w
+		
+		mString += "actor" + i as string + " = \"" + getIdName mJoint.body0 as string + "\" "
+		
+				mString += " jointRelativePosition0=\"" \
+												+ body0_rel_mcv.row4.x as string+" " \
+												+ body0_rel_mcv.row4.y as string+" " \
+												+ body0_rel_mcv.row4.z as string+"" \
+						+ "\" jointRelativeRotation0=\"" \
+											+ q_body0_rel_mcv.x as string+" "\
+											+ q_body0_rel_mcv.y as string+" "\
+											+ q_body0_rel_mcv.z as string+" "\
+											+ q_body0_rel_mcv.w as string+"\" "
+		
 		i += 1;
 	)
 	
 	if (mJoint.body1 != undefined) then (
-		local name2 = getIdName mJoint.body1	
-		mString += "actor" + i as string + " = \"" + name2 as string + "\" "
+		
+		-- Calculate transform 
+		local body1_rel_mcv = getRelativeTransform mJoint mJoint.body1
+		local q_body1_rel_mcv = body1_rel_mcv.rotationPart as quat
+		q_body1_rel_mcv = quat -q_body1_rel_mcv.x -q_body1_rel_mcv.y -q_body1_rel_mcv.z q_body1_rel_mcv.w
+		mString += "actor" + i as string + " = \"" + getIdName mJoint.body1 as string + "\" "
+		
+		mString += " jointRelativePosition1=\"" \
+										+ body1_rel_mcv.row4.x as string+" " \
+										+ body1_rel_mcv.row4.y as string+" " \
+										+ body1_rel_mcv.row4.z as string+"" \
+				+ "\" jointRelativeRotation1=\"" \
+									+ q_body1_rel_mcv.x as string+" "\
+									+ q_body1_rel_mcv.y as string+" "\
+									+ q_body1_rel_mcv.z as string+" "\
+									+ q_body1_rel_mcv.w as string+"\" "
 	)
+	
+	mString += " jointPosition=\"" \
+										+ mObj.row4.x as string+" " \
+										+ mObj.row4.y as string+" " \
+										+ mObj.row4.z as string+"" \
+					+ "\" jointRotation=\"" \
+										+ qObj.x as string+" "\
+										+ qObj.y as string+" "\
+										+ qObj.z as string+" "\
+										+ qObj.w as string+"\" "
+	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
-	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
+	
+	-- Advanced
+	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
+	mString += "breakable=\"" + mJoint.breakable as string + "\" "
+	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
+	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
+
+	
+	-- mode 1 = Locked, 2 = Limited, 3 = Free
+	mString += "linearModeX=\"" + mJoint.linearModeX as string + "\" "
+	mString += "linearModeY=\"" + mJoint.linearModeY as string + "\" "
 	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
 	
 	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
@@ -1809,6 +2031,9 @@ fn getJointPrismatic obj = (
 	-- Spring
 	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
 	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
+	
+	mString += "parentCollition=\"" +mJoint.Collision as string + "\" "
+	
 	
 	mString += "/>\n"	
 	
@@ -1966,9 +2191,6 @@ fn getJointHinge obj = (
 	
 	return mString
 )	
-	
-	
-
 
 fn validatePlatformPath obj = (
 	
@@ -2369,6 +2591,7 @@ fn getPlatformPath obj = (
 		expDiff = #()
 		expNormal = #()
 		expJoints = #()
+		jointsToExp = #()
 		
 		initializePrefabs()
 		
@@ -2413,6 +2636,7 @@ fn getPlatformPath obj = (
 			getJointPrismatic,
 			getJointHinge,
 			getJointD6,
+			getJointFixed,
 			getPlatformPath,
 			getTrigger,
 			getPullInt,
@@ -2505,7 +2729,8 @@ fn getPlatformPath obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
---openCloseFile()
---removeObjectsID()
+	/*export_materials = false
+addObjectsID()
+exportXMLScene()
+openCloseFile()
+removeObjectsID()*/

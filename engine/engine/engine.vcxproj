@@ -191,6 +191,9 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
     <ClInclude Include="components\comp_joint_fixed.h" />
+    <ClInclude Include="components\comp_recast_aabb.h" />
+    <ClInclude Include="components\comp_golden_needle_logic.h" />
+    <ClInclude Include="components\comp_golden_needle.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
@@ -329,6 +332,7 @@
     <ClInclude Include="render\shadows.h" />
     <ClInclude Include="render\sharpen_step.h" />
     <ClInclude Include="render\ssao_step.h" />
+    <ClInclude Include="render\ssrr_step.h" />
     <ClInclude Include="render\texture.h" />
     <ClInclude Include="render\underwater_step.h" />
     <ClInclude Include="render\vertex_declarations.h" />
@@ -369,6 +373,9 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
+    <ClCompile Include="components\comp_recast_aabb.cpp" />
+    <ClCompile Include="components\comp_golden_needle_logic.cpp" />
+    <ClCompile Include="components\comp_golden_needle.cpp" />
     <ClCompile Include="render\collision_convex.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />
@@ -589,6 +596,7 @@
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\sharpen_step.cpp" />
     <ClCompile Include="render\ssao_step.cpp" />
+    <ClCompile Include="render\ssrr_step.cpp" />
     <ClCompile Include="render\texture.cpp" />
     <ClCompile Include="render\underwater_step.cpp" />
     <ClCompile Include="render\vertex_declarations.cpp" />
@@ -630,7 +638,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.lua" />
+    <None Include="data\lua\scheduler.lua" />
+    <None Include="data\lua\test.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

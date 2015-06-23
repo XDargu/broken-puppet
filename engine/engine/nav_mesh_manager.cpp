@@ -2,8 +2,11 @@
 #include "nav_mesh_manager.h"
 #include "entity_manager.h"
 #include "physics_manager.h"
+#include "ai\aimanager.h"
+#include "components\comp_recast_aabb.h"
 
 static CNav_mesh_manager the_nav_mesh_manager;
+static float max_distance_act_enemies = 4.f;
 CNavmesh* nav_mesh;
 CNavmesh 	nav_A;		// temporal 1
 CNavmesh 	nav_B;		// temporal 2
@@ -23,6 +26,7 @@ bool CNav_mesh_manager::build_nav_mesh(){
 	nav_A.build();
 	nav_mesh = &nav_A;
 	keep_updating_navmesh = true;
+	player = CEntityManager::get().getByName("Player");
 	new std::thread(&CNav_mesh_manager::updateNavmesh, this);
 	return true;
 }
@@ -30,15 +34,15 @@ bool CNav_mesh_manager::build_nav_mesh(){
 void CNav_mesh_manager::prepareInputNavMesh(){
 
 	for (int i = 0; i < colMeshes.size(); ++i){
-		colMeshes[i]->addInputNavMesh();
+		((TCompColliderMesh*)colMeshes[i])->addInputNavMesh();
 	}
 
 	for (int i = 0; i < colBoxes.size(); ++i){
-		colBoxes[i]->addInputNavMesh();
+		((TCompColliderBox*)colBoxes[i])->addInputNavMesh();
 	}
 
 	for (int i = 0; i < colSpheres.size(); ++i){
-		colSpheres[i]->addInputNavMesh();
+		((TCompColliderSphere*)colSpheres[i])->addInputNavMesh();
 	}
 
 	/*for (int i = 0; i < colCapsules.size(); ++i){
@@ -55,14 +59,14 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 	int i = 0;
 	bool updatedChecked = false;
 	while ((!updatedChecked) && (i < colBoxes.size())){
-		updatedChecked = colBoxes[i]->getIfUpdated();
+		updatedChecked = ((TCompColliderBox*)colBoxes[i])->getIfUpdated();
 		i++;
 	}
 	
 	if (!updatedChecked){
 		i = 0;
 		while ((!updatedChecked) && (i < colSpheres.size())){
-			updatedChecked = colSpheres[i]->getIfUpdated();
+			updatedChecked = ((TCompColliderSphere*)colSpheres[i])->getIfUpdated();
 			i++;
 		}
 	}
@@ -159,7 +163,7 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 				navMeshQuery.setTool(CNavmeshQuery::ETool::FIND_PATH);
 				navMeshQuery.findStraightPath();
 				num = navMeshQuery.numPointsStraightPath;
-				prue = navMeshQuery.straightPath;
+				polys = navMeshQuery.straightPath;
 				straightPath.clear();
 				XMFLOAT3* aux_array = new XMFLOAT3[navMeshQuery.numPointsStraightPath];
 				for (int i = 0; i < navMeshQuery.numPointsStraightPath; ++i){
@@ -172,11 +176,11 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 }
 
 void CNav_mesh_manager::pathRender(){
-	if (prue) {
+	if (polys) {
 		for (int i = 0; i <num; ++i){
 			if (i>0){
-				XMVECTOR p1 = XMVectorSet(prue[(i - 1) * 3], prue[((i - 1) * 3) + 1]+0.10f, prue[((i - 1) * 3) + 2], 1);
-				XMVECTOR p2 = XMVectorSet(prue[i * 3], prue[i * 3 + 1] + 0.10f, prue[i * 3 + 2], 1);
+				XMVECTOR p1 = XMVectorSet(polys[(i - 1) * 3], polys[((i - 1) * 3) + 1] + 0.10f, polys[((i - 1) * 3) + 2], 1);
+				XMVECTOR p2 = XMVectorSet(polys[i * 3], polys[i * 3 + 1] + 0.10f, polys[i * 3 + 2], 1);
 				drawLine(p1, p2);
 			}
 		}
@@ -222,8 +226,32 @@ bool CNav_mesh_manager::rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos){
 	return navMeshQuery.m_hitResult;
 }
 
+int CNav_mesh_manager::getLastRecastAABBIndex(){
+	return recast_aabb_index;
+}
+
+void CNav_mesh_manager::registerRecastAABB(CHandle recastAABB){
+	recastAABBs.push_back(recastAABB);
+	recast_aabb_index++;
+}
+
+void CNav_mesh_manager::checkDistaceToEnemies(){
+	for (int i = 0; i < recastAABBs.size(); ++i){
+		TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
+		int ind=aux_recast_aabb->getIndex();
+		AABB aabb_struct = AABB(((TCompAABB*)aux_recast_aabb->m_aabb)->min, ((TCompAABB*)aux_recast_aabb->m_aabb)->max);
+		CHandle p_transform=((CEntity*)player)->get<TCompTransform>();
+		TCompTransform* player_transform = (TCompTransform*)p_transform;
+		float distance = aabb_struct.sqrDistance(player_transform->position);
+		if (distance < max_distance_act_enemies*2.f){
+			aimanager::get().recastAABBActivate(ind);
+		}
+	}
+}
+
 CNav_mesh_manager::CNav_mesh_manager()
 {
+	recast_aabb_index = 0;
 }
 
 

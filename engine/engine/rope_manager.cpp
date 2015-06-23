@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "rope_manager.h"
 #include "components\comp_rope.h"
+#include "ai\logic_manager.h"
 
 static CRope_manager the_rope_manager;
 

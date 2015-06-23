@@ -109,11 +109,13 @@ extern CMesh        mesh_textured_quad_xy_centered;
 extern CMesh        plane3x3;
 
 // Post process
+extern  CShaderCte<TCtesGlobal> ctes_global;
 extern	CShaderCte<TCtesBlur> ctes_blur;
 extern	CShaderCte<TCtesSharpen> ctes_sharpen;
 extern	CShaderCte<TCtesSSAO> ctes_ssao;
 extern  CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 extern  CShaderCte<TCtesGlow> ctes_glow;
 extern  CShaderCte<TCtesUnderwater> ctes_underwater;
+extern  CShaderCte<TCtesSSRR> ctes_ssrr;
 
 #endif

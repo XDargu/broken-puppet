@@ -1,7 +1,6 @@
 <!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
 <std_material name="Standardmaterial"
 diffuse="StandardDiff"
-ao="Steel_Worn_00_A"
 normal="Steel_Worn_00_N"
 specular="StandardDiff"
 glossiness="StandardDiff"

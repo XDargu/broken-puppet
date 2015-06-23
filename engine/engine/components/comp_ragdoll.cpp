@@ -37,10 +37,10 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompRagdoll::fixedUpdate(float elapsed) {
 
-	if (CIOStatus::get().becomesPressed(CIOStatus::F8_KEY)) {
+	/*if (CIOStatus::get().becomesPressed(CIOStatus::F8_KEY)) {
 		if (!((CEntity*)CHandle(this).getOwner())->hasTag("player"))
 			setActive(!isRagdollActive());
-	}
+	}*/
 
 
 	// If the ragdoll is not active, the rigid bones must follow the bone position of the animation

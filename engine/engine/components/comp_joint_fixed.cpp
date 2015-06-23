@@ -34,7 +34,7 @@ void TCompJointFixed::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	bool breakable = atts.getBool("breakable", false);
 	float breakForce = atts.getFloat("maxBreakForce", 1000);
-	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
+	float breakTorque = atts.getFloat("maxTorqueForce", 1000);
 
 	float angle_limit = atts.getFloat("swingAngle", 0);
 

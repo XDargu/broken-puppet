@@ -38,6 +38,7 @@ public:
 	void addMusicTrack(int trackID, const char* file);
 
 	void playTrack(int trackID, bool loop);
+	void playTrack(std::string name, bool loop);
 	void playFXTrack(std::string name);
 	void addFXTrack(const char* file, std::string name);
 	void playMusic(bool loop);
@@ -49,6 +50,8 @@ public:
 	void stopFX(std::string name);
 
 	void play3DFX(std::string name, TTransform* trans, float volume_lambda);
+
+	void play3DFX(std::string name, XMVECTOR pos);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 	//bool set3DPosition(std::string name);

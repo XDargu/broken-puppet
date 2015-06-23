@@ -33,8 +33,7 @@ void TCompPlayerController::init() {
 void TCompPlayerController::update(float elapsed) {
 	time_since_last_hit += elapsed;
 
-	fsm_player_torso.update(elapsed);
-	
+	//fsm_player_torso.update(elapsed);
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
 	/*dbg((
@@ -45,8 +44,8 @@ void TCompPlayerController::update(float elapsed) {
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {
-	
 	fsm_player_legs.update(elapsed);
+	fsm_player_torso.update(elapsed);
 }
 
 //unsigned int TCompPlayerController::getStringCount() {

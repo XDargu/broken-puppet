@@ -5,14 +5,19 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
+#include "components\comp_camera.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
+#include "components\comp_golden_needle_logic.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
+#include "render\render_manager.h"
 #include "entity_inspector.h"
 //#include <SLB\include\SLB\SLB.hpp>
 #include "SLB\include\SLB\SLB.hpp"
+#include "audio\sound_manager.h"
+#include "render\render_utils.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -37,6 +42,15 @@ void CLogicManager::init()
 		water_level_dest = XMVectorGetY(water_t->position);
 		lerp_water = 0.05f;
 	}
+
+	ambient_light = XMVectorSet(1, 1, 1, 1);
+	lerp_ambient_light = 0.05f;
+
+	scene_to_load = "";
+
+	//triggers.clear();
+	timers.clear();
+	GNLogic.clear();
 }
 
 CLogicManager::~CLogicManager() {}
@@ -45,6 +59,11 @@ std::vector<std::string> timers_to_delete;
 std::vector<TKeyFrame> keyframes_to_delete;
 
 void CLogicManager::update(float elapsed) {
+	
+	char buffer[64];
+	sprintf(buffer, "updateCoroutines( %f )", elapsed);
+	luaL_dostring(L, buffer);
+
 	SET_ERROR_CONTEXT("Upadating timers", "");
 	// Update the timers
 	for (auto& it : timers) {
@@ -73,6 +92,12 @@ void CLogicManager::update(float elapsed) {
 		// Update the animation
 		it.update(elapsed);		
 	};
+
+	// Update ambient light
+	
+	
+	ctes_global.get()->added_ambient_color = XMVectorLerp(ctes_global.get()->added_ambient_color, ambient_light, lerp_ambient_light* elapsed);
+	//ctes_global.uploadToGPU();
 
 	// Update water level
 	if (water_transform.isValid()) {
@@ -140,12 +165,20 @@ void CLogicManager::update(float elapsed) {
 	if (keyframes_to_delete.size() > 0)
 		keyframes_to_delete.clear();
 	*/
+
+	if (scene_to_load != "") {
+		CApp::get().loadScene(scene_to_load);
+	}
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
 	SET_ERROR_CONTEXT("Setting a timer", the_name.c_str());
 	XDEBUG("Timer %s is set to %f seconds", the_name.c_str(), time);
 	timers[the_name] = CTimer(time);
+}
+
+void CLogicManager::registerGNLogic(CHandle golden_logic){
+	GNLogic.push_back(golden_logic);
 }
 
 void CLogicManager::registerTrigger(CHandle trigger) {
@@ -165,6 +198,11 @@ void CLogicManager::onTriggerExit(CHandle trigger, CHandle who) {
 
 	if (c_name && c_name_who)
 		execute("onTriggerExit_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+}
+
+void CLogicManager::unregisterGNLogic(CHandle golden_logic) {
+	auto it = std::find(GNLogic.begin(), GNLogic.end(), golden_logic);
+	GNLogic.erase(it);
 }
 
 void CLogicManager::unregisterTrigger(CHandle trigger) {
@@ -187,6 +225,15 @@ void CLogicManager::onSwitchReleased(CHandle the_switch) {
 }
 
 void CLogicManager::addRigidAnimation(CRigidAnimation animation) {
+	// Remove previous animations
+	auto it = animations.begin();
+	while (it != animations.end()) {
+		if (animation.target_transform == it->target_transform) {
+			it = animations.erase(it);			
+		}
+		else ++it;		
+	}
+
 	animations.push_back(animation);
 }
 
@@ -198,6 +245,11 @@ void CLogicManager::changeWaterLevel(float pos1, float time)
 {
 	lerp_water = time;
 	water_level_dest = pos1;
+}
+
+void CLogicManager::changeAmbientLight(float r, float g, float b, float time) {
+	ambient_light = XMVectorSet(r, g, b, 1);
+	lerp_ambient_light = time;
 }
 
 /*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
@@ -325,6 +377,11 @@ void CLogicManager::bootLUA() {
 		.set("cameraLookAtBot", (void (CLogicManager::*)(CBot)) &CLogicManager::cameraLookAtBot)
 		.set("cameraLookAtPosition", (void (CLogicManager::*)(CVector)) &CLogicManager::cameraLookAtPosition)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
+		.set("changeCamera", &CLogicManager::changeCamera)
+		.set("changeTrack", &CLogicManager::changeTrack)
+		.set("stopMusic", &CLogicManager::stopMusic)
+		.set("playMusic", &CLogicManager::playMusic)
+		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
 	;
 
 	// Register the bot class
@@ -372,13 +429,15 @@ void CLogicManager::bootLUA() {
 
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
-	luaL_dofile(L, "test.lua");
+	luaL_dofile(L, "data/lua/scheduler.lua");
+	luaL_dofile(L, "data/lua/test.lua");
+	
 
 	execute("onInit();");
 }
 
 void CLogicManager::loadScene(std::string scene_name) {
-	CApp::get().loadScene(scene_name);
+	scene_to_load = scene_name;
 }
 
 void CLogicManager::onSceneLoad(std::string scene_name) {
@@ -495,3 +554,59 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 	}
 
 }
+
+void CLogicManager::changeCamera(std::string name) {
+	CHandle camera_entity = CEntityManager::get().getByName(name.c_str());
+	if (camera_entity.isValid()) {
+		CEntity* e = camera_entity;
+		TCompCamera* camera = e->get<TCompCamera>();
+		if (camera) {
+			render_manager.activeCamera = camera;
+		}
+	}
+}
+
+bool CLogicManager::playerInsideGNZone(XMVECTOR& vector, CHandle logicGN){
+	for (int i = 0; i < GNLogic.size(); ++i){
+		TCompGNLogic* GN_comp = (TCompGNLogic*)GNLogic[i];
+		if (GN_comp->checkPlayerInside()){
+			vector = GN_comp->getCluePoint();
+			logicGN = GN_comp;
+			return true;
+		}
+	}
+	return false;
+}
+
+void CLogicManager::changeTrack(std::string name, bool loop) {
+	CSoundManager::get().playTrack(name, loop);
+}
+
+void CLogicManager::stopMusic() {
+	CSoundManager::get().stopMusic();
+}
+
+void CLogicManager::playMusic(bool loop) {
+	CSoundManager::get().playMusic(loop);
+}
+
+void CLogicManager::stringThrown() {
+	execute("onStringThrown()");
+}
+
+void CLogicManager::stringPulled() {
+	execute("onStringPulled()");
+}
+
+void CLogicManager::stringsTensed() {
+	execute("onStringTensed()");
+}
+
+void CLogicManager::stringCancelled() {
+	execute("onStringCancel()");
+}
+
+void CLogicManager::stringAllCancelled() {
+	execute("onStringCancelAll()");
+}
+

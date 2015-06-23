@@ -16,11 +16,15 @@ class CLogicManager
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;
+	std::vector<CHandle> GNLogic;
 
 	std::vector<CRigidAnimation> animations;
 
 	float water_level_dest;
 	float lerp_water;
+
+	XMVECTOR ambient_light;
+	float lerp_ambient_light;
 
 	// Keep some usefull handles
 	CHandle water_transform;
@@ -29,6 +33,8 @@ private:
 	CHandle player;
 	CHandle player_pivot;
 	CHandle camera_pivot;
+
+	std::string scene_to_load;
 public:
 
 	static CLogicManager& get();
@@ -42,12 +48,15 @@ public:
 	void setTimer(std::string, float time);
 
 	void registerTrigger(CHandle trigger);
+	void registerGNLogic(CHandle golden_logic);
 	void onTriggerEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
+	void unregisterGNLogic(CHandle golden_logic);
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
+
 
 	void startPathMovement(const char* name);
 
@@ -61,6 +70,9 @@ public:
 
 	void bootLUA();
 
+	//Golden Needle
+	bool playerInsideGNZone(XMVECTOR& vector, CHandle logicGN);
+
 	// LUA
 	void execute(std::string text);
 
@@ -72,14 +84,31 @@ public:
 	CPrismaticJoint getPrismaticJoint(std::string name);
 	CHingeJoint getHingeJoint(std::string name);
 
-	void changeWaterLevel(float pos1, float time);
 	void pushPlayerLegsState(std::string state_name);
 	void cameraLookAtBot(CBot bot);
 	void cameraLookAtPosition(CVector target);
 	void cameraLookAt(XMVECTOR target);
 
 	void playerDead();
+	void changeCamera(std::string name);
 
+	// SOUND & MUSIC
+	void changeTrack(std::string name, bool loop);
+	void stopMusic();
+	void playMusic(bool loop);
+
+	// LIGHT & ENVIROMENT
+	void changeWaterLevel(float pos1, float time);
+	void changeAmbientLight(float r, float g, float b, float time);
+
+	// STRING EVENTS
+	void stringThrown();
+	void stringsTensed();
+	void stringPulled();
+	void stringCancelled();
+	void stringAllCancelled();
+
+	// MISC
 	void print(std::string text);
 	void help();
 };

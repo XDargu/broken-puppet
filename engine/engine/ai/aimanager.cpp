@@ -239,9 +239,25 @@ void aimanager::setEnemyRol(aicontroller* enemy){
 }
 
 void aimanager::RemoveEnemyAttacker(aicontroller* enemy){
-	for (int i = 0; i < attackers_rol.size(); i++){
+	for (int i = 0; i < attackers_rol.size(); ++i){
 		if (attackers_rol[i] == enemy){
 			attackers_rol[i] = nullptr;
+		}
+	}
+}
+
+void aimanager::recastAABBActivate(int ind){
+	for (int i = 0; i < bots.size(); ++i){
+		if (((bt_grandma*)bots[i])->getIndRecastAABB()==ind){
+			((bt_grandma*)bots[i])->setActive(true);
+		}
+	}
+}
+
+void aimanager::recastAABBDesactivate(int ind){
+	for (int i = 0; i < bots.size(); ++i){
+		if (((bt_grandma*)bots[i])->getIndRecastAABB() == ind){
+			((bt_grandma*)bots[i])->setActive(false);
 		}
 	}
 }
