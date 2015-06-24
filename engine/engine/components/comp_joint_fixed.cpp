@@ -15,14 +15,25 @@ TCompJointFixed::~TCompJointFixed() {
 		mJoint->getActors(a1, a2);
 		// Call the addForce method to awake the bodies, if dynamic
 		if (a1 && a1->isRigidDynamic()) {
-			((PxRigidDynamic*)a1)->wakeUp();
+			if (a1->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a1)->isSleeping())
+						((PxRigidDynamic*)a1)->wakeUp();
+				}
+			}
 		}
 		if (a2 && a2->isRigidDynamic()) {
-			((PxRigidDynamic*)a2)->wakeUp();
+			if (a2->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a2)->isSleeping())
+						((PxRigidDynamic*)a2)->wakeUp();
+				}
+			}
 		}
 
 		// Release the joint
-		mJoint->release();
+		if ((a1 && a1->isRigidDynamic()) || (a2 && a2->isRigidDynamic()))
+			mJoint->release();
 	}
 }
 

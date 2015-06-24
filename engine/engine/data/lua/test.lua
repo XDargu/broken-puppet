@@ -96,8 +96,10 @@ end
 ---
 ----------------------------------------------------------
 function onTriggerEnter_trigger_goto_escene_2(who)
-	print(tostring(who) .. " ha entrado en el trigger de cambio a escena_2");
-	logicManager:loadScene("data/scenes/escene_2.xml");
+	if who == "Player" then	
+		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_2");
+		logicManager:loadScene("data/scenes/escene_2.xml");
+	end
 end
 ----------------------------------------------------------
 ------- Escene 2 ------- Escene 2 ------- Escene 2 -------
@@ -110,7 +112,7 @@ function onSceneLoad_escene_2()
 
 		print(tostring(who) .. " Interruptor escene_2_int_push_false_way pressed");
 		local escene_2_int_push_false_way_platform = logicManager:getObject("escene_2_int_push_false_way_platform");
-		escene_2_int_push_false_way_platform:move(Vector(86.0, 4.88892, 8.0), 2);
+		escene_2_int_push_false_way_platform:move(Vector(86.0, 4.88892, 8.0), 1);
 
 	end
 
@@ -128,8 +130,10 @@ end
 ---
 ----------------------------------------------------------
 function onTriggerEnter_trigger_goto_escene_3(who)
-	print(tostring(who) .. " ha entrado en el trigger de cambio a escena_3");
-	logicManager:loadScene("data/scenes/escene_3.xml");
+	if who == "Player" then	
+		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_3");
+		logicManager:loadScene("data/scenes/escene_3.xml");
+	end
 end
 ----------------------------------------------------------
 ------- Escene 3 ------- Escene 3 ------- Escene 3 -------
@@ -177,9 +181,11 @@ function onSceneLoad_escene_3()
 	--- Sala Presentacion Agua ---
 
 	function onTriggerExit_escene_3_trigger_pipedown(who)
-		print(tostring(who) .. " ha dejado en el trigger de cambio a escena_3");
+		print(tostring(who) .. " ha dejado en el trigger de pipedown");
 	
 		if who == "escene_3_pipedown_top" then
+			local m_door = logicManager:getHingeJoint("escene_3_puerta_gating_1");
+			m_door:setMotor(1.55, 20000);
 			logicManager:changeWaterLevel(-1,0.25);
 		end
 	
@@ -188,7 +194,7 @@ function onSceneLoad_escene_3()
 	--- Sala Puzle Agua ---
 
 	function onTriggerExit_escene_3_trigger_pipeout(who)
-		print(tostring(who) .. " ha dejado en el trigger de cambio a escena_3");
+		print(tostring(who) .. " ha dejado en el trigger de pipeout");
 	
 		if who == "escene_3_pipeout_top" then
 			logicManager:changeWaterLevel(-11.1,0.25);
@@ -218,22 +224,24 @@ end
 ----
 ----------------------------------------------------------
 function onTriggerEnter_trigger_goto_escene_4(who)
-	print(tostring(who) .. " ha entrado en el trigger de cambio a escena_4");
-	logicManager:loadScene("data/scenes/escene_4.xml");
+	if who == "Player" then	
+		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_4");
+		logicManager:loadScene("data/scenes/escene_4.xml");
+	end
 end
 ----------------------------------------------------------
 ------- Escene 4 ------- Escene 4 ------- Escene 4 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_my_file()
+function onSceneLoad_escene_4()
 
 
 	function onSwitchPressed_interruptor_pulsar_plataforma_01(who)
 
 		print(tostring(who) .. " Interruptor plataforma_01 pulsado");
 		local plataforma_ascendente_01 = logicManager:getObject("plataforma_ascendente_01");
-		plataforma_ascendente_01:move(Vector(51.1903, 56, 18.1153), 6);
+		plataforma_ascendente_01:move(Vector(50.3461, 9.77687, 27.29), 4);
 
 	end
 
@@ -241,7 +249,24 @@ function onSceneLoad_my_file()
 
 		print(tostring(who) .. " Interruptor plataforma_01 relesed");
 		local plataforma_ascendente_01 = logicManager:getObject("plataforma_ascendente_01");
-		plataforma_ascendente_01:move(Vector(51.1903, -1, 18.1153), 1);
+		plataforma_ascendente_01:move(Vector(50.3461, -1.77687, 27.29), 1.2);
+
+	end
+
+
+	function onSwitchPressed_interruptor_pulsar_plataforma_02(who)
+
+		print(tostring(who) .. " Interruptor plataforma_02 pulsado");
+		local plataforma_ascendente_02 = logicManager:getObject("plataforma_ascendente_02");
+		plataforma_ascendente_02:move(Vector(39.4995, 20.4613, 30.4338), 4);
+
+	end
+
+	function onSwitchReleased_interruptor_pulsar_plataforma_02(who)
+
+		print(tostring(who) .. " Interruptor plataforma_02 relesed");
+		local plataforma_ascendente_02 = logicManager:getObject("plataforma_ascendente_02");
+		plataforma_ascendente_02:move(Vector(39.4995, 10.4613, 30.4338), 1.2);
 
 	end
 
@@ -251,8 +276,10 @@ end
 ----
 ----------------------------------------------------------
 function onTriggerEnter_trigger_goto_escene_5(who)
-	print(tostring(who) .. " ha entrado en el trigger de cambio a escena_5");
-	logicManager:loadScene("data/scenes/escene_5.xml");
+	if who == "Player" then	
+		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_5");
+		logicManager:loadScene("data/scenes/escene_5.xml");
+	end
 end
 
 

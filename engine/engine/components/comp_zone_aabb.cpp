@@ -3,6 +3,7 @@
 #include "comp_transform.h"
 #include "comp_aabb.h"
 #include "comp_name.h"
+#include "entity_manager.h"
 #include "aabb.h"
 
 TCompZoneAABB::TCompZoneAABB() {

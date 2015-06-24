@@ -333,14 +333,14 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
 
 	// XML Pruebas
-	//loadScene("data/scenes/escene_1.xml");
+	loadScene("data/scenes/escene_1.xml");
 	//loadScene("data/scenes/escene_2.xml");
 	//loadScene("data/scenes/escene_3.xml");
 	//loadScene("data/scenes/escene_4.xml");

@@ -7,22 +7,33 @@
 TCompDistanceJoint::~TCompDistanceJoint() {
 
 	// Awake the actors
-	physx::PxRigidActor* a1 = nullptr;
-	physx::PxRigidActor* a2 = nullptr;
+	if (joint) {
+		physx::PxRigidActor* a1 = nullptr;
+		physx::PxRigidActor* a2 = nullptr;
 
-	joint->getActors(a1, a2);
-	// Call the addForce method to awake the bodies, if dynamic
-	if (a1 && a1->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((physx::PxRigidDynamic*)a1)->wakeUp();
-	}
-	if (a2 && a2->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((physx::PxRigidDynamic*)a2)->wakeUp();
-	}
+		joint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			if (a1->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a1)->isSleeping())
+						((PxRigidDynamic*)a1)->wakeUp();
+				}
+			}
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			if (a2->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a2)->isSleeping())
+						((PxRigidDynamic*)a2)->wakeUp();
+				}
+			}
+		}
 
-	// Release the joint
-	joint->release();
+		// Release the joint
+		if ((a1 && a1->isRigidDynamic()) || (a2 && a2->isRigidDynamic()))
+			joint->release();
+	}
 }
 
 void TCompDistanceJoint::loadFromAtts(const std::string& elem, MKeyValue &atts) {
