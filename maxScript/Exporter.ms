@@ -33,8 +33,12 @@ clearlistener()
 	PlayerPivotAttribute = "objectPlayerPivotData"
 	PlayerAttribute = "objectPlayerData"
 	TriggerAttribute = "TRIGGER"
+	RoomAABBAttribute = "ROOM"
+	NoEvalAttribute = "NOEVAL"
+	ClueZoneAttribute = "mCluePoint"
+	RecastAABBAttribute = "RECASTAABB"
 	
-	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute)
+	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute, RoomAABBAttribute, ClueZoneAttribute, RecastAABBAttribute)
 	
 	-- Logic attribute	
 	logicAttribute = "Logic_element"
@@ -56,9 +60,6 @@ clearlistener()
 	
 	-- List of UConstrait exported
 	expJoints = #()
-	
-	
-	jointsToExp = #()
 
 	LevelName = "Level"
 	PlayerName = "Player"
@@ -1316,7 +1317,7 @@ clearlistener()
 	fn validateCompAABB obj = (
 		
 		 local is_collision = (isProperty obj.baseObject #collisionMesh == true)
-			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true) or is_collision
+			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true) or (isProperty obj.baseObject #ROOM == true) or (isProperty obj.baseObject #mCluePoint == true) or (isProperty obj.baseObject #RECASTAABB == true) or is_collision
 	)
 	
 	/**********************************************************************************************
@@ -1608,119 +1609,7 @@ clearlistener()
 		return mString
 	)	
 	
-
-	fn validateJointFixed obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
-	
-	local varJointReturn = undefined
-	-- check if the obj is an actor in a Uconstraint
-	for mJoint in list do (
-		
-		--jointsToExp		
-		local ownerTest = false
-		
-		if ((mJoint.constraintType == 0) == false) then continue
-		local body0 = false
-		local body1 = false
-		local undefinedTest = false
-		
-		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
-		)
-		else (
-			undefinedTest = true
-		)
-
-		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
-		)
-		else (
-			undefinedTest = true
-		)
-		
-			
-		if (body0) or (body1) then (
-			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then varJointReturn = mJoint
-			)
-			-- If there are two actor
-			-- It´s the secont time it appears
-			else (					
-				if ((varJointReturn == undefined) and (findItem jointsToExp mName) == 0) then		
-				varJointReturn = mJoint
-			)
-		)
-	)	
-	-- If didn´t exported it yet
-	if (varJointReturn != undefined) then(
-		append jointsToExp (getIdName varJointReturn)
-	)
-	
-	return varJointReturn
-)
-	
-/**********************************************************************************************
-Gets a FixedJoint
- Params:
-  - obj: target object
- Returns:
-  - String with the component information
-***********************************************************************************************/
-fn getJointFixed obj = (
-	local mJoint = validateJointFixed obj
-	if (mJoint == undefined) then return ""
-	
-	mString = "<jointFixed "
-	
-	local mObj = max2mcvMatrix mJoint
-	local qObj = mObj.rotationPart as quat
-	qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
-	
-	-- Translations limits
-	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	
-	i = 1;
-	-- Actors
-	if (mJoint.body0 != undefined) then (		
-		mString += "actor" + i as string + " = \"" +getIdName mJoint.body0 as string + "\" "
-		i += 1;
-	)
-	
-	if (mJoint.body1 != undefined) then 
-	mString += "actor" + i as string + " = \"" + getIdName mJoint.body1 as string + "\" "
-	
-	mString += " jointPosition=\"" \
-											+ mObj.row4.x as string+" " \
-											+ mObj.row4.y as string+" " \
-											+ mObj.row4.z as string+"" \
-						+ "\" jointRotation=\"" \
-											+ qObj.x as string+" "\
-											+ qObj.y as string+" "\
-											+ qObj.z as string+" "\
-											+ qObj.w as string+"\" "
-	
-	
-	-- Advanced
-	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
-	mString += "breakable=\"" + mJoint.breakable as string + "\" "
-	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
-	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
-	
-	mString += "/>\n"	
-	
-	return mString
-)
-
-
 		
 fn validateJointD6 obj = (
 	
@@ -1947,82 +1836,27 @@ Gets a Distance Text component
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
 	local mJoint = validateJointPrismatic obj
-	if (mJoint == undefined) then return ""
-		
-	local mObj = max2mcvMatrix mJoint
-	local qObj = mObj.rotationPart as quat
-	qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
 	
-	local hingePos = undefined
+	if (mJoint == undefined) then return ""
 	
 	mString = "<jointPrismatic "
 	
 	i = 1;
 	-- Actors
 	if (mJoint.body0 != undefined) then (		
-		
-		-- Calculate transform 
-		local body0_rel_mcv = getRelativeTransform mJoint mJoint.body0
-		local q_body0_rel_mcv = body0_rel_mcv.rotationPart as quat
-		q_body0_rel_mcv = quat -q_body0_rel_mcv.x -q_body0_rel_mcv.y -q_body0_rel_mcv.z q_body0_rel_mcv.w
-		
-		mString += "actor" + i as string + " = \"" + getIdName mJoint.body0 as string + "\" "
-		
-				mString += " jointRelativePosition0=\"" \
-												+ body0_rel_mcv.row4.x as string+" " \
-												+ body0_rel_mcv.row4.y as string+" " \
-												+ body0_rel_mcv.row4.z as string+"" \
-						+ "\" jointRelativeRotation0=\"" \
-											+ q_body0_rel_mcv.x as string+" "\
-											+ q_body0_rel_mcv.y as string+" "\
-											+ q_body0_rel_mcv.z as string+" "\
-											+ q_body0_rel_mcv.w as string+"\" "
-		
+		local name1 = getIdName mJoint.body0
+		mString += "actor" + i as string + " = \"" + name1 as string + "\" "
 		i += 1;
 	)
 	
 	if (mJoint.body1 != undefined) then (
-		
-		-- Calculate transform 
-		local body1_rel_mcv = getRelativeTransform mJoint mJoint.body1
-		local q_body1_rel_mcv = body1_rel_mcv.rotationPart as quat
-		q_body1_rel_mcv = quat -q_body1_rel_mcv.x -q_body1_rel_mcv.y -q_body1_rel_mcv.z q_body1_rel_mcv.w
-		mString += "actor" + i as string + " = \"" + getIdName mJoint.body1 as string + "\" "
-		
-		mString += " jointRelativePosition1=\"" \
-										+ body1_rel_mcv.row4.x as string+" " \
-										+ body1_rel_mcv.row4.y as string+" " \
-										+ body1_rel_mcv.row4.z as string+"" \
-				+ "\" jointRelativeRotation1=\"" \
-									+ q_body1_rel_mcv.x as string+" "\
-									+ q_body1_rel_mcv.y as string+" "\
-									+ q_body1_rel_mcv.z as string+" "\
-									+ q_body1_rel_mcv.w as string+"\" "
+		local name2 = getIdName mJoint.body1	
+		mString += "actor" + i as string + " = \"" + name2 as string + "\" "
 	)
-	
-	mString += " jointPosition=\"" \
-										+ mObj.row4.x as string+" " \
-										+ mObj.row4.y as string+" " \
-										+ mObj.row4.z as string+"" \
-					+ "\" jointRotation=\"" \
-										+ qObj.x as string+" "\
-										+ qObj.y as string+" "\
-										+ qObj.z as string+" "\
-										+ qObj.w as string+"\" "
-	
 	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	
-	-- Advanced
-	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
-	mString += "breakable=\"" + mJoint.breakable as string + "\" "
-	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
-	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
-
-	
-	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + mJoint.linearModeX as string + "\" "
-	mString += "linearModeY=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
+	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
 	mString += "linearModeZ=\"" + mJoint.linearModeZ as string + "\" "
 	
 	mString += "linearPosition=\"" + mJoint.linearPosition as string + "\" "
@@ -2031,9 +1865,6 @@ fn getJointPrismatic obj = (
 	-- Spring
 	mString += "posSpring=\"" + mJoint.posSpring as string + "\" "
 	mString += "posDamping=\"" +mJoint.posDamping as string + "\" "
-	
-	mString += "parentCollition=\"" +mJoint.Collision as string + "\" "
-	
 	
 	mString += "/>\n"	
 	
@@ -2191,6 +2022,9 @@ fn getJointHinge obj = (
 	
 	return mString
 )	
+	
+	
+
 
 fn validatePlatformPath obj = (
 	
@@ -2247,7 +2081,7 @@ fn getPlatformPath obj = (
 	)
 	
 	/**********************************************************************************************
-	Gets the object name
+	Gets the trigger component
 	Params:
 	  - obj: target object
 	 Returns:
@@ -2258,10 +2092,76 @@ fn getPlatformPath obj = (
 				return "<trigger/>\n"		
 		return ""
 	)
+	
+	fn  validateRecastAABB obj = (
+		return  (isProperty obj.baseObject RecastAABBAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the recastAABB component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getRecastAABB obj = (
+			if (validateRecastAABB obj) then
+				return "<recastAABB/>\n"		
+		return ""
+	)
+	
+	fn  validateRoomAABB obj = (
+		return  (isProperty obj.baseObject RoomAABBAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the room AABB component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getRoomAABB obj = (
+			if ((validateRoomAABB obj) == false) then
+				return ""		
+		
+		return "<zoneAABB/>\n"
+	)
+	
+	fn  validateClueZone obj = (
+		return  (isProperty obj.baseObject ClueZoneAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the Clue Zone component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getClueZone obj = (
+			if ((validateClueZone obj) == false) then
+				return ""
+		
+		local mString = "<logicGoldenNeedle "
+			
+		local clue_point = (getnodebyname obj.mCluePoint).pos
+			
+			
+			
+		mString += "cluePoint=\"" \
+							+ clue_point.x as string+" " \
+							+ clue_point.z as string+" " \
+							+ (-clue_point.y) as string+"" \
+							+ "\" "
+			
+		mString += "/>\n"
+		return mString;
+	)
 
 	
 	fn validateDistanceText obj = (
-			return isProperty obj.baseObject #distanceTextData == true
+			return isProperty obj.baseObject #mString == true
 	)
 
 	/**********************************************************************************************
@@ -2277,10 +2177,10 @@ fn getPlatformPath obj = (
 		return ""
 		
 		local mString = "<distanceText " \
-											+ "text=\"" + obj.textData as string + "\" " \
-											+ "distance=\"" + obj.distanceData as string + "\" " \
-											+ "size=\"" + obj.sizeData as string + "\" " \
-											+ "color=\"" + obj.colorData as string + "\" " \										
+											+ "text=\"" + obj.mString as string + "\" " \
+											+ "distance=\"" + obj.mDistance as string + "\" " \
+											+ "size=\"" + obj.mSize as string + "\" " \
+											+ "color=\"" + obj.mColor as string + "\" " \										
 											+ "/>\n"
 		return mString
 	)	
@@ -2314,7 +2214,7 @@ fn getPlatformPath obj = (
 	)
 
 	fn validateEntity obj = (
-		return ((findItem NotEval (classof obj)) == 0)
+		return (((findItem NotEval (classof obj)) == 0) and (not  (isProperty obj.baseObject NoEvalAttribute)))
 	)
 	
 	fn validateEntityCollisionTag obj = (	
@@ -2591,7 +2491,6 @@ fn getPlatformPath obj = (
 		expDiff = #()
 		expNormal = #()
 		expJoints = #()
-		jointsToExp = #()
 		
 		initializePrefabs()
 		
@@ -2636,11 +2535,13 @@ fn getPlatformPath obj = (
 			getJointPrismatic,
 			getJointHinge,
 			getJointD6,
-			getJointFixed,
 			getPlatformPath,
 			getTrigger,
+			getRoomAABB,
 			getPullInt,
-			getPushInt
+			getPushInt,
+			getClueZone,
+			getRecastAABB
 		)
 
 		-- Initialize XML
@@ -2729,8 +2630,7 @@ fn getPlatformPath obj = (
 
 
 -- Execution
-	/*export_materials = false
-addObjectsID()
-exportXMLScene()
-openCloseFile()
-removeObjectsID()*/
+--addObjectsID()
+--exportXMLScene()
+--openCloseFile()
+--removeObjectsID()
