@@ -4,6 +4,7 @@
 #include "comp_aabb.h"
 #include "comp_name.h"
 #include "aabb.h"
+#include "entity_manager.h"
 
 TCompZoneAABB::TCompZoneAABB() {
 }
