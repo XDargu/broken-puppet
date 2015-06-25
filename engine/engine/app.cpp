@@ -238,6 +238,8 @@ void initManagers() {
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
+	getObjManager<TCompColliderMesh>()->initHandlers();
+	getObjManager<TCompColliderConvex>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -333,14 +335,14 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
 
 	// XML Pruebas
-	loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_1.xml");
 	//loadScene("data/scenes/escene_2.xml");
 	//loadScene("data/scenes/escene_3.xml");
 	//loadScene("data/scenes/escene_4.xml");
@@ -491,12 +493,12 @@ void CApp::update(float elapsed) {
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	if (io.becomesReleased(CIOStatus::Q)) {
+	/*if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
 			time_modifier = 1;
-	}
+	}*/
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
@@ -819,6 +821,12 @@ void CApp::render() {
 	t0.end();
 #endif
 
+	TCompName* zone_name = logic_manager.getPlayerZoneName();
+	if (zone_name) {
+		XMVECTOR size = font.measureString(zone_name->name);
+		font.print(xres*0.5f - XMVectorGetZ(size) * 0.5f, 40, zone_name->name);
+	}
+
 	// Test GUI
 
 	/*if (h_player.isValid()) {
@@ -1019,7 +1027,7 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	if (renderNavMesh)
-	CNav_mesh_manager::get().render_nav_mesh();
+		CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();

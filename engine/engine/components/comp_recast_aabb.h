@@ -6,16 +6,23 @@
 
 struct TCompRecastAABB : TBaseComponent {
 
+private:
 	CHandle m_transform;
-	CHandle m_aabb;
 	int index;
+	bool active;
 
+public:
+	CHandle m_aabb;
 	TCompRecastAABB();
 	~TCompRecastAABB();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
+	void setIndex(int ind);
 	int getIndex();
+	bool getActive();
+	void setActive(bool act);
+
 
 	void init();
 

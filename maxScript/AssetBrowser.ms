@@ -298,6 +298,37 @@ macroScript MCVAssetBrowser
 				objectSpinePath = obj.name + "_Path"
 			)				
 		)
+		
+		/**********************************************************************************************
+		Object CLUEZONE structure
+		 Params:
+		  - CLUE POINT: point where the golden needle goes
+		***********************************************************************************************/
+		objectClueZone = attributes objectClueZone
+		(
+			parameters main rollout:params
+			(
+				mCluePoint type:#string ui:CluePointName default:""
+			)
+			 
+			rollout params "Object Clue Point"
+			(
+				editText CluePointName "CluePointName" type: #string
+			)
+		)
+
+		/**********************************************************************************************
+			Set the Clue Point of all the objects of the scene
+		***********************************************************************************************/
+		fn addObjectClueZone = (	
+			local obj = $
+			if (obj != undefined) and (isProperty obj.baseObject #mCluePoint != true) then
+			(
+				actionMan.executeAction 0 "373"
+				custAttributes.add obj objectClueZone
+				objectClueZone = obj.name + "_Clue"
+			)				
+		)
 
 		global createModuleSelectionPoint
 		fn createModuleSelectionPoint dir = (
@@ -307,6 +338,44 @@ macroScript MCVAssetBrowser
 				--createModuleSelectionPoint dir
 			)
 		)
+		
+		/**********************************************************************************************
+		Object DISTANCETEXT structure
+		 Params:
+		  - MSTRING: text to show near the position
+		***********************************************************************************************/
+		objectDistanceText = attributes objectDistanceText
+		(
+			parameters main rollout:params
+			(
+				mString type:#string ui:mString default:"inserte aqui su texto"
+				mDistance type:#float ui:mDistance default:0.0
+				mSize type:#float ui:mSize default:0.0
+				mColor type:#string ui:mColor default:"FFFFFFFF"
+			)
+			 
+			rollout params "Object Distance Text"
+			(
+				editText mString "mString" type: #string
+				spinner  mDistance "mDistance" type: #float
+				spinner  mSize "mSize" type: #float
+				editText mColor "mColor" type: #string
+			)
+		)
+
+		/**********************************************************************************************
+			Set the String of all the objects of the scene
+		***********************************************************************************************/
+	fn addObjectsDistanceText = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #mString != true) then
+		(
+			custAttributes.add objSelected objectDistanceText	
+						
+		)	
+		
+	)
 		
 	/**********************************************************************************************
 	Object  structure Trigger
@@ -335,6 +404,100 @@ macroScript MCVAssetBrowser
 		if (isProperty objSelected.baseobject #TRIGGER != true) then
 		(
 			custAttributes.add objSelected objectDataTrigger	
+						
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure RecastAABB
+	 Params:
+	  - RECASTAABB: Indicate that the object is a RecastAABB
+	***********************************************************************************************/
+	objectDataRecastAABB = attributes objectRecastAABB
+	(
+		parameters main rollout:params
+		(
+			RECASTAABB type:#boolean ui:RECASTAABB default:true
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Recast AABB"
+		(
+			checkbox RECASTAABB "RECASTAABB" type: #boolean
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsRecastAABB = 
+	(		
+		local objSelected = $
+		actionMan.executeAction 0 "373"
+		if (isProperty objSelected.baseobject #RECASTAABB != true) then
+		(
+			custAttributes.add objSelected objectDataRecastAABB	
+						
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure RoomAABB
+	 Params:
+	  - ROOM: Indicate that the object is a room
+	***********************************************************************************************/
+	objectDataRoomAABB = attributes objectRoomAABB
+	(
+		parameters main rollout:params
+		(
+			ROOM type:#boolean ui:ROOM default:true
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Room AABB"
+		(
+			checkbox ROOM "ROOM" type: #boolean
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsRoomAABB = 
+	(		
+		local objSelected = $
+		actionMan.executeAction 0 "373"
+		if (isProperty objSelected.baseobject #ROOM != true) then
+		(
+			custAttributes.add objSelected objectDataRoomAABB
+						
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure NoEval
+	 Params:
+	  - NOEVAL: Indicate that the object is not evaluable
+	***********************************************************************************************/
+	objectDataNoEval = attributes objectNoEval
+	(
+		parameters main rollout:params
+		(
+			NOEVAL type:#boolean ui:NOEVAL default:true
+		)
+
+		rollout params "Object Custom NoEval"
+		(
+			checkbox NOEVAL "NOEVAL" type: #boolean
+		)
+	)
+	
+	fn addObjectsNoEval = 
+	(		
+		local objSelected = $
+		actionMan.executeAction 0 "373"
+		if (isProperty objSelected.baseobject #NOEVAL != true) then
+		(
+			custAttributes.add objSelected objectDataNoEval
 						
 		)	
 		
@@ -401,6 +564,11 @@ macroScript MCVAssetBrowser
 			button button1Grid "Grid 1x1" pos:[248,34] width:75 height:25 toolTip:""
 			button botonAddTrigger "Add Trigger" pos:[5,65] width:75 height:25 toolTip:""
 			button botonAddLogic "Add Logic" pos:[86,65] width:75 height:25 toolTip:""
+			button botonAddRoomAABB "Add RoomAABB" pos:[167,65] width:75 height:25 toolTip:""
+			button botonAddNoEval "Add NoEval" pos:[248,65] width:75 height:25 toolTip:""
+			button botonAddClueZone "Add ClueZone" pos:[5,99] width:75 height:25 toolTip:""
+			button botonAddRecastAABB "Add RecastAABB" pos:[86,99] width:75 height:25 toolTip:""
+			button botonAddDistanceText "Add DistanceText" pos:[167,99] width:75 height:25 toolTip:""
 							
 			on botonA pressed do	( 
 				objs = $*
@@ -447,6 +615,21 @@ macroScript MCVAssetBrowser
 			)
 			on botonAddLogic pressed do (
 				addObjectsLogic()
+			)
+			on botonAddRoomAABB pressed do (
+				addObjectsRoomAABB()
+			)
+			on botonAddNoEval pressed do (
+				addObjectsNoEval()
+			)
+			on botonAddClueZone pressed do (
+				addObjectClueZone()
+			)
+			on botonAddRecastAABB pressed do (
+				addObjectsRecastAABB()
+			)
+			on botonAddDistanceText pressed do (
+				addObjectsDistanceText()
 			)
 
 		)

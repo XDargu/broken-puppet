@@ -1357,6 +1357,8 @@ void bt_grandma::update(float elapsed){
 			((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 		}
 		this->recalc(elapsed);
+	}else{
+		resetBot();
 	}
 }
 
@@ -1541,4 +1543,11 @@ void bt_grandma::setIndRecastAABB(int ind){
 
 int bt_grandma::getIndRecastAABB(){
 	return ind_recast_aabb;
+}
+
+void bt_grandma::resetBot(){
+	setCurrent(NULL);
+	playAnimationIfNotPlaying(10);
+	mov_direction = PxVec3(0, 0, 0);
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }

@@ -5,11 +5,14 @@
 #include "comp_name.h"
 #include "entity_manager.h"
 #include "aabb.h"
+#include "entity_manager.h"
+#include "ai\logic_manager.h"
 
 TCompZoneAABB::TCompZoneAABB() {
 }
 
 TCompZoneAABB::~TCompZoneAABB() {
+	CLogicManager::get().unregisterZoneAABB(this);
 }
 
 void TCompZoneAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -17,6 +20,8 @@ void TCompZoneAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_transform = assertRequiredComponent<TCompTransform>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
 	m_name = assertRequiredComponent<TCompName>(this);
+
+	CLogicManager::get().registerZoneAABB(this);
 }
 
 CHandle TCompZoneAABB::getZoneName(){

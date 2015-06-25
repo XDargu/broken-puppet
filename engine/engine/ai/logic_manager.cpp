@@ -229,6 +229,7 @@ CHandle CLogicManager::getPlayerZoneName(){
 				return Zone_comp->getZoneName();
 		}
 	}
+	return CHandle();
 }
 
 void CLogicManager::onSwitchPressed(CHandle the_switch) {

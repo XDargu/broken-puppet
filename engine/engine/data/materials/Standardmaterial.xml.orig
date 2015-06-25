@@ -1,0 +1,15 @@
+<!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
+<std_material name="Standardmaterial"
+diffuse="StandardDiff"
+<<<<<<< HEAD
+ao="Steel_Worn_00_A"
+=======
+>>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
+normal="Steel_Worn_00_N"
+specular="StandardDiff"
+glossiness="StandardDiff"
+emissive="black"
+cubemap="desertcube1024"
+cubemap2="sunsetcube1024"
+tech="deferred_gbuffer"
+/>

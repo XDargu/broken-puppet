@@ -190,6 +190,7 @@ void CNav_mesh_manager::pathRender(){
 void CNav_mesh_manager::clearNavMesh(){
 	keep_updating_navmesh = false;
 	nav_mesh_input.clearInput();
+	recastAABBs.clear();
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
@@ -235,18 +236,44 @@ void CNav_mesh_manager::registerRecastAABB(CHandle recastAABB){
 	recast_aabb_index++;
 }
 
+void CNav_mesh_manager::unregisterRecastAABB(CHandle recastAABB){
+	auto it = std::find(recastAABBs.begin(), recastAABBs.end(), recastAABB);
+	recastAABBs.erase(it);
+}
+
 void CNav_mesh_manager::checkDistaceToEnemies(){
 	for (int i = 0; i < recastAABBs.size(); ++i){
 		TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
-		int ind=aux_recast_aabb->getIndex();
-		AABB aabb_struct = AABB(((TCompAABB*)aux_recast_aabb->m_aabb)->min, ((TCompAABB*)aux_recast_aabb->m_aabb)->max);
+		int ind = aux_recast_aabb->getIndex();
+		AABB aabb_struct = *((TCompAABB*)aux_recast_aabb->m_aabb);
 		CHandle p_transform=((CEntity*)player)->get<TCompTransform>();
 		TCompTransform* player_transform = (TCompTransform*)p_transform;
 		float distance = aabb_struct.sqrDistance(player_transform->position);
-		if (distance < max_distance_act_enemies*2.f){
-			aimanager::get().recastAABBActivate(ind);
+		if (distance < max_distance_act_enemies*max_distance_act_enemies) {
+			if (!aux_recast_aabb->getActive()){
+				aimanager::get().recastAABBActivate(ind);
+				aux_recast_aabb->setActive(true);
+			}
+		}else{
+				if (aux_recast_aabb->getActive()){
+					aimanager::get().recastAABBDesactivate(ind);
+					aux_recast_aabb->setActive(false);
+				}
 		}
 	}
+}
+
+int CNav_mesh_manager::getIndexMyRecastAABB(CHandle my_aabb){
+	for (int i = 0; i < recastAABBs.size(); ++i){
+		TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
+		int ind = aux_recast_aabb->getIndex();
+		AABB aabb_struct = *((TCompAABB*)aux_recast_aabb->m_aabb);
+		TCompAABB* m_aabb = (TCompAABB*)my_aabb;
+		if (aabb_struct.intersects(m_aabb)){
+			return aux_recast_aabb->getIndex();
+		}
+	}
+	return -1;
 }
 
 CNav_mesh_manager::CNav_mesh_manager()
