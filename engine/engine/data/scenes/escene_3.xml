@@ -91,7 +91,8 @@
 	</entity>
 	<entity tag = "player" prefab="Player">
 <transform position="-1.25859 -2.77333 -0.971825" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-	</entity>
+	<ragdoll name="prota"/>
+  </entity>
 	<entity  prefab="PlayerPivot">
 <transform position="-1.25859 -2.77333 -0.971825" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
@@ -4601,7 +4602,7 @@
 <aabb min="-2.0 0.0 3.46501e-006" max="-2.0 8.0 4.0"/>
 <colliderMesh path="esc1_arqui_pared_pared_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "level" collisionTag = "Level">
+	<entity tag = "actor" collisionTag = "Actor">
 <name name="eje_467.0" />
 <transform position="-9.60665 9.64525 9.17511" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
@@ -4611,7 +4612,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.04934" boxY="2.53954" boxZ="0.320854"/>
 <staticbody/>
 	</entity>
-	<entity  >
+	<entity tag = "actor" collisionTag = "Actor">
 <name name="tuerca_469.0" />
 <transform position="-9.62696 5.96809 9.17272" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
@@ -4762,7 +4763,7 @@
 <rigidbody density="500.0"  />
 <jointHinge actor1 = "esc1_puert_suelo_pared_4m_2m_a_284.0"  jointRelativePosition0="-1.86005 -0.807998 5.94116" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "escene_1_puerta_gating_1"  jointRelativePosition1="0.00298476 1.15239 0.00780773" jointRelativeRotation1="0.0 0.0 -0.707107 0.707107"  jointPosition="3.192 6.94116 34.14" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag = "Actor">
 <name name="escene_3_grandmacrasher_01" />
 <transform position="-9.56188 4.03274 9.1467" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
