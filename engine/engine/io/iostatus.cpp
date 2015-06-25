@@ -114,8 +114,8 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 	normalized_x = (float)cursor_screen.x / App.xres;
 	normalized_y = (float)cursor_screen.y / App.yres;
 
-	prev_x = screen_x;
-	prev_y = screen_y;
+	prev_x = screen_x*elapsed;
+	prev_y = screen_y*elapsed;
 
 	if (centered) {
 		::SetCursorPos(mid_screen.x, mid_screen.y);

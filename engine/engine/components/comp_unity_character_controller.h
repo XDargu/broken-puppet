@@ -122,7 +122,7 @@ public:
 		enemy_rigidbody->setName(name->name);
 
 		//physx::PxReal threshold = 3500.f;
-		physx::PxReal threshold = 1000.f;
+		physx::PxReal threshold = 300.f;
 		enemy_rigidbody->setContactReportThreshold(threshold);
 
 		oldPos = Physics.XMVECTORToPxVec3(trans->position);
