@@ -7,22 +7,33 @@
 TCompJointPrismatic::~TCompJointPrismatic() {
 
 	// Awake the actors
-	PxRigidActor* a1 = nullptr;
-	PxRigidActor* a2 = nullptr;
+	if (mJoint) {
+		PxRigidActor* a1 = nullptr;
+		PxRigidActor* a2 = nullptr;
 
-	mJoint->getActors(a1, a2);
-	// Call the addForce method to awake the bodies, if dynamic
-	if (a1 && a1->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((PxRigidDynamic*)a1)->wakeUp();
-	}
-	if (a2 && a2->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((PxRigidDynamic*)a2)->wakeUp();
-	}
+		mJoint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			if (a1->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a1)->isSleeping())
+						((PxRigidDynamic*)a1)->wakeUp();
+				}
+			}
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			if (a2->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a2)->isSleeping())
+						((PxRigidDynamic*)a2)->wakeUp();
+				}
+			}
+		}
 
-	// Release the joint
-	mJoint->release();
+		// Release the joint
+		if ((a1 && a1->isRigidDynamic()) || (a2 && a2->isRigidDynamic()))
+			mJoint->release();
+	}
 }
 
 void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts) {

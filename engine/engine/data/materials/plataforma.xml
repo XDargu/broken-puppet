@@ -1,1 +1,1 @@
-<std_material name="plataforma" diffuse="palco_diffuse" normal="palco_normals" specular="" glossiness="" emissive=""/>
+<std_material name="plataforma" diffuse="palco_diffuse" normal="palco_normals" specular="palco_specular" glossiness="palco_gloss" emissive=""/>

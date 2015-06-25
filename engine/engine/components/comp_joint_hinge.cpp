@@ -6,24 +6,35 @@
 
 TCompJointHinge::~TCompJointHinge() {
 
-	// Awake the actors
-	PxRigidActor* a1 = nullptr;
-	PxRigidActor* a2 = nullptr;
-	
+	if (mJoint) {
+		// Awake the actors
+		PxRigidActor* a1 = nullptr;
+		PxRigidActor* a2 = nullptr;
 
-	mJoint->getActors(a1, a2);
-	// Call the addForce method to awake the bodies, if dynamic
-	if (a1 && a1->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((PxRigidDynamic*)a1)->wakeUp();
-	}
-	if (a2 && a2->isRigidDynamic()) {
-		if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
-			((PxRigidDynamic*)a2)->wakeUp();
-	}
 
-	// Release the joint
-	mJoint->release();
+		mJoint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			if (a1->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a1)->isSleeping())
+						((PxRigidDynamic*)a1)->wakeUp();
+				}
+			}
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			if (a2->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a2)->isSleeping())
+						((PxRigidDynamic*)a2)->wakeUp();
+				}
+			}
+		}
+
+		// Release the joint
+		if ((a1 && a1->isRigidDynamic()) || (a2 && a2->isRigidDynamic()))
+			mJoint->release();
+	}
 }
 
 void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -107,7 +118,7 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	joint_abs = joint_abs.transform(t_corrector);
 
 	PxTransform r1_abs = m_ridig_Actor1->getGlobalPose();
-	PxTransform r2_abs = m_ridig_Actor2->getGlobalPose();
+		PxTransform r2_abs = m_ridig_Actor2->getGlobalPose();
 	
 	r1_abs = r1_abs.getInverse();
 	r2_abs = r2_abs.getInverse();

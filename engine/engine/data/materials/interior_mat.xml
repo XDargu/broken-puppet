@@ -1,1 +1,1 @@
-<std_material name="interior_mat" diffuse="interior_diffuse" normal="interior_normal" emissive=""/>
+<std_material name="interior_mat" diffuse="interior_diffuse" normal="interior_normal" specular="interior_specular" glossiness="interior_gloss" emissive=""/>

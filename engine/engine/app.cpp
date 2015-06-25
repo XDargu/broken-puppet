@@ -156,14 +156,14 @@ void createManagers() {
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompRecastAABB>()->init(32);
-	getObjManager<TCompColliderMesh>()->init(512);
+	getObjManager<TCompColliderMesh>()->init(1024);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
-	getObjManager<TCompStaticBody>()->init(512);
+	getObjManager<TCompStaticBody>()->init(1024);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompZoneAABB>()->init(32);
@@ -327,6 +327,10 @@ bool CApp::create() {
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
 
+
+
+	physics_manager.init();
+
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
@@ -335,6 +339,15 @@ bool CApp::create() {
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
+
+
+	// XML Pruebas
+	//loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_2.xml");
+	//loadScene("data/scenes/escene_3.xml");
+	//loadScene("data/scenes/escene_4.xml");
+	//loadScene("data/scenes/escene_5.xml");
+
 
 	//sm.playTrack(0,false);
 
@@ -1178,9 +1191,10 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
+	logic_manager.init();
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
-	physics_manager.init();
+	//physics_manager.init();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);

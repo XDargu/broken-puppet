@@ -1,1 +1,1 @@
-<std_material name="rodapie" diffuse="rodapie_diffuse" normal="rodapie_normal" specular="" glossiness="" emissive=""/>
+<std_material name="rodapie" diffuse="rodapie_diffuse" normal="rodapie_normal" specular="rodapie_specular" glossiness="rodapie_gloss" emissive=""/>

@@ -1,1 +1,1 @@
-<std_material name="machacabuelas_map" diffuse="machacabuelas_diffuse" normal="machacabuelas_normal" emissive=""/>
+<std_material name="machacabuelas_map" diffuse="machacabuelas_diffuse" normal="machacabuelas_normal" specular="machacabuelas_specular" glossiness="machacabuelas_gloss" emissive=""/>
