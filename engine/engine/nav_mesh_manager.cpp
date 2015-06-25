@@ -190,6 +190,7 @@ void CNav_mesh_manager::pathRender(){
 void CNav_mesh_manager::clearNavMesh(){
 	keep_updating_navmesh = false;
 	nav_mesh_input.clearInput();
+	recastAABBs.clear();
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
@@ -233,6 +234,11 @@ int CNav_mesh_manager::getLastRecastAABBIndex(){
 void CNav_mesh_manager::registerRecastAABB(CHandle recastAABB){
 	recastAABBs.push_back(recastAABB);
 	recast_aabb_index++;
+}
+
+void CNav_mesh_manager::unregisterRecastAABB(CHandle recastAABB){
+	auto it = std::find(recastAABBs.begin(), recastAABBs.end(), recastAABB);
+	recastAABBs.erase(it);
 }
 
 void CNav_mesh_manager::checkDistaceToEnemies(){

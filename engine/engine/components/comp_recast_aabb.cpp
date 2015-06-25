@@ -9,6 +9,7 @@ TCompRecastAABB::TCompRecastAABB() {
 }
 
 TCompRecastAABB::~TCompRecastAABB() {
+	CNav_mesh_manager::get().unregisterRecastAABB(this);
 }
 
 void TCompRecastAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
