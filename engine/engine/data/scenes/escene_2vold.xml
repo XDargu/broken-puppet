@@ -32,30 +32,30 @@
 <pointLight radius="200.0" intensity="0.66" color="0.470588 0.968628 0.980392 1"/>
 	</entity>
 	<entity tag = "actor" >
-<name name="Box001_10.0" />
+<name name="escene_2_plataforma_breakable_10.0" />
 <transform position="98.7924 8.23 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box001" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box001" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box001" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box001" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box001" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box001" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-1.5 -0.23 -1.5" max="1.5 0.23 1.5"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.5" boxY="0.23" boxZ="1.5"/>
 <rigidbody density="10.0"  />
 	</entity>
 	<entity tag = "actor" >
-<name name="Box002_11.0" />
+<name name="escene_2_plataforma_breakable_11.0" />
 <transform position="93.0 8.23 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box002" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box002" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box002" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box002" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box002" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box002" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="escene_2_plataforma_breakable" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-1.5 -0.23 -1.5" max="1.5 0.23 1.5"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.5" boxY="0.23" boxZ="1.5"/>
@@ -2447,7 +2447,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_techo_pared_a_252.0" />
-<transform position="100.0 8.0 30.0" rotation="0.0 1.0 0.0 1.29183e-005" scale="1.0 1.0 1.0"/>
+<transform position="100.0 8.0 30.0" rotation="0.0 1.0 0.0 1.31567e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="1" mat="techo"/>
@@ -3249,7 +3249,7 @@
 	</entity>
 	<entity tag = "actor" >
 <name name="Tablon2_332.0" />
-<transform position="25.7261 2.5188 7.9202" rotation="-0.0249226 -0.0249226 -0.706667 0.706668" scale="1.0 1.0 1.0"/>
+<transform position="25.7261 2.5188 7.9202" rotation="-0.0249226 -0.0249227 -0.706667 0.706668" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="Tablon2" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="Tablon2" sub_mesh="1" mat="Standardmaterial"/>
@@ -3511,15 +3511,15 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
 <name name="tope_cajon_359.0" />
-<transform position="38.7415 1.45464 17.6748" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="38.7415 1.45464 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
 <staticbody/>
-<jointPrismatic actor1 = "tope_cajon_359.0"  jointRelativePosition0="-0.0462036 3.10654 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera001_358.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.6953 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_359.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera001_358.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.6953 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
 <name name="tope_cajon_361.0" />
-<transform position="41.1175 2.91785 17.6748" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="41.1175 2.91785 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="tope_cajon" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="tope_cajon" sub_mesh="1" mat="Standardmaterial"/>
@@ -3541,11 +3541,11 @@
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
-<jointPrismatic actor1 = "tope_cajon_361.0"  jointRelativePosition0="-0.0462036 3.10654 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera002_363.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.0713 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_361.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera002_363.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.0713 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
 <name name="tope_cajon_364.0" />
-<transform position="43.4797 4.40123 17.6748" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="43.4797 4.40123 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="tope_cajon" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="tope_cajon" sub_mesh="1" mat="Standardmaterial"/>
@@ -3567,11 +3567,11 @@
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
-<jointPrismatic actor1 = "tope_cajon_364.0"  jointRelativePosition0="-0.0462036 3.10654 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera003_366.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4335 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_364.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera003_366.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4335 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
 <name name="tope_cajon_367.0" />
-<transform position="45.8755 5.8387 17.6748" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="45.8755 5.8387 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="tope_cajon" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="tope_cajon" sub_mesh="1" mat="Standardmaterial"/>
@@ -3593,7 +3593,7 @@
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
-<jointPrismatic actor1 = "tope_cajon_367.0"  jointRelativePosition0="-0.0462036 3.10654 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera004_369.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.8293 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_367.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera004_369.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.8293 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="interruptor_tirar_base_375.0" />
@@ -3633,7 +3633,7 @@
 <aabb min="-0.25 0.0 -0.25" max="0.25 0.5 0.25"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.25" boxY="0.25" boxZ="0.25"/>
 <staticbody/>
-<jointFixed actor1 = "Box010_378.0" actor2 = "Box002_11.0"  jointPosition="93.0 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
+<jointFixed actor1 = "Box010_378.0" actor2 = "escene_2_plataforma_breakable_11.0"  jointPosition="93.0 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="Box011_380.0" />
@@ -3649,57 +3649,57 @@
 <aabb min="-0.25 0.0 -0.25" max="0.25 0.5 0.25"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.25" boxY="0.25" boxZ="0.25"/>
 <staticbody/>
-<jointFixed actor1 = "Box011_380.0" actor2 = "Box001_10.0"  jointPosition="98.7924 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="100.0" />
+<jointFixed actor1 = "Box011_380.0" actor2 = "escene_2_plataforma_breakable_10.0"  jointPosition="98.7924 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
 	</entity>
 	<entity  >
-<name name="Box012_383.0" />
+<name name="escene_2_nail_383.0" />
 <transform position="25.512 2.75552 11.0365" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box012" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box012" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box012" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box012" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box012" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box012" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
 	<entity  >
-<name name="Box013_384.0" />
+<name name="escene_2_nail_384.0" />
 <transform position="25.512 3.55736 6.01724" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box013" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box013" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box013" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box013" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box013" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box013" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
 	<entity  >
-<name name="Box014_385.0" />
+<name name="escene_2_nail_385.0" />
 <transform position="25.512 0.928921 4.95483" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box014" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box014" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box014" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box014" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box014" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box014" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
 	<entity  >
-<name name="Box015_386.0" />
+<name name="escene_2_nail_386.0" />
 <transform position="25.7983 0.257057 11.99" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box015" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box015" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box015" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box015" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box015" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box015" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="escene_2_nail" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
@@ -3739,6 +3739,12 @@
 <name name="trigger_goto_escene_3" />
 <transform position="79.7369 -35.1649 70.9255" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-5.26451 -2.94313 -2.60022" max="5.26451 2.94312 2.60022"/>
+<trigger/>
+	</entity>
+	<entity  >
+<name name="escene_2_lightsout_trigger" />
+<transform position="96.3612 -0.456528 31.9964" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-11.3208 -2.29111 -6.73854" max="11.3208 2.29111 6.73854"/>
 <trigger/>
 	</entity>
 </scene>
