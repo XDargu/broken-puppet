@@ -29,7 +29,8 @@ void TCompGNLogic::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompGNLogic::init() {
 	player = CEntityManager::get().getByName("Player");
-	player_transform=((CEntity*)player)->get<TCompTransform>();
+	player_transform = ((CEntity*)player)->get<TCompTransform>();
+	player_aabb = ((CEntity*)player)->get<TCompAABB>();
 }
 
 void TCompGNLogic::update(float elapsed) {
@@ -39,8 +40,9 @@ void TCompGNLogic::update(float elapsed) {
 
 bool TCompGNLogic::checkPlayerInside(){
 	TCompTransform* p_transform = (TCompTransform*)player_transform;
+	TCompAABB* p_aabb = (TCompAABB*)player_aabb;
 	AABB GNaabb = AABB(((TCompAABB*)m_aabb)->min, ((TCompAABB*)m_aabb)->max);
-	if (GNaabb.containts(p_transform->position))
+	if (GNaabb.intersects(p_aabb))
 		return true;
 	else
 		return false;

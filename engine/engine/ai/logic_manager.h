@@ -34,6 +34,8 @@ private:
 	CHandle player;
 	CHandle player_pivot;
 	CHandle camera_pivot;
+
+	std::string scene_to_load;
 public:
 
 	static CLogicManager& get();

@@ -33,8 +33,12 @@ clearlistener()
 	PlayerPivotAttribute = "objectPlayerPivotData"
 	PlayerAttribute = "objectPlayerData"
 	TriggerAttribute = "TRIGGER"
+	RoomAABBAttribute = "ROOM"
+	NoEvalAttribute = "NOEVAL"
+	ClueZoneAttribute = "mCluePoint"
+	RecastAABBAttribute = "RECASTAABB"
 	
-	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute)
+	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute, RoomAABBAttribute, ClueZoneAttribute, RecastAABBAttribute)
 	
 	-- Logic attribute	
 	logicAttribute = "Logic_element"
@@ -1313,7 +1317,7 @@ clearlistener()
 	fn validateCompAABB obj = (
 		
 		 local is_collision = (isProperty obj.baseObject #collisionMesh == true)
-			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true) or is_collision
+			return (validateCompRender obj) or (isProperty obj.baseObject #TRIGGER == true) or (isProperty obj.baseObject #ROOM == true) or (isProperty obj.baseObject #mCluePoint == true) or (isProperty obj.baseObject #RECASTAABB == true) or is_collision
 	)
 	
 	/**********************************************************************************************
@@ -2077,7 +2081,7 @@ fn getPlatformPath obj = (
 	)
 	
 	/**********************************************************************************************
-	Gets the object name
+	Gets the trigger component
 	Params:
 	  - obj: target object
 	 Returns:
@@ -2088,10 +2092,76 @@ fn getPlatformPath obj = (
 				return "<trigger/>\n"		
 		return ""
 	)
+	
+	fn  validateRecastAABB obj = (
+		return  (isProperty obj.baseObject RecastAABBAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the recastAABB component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getRecastAABB obj = (
+			if (validateRecastAABB obj) then
+				return "<recastAABB/>\n"		
+		return ""
+	)
+	
+	fn  validateRoomAABB obj = (
+		return  (isProperty obj.baseObject RoomAABBAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the room AABB component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getRoomAABB obj = (
+			if ((validateRoomAABB obj) == false) then
+				return ""		
+		
+		return "<zoneAABB/>\n"
+	)
+	
+	fn  validateClueZone obj = (
+		return  (isProperty obj.baseObject ClueZoneAttribute)
+	)
+	
+	/**********************************************************************************************
+	Gets the Clue Zone component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getClueZone obj = (
+			if ((validateClueZone obj) == false) then
+				return ""
+		
+		local mString = "<logicGoldenNeedle "
+			
+		local clue_point = (getnodebyname obj.mCluePoint).pos
+			
+			
+			
+		mString += "cluePoint=\"" \
+							+ clue_point.x as string+" " \
+							+ clue_point.z as string+" " \
+							+ (-clue_point.y) as string+"" \
+							+ "\" "
+			
+		mString += "/>\n"
+		return mString;
+	)
 
 	
 	fn validateDistanceText obj = (
-			return isProperty obj.baseObject #distanceTextData == true
+			return isProperty obj.baseObject #mString == true
 	)
 
 	/**********************************************************************************************
@@ -2107,10 +2177,10 @@ fn getPlatformPath obj = (
 		return ""
 		
 		local mString = "<distanceText " \
-											+ "text=\"" + obj.textData as string + "\" " \
-											+ "distance=\"" + obj.distanceData as string + "\" " \
-											+ "size=\"" + obj.sizeData as string + "\" " \
-											+ "color=\"" + obj.colorData as string + "\" " \										
+											+ "text=\"" + obj.mString as string + "\" " \
+											+ "distance=\"" + obj.mDistance as string + "\" " \
+											+ "size=\"" + obj.mSize as string + "\" " \
+											+ "color=\"" + obj.mColor as string + "\" " \										
 											+ "/>\n"
 		return mString
 	)	
@@ -2144,7 +2214,7 @@ fn getPlatformPath obj = (
 	)
 
 	fn validateEntity obj = (
-		return ((findItem NotEval (classof obj)) == 0)
+		return (((findItem NotEval (classof obj)) == 0) and (not  (isProperty obj.baseObject NoEvalAttribute)))
 	)
 	
 	fn validateEntityCollisionTag obj = (	
@@ -2467,8 +2537,11 @@ fn getPlatformPath obj = (
 			getJointD6,
 			getPlatformPath,
 			getTrigger,
+			getRoomAABB,
 			getPullInt,
-			getPushInt
+			getPushInt,
+			getClueZone,
+			getRecastAABB
 		)
 
 		-- Initialize XML

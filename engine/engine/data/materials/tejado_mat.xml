@@ -1,1 +1,1 @@
-<std_material name="tejado_mat" diffuse="tejado_diffuse" normal="tejado_normal" emissive=""/>
+<std_material name="tejado_mat" diffuse="tejado_diffuse" normal="tejado_normal" specular="tejado_specular" glossiness="tejado_gloss" emissive=""/>

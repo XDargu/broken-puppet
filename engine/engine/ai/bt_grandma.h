@@ -226,6 +226,8 @@ public:
 	void setIndRecastAABB(int ind);
 	int getIndRecastAABB();
 
+	void resetBot();
+
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };
 

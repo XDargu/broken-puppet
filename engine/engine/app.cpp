@@ -156,14 +156,14 @@ void createManagers() {
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
 	getObjManager<TCompRecastAABB>()->init(32);
-	getObjManager<TCompColliderMesh>()->init(512);
+	getObjManager<TCompColliderMesh>()->init(1024);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
-	getObjManager<TCompStaticBody>()->init(512);
+	getObjManager<TCompStaticBody>()->init(1024);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompZoneAABB>()->init(32);
@@ -238,6 +238,8 @@ void initManagers() {
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
+	getObjManager<TCompColliderMesh>()->initHandlers();
+	getObjManager<TCompColliderConvex>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -325,14 +327,27 @@ bool CApp::create() {
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
 
+
+
+	physics_manager.init();
+
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/lightmap_test.xml");
+	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
+
+
+	// XML Pruebas
+	//loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_2.xml");
+	loadScene("data/scenes/escene_3.xml");
+	//loadScene("data/scenes/escene_4.xml");
+	//loadScene("data/scenes/escene_5.xml");
+
 
 	//sm.playTrack(0,false);
 
@@ -341,8 +356,6 @@ bool CApp::create() {
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
 	XASSERT(is_ok, "Error creating debug meshes");
-
-	logic_manager.init();
 
 #ifdef _DEBUG
 
@@ -478,12 +491,12 @@ void CApp::update(float elapsed) {
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	if (io.becomesReleased(CIOStatus::Q)) {
+	/*if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
 			time_modifier = 1;
-	}
+	}*/
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
@@ -806,6 +819,12 @@ void CApp::render() {
 	t0.end();
 #endif
 
+	TCompName* zone_name = logic_manager.getPlayerZoneName();
+	if (zone_name) {
+		XMVECTOR size = font.measureString(zone_name->name);
+		font.print(xres*0.5f - XMVectorGetZ(size) * 0.5f, 40, zone_name->name);
+	}
+
 	// Test GUI
 
 	/*if (h_player.isValid()) {
@@ -856,8 +875,8 @@ void CApp::renderEntities() {
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	debugTech.activate();
-	const CTexture *t = texture_manager.getByName("grass");
-	t->activate(0);
+	const CTexture *tex = texture_manager.getByName("grass");
+	tex->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -877,6 +896,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 		if (c_rope) {
+			tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
@@ -1006,7 +1026,7 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	if (renderNavMesh)
-	CNav_mesh_manager::get().render_nav_mesh();
+		CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();
@@ -1172,7 +1192,7 @@ void CApp::loadScene(std::string scene_name) {
 	logic_manager.clearAnimations();
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
-	physics_manager.init();
+	//physics_manager.init();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
@@ -1209,7 +1229,7 @@ void CApp::loadScene(std::string scene_name) {
 	debug_map = 0;
 
 	//physics_manager.init();
-	
+	logic_manager.init();
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");

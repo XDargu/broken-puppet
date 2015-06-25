@@ -23,9 +23,9 @@ void TCompColliderMesh::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		true);
 
 	//AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
-	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+	//TCompAABB* m_aabb = getSibling<TCompAABB>(this);
 
-	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+	/*for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
 		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
 		TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
 		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
@@ -33,7 +33,7 @@ void TCompColliderMesh::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			addInputNavMesh();
 			CNav_mesh_manager::get().colMeshes.push_back(this);
 		}
-	}
+	}*/
 
 	setCollisionGroups();
 
@@ -45,6 +45,16 @@ void TCompColliderMesh::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompColliderMesh::init() {
 	const CCollision_Mesh* c_nv = mesh_collision_manager.getByName(path);
+	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
+		TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+		if (recast_aabb.intersects(m_aabb)) {
+			addInputNavMesh();
+			CNav_mesh_manager::get().colMeshes.push_back(this);
+		}
+	}
 }
 
 void TCompColliderMesh::addInputNavMesh(){

@@ -46,6 +46,12 @@ void CLogicManager::init()
 
 	ambient_light = XMVectorSet(1, 1, 1, 1);
 	lerp_ambient_light = 0.05f;
+
+	scene_to_load = "";
+
+	//triggers.clear();
+	timers.clear();
+	GNLogic.clear();
 }
 
 CLogicManager::~CLogicManager() {}
@@ -160,6 +166,10 @@ void CLogicManager::update(float elapsed) {
 	if (keyframes_to_delete.size() > 0)
 		keyframes_to_delete.clear();
 	*/
+
+	if (scene_to_load != "") {
+		CApp::get().loadScene(scene_to_load);
+	}
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
@@ -219,6 +229,7 @@ CHandle CLogicManager::getPlayerZoneName(){
 				return Zone_comp->getZoneName();
 		}
 	}
+	return CHandle();
 }
 
 void CLogicManager::onSwitchPressed(CHandle the_switch) {
@@ -448,7 +459,7 @@ void CLogicManager::bootLUA() {
 }
 
 void CLogicManager::loadScene(std::string scene_name) {
-	CApp::get().loadScene(scene_name);
+	scene_to_load = scene_name;
 }
 
 void CLogicManager::onSceneLoad(std::string scene_name) {

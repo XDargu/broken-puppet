@@ -30,6 +30,7 @@ using namespace DirectX;
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
 #include "audio\sound_manager.h"
+#include "particles\importer_particle_groups.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -41,6 +42,9 @@ using namespace physx;
 #include "render\all_post_process_effects.h"
 #include "render/render_instances.h"
 
+#include "audio\sound.h"
+#include "audio\sound_manager.h"
+
 
 static CApp the_app;
 
@@ -51,6 +55,7 @@ CEntityActioner			 &entity_actioner = CEntityActioner::get();
 CDebugOptioner			 &debug_optioner = CDebugOptioner::get();
 CConsole				 &console = CConsole::get();
 CPostProcessOptioner	 &post_process_optioner = CPostProcessOptioner::get();
+CSoundManager            &sm = CSoundManager::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
@@ -100,9 +105,7 @@ CHandle		 h_player;
 
 CFont         font;
 CDeferredRender deferred;
-CShaderCte<TCtesGlobal> ctes_global;
 CRenderToTexture* rt_base;
-CSoundManager sm;
 
 const CTexture* cubemap;
 
@@ -116,14 +119,8 @@ TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
 TUnderwaterEffect underwater;
+TSSRRStep ssrr;
 
-<<<<<<< HEAD
-CRenderInstances instances;
-
-CPhysicsParticleSystem ps;
-
-=======
->>>>>>> 401f154f71313ec78f2f7dc6af792b1534ce97f5
 //---------------------------------------------------
 //CNavmesh nav_prueba;
 //---------------------------------------------------
@@ -137,6 +134,9 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtGrandma, TWarWarning, warWarning);
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
+	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
+	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
+
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
@@ -155,14 +155,22 @@ void createManagers() {
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
+<<<<<<< HEAD
+	getObjManager<TCompColliderMesh>()->init(1024);
+=======
+	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompColliderMesh>()->init(512);
+>>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
+	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
 	getObjManager<TCompRigidBody>()->init(512);
-	getObjManager<TCompStaticBody>()->init(512);
+	getObjManager<TCompStaticBody>()->init(1024);
 	getObjManager<TCompAABB>()->init(1024);
+	getObjManager<TCompGNLogic>()->init(32);
+	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
 	getObjManager<TCompCameraPivotController>()->init(1);
@@ -172,13 +180,13 @@ void createManagers() {
 	getObjManager<TCompJointPrismatic>()->init(32);
 	getObjManager<TCompJointHinge>()->init(32);
 	getObjManager<TCompJointD6>()->init(512);
+	getObjManager<TCompJointFixed>()->init(64);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
 	getObjManager<TCompSensorDistPlayer>()->init(64);
-	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->init(1024);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
@@ -190,7 +198,7 @@ void createManagers() {
 	getObjManager<TCompSwitchPushController>()->init(32);
 
 	// Plataformas
-	getObjManager<TCompPlatformPath>()->init(32);	
+	getObjManager<TCompPlatformPath>()->init(32);
 
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
@@ -212,7 +220,13 @@ void createManagers() {
 	getObjManager<TCompRagdoll>()->init(64);
 	getObjManager<TCompShadows>()->init(8);
 
-	getObjManager<TCompParticleGroup>()->init(64);
+	getObjManager<TCompParticleGroup>()->init(256);
+	getObjManager<TCompParticleEditor>()->init(1);
+	getObjManager<TCompAnimEditor>()->init(1);
+
+	//Audio
+	getObjManager<TCompAudioListener>()->init(1024);
+	getObjManager<TCompAudioSource>()->init(1024);
 
 
 	registerAllComponentMsgs();
@@ -223,12 +237,15 @@ void initManagers() {
 
 	getObjManager<TCompTransform>()->initHandlers();
 	getObjManager<TCompCamera>()->initHandlers();
+	getObjManager<TCompRecastAABB>()->initHandlers();
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
+	getObjManager<TCompGNLogic>()->initHandlers();
+	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
 	getObjManager<TCompPlayerPivotController>()->initHandlers();
@@ -237,6 +254,7 @@ void initManagers() {
 	getObjManager<TCompDistanceJoint>()->initHandlers();
 	getObjManager<TCompJointPrismatic>()->initHandlers();
 	getObjManager<TCompJointD6>()->initHandlers();
+	getObjManager<TCompJointFixed>()->initHandlers();
 	getObjManager<TCompEnemyController>()->initHandlers();
 
 	getObjManager<TCompPlayerPosSensor>()->initHandlers();
@@ -251,8 +269,6 @@ void initManagers() {
 	getObjManager<TCompSwitchPullController>()->initHandlers();
 	getObjManager<TCompSwitchPushController>()->initHandlers();
 
-	//PRUEBA TRIGGER
-
 	getObjManager<TCompTrigger>()->initHandlers();
 	getObjManager<TCompDistanceText>()->initHandlers();
 	getObjManager<TCompVictoryCond>()->initHandlers();
@@ -265,8 +281,12 @@ void initManagers() {
 	getObjManager<TCompShadows>()->initHandlers();
 
 	getObjManager<TCompParticleGroup>()->initHandlers();
+	getObjManager<TCompParticleEditor>()->initHandlers();
+	getObjManager<TCompAnimEditor>()->initHandlers();
 
-
+	//AUDIO
+	getObjManager<TCompAudioListener>()->initHandlers();
+	getObjManager<TCompAudioSource>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -283,45 +303,77 @@ bool CApp::create() {
 
 	// Start random seed
 	srand((unsigned int)time(NULL));
-	
+
 	createManagers();
+
+#ifdef _DEBUG
+	// Init AntTweakBar
+	TwInit(TW_DIRECT3D11, ::render.device);
+	TwWindowSize(xres, yres);
+#endif
 
 	bool is_ok = true;
 
-<<<<<<< HEAD
-=======
 	rt_base = nullptr;
 
 	// Boot LUA
->>>>>>> 401f154f71313ec78f2f7dc6af792b1534ce97f5
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
 
+	sm.addMusicTrack(0, "CANCION.mp3");
+	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	sm.addFXTrack("light.wav", "light");
+	sm.addFXTrack("steam.wav", "steam");
+	sm.addFXTrack("sonar.wav", "sonar");
+
+
+
+	physics_manager.init();
+
 	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_ms2.xml");
+<<<<<<< HEAD
+=======
+	//loadScene("data/scenes/escena_ms2.xml");
+>>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
-	
+	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/lightmap_test.xml");
+	//loadScene("data/scenes/anim_test.xml");
+<<<<<<< HEAD
+	//loadScene("data/scenes/viewer_test.xml");
+
+
+	// XML Pruebas
+	loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_2.xml");
+	//loadScene("data/scenes/escene_3.xml");
+	//loadScene("data/scenes/escene_4.xml");
+	//loadScene("data/scenes/escene_5.xml");
+
 
 	sm.addMusicTrack(0, "CANCION.mp3");
 	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	sm.addFXTrack("light.wav", "light");
+	sm.addFXTrack("steam.wav", "steam");
+	sm.addFXTrack("sonar.wav", "sonar");
+=======
+	//loadScene("data/scenes/viewer_test.xml");	
+>>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
 
-	sm.playTrack(0);
+	//sm.playTrack(0,false);
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
-	
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
 	logic_manager.init();
 
 #ifdef _DEBUG
-	// Init AntTweakBar
-	TwInit(TW_DIRECT3D11, ::render.device);
-	TwWindowSize(xres, yres);
 
 	entity_inspector.init();
 	entity_inspector.inspectEntity(CHandle());
@@ -333,17 +385,18 @@ bool CApp::create() {
 	post_process_optioner.sharpen = &sharpen;
 	post_process_optioner.chromatic_aberration = &chromatic_aberration;
 	post_process_optioner.blur = &blur;
+	post_process_optioner.ssrr = &ssrr;
 
 	post_process_optioner.init();
-	
 
-	entity_lister.update();	
+
+	entity_lister.update();
 #endif
-	
+
 	fps = 0;
 
 	// Timer test
-	logic_manager.setTimer("TestTimer", 10);
+	logic_manager.setTimer("TestTimer", 2);
 
 	assert(is_ok);
 
@@ -360,45 +413,9 @@ bool CApp::create() {
 	anim.addRelativeKeyframe(XMVectorSet(15, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 0, 0, 0), XMQuaternionIdentity(), 5);
 	anim.addRelativeKeyframe(XMVectorSet(0, 4, 0, 0), XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(270)), 10);
-	
+
 	logic_manager.addRigidAnimation(anim);	*/
 
-<<<<<<< HEAD
-	//PRUEBAS PARTICULAS --------------------------
-	/*PxParticleCreationData particleCreationData;
-	PxU32 myIndexBuffer[] = { 0, 1, 2 };
-	PxVec3 myPositionBuffer[] = { PxVec3(0, 0.2, 0), PxVec3(0.5, 1, 0),
-		PxVec3(0, 2, .7) };
-	PxVec3 myVelocityBuffer[] = { PxVec3(0.1, 0, 0), PxVec3(0, 0.1, 0),
-		PxVec3(0, 0, 0.1) };
-	particleCreationData.indexBuffer =
-		PxStrideIterator<const PxU32>(myIndexBuffer);
-	particleCreationData.positionBuffer =
-		PxStrideIterator<const PxVec3>(myPositionBuffer);
-	particleCreationData.velocityBuffer =
-		PxStrideIterator<const PxVec3>(myVelocityBuffer);*/
-	//bool success=CPhysicsManager::get().createParticles();
-	//---------------------------------------------
-	instances.create(300, &mesh_textured_quad_xy_centered);
-=======
->>>>>>> 401f154f71313ec78f2f7dc6af792b1534ce97f5
-
-
-	/*PxU32 myIndexBuffer[] = { 0, 1, 2, 3, 4, 5 };
-	PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f))};
-	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };*/
-	//ps.init(4);
-	/*ps_prueba.myIndexBuffer = myIndexBuffer;
-	ps_prueba.myPositionBuffer = myPositionBuffer;
-	ps_prueba.myVelocityBuffer = myVelocityBuffer;*/
-	PxU32 indices[4] = { 0, 1, 2, 3 };
-	PxVec3 positions[4] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), 
-		PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)) };
-	PxVec3 myVelocityBuffer[4] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0), PxVec3(0, 0, 0) };
-	ps.addParticles(100, indices, positions, myVelocityBuffer);
-	bool success = ps.createParticles(100);
 
 	return true;
 }
@@ -428,10 +445,14 @@ void CApp::doFrame() {
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
 
-		/*if (isKeyPressed('Q')) {
-			time_modifier = 0.05f;
-		}*/
-		
+		CIOStatus& io = CIOStatus::get();
+		// Update input
+		io.update(delta_secs);
+
+		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+			pause = !pause;
+		}
+
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
 			if (slow_motion_counter <= 0) {
@@ -460,17 +481,37 @@ void CApp::doFrame() {
 
 void CApp::update(float elapsed) {
 
+	if (pause)
+		return;
+
 	CIOStatus& io = CIOStatus::get();
 	// Update input
-	io.update(elapsed);
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(0);
 	}
 
+
+
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/escena_ms2.xml");
+		loadScene("data/scenes/anim_test.xml");
+		//CEntity* e = entity_manager.getByName("fire_ps");
+		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
+		XMVECTOR pos = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
+		sm.play3DFX("sonar", pos);
+		//sm.playFX("sonar");
+		/*CEntity* e = entity_manager.getByName("Fspot001_49.0");		
+		render_manager.activeCamera = e->get<TCompCamera>();*/
+	}
+
+	//sm.StopLoopedFX("sonar");
+	// Slow motion
+	if (io.becomesReleased(CIOStatus::Q)) {
+		if (time_modifier == 1)
+			time_modifier = 0.05f;
+		else
+			time_modifier = 1;
 	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -481,17 +522,23 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
 
-	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
-	}
+	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("ssao");
+		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("particles");
+		render_techniques_manager.reload("particles_dist");
+		render_techniques_manager.reload("gen_shadows");
+		render_techniques_manager.reload("gen_shadows_skel");
 		render_techniques_manager.reload("light_shaft");
+		render_techniques_manager.reload("distorsion");
+		render_techniques_manager.reload("ssrr");*/
 		/*render_techniques_manager.reload("chromatic_aberration");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("skin_basic");
@@ -512,7 +559,7 @@ void CApp::update(float elapsed) {
 			TCompTransform* player_t = player->get<TCompTransform>();
 			float p_y = XMVectorGetY(player_t->position);
 			underwater.amount = p_y > water_level ? 0 : 1;
-		}		
+		}
 	}
 	else
 	{
@@ -520,6 +567,7 @@ void CApp::update(float elapsed) {
 	}
 
 	//-----------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().checkDistaceToEnemies();
 	CNav_mesh_manager::get().checkUpdates();
 	//-----------------------------------------------------------------------------------------
 
@@ -553,7 +601,7 @@ void CApp::update(float elapsed) {
 	//Insertamos aguja en vector agujas del item manager
 	/*Citem_manager::get().addNeedle(new_e_needle);
 
-	//Insertamos aguja en vector agujas del item manager					
+	//Insertamos aguja en vector agujas del item manager
 	Citem_manager::get().addNeedle(new_e_needle2);
 
 	//borrado de la aguja también del item manager
@@ -561,25 +609,13 @@ void CApp::update(float elapsed) {
 	TCompNeedle* needle = e->get<TCompNeedle>();
 	Citem_manager::get().removeNeedle(needle);*/
 
-	/*PxVec3 myPositionBuffer[] = { PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)), PxVec3(getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f), getRandomNumber(0.1f, 0.5f)),
-		 };
-	PxVec3 myVelocityBuffer[] = { PxVec3(0, 0, 0), PxVec3(0, 0, 0),
-		PxVec3(0, 0, 0) };
-	bool success = CPhysicsManager::get().createParticles(3, myPositionBuffer, myVelocityBuffer);*/
-
-
-	//CPhysicsManager::get().updateParticles();
-
-	/*if (io.becomesPressed(CIOStatus::EXTRA)) {
-		physics_manager.ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
-	}*/
-
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
-	
+
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
+	getObjManager<TCompGNLogic>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -591,7 +627,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
-	
+
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
 
@@ -600,13 +636,19 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompSwitchPullController>()->update(elapsed);
 	getObjManager<TCompSwitchPushController>()->update(elapsed);
 
-	//PRUEBA TRIGGER
 	getObjManager<TCompTrigger>()->update(elapsed);
+	//getObjManager<TCompRecastAABB>()->update(elapsed);
 	getObjManager<TCompDistanceText>()->update(elapsed);
 	getObjManager<TCompBasicPlayerController>()->update(elapsed);
 
 	// PARTICLES
 	getObjManager<TCompParticleGroup>()->update(elapsed);
+	getObjManager<TCompParticleEditor>()->update(elapsed);
+	getObjManager<TCompAnimEditor>()->update(elapsed);
+
+	//AUDIO
+	getObjManager<TCompAudioListener>()->update(elapsed);
+	getObjManager<TCompAudioSource>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
@@ -619,6 +661,9 @@ void CApp::update(float elapsed) {
 
 // Physics update
 void CApp::fixedUpdate(float elapsed) {
+	if (pause)
+		return;
+
 	physics_manager.gScene->simulate(elapsed);
 	physics_manager.gScene->fetchResults(true);
 
@@ -626,13 +671,15 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompEnemyController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRope>()->fixedUpdate(elapsed);
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
+	getObjManager<TCompGoldenNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
-	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);	
+	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
-	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);	
+	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
+	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -651,12 +698,12 @@ void CApp::render() {
 	/*CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	if (e_light) {
-		TCompCamera* cam_light = e_light->get<TCompCamera>();
-		activateLight(*cam_light, 4);
+	TCompCamera* cam_light = e_light->get<TCompCamera>();
+	activateLight(*cam_light, 4);
 	}*/
 
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
-	
+
 	// Generate the culling for the active camera
 	render_manager.cullActiveCamera();
 
@@ -664,25 +711,45 @@ void CApp::render() {
 	CTraceScoped scope("gen_shadows");
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
 	scope.end();
-
+	
 	deferred.render(&camera, *rt_base);
+
+	deferred.rt_albedo->activate();
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, rt_base);
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+	
+	rt_base->activate();
+	texture_manager.getByName("rt_albedo")->activate(0);
+	texture_manager.getByName("noise")->activate(9);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
 
-	texture_manager.getByName("noise")->activate(9);
-	ssao.apply(rt_base);	
-	sharpen.apply(rt_base);
+	deferred.rt_albedo->activate();
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, rt_base);
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+
+	rt_base->activate();
+	texture_manager.getByName("rt_albedo")->activate(0);
+	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
+	
+	activateCamera(camera, 1);
+	ssrr.apply(rt_base);
+	ssao.apply(ssrr.getOutput());
+	sharpen.apply(ssao.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
-	
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
 	static int sz = 150;
-	
+
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals"));
 	//drawTexture2D(0, 0, sz, sz, texture_manager.getByName("rt_albedo"));
-	
+
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 	//ssao.getOutput()->activate(1);
 
@@ -698,20 +765,19 @@ void CApp::render() {
 	CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
 	TCompShadows* shadow = e_light->get<TCompShadows>();
-	
+
 	*/
 
 	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
-	
-#ifdef _DEBUG
 
-	drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
+#ifdef _DEBUG
+	/*drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
 	drawTexture2D(0, 3 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_normals"));
 	drawTexture2D(0, 4 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_albedo"));
 	drawTexture2D(sz * 2, 0 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_specular"));
-	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));
+	drawTexture2D(sz * 2, 1 * sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_gloss"));*/
 
 	if (debug_map == 1) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_albedo")); }
 	if (debug_map == 2) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_normals")); }
@@ -735,15 +801,13 @@ void CApp::render() {
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
 	renderEntities();
 
-	activateBlendConfig(BLEND_CFG_ADDITIVE_BY_SRC_ALPHA);
-	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);	
-	render_manager.renderAll(&camera, false);
+	
+	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
+	render_manager.renderAll(&camera, false, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
-	render_manager.renderAll(&camera, false);
+	render_manager.renderAll(&camera, false, true);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
-	activateBlendConfig(BLEND_CFG_DEFAULT);
-	
 
 #ifdef _DEBUG
 	renderDebugEntities();
@@ -751,7 +815,7 @@ void CApp::render() {
 	if (renderWireframe) {
 		debugTech.activate();
 		renderWireframeCurrent = true;
-		render_manager.renderAll(&camera, true);
+		render_manager.renderAll(&camera, true, false);
 		renderWireframeCurrent = false;
 	}
 
@@ -771,13 +835,47 @@ void CApp::render() {
 	t0.end();
 #endif
 
+	// Test GUI
+
+	/*if (h_player.isValid()) {
+		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
+		life_val /= 10;
+		int leng = 50;
+		for (int i = 0; i < life_val; ++i) {		
+			activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
+			activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
+			activateZConfig(ZConfig::ZCFG_DEFAULT);
+			activateBlendConfig(BLEND_CFG_DEFAULT);
+		}
+
+		
+		activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+		drawDialogBox3D(camera, ((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), 100, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		float x, y;		
+		if (camera.getScreenCoords(((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), &x, &y))
+			font.print(x + 20, y + 20, "Aguja");
+
+		drawDialogBox3D(camera, XMVectorSet(-9.98f, 1.14f, 2.96f, 0), 150, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		if (camera.getScreenCoords(XMVectorSet(-9.98f, 1.14f, 2.96f, 0), &x, &y))
+			font.print(x + 20, y + 20, "Partículas");
+		activateBlendConfig(BLEND_CFG_DEFAULT);
+	}
+
+	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+	activateBlendConfig(BLEND_CFG_DEFAULT);*/
+
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
 	font.print(15, 15, life_text.c_str());*/
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
+	//font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -786,7 +884,7 @@ void CApp::renderEntities() {
 
 	debugTech.activate();
 	const CTexture *t = texture_manager.getByName("grass");
-	t->activate(0);	
+	t->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -818,34 +916,34 @@ void CApp::renderEntities() {
 			XMVECTOR rot2 = XMQuaternionIdentity();
 
 			if (a1) {
-				XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			XMVECTOR offset_pos1 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
 
-				XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
-				rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
+			XMVECTOR pos1 = physics_manager.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
+			rot1 = physics_manager.PxQuatToXMVECTOR(a1->getGlobalPose().q);
 
-				XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+			XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
 
-				//   RECREATE ROPE   
-				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-				initialPos = pos1 + offset_rotado_1;
+			//   RECREATE ROPE
+			// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+			initialPos = pos1 + offset_rotado_1;
 			}
 			else {
-				initialPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+			initialPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
 			}
 			if (a2) {
-				XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			XMVECTOR offset_pos2 = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 
-				XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
-				rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+			XMVECTOR pos2 = physics_manager.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+			rot2 = physics_manager.PxQuatToXMVECTOR(a2->getGlobalPose().q);
 
-				XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
+			XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
 
-				//   RECREATE ROPE   
-				// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
-				finalPos = pos2 + offset_rotado_2;
+			//   RECREATE ROPE
+			// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+			finalPos = pos2 + offset_rotado_2;
 			}
 			else {
-				finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+			finalPos = physics_manager.PxVec3ToXMVECTOR(djoint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
 			}*/
 
 			XMVECTOR initialPos = c_rope->pos_1;
@@ -862,6 +960,7 @@ void CApp::renderEntities() {
 			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
+			tension = maxDist < 0.2 ? 0 : 1;
 
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
@@ -885,7 +984,7 @@ void CApp::renderEntities() {
 			continue;
 
 		/*if (mesh)
-			setTint(mesh->color);*/
+		setTint(mesh->color);*/
 
 		setWorldMatrix(t->getWorld());
 
@@ -908,10 +1007,8 @@ void CApp::renderEntities() {
 
 void CApp::renderDebugEntities() {
 
-	debugTech.activate();
-
 	std::string s_fps = "FPS: " + std::to_string(fps);
-	font.print(300, 30, s_fps.c_str());
+	font.print(500, 30, s_fps.c_str());
 
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
@@ -923,36 +1020,13 @@ void CApp::renderDebugEntities() {
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
-	//if (renderNavMesh)
+	if (renderNavMesh)
 	CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
-	CNav_mesh_manager::get().pathRender();
+	//CNav_mesh_manager::get().pathRender();
 
-
-
-	PxParticleReadData* rd = ps.ps->lockParticleReadData();
-	if (rd)
-	{
-		PxStrideIterator<const PxVec3> positionIt(rd->positionBuffer);
-
-		for (unsigned i = 0; i < rd->nbValidParticles; ++i, ++positionIt)
-		{
-			// access particle position
-			const PxVec3& position = *positionIt;
-			XMVECTOR pos = XMVectorSet(position.x, position.y, position.z, 1);
-			XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
-			XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
-			XMVECTOR scale = XMVectorSet(0.02, 0.02, 0.02, 1);
-			setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
-			//setWorldMatrix(XMMatrixTranslation(position.x, position.y, position.z));			
-			mesh_icosahedron.activateAndRender();
-		}
-
-		// return ownership of the buffers back to the SDK
-		rd->unlock();
-	}
-
+	debugTech.activate();
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
 		grid.activateAndRender();
@@ -966,6 +1040,7 @@ void CApp::renderDebugEntities() {
 		TCompTransform* t = e->get<TCompTransform>();
 		TCompName* name = e->get<TCompName>();
 		TCompAABB* aabb = e->get<TCompAABB>();
+		TCompGNLogic* golden_needle = e->get<TCompGNLogic>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
@@ -1045,11 +1120,14 @@ void CApp::destroy() {
 	render_techniques_manager.destroyAll();
 	axis.destroy();
 	grid.destroy();
+	rope.destroy();
 	intersectsWiredCube.destroy();
 	wiredCube.destroy();
 	renderUtilsDestroy();
 	debugTech.destroy();
+	ropeTech.destroy();
 	font.destroy();
+	particle_groups_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
 }
@@ -1058,7 +1136,7 @@ unsigned int CApp::numStrings(){
 	int num_strings = 0;
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i){
 		TCompRope* c_rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();
-		if (c_rope){			
+		if (c_rope){
 			num_strings++;
 		}
 	}
@@ -1071,7 +1149,28 @@ void CApp::activateVictory(){
 
 void CApp::loadScene(std::string scene_name) {
 
+	// Load picture
+	renderUtilsDestroy();
+	renderUtilsCreate();
+	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
+	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	activateTextureSamplers();
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DISABLE_ALL);
+
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
+	::render.swap_chain->Present(0, 0);
+
 	bool is_ok = true;
+	pause = false;
+
+	load_timer.reset();
+	aux_timer.reset();
+	load_mesh_time = 0;
+	load_text_time = 0;
+	load_skel_time = 0;
+	load_ragdoll_time = 0;
 
 	CNav_mesh_manager::get().clearNavMesh();
 	CImporterParser p;
@@ -1086,16 +1185,29 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
-	/*physics_manager.gScene->release();*/	
+	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
-	physics_manager.init();
+	//physics_manager.init();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 
 	is_ok &= renderUtilsCreate();
 
+	dbg("Init loads: %g\n", aux_timer.seconds());
+
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
+
+	dbg("Total texture load time: %g\n", load_text_time);
+	dbg("Total mesh load time: %g\n", load_mesh_time);
+	dbg("Total skeleton load time: %g\n", load_skel_time);
+	dbg("Total ragdoll load time: %g\n", load_ragdoll_time);
+
+	aux_timer.reset();
+	particle_groups_manager.destroy();
+	XASSERT(particle_groups_manager.xmlParseFile("data/particles/particle_groups.xml"), "Error loading the particle groups");
+	dbg("Total particle load time: %g\n", aux_timer.seconds());
+	aux_timer.reset();
 
 	// public delta time inicialization
 	delta_time = 0.f;
@@ -1112,7 +1224,7 @@ void CApp::loadScene(std::string scene_name) {
 	debug_map = 0;
 
 	//physics_manager.init();
-
+	
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
@@ -1126,12 +1238,15 @@ void CApp::loadScene(std::string scene_name) {
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
-	
+
 	is_ok &= deferred.create(xres, yres);
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
+	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
+	ctes_global.uploadToGPU();
+
 	XASSERT(is_ok, "Error creating global constants");
 
 	XASSERT(is_ok, "Error creating debug meshes");
@@ -1145,14 +1260,14 @@ void CApp::loadScene(std::string scene_name) {
 	initManagers();
 
 	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
-	logic_manager.onSceneLoad(name);	
+	logic_manager.onSceneLoad(name);
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();
 
 	h_player = entity_manager.getByName("Player");
 
-	texture_manager.getByName("desertcube1024")->activate(8);
+	texture_manager.getByName("room_env_test")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
 	is_ok &= ssao.create("ssao", xres, yres, 1);
@@ -1160,6 +1275,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
+	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");
@@ -1169,6 +1285,9 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
+
+	dbg("Misc loads: %g\n", aux_timer.seconds());
+	dbg("Total load time: %g\n", load_timer.seconds());
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

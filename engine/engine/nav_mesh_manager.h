@@ -34,11 +34,13 @@ public:
 	void updateNavmesh();
 	void prepareInputNavMesh();
 	bool checkIfUpdatedNavMesh();
+	int getIndexMyRecastAABB(CHandle my_aabb);
 	bool rayCastHit(XMVECTOR pos, XMVECTOR wanted_pos);
 	void clearNavMesh();
 	void checkUpdates();
 	int getLastRecastAABBIndex();
 	void registerRecastAABB(CHandle recastAABB);
+	void unregisterRecastAABB(CHandle recastAABB);
 	void checkDistaceToEnemies();
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
 	static CNav_mesh_manager& get();

@@ -55,7 +55,7 @@ bool TCompTrigger::onExit(){
 	if (inside.size() > 0){
 		for (std::vector<CEntity*>::size_type i = 0; i != inside.size(); i++) {
 			TCompAABB* aabb = (TCompAABB*)m_aabb;
-			CEntity* e = (CEntity*)inside[i];
+			CEntity* e = inside[i];
 			if (e->has<TCompAABB>()){
 				TCompAABB* i_aabb = e->get<TCompAABB>();
 				CEntity* own = CHandle(this).getOwner();

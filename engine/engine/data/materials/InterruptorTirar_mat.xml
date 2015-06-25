@@ -1,1 +1,1 @@
-<std_material name="InterruptorTirar_mat" diffuse="interruptorTirar_Diffuse"/>
+<std_material name="InterruptorTirar_mat" diffuse="interruptorTirar_Diffuse" normal="interruptorTirar_Normal" specular="interruptorTirar_Specular" glossiness="interruptorTirar_Gloss" emissive="interruptorTirar_Emissive"/>

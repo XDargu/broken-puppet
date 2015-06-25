@@ -11,18 +11,30 @@ TCompJointFixed::~TCompJointFixed() {
 	PxRigidActor* a1 = nullptr;
 	PxRigidActor* a2 = nullptr;
 
+	if (mJoint) {
+		mJoint->getActors(a1, a2);
+		// Call the addForce method to awake the bodies, if dynamic
+		if (a1 && a1->isRigidDynamic()) {
+			if (a1->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a1)->isSleeping())
+						((PxRigidDynamic*)a1)->wakeUp();
+				}
+			}
+		}
+		if (a2 && a2->isRigidDynamic()) {
+			if (a2->getScene() != NULL) {
+				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+					if (((PxRigidDynamic*)a2)->isSleeping())
+						((PxRigidDynamic*)a2)->wakeUp();
+				}
+			}
+		}
 
-	mJoint->getActors(a1, a2);
-	// Call the addForce method to awake the bodies, if dynamic
-	if (a1 && a1->isRigidDynamic()) {
-		((PxRigidDynamic*)a1)->wakeUp();
+		// Release the joint
+		if ((a1 && a1->isRigidDynamic()) || (a2 && a2->isRigidDynamic()))
+			mJoint->release();
 	}
-	if (a2 && a2->isRigidDynamic()) {
-		((PxRigidDynamic*)a2)->wakeUp();
-	}
-
-	// Release the joint
-	mJoint->release();
 }
 
 void TCompJointFixed::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -33,7 +45,7 @@ void TCompJointFixed::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	bool breakable = atts.getBool("breakable", false);
 	float breakForce = atts.getFloat("maxBreakForce", 1000);
-	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
+	float breakTorque = atts.getFloat("maxTorqueForce", 1000);
 
 	float angle_limit = atts.getFloat("swingAngle", 0);
 
