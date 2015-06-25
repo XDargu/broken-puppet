@@ -344,7 +344,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 	canThrow = true;
 
 	if (on_enter) {
-		//skeleton->loopAnimation(6);
+		skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
 	}
 
@@ -489,20 +489,29 @@ void FSMPlayerLegs::Land(float elapsed){
 	if (on_enter) {
 		skeleton->playAnimation(7);
 	}
-
+	bool is_moving = false;
 	if (state_time > 0.2f) {
 		physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
 		dir.normalize();
 		((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 	}
 	else {
-		EvaluateMovement(true, elapsed);
+		is_moving = EvaluateMovement(true, elapsed);
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
 	
-	if (state_time >= 0.5f){
-		ChangeState("fbp_Idle");
+	if (state_time >= 0.2f){
+		if (is_moving) {
+			skeleton->stopAnimation(7);
+			ChangeState("fbp_Idle");
+		}
+		else {
+			if (state_time >= 0.5f){
+				skeleton->stopAnimation(7);
+				ChangeState("fbp_Idle");
+			}
+		}
 	}
 }
 

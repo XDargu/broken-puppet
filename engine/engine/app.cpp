@@ -357,8 +357,6 @@ bool CApp::create() {
 
 	XASSERT(is_ok, "Error creating debug meshes");
 
-	logic_manager.init();
-
 #ifdef _DEBUG
 
 	entity_inspector.init();
@@ -877,8 +875,8 @@ void CApp::renderEntities() {
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	debugTech.activate();
-	const CTexture *t = texture_manager.getByName("grass");
-	t->activate(0);
+	const CTexture *tex = texture_manager.getByName("grass");
+	tex->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -898,6 +896,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 		if (c_rope) {
+			tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
@@ -1191,7 +1190,6 @@ void CApp::loadScene(std::string scene_name) {
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
-	logic_manager.init();
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
@@ -1231,7 +1229,7 @@ void CApp::loadScene(std::string scene_name) {
 	debug_map = 0;
 
 	//physics_manager.init();
-	
+	logic_manager.init();
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
