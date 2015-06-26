@@ -343,7 +343,8 @@
 	</entity>
 	<entity tag = "player" prefab="Player">
 <transform position="-0.953568 -39.5737 -7.60658" rotation="0.0 0.923879 0.0 0.382684" scale="1.0 1.0 1.0"/>
-	</entity>
+   <ragdoll name="prota"/>
+  </entity>
 	<entity  prefab="PlayerPivot">
 <transform position="-0.953568 -39.5737 -7.60658" rotation="0.0 0.923879 0.0 0.382684" scale="1.0 1.0 1.0"/>
 	</entity>
@@ -363,7 +364,7 @@
 <transform position="0.0 -33.0597 -3.59258" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="obstaculo_inicial_44.0" />
 <transform position="0.0827398 -37.4911 1.10443" rotation="0.0 0.0 0.0 1.0" scale="1.0 0.836288 1.0"/>
 <render>
@@ -877,7 +878,7 @@
 <aabb min="-2.0 0.0 -2.0" max="2.0 1.0 2.0"/>
 <colliderMesh path="esc1_selev_rampa_26g_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_rampa_98.0" />
 <transform position="-13.5254 -38.5 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -3405,7 +3406,7 @@
 <transform position="-26.7274 1.63031 4.52797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
 	</entity>
-	<entity tag = "actor" >
+ <entity tag = "actor" collisionTag = "Actor">
 <name name="obstaculo_esfera_370.0" />
 <transform position="-13.5616 -4.65961 -5.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -3689,7 +3690,7 @@
 <aabb min="-0.736001 -0.177819 -0.768001" max="0.736001 0.177819 0.768001"/>
 <colliderMesh path="interruptor_pulsar_base" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_plataforma_media_403.0" />
 <transform position="-32.3042 -1.99791 27.7998" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
@@ -5545,7 +5546,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.81794" boxY="0.0889033" boxZ="1.63248"/>
 <staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_objeto_interruptor_603.0" />
 <transform position="-26.7811 -4.80217 -8.86006" rotation="-0.076529 0.0 0.0 0.997067" scale="1.0 1.0 1.0"/>
 <render>
@@ -5569,7 +5570,7 @@
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
 <colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_plataforma_605.0" />
 <transform position="-20.1525 -4.97617 27.7816" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
@@ -5798,7 +5799,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="2.5" boxZ="0.15"/>
 <staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_635.0" />
 <transform position="-33.0089 -38.5 -14.25" rotation="0.0 -0.302925 0.0 0.953014" scale="1.0 1.0 1.0"/>
 <render>
@@ -5813,7 +5814,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.4" boxY="1.4" boxZ="1.4"/>
 <rigidbody density="54.6647"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_636.0" />
 <transform position="-35.6268 -38.5 -16.6152" rotation="0.0 0.0365295 0.0 0.999333" scale="1.0 1.0 1.0"/>
 <render>
@@ -5828,7 +5829,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.4" boxY="1.4" boxZ="1.4"/>
 <rigidbody density="54.6647"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_637.0" />
 <transform position="-38.8115 -38.5 -15.2737" rotation="0.0 0.260824 0.0 0.965387" scale="1.0 1.0 1.0"/>
 <render>
@@ -5843,7 +5844,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.4" boxY="1.4" boxZ="1.4"/>
 <rigidbody density="54.6647"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_638.0" />
 <transform position="-37.8577 -35.517 -15.7642" rotation="0.0 0.92388 0.0 0.382683" scale="1.0 1.0 1.0"/>
 <render>
@@ -6022,7 +6023,7 @@
 <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
 <colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_objeto_aplastar_01_657.0" />
 <transform position="-14.9717 4.26819 49.4131" rotation="-0.076529 0.0 0.0 0.997067" scale="1.0 1.0 1.0"/>
 <render>
@@ -6037,7 +6038,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.5" boxY="3.0" boxZ="0.25"/>
 <rigidbody density="333.333"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_objeto_aplastar_02_658.0" />
 <transform position="-14.9717 4.26819 67.0293" rotation="0.0 0.997067 0.0765289 5.19022e-007" scale="1.0 1.0 1.0"/>
 <render>
@@ -6052,7 +6053,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.5" boxY="3.0" boxZ="0.25"/>
 <rigidbody density="333.333"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_659.0" />
 <transform position="-33.9218 -35.517 -14.8184" rotation="0.0 -0.260703 0.0 0.965419" scale="1.0 1.0 1.0"/>
 <render>
@@ -6115,7 +6116,7 @@
 <jointPrismatic actor1 = "interruptor_pulsar_base_400.0"  jointRelativePosition0="0.0 0.0 0.0917606" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "escene_1_push_int"  jointRelativePosition1="-3.57628e-005 5.72205e-005 -0.082571" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="-26.0 -8.00636 -3.99998" jointRotation="0.0 0.707106 0.0 0.707108" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="0.2" linearRestitution="0.0" posSpring="10000.0" posDamping="1000.0" parentCollition="false" />
 <switchPushController />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor"  collisionTag = "Actor">
 <name name="escene_1_grandmacrasher_02" />
 <transform position="-2.1232 10.0387 66.0163" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
 <render>
@@ -6126,7 +6127,7 @@
 <rigidbody density="505.05"  />
 <jointPrismatic actor1 = "eje_593.0"  jointRelativePosition0="-0.0284045 0.0447693 -6.16524" jointRelativeRotation0="0.0 0.0 -0.707106 0.707107" actor2 = "escene_1_grandmacrasher_02"  jointRelativePosition1="0.0 0.0 -0.552734" jointRelativeRotation1="0.0 0.0 -0.707106 0.707107"  jointPosition="-2.1232 9.486 66.0163" jointRotation="0.0 0.707106 0.0 0.707107" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="3.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" parentCollition="false" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor"  collisionTag = "Actor">
 <name name="escene_1_grandmacrasher_01" />
 <transform position="-5.98629 9.06431 50.0032" rotation="0.0 -1.19209e-006 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -6149,7 +6150,7 @@
 <aabb min="-2.0 -0.5 -2.0" max="2.0 0.5 2.0"/>
 <trigger/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_1_door_L" />
 <transform position="-20.9061 -5.5 7.96911" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
@@ -6165,7 +6166,7 @@
 <rigidbody density="500.0"  />
 <jointHinge actor1 = "marco_puerta_630.0"  jointRelativePosition0="-0.0214901 0.199016 0.0" jointRelativeRotation0="0.0 0.0 0.707107 0.707107" actor2 = "escene_1_door_L"  jointRelativePosition1="1.47604 -0.147936 0.0" jointRelativeRotation1="0.0 0.0 1.0 0.0"  jointPosition="-21.054 -5.5 9.44516" jointRotation="0.0 0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_1_door_R" />
 <transform position="-27.1894 -5.5 7.97491" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>

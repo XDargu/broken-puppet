@@ -42,7 +42,7 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 		, density);
 
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
-	physx::PxReal threshold = 15.f;
+	physx::PxReal threshold = 400.f;
 	rigidBody->setContactReportThreshold(threshold);
 
 	Physics.gScene->addActor(*rigidBody);
@@ -98,7 +98,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		, density);
 
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
-	physx::PxReal threshold = 1000.f;
+	physx::PxReal threshold = 400.f;
 	rigidBody->setContactReportThreshold(threshold);
 
 

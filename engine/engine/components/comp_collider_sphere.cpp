@@ -62,6 +62,7 @@ void TCompColliderSphere::loadFromAtts(const std::string& elem, MKeyValue &atts)
 			,
 			true);
 
+		setCollisionGroups();
 		//AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
