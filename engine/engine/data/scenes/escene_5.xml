@@ -641,7 +641,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_71.0" />
-<transform position="-10.0 -2.74967e-006 68.0" rotation="0.0 1.0 0.0 1.99517e-005" scale="1.0 1.0 1.0"/>
+<transform position="-10.0 -2.74967e-006 68.0" rotation="0.0 1.0 0.0 1.97132e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -661,7 +661,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_73.0" />
-<transform position="-10.0 -2.05029e-006 84.0" rotation="0.0 1.0 0.0 2.03093e-005" scale="1.0 1.0 1.0"/>
+<transform position="-10.0 -2.05029e-006 84.0" rotation="0.0 1.0 0.0 2.00709e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -691,7 +691,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_76.0" />
-<transform position="-10.0 -2.39998e-006 76.0" rotation="0.0 1.0 0.0 2.03093e-005" scale="1.0 1.0 1.0"/>
+<transform position="-10.0 -2.39998e-006 76.0" rotation="0.0 1.0 0.0 2.00709e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -701,7 +701,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_77.0" />
-<transform position="30.0 4.0 16.0" rotation="0.0 1.0 0.0 1.19646e-005" scale="1.0 1.0 1.0"/>
+<transform position="30.0 4.0 16.0" rotation="0.0 1.0 0.0 1.17262e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -711,7 +711,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_78.0" />
-<transform position="30.0 4.0 24.0" rotation="0.0 1.0 0.0 1.19646e-005" scale="1.0 1.0 1.0"/>
+<transform position="30.0 4.0 24.0" rotation="0.0 1.0 0.0 1.17262e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -721,7 +721,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_79.0" />
-<transform position="30.0 4.0 32.0" rotation="0.0 1.0 0.0 1.19646e-005" scale="1.0 1.0 1.0"/>
+<transform position="30.0 4.0 32.0" rotation="0.0 1.0 0.0 1.17262e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -731,7 +731,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_80.0" />
-<transform position="30.0 4.0 40.0" rotation="0.0 1.0 0.0 1.19646e-005" scale="1.0 1.0 1.0"/>
+<transform position="30.0 4.0 40.0" rotation="0.0 1.0 0.0 1.17262e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -741,7 +741,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_81.0" />
-<transform position="30.0 4.0 48.0" rotation="0.0 1.0 0.0 1.19646e-005" scale="1.0 1.0 1.0"/>
+<transform position="30.0 4.0 48.0" rotation="0.0 1.0 0.0 1.17262e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -811,7 +811,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_88.0" />
-<transform position="30.0 4.0 56.0" rotation="0.0 1.0 0.0 1.17262e-005" scale="1.0 1.0 1.0"/>
+<transform position="30.0 4.0 56.0" rotation="0.0 1.0 0.0 1.14878e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -1001,7 +1001,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_suelo_a_107.0" />
-<transform position="6.0 4.0 16.0" rotation="0.0 1.0 0.0 1.20838e-005" scale="1.0 1.0 1.0"/>
+<transform position="6.0 4.0 16.0" rotation="0.0 1.0 0.0 1.18454e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
@@ -1010,7 +1010,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_suelo_a_108.0" />
-<transform position="14.0 4.0 16.0" rotation="0.0 1.0 0.0 1.20838e-005" scale="1.0 1.0 1.0"/>
+<transform position="14.0 4.0 16.0" rotation="0.0 1.0 0.0 1.18454e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
@@ -1019,7 +1019,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_suelo_a_109.0" />
-<transform position="22.0 4.0 16.0" rotation="0.0 1.0 0.0 1.20838e-005" scale="1.0 1.0 1.0"/>
+<transform position="22.0 4.0 16.0" rotation="0.0 1.0 0.0 1.18454e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
@@ -1136,7 +1136,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_suelo_a_122.0" />
-<transform position="22.0 4.0 56.0" rotation="0.0 1.0 0.0 1.18454e-005" scale="1.0 1.0 1.0"/>
+<transform position="22.0 4.0 56.0" rotation="0.0 1.0 0.0 1.1607e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
@@ -1145,7 +1145,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_suelo_a_123.0" />
-<transform position="14.0 4.0 56.0" rotation="0.0 1.0 0.0 1.18454e-005" scale="1.0 1.0 1.0"/>
+<transform position="14.0 4.0 56.0" rotation="0.0 1.0 0.0 1.1607e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
@@ -1312,7 +1312,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_techo_pared_a_140.0" />
-<transform position="-10.0 8.0 80.0" rotation="0.0 1.0 0.0 1.91172e-005" scale="1.0 1.0 1.0"/>
+<transform position="-10.0 8.0 80.0" rotation="0.0 1.0 0.0 1.88788e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="1" mat="techo"/>
@@ -1322,7 +1322,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_techo_pared_a_141.0" />
-<transform position="-10.0 8.0 72.0" rotation="0.0 1.0 0.0 1.91172e-005" scale="1.0 1.0 1.0"/>
+<transform position="-10.0 8.0 72.0" rotation="0.0 1.0 0.0 1.88788e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="1" mat="techo"/>
@@ -2581,7 +2581,7 @@
 	</entity>
 	<entity  >
 <name name="eje3_282.0" />
-<transform position="15.8539 12.1046 58.6799" rotation="0.0 1.0 0.0 2.18948e-006" scale="1.0 1.0 1.0"/>
+<transform position="15.8539 12.1046 58.6799" rotation="0.0 1.0 0.0 2.07027e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="eje3" sub_mesh="0" mat="mecanismo_mat"/>
 <draw mesh="eje3" sub_mesh="1" mat="mecanismo_mat"/>
@@ -2643,7 +2643,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esferaReloj_287.0" />
-<transform position="23.3641 9.47687 51.1319" rotation="0.0 0.998773 0.0 -0.0495163" scale="1.0 1.0 1.0"/>
+<transform position="23.3641 9.47687 51.1319" rotation="0.0 0.998773 0.0 -0.049516" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esferaReloj" sub_mesh="0" mat="tejado_mat"/>
 <draw mesh="esferaReloj" sub_mesh="1" mat="cristal_mat"/>
@@ -2653,7 +2653,7 @@
 	</entity>
 	<entity  >
 <name name="manecillaHoraria_289.0" />
-<transform position="23.4732 8.51893 48.7729" rotation="-0.245546 0.96812 -0.0121722 -0.0479962" scale="1.0 1.0 1.0"/>
+<transform position="23.4732 8.51893 48.7729" rotation="-0.245546 0.96812 -0.0121723 -0.047996" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="manecillaHoraria" sub_mesh="0" mat="Standardmaterial"/>
 </render>
@@ -2670,7 +2670,7 @@
 	</entity>
 	<entity  >
 <name name="colider_291.0" />
-<transform position="15.526 9.42889 58.0949" rotation="0.0 0.999995 0.0 -0.00328223" scale="1.0 1.0 1.0"/>
+<transform position="15.526 9.42889 58.0949" rotation="0.0 0.999995 0.0 -0.00328211" scale="1.0 1.0 1.0"/>
 <aabb min="-18.9183 -10.2348 -9.20202" max="18.9183 10.2348 9.20202"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
@@ -2781,14 +2781,14 @@
 	</entity>
 	<entity tag = "actor" >
 <name name="escene_5_minutero" />
-<transform position="23.6034 10.9662 48.975" rotation="0.0 0.998773 0.0 -0.0495165" scale="1.0 1.0 1.0"/>
+<transform position="23.6034 10.9662 48.975" rotation="0.0 0.998773 0.0 -0.0495163" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="escene_5_minutero" sub_mesh="0" mat="tejado_mat"/>
 </render>
 <aabb min="-0.729231 -1.91949 -0.128118" max="0.703433 1.9498 0.128563"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.336676" boxY="1.93465" boxZ="0.128341"/>
 <rigidbody density="500.0"  />
-<jointHinge actor1 = "esferaReloj_287.0"  jointRelativePosition0="-0.432167 -2.12461 -0.0414791" jointRelativeRotation0="0.524145 0.474628 0.524145 -0.474628" actor2 = "escene_5_minutero"  jointRelativePosition1="0.0192261 -0.00192642 -1.53081" jointRelativeRotation1="0.524145 0.474628 0.524145 -0.474628"  jointPosition="23.584 9.43539 48.9749" jointRotation="0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="1.0" posSpring="200.0" posDamping="10.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+<jointHinge actor1 = "esferaReloj_287.0"  jointRelativePosition0="-0.432167 -2.12461 -0.0414791" jointRelativeRotation0="0.524145 0.474629 0.524145 -0.474629" actor2 = "escene_5_minutero"  jointRelativePosition1="0.0192261 -0.00192642 -1.53081" jointRelativeRotation1="0.524145 0.474629 0.524145 -0.474629"  jointPosition="23.584 9.43539 48.9749" jointRotation="0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="1.0" posSpring="200.0" posDamping="10.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 	<entity  >
 <name name="Trigger_Victory" />
@@ -2841,5 +2841,11 @@
 <transform position="-23.3404 3.30099e-006 75.5179" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-15.7682 0.0 -20.2156" max="15.7682 24.7978 20.2156"/>
 <zoneAABB/>
+	</entity>
+	<entity  >
+<name name="escene_5_recast" />
+<transform position="12.8173 8.48143 31.3971" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-16.1965 -8.48143 -19.7804" max="16.1965 8.48143 19.7804"/>
+<recastAABB/>
 	</entity>
 </scene>

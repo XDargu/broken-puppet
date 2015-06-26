@@ -137,7 +137,8 @@
 	fn addObjectsCollisionMesh = 
 	(		
 		local objSelected = $
-		if (isProperty objSelected.baseobject #collisionMesh != true) then
+		--if (isProperty objSelected.baseobject #collisionMesh != true) then
+		if true then
 		(
 			custAttributes.add objSelected objectDataCollisionMesh	
 		)	
