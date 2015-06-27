@@ -18,6 +18,11 @@ CNav_mesh_manager& CNav_mesh_manager::get() {
 }
 
 bool CNav_mesh_manager::build_nav_mesh(){
+	colBoxes.clear();
+	colSpheres.clear();
+	colMeshes.clear();
+	colConvex.clear();
+	recastAABBs.clear();
 	first = true;
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
