@@ -28,5 +28,6 @@
     <characterController/>
 	<life life="100"/>
 	<playerController/>
+  <ragdoll name="prota"/>
  </entity>
 </prefab>
