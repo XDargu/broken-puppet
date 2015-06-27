@@ -1283,7 +1283,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_parche_esqui_a_136.0" />
-<transform position="13.0 8.0 12.0" rotation="0.0 1.0 0.0 1.92364e-005" scale="1.0 1.0 1.0"/>
+<transform position="13.0 8.0 12.0" rotation="0.0 1.0 0.0 1.94748e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_parche_esqui_a" sub_mesh="0" mat="suelo_parche"/>
 </render>
@@ -1501,7 +1501,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_half_a_158.0" />
-<transform position="3.0 1.74846e-007 4.0" rotation="0.0 1.0 0.0 1.63754e-005" scale="1.0 1.0 1.0"/>
+<transform position="3.0 1.74846e-007 4.0" rotation="0.0 1.0 0.0 1.66138e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_half_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_half_a" sub_mesh="1" mat="pared"/>
@@ -1586,7 +1586,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_half_end_L_b_166.0" />
-<transform position="29.0 8.0 16.0" rotation="0.0 1.0 0.0 1.63754e-005" scale="1.0 1.0 1.0"/>
+<transform position="29.0 8.0 16.0" rotation="0.0 1.0 0.0 1.66138e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_half_end_L_b" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_suelo_pared_half_end_L_b" sub_mesh="1" mat="rodapie"/>
@@ -3809,14 +3809,19 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="elevador_top_403.0" />
-<transform position="50.9425 66.662 18.2462" rotation="1.0 0.0 0.0 2.66632e-006" scale="0.630575 0.463627 0.630575"/>
+<transform position="50.9425 66.662 18.2462" rotation="1.0 0.0 0.0 2.90473e-006" scale="0.630575 0.463627 0.630575"/>
 <render>
 <draw mesh="elevador_top" sub_mesh="0" mat="Standardmaterial"/>
 </render>
 <aabb min="-4.74046 -2.37023 -4.74046" max="4.74046 2.37023 4.74046"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.98922" boxY="1.0989" boxZ="2.98922"/>
 <staticbody/>
-<jointPrismatic actor1 = "elevador_top_403.0"  jointRelativePosition0="0.0 -0.000162125 38.0941" jointRelativeRotation0="1.0 0.0 0.0 -2.90473e-006" actor2 = "Elevador_12.0"  jointRelativePosition1="-0.448257 0.00779152 -2.62188" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="50.9425 49.0005 18.2462" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="14.0" linearRestitution="0.0" posSpring="0.0" posDamping="10000.0" parentCollition="false" />
+<jointPrismatic actor1 = "elevador_top_403.0"  jointRelativePosition0="0.0 -0.000175476 38.0941" jointRelativeRotation0="1.0 0.0 0.0 -3.14315e-006" actor2 = "Elevador_12.0"  jointRelativePosition1="-0.448257 0.00779152 -2.62188" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="50.9425 49.0005 18.2462" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="14.0" linearRestitution="0.0" posSpring="0.0" posDamping="10000.0" parentCollition="false" />
+	</entity>
+	<entity  >
+<name name="escene_4_critalcollider_405.0" />
+<transform position="17.4556 8.84944 -0.224989" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-6.40367 -8.84944 -14.5758" max="6.40367 8.84944 14.5758"/>
 	</entity>
 	<entity tag = "actor" >
 <name name="plataforma_ascendente_01" />
@@ -3872,5 +3877,29 @@
 <rigidbody density="19.6219"  />
 <jointPrismatic actor1 = "plataforma_ascendente_02"  jointRelativePosition0="-0.026825 0.101189 10.0969" jointRelativeRotation0="0.0 0.0 0.707106 0.707108" actor2 = "interruptor_pulsar_plataforma_02"  jointRelativePosition1="-3.8147e-005 5.34058e-005 -0.082571" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="39.4727 20.5583 30.3326" jointRotation="0.0 0.707106 0.0 0.707108" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="0.2" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="false" />
 <switchPushController />
+	</entity>
+	<entity  >
+<name name="escene_4_room_1" />
+<transform position="-15.3927 7.6024 -3.70302" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-22.1176 -8.58259 -11.9866" max="22.1176 8.58259 11.9866"/>
+<zoneAABB/>
+	</entity>
+	<entity  >
+<name name="Box004" />
+<transform position="15.0174 4.96598 -0.074486" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-7.74957 -4.96598 -25.6578" max="7.74957 4.96598 25.6578"/>
+<recastAABB/>
+	</entity>
+	<entity  >
+<name name="escene_4_room_2" />
+<transform position="17.0828 7.87256 6.56756" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-9.2571 -7.87256 -22.1141" max="9.2571 7.87256 22.1141"/>
+<zoneAABB/>
+	</entity>
+	<entity  >
+<name name="escene_4_room_3" />
+<transform position="44.818 7.6024 21.7028" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-17.6941 -8.58259 -12.2359" max="17.6941 60.9364 12.2359"/>
+<zoneAABB/>
 	</entity>
 </scene>

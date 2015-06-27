@@ -2447,7 +2447,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_techo_pared_a_252.0" />
-<transform position="100.0 8.0 30.0" rotation="0.0 1.0 0.0 1.31567e-005" scale="1.0 1.0 1.0"/>
+<transform position="100.0 8.0 30.0" rotation="0.0 1.0 0.0 1.33952e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="1" mat="techo"/>
@@ -3249,7 +3249,7 @@
 	</entity>
 	<entity tag = "actor" >
 <name name="Tablon2_332.0" />
-<transform position="25.7261 2.5188 7.9202" rotation="-0.0249226 -0.0249227 -0.706667 0.706668" scale="1.0 1.0 1.0"/>
+<transform position="25.7261 2.5188 7.9202" rotation="-0.0249227 -0.0249228 -0.706667 0.706668" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="Tablon2" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="Tablon2" sub_mesh="1" mat="Standardmaterial"/>
@@ -3746,5 +3746,23 @@
 <transform position="96.3612 -0.456528 31.9964" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-11.3208 -2.29111 -6.73854" max="11.3208 2.29111 6.73854"/>
 <trigger/>
+	</entity>
+	<entity  >
+<name name="escene_2_room_1" />
+<transform position="8.39058 5.33665 -7.05476" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-19.4861 -5.33666 -28.3499" max="19.4861 5.33666 28.3499"/>
+<zoneAABB/>
+	</entity>
+	<entity  >
+<name name="escene_2_room_2" />
+<transform position="46.2565 5.33666 8.08252" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-16.9725 -5.33666 -9.88843" max="16.9725 10.8868 9.88843"/>
+<zoneAABB/>
+	</entity>
+	<entity  >
+<name name="escene_2_room_3" />
+<transform position="84.6646 -34.5459 35.692" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-22.0642 -5.33666 -37.2596" max="22.0642 50.1085 37.2596"/>
+<zoneAABB/>
 	</entity>
 </scene>

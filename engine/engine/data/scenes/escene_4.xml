@@ -3818,10 +3818,12 @@
 <staticbody/>
 <jointPrismatic actor1 = "elevador_top_403.0"  jointRelativePosition0="0.0 -0.000175476 38.0941" jointRelativeRotation0="1.0 0.0 0.0 -3.14315e-006" actor2 = "Elevador_12.0"  jointRelativePosition1="-0.448257 0.00779152 -2.62188" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="50.9425 49.0005 18.2462" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="14.0" linearRestitution="0.0" posSpring="0.0" posDamping="10000.0" parentCollition="false" />
 	</entity>
-	<entity  >
+	<entity tag = "level" collisionTag = "Level">
 <name name="escene_4_critalcollider_405.0" />
 <transform position="17.4556 8.84944 -0.224989" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-6.40367 -8.84944 -14.5758" max="6.40367 8.84944 14.5758"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="6.40367" boxY="8.84944" boxZ="14.5758"/>
+<staticbody/>
 	</entity>
 	<entity tag = "actor" >
 <name name="plataforma_ascendente_01" />
@@ -3885,9 +3887,9 @@
 <zoneAABB/>
 	</entity>
 	<entity  >
-<name name="Box004" />
-<transform position="15.0174 4.96598 -0.074486" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-7.74957 -4.96598 -25.6578" max="7.74957 4.96598 25.6578"/>
+<name name="escene_4_recast" />
+<transform position="15.0174 7.99315 20.6175" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-5.96717 -4.96598 -4.23354" max="5.96717 4.96598 4.23354"/>
 <recastAABB/>
 	</entity>
 	<entity  >

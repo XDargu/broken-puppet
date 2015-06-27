@@ -342,9 +342,9 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_1.xml");
 	//loadScene("data/scenes/escene_2.xml");
-	//loadScene("data/scenes/escene_3.xml");
+	loadScene("data/scenes/escene_3.xml");
 	//loadScene("data/scenes/escene_4.xml");
 	//loadScene("data/scenes/escene_5.xml");
 
@@ -385,7 +385,7 @@ bool CApp::create() {
 	assert(is_ok);
 
 	//PRUEBAS NAV MESHES -----------------
-	bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	//bool valid = CNav_mesh_manager::get().build_nav_mesh();
 	//------------------------------------
 	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
@@ -1230,6 +1230,9 @@ void CApp::loadScene(std::string scene_name) {
 
 	//physics_manager.init();
 	logic_manager.init();
+
+	// Navmesh initialization
+	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");

@@ -90,17 +90,16 @@
 <staticbody/>
 	</entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-1.25859 -2.77333 -0.971825" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-	<ragdoll name="prota"/>
-  </entity>
+<transform position="-1.49808 -2.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
 	<entity  prefab="PlayerPivot">
-<transform position="-1.25859 -2.77333 -0.971825" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-1.49808 -2.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="CameraPivot">
-<transform position="-0.258595 -0.77333 -1.97182" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-0.498076 -0.77333 -4.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="PlayerCamera">
-<transform position="6.74141 3.22667 -2.97182"/>
+<transform position="6.50192 3.22667 -5.06559"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_pelev_plata_half_0_12.0" />
@@ -1606,7 +1605,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_pared_a_140.0" />
-<transform position="20.0 1.00001 96.0" rotation="0.0 1.0 0.0 1.99517e-005" scale="1.0 1.0 1.0"/>
+<transform position="20.0 1.00001 96.0" rotation="0.0 1.0 0.0 2.01901e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_arqui_suelo_pared_a" sub_mesh="1" mat="pared"/>
@@ -1994,7 +1993,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_suelo_half_a_181.0" />
-<transform position="-12.0 -3.0 16.0" rotation="0.0 1.0 0.0 1.68522e-005" scale="1.0 1.0 1.0"/>
+<transform position="-12.0 -3.0 16.0" rotation="0.0 1.0 0.0 1.70906e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
@@ -2336,7 +2335,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_techo_pared_a_216.0" />
-<transform position="20.0 9.00001 102.0" rotation="0.0 1.0 0.0 1.99517e-005" scale="1.0 1.0 1.0"/>
+<transform position="20.0 9.00001 102.0" rotation="0.0 1.0 0.0 2.01901e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="1" mat="techo"/>
@@ -4145,7 +4144,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_pared_pared_half_a_415.0" />
-<transform position="20.0 1.0 108.0" rotation="0.0 1.0 0.0 8.74599e-006" scale="1.0 1.0 1.0"/>
+<transform position="20.0 1.0 108.0" rotation="0.0 1.0 0.0 8.98441e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_pared_pared_half_a" sub_mesh="0" mat="pared"/>
 </render>
@@ -4154,7 +4153,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_pared_pared_half_a_416.0" />
-<transform position="20.0 1.00001 112.0" rotation="0.0 1.0 0.0 8.74599e-006" scale="1.0 1.0 1.0"/>
+<transform position="20.0 1.00001 112.0" rotation="0.0 1.0 0.0 8.98441e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_pared_pared_half_a" sub_mesh="0" mat="pared"/>
 </render>
@@ -4417,7 +4416,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_ambos_pared_half_a_442.0" />
-<transform position="8.0 -7.99999 112.0" rotation="0.0 1.0 0.0 8.50757e-006" scale="1.0 1.0 1.0"/>
+<transform position="8.0 -7.99999 112.0" rotation="0.0 1.0 0.0 8.74599e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_ambos_pared_half_a" sub_mesh="0" mat="techo"/>
 <draw mesh="esc1_arqui_ambos_pared_half_a" sub_mesh="1" mat="suelo_basico"/>
@@ -4595,14 +4594,14 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_pared_pared_half_a_465.0" />
-<transform position="20.0 1.0 104.0" rotation="0.0 1.0 0.0 8.74599e-006" scale="1.0 1.0 1.0"/>
+<transform position="20.0 1.0 104.0" rotation="0.0 1.0 0.0 8.98441e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_pared_pared_half_a" sub_mesh="0" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 3.46501e-006" max="-2.0 8.0 4.0"/>
 <colliderMesh path="esc1_arqui_pared_pared_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" collisionTag = "Actor">
+	<entity tag = "level" collisionTag = "Level">
 <name name="eje_467.0" />
 <transform position="-9.60665 9.64525 9.17511" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
@@ -4612,7 +4611,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.04934" boxY="2.53954" boxZ="0.320854"/>
 <staticbody/>
 	</entity>
-	<entity tag = "actor" collisionTag = "Actor">
+	<entity  >
 <name name="tuerca_469.0" />
 <transform position="-9.62696 5.96809 9.17272" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
@@ -4763,7 +4762,7 @@
 <rigidbody density="500.0"  />
 <jointHinge actor1 = "esc1_puert_suelo_pared_4m_2m_a_284.0"  jointRelativePosition0="-1.86005 -0.807998 5.94116" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "escene_3_puerta_gating_1"  jointRelativePosition1="0.00298476 1.15239 0.00780773" jointRelativeRotation1="0.0 0.0 -0.707107 0.707107"  jointPosition="3.192 6.94116 34.14" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
-	<entity tag = "actor" collisionTag = "Actor">
+	<entity tag = "actor" >
 <name name="escene_3_grandmacrasher_01" />
 <transform position="-9.56188 4.03274 9.1467" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
@@ -4787,7 +4786,7 @@
 <zoneAABB/>
 	</entity>
 	<entity  >
-<name name="Box054" />
+<name name="escene_3_recast" />
 <transform position="-4.00241 -0.0207298 5.58466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-9.95102 -4.84886 -10.6112" max="9.95102 5.33374 10.6112"/>
 <recastAABB/>

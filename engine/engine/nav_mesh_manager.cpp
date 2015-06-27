@@ -238,7 +238,8 @@ void CNav_mesh_manager::registerRecastAABB(CHandle recastAABB){
 
 void CNav_mesh_manager::unregisterRecastAABB(CHandle recastAABB){
 	auto it = std::find(recastAABBs.begin(), recastAABBs.end(), recastAABB);
-	recastAABBs.erase(it);
+	if (it != recastAABBs.end())
+		recastAABBs.erase(it);
 }
 
 void CNav_mesh_manager::checkDistaceToEnemies(){
