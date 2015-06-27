@@ -42,7 +42,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
 				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-				float force_float = force;
+     			float force_float = force;
 				if (force_float >force_threshold)
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
@@ -115,52 +115,59 @@ PxFilterFlags FilterShader(
 	//Si la colision se produce entre dos entities descartadas entre si, se anula dicha colision.
 	//Si no es así, se hacen las comprobaciones pertinentes y se deja la colision
 
-	if (filterData0.word0 != FilterGroup::ePARTICLES){
-		if (filterData0.word1&filterData1.word0)
-			return PxFilterFlag::eSUPPRESS;
-		else if (filterData1.word0&filterData0.word1)
-			return PxFilterFlag::eSUPPRESS;
-		else{
-			//Colisiones entre actores (cajas) y enemigos
-			if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eENEMY)){
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}
-			else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::eACTOR)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}
-			else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eACTOR)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}
-			else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}
-			else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eLEVEL)){
-				//Colisiones entre actores (cajas) y el escenario
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}
-			else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::ePLAYER)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eENEMY)){
-				//Colisiones entre actores (cajas) y enemigos
-				pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
-				return PxFilterFlag::eDEFAULT;
-			}
+	if ((filterData1.word0 == FilterGroup::eNON_COLLISION)||(filterData0.word0 == FilterGroup::eNON_COLLISION))
+		return PxFilterFlag::eSUPPRESS;
+	else{
+
+		if (filterData0.word0 != FilterGroup::ePARTICLES){
+			if (filterData0.word1&filterData1.word0)
+				return PxFilterFlag::eSUPPRESS;
+			else if (filterData1.word0&filterData0.word1)
+				return PxFilterFlag::eSUPPRESS;
 			else{
-				return PxFilterFlag::eDEFAULT;
+				//Colisiones entre actores (cajas) y enemigos
+				if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eENEMY)){
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::eACTOR)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eACTOR)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eLEVEL)){
+					//Colisiones entre actores (cajas) y el escenario
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::eENEMY) && (filterData1.word0 == FilterGroup::ePLAYER)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::ePLAYER) && (filterData1.word0 == FilterGroup::eENEMY)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else{
+					return PxFilterFlag::eDEFAULT;
+				}
 			}
 		}
 	}
