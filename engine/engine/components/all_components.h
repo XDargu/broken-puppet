@@ -86,5 +86,6 @@ using namespace DirectX;
 #include "comp_particle_editor.h"
 #include "comp_anim_editor.h"
 #include "comp_golden_needle.h"
+#include "comp_golden_needle_item.h"
 
 #endif

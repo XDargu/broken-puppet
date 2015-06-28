@@ -166,6 +166,7 @@ void createManagers() {
 	getObjManager<TCompStaticBody>()->init(1024);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompGNLogic>()->init(32);
+	getObjManager<TCompGNItem>()->init(64);
 	getObjManager<TCompZoneAABB>()->init(32);
 	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
@@ -244,6 +245,7 @@ void initManagers() {
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
 	getObjManager<TCompGNLogic>()->initHandlers();
+	getObjManager<TCompGNItem>()->initHandlers();
 	getObjManager<TCompZoneAABB>()->initHandlers();
 	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
@@ -600,6 +602,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompGNLogic>()->update(elapsed);
+	getObjManager<TCompGNItem>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -1046,6 +1049,7 @@ void CApp::renderDebugEntities() {
 		TCompName* name = e->get<TCompName>();
 		TCompAABB* aabb = e->get<TCompAABB>();
 		TCompGNLogic* golden_needle = e->get<TCompGNLogic>();
+		TCompGNItem* golden_needle_item = e->get<TCompGNItem>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
