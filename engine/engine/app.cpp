@@ -344,9 +344,9 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	//loadScene("data/scenes/escene_1.xml");
+	loadScene("data/scenes/escene_1.xml");
 	//loadScene("data/scenes/escene_2.xml");
-	loadScene("data/scenes/escene_3.xml");
+	//loadScene("data/scenes/escene_3.xml");
 	//loadScene("data/scenes/escene_4.xml");
 	//loadScene("data/scenes/escene_5.xml");
 
@@ -435,9 +435,9 @@ void CApp::doFrame() {
 		// Update input
 		io.update(delta_secs);
 
-		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+		/*if (CIOStatus::get().becomesReleased(CIOStatus::E)){
 			pause = !pause;
-		}
+		}*/
 
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
@@ -997,17 +997,18 @@ void CApp::renderEntities() {
 				font.color = c_text->color;
 
 				XMVECTOR edges = font.measureString(c_text->text);
-				activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 				float x, y;
 				float offset = 15;
-				if (camera.getScreenCoords(t->position, &x, &y))
+				if (camera.getScreenCoords(t->position, &x, &y)) {
+					activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 					drawDialogBox(x, y, XMVectorGetZ(edges) + offset * 2, XMVectorGetW(edges) + offset * 2, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-				activateBlendConfig(BLEND_CFG_DEFAULT);
+					activateBlendConfig(BLEND_CFG_DEFAULT);
 
-				//font.print3D(t->position, c_text->text);
-				font.print(x + offset, y + offset, c_text->text);
-				font.size = old_size;
-				font.color = old_col;
+					//font.print3D(t->position, c_text->text);
+					font.print(x + offset, y + offset, c_text->text);
+					font.size = old_size;
+					font.color = old_col;
+				}
 			}
 		}
 	}
