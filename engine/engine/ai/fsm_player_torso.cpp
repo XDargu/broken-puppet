@@ -634,7 +634,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Cancel previous strings
 	// Simple cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
-
+		float time_prueba = io.getTimePressed(CIOStatus::CANCEL_STRING);
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f ){ //&& num_strings > 0) {
 			/*CHandle c_rope = strings.back();
 			strings.pop_back();
