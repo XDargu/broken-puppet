@@ -214,7 +214,7 @@ void PSGBuffer(
   , out float4 albedo : SV_Target0
   , out float4 normal : SV_Target1
   , out float4 acc_light : SV_Target2
-  , out float  depth : SV_Target3
+  , out float2  depth : SV_Target3
   , out float4 specular : SV_Target4
   , out float4 gloss : SV_Target5
 )
@@ -224,7 +224,8 @@ void PSGBuffer(
   albedo = txDiffuse.Sample(samWrapLinear, input.UV);
   specular = txSpecular.Sample(samWrapLinear, input.UV);
   gloss = txGloss.Sample(samWrapLinear, input.UV);
-
+  acc_light = float4(0, 0, 0, 0);
+  
   float3   in_normal = normalize(input.wNormal);
   float3   in_tangent = normalize(input.wTangent.xyz);
   float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;
@@ -252,14 +253,18 @@ void PSGBuffer(
   
   float  diffuse_amount2 = saturate(dot(in_normal, L));
 
-  depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+  depth.x = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+  depth.y = t_type.x;
+  if (t_type.x == 0.95 || t_type.x == 0.9) {
+	  //albedo = float4(1, 0, 0, 1);	  
+	  albedo.g = 1;
+  }
   //depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
 
   // 
   //acc_light = getShadowAt(input.wPos);
 
   
-  acc_light = float4(0, 0, 0, 0);
 	  
   //if (true)
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y)

@@ -118,6 +118,7 @@ TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
+TSilouetteStep silouette;
 TUnderwaterEffect underwater;
 TSSRRStep ssrr;
 
@@ -512,6 +513,8 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("silouette");
+		render_techniques_manager.reload("silouette_type");
 		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
@@ -720,7 +723,8 @@ void CApp::render() {
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
 	activateCamera(camera, 1);
-	ssrr.apply(rt_base);
+	silouette.apply(rt_base);
+	ssrr.apply(silouette.getOutput());
 	ssao.apply(ssrr.getOutput());
 	sharpen.apply(ssao.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
@@ -1285,6 +1289,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);
+	is_ok &= silouette.create("silouette", xres, yres, 1);
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");

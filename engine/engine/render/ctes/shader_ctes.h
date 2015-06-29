@@ -5,6 +5,7 @@
 
 cbuffer TCtesObject SHADER_REGISTER(b0)
 {
+  float4 t_type;
   matrix World;
   float4 Tint;
 };

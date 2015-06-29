@@ -6,6 +6,17 @@
 #include "cal3d/cal3d.h"
 #include "XMLParser.h"
 
+class CRagdollDef {
+public:
+	std::string               name;
+	std::string               xml_as_text;
+	bool load(const char* name);
+	void setName(const char *new_name) {
+		name = new_name;
+	}
+	const std::string& getName() const { return name; }
+};
+
 // Mas otras cosas que cal3d no tiene
 class CCoreRagdoll : public CXMLParser {
 	std::string               root_path;

@@ -332,6 +332,7 @@
     <ClInclude Include="render\shaders.h" />
     <ClInclude Include="render\shadows.h" />
     <ClInclude Include="render\sharpen_step.h" />
+    <ClInclude Include="render\silouette_step.h" />
     <ClInclude Include="render\ssao_step.h" />
     <ClInclude Include="render\ssrr_step.h" />
     <ClInclude Include="render\texture.h" />
@@ -597,6 +598,7 @@
     <ClCompile Include="render\render_utils.cpp" />
     <ClCompile Include="render\shaders.cpp" />
     <ClCompile Include="render\sharpen_step.cpp" />
+    <ClCompile Include="render\silouette_step.cpp" />
     <ClCompile Include="render\ssao_step.cpp" />
     <ClCompile Include="render\ssrr_step.cpp" />
     <ClCompile Include="render\texture.cpp" />

@@ -28,6 +28,8 @@ public:
 		return (TCompTransform*)m_transform;
 	}
 
+	PxRigidActor* getAttachedRigid() { return physx_rigidbody; }
+
 	void fixedUpdate(float elapsed);
 };
 

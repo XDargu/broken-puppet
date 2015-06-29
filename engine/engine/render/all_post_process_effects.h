@@ -8,5 +8,6 @@
 #include "ssao_step.h"
 #include "underwater_step.h"
 #include "ssrr_step.h"
+#include "silouette_step.h"
 
 #endif

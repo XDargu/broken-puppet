@@ -1,0 +1,6 @@
+<technique 
+	fx="silouette.fx"
+	vs="VSSilouette"
+	vs_decl="vdcl_position_uv"
+	ps="PSSilouette"
+	/>

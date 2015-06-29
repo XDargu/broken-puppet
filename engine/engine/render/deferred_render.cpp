@@ -28,7 +28,7 @@ bool CDeferredRender::create(int xres, int yres) {
 		return false;
 	if (!rt_gloss->create("rt_gloss", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
 		return false;
-	if (!rt_depth->create("rt_depth", xres, yres, DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN))
+	if (!rt_depth->create("rt_depth", xres, yres, DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN))
 		return false;
 	return true;
 }
@@ -54,7 +54,7 @@ void CDeferredRender::generateGBuffer(const CCamera* camera) {
 	rt_lights->clearColorBuffer(black);
 	rt_specular->clearColorBuffer(black);
 	rt_gloss->clearColorBuffer(black);
-	float clear_depth[4] = { 1.f, 1.f, 1.f, 1.f };
+	float clear_depth[4] = { 1.f, 0.f, 1.f, 1.f };
 	rt_depth->clearColorBuffer(clear_depth);
 
 	//texture_manager.getByName("Zthe_light")->activate(6);

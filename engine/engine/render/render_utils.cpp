@@ -1126,6 +1126,11 @@ void setWorldMatrix(XMMATRIX world) {
   ctes_object.uploadToGPU();
 }
 
+void setTransformType(float type) {
+	ctes_object.get()->t_type = XMVectorSet(type, 0, 0, 0);
+	ctes_object.uploadToGPU();
+}
+
 void setTint(XMVECTOR tint) {
 	ctes_object.get()->Tint = tint;
 	ctes_object.uploadToGPU();

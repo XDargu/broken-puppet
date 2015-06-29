@@ -5,8 +5,39 @@
 #include "entity_manager.h"
 #include "rope_manager.h"
 #include "physics_manager.h"
+#include "comp_needle.h"
 
 TCompRope::~TCompRope() {
+	CHandle valid_trans_1 = transform_1_aux.isValid() ? transform_1_aux : transform_1;
+	CHandle valid_trans_2 = transform_2_aux.isValid() ? transform_2_aux : transform_2;
+
+	if (valid_trans_1.isValid()) {
+
+		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
+		if (needle->getAttachedRigid() != nullptr) {
+			CHandle attached_entity(needle->getAttachedRigid()->userData);
+			TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
+
+			if (attached_transform->getType() == 95)
+				attached_transform->setType(1);
+			if (attached_transform->getType() == 90)
+				attached_transform->setType(0.8f);
+		}
+	}
+
+	// Update the second pos
+	if (valid_trans_2.isValid()) {
+		TCompNeedle* needle = ((CEntity*)valid_trans_2.getOwner())->get<TCompNeedle>();
+		if (needle->getAttachedRigid() != nullptr) {
+			CHandle attached_entity(needle->getAttachedRigid()->userData);
+			TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
+
+			if (attached_transform->getType() == 95)
+				attached_transform->setType(1);
+			if (attached_transform->getType() == 90)
+				attached_transform->setType(0.8f);
+		}
+	}
 }
 
 void TCompRope::setPositions(CHandle the_transform_1, XMVECTOR the_pos_2) {
@@ -52,6 +83,17 @@ void TCompRope::fixedUpdate(float elapsed) {
 
 		pos_1 = pos_1 + normal_dir * speed * elapsed;
 
+		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
+		if (needle->getAttachedRigid() != nullptr) {
+			CHandle attached_entity(needle->getAttachedRigid()->userData);
+			TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
+
+			if (attached_transform->getType() == 80)
+				attached_transform->setType(0.9f);
+			if (attached_transform->getType() == 100)
+				attached_transform->setType(0.95f);
+		}
+
 		//pos_1 = trans_1->position;
 	}
 
@@ -65,6 +107,17 @@ void TCompRope::fixedUpdate(float elapsed) {
 		float speed = min(dist / elapsed, 50);
 
 		pos_2 = pos_2 + normal_dir * speed * elapsed;
+
+		TCompNeedle* needle = ((CEntity*)valid_trans_2.getOwner())->get<TCompNeedle>();
+		if (needle->getAttachedRigid() != nullptr) {
+			CHandle attached_entity(needle->getAttachedRigid()->userData);
+			TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
+
+			if (attached_transform->getType() == 80)
+				attached_transform->setType(0.9f);
+			if (attached_transform->getType() == 100)
+				attached_transform->setType(0.95f);
+		}
 
 		//pos_2 = trans_2->position;
 	}
