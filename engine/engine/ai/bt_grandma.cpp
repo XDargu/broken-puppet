@@ -1352,9 +1352,10 @@ void bt_grandma::update(float elapsed){
 			}
 			}*/
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
-
-		if (!m_ragdoll->isRagdollActive()) {
-			((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+		if (m_ragdoll) {
+			if (!m_ragdoll->isRagdollActive()) {
+				((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+			}
 		}
 		this->recalc(elapsed);
 	}else{

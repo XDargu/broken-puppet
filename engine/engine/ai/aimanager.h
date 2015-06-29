@@ -21,6 +21,7 @@ public:
 	void changeEnemyRol(aicontroller* enemy);
 	void recastAABBActivate(int ind);
 	void recastAABBDesactivate(int ind);
+	void clear();
 private:
 	unsigned int last_id;
 	std::vector<aicontroller*> attackers_rol;

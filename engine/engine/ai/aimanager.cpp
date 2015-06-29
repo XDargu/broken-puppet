@@ -261,3 +261,9 @@ void aimanager::recastAABBDesactivate(int ind){
 		}
 	}
 }
+
+void aimanager::clear(){
+	attackers_rol.clear();
+	taunters_rol.clear();
+	bots.clear();
+}

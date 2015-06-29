@@ -15,79 +15,78 @@ clearCoroutines( )
 -------------------------- MS3 ---------------------------
 
 ----------------------------------------------------------
-------- Escene 1 ------- Escene 1 ------- Escene 1 -------
+------- scene 1 ------- scene 1 ------- scene 1 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_escene_1()
-
-	local crasher1 = logicManager:getPrismaticJoint("escene_1_grandmacrasher_01");
+function onSceneLoad_scene_1()
+	local crasher1 = logicManager:getPrismaticJoint("scene_1_grandmacrasher_01");
 	crasher1:setLinearLimit(0.1, 10000000, 10000000);
-	local crasher2 = logicManager:getPrismaticJoint("escene_1_grandmacrasher_02");
+	local crasher2 = logicManager:getPrismaticJoint("scene_1_grandmacrasher_02");
 	crasher2:setLinearLimit(0.1, 10000000, 10000000);
 
-	local m_door_L = logicManager:getHingeJoint("escene_1_door_L");
-	m_door_L:setMotor(-1.55, 20000);
+	local m_door_L = logicManager:getHingeJoint("scene_1_door_L");
+	m_door_L:setMotor(-1.55, 2000000);
 
-	local m_door_R = logicManager:getHingeJoint("escene_1_door_R");
-	m_door_R:setMotor(1.55, 20000);
+	local m_door_R = logicManager:getHingeJoint("scene_1_door_R");
+	m_door_R:setMotor(1.55, 2000000);
 
 		-- PUZZLE ATREZZO
 
-	function onSwitchPressed_escene_1_push_int(who)
+	function onSwitchPressed_scene_1_push_int(who)
 
-		print(tostring(who) .. "Interruptor pulsado escene_1_door_switch");
-		-- local m_door_L = logicManager:getHingeJoint("escene_1_door_L");
-		m_door_L:setMotor(1.55, 20000);
+		print(tostring(who) .. "Interruptor pulsado scene_1_door_switch");
+		-- local m_door_L = logicManager:getHingeJoint("scene_1_door_L");
+		m_door_L:setMotor(1.55, 2000000);
 
-		-- local m_door_R = logicManager:getHingeJoint("escene_1_door_R");
-		m_door_R:setMotor(-1.55, 20000);
+		-- local m_door_R = logicManager:getHingeJoint("scene_1_door_R");
+		m_door_R:setMotor(-1.55, 2000000);
 
 	end
 
 	
-	function onSwitchReleased_escene_1_push_int(who)
+	function onSwitchReleased_scene_1_push_int(who)
 
-		print(tostring(who) .. "Interruptor liberado escene_1_door_switch");
-		-- local m_door_L = logicManager:getHingeJoint("escene_1_door_L");
-		m_door_L:setMotor(-1.55, 20000);
+		print(tostring(who) .. "Interruptor liberado scene_1_door_switch");
+		-- local m_door_L = logicManager:getHingeJoint("scene_1_door_L");
+		m_door_L:setMotor(-1.55, 2000000);
 
-		-- local m_door_R = logicManager:getHingeJoint("escene_1_door_R");
-		m_door_R:setMotor(1.55, 20000);
+		-- local m_door_R = logicManager:getHingeJoint("scene_1_door_R");
+		m_door_R:setMotor(1.55, 2000000);
 
 	end
 
 	-- PUZZLE MACHACABUELAS
 
-	function onTimerEnd_escene_1_grandma_crasher01Restore()
-		local crasher = logicManager:getPrismaticJoint("escene_1_grandmacrasher_01")
+	function onTimerEnd_scene_1_grandma_crasher01Restore()
+		local crasher = logicManager:getPrismaticJoint("scene_1_grandmacrasher_01")
 		crasher:setLinearLimit(0.1, 10000000, 10000000)
 		print("Timer ends")
 	end
 
 
-	function onTriggerEnter_escene_1_grandmacrasher_01_trigger(who)
+	function onTriggerEnter_scene_1_grandmacrasher_01_trigger(who)
 		print(tostring(who) .. " ha entrado en el trigger")
-		local crasher = logicManager:getPrismaticJoint("escene_1_grandmacrasher_01")
+		local crasher = logicManager:getPrismaticJoint("scene_1_grandmacrasher_01")
 		crasher:setLinearLimit(1000, 0, 0)
 
-		logicManager:setTimer("escene_1_grandma_crasher01Restore", 3)
+		logicManager:setTimer("scene_1_grandma_crasher01Restore", 3)
 	end
 
 	
-	function onTimerEnd_escene_1_grandma_crasher02Restore()
-		local crasher = logicManager:getPrismaticJoint("escene_1_grandmacrasher_02")
+	function onTimerEnd_scene_1_grandma_crasher02Restore()
+		local crasher = logicManager:getPrismaticJoint("scene_1_grandmacrasher_02")
 		crasher:setLinearLimit(0.1, 10000000, 10000000)
 		print("Timer ends")
 	end
 
 
-	function onTriggerEnter_escene_1_grandmacrasher_02_trigger(who)
+	function onTriggerEnter_scene_1_grandmacrasher_02_trigger(who)
 		print(tostring(who) .. " ha entrado en el trigger")
-		local crasher = logicManager:getPrismaticJoint("escene_1_grandmacrasher_02")
+		local crasher = logicManager:getPrismaticJoint("scene_1_grandmacrasher_02")
 		crasher:setLinearLimit(1000, 0, 0)
 
-		logicManager:setTimer("escene_1_grandma_crasher02Restore", 3)
+		logicManager:setTimer("scene_1_grandma_crasher02Restore", 3)
 	end
 
 
@@ -95,32 +94,32 @@ end
 
 ---
 ----------------------------------------------------------
-function onTriggerEnter_trigger_goto_escene_2(who)
+function onTriggerEnter_trigger_goto_scene_2(who)
 	if who == "Player" then	
 		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_2");
-		logicManager:loadScene("data/scenes/escene_2.xml");
+		logicManager:loadScene("data/scenes/scene_2.xml");
 	end
 end
 ----------------------------------------------------------
-------- Escene 2 ------- Escene 2 ------- Escene 2 -------
+------- scene 2 ------- scene 2 ------- scene 2 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_escene_2()
+function onSceneLoad_scene_2()
 
-	function onSwitchPressed_escene_2_int_push_false_way(who)
+	function onSwitchPressed_scene_2_int_push_false_way(who)
 
-		print(tostring(who) .. " Interruptor escene_2_int_push_false_way pressed");
-		local escene_2_int_push_false_way_platform = logicManager:getObject("escene_2_int_push_false_way_platform");
-		escene_2_int_push_false_way_platform:move(Vector(86.0, 4.88892, 8.0), 1);
+		print(tostring(who) .. " Interruptor scene_2_int_push_false_way pressed");
+		local scene_2_int_push_false_way_platform = logicManager:getObject("scene_2_int_push_false_way_platform");
+		scene_2_int_push_false_way_platform:move(Vector(86.0, 4.88892, 8.0), 1);
 
 	end
 
-	function onSwitchReleased_escene_2_int_push_false_way(who)
+	function onSwitchReleased_scene_2_int_push_false_way(who)
 
-		print(tostring(who) .. " Interruptor escene_2_int_push_false_way released");
-		local escene_2_int_push_false_way_platform = logicManager:getObject("escene_2_int_push_false_way_platform");
-		escene_2_int_push_false_way_platform:move(Vector(86.0, 8.88892, 8.0), 1);
+		print(tostring(who) .. " Interruptor scene_2_int_push_false_way released");
+		local scene_2_int_push_false_way_platform = logicManager:getObject("scene_2_int_push_false_way_platform");
+		scene_2_int_push_false_way_platform:move(Vector(86.0, 8.88892, 8.0), 1);
 
 	end
 
@@ -129,62 +128,62 @@ end
 
 ---
 ----------------------------------------------------------
-function onTriggerEnter_trigger_goto_escene_3(who)
+function onTriggerEnter_trigger_goto_scene_3(who)
 	if who == "Player" then	
 		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_3");
-		logicManager:loadScene("data/scenes/escene_3.xml");
+		logicManager:loadScene("data/scenes/scene_3.xml");
 	end
 end
 ----------------------------------------------------------
-------- Escene 3 ------- Escene 3 ------- Escene 3 -------
+------- scene 3 ------- scene 3 ------- scene 3 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_escene_3()
+function onSceneLoad_scene_3()
 
-	local crasher1 = logicManager:getPrismaticJoint("escene_3_grandmacrasher_01");
+	local crasher1 = logicManager:getPrismaticJoint("scene_3_grandmacrasher_01");
 	crasher1:setLinearLimit(0.1, 10000000, 10000000);
 	--- Sala Presentacion Abuelas---
 
-	function onSwitchPressed_escene_3_int_pull_grandma(who)
+	function onSwitchPressed_scene_3_int_pull_grandma(who)
 
-		print(tostring(who) .. " Interruptor escene_3_int_pull_grandma pressed");
-		local platform = logicManager:getObject("escene_3_int_pull_grandma_platform");
+		print(tostring(who) .. " Interruptor scene_3_int_pull_grandma pressed");
+		local platform = logicManager:getObject("scene_3_int_pull_grandma_platform");
 		platform:move(Vector(-2.07411, 1.0, 19.8556), 6);
 
 	end
 
-	function onSwitchReleased_escene_3_int_pull_grandma(who)
+	function onSwitchReleased_scene_3_int_pull_grandma(who)
 
-		print(tostring(who) .. " Interruptor escene_3_int_pull_grandma released");
-		local platform = logicManager:getObject("escene_3_int_pull_grandma_platform");
+		print(tostring(who) .. " Interruptor scene_3_int_pull_grandma released");
+		local platform = logicManager:getObject("scene_3_int_pull_grandma_platform");
 		platform:move(Vector(-2.07411, -6.06088, 19.8556), 6);
 
 	end
 
-	function onTimerEnd_escene_3_grandma_crasher01Restore()
-		local crasher = logicManager:getPrismaticJoint("escene_3_grandmacrasher_01")
+	function onTimerEnd_scene_3_grandma_crasher01Restore()
+		local crasher = logicManager:getPrismaticJoint("scene_3_grandmacrasher_01")
 		crasher:setLinearLimit(0.1, 10000000, 10000000)
 		print("Timer ends")
 	end
 
 
-	function onTriggerEnter_escene_3_grandmacrasher_01_trigger(who)
+	function onTriggerEnter_scene_3_grandmacrasher_01_trigger(who)
 		print(tostring(who) .. " ha entrado en el trigger")
-		local crasher = logicManager:getPrismaticJoint("escene_3_grandmacrasher_01")
+		local crasher = logicManager:getPrismaticJoint("scene_3_grandmacrasher_01")
 		crasher:setLinearLimit(1000, 0, 0)
 
-		logicManager:setTimer("escene_3_grandma_crasher01Restore", 3)
+		logicManager:setTimer("scene_3_grandma_crasher01Restore", 3)
 	end
 
 
 	--- Sala Presentacion Agua ---
 
-	function onTriggerExit_escene_3_trigger_pipedown(who)
+	function onTriggerExit_scene_3_trigger_pipedown(who)
 		print(tostring(who) .. " ha dejado en el trigger de pipedown");
 	
-		if who == "escene_3_pipedown_top" then
-			local m_door = logicManager:getHingeJoint("escene_3_puerta_gating_1");
+		if who == "scene_3_pipedown_top" then
+			local m_door = logicManager:getHingeJoint("scene_3_puerta_gating_1");
 			m_door:setMotor(1.55, 20000);
 			logicManager:changeWaterLevel(-1,0.25);
 		end
@@ -193,27 +192,27 @@ function onSceneLoad_escene_3()
 
 	--- Sala Puzle Agua ---
 
-	function onTriggerExit_escene_3_trigger_pipeout(who)
+	function onTriggerExit_scene_3_trigger_pipeout(who)
 		print(tostring(who) .. " ha dejado en el trigger de pipeout");
 	
-		if who == "escene_3_pipeout_top" then
+		if who == "scene_3_pipeout_top" then
 			logicManager:changeWaterLevel(-11.1,0.25);
 		end
 	
 	end
 
-	function onSwitchPressed_escene_3_int_push_final_door(who)
+	function onSwitchPressed_scene_3_int_push_final_door(who)
 
-		print(tostring(who) .. " Interruptor escene_3_int_push_final_door pressed");
-		local platform = logicManager:getObject("escene_3_final_door");
+		print(tostring(who) .. " Interruptor scene_3_int_push_final_door pressed");
+		local platform = logicManager:getObject("scene_3_final_door");
 		platform:move(Vector(-21.466, 5.55807, 113.98), 6);
 
 	end
 
-	function onSwitchReleased_escene_3_int_push_final_door(who)
+	function onSwitchReleased_scene_3_int_push_final_door(who)
 
-		print(tostring(who) .. " Interruptor escene_3_int_push_final_doora released");
-		local platform = logicManager:getObject("escene_3_final_door");
+		print(tostring(who) .. " Interruptor scene_3_int_push_final_doora released");
+		local platform = logicManager:getObject("scene_3_final_door");
 		platform:move(Vector(-21.466, 1.55807, 113.98), 6);
 
 	end
@@ -223,18 +222,18 @@ end
 
 ----
 ----------------------------------------------------------
-function onTriggerEnter_trigger_goto_escene_4(who)
+function onTriggerEnter_trigger_goto_scene_4(who)
 	if who == "Player" then	
 		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_4");
-		logicManager:loadScene("data/scenes/escene_4.xml");
+		logicManager:loadScene("data/scenes/scene_4.xml");
 	end
 end
 ----------------------------------------------------------
-------- Escene 4 ------- Escene 4 ------- Escene 4 -------
+------- scene 4 ------- scene 4 ------- scene 4 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_escene_4()
+function onSceneLoad_scene_4()
 
 
 	function onSwitchPressed_interruptor_pulsar_plataforma_01(who)
@@ -275,25 +274,25 @@ end
 
 ----
 ----------------------------------------------------------
-function onTriggerEnter_trigger_goto_escene_5(who)
+function onTriggerEnter_trigger_goto_scene_5(who)
 	if who == "Player" then	
 		print(tostring(who) .. " ha entrado en el trigger de cambio a escena_5");
-		logicManager:loadScene("data/scenes/escene_5.xml");
+		logicManager:loadScene("data/scenes/scene_5.xml");
 	end
 end
 
 
 ----------------------------------------------------------
-------- Escene 5 ------- Escene 5 ------- Escene 5 -------
+------- scene 5 ------- scene 5 ------- scene 5 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_escene_5()
+function onSceneLoad_scene_5()
 
-	local escene_5_clockround = false;
+	local scene_5_clockround = false;
 
-	local m_gear_r = logicManager:getHingeJoint("escene_5_main_gear_part_R");
-	local m_gear_l = logicManager:getHingeJoint("escene_5_main_gear_part_L");
+	local m_gear_r = logicManager:getHingeJoint("scene_5_main_gear_part_R");
+	local m_gear_l = logicManager:getHingeJoint("scene_5_main_gear_part_L");
 
 	m_gear_r:setMotor(-1, 10000);
 	m_gear_l:setMotor(1, 10000);
@@ -361,20 +360,20 @@ function onSceneLoad_escene_5()
 
 	function onTriggerEnter_clock_round_trigger(who)
 		print(tostring(who) .. " ha entrado en el trigger clock_round_trigger");
-		if who == "escene_5_minutero" then	
+		if who == "scene_5_minutero" then	
 			
-			escene_5_clockround = true;
+			scene_5_clockround = true;
 
 		end
 	end
 
-	function onTriggerEnter_escene_5_clock_trigger(who)
-		print(tostring(who) .. " ha entrado en el trigger escene_5_clock_trigger");
-		if who == "escene_5_minutero" then	
-			if escene_5_clockround then
+	function onTriggerEnter_scene_5_clock_trigger(who)
+		print(tostring(who) .. " ha entrado en el trigger scene_5_clock_trigger");
+		if who == "scene_5_minutero" then	
+			if scene_5_clockround then
 
 				print("Clock Blocked!");
-				m_minutero = logicManager:getHingeJoint("escene_5_minutero");
+				m_minutero = logicManager:getHingeJoint("scene_5_minutero");
 				m_minutero:setLimit(10);
 		
 				m_atrezzo01 = logicManager:getHingeJoint("atrezzo_plataforma01");
@@ -384,18 +383,18 @@ function onSceneLoad_escene_5()
 				m_atrezzo03 = logicManager:getHingeJoint("atrezzo_plataforma03");
 				m_atrezzo03:setMotor(10, 1000);
 
-				escene_5_clockround = false;
+				scene_5_clockround = false;
 			end
 		end
 	end
 
 
-	function onSwitchPressed_escene_5_clock_switch(who)
+	function onSwitchPressed_scene_5_clock_switch(who)
 
-		print(tostring(who) .. "Interruptor pulsado escene_5_clock_switch");
-		m_minutero = logicManager:getHingeJoint("escene_5_minutero");
+		print(tostring(who) .. "Interruptor pulsado scene_5_clock_switch");
+		m_minutero = logicManager:getHingeJoint("scene_5_minutero");
 		m_minutero:setLimit(0);
-		m_minutero:setMotor(-1.55, 20000);
+		m_minutero:setMotor(-1.55, 2000);
 
 		m_atrezzo01 = logicManager:getHingeJoint("atrezzo_plataforma01");
 		m_atrezzo01:setMotor(-1000, 100000);

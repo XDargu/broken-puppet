@@ -121,7 +121,7 @@ void CLogicManager::update(float elapsed) {
 			CHandle rigid = ((CEntity*)madera)->get<TCompRigidBody>();
 			if (rigid.isValid()){
 				PxTransform aux_pos = ((TCompRigidBody*)rigid)->rigidBody->getGlobalPose();
-				aux_pos.p.y = XMVectorGetY(water_t->position);				
+				aux_pos.p.y = XMVectorGetY(water_t->position);
 				((TCompRigidBody*)rigid)->rigidBody->setKinematicTarget(aux_pos);
 			}
 		}

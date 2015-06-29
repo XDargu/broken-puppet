@@ -21,6 +21,7 @@ public:
 	//std::vector<TCompNeedle*> needleInRange(XMVECTOR pos, float radius);
 	void removeNeedle(CHandle n);
 	static Citem_manager& get();
+	void clear();
 };
 #endif
 

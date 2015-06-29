@@ -182,6 +182,10 @@ CHandle Citem_manager::getRopeAsociated(CHandle grandma){
 	return CHandle();
 }
 
+void Citem_manager::clear(){
+	needles.clear();
+}
+
 /*std::vector<TCompNeedle*> Citem_manager::needleInRange(XMVECTOR pos, float radius){
 	std::vector<TCompNeedle*> needlesNear;
 	for (auto & element : needles) {

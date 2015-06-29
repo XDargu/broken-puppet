@@ -1,6 +1,7 @@
 <scene>
 	<entity tag = "player" prefab="Player">
 <transform position="-6.856 1.30879 0.248499" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<ragdoll name="prota"/>
 	</entity>
 	<entity  prefab="PlayerPivot">
 <transform position="-6.856 1.30879 0.248499" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
@@ -32,30 +33,30 @@
 <pointLight radius="200.0" intensity="0.66" color="0.470588 0.968628 0.980392 1"/>
 	</entity>
 	<entity tag = "actor" >
-<name name="escene_2_plataforma_breakable_10.0" />
+<name name="scene_2_plataforma_breakable_10.0" />
 <transform position="98.7924 8.23 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-1.5 -0.23 -1.5" max="1.5 0.23 1.5"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.5" boxY="0.23" boxZ="1.5"/>
 <rigidbody density="10.0"  />
 	</entity>
 	<entity tag = "actor" >
-<name name="escene_2_plataforma_breakable_11.0" />
+<name name="scene_2_plataforma_breakable_11.0" />
 <transform position="93.0 8.23 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="escene_2_plataforma_breakable" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="scene_2_plataforma_breakable" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-1.5 -0.23 -1.5" max="1.5 0.23 1.5"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.5" boxY="0.23" boxZ="1.5"/>
@@ -2447,7 +2448,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_techo_pared_a_252.0" />
-<transform position="100.0 8.0 30.0" rotation="0.0 1.0 0.0 1.33952e-005" scale="1.0 1.0 1.0"/>
+<transform position="100.0 8.0 30.0" rotation="0.0 1.0 0.0 1.36336e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_arqui_techo_pared_a" sub_mesh="1" mat="techo"/>
@@ -3249,7 +3250,7 @@
 	</entity>
 	<entity tag = "actor" >
 <name name="Tablon2_332.0" />
-<transform position="25.7261 2.5188 7.9202" rotation="-0.0249227 -0.0249228 -0.706667 0.706668" scale="1.0 1.0 1.0"/>
+<transform position="25.7261 2.5188 7.9202" rotation="-0.0249228 -0.0249228 -0.706667 0.706668" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="Tablon2" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="Tablon2" sub_mesh="1" mat="Standardmaterial"/>
@@ -3321,20 +3322,20 @@
 <colliderMesh path="esc1_arqui_ambos_ambos_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "actor" >
-<name name="Box009_339.0" />
+<name name="scene_2_puerta_339.0" />
 <transform position="16.0199 1.50334 -4.85547" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="Box009" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="Box009" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="Box009" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="Box009" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="Box009" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="Box009" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="scene_2_puerta" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="scene_2_puerta" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="scene_2_puerta" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="scene_2_puerta" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="scene_2_puerta" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="scene_2_puerta" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-0.95 -1.45 -0.05" max="0.95 1.45 0.05"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.95" boxY="1.45" boxZ="0.05"/>
 <rigidbody density="500.0"  />
-<jointHinge actor1 = "esc1_puert_pared_pared_0m_1m_a_284.0"  jointRelativePosition0="-3.14453 -2.97699 1.50334" jointRelativeRotation0="0.0 0.0 0.707107 0.707107" actor2 = "Box009_339.0"  jointRelativePosition1="0.957121 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 0.0"  jointPosition="16.977 1.50334 -4.85547" jointRotation="0.0 1.0 0.0 0.0" linearPosition="100.0" linearRestitution="0.0" swingAngle="100.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+<jointHinge actor1 = "esc1_puert_pared_pared_0m_1m_a_284.0"  jointRelativePosition0="-3.14453 -2.97699 1.50334" jointRelativeRotation0="0.0 0.0 0.707107 0.707107" actor2 = "scene_2_puerta_339.0"  jointRelativePosition1="0.957121 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 0.0"  jointPosition="16.977 1.50334 -4.85547" jointRotation="0.0 1.0 0.0 0.0" linearPosition="100.0" linearRestitution="0.0" swingAngle="100.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 	<entity tag = "actor" >
 <name name="Pasarela_341.0" />
@@ -3379,146 +3380,26 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="5.37082" boxY="3.7949" boxZ="2.99581"/>
 <staticbody/>
 	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_346.0" />
-<transform position="45.8154 1.55721 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_347.0" />
-<transform position="43.4454 1.55721 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_348.0" />
-<transform position="41.0754 1.55721 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_349.0" />
-<transform position="38.7054 3.01542 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_350.0" />
-<transform position="43.4454 3.01542 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_351.0" />
-<transform position="45.8154 3.01542 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_352.0" />
-<transform position="38.7054 4.47363 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_353.0" />
-<transform position="41.0754 4.47363 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_354.0" />
-<transform position="45.8154 4.47363 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_355.0" />
-<transform position="38.7054 5.93183 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_356.0" />
-<transform position="41.0754 5.93183 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
-<staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="cajon_cajonera_357.0" />
-<transform position="43.4454 5.93183 14.5783" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
-<render>
-<draw mesh="cajon_cajonera" sub_mesh="0" mat="cajon_cajonera"/>
-</render>
-<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
-<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.80023"/>
-<staticbody/>
-	</entity>
 	<entity tag = "actor" collisionTag = "Level">
-<name name="cajon_cajonera001_358.0" />
+<name name="scene_2_cajonera_cajon_346.0" />
 <transform position="38.6953 1.54976 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="cajon_cajonera001" sub_mesh="0" mat="cajon_cajonera"/>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
 </render>
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
-<name name="tope_cajon_359.0" />
+<name name="tope_cajon_347.0" />
 <transform position="38.7415 1.45464 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
 <staticbody/>
-<jointPrismatic actor1 = "tope_cajon_359.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera001_358.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.6953 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_347.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_346.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.6953 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
-<name name="tope_cajon_361.0" />
+<name name="tope_cajon_349.0" />
 <transform position="41.1175 2.91785 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="tope_cajon" sub_mesh="0" mat="Standardmaterial"/>
@@ -3533,18 +3414,18 @@
 <staticbody/>
 	</entity>
 	<entity tag = "actor" collisionTag = "Level">
-<name name="cajon_cajonera002_363.0" />
+<name name="scene_2_cajonera_cajon_351.0" />
 <transform position="41.0713 3.01297 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="cajon_cajonera002" sub_mesh="0" mat="cajon_cajonera"/>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
 </render>
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
-<jointPrismatic actor1 = "tope_cajon_361.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera002_363.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.0713 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_349.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_351.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.0713 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
-<name name="tope_cajon_364.0" />
+<name name="tope_cajon_352.0" />
 <transform position="43.4797 4.40123 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="tope_cajon" sub_mesh="0" mat="Standardmaterial"/>
@@ -3559,18 +3440,18 @@
 <staticbody/>
 	</entity>
 	<entity tag = "actor" collisionTag = "Level">
-<name name="cajon_cajonera003_366.0" />
+<name name="scene_2_cajonera_cajon_354.0" />
 <transform position="43.4335 4.49635 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="cajon_cajonera003" sub_mesh="0" mat="cajon_cajonera"/>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
 </render>
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
-<jointPrismatic actor1 = "tope_cajon_364.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera003_366.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4335 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_352.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_354.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4335 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
-<name name="tope_cajon_367.0" />
+<name name="tope_cajon_355.0" />
 <transform position="45.8755 5.8387 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="tope_cajon" sub_mesh="0" mat="Standardmaterial"/>
@@ -3585,18 +3466,18 @@
 <staticbody/>
 	</entity>
 	<entity tag = "actor" collisionTag = "Level">
-<name name="cajon_cajonera004_369.0" />
+<name name="scene_2_cajonera_cajon_357.0" />
 <transform position="45.8293 5.93382 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="cajon_cajonera004" sub_mesh="0" mat="cajon_cajonera"/>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
 </render>
 <aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
 <rigidbody density="850.34"  />
-<jointPrismatic actor1 = "tope_cajon_367.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "cajon_cajonera004_369.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.8293 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+<jointPrismatic actor1 = "tope_cajon_355.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_357.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.8293 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="interruptor_tirar_base_375.0" />
+<name name="interruptor_tirar_base_363.0" />
 <transform position="73.9985 9.72908 7.98695" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="interruptor_tirar_base" sub_mesh="0" mat="InterruptorTirar_mat"/>
@@ -3605,7 +3486,7 @@
 <colliderMesh path="interruptor_tirar_base" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Actor">
-<name name="interruptor_tirar_tope_376.0" />
+<name name="interruptor_tirar_tope_364.0" />
 <transform position="73.9701 7.97882 8.00712" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="interruptor_tirar_tope" sub_mesh="0" mat="Standardmaterial"/>
@@ -3620,7 +3501,7 @@
 <staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="Box010_378.0" />
+<name name="Box010_366.0" />
 <transform position="88.8656 7.92884 31.9054" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="Box010" sub_mesh="0" mat="Standardmaterial"/>
@@ -3633,10 +3514,10 @@
 <aabb min="-0.25 0.0 -0.25" max="0.25 0.5 0.25"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.25" boxY="0.25" boxZ="0.25"/>
 <staticbody/>
-<jointFixed actor1 = "Box010_378.0" actor2 = "escene_2_plataforma_breakable_11.0"  jointPosition="93.0 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
+<jointFixed actor1 = "Box010_366.0" actor2 = "scene_2_plataforma_breakable_11.0"  jointPosition="93.0 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="Box011_380.0" />
+<name name="Box011_368.0" />
 <transform position="104.437 7.92884 31.9054" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="Box011" sub_mesh="0" mat="Standardmaterial"/>
@@ -3649,10 +3530,10 @@
 <aabb min="-0.25 0.0 -0.25" max="0.25 0.5 0.25"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.25" boxY="0.25" boxZ="0.25"/>
 <staticbody/>
-<jointFixed actor1 = "Box011_380.0" actor2 = "escene_2_plataforma_breakable_10.0"  jointPosition="98.7924 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
+<jointFixed actor1 = "Box011_368.0" actor2 = "scene_2_plataforma_breakable_10.0"  jointPosition="98.7924 8.0 32.0" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="700.0" maxTorqueForce="700.0" />
 	</entity>
 	<entity  >
-<name name="escene_2_nail_383.0" />
+<name name="escene_2_nail_371.0" />
 <transform position="25.512 2.75552 11.0365" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
@@ -3665,7 +3546,7 @@
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
 	<entity  >
-<name name="escene_2_nail_384.0" />
+<name name="escene_2_nail_372.0" />
 <transform position="25.512 3.55736 6.01724" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
@@ -3678,7 +3559,7 @@
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
 	<entity  >
-<name name="escene_2_nail_385.0" />
+<name name="escene_2_nail_373.0" />
 <transform position="25.512 0.928921 4.95483" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
@@ -3691,7 +3572,7 @@
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
 	<entity  >
-<name name="escene_2_nail_386.0" />
+<name name="escene_2_nail_374.0" />
 <transform position="25.7983 0.257057 11.99" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="escene_2_nail" sub_mesh="0" mat="Standardmaterial"/>
@@ -3703,46 +3584,334 @@
 </render>
 <aabb min="-0.510587 0.0 -0.047781" max="0.510587 0.0827698 0.047781"/>
 	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_380.0" />
+<transform position="43.4385 5.93382 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon001_381.0" />
+<transform position="43.4847 5.8387 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon001" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon001" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon001" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon001" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon001" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon001" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+<jointPrismatic actor1 = "tope_cajon001_381.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_380.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4385 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_383.0" />
+<transform position="41.0815 5.93382 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon002_384.0" />
+<transform position="41.1277 5.8387 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon002" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon002" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon002" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon002" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon002" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon002" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+<jointPrismatic actor1 = "tope_cajon002_384.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_383.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.0815 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_386.0" />
+<transform position="38.7261 5.93382 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon003_387.0" />
+<transform position="38.7723 5.8387 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon003" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon003" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon003" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon003" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon003" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon003" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+<jointPrismatic actor1 = "tope_cajon003_387.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_386.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.7261 5.93382 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon004_388.0" />
+<transform position="41.1112 4.40123 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon004" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon004" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon004" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon004" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon004" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon004" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_390.0" />
+<transform position="41.065 4.49635 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon004_388.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_390.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.065 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon005_391.0" />
+<transform position="38.768 4.40123 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon005" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon005" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon005" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon005" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon005" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon005" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_393.0" />
+<transform position="38.7218 4.49635 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon005_391.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_393.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.7218 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon006_394.0" />
+<transform position="45.888 4.40123 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon006" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon006" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon006" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon006" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon006" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon006" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_395.0" />
+<transform position="45.8418 4.49635 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon006_394.0"  jointRelativePosition0="-0.0462036 3.04492 0.09512" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_395.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.8418 4.49635 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon007_397.0" />
+<transform position="43.4558 2.91785 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon007" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon007" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon007" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon007" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon007" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon007" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_399.0" />
+<transform position="43.4096 3.01297 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon007_397.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_399.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4096 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon008_400.0" />
+<transform position="45.8522 2.91785 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon008" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon008" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon008" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon008" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon008" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon008" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_402.0" />
+<transform position="45.806 3.01297 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon008_400.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_402.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.806 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_403.0" />
+<transform position="38.6924 3.01297 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon009_404.0" />
+<transform position="38.7386 2.91785 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tope_cajon009" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="tope_cajon009" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="tope_cajon009" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="tope_cajon009" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="tope_cajon009" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="tope_cajon009" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+<jointPrismatic actor1 = "tope_cajon009_404.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951197" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_403.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="38.6924 3.01297 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon010_406.0" />
+<transform position="41.1172 1.45464 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_408.0" />
+<transform position="41.071 1.54976 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon010_406.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_408.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="41.071 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon011_409.0" />
+<transform position="43.4675 1.45464 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_411.0" />
+<transform position="43.4212 1.54976 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon011_409.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_411.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="43.4212 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Actor">
+<name name="tope_cajon012_412.0" />
+<transform position="45.8876 1.45464 17.6131" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-0.15 0.0 -0.15" max="0.15 0.3 0.15"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="0.15" boxZ="0.15"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level">
+<name name="scene_2_cajonera_cajon_414.0" />
+<transform position="45.8414 1.54976 14.5682" rotation="0.0 1.0 0.0 1.02917e-006" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="scene_2_cajonera_cajon" sub_mesh="0" mat="cajon_cajonera"/>
+</render>
+<aabb min="-0.999998 -0.525 -2.94484" max="1.0 0.525 2.94484"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.525" boxZ="2.8"/>
+<rigidbody density="850.34"  />
+<jointPrismatic actor1 = "tope_cajon012_412.0"  jointRelativePosition0="-0.0462036 3.04492 0.0951198" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_cajonera_cajon_414.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 1.0 -1.02917e-006"  jointPosition="45.8414 1.54976 14.5682" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1000.0" posDamping="1000.0" parentCollition="true" />
+	</entity>
 	<entity tag = "actor" >
-<name name="escene_2_int_push_false_way_platform" />
+<name name="scene_2_int_push_false_way_platform" />
 <transform position="86.0 8.88892 8.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="escene_2_int_push_false_way_platform" sub_mesh="0" mat="Standardmaterial"/>
-<draw mesh="escene_2_int_push_false_way_platform" sub_mesh="1" mat="Standardmaterial"/>
-<draw mesh="escene_2_int_push_false_way_platform" sub_mesh="2" mat="Standardmaterial"/>
-<draw mesh="escene_2_int_push_false_way_platform" sub_mesh="3" mat="Standardmaterial"/>
-<draw mesh="escene_2_int_push_false_way_platform" sub_mesh="4" mat="Standardmaterial"/>
-<draw mesh="escene_2_int_push_false_way_platform" sub_mesh="5" mat="Standardmaterial"/>
+<draw mesh="scene_2_int_push_false_way_platform" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="scene_2_int_push_false_way_platform" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="scene_2_int_push_false_way_platform" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="scene_2_int_push_false_way_platform" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="scene_2_int_push_false_way_platform" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="scene_2_int_push_false_way_platform" sub_mesh="5" mat="Standardmaterial"/>
 </render>
 <aabb min="-2.0 -3.0 -8.0" max="2.0 3.0 8.0"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.0" boxY="3.0" boxZ="8.0"/>
 <rigidbody density="500.0" kinematic="true"  />
 	</entity>
 	<entity tag = "actor" collisionTag = "Level">
-<name name="escene_2_int_push_false_way" />
+<name name="scene_2_int_push_false_way" />
 <transform position="73.9985 8.66162 7.98695" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="escene_2_int_push_false_way" sub_mesh="0" mat="InterruptorTirar_mat"/>
-<draw mesh="escene_2_int_push_false_way" sub_mesh="1" mat="InterruptorTirar_mat"/>
-<draw mesh="escene_2_int_push_false_way" sub_mesh="2" mat="InterruptorTirar_mat"/>
-<draw mesh="escene_2_int_push_false_way" sub_mesh="3" mat="InterruptorTirar_mat"/>
-<draw mesh="escene_2_int_push_false_way" sub_mesh="4" mat="InterruptorTirar_mat"/>
-<draw mesh="escene_2_int_push_false_way" sub_mesh="5" mat="InterruptorTirar_mat"/>
+<draw mesh="scene_2_int_push_false_way" sub_mesh="0" mat="InterruptorTirar_mat"/>
+<draw mesh="scene_2_int_push_false_way" sub_mesh="1" mat="InterruptorTirar_mat"/>
+<draw mesh="scene_2_int_push_false_way" sub_mesh="2" mat="InterruptorTirar_mat"/>
+<draw mesh="scene_2_int_push_false_way" sub_mesh="3" mat="InterruptorTirar_mat"/>
+<draw mesh="scene_2_int_push_false_way" sub_mesh="4" mat="InterruptorTirar_mat"/>
+<draw mesh="scene_2_int_push_false_way" sub_mesh="5" mat="InterruptorTirar_mat"/>
 </render>
 <aabb min="-0.491362 -0.647835 -0.491509" max="0.491362 0.752713 0.491216"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.4" boxY="0.6" boxZ="0.4"/>
 <rigidbody density="260.417"  />
-<jointPrismatic actor1 = "interruptor_tirar_tope_376.0"  jointRelativePosition0="0.034317 -0.00579071 1.75027" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "escene_2_int_push_false_way"  jointRelativePosition1="0.0 0.0 1.06746" jointRelativeRotation1="0.0 0.0 -0.382683 0.92388"  jointPosition="73.9985 9.72908 7.98695" jointRotation="0.0 0.382683 0.0 0.92388" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="1.1" linearRestitution="0.0" posSpring="1000.0" posDamping="100.0" parentCollition="true" />
+<jointPrismatic actor1 = "interruptor_tirar_tope_364.0"  jointRelativePosition0="0.034317 -0.00579071 1.75027" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "scene_2_int_push_false_way"  jointRelativePosition1="0.0 0.0 1.06746" jointRelativeRotation1="0.0 0.0 -0.382683 0.92388"  jointPosition="73.9985 9.72908 7.98695" jointRotation="0.0 0.382683 0.0 0.92388" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="1.1" linearRestitution="0.0" posSpring="1000.0" posDamping="100.0" parentCollition="true" />
 <switchPullController />
 	</entity>
 	<entity  >
-<name name="trigger_goto_escene_3" />
+<name name="trigger_goto_scene_3" />
 <transform position="79.7369 -35.1649 70.9255" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-5.26451 -2.94313 -2.60022" max="5.26451 2.94312 2.60022"/>
 <trigger/>
 	</entity>
 	<entity  >
-<name name="escene_2_lightsout_trigger" />
+<name name="scene_2_lightsout_trigger" />
 <transform position="96.3612 -0.456528 31.9964" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-11.3208 -2.29111 -6.73854" max="11.3208 2.29111 6.73854"/>
 <trigger/>

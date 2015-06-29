@@ -12,7 +12,7 @@ TCompAudioSource::TCompAudioSource() {
 }
 
 TCompAudioSource::~TCompAudioSource() {
-	CLogicManager::get().unregisterTrigger(CHandle(this));
+	//CLogicManager::get().unregisterTrigger(CHandle(this));	
 }
 
 void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {

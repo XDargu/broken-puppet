@@ -342,11 +342,11 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	loadScene("data/scenes/escene_1.xml");
-	//loadScene("data/scenes/escene_2.xml");
-	//loadScene("data/scenes/escene_3.xml");
-	//loadScene("data/scenes/escene_4.xml");
-	//loadScene("data/scenes/escene_5.xml");
+	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_2.xml");
+	//loadScene("data/scenes/scene_3.xml");
+	//loadScene("data/scenes/scene_4.xml");
+	//loadScene("data/scenes/scene_5.xml");
 
 
 	//sm.playTrack(0,false);
@@ -1178,8 +1178,11 @@ void CApp::loadScene(std::string scene_name) {
 	load_ragdoll_time = 0;
 
 	CNav_mesh_manager::get().clearNavMesh();
+	Citem_manager::get().clear();
 	CImporterParser p;
+	aimanager::get().clear();
 	entity_manager.clear();
+	CRope_manager::get().clearStrings();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
 	render_techniques_manager.destroyAll();
