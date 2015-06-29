@@ -57,7 +57,6 @@ private:
 	float sensor_delay;
 	//-------------------------------------
 
-	unsigned int my_id;
 	CHandle ropeRef;
 	CHandle m_sensor;
 	CHandle own_transform;
@@ -197,8 +196,8 @@ public:
 	//void PlayerTouchSensor(bool touch);
 	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
-	unsigned getId();
-	void setId(unsigned int id);
+	//unsigned getId();
+	//void setId(unsigned int id);
 
 	bool player_viewed_sensor;
 	unsigned int lastNumNeedlesViewed;

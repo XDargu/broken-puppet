@@ -172,7 +172,9 @@ int bt_grandma::actionRagdoll()
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
+
 			aimanager::get().removeBot(this->getId());
+
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 
 			TCompTransform* p_transform = player_transform;
@@ -1393,13 +1395,13 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
 }
 
-void bt_grandma::setId(unsigned int id){
+/*void bt_grandma::setId(unsigned int id){
 	my_id = id;
 }
 
 unsigned int bt_grandma::getId(){
 	return my_id;
-}
+}*/
 
 CHandle bt_grandma::getPlayerTransform(){
 	return player_transform;

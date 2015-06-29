@@ -269,4 +269,5 @@ void aimanager::clear(){
 	attackers_rol.clear();
 	taunters_rol.clear();
 	bots.clear();
+	last_id = 0;
 }
