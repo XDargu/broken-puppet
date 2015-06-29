@@ -342,8 +342,9 @@
 <colliderMesh path="esc2_arqui_pared_esqui_ex_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-0.953568 0.426342 -7.60659" rotation="0.0 0.923879 0.0 0.382684" scale="1.0 1.0 1.0"/>
-	</entity>
+  <transform position="-0.953568 0.426342 -7.60659" rotation="0.0 0.923879 0.0 0.382684" scale="1.0 1.0 1.0"/>
+  <ragdoll name="prota"/>
+  </entity>
 	<entity  prefab="PlayerPivot">
 <transform position="-0.953568 0.426342 -7.60659" rotation="0.0 0.923879 0.0 0.382684" scale="1.0 1.0 1.0"/>
 	</entity>
@@ -363,7 +364,7 @@
 <transform position="0.0 6.94029 -3.59258" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="obstaculo_inicial_44.0" />
 <transform position="0.0827398 1.67258 1.58987" rotation="0.0 0.0 0.0 1.0" scale="1.0 0.836288 1.0"/>
 <render>
@@ -878,7 +879,7 @@
 <aabb min="-2.0 0.0 -2.0" max="2.0 1.0 2.0"/>
 <colliderMesh path="esc1_selev_rampa_26g_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_rampa_98.0" />
 <transform position="-13.5254 1.5 16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -3408,7 +3409,7 @@
 <transform position="-26.7274 41.6303 4.52796" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="obstaculo_esfera_370.0" />
 <transform position="-13.5616 35.3404 -5.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -3692,7 +3693,7 @@
 <aabb min="-0.736001 -0.177819 -0.768001" max="0.736001 0.177819 0.768001"/>
 <colliderMesh path="interruptor_pulsar_base" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_plataforma_media_403.0" />
 <transform position="-32.3042 38.0021 27.7998" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
@@ -5548,7 +5549,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.81794" boxY="0.0889033" boxZ="1.63248"/>
 <staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_objeto_interruptor_603.0" />
 <transform position="-26.7811 35.1978 -8.86007" rotation="-0.076529 0.0 0.0 0.997067" scale="1.0 1.0 1.0"/>
 <render>
@@ -5573,7 +5574,7 @@
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
 <colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_plataforma_605.0" />
 <transform position="-20.1525 35.0238 27.7816" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
@@ -5803,7 +5804,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.15" boxY="2.5" boxZ="0.15"/>
 <staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_635.0" />
 <transform position="-33.0089 1.5 -14.6304" rotation="0.0 -0.217845 0.0 0.975983" scale="1.0 1.0 1.0"/>
 <render>
@@ -5818,7 +5819,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.4" boxY="1.4" boxZ="1.4"/>
 <rigidbody density="54.6647"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_636.0" />
 <transform position="-35.6268 1.5 -16.6152" rotation="0.0 0.0365296 0.0 0.999333" scale="1.0 1.0 1.0"/>
 <render>
@@ -5834,7 +5835,7 @@
 <rigidbody density="54.6647"  />
 <distanceText text="Si con una cuerda no es suficiente, prueba con varias" distance="10.0" size="20.0" color="FFFFFFFF" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_637.0" />
 <transform position="-38.8115 1.5 -15.983" rotation="0.0 -0.189683 0.0 0.981845" scale="1.0 1.0 1.0"/>
 <render>
@@ -5849,7 +5850,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.4" boxY="1.4" boxZ="1.4"/>
 <rigidbody density="54.6647"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_638.0" />
 <transform position="-37.8577 4.48299 -15.7642" rotation="0.0 0.92388 0.0 0.382683" scale="1.0 1.0 1.0"/>
 <render>
@@ -6028,7 +6029,7 @@
 <aabb min="-4.00001 -9.88644e-006 -4.00001" max="4.00001 9.88644e-006 4.00001"/>
 <colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_objeto_aplastar_01_657.0" />
 <transform position="-14.9717 44.2682 49.4131" rotation="-0.076529 0.0 0.0 0.997067" scale="1.0 1.0 1.0"/>
 <render>
@@ -6044,7 +6045,7 @@
 <rigidbody density="333.333"  />
 <distanceText text="Muchos objetos se pueden mover" distance="20.0" size="20.0" color="FFFFFFFF" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_objeto_aplastar_02_658.0" />
 <transform position="-14.9717 44.2682 67.0293" rotation="-1.49313e-007 0.997067 0.0765289 1.94534e-006" scale="1.0 1.0 1.0"/>
 <render>
@@ -6059,7 +6060,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.5" boxY="3.0" boxZ="0.25"/>
 <rigidbody density="333.333"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escena_1_obstaculo_659.0" />
 <transform position="-33.8337 4.48299 -14.8184" rotation="0.0 -0.0446105 0.0 0.999004" scale="1.0 1.0 1.0"/>
 <render>

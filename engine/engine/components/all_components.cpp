@@ -67,5 +67,6 @@ DECL_OBJ_MANAGER(TCompParticleGroup, "particleGroup");
 DECL_OBJ_MANAGER(TCompParticleEditor, "particleEditor");
 DECL_OBJ_MANAGER(TCompAnimEditor, "animEditor");
 DECL_OBJ_MANAGER(TCompGoldenNeedle, "goldenNeedle");
+DECL_OBJ_MANAGER(TCompGNItem, "goldenNeedleItem");
 DECL_OBJ_MANAGER(TCompZoneAABB, "zoneAABB");
 

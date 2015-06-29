@@ -195,6 +195,7 @@
     <ClInclude Include="components\comp_golden_needle_logic.h" />
     <ClInclude Include="components\comp_golden_needle.h" />
     <ClInclude Include="components\comp_zone_aabb.h" />
+    <ClInclude Include="components\comp_golden_needle_item.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="components\comp_golden_needle_logic.cpp" />
     <ClCompile Include="components\comp_golden_needle.cpp" />
     <ClCompile Include="components\comp_zone_aabb.cpp" />
+    <ClCompile Include="components\comp_golden_needle_item.cpp" />
     <ClCompile Include="render\collision_convex.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />

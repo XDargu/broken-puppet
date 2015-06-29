@@ -90,8 +90,9 @@
 <staticbody/>
 	</entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-1.49808 -2.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-	</entity>
+  <transform position="-1.49808 -2.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	<ragdoll name="prota"/>
+  </entity>
 	<entity  prefab="PlayerPivot">
 <transform position="-1.49808 -2.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
@@ -136,7 +137,7 @@
 <transform position="2.0 1.00001 70.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="200.0" intensity="1.0" color="1.0 0.933333 0.796079 1"/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box001_15.0" />
 <transform position="-3.0 -0.517442 70.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -151,7 +152,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="3.0" boxY="0.5" boxZ="3.0"/>
 <rigidbody density="277.778"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box011_16.0" />
 <transform position="21.282 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -166,7 +167,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box012_17.0" />
 <transform position="20.2555 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -181,7 +182,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box013_18.0" />
 <transform position="19.229 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -196,7 +197,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box014_19.0" />
 <transform position="18.2025 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -211,7 +212,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box015_20.0" />
 <transform position="17.1759 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -226,7 +227,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box016_21.0" />
 <transform position="16.1494 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -241,7 +242,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box017_22.0" />
 <transform position="15.1229 5.36176 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -256,7 +257,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box018_23.0" />
 <transform position="15.6603 6.10139 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -271,7 +272,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box020_24.0" />
 <transform position="20.7929 6.10139 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -286,7 +287,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box021_25.0" />
 <transform position="19.7664 6.10139 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -301,7 +302,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box023_26.0" />
 <transform position="17.7134 6.10139 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -316,7 +317,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box024_27.0" />
 <transform position="16.6868 6.10139 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -331,7 +332,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box025_28.0" />
 <transform position="15.1229 6.84103 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -346,7 +347,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box026_29.0" />
 <transform position="21.282 6.84103 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -361,7 +362,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box027_30.0" />
 <transform position="20.2555 6.84103 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -376,7 +377,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box029_31.0" />
 <transform position="18.2025 6.84103 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -391,7 +392,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box030_32.0" />
 <transform position="17.1759 6.84103 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -406,7 +407,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box031_33.0" />
 <transform position="16.1494 6.84103 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -421,7 +422,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box032_34.0" />
 <transform position="15.6603 7.58067 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -436,7 +437,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box034_35.0" />
 <transform position="20.7929 7.58067 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -451,7 +452,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box035_36.0" />
 <transform position="19.7664 7.58067 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -466,7 +467,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box036_37.0" />
 <transform position="18.7399 7.58067 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -481,7 +482,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box037_38.0" />
 <transform position="17.7134 7.58067 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -496,7 +497,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box038_39.0" />
 <transform position="16.6868 7.58067 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -511,7 +512,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box039_40.0" />
 <transform position="15.1229 8.36536 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -526,7 +527,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box040_41.0" />
 <transform position="21.282 8.36536 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -541,7 +542,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box041_42.0" />
 <transform position="20.2555 8.36536 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -556,7 +557,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box042_43.0" />
 <transform position="19.229 8.36536 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -571,7 +572,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box043_44.0" />
 <transform position="18.2025 8.36536 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -586,7 +587,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box045_45.0" />
 <transform position="16.1494 8.36536 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -601,7 +602,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box046_46.0" />
 <transform position="15.6603 9.15006 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -616,7 +617,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box048_47.0" />
 <transform position="20.7929 9.15006 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -631,7 +632,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box049_48.0" />
 <transform position="19.7664 9.15006 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -646,7 +647,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box050_49.0" />
 <transform position="18.7399 9.15006 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -661,7 +662,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box051_50.0" />
 <transform position="17.7134 9.15006 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -676,7 +677,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.532518" boxY="0.366963" boxZ="0.35553"/>
 <rigidbody density="17.9919"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box052_51.0" />
 <transform position="16.6868 9.15006 105.472" rotation="0.0 0.0 0.0 1.0" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -702,7 +703,7 @@
 <aabb min="-1.39 -0.999998 -1.39" max="1.39 1.0 1.39"/>
 <colliderMesh path="desague" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Box053_53.0" />
 <transform position="15.6603 5.37637 102.207" rotation="0.0 -0.382683 0.0 0.92388" scale="1.06504 0.733926 0.711061"/>
 <render>
@@ -4016,7 +4017,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.42975" boxY="1.78303" boxZ="0.617378"/>
 <staticbody/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Flotante_396.0" />
 <transform position="-11.4558 1.35258 115.908" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -4031,7 +4032,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.31302" boxY="0.876895" boxZ="1.41274"/>
 <rigidbody density="38.8845"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Flotante_397.0" />
 <transform position="-7.67187 1.35258 119.744" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -4046,7 +4047,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.31302" boxY="0.876895" boxZ="1.41274"/>
 <rigidbody density="38.4234"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Flotante_398.0" />
 <transform position="-1.36569 1.35258 119.471" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -4061,7 +4062,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.31302" boxY="0.876895" boxZ="1.41274"/>
 <rigidbody density="38.8845"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="Flotante_399.0" />
 <transform position="-1.44185 1.35258 108.721" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -4669,7 +4670,7 @@
 <jointPrismatic actor1 = "interruptor_tirar_tope_402.0"  jointRelativePosition0="0.034317 -0.00579119 1.75027" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "escene_3_int_pull_grandma"  jointRelativePosition1="0.0 0.0 1.06746" jointRelativeRotation1="0.0 0.0 -0.382683 0.92388"  jointPosition="-0.723815 -2.27087 5.8036" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="1.1" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" parentCollition="true" />
 <switchPullController />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_3_pipedown_top" />
 <transform position="9.23639 -0.140955 74.6737" rotation="0.0 0.0 0.707107 0.707107" scale="1.0 1.0 1.0"/>
 <render>
@@ -4685,7 +4686,7 @@
 <rigidbody density="111.111"  />
 <jointFixed actor1 = "escene_3_pipedown_2_404.0" actor2 = "escene_3_pipedown_top"  jointPosition="9.26581 -0.0215193 74.6737" jointRotation="0.0 0.0 0.707107 0.707107" parentChildCollision="false" breakable="true" maxBreakForce="10000.0" maxTorqueForce="100000.0" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_3_pipeout_top" />
 <transform position="-0.36998 -10.4552 83.518" rotation="-0.382683 0.0 0.0 0.92388" scale="1.0 1.0 1.0"/>
 <render>
@@ -4731,7 +4732,7 @@
 <aabb min="-0.25 -0.25 -0.25" max="0.25 0.25 0.25"/>
 <trigger/>
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_3_final_door" />
 <transform position="-21.466 1.55807 113.98" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -4746,7 +4747,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.413315" boxY="1.55807" boxZ="1.1181"/>
 <rigidbody density="500.0" kinematic="true"  />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_3_puerta_gating_1" />
 <transform position="3.18902 6.93335 35.2923" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
@@ -4762,7 +4763,7 @@
 <rigidbody density="500.0"  />
 <jointHinge actor1 = "esc1_puert_suelo_pared_4m_2m_a_284.0"  jointRelativePosition0="-1.86005 -0.807998 5.94116" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "escene_3_puerta_gating_1"  jointRelativePosition1="0.00298476 1.15239 0.00780773" jointRelativeRotation1="0.0 0.0 -0.707107 0.707107"  jointPosition="3.192 6.94116 34.14" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
-	<entity tag = "actor" >
+	<entity tag = "actor" collisionTag="Actor">
 <name name="escene_3_grandmacrasher_01" />
 <transform position="-9.56188 4.03274 9.1467" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
