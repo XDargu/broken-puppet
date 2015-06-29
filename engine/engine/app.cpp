@@ -337,13 +337,13 @@ bool CApp::create() {
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/lightmap_test.xml");
+	loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
 
 	// XML Pruebas
-	loadScene("data/scenes/escene_1.xml");
+	//loadScene("data/scenes/escene_1.xml");
 	//loadScene("data/scenes/escene_2.xml");
 	//loadScene("data/scenes/escene_3.xml");
 	//loadScene("data/scenes/escene_4.xml");
@@ -515,8 +515,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
-		/*render_techniques_manager.reload("deferred_gbuffer");
-		render_techniques_manager.reload("deferred_point_lights");
+		render_techniques_manager.reload("deferred_gbuffer");
+		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("particles");
@@ -599,6 +599,22 @@ void CApp::update(float elapsed) {
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
+
+	int needle_count = 0;
+	for (auto& string : CRope_manager::get().getStrings()) {
+		TCompRope* rope = string;
+		if (rope) {
+			XMVECTOR static_pos;
+			if (rope->getStaticPosition(static_pos)) {
+				ctes_global.get()->static_needles[needle_count] = static_pos;
+			}
+		}		 
+		needle_count++;
+	}
+
+	for (int i = 0; i < (4 - needle_count); ++i) {
+		ctes_global.get()->static_needles[needle_count + i] = XMVectorSet(-1, -1, -1, -1);
+	}
 
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
@@ -1256,7 +1272,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
-	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	ctes_global.get()->added_ambient_color = XMVectorSet(0,0,0, 1);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	ctes_global.uploadToGPU();
 

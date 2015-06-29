@@ -187,6 +187,41 @@ void TCompRope::fixedUpdate(float elapsed) {
 	if (!colliding)
 		remove_counter = 0;
 
-	
+}
 
+bool TCompRope::getStaticPosition(XMVECTOR& position) {
+	CHandle valid_trans_1 = transform_1_aux.isValid() ? transform_1_aux : transform_1;
+	CHandle valid_trans_2 = transform_2_aux.isValid() ? transform_2_aux : transform_2;
+
+	// Update the first pos
+	if (valid_trans_1.isValid()) {
+		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
+		if (needle->getAttachedRigid() == nullptr) {
+			position = pos_1;
+			return true;
+		}
+		else {
+			if (needle->getAttachedRigid()->isRigidStatic()) {
+				position = pos_1;
+				return true;
+			}
+		}
+	}
+
+	// Update the second pos
+	if (valid_trans_2.isValid()) {
+		TCompNeedle* needle = ((CEntity*)valid_trans_2.getOwner())->get<TCompNeedle>();
+		if (needle->getAttachedRigid() == nullptr) {
+			position = pos_2;
+			return true;
+		}
+		else {
+			if (needle->getAttachedRigid()->isRigidStatic()) {
+				position = pos_2;
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

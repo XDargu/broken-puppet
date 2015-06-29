@@ -19,6 +19,8 @@ public:
 	void removeString(CHandle rope);
 	void clearStrings();
 	static CRope_manager& get();
+
+	std::deque<CHandle> getStrings() { return strings; }
 };
 #endif
 

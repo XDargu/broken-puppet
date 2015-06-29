@@ -259,6 +259,19 @@ void PSGBuffer(
 	  //albedo = float4(1, 0, 0, 1);	  
 	  albedo.g = 1;
   }
+
+  if (depth.y == 0) {
+	  for (int i = 0; i < 4; i++) {
+		  if (static_needles[i].w != -1) {
+			  //float dist = rand_1_05(input.UV) * 0.0;
+			  float dist = 0.5;
+			  float rad = distance(input.wPos.xyz, static_needles[i].xyz);
+			  if (rad < dist) {
+				  albedo += float4(.5, 0, 0, 0) * (1 - (rad / dist));
+			  }
+		  }		  
+	  }
+  }
   //depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
 
   // 
