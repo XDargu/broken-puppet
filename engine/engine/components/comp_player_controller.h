@@ -7,6 +7,8 @@
 #include "ai\fsm_player_torso.h"
 
 struct TCompPlayerController : TBaseComponent {
+
+	CHandle old_target_transform;
 public:
 	FSMPlayerLegs fsm_player_legs;
 	FSMPlayerTorso fsm_player_torso;
@@ -14,7 +16,7 @@ public:
 	float hit_cool_down;
 	float time_since_last_hit;
 
-	TCompPlayerController() {}
+	TCompPlayerController() : old_target_transform(CHandle()) {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

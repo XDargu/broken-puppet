@@ -15,10 +15,13 @@ void TCompTransform::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 		strcpy(parent_name, atts["parent"].c_str());
 	}
 
+	type = 0;
+
 	TCompRigidBody* r = getSibling<TCompRigidBody>(this);
 	TCompUnityCharacterController* u = getSibling<TCompUnityCharacterController>(this);
 	if (r) {
 		r->rigidBody->setGlobalPose(Physics.transformToPxTransform(*this));
+		type = 1;
 	}
 	if (u) {
 		u->enemy_rigidbody->setGlobalPose(Physics.transformToPxTransform(*this));
@@ -44,9 +47,12 @@ void TCompTransform::init() {
 
 		//parent_offset.rotation = XMQuaternionMultiply(rotation, XMQuaternionInverse(c_parent->rotation));
 		//parent_offset.position = c_parent->position - XMVector3Rotate(position, XMQuaternionInverse(c_parent->rotation));
-		//parent_offset.position = c_parent->inverseTransformPoint(position);
-		
+		//parent_offset.position = c_parent->inverseTransformPoint(position);		
 	}
+
+	TCompRigidBody* r = getSibling<TCompRigidBody>(this);
+	if (r)
+		type = 1;
 
 }
 

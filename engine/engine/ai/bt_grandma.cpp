@@ -172,6 +172,7 @@ int bt_grandma::actionRagdoll()
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
+			aimanager::get().removeBot(this->getId());
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 
 			TCompTransform* p_transform = player_transform;

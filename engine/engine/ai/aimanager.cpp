@@ -28,8 +28,11 @@ aimanager& aimanager::get(){
 
 aicontroller* aimanager::getAI(unsigned int id){
 	for (auto & element : bots) {
-		if (element->getInt() == id)
+		if (((bt_grandma*)element)->getId() == id)
 			return element;
+		// TODO: ARREGLAR ESTO
+		/*if (element->getInt() == id)
+			return element;*/
 	}
 	//Meter un xassert
 	CErrorContext ec("Getting bot", "aimanager");

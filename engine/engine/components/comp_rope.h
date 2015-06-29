@@ -39,6 +39,8 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue& atts);
 
 	void fixedUpdate(float elapsed);
+
+	bool getStaticPosition(XMVECTOR& position);
 };
 
 #endif

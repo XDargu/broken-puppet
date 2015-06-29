@@ -63,6 +63,7 @@ void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int s
 void activateDirLight(const TCompShadows* dir_light, XMVECTOR light_pos, XMVECTOR light_dir, float angle, int slot);
 
 // Provisional
+void setTransformType(float type);
 void setTint(XMVECTOR tint);
 void activateTint(int slot);
 

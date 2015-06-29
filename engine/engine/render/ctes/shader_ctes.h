@@ -5,6 +5,7 @@
 
 cbuffer TCtesObject SHADER_REGISTER(b0)
 {
+  float4 t_type;
   matrix World;
   float4 Tint;
 };
@@ -79,8 +80,9 @@ cbuffer TCtesGUI SHADER_REGISTER(b5)   // using the same register as the lights 
 cbuffer TCtesGlobal SHADER_REGISTER(b2)
 {
   float4 added_ambient_color;
+  float4 static_needles[4];
   float  world_time;
-  float  dummy3[3];  
+  float  dummy3[3];
   
   // Aligned to 16 bytes  
 };

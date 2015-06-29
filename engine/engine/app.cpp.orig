@@ -118,6 +118,7 @@ TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
 TGlowStep glow;
+TSilouetteStep silouette;
 TUnderwaterEffect underwater;
 TSSRRStep ssrr;
 
@@ -155,12 +156,8 @@ void createManagers() {
 	getObjManager<TCompName>()->init(1024);
 	getObjManager<TCompMesh>()->init(1024);
 	getObjManager<TCompRender>()->init(1024);
-<<<<<<< HEAD
-	getObjManager<TCompColliderMesh>()->init(1024);
-=======
 	getObjManager<TCompRecastAABB>()->init(32);
-	getObjManager<TCompColliderMesh>()->init(512);
->>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
+	getObjManager<TCompColliderMesh>()->init(1024);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
 	getObjManager<TCompColliderBox>()->init(512);
@@ -170,6 +167,8 @@ void createManagers() {
 	getObjManager<TCompStaticBody>()->init(1024);
 	getObjManager<TCompAABB>()->init(1024);
 	getObjManager<TCompGNLogic>()->init(32);
+	getObjManager<TCompGNItem>()->init(64);
+	getObjManager<TCompZoneAABB>()->init(32);
 	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
@@ -241,10 +240,14 @@ void initManagers() {
 	getObjManager<TCompColliderBox>()->initHandlers();
 	getObjManager<TCompColliderSphere>()->initHandlers();
 	getObjManager<TCompColliderCapsule>()->initHandlers();
+	getObjManager<TCompColliderMesh>()->initHandlers();
+	getObjManager<TCompColliderConvex>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
 	getObjManager<TCompGNLogic>()->initHandlers();
+	getObjManager<TCompGNItem>()->initHandlers();
+	getObjManager<TCompZoneAABB>()->initHandlers();
 	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
@@ -333,35 +336,29 @@ bool CApp::create() {
 
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
-<<<<<<< HEAD
-=======
-	//loadScene("data/scenes/escena_ms2.xml");
->>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
 	loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
-<<<<<<< HEAD
-	//loadScene("data/scenes/viewer_test.xml");
+	//loadScene("data/scenes/viewer_test.xml");	
 
 
 	// XML Pruebas
-	loadScene("data/scenes/escene_1.xml");
+<<<<<<< HEAD
+	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_2.xml");
+	//loadScene("data/scenes/scene_3.xml");
+	//loadScene("data/scenes/scene_4.xml");
+	//loadScene("data/scenes/scene_5.xml");
+=======
+	//loadScene("data/scenes/escene_1.xml");
 	//loadScene("data/scenes/escene_2.xml");
 	//loadScene("data/scenes/escene_3.xml");
 	//loadScene("data/scenes/escene_4.xml");
 	//loadScene("data/scenes/escene_5.xml");
+>>>>>>> 3c8f00c536ccc428b491723be4c90d00e58f62d5
 
-
-	sm.addMusicTrack(0, "CANCION.mp3");
-	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
-	sm.addFXTrack("light.wav", "light");
-	sm.addFXTrack("steam.wav", "steam");
-	sm.addFXTrack("sonar.wav", "sonar");
-=======
-	//loadScene("data/scenes/viewer_test.xml");	
->>>>>>> d7f003fafc6fbcb285f1b52bbebe10721f58c0c5
 
 	//sm.playTrack(0,false);
 
@@ -370,8 +367,6 @@ bool CApp::create() {
 	is_ok &= createUnitWiredCube(intersectsWiredCube, XMFLOAT4(1.f, 0.f, 0.f, 1.f));
 
 	XASSERT(is_ok, "Error creating debug meshes");
-
-	logic_manager.init();
 
 #ifdef _DEBUG
 
@@ -401,7 +396,7 @@ bool CApp::create() {
 	assert(is_ok);
 
 	//PRUEBAS NAV MESHES -----------------
-	bool valid = CNav_mesh_manager::get().build_nav_mesh();
+	//bool valid = CNav_mesh_manager::get().build_nav_mesh();
 	//------------------------------------
 	/*CEntity* r = entity_manager.getByName("dvn_arqui_suelo_esqui2_in_01_10.0");
 	CHandle t = r->get<TCompTransform>();
@@ -449,9 +444,9 @@ void CApp::doFrame() {
 		// Update input
 		io.update(delta_secs);
 
-		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+		/*if (CIOStatus::get().becomesReleased(CIOStatus::E)){
 			pause = !pause;
-		}
+		}*/
 
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
@@ -507,12 +502,12 @@ void CApp::update(float elapsed) {
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	if (io.becomesReleased(CIOStatus::Q)) {
+	/*if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
 			time_modifier = 1;
-	}
+	}*/
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
@@ -528,8 +523,10 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("ssao");
-		/*render_techniques_manager.reload("deferred_gbuffer");
-		render_techniques_manager.reload("deferred_point_lights");
+		render_techniques_manager.reload("silouette");
+		render_techniques_manager.reload("silouette_type");
+		render_techniques_manager.reload("deferred_gbuffer");
+		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("particles");
@@ -613,9 +610,26 @@ void CApp::update(float elapsed) {
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
 
+	int needle_count = 0;
+	for (auto& string : CRope_manager::get().getStrings()) {
+		TCompRope* rope = string;
+		if (rope) {
+			XMVECTOR static_pos;
+			if (rope->getStaticPosition(static_pos)) {
+				ctes_global.get()->static_needles[needle_count] = static_pos;
+			}
+		}		 
+		needle_count++;
+	}
+
+	for (int i = 0; i < (4 - needle_count); ++i) {
+		ctes_global.get()->static_needles[needle_count + i] = XMVectorSet(-1, -1, -1, -1);
+	}
+
 	getObjManager<TCompTransform>()->update(elapsed);
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompGNLogic>()->update(elapsed);
+	getObjManager<TCompGNItem>()->update(elapsed);
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -736,7 +750,8 @@ void CApp::render() {
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
 	activateCamera(camera, 1);
-	ssrr.apply(rt_base);
+	silouette.apply(rt_base);
+	ssrr.apply(silouette.getOutput());
 	ssao.apply(ssrr.getOutput());
 	sharpen.apply(ssao.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
@@ -835,6 +850,12 @@ void CApp::render() {
 	t0.end();
 #endif
 
+	TCompName* zone_name = logic_manager.getPlayerZoneName();
+	if (zone_name) {
+		XMVECTOR size = font.measureString(zone_name->name);
+		font.print(xres*0.5f - XMVectorGetZ(size) * 0.5f, 40, zone_name->name);
+	}
+
 	// Test GUI
 
 	/*if (h_player.isValid()) {
@@ -882,9 +903,11 @@ void CApp::render() {
 
 void CApp::renderEntities() {
 
+	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
+
 	debugTech.activate();
-	const CTexture *t = texture_manager.getByName("grass");
-	t->activate(0);
+	const CTexture *tex = texture_manager.getByName("grass");
+	tex->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -904,6 +927,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 		if (c_rope) {
+			tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
@@ -994,13 +1018,26 @@ void CApp::renderEntities() {
 		// Draw texts
 		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
 		if (c_text && t) {
-			float old_size = font.size;
-			font.size = c_text->size;
-			unsigned int old_col = font.color;
-			font.color = c_text->color;
-			font.print3D(t->position, c_text->text);
-			font.size = old_size;
-			font.color = old_col;
+			if (c_text->in_range) {
+				float old_size = font.size;
+				font.size = c_text->size;
+				unsigned int old_col = font.color;
+				font.color = c_text->color;
+
+				XMVECTOR edges = font.measureString(c_text->text);
+				float x, y;
+				float offset = 15;
+				if (camera.getScreenCoords(t->position, &x, &y)) {
+					activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+					drawDialogBox(x, y, XMVectorGetZ(edges) + offset * 2, XMVectorGetW(edges) + offset * 2, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+					activateBlendConfig(BLEND_CFG_DEFAULT);
+
+					//font.print3D(t->position, c_text->text);
+					font.print(x + offset, y + offset, c_text->text);
+					font.size = old_size;
+					font.color = old_col;
+				}
+			}
 		}
 	}
 }
@@ -1021,7 +1058,7 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	if (renderNavMesh)
-	CNav_mesh_manager::get().render_nav_mesh();
+		CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();
@@ -1041,6 +1078,7 @@ void CApp::renderDebugEntities() {
 		TCompName* name = e->get<TCompName>();
 		TCompAABB* aabb = e->get<TCompAABB>();
 		TCompGNLogic* golden_needle = e->get<TCompGNLogic>();
+		TCompGNItem* golden_needle_item = e->get<TCompGNItem>();
 
 		// If the component has no transform it can't be rendered
 		if (!t)
@@ -1173,8 +1211,11 @@ void CApp::loadScene(std::string scene_name) {
 	load_ragdoll_time = 0;
 
 	CNav_mesh_manager::get().clearNavMesh();
+	Citem_manager::get().clear();
 	CImporterParser p;
+	aimanager::get().clear();
 	entity_manager.clear();
+	CRope_manager::get().clearStrings();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
 	render_techniques_manager.destroyAll();
@@ -1224,11 +1265,14 @@ void CApp::loadScene(std::string scene_name) {
 	debug_map = 0;
 
 	//physics_manager.init();
-	
+	logic_manager.init();
+
+	// Navmesh initialization
+	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
-	XASSERT(ropeTech.load("textured"), "Error loading basic technique");
+	XASSERT(ropeTech.load("rope"), "Error loading basic technique");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");
 	XASSERT(CHandle(e).isValid(), "Camera not valid");
@@ -1276,6 +1320,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);
+	is_ok &= silouette.create("silouette", xres, yres, 1);
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");
