@@ -1257,7 +1257,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	// Create Debug Technique
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
-	XASSERT(ropeTech.load("textured"), "Error loading basic technique");
+	XASSERT(ropeTech.load("rope"), "Error loading basic technique");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");
 	XASSERT(CHandle(e).isValid(), "Camera not valid");
@@ -1272,7 +1272,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
-	ctes_global.get()->added_ambient_color = XMVectorSet(0,0,0, 1);
+	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	ctes_global.uploadToGPU();
 

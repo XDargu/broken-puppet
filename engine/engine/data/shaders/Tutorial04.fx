@@ -136,6 +136,11 @@ float4 PSGUIDialogBox(
 	return txDiffuse.Sample(samWrapLinear, input.UV);
 }
 
+float4 PSRope(VS_TEXTURED_OUTPUT input) : SV_Target
+{
+	return txDiffuse.Sample(samWrapLinear, input.UV) * Tint;
+}
+
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
