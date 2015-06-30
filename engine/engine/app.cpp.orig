@@ -138,6 +138,12 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
 
+	SUBSCRIBE(TCompBtSoldier, TActorHit, actorHit);
+	SUBSCRIBE(TCompBtSoldier, TWarWarning, warWarning);
+	SUBSCRIBE(TCompBtSoldier, TPlayerFound, notifyPlayerFound);
+	//SUBSCRIBE(TCompBtSoldier, TPlayerTouch, notifyPlayerTouch);
+	SUBSCRIBE(TCompBtSoldier, TMsgRopeTensed, onRopeTensed);
+
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
@@ -207,6 +213,7 @@ void createManagers() {
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 	getObjManager<TCompBtGrandma>()->init(64);
+	getObjManager<TCompBtSoldier>()->init(64);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -279,6 +286,7 @@ void initManagers() {
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompBtGrandma>()->initHandlers();
+	getObjManager<TCompBtSoldier>()->initHandlers();
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
@@ -339,7 +347,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/lightmap_test.xml");
+	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
@@ -349,15 +357,13 @@ bool CApp::create() {
 	loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 	//loadScene("data/scenes/scene_3.xml");
+=======
+	//loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_2.xml");
+	loadScene("data/scenes/scene_3.xml");
+>>>>>>> 457764638022aab07a230427bdaa44efb3d76197
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
-=======
-	//loadScene("data/scenes/escene_1.xml");
-	//loadScene("data/scenes/escene_2.xml");
-	//loadScene("data/scenes/escene_3.xml");
-	//loadScene("data/scenes/escene_4.xml");
-	//loadScene("data/scenes/escene_5.xml");
->>>>>>> 3c8f00c536ccc428b491723be4c90d00e58f62d5
 
 
 	//sm.playTrack(0,false);
@@ -644,6 +650,7 @@ void CApp::update(float elapsed) {
 
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
+	getObjManager<TCompBtSoldier>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
@@ -1050,6 +1057,7 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
+	getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompParticleGroup>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
@@ -1057,6 +1065,7 @@ void CApp::renderDebugEntities() {
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
+	renderNavMesh = true;
 	if (renderNavMesh)
 		CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------

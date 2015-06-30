@@ -241,6 +241,14 @@ void aimanager::setEnemyRol(aicontroller* enemy){
 	}
 }
 
+void aimanager::RemoveEnemyTaunt(aicontroller* enemy){
+	for (int i = 0; i < taunters_rol.size(); ++i){
+		if (taunters_rol[i] == enemy){
+			taunters_rol[i] = nullptr;
+		}
+	}
+}
+
 void aimanager::RemoveEnemyAttacker(aicontroller* enemy){
 	for (int i = 0; i < attackers_rol.size(); ++i){
 		if (attackers_rol[i] == enemy){

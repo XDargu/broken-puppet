@@ -43,6 +43,7 @@ public:
 	void unregisterRecastAABB(CHandle recastAABB);
 	void checkDistaceToEnemies();
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
+	void removeCapsule(CHandle cap);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	std::vector<CHandle>     colMeshes;
