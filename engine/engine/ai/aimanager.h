@@ -18,6 +18,7 @@ public:
 	void setEnemyRol(aicontroller* enemy);
 	bool attackRolEmptySlot();
 	void RemoveEnemyAttacker(aicontroller* enemy);
+	void RemoveEnemyTaunt(aicontroller* enemy);
 	void changeEnemyRol(aicontroller* enemy);
 	void recastAABBActivate(int ind);
 	void recastAABBDesactivate(int ind);
