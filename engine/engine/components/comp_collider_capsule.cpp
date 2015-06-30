@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "comp_collider_capsule.h"
+#include "comp_recast_aabb.h"
 #include "base_component.h"
 #include "nav_mesh_manager.h"
 
@@ -74,7 +75,20 @@ void TCompColliderCapsule::loadFromAtts(const std::string& elem, MKeyValue &atts
 	}
 
 void TCompColliderCapsule::init() {
-	}
+	//if (((CEntity*)this)->tag == "player"){
+		TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+
+		for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+			TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
+			TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+			AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+			//if (recast_aabb.intersects(m_aabb)) {
+				addInputNavMesh();
+				CNav_mesh_manager::get().colCapsules.push_back(this);
+			//}
+		}
+	//}
+}
 
 	// Returns the half height of the capsule
 float TCompColliderCapsule::getHalfHeight() {
@@ -96,38 +110,55 @@ void TCompColliderCapsule::addInputNavMesh(){
 	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
 	TCompTransform* trans = getSibling<TCompTransform>(this);
 
-	TTransform* t = trans;
-	XMFLOAT3 min;
-	XMStoreFloat3(&min, aabb_module->min);
-	XMFLOAT3 max;
-	XMStoreFloat3(&max, aabb_module->max);
-	int n_vertex = 8;
-	int n_triangles = 24;
+	if ((aabb_module) && (trans)){
 
-	const float vertex[24] = {
-		min.x, min.y, min.z
-		, max.x, min.y, min.z
-		, min.x, max.y, min.z
-		, max.x, max.y, min.z
-		, min.x, min.y, max.z
-		, max.x, min.y, max.z
-		, min.x, max.y, max.z
-		, max.x, max.y, max.z
-	};
+		TTransform* t = trans;
+		t_previous = trans->position;
+		XMFLOAT3 min;
+		XMStoreFloat3(&min, aabb_module->min);
+		XMFLOAT3 max;
+		XMStoreFloat3(&max, aabb_module->max);
+		int n_vertex = 8;
+		int n_triangles = 24;
+		float borders = 0.f;
 
-	float* m_v = new float[n_vertex * 3];
-	memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
+		if (((CEntity*)this)->tag == "player")
+			borders = 0.03f;
+		else if (((CEntity*)this)->tag == "enemy")
+			borders = 0.03f;
 
-	const int indices[] = {
-		0, 1, 2, 3, 4, 5, 6, 7
-		, 0, 2, 1, 3, 4, 6, 5, 7
-		, 0, 4, 1, 5, 2, 6, 3, 7
-	};
-	int* t_v = new int[n_triangles];
-	memcpy(t_v, indices, n_triangles * sizeof(int));
+		const float vertex[24] = {
+			min.x - borders, min.y, min.z - borders
+			, max.x - borders, min.y, min.z - borders
+			, min.x - borders, max.y, min.z - borders
+			, max.x - borders, max.y, min.z - borders
+			, min.x - borders, min.y, max.z - borders
+			, max.x - borders, min.y, max.z - borders
+			, min.x - borders, max.y, max.z - borders
+			, max.x - borders, max.y, max.z - borders
+		};
 
-	CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
-	//------------------------------------------------------------------------------------------------------------------------
+		float* m_v = new float[n_vertex * 3];
+		memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
+
+		const int indices[] = {
+			0, 1, 2, 3, 4, 5, 6, 7
+			, 0, 2, 1, 3, 4, 6, 5, 7
+			, 0, 4, 1, 5, 2, 6, 3, 7
+		};
+		int* t_v = new int[n_triangles];
+		memcpy(t_v, indices, n_triangles * sizeof(int));
+
+		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+		//------------------------------------------------------------------------------------------------------------------------
+	}
+	else{
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		if (!aabb_module)
+			XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+	}
 }
 
 void TCompColliderCapsule::setCollisionGroups(){
@@ -153,4 +184,27 @@ void TCompColliderCapsule::setCollisionGroups(PxU32 own_mask, PxU32* vector_mask
 		not_collide |= vector_masks[i];
 	}
 	setupFiltering(collider, own_mask, not_collide);
+}
+
+bool TCompColliderCapsule::getIfUpdated(){
+	TCompTransform* trans = getSibling<TCompTransform>(this);
+	if (trans){
+		t_current = trans->position;
+		float current_x = XMVectorGetX(t_current);
+		float current_y = XMVectorGetY(t_current);
+		float current_z = XMVectorGetZ(t_current);
+
+		float prev_x = XMVectorGetX(t_previous);
+		float prev_y = XMVectorGetY(t_previous);
+		float prev_z = XMVectorGetZ(t_previous);
+		if ((current_x != prev_x) || (current_y != prev_y) || (current_z != prev_z))
+			return true;
+		else
+			return false;
+	}
+	else{
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		if (!trans)
+			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+	}
 }

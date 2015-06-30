@@ -356,7 +356,30 @@ physx::PxVec3 TCompCharacterController::Vector3Lerp(physx::PxVec3 start, physx::
 }
 // TODO NOTE provisional para rotar objetos
 
-bool TCompCharacterController::OnGround(){
+bool TCompCharacterController::OnGround() {
+
+	TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+
+	PxTransform &px_trans = rigid->rigidBody->getGlobalPose();
+
+	PxRaycastBuffer buf;
+
+	Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 0.25f, buf);
+
+	if (velocity.y < jumpPower*.5f)
+	{
+		onGround = false;
+
+		// comprobamos si el el objeto es el más cercano, si lo es, obtenemos su movimiento
+		for (int i = 0; i < (int)buf.nbTouches; i++)
+		{
+			if (buf.touches[i].actor != rigid->rigidBody) {
+				onGround = true;
+				break;
+			}
+		}
+	}
+
 	return onGround;
 }
 
