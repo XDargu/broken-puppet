@@ -46,6 +46,7 @@ public:
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	std::vector<CHandle>     colMeshes;
+	std::vector<CHandle>     colCapsules;
 	std::vector<CHandle>   colConvex;
 	std::vector<CHandle>      colBoxes;
 	std::vector<CHandle>   colSpheres;

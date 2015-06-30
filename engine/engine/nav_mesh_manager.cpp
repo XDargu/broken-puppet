@@ -45,9 +45,9 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 		((TCompColliderSphere*)colSpheres[i])->addInputNavMesh();
 	}
 
-	/*for (int i = 0; i < colCapsules.size(); ++i){
-		colCapsules[i]->addInputNavMesh();
-	}*/
+	for (int i = 0; i < colCapsules.size(); ++i){
+		((TCompColliderCapsule*)colCapsules[i])->addInputNavMesh();
+	}
 
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
@@ -67,6 +67,14 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 		i = 0;
 		while ((!updatedChecked) && (i < colSpheres.size())){
 			updatedChecked = ((TCompColliderSphere*)colSpheres[i])->getIfUpdated();
+			i++;
+		}
+	}
+
+	if (!updatedChecked){
+		i = 0;
+		while ((!updatedChecked) && (i < colCapsules.size())){
+			updatedChecked = ((TCompColliderCapsule*)colCapsules[i])->getIfUpdated();
 			i++;
 		}
 	}
