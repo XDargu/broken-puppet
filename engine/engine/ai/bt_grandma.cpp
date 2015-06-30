@@ -42,7 +42,7 @@ void bt_grandma::create(string s)
 	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_grandma::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_grandma::conditiontied_event, NULL);
-	addChild("WakeUp", "GroundedTied", PRIORITY, NULL, NULL);
+	addChild("Awake", "GroundedTied", PRIORITY, NULL, NULL);
 	addChild("GroundedTied", "ActionWakeUp2", ACTION, (btcondition)&bt_grandma::conditionis_grounded, (btaction)&bt_grandma::actionWakeUp);
 	addChild("GroundedTied", "CutOwnSec", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
 	
@@ -245,11 +245,11 @@ int bt_grandma::actionWakeUp()
 
 int bt_grandma::actionWaitSec()
 {
-	time_tied += CApp::get().delta_time;
-	if (time_tied <= max_time_tied)
+	if (state_time <= max_time_tied)
 		return STAY;
-	else
-		return LEAVE;
+	else{
+	    return LEAVE;
+	}
 }
 
 //Corta todas las cuerdas a la que est atada
@@ -257,6 +257,7 @@ int bt_grandma::actionCutOwn()
 {
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
+	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
 	if (on_enter) {
 		if (ropeRef == nullptr){
@@ -265,6 +266,7 @@ int bt_grandma::actionCutOwn()
 			return LEAVE;
 		}else{
 			// Ninja animation
+			m_ragdoll->setActive(false);
 			playAnimationIfNotPlaying(11);
 			tied_event = false;
 			event_detected = false;
@@ -280,6 +282,7 @@ int bt_grandma::actionCutOwn()
 		event_detected = false;
 		is_angry = true;
 		have_to_warcry = true;
+		is_ragdoll = false;
 		return LEAVE;
 	}
 }

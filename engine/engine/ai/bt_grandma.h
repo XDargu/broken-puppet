@@ -16,7 +16,6 @@ private:
 	float find_path_time;
 	float last_time_player_saw;
 	float time_searching_player;
-	float time_tied;
 	XMVECTOR previous_point_search;
 	XMVECTOR center;
 	XMVECTOR last_point_player_saw;
