@@ -20,9 +20,6 @@ clearCoroutines( )
 ----------------------------------------------------------
 
 function onSceneLoad_scene_1()
-
-	logicManager:loadScene("data/scenes/scene_4.xml");
-
 	local crasher1 = logicManager:getPrismaticJoint("scene_1_grandmacrasher_01");
 	crasher1:setLinearLimit(0.1, 10000000, 10000000);
 	local crasher2 = logicManager:getPrismaticJoint("scene_1_grandmacrasher_02");
