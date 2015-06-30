@@ -513,9 +513,15 @@
     </ClInclude>
     <ClInclude Include="render\silouette_step.h">
       <Filter>render\postpro</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="components\comp_golden_needle_item.h">
       <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_soldier.h">
+      <Filter>ai\behaviour trees</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_bt_soldier.h">
+      <Filter>components\ai\enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -957,9 +963,15 @@
     </ClCompile>
     <ClCompile Include="render\silouette_step.cpp">
       <Filter>render\postpro</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="components\comp_golden_needle_item.cpp">
       <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_soldier.cpp">
+      <Filter>ai\behaviour trees</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_bt_soldier.cpp">
+      <Filter>components\ai\enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

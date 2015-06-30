@@ -71,7 +71,8 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force = getForce(first_rigid->getMass(), pairs, i);
 				float force_float = force;
 				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform, force_float);
+				if (force_float>0)
+					CSoundManager::get().play3DFX("sonar", (TTransform*)entity_transform, force_float);
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("player"))){
 				firstActorEntity->sendMsg(TPlayerTouch(firstActorEntity, true));
 			}else if ((firstActorEntity->hasTag("player")) && (secondActorEntity->hasTag("enemy"))){

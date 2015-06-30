@@ -369,7 +369,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 void FSMPlayerLegs::ThrowString(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
-	canThrow = false;
+	//canThrow = false;
 	
 	int animation = torso->up_animation ? 19 : 4;
 
@@ -391,7 +391,7 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 
 void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 
-	canThrow = false;
+	//canThrow = false;
 
 	TCompSkeleton* skeleton = comp_skeleton;
 

@@ -138,6 +138,12 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
 
+	SUBSCRIBE(TCompBtSoldier, TActorHit, actorHit);
+	SUBSCRIBE(TCompBtSoldier, TWarWarning, warWarning);
+	SUBSCRIBE(TCompBtSoldier, TPlayerFound, notifyPlayerFound);
+	//SUBSCRIBE(TCompBtSoldier, TPlayerTouch, notifyPlayerTouch);
+	SUBSCRIBE(TCompBtSoldier, TMsgRopeTensed, onRopeTensed);
+
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);
 	SUBSCRIBE(TCompPlayerController, TActorHit, actorHit);
@@ -207,6 +213,7 @@ void createManagers() {
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 	getObjManager<TCompBtGrandma>()->init(64);
+	getObjManager<TCompBtSoldier>()->init(64);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -279,6 +286,7 @@ void initManagers() {
 	getObjManager<TCompBasicPlayerController>()->initHandlers();
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompBtGrandma>()->initHandlers();
+	getObjManager<TCompBtSoldier>()->initHandlers();
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
@@ -636,6 +644,7 @@ void CApp::update(float elapsed) {
 
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
+	getObjManager<TCompBtSoldier>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
@@ -1042,6 +1051,7 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompSkeleton>()->renderDebug3D();
 	getObjManager<TCompTrigger>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
+	getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompParticleGroup>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
@@ -1049,6 +1059,7 @@ void CApp::renderDebugEntities() {
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
 	}
+	renderNavMesh = true;
 	if (renderNavMesh)
 		CNav_mesh_manager::get().render_nav_mesh();
 	//----------------------------------------------

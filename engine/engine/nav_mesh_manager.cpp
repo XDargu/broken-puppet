@@ -45,14 +45,19 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 		((TCompColliderSphere*)colSpheres[i])->addInputNavMesh();
 	}
 
-	/*for (int i = 0; i < colCapsules.size(); ++i){
-		colCapsules[i]->addInputNavMesh();
-	}*/
+	for (int i = 0; i < colCapsules.size(); ++i){
+		((TCompColliderCapsule*)colCapsules[i])->addInputNavMesh();
+	}
 
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
 	nav_B.m_input = nav_mesh_input;
 	nav_B.m_input.computeBoundaries();
+}
+
+void CNav_mesh_manager::removeCapsule(CHandle cap){
+	auto it = std::find(colCapsules.begin(), colCapsules.end(), cap);
+	colCapsules.erase(it);
 }
 
 bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
@@ -67,6 +72,14 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 		i = 0;
 		while ((!updatedChecked) && (i < colSpheres.size())){
 			updatedChecked = ((TCompColliderSphere*)colSpheres[i])->getIfUpdated();
+			i++;
+		}
+	}
+
+	if (!updatedChecked){
+		i = 0;
+		while ((!updatedChecked) && (i < colCapsules.size())){
+			updatedChecked = ((TCompColliderCapsule*)colCapsules[i])->getIfUpdated();
 			i++;
 		}
 	}
@@ -192,6 +205,7 @@ void CNav_mesh_manager::clearNavMesh(){
 	colSpheres.clear();
 	colMeshes.clear();
 	colConvex.clear();
+	colCapsules.clear();
 	keep_updating_navmesh = false;
 	nav_mesh_input.clearInput();
 	recastAABBs.clear();

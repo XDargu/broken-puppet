@@ -1,5 +1,5 @@
 #include "mcv_platform.h"
-#include "bt_grandma.h"
+#include "bt_soldier.h"
 #include "../entity_manager.h"
 #include "../components/all_components.h"
 #include "utils.h"
@@ -12,8 +12,7 @@ const int max_bf_posibilities = 7;
 const float max_dist_reach_needle = 1.8f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
-const float max_time_tied = 2.f;
-const float max_distance_to_attack = 1.5f;
+const float max_distance_to_attack = 1.f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
@@ -31,81 +30,75 @@ const float run_angry_speed = 2.2f;
 
 // Sensor
 const float sensor_delay = 1.f;
-float sensor_acum = 0.f;
+float sensor_acum_soldier = 0.f;
 
 
-void bt_grandma::create(string s)
+void bt_soldier::create(string s)
 {
 	name = s;
 	createRoot("Root", PRIORITY, NULL, NULL);
-	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_grandma::conditionis_ragdoll, NULL);
-	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_grandma::actionRagdoll);
+	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_soldier::conditionis_ragdoll, NULL);
+	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
-	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_grandma::conditiontied_event, NULL);
-	addChild("Awake", "GroundedTied", PRIORITY, NULL, NULL);
-	addChild("GroundedTied", "ActionWakeUp2", ACTION, (btcondition)&bt_grandma::conditionis_grounded, (btaction)&bt_grandma::actionWakeUp);
-	addChild("GroundedTied", "CutOwnSec", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
-	
-	
-	//addChild("CutOwnSec", "WaitTied", SEQUENCE, NULL, NULL);																				//Este estaba en undefined 
-	addChild("CutOwnSec", "actionWaitTied", ACTION, NULL, (btaction)&bt_grandma::actionWaitSec);
-	addChild("CutOwnSec", "actionCutTied", ACTION, NULL, (btaction)&bt_grandma::actionCutOwn);
-	
-	
-	addChild("WakeUp", "CutOwn3", ACTION, NULL, (btaction)&bt_grandma::actionCutOwn);
-	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_grandma::conditionis_grounded, (btaction)&bt_grandma::actionWakeUp);
-	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionLeave);
-	addChild("Ragdoll", "GetAngry6", ACTION, NULL, (btaction)&bt_grandma::actionGetAngry);
-	addChild("Root", "events", PRIORITY, (btcondition)&bt_grandma::conditionare_events, NULL);
-	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_grandma::conditionhurt_event, (btaction)&bt_grandma::actionHurtEvent);
-	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_grandma::conditionfalling_event, (btaction)&bt_grandma::actionFallingEvent);
-	addChild("events", "TiedEvent9", ACTION, (btcondition)&bt_grandma::conditiontied_event, (btaction)&bt_grandma::actionTiedEvent);
-	addChild("events", "No events10", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionNoevents);
-	addChild("Root", "Angry", PRIORITY, (btcondition)&bt_grandma::conditionis_angry, NULL);
+	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_soldier::conditionTied, NULL);
+	addChild("WakeUp", "GroundedTied", PRIORITY, NULL, NULL);
+	addChild("GroundedTied", "ActionWakeUp2", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
+	addChild("GroundedTied", "CutOwnSec", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("CutOwnSec", "WaitTied", SEQUENCE, NULL, NULL);																				//Este estaba en undefined 
+	addChild("WakeUp", "CutOwn3", ACTION, NULL, (btaction)&bt_soldier::actionCutOwn);
+	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
+	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionLeave);
+	addChild("Ragdoll", "GetAngry6", ACTION, NULL, (btaction)&bt_soldier::actionGetAngry);
+	addChild("Root", "events", PRIORITY, (btcondition)&bt_soldier::conditionare_events, NULL);
+	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
+	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_soldier::conditionfalling_event, (btaction)&bt_soldier::actionFallingEvent);
+	addChild("events", "TiedEvent9", ACTION, (btcondition)&bt_soldier::conditiontied_event, (btaction)&bt_soldier::actionTiedEvent);
+	addChild("events", "No events10", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionNoevents);
+	addChild("Root", "Angry", PRIORITY, (btcondition)&bt_soldier::conditionis_angry, NULL);
 
-	addChild("Angry", "Warcry11", ACTION, (btcondition)&bt_grandma::conditionhave_to_warcry, (btaction)&bt_grandma::actionWarcry);
-	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_grandma::conditionplayer_lost, NULL);
-	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_grandma::conditionsee_player, (btaction)&bt_grandma::actionPlayerAlert);
+	addChild("Angry", "Warcry11", ACTION, (btcondition)&bt_soldier::conditionhave_to_warcry, (btaction)&bt_soldier::actionWarcry);
+	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_soldier::conditionplayer_lost, NULL);
+	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_soldier::conditionsee_player, (btaction)&bt_soldier::actionPlayerAlert);
 
-	addChild("LookForPlayer", "CalmDown13", ACTION, (btcondition)&bt_grandma::conditionLook_for_timeout, (btaction)&bt_grandma::actionCalmDown);
+	addChild("LookForPlayer", "CalmDown13", ACTION, (btcondition)&bt_soldier::conditionLook_for_timeout, (btaction)&bt_soldier::actionCalmDown);
 
-	addChild("LookForPlayer", "LookAroundSequence", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_grandma::actionSearchArroundLastPoint);
-	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_grandma::actionLookAround);
+	addChild("LookForPlayer", "LookAroundSequence", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_soldier::actionSearchArroundLastPoint);
+	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_soldier::actionLookAround);
 
-	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_grandma::actionSelectRole);
+	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_soldier::actionSelectRole);
 	addChild("TryAttack", "ExecuteRole", PRIORITY, NULL, NULL);
-	addChild("ExecuteRole", "AttackRoutine", PRIORITY, (btcondition)&bt_grandma::conditionis_attacker, NULL);
-	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL, (btcondition)&bt_grandma::conditioninitial_attack, (btaction)&bt_grandma::actionInitialAttack);
-	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_grandma::conditionnormal_attack, (btaction)&bt_grandma::actionNormalAttack);
-	addChild("AttackRoutine", "Situate18", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
-	addChild("AttackRoutine", "IdleWa19r", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionIdleWar);
-	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
-	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
-	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
+	addChild("ExecuteRole", "AttackRoutine", PRIORITY, (btcondition)&bt_soldier::conditionis_attacker, NULL);
+	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL, (btcondition)&bt_soldier::conditioninitial_attack, (btaction)&bt_soldier::actionInitialAttack);
+	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_soldier::conditionnormal_attack, (btaction)&bt_soldier::actionNormalAttack);
+	addChild("AttackRoutine", "Situate18", ACTION, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
+	addChild("AttackRoutine", "IdleWa19r", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionIdleWar);
+	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_soldier::conditionis_taunter, NULL);
+	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
+	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_soldier::actionTaunter);
 
-	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
+	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseRoleDistance);
 
-	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
-	addChild("XSecAttack", "TooCloseAttack23", ACTION, INTERNAL, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
-	addChild("Peacefull", "TakeNeedle", SEQUENCE, (btcondition)&bt_grandma::conditionneedle_to_take, NULL);
+	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_soldier::conditiontoo_close_attack, NULL);
+	addChild("XSecAttack", "TooCloseAttack23", ACTION, INTERNAL, NULL, (btaction)&bt_soldier::actionTooCloseAttack);
+	addChild("Peacefull", "TakeNeedle", SEQUENCE, (btcondition)&bt_soldier::conditionneedle_to_take, NULL);
 	addChild("TakeNeedle", "XSecsNeedle", SEQUENCE, NULL, NULL);
-	addChild("XSecsNeedle", "NeedleAppearsEvent24", ACTION, NULL, (btaction)&bt_grandma::actionNeedleAppearsEvent);
-	addChild("TakeNeedle", "SelectNeedleToTake25", ACTION, NULL, (btaction)&bt_grandma::actionSelectNeedleToTake);
+	addChild("XSecsNeedle", "NeedleAppearsEvent24", ACTION, NULL, (btaction)&bt_soldier::actionNeedleAppearsEvent);
+	addChild("TakeNeedle", "SelectNeedleToTake25", ACTION, NULL, (btaction)&bt_soldier::actionSelectNeedleToTake);
 	addChild("TakeNeedle", "ChaseAndTakeNeedle", PRIORITY, NULL, NULL);
-	addChild("ChaseAndTakeNeedle", "HowToCutAndTakeNeedle", PRIORITY, (btcondition)&bt_grandma::conditioncan_reach_needle, NULL);
-	addChild("HowToCutAndTakeNeedle", "CutRope26", ACTION, (btcondition)&bt_grandma::conditionis_needle_tied, (btaction)&bt_grandma::actionCutRope);
-	addChild("HowToCutAndTakeNeedle", "TakeNeedle27", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionTakeNeedle);
-	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseNeedlePosition);
-	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionIdle, 70);
+	addChild("ChaseAndTakeNeedle", "HowToCutAndTakeNeedle", PRIORITY, (btcondition)&bt_soldier::conditioncan_reach_needle, NULL);
+	addChild("HowToCutAndTakeNeedle", "CutRope26", ACTION, (btcondition)&bt_soldier::conditionis_needle_tied, (btaction)&bt_soldier::actionCutRope);
+	addChild("HowToCutAndTakeNeedle", "TakeNeedle27", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionTakeNeedle);
+	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseNeedlePosition);
+	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionIdle, 70);
 	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL, 30);
 
-	addChild("Wander30", "SearchPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSearchPoint);
-	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander);
+	addChild("Wander30", "SearchPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionSearchPoint);
+	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionWander);
 
 
 	last_anim_id = -1;
@@ -139,8 +132,8 @@ void bt_grandma::create(string s)
 	see_player = false;
 	animation_done = false;
 	active = false;
-
-	//player_touch = false;
+	cut = false;
+	attacked = false;
 
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -158,7 +151,7 @@ void bt_grandma::create(string s)
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
-int bt_grandma::actionRagdoll()
+int bt_soldier::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
@@ -175,21 +168,8 @@ int bt_grandma::actionRagdoll()
 			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
 			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
 			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
-
-			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
-				if (ropeRef.isValid())
-					CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-			}
-
-			CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
-			if (this->getRol() == role::ATTACKER)
-				aimanager::get().RemoveEnemyAttacker(this);
-			else
-				aimanager::get().RemoveEnemyTaunt(this);
-
-			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
-
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
@@ -203,7 +183,7 @@ int bt_grandma::actionRagdoll()
 				TCompTransform* c_transform = camera->get<TCompTransform>();
 				TCompCamera* c_camera = camera->get<TCompCamera>();
 				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					//CApp::get().slowMotion(4);
+					CApp::get().slowMotion(4);
 				}
 			}
 
@@ -232,7 +212,7 @@ int bt_grandma::actionRagdoll()
 }
 
 //Ejecuta la animacin de levantarse
-int bt_grandma::actionWakeUp()
+int bt_soldier::actionWakeUp()
 {
 	if (on_enter) {
 		is_ragdoll = false;
@@ -255,59 +235,20 @@ int bt_grandma::actionWakeUp()
 
 }
 
-
-int bt_grandma::actionWaitSec()
-{
-	if (state_time <= max_time_tied)
-		return STAY;
-	else{
-	    return LEAVE;
-	}
-}
-
 //Corta todas las cuerdas a la que est atada
-int bt_grandma::actionCutOwn()
+int bt_soldier::actionCutOwn()
 {
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-	TCompRagdoll* m_ragdoll = enemy_ragdoll;
-
-	if (on_enter) {
-		if (ropeRef == nullptr){
-			tied_event = false;
-			event_detected = false;
-			return LEAVE;
-		}else{
-			// Ninja animation
-			m_ragdoll->setActive(false);
-			playAnimationIfNotPlaying(11);
-			tied_event = false;
-			event_detected = false;
-		}
-
-	}
-
-	if (state_time < getAnimationDuration(11)){
-		return STAY;
-	}else{
-		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-		tied_event = false;
-		event_detected = false;
-		is_angry = true;
-		have_to_warcry = true;
-		is_ragdoll = false;
-		return LEAVE;
-	}
+	return LEAVE;
 }
 
 //
-int bt_grandma::actionLeave()
+int bt_soldier::actionLeave()
 {
 	return LEAVE;
 }
 
 //Attack to the player when he is too close
-int bt_grandma::actionTooCloseAttack()
+int bt_soldier::actionTooCloseAttack()
 {
 	if (on_enter) {
 		TCompTransform* p_transform = player_transform;
@@ -336,7 +277,7 @@ int bt_grandma::actionTooCloseAttack()
 }
 
 //Go to the needle position (leave if cant reach)
-int bt_grandma::actionChaseNeedlePosition()
+int bt_soldier::actionChaseNeedlePosition()
 {
 	if (needle_is_valid){
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
@@ -398,7 +339,7 @@ int bt_grandma::actionChaseNeedlePosition()
 }
 
 //Select the priority needle
-int bt_grandma::actionSelectNeedleToTake()
+int bt_soldier::actionSelectNeedleToTake()
 {
 	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle, distance_change_way_point));
 	if (sucess)
@@ -407,9 +348,8 @@ int bt_grandma::actionSelectNeedleToTake()
 
 }
 
-bool cut = false;
 //Cut the needles rope
-int bt_grandma::actionCutRope()
+int bt_soldier::actionCutRope()
 {
 	if (on_enter){
 		animation_done = false;
@@ -457,7 +397,7 @@ int bt_grandma::actionCutRope()
 }
 
 //Take the needle
-int bt_grandma::actionTakeNeedle()
+int bt_soldier::actionTakeNeedle()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(7);
@@ -482,7 +422,7 @@ int bt_grandma::actionTakeNeedle()
 }
 
 //Select the idle and play it
-int bt_grandma::actionIdle()
+int bt_soldier::actionIdle()
 {
 	//TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
@@ -507,7 +447,7 @@ int bt_grandma::actionIdle()
 }
 
 //Select a point to go 
-int bt_grandma::actionSearchPoint()
+int bt_soldier::actionSearchPoint()
 {
 	float aux_time = state_time;
 	bool aux_on_enter = on_enter;
@@ -525,7 +465,7 @@ int bt_grandma::actionSearchPoint()
 }
 
 //Chase the selected point
-int bt_grandma::actionWander()
+int bt_soldier::actionWander()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(1);
@@ -579,7 +519,7 @@ int bt_grandma::actionWander()
 }
 
 //Makes a warcry
-int bt_grandma::actionWarcry()
+int bt_soldier::actionWarcry()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(18);
@@ -601,7 +541,7 @@ int bt_grandma::actionWarcry()
 }
 
 //Alert to the other grandma about the player
-int bt_grandma::actionPlayerAlert()
+int bt_soldier::actionPlayerAlert()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(17);
@@ -623,7 +563,7 @@ int bt_grandma::actionPlayerAlert()
 }
 
 //Leave the angry state, go to peacefull
-int bt_grandma::actionCalmDown()
+int bt_soldier::actionCalmDown()
 {
 	is_angry = false;
 	time_searching_player = 0;
@@ -631,7 +571,7 @@ int bt_grandma::actionCalmDown()
 }
 
 //Search random point around the last place where the player was saw
-int bt_grandma::actionSearchArroundLastPoint()
+int bt_soldier::actionSearchArroundLastPoint()
 {
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(last_point_player_saw, radius, ((TCompTransform*)own_transform)->position);
 
@@ -643,7 +583,7 @@ int bt_grandma::actionSearchArroundLastPoint()
 }
 
 //look the player around the his last point
-int bt_grandma::actionLookAround()
+int bt_soldier::actionLookAround()
 {
 	float aux_time = state_time;
 	bool aux_on_enter = on_enter;
@@ -696,7 +636,7 @@ int bt_grandma::actionLookAround()
 }
 
 //Takes a roll, attacker or taunter and a poisition to go
-int bt_grandma::actionSelectRole()
+int bt_soldier::actionSelectRole()
 {
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
@@ -727,9 +667,9 @@ int bt_grandma::actionSelectRole()
 	return LEAVE;
 }
 
-bool is_reacheable = false;
+//bool is_reacheable = false;
 //Go to his position
-int bt_grandma::actionChaseRoleDistance()
+int bt_soldier::actionChaseRoleDistance()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(15);
@@ -773,9 +713,8 @@ int bt_grandma::actionChaseRoleDistance()
 	}
 }
 
-bool attacked = false;
 //First attack
-int bt_grandma::actionInitialAttack()
+int bt_soldier::actionInitialAttack()
 {
 	if (on_enter) {
 		initial_attack = true;
@@ -804,7 +743,7 @@ int bt_grandma::actionInitialAttack()
 }
 
 //Move step by step to the roll position (leave on reach or lost)
-int bt_grandma::actionSituate()
+int bt_soldier::actionSituate()
 {
 	if (on_enter) {
 		TCompCharacterController* m_char_controller = character_controller;
@@ -851,7 +790,7 @@ int bt_grandma::actionSituate()
 }
 
 //
-int bt_grandma::actionNormalAttack()
+int bt_soldier::actionNormalAttack()
 {
 	if (on_enter) {
 		attacked = false;
@@ -865,7 +804,7 @@ int bt_grandma::actionNormalAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time  >= getAnimationDuration(4) / 5) && (!attacked)) {
+	if ((state_time  > getAnimationDuration(4) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
@@ -880,7 +819,7 @@ int bt_grandma::actionNormalAttack()
 }
 
 //Play a Idle war animation
-int bt_grandma::actionIdleWar()
+int bt_soldier::actionIdleWar()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(10);
@@ -899,7 +838,7 @@ int bt_grandma::actionIdleWar()
 }
 
 //Play a taunter routine
-int bt_grandma::actionTaunter()
+int bt_soldier::actionTaunter()
 {
 	//Meter animacion
 	if (on_enter) {
@@ -919,7 +858,7 @@ int bt_grandma::actionTaunter()
 }
 
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
-int bt_grandma::actionHurtEvent()
+int bt_soldier::actionHurtEvent()
 {
 	if (on_enter) {
 		playAnimationIfNotPlaying(9);
@@ -942,7 +881,7 @@ int bt_grandma::actionHurtEvent()
 }
 
 //
-int bt_grandma::actionNeedleAppearsEvent()
+int bt_soldier::actionNeedleAppearsEvent()
 {
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
@@ -959,7 +898,7 @@ int bt_grandma::actionNeedleAppearsEvent()
 	}
 }
 
-int bt_grandma::actionTiedEvent()
+int bt_soldier::actionTiedEvent()
 {
 
 	mov_direction = PxVec3(0, 0, 0);
@@ -1002,41 +941,42 @@ int bt_grandma::actionTiedEvent()
 		have_to_warcry = true;
 		return LEAVE;
 	}
+
 }
 
 //Keeps in falling state till ti
-int bt_grandma::actionFallingEvent()
+int bt_soldier::actionFallingEvent()
 {
 	return LEAVE;
 }
 
 //
-int bt_grandma::actionGetAngry()
+int bt_soldier::actionGetAngry()
 {
 	is_angry = true;
 	return LEAVE;
 }
 
 //Puts are_events var to false
-int bt_grandma::actionNoevents()
+int bt_soldier::actionNoevents()
 {
 	return LEAVE;
 }
 
 //
-int bt_grandma::conditionTied()
+int bt_soldier::conditionTied()
 {
 	return false;
 }
 
 //
-int bt_grandma::conditionis_ragdoll()
+int bt_soldier::conditionis_ragdoll()
 {
 	return is_ragdoll;
 }
 
 //
-int bt_grandma::conditionis_grounded()
+int bt_soldier::conditionis_grounded()
 {
 	TCompCharacterController* me_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	if (me_controller->OnGround()){
@@ -1048,19 +988,19 @@ int bt_grandma::conditionis_grounded()
 }
 
 //
-int bt_grandma::conditiontrue()
+int bt_soldier::conditiontrue()
 {
 	return true;
 }
 
 //
-int bt_grandma::conditionis_angry()
+int bt_soldier::conditionis_angry()
 {
 	return is_angry;
 }
 
 //Check if the player is close enought for an annoying attack
-int bt_grandma::conditiontoo_close_attack()
+int bt_soldier::conditiontoo_close_attack()
 {
 
 	if ((V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position) < max_dist_close_attack) && ((timer - last_time) >= delta_time_close_attack)){
@@ -1074,7 +1014,7 @@ int bt_grandma::conditiontoo_close_attack()
 }
 
 //Check if there is a needle to take
-int bt_grandma::conditionneedle_to_take()
+int bt_soldier::conditionneedle_to_take()
 {
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);
 	if (currentNumNeedlesViewed > 0){
@@ -1088,7 +1028,7 @@ int bt_grandma::conditionneedle_to_take()
 }
 
 //
-int bt_grandma::conditionis_needle_tied()
+int bt_soldier::conditionis_needle_tied()
 {
 	CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
 	if (target_rope.isValid()){
@@ -1101,13 +1041,13 @@ int bt_grandma::conditionis_needle_tied()
 }
 
 //Check if is necesary a warcry
-int bt_grandma::conditionhave_to_warcry()
+int bt_soldier::conditionhave_to_warcry()
 {
 	return have_to_warcry;
 }
 
 //Check if there player is not visible for any grandma (and reach the last position)
-int bt_grandma::conditionplayer_lost()
+int bt_soldier::conditionplayer_lost()
 {
 	if ((last_time_player_saw) > max_time_player_lost){
 		player_previously_lost = true;
@@ -1118,7 +1058,7 @@ int bt_grandma::conditionplayer_lost()
 }
 
 //check if the player is visible
-int bt_grandma::conditionsee_player()
+int bt_soldier::conditionsee_player()
 {
 	//Podría quitar see_player
 	if ((findPlayer()) && (player_previously_lost)){
@@ -1132,7 +1072,7 @@ int bt_grandma::conditionsee_player()
 }
 
 //Check the look for timer
-int bt_grandma::conditionLook_for_timeout()
+int bt_soldier::conditionLook_for_timeout()
 {
 	if (time_searching_player > max_time_player_search){
 		return true;
@@ -1144,7 +1084,7 @@ int bt_grandma::conditionLook_for_timeout()
 }
 
 //Check if the role is attacker and is close enought
-int bt_grandma::conditionis_attacker()
+int bt_soldier::conditionis_attacker()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
@@ -1159,7 +1099,7 @@ int bt_grandma::conditionis_attacker()
 }
 
 //Check if the player is in range and cold down time passed
-int bt_grandma::conditionnormal_attack()
+int bt_soldier::conditionnormal_attack()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
@@ -1176,34 +1116,34 @@ int bt_grandma::conditionnormal_attack()
 }
 
 //Init on false
-int bt_grandma::conditionare_events()
+int bt_soldier::conditionare_events()
 {
 	return event_detected;
 	//return are_events;
 }
 
 //Check if is a hurt event
-int bt_grandma::conditionhurt_event()
+int bt_soldier::conditionhurt_event()
 {
 	return hurt_event;
 }
 
 //Check if is a falling event
-int bt_grandma::conditionfalling_event()
+int bt_soldier::conditionfalling_event()
 {
 	return false;
 	//return falling_event;
 }
 
 //Check if is a tied event
-int bt_grandma::conditiontied_event()
+int bt_soldier::conditiontied_event()
 {
 	//return false;
 	return tied_event;
 }
 
 //Check if can reach the selected needle
-int bt_grandma::conditioncan_reach_needle()
+int bt_soldier::conditioncan_reach_needle()
 {
 	//XASSERT(needle_objective->needleRef.isValid(), "Invalid needle");
 	if (needle_is_valid){
@@ -1230,7 +1170,7 @@ int bt_grandma::conditioncan_reach_needle()
 }
 
 //Check if the role is taunter and is close enought
-int bt_grandma::conditionis_taunter()
+int bt_soldier::conditionis_taunter()
 {
 	float distance = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
 	if ((rol == role::TAUNTER) && (distance <= 4.5f)){
@@ -1243,7 +1183,7 @@ int bt_grandma::conditionis_taunter()
 }
 
 //
-int bt_grandma::conditioninitial_attack()
+int bt_soldier::conditioninitial_attack()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
@@ -1257,7 +1197,7 @@ int bt_grandma::conditioninitial_attack()
 }
 
 //Check if it is too far from the target position
-int bt_grandma::conditionfar_from_target_pos()
+int bt_soldier::conditionfar_from_target_pos()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
@@ -1278,7 +1218,7 @@ int bt_grandma::conditionfar_from_target_pos()
 
 
 // Sensor para detectar si el enemigo ve al player
-void bt_grandma::playerViewedSensor(){
+void bt_soldier::playerViewedSensor(){
 	if (!player_viewed_sensor){
 
 		bool tri = ((TCompPlayerPosSensor*)player_pos_sensor)->playerInRange();
@@ -1300,7 +1240,7 @@ void bt_grandma::playerViewedSensor(){
 }
 
 // Sensor para detectar si el enemigo ve alguna aguja
-void bt_grandma::needleViewedSensor(){
+void bt_soldier::needleViewedSensor(){
 
 	//--------------------------------------------------------------------------------------------------
 	/*NOTA: Debería solo ejecutar tanto este sensor como el de player position mientras no haya eventos*/
@@ -1328,7 +1268,7 @@ void bt_grandma::needleViewedSensor(){
 	//}
 }
 
-void bt_grandma::tiedSensor(){
+void bt_soldier::tiedSensor(){
 	((TCompSensorTied*)tied_sensor)->keepTied();
 	if (!tied_succesfull){
 		if (!tied_event){
@@ -1349,7 +1289,7 @@ void bt_grandma::tiedSensor(){
 	}
 }
 
-void bt_grandma::hurtSensor(float damage){
+void bt_soldier::hurtSensor(float damage){
 
 	if (!is_angry)
 		have_to_warcry = true;
@@ -1370,32 +1310,28 @@ void bt_grandma::hurtSensor(float damage){
 	}
 }
 
-void bt_grandma::WarWarningSensor(XMVECTOR player_position){
+void bt_soldier::WarWarningSensor(XMVECTOR player_position){
 	is_angry = true;
 	have_to_warcry = false;
 	player_detected_pos = player_position;
 	setCurrent(NULL);
 }
 
-void bt_grandma::PlayerFoundSensor(){
+void bt_soldier::PlayerFoundSensor(){
 
 	last_time_player_saw = 0;
 	setCurrent(NULL);
 }
-/*void bt_grandma::PlayerTouchSensor(bool touch){
-	player_touch = touch;
-	//setCurrent(NULL);
-}*/
 
-void bt_grandma::update(float elapsed){
+void bt_soldier::update(float elapsed){
 
 	if (active){
-		sensor_acum += elapsed;
+		sensor_acum_soldier += elapsed;
 
-		if (sensor_delay <= sensor_acum)
+		if (sensor_delay <= sensor_acum_soldier)
 		{
 			needleViewedSensor();
-			sensor_acum = 0;
+			sensor_acum_soldier = 0;
 		}
 
 
@@ -1406,12 +1342,12 @@ void bt_grandma::update(float elapsed){
 			last_time_player_saw = 0;
 		}
 		/*else{
-			float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
-			if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
-			if (rol == role::ATTACKER)
-			aimanager::get().RemoveEnemyAttacker(this);
-			}
-			}*/
+		float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+		if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
+		if (rol == role::ATTACKER)
+		aimanager::get().RemoveEnemyAttacker(this);
+		}
+		}*/
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
@@ -1419,12 +1355,13 @@ void bt_grandma::update(float elapsed){
 			}
 		}
 		this->recalc(elapsed);
-	}else{
+	}
+	else{
 		resetBot();
 	}
 }
 
-bool bt_grandma::trueEveryXSeconds(float time)
+bool bt_soldier::trueEveryXSeconds(float time)
 {
 	static float counter = 0;
 	counter += CApp::get().delta_time;
@@ -1435,7 +1372,7 @@ bool bt_grandma::trueEveryXSeconds(float time)
 	return false;
 }
 
-void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
+void bt_soldier::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	physx::PxRaycastBuffer buf;
 	Physics.raycastAll(own_position->position + XMVectorSet(0, 0.1f, 0, 0), own_position->getFront(), 1.f, buf);
 	for (int i = 0; i < (int)buf.nbTouches; i++)
@@ -1453,19 +1390,11 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
 }
 
-/*void bt_grandma::setId(unsigned int id){
-	my_id = id;
-}
-
-unsigned int bt_grandma::getId(){
-	return my_id;
-}*/
-
-CHandle bt_grandma::getPlayerTransform(){
+CHandle bt_soldier::getPlayerTransform(){
 	return player_transform;
 }
 
-bool bt_grandma::findPlayer(){
+bool bt_soldier::findPlayer(){
 	if (((TCompPlayerPosSensor*)player_pos_sensor)->playerInRange()) {
 		return true;
 	}
@@ -1474,18 +1403,18 @@ bool bt_grandma::findPlayer(){
 	}
 }
 
-bool bt_grandma::isAngry(){
+bool bt_soldier::isAngry(){
 	return is_angry;
 }
 
-void bt_grandma::setRol(int r){
+void bt_soldier::setRol(int r){
 	if (r == 1)
 		rol = role::ATTACKER;
 	else if (r == 2)
 		rol = role::TAUNTER;
 }
 
-void bt_grandma::setAttackerSlot(int s){
+void bt_soldier::setAttackerSlot(int s){
 	if (s == 1){
 		slot = attacker_slots::NORTH;
 	}
@@ -1497,22 +1426,22 @@ void bt_grandma::setAttackerSlot(int s){
 	}
 }
 
-int bt_grandma::getAttackerSlot(){
+int bt_soldier::getAttackerSlot(){
 	return slot;
 }
 
-int bt_grandma::getRol(){
+int bt_soldier::getRol(){
 	return rol;
 }
 
-float bt_grandma::getDistanceToPlayer(){
+float bt_soldier::getDistanceToPlayer(){
 	if (own_transform.isValid())
 		return V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
 	else
 		return 0.f;
 }
 
-int bt_grandma::getNearestSlot(bool free_north, bool free_east, bool free_west){
+int bt_soldier::getNearestSlot(bool free_north, bool free_east, bool free_west){
 	float distanceToNorth = 1000.f;
 	float distanceToEast = 1000.f;
 	float distanceToWest = 1000.f;
@@ -1555,7 +1484,7 @@ int bt_grandma::getNearestSlot(bool free_north, bool free_east, bool free_west){
 }
 
 
-void bt_grandma::drawdebug() {
+void bt_soldier::drawdebug() {
 	font.print3D(wander_target, "Destino");
 	if (slot == attacker_slots::NORTH)
 		font.print3D(wander_target + XMVectorSet(0.f, 0.5f, 0.f, 0.f), "NORTH");
@@ -1565,7 +1494,7 @@ void bt_grandma::drawdebug() {
 		font.print3D(wander_target + XMVectorSet(0.f, 0.5f, 0.f, 0.f), "EAST");
 }
 
-void bt_grandma::stopAllAnimations() {
+void bt_soldier::stopAllAnimations() {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
 
 	for (int i = 0; i < 20; ++i) {
@@ -1573,7 +1502,7 @@ void bt_grandma::stopAllAnimations() {
 	}
 }
 
-void bt_grandma::playAnimationIfNotPlaying(int id) {
+void bt_soldier::playAnimationIfNotPlaying(int id) {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
 
 	if (id != last_anim_id) {
@@ -1583,31 +1512,31 @@ void bt_grandma::playAnimationIfNotPlaying(int id) {
 	}
 }
 
-void bt_grandma::stopAnimation(int id) {
+void bt_soldier::stopAnimation(int id) {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
 	m_skeleton->stopAnimation(id);
 }
 
-float bt_grandma::getAnimationDuration(int id) {
+float bt_soldier::getAnimationDuration(int id) {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
 
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
 }
 
-void bt_grandma::setActive(bool act){
+void bt_soldier::setActive(bool act){
 	active = act;
 }
 
-void bt_grandma::setIndRecastAABB(int ind){
+void bt_soldier::setIndRecastAABB(int ind){
 	ind_recast_aabb = ind;
 }
 
-int bt_grandma::getIndRecastAABB(){
+int bt_soldier::getIndRecastAABB(){
 	return ind_recast_aabb;
 }
 
-void bt_grandma::resetBot(){
+void bt_soldier::resetBot(){
 	setCurrent(NULL);
 	playAnimationIfNotPlaying(10);
 	mov_direction = PxVec3(0, 0, 0);
