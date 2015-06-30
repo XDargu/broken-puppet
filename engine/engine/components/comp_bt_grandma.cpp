@@ -100,7 +100,8 @@ void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 }
 
 void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {	
-	m_ai_controller->setRagdoll();
+	m_ai_controller->hurtSensor(100000);
+	//m_ai_controller->setRagdoll();
 }
 
 

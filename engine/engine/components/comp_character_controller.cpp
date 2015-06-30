@@ -112,14 +112,17 @@ void TCompCharacterController::Move(physx::PxVec3 move, bool crouch, bool jump, 
 	// grab current velocity, we will be changing it.
 	velocity = rigid->rigidBody->getLinearVelocity();
 	physx::PxVec3 prev_velocity = rigid->rigidBody->getLinearVelocity();
-
+	
 	ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
-
+	
 	TurnTowardsCameraForward(); // makes the character face the way the camera is looking
+	
 
 	GroundCheck(0); // detect and stick to ground
+	
 
 	SetFriction(); // use low or high friction values depending on the current states
+	
 
 	// control and velocity handling is different when grounded and airborne:
 	if (onGround)
@@ -130,6 +133,7 @@ void TCompCharacterController::Move(physx::PxVec3 move, bool crouch, bool jump, 
 	{
 		HandleAirborneVelocities();
 	}
+	
 
 	// reassign velocity, since it will have been modified by the above functions.		
 	rigid->rigidBody->setLinearVelocity(velocity);
@@ -187,7 +191,7 @@ void TCompCharacterController::GroundCheck(float elapsed)
 
 		for (int i = 0; i < (int)buf.nbTouches; i++)
 		{
-			if (buf.touches[i].actor != rigid->rigidBody) {
+			if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 				// check whether we hit a non-trigger collider (and not the character itself)
 
 				// this counts as being on ground.
@@ -200,6 +204,9 @@ void TCompCharacterController::GroundCheck(float elapsed)
 						int i = 0;
 
 					// Colocamos en el ground a pelo
+					// Imprimir el actor
+					std::string n = std::string(buf.touches[i].actor->getName()) + ", ";
+					dbg(n.c_str());
 					PxTransform px_trans = rigid->rigidBody->getGlobalPose();
 					px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.1f, 0);
 					rigid->rigidBody->setGlobalPose(px_trans);
@@ -357,7 +364,7 @@ physx::PxVec3 TCompCharacterController::Vector3Lerp(physx::PxVec3 start, physx::
 // TODO NOTE provisional para rotar objetos
 
 bool TCompCharacterController::OnGround() {
-
+	
 	TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
 	PxTransform &px_trans = rigid->rigidBody->getGlobalPose();
@@ -405,19 +412,15 @@ void TCompCharacterController::Move(physx::PxVec3 move, bool crouch, bool jump, 
 	crouchInput = crouch;
 	jumpInput = jump;
 	currentLookPos = lookPos;
-
+	
 	// grab current velocity, we will be changing it.
 	velocity = rigid->rigidBody->getLinearVelocity();
 	physx::PxVec3 prev_velocity = rigid->rigidBody->getLinearVelocity();
 
 	ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
-
 	TurnTowardsCameraForward(); // makes the character face the way the camera is looking
-
 	GroundCheck(elapsed); // detect and stick to ground
-
 	SetFriction(); // use low or high friction values depending on the current states
-
 	// control and velocity handling is different when grounded and airborne:
 	if (onGround)
 	{
@@ -427,7 +430,6 @@ void TCompCharacterController::Move(physx::PxVec3 move, bool crouch, bool jump, 
 	{
 		HandleAirborneVelocities();
 	}
-
 	// reassign velocity, since it will have been modified by the above functions.		
 	rigid->rigidBody->setLinearVelocity(velocity);
 }

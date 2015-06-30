@@ -21,11 +21,13 @@ public:
 	XMVECTOR pos_1;
 	XMVECTOR pos_2;
 
+	bool tensed;
+
 	float max_distance;
 	float width;
 	
 
-	TCompRope() : max_distance(20), width(0.02f), remove_counter(0) {}
+	TCompRope() : max_distance(20), width(0.02f), remove_counter(0), tensed(false){}
 
 	~TCompRope();
 
@@ -41,6 +43,8 @@ public:
 	void fixedUpdate(float elapsed);
 
 	bool getStaticPosition(XMVECTOR& position);
+
+	void tenseRope();
 };
 
 #endif
