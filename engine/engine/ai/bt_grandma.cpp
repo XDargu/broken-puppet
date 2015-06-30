@@ -176,10 +176,10 @@ int bt_grandma::actionRagdoll()
 			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
 			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
 
-			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
+			/*if (((TCompSensorTied*)tied_sensor)->getTiedState()){
 				if (ropeRef.isValid())
 					CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-			}
+			}*/
 
 			CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
 			if (this->getRol() == role::ATTACKER)
