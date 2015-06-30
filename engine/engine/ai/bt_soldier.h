@@ -1,5 +1,5 @@
-#ifndef _BT_GRANDMA_INC
-#define _BT_GRANDMA_INC
+#ifndef _BT_SOLDIER_INC
+#define _BT_SOLDIER_INC
 
 #include "mcv_platform.h"
 #include "behaviour_trees.h"
@@ -9,14 +9,14 @@
 #include "../components/comp_sensor_tied.h"
 #include "../components/comp_player_position_sensor.h"
 
-class bt_grandma : public bt
+class bt_soldier : public bt
 {
 private:
 
 	float find_path_time;
 	float last_time_player_saw;
 	float time_searching_player;
-	float time_tied;
+	float sensor_delay;
 	XMVECTOR previous_point_search;
 	XMVECTOR center;
 	XMVECTOR last_point_player_saw;
@@ -26,6 +26,7 @@ private:
 	CHandle player;
 	int ind_path;
 	int ind_recast_aabb;
+	int last_anim_id;
 	physx::PxVec3 last_look_direction;
 	physx::PxVec3 mov_direction;
 	physx::PxVec3 look_direction;
@@ -49,14 +50,9 @@ private:
 	bool initial_attack;
 	bool animation_done;
 	bool active;
-	//bool player_touch;
-	int last_anim_id;
-
-	//Bool ñapa a quitar en un futuro -----
 	bool player_previously_lost;
-
-	float sensor_delay;
-	//-------------------------------------
+	bool cut;
+	bool attacked;
 
 	CHandle ropeRef;
 	CHandle m_sensor;
@@ -69,10 +65,10 @@ private:
 	CHandle enemy_rigid;
 
 	CHandle audioSource;
-	
+
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;
-	enum attacker_slots{ NO_SLOT, NORTH, EAST, WEST};
+	enum attacker_slots{ NO_SLOT, NORTH, EAST, WEST };
 	attacker_slots slot;
 
 public:
@@ -84,8 +80,6 @@ public:
 	int actionWakeUp();
 	//Corta todas las cuerdas a la que est atada
 	int actionCutOwn();
-	//Espera unos segundos
-	int actionWaitSec();
 	//
 	int actionLeave();
 	//Attack to the player when he is too close
@@ -192,15 +186,12 @@ public:
 	/*Sensores*/
 
 	void playerViewedSensor();
-	void needleViewedSensor();	
+	void needleViewedSensor();
 	void tiedSensor();
 	void hurtSensor(float damage);
 	void PlayerFoundSensor();
-	//void PlayerTouchSensor(bool touch);
 	void WarWarningSensor(XMVECTOR player_position);
 	void update(float elapsed);
-	//unsigned getId();
-	//void setId(unsigned int id);
 
 	bool player_viewed_sensor;
 	unsigned int lastNumNeedlesViewed;
@@ -234,3 +225,4 @@ public:
 };
 
 #endif
+
