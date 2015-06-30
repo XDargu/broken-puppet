@@ -200,6 +200,7 @@ void CNav_mesh_manager::clearNavMesh(){
 	colSpheres.clear();
 	colMeshes.clear();
 	colConvex.clear();
+	colCapsules.clear();
 	keep_updating_navmesh = false;
 	nav_mesh_input.clearInput();
 	recastAABBs.clear();
