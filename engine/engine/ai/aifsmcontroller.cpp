@@ -86,3 +86,15 @@ CHandle aifsmcontroller::getTransform(){
 	CHandle aux;
 	return aux;
 }
+
+void aifsmcontroller::setRol(int r){}
+
+void aifsmcontroller::setAttackerSlot(int s){}
+
+int aifsmcontroller::getAttackerSlot(){ return 0; }
+
+int aifsmcontroller::getRol(){ return 0; }
+
+float aifsmcontroller::getDistanceToPlayer(){ return 0.f; }
+
+int aifsmcontroller::getNearestSlot(bool free_north, bool free_east, bool free_west){ return 0; }

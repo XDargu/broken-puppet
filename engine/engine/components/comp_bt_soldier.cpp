@@ -23,6 +23,7 @@ TCompBtSoldier::TCompBtSoldier(bt_soldier* ai_controller) {
 
 	m_ai_controller = new bt_soldier;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
+	m_ai_controller->setKind(aicontroller::kind::SOLDIER);
 	aimanager::get().addBot(m_ai_controller);
 }
 
@@ -43,6 +44,7 @@ void TCompBtSoldier::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	m_ai_controller = new bt_soldier;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
+	m_ai_controller->setKind(aicontroller::kind::SOLDIER);
 	aimanager::get().addBot(m_ai_controller);
 }
 

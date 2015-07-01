@@ -5,8 +5,26 @@
 
 using namespace DirectX;
 
-const float max_dist_reach_needle = 3.f;
-const float distance_change_way_point = 0.3f;
+//Constants
+const int max_bf_posibilities = 7;
+const float max_dist_reach_needle = 1.8f;
+const float max_dist_close_attack = 1.7f;
+const float max_time_player_lost = 2.f;
+const float max_time_tied = 2.f;
+const float max_distance_to_attack = 1.5f;
+const float max_time_player_search = 7.f;
+const float max_range_role = 7.f;
+const float max_distance_taunter = 4.f;
+const float delta_time_close_attack = 6.f;
+const float distance_change_way_point = 0.55f;
+const float force_large_impact = 500.f;
+const float force_medium_impact = 100.f;
+const float max_time_ragdoll = 3.f;
+const float radius = 7.f;
+
+const float walk_speed = 0.8f;
+const float run_speed = 2.f;
+const float run_angry_speed = 2.2f;
 
 void bt_basic_enemy::create(string s)
 {
@@ -343,4 +361,80 @@ unsigned int bt_basic_enemy::getInt(){
 CHandle bt_basic_enemy::getTransform(){
 	CHandle transform = ((CEntity*)entity)->get<TCompTransform>();
 	return transform;
+}
+
+void bt_basic_enemy::setRol(int r){
+	if (r == 1)
+		rol = role::ATTACKER;
+	else if (r == 2)
+		rol = role::TAUNTER;
+}
+
+void bt_basic_enemy::setAttackerSlot(int s){
+	if (s == 1){
+		slot = attacker_slots::NORTH;
+	}
+	else if (s == 2){
+		slot = attacker_slots::EAST;
+	}
+	else if (s == 3){
+		slot = attacker_slots::WEST;
+	}
+}
+
+int bt_basic_enemy::getAttackerSlot(){
+	return slot;
+}
+
+int bt_basic_enemy::getRol(){
+	return rol;
+}
+
+float bt_basic_enemy::getDistanceToPlayer(){
+	if (own_transform.isValid())
+		return V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
+	else
+		return 0.f;
+}
+
+int bt_basic_enemy::getNearestSlot(bool free_north, bool free_east, bool free_west){
+	float distanceToNorth = 1000.f;
+	float distanceToEast = 1000.f;
+	float distanceToWest = 1000.f;
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR left = XMVectorSet(-1, 0, 0, 0);
+	XMVECTOR right = XMVectorSet(1, 0, 0, 0);
+	XMVECTOR front = XMVectorSet(0, 0, 1, 0);
+
+	if (free_north){
+		XMVECTOR slot_positionNorth = front * max_distance_to_attack;
+		XMVECTOR pos = (p_transform->position + slot_positionNorth);
+		distanceToNorth = V3DISTANCE(pos, m_transform->position);
+	}
+
+	if (free_east){
+		XMVECTOR slot_positionEast = left * max_distance_to_attack;
+		XMVECTOR pos = (p_transform->position + slot_positionEast);
+		distanceToEast = V3DISTANCE(pos, m_transform->position);
+	}
+
+	if (free_west){
+		XMVECTOR slot_positionWest = right * max_distance_to_attack;
+		XMVECTOR pos = (p_transform->position + slot_positionWest);
+		distanceToWest = V3DISTANCE(pos, m_transform->position);
+	}
+
+	if ((distanceToNorth <= distanceToEast) && (distanceToNorth <= distanceToWest)){
+		//devolvemos north
+		return 0;
+	}
+	else if ((distanceToEast <= distanceToNorth) && (distanceToEast <= distanceToWest)){
+		//devolvemos east
+		return 1;
+	}
+	else if ((distanceToWest <= distanceToNorth) && (distanceToWest <= distanceToEast)){
+		//devolvemos west
+		return 2;
+	}
 }
