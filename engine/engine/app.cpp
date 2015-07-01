@@ -754,7 +754,7 @@ void CApp::render() {
 	silouette.apply(rt_base);
 	ssrr.apply(silouette.getOutput());
 	ssao.apply(ssrr.getOutput());
-	sharpen.apply(ssao.getOutput());
+	sharpen.apply(ssrr.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());

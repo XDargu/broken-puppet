@@ -818,7 +818,7 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 
 	// Evaluate falling
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
-	falling = velocity.y <= 0 && !((TCompCharacterController*)comp_character_controller)->OnGround();
+	falling = velocity.y < -0.5f && !((TCompCharacterController*)comp_character_controller)->OnGround();	
 
 	return is_moving;
 }

@@ -233,3 +233,7 @@ bool TCompRope::getStaticPosition(XMVECTOR& position) {
 
 	return false;
 }
+
+void TCompRope::tenseRope() {
+
+}

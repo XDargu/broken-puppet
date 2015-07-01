@@ -177,10 +177,10 @@ int bt_grandma::actionRagdoll()
 			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
 
 			//Si esta atada, eliminamos el hilo antes de matar al enemigo
-			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
+			/*if (((TCompSensorTied*)tied_sensor)->getTiedState()){
 				if (ropeRef.isValid())
 					CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-			}
+			}*/
 
 			CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
 			if (this->getRol() == role::ATTACKER)
@@ -188,8 +188,9 @@ int bt_grandma::actionRagdoll()
 			else
 				aimanager::get().RemoveEnemyTaunt(this);
 
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
@@ -203,7 +204,7 @@ int bt_grandma::actionRagdoll()
 				TCompTransform* c_transform = camera->get<TCompTransform>();
 				TCompCamera* c_camera = camera->get<TCompCamera>();
 				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					CApp::get().slowMotion(4);
+					//CApp::get().slowMotion(4);
 				}
 			}
 
