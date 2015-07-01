@@ -131,7 +131,7 @@ void bt_soldier::create(string s)
 	slot_position = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	player_pos_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
-	tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
+	//tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
@@ -581,7 +581,8 @@ int bt_soldier::actionLookAround()
 	time_searching_player += CApp::get().delta_time;
 	//Tratamos de evitar cambios demasiado repentinos de ruta
 	if (on_enter){
-
+		player_viewed_sensor = false;
+		have_to_warcry = false;
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = run_speed;
@@ -1330,7 +1331,7 @@ void bt_soldier::update(float elapsed){
 
 
 		playerViewedSensor();
-		tiedSensor();
+		//tiedSensor();
 		if (findPlayer()){
 			last_point_player_saw = ((TCompTransform*)player_transform)->position;
 			last_time_player_saw = 0;

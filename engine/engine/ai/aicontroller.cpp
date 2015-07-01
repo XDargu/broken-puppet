@@ -18,11 +18,3 @@ unsigned int aicontroller::getId(){
 	return my_id;
 }
 
-void aicontroller::setKind(kind type){
-	enemy_type = type;
-}
-
-aicontroller::kind aicontroller::getKind(){
-	return enemy_type;
-}
-

@@ -5,10 +5,6 @@
 class aicontroller
 {
 public:
-	enum kind{ SOLDIER, GRANDMA };
-
-	void setKind(kind type);
-	kind getKind();
 	virtual void recalc(float deltaTime) = 0;
 	virtual void create(std::string) = 0;
 	virtual void update(float elapsed) = 0;
@@ -34,7 +30,6 @@ public:
 	~aicontroller();
 private:
 	unsigned int my_id;
-	kind enemy_type;
 };
 #endif
 
