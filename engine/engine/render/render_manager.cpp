@@ -181,6 +181,13 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			setTransformType(tmx->getType() / 100.0f);
 			setWorldMatrix(tmx->getWorld());
 
+			// Highligh border -- DOESN'T WORK WITH MULTIPLE SUBMESHES
+			/*if (tmx->getType() >= 80 && tmx->getType() <= 90) {
+				render_techniques_manager.getByName("highligh")->activate();
+				it->mesh->renderGroup(it->mesh_id);
+				curr_tech->activate();
+			}*/
+
 			// Pintar la mesh:submesh del it
 			it->mesh->renderGroup(it->mesh_id);
 			

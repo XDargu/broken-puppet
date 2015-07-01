@@ -204,9 +204,6 @@ void TCompCharacterController::GroundCheck(float elapsed)
 						int i = 0;
 
 					// Colocamos en el ground a pelo
-					// Imprimir el actor
-					std::string n = std::string(buf.touches[i].actor->getName()) + ", ";
-					dbg(n.c_str());
 					PxTransform px_trans = rigid->rigidBody->getGlobalPose();
 					px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.1f, 0);
 					rigid->rigidBody->setGlobalPose(px_trans);
@@ -391,7 +388,7 @@ bool TCompCharacterController::OnGround() {
 }
 
 bool TCompCharacterController::IsJumping(){
-	return (onAir && (velocity.y > 0) && (!onGround));
+	return (onAir && (velocity.y > 0.5) && (!onGround));
 }
 
 physx::PxReal TCompCharacterController::getMass(){
