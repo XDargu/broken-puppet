@@ -74,7 +74,6 @@ void TCompAudioSource::update(float elapsed){
 			if (loop){
 				if (distance >= distance_max){
 					asociated_sound.stopSound();
-					CEntityManager::get().remove(((CEntity*)this));
 				}
 			}
 		}

@@ -353,9 +353,9 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	//loadScene("data/scenes/scene_1.xml");
+	loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
-	loadScene("data/scenes/scene_3.xml");
+	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
 
