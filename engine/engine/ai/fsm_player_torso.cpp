@@ -669,30 +669,40 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 		{
+			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			
 			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
 
-			if (djoint) {
-				djoint->joint->setMaxDistance(0.1f);
-				PxRigidActor* a1 = nullptr;
-				PxRigidActor* a2 = nullptr;
+			if (rope && djoint) {
+				if (!rope->tensed) {
+					rope->tensed = true;
+					djoint->joint->setMaxDistance(0.1f);
+					PxRigidActor* a1 = nullptr;
+					PxRigidActor* a2 = nullptr;
 
-				djoint->joint->getActors(a1, a2);
-				// Wake up the actors, if dynamic
-				if (a1 && a1->isRigidDynamic()) {
-					if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
-						((physx::PxRigidDynamic*)a1)->wakeUp();
+					if (rope->joint_aux.isValid()) {
+						TCompDistanceJoint* joint2 = rope->joint_aux;
+						joint2->joint->setMaxDistance(0.1f);
+						joint2->awakeActors();
 					}
 
-					((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+					djoint->joint->getActors(a1, a2);
+					// Wake up the actors, if dynamic
+					if (a1 && a1->isRigidDynamic()) {
+						if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
+							((physx::PxRigidDynamic*)a1)->wakeUp();
+						}
 
-					//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-				}
-				if (a2 && a2->isRigidDynamic()) {
-					if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
-						((physx::PxRigidDynamic*)a2)->wakeUp();
+						((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+
+						//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 					}
-					((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-					//((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+					if (a2 && a2->isRigidDynamic()) {
+						if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
+							((physx::PxRigidDynamic*)a2)->wakeUp();
+						}
+						((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+						//((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+					}
 				}
 			}
 		}

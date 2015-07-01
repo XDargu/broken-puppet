@@ -355,8 +355,6 @@ bool CApp::create() {
 	// XML Pruebas
 	loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
-	loadScene("data/scenes/scene_3.xml");
-	//loadScene("data/scenes/scene_2.xml");
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
@@ -755,8 +753,8 @@ void CApp::render() {
 	activateCamera(camera, 1);
 	silouette.apply(rt_base);
 	ssrr.apply(silouette.getOutput());
-	ssao.apply(ssrr.getOutput());
-	sharpen.apply(ssao.getOutput());
+	//ssao.apply(ssrr.getOutput());
+	sharpen.apply(ssrr.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());

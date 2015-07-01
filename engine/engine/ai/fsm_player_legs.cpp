@@ -818,8 +818,8 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 
 	// Evaluate falling
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
-	falling = velocity.y <= 0 && !((TCompCharacterController*)comp_character_controller)->OnGround();
-
+	falling = velocity.y < -1.5f && !((TCompCharacterController*)comp_character_controller)->OnGround();	
+	dbg("velocity: %f, %f, %f\n", velocity.x, velocity.y, velocity.z);
 	return is_moving;
 }
 
@@ -828,7 +828,7 @@ bool FSMPlayerLegs::EvaluateFall(float elapsed){
 	TCompRigidBody* rigidbody = (TCompRigidBody*)comp_rigidbody;
 
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
-	return velocity.y <= 0 && !((TCompCharacterController*)comp_character_controller)->OnGround();
+	return velocity.y < -1.5 && !((TCompCharacterController*)comp_character_controller)->OnGround();
 }
 
 void FSMPlayerLegs::EvaluateHit(float damage){
