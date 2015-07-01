@@ -30,15 +30,17 @@ void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			CSoundManager::get().addFXTrack(sound_char, sound_name);
 			asociated_sound.init_sound(sound_name);
 			loop = atts.getBool("loop", false);
+			distance_max = atts.getFloat("distance", 5.5f);
+			volume = atts.getFloat("volume", 0.5f);
+			asociated_sound.setSoundVolume(volume);
 			asociated_sound.setLoop(loop);
 			autoPlaySound = true;
 		}
 	}
-	
 }
 
 void TCompAudioSource::init() {
-
+	player = CEntityManager::get().getByName("Player");
 }
 
 void TCompAudioSource::update(float elapsed){
@@ -57,9 +59,22 @@ void TCompAudioSource::update(float elapsed){
 	asociated_sound.setSoundPosition(pos, front, NULL);
 	BASS_Apply3D();
 	if (autoPlaySound)
+		player_transform = ((CEntity*)player)->get<TCompTransform>();
+		TCompTransform* p_transform = (TCompTransform*)player_transform;
+		TCompTransform* m_transform = (TCompTransform*)own_transform;
+		float distance = V3DISTANCE(transform->position, p_transform->position);
 		if (!played){
-			asociated_sound.playSound();
-			played = true;
+			if (distance < distance_max){
+				asociated_sound.playSound();
+				played = true;
+			}
+		}else{
+			if (loop){
+				if (distance >= distance_max){
+					asociated_sound.stopSound();
+					CEntityManager::get().remove(((CEntity*)this));
+				}
+			}
 		}
 }
 

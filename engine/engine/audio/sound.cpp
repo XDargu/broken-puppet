@@ -113,6 +113,10 @@ void CSound::setSoundPosition(BASS_3DVECTOR* pos_source, BASS_3DVECTOR* orient, 
 	BASS_ChannelSet3DPosition(own_channel, pos_source, orient, vel);
 }
 
+void CSound::setSoundVolume(float volume){
+	BASS_ChannelSetAttribute(own_channel, BASS_ATTRIB_VOL, volume);
+}
+
 bool CSound::Set3DSampleAttributes(DWORD handle, DWORD mode, float min, float max){
 	BASS_SAMPLE info;
 	info.flags = mode;

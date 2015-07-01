@@ -25,5 +25,6 @@ public:
 	bool Set3DSampleAttributes(DWORD handle, DWORD mode, float min, float max);
 	void setLoop(bool looped);
 	bool getLoop();
+	void setSoundVolume(float volume);
 };
 #endif

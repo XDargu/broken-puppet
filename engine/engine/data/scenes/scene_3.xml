@@ -102,10 +102,6 @@
 	<entity  prefab="PlayerCamera">
 <transform position="-1.49808 -2.77333 -3.06559"/>
 	</entity>
-<!--<entity>
-   <transform position="6.50192 3.22667 -5.06559"/>
-   <audioSource sound="sonar.wav" loop="true"/>
-</entity>-->
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_pelev_plata_half_0_12.0" />
 <transform position="-3.0 2.75 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
