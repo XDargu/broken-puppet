@@ -100,8 +100,12 @@
 <transform position="-0.498076 -0.77333 -4.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="PlayerCamera">
-<transform position="6.50192 3.22667 -5.06559"/>
+<transform position="-1.49808 -2.77333 -3.06559"/>
 	</entity>
+<!--<entity>
+   <transform position="6.50192 3.22667 -5.06559"/>
+   <audioSource sound="sonar.wav" loop="true"/>
+</entity>-->
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_pelev_plata_half_0_12.0" />
 <transform position="-3.0 2.75 -4.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -4630,7 +4634,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.81794" boxY="0.0889033" boxZ="1.63248"/>
 <staticbody/>
 	</entity>
-	<entity tag = "enemy" prefab="EnemyGrandma">
+<entity tag = "enemy" prefab="EnemyGrandma">
 <name name="EnemyGrandma_479.0" />
 <transform position="-8.0327 -2.04605 2.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#1"/>
