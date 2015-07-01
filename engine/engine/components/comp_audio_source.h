@@ -13,6 +13,9 @@ private:
 	DWORD m_mode;
 	float m_min;
 	float m_max;
+	bool autoPlaySound;
+	bool played;
+	bool loop;
 public:
 
 	CSound asociated_sound;

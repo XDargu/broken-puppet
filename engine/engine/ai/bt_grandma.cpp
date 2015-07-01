@@ -176,6 +176,7 @@ int bt_grandma::actionRagdoll()
 			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
 			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
 
+			//Si esta atada, eliminamos el hilo antes de matar al enemigo
 			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
 				if (ropeRef.isValid())
 					CEntityManager::get().remove(CHandle(ropeRef).getOwner());
