@@ -41,15 +41,9 @@ void bt_soldier::create(string s)
 	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_soldier::conditionTied, NULL);
-	addChild("WakeUp", "GroundedTied", PRIORITY, NULL, NULL);
-	addChild("GroundedTied", "ActionWakeUp2", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
-	addChild("GroundedTied", "CutOwnSec", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
-	addChild("CutOwnSec", "WaitTied", SEQUENCE, NULL, NULL);																				//Este estaba en undefined 
-	addChild("WakeUp", "CutOwn3", ACTION, NULL, (btaction)&bt_soldier::actionCutOwn);
 	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionLeave);
-	addChild("Ragdoll", "GetAngry6", ACTION, NULL, (btaction)&bt_soldier::actionGetAngry);
 	addChild("Root", "events", PRIORITY, (btcondition)&bt_soldier::conditionare_events, NULL);
 	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
 	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_soldier::conditionfalling_event, (btaction)&bt_soldier::actionFallingEvent);
