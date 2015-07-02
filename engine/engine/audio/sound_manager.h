@@ -24,12 +24,14 @@ public:
 	//vector of emiting channels
 	//typedef std::vector< CSound* > VSounds;
 	std::map<std::string, HSAMPLE>* sounds;
+	std::map<std::string, std::vector<HSAMPLE>>* sounds_categories;
 	//VSounds vector_sounds;
 
 private:
 	TMusicTrack music_tracks[8];
 	int currentTrack;
 	HSTREAM musicTracks[8];
+
 public:
 	CSoundManager();
 	~CSoundManager();
@@ -41,6 +43,10 @@ public:
 	void playTrack(std::string name, bool loop);
 	void playFXTrack(std::string name);
 	void addFXTrack(const char* file, std::string name);
+	void addFXTrack(const char* file, std::string name, std::string category_name);
+	void addFX2DTrack(const char* file, std::string name);
+	void addFX2DTrack(const char* file, std::string name, std::string category_name);
+	void playRandomFX(std::string category_name);
 	void playMusic(bool loop);
 	void stopMusic();
 

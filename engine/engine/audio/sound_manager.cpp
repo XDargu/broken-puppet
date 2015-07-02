@@ -32,6 +32,7 @@ CSoundManager& CSoundManager::get() {
 CSoundManager::CSoundManager()
 {
 	sounds = new std::map<std::string, HSAMPLE>();
+	sounds_categories = new std::map<std::string, std::vector<HSAMPLE>>();
 	BASS_Init(-1, 44100, BASS_DEVICE_3D, 0, NULL);
 	currentTrack = 0;
 }
@@ -40,6 +41,8 @@ CSoundManager::~CSoundManager()
 {
 	delete sounds;
 	sounds = nullptr;
+	delete sounds_categories;
+	sounds_categories = nullptr;
 	//vector_sounds.clear();
 	BASS_Free();
 }
@@ -131,6 +134,37 @@ void CSoundManager::addFXTrack(const char* file, std::string name){
 	std::string filename = ("data/sounds/" + std::string(file));
 	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_3D);
 	sounds->operator[](name) = sample;
+}
+
+void CSoundManager::addFXTrack(const char* file, std::string name, std::string category_name){
+	std::string filename = ("data/sounds/" + std::string(file));
+	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_3D);
+	sounds->operator[](name) = sample;
+	sounds_categories->operator[](category_name).push_back(sample);
+}
+
+void CSoundManager::addFX2DTrack(const char* file, std::string name){
+	std::string filename = ("data/sounds/" + std::string(file));
+	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_MONO);
+	sounds->operator[](name) = sample;
+}
+
+void CSoundManager::addFX2DTrack(const char* file, std::string name, std::string category_name){
+	std::string filename = ("data/sounds/" + std::string(file));
+	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_MONO);
+	sounds->operator[](name) = sample;
+	sounds_categories->operator[](category_name).push_back(sample);
+	int prueba = 1;
+}
+
+void CSoundManager::playRandomFX(std::string category_name){
+	if (sounds_categories->operator[](category_name).size() > 0){
+		int random_ind = getRandomNumber(0, sounds_categories->operator[](category_name).size());
+		HSTREAM stream = sounds_categories->operator[](category_name)[random_ind];
+		HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+		BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
+		BASS_ChannelPlay(channel, 0);
+	}
 }
 
 void CSoundManager::playFXTrack(std::string name) {

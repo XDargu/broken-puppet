@@ -6,7 +6,7 @@
 #include "components\comp_recast_aabb.h"
 
 static CNav_mesh_manager the_nav_mesh_manager;
-static float max_distance_act_enemies = 4.f;
+static float max_distance_act_enemies = 30.f;
 CNavmesh* nav_mesh;
 CNavmesh 	nav_A;		// temporal 1
 CNavmesh 	nav_B;		// temporal 2
