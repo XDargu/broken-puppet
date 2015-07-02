@@ -2374,6 +2374,36 @@ fn getPlatformPath obj = (
 
 	
 	
+	fn validateAudioSource obj = (
+		if (isProperty obj.baseObject #mAudioActive == true) then ( 
+			if obj.mAudioActive == true then return true
+		)			
+		return false
+	)
+
+	/**********************************************************************************************
+	Gets a Distance Text component
+	 Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/
+	fn getAudioSource obj = (
+		
+		if((validateAudioSource obj) == false) then
+		return ""
+		
+		local mString = "<audioSource " \
+											+ "sound=\"" + obj.mAudioSound as string + "\" " \
+											+ "loop=\"" + obj.mAudioLoop as string + "\" " \
+											+ "distance=\"" + obj.mAudioDistance as string + "\" " \
+											+ "volume=\"" + obj.mAudioVolume as string + "\" " \
+											+ "/>\n"
+		return mString
+	)	
+
+	
+	
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #mString == true
 	)
@@ -2782,7 +2812,8 @@ fn getPlatformPath obj = (
 			getPushInt,
 			getClueZone,
 			getRecastAABB,
-			getParticleSystem
+			getParticleSystem,
+			getAudioSource
 		)
 
 		-- Initialize XML
