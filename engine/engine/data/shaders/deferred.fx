@@ -703,11 +703,11 @@ float4 PSResolve(
 		if (wPos.y <= 0.01)
 			return env;*/
 
-	if (length(N) > 1.73) {
+	/*if (length(N) > 1.73) {
 		R = reflect(I, float3(0,0,0));
 		env = txEnvironment.Sample(samCube, R);
 		//return env;
-	}
+	}*/
 	
 	
 	float4 base_color = albedo * (1 - gloss*0.5) + env * gloss * 0.5;

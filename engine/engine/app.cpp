@@ -346,8 +346,8 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
-	loadScene("data/scenes/desvan_test.xml");
+	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
@@ -527,6 +527,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_resolve");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");

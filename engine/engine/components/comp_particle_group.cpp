@@ -5,6 +5,8 @@
 #include "render\render_utils.h"
 #include "particles\importer_particle_groups.h"
 #include "entity_manager.h"
+#include "comp_aabb.h"
+#include "render\render_manager.h"
 
 TCompParticleGroup::~TCompParticleGroup() {
 	for (int i = 0; i < particle_systems.size(); ++i) {
@@ -88,9 +90,12 @@ void TCompParticleGroup::update(float elapsed) {
 }
 
 void TCompParticleGroup::render() {
-	for (auto& ps : particle_systems) {
-		ps.render(false);
-	}	
+	TCompAABB* aabb = getSibling<TCompAABB>(this);
+	if (render_manager.planes_active_camera.isVisible(aabb)) {
+		for (auto& ps : particle_systems) {
+			ps.render(false);
+		}
+	}
 }
 
 void TCompParticleGroup::renderDistorsion() {

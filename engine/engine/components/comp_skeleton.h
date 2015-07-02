@@ -35,6 +35,7 @@ public:
 
 	void uploadBonesToGPU() const;
 	XMVECTOR getPositionOfBone(int id);
+	XMVECTOR getRotationOfBone(int id);
 
 	void ragdollUnactive();
 

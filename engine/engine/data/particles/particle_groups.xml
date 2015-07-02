@@ -167,6 +167,16 @@
       <updater type="noise" minNoise="-0.010000 -0.010000 -0.010000" maxNoise="0.010000 0.010000 0.010000" />
       <renderer texture="particles/part_cloud_white_alpha_dff" aditive="false" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="billboard" animationMode="1" />
     </particleSystem>
+    <particleSystem>
+      <emitter type="cone" radius="0.150000" angle="30.000000" rate="0.200000" minLifeTime="8.000000" maxLifeTime="5.000000" fillInitial="0" limit="50" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="true" />
+      <updater type="movement" speed="0.500000" />
+      <updater type="rotation" angular_speed="0.500000" />
+      <updater type="color" initialColor="0.850980 0.388235 0.035294" finalColor="0.078431 0.078431 0.078431" curveVal="8.000000" curveType="log" />
+      <updater type="lifeTime" />
+      <updater type="size" initialSize="0.500000" finalSize="5.000000" />
+      <updater type="noise" minNoise="-0.010000 -0.010000 -0.010000" maxNoise="0.010000 0.010000 0.010000" />
+      <renderer texture="particles/part_cloud_white_alpha_dff" aditive="false" distorsion="true" distorsionAmount="2.500000" n_anim_x="1" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="billboard" animationMode="1" />
+    </particleSystem>
   </particleGroup>
   <particleGroup name="ps_water_spring">
     <particleSystem>

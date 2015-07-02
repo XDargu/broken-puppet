@@ -1,4 +1,22 @@
 <scene>
+
+  <entity >
+    <name name="NeedleCarrete1" />
+    <transform position="0 0 0" rotation="0 0 0 1" scale="1 1 1"/>
+    <render>
+      <draw mesh="aguja_plateada" sub_mesh="0" mat="needle"/>
+    </render>
+    <aabb min="-0.2 0 -0.2" max="0.2 1 0.2"/>
+  </entity>
+  <entity >
+    <name name="NeedleCarrete2" />
+    <transform position="0 0 0" rotation="0 0 0 1" scale="1 1 1"/>
+    <render>
+      <draw mesh="aguja_plateada" sub_mesh="0" mat="needle"/>
+    </render>
+    <aabb min="-0.2 0 -0.2" max="0.2 1 0.2"/>
+  </entity>
+  
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_ambos_ambos_a_1.0" />
 <transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -557,12 +575,12 @@
 	<entity  prefab="PlayerCamera">
 <transform position="4.0626 6.0 -4.10385"/>
 	</entity>
-  <entity>
+  <!--<entity>
     <name name="Fspot003_58.0" />
     <transform position="-8.03881 17.093 -7.94094" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <shadows intensity="1.0" color="1.0 1.0 1.0 1" correction="true"/>
     <camera fov="45.0" znear="1.0" zfar="50" width="30" height="30" />
-	</entity>
+	</entity>-->
   <entity  >
 <name name="ps_box_sparks" />
 <transform position="-11.07 8.0 -7.94" rotation="-0.63 0.09 -0.77 -0.07" scale="1.0 1.0 1.0"/>
