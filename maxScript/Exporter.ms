@@ -71,6 +71,7 @@ clearlistener()
 	CameraName = "PlayerCamera"
 	BasicEnemyName = "BasicEnemy"
 	grandmaEnemyName = "EnemyGrandma"
+	soldierEnemyName = "EnemySoldier"
 	IntPullName = "int_pull"
 	IntPushName = "int_push"
 	
@@ -88,13 +89,13 @@ clearlistener()
 	noExportMaterials = #(WaterMaterial, GlassMaterial)
 
 	-- List of enemys
-	enemyNames = #(BasicEnemyName, grandmaEnemyName)
+	enemyNames = #(BasicEnemyName, grandmaEnemyName, soldierEnemyName)
 
 	-- List of prefabs
 	ex_prefabList = #()
 	
-	ragdoll_ind = 0
-
+	grandma_ragdoll_ind = 0
+	soldier_ragdoll_ind = 0
 
 	/********************** PREFAB ************************/
 
@@ -322,46 +323,9 @@ clearlistener()
 	***********************************************************************************************/
 
 	fn validateEnemy obj = (
-		return ( (obj.name) == BasicEnemyName) or ( (obj.name) == grandmaEnemyName)
+		return ( (obj.name) == BasicEnemyName) or ( (obj.name) == grandmaEnemyName) or ( (obj.name) == soldierEnemyName)
 	)
 
-	/*
-		La intención de este get es obtener el mismo enemy controller para todos los tipos de enemigos
-		falta meter los datos propios de cada tipo de enemigo, como velocidad de movimiento y de rotación
-		para eso hay que añadir los datos al addControllers, es decir los datos del componente enemy controller
-	*/
-	fn getEnemyController obj = (
-		
-		if((validateEnemy obj) == false) then
-		return ""
-		
-		return "<enemyController/>"
-	)	
-
-	fn validateAiFsmBasic obj = (
-		return (((obj.name) == BasicEnemyName) == true)
-	)
-
-	fn getAiFsmBasic obj = (
-		
-		if((validateAiFsmBasic obj) == false) then
-		return ""
-		
-		return "<aiFSMBasic/>"
-	)	
-
-
-	fn validateLevelMeshCollider obj = (
-		return (((obj.name) == levelName) == true)
-	)
-
-	fn getLevelMeshCollider obj = (
-		
-		if((validateLevelMeshCollider obj) == false) then
-		return ""
-		
-		return "<colliderMesh path=\"Level\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
-	)	
 
 	/**********************************************************************************************
 		ABADIA ISLAND 
@@ -1031,7 +995,7 @@ clearlistener()
 		return mString
 	)	
 
-	
+
 	fn validateIsNotVisible obj =(
 	
 		if (isProperty  obj.baseObject #collisionMesh) then (
@@ -2266,10 +2230,8 @@ fn getPlatformPath obj = (
 	 Returns:
 	  - String with the component information
 	***********************************************************************************************/	
-	fn getPlayerRagdoll obj = (
-		
-	return "<ragdoll name=\"prota\"/>\n"	
-
+	fn getPlayerRagdoll obj = (		
+		return "<ragdoll name=\"prota\"/>\n"	
 	)
 
 
@@ -2287,12 +2249,18 @@ fn getPlatformPath obj = (
 	fn getGrandmaRagdoll obj = (
 			if (validateGrandmaRagdoll obj)==true then
 			(
-				ragdoll_ind = ragdoll_ind + 1;				
-				return "<ragdoll name=\"abuela#" + ragdoll_ind as string	 + "\"/>\n"	
+				grandma_ragdoll_ind = grandma_ragdoll_ind + 1;				
+				return "<ragdoll name=\"abuela#" + grandma_ragdoll_ind as string	 + "\"/>\n"	
 			)
 				
 		return ""
 	)
+
+	fn getSoldierRagdoll obj = (
+		soldier_ragdoll_ind = soldier_ragdoll_ind + 1;				
+		return "<ragdoll name=\"soldado#" + soldier_ragdoll_ind as string	 + "\"/>\n"	
+	)	
+	
 
 	fn  validateTrigger obj = (
 		return  (isProperty obj.baseObject TriggerAttribute)
@@ -2559,11 +2527,12 @@ fn getPlatformPath obj = (
 		append playerCameraPrefab.components getTransform
 		append playerCameraPrefab.components getCameraController
 
-		-- Create BasicEnemy prefab
-		basicEnemyPrefab = objPrefab()
-		basicEnemyPrefab.obj_name = BasicEnemyName
-		append basicEnemyPrefab.components getTransform
-		append basicEnemyPrefab.components getAiFsmBasic
+		-- Create soldierEnemy prefab
+		soldierEnemyPrefab = objPrefab()
+		soldierEnemyPrefab.obj_name = soldierEnemyName
+		append soldierEnemyPrefab.components getName
+		append soldierEnemyPrefab.components getTransform
+		append soldierEnemyPrefab.components getSoldierRagdoll		
 		
 		-- Create GrandmaEnemy prefab
 		grandmaEnemyPrefab = objPrefab()
@@ -2580,7 +2549,7 @@ fn getPlatformPath obj = (
 		append pullIntPrefab.components getJointPrismatic
 
 		-- Adding prefabs to the prefabs list
-		ex_prefabList = #(playerPrefab, grandmaEnemyPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab, pullIntPrefab)
+		ex_prefabList = #(playerPrefab, grandmaEnemyPrefab, soldierEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab, pullIntPrefab)
 	)
 	
 	/**********************************************************************************************
@@ -2761,7 +2730,8 @@ fn getPlatformPath obj = (
 		expJoints = #()
 		jointsToExp = #()
 		
-		ragdoll_ind = 0
+		grandma_ragdoll_ind = 0
+		soldier_ragdoll_ind = 0
 		
 		initializePrefabs()
 		
@@ -2796,8 +2766,6 @@ fn getPlatformPath obj = (
 			getCameraPivotController,		
 			getPlayerPivotController,
 			getCharacterController,
-			--getPlayerController,
-			--getAiFsmBasic,
 			getLevelMeshCollider,
 			getPointLight,
 			getAmbientLight,
