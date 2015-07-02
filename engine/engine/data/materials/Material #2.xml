@@ -1,1 +1,1 @@
-<std_material name="Material #2" diffuse="Joint_Platform3_diffuse" normal="Joint_Platform3_normal" emissive="Joint_Platform3_emissive"/>
+<std_material name="Material #2" diffuse="biombo_01_diffuse" normal="biombo_01_normal" specular="biombo_01_specular" glossiness="biombo_01_gloss" emissive=""/>

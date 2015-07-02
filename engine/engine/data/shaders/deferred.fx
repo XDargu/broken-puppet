@@ -709,7 +709,12 @@ float4 PSResolve(
 		//return env;
 	}
 	
-	return (albedo * diffuse + saturate(specular)) * (1 - ambient_val) + albedo * ambient_color * ambient_val;
+	
+	float4 base_color = albedo * (1 - gloss*0.5) + env * gloss * 0.5;
+	base_color = base_color * diffuse + saturate(specular);
+	return 
+		(base_color)* (1 - ambient_val)
+		+ (base_color * ambient_color * ambient_val);
 }
 
 
