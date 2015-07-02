@@ -44,6 +44,15 @@ public:
 	void AddState(string, statehandler);
 	void update(float elapsed);
 	virtual CHandle getTransform();
+
+	//---------------------------------------------
+	void setRol(int r);
+	int getRol();
+	void setAttackerSlot(int s);
+	int getAttackerSlot();
+	float getDistanceToPlayer();
+	int getNearestSlot(bool free_north, bool free_east, bool free_west);
+	//---------------------------------------------
 };
 
 #endif

@@ -41,19 +41,12 @@ void bt_soldier::create(string s)
 	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_soldier::conditionTied, NULL);
-	addChild("WakeUp", "GroundedTied", PRIORITY, NULL, NULL);
-	addChild("GroundedTied", "ActionWakeUp2", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
-	addChild("GroundedTied", "CutOwnSec", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
-	addChild("CutOwnSec", "WaitTied", SEQUENCE, NULL, NULL);																				//Este estaba en undefined 
-	addChild("WakeUp", "CutOwn3", ACTION, NULL, (btaction)&bt_soldier::actionCutOwn);
 	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionLeave);
-	addChild("Ragdoll", "GetAngry6", ACTION, NULL, (btaction)&bt_soldier::actionGetAngry);
 	addChild("Root", "events", PRIORITY, (btcondition)&bt_soldier::conditionare_events, NULL);
 	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
 	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_soldier::conditionfalling_event, (btaction)&bt_soldier::actionFallingEvent);
-	addChild("events", "TiedEvent9", ACTION, (btcondition)&bt_soldier::conditiontied_event, (btaction)&bt_soldier::actionTiedEvent);
 	addChild("events", "No events10", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionNoevents);
 	addChild("Root", "Angry", PRIORITY, (btcondition)&bt_soldier::conditionis_angry, NULL);
 
@@ -82,17 +75,8 @@ void bt_soldier::create(string s)
 	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseRoleDistance);
 
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
-	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_soldier::conditiontoo_close_attack, NULL);
-	addChild("XSecAttack", "TooCloseAttack23", ACTION, INTERNAL, NULL, (btaction)&bt_soldier::actionTooCloseAttack);
-	addChild("Peacefull", "TakeNeedle", SEQUENCE, (btcondition)&bt_soldier::conditionneedle_to_take, NULL);
-	addChild("TakeNeedle", "XSecsNeedle", SEQUENCE, NULL, NULL);
-	addChild("XSecsNeedle", "NeedleAppearsEvent24", ACTION, NULL, (btaction)&bt_soldier::actionNeedleAppearsEvent);
-	addChild("TakeNeedle", "SelectNeedleToTake25", ACTION, NULL, (btaction)&bt_soldier::actionSelectNeedleToTake);
-	addChild("TakeNeedle", "ChaseAndTakeNeedle", PRIORITY, NULL, NULL);
-	addChild("ChaseAndTakeNeedle", "HowToCutAndTakeNeedle", PRIORITY, (btcondition)&bt_soldier::conditioncan_reach_needle, NULL);
-	addChild("HowToCutAndTakeNeedle", "CutRope26", ACTION, (btcondition)&bt_soldier::conditionis_needle_tied, (btaction)&bt_soldier::actionCutRope);
-	addChild("HowToCutAndTakeNeedle", "TakeNeedle27", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionTakeNeedle);
-	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseNeedlePosition);
+	
+	
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionIdle, 70);
 	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL, 30);
@@ -141,7 +125,7 @@ void bt_soldier::create(string s)
 	slot_position = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	player_pos_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
-	tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
+	//tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
@@ -591,7 +575,8 @@ int bt_soldier::actionLookAround()
 	time_searching_player += CApp::get().delta_time;
 	//Tratamos de evitar cambios demasiado repentinos de ruta
 	if (on_enter){
-
+		player_viewed_sensor = false;
+		have_to_warcry = false;
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = run_speed;
@@ -1225,6 +1210,8 @@ void bt_soldier::playerViewedSensor(){
 		if (((TCompPlayerPosSensor*)player_pos_sensor)->playerInRange()) {
 			if (current != NULL){
 				if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
+					is_angry = true;
+					have_to_warcry = false;
 					setCurrent(NULL);
 					player_viewed_sensor = true;
 				}
@@ -1232,6 +1219,8 @@ void bt_soldier::playerViewedSensor(){
 		}
 		else{
 			player_viewed_sensor = false;
+			have_to_warcry = false;
+			is_angry=false;
 		}
 	}
 	else{
@@ -1336,7 +1325,7 @@ void bt_soldier::update(float elapsed){
 
 
 		playerViewedSensor();
-		tiedSensor();
+		//tiedSensor();
 		if (findPlayer()){
 			last_point_player_saw = ((TCompTransform*)player_transform)->position;
 			last_time_player_saw = 0;

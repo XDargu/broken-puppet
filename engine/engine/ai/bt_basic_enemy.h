@@ -9,9 +9,11 @@
 class bt_basic_enemy :public bt
 {
 	CHandle player;
+	CHandle player_transform;
 	CHandle character_controller;
 	CHandle comp_mesh;
 	CHandle comp_life;
+	CHandle own_transform;
 
 	float attack_distance;
 	float view_distance;
@@ -30,6 +32,11 @@ class bt_basic_enemy :public bt
 	unsigned int my_id;
 	unsigned int lastNumNeedlesViewed;
 	unsigned int currentNumNeedlesViewed;
+
+	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
+	role rol;
+	enum attacker_slots{ NO_SLOT, NORTH, EAST, WEST };
+	attacker_slots slot;
 
 	needle_rope* needle_objective;
 
@@ -59,6 +66,15 @@ public:
 	unsigned int getInt();
 	CHandle getTransform();
 	//---------------------------------------------------------------------------------------------------
+
+	//---------------------------------------------
+	void setRol(int r);
+	int getRol();
+	void setAttackerSlot(int s);
+	int getAttackerSlot();
+	float getDistanceToPlayer();
+	int getNearestSlot(bool free_north, bool free_east, bool free_west);
+	//---------------------------------------------
 
 	//--------- SENSORES --------------------------------------------------------------------------------
 	void playerViewedSensor();

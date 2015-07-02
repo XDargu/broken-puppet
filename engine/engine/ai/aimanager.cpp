@@ -143,7 +143,7 @@ void aimanager::setEnemyRol(aicontroller* enemy){
 	bool already_attacker = false;
 	bool sustitute_attacker = false;
 	bool no_reasignated = false;
-	bt_grandma* bt_enemy = (bt_grandma*)enemy;
+	aicontroller* bt_enemy = (aicontroller*)enemy;
 	int ind_asignated = -1;
 	int ind_sustitution = -1;
 	int ind_my_already = -1;
