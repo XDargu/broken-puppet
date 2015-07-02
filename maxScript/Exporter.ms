@@ -611,6 +611,7 @@ clearlistener()
 		end
 		if classof m == Multimaterial then 
 			local sm = m[ submesh ]
+			if classof sm == UndefinedClass then return Standardmaterial()
 			if classof sm == Standardmaterial then return sm
 			if classof sm == Multimaterial then throw( "El objeto " + obj.name + " submaterial " + (submesh as string) + " es a la vez un multimaterial!")
 			throw ("No se exportar materiales de tipo " + ( classof(  sm )  as string ))
@@ -724,6 +725,7 @@ clearlistener()
 					local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
 					local uvL = meshop.getMapVert obj channelL face_mapL[ vid ]
 					local wn = face_normals[ vid ]
+					if (wn == undefined) then ( wn = [1,0,0])
 					
 					local mpos = wpos * _world2mcv 
 					local n = wn * _world2mcv.rotationpart 
