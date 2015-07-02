@@ -5,6 +5,7 @@
 #include "comp_collider_capsule.h"
 #include "comp_rigid_body.h"
 #include "comp_character_controller.h"
+#include "../audio/sound_manager.h"
 
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompLife>(this);
@@ -30,6 +31,17 @@ float counter;
 XMVECTOR prev_pos;*/
 
 void TCompPlayerController::init() {
+
+	/*
+		Load sounds
+	*/
+
+	CSoundManager::get().addFX2DTrack("string_throw_3.ogg", "string_throw_3");
+	CSoundManager::get().addFX2DTrack("string_grab_6.ogg", "string_grab_6", "tense");
+	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_grab_7", "tense");
+	CSoundManager::get().addFX2DTrack("string_grab_8.ogg", "string_grab_8", "tense");
+	CSoundManager::get().addFX2DTrack("string_grab_9.ogg", "string_grab_9", "tense");
+
 	fsm_player_legs.Init();
 	fsm_player_torso.Init();
 	

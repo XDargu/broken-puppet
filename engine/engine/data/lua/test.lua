@@ -11,6 +11,9 @@ end
 _print = print
 clearCoroutines( )
 
+function onSceneLoad_desvan_test()
+	logicManager:loadScene("data/scenes/my_file.xml");
+end
 
 -------------------------- MS3 ---------------------------
 

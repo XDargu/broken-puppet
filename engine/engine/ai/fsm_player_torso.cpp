@@ -554,6 +554,11 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		return;
 	}
 
+	if (on_enter)
+	{
+		//CSoundManager::get().playFX("string_grab_8");
+		CSoundManager::get().playRandomFX("tense");
+	}
 	up_animation = true;
 
 	TCompSkeleton* skeleton = comp_skeleton;
