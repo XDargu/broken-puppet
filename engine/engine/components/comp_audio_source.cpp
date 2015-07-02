@@ -59,7 +59,7 @@ void TCompAudioSource::update(float elapsed){
 	front = &front_ref;
 	asociated_sound.setSoundPosition(pos, front, NULL);
 	BASS_Apply3D();
-	if (autoPlaySound)
+	if (autoPlaySound){
 		player_transform = ((CEntity*)player)->get<TCompTransform>();
 		TCompTransform* p_transform = (TCompTransform*)player_transform;
 		TCompTransform* m_transform = (TCompTransform*)own_transform;
@@ -69,14 +69,15 @@ void TCompAudioSource::update(float elapsed){
 				asociated_sound.playSound();
 				played = true;
 			}
-		}else{
+		}
+		else{
 			if (loop){
 				if (distance >= distance_max){
 					asociated_sound.stopSound();
-					CEntityManager::get().remove(((CEntity*)this));
 				}
 			}
 		}
+	}
 }
 
 void TCompAudioSource::setSoundAsociated(std::string name, DWORD mode, float min, float max){

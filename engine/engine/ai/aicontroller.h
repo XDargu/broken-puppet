@@ -4,8 +4,6 @@
 
 class aicontroller
 {
-private:
-	unsigned int my_id;
 public:
 	virtual void recalc(float deltaTime) = 0;
 	virtual void create(std::string) = 0;
@@ -18,8 +16,20 @@ public:
 	virtual CHandle getTransform() = 0;
 	unsigned getId();
 	void setId(unsigned int id);
+
+	//-------------------------------------
+	virtual void setRol(int r) = 0;
+	virtual int getRol() = 0;
+	virtual void setAttackerSlot(int s) = 0;
+	virtual int getAttackerSlot() = 0;
+	virtual float getDistanceToPlayer() = 0;
+	virtual int getNearestSlot(bool free_north, bool free_east, bool free_west) = 0;
+	//-------------------------------------
+
 	aicontroller();
 	~aicontroller();
+private:
+	unsigned int my_id;
 };
 #endif
 

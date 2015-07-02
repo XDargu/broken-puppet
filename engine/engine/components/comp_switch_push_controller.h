@@ -14,10 +14,15 @@ struct TCompSwitchPushController : TBaseComponent{
 	PxActor* px_actor2;
 
 	float limit;
+	float init_distance;
 	PxReal init_up_distance;
 	bool pressed;
 	
 	PxVec3 init_offset;
+
+	/*
+		Utilizar diferencia de posición entre el interruptor y la base, en lugar de entre el interruptor y su posición inicial
+	*/
 
 	TCompSwitchPushController() { }
 
@@ -60,6 +65,7 @@ struct TCompSwitchPushController : TBaseComponent{
 		pressed = false;
 		
 		init_offset = (((PxRigidBody*)px_actor1)->getGlobalPose().p - ((PxRigidBody*)px_actor2)->getGlobalPose().p);
+		init_distance = init_offset.magnitude();
 
 	}
 
@@ -68,14 +74,16 @@ struct TCompSwitchPushController : TBaseComponent{
 		// Have to be a valid rigidbody
 		PxVec3 actual_offset = (((PxRigidBody*)px_actor1)->getGlobalPose().p - ((PxRigidBody*)px_actor2)->getGlobalPose().p);
 
+		float actual_distance = actual_offset.magnitude();
+
 		float dist_actual = (init_offset - actual_offset).magnitude();
 
-		if ((pressed == false) && (dist_actual >= limit / 3 * 2)){
+		if ((pressed == false) && (actual_distance<init_distance) && (dist_actual >= limit / 2)){
 			// Call onPress function
 			onPress();
 			pressed = true;
 		}
-		else if ((pressed == true) && (dist_actual < limit / 3 * 2)){
+		else if ((pressed == true) && (dist_actual < limit / 2)){
 			// Call onPress function
 			onLeave();
 			pressed = false;
