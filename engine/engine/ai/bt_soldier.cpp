@@ -152,8 +152,16 @@ int bt_soldier::actionRagdoll()
 			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
 			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
 			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+			
+			CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+			if (this->getRol() == role::ATTACKER)
+				aimanager::get().RemoveEnemyAttacker(this);
+			else
+				aimanager::get().RemoveEnemyTaunt(this);
+
+			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
