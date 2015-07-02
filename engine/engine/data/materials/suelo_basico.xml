@@ -1,1 +1,1 @@
-<std_material name="suelo_basico" diffuse="suelo_basico_diffuse" normal="suelo_basico_normal" specular="" glossiness="" emissive=""/>
+<std_material name="suelo_basico" diffuse="suelo_basico_diffuse" normal="suelo_basico_normal" specular="suelo_basico_specular" glossiness="suelo_basico_gloss" emissive=""/>

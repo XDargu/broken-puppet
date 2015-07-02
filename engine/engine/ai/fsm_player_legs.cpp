@@ -344,7 +344,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 	canThrow = true;
 
 	if (on_enter) {
-		skeleton->loopAnimation(6);
+		//skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
 	}
 
@@ -501,7 +501,7 @@ void FSMPlayerLegs::Land(float elapsed){
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
 	
-	if (state_time >= 0.2f){
+	if (state_time >= 0.0f){
 		if (is_moving) {
 			skeleton->stopAnimation(7);
 			ChangeState("fbp_Idle");
