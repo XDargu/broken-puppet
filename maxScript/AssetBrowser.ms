@@ -437,6 +437,47 @@ macroScript MCVAssetBrowser
 		)		
 	)	
 	
+		
+	/**********************************************************************************************
+	Object AUDIO SOURCE structure
+	 Params:
+	  - MSTRING: text to show near the position
+	***********************************************************************************************/
+	objectAudioSource = attributes objectAudioSource
+	(
+		parameters main rollout:params
+		(
+			mAudioSound type:#string ui:mAudioSound default:"light.wav"
+			mAudioLoop type:#boolean ui:mAudioLoop default:true
+			mAudioDistance type:#float ui:mAudioDistance default:40
+			mAudioVolume type:#float ui:mAudioVolume default:0.6
+			mAudioActive type:#boolean ui:mAudioActive default:true
+		)
+		 
+		rollout params "Object Distance Text"
+		(
+			editText mAudioSound "Sound" type: #string
+			checkbox mAudioLoop "Loop" type: #boolean
+			spinner  mAudioDistance "Distancia" type: #float
+			spinner  mAudioVolume "Volume" type: #float
+			checkbox mAudioActive "Active" type: #boolean
+		)
+	)
+
+	/**********************************************************************************************
+		Set the String of all the objects of the scene
+	***********************************************************************************************/
+	fn addObjectsAudioSource = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #mAudioActive != true) then
+		(
+			custAttributes.add objSelected objectAudioSource
+		)			
+	)
+	
+	
+	
 	
 	objectIsNotVisible = attributes objectIsNotVisible
 	(
@@ -460,6 +501,19 @@ macroScript MCVAssetBrowser
 		)	
 		else(
 				objSelected.collisionMesh = true
+		)
+		
+	)
+	
+	fn AddAudioSource = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #mAudioActive != true) then
+		(
+			custAttributes.add objSelected objectAudioSource	
+		)	
+		else(
+				objSelected.mAudioActive = true
 		)
 		
 	)
@@ -672,6 +726,7 @@ macroScript MCVAssetBrowser
 			button botonActivateParticles "Activate Particles" pos:[5,130] width:75 height:25 toolTip:""
 			button botonDeactivateParticles "Deactivate Particles" pos:[89,130] width:75 height:25 toolTip:""
 			button botonNotVisible "Not Visible" pos:[167,130] width:75 height:25 toolTip:""
+			button botonAddAudioSource "Audio Source" pos:[248,130] width:75 height:25 toolTip:""
 			
 							
 			on botonA pressed do	( 
@@ -746,6 +801,9 @@ macroScript MCVAssetBrowser
 			)
 			on botonNotVisible pressed do (
 				addObjectsIsNotVisible()
+			)
+			on botonAddAudioSource pressed do (
+				AddAudioSource()
 			)
 			
 			

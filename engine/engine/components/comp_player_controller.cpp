@@ -37,7 +37,11 @@ void TCompPlayerController::init() {
 		Load sounds
 	*/
 
-	CSoundManager::get().addFX2DTrack("string_throw_3.ogg", "string_throw_3");
+	CSoundManager::get().addFX2DTrack("string_free_1.ogg", "string_free_1","throw");
+	CSoundManager::get().addFX2DTrack("string_free_2.ogg", "string_free_2", "throw");
+	CSoundManager::get().addFX2DTrack("string_free_3.ogg", "string_free_3", "throw");
+	CSoundManager::get().addFX2DTrack("string_free_4.ogg", "string_free_4", "throw");
+	CSoundManager::get().addFX2DTrack("string_free_5.ogg", "string_free_5", "throw");
 	CSoundManager::get().addFX2DTrack("string_grab_6.ogg", "string_grab_6", "tense");
 	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_grab_7", "tense");
 	CSoundManager::get().addFX2DTrack("string_grab_8.ogg", "string_grab_8", "tense");
