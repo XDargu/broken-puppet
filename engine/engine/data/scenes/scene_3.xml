@@ -4635,7 +4635,7 @@
 <transform position="-8.0327 -2.04605 2.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#1"/>
 	</entity>
-	<entity tag = "enemy" prefab="EnemyGrandma">
+	<!--<entity tag = "enemy" prefab="EnemyGrandma">
 <name name="EnemyGrandma_480.0" />
 <transform position="3.22448 -2.04605 2.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#2"/>
@@ -4644,7 +4644,7 @@
 <name name="EnemyGrandma_481.0" />
 <transform position="3.22448 -2.04605 13.0235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#3"/>
-	</entity>
+	</entity>-->
 	<entity  >
 <name name="water" />
 <transform position="6.24763 -3.65007 94.7489" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
