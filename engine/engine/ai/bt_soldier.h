@@ -53,7 +53,6 @@ private:
 	bool player_previously_lost;
 	bool cut;
 	bool attacked;
-
 	CHandle ropeRef;
 	CHandle m_sensor;
 	CHandle own_transform;

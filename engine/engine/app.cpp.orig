@@ -346,20 +346,20 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
+<<<<<<< HEAD
+	loadScene("data/scenes/my_file.xml");
+=======
 	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/desvan_test.xml");
+>>>>>>> b43bbc1a88670bb6a78b7b4bd8f44a15224b89a4
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
 
 	// XML Pruebas
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
-<<<<<<< HEAD
-	loadScene("data/scenes/scene_3.xml");
-	//loadScene("data/scenes/scene_2.xml");
-=======
->>>>>>> 877e01e295547dd0712b1c6fa6baebc3de7bc9f0
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");

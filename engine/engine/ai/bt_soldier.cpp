@@ -41,9 +41,11 @@ void bt_soldier::create(string s)
 	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_soldier::conditionTied, NULL);
+
 	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionLeave);
+
 	addChild("Root", "events", PRIORITY, (btcondition)&bt_soldier::conditionare_events, NULL);
 	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
 	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_soldier::conditionfalling_event, (btaction)&bt_soldier::actionFallingEvent);
@@ -152,14 +154,22 @@ int bt_soldier::actionRagdoll()
 			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
 			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
 			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+			
+			CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+			if (this->getRol() == role::ATTACKER)
+				aimanager::get().RemoveEnemyAttacker(this);
+			else
+				aimanager::get().RemoveEnemyTaunt(this);
+
+			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
 			aimanager::get().removeBot(this->getId());
 
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
+			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
 
 			TCompTransform* p_transform = player_transform;
 			if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {

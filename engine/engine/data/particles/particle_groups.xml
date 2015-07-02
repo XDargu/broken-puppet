@@ -103,38 +103,37 @@
   </particleGroup>
   <particleGroup name="ps_sparks_px">
     <particleSystem>
-      <emitter use_physx="true" angle="114.591553" burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="100" loop="true" maxLifeTime="2.000000" minLifeTime="0.300000" radius="0.150000" randomRotation="false" rate="0.000100" type="cone"></emitter>
-      <updater speed="6.000000" type="movement"></updater>
-      <updater constant="false" gravity="0.004000" type="gravity"></updater>
-      <updater curveType="linear" curveVal="2.000000" finalColor="1.000000 0.364706 0.000000" initialColor="1.000000 1.000000 0.709804" type="color"></updater>
-      <updater type="lifeTime"></updater>
-      <updater type="physx"></updater>
-      <updater finalSize="0.010000" initialSize="0.010000" type="size"></updater>
-      <renderer aditive="true" animationMode="0" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" render_mode="stretched_billboard" stretch="25.000000" stretchMode="0" texture="particles/part_spark_dff"></renderer>
+      <emitter type="cone" radius="0.150000" angle="114.591553" rate="0.000100" minLifeTime="0.300000" maxLifeTime="2.000000" fillInitial="0" limit="100" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="false" />
+      <updater type="movement" speed="6.000000" />
+      <updater type="gravity" gravity="0.004000" constant="false" />
+      <updater type="color" initialColor="1.000000 1.000000 0.709804" finalColor="1.000000 0.364706 0.000000" curveVal="2.000000" curveType="linear" />
+      <updater type="lifeTime" />
+      <updater type="size" initialSize="0.010000" finalSize="0.010000" />
+      <renderer texture="particles/part_spark_dff" aditive="true" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" stretch="25.000000" stretchMode="0" render_mode="stretched_billboard" animationMode="0" />
     </particleSystem>
     <particleSystem>
-      <emitter angle="30.000000" burstAmount="0" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="20" loop="true" maxLifeTime="8.000000" minLifeTime="3.000000" radius="0.100000" randomRotation="true" rate="0.470100" type="cone"></emitter>
-      <updater angular_speed="0.400000" type="rotation"></updater>
-      <updater constant="true" gravity="-0.100000" type="gravity"></updater>
-      <updater curveType="log" curveVal="7.000000" finalColor="0.396078 0.396078 0.396078" initialColor="1.000000 0.364706 0.078431" type="color"></updater>
-      <updater type="lifeTime"></updater>
-      <updater finalSize="5.000000" initialSize="1.000000" type="size"></updater>
-      <updater maxNoise="0.010000 0.010000 0.010000" minNoise="-0.010000 -0.010000 -0.010000" type="noise"></updater>
-      <renderer aditive="false" animationMode="0" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" render_mode="billboard" stretch="1.000000" stretchMode="0" texture="particles/part_cloud_white_alpha_dff"></renderer>
+      <emitter type="cone" radius="0.100000" angle="30.000000" rate="0.470100" minLifeTime="3.000000" maxLifeTime="8.000000" fillInitial="0" limit="20" burstTime="0.000000" burstAmount="0" delay="0.000000" loop="true" randomRotation="true" />
+      <updater type="rotation" angular_speed="0.400000" />
+      <updater type="gravity" gravity="-0.100000" constant="true" />
+      <updater type="color" initialColor="1.000000 0.364706 0.078431" finalColor="0.396078 0.396078 0.396078" curveVal="7.000000" curveType="log" />
+      <updater type="lifeTime" />
+      <updater type="size" initialSize="1.000000" finalSize="5.000000" />
+      <updater type="noise" minNoise="-0.010000 -0.010000 -0.010000" maxNoise="0.010000 0.010000 0.010000" />
+      <renderer texture="particles/part_cloud_white_alpha_dff" aditive="false" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" stretch="1.000000" stretchMode="0" render_mode="billboard" animationMode="0" />
     </particleSystem>
     <particleSystem>
-      <emitter burstAmount="0" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="3" loop="true" maxLifeTime="0.020000" minLifeTime="0.200000" radius="0.010000" randomRotation="true" rate="0.000100" type="sphere"></emitter>
-      <updater curveType="linear" curveVal="2.000000" finalColor="1.000000 1.000000 0.835294" initialColor="1.000000 0.654902 0.372549" type="color"></updater>
-      <updater type="lifeTime"></updater>
-      <updater finalSize="0.600000" initialSize="0.600000" type="size"></updater>
-      <renderer aditive="true" animationMode="0" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" render_mode="billboard" stretch="1.000000" stretchMode="0" texture="particles/part_flare_dff"></renderer>
+      <emitter type="sphere" radius="0.010000" rate="0.000100" minLifeTime="0.200000" maxLifeTime="0.020000" fillInitial="0" limit="3" burstTime="0.000000" burstAmount="0" delay="0.000000" loop="true" randomRotation="true" />
+      <updater type="color" initialColor="1.000000 0.654902 0.372549" finalColor="1.000000 1.000000 0.835294" curveVal="2.000000" curveType="linear" />
+      <updater type="lifeTime" />
+      <updater type="size" initialSize="0.600000" finalSize="0.600000" />
+      <renderer texture="particles/part_flare_dff" aditive="true" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" stretch="1.000000" stretchMode="0" render_mode="billboard" animationMode="0" />
     </particleSystem>
     <particleSystem>
-      <emitter angle="30.000000" burstAmount="0" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="20" loop="true" maxLifeTime="8.000000" minLifeTime="5.000000" radius="0.520000" randomRotation="true" rate="0.470000" type="cone"></emitter>
-      <updater constant="true" gravity="-0.100000" type="gravity"></updater>
-      <updater type="lifeTime"></updater>
-      <updater finalSize="5.000000" initialSize="1.000000" type="size"></updater>
-      <renderer aditive="false" animationMode="1" distorsion="true" distorsionAmount="0.600000" n_anim_x="4" n_anim_y="4" render_mode="billboard" stretch="1.000000" stretchMode="0" texture="smoke"></renderer>
+      <emitter type="cone" radius="0.520000" angle="30.000000" rate="0.470000" minLifeTime="5.000000" maxLifeTime="8.000000" fillInitial="0" limit="20" burstTime="0.000000" burstAmount="0" delay="0.000000" loop="true" randomRotation="true" />
+      <updater type="gravity" gravity="-0.100000" constant="true" />
+      <updater type="lifeTime" />
+      <updater type="size" initialSize="1.000000" finalSize="5.000000" />
+      <renderer texture="smoke" aditive="false" distorsion="true" distorsionAmount="0.600000" n_anim_x="4" n_anim_y="4" stretch="1.000000" stretchMode="0" render_mode="billboard" animationMode="1" />
     </particleSystem>
   </particleGroup>
   <particleGroup name="ps_cockroaches">
@@ -146,7 +145,7 @@
       <renderer aditive="true" animationMode="0" n_anim_x="1" n_anim_y="1" render_mode="h_dir_billboard" stretch="2.000000" texture="particles/cockroach"></renderer>
     </particleSystem>
   </particleGroup>
-  <particleGroup name="ps_jet">
+  <particleGroup name="ps_water_spring">
     <particleSystem>
       <emitter burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="85" loop="true" maxLifeTime="1.000000" minLifeTime="1.000000" randomRotation="true" rate="0.010000" size="0.100000" type="box"></emitter>
       <updater speed="5.000000" type="movement"></updater>
@@ -158,14 +157,13 @@
   </particleGroup>
   <particleGroup name="ps_dust_2">
     <particleSystem>
-      <emitter type="cone" radius="0.150000" angle="30.000000" rate="0.200000" minLifeTime="8.000000" maxLifeTime="5.000000" fillInitial="0" limit="50" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="true" />
-      <updater type="movement" speed="0.500000" />
-      <updater type="rotation" angular_speed="0.500000" />
-      <updater type="color" initialColor="0.850980 0.388235 0.035294" finalColor="0.078431 0.078431 0.078431" curveVal="8.000000" curveType="log" />
-      <updater type="lifeTime" />
-      <updater type="size" initialSize="0.500000" finalSize="5.000000" />
-      <updater type="noise" minNoise="-0.010000 -0.010000 -0.010000" maxNoise="0.010000 0.010000 0.010000" />
-      <renderer texture="particles/part_cloud_white_alpha_dff" aditive="false" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="billboard" animationMode="1" />
+      <emitter angle="30.000000" burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="100" loop="true" maxLifeTime="5.000000" minLifeTime="8.000000" radius="0.150000" randomRotation="true" rate="0.050000" type="cone"></emitter>
+      <updater speed="0.500000" type="movement"></updater>
+      <updater finalColor="0.078431 0.078431 0.078431" initialColor="0.219608 0.203922 0.180392" type="color"></updater>
+      <updater type="lifeTime"></updater>
+      <updater finalSize="2.000000" initialSize="0.250000" type="size"></updater>
+      <updater maxNoise="0.010000 0.010000 0.010000" minNoise="-0.010000 -0.010000 -0.010000" type="noise"></updater>
+      <renderer aditive="false" animationMode="1" n_anim_x="4" n_anim_y="4" render_mode="billboard" stretch="2.000000" stretchMode="0" texture="particles/smoke"></renderer>
     </particleSystem>
     <particleSystem>
       <emitter type="cone" radius="0.150000" angle="30.000000" rate="0.200000" minLifeTime="8.000000" maxLifeTime="5.000000" fillInitial="0" limit="50" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="true" />
@@ -178,7 +176,7 @@
       <renderer texture="particles/part_cloud_white_alpha_dff" aditive="false" distorsion="true" distorsionAmount="2.500000" n_anim_x="1" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="billboard" animationMode="1" />
     </particleSystem>
   </particleGroup>
-  <particleGroup name="ps_water_spring">
+  <particleGroup name="ps_jet">
     <particleSystem>
       <emitter angle="30.000000" burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="15" loop="true" maxLifeTime="2.000000" minLifeTime="1.000000" radius="0.150000" randomRotation="true" rate="0.020000" type="cone"></emitter>
       <updater speed="5.000000" type="movement"></updater>
@@ -190,7 +188,7 @@
       <renderer aditive="true" animationMode="0" n_anim_x="1" n_anim_y="1" render_mode="billboard" stretch="2.000000" stretchMode="0" texture="particles/part_splashes_fine_dff"></renderer>
     </particleSystem>
     <particleSystem>
-      <emitter angle="30.000000" burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="50" loop="true" maxLifeTime="2.000000" minLifeTime="1.000000" radius="0.150000" randomRotation="true" rate="0.020000" type="cone"></emitter>
+      <emitter angle="30.000000" burstAmount="0" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="65" loop="true" maxLifeTime="2.000000" minLifeTime="1.000000" radius="0.150000" randomRotation="true" rate="0.020000" type="cone"></emitter>
       <updater speed="5.000000" type="movement"></updater>
       <updater angular_speed="0.400000" type="rotation"></updater>
       <updater constant="false" gravity="0.001000" type="gravity"></updater>

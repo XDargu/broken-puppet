@@ -70,6 +70,8 @@ clearlistener()
 	CameraPivotName = "CameraPivot"
 	CameraName = "PlayerCamera"
 	BasicEnemyName = "BasicEnemy"
+	grandmaEnemyName = "EnemyGrandma"
+	soldierEnemyName = "EnemySoldier"
 	IntPullName = "int_pull"
 	IntPushName = "int_push"
 	
@@ -87,11 +89,13 @@ clearlistener()
 	noExportMaterials = #(WaterMaterial, GlassMaterial)
 
 	-- List of enemys
-	enemyNames = #(BasicEnemyName)
+	enemyNames = #(BasicEnemyName, grandmaEnemyName, soldierEnemyName)
 
 	-- List of prefabs
 	ex_prefabList = #()
-
+	
+	grandma_ragdoll_ind = 0
+	soldier_ragdoll_ind = 0
 
 	/********************** PREFAB ************************/
 
@@ -319,46 +323,9 @@ clearlistener()
 	***********************************************************************************************/
 
 	fn validateEnemy obj = (
-		return ( (obj.name) == BasicEnemyName)
+		return ( (obj.name) == BasicEnemyName) or ( (obj.name) == grandmaEnemyName) or ( (obj.name) == soldierEnemyName)
 	)
 
-	/*
-		La intención de este get es obtener el mismo enemy controller para todos los tipos de enemigos
-		falta meter los datos propios de cada tipo de enemigo, como velocidad de movimiento y de rotación
-		para eso hay que añadir los datos al addControllers, es decir los datos del componente enemy controller
-	*/
-	fn getEnemyController obj = (
-		
-		if((validateEnemy obj) == false) then
-		return ""
-		
-		return "<enemyController/>"
-	)	
-
-	fn validateAiFsmBasic obj = (
-		return (((obj.name) == BasicEnemyName) == true)
-	)
-
-	fn getAiFsmBasic obj = (
-		
-		if((validateAiFsmBasic obj) == false) then
-		return ""
-		
-		return "<aiFSMBasic/>"
-	)	
-
-
-	fn validateLevelMeshCollider obj = (
-		return (((obj.name) == levelName) == true)
-	)
-
-	fn getLevelMeshCollider obj = (
-		
-		if((validateLevelMeshCollider obj) == false) then
-		return ""
-		
-		return "<colliderMesh path=\"Level\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
-	)	
 
 	/**********************************************************************************************
 		ABADIA ISLAND 
@@ -1029,6 +996,15 @@ clearlistener()
 	)	
 
 
+	fn validateIsNotVisible obj =(
+	
+		if (isProperty  obj.baseObject #collisionMesh) then (
+			return obj.collisionMesh
+		)
+		
+		return false
+	) 
+
 	fn validateCompRender obj = (
 		if (ExportMeshes == false) then
 		return false
@@ -1041,8 +1017,8 @@ clearlistener()
 			)		
 		)	
 		-- The collision mesh has no render
-		local isNotCollisionMesh = not(isProperty  obj.baseObject #collisionMesh)
-		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes and isNotCollisionMesh)
+		local isVisible = not(validateIsNotVisible obj)
+		return ( ((classof obj) != UConstraint ) and ((findItem NotMesh (classof obj)) == 0) and validAttributes and isVisible)
 	)
 
 	fn validateObjExported obj = (
@@ -2014,10 +1990,6 @@ fn getJointPrismatic obj = (
 										+ qObj.z as string+" "\
 										+ qObj.w as string+"\" "
 	
-	-- Translations limits
-	-- mode 1 = Locked, 2 = Limited, 3 = Free
-	mString += "linearModeX=\"" + mJoint.linearModeY as string + "\" "
-	mString += "linearModeY=\"" + mJoint.linearModeX as string + "\" "
 	
 	-- Advanced
 	mString += "parentChildCollision=\"" + mJoint.collision as string + "\" "
@@ -2025,7 +1997,7 @@ fn getJointPrismatic obj = (
 	mString += "maxBreakForce=\"" + mJoint.maxForce as string + "\" "
 	mString += "maxTorqueForce=\"" + mJoint.maxTorque as string + "\" "
 
-	
+	-- Translations limits
 	-- mode 1 = Locked, 2 = Limited, 3 = Free
 	mString += "linearModeX=\"" + mJoint.linearModeX as string + "\" "
 	mString += "linearModeY=\"" + mJoint.linearModeY as string + "\" "
@@ -2251,6 +2223,45 @@ fn getPlatformPath obj = (
 )
 
 
+	/**********************************************************************************************
+	Gets the Ragdoll component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getPlayerRagdoll obj = (		
+		return "<ragdoll name=\"prota\"/>\n"	
+	)
+
+
+	fn  validateGrandmaRagdoll obj = (
+		return  (obj.name == grandmaEnemyName)
+	)
+	
+	/**********************************************************************************************
+	Gets the Ragdoll component
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getGrandmaRagdoll obj = (
+			if (validateGrandmaRagdoll obj)==true then
+			(
+				grandma_ragdoll_ind = grandma_ragdoll_ind + 1;				
+				return "<ragdoll name=\"abuela#" + grandma_ragdoll_ind as string	 + "\"/>\n"	
+			)
+				
+		return ""
+	)
+
+	fn getSoldierRagdoll obj = (
+		soldier_ragdoll_ind = soldier_ragdoll_ind + 1;				
+		return "<ragdoll name=\"soldado#" + soldier_ragdoll_ind as string	 + "\"/>\n"	
+	)	
+	
+
 	fn  validateTrigger obj = (
 		return  (isProperty obj.baseObject TriggerAttribute)
 	)
@@ -2335,6 +2346,34 @@ fn getPlatformPath obj = (
 	)
 
 	
+	
+	fn validateParticleSystem obj = (
+		if (isProperty obj.baseObject #mSystemActive == true) then ( 
+			if obj.mSystemActive == true then return true
+		)			
+		return false
+	)
+
+	/**********************************************************************************************
+	Gets a Distance Text component
+	 Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/
+	fn getParticleSystem obj = (
+		
+		if((validateParticleSystem obj) == false) then
+		return ""
+		
+		local mString = "<particleGroup " \
+											+ "name=\"" + obj.mSystemName as string + "\" " \
+											+ "/>\n"
+		return mString
+	)	
+
+	
+	
 	fn validateDistanceText obj = (
 			return isProperty obj.baseObject #mString == true
 	)
@@ -2402,13 +2441,27 @@ fn getPlatformPath obj = (
 	fn getEntityCollisionTag obj = (
 		local collisionTag = ""
 		
-		if(validateStaticbody obj) then
-		(
-			collisionTag = "collisionTag = \"Level\""
-		)	
-		
 		if(validateEntityCollisionTag obj) then (
 			collisionTag = "collisionTag = \"" + obj.collisionTag + "\""
+		)
+		else
+		(		
+			if(obj.name == PlayerName) then
+			(
+				collisionTag = "collisionTag = \"Player\""
+			)
+			if(validateEnemy obj) then				
+			(
+				collisionTag = "collisionTag = \"Enemy\""
+			)
+			if(validateRigidbody obj) then
+			(
+				collisionTag = "collisionTag = \"Actor\""
+			)
+			if(validateStaticbody obj) then
+			(
+				collisionTag = "collisionTag = \"Level\""
+			)
 		)
 
 		return collisionTag
@@ -2454,6 +2507,7 @@ fn getPlatformPath obj = (
 		playerPrefab.obj_name = PlayerName
 		append playerPrefab.components getTransform
 		append playerPrefab.components getPlayerController
+		append playerPrefab.components getPlayerRagdoll
 
 		-- Create PlayerPivot prefab
 		playerPivotPrefab = objPrefab()
@@ -2473,11 +2527,19 @@ fn getPlatformPath obj = (
 		append playerCameraPrefab.components getTransform
 		append playerCameraPrefab.components getCameraController
 
-		-- Create BasicEnemy prefab
-		basicEnemyPrefab = objPrefab()
-		basicEnemyPrefab.obj_name = BasicEnemyName
-		append basicEnemyPrefab.components getTransform
-		append basicEnemyPrefab.components getAiFsmBasic
+		-- Create soldierEnemy prefab
+		soldierEnemyPrefab = objPrefab()
+		soldierEnemyPrefab.obj_name = soldierEnemyName
+		append soldierEnemyPrefab.components getName
+		append soldierEnemyPrefab.components getTransform
+		append soldierEnemyPrefab.components getSoldierRagdoll		
+		
+		-- Create GrandmaEnemy prefab
+		grandmaEnemyPrefab = objPrefab()
+		grandmaEnemyPrefab.obj_name = grandmaEnemyName
+		append grandmaEnemyPrefab.components getName
+		append grandmaEnemyPrefab.components getTransform
+		append grandmaEnemyPrefab.components getGrandmaRagdoll		
 		
 		-- Create IntPull prefab
 		pullIntPrefab = objPrefab()
@@ -2487,7 +2549,7 @@ fn getPlatformPath obj = (
 		append pullIntPrefab.components getJointPrismatic
 
 		-- Adding prefabs to the prefabs list
-		ex_prefabList = #(playerPrefab, basicEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab, pullIntPrefab)
+		ex_prefabList = #(playerPrefab, grandmaEnemyPrefab, soldierEnemyPrefab, playerPivotPrefab, cameraPivotPrefab, playerCameraPrefab, pullIntPrefab)
 	)
 	
 	/**********************************************************************************************
@@ -2668,6 +2730,9 @@ fn getPlatformPath obj = (
 		expJoints = #()
 		jointsToExp = #()
 		
+		grandma_ragdoll_ind = 0
+		soldier_ragdoll_ind = 0
+		
 		initializePrefabs()
 		
 		/*if (validateScene true == false) then (
@@ -2701,8 +2766,6 @@ fn getPlatformPath obj = (
 			getCameraPivotController,		
 			getPlayerPivotController,
 			getCharacterController,
-			--getPlayerController,
-			--getAiFsmBasic,
 			getLevelMeshCollider,
 			getPointLight,
 			getAmbientLight,
@@ -2718,7 +2781,8 @@ fn getPlatformPath obj = (
 			getPullInt,
 			getPushInt,
 			getClueZone,
-			getRecastAABB
+			getRecastAABB,
+			getParticleSystem
 		)
 
 		-- Initialize XML
