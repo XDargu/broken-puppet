@@ -342,41 +342,140 @@ macroScript MCVAssetBrowser
 		/**********************************************************************************************
 		Object DISTANCETEXT structure
 		 Params:
-		  - MSTRING: text to show near the position
+		  - MDTSTRING: text to show near the position
 		***********************************************************************************************/
 		objectDistanceText = attributes objectDistanceText
 		(
 			parameters main rollout:params
 			(
-				mString type:#string ui:mString default:"inserte aqui su texto"
-				mDistance type:#float ui:mDistance default:0.0
-				mSize type:#float ui:mSize default:0.0
-				mColor type:#string ui:mColor default:"FFFFFFFF"
+				mDistTextString type:#string ui:mDistTextString default:"inserte aqui su texto"
+				mDistTextDistance type:#float ui:mDistTextDistance default:0.0
+				mDistTextSize type:#float ui:mDistTextSize default:0.0
+				mDistTextColor type:#string ui:mDistTextColor default:"FFFFFFFF"
 			)
 			 
 			rollout params "Object Distance Text"
 			(
-				editText mString "mString" type: #string
-				spinner  mDistance "mDistance" type: #float
-				spinner  mSize "mSize" type: #float
-				editText mColor "mColor" type: #string
+				editText mDistTextString "Texto" type: #string
+				spinner  mDistTextDistance "Distancia" type: #float
+				spinner  mDistTextSize "Tamanyo" type: #float
+				editText mDistTextColor "Color" type: #string
 			)
 		)
 
 		/**********************************************************************************************
 			Set the String of all the objects of the scene
 		***********************************************************************************************/
-	fn addObjectsDistanceText = 
+		fn addObjectsDistanceText = 
+		(		
+			local objSelected = $
+			if (isProperty objSelected.baseobject #mString != true) then
+			(
+				custAttributes.add objSelected objectDistanceText	
+							
+			)			
+		)
+		
+	
+		/**********************************************************************************************
+		Object PARTICLE SYSTEM structure
+		 Params:
+		  - MSTRING: text to show near the position
+		***********************************************************************************************/
+		objectParticleSystem = attributes objectParticleSystem
+		(
+			parameters main rollout:params
+			(
+				mSystemName type:#string ui:mSystemName default:"ps_dust"
+				mSystemActive type:#boolean ui:mSystemActive default:true
+			)
+			 
+			rollout params "Object Distance Text"
+			(
+				editText mSystemName "Nombre" type: #string
+				checkbox mSystemActive "Activo" type: #boolean
+			)
+		)
+
+		/**********************************************************************************************
+			Set the String of all the objects of the scene
+		***********************************************************************************************/
+		fn addObjectsParticleSystem = 
+		(		
+			local objSelected = $
+			if (isProperty objSelected.baseobject #mSystemActive != true) then
+			(
+				custAttributes.add objSelected objectParticleSystem
+			)			
+		)
+		
+		
+	/**********************************************************************************************
+		Activate all the particle systems in the scene
+	***********************************************************************************************/	
+	fn activateParticleSystems = 
+	(				
+		
+		for obj in $* do(
+			print "hola"
+			if  (isProperty obj.baseobject #mSystemActive == true) then (
+				obj.mSystemActive = true
+			)			
+		)		
+	)	
+	
+	/**********************************************************************************************
+		Deactivate all the particle systems in the scene
+	***********************************************************************************************/	
+	fn deactivateParticleSystems = 
+	(				
+		
+		for obj in $* do(
+			if  (isProperty obj.baseobject #mSystemActive == true) then (
+				obj.mSystemActive = false
+			)			
+		)		
+	)	
+	
+	
+	objectIsNotVisible = attributes objectIsNotVisible
+	(
+		parameters main rollout:params
+		(
+			collisionMesh type:#boolean ui:collisionMesh default:true
+		)
+
+		rollout params "Object Custom IsNotVisible"
+		(
+			checkbox collisionMesh "collisionMesh" type: #boolean
+		)
+	)
+	
+	fn addObjectsIsNotVisible = 
 	(		
 		local objSelected = $
-		if (isProperty objSelected.baseobject #mString != true) then
+		if (isProperty objSelected.baseobject #collisionMesh != true) then
 		(
-			custAttributes.add objSelected objectDistanceText	
-						
+			custAttributes.add objSelected objectIsNotVisible	
 		)	
+		else(
+				objSelected.collisionMesh = true
+		)
 		
 	)
+	
+	fn setNotVisible = 
+	(				
+		local allObj = $*
 		
+		for obj in allObj do(
+			if  (isProperty obj.baseobject #IsNotVisible == true) then (
+				obj.IsNotVisible = true
+			)			
+		)		
+	)	
+		
+	
 	/**********************************************************************************************
 	Object  structure Trigger
 	 Params:
@@ -569,6 +668,11 @@ macroScript MCVAssetBrowser
 			button botonAddClueZone "Add ClueZone" pos:[5,99] width:75 height:25 toolTip:""
 			button botonAddRecastAABB "Add RecastAABB" pos:[86,99] width:75 height:25 toolTip:""
 			button botonAddDistanceText "Add DistanceText" pos:[167,99] width:75 height:25 toolTip:""
+			button botonAddParticleSystem "Add ParticleSystem" pos:[248,99] width:75 height:25 toolTip:""
+			button botonActivateParticles "Activate Particles" pos:[5,130] width:75 height:25 toolTip:""
+			button botonDeactivateParticles "Deactivate Particles" pos:[89,130] width:75 height:25 toolTip:""
+			button botonNotVisible "Not Visible" pos:[167,130] width:75 height:25 toolTip:""
+			
 							
 			on botonA pressed do	( 
 				objs = $*
@@ -631,7 +735,20 @@ macroScript MCVAssetBrowser
 			on botonAddDistanceText pressed do (
 				addObjectsDistanceText()
 			)
-
+			on botonAddParticleSystem pressed do (
+				addObjectsParticleSystem()
+			)		
+			on botonActivateParticles pressed do (
+				activateParticleSystems()
+			)
+			on botonDeactivateParticles pressed do (
+				deactivateParticleSystems()
+			)
+			on botonNotVisible pressed do (
+				addObjectsIsNotVisible()
+			)
+			
+			
 		)
 		
 		rollout Exporter "Exportador" 
