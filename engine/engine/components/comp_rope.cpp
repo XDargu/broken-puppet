@@ -6,6 +6,7 @@
 #include "rope_manager.h"
 #include "physics_manager.h"
 #include "comp_needle.h"
+#include "audio\sound_manager.h"
 
 TCompRope::~TCompRope() {
 	CHandle valid_trans_1 = transform_1_aux.isValid() ? transform_1_aux : transform_1;
@@ -84,12 +85,20 @@ void TCompRope::fixedUpdate(float elapsed) {
 	if (valid_trans_1.isValid()) {
 		TCompTransform* trans_1 = valid_trans_1;
 
-		XMVECTOR normal_dir = trans_1->position - pos_1;
-		normal_dir = XMVector3Normalize(normal_dir);
 		float dist = V3DISTANCE(trans_1->position, pos_1);
-		float speed = min(dist / elapsed, 50);
 
-		pos_1 = pos_1 + normal_dir * speed * elapsed;
+		if (dist > 0) {
+			XMVECTOR normal_dir = trans_1->position - pos_1;
+			normal_dir = XMVector3Normalize(normal_dir);
+			float speed = min(dist / elapsed, 50);
+
+			pos_1 = pos_1 + normal_dir * speed * elapsed;
+
+			dist = V3DISTANCE(trans_1->position, pos_1);
+			if (dist <= 0) {
+				CSoundManager::get().playFXTrack("nail1");
+			}
+		}
 
 		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
 		if (needle->getAttachedRigid() != nullptr) {
@@ -109,12 +118,20 @@ void TCompRope::fixedUpdate(float elapsed) {
 	if (valid_trans_2.isValid()) {
 		TCompTransform* trans_2 = valid_trans_2;
 
-		XMVECTOR normal_dir = trans_2->position - pos_2;
-		normal_dir = XMVector3Normalize(normal_dir);
 		float dist = V3DISTANCE(trans_2->position, pos_2);
-		float speed = min(dist / elapsed, 50);
 
-		pos_2 = pos_2 + normal_dir * speed * elapsed;
+		if (dist > 0) {
+			XMVECTOR normal_dir = trans_2->position - pos_2;
+			normal_dir = XMVector3Normalize(normal_dir);
+			float speed = min(dist / elapsed, 50);
+
+			pos_2 = pos_2 + normal_dir * speed * elapsed;
+
+			dist = V3DISTANCE(trans_2->position, pos_2);
+			if (dist <= 0) {
+				CSoundManager::get().playFXTrack("nail1");
+			}
+		}
 
 		TCompNeedle* needle = ((CEntity*)valid_trans_2.getOwner())->get<TCompNeedle>();
 		if (needle->getAttachedRigid() != nullptr) {

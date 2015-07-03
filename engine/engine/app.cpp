@@ -339,8 +339,7 @@ bool CApp::create() {
 	sm.addFXTrack("light.wav", "light");
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
-
-
+	sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
 
 	physics_manager.init();
 
