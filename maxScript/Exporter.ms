@@ -2798,7 +2798,6 @@ fn getPlatformPath obj = (
 			getCameraPivotController,		
 			getPlayerPivotController,
 			getCharacterController,
-			getLevelMeshCollider,
 			getPointLight,
 			getAmbientLight,
 			getDirectionalLight,
