@@ -1364,7 +1364,9 @@ void bt_grandma::hurtSensor(float damage){
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
+		stopAllAnimations();
 		is_ragdoll = true;
+		setCurrent(NULL);
 	}
 	else if (damage < force_medium_impact){
 		hurt_event = true;

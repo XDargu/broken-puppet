@@ -234,6 +234,8 @@ void createManagers() {
 	getObjManager<TCompAudioListener>()->init(1024);
 	getObjManager<TCompAudioSource>()->init(1024);
 
+	getObjManager<TCompOcclusionPlane>()->init(128);
+
 
 	registerAllComponentMsgs();
 }
@@ -344,6 +346,7 @@ bool CApp::create() {
 
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	loadScene("data/scenes/my_file.xml");
@@ -1226,6 +1229,7 @@ void CApp::loadScene(std::string scene_name) {
 	render_techniques_manager.destroyAll();
 	material_manager.destroyAll();
 	render_manager.destroyAllKeys();
+	render_manager.clearOcclusionPlanes();
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();

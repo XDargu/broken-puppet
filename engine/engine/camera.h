@@ -45,6 +45,10 @@ public:
 
   // helpers
   bool getScreenCoords(XMVECTOR world_coord, float *x, float *y) const;
+
+  void setOcclusionProjection(float width, float height, float znear, float zfar);
+  void setOcclusionViewport(float x0, float y0, float width, float height, float new_znear, float new_zfar);
+  void setOcclusionViewProjection(XMVECTOR eye_position, XMVECTOR target_position, XMVECTOR the_front);
 };
 
 #endif

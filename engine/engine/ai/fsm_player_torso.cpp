@@ -389,7 +389,15 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 									// ************ Change existing joint ***********
 									aux_joint->joint->release();
-									aux_joint->create(a1, bone, 1, a1->getGlobalPose().p, bone->getGlobalPose().p, physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)), physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)));
+									if (a1 != bone) {
+										aux_joint->create(a1, bone, 1, a1->getGlobalPose().p, bone->getGlobalPose().p, physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)), physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)));
+									}
+									else {
+										CEntityManager::get().remove(CHandle(aux_joint).getOwner());
+										aux_joint->joint = nullptr;
+										aux_joint = CHandle();
+										new_e_r->joint_aux = CHandle();
+									}
 								}
 							}
 						}
@@ -428,11 +436,20 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 								PxVec3 pos = bone->getGlobalPose().q.rotate(aux_offset) + bone->getGlobalPose().p;
 
-								aux_joint->create(bone, blockHit.actor, 1, bone->getGlobalPose().p, blockHit.position, physx::PxTransform(aux_offset), physx::PxTransform(offset_2));
+								if (blockHit.actor != bone) {
+									aux_joint->create(bone, blockHit.actor, 1, bone->getGlobalPose().p, blockHit.position, physx::PxTransform(aux_offset), physx::PxTransform(offset_2));
+									aux_e->add(aux_joint);
+								}
+								else {
+									CEntityManager::get().remove(aux_e);
+									aux_joint->joint = nullptr;									
+									aux_joint = CHandle();									
+								}
 
-								aux_e->add(aux_joint);
-
-								new_e_r->joint_aux = CHandle(aux_joint);
+								if (aux_joint == CHandle())
+									new_e_r->joint_aux = CHandle();
+								else
+									new_e_r->joint_aux = CHandle(aux_joint);
 							}
 						}
 

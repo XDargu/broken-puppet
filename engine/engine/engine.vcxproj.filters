@@ -523,6 +523,9 @@
     <ClInclude Include="components\comp_bt_soldier.h">
       <Filter>components\ai\enemies</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_occlusion_plane.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -972,6 +975,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_bt_soldier.cpp">
       <Filter>components\ai\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_occlusion_plane.cpp">
+      <Filter>components\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

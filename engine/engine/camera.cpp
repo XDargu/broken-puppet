@@ -52,3 +52,30 @@ bool CCamera::getScreenCoords(XMVECTOR world_coord, float *x, float *y) const {
 
 	return true;
 }
+
+void CCamera::setOcclusionViewport(float x0, float y0, float width_at_znear, float height_at_znear, float new_znear, float new_zfar) {
+	viewport.TopLeftX = x0;
+	viewport.TopLeftY = y0;
+	viewport.Width = width_at_znear;
+	viewport.Height = height_at_znear;
+	viewport.MinDepth = 0.f;
+	viewport.MaxDepth = 1.f;
+
+	aspect_ratio = width_at_znear / height_at_znear;
+
+	setOcclusionProjection(width_at_znear, height_at_znear, new_znear, new_zfar);
+}
+
+void CCamera::setOcclusionProjection(float width_at_znear, float height_at_znear, float new_znear, float new_zfar) {
+	projection = XMMatrixPerspectiveRH(width_at_znear, height_at_znear, new_znear, new_zfar);
+
+	//fov_in_radians = new_fov_in_rad;
+	znear = new_znear;
+	zfar = new_zfar;
+}
+
+void CCamera::setOcclusionViewProjection(XMVECTOR eye_position, XMVECTOR target_position, XMVECTOR the_front) {
+
+	view = XMMatrixLookToRH(eye_position, the_front, XMVectorSet(0, 1, 0, 1));
+	view_projection = view * projection;
+}

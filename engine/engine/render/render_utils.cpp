@@ -1121,6 +1121,36 @@ void drawLine(XMVECTOR src, XMVECTOR target) {
 	mesh_line.activateAndRender();
 }
 
+// N*r + d = 0
+void drawPlane(XMVECTOR plane) {
+	XMVECTOR n = plane;
+	n = XMVectorSetW(n, 0);
+	XMVECTOR aux = XMVectorSet(0, 1, 0, 0);
+	XMVECTOR dot = XMVector3Dot(aux, n);
+	if (XMVectorGetX(dot) == 1.0f)
+		aux = XMVectorSet(1, 0, 0, 0);
+
+	XMVECTOR a = XMVector3Normalize(XMVector3Cross(n, aux));
+	XMVECTOR b = XMVector3Normalize(XMVector3Cross(n, a));
+
+	a *= 5.0f;
+	b *= 5.f;
+
+	XMVECTOR p0 = n * (-XMVectorGetW(plane));
+	p0 = XMVectorSetW(p0, 1.f);
+
+	drawLine(p0 + a + b, p0 - a + b);
+	drawLine(p0 - a + b, p0 - a - b);
+	drawLine(p0 - a - b, p0 + a - b);
+	drawLine(p0 + a - b, p0 + a + b);
+	drawLine(p0, p0 + n * 5);
+}
+
+void drawVPlanes(const VPlanes& planes) {
+	for (auto i : planes)
+		drawPlane(i);
+}
+
 void setWorldMatrix(XMMATRIX world) {
   ctes_object.get()->World = world;
   ctes_object.uploadToGPU();
