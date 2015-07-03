@@ -59,6 +59,7 @@ void TCompParticleGroup::update(float elapsed) {
 
 	bool all_dirty = true;
 	for (auto& ps : particle_systems) {
+		ps.visible = render_manager.planes_active_camera.isVisible(&ps.aabb);
 		ps.update(elapsed);
 		all_dirty &= ps.dirty_destroy_group;
 	}
@@ -90,13 +91,33 @@ void TCompParticleGroup::update(float elapsed) {
 }
 
 void TCompParticleGroup::render() {
-	TCompAABB* aabb = getSibling<TCompAABB>(this);
-	if (render_manager.planes_active_camera.isVisible(aabb)) {
-		for (auto& ps : particle_systems) {
-			ps.render(false);
-		}
+	/*TCompAABB* aabb = getSibling<TCompAABB>(this);
+	XMVECTOR minValue = XMVectorSet(D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, 1);
+	XMVECTOR maxValue = -minValue;*/
+
+	for (auto& ps : particle_systems) {
+
+		/*if (XMVectorGetX(ps.aabb.min) < XMVectorGetX(minValue))
+			minValue = XMVectorSetX(minValue, XMVectorGetX(ps.aabb.min));
+		if (XMVectorGetY(ps.aabb.min) < XMVectorGetY(minValue))
+			minValue = XMVectorSetY(minValue, XMVectorGetY(ps.aabb.min));
+		if (XMVectorGetZ(ps.aabb.min) < XMVectorGetZ(minValue))
+			minValue = XMVectorSetZ(minValue, XMVectorGetZ(ps.aabb.min));
+
+		if (XMVectorGetX(ps.aabb.max) > XMVectorGetX(maxValue))
+			maxValue = XMVectorSetX(maxValue, XMVectorGetX(ps.aabb.max));
+		if (XMVectorGetY(ps.aabb.max) > XMVectorGetY(maxValue))
+			maxValue = XMVectorSetY(maxValue, XMVectorGetY(ps.aabb.max));
+		if (XMVectorGetZ(ps.aabb.max) > XMVectorGetZ(maxValue))
+			maxValue = XMVectorSetZ(maxValue, XMVectorGetZ(ps.aabb.max));*/
+		
+		ps.render(false);		
 	}
+
+	/*aabb->min = minValue;
+	aabb->max = maxValue;*/
 }
+
 
 void TCompParticleGroup::renderDistorsion() {
 	for (auto& ps : particle_systems) {

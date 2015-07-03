@@ -32,6 +32,9 @@ TParticleSystem::TParticleSystem() : updater_lifetime(nullptr)
 
 , instanced_mesh(nullptr)
 , instances_data(nullptr)
+
+, aabb(XMVectorZero(), XMVectorZero())
+, visible(false)
 {	
 }
 
@@ -185,7 +188,7 @@ void TParticleSystem::init() {
 
 	if (particles.capacity() < emitter_generation->limit) {
 		particles.reserve(emitter_generation->limit - particles.capacity());
-	}	
+	}
 }
 
 void TParticleSystem::fixedUpdate(float elapsed) {
@@ -228,10 +231,30 @@ void TParticleSystem::update(float elapsed) {
 
 	VParticles::iterator it = particles.begin();
 
+	// AABB Min max
+	XMFLOAT3 aabb_min = XMFLOAT3(1000000, 1000000, 1000000);
+	XMFLOAT3 aabb_max = XMFLOAT3(-1000000, -1000000, -1000000);
 	int delete_counter = 0;
+
 	while (it != particles.end()) {
 
 		if (it->size != -1) {
+			// Update the aabb
+			// Position +/- size = bounds of the particle
+			aabb_min.x = min(aabb_min.x, it->position.x - it->size);
+			aabb_min.y = min(aabb_min.y, it->position.y - it->size);
+			aabb_min.z = min(aabb_min.z, it->position.z - it->size);
+
+			aabb_max.x = max(aabb_max.x, it->position.x + it->size);
+			aabb_max.y = max(aabb_max.y, it->position.y + it->size);
+			aabb_max.z = max(aabb_max.z, it->position.z + it->size);
+
+			// Don't keep updating if the particle system is not seen
+			if (!visible) {
+				++it;
+				continue;
+			}
+
 			// Update the position, no updater needed
 			it->position.x += it->speed.x * elapsed;
 			it->position.y += it->speed.y * elapsed;
@@ -284,6 +307,9 @@ void TParticleSystem::update(float elapsed) {
 		//++it;
 	}
 
+	aabb.min = XMLoadFloat3(&aabb_min);
+	aabb.max = XMLoadFloat3(&aabb_max);
+
 	/*for (int i = 0; i < delete_counter; ++i) {
 		particles.push_front(TParticle());		
 	}*/
@@ -306,6 +332,7 @@ void TParticleSystem::update(float elapsed) {
 }
 
 void TParticleSystem::render(bool distorsion) {
+	if (!visible) { return; }
 	if (renderer->distorsion != distorsion) { return; }
 	if (instances_data != nullptr) {
 		TCtesParticleSystem* ps_ctes = ctes_particle_system.get();
@@ -341,8 +368,9 @@ void TParticleSystem::render(bool distorsion) {
 }
 
 void TParticleSystem::renderDebug3D() const {
-	render_techniques_manager.getByName("basic")->activate();
 	return;
+
+	render_techniques_manager.getByName("basic")->activate();	
 	for (auto& particle : particles) {
 		XMVECTOR pos = XMLoadFloat3(&particle.position);
 		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
