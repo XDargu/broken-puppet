@@ -4793,7 +4793,7 @@
 <name name="scene_3_grandmacrasher_01_trigger" />
 <transform position="-9.83904 -2.77668 9.21452" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-1.98442 -0.582414 -2.03737" max="1.98442 0.582413 2.03737"/>
-<trigger/>
+<trigger playerOnly="true"/>
 	</entity>
 	<entity  >
 <name name="escene_3_room_1" />
