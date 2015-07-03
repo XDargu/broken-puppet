@@ -1062,8 +1062,10 @@ void CApp::renderDebugEntities() {
 		exit(-1);
 	}
 	renderNavMesh = true;
-	if (renderNavMesh)
+	if (renderNavMesh){
 		CNav_mesh_manager::get().render_nav_mesh();
+		CNav_mesh_manager::get().pathRender();
+	}
 	//----------------------------------------------
 
 	//CNav_mesh_manager::get().pathRender();

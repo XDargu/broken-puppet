@@ -138,6 +138,7 @@ void bt_grandma::create(string s)
 	initial_attack = false;
 	see_player = false;
 	animation_done = false;
+	player_cant_reach = false;
 	active = false;
 
 	//player_touch = false;
@@ -1116,6 +1117,7 @@ int bt_grandma::conditionplayer_lost()
 		return true;
 	}
 	return false;
+
 }
 
 //check if the player is visible
