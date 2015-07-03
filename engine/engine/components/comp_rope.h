@@ -12,6 +12,9 @@ private:
 	CHandle joint;
 
 	float remove_counter;
+
+	bool sound_1_played;
+	bool sound_2_played;
 public:
 
 	CHandle transform_1_aux;
@@ -27,7 +30,7 @@ public:
 	float width;
 	
 
-	TCompRope() : max_distance(20), width(0.02f), remove_counter(0), tensed(false), joint_aux(CHandle()) {}
+	TCompRope() : max_distance(20), width(0.02f), remove_counter(0), tensed(false), joint_aux(CHandle()), sound_1_played(false), sound_2_played(false){}
 
 	~TCompRope();
 

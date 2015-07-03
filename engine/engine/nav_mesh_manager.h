@@ -21,6 +21,7 @@ private:
 	int num;
 	bool first;
 	bool need_update;
+	bool need_navmesh;
 	int recast_aabb_index;
 	CHandle player;
 public:
@@ -46,6 +47,8 @@ public:
 	void removeCapsule(CHandle cap);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
+	void setNeedNavMesh(bool need);
+	bool getNeedNavMesh();
 	std::vector<CHandle>     colMeshes;
 	std::vector<CHandle>     colCapsules;
 	std::vector<CHandle>   colConvex;

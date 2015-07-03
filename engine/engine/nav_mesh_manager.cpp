@@ -18,17 +18,20 @@ CNav_mesh_manager& CNav_mesh_manager::get() {
 }
 
 bool CNav_mesh_manager::build_nav_mesh(){
-	first = true;
-	nav_A.m_input = nav_mesh_input;
-	nav_A.m_input.computeBoundaries();
-	nav_B.m_input = nav_mesh_input;
-	nav_B.m_input.computeBoundaries();
-	nav_A.build();
-	nav_mesh = &nav_A;
-	keep_updating_navmesh = true;
-	player = CEntityManager::get().getByName("Player");
-	new std::thread(&CNav_mesh_manager::updateNavmesh, this);
-	return true;
+	if (need_navmesh){
+		first = true;
+		nav_A.m_input = nav_mesh_input;
+		nav_A.m_input.computeBoundaries();
+		nav_B.m_input = nav_mesh_input;
+		nav_B.m_input.computeBoundaries();
+		nav_A.build();
+		nav_mesh = &nav_A;
+		keep_updating_navmesh = true;
+		player = CEntityManager::get().getByName("Player");
+		new std::thread(&CNav_mesh_manager::updateNavmesh, this);
+		return true;
+	}
+	return false;
 }
 
 void CNav_mesh_manager::prepareInputNavMesh(){
@@ -295,9 +298,18 @@ int CNav_mesh_manager::getIndexMyRecastAABB(CHandle my_aabb){
 	return -1;
 }
 
+void CNav_mesh_manager::setNeedNavMesh(bool need){
+	need_navmesh = need;
+}
+
+bool CNav_mesh_manager::getNeedNavMesh(){
+	return need_navmesh;
+}
+
 CNav_mesh_manager::CNav_mesh_manager()
 {
 	recast_aabb_index = 0;
+	need_navmesh=false;
 }
 
 
