@@ -83,7 +83,7 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 	float cosAngle = abs(dot(normal, cameraToWorldNorm)); // Will be a value between 0 and 1
 	float fact = 1 - cosAngle;
 	fact = min(1, 1.38 - fact*fact);
-
+	
 	float3 newPos;
 	float4 newScreen;
 	float i = 0;
@@ -112,7 +112,7 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 
 		currentWorldDist = length(newPos.xyz - cameraWorldPos.xyz);
 		rayDist = length(rayTrace.xyz - cameraWorldPos.xyz);
-		if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1 || newScreen.z > 1 || newScreen.z < -1 || i >= 1.0 || cameraToWorldDist > currentWorldDist) {
+		if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1 || newScreen.z > 1 || newScreen.z < -1 || i >= 0.5 || cameraToWorldDist > currentWorldDist) {
 			break; // This is a failure mode.
 		}
 	} while (rayDist < currentWorldDist);

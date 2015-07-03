@@ -5,12 +5,15 @@
 
 struct TCompTrigger : TBaseComponent {
 private:
+	CHandle player_entity;
 	CHandle m_transform;
 	CHandle m_aabb;
-	std::vector<CEntity*> inside;
+	std::vector<CHandle> inside;
+	bool player_only;
+	bool bots_only;
 public:
 
-    TCompTrigger(){}
+	TCompTrigger() : m_transform(CHandle()), m_aabb(CHandle()), player_only(false), bots_only(false) {}
 	~TCompTrigger();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
@@ -23,9 +26,9 @@ public:
 
 	bool onExit();
 
-	bool checkIfInside(CEntity* entity);
+	bool checkIfInside(CHandle entity);
 
-	void remove(std::vector<CEntity*>& vec, size_t pos);
+	void remove(std::vector<CHandle>& vec, size_t pos);
 
 	void renderDebug3D();
 };

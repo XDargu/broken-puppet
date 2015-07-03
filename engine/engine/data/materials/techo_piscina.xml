@@ -1,1 +1,1 @@
-<std_material name="techo_piscina" diffuse="techo_diffuse" normal="techo_normal" specular="techo_specular" glossiness="techo_gloss" emissive=""/>
+<std_material name="techo_piscina" diffuse="techo_dvn2_diffuse" normal="techo_dvn2_normal" specular="techo_dvn2_specular" glossiness="techo_dvn2_gloss" emissive=""/>

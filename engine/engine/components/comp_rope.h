@@ -27,7 +27,7 @@ public:
 	float width;
 	
 
-	TCompRope() : max_distance(20), width(0.02f), remove_counter(0), tensed(false){}
+	TCompRope() : max_distance(20), width(0.02f), remove_counter(0), tensed(false), joint_aux(CHandle()) {}
 
 	~TCompRope();
 

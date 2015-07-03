@@ -1,1 +1,1 @@
-<std_material name="Material #25" diffuse="engranaje"/>
+<std_material name="Material #25" diffuse="pasarela_diffuse" normal="pasarela_normal" specular="pasarela_specular" glossiness="pasarela_gloss" emissive=""/>

@@ -156,22 +156,22 @@ void registerAllComponentMsgs() {
 void createManagers() {
 	SET_ERROR_CONTEXT("Creating", "managers");
 
-	getObjManager<CEntity>()->init(1024);
-	getObjManager<TCompTransform>()->init(1024);
+	getObjManager<CEntity>()->init(4096);
+	getObjManager<TCompTransform>()->init(4096);
 	getObjManager<TCompLife>()->init(32);
-	getObjManager<TCompName>()->init(1024);
-	getObjManager<TCompMesh>()->init(1024);
-	getObjManager<TCompRender>()->init(1024);
+	getObjManager<TCompName>()->init(4096);
+	getObjManager<TCompMesh>()->init(4096);
+	getObjManager<TCompRender>()->init(4096);
 	getObjManager<TCompRecastAABB>()->init(32);
-	getObjManager<TCompColliderMesh>()->init(1024);
+	getObjManager<TCompColliderMesh>()->init(4096);
 	getObjManager<TCompColliderConvex>()->init(512);
 	getObjManager<TCompCamera>()->init(4);
-	getObjManager<TCompColliderBox>()->init(512);
+	getObjManager<TCompColliderBox>()->init(1024);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
-	getObjManager<TCompRigidBody>()->init(512);
-	getObjManager<TCompStaticBody>()->init(1024);
-	getObjManager<TCompAABB>()->init(1024);
+	getObjManager<TCompRigidBody>()->init(2048);
+	getObjManager<TCompStaticBody>()->init(4096);
+	getObjManager<TCompAABB>()->init(4096);
 	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompGNItem>()->init(64);
 	getObjManager<TCompZoneAABB>()->init(32);
@@ -182,17 +182,17 @@ void createManagers() {
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompViewerCameraController>()->init(1);
 	getObjManager<TCompDistanceJoint>()->init(32);
-	getObjManager<TCompJointPrismatic>()->init(32);
-	getObjManager<TCompJointHinge>()->init(32);
+	getObjManager<TCompJointPrismatic>()->init(256);
+	getObjManager<TCompJointHinge>()->init(256);
 	getObjManager<TCompJointD6>()->init(512);
-	getObjManager<TCompJointFixed>()->init(64);
+	getObjManager<TCompJointFixed>()->init(512);
 	getObjManager<TCompRope>()->init(32);
 	getObjManager<TCompNeedle>()->init(1024);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
 	getObjManager<TCompSensorDistPlayer>()->init(64);
-	getObjManager<TCompTrigger>()->init(1024);
+	getObjManager<TCompTrigger>()->init(256);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
 	//
@@ -208,7 +208,7 @@ void createManagers() {
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
-	getObjManager<TCompPointLight>()->init(64);
+	getObjManager<TCompPointLight>()->init(256);
 
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
@@ -219,9 +219,9 @@ void createManagers() {
 	getObjManager<TCompUnityCharacterController>()->init(64);
 	getObjManager<TCompBasicPlayerController>()->init(1);
 
-	getObjManager<TCompSkeleton>()->init(1024);
-	getObjManager<TCompSkeletonLookAt>()->init(1024);
-	getObjManager<TCompSkeletonIK>()->init(1024);
+	getObjManager<TCompSkeleton>()->init(256);
+	getObjManager<TCompSkeletonLookAt>()->init(256);
+	getObjManager<TCompSkeletonIK>()->init(256);
 
 	getObjManager<TCompRagdoll>()->init(64);
 	getObjManager<TCompShadows>()->init(8);
@@ -233,6 +233,8 @@ void createManagers() {
 	//Audio
 	getObjManager<TCompAudioListener>()->init(1024);
 	getObjManager<TCompAudioSource>()->init(1024);
+
+	getObjManager<TCompOcclusionPlane>()->init(128);
 
 
 	registerAllComponentMsgs();
@@ -337,16 +339,16 @@ bool CApp::create() {
 	sm.addFXTrack("light.wav", "light");
 	sm.addFXTrack("steam.wav", "steam");
 	sm.addFXTrack("sonar.wav", "sonar");
-
-
+	sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
 
 	physics_manager.init();
 
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -356,7 +358,8 @@ bool CApp::create() {
 	// XML Pruebas
 	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
-	loadScene("data/scenes/scene_3.xml");
+
+	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
 
@@ -527,6 +530,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_resolve");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -1225,6 +1229,7 @@ void CApp::loadScene(std::string scene_name) {
 	render_techniques_manager.destroyAll();
 	material_manager.destroyAll();
 	render_manager.destroyAllKeys();
+	render_manager.clearOcclusionPlanes();
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();

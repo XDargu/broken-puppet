@@ -204,7 +204,7 @@ int bt_grandma::actionRagdoll()
 				TCompTransform* c_transform = camera->get<TCompTransform>();
 				TCompCamera* c_camera = camera->get<TCompCamera>();
 				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					//CApp::get().slowMotion(4);
+					CApp::get().slowMotion(3);
 				}
 			}
 
@@ -1364,7 +1364,9 @@ void bt_grandma::hurtSensor(float damage){
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
+		stopAllAnimations();
 		is_ragdoll = true;
+		setCurrent(NULL);
 	}
 	else if (damage < force_medium_impact){
 		hurt_event = true;

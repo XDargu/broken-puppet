@@ -5,6 +5,7 @@
 #include "handle\handle.h"
 #include "particle.h"
 #include "particle_system_subtypes.h"
+#include "aabb.h"
 
 typedef std::vector<TParticle> VParticles;
 
@@ -42,8 +43,12 @@ struct TParticleSystem {
 	// Group reference
 	CHandle h_pg;
 
+	AABB aabb;
+
 	const CMesh* instanced_mesh;      // The particle mesh
 	CMesh* instances_data;      // The positions of each instance
+
+	bool visible; // Is visible vy the camera
 public:
 
 	TParticleSystem();

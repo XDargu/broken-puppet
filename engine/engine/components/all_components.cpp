@@ -70,4 +70,5 @@ DECL_OBJ_MANAGER(TCompAnimEditor, "animEditor");
 DECL_OBJ_MANAGER(TCompGoldenNeedle, "goldenNeedle");
 DECL_OBJ_MANAGER(TCompGNItem, "goldenNeedleItem");
 DECL_OBJ_MANAGER(TCompZoneAABB, "zoneAABB");
+DECL_OBJ_MANAGER(TCompOcclusionPlane, "occlusionPlane");
 

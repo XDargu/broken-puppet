@@ -489,6 +489,14 @@ XMVECTOR TCompSkeleton::getPositionOfBone(int id) {
 	return Cal2DX(bone->getTranslationAbsolute());
 }
 
+XMVECTOR TCompSkeleton::getRotationOfBone(int id) {
+	CalSkeleton* skel = model->getSkeleton();
+	auto& cal_bones = skel->getVectorBone();
+
+	CalBone* bone = cal_bones[id];
+	return Cal2DX(bone->getRotationAbsolute());
+}
+
 void TCompSkeleton::ragdollUnactive() {
 	time_since_last_ragdoll = 0;
 	CalSkeleton* skel = model->getSkeleton();

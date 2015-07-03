@@ -1,0 +1,7 @@
+<std_material name="prota"
+diffuse="aguja_Diffuse"
+normal="aguja_Normal"
+specular="aguja_Specular"
+glossiness="aguja_Gloss"
+emissive="aguja_Emissive"
+/>

@@ -5,6 +5,7 @@
 #include "comp_collider_capsule.h"
 #include "comp_rigid_body.h"
 #include "comp_character_controller.h"
+#include "comp_skeleton.h"
 #include "../audio/sound_manager.h"
 
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -54,6 +55,18 @@ void TCompPlayerController::init() {
 	/*prev_pos = trans->position;
 	displacement = 0;
 	counter = 0;*/
+
+	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
+	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
+
+	float offset_size = 0.05f;
+	float offset_rot_size = 0.2f;
+	float offset_rot_size2 = 3.14f;
+	offset_needle_back1 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
+	offset_needle_back2 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
+
+	offset_rot_needle_back1 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
+	offset_rot_needle_back2 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -107,6 +120,35 @@ void TCompPlayerController::update(float elapsed) {
 		counter = 0;
 	}
 	prev_pos = trans->position;*/
+
+	// Back needles
+	if (needle_back1.isValid() && needle_back2.isValid()) {
+		TCompSkeleton* skel = assertRequiredComponent<TCompSkeleton>(this);
+		XMVECTOR back_pos = skel->getPositionOfBone(58);
+		XMVECTOR back_rot = skel->getRotationOfBone(58);
+
+		CEntity* needle_back1_entity = needle_back1;
+		CEntity* needle_back2_entity = needle_back2;
+
+		TCompTransform* needle_back1_t = needle_back1_entity->get<TCompTransform>();
+		TCompTransform* needle_back2_t = needle_back2_entity->get<TCompTransform>();
+
+		// Bone transform
+		TTransform bone_trans = TTransform(back_pos, back_rot, XMVectorSet(1, 1, 1, 0));
+
+		bone_trans.rotation = XMQuaternionMultiply(bone_trans.rotation, XMQuaternionRotationAxis(bone_trans.getUp(), deg2rad(90)));
+		bone_trans.position += bone_trans.getFront() * -0.15;
+
+		// Here we have the bone_trans transform with the neutral position of a needle
+		// Now, add some random rotation/poasition to the needles
+
+		needle_back1_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getLeft(), XMVectorGetX(offset_rot_needle_back1)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back1)), bone_trans.rotation));
+		needle_back2_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getLeft(), XMVectorGetX(offset_rot_needle_back2)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back2)), bone_trans.rotation));
+
+		needle_back1_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back1) + bone_trans.getUp() * XMVectorGetY(offset_needle_back1);
+		needle_back2_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back2) + bone_trans.getUp() * XMVectorGetY(offset_needle_back2);
+	}
+	
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

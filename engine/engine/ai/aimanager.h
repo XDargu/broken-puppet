@@ -5,8 +5,11 @@
 class aimanager
 {
 public:
+	std::vector<aicontroller*> bots;
+
 	aimanager();
 	~aimanager();
+
 	aicontroller* getAI(unsigned int id);
 	void getAI(XMVECTOR pos, float radius, std::vector<aicontroller*>& botsInRange);
 	aicontroller *getClosest(XMVECTOR pos);
@@ -27,7 +30,7 @@ private:
 	unsigned int last_id;
 	std::vector<aicontroller*> attackers_rol;
 	std::vector<aicontroller*> taunters_rol;
-
+	
 };
 
 #endif

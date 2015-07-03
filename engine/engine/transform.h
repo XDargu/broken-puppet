@@ -42,6 +42,10 @@ struct TTransform {     // 1
 		return XMVectorGetX(XMVector3Dot(getLeft(), loc - position)) > 0.f;
 	}
 
+	bool isInUp(XMVECTOR loc) const {
+		return XMVectorGetX(XMVector3Dot(getUp(), loc - position)) > 0.f;
+	}
+
 	bool isInFov(XMVECTOR loc, float fov_in_rad) const {
 		XMVECTOR unit_delta = XMVector3Normalize(loc - position);
 		float cos_angle = XMVectorGetX(XMVector3Dot(getFront(), unit_delta));
