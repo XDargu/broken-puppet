@@ -56,7 +56,7 @@ void TCompBtSoldier::init(){
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	TCompRigidBody* rigidBody = getSibling<TCompRigidBody>(this);
 
-	physx::PxReal threshold = 300.f;
+	physx::PxReal threshold = 100.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
 	TCompTransform* pos = assertRequiredComponent<TCompTransform>(this);

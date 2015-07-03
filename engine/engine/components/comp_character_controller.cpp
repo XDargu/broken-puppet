@@ -32,7 +32,7 @@ void TCompCharacterController::loadFromAtts(const std::string& elem, MKeyValue &
 	rigid->rigidBody->setName(name->name);
 
 	//float threshold = 3500.f;
-	physx::PxReal threshold = 300.f;
+	physx::PxReal threshold = 100.f;
 	rigid->rigidBody->setContactReportThreshold(threshold);
 
 	// Lock rotation
