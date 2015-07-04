@@ -265,6 +265,7 @@ void CLogicManager::clearAnimations() {
 
 void CLogicManager::changeWaterLevel(float pos1, float time)
 {
+
 	lerp_water = time;
 	water_level_dest = pos1;
 }

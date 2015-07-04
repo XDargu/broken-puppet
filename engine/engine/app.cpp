@@ -371,12 +371,12 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
-	 //loadScene("data/scenes/scene_3.xml");
+	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
-	//loadScene("data/scenes/scene_5.xml");
+	loadScene("data/scenes/scene_5.xml");
 
 
 	//sm.playTrack(0,false);
@@ -1356,28 +1356,38 @@ void CApp::loadScene(std::string scene_name) {
 	render_manager.init();
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
-	if ((scene_name == "data/scenes/scene_1.xml") || (scene_name == "data/scenes/scene_5.xml")){
+	if (scene_name == "data/scenes/scene_1.xml"){
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(150.f);
+		cam->changeZFar(60.f);
 		sm.playTrack("ambient_orquestal.ogg", true);
 		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		sm.playTrack("ambient_no_orquest.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(70.f);
+		cam->changeZFar(77.f);
 		/*sm.stopFX("ambiental_orq");
 		sm.playFXTrack("ambiental_no_orq", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_3.xml"){
 		sm.playTrack("ambient_neutral.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(100.f);
 		/*sm.stopFX("ambiental_no_orq");
 		sm.playFXTrack("ambiental_neutral", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		sm.playTrack("ambient_neutral_louder.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(70.f);
 		/*sm.stopFX("ambiental_neutral");
 		sm.playFXTrack("ambiental_neutral_louder", true);*/
+	}
+	else if (scene_name == "data/scenes/scene_5.xml"){
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(65.f);
+		sm.playTrack("ambient_orquestal.ogg", true);
+		//sm.playFXTrack("ambiental_orq", true);
 	}
 
 	dbg("Misc loads: %g\n", aux_timer.seconds());

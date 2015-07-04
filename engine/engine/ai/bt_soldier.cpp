@@ -127,11 +127,10 @@ void bt_soldier::create(string s)
 	slot_position = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	player_pos_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
-	//tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
-	lastNumNeedlesViewed = 0;
+	resetBot();
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -266,151 +265,6 @@ int bt_soldier::actionTooCloseAttack()
 		return STAY;
 	}
 
-}
-
-//Go to the needle position (leave if cant reach)
-int bt_soldier::actionChaseNeedlePosition()
-{
-	if (needle_is_valid){
-		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
-
-		if (on_enter){
-
-			TCompCharacterController* m_char_controller = character_controller;
-
-			m_char_controller->moveSpeedMultiplier = run_speed;
-			m_char_controller->airSpeed = run_speed * 0.8f;
-
-			playAnimationIfNotPlaying(14);
-
-			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, n_transform->position, path);
-			if (path.size() > 0){
-				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle - distance_change_way_point){
-					ind_path = 0;
-					return STAY;
-				}
-				else{
-					return LEAVE;
-				}
-			}
-		}
-		else{
-			if (path.size() > 0){
-				if (ind_path < path.size()){
-					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle - distance_change_way_point){
-						chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-						if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
-							ind_path++;
-							return STAY;
-						}
-						else{
-							return STAY;
-						}
-					}
-					else{
-						last_look_direction = look_direction;
-						return LEAVE;
-					}
-				}
-				else{
-					last_look_direction = look_direction;
-					return LEAVE;
-				}
-			}
-			else{
-				last_look_direction = look_direction;
-				return LEAVE;
-			}
-		}
-	}
-	else{
-		last_look_direction = look_direction;
-		return LEAVE;
-	}
-}
-
-//Select the priority needle
-int bt_soldier::actionSelectNeedleToTake()
-{
-	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle, distance_change_way_point));
-	if (sucess)
-		needle_is_valid = true;
-	return LEAVE;
-
-}
-
-//Cut the needles rope
-int bt_soldier::actionCutRope()
-{
-	if (on_enter){
-		animation_done = false;
-		cut = false;
-	}
-	playAnimationIfNotPlaying(8);
-
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-
-	float duration_cut = getAnimationDuration(8);
-
-	// Exe the logic of cut the rope
-	if ((state_time >= duration_cut * 0.7f) && (!cut)){
-		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
-		CEntityManager::get().remove(CHandle(target_rope).getOwner());
-		cut = true;
-	}
-
-	// Finish the animation
-	if (state_time >= duration_cut) {
-
-		playAnimationIfNotPlaying(7);
-		(getAnimationDuration(8) + getAnimationDuration(7));
-
-		// Exe the logic of taking a needle
-		if ((state_time >= (getAnimationDuration(8) + getAnimationDuration(7)*0.6f)) && !animation_done){
-			CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-			((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-			CEntityManager::get().remove(CHandle(target_needle).getOwner());
-			animation_done = true;
-		}
-
-		// When the animation finish, leave state and clean bools
-		if (state_time >= getAnimationDuration(8) + getAnimationDuration(7)) {
-			needle_to_take = false;
-			needle_is_valid = false;
-			animation_done = false;
-			cut = false;
-			return LEAVE;
-		}
-	}
-	return STAY;
-
-}
-
-//Take the needle
-int bt_soldier::actionTakeNeedle()
-{
-	if (on_enter) {
-		playAnimationIfNotPlaying(7);
-	}
-
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
-
-	if (state_time >= getAnimationDuration(7)) {
-		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-
-		((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-		CEntityManager::get().remove(CHandle(target_needle).getOwner());
-		needle_to_take = false;
-		needle_is_valid = false;
-
-		return LEAVE;
-	}
-	else {
-		return STAY;
-	}
 }
 
 //Select the idle and play it
@@ -656,18 +510,22 @@ int bt_soldier::actionSelectRole()
 //Go to his position
 int bt_soldier::actionChaseRoleDistance()
 {
-	if (on_enter) {
-		playAnimationIfNotPlaying(15);
-
-		TCompCharacterController* m_char_controller = character_controller;
-
-		m_char_controller->moveSpeedMultiplier = run_angry_speed;
-		m_char_controller->airSpeed = run_angry_speed * 0.8f;
-		ind_path = 0;
-	}
-
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (on_enter) {
+		if (path.size() > 0){
+			playAnimationIfNotPlaying(15);
+
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
+			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			ind_path = 0;
+		}
+		else
+			playAnimationIfNotPlaying(0);
+	}
 
 	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
@@ -677,7 +535,6 @@ int bt_soldier::actionChaseRoleDistance()
 		return LEAVE;
 	}
 
-	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
@@ -694,6 +551,7 @@ int bt_soldier::actionChaseRoleDistance()
 		}
 	}
 	else{
+		null_node = true;
 		return LEAVE;
 	}
 }
@@ -865,24 +723,6 @@ int bt_soldier::actionHurtEvent()
 		return STAY;
 }
 
-//
-int bt_soldier::actionNeedleAppearsEvent()
-{
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
-	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
-		if (current != NULL){
-			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-				setCurrent(NULL);
-				lastNumNeedlesViewed = currentNumNeedlesViewed;
-				return LEAVE;
-			}
-		}
-	}
-	else{
-		return LEAVE;
-	}
-}
-
 int bt_soldier::actionTiedEvent()
 {
 
@@ -998,33 +838,6 @@ int bt_soldier::conditiontoo_close_attack()
 	return too_close_attack;
 }
 
-//Check if there is a needle to take
-int bt_soldier::conditionneedle_to_take()
-{
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);
-	if (currentNumNeedlesViewed > 0){
-		needle_to_take = true;
-	}
-	else{
-		needle_to_take = false;
-	}
-
-	return needle_to_take;
-}
-
-//
-int bt_soldier::conditionis_needle_tied()
-{
-	CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
-	if (target_rope.isValid()){
-		is_needle_tied = true;
-	}
-	else{
-		is_needle_tied = false;
-	}
-	return is_needle_tied;
-}
-
 //Check if is necesary a warcry
 int bt_soldier::conditionhave_to_warcry()
 {
@@ -1125,33 +938,6 @@ int bt_soldier::conditiontied_event()
 {
 	//return false;
 	return tied_event;
-}
-
-//Check if can reach the selected needle
-int bt_soldier::conditioncan_reach_needle()
-{
-	//XASSERT(needle_objective->needleRef.isValid(), "Invalid needle");
-	if (needle_is_valid){
-		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-		XASSERT(target_needle.isValid(), "Invalid owner");
-		TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
-
-		wander_target = e_transform->position;
-
-		float distance_prueba = V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position);
-
-		if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_reach_needle){
-			can_reach_needle = true;
-		}
-		else{
-			can_reach_needle = false;
-		}
-	}
-	else{
-		can_reach_needle = false;
-	}
-
-	return can_reach_needle;
 }
 
 //Check if the role is taunter and is close enought
@@ -1310,7 +1096,12 @@ void bt_soldier::update(float elapsed){
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
-				((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+				if ((current != NULL)&&(!null_node))
+					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+				else{
+					resetBot();
+					null_node = false;
+				}
 			}
 		}
 		this->recalc(elapsed);

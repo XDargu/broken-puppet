@@ -141,6 +141,7 @@ void bt_grandma::create(string s)
 	active = false;
 
 	//player_touch = false;
+	null_node = false;
 
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -722,18 +723,21 @@ bool is_reacheable = false;
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
-	if (on_enter) {
-		playAnimationIfNotPlaying(15);
-
-		TCompCharacterController* m_char_controller = character_controller;
-
-		m_char_controller->moveSpeedMultiplier = run_angry_speed;
-		m_char_controller->airSpeed = run_angry_speed * 0.8f;
-		ind_path = 0;
-	}
-
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (on_enter) {
+		if (path.size() > 0){
+			playAnimationIfNotPlaying(15);
+
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
+			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			ind_path = 0;
+		}else
+			playAnimationIfNotPlaying(0);
+	}
 
 	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
@@ -743,7 +747,6 @@ int bt_grandma::actionChaseRoleDistance()
 		return LEAVE;
 	}
 
-	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
@@ -760,6 +763,7 @@ int bt_grandma::actionChaseRoleDistance()
 		}
 	}
 	else{
+		null_node = true;
 		return LEAVE;
 	}
 }
@@ -1408,7 +1412,12 @@ void bt_grandma::update(float elapsed){
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
-				((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+				if ((current != NULL) && (!null_node))
+					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+				else{
+					resetBot();
+					null_node = false;
+				}
 			}
 		}
 		this->recalc(elapsed);

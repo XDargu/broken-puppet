@@ -51,11 +51,11 @@ private:
 	//bool player_touch;
 	int last_anim_id;
 
-	//Bool ñapa a quitar en un futuro -----
 	bool player_previously_lost;
 
 	float sensor_delay;
-	//-------------------------------------
+
+	bool null_node;
 
 	CHandle ropeRef;
 	CHandle m_sensor;
