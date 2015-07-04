@@ -39,6 +39,9 @@ CMesh        grid;
 CMesh        axis;
 CMesh        plane3x3;
 
+// Textured technique
+const CRenderTechnique* textured_technique;
+
 bool createLine(CMesh& mesh);
 bool createTexturedQuadXYCentered(CMesh& mesh);
 
@@ -405,6 +408,8 @@ bool renderUtilsCreate() {
 	is_ok &= createDepthStencilStates();
 	is_ok &= createRasterizationStates();
 	is_ok &= createBlendStates();
+
+	textured_technique = render_techniques_manager.getByName("textured");
 	return is_ok;
 }
 
@@ -1169,10 +1174,13 @@ void setTint(XMVECTOR tint) {
 // -----------------------------------------------
 void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const char *tech_name) {
 
-	if (tech_name == nullptr)
-		tech_name = "textured";
-
-	render_techniques_manager.getByName(tech_name)->activate();
+	if (tech_name == nullptr) {
+		textured_technique->activate();
+	}
+	else {
+		render_techniques_manager.getByName(tech_name)->activate();
+	}
+	//tech_name = "textured";
 
 	// Activate the texture
 	texture->activate(0);

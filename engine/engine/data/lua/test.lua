@@ -11,8 +11,8 @@ end
 _print = print
 clearCoroutines( )
 
-function onSceneLoad_desvan_test()
-	logicManager:loadScene("data/scenes/my_file.xml");
+function onSceneLoad_amy_file()
+	logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 end
 
 -------------------------- MS3 ---------------------------
