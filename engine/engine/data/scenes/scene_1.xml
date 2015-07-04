@@ -390,10 +390,10 @@
   <entity  prefab="PlayerCamera">
     <transform position="1.04643 6.42634 -15.6066"/>
   </entity>
-  <entity>
+  <!--<entity>
     <transform position="-0.953568 0.426342 -7.60659"/>
     <audioSource sound="light.wav" loop="true" distance="40.0" volume="0.6"/>
-  </entity>
+  </entity>-->
   <entity  >
     <name name="Omni001_42.0" />
     <transform position="0.0 6.94029 14.7325" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>

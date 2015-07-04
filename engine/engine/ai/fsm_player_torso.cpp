@@ -495,6 +495,8 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		
 		TCompSkeleton* skeleton = comp_skeleton;		
 		skeleton->playAnimation(17);
+
+		CSoundManager::get().playRandomFX("pull");
 		
 	}
 
@@ -611,6 +613,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		strings.pop_back();
 		CEntityManager::get().remove(c_rope.getOwner());*/
 		CRope_manager::get().removeBackString();
+		CSoundManager::get().playRandomFX("throw");
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -663,6 +666,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
+			CSoundManager::get().playRandomFX("throw");
 		}
 	}
 
@@ -671,6 +675,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
+			CSoundManager::get().playRandomFX("throw");
 			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
@@ -687,6 +692,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
 
 		CLogicManager::get().stringsTensed();
+		CSoundManager::get().playRandomFX("tense");
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)

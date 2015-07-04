@@ -334,12 +334,27 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	sm.addMusicTrack(0, "CANCION.mp3");
-	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
-	sm.addFXTrack("light.wav", "light");
-	sm.addFXTrack("steam.wav", "steam");
-	sm.addFXTrack("sonar.wav", "sonar");
+	//sm.addMusicTrack(0, "CANCION.mp3");
+	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	//sm.addFXTrack("light.wav", "light");
+	//sm.addFXTrack("steam.wav", "steam");
+	//sm.addFXTrack("sonar.wav", "sonar");
+	/*sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
+	sm.addFX2DTrack("ambient_orquestal.ogg", "ambiental_orq");
+	sm.addFX2DTrack("ambient_no_orquest.ogg", "ambiental_no_orq");
+	sm.addFX2DTrack("ambient_neutral.ogg", "ambiental_neutral");
+	sm.addFX2DTrack("ambient_neutral_louder.ogg", "ambiental_neutral_louder");*/
+
 	sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
+
+	sm.addMusicTrack(0, "ambient_orquestal.ogg");
+	sm.addMusicTrack(1, "ambient_no_orquest.ogg");
+	sm.addMusicTrack(2, "ambient_neutral.ogg");
+	sm.addMusicTrack(3, "ambient_neutral_louder.ogg");
+
+	sm.addFXTrack("hit_wood_light.ogg", "hit_wood_light");
+	sm.addFXTrack("hit_wood_medium.ogg", "hit_wood_medium");
+	sm.addFXTrack("hit_wood_heavy.ogg", "hit_wood_heavy");
 
 	physics_manager.init();
 
@@ -348,7 +363,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -356,7 +371,7 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
@@ -494,14 +509,12 @@ void CApp::update(float elapsed) {
 
 
 	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/anim_test.xml");
+		//loadScene("data/scenes/anim_test.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
-		XMVECTOR pos = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
-		sm.play3DFX("sonar", pos);
-		//sm.playFX("sonar");
-		/*CEntity* e = entity_manager.getByName("Fspot001_49.0");		
-		render_manager.activeCamera = e->get<TCompCamera>();*/
+		//sm.playFX("ambiental_orq");
+		//CEntity* e = entity_manager.getByName("Fspot001_49.0");		
+		//render_manager.activeCamera = e->get<TCompCamera>();
 	}
 
 	//sm.StopLoopedFX("sonar");
@@ -862,6 +875,8 @@ void CApp::render() {
 		font.print(xres*0.5f - XMVectorGetZ(size) * 0.5f, 40, zone_name->name);
 	}
 
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(500, 30, s_fps.c_str());
 	// Test GUI
 
 	/*if (h_player.isValid()) {
@@ -1339,6 +1354,27 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
+
+	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
+	if ((scene_name == "data/scenes/scene_1.xml") || (scene_name == "data/scenes/scene_5.xml")){
+		sm.playTrack("ambiental_orq.ogg", true);
+		//sm.playFXTrack("ambiental_orq", true);
+	}
+	else if (scene_name == "data/scenes/scene_2.xml"){
+		sm.playTrack("ambiental_no_orq.ogg", true);
+		/*sm.stopFX("ambiental_orq");
+		sm.playFXTrack("ambiental_no_orq", true);*/
+	}
+	else if (scene_name == "data/scenes/scene_3.xml"){
+		sm.playTrack("ambiental_neutral.ogg", true);
+		/*sm.stopFX("ambiental_no_orq");
+		sm.playFXTrack("ambiental_neutral", true);*/
+	}
+	else if (scene_name == "data/scenes/scene_4.xml"){
+		sm.playTrack("ambiental_neutral_louder.ogg", true);
+		/*sm.stopFX("ambiental_neutral");
+		sm.playFXTrack("ambiental_neutral_louder", true);*/
+	}
 
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());
