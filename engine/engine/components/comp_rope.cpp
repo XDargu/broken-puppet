@@ -95,10 +95,15 @@ void TCompRope::fixedUpdate(float elapsed) {
 			pos_1 = pos_1 + normal_dir * speed * elapsed;
 
 			dist = V3DISTANCE(trans_1->position, pos_1);
-			if (dist <= 0) {
-				CSoundManager::get().playFXTrack("nail1");
+
+			if (dist <= 0.f) {
+				if (!sound_1_played) {
+					CSoundManager::get().playFXTrack("nail1");
+					sound_1_played = true;
+				}
 			}
 		}
+		
 
 		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
 		if (needle->getAttachedRigid() != nullptr) {
@@ -128,8 +133,12 @@ void TCompRope::fixedUpdate(float elapsed) {
 			pos_2 = pos_2 + normal_dir * speed * elapsed;
 
 			dist = V3DISTANCE(trans_2->position, pos_2);
-			if (dist <= 0) {
-				CSoundManager::get().playFXTrack("nail1");
+
+			if (dist <= 0.f) {
+				if (!sound_2_played) {
+					CSoundManager::get().playFXTrack("nail1");
+					sound_2_played = true;
+				}
 			}
 		}
 

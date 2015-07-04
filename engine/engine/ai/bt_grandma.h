@@ -67,7 +67,6 @@ private:
 	CHandle enemy_ragdoll;
 	CHandle enemy_rigid;
 
-	CHandle audioSource;
 	
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;

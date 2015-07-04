@@ -495,6 +495,8 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		
 		TCompSkeleton* skeleton = comp_skeleton;		
 		skeleton->playAnimation(17);
+
+		CSoundManager::get().playRandomFX("pull");
 		
 	}
 
@@ -611,6 +613,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		strings.pop_back();
 		CEntityManager::get().remove(c_rope.getOwner());*/
 		CRope_manager::get().removeBackString();
+		CSoundManager::get().playRandomFX("throw");
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -663,6 +666,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
+			CSoundManager::get().playRandomFX("throw");
 		}
 	}
 
@@ -696,6 +700,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
+					CSoundManager::get().playRandomFX("tense");
 					rope->tensed = true;
 					djoint->joint->setMaxDistance(0.1f);
 					PxRigidActor* a1 = nullptr;

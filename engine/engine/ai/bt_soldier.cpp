@@ -132,8 +132,6 @@ void bt_soldier::create(string s)
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
 	lastNumNeedlesViewed = 0;
-
-	audioSource = ((CEntity*)entity)->get<TCompAudioSource>();
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -425,16 +423,13 @@ int bt_soldier::actionIdle()
 
 	if (on_enter) {
 		playAnimationIfNotPlaying(0);
-		((TCompAudioSource*)audioSource)->setSoundAsociated("sonar", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	if (state_time >= 2){
-		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 
 	}
 	else{
-		((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 		return STAY;
 	}
 
@@ -469,7 +464,6 @@ int bt_soldier::actionWander()
 		m_char_controller->moveSpeedMultiplier = walk_speed;
 		m_char_controller->airSpeed = walk_speed * 0.8f;
 
-		((TCompAudioSource*)audioSource)->setSoundAsociated("steam", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	jump = false;
@@ -492,22 +486,18 @@ int bt_soldier::actionWander()
 			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 				ind_path++;
-				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}
 			else{
-				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}
 		}
 		else{
-			((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}
 	else{
-		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 	}
 }
@@ -1238,35 +1228,6 @@ void bt_soldier::playerViewedSensor(){
 	}
 }
 
-// Sensor para detectar si el enemigo ve alguna aguja
-void bt_soldier::needleViewedSensor(){
-
-	//--------------------------------------------------------------------------------------------------
-	/*NOTA: Debería solo ejecutar tanto este sensor como el de player position mientras no haya eventos*/
-	//--------------------------------------------------------------------------------------------------
-
-	//componente sensor de agujas del enemigo
-	//m_sensor->getNeedlesInRange();
-
-	//if (!needle_to_take){
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
-	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
-		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
-		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-		if (current != NULL){
-			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-				//TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-				//m_sensor->asociateGrandmaTargetNeedle(entity);
-				//needle_to_take = true;
-				setCurrent(NULL);
-			}
-		}
-	}
-	lastNumNeedlesViewed = currentNumNeedlesViewed;
-	//}
-	//}
-}
-
 void bt_soldier::tiedSensor(){
 	((TCompSensorTied*)tied_sensor)->keepTied();
 	if (!tied_succesfull){
@@ -1329,7 +1290,6 @@ void bt_soldier::update(float elapsed){
 
 		if (sensor_delay <= sensor_acum_soldier)
 		{
-			needleViewedSensor();
 			sensor_acum_soldier = 0;
 		}
 
