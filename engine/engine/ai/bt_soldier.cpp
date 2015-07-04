@@ -1228,35 +1228,6 @@ void bt_soldier::playerViewedSensor(){
 	}
 }
 
-// Sensor para detectar si el enemigo ve alguna aguja
-void bt_soldier::needleViewedSensor(){
-
-	//--------------------------------------------------------------------------------------------------
-	/*NOTA: Debería solo ejecutar tanto este sensor como el de player position mientras no haya eventos*/
-	//--------------------------------------------------------------------------------------------------
-
-	//componente sensor de agujas del enemigo
-	//m_sensor->getNeedlesInRange();
-
-	//if (!needle_to_take){
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
-	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
-		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
-		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
-		if (current != NULL){
-			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
-				//TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-				//m_sensor->asociateGrandmaTargetNeedle(entity);
-				//needle_to_take = true;
-				setCurrent(NULL);
-			}
-		}
-	}
-	lastNumNeedlesViewed = currentNumNeedlesViewed;
-	//}
-	//}
-}
-
 void bt_soldier::tiedSensor(){
 	((TCompSensorTied*)tied_sensor)->keepTied();
 	if (!tied_succesfull){
@@ -1319,7 +1290,6 @@ void bt_soldier::update(float elapsed){
 
 		if (sensor_delay <= sensor_acum_soldier)
 		{
-			needleViewedSensor();
 			sensor_acum_soldier = 0;
 		}
 

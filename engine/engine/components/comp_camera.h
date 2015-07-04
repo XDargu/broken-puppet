@@ -45,6 +45,18 @@ public:
 		view = XMMatrixLookAtRH(trans->position, trans->position + trans->getFront(), XMVectorSet(0, 1, 0, 1));
 		view_projection = view * projection;
 	}
+
+	void changeZFar(float new_zfar) {
+		zfar = new_zfar;
+
+		float width = (float)CApp::get().xres;
+		float height = (float)CApp::get().yres;
+
+		transform = assertRequiredComponent<TCompTransform>(this);
+		setViewport(0, 0, width, height);
+
+		updateViewProjection();
+	}
 };
 
 #endif

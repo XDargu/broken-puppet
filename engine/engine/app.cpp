@@ -374,7 +374,7 @@ bool CApp::create() {
 	loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
-	//loadScene("data/scenes/scene_3.xml");
+	 //loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
 
@@ -508,14 +508,14 @@ void CApp::update(float elapsed) {
 
 
 
-	if (io.becomesReleased(CIOStatus::EXTRA)) {
+	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/anim_test.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
 		//sm.playFX("ambiental_orq");
 		//CEntity* e = entity_manager.getByName("Fspot001_49.0");		
 		//render_manager.activeCamera = e->get<TCompCamera>();
-	}
+	}*/
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
@@ -1357,21 +1357,25 @@ void CApp::loadScene(std::string scene_name) {
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if ((scene_name == "data/scenes/scene_1.xml") || (scene_name == "data/scenes/scene_5.xml")){
-		sm.playTrack("ambiental_orq.ogg", true);
+		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(150.f);
+		sm.playTrack("ambient_orquestal.ogg", true);
 		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
-		sm.playTrack("ambiental_no_orq.ogg", true);
+		sm.playTrack("ambient_no_orquest.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(70.f);
 		/*sm.stopFX("ambiental_orq");
 		sm.playFXTrack("ambiental_no_orq", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_3.xml"){
-		sm.playTrack("ambiental_neutral.ogg", true);
+		sm.playTrack("ambient_neutral.ogg", true);
 		/*sm.stopFX("ambiental_no_orq");
 		sm.playFXTrack("ambiental_neutral", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
-		sm.playTrack("ambiental_neutral_louder.ogg", true);
+		sm.playTrack("ambient_neutral_louder.ogg", true);
 		/*sm.stopFX("ambiental_neutral");
 		sm.playFXTrack("ambiental_neutral_louder", true);*/
 	}

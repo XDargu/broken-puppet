@@ -675,7 +675,6 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
-			CSoundManager::get().playRandomFX("throw");
 			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
@@ -692,7 +691,6 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
 
 		CLogicManager::get().stringsTensed();
-		CSoundManager::get().playRandomFX("tense");
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
@@ -702,6 +700,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
+					CSoundManager::get().playRandomFX("tense");
 					rope->tensed = true;
 					djoint->joint->setMaxDistance(0.1f);
 					PxRigidActor* a1 = nullptr;

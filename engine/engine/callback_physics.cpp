@@ -72,16 +72,15 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				float force_float = force;
 				CSoundManager::get().playImpactFX(force_float, firstActorEntity->get<TCompTransform>());
 			}else if ((firstActorEntity->hasTag("level")) && (secondActorEntity->hasTag("actor"))){
-					TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-					PxReal force = getForce(first_rigid->getMass(), pairs, i);
+				TCompRigidBody* rigid = secondActorEntity->get<TCompRigidBody>();
+				PxReal force = getForce(rigid->getMass(), pairs, i);
 					float force_float = force;
-					//TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-					CSoundManager::get().playImpactFX(force_float, firstActorEntity->get<TCompTransform>());
+					CSoundManager::get().playImpactFX(force_float, secondActorEntity->get<TCompTransform>());
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("actor"))){
-				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				PxReal force = getForce(first_rigid->getMass(), pairs, i);
+				TCompRigidBody* rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force = getForce(rigid->getMass(), pairs, i);
 				float force_float = force;
-				CSoundManager::get().playImpactFX(force_float, firstActorEntity->get<TCompTransform>());
+				CSoundManager::get().playImpactFX(force_float, secondActorEntity->get<TCompTransform>());
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("player"))){
 				firstActorEntity->sendMsg(TPlayerTouch(firstActorEntity, true));
 			}else if ((firstActorEntity->hasTag("player")) && (secondActorEntity->hasTag("enemy"))){

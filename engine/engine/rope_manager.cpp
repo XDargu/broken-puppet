@@ -2,6 +2,7 @@
 #include "rope_manager.h"
 #include "components\comp_rope.h"
 #include "ai\logic_manager.h"
+#include "audio\sound_manager.h"
 
 static CRope_manager the_rope_manager;
 
@@ -67,6 +68,7 @@ void CRope_manager::clearStrings(){
 				TCompRope* m_rope = rope;
 				CEntityManager::get().remove(m_rope->joint_aux.getOwner());
 				CEntityManager::get().remove(CHandle(rope).getOwner());
+				CSoundManager::get().playRandomFX("throw");
 			}
 		}
 	}
