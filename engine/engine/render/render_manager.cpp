@@ -153,6 +153,10 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		if (culling) {
 			for (auto& o_plane : occlusionPlanes) {
 				culling &= !o_plane.isInside(m_aabb);
+				if (!culling)
+				{
+					break;
+				}
 			}
 			culling &= it->material->isSolid() == solids;
 		}		

@@ -462,6 +462,14 @@ void TCompSkeleton::stopAnimation(int id) {
 	}
 }
 
+void TCompSkeleton::cancelAnimation(int id) {
+	if (id >= 0) {
+		float blend = 0.f;
+		model->getMixer()->clearCycle(id, blend);
+		model->getMixer()->removeAction(id, blend);
+	}
+}
+
 void TCompSkeleton::loopAnimation(int id) {
 	if (id >= 0) {
 		float blend = core_model->animation_blend_times[id];

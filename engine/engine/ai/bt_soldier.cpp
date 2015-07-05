@@ -140,46 +140,49 @@ int bt_soldier::actionRagdoll()
 
 	stopAllAnimations();
 
-	if (!m_ragdoll->isRagdollActive()) {
-		m_ragdoll->setActive(true);
+	if (m_ragdoll) {
 
-		TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
-		if (m_life->life <= 0) {
-			TCompRagdoll* m_ragdoll = enemy_ragdoll;
-			m_ragdoll->breakJoints();
-			TCompTransform* m_transform = own_transform;
-			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
-			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
-			
-			CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
-			if (this->getRol() == role::ATTACKER)
-				aimanager::get().RemoveEnemyAttacker(this);
-			else
-				aimanager::get().RemoveEnemyTaunt(this);
+		if (!m_ragdoll->isRagdollActive()) {
+			m_ragdoll->setActive(true);
 
-			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+			TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
+			if (m_life->life <= 0) {
+				TCompRagdoll* m_ragdoll = enemy_ragdoll;
+				m_ragdoll->breakJoints();
+				TCompTransform* m_transform = own_transform;
+				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
+				XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
+				XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
 
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
-			ragdoll_aabb->setIdentityMinMax(min, max);
+				CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+				if (this->getRol() == role::ATTACKER)
+					aimanager::get().RemoveEnemyAttacker(this);
+				else
+					aimanager::get().RemoveEnemyTaunt(this);
 
-			aimanager::get().removeBot(this->getId());
+				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
+				CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
+				ragdoll_aabb->setIdentityMinMax(min, max);
 
-			TCompTransform* p_transform = player_transform;
-			if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
-				CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
-				TCompTransform* c_transform = camera->get<TCompTransform>();
-				TCompCamera* c_camera = camera->get<TCompCamera>();
-				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					CApp::get().slowMotion(3);
+				aimanager::get().removeBot(this->getId());
+
+				CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
+
+				TCompTransform* p_transform = player_transform;
+				if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
+					CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
+					TCompTransform* c_transform = camera->get<TCompTransform>();
+					TCompCamera* c_camera = camera->get<TCompCamera>();
+					if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
+						CApp::get().slowMotion(3);
+					}
 				}
+
 			}
 
 		}
-
 	}
 
 	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);

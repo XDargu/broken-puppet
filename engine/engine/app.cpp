@@ -363,7 +363,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -376,7 +376,7 @@ bool CApp::create() {
 
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
-	loadScene("data/scenes/scene_5.xml");
+	//loadScene("data/scenes/scene_5.xml");
 
 
 	//sm.playTrack(0,false);
@@ -519,12 +519,12 @@ void CApp::update(float elapsed) {
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	/*if (io.becomesReleased(CIOStatus::Q)) {
+	if (io.becomesReleased(CIOStatus::E)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
 			time_modifier = 1;
-	}*/
+	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }

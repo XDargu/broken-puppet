@@ -31,7 +31,7 @@ void TCompBtSoldier::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	assertRequiredComponent<TCompTransform>(this);
 	assertRequiredComponent<TCompCharacterController>(this);
-	assertRequiredComponent<TCompSensorNeedles>(this);
+	//assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
 	assertRequiredComponent<TCompSensorDistPlayer>(this);
 	assertRequiredComponent<TCompSensorTied>(this);
