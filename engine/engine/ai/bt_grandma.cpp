@@ -415,7 +415,9 @@ int bt_grandma::actionCutRope()
 		animation_done = false;
 		cut = false;
 	}
-	playAnimationIfNotPlaying(8);
+	
+	if (!cut)
+		playAnimationIfNotPlaying(8);
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
