@@ -121,6 +121,8 @@ void bt_soldier::create(string s)
 	cut = false;
 	attacked = false;
 
+	player_out_navMesh = false;
+
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	previous_point_search = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -407,6 +409,7 @@ int bt_soldier::actionPlayerAlert()
 int bt_soldier::actionCalmDown()
 {
 	is_angry = false;
+	player_viewed_sensor = false;
 	time_searching_player = 0;
 	return LEAVE;
 }
@@ -432,8 +435,7 @@ int bt_soldier::actionLookAround()
 	time_searching_player += CApp::get().delta_time;
 	//Tratamos de evitar cambios demasiado repentinos de ruta
 	if (on_enter){
-		player_viewed_sensor = false;
-		have_to_warcry = false;
+
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = run_speed;
@@ -515,7 +517,7 @@ int bt_soldier::actionChaseRoleDistance()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
-	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
 	if (on_enter) {
 		if (path.size() > 0){
 			playAnimationIfNotPlaying(15);
@@ -526,8 +528,11 @@ int bt_soldier::actionChaseRoleDistance()
 			m_char_controller->airSpeed = run_angry_speed * 0.8f;
 			ind_path = 0;
 		}
-		else
+		else{
+			player_out_navMesh = true;
 			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
 	}
 
 	if (findPlayer())
@@ -591,18 +596,25 @@ int bt_soldier::actionInitialAttack()
 //Move step by step to the roll position (leave on reach or lost)
 int bt_soldier::actionSituate()
 {
-	if (on_enter) {
-		TCompCharacterController* m_char_controller = character_controller;
-
-		m_char_controller->moveSpeedMultiplier = run_angry_speed;
-		m_char_controller->airSpeed = run_angry_speed * 0.8f;
-		playAnimationIfNotPlaying(15);
-	}
-
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
 	wander_target = p_transform->position + slot_position;
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (on_enter) {
+		if (path.size() > 0){
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
+			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			playAnimationIfNotPlaying(15);
+		}
+		else{
+			player_out_navMesh = true;
+			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
+	}
 
 	if (on_enter){
 		ind_path = 0;
@@ -850,9 +862,15 @@ int bt_soldier::conditionhave_to_warcry()
 //Check if there player is not visible for any grandma (and reach the last position)
 int bt_soldier::conditionplayer_lost()
 {
-	if ((last_time_player_saw) > max_time_player_lost){
-		player_previously_lost = true;
-		initial_attack = false;
+	if (!player_out_navMesh){
+		if ((last_time_player_saw) > max_time_player_lost){
+			player_previously_lost = true;
+			initial_attack = false;
+			return true;
+		}
+	}
+	else{
+		player_out_navMesh = false;
 		return true;
 	}
 	return false;
@@ -1099,7 +1117,7 @@ void bt_soldier::update(float elapsed){
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
-				if ((current != NULL)&&(!null_node))
+				if ((current != NULL)||(!null_node))
 					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 				else{
 					resetBot();

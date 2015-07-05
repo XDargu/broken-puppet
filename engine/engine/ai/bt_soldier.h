@@ -64,6 +64,7 @@ private:
 	CHandle enemy_rigid;
 
 	bool null_node;
+	bool player_out_navMesh;
 
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;

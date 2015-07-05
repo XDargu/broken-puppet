@@ -809,18 +809,24 @@ int bt_grandma::actionInitialAttack()
 //Move step by step to the roll position (leave on reach or lost)
 int bt_grandma::actionSituate()
 {
-	if (on_enter) {
-		TCompCharacterController* m_char_controller = character_controller;
-
-		m_char_controller->moveSpeedMultiplier = run_angry_speed;
-		m_char_controller->airSpeed = run_angry_speed * 0.8f;
-		playAnimationIfNotPlaying(15);
-	}
-
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
 	wander_target = p_transform->position + slot_position;
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (on_enter) {
+		if (path.size() > 0){
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
+			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			playAnimationIfNotPlaying(15);
+		}else{
+			player_out_navMesh = true;
+			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
+	}
 
 	if (on_enter){
 		ind_path = 0;
@@ -1430,7 +1436,7 @@ void bt_grandma::update(float elapsed){
 				if ((current != NULL) || (!null_node))
 					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 				else{
-					resetBot();
+				resetBot();
 					null_node = false;
 				}
 			}
