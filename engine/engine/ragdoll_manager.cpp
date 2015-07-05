@@ -77,6 +77,9 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 		// More solver iteration (precise rigidbody collision)
 		rigidBody->setSolverIterationCounts(8, 8);
 
+		// CCD
+		rigidBody->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
+
 		// Increase the sleep threshold, to prevent the shakiness of the ragdoll
 		rigidBody->setSleepThreshold(0.1f);
 		rigidBody->setContactReportThreshold(PX_MAX_F32);
