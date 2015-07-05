@@ -619,7 +619,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		strings.pop_back();
 		CEntityManager::get().remove(c_rope.getOwner());*/
 		CRope_manager::get().removeBackString();
-		CSoundManager::get().playRandomFX("throw");
+
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -672,7 +672,6 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
-			CSoundManager::get().playRandomFX("throw");
 		}
 	}
 

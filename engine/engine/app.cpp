@@ -869,29 +869,30 @@ void CApp::render() {
 	t0.end();
 #endif
 
-	TCompName* zone_name = logic_manager.getPlayerZoneName();
+	/*TCompName* zone_name = logic_manager.getPlayerZoneName();
 	if (zone_name) {
 		XMVECTOR size = font.measureString(zone_name->name);
 		font.print(xres*0.5f - XMVectorGetZ(size) * 0.5f, 40, zone_name->name);
 	}
 
 	std::string s_fps = "FPS: " + std::to_string(fps);
-	font.print(500, 30, s_fps.c_str());
+	font.print(500, 30, s_fps.c_str());*/
 	// Test GUI
 
-	/*if (h_player.isValid()) {
+	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-		life_val /= 10;
-		int leng = 50;
-		for (int i = 0; i < life_val; ++i) {		
-			activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
-			activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+		life_val /= 20;
+		int leng = 100;
+		activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
+		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+		for (int i = 0; i < life_val; ++i) {			
 			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
-			activateZConfig(ZConfig::ZCFG_DEFAULT);
-			activateBlendConfig(BLEND_CFG_DEFAULT);
 		}
 
-		
+		activateZConfig(ZConfig::ZCFG_DEFAULT);
+		activateBlendConfig(BLEND_CFG_DEFAULT);
+
+		/*
 		activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 		drawDialogBox3D(camera, ((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), 100, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 		float x, y;		
@@ -901,15 +902,15 @@ void CApp::render() {
 		drawDialogBox3D(camera, XMVectorSet(-9.98f, 1.14f, 2.96f, 0), 150, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 		if (camera.getScreenCoords(XMVectorSet(-9.98f, 1.14f, 2.96f, 0), &x, &y))
 			font.print(x + 20, y + 20, "Partículas");
-		activateBlendConfig(BLEND_CFG_DEFAULT);
+		activateBlendConfig(BLEND_CFG_DEFAULT);*/
 	}
 
-	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+	//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
 	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	activateBlendConfig(BLEND_CFG_DEFAULT);*/
+	//activateBlendConfig(BLEND_CFG_DEFAULT);
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
@@ -917,7 +918,7 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	//font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
+	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -1220,7 +1221,7 @@ void CApp::loadScene(std::string scene_name) {
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DISABLE_ALL);
 
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("loading_screen"));
 	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;

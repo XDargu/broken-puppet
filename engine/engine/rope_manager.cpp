@@ -27,6 +27,7 @@ void CRope_manager::removeBackString(){
 		CHandle c_rope = strings.back();
 		strings.pop_back();
 		if (c_rope.isValid()) {
+			CSoundManager::get().playRandomFX("throw");
 			TCompRope* rope = c_rope;
 			CEntityManager::get().remove(rope->joint_aux.getOwner());
 			CEntityManager::get().remove(c_rope.getOwner());
