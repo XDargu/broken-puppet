@@ -18,6 +18,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		float radius = atts.getFloat("radius", 0.2);
 		float half_height = (atts.getFloat("height", 0.2)) / 2;
+		float density = atts.getFloat("density", 1000);
 
 		XMVECTOR rotation_in_max_coords = atts.getQuat("rotation");
 		XMVECTOR max2mcv = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(90));
@@ -69,7 +70,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 			Physics.XMVECTORToPxVec3(dx_pos),
 			Physics.XMVECTORToPxQuat(dx_rot))
 			, *collider
-			, 1000);
+			, density);
 
 		Physics.gScene->addActor(*rigidBody);
 
