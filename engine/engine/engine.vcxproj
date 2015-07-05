@@ -177,6 +177,7 @@
     <ClInclude Include="ai\hinge_joint.h" />
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
+    <ClInclude Include="ai\lua_quaternion.h" />
     <ClInclude Include="ai\mcv_object.h" />
     <ClInclude Include="ai\prismatic_joint.h" />
     <ClInclude Include="ai\rigid_animation.h" />
