@@ -1,0 +1,7 @@
+<prefab>
+<entity >
+    <name name="EmptyEntity" />
+	<transform position="0 0 0" rotation="0 0 0 1" scale="1 1 1"/>
+	<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+</entity>
+</prefab>

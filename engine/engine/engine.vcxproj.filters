@@ -526,6 +526,9 @@
     <ClInclude Include="components\comp_occlusion_plane.h">
       <Filter>components\render</Filter>
     </ClInclude>
+    <ClInclude Include="ai\lua_quaternion.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
