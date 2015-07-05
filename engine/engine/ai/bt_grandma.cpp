@@ -142,6 +142,8 @@ void bt_grandma::create(string s)
 
 	//player_touch = false;
 	null_node = false;
+	player_out_navMesh=false;
+
 
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -727,7 +729,7 @@ int bt_grandma::actionChaseRoleDistance()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
-	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
 	if (on_enter) {
 		if (path.size() > 0){
 			playAnimationIfNotPlaying(15);
@@ -737,8 +739,12 @@ int bt_grandma::actionChaseRoleDistance()
 			m_char_controller->moveSpeedMultiplier = run_angry_speed;
 			m_char_controller->airSpeed = run_angry_speed * 0.8f;
 			ind_path = 0;
-		}else
+		}
+		else{
+			player_out_navMesh = true;
 			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
 	}
 
 	if (findPlayer())
@@ -1106,9 +1112,15 @@ int bt_grandma::conditionhave_to_warcry()
 //Check if there player is not visible for any grandma (and reach the last position)
 int bt_grandma::conditionplayer_lost()
 {
-	if ((last_time_player_saw) > max_time_player_lost){
-		player_previously_lost = true;
-		initial_attack = false;
+
+	if (!player_out_navMesh){
+		if ((last_time_player_saw) > max_time_player_lost){
+			player_previously_lost = true;
+			initial_attack = false;
+			return true;
+		}
+	}else{
+		player_out_navMesh = false;
 		return true;
 	}
 	return false;
@@ -1137,6 +1149,7 @@ int bt_grandma::conditionLook_for_timeout()
 	else{
 		return false;
 	}
+
 	//return Look_for_timeout;
 }
 
@@ -1414,7 +1427,7 @@ void bt_grandma::update(float elapsed){
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
-				if ((current != NULL) && (!null_node))
+				if ((current != NULL) || (!null_node))
 					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 				else{
 					resetBot();

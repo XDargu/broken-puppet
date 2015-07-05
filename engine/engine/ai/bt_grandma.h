@@ -56,6 +56,7 @@ private:
 	float sensor_delay;
 
 	bool null_node;
+	bool player_out_navMesh;
 
 	CHandle ropeRef;
 	CHandle m_sensor;
