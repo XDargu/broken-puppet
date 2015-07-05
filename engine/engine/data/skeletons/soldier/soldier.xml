@@ -18,7 +18,7 @@
   <anim name="idle"/>13
   <anim name="run"/>14
   <anim name="run"/>15
-  <anim name="idle"/>16
+  <anim name="run"/>16
   <anim name="idle_war"/>17
   <anim name="idle_war"/>18
 </skeleton>
