@@ -1,23 +1,24 @@
 <skeleton>
     <mesh name="soldier"/>
 	
-	<anim name="idle_base"/>0
+<anim name="idle"/>0
   <anim name="walk"/>1
-  <anim name="attack_pasota_left"/>2
-  <anim name="attack_pasota_right"/>3
+  <anim name="idle"/>2
+  <anim name="idle"/>3
   <anim name="attack01"/>4
-  <anim name="attack02"/>5
-  <anim name="attack03"/>6
-  <anim name="coger"/>7
-  <anim name="cortar"/>8
-  <anim name="hit01"/>9
+  <anim name="attack01"/>5
+  <anim name="attack01"/>6
+  <anim name="idle"/>7
+  <anim name="idle"/>8
+  <anim name="idle"/>9
   <anim name="idle_war"/>10
-  <anim name="ninja"/>11
-  <anim name="orbit_left"/>12
-  <anim name="orbit_right"/>13
+  <anim name="idle"/>11
+  anim name="initial_attack"/>11
+  <anim name="idle"/>12
+  <anim name="idle"/>13
   <anim name="run"/>14
-  <anim name="run_angry"/>15
-  <anim name="stand_up"/>16
-  <anim name="view"/>17
-  <anim name="warcry"/>18
+  <anim name="run"/>15
+  <anim name="idle"/>16
+  <anim name="idle_war"/>17
+  <anim name="idle_war"/>18
 </skeleton>

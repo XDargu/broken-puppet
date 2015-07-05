@@ -1328,8 +1328,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	initManagers();
 
-	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
-	logic_manager.onSceneLoad(name);
+	current_scene_name = split_string(split_string(scene_name, "/").back(), ".").front();
+	logic_manager.onSceneLoad(current_scene_name);
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();

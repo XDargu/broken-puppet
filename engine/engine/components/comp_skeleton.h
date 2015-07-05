@@ -31,6 +31,7 @@ public:
 	void stopAnimation(int id);
 	void loopAnimation(int id);
 	void playAnimation(int id);
+	void resetAnimationTime();
 
 	float getAnimationDuration(int id);
 

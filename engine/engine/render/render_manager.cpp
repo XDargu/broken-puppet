@@ -53,7 +53,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	TCompName* c_name = e->get< TCompName >();
 
 	if (c_name) {
-		std::string lightmap = "/lightmaps/" + std::string(c_name->name) + "_lighting";
+		std::string lightmap = "/lightmaps/" + CApp::get().current_scene_name + "/" + std::string(c_name->name) + "_lighting";
 		const CTexture* light = texture_manager.getByName(lightmap.c_str());
 		if (light != nullptr)
 			k.lightmap = light;

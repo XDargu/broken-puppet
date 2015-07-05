@@ -653,6 +653,8 @@ int bt_soldier::actionNormalAttack()
 	if (on_enter) {
 		attacked = false;
 		int anim = getRandomNumber(4, 6);
+		TCompSkeleton* m_skeleton = enemy_skeleton;
+		m_skeleton->resetAnimationTime();
 		playAnimationIfNotPlaying(anim);
 	}
 
@@ -662,7 +664,7 @@ int bt_soldier::actionNormalAttack()
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time  > getAnimationDuration(4) / 5) && (!attacked)) {
+	if ((state_time  > getAnimationDuration(4)) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)

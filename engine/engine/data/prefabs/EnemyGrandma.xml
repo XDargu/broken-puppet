@@ -8,7 +8,6 @@
     <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
     <characterController/>
     <life life="100"/>
-    <skeleton name="abuela"/>
     <sensorPlayerPos/>
     <sensorNeedles radius="7"/>
     <sensorTied/>

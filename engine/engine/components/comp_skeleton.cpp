@@ -485,6 +485,10 @@ void TCompSkeleton::playAnimation(int id) {
 	}
 }
 
+void TCompSkeleton::resetAnimationTime() {
+	model->getMixer()->setAnimationTime(0);
+}
+
 float TCompSkeleton::getAnimationDuration(int id) {
 	return model->getMixer()->getAnimationDuration();
 }
