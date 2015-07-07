@@ -28,10 +28,10 @@
   </particleGroup>
   <particleGroup name="ps_dust">
     <particleSystem>
-      <emitter burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="1" limit="500" loop="true" maxLifeTime="4.000000" minLifeTime="2.000000" randomRotation="true" rate="0.000500" size="6.000000" type="box"></emitter>
+      <emitter burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="1" limit="800" loop="true" maxLifeTime="4.000000" minLifeTime="2.000000" randomRotation="true" rate="0.000500" size="13.000000" type="box"></emitter>
       <updater curveType="linear" curveVal="2.000000" finalColor="0.470588 0.454902 0.407843" initialColor="0.713726 0.701961 0.627451" type="color"></updater>
       <updater type="lifeTime"></updater>
-      <updater finalSize="0.150000" initialSize="0.060000" type="size"></updater>
+      <updater finalSize="0.250000" initialSize="0.090000" type="size"></updater>
       <updater maxNoise="0.010000 0.010000 0.010000" minNoise="-0.010000 -0.010000 -0.010000" type="noise"></updater>
       <renderer aditive="true" animationMode="0" n_anim_x="1" n_anim_y="1" render_mode="billboard" stretch="1.000000" stretchMode="0" texture="particles/part_flare_dff"></renderer>
     </particleSystem>

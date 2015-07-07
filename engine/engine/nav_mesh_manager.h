@@ -24,6 +24,7 @@ private:
 	bool need_navmesh;
 	int recast_aabb_index;
 	CHandle player;
+	bool builded;
 public:
 	CNav_mesh_manager();
 	~CNav_mesh_manager();

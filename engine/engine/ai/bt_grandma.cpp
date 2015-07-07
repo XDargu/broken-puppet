@@ -175,8 +175,8 @@ int bt_grandma::actionRagdoll()
 			m_ragdoll->breakJoints();
 			TCompTransform* m_transform = own_transform;
 			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-			XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
-			XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
+			XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
+			XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
 			//Si esta atada, eliminamos el hilo antes de matar al enemigo
 			/*if (((TCompSensorTied*)tied_sensor)->getTiedState()){

@@ -525,7 +525,7 @@ void CApp::update(float elapsed) {
 		else
 			time_modifier = 1;
 	}
-
+#ifdef _DEBUG
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
 	if (io.becomesReleased(CIOStatus::NUM2)) { debug_map = 2; }
@@ -533,6 +533,13 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM4)) { debug_map = 4; }
 	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
+#endif
+
+	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
@@ -580,11 +587,6 @@ void CApp::update(float elapsed) {
 	{
 		underwater.amount = 0;
 	}
-
-	//-----------------------------------------------------------------------------------------
-	CNav_mesh_manager::get().checkDistaceToEnemies();
-	CNav_mesh_manager::get().checkUpdates();
-	//-----------------------------------------------------------------------------------------
 
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
 	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
@@ -690,6 +692,11 @@ void CApp::update(float elapsed) {
 	entity_lister.update();
 	entity_actioner.update();
 #endif
+	//-----------------------------------------------------------------------------------------
+	CNav_mesh_manager::get().checkUpdates();
+	CNav_mesh_manager::get().checkDistaceToEnemies();
+	//-----------------------------------------------------------------------------------------
+
 }
 
 // Physics update
@@ -1263,7 +1270,8 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= renderUtilsCreate();
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
-
+	
+	current_scene_name = split_string(split_string(scene_name, "/").back(), ".").front();
 	XASSERT(p.xmlParseFile(scene_name), "Error loading the scene: %s", scene_name.c_str());
 
 	dbg("Total texture load time: %g\n", load_text_time);
@@ -1330,7 +1338,6 @@ void CApp::loadScene(std::string scene_name) {
 
 	initManagers();
 
-	current_scene_name = split_string(split_string(scene_name, "/").back(), ".").front();
 	logic_manager.onSceneLoad(current_scene_name);
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders

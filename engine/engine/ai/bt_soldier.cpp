@@ -153,8 +153,8 @@ int bt_soldier::actionRagdoll()
 				m_ragdoll->breakJoints();
 				TCompTransform* m_transform = own_transform;
 				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-				XMVECTOR min = m_transform->position - XMVectorSet(20, 20, 20, 0);
-				XMVECTOR max = m_transform->position + XMVectorSet(20, 20, 20, 0);
+				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
+				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
 				CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
 				if (this->getRol() == role::ATTACKER)
@@ -1072,8 +1072,8 @@ void bt_soldier::hurtSensor(float damage){
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
-		is_ragdoll = true;
 		stopAllAnimations();
+		is_ragdoll = true;
 		setCurrent(NULL);
 	}
 	else if (damage < force_medium_impact){

@@ -47,10 +47,15 @@ void TCompCameraPivotController::update(float elapsed) {
 
 	for (int i = 0; i < (int)buf.nbTouches; i++)
 	{
-		CEntity* e = CHandle(buf.touches[i].actor->userData);
-		if (!e->hasTag("player")) {
-			if (buf.touches[i].distance < collision_dist)
-				collision_dist = buf.touches[i].distance;
+		CHandle h = CHandle(buf.touches[i].actor->userData);
+		if (h.isValid()) {
+			CEntity* e = h;
+			if (e) {
+				if (!e->hasTag("player")) {
+					if (buf.touches[i].distance < collision_dist)
+						collision_dist = buf.touches[i].distance;
+				}
+			}
 		}
 	}
 

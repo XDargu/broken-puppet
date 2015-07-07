@@ -650,6 +650,9 @@ void CLogicManager::createParticleGroup(std::string pg_name, CVector position, C
 	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
 	if (entity.isValid()) {
 		TCompName* name = ((CEntity*)entity)->get<TCompName>();
+		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
 		std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
 		std::strcpy(name->name, n_pg_name.c_str());
 		particle_group_counter++;
