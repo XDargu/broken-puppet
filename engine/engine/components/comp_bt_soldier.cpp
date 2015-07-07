@@ -31,7 +31,7 @@ void TCompBtSoldier::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	assertRequiredComponent<TCompTransform>(this);
 	assertRequiredComponent<TCompCharacterController>(this);
-	assertRequiredComponent<TCompSensorNeedles>(this);
+	//assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
 	assertRequiredComponent<TCompSensorDistPlayer>(this);
 	assertRequiredComponent<TCompSensorTied>(this);
@@ -100,7 +100,13 @@ void TCompBtSoldier::groundHit(const TGroundHit& msg) {
 }
 
 void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
-	m_ai_controller->setRagdoll();
+	if (msg.sqrRopeDistance < 12 * 12) {
+		m_ai_controller->setRagdoll();
+	}
+	else {
+		m_ai_controller->hurtSensor(100000);
+	}
+	//m_ai_controller->setRagdoll();
 }
 
 

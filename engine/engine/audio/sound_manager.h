@@ -42,6 +42,7 @@ public:
 	void playTrack(int trackID, bool loop);
 	void playTrack(std::string name, bool loop);
 	void playFXTrack(std::string name);
+	void playFXTrack(std::string name, bool loop);
 	void addFXTrack(const char* file, std::string name);
 	void addFXTrack(const char* file, std::string name, std::string category_name);
 	void addFX2DTrack(const char* file, std::string name);
@@ -53,11 +54,14 @@ public:
 	void crossFade(int trackID, float timeInSeconds, bool loop);
 
 	void playFX(std::string name);
+	void playFX(std::string name, bool loop);
 	void stopFX(std::string name);
 
 	void play3DFX(std::string name, TTransform* trans, float volume_lambda);
 
 	void play3DFX(std::string name, XMVECTOR pos);
+
+	void playImpactFX(float force, CHandle transform);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 	//bool set3DPosition(std::string name);

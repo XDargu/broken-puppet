@@ -9,6 +9,7 @@
 #include "prismatic_joint.h"
 #include "hinge_joint.h"
 #include "lua_vector.h"
+#include "lua_quaternion.h"
 #include "mcv_object.h"
 
 class CLogicManager
@@ -23,6 +24,7 @@ private:
 
 	float water_level_dest;
 	float lerp_water;
+	int particle_group_counter;
 
 	XMVECTOR ambient_light;
 	float lerp_ambient_light;
@@ -106,6 +108,9 @@ public:
 	// LIGHT & ENVIROMENT
 	void changeWaterLevel(float pos1, float time);
 	void changeAmbientLight(float r, float g, float b, float time);
+
+	// PARTICLES
+	void createParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
 
 	// STRING EVENTS
 	void stringThrown();

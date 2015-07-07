@@ -1,0 +1,17 @@
+<prefab>
+  <entity collisionTag="Enemy">
+    <name name="soldier"/>
+    <transform position="0 10 0" rotation="0.0 0.0 0.0 1.0" scale="0.01 0.01 0.01"/>
+    <skeleton name="soldier"/>
+    <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>
+    <colliderCapsule radius="0.45" halfHeigth="0.5" frictionCombineMode="Multiply" restitutionCombineMode="Multiply"/>
+    <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
+    <characterController/>
+    <life life="100"/>
+    <sensorTied/>
+    <sensorPlayerPos/>
+    <sensorDistPlayer/>
+    <audioSource/>
+    <btSoldier/>
+  </entity>
+</prefab>

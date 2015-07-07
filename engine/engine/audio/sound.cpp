@@ -87,9 +87,9 @@ void CSound::stopSound(){
 			}
 		}
 	}else{
-		bool success = BASS_ChannelStop(own_channel);
-		if (!success){
-			XASSERT(success, "error stop channel");
+		if (is_playing()){
+			bool success = BASS_ChannelStop(own_channel);
+			XASSERT(!success, "error stop channel");
 		}
 	}
 }

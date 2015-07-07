@@ -18,7 +18,9 @@
 //#include <SLB\include\SLB\SLB.hpp>
 #include "SLB\include\SLB\SLB.hpp"
 #include "audio\sound_manager.h"
+#include "handle\prefabs_manager.h"
 #include "render\render_utils.h"
+#include "particles\importer_particle_groups.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -33,6 +35,7 @@ CLogicManager::CLogicManager() {
 
 void CLogicManager::init()
 {
+	particle_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
 	player = CEntityManager::get().getByName("Player");
@@ -265,6 +268,7 @@ void CLogicManager::clearAnimations() {
 
 void CLogicManager::changeWaterLevel(float pos1, float time)
 {
+
 	lerp_water = time;
 	water_level_dest = pos1;
 }
@@ -404,6 +408,7 @@ void CLogicManager::bootLUA() {
 		.set("stopMusic", &CLogicManager::stopMusic)
 		.set("playMusic", &CLogicManager::playMusic)
 		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
+		.set("createParticleGroup", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createParticleGroup)
 	;
 
 	// Register the bot class
@@ -431,6 +436,15 @@ void CLogicManager::bootLUA() {
 		.property("y", &CVector::y)
 		.property("z", &CVector::z)
 	;
+
+	SLB::Class<CQuaterion>("Quaternion")
+		.constructor()
+		.constructor<float, float, float, float>()
+		.property("x", &CQuaterion::x)
+		.property("y", &CQuaterion::y)
+		.property("z", &CQuaterion::z)
+		.property("w", &CQuaterion::w)
+		;
 
 	// Moving platforms
 	SLB::Class<CMovingPlatform>("MovingPlatform")
@@ -632,3 +646,13 @@ void CLogicManager::stringAllCancelled() {
 	execute("onStringCancelAll()");
 }
 
+void CLogicManager::createParticleGroup(std::string pg_name, CVector position, CQuaterion rotation) {
+	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
+	if (entity.isValid()) {
+		TCompName* name = ((CEntity*)entity)->get<TCompName>();
+		std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
+		std::strcpy(name->name, n_pg_name.c_str());
+		particle_group_counter++;
+		particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+	}
+}

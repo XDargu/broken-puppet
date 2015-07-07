@@ -99,8 +99,13 @@ void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 	}
 }
 
-void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {	
-	m_ai_controller->hurtSensor(100000);
+void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
+	if (msg.sqrRopeDistance < 12 * 12) {
+		m_ai_controller->setRagdoll();
+	}
+	else {
+		m_ai_controller->hurtSensor(100000);
+	}
 	//m_ai_controller->setRagdoll();
 }
 

@@ -9,7 +9,7 @@
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 1.8f;
+const float max_dist_reach_needle = 2.1f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
 const float max_time_tied = 2.f;
@@ -142,6 +142,9 @@ void bt_grandma::create(string s)
 	active = false;
 
 	//player_touch = false;
+	null_node = false;
+	player_out_navMesh=false;
+
 
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -154,8 +157,6 @@ void bt_grandma::create(string s)
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
 	lastNumNeedlesViewed = 0;
-
-	audioSource = ((CEntity*)entity)->get<TCompAudioSource>();
 }
 
 //Se mantiene en modo ragdoll durante un tiempo
@@ -205,7 +206,7 @@ int bt_grandma::actionRagdoll()
 				TCompTransform* c_transform = camera->get<TCompTransform>();
 				TCompCamera* c_camera = camera->get<TCompCamera>();
 				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					//CApp::get().slowMotion(4);
+					CApp::get().slowMotion(3);
 				}
 			}
 
@@ -417,7 +418,9 @@ int bt_grandma::actionCutRope()
 		animation_done = false;
 		cut = false;
 	}
-	playAnimationIfNotPlaying(8);
+	
+	if (!cut)
+		playAnimationIfNotPlaying(8);
 
 	mov_direction = PxVec3(0, 0, 0);
 	look_direction = last_look_direction;
@@ -493,16 +496,13 @@ int bt_grandma::actionIdle()
 
 	if (on_enter) {
 		playAnimationIfNotPlaying(0);
-		((TCompAudioSource*)audioSource)->setSoundAsociated("sonar", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	if (state_time >= 2){
-		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 
 	}
 	else{
-		((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 		return STAY;
 	}
 
@@ -537,7 +537,6 @@ int bt_grandma::actionWander()
 		m_char_controller->moveSpeedMultiplier = walk_speed;
 		m_char_controller->airSpeed = walk_speed * 0.8f;
 
-		((TCompAudioSource*)audioSource)->setSoundAsociated("steam", BASS_SAMPLE_3D, 1.5f, 2.0f);
 	}
 
 	jump = false;
@@ -560,22 +559,18 @@ int bt_grandma::actionWander()
 			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 				ind_path++;
-				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}
 			else{
-				((TCompAudioSource*)audioSource)->asociated_sound.playSound();
 				return STAY;
 			}
 		}
 		else{
-			((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}
 	else{
-		((TCompAudioSource*)audioSource)->asociated_sound.stopSound();
 		return LEAVE;
 	}
 }
@@ -733,18 +728,25 @@ bool is_reacheable = false;
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
-	if (on_enter) {
-		playAnimationIfNotPlaying(15);
-
-		TCompCharacterController* m_char_controller = character_controller;
-
-		m_char_controller->moveSpeedMultiplier = run_angry_speed;
-		m_char_controller->airSpeed = run_angry_speed * 0.8f;
-		ind_path = 0;
-	}
-
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
+	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
+	if (on_enter) {
+		if (path.size() > 0){
+			playAnimationIfNotPlaying(15);
+
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
+			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			ind_path = 0;
+		}
+		else{
+			player_out_navMesh = true;
+			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
+	}
 
 	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
@@ -754,7 +756,6 @@ int bt_grandma::actionChaseRoleDistance()
 		return LEAVE;
 	}
 
-	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
@@ -771,6 +772,7 @@ int bt_grandma::actionChaseRoleDistance()
 		}
 	}
 	else{
+		null_node = true;
 		return LEAVE;
 	}
 }
@@ -808,18 +810,24 @@ int bt_grandma::actionInitialAttack()
 //Move step by step to the roll position (leave on reach or lost)
 int bt_grandma::actionSituate()
 {
-	if (on_enter) {
-		TCompCharacterController* m_char_controller = character_controller;
-
-		m_char_controller->moveSpeedMultiplier = run_angry_speed;
-		m_char_controller->airSpeed = run_angry_speed * 0.8f;
-		playAnimationIfNotPlaying(15);
-	}
-
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
 	wander_target = p_transform->position + slot_position;
+	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
+	if (on_enter) {
+		if (path.size() > 0){
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
+			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			playAnimationIfNotPlaying(15);
+		}else{
+			player_out_navMesh = true;
+			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
+	}
 
 	if (on_enter){
 		ind_path = 0;
@@ -1111,9 +1119,15 @@ int bt_grandma::conditionhave_to_warcry()
 //Check if there player is not visible for any grandma (and reach the last position)
 int bt_grandma::conditionplayer_lost()
 {
-	if ((last_time_player_saw) > max_time_player_lost){
-		player_previously_lost = true;
-		initial_attack = false;
+
+	if (!player_out_navMesh){
+		if ((last_time_player_saw) > max_time_player_lost){
+			player_previously_lost = true;
+			initial_attack = false;
+			return true;
+		}
+	}else{
+		player_out_navMesh = false;
 		return true;
 	}
 	return false;
@@ -1143,6 +1157,7 @@ int bt_grandma::conditionLook_for_timeout()
 	else{
 		return false;
 	}
+
 	//return Look_for_timeout;
 }
 
@@ -1366,8 +1381,8 @@ void bt_grandma::hurtSensor(float damage){
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
-		is_ragdoll = true;
 		stopAllAnimations();
+		is_ragdoll = true;
 		setCurrent(NULL);
 	}
 	else if (damage < force_medium_impact){
@@ -1420,7 +1435,12 @@ void bt_grandma::update(float elapsed){
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
-				((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+				if ((current != NULL) || (!null_node))
+					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+				else{
+				resetBot();
+					null_node = false;
+				}
 			}
 		}
 		this->recalc(elapsed);

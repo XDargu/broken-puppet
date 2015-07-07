@@ -581,12 +581,6 @@
     <shadows intensity="1.0" color="1.0 1.0 1.0 1" correction="true"/>
     <camera fov="45.0" znear="1.0" zfar="50" width="30" height="30" />
 	</entity>-->
-  <entity  >
-<name name="ps_box_sparks" />
-<transform position="-11.07 8.0 -7.94" rotation="-0.63 0.09 -0.77 -0.07" scale="1.0 1.0 1.0"/>
-<aabb min="-0.239573 0.0 -0.150451" max="0.239573 0.381492 0.150451"/>
-  <particleGroup name="ps_sparks"/>
-	</entity>
 	<entity  >
 <name name="Sky001_59.0" />
 <transform position="-21.7197 -4.27179e-007 -9.77271" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -735,6 +729,12 @@
 <aabb min="-2.51833 0.0 3.8147e-006" max="0.0 8.0 4.0"/>
 <colliderMesh path="dvn2_arqui_ambos_pared_half_l" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
+  <entity  >
+    <name name="ps_box_sparks" />
+    <transform position="-11.07 8.0 -7.94" rotation="-0.63 0.09 -0.77 -0.07" scale="1.0 1.0 1.0"/>
+    <aabb min="-0.239573 0.0 -0.150451" max="0.239573 0.381492 0.150451"/>
+    <particleGroup name="ps_sparks"/>
+  </entity>
 	<entity  >
 <name name="ps_box_79.0" />
 <transform position="-12.9314 1.34324 8.81456" rotation="0.0 0.918904 0.0 0.394481" scale="1.0 1.0 1.0"/>

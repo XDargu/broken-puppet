@@ -47,8 +47,8 @@ void CImporterParticleGroups::addParticleGroupToEntity(CEntity* entity, std::str
 			CImporterParser p;
 			p.setCurrentEntity(entity);
 			TCompParticleGroup* e_pg = entity->get<TCompParticleGroup>();
-			e_pg->def_name = name;
 			if (e_pg) {
+				e_pg->def_name = name;
 				e_pg->clearParticleSystems();
 			}				
 			std::istringstream istr(pg.xml_as_text);

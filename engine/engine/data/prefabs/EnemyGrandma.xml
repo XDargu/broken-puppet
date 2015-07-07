@@ -8,12 +8,15 @@
     <rigidbody density="25" lockXRot="true" lockZRot="true" lockYRot="true"/>
     <characterController/>
     <life life="100"/>
-    <skeleton name="abuela"/>
     <sensorPlayerPos/>
     <sensorNeedles radius="7"/>
     <sensorTied/>
     <sensorDistPlayer/>
     <audioSource/>
     <btGrandma/>
+<<<<<<< HEAD
+=======
+    btSoldier/>
+>>>>>>> 72376eb3e15a3cabc27a6d008d2af8bc89f5da06
   </entity>
 </prefab>

@@ -1,0 +1,8 @@
+<std_material name="skin_soldier"
+              tech="skin_basic"
+              diffuse="soldado_difusse"
+			  normal="soldado_normal"
+			  emissive="black"
+			specular="black"
+			glossiness="black"
+			  />

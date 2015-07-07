@@ -53,6 +53,10 @@ class CRenderManager {
 
 	static bool sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2);
 
+	// Occlusion
+	typedef std::vector< OcclusionPlane > VOcclusionPlanes;
+	VOcclusionPlanes occlusionPlanes;
+
 public:
 
 	VPlanes planes_active_camera;
@@ -78,6 +82,10 @@ public:
 	void destroyAllKeys();
 
 	void cullActiveCamera();
+
+	void addOcclusionPlane(TTransform* a_plane, float the_width, float the_height);
+	void clearOcclusionPlanes();
+
 
 };
 

@@ -177,6 +177,7 @@
     <ClInclude Include="ai\hinge_joint.h" />
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
+    <ClInclude Include="ai\lua_quaternion.h" />
     <ClInclude Include="ai\mcv_object.h" />
     <ClInclude Include="ai\prismatic_joint.h" />
     <ClInclude Include="ai\rigid_animation.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
     <ClInclude Include="components\comp_joint_fixed.h" />
+    <ClInclude Include="components\comp_occlusion_plane.h" />
     <ClInclude Include="components\comp_recast_aabb.h" />
     <ClInclude Include="components\comp_golden_needle_logic.h" />
     <ClInclude Include="components\comp_golden_needle.h" />
@@ -379,6 +381,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
+    <ClCompile Include="components\comp_occlusion_plane.cpp" />
     <ClCompile Include="components\comp_recast_aabb.cpp" />
     <ClCompile Include="components\comp_golden_needle_logic.cpp" />
     <ClCompile Include="components\comp_golden_needle.cpp" />

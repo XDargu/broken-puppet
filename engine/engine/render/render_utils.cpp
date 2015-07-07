@@ -39,6 +39,9 @@ CMesh        grid;
 CMesh        axis;
 CMesh        plane3x3;
 
+// Textured technique
+const CRenderTechnique* textured_technique;
+
 bool createLine(CMesh& mesh);
 bool createTexturedQuadXYCentered(CMesh& mesh);
 
@@ -405,6 +408,8 @@ bool renderUtilsCreate() {
 	is_ok &= createDepthStencilStates();
 	is_ok &= createRasterizationStates();
 	is_ok &= createBlendStates();
+
+	textured_technique = render_techniques_manager.getByName("textured");
 	return is_ok;
 }
 
@@ -1121,6 +1126,36 @@ void drawLine(XMVECTOR src, XMVECTOR target) {
 	mesh_line.activateAndRender();
 }
 
+// N*r + d = 0
+void drawPlane(XMVECTOR plane) {
+	XMVECTOR n = plane;
+	n = XMVectorSetW(n, 0);
+	XMVECTOR aux = XMVectorSet(0, 1, 0, 0);
+	XMVECTOR dot = XMVector3Dot(aux, n);
+	if (XMVectorGetX(dot) == 1.0f)
+		aux = XMVectorSet(1, 0, 0, 0);
+
+	XMVECTOR a = XMVector3Normalize(XMVector3Cross(n, aux));
+	XMVECTOR b = XMVector3Normalize(XMVector3Cross(n, a));
+
+	a *= 5.0f;
+	b *= 5.f;
+
+	XMVECTOR p0 = n * (-XMVectorGetW(plane));
+	p0 = XMVectorSetW(p0, 1.f);
+
+	drawLine(p0 + a + b, p0 - a + b);
+	drawLine(p0 - a + b, p0 - a - b);
+	drawLine(p0 - a - b, p0 + a - b);
+	drawLine(p0 + a - b, p0 + a + b);
+	drawLine(p0, p0 + n * 5);
+}
+
+void drawVPlanes(const VPlanes& planes) {
+	for (auto i : planes)
+		drawPlane(i);
+}
+
 void setWorldMatrix(XMMATRIX world) {
   ctes_object.get()->World = world;
   ctes_object.uploadToGPU();
@@ -1139,10 +1174,13 @@ void setTint(XMVECTOR tint) {
 // -----------------------------------------------
 void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const char *tech_name) {
 
-	if (tech_name == nullptr)
-		tech_name = "textured";
-
-	render_techniques_manager.getByName(tech_name)->activate();
+	if (tech_name == nullptr) {
+		textured_technique->activate();
+	}
+	else {
+		render_techniques_manager.getByName(tech_name)->activate();
+	}
+	//tech_name = "textured";
 
 	// Activate the texture
 	texture->activate(0);

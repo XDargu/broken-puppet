@@ -63,7 +63,8 @@ private:
 	CHandle enemy_ragdoll;
 	CHandle enemy_rigid;
 
-	CHandle audioSource;
+	bool null_node;
+	bool player_out_navMesh;
 
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;
@@ -83,14 +84,6 @@ public:
 	int actionLeave();
 	//Attack to the player when he is too close
 	int actionTooCloseAttack();
-	//Go to the needle position (leave if cant reach)
-	int actionChaseNeedlePosition();
-	//Select the priority needle
-	int actionSelectNeedleToTake();
-	//Cut the needles rope
-	int actionCutRope();
-	//Take the needle
-	int actionTakeNeedle();
 	//Select the idle and play it
 	int actionIdle();
 	//Select a point to go
@@ -122,8 +115,6 @@ public:
 	//Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 	int actionHurtEvent();
 	//
-	int actionNeedleAppearsEvent();
-	//
 	int actionTiedEvent();
 	//Keeps in falling state till ti
 	int actionFallingEvent();
@@ -144,10 +135,6 @@ public:
 	int conditionis_angry();
 	//Check if the player is close enought for an annoying attack
 	int conditiontoo_close_attack();
-	//Check if there is a needle to take
-	int conditionneedle_to_take();
-	//
-	int conditionis_needle_tied();
 	//Check if is necesary a warcry
 	int conditionhave_to_warcry();
 	//Check if there player is not visible for any grandma (and reach the last position)
@@ -170,8 +157,6 @@ public:
 	int conditionfalling_event();
 	//Check if is a tied event
 	int conditiontied_event();
-	//Check if can reach the selected needle
-	int conditioncan_reach_needle();
 	//Check if the role is taunter and is close enought
 	int conditionis_taunter();
 	//
@@ -185,7 +170,6 @@ public:
 	/*Sensores*/
 
 	void playerViewedSensor();
-	void needleViewedSensor();
 	void tiedSensor();
 	void hurtSensor(float damage);
 	void PlayerFoundSensor();
@@ -193,8 +177,6 @@ public:
 	void update(float elapsed);
 
 	bool player_viewed_sensor;
-	unsigned int lastNumNeedlesViewed;
-	unsigned int currentNumNeedlesViewed;
 
 	CHandle getPlayerTransform();
 	bool findPlayer();

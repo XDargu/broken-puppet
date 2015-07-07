@@ -8,12 +8,16 @@ function error(s)
 	logicManager:print("ERROR: " .. tostring(s));
 end
 
+
+
 _print = print
 clearCoroutines( )
 
-function onSceneLoad_desvan_test()
-	logicManager:loadScene("data/scenes/my_file.xml");
+function onSceneLoad_amy_file()
+	logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 end
+
+initPos = 0;
 
 -------------------------- MS3 ---------------------------
 
@@ -23,6 +27,9 @@ end
 ----------------------------------------------------------
 
 function onSceneLoad_scene_1()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
 
 	local crasher1 = logicManager:getPrismaticJoint("scene_1_grandmacrasher_01");
 	crasher1:setLinearLimit(0.1, 10000000, 10000000);
@@ -111,6 +118,9 @@ end
 
 function onSceneLoad_scene_2()
 
+	player = logicManager:getBot("Player");
+	initPos = player:getpos();
+
 	function onSwitchPressed_scene_2_int_push_false_way(who)
 
 		print(tostring(who) .. " Interruptor scene_2_int_push_false_way pressed");
@@ -144,6 +154,9 @@ end
 ----------------------------------------------------------
 
 function onSceneLoad_scene_3()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
 
 	local crasher1 = logicManager:getPrismaticJoint("scene_3_grandmacrasher_01");
 	crasher1:setLinearLimit(0.1, 10000000, 10000000);
@@ -239,6 +252,8 @@ end
 
 function onSceneLoad_scene_4()
 
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
 
 	function onSwitchPressed_interruptor_pulsar_plataforma_01(who)
 
@@ -293,6 +308,9 @@ end
 
 function onSceneLoad_scene_5()
 
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	local scene_5_clockround = false;
 
 	local m_gear_r = logicManager:getHingeJoint("scene_5_main_gear_part_R");
@@ -307,7 +325,6 @@ function onSceneLoad_scene_5()
 	crasher2:setLinearLimit(0.1, 10000000, 10000000)
 	local crasher3 = logicManager:getPrismaticJoint("grandma_crasher03")
 	crasher3:setLinearLimit(0.1, 10000000, 10000000)
-
 
 
 	-- PUZLE MACHACABUELAS
@@ -436,7 +453,7 @@ end
 
 function onPlayerDead()
 	local player = logicManager:getBot("Player");
-	player:teleport(5.008, 0.479939, 47.0041);
+	player:teleportToPos(initPos);
 end
 
 

@@ -16,6 +16,7 @@ class CApp {
 	float slow_motion_counter;
 public:
 
+	std::string current_scene_name;
 	// Timer and stats
 	CDBGTimer load_timer;
 	CDBGTimer aux_timer;

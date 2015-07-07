@@ -27,9 +27,11 @@ public:
 	void renderDebug3D() const;
 	void renderBoneAxis(int bone_id) const;
 
+	void cancelAnimation(int id);
 	void stopAnimation(int id);
 	void loopAnimation(int id);
 	void playAnimation(int id);
+	void resetAnimationTime();
 
 	float getAnimationDuration(int id);
 

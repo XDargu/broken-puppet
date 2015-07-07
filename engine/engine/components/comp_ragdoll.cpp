@@ -64,8 +64,17 @@ void TCompRagdoll::setActive(bool active) {
 	// Call the skeleton to save the ragdoll bone positions
 	if (!active) {
 		TCompSkeleton* skel = skeleton;
-		skel->ragdollUnactive();
+		skel->ragdollUnactive();		
 	}
+	/*else {
+		TCompSkeleton* skel = skeleton;
+
+		// find the prop1 bone. If exists, set the position far away
+		int prop_id = skel->model->getCoreModel()->getBoneId("Prop1");
+		if (prop_id != -1) {
+			skel->model->getSkeleton()->getVectorBone()[prop_id]->setTranslation(CalVector(50000, 50000, 50000));
+		}
+	}*/
 
 	// Make all the rigidboies kinematic if the ragdoll is not active, and make them not kinematic if active
 	CEntity* e = (CEntity*)CHandle(this).getOwner();

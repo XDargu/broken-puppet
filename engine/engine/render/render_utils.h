@@ -7,6 +7,7 @@
 class CCamera;
 struct TCompPointLight;
 struct TCompShadows;
+class VPlanes;
 
 struct CVertexPos {
 	XMFLOAT3 Pos;
@@ -53,6 +54,8 @@ void drawTexture3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, con
 void drawDialogBox(int x0, int y0, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 void drawDialogBox3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
 void drawDialogBox3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name = nullptr);
+void drawPlane(XMVECTOR plane);
+void drawVPlanes(const VPlanes& planes);
 
 // Render world
 void setWorldMatrix(XMMATRIX world);

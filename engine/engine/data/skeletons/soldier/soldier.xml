@@ -1,8 +1,24 @@
 <skeleton>
     <mesh name="soldier"/>
-    <anim name="walk"/>
 	
-	<ik_foot bone="Bip01 R Foot" local_dir="0 1 0" amount="1" render="1"/>
-	<ik_foot bone="Bip01 L Foot" local_dir="0 1 0" amount="1" render="1"/>
-	
+<anim name="idle"/>0
+  <anim name="walk"/>1
+  <anim name="idle"/>2
+  <anim name="idle"/>3
+  <anim name="attack01"/>4
+  <anim name="attack01"/>5
+  <anim name="attack01"/>6
+  <anim name="idle"/>7
+  <anim name="idle"/>8
+  <anim name="idle"/>9
+  <anim name="idle_war"/>10
+  <anim name="idle"/>11
+  anim name="initial_attack"/>11
+  <anim name="idle"/>12
+  <anim name="idle"/>13
+  <anim name="run"/>14
+  <anim name="run"/>15
+  <anim name="run"/>16
+  <anim name="idle_war"/>17
+  <anim name="idle_war"/>18
 </skeleton>

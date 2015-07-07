@@ -3,7 +3,7 @@
 
 using namespace DirectX;
 #include "aabb.h"
-
+#include "transform.h"
 /*struct TAABB {
 	XMVECTOR center;
 	XMVECTOR half;
@@ -55,8 +55,23 @@ public:
 	bool isVisible(XMVECTOR coord) const;
 
 	bool isVisible(AABB* aabb) const;
+
+	bool isInside(AABB* aabb) const;
 };
 
+class OcclusionPlane : public VPlanes {
+	XMVECTOR left_up;
+	XMVECTOR right_up;
+	XMVECTOR left_down;
+	XMVECTOR right_down;
+	TTransform plane;
+	float width;
+	float height;
+public:
+	void create(TTransform a_plane, float the_width, float the_height);
+	void update(XMVECTOR eye_position);
+
+};
 
 // AABB
 //   AABBworld = AABBlocal * TRansform

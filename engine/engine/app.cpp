@@ -234,6 +234,8 @@ void createManagers() {
 	getObjManager<TCompAudioListener>()->init(1024);
 	getObjManager<TCompAudioSource>()->init(1024);
 
+	getObjManager<TCompOcclusionPlane>()->init(128);
+
 
 	registerAllComponentMsgs();
 }
@@ -332,18 +334,33 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	sm.addMusicTrack(0, "CANCION.mp3");
-	sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
-	sm.addFXTrack("light.wav", "light");
-	sm.addFXTrack("steam.wav", "steam");
-	sm.addFXTrack("sonar.wav", "sonar");
+	//sm.addMusicTrack(0, "CANCION.mp3");
+	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
+	//sm.addFXTrack("light.wav", "light");
+	//sm.addFXTrack("steam.wav", "steam");
+	//sm.addFXTrack("sonar.wav", "sonar");
+	/*sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
+	sm.addFX2DTrack("ambient_orquestal.ogg", "ambiental_orq");
+	sm.addFX2DTrack("ambient_no_orquest.ogg", "ambiental_no_orq");
+	sm.addFX2DTrack("ambient_neutral.ogg", "ambiental_neutral");
+	sm.addFX2DTrack("ambient_neutral_louder.ogg", "ambiental_neutral_louder");*/
 
+	sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
 
+	sm.addMusicTrack(0, "ambient_orquestal.ogg");
+	sm.addMusicTrack(1, "ambient_no_orquest.ogg");
+	sm.addMusicTrack(2, "ambient_neutral.ogg");
+	sm.addMusicTrack(3, "ambient_neutral_louder.ogg");
+
+	sm.addFXTrack("hit_wood_light.ogg", "hit_wood_light");
+	sm.addFXTrack("hit_wood_medium.ogg", "hit_wood_medium");
+	sm.addFXTrack("hit_wood_heavy.ogg", "hit_wood_heavy");
 
 	physics_manager.init();
 
 	//loadScene("data/scenes/escena_ms2.xml");
 	//loadScene("data/scenes/escena_ms2.xml");
+	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
 	//loadScene("data/scenes/my_file.xml");
@@ -354,9 +371,10 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	//loadScene("data/scenes/scene_1.xml");
+	loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
-	loadScene("data/scenes/scene_3.xml");
+
+	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
 
@@ -490,25 +508,23 @@ void CApp::update(float elapsed) {
 
 
 
-	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		loadScene("data/scenes/anim_test.xml");
+	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
+		//loadScene("data/scenes/anim_test.xml");
 		//CEntity* e = entity_manager.getByName("fire_ps");
 		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
-		XMVECTOR pos = XMVectorSet(-6.73f, 1.5f, 17.80f, 0.f);
-		sm.play3DFX("sonar", pos);
-		//sm.playFX("sonar");
-		/*CEntity* e = entity_manager.getByName("Fspot001_49.0");		
-		render_manager.activeCamera = e->get<TCompCamera>();*/
-	}
+		//sm.playFX("ambiental_orq");
+		//CEntity* e = entity_manager.getByName("Fspot001_49.0");		
+		//render_manager.activeCamera = e->get<TCompCamera>();
+	}*/
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	/*if (io.becomesReleased(CIOStatus::Q)) {
+	if (io.becomesReleased(CIOStatus::E)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
 			time_modifier = 1;
-	}*/
+	}
 
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
@@ -853,27 +869,30 @@ void CApp::render() {
 	t0.end();
 #endif
 
-	TCompName* zone_name = logic_manager.getPlayerZoneName();
+	/*TCompName* zone_name = logic_manager.getPlayerZoneName();
 	if (zone_name) {
 		XMVECTOR size = font.measureString(zone_name->name);
 		font.print(xres*0.5f - XMVectorGetZ(size) * 0.5f, 40, zone_name->name);
 	}
 
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(500, 30, s_fps.c_str());*/
 	// Test GUI
 
-	/*if (h_player.isValid()) {
+	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-		life_val /= 10;
-		int leng = 50;
-		for (int i = 0; i < life_val; ++i) {		
-			activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
-			activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+		life_val /= 20;
+		int leng = 100;
+		activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
+		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+		for (int i = 0; i < life_val; ++i) {			
 			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
-			activateZConfig(ZConfig::ZCFG_DEFAULT);
-			activateBlendConfig(BLEND_CFG_DEFAULT);
 		}
 
-		
+		activateZConfig(ZConfig::ZCFG_DEFAULT);
+		activateBlendConfig(BLEND_CFG_DEFAULT);
+
+		/*
 		activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 		drawDialogBox3D(camera, ((TCompSkeleton*)((CEntity*)h_player)->get<TCompSkeleton>())->getPositionOfBone(89), 100, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 		float x, y;		
@@ -883,15 +902,15 @@ void CApp::render() {
 		drawDialogBox3D(camera, XMVectorSet(-9.98f, 1.14f, 2.96f, 0), 150, 60, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 		if (camera.getScreenCoords(XMVectorSet(-9.98f, 1.14f, 2.96f, 0), &x, &y))
 			font.print(x + 20, y + 20, "Partículas");
-		activateBlendConfig(BLEND_CFG_DEFAULT);
+		activateBlendConfig(BLEND_CFG_DEFAULT);*/
 	}
 
-	activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+	//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
 	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
 	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	activateBlendConfig(BLEND_CFG_DEFAULT);*/
+	//activateBlendConfig(BLEND_CFG_DEFAULT);
 
 	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
@@ -899,7 +918,7 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	//font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
+	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -1204,7 +1223,7 @@ void CApp::loadScene(std::string scene_name) {
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DISABLE_ALL);
 
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("cartel1"));
+	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("loading_screen"));
 	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;
@@ -1228,6 +1247,7 @@ void CApp::loadScene(std::string scene_name) {
 	render_techniques_manager.destroyAll();
 	material_manager.destroyAll();
 	render_manager.destroyAllKeys();
+	render_manager.clearOcclusionPlanes();
 	ctes_global.destroy();
 	renderUtilsDestroy();
 	entity_lister.resetEventCount();
@@ -1310,8 +1330,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	initManagers();
 
-	std::string name = split_string(split_string(scene_name, "/").back(), ".").front();
-	logic_manager.onSceneLoad(name);
+	current_scene_name = split_string(split_string(scene_name, "/").back(), ".").front();
+	logic_manager.onSceneLoad(current_scene_name);
 
 	//Borrado de mapa de colisiones una vez cargado en sus respectivos colliders
 	CPhysicsManager::get().m_collision->clear();
@@ -1337,6 +1357,41 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
+
+	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
+	if (scene_name == "data/scenes/scene_1.xml"){
+		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(60.f);
+		sm.playTrack("ambient_orquestal.ogg", true);
+		//sm.playFXTrack("ambiental_orq", true);
+	}
+	else if (scene_name == "data/scenes/scene_2.xml"){
+		sm.playTrack("ambient_no_orquest.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(77.f);
+		/*sm.stopFX("ambiental_orq");
+		sm.playFXTrack("ambiental_no_orq", true);*/
+	}
+	else if (scene_name == "data/scenes/scene_3.xml"){
+		sm.playTrack("ambient_neutral.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(100.f);
+		/*sm.stopFX("ambiental_no_orq");
+		sm.playFXTrack("ambiental_neutral", true);*/
+	}
+	else if (scene_name == "data/scenes/scene_4.xml"){
+		sm.playTrack("ambient_neutral_louder.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(70.f);
+		/*sm.stopFX("ambiental_neutral");
+		sm.playFXTrack("ambiental_neutral_louder", true);*/
+	}
+	else if (scene_name == "data/scenes/scene_5.xml"){
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(65.f);
+		sm.playTrack("ambient_orquestal.ogg", true);
+		//sm.playFXTrack("ambiental_orq", true);
+	}
 
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());

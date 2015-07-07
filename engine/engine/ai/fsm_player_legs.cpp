@@ -348,6 +348,10 @@ void FSMPlayerLegs::Jump(float elapsed){
 		skeleton->playAnimation(5);
 	}
 
+	if (state_time > 0.5) {		
+		skeleton->loopAnimation(6);
+	}
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
 	EvaluateMovement(true, elapsed);
 
@@ -505,12 +509,12 @@ void FSMPlayerLegs::Land(float elapsed){
 	
 	if (state_time >= 0.0f){
 		if (is_moving) {
-			skeleton->stopAnimation(7);
+			//skeleton->stopAnimation(7);
 			ChangeState("fbp_Idle");
 		}
 		else {
 			if (state_time >= 0.5f){
-				skeleton->stopAnimation(7);
+				//skeleton->stopAnimation(7);
 				ChangeState("fbp_Idle");
 			}
 		}
@@ -867,3 +871,23 @@ void FSMPlayerLegs::localCameraFront(){
 }
 
 void stopAnimation(int id);
+
+void FSMPlayerLegs::stopAllAnimations() {
+	TCompSkeleton* m_skeleton = comp_skeleton;
+
+	for (int i = 0; i < 20; ++i) {
+		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
+	}
+}
+
+void FSMPlayerLegs::stopAnimation(int id) {
+	TCompSkeleton* m_skeleton = comp_skeleton;
+	m_skeleton->stopAnimation(id);
+}
+
+float FSMPlayerLegs::getAnimationDuration(int id) {
+	TCompSkeleton* m_skeleton = comp_skeleton;
+
+	float res = m_skeleton->model->getMixer()->getAnimationDuration();
+	return res;
+}

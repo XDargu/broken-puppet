@@ -56,6 +56,9 @@ private:
 
 	float sensor_delay;
 
+	bool null_node;
+	bool player_out_navMesh;
+
 	CHandle ropeRef;
 	CHandle m_sensor;
 	CHandle own_transform;
@@ -66,7 +69,6 @@ private:
 	CHandle enemy_ragdoll;
 	CHandle enemy_rigid;
 
-	CHandle audioSource;
 	
 	enum role{ UNASIGNATED, ATTACKER, TAUNTER };
 	role rol;

@@ -13,6 +13,7 @@
 #include "components/comp_skeleton.h"
 #include "components\comp_render.h"
 #include "components\comp_aabb.h"
+#include "entity_manager.h"
 
 CRenderManager render_manager;
 
@@ -52,7 +53,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	TCompName* c_name = e->get< TCompName >();
 
 	if (c_name) {
-		std::string lightmap = "/lightmaps/" + std::string(c_name->name) + "_lighting";
+		std::string lightmap = "/lightmaps/" + CApp::get().current_scene_name + "/" + std::string(c_name->name) + "_lighting";
 		const CTexture* light = texture_manager.getByName(lightmap.c_str());
 		if (light != nullptr)
 			k.lightmap = light;
@@ -63,7 +64,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 	k.transform = e->get< TCompTransform >();
 	k.aabb = e->get< TCompAABB >();
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
-	XASSERT(k.aabb.isValid(), "AABB from entity %s not valid", e->getName());
+	//XASSERT(k.aabb.isValid(), "AABB from entity %s not valid", e->getName());
 
 	k.active = active;
 
@@ -112,6 +113,23 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	bool culling = true;
 	int render_count = 0;
 
+	// ----------------- TEST OCCLUSION CULLING ----------------------
+
+	/*CEntity* occlusion_plane = CEntityManager::get().getByName("occlusion_plane1");
+	//CEntity* playerCamera = CEntityManager::get().getByName("esc1_arco_pilar_bottom_a_166.0");
+	CEntity* playerCamera = CEntityManager::get().getByName("PlayerCamera");
+	TCompTransform* p_t = occlusion_plane->get<TCompTransform>();
+	TCompTransform* c_t = playerCamera->get<TCompTransform>();
+	
+	frustrum_occlusion.create(*p_t, 8, 8);
+	frustrum_occlusion.update(camera->getPosition());*/
+
+	for (auto& o_plane : occlusionPlanes) {
+		o_plane.update(camera->getPosition());
+	}
+
+	// ---------------------------------------------------------------
+
 	while (it != keys.end()) {
 		if (!it->material->isDoubleSided() && double_sided) {
 			it++;
@@ -128,11 +146,20 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		}
 		
 		TCompAABB* m_aabb = it->aabb;
-		TCompName* m_name = ((CEntity*)it->transform.getOwner())->get<TCompName>();
+		//TCompName* m_name = ((CEntity*)it->transform.getOwner())->get<TCompName>();
 		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes_active_camera.isVisible(m_aabb);
-
-		culling &= it->material->isSolid() == solids;
+		
+		if (culling) {
+			for (auto& o_plane : occlusionPlanes) {
+				culling &= !o_plane.isInside(m_aabb);
+				if (!culling)
+				{
+					break;
+				}
+			}
+			culling &= it->material->isSolid() == solids;
+		}		
 				
 		//culling = true;
 		if (*it->active && culling)
@@ -282,4 +309,14 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera) {
 void CRenderManager::cullActiveCamera() {
 	planes_active_camera.create(((TCompCamera*)activeCamera)->getViewProjection());
 
+}
+
+void CRenderManager::addOcclusionPlane(TTransform* a_plane, float the_width, float the_height) {
+	OcclusionPlane o_plane;
+	o_plane.create(*a_plane, the_width, the_height);
+	occlusionPlanes.push_back(o_plane);
+}
+
+void CRenderManager::clearOcclusionPlanes() {
+	occlusionPlanes.clear();
 }

@@ -36,7 +36,7 @@ bool isKeyPressed(int key) {
 
 // -----------------------------------------
 int fatal(const char* fmt, ...) {
-	return 0;
+	//return 0;
 	va_list ap;
 	va_start(ap, fmt);
 	char buf[512];
@@ -65,7 +65,6 @@ void dbg(const char* fmt, ...) {
 }
 
 void error(int line, char* file, char* method, char* msg, ...) {
-	return;
 	va_list ap;
 	va_start(ap, msg);
 	char buf[512];
@@ -80,6 +79,7 @@ void error(int line, char* file, char* method, char* msg, ...) {
 }
 
 void debug(int line, char* file, char* method, char* msg, ...) {
+#ifdef DEBUG
 	//return;
 	va_list ap;
 	va_start(ap, msg);
@@ -92,6 +92,7 @@ void debug(int line, char* file, char* method, char* msg, ...) {
 	}
 
 	dbg("%s%s\n\t%s\n\tLine: %i\n\tFile: %s\n", error_context.c_str(), method, buf, line, file);
+#endif
 }
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {

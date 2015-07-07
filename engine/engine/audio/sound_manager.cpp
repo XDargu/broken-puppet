@@ -162,6 +162,7 @@ void CSoundManager::playRandomFX(std::string category_name){
 		int random_ind = getRandomNumber(0, sounds_categories->operator[](category_name).size());
 		HSTREAM stream = sounds_categories->operator[](category_name)[random_ind];
 		HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+		BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 0.3f);
 		BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 		BASS_ChannelPlay(channel, 0);
 	}
@@ -177,12 +178,42 @@ void CSoundManager::playFXTrack(std::string name) {
 	}
 }
 
+void CSoundManager::playFXTrack(std::string name, bool loop) {
+	//If the Fx exists in the tree, is previouly loaded
+	if (sounds->find(name) == sounds->end()){
+		XASSERT(sounds, "error, sonido inexistente %s", name.c_str());
+	}
+	else{
+		playFX(name, loop);
+	}
+}
+
 void CSoundManager::playFX(std::string name){
 	// Play FX
 	HSTREAM stream = sounds->operator[](name);
 	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 0.3f);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_ChannelPlay(channel, 0);
+}
+
+void CSoundManager::playFX(std::string name, bool loop){
+	// Play FX
+	HSTREAM stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	if (loop){
+		BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 1.f);
+		BASS_ChannelFlags(channel, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
+	}else
+		BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
+	BASS_ChannelPlay(channel, 0);
+}
+
+void CSoundManager::stopFX(std::string name){
+	// Play FX
+	HSTREAM stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	BASS_ChannelStop(channel);
 }
 
 void CSoundManager::play3DFX(std::string name, TTransform* trans, float volume_lambda){
@@ -228,6 +259,16 @@ void CSoundManager::play3DFX(std::string name, XMVECTOR pos){
 
 void CSoundManager::setSound3DFactors(float distance, float roll, float doppler){
 	BASS_Set3DFactors(distance, roll, doppler);
+}
+
+void CSoundManager::playImpactFX(float force, CHandle transform){
+	TCompTransform* t_transform = (TCompTransform*)transform;
+	if ((force>10) && (force <= 5000))
+		CSoundManager::get().play3DFX("hit_wood_light", (TTransform*)t_transform, force);
+	else if ((force>5000) && (force <= 8000))
+		CSoundManager::get().play3DFX("hit_wood_medium", (TTransform*)t_transform, force);
+	else if (force>8000)
+		CSoundManager::get().play3DFX("hit_wood_heavy", (TTransform*)t_transform, force);
 }
 
 

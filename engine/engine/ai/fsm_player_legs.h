@@ -66,6 +66,10 @@ public:
 	bool EvaluateFall(float elapsed);
 
 	bool trueEveryXSeconds(float time);
+
+	void stopAllAnimations();
+	void stopAnimation(int id);
+	float getAnimationDuration(int id);
 };
 
 #endif
