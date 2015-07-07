@@ -1,4 +1,10 @@
 <scene>
+  <entity  >
+    <name name="scene_1_recast" />
+    <transform position="-7.94385 43.0163 57.972" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-25.6329 -4.5007 -9.59916" max="25.6329 4.5007 9.59916"/>
+    <recastAABB/>
+  </entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_ambos_ambos_half_a_1.0" />
 <transform position="-12.0 6.99382e-007 16.0" rotation="-1.86691e-007 -0.707108 -2.43209e-007 0.707106" scale="1.0 1.0 1.0"/>
@@ -6205,11 +6211,5 @@
 <transform position="23.0662 50.3669 57.6954" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-5.0 -4.0 -5.0" max="5.0 4.0 5.0"/>
     <trigger botOnly="false" playerOnly="true" />
-	</entity>
-	<entity  >
-<name name="scene_1_recast" />
-<transform position="-7.94385 43.0163 57.972" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-25.6329 -4.5007 -9.59916" max="25.6329 4.5007 9.59916"/>
-<recastAABB/>
 	</entity>
 </scene>
