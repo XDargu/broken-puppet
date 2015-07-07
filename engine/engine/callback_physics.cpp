@@ -187,9 +187,13 @@ PxFilterFlags FilterShader(
 				else{
 					return PxFilterFlag::eDEFAULT;
 				}
+				return PxFilterFlag::eDEFAULT;
 			}
+			return PxFilterFlag::eDEFAULT;
 		}
+		return PxFilterFlag::eDEFAULT;
 	}
+	return PxFilterFlag::eDEFAULT;
 }
 
 CFilterCallback::CFilterCallback(){};

@@ -398,6 +398,7 @@ int bt_grandma::actionChaseNeedlePosition()
 		last_look_direction = look_direction;
 		return LEAVE;
 	}
+	return LEAVE;
 }
 
 //Select the priority needle
@@ -967,6 +968,7 @@ int bt_grandma::actionNeedleAppearsEvent()
 	else{
 		return LEAVE;
 	}
+	return LEAVE;
 }
 
 int bt_grandma::actionTiedEvent()
@@ -1577,6 +1579,7 @@ int bt_grandma::getNearestSlot(bool free_north, bool free_east, bool free_west){
 		//devolvemos west
 		return 2;
 	}
+	return -1;
 }
 
 

@@ -437,4 +437,5 @@ int bt_basic_enemy::getNearestSlot(bool free_north, bool free_east, bool free_we
 		//devolvemos west
 		return 2;
 	}
+	return -1;
 }

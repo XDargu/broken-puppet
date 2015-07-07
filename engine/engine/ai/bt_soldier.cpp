@@ -1256,6 +1256,7 @@ int bt_soldier::getNearestSlot(bool free_north, bool free_east, bool free_west){
 		//devolvemos west
 		return 2;
 	}
+	return -1;
 }
 
 

@@ -207,4 +207,5 @@ bool TCompColliderCapsule::getIfUpdated(){
 		if (!trans)
 			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
 	}
+	return false;
 }
