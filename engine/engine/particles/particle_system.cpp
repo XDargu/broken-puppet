@@ -118,9 +118,19 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		// Instancing
 		instanced_mesh = &mesh_textured_quad_xy_centered;
 
+		void *data = nullptr;
+		if (particles.empty()) {
+			particles.resize(1);
+			data = &particles[0];
+			particles.clear();
+		}
+		else {
+			data = &particles[0];
+		}
+
 		// This mesh has not been registered in the mesh manager
 		instances_data = new CMesh;
-		bool is_ok = instances_data->create(limit, &particles
+		bool is_ok = instances_data->create(limit, data
 			, 0, nullptr        // No indices
 			, CMesh::POINTS     // We are not using this
 			, &vdcl_particle_data    // Type of vertex
