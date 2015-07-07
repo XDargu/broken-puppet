@@ -1,1 +1,1 @@
-<std_material name="cajon_cajonera" diffuse="cajon_diffuse" normal="cajon_normal" specular="" glossiness="" emissive=""/>
+<std_material name="cajon_cajonera" diffuse="cajon_diffuse" normal="cajon_normal" specular="cajon_specular" glossiness="cajon_gloss" emissive=""/>

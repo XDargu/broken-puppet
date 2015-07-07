@@ -281,7 +281,7 @@ void PSGBuffer(
 	  
   //if (true)
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y)
-	  acc_light += float4(0.98, 0.85, 0.8, 0) * 0.15;
+	  acc_light += float4(0.88, 0.85, 0.85, 0) * 0.35;//acc_light += float4(0.98, 0.85, 0.8, 0) * 0.35;
   else
 	  acc_light += float4(lightmap.xyz * 0.5, 0);
   

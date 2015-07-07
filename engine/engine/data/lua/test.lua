@@ -22,7 +22,7 @@ initPos = 0;
 -------------------------- MS3 ---------------------------
 
 ----------------------------------------------------------
-------- scene 1 ------- scene 1 ------- scene 1 -------
+------- scene 1 ------- scene 1 ------- scene 1 ----------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
@@ -44,6 +44,12 @@ function onSceneLoad_scene_1()
 
 		-- PUZZLE ATREZZO
 
+	function onTimerEnd_scene_1_door_stop()
+		m_door_L:setMotor(0, 0);
+		m_door_R:setMotor(0, 0);
+		print("Timer ends")
+	end
+
 	function onSwitchPressed_scene_1_push_int(who)
 
 		print(tostring(who) .. "Interruptor pulsado scene_1_door_switch");
@@ -52,6 +58,8 @@ function onSceneLoad_scene_1()
 
 		-- local m_door_R = logicManager:getHingeJoint("scene_1_door_R");
 		m_door_R:setMotor(-1.55, 2000000);
+
+		logicManager:setTimer("scene_1_door_stop", 0.1)
 
 	end
 
@@ -119,23 +127,27 @@ end
 function onSceneLoad_scene_2()
 
 	player = logicManager:getBot("Player");
-	initPos = player:getpos();
+	initPos = player:getPos();
+
+	local scene_2_int_push_false_way_platform = logicManager:getObject("scene_2_int_push_false_way_platform");
+	local platform_pos = scene_2_int_push_false_way_platform:getPos();
 
 	function onSwitchPressed_scene_2_int_push_false_way(who)
-
 		print(tostring(who) .. " Interruptor scene_2_int_push_false_way pressed");
-		local scene_2_int_push_false_way_platform = logicManager:getObject("scene_2_int_push_false_way_platform");
-		scene_2_int_push_false_way_platform:move(Vector(86.0, 4.88892, 8.0), 1);
-
+		scene_2_int_push_false_way_platform:move(Vector(platform_pos.x, (platform_pos.y - 4), platform_pos.z), 1);
 	end
 
 	function onSwitchReleased_scene_2_int_push_false_way(who)
-
 		print(tostring(who) .. " Interruptor scene_2_int_push_false_way released");
-		local scene_2_int_push_false_way_platform = logicManager:getObject("scene_2_int_push_false_way_platform");
-		scene_2_int_push_false_way_platform:move(Vector(86.0, 8.88892, 8.0), 1);
-
+		scene_2_int_push_false_way_platform:move(Vector(platform_pos.x, platform_pos.y, platform_pos.z), 1);
 	end
+
+	function onTriggerEnter_scene_2_lightsout_trigger(who)
+		if who == "Player" then	
+			print(tostring(who) .. " ha entrado en el trigger de cambio de ambient light");
+			logicManager:changeAmbientLight(0.5,0.5,0.5,0.95);
+		end
+	end		
 
 end
 
@@ -156,7 +168,7 @@ end
 function onSceneLoad_scene_3()
 
 	player = logicManager:getBot("Player");
-	initPos = player:getPos();
+	initPos = player:getPos();	
 
 	local crasher1 = logicManager:getPrismaticJoint("scene_3_grandmacrasher_01");
 	crasher1:setLinearLimit(0.1, 10000000, 10000000);
@@ -166,7 +178,7 @@ function onSceneLoad_scene_3()
 
 		print(tostring(who) .. " Interruptor scene_3_int_pull_grandma pressed");
 		local platform = logicManager:getObject("scene_3_int_pull_grandma_platform");
-		platform:move(Vector(-2.07411, 1.0, 19.8556), 6);
+		platform:move(Vector(-2.07411, 0, 19.8556), 6);
 
 	end
 
@@ -174,7 +186,7 @@ function onSceneLoad_scene_3()
 
 		print(tostring(who) .. " Interruptor scene_3_int_pull_grandma released");
 		local platform = logicManager:getObject("scene_3_int_pull_grandma_platform");
-		platform:move(Vector(-2.07411, -6.06088, 19.8556), 6);
+		platform:move(Vector(-2.07411, -7, 19.8556), 6);
 
 	end
 
@@ -198,11 +210,17 @@ function onSceneLoad_scene_3()
 
 	function onTriggerExit_scene_3_trigger_pipedown(who)
 		print(tostring(who) .. " ha dejado en el trigger de pipedown");
-	
+				
+		local top = logicManager:getObject("scene_3_pipedown_top");
+		local top_pos = top:getPos();		
+
 		if who == "scene_3_pipedown_top" then
 			local m_door = logicManager:getHingeJoint("scene_3_puerta_gating_1");
 			m_door:setMotor(1.55, 20000);
-			logicManager:changeWaterLevel(-1,0.25);
+			logicManager:changeWaterLevel(-1.1,0.25);
+			--logicManager:createParticleGroup("ps_jet", top_pos, Quaternion( 0.5, 0.5, -0.5, 0.5));
+
+			logicManager:createParticleGroup("ps_jet", Vector(top_pos.x + 1, top_pos.y + 1, top_pos.z), Quaternion( 0.7071067811865476, 0, -0.7071067811865476, 0));
 		end
 	
 	end
@@ -259,7 +277,7 @@ function onSceneLoad_scene_4()
 
 		print(tostring(who) .. " Interruptor plataforma_01 pulsado");
 		local plataforma_ascendente_01 = logicManager:getObject("plataforma_ascendente_01");
-		plataforma_ascendente_01:move(Vector(50.3461, 9.77687, 27.29), 4);
+		plataforma_ascendente_01:move(Vector(50.3461, 9.77687, 27.29), 3);
 
 	end
 
@@ -267,7 +285,7 @@ function onSceneLoad_scene_4()
 
 		print(tostring(who) .. " Interruptor plataforma_01 relesed");
 		local plataforma_ascendente_01 = logicManager:getObject("plataforma_ascendente_01");
-		plataforma_ascendente_01:move(Vector(50.3461, -1.77687, 27.29), 1.2);
+		plataforma_ascendente_01:move(Vector(50.3461, -1.77687, 27.29), 1);
 
 	end
 
@@ -276,7 +294,7 @@ function onSceneLoad_scene_4()
 
 		print(tostring(who) .. " Interruptor plataforma_02 pulsado");
 		local plataforma_ascendente_02 = logicManager:getObject("plataforma_ascendente_02");
-		plataforma_ascendente_02:move(Vector(39.4995, 20.4613, 30.4338), 4);
+		plataforma_ascendente_02:move(Vector(39.4995, 20.4613, 30.4338), 3);
 
 	end
 
@@ -284,7 +302,7 @@ function onSceneLoad_scene_4()
 
 		print(tostring(who) .. " Interruptor plataforma_02 relesed");
 		local plataforma_ascendente_02 = logicManager:getObject("plataforma_ascendente_02");
-		plataforma_ascendente_02:move(Vector(39.4995, 10.4613, 30.4338), 1.2);
+		plataforma_ascendente_02:move(Vector(39.4995, 10.4613, 30.4338), 1);
 
 	end
 
@@ -312,12 +330,6 @@ function onSceneLoad_scene_5()
 	initPos = player:getPos();
 
 	local scene_5_clockround = false;
-
-	local m_gear_r = logicManager:getHingeJoint("scene_5_main_gear_part_R");
-	local m_gear_l = logicManager:getHingeJoint("scene_5_main_gear_part_L");
-
-	m_gear_r:setMotor(-1, 10000);
-	m_gear_l:setMotor(1, 10000);
 
 	local crasher1 = logicManager:getPrismaticJoint("grandma_crasher01")
 	crasher1:setLinearLimit(0.1, 10000000, 10000000)
@@ -424,18 +436,9 @@ function onSceneLoad_scene_5()
 		m_atrezzo03 = logicManager:getHingeJoint("atrezzo_plataforma03");
 		m_atrezzo03:setMotor(-1000, 100000);
 
-		m_puerta = logicManager:getHingeJoint("puertaIzda");
-		m_puerta:setMotor(-1, 1000);
 	end
 
 end
-
-
-
-
-
-
-
 
 
 
@@ -444,7 +447,7 @@ end
 function onTriggerEnter_Trigger_Victory(who)
 	if who == "Player" then
 		print(tostring(who) .. " VICTORIAAAA!!!");
-		logicManager:pushPlayerLegsState("fbp_Victory");
+		--logicManager:pushPlayerLegsState("fbp_Victory");
 	end
 end
 
