@@ -1324,7 +1324,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= ctes_global.create();
 	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
-	ctes_global.uploadToGPU();
+	
 
 	XASSERT(is_ok, "Error creating global constants");
 
@@ -1370,12 +1370,14 @@ void CApp::loadScene(std::string scene_name) {
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(60.f);
 		sm.playTrack("ambient_orquestal.ogg", true);
+		ctes_global.get()->use_lightmaps = 0;
 		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		sm.playTrack("ambient_no_orquest.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(77.f);
+		ctes_global.get()->use_lightmaps = 0;
 		/*sm.stopFX("ambiental_orq");
 		sm.playFXTrack("ambiental_no_orq", true);*/
 	}
@@ -1383,6 +1385,7 @@ void CApp::loadScene(std::string scene_name) {
 		sm.playTrack("ambient_neutral.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
+		ctes_global.get()->use_lightmaps = 1;
 		/*sm.stopFX("ambiental_no_orq");
 		sm.playFXTrack("ambiental_neutral", true);*/
 	}
@@ -1390,6 +1393,7 @@ void CApp::loadScene(std::string scene_name) {
 		sm.playTrack("ambient_neutral_louder.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(70.f);
+		ctes_global.get()->use_lightmaps = 0;
 		/*sm.stopFX("ambiental_neutral");
 		sm.playFXTrack("ambiental_neutral_louder", true);*/
 	}
@@ -1397,9 +1401,10 @@ void CApp::loadScene(std::string scene_name) {
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(65.f);
 		sm.playTrack("ambient_orquestal.ogg", true);
+		ctes_global.get()->use_lightmaps = 0;
 		//sm.playFXTrack("ambiental_orq", true);
 	}
-
+	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());
 }

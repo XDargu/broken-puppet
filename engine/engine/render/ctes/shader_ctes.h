@@ -82,7 +82,8 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
   float4 added_ambient_color;
   float4 static_needles[4];
   float  world_time;
-  float  dummy3[3];
+  float use_lightmaps;
+  float  dummy3[2];
   
   // Aligned to 16 bytes  
 };
