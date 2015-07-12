@@ -19,6 +19,39 @@ end
 
 initPos = 0;
 
+
+
+
+
+----------------------------------------------------------
+--- scene my_file --- scene my_file --- scene my_file ----
+----------------------------------------------------------
+----------------------------------------------------------
+
+function onSceneLoad_my_file()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
+	local fallingDoor = logicManager:getPrismaticJoint("puerta_descendente");
+	fallingDoor:setLinearLimit(0.1, 10000000, 10000000);
+
+	function onSwitchPressed_interruptor_puerta_descendente(who)
+
+		print(tostring(who) .. " Interruptor interruptor_puerta_descendente");
+		fallingDoor:setLinearLimit(100, 1, 1);
+
+	end
+
+	function onSwitchReleased_interruptor_puerta_descendente(who)
+
+		print(tostring(who) .. " Interruptor interruptor_puerta_descendente relesed");
+		fallingDoor:setLinearLimit(0.1, 10000000, 10000000);
+
+	end
+
+end
+
 -------------------------- MS3 ---------------------------
 
 ----------------------------------------------------------
@@ -27,7 +60,7 @@ initPos = 0;
 ----------------------------------------------------------
 
 function onSceneLoad_scene_1()
-
+logicManager:loadScene("data/scenes/my_file.xml");
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
