@@ -28,7 +28,7 @@ initPos = 0;
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_my_file()
+function onSceneLoad_test_dificultad()
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
@@ -64,7 +64,7 @@ function onSceneLoad_scene_1_noenemy()
 end
 
 function onSceneLoad_scene_1()
-logicManager:loadScene("data/scenes/my_file.xml");
+logicManager:loadScene("data/scenes/test_dificultad.xml");
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
