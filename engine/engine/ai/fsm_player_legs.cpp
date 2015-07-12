@@ -69,6 +69,9 @@ void FSMPlayerLegs::Init()
 	character_controller->gravityMultiplier = 32;
 	character_controller->jumpPower = 9.2;
 
+	character_controller->gravityMultiplier = 48;
+	character_controller->jumpPower = 10.2;
+
 	current_animation_id = -1;
 
 	life = ((CEntity*)entity)->get<TCompLife>();
