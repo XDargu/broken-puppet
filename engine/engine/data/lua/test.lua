@@ -59,6 +59,10 @@ end
 ----------------------------------------------------------
 ----------------------------------------------------------
 
+function onSceneLoad_scene_1_noenemy()
+	onSceneLoad_scene_1()
+end
+
 function onSceneLoad_scene_1()
 logicManager:loadScene("data/scenes/my_file.xml");
 	player = logicManager:getBot("Player");
@@ -197,6 +201,10 @@ end
 ------- scene 3 ------- scene 3 ------- scene 3 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
+
+function onSceneLoad_scene_3_noenemy()
+	onSceneLoad_scene_3()
+end
 
 function onSceneLoad_scene_3()
 
@@ -356,6 +364,10 @@ end
 ------- scene 5 ------- scene 5 ------- scene 5 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
+
+function onSceneLoad_scene_5_noenemy()
+	onSceneLoad_scene_5()
+end
 
 function onSceneLoad_scene_5()
 

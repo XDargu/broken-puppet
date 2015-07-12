@@ -57,6 +57,9 @@ public:
 		, NUM4
 		, NUM5
 		, NUM6
+		, NUM7
+		, NUM8
+		, NUM9
 		, SPACEBAR
 		, Q
 		, E

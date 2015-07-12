@@ -42,6 +42,8 @@ public:
 	void ragdollUnactive();
 
 	CCoreModel* getCCoreModel() { return core_model; }
+
+	float getCancelTime(int id);
 };
 
 #endif

@@ -8,7 +8,7 @@
 	<anim name="throw" blend_out = "0"/>4
 	<anim name="jump" blend = "0" blend_out= "0.3"/>5 
 	<anim name="falling" blend = "0.1" blend_out="0.3"/>6 
-	<anim name="ground" blend = "0.3" blend_out="0.3"/>7
+	<anim name="ground" blend = "0.3" blend_out="0.3" cancel="0"/>7
 	<anim name="idle_up"/>8
 	<anim name="walk_up"/>9
 	<anim name="run_up"/>10
@@ -30,5 +30,7 @@
 	<anim name="run_left_up"/>26
 	<anim name="run_right_up"/>27
 	<anim name="hit"/>28
+	<anim name="wrong_falling"/>29
+	<anim name="ground_heavy"/>30
 	
 </skeleton>

@@ -540,6 +540,9 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM6)) { loadScene("data/scenes/scene_1_noenemy.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM7)) { loadScene("data/scenes/scene_3_noenemy.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/scene_5_noenemy.xml"); }
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
@@ -1373,6 +1376,13 @@ void CApp::loadScene(std::string scene_name) {
 		ctes_global.get()->use_lightmaps = 0;
 		//sm.playFXTrack("ambiental_orq", true);
 	}
+	else if (scene_name == "data/scenes/scene_1_noenemy.xml"){
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(60.f);
+		sm.playTrack("ambient_orquestal.ogg", true);
+		ctes_global.get()->use_lightmaps = 0;
+		//sm.playFXTrack("ambiental_orq", true);
+	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		sm.playTrack("ambient_no_orquest.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
@@ -1389,6 +1399,14 @@ void CApp::loadScene(std::string scene_name) {
 		/*sm.stopFX("ambiental_no_orq");
 		sm.playFXTrack("ambiental_neutral", true);*/
 	}
+	else if (scene_name == "data/scenes/scene_3_noenemy.xml"){
+		sm.playTrack("ambient_neutral.ogg", true);
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(100.f);
+		ctes_global.get()->use_lightmaps = 1;
+		/*sm.stopFX("ambiental_no_orq");
+		sm.playFXTrack("ambiental_neutral", true);*/
+	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		sm.playTrack("ambient_neutral_louder.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
@@ -1398,6 +1416,13 @@ void CApp::loadScene(std::string scene_name) {
 		sm.playFXTrack("ambiental_neutral_louder", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_5.xml"){
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(65.f);
+		sm.playTrack("ambient_orquestal.ogg", true);
+		ctes_global.get()->use_lightmaps = 0;
+		//sm.playFXTrack("ambiental_orq", true);
+	}
+	else if (scene_name == "data/scenes/scene_5_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(65.f);
 		sm.playTrack("ambient_orquestal.ogg", true);
