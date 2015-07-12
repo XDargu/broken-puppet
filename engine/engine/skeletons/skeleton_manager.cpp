@@ -57,6 +57,8 @@ void CCoreModel::onStartElement(const std::string &elem, MKeyValue &atts) {
 	animation_blend_times.push_back(blend_time);
 	float blend_out_time = atts.getFloat("blend_out", 0.3f);
 	animation_blend_out_times.push_back(blend_out_time);
+	float cancel_time = atts.getFloat("cancel", 100.f);
+	animation_cancel_times.push_back(cancel_time);
 	animation_names.push_back(caf);
     caf = root_path + caf + ".caf";
     int id = loadCoreAnimation(caf);	

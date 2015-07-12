@@ -50,6 +50,9 @@ CIOStatus::CIOStatus( ) {
 	buttons[NUM4].key = '4';
 	buttons[NUM5].key = '5';
 	buttons[NUM6].key = '6';
+	buttons[NUM7].key = '7';
+	buttons[NUM8].key = '8';
+	buttons[NUM9].key = '9';
 
 	buttons[SPACEBAR].key = VK_SPACE;
 
