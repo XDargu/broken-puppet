@@ -17,6 +17,19 @@ function onSceneLoad_amy_file()
 	logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 end
 
+function onSceneLoad_my_file()
+
+	local scene_1_platform = logicManager:getObject("scene1_elevator");
+	local platform_pos = scene_1_platform:getPos();
+
+	function onTriggerEnter_scene1_elevator_trigger(who)
+		if who == "Player" then
+			print(tostring(who) .. " scene1_elevator_trigger enter");
+			scene_1_platform:move(Vector(platform_pos.x, (platform_pos.y + 24), platform_pos.z), 3);
+		end
+	end
+end
+
 initPos = 0;
 
 -------------------------- MS3 ---------------------------
@@ -27,7 +40,7 @@ initPos = 0;
 ----------------------------------------------------------
 
 function onSceneLoad_scene_1()
-
+	--logicManager:loadScene("data/scenes/my_file.xml");
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
