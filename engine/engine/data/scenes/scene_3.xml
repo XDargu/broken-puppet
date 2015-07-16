@@ -6,7 +6,7 @@
     <recastAABB/>
   </entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-1.49808 -3.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-1.49808 -1.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="prota"/>
 	</entity>
 	<entity  prefab="PlayerPivot">
