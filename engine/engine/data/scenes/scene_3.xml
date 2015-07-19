@@ -753,7 +753,7 @@
 <transform position="-5.0327 -3.04605 3.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#1"/>
 	</entity>
-	<!--<entity tag = "enemy" prefab="EnemyGrandma">
+	<entity tag = "enemy" prefab="EnemyGrandma">
 <name name="EnemyGrandma_76.0" />
 <transform position="3.22448 -3.04605 2.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#2"/>
@@ -762,7 +762,7 @@
 <name name="EnemyGrandma_77.0" />
 <transform position="3.22448 -3.04605 13.0235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#3"/>
-	</entity>-->
+	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_techo_techo_b001_78.0" />
 <transform position="-8.00001 3.14722e-006 72.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
