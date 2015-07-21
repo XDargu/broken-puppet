@@ -24,6 +24,9 @@ public:
 	virtual int getAttackerSlot() = 0;
 	virtual float getDistanceToPlayer() = 0;
 	virtual int getNearestSlot(bool free_north, bool free_east, bool free_west) = 0;
+	virtual bool isAngry() = 0;
+	virtual int getIndRecastAABB()=0;
+	virtual void setActive(bool act)=0;
 	//-------------------------------------
 
 	aicontroller();

@@ -439,3 +439,9 @@ int bt_basic_enemy::getNearestSlot(bool free_north, bool free_east, bool free_we
 	}
 	return -1;
 }
+
+bool bt_basic_enemy::isAngry(){ return false; }
+
+int bt_basic_enemy::getIndRecastAABB(){ return 0; }
+
+void bt_basic_enemy::setActive(bool act){}

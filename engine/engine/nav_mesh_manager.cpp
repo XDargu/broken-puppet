@@ -18,6 +18,7 @@ CNav_mesh_manager& CNav_mesh_manager::get() {
 }
 
 bool CNav_mesh_manager::build_nav_mesh(){
+		navMeshQuery = nullptr;
 		builded = false;
 		first = true;
 		nav_A.m_input = nav_mesh_input;
@@ -28,7 +29,7 @@ bool CNav_mesh_manager::build_nav_mesh(){
 		nav_mesh = &nav_A;
 		keep_updating_navmesh = true;
 		player = CEntityManager::get().getByName("Player");
-		new std::thread(&CNav_mesh_manager::updateNavmesh, this);
+		AiThread=new std::thread(&CNav_mesh_manager::updateNavmesh, this);
 		return true;
 }
 
@@ -206,6 +207,7 @@ void CNav_mesh_manager::pathRender(){
 }
 
 void CNav_mesh_manager::clearNavMesh(){
+	navMeshQuery = nullptr;
 	recastAABBs.clear();
 	colBoxes.clear();
 	colSpheres.clear();
@@ -215,6 +217,10 @@ void CNav_mesh_manager::clearNavMesh(){
 	keep_updating_navmesh = false;
 	need_navmesh = false;
 	nav_mesh_input.clearInput();
+	nav_mesh = nullptr;
+	if (AiThread != nullptr){
+		TerminateThread(AiThread, 0);
+	}
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
@@ -317,6 +323,7 @@ CNav_mesh_manager::CNav_mesh_manager()
 	recast_aabb_index = 0;
 	need_navmesh=false;
 	builded = false;
+	AiThread = nullptr;
 }
 
 

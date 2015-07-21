@@ -57,6 +57,7 @@ public:
 	std::vector<CHandle>   colSpheres;
 	std::vector<CHandle> recastAABBs;
 	bool keep_updating_navmesh;
+	std::thread* AiThread;
 	//std::vector<TCompColliderCapsule*>  colCapsules;
 };
 #endif

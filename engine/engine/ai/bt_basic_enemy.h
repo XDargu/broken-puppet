@@ -74,6 +74,9 @@ public:
 	int getAttackerSlot();
 	float getDistanceToPlayer();
 	int getNearestSlot(bool free_north, bool free_east, bool free_west);
+	bool isAngry();
+	int getIndRecastAABB();
+	void setActive(bool act);
 	//---------------------------------------------
 
 	//--------- SENSORES --------------------------------------------------------------------------------
