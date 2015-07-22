@@ -817,7 +817,7 @@ int bt_grandma::actionSituate()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	wander_target = p_transform->position + slot_position;
+	wander_target = p_transform->position;// + slot_position;
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (on_enter) {
 		if (path.size() > 0){
@@ -838,7 +838,7 @@ int bt_grandma::actionSituate()
 	}
 
 	float distance = V3DISTANCE(m_transform->position, wander_target);
-	if (distance < 0.5f) {
+	if (distance < 1.5f) {
 		return LEAVE;
 	}
 
@@ -847,7 +847,7 @@ int bt_grandma::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.3f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 1.3f)){
 				ind_path++;
 				return STAY;
 			}
@@ -1172,7 +1172,7 @@ int bt_grandma::conditionis_attacker()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
+	float distance = V3DISTANCE(m_transform->position, p_transform->position); //+ slot_position);
 	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) <= 4.5f)){
 		return true;
 	}
@@ -1285,7 +1285,7 @@ int bt_grandma::conditionfar_from_target_pos()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	XMVECTOR target = p_transform->position + slot_position;
+	XMVECTOR target = p_transform->position; //+ slot_position;
 
 	float distance = V3DISTANCE(m_transform->position, target);
 	if (distance > 2.f){
