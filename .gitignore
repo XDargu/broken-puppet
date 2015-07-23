@@ -221,3 +221,5 @@ engine/engine/log.txt
 engine/engine/data/scenes/my_file.xml
 engine/engine/engine.exp
 engine/engine/engined.exp
+engine/engine/engine.lib
+engine/engine/engined.lib
