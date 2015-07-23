@@ -219,3 +219,5 @@ pip-log.txt
 maxScript/PathConfig.ms
 engine/engine/log.txt
 engine/engine/data/scenes/my_file.xml
+engine/engine/engine.exp
+engine/engine/engined.exp
