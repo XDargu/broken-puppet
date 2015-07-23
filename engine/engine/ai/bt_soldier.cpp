@@ -928,7 +928,7 @@ int bt_soldier::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (/*(player_touch)||*/((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	if (/*(player_touch)||*/((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
 		last_time = timer;
 		//player_touch = false;
 		return true;
@@ -985,7 +985,7 @@ int bt_soldier::conditioninitial_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.f))){
+	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position) < 2.f))){
 		return true;
 	}
 	else{
