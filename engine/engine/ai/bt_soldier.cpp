@@ -132,6 +132,9 @@ void bt_soldier::create(string s)
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
+
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+
 	resetBot();
 }
 

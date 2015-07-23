@@ -159,6 +159,8 @@ void bt_grandma::create(string s)
 	slot = attacker_slots::NO_SLOT;
 	lastNumNeedlesViewed = 0;
 
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+
 	resetBot();
 }
 
@@ -568,8 +570,7 @@ int bt_grandma::actionWander()
 			else{
 				return STAY;
 			}
-		}
-		else{
+		}else{
 			//last_look_direction = look_direction;
 			return LEAVE;
 		}
@@ -1479,7 +1480,13 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	}
 	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
-	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+	/*XMVECTOR diff = XMVector3AngleBetweenVectors(own_position->getFront(), chase_point - own_position->position);
+	if ((XMVectorGetX(diff)>0.3f) || (XMVectorGetZ(diff) > 0.3f)){
+		own_position->rotation = own_position->rotation*0.2f;
+	}
+	else{*/
+		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+	//}
 }
 
 /*void bt_grandma::setId(unsigned int id){
