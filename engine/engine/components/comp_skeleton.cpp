@@ -525,3 +525,5 @@ void TCompSkeleton::ragdollUnactive() {
 			);
 	}
 }
+
+float TCompSkeleton::getCancelTime(int id) { return core_model->animation_cancel_times[id]; }

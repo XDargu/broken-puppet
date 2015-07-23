@@ -81,16 +81,24 @@ float4 PSSilouette(
 	float4 color_x = float4(0, 0, 0, 0);
 	float4 color_y = float4(0, 0, 0, 0);
 
+	float2 deltaaa = float2(1.0 / 1280.0, 1.0 / 1024.0);
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			delta = float2(glow_delta.x * (i - 1), glow_delta.y * (j - 1)) * 5;
+			delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
 			float4 samp = txType.Sample(samClampLinear, input.UV + delta * 0.3);
 
 			factor = sobel_x[i][j];
 			color_x += samp * factor;
+		}
+	}
+	
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
+			float4 samp = txType.Sample(samClampLinear, input.UV + delta * 0.3);
 
 			factor = sobel_y[i][j];
 			color_y += samp * factor;
@@ -101,7 +109,6 @@ float4 PSSilouette(
 	//return abs(border);
 	if (border > 0)
 		diffuse = float4(0,0.7,0,0);
-	
 	return diffuse;
 }
 

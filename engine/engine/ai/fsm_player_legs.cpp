@@ -69,6 +69,9 @@ void FSMPlayerLegs::Init()
 	character_controller->gravityMultiplier = 32;
 	character_controller->jumpPower = 9.2;
 
+	character_controller->gravityMultiplier = 48;
+	character_controller->jumpPower = 10.2;
+
 	current_animation_id = -1;
 
 	life = ((CEntity*)entity)->get<TCompLife>();
@@ -378,7 +381,8 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 	int animation = torso->up_animation ? 19 : 4;
 
 	if (on_enter) {
-		skeleton->loopAnimation(0);
+		stopAllAnimations();
+		//skeleton->loopAnimation(0);
 		skeleton->playAnimation(animation);
 		CSoundManager::get().playFX("string_throw_3");
 	}
@@ -389,7 +393,7 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= skeleton->getAnimationDuration(4) && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
-		skeleton->stopAnimation(0);
+		//skeleton->stopAnimation(0);
 		ChangeState("fbp_Idle");
 	}
 }
@@ -474,7 +478,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 		ChangeState("fbp_Jump");
 		skeleton->stopAnimation(6);
 	}
-	else if (state_time >= 4.f){
+	else if (state_time >= 1.f){
 		ChangeState("fbp_WrongFall");
 		skeleton->stopAnimation(6);
 	}
@@ -507,7 +511,7 @@ void FSMPlayerLegs::Land(float elapsed){
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_landing");
 	
-	if (state_time >= 0.0f){
+	if (state_time >= skeleton->getCancelTime(7)){
 		if (is_moving) {
 			//skeleton->stopAnimation(7);
 			ChangeState("fbp_Idle");
@@ -528,7 +532,7 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
 	if (on_enter) {
-		skeleton->loopAnimation(6);
+		skeleton->loopAnimation(29);
 	}
 
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
@@ -538,9 +542,9 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
-		skeleton->stopAnimation(6);
-		//ChangeState("fbp_WrongLand");
-		ChangeState("fbp_Ragdoll");
+		skeleton->stopAnimation(29);
+		ChangeState("fbp_WrongLand");
+		//ChangeState("fbp_Ragdoll");
 	}
 }
 
@@ -553,7 +557,7 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
 	if (on_enter) {
-		skeleton->loopAnimation(7);
+		skeleton->loopAnimation(30);
 	}
 
 	if (state_time > 0.2f) {
@@ -566,7 +570,7 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 	}
 
 	if (state_time >= 0.5){
-		skeleton->stopAnimation(7);
+		skeleton->stopAnimation(30);
 		ChangeState("fbp_Idle");
 	}
 }

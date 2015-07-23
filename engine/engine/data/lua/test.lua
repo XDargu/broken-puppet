@@ -19,6 +19,39 @@ end
 
 initPos = 0;
 
+
+
+
+
+----------------------------------------------------------
+--- scene my_file --- scene my_file --- scene my_file ----
+----------------------------------------------------------
+----------------------------------------------------------
+
+function onSceneLoad_test_dificultad()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
+	local fallingDoor = logicManager:getPrismaticJoint("puerta_descendente");
+	fallingDoor:setLinearLimit(0.1, 10000000, 10000000);
+
+	function onSwitchPressed_interruptor_puerta_descendente(who)
+
+		print(tostring(who) .. " Interruptor interruptor_puerta_descendente");
+		fallingDoor:setLinearLimit(100, 1, 1);
+
+	end
+
+	function onSwitchReleased_interruptor_puerta_descendente(who)
+
+		print(tostring(who) .. " Interruptor interruptor_puerta_descendente relesed");
+		fallingDoor:setLinearLimit(0.1, 10000000, 10000000);
+
+	end
+
+end
+
 -------------------------- MS3 ---------------------------
 
 ----------------------------------------------------------
@@ -26,8 +59,12 @@ initPos = 0;
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_scene_1()
+function onSceneLoad_scene_1_noenemy()
+	onSceneLoad_scene_1()
+end
 
+function onSceneLoad_scene_1()
+logicManager:loadScene("data/scenes/test_dificultad.xml");
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
@@ -164,6 +201,10 @@ end
 ------- scene 3 ------- scene 3 ------- scene 3 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
+
+function onSceneLoad_scene_3_noenemy()
+	onSceneLoad_scene_3()
+end
 
 function onSceneLoad_scene_3()
 
@@ -323,6 +364,10 @@ end
 ------- scene 5 ------- scene 5 ------- scene 5 -------
 ----------------------------------------------------------
 ----------------------------------------------------------
+
+function onSceneLoad_scene_5_noenemy()
+	onSceneLoad_scene_5()
+end
 
 function onSceneLoad_scene_5()
 
