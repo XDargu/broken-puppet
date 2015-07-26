@@ -104,3 +104,7 @@ bool aifsmcontroller::isAngry(){ return false; }
 int aifsmcontroller::getIndRecastAABB(){ return 0; }
 
 void aifsmcontroller::setActive(bool act){}
+
+void aifsmcontroller::setType(aicontroller::types kind){};
+
+aicontroller::types aifsmcontroller::getType(){ return aicontroller::types::untyped; };

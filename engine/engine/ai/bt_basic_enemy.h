@@ -77,6 +77,8 @@ public:
 	bool isAngry();
 	int getIndRecastAABB();
 	void setActive(bool act);
+	void setType(types kind);
+	types getType();
 	//---------------------------------------------
 
 	//--------- SENSORES --------------------------------------------------------------------------------

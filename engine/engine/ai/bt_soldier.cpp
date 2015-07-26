@@ -87,6 +87,7 @@ void bt_soldier::create(string s)
 	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionWander);
 
 
+	type = aicontroller::types::soldier;
 	last_anim_id = -1;
 	ind_path = 0;
 	own_transform = ((CEntity*)entity)->get<TCompTransform>();
@@ -1320,3 +1321,11 @@ void bt_soldier::resetBot(){
 	mov_direction = PxVec3(0, 0, 0);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }
+
+void bt_soldier::setType(aicontroller::types kind){
+	type = kind;
+};
+
+aicontroller::types bt_soldier::getType(){
+	return type;
+};

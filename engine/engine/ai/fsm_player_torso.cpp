@@ -205,7 +205,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					//Checking if enemy tied
 					CEntity* firstActorEntity = CHandle(first_actor->userData);
-					if (firstActorEntity->hasTag("enemy")){
+					TCompBtGrandma* bot_ai = firstActorEntity->get<TCompBtGrandma>();
+					//aicontroller::types kind=bot_ai->m_ai_controller->getType();
+					if ((firstActorEntity->hasTag("enemy")) && (bot_ai)){
 						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
 						tied_sensor->changeTiedState(true, CHandle(new_e_r));
 

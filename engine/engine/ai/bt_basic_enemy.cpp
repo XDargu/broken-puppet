@@ -445,3 +445,7 @@ bool bt_basic_enemy::isAngry(){ return false; }
 int bt_basic_enemy::getIndRecastAABB(){ return 0; }
 
 void bt_basic_enemy::setActive(bool act){}
+
+void bt_basic_enemy::setType(aicontroller::types kind){};
+
+aicontroller::types bt_basic_enemy::getType(){ return aicontroller::types::untyped; };
