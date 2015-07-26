@@ -337,7 +337,7 @@ void bt_basic_enemy::needleViewedSensor(){
 	//m_sensor->getNeedlesInRange(needle_vector);
 	//if (!needle_vector->empty()){
 	//almacenamos el numero de agujas en rango para comprobar variaciones
-	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
+	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción

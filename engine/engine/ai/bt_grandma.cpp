@@ -361,7 +361,7 @@ int bt_grandma::actionChaseNeedlePosition()
 
 			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, n_transform->position, path);
 			if (path.size() > 0){
-				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle - distance_change_way_point){
+				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle){
 					ind_path = 0;
 					return STAY;
 				}
@@ -373,7 +373,7 @@ int bt_grandma::actionChaseNeedlePosition()
 		else{
 			if (path.size() > 0){
 				if (ind_path < path.size()){
-					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle - distance_change_way_point){
+					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
 						chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 						if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 							ind_path++;
@@ -409,7 +409,7 @@ int bt_grandma::actionChaseNeedlePosition()
 //Select the priority needle
 int bt_grandma::actionSelectNeedleToTake()
 {
-	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle, distance_change_way_point));
+	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle));
 	if (sucess)
 		needle_is_valid = true;
 	return LEAVE;
@@ -959,7 +959,7 @@ int bt_grandma::actionHurtEvent()
 //
 int bt_grandma::actionNeedleAppearsEvent()
 {
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
+	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
 		if (current != NULL){
 			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
@@ -1092,7 +1092,7 @@ int bt_grandma::conditiontoo_close_attack()
 //Check if there is a needle to take
 int bt_grandma::conditionneedle_to_take()
 {
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);
+	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);
 	if (currentNumNeedlesViewed > 0){
 		needle_to_take = true;
 	}
@@ -1334,7 +1334,7 @@ void bt_grandma::needleViewedSensor(){
 	//m_sensor->getNeedlesInRange();
 
 	//if (!needle_to_take){
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
+	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
 		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
