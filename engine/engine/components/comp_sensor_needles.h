@@ -23,10 +23,10 @@ public:
 	void init();
 	//void getNeedlesInRange();
 	//void needleInRange(XMVECTOR pos, float radius);
-	bool asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle, float distance_change_way_point);
+	bool asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle);
 	CHandle getNeedleAsociatedSensor(CHandle grandma);
 	CHandle getRopeAsociatedSensor(CHandle grandma);
-	int getNumNeedles(CHandle grandmaRef, float max_dist_reach_needle, float distance_change_way_point);
+	int getNumNeedles(CHandle grandmaRef, float max_dist_reach_needle);
 	void removeNeedleRope(CHandle grandmaRef);
 };
 #endif

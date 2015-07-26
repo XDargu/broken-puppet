@@ -71,6 +71,8 @@ private:
 	enum attacker_slots{ NO_SLOT, NORTH, EAST, WEST };
 	attacker_slots slot;
 
+	aicontroller::types type;
+
 public:
 	void create(string);
 
@@ -203,6 +205,10 @@ public:
 	void resetBot();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
+
+	void setType(types kind);
+
+	types getType();
 };
 
 #endif

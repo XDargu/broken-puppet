@@ -98,3 +98,13 @@ int aifsmcontroller::getRol(){ return 0; }
 float aifsmcontroller::getDistanceToPlayer(){ return 0.f; }
 
 int aifsmcontroller::getNearestSlot(bool free_north, bool free_east, bool free_west){ return 0; }
+
+bool aifsmcontroller::isAngry(){ return false; }
+
+int aifsmcontroller::getIndRecastAABB(){ return 0; }
+
+void aifsmcontroller::setActive(bool act){}
+
+void aifsmcontroller::setType(aicontroller::types kind){};
+
+aicontroller::types aifsmcontroller::getType(){ return aicontroller::types::untyped; };

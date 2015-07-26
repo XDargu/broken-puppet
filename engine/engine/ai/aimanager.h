@@ -16,7 +16,7 @@ public:
 	static aimanager& get();
 	void addBot(aicontroller* bot);
 	void removeBot(unsigned int id);
-	void warningToClose(aicontroller* me, float warning_distance);
+	void warningToClose(aicontroller* me, float warning_distance, CHandle player_transform);
 	void warningPlayerFound(aicontroller* me);
 	void setEnemyRol(aicontroller* enemy);
 	bool attackRolEmptySlot();
@@ -30,7 +30,7 @@ private:
 	unsigned int last_id;
 	std::vector<aicontroller*> attackers_rol;
 	std::vector<aicontroller*> taunters_rol;
-	
+	CHandle player;
 };
 
 #endif

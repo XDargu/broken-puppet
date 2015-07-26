@@ -87,6 +87,7 @@ void bt_soldier::create(string s)
 	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionWander);
 
 
+	type = aicontroller::types::soldier;
 	last_anim_id = -1;
 	ind_path = 0;
 	own_transform = ((CEntity*)entity)->get<TCompTransform>();
@@ -132,6 +133,9 @@ void bt_soldier::create(string s)
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 	slot = attacker_slots::NO_SLOT;
+
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+
 	resetBot();
 }
 
@@ -219,8 +223,8 @@ int bt_soldier::actionWakeUp()
 
 	}
 
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 	if (state_time > getAnimationDuration(16)) {
 		playAnimationIfNotPlaying(0);
@@ -258,8 +262,8 @@ int bt_soldier::actionTooCloseAttack()
 
 	}
 
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 	if (state_time >= getAnimationDuration(7)) {
 		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
@@ -277,8 +281,8 @@ int bt_soldier::actionIdle()
 {
 	//TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 	if (on_enter) {
 		playAnimationIfNotPlaying(0);
@@ -305,8 +309,8 @@ int bt_soldier::actionSearchPoint()
 		rand_point = XMVectorSet(XMVectorGetX(center), XMVectorGetY(((TCompTransform*)own_transform)->position), XMVectorGetZ(center), 0);
 	}
 	previous_point_search = rand_point;
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 	return LEAVE;
 
@@ -352,7 +356,7 @@ int bt_soldier::actionWander()
 			}
 		}
 		else{
-			last_look_direction = look_direction;
+			//last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}
@@ -368,12 +372,12 @@ int bt_soldier::actionWarcry()
 		playAnimationIfNotPlaying(18);
 	}
 
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 
 	if (state_time >= getAnimationDuration(18) + 1) {
-		aimanager::get().warningToClose(this, 20.f);
+		aimanager::get().warningToClose(this, 20.f, player_transform);
 		have_to_warcry = false;
 		time_searching_player = 0;
 		return LEAVE;
@@ -393,8 +397,8 @@ int bt_soldier::actionPlayerAlert()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = Physics.XMVECTORToPxVec3(dir);
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if (state_time > getAnimationDuration(17)) {
 		//Call the iaManager method for warning the rest of the grandmas
@@ -419,8 +423,8 @@ int bt_soldier::actionSearchArroundLastPoint()
 {
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(last_point_player_saw, radius, ((TCompTransform*)own_transform)->position);
 
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 	return LEAVE;
 
@@ -470,7 +474,7 @@ int bt_soldier::actionLookAround()
 			}
 		}
 		else{
-			last_look_direction = look_direction;
+			//last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}
@@ -576,8 +580,8 @@ int bt_soldier::actionInitialAttack()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = Physics.XMVECTORToPxVec3(dir);
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if ((state_time > getAnimationDuration(11) / 5) && (!attacked)) {
 		// Check if the attack reach the player
@@ -599,7 +603,7 @@ int bt_soldier::actionSituate()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	wander_target = p_transform->position + slot_position;
+	wander_target = p_transform->position;// + slot_position;
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (on_enter) {
 		if (path.size() > 0){
@@ -621,7 +625,7 @@ int bt_soldier::actionSituate()
 	}
 
 	float distance = V3DISTANCE(m_transform->position, wander_target);
-	if (distance < 0.5f) {
+	if (distance < 1.5f) {
 		return LEAVE;
 	}
 
@@ -630,7 +634,7 @@ int bt_soldier::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.3f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 1.3f)){
 				ind_path++;
 				return STAY;
 			}
@@ -661,8 +665,8 @@ int bt_soldier::actionNormalAttack()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = Physics.XMVECTORToPxVec3(dir);
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if ((state_time  > getAnimationDuration(4)) && (!attacked)) {
 		// Check if the attack reach the player
@@ -688,8 +692,8 @@ int bt_soldier::actionIdleWar()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = Physics.XMVECTORToPxVec3(dir);
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if (state_time > getAnimationDuration(10))
 		return LEAVE;
@@ -708,8 +712,8 @@ int bt_soldier::actionTaunter()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = Physics.XMVECTORToPxVec3(dir);
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if (state_time > getAnimationDuration(17))
 		return LEAVE;
@@ -727,8 +731,8 @@ int bt_soldier::actionHurtEvent()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = Physics.XMVECTORToPxVec3(dir);
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if (state_time > getAnimationDuration(9)) {
 		//Call the iaManager method for warning the rest of the grandmas
@@ -743,8 +747,8 @@ int bt_soldier::actionHurtEvent()
 int bt_soldier::actionTiedEvent()
 {
 
-	mov_direction = PxVec3(0, 0, 0);
-	look_direction = last_look_direction;
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = last_look_direction;
 
 	if (on_enter) {
 
@@ -910,7 +914,7 @@ int bt_soldier::conditionis_attacker()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	float distance = V3DISTANCE(m_transform->position, p_transform->position + slot_position);
+	float distance = V3DISTANCE(m_transform->position, p_transform->position);// + slot_position);
 	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) <= 4.5f)){
 		return true;
 	}
@@ -925,7 +929,7 @@ int bt_soldier::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (/*(player_touch)||*/((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	if (/*(player_touch)||*/((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
 		last_time = timer;
 		//player_touch = false;
 		return true;
@@ -982,7 +986,7 @@ int bt_soldier::conditioninitial_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position + slot_position) < 2.f))){
+	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position) < 2.f))){
 		return true;
 	}
 	else{
@@ -996,7 +1000,7 @@ int bt_soldier::conditionfar_from_target_pos()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	XMVECTOR target = p_transform->position + slot_position;
+	XMVECTOR target = p_transform->position;// + slot_position;
 
 	float distance = V3DISTANCE(m_transform->position, target);
 	if (distance > 2.f){
@@ -1121,9 +1125,7 @@ void bt_soldier::update(float elapsed){
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
-				if ((current != NULL)||(!null_node))
-					((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
-				else{
+				if ((current == NULL) || (null_node)){
 					resetBot();
 					null_node = false;
 				}
@@ -1163,6 +1165,7 @@ void bt_soldier::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	}
 	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 }
 
 CHandle bt_soldier::getPlayerTransform(){
@@ -1318,3 +1321,11 @@ void bt_soldier::resetBot(){
 	mov_direction = PxVec3(0, 0, 0);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }
+
+void bt_soldier::setType(aicontroller::types kind){
+	type = kind;
+};
+
+aicontroller::types bt_soldier::getType(){
+	return type;
+};
