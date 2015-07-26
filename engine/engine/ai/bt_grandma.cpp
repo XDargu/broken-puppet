@@ -108,7 +108,6 @@ void bt_grandma::create(string s)
 	addChild("Wander30", "SearchPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSearchPoint);
 	addChild("Wander30", "ActionWander", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionWander);
 
-	type = aicontroller::types::granny;
 	last_anim_id = -1;
 	ind_path = 0;
 	own_transform = ((CEntity*)entity)->get<TCompTransform>();
@@ -1650,11 +1649,3 @@ void bt_grandma::resetBot(){
 	mov_direction = PxVec3(0, 0, 0);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }
-
-void bt_grandma::setType(aicontroller::types kind){
-	type = kind;
-};
-
-aicontroller::types bt_grandma::getType(){ 
-	return type; 
-};

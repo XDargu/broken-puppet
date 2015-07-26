@@ -16,12 +16,6 @@ public:
 	virtual CHandle getTransform() = 0;
 	unsigned getId();
 	void setId(unsigned int id);
-	enum types
-	{
-		soldier,
-		granny,
-		untyped
-	};
 	//-------------------------------------
 	virtual void setRol(int r) = 0;
 	virtual int getRol() = 0;
@@ -32,8 +26,6 @@ public:
 	virtual bool isAngry() = 0;
 	virtual int getIndRecastAABB()=0;
 	virtual void setActive(bool act)=0;
-	virtual void setType(types kind) = 0;
-	virtual types getType() = 0;
 	//-------------------------------------
 
 	aicontroller();
