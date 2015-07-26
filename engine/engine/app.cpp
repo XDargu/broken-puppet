@@ -363,7 +363,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -371,7 +371,7 @@ bool CApp::create() {
 
 
 	// XML Pruebas
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
@@ -463,9 +463,9 @@ void CApp::doFrame() {
 		// Update input
 		io.update(delta_secs);
 
-		/*if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
 			pause = !pause;
-		}*/
+		}
 
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
@@ -519,7 +519,7 @@ void CApp::update(float elapsed) {
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	if (io.becomesReleased(CIOStatus::E)) {
+	if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
@@ -896,7 +896,7 @@ void CApp::render() {
 		activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
 		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 		for (int i = 0; i < life_val; ++i) {			
-			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
+			//drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
 		}
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);

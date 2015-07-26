@@ -43,7 +43,7 @@ void TCompThirdPersonCameraController::update(float elapsed) {
 	for (int i = 0; i < (int)buf.nbTouches; i++)
 	{
 		CEntity* e = CHandle(buf.touches[i].actor->userData);
-		if (!e->hasTag("player")) {
+		if (e && !e->hasTag("player")) {
 			if (buf.touches[i].distance < collision_dist)
 				collision_dist = buf.touches[i].distance;
 		}

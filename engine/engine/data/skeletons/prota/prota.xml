@@ -32,5 +32,10 @@
 	<anim name="hit"/>28
 	<anim name="wrong_falling"/>29
 	<anim name="ground_heavy"/>30
+	<anim name="cancel_partial"/>31
+	<anim name="tense_partial"/>32
+	<anim name="idle_var01"/>33
+	<anim name="idle_var02"/>34
+	<anim name="idle_var03"/>35
 	
 </skeleton>

@@ -620,6 +620,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		CEntityManager::get().remove(c_rope.getOwner());*/
 		CRope_manager::get().removeBackString();
 
+		skeleton->playAnimation(31);
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -656,6 +657,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	CIOStatus& io = CIOStatus::get();
 	CEntityManager &entity_manager = CEntityManager::get();
+	TCompSkeleton* skeleton = comp_skeleton;
 
 	//Calculate the current number of strings
 	//unsigned int num_strings = getStringCount();
@@ -672,6 +674,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
+			skeleton->playAnimation(31);
 		}
 	}
 
@@ -680,6 +683,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
+			skeleton->playAnimation(31);
 			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
@@ -702,6 +706,8 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		{
 			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			
 			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+
+			skeleton->playAnimation(32);
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
