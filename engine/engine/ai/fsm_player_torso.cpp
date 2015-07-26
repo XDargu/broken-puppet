@@ -205,7 +205,15 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					//Checking if enemy tied
 					CEntity* firstActorEntity = CHandle(first_actor->userData);
+
+					//aicontroller::types kind=bot_ai->m_ai_controller->getType();
 					if (firstActorEntity->hasTag("enemy")){
+
+						TCompBtSoldier* bot_ai = firstActorEntity->get<TCompBtSoldier>();
+						if (bot_ai){
+							Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
+						}
+
 						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
 						tied_sensor->changeTiedState(true, CHandle(new_e_r));
 

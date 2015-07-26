@@ -337,7 +337,7 @@ void bt_basic_enemy::needleViewedSensor(){
 	//m_sensor->getNeedlesInRange(needle_vector);
 	//if (!needle_vector->empty()){
 	//almacenamos el numero de agujas en rango para comprobar variaciones
-	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles(entity, max_dist_reach_needle, distance_change_way_point);//list_needles.size();
+	currentNumNeedlesViewed = (unsigned int)m_sensor->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed != lastNumNeedlesViewed){
 		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
@@ -439,3 +439,9 @@ int bt_basic_enemy::getNearestSlot(bool free_north, bool free_east, bool free_we
 	}
 	return -1;
 }
+
+bool bt_basic_enemy::isAngry(){ return false; }
+
+int bt_basic_enemy::getIndRecastAABB(){ return 0; }
+
+void bt_basic_enemy::setActive(bool act){}

@@ -18,6 +18,8 @@ CNav_mesh_manager& CNav_mesh_manager::get() {
 }
 
 bool CNav_mesh_manager::build_nav_mesh(){
+	if (need_navmesh){
+		navMeshQuery = nullptr;
 		builded = false;
 		first = true;
 		nav_A.m_input = nav_mesh_input;
@@ -28,7 +30,8 @@ bool CNav_mesh_manager::build_nav_mesh(){
 		nav_mesh = &nav_A;
 		keep_updating_navmesh = true;
 		player = CEntityManager::get().getByName("Player");
-		new std::thread(&CNav_mesh_manager::updateNavmesh, this);
+			AiThread = new std::thread(&CNav_mesh_manager::updateNavmesh, this);
+		}
 		return true;
 }
 
@@ -96,34 +99,32 @@ void CNav_mesh_manager::checkUpdates(){
 }
 
 void CNav_mesh_manager::updateNavmesh() {
-	if (need_navmesh){
-		while (keep_updating_navmesh) {
-			bool lock = false;
-			if (need_update){
+	while (keep_updating_navmesh) {
+		bool lock = false;
+		if (need_update){
 
-				// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
-				CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
+			// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
+			CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
 
-				// generamos la navmesh con los datos actualizados
-				updated_nav->build();
+			// generamos la navmesh con los datos actualizados
+			updated_nav->build();
 
-				// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
-				generating_navmesh.lock();
+			// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
+			generating_navmesh.lock();
 
-				// hacemos el swap de los datos de la navmesh
-				nav_mesh = updated_nav;
+			// hacemos el swap de los datos de la navmesh
+			nav_mesh = updated_nav;
 
-				// desactivamos el mutex
-				generating_navmesh.unlock();
+			// desactivamos el mutex
+			generating_navmesh.unlock();
 
-				// esperamos un poco antes de volver a actulizarla
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			// esperamos un poco antes de volver a actulizarla
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-				nav_mesh_input.clearInput();
-				prepareInputNavMesh();
+			nav_mesh_input.clearInput();
+			prepareInputNavMesh();
 
-				builded = true;
-			}
+			builded = true;
 		}
 	}
 }
@@ -206,6 +207,7 @@ void CNav_mesh_manager::pathRender(){
 }
 
 void CNav_mesh_manager::clearNavMesh(){
+	navMeshQuery = nullptr;
 	recastAABBs.clear();
 	colBoxes.clear();
 	colSpheres.clear();
@@ -215,6 +217,10 @@ void CNav_mesh_manager::clearNavMesh(){
 	keep_updating_navmesh = false;
 	need_navmesh = false;
 	nav_mesh_input.clearInput();
+	nav_mesh = nullptr;
+	if (AiThread != nullptr){
+		TerminateThread(AiThread, 0);
+	}
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
@@ -317,6 +323,7 @@ CNav_mesh_manager::CNav_mesh_manager()
 	recast_aabb_index = 0;
 	need_navmesh=false;
 	builded = false;
+	AiThread = nullptr;
 }
 
 

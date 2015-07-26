@@ -203,6 +203,7 @@ public:
 	void resetBot();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
+
 };
 
 #endif

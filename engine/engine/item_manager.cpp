@@ -43,7 +43,7 @@ void Citem_manager::removeNeedle(CHandle n){
 	}
 }
 
-bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma, float max_dist_reach_needle, float distance_change_way_point){
+bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma, float max_dist_reach_needle){
 	bool success = false;
 	int min_distance_rope = 100.f;
 	int min_distance_no_rope = 100.f;
@@ -60,7 +60,7 @@ bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 						CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
 						if (path.size() > 0){
 							XMVECTOR last_point = path[path.size() - 1];
-							if (V3DISTANCE(last_point, e_transform->position) <= max_dist_reach_needle - distance_change_way_point){
+							if (V3DISTANCE(last_point, e_transform->position) <= max_dist_reach_needle){
 								if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandma)){
 									min_distance_rope = V3DISTANCE(e_transform->position, pos);
 									ind_priority = i;
@@ -73,7 +73,7 @@ bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 						std::vector<XMVECTOR> path;
 						CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
 						if (path.size() > 0){
-							if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle - distance_change_way_point){
+							if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
 								if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandma)){
 									min_distance_no_rope = (V3DISTANCE(e_transform->position, pos));
 									ind_nearest = i;
@@ -106,7 +106,7 @@ bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 	return success;
 }
 
-int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius, float max_dist_reach_needle, float distance_change_way_point){
+int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius, float max_dist_reach_needle){
 	int result = 0;
 	for (auto & element : needles) {
 
@@ -119,7 +119,7 @@ int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius
 			CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
 			if (path.size() > 0){
 				int distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
-				if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle - distance_change_way_point){
+				if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
 					if ((!element.grandma_asociated.isValid()) || (element.grandma_asociated==grandmaRef))
 						result++;
 				}

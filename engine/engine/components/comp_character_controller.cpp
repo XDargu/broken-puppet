@@ -99,44 +99,46 @@ void TCompCharacterController::fixedUpdate(float elapsed) {
 
 void TCompCharacterController::Move(physx::PxVec3 move, bool crouch, bool jump, physx::PxVec3 lookPos)
 {
-	TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
+	if (rigidbody.isValid()){
+		TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
-	if (move.magnitude() > 1) move.normalize();
+		if (move.magnitude() > 1) move.normalize();
 
-	// transfer input parameters to member variables.
-	moveInput = move;
-	crouchInput = crouch;
-	jumpInput = jump;
-	currentLookPos = lookPos;
+		// transfer input parameters to member variables.
+		moveInput = move;
+		crouchInput = crouch;
+		jumpInput = jump;
+		currentLookPos = lookPos;
 
-	// grab current velocity, we will be changing it.
-	velocity = rigid->rigidBody->getLinearVelocity();
-	physx::PxVec3 prev_velocity = rigid->rigidBody->getLinearVelocity();
-	
-	ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
-	
-	TurnTowardsCameraForward(); // makes the character face the way the camera is looking
-	
+		// grab current velocity, we will be changing it.
+		velocity = rigid->rigidBody->getLinearVelocity();
+		physx::PxVec3 prev_velocity = rigid->rigidBody->getLinearVelocity();
 
-	GroundCheck(0); // detect and stick to ground
-	
+		ConvertMoveInput(); // converts the relative move vector into local turn & fwd values
 
-	SetFriction(); // use low or high friction values depending on the current states
-	
+		TurnTowardsCameraForward(); // makes the character face the way the camera is looking
 
-	// control and velocity handling is different when grounded and airborne:
-	if (onGround)
-	{
-		HandleGroundedVelocities();
+
+		GroundCheck(0); // detect and stick to ground
+
+
+		SetFriction(); // use low or high friction values depending on the current states
+
+
+		// control and velocity handling is different when grounded and airborne:
+		if (onGround)
+		{
+			HandleGroundedVelocities();
+		}
+		else
+		{
+			HandleAirborneVelocities();
+		}
+
+
+		// reassign velocity, since it will have been modified by the above functions.		
+		rigid->rigidBody->setLinearVelocity(velocity);
 	}
-	else
-	{
-		HandleAirborneVelocities();
-	}
-	
-
-	// reassign velocity, since it will have been modified by the above functions.		
-	rigid->rigidBody->setLinearVelocity(velocity);
 }
 
 
