@@ -280,7 +280,7 @@ int bt_grandma::actionCutOwn()
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
 	if (on_enter) {
-		if (ropeRef == nullptr){
+		if (!ropeRef.isValid()){
 			tied_event = false;
 			event_detected = false;
 			return LEAVE;
@@ -297,6 +297,8 @@ int bt_grandma::actionCutOwn()
 	if (state_time < getAnimationDuration(11)){
 		return STAY;
 	}else{
+		TCompRope* rope = (TCompRope*)ropeRef;
+		CEntityManager::get().remove(rope->joint_aux.getOwner());
 		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		tied_event = false;
 		event_detected = false;
@@ -982,7 +984,7 @@ int bt_grandma::actionTiedEvent()
 
 	if (on_enter) {
 
-		if (ropeRef == nullptr){
+		if (!ropeRef.isValid()){
 			tied_event = false;
 			event_detected = false;
 			return LEAVE;
@@ -1007,6 +1009,8 @@ int bt_grandma::actionTiedEvent()
 	}
 
 	if (state_time >= getAnimationDuration(11)){
+		TCompRope* rope = (TCompRope*)ropeRef;
+		CEntityManager::get().remove(rope->joint_aux.getOwner());
 		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		tied_event = false;
 		event_detected = false;
