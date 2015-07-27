@@ -430,6 +430,8 @@ bool CApp::create() {
 
 	logic_manager.addRigidAnimation(anim);	*/
 
+	//Runs the ai thread
+	CNav_mesh_manager::get().nav_mesh_init();
 
 	return true;
 }

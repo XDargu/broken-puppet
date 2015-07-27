@@ -18,21 +18,24 @@ CNav_mesh_manager& CNav_mesh_manager::get() {
 }
 
 bool CNav_mesh_manager::build_nav_mesh(){
+	navMeshQuery = nullptr;
+	builded = false;
+	first = true;
 	if (need_navmesh){
-		navMeshQuery = nullptr;
-		builded = false;
-		first = true;
-		nav_A.m_input = nav_mesh_input;
-		nav_A.m_input.computeBoundaries();
-		nav_B.m_input = nav_mesh_input;
-		nav_B.m_input.computeBoundaries();
-		nav_A.build();
-		nav_mesh = &nav_A;
 		keep_updating_navmesh = true;
 		player = CEntityManager::get().getByName("Player");
-			AiThread = new std::thread(&CNav_mesh_manager::updateNavmesh, this);
-		}
-		return true;
+	}
+	return true;
+}
+
+void CNav_mesh_manager::nav_mesh_init(){
+	nav_A.m_input = nav_mesh_input;
+	nav_A.m_input.computeBoundaries();
+	nav_B.m_input = nav_mesh_input;
+	nav_B.m_input.computeBoundaries();
+	nav_A.build();
+	nav_mesh = &nav_A;
+	AiThread = new std::thread(&CNav_mesh_manager::updateNavmesh, this);
 }
 
 void CNav_mesh_manager::prepareInputNavMesh(){
@@ -99,32 +102,34 @@ void CNav_mesh_manager::checkUpdates(){
 }
 
 void CNav_mesh_manager::updateNavmesh() {
-	while (keep_updating_navmesh) {
-		bool lock = false;
-		if (need_update){
+	while (true){
+		if (keep_updating_navmesh) {
+			bool lock = false;
+			if (need_update){
 
-			// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
-			CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
+				// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
+				CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
 
-			// generamos la navmesh con los datos actualizados
-			updated_nav->build();
+				// generamos la navmesh con los datos actualizados
+				updated_nav->build();
 
-			// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
-			generating_navmesh.lock();
+				// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
+				generating_navmesh.lock();
 
-			// hacemos el swap de los datos de la navmesh
-			nav_mesh = updated_nav;
+				// hacemos el swap de los datos de la navmesh
+				nav_mesh = updated_nav;
 
-			// desactivamos el mutex
-			generating_navmesh.unlock();
+				// desactivamos el mutex
+				generating_navmesh.unlock();
 
-			// esperamos un poco antes de volver a actulizarla
-			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+				// esperamos un poco antes de volver a actulizarla
+				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-			nav_mesh_input.clearInput();
-			prepareInputNavMesh();
+				nav_mesh_input.clearInput();
+				prepareInputNavMesh();
 
-			builded = true;
+				builded = true;
+			}
 		}
 	}
 }
@@ -218,9 +223,9 @@ void CNav_mesh_manager::clearNavMesh(){
 	need_navmesh = false;
 	nav_mesh_input.clearInput();
 	nav_mesh = nullptr;
-	if (AiThread != nullptr){
+	/*if (AiThread != nullptr){
 		TerminateThread(AiThread, 0);
-	}
+	}*/
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
@@ -278,19 +283,21 @@ void CNav_mesh_manager::checkDistaceToEnemies(){
 			TCompRecastAABB* aux_recast_aabb = (TCompRecastAABB*)recastAABBs[i];
 			int ind = aux_recast_aabb->getIndex();
 			AABB aabb_struct = *((TCompAABB*)aux_recast_aabb->m_aabb);
-			CHandle p_transform = ((CEntity*)player)->get<TCompTransform>();
-			TCompTransform* player_transform = (TCompTransform*)p_transform;
-			float distance = aabb_struct.sqrDistance(player_transform->position);
-			if (distance < max_distance_act_enemies*max_distance_act_enemies) {
-				if (!aux_recast_aabb->getActive()){
-					aimanager::get().recastAABBActivate(ind);
-					aux_recast_aabb->setActive(true);
+			if (player.isValid()){
+				CHandle p_transform = ((CEntity*)player)->get<TCompTransform>();
+				TCompTransform* player_transform = (TCompTransform*)p_transform;
+				float distance = aabb_struct.sqrDistance(player_transform->position);
+				if (distance < max_distance_act_enemies*max_distance_act_enemies) {
+					if (!aux_recast_aabb->getActive()){
+						aimanager::get().recastAABBActivate(ind);
+						aux_recast_aabb->setActive(true);
+					}
 				}
-			}
-			else{
-				if (aux_recast_aabb->getActive()){
-					aimanager::get().recastAABBDesactivate(ind);
-					aux_recast_aabb->setActive(false);
+				else{
+					if (aux_recast_aabb->getActive()){
+						aimanager::get().recastAABBDesactivate(ind);
+						aux_recast_aabb->setActive(false);
+					}
 				}
 			}
 		}
