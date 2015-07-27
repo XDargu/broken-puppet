@@ -56,7 +56,7 @@ CIOStatus::CIOStatus( ) {
 
 	buttons[SPACEBAR].key = VK_SPACE;
 
-	buttons[CLUE_BUTTON].key = 'Q';
+	buttons[CLUE_BUTTON].key = 'Ñ';
 
 	mouse.dx = 0;
 	mouse.dy = 0;
