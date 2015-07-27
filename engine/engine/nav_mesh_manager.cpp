@@ -21,9 +21,9 @@ bool CNav_mesh_manager::build_nav_mesh(){
 	navMeshQuery = nullptr;
 	builded = false;
 	first = true;
+	player = CEntityManager::get().getByName("Player");
 	if (need_navmesh){
 		keep_updating_navmesh = true;
-		player = CEntityManager::get().getByName("Player");
 	}
 	return true;
 }
