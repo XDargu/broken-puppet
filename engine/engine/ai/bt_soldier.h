@@ -201,6 +201,7 @@ public:
 	int getIndRecastAABB();
 
 	void resetBot();
+	void stopMovement();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 

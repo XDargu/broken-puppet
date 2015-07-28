@@ -9,14 +9,13 @@
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 1.8f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
 const float max_distance_to_attack = 1.f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
-const float delta_time_close_attack = 6.f;
+const float delta_time_close_attack = 3.3f;
 const float distance_change_way_point = 0.55f;
 const float force_large_impact = 500.f;
 const float force_medium_impact = 100.f;
@@ -103,10 +102,6 @@ void bt_soldier::create(string s)
 	tied_event = false;
 	event_detected = false;
 	tied_succesfull = false;
-	needle_to_take = false;
-	can_reach_needle = false;
-	is_needle_tied = false;
-	needle_is_valid = false;
 	too_close_attack = false;
 	is_angry = false;
 	have_to_warcry = false;
@@ -118,7 +113,6 @@ void bt_soldier::create(string s)
 	see_player = false;
 	animation_done = false;
 	active = false;
-	cut = false;
 	attacked = false;
 
 	player_out_navMesh = false;
@@ -127,13 +121,11 @@ void bt_soldier::create(string s)
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	previous_point_search = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	slot_position = XMVectorSet(0.f, 0.f, 0.f, 0.f);
-	m_sensor = ((CEntity*)entity)->get<TCompSensorNeedles>();
 	player_pos_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
-	slot = attacker_slots::NO_SLOT;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.2f;
 
 	resetBot();
 }
@@ -159,7 +151,7 @@ int bt_soldier::actionRagdoll()
 				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
 				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
-				CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+				//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
 				if (this->getRol() == role::ATTACKER)
 					aimanager::get().RemoveEnemyAttacker(this);
 				else
@@ -664,6 +656,8 @@ int bt_soldier::actionNormalAttack()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -691,6 +685,8 @@ int bt_soldier::actionIdleWar()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -928,15 +924,13 @@ int bt_soldier::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (/*(player_touch)||*/((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
 		last_time = timer;
-		//player_touch = false;
 		return true;
 	}
 	else{
 		return false;
 	}
-	//return normal_attack;
 }
 
 //Init on false
@@ -1312,6 +1306,11 @@ void bt_soldier::setIndRecastAABB(int ind){
 
 int bt_soldier::getIndRecastAABB(){
 	return ind_recast_aabb;
+}
+
+void bt_soldier::stopMovement(){
+	mov_direction = PxVec3(0, 0, 0);
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }
 
 void bt_soldier::resetBot(){

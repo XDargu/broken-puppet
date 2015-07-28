@@ -31,28 +31,20 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 
 			//Colision entre actor y player
 			if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("player"))){
-				TCompRagdoll* p_ragdoll=firstActorEntity->get<TCompRagdoll>();
-				TCompPlayerController* p_controller = firstActorEntity->get<TCompPlayerController>();
-				if ((!(p_ragdoll->isRagdollActive()) || (p_controller->fsm_player_legs.getCurrentNode()=="fbp_WakeUp"))){
-					TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
-					PxReal force = getForce(second_rigid->getMass(), pairs, i);
-					float force_float = force;
-					if (force_float > force_threshold)
-						firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
-				}
+				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(second_rigid->getMass(), pairs, i);
+				float force_float = force;
+				if (force_float > force_threshold)
+					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 			} else if((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
 			//Colision entre player y actor
-				TCompRagdoll* p_ragdoll = secondActorEntity->get<TCompRagdoll>();
-				TCompPlayerController* p_controller = firstActorEntity->get<TCompPlayerController>();
-				if ((!(p_ragdoll->isRagdollActive()) || (p_controller->fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
-					TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-					PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
-					PxReal force = getForce(first_rigid->getMass(), pairs, i);
-					float force_float = force;
-					if (force_float > force_threshold)
-						secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
-				}
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(first_rigid->getMass(), pairs, i);
+				float force_float = force;
+				if (force_float > force_threshold)
+					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 			//Colision entre actor y enemigo
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();

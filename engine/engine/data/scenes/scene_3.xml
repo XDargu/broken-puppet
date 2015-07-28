@@ -5,6 +5,42 @@
     <aabb min="-12.6537 -4.84886 -14.3092" max="12.6537 4.16885 14.3092"/>
     <recastAABB/>
   </entity>
+<entity tag = "enemy" prefab="EnemyGrandma">
+<name name="EnemyGrandma_75.0" />
+<transform position="-5.0327 -3.04605 3.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<ragdoll name="abuela#1"/>
+	</entity>
+	<entity tag = "enemy" prefab="EnemyGrandma">
+<name name="EnemyGrandma_76.0" />
+<transform position="3.22448 -3.04605 2.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<ragdoll name="abuela#2"/>
+	</entity>
+	<entity tag = "enemy" prefab="EnemyGrandma">
+<name name="EnemyGrandma_77.0" />
+<transform position="3.22448 -3.04605 13.0235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<ragdoll name="abuela#3"/>
+	</entity>
+<!--<entity tag = "enemy" prefab="EnemySoldier">
+    <name name="EnemySoldier_680.0" />
+    <transform position="-5.0327 -3.04605 3.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="soldier#1"/>
+  </entity>
+  <entity tag = "enemy" prefab="EnemySoldier">
+    <name name="EnemySoldier_681.0" />
+    <transform position="3.22448 -3.04605 2.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="soldier#2"/>
+  </entity>
+  <entity tag = "enemy" prefab="EnemySoldier">
+    <name name="EnemySoldier_682.0" />
+    <transform position="3.22448 -3.04605 13.0235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="soldier#3"/>
+  </entity>
+  <entity tag = "enemy" prefab="EnemySoldier">
+    <name name="EnemySoldier_683.0" />
+    <transform position="3.22448 -3.04605 15.0235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="soldier#4"/>
+  </entity>
+  -->
 	<entity tag = "player" prefab="Player">
 <transform position="-1.49808 -1.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="prota"/>
@@ -748,7 +784,7 @@
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.81794" boxY="0.0889033" boxZ="1.63248"/>
 <staticbody/>
 	</entity>
-<entity tag = "enemy" prefab="EnemyGrandma">
+<!--<entity tag = "enemy" prefab="EnemyGrandma">
 <name name="EnemyGrandma_75.0" />
 <transform position="-5.0327 -3.04605 3.468" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#1"/>
@@ -762,7 +798,7 @@
 <name name="EnemyGrandma_77.0" />
 <transform position="3.22448 -3.04605 13.0235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="abuela#3"/>
-	</entity>
+	</entity>-->
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_techo_techo_b001_78.0" />
 <transform position="-8.00001 3.14722e-006 72.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>

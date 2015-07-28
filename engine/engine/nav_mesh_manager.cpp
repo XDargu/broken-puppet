@@ -64,7 +64,8 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 
 void CNav_mesh_manager::removeCapsule(CHandle cap){
 	auto it = std::find(colCapsules.begin(), colCapsules.end(), cap);
-	colCapsules.erase(it);
+	if (it != colCapsules.end())
+		colCapsules.erase(it);
 }
 
 bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
