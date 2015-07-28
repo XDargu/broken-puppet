@@ -174,6 +174,7 @@ bool CPhysicsParticleSystem::createParticles(PxU32 numParticles){
 	// is smaller than numNewAppParticles, the maxParticles limit was exceeded
 	//PxU32 numAllocated = indexPool->allocateIndices(maxParticles, PxStrideIterator<PxU32>(myIndexBuffer));
 
+	indexPool = nullptr;
 	maxParticles = numParticles;
 	bool success = false;
 	ps = CPhysicsManager::get().gPhysicsSDK->createParticleSystem(maxParticles);
@@ -226,7 +227,10 @@ void CPhysicsParticleSystem::releaseParticles(int numParticlesReleased, PxU32 in
 }
 
 void CPhysicsParticleSystem::releaseAllParticles(){
-	//indexPool->release();
+	numParticlesStored = 0;
+	myIndexBuffer.clear();
+	myParticlesForces.clear();
+	indexPool->release();
 	ps->releaseParticles();
 }
 

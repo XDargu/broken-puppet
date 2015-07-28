@@ -29,7 +29,6 @@ using namespace DirectX;
 #include "skeletons/ik_handler.h"
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
-#include "audio\sound_manager.h"
 #include "particles\importer_particle_groups.h"
 
 #include <PxPhysicsAPI.h>

@@ -26,12 +26,11 @@ public:
 	void recastAABBActivate(int ind);
 	void recastAABBDesactivate(int ind);
 	void clear();
+	void init();
 private:
 	unsigned int last_id;
 	std::vector<aicontroller*> attackers_rol;
-	std::vector<aicontroller*> taunters_rol;
-	CHandle player;
-};
+	std::vector<aicontroller*> taunters_rol;};
 
 #endif
 

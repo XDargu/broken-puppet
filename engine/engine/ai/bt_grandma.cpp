@@ -1098,8 +1098,7 @@ int bt_grandma::conditionneedle_to_take()
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);
 	if (currentNumNeedlesViewed > 0){
 		needle_to_take = true;
-	}
-	else{
+	}else{
 		needle_to_take = false;
 	}
 

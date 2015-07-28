@@ -279,3 +279,7 @@ void aimanager::clear(){
 	bots.clear();
 	last_id = 0;
 }
+
+void aimanager::init(){
+
+}
