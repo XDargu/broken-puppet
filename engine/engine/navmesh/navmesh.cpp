@@ -39,7 +39,7 @@ void CNavmesh::build() {
 	//----------------------------------
 
 	config.walkableHeight = 2;
-	config.walkableRadius = 1;
+	config.walkableRadius = 2;
 	config.walkableClimb = 1;
 	config.walkableSlopeAngle = 45.0f;
 	config.minRegionArea = 1;

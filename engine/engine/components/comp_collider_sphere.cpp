@@ -3,6 +3,8 @@
 #include "comp_recast_aabb.h"
 #include "nav_mesh_manager.h"
 
+const float border = 0.3f;
+
 void TCompColliderSphere::setShape(float radius, float static_friction, float dynamic_friction, float restitution) {
 		collider = Physics.gPhysicsSDK->createShape(
 			physx::PxSphereGeometry(
@@ -100,14 +102,14 @@ void TCompColliderSphere::addInputNavMesh(){
 		int n_triangles = 24;
 
 		const float vertex[24] = {
-			min.x, min.y, min.z
-			, max.x, min.y, min.z
-			, min.x, max.y, min.z
-			, max.x, max.y, min.z
-			, min.x, min.y, max.z
-			, max.x, min.y, max.z
-			, min.x, max.y, max.z
-			, max.x, max.y, max.z
+			min.x + border, min.y, min.z + border
+			, max.x + border, min.y, min.z + border
+			, min.x + border, max.y, min.z + border
+			, max.x + border, max.y, min.z + border
+			, min.x + border, min.y, max.z + border
+			, max.x + border, min.y, max.z + border
+			, min.x + border, max.y, max.z + border
+			, max.x + border, max.y, max.z + border
 		};
 
 		float* m_v = new float[n_vertex * 3];
@@ -122,6 +124,11 @@ void TCompColliderSphere::addInputNavMesh(){
 		memcpy(t_v, indices, n_triangles * sizeof(int));
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+
+		m_v = nullptr;
+		delete m_v;
+		t_v = nullptr;
+		delete t_v;
 		//------------------------------------------------------------------------------------------------------------------------
 	}else{
 		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();

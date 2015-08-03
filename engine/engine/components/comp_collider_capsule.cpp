@@ -156,6 +156,11 @@ void TCompColliderCapsule::addInputNavMesh(){
 		memcpy(t_v, indices, n_triangles * sizeof(int));
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+
+		m_v = nullptr;
+		delete m_v;
+		t_v = nullptr;
+		delete t_v;
 		//------------------------------------------------------------------------------------------------------------------------
 	}
 	else{

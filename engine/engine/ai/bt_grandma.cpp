@@ -345,39 +345,46 @@ int bt_grandma::actionChaseNeedlePosition()
 {
 	if (needle_is_valid){
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
-		if (on_enter){
+		if (target_needle.isValid()){
+			TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
-			TCompCharacterController* m_char_controller = character_controller;
+			if (on_enter){
 
-			m_char_controller->moveSpeedMultiplier = run_speed;
-			m_char_controller->airSpeed = run_speed * 0.8f;
+				TCompCharacterController* m_char_controller = character_controller;
 
-			playAnimationIfNotPlaying(14);
+				m_char_controller->moveSpeedMultiplier = run_speed;
+				m_char_controller->airSpeed = run_speed * 0.8f;
 
-			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, n_transform->position, path);
-			if (path.size() > 0){
-				if (V3DISTANCE((path[path.size() - 1]), n_transform->position)<max_dist_reach_needle){
-					ind_path = 0;
-					return STAY;
-				}
-				else{
-					return LEAVE;
+				playAnimationIfNotPlaying(14);
+
+				CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, n_transform->position, path);
+				if (path.size() > 0){
+					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
+						ind_path = 0;
+						return STAY;
+					}
+					else{
+						return LEAVE;
+					}
 				}
 			}
-		}
-		else{
-			if (path.size() > 0){
-				if (ind_path < path.size()){
-					if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
-						chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-						if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
-							ind_path++;
-							return STAY;
+			else{
+				if (path.size() > 0){
+					if (ind_path < path.size()){
+						if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
+							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
+							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
+								ind_path++;
+								return STAY;
+							}
+							else{
+								return STAY;
+							}
 						}
 						else{
-							return STAY;
+							//last_look_direction = look_direction;
+							return LEAVE;
 						}
 					}
 					else{
@@ -390,16 +397,15 @@ int bt_grandma::actionChaseNeedlePosition()
 					return LEAVE;
 				}
 			}
-			else{
-				//last_look_direction = look_direction;
-				return LEAVE;
-			}
 		}
-	}
-	else{
-		//last_look_direction = look_direction;
+		else{
+			//last_look_direction = look_direction;
+			return LEAVE;
+		}
 		return LEAVE;
 	}
+	needle_to_take = false;
+	needle_is_valid = false;
 	return LEAVE;
 }
 
