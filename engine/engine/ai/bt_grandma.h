@@ -230,6 +230,7 @@ public:
 
 	void resetBot();
 	void stopMovement();
+	void BeAngry();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };

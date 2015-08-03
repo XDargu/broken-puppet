@@ -607,8 +607,9 @@ int bt_grandma::actionPlayerAlert()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = Physics.XMVECTORToPxVec3(dir);
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 
 	if (state_time > getAnimationDuration(17)) {
 		//Call the iaManager method for warning the rest of the grandmas
@@ -962,13 +963,13 @@ int bt_grandma::actionNeedleAppearsEvent()
 {
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
-		if (current != NULL){
+		//if (current != NULL){
 			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
 				setCurrent(NULL);
 				lastNumNeedlesViewed = currentNumNeedlesViewed;
 				return LEAVE;
 			}
-		}
+		//}
 	}
 	else{
 		return LEAVE;
@@ -1376,9 +1377,6 @@ void bt_grandma::tiedSensor(){
 
 void bt_grandma::hurtSensor(float damage){
 
-	if (!is_angry)
-		have_to_warcry = true;
-	is_angry = true;
 	if (damage >= force_large_impact){
 		TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 		life->life = 0;
@@ -1391,9 +1389,18 @@ void bt_grandma::hurtSensor(float damage){
 		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
+		BeAngry();
 	}
 	else if (damage < force_medium_impact){
 		hurt_event = true;
+		BeAngry();
+	}
+}
+
+void bt_grandma::BeAngry(){
+	if (!is_angry){
+		have_to_warcry = true;
+		is_angry = true;
 	}
 }
 
