@@ -244,6 +244,7 @@ int bt_grandma::actionWakeUp()
 
 	}
 
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -280,6 +281,7 @@ int bt_grandma::actionCutOwn()
 			return LEAVE;
 		}else{
 			// Ninja animation
+			stopMovement();
 			m_ragdoll->setActive(false);
 			tied_event = false;
 			event_detected = false;
@@ -425,6 +427,7 @@ int bt_grandma::actionCutRope()
 
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
+	stopMovement();
 
 	float duration_cut = getAnimationDuration(8);
 
@@ -471,6 +474,7 @@ int bt_grandma::actionTakeNeedle()
 
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
+	stopMovement();
 
 	if (state_time >= getAnimationDuration(7)) {
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
@@ -498,7 +502,7 @@ int bt_grandma::actionIdle()
 	if (on_enter) {
 		playAnimationIfNotPlaying(0);
 	}
-
+	stopMovement();
 	if (state_time >= 2){
 		return LEAVE;
 
@@ -584,6 +588,7 @@ int bt_grandma::actionWarcry()
 
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
+	stopMovement();
 
 
 	if (state_time >= getAnimationDuration(18) + 1) {
@@ -635,6 +640,7 @@ int bt_grandma::actionSearchArroundLastPoint()
 
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
+	stopMovement();
 
 	return LEAVE;
 
@@ -684,7 +690,7 @@ int bt_grandma::actionLookAround()
 			}
 		}
 		else{
-			//last_look_direction = look_direction;
+			last_look_direction = look_direction;
 			return LEAVE;
 		}
 	}
@@ -791,6 +797,7 @@ int bt_grandma::actionInitialAttack()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -803,9 +810,10 @@ int bt_grandma::actionInitialAttack()
 		}
 		attacked = true;
 		return LEAVE;
-	}
-	else
+	}else{
+		attacked = false;
 		return STAY;
+	}
 }
 
 //Move step by step to the roll position (leave on reach or lost)
@@ -926,6 +934,7 @@ int bt_grandma::actionTaunter()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -945,6 +954,7 @@ int bt_grandma::actionHurtEvent()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -982,6 +992,7 @@ int bt_grandma::actionTiedEvent()
 
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
+	stopMovement();
 
 	if (on_enter) {
 
@@ -1660,6 +1671,7 @@ void bt_grandma::stopMovement(){
 void bt_grandma::resetBot(){
 	setCurrent(NULL);
 	playAnimationIfNotPlaying(10);
-	mov_direction = PxVec3(0, 0, 0);
-	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
+	stopMovement();
+	//mov_direction = PxVec3(0, 0, 0);
+	//((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }

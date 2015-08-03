@@ -213,7 +213,7 @@ int bt_soldier::actionWakeUp()
 		m_skeleton->playAnimation(16);
 
 	}
-
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -252,7 +252,7 @@ int bt_soldier::actionTooCloseAttack()
 			playAnimationIfNotPlaying(3);
 
 	}
-
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -271,7 +271,7 @@ int bt_soldier::actionTooCloseAttack()
 int bt_soldier::actionIdle()
 {
 	//TCompSkeleton* skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
-
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -300,6 +300,7 @@ int bt_soldier::actionSearchPoint()
 		rand_point = XMVectorSet(XMVectorGetX(center), XMVectorGetY(((TCompTransform*)own_transform)->position), XMVectorGetZ(center), 0);
 	}
 	previous_point_search = rand_point;
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -362,7 +363,7 @@ int bt_soldier::actionWarcry()
 	if (on_enter) {
 		playAnimationIfNotPlaying(18);
 	}
-
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -388,8 +389,9 @@ int bt_soldier::actionPlayerAlert()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = Physics.XMVECTORToPxVec3(dir);
+	mov_direction = PxVec3(0, 0, 0);
+	look_direction = Physics.XMVECTORToPxVec3(dir);
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 
 	if (state_time > getAnimationDuration(17)) {
 		//Call the iaManager method for warning the rest of the grandmas
@@ -413,7 +415,7 @@ int bt_soldier::actionCalmDown()
 int bt_soldier::actionSearchArroundLastPoint()
 {
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(last_point_player_saw, radius, ((TCompTransform*)own_transform)->position);
-
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -571,6 +573,7 @@ int bt_soldier::actionInitialAttack()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -583,9 +586,10 @@ int bt_soldier::actionInitialAttack()
 		}
 		attacked = true;
 		return LEAVE;
-	}
-	else
+	}else{
+		attacked = false;
 		return STAY;
+	}
 }
 
 //Move step by step to the roll position (leave on reach or lost)
@@ -670,9 +674,10 @@ int bt_soldier::actionNormalAttack()
 		}
 		attacked = true;
 		return LEAVE;
-	}
-	else
+	}else{
+		attacked = false;
 		return STAY;
+	}
 }
 
 //Play a Idle war animation
@@ -707,6 +712,7 @@ int bt_soldier::actionTaunter()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -726,6 +732,7 @@ int bt_soldier::actionHurtEvent()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
@@ -741,7 +748,7 @@ int bt_soldier::actionHurtEvent()
 
 int bt_soldier::actionTiedEvent()
 {
-
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
@@ -1316,6 +1323,7 @@ void bt_soldier::stopMovement(){
 void bt_soldier::resetBot(){
 	setCurrent(NULL);
 	playAnimationIfNotPlaying(10);
-	mov_direction = PxVec3(0, 0, 0);
-	((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
+	stopMovement();
+	//mov_direction = PxVec3(0, 0, 0);
+	//((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }
