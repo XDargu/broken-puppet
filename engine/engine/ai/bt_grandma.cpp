@@ -152,7 +152,7 @@ void bt_grandma::create(string s)
 	rol = role::UNASIGNATED;
 	lastNumNeedlesViewed = 0;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.2f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.223f;
 
 	resetBot();
 }
@@ -353,7 +353,7 @@ int bt_grandma::actionChaseNeedlePosition()
 
 				TCompCharacterController* m_char_controller = character_controller;
 
-				m_char_controller->moveSpeedMultiplier = run_speed;
+				m_char_controller->moveSpeedMultiplier = run_speed+0.3f;
 				m_char_controller->airSpeed = run_speed * 0.8f;
 
 				playAnimationIfNotPlaying(14);
@@ -746,6 +746,14 @@ int bt_grandma::actionChaseRoleDistance()
 	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
 	if (on_enter) {
 		if (path.size() > 0){
+
+			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+			if (distance>2.f){
+				player_out_navMesh = true;
+				playAnimationIfNotPlaying(0);
+				return LEAVE;
+			}
+
 			playAnimationIfNotPlaying(15);
 
 			TCompCharacterController* m_char_controller = character_controller;
@@ -764,6 +772,7 @@ int bt_grandma::actionChaseRoleDistance()
 	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
 
+	//Go to situate
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if (distance < 4.f) {
 		return LEAVE;
@@ -833,6 +842,13 @@ int bt_grandma::actionSituate()
 	if (on_enter) {
 		if (path.size() > 0){
 			TCompCharacterController* m_char_controller = character_controller;
+
+			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+			if (distance>2.f){
+				player_out_navMesh = true;
+				playAnimationIfNotPlaying(0);
+				return LEAVE;
+			}
 
 			m_char_controller->moveSpeedMultiplier = run_angry_speed;
 			m_char_controller->airSpeed = run_angry_speed * 0.8f;
