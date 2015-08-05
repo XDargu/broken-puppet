@@ -20,6 +20,8 @@ public:
 	void clearStrings();
 	static CRope_manager& get();
 
+	int getRopeCount() { return strings.size(); }
+
 	std::deque<CHandle> getStrings() { return strings; }
 };
 #endif

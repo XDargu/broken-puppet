@@ -676,19 +676,19 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Simple cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 		float time_prueba = io.getTimePressed(CIOStatus::CANCEL_STRING);
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f ){ //&& num_strings > 0) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			/*CHandle c_rope = strings.back();
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
-			skeleton->playAnimation(31);
+			skeleton->playAnimation(31);			
 		}
 	}
 
 	// Multiple cancel
 	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
 			skeleton->playAnimation(31);
@@ -710,12 +710,11 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		CLogicManager::get().stringsTensed();
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
+		skeleton->playAnimation(32);
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 		{
 			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			
 			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-
-			skeleton->playAnimation(32);
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
