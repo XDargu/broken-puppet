@@ -169,6 +169,7 @@ void createManagers() {
 	getObjManager<TCompColliderBox>()->init(1024);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
+	getObjManager<TCompColliderMultiple>()->init(512);
 	getObjManager<TCompRigidBody>()->init(2048);
 	getObjManager<TCompStaticBody>()->init(4096);
 	getObjManager<TCompAABB>()->init(4096);
@@ -251,6 +252,7 @@ void initManagers() {
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompColliderMesh>()->initHandlers();
 	getObjManager<TCompColliderConvex>()->initHandlers();
+	getObjManager<TCompColliderMultiple>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -363,13 +365,13 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
-
+	loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
 	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");

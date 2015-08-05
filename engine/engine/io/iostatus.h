@@ -63,6 +63,7 @@ public:
 		, SPACEBAR
 		, Q
 		, E
+		, R
 		, CLUE_BUTTON
 		, BUTTONS_COUNT
 		

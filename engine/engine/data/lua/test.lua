@@ -64,7 +64,7 @@ function onSceneLoad_scene_1_noenemy()
 end
 
 function onSceneLoad_scene_1()
-logicManager:loadScene("data/scenes/test_dificultad.xml");
+--logicManager:loadScene("data/scenes/test_dificultad.xml");
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 

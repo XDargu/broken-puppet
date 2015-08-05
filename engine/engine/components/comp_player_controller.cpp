@@ -7,6 +7,7 @@
 #include "comp_character_controller.h"
 #include "comp_skeleton.h"
 #include "../audio/sound_manager.h"
+#include "io\iostatus.h"
 
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompLife>(this);
@@ -75,6 +76,11 @@ void TCompPlayerController::update(float elapsed) {
 	time_since_last_hit += elapsed;
 
 	fsm_player_torso.update(elapsed);	
+
+	CIOStatus& io = CIOStatus::get();
+	if (io.becomesReleased(CIOStatus::R)) {
+		fsm_player_legs.ChangeState("fbp_Ragdoll");
+	}
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
 	/*dbg((

@@ -529,6 +529,9 @@
     <ClInclude Include="ai\lua_quaternion.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_collider_multiple.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -981,6 +984,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_occlusion_plane.cpp">
       <Filter>components\render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_collider_multiple.cpp">
+      <Filter>components\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

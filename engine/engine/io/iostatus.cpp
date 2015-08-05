@@ -25,6 +25,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[DIGITAL_DOWN].key = 'S';
 	buttons[Q].key = 'Q';
 	buttons[E].key = 'E';
+	buttons[R].key = 'R';
 
 	buttons[THROW_STRING].key = VK_LBUTTON;
 	buttons[TENSE_STRING].key = VK_RBUTTON;

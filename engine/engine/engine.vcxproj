@@ -192,6 +192,7 @@
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
+    <ClInclude Include="components\comp_collider_multiple.h" />
     <ClInclude Include="components\comp_joint_fixed.h" />
     <ClInclude Include="components\comp_occlusion_plane.h" />
     <ClInclude Include="components\comp_recast_aabb.h" />
@@ -380,6 +381,7 @@
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
+    <ClCompile Include="components\comp_collider_multiple.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
     <ClCompile Include="components\comp_occlusion_plane.cpp" />
     <ClCompile Include="components\comp_recast_aabb.cpp" />
