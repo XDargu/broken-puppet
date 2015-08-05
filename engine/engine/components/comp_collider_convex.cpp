@@ -76,6 +76,11 @@ void TCompColliderConvex::addInputNavMesh(){
 				memcpy(t_v, c_m->index_int, n_triangles * sizeof(int));
 
 				CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.MODULE);
+
+				m_v = nullptr;
+				delete m_v;
+				t_v = nullptr;
+				delete t_v;
 			}
 		}
 	}

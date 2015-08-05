@@ -29,7 +29,6 @@ using namespace DirectX;
 #include "skeletons/ik_handler.h"
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
-#include "audio\sound_manager.h"
 #include "particles\importer_particle_groups.h"
 
 #include <PxPhysicsAPI.h>
@@ -432,6 +431,8 @@ bool CApp::create() {
 
 	logic_manager.addRigidAnimation(anim);	*/
 
+	//Runs the ai thread
+	CNav_mesh_manager::get().nav_mesh_init();
 
 	return true;
 }

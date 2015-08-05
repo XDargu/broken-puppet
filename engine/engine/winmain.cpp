@@ -35,7 +35,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 	CApp &app = CApp::get();
 	app.loadConfig();
 
-	HANDLE myhandle;
+	//HANDLE myhandle;
 
 	// Initialize global strings
 	MyRegisterClass(hInstance);

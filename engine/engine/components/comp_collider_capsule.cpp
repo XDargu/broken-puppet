@@ -84,7 +84,9 @@ void TCompColliderCapsule::init() {
 				TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
 				AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
 				//if (recast_aabb.intersects(m_aabb)) {
-				if (((CEntity*)this)->tag != "enemy"){
+				CHandle owner_handle = CHandle(this).getOwner();
+				CEntity* owner_entity = (CEntity*)owner_handle;
+				if (strcmp(owner_entity->tag,"enemy")!=0 ){
 					addInputNavMesh();
 					CNav_mesh_manager::get().colCapsules.push_back(this);
 				}
@@ -154,6 +156,11 @@ void TCompColliderCapsule::addInputNavMesh(){
 		memcpy(t_v, indices, n_triangles * sizeof(int));
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+
+		m_v = nullptr;
+		delete m_v;
+		t_v = nullptr;
+		delete t_v;
 		//------------------------------------------------------------------------------------------------------------------------
 	}
 	else{
