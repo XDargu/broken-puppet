@@ -71,10 +71,33 @@ aicontroller* aimanager::getClosest(XMVECTOR pos){
 	return closest_bot;
 }
 
+aicontroller* aimanager::getClosestGrandma(XMVECTOR pos){
+	fsm_basic_enemy* initialization = new fsm_basic_enemy;
+	aicontroller* closest_bot = initialization;
+	bool first = false;
+	float closest_distance = 0.f;
+	for (auto & element : grandmas) {
+		CEntity* needle_entity = (CEntity*)element->GetEntity();
+		TCompTransform* e_transform = needle_entity->get<TCompTransform>();
+		float aux_distance = V3DISTANCE(e_transform->position, pos);
+		if ((aux_distance < closest_distance) || (first == false)){
+			closest_distance = aux_distance;
+			closest_bot = element;
+			first = true;
+		}
+	}
+	return closest_bot;
+}
+
 void aimanager::addBot(aicontroller* bot){
 	bot->setId(last_id);
 	bots.push_back(bot);
 	last_id++;
+}
+
+void aimanager::addGrandma(aicontroller* grandma){
+	grandma->setId(last_id);
+	grandmas.push_back(grandma);
 }
 
 void aimanager::removeBot(unsigned int id){
@@ -85,6 +108,23 @@ void aimanager::removeBot(unsigned int id){
 		if (*iter == bot_to_remove)
 		{
 			iter = bots.erase(iter);
+			return;
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
+void aimanager::removeGrandma(unsigned int id){
+	aicontroller* bot_to_remove = getAI(id);
+	std::vector<aicontroller*>::iterator iter = grandmas.begin();
+	while (iter != grandmas.end())
+	{
+		if (*iter == bot_to_remove)
+		{
+			iter = grandmas.erase(iter);
 			return;
 		}
 		else
@@ -277,9 +317,6 @@ void aimanager::clear(){
 	attackers_rol.push_back(nullptr);
 	taunters_rol.clear();
 	bots.clear();
+	grandmas.clear();
 	last_id = 0;
-}
-
-void aimanager::init(){
-
 }

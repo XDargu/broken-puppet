@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "item_manager.h"
+#include "ai\aimanager.h"
 #include "components\all_components.h"
 
 static Citem_manager the_item_manager;
@@ -41,6 +42,84 @@ void Citem_manager::removeNeedle(CHandle n){
 			++i;
 		}
 	}
+}
+
+bool Citem_manager::getTargetNeedle(float radius, float max_dist_reach_needle){
+	bool needle_asignated = false;
+	for (int i = 0; i < needles.size(); i++){
+		if (!needles[i].grandma_asociated.isValid()){
+			CEntity* owner = needles[i].needleRef.getOwner();
+			TCompTransform* needle_trans = ((CEntity*)owner)->get<TCompTransform>();
+			aicontroller* grandma_ref = aimanager::get().getClosestGrandma(needle_trans->position);
+			CHandle grandma_needle = grandma_ref->GetEntity();
+			if (grandma_needle.isValid()){
+				TCompTransform* grandma_trans=((CEntity*)grandma_needle)->get<TCompTransform>();
+				TCompSensorNeedles* grandma_sensor = ((CEntity*)grandma_needle)->get<TCompSensorNeedles>();
+				needle_rope needle_rope_ref = grandma_sensor->getAsociatedNeedle();
+				float distance_new = V3DISTANCE(grandma_trans->position, needle_trans->position);
+				if (distance_new <= radius){
+					std::vector<XMVECTOR> path;
+					CNav_mesh_manager::get().findPath(grandma_trans->position, needle_trans->position, path);
+					if (path.size() > 0){
+						XMVECTOR last_point = path[path.size() - 1];
+						if (V3DISTANCE(last_point, needle_trans->position) <= max_dist_reach_needle){
+							if (!needle_rope_ref.needleRef.isValid()){
+								needles[i].grandma_asociated = grandma_needle;
+								grandma_sensor->setAsociatedNeedle(needles[i], i);
+								needle_asignated = true;
+							}else{
+								TCompTransform* old_needle_trans = ((CEntity*)needle_rope_ref.needleRef.getOwner())->get<TCompTransform>();
+								float distance_old = V3DISTANCE(grandma_trans->position, old_needle_trans->position);
+								if ((!needle_rope_ref.rope_asociated.isValid()) && (needles[i].rope_asociated.isValid())){
+									int old_ind=grandma_sensor->getIndAsociatedNeedle();
+									if (old_ind!=-1)
+										needles[old_ind].grandma_asociated = CHandle();
+									needles[i].grandma_asociated = grandma_needle;
+									grandma_sensor->setAsociatedNeedle(needles[i], i);
+									needle_asignated = true;
+								}else{
+									if (needle_rope_ref.rope_asociated.isValid()){
+										if (needles[i].rope_asociated.isValid()){
+											if (distance_new < distance_old){
+												int old_ind = grandma_sensor->getIndAsociatedNeedle();
+												if (old_ind != -1)
+													needles[old_ind].grandma_asociated = CHandle();
+												needles[i].grandma_asociated = grandma_needle;
+												grandma_sensor->setAsociatedNeedle(needles[i], i);
+												needle_asignated = true;
+											}else{
+												needle_asignated = false;
+											}
+										}else{
+											needle_asignated = false;
+										}
+									}else{
+										if (!needles[i].rope_asociated.isValid()){
+											if (distance_new < distance_old){
+												int old_ind = grandma_sensor->getIndAsociatedNeedle();
+												if (old_ind != -1)
+													needles[old_ind].grandma_asociated = CHandle();
+												needles[i].grandma_asociated = grandma_needle;
+												grandma_sensor->setAsociatedNeedle(needles[i], i);
+												needle_asignated = true;
+											}else{
+												needle_asignated = false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}else{
+				needle_asignated = true;
+			}
+		}else{
+			needle_asignated=true;
+		}
+	}
+	return needle_asignated;
 }
 
 bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma, float max_dist_reach_needle){

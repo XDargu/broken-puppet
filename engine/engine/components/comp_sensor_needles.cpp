@@ -9,6 +9,10 @@ void TCompSensorNeedles::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 
 void TCompSensorNeedles::init() {
 	numNeedlesInRange = 0;
+	asociatedNeedle.grandma_asociated = CHandle();
+	asociatedNeedle.needleRef = NULL;
+	asociatedNeedle.rope_asociated = NULL;
+	ind_needle_asociated = -1;
 }
 
 //void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
@@ -44,6 +48,12 @@ void TCompSensorNeedles::init() {
 	needlesInRangeVector = dequeAux;*/	
 
 //}
+
+bool TCompSensorNeedles::asociateGrandmaTargetNeedle(float max_dist_reach_needle){
+	bool success = Citem_manager::get().getTargetNeedle(radius, max_dist_reach_needle);
+
+	return success;
+}
 
 bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle){
 
@@ -92,4 +102,22 @@ CHandle TCompSensorNeedles::getRopeAsociatedSensor(CHandle grandma){
 
 void TCompSensorNeedles::removeNeedleRope(CHandle needleToTake){
 	Citem_manager::get().removeNeedle(needleToTake);
+}
+
+void TCompSensorNeedles::setAsociatedNeedle(needle_rope needle_ref, int ind){
+	asociatedNeedle = needle_ref;
+	ind_needle_asociated = ind;
+}
+
+needle_rope TCompSensorNeedles::getAsociatedNeedle(){
+	return asociatedNeedle;
+}
+
+int TCompSensorNeedles::getIndAsociatedNeedle(){
+	if (asociatedNeedle.needleRef.isValid()){
+		return ind_needle_asociated;
+	}
+	else{
+		return -1;
+	}
 }

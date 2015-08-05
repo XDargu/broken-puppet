@@ -195,6 +195,7 @@ int bt_grandma::actionRagdoll()
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
 			aimanager::get().removeBot(this->getId());
+			aimanager::get().removeGrandma(this->getId());
 
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 
@@ -412,7 +413,8 @@ int bt_grandma::actionChaseNeedlePosition()
 //Select the priority needle
 int bt_grandma::actionSelectNeedleToTake()
 {
-	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle));
+	//bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle));
+	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(max_dist_reach_needle));
 	if (sucess)
 		needle_is_valid = true;
 	return LEAVE;
@@ -1267,17 +1269,20 @@ int bt_grandma::conditioncan_reach_needle()
 	//XASSERT(needle_objective->needleRef.isValid(), "Invalid needle");
 	if (needle_is_valid){
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-		XASSERT(target_needle.isValid(), "Invalid owner");
-		TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
+		if (target_needle.isValid()){
+			TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
-		wander_target = e_transform->position;
+			wander_target = e_transform->position;
 
-		float distance_prueba = V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position);
+			float distance_prueba = V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position);
 
-		if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_reach_needle){
-			return true;
-		}
-		else{
+			if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_reach_needle){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}else{
 			return false;
 		}
 	}
