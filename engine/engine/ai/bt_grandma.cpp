@@ -373,7 +373,8 @@ int bt_grandma::actionChaseNeedlePosition()
 			else{
 				if (path.size() > 0){
 					if (ind_path < path.size()){
-						if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
+						float distance = V3DISTANCE((path[path.size() - 1]), n_transform->position);
+						if (distance <= max_dist_reach_needle){
 							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 								ind_path++;
@@ -414,8 +415,7 @@ int bt_grandma::actionChaseNeedlePosition()
 int bt_grandma::actionSelectNeedleToTake()
 {
 	//bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle));
-	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(max_dist_reach_needle));
-	if (sucess)
+	//if (sucess)
 		needle_is_valid = true;
 	return LEAVE;
 

@@ -10,9 +10,8 @@ void TCompSensorNeedles::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 void TCompSensorNeedles::init() {
 	numNeedlesInRange = 0;
 	asociatedNeedle.grandma_asociated = CHandle();
-	asociatedNeedle.needleRef = NULL;
-	asociatedNeedle.rope_asociated = NULL;
-	ind_needle_asociated = -1;
+	asociatedNeedle.needleRef = CHandle();
+	asociatedNeedle.rope_asociated = CHandle();
 }
 
 //void TCompSensorNeedles::needleInRange(XMVECTOR pos, float radius){
@@ -49,18 +48,19 @@ void TCompSensorNeedles::init() {
 
 //}
 
-bool TCompSensorNeedles::asociateGrandmaTargetNeedle(float max_dist_reach_needle){
+/*bool TCompSensorNeedles::asociateGrandmaTargetNeedle(float max_dist_reach_needle){
 	bool success = Citem_manager::get().getTargetNeedle(radius, max_dist_reach_needle);
 
 	return success;
-}
+}*/
 
-bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle){
+//bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle){
 
-	TCompTransform* m_transform = transform;
-	bool success = Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef, max_dist_reach_needle);
+	//TCompTransform* m_transform = transform;
+	//bool success = Citem_manager::get().asociateTargetNeedle(m_transform->position, radius, gradmaRef, max_dist_reach_needle);
+	//bool success = Citem_manager::get().getTargetNeedle(gradmaRef, radius, max_dist_reach_needle);
 
-	return success;
+	//return success;
 
 	/*int min_distance = 100.f;
 	needle_rope* priority = nullptr;
@@ -84,7 +84,7 @@ bool TCompSensorNeedles::asociateGrandmaTargetNeedle(CHandle gradmaRef, float ma
 	}else{
 		return nearest;
 	}*/
-}
+//}
 
 int TCompSensorNeedles::getNumNeedles(CHandle grandmaRef, float max_dist_reach_needle){
 	TCompTransform* m_transform = transform;
@@ -104,20 +104,10 @@ void TCompSensorNeedles::removeNeedleRope(CHandle needleToTake){
 	Citem_manager::get().removeNeedle(needleToTake);
 }
 
-void TCompSensorNeedles::setAsociatedNeedle(needle_rope needle_ref, int ind){
+void TCompSensorNeedles::setAsociatedNeedle(needle_rope needle_ref){
 	asociatedNeedle = needle_ref;
-	ind_needle_asociated = ind;
 }
 
 needle_rope TCompSensorNeedles::getAsociatedNeedle(){
 	return asociatedNeedle;
-}
-
-int TCompSensorNeedles::getIndAsociatedNeedle(){
-	if (asociatedNeedle.needleRef.isValid()){
-		return ind_needle_asociated;
-	}
-	else{
-		return -1;
-	}
 }

@@ -12,6 +12,7 @@ public:
 	~aimanager();
 
 	aicontroller* getAI(unsigned int id);
+	aicontroller* getGrandma(unsigned int id);
 	void getAI(XMVECTOR pos, float radius, std::vector<aicontroller*>& botsInRange);
 	aicontroller *getClosest(XMVECTOR pos);
 	aicontroller *getClosestGrandma(XMVECTOR pos);

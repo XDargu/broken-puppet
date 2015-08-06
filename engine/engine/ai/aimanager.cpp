@@ -39,6 +39,20 @@ aicontroller* aimanager::getAI(unsigned int id){
 	return nullptr;
 }
 
+aicontroller* aimanager::getGrandma(unsigned int id){
+	for (auto & element : grandmas) {
+		if (((aicontroller*)element)->getId() == id)
+			return element;
+		// TODO: ARREGLAR ESTO
+		/*if (element->getInt() == id)
+		return element;*/
+	}
+	//Meter un xassert
+	CErrorContext ec("Getting bot", "aimanager");
+	XASSERT(id, "bot doesn't exists");
+	return nullptr;
+}
+
 //Para evitar el retorno de un vector de punteros de aicontrollers pasamos la referencia del vector 
 //donde queremos que se almacenen los bots que esten en el rango dado. El metodo se encargara
 //simplemente de rellenarlo.
@@ -72,19 +86,22 @@ aicontroller* aimanager::getClosest(XMVECTOR pos){
 }
 
 aicontroller* aimanager::getClosestGrandma(XMVECTOR pos){
-	fsm_basic_enemy* initialization = new fsm_basic_enemy;
-	aicontroller* closest_bot = initialization;
+	//fsm_basic_enemy* initialization = new fsm_basic_enemy;
+	aicontroller* closest_bot=nullptr;
 	bool first = false;
 	float closest_distance = 0.f;
 	for (auto & element : grandmas) {
-		CEntity* needle_entity = (CEntity*)element->GetEntity();
-		TCompTransform* e_transform = needle_entity->get<TCompTransform>();
-		float aux_distance = V3DISTANCE(e_transform->position, pos);
-		if ((aux_distance < closest_distance) || (first == false)){
-			closest_distance = aux_distance;
-			closest_bot = element;
-			first = true;
-		}
+		CHandle grandma_entity=element->GetEntity();
+		if (grandma_entity.isValid()){
+			CEntity* needle_entity = (CEntity*)grandma_entity;
+			TCompTransform* e_transform = needle_entity->get<TCompTransform>();
+			float aux_distance = V3DISTANCE(e_transform->position, pos);
+			if ((aux_distance < closest_distance) || (first == false)){
+				closest_distance = aux_distance;
+				closest_bot = element;
+				first = true;
+			}
+		}	
 	}
 	return closest_bot;
 }
@@ -118,7 +135,7 @@ void aimanager::removeBot(unsigned int id){
 }
 
 void aimanager::removeGrandma(unsigned int id){
-	aicontroller* bot_to_remove = getAI(id);
+	aicontroller* bot_to_remove = getGrandma(id);
 	std::vector<aicontroller*>::iterator iter = grandmas.begin();
 	while (iter != grandmas.end())
 	{
