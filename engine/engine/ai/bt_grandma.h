@@ -56,8 +56,6 @@ private:
 	bool player_previously_lost;
 	bool player_cant_reach;
 
-	float sensor_delay;
-
 	bool null_node;
 	bool player_out_navMesh;
 

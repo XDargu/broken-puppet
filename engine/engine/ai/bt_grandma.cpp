@@ -994,7 +994,7 @@ int bt_grandma::actionHurtEvent()
 //
 int bt_grandma::actionNeedleAppearsEvent()
 {
-	//currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
+	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
 		if (current != NULL){
 			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
