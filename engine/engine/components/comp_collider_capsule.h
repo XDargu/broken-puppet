@@ -9,8 +9,12 @@ struct TCompColliderCapsule : public CCollider, TBaseComponent {
 private:
 	XMVECTOR t_current;
 	XMVECTOR t_previous;
+	//float* m_v;
+	//int*   t_v;
 public:
-	TCompColliderCapsule() : CCollider() {}
+	TCompColliderCapsule() : CCollider() { /*m_v = nullptr, t_v = nullptr;*/ }
+
+	//~TCompColliderCapsule();
 
 	void setShape(float radius, float half_height, float static_friction, float dynamic_friction, float restitution);
 

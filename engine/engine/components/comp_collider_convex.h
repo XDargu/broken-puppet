@@ -12,10 +12,17 @@
 #include "comp_aabb.h"
 
 struct TCompColliderConvex : public CCollider, TBaseComponent {
+private:
+	//float* m_v;
+	//int*   t_v;
 public:
 	char path[64];
-	TCompColliderConvex() : CCollider() { }
-	TCompColliderConvex(physx::PxShape* the_convex_collider) { collider = the_convex_collider; strcpy(path, "unknown"); }
+
+	TCompColliderConvex() : CCollider() { /*m_v = nullptr, t_v = nullptr;*/ }
+
+	TCompColliderConvex(physx::PxShape* the_convex_collider) { collider = the_convex_collider; strcpy(path, "unknown"); /*m_v = nullptr, t_v = nullptr;*/ }
+	
+	//~TCompColliderConvex();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

@@ -122,11 +122,8 @@ void TCompColliderSphere::addInputNavMesh(){
 		memcpy(t_v, indices, n_triangles * sizeof(int));
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
-
 		m_v = nullptr;
-		delete m_v;
 		t_v = nullptr;
-		delete t_v;
 		//------------------------------------------------------------------------------------------------------------------------
 	}else{
 		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
@@ -184,3 +181,11 @@ bool TCompColliderSphere::getIfUpdated(){
 	}
 	return false;
 }
+
+/*TCompColliderSphere::~TCompColliderSphere(){
+	if (t_v)
+		delete[] t_v;
+
+	if (m_v)
+		delete[] m_v;
+}*/
