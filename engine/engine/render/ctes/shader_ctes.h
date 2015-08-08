@@ -19,7 +19,7 @@ cbuffer TCtesCamera SHADER_REGISTER(b1)
 	float4 cameraWorldFront;
 	float4 cameraWorldUp;
 	float4 cameraWorldLeft;
-	float  cameraZNear, cameraZFar, cameraViewD, cameraDummy1;
+	float  cameraZNear, cameraZFar, cameraViewD, cameraCinematicBands;
 	float  cameraHalfXRes, cameraHalfYRes, cameraXRes, cameraYRes;
 };
 

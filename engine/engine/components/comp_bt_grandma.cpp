@@ -24,6 +24,7 @@ TCompBtGrandma::TCompBtGrandma(bt_grandma* ai_controller) {
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
 	aimanager::get().addBot(m_ai_controller);
+	aimanager::get().addGrandma(m_ai_controller);
 }
 
 
@@ -44,6 +45,7 @@ void TCompBtGrandma::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_ai_controller = new bt_grandma;
 	m_ai_controller->SetEntity(CHandle(this).getOwner());
 	aimanager::get().addBot(m_ai_controller);
+	aimanager::get().addGrandma(m_ai_controller);
 }
 
 void TCompBtGrandma::init(){

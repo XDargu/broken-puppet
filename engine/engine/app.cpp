@@ -509,7 +509,15 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}
 
+	if (CIOStatus::get().isPressed(CIOStatus::NUM9)){
+		band_heigth = lerp(band_heigth, 0.1f, 0.05f);
+	}
+	else
+	{
+		band_heigth = lerp(band_heigth, 0, 0.05f);
+	}
 
+	setCinematicBands(band_heigth);
 
 	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/anim_test.xml");
@@ -1304,6 +1312,7 @@ void CApp::loadScene(std::string scene_name) {
 	renderWireframe = false;
 	renderWireframeCurrent = false;
 	debug_map = 0;
+	band_heigth = 0;
 
 	//physics_manager.init();
 	logic_manager.init();

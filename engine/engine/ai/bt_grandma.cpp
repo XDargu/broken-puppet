@@ -152,7 +152,7 @@ void bt_grandma::create(string s)
 	rol = role::UNASIGNATED;
 	lastNumNeedlesViewed = 0;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.2f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.223f;
 
 	resetBot();
 }
@@ -195,6 +195,7 @@ int bt_grandma::actionRagdoll()
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
 			aimanager::get().removeBot(this->getId());
+			aimanager::get().removeGrandma(this->getId());
 
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 
@@ -353,7 +354,7 @@ int bt_grandma::actionChaseNeedlePosition()
 
 				TCompCharacterController* m_char_controller = character_controller;
 
-				m_char_controller->moveSpeedMultiplier = run_speed;
+				m_char_controller->moveSpeedMultiplier = run_speed+0.3f;
 				m_char_controller->airSpeed = run_speed * 0.8f;
 
 				playAnimationIfNotPlaying(14);
@@ -372,7 +373,8 @@ int bt_grandma::actionChaseNeedlePosition()
 			else{
 				if (path.size() > 0){
 					if (ind_path < path.size()){
-						if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
+						float distance = V3DISTANCE((path[path.size() - 1]), n_transform->position);
+						if (distance <= max_dist_reach_needle){
 							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 								ind_path++;
@@ -412,8 +414,8 @@ int bt_grandma::actionChaseNeedlePosition()
 //Select the priority needle
 int bt_grandma::actionSelectNeedleToTake()
 {
-	bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle));
-	if (sucess)
+	//bool sucess = (((TCompSensorNeedles*)m_sensor)->asociateGrandmaTargetNeedle(entity, max_dist_reach_needle));
+	//if (sucess)
 		needle_is_valid = true;
 	return LEAVE;
 
@@ -746,6 +748,14 @@ int bt_grandma::actionChaseRoleDistance()
 	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
 	if (on_enter) {
 		if (path.size() > 0){
+
+			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+			if (distance>2.f){
+				player_out_navMesh = true;
+				playAnimationIfNotPlaying(0);
+				return LEAVE;
+			}
+
 			playAnimationIfNotPlaying(15);
 
 			TCompCharacterController* m_char_controller = character_controller;
@@ -764,6 +774,7 @@ int bt_grandma::actionChaseRoleDistance()
 	if (findPlayer())
 		wander_target = p_transform->position;// last_point_player_saw;
 
+	//Go to situate
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if (distance < 4.f) {
 		return LEAVE;
@@ -833,6 +844,13 @@ int bt_grandma::actionSituate()
 	if (on_enter) {
 		if (path.size() > 0){
 			TCompCharacterController* m_char_controller = character_controller;
+
+			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+			if (distance>2.f){
+				player_out_navMesh = true;
+				playAnimationIfNotPlaying(0);
+				return LEAVE;
+			}
 
 			m_char_controller->moveSpeedMultiplier = run_angry_speed;
 			m_char_controller->airSpeed = run_angry_speed * 0.8f;
@@ -1251,17 +1269,20 @@ int bt_grandma::conditioncan_reach_needle()
 	//XASSERT(needle_objective->needleRef.isValid(), "Invalid needle");
 	if (needle_is_valid){
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-		XASSERT(target_needle.isValid(), "Invalid owner");
-		TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
+		if (target_needle.isValid()){
+			TCompTransform* e_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
-		wander_target = e_transform->position;
+			wander_target = e_transform->position;
 
-		float distance_prueba = V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position);
+			float distance_prueba = V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position);
 
-		if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_reach_needle){
-			return true;
-		}
-		else{
+			if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_reach_needle){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}else{
 			return false;
 		}
 	}

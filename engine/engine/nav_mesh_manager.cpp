@@ -195,6 +195,7 @@ void CNav_mesh_manager::findPath(XMVECTOR pst_src, XMVECTOR pst_dst, std::vector
 					XMVECTOR point = XMVectorSet(navMeshQuery.straightPath[i * 3], navMeshQuery.straightPath[i * 3 + 1] + 0.10f, navMeshQuery.straightPath[i * 3 + 2], 1);
 					straightPath.push_back(point);
 				}
+				delete[] aux_array;
 			}
 		}
 	}

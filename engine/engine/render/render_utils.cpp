@@ -456,6 +456,11 @@ void activateTint(int slot) {
 	ctes_object.activateInPS(slot);
 }
 
+void setCinematicBands(float band) {
+	ctes_camera.get()->cameraCinematicBands = band;
+	ctes_camera.uploadToGPU();
+}
+
 void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
@@ -468,7 +473,6 @@ void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.get()->cameraWorldUp = camera.getUp();
 	ctes_camera.get()->cameraZFar = camera.getZFar();
 	ctes_camera.get()->cameraZNear = camera.getZNear();
-	ctes_camera.get()->cameraDummy1 = 0.f;
 	
 	D3D11_VIEWPORT vp = camera.getViewport();
 	ctes_camera.get()->cameraHalfXRes = vp.Width / 2.f;

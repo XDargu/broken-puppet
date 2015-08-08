@@ -3,8 +3,6 @@
 #include "comp_recast_aabb.h"
 #include "nav_mesh_manager.h"
 
-const float border = 0.3f;
-
 void TCompColliderBox::setShape(float boxX, float boxY, float boxZ, float static_friction, float dynamic_friction, float restitution) {
 		collider = Physics.gPhysicsSDK->createShape(
 			physx::PxBoxGeometry(
@@ -105,14 +103,14 @@ void TCompColliderBox::addInputNavMesh(){
 		int n_triangles = 24;
 
 		const float vertex[24] = {
-			min.x + border, min.y, min.z + border
-			, max.x + border, min.y, min.z + border
-			, min.x + border, max.y, min.z + border
-			, max.x + border, max.y, min.z + border
-			, min.x + border, min.y, max.z + border
-			, max.x + border, min.y, max.z + border
-			, min.x + border, max.y, max.z + border
-			, max.x + border, max.y, max.z + border
+			min.x, min.y, min.z
+			, max.x, min.y, min.z
+			, min.x, max.y, min.z
+			, max.x, max.y, min.z
+			, min.x, min.y, max.z
+			, max.x, min.y, max.z
+			, min.x, max.y, max.z
+			, max.x, max.y, max.z
 		};
 
 		float* m_v = new float[n_vertex * 3];

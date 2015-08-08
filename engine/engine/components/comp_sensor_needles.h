@@ -18,15 +18,19 @@ private:
 	CHandle		transform;
 	unsigned int numNeedlesInRange;
 	float radius;
+	needle_rope asociatedNeedle;
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	//void getNeedlesInRange();
 	//void needleInRange(XMVECTOR pos, float radius);
-	bool asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle);
+	//bool asociateGrandmaTargetNeedle(float max_dist_reach_needle);
+	//bool asociateGrandmaTargetNeedle(CHandle gradmaRef, float max_dist_reach_needle);
 	CHandle getNeedleAsociatedSensor(CHandle grandma);
 	CHandle getRopeAsociatedSensor(CHandle grandma);
 	int getNumNeedles(CHandle grandmaRef, float max_dist_reach_needle);
 	void removeNeedleRope(CHandle grandmaRef);
+	void setAsociatedNeedle(needle_rope needle_ref);
+	needle_rope getAsociatedNeedle();
 };
 #endif

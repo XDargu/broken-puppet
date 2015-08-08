@@ -6,16 +6,21 @@ class aimanager
 {
 public:
 	std::vector<aicontroller*> bots;
+	std::vector<aicontroller*> grandmas;
 
 	aimanager();
 	~aimanager();
 
 	aicontroller* getAI(unsigned int id);
+	aicontroller* getGrandma(unsigned int id);
 	void getAI(XMVECTOR pos, float radius, std::vector<aicontroller*>& botsInRange);
 	aicontroller *getClosest(XMVECTOR pos);
+	aicontroller *getClosestGrandma(XMVECTOR pos);
 	static aimanager& get();
 	void addBot(aicontroller* bot);
+	void addGrandma(aicontroller* grandma);
 	void removeBot(unsigned int id);
+	void removeGrandma(unsigned int id);
 	void warningToClose(aicontroller* me, float warning_distance, CHandle player_transform);
 	void warningPlayerFound(aicontroller* me);
 	void setEnemyRol(aicontroller* enemy);
@@ -26,7 +31,6 @@ public:
 	void recastAABBActivate(int ind);
 	void recastAABBDesactivate(int ind);
 	void clear();
-	void init();
 private:
 	unsigned int last_id;
 	std::vector<aicontroller*> attackers_rol;
