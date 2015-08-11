@@ -131,6 +131,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	}
 
 	// ---------------------------------------------------------------
+	
+	TCompTransform* tmx = nullptr;
+	TCompRender* render = nullptr;
 
 	while (it != keys.end()) {
 		if (!it->material->isDoubleSided() && double_sided) {
@@ -140,7 +143,8 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
-		TCompTransform* tmx = it->transform;
+		tmx = it->transform;
+		render = it->owner;
 		XASSERT(tmx, "Invalid transform");
 
 		if (!it->aabb.isValid()) {
@@ -193,7 +197,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				}
 				
 				// Activar shader y material de it
-				it->material->activateTextures();
+				it->material->activateTextures(render->emissive_on);
 			}
 
 			if (it->mesh != prev_it->mesh || is_first) {

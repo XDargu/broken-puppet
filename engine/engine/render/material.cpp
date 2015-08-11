@@ -65,13 +65,15 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 	}
 }
 
-void CMaterial::activateTextures() const {
+void CMaterial::activateTextures(bool emissive_on) const {
 	// textures ... activate
 	diffuse->activate(0);
 	if (normal)
 		normal->activate(1);      // as per t1 in the deferred.fx
-	if (emissive)
+	if (emissive && emissive_on)
 		emissive->activate(7);
+	if (emissive_off && !emissive_on)
+		emissive_off->activate(7);
 	if (specular)
 		specular->activate(4);
 	if (glossiness)

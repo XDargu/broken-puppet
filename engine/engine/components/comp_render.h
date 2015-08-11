@@ -15,12 +15,13 @@ struct TCompRender : TBaseComponent {
 	const CMesh*		mesh;
 	unsigned			submesh_id;
 	const CMaterial*	mat;
+	bool emissive_on;
 
 	XMVECTOR color;
 
 	std::vector< RKey > keys;
 
-	TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr) { }
+	TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr), emissive_on(true){}
 	~TCompRender();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
