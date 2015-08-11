@@ -52,6 +52,9 @@ clearlistener()
 
 	-- List of shapes exported
 	expShapesNames = #()
+	
+	-- List of convex meshes exported
+	expConvexNames = #()
 
 	-- List of diffuses exported
 	expDiff = #()
@@ -574,6 +577,7 @@ clearlistener()
 		local diff_name = importTexture m.diffusemap.filename
 		local normal_name = ""
 		local emissive_name = ""
+		local emissive_off_name = ""
 		local specular_name = ""
 		local gloss_name = ""
 		
@@ -583,6 +587,10 @@ clearlistener()
 		
 		if (m.selfIllumMap != undefined) then (
 			emissive_name = importTexture m.selfIllumMap.filename
+		)
+		
+		if (m.filterMap != undefined) then (
+			emissive_off_name = importTexture m.filterMap.filename
 		)
 		
 		if (m.specularMap != undefined) then (
@@ -598,7 +606,7 @@ clearlistener()
 		local out_filename = out_path + "materials\\" + m.name + ".xml"
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
-		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" glossiness=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name specular_name gloss_name emissive_name to:mfs
+		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" glossiness=\"%\" emissive=\"%\" emissive_off=\"%\" />\n" m.name diff_name normal_name specular_name gloss_name emissive_name emissive_off_name to:mfs
 		print ("Exported material: " + (m.name as string))
 		close mfs
 	)
@@ -867,7 +875,7 @@ clearlistener()
 			
 			-- Position
 			local face_pos = getFace obj face_id
-			local face_mapA = meshop.getMapFace obj channelA face_id
+			--local face_mapA = meshop.getMapFace obj channelA face_id
 			local face_normals = meshop.getFaceRNormals obj face_id
 			
 			--format "face_pos[%] = %\n" face_id face_pos
@@ -876,7 +884,8 @@ clearlistener()
 			local vid
 			for vid in #(1,3,2) do (
 				local wpos = meshop.getVert obj face_pos[ vid ]
-				local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+				--local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+				local uvA = [0, 0]
 				local wn = face_normals[ vid ]
 				
 				local mpos = wpos * _world2mcv 
@@ -1297,6 +1306,33 @@ clearlistener()
 			)
 			mString = "<colliderMesh path=\"" + obj.name + "\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
 		)
+		
+		-- CONVEX SHAPE
+		if (obj.modifiers[#PhysX_Rigid_Body].meshType == 4) then (
+			-- if not in expConvexNames export
+			if (findItem expConvexNames obj.name) == 0 then (
+				
+				-- Get the convex mesh, export it and delete it
+				modRb = obj.modifiers[#PhysX_Rigid_Body]
+				m = modRb.GetRBMeshShape 1
+				convexObj = mesh mesh: m
+				convexObj.name = obj.name
+				exportMeshShape convexObj
+				delete convexObj
+				
+				append expConvexNames obj.name
+			)
+			mString = "<colliderConvex path=\"" + obj.name + "\" staticFriction=\""  \
+															+ obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
+										 + " dynamicFriction=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].DynamicFriction as string + "\"" \
+										 + " restitution=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].Bounciness as string + "\"" \
+										 + " radius=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].meshRadius as string + "\"" \
+				+ "/>\n"
+		)
+		
 		return mString
 	)
 
@@ -1596,64 +1632,75 @@ clearlistener()
 		return mString
 	)	
 	
+	
+fn printJointData myJoint = (
 
-	fn validateJointFixed obj = (
+		print "........................ list............................."
+		print expJoints
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
+		print "........................ bodies............................."
+		print myJoint.body0
+		print myJoint.body1
+		print "........................................................."
 	
-	local varJointReturn = undefined
+	
+)
+	
+fn validateJointFixed obj = (
+	
+	local list = for o in $* where (classof o == UConstraint) collect o
+	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
 		
 		--jointsToExp		
-		local ownerTest = false
 		
 		if ((mJoint.constraintType == 0) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then varJointReturn = mJoint
+			if (undefinedTest) then (
+				printJointData mJoint
+				return mJoint
+				
 			)
-			-- If there are two actor
-			-- It´s the secont time it appears
-			else (					
-				if ((varJointReturn == undefined) and (findItem jointsToExp mName) == 0) then		
-				varJointReturn = mJoint
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				printJointData mJoint
+				return mJoint
+				
 			)
-		)
-	)	
-	-- If didn´t exported it yet
-	if (varJointReturn != undefined) then(
-		append jointsToExp (getIdName varJointReturn)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				printJointData mJoint
+				return mJoint
+				
+			)
+			else (
+				append expJoints obj
+				print "No agrega"
+				printJointData mJoint
+			)		
+		)	
 	)
-	
-	return varJointReturn
+	return undefined
 )
 	
 /**********************************************************************************************
@@ -1664,7 +1711,8 @@ Gets a FixedJoint
   - String with the component information
 ***********************************************************************************************/
 fn getJointFixed obj = (
-	local mJoint = validateJointFixed obj
+	--local mJoint = validateJointFixed obj
+	local mJoint = obj
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointFixed "
@@ -1708,60 +1756,55 @@ fn getJointFixed obj = (
 	return mString
 )
 
-
-		
+	
 fn validateJointD6 obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
+	local list = for o in $* where (classof o == UConstraint) collect o
 	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
 		
+		--jointsToExp		
+		
 		if ((mJoint.constraintType == 6) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
+			if (undefinedTest) then (
 				return mJoint
 			)
-		)
-	)	
-	
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				return mJoint
+			)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				return mJoint
+			)
+			else (
+				append expJoints obj
+			)		
+		)	
+	)
 	return undefined
 )
-
 /**********************************************************************************************
 Gets a Distance Text component
  Params:
@@ -1770,7 +1813,8 @@ Gets a Distance Text component
   - String with the component information
 ***********************************************************************************************/
 fn getJointD6 obj = (
-	local mJoint = validateJointD6 obj
+	--local mJoint = validateJointD6 obj
+	local mJoint = obj
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointD6 "
@@ -1876,56 +1920,51 @@ fn getJointD6 obj = (
 		
 fn validateJointPrismatic obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
+	local list = for o in $* where (classof o == UConstraint) collect o
 	
 	-- check if the obj is an actor in a Uconstraint
-	for mJoint in list do (
+	for mJoint in list do (		
+		--jointsToExp		
 		
 		if ((mJoint.constraintType == 2) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
+			if (undefinedTest) then (
 				return mJoint
 			)
-		)
-	)	
-	
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				return mJoint
+			)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				return mJoint
+			)
+			else (
+				append expJoints obj
+			)		
+		)	
+	)
 	return undefined
 )
-
 /**********************************************************************************************
 Gets a Distance Text component
  Params:
@@ -1934,7 +1973,8 @@ Gets a Distance Text component
   - String with the component information
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
-	local mJoint = validateJointPrismatic obj
+	--local mJoint = validateJointPrismatic obj
+	local mJoint = obj
 	if (mJoint == undefined) then return ""
 		
 	local mObj = max2mcvMatrix mJoint
@@ -2027,55 +2067,52 @@ fn getJointPrismatic obj = (
 )	
 
 		
+	
 fn validateJointHinge obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
-	
+	local list = for o in $* where (classof o == UConstraint) collect o
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
 		
+		--jointsToExp		
+		
 		if ((mJoint.constraintType == 4) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
+			if (undefinedTest) then (
 				return mJoint
 			)
-		)
-	)	
-	
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				return mJoint
+			)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				return mJoint
+			)
+			else (
+				append expJoints obj
+			)		
+		)	
+	)
 	return undefined
 )
 
@@ -2088,7 +2125,9 @@ Gets a Hinge joint component
 ***********************************************************************************************/
 fn getJointHinge obj = (
 		
-	local mJoint = validateJointHinge obj
+	--local mJoint = validateJointHinge obj
+	local mJoint = obj
+	
 	if (mJoint == undefined) then return ""
 		
 	local mObj = max2mcvMatrix mJoint
@@ -2266,7 +2305,7 @@ fn getPlatformPath obj = (
 
 	fn getSoldierRagdoll obj = (
 		soldier_ragdoll_ind = soldier_ragdoll_ind + 1;				
-		return "<ragdoll name=\"soldado#" + soldier_ragdoll_ind as string	 + "\"/>\n"	
+		return "<ragdoll name=\"soldier#" + soldier_ragdoll_ind as string	 + "\"/>\n"	
 	)	
 	
 
@@ -2654,10 +2693,10 @@ fn getPlatformPath obj = (
 		expNames = #()
 		expObjects = #()
 		expShapesNames = #()
+		expConvexNames = #()
 		expDiff = #()
 		expNormal = #()
-		expJoints = #()
-		
+		expJoints = #()		
 		initializePrefabs()
 		
 		/*if (validateScene true == false) then (
@@ -2812,6 +2851,7 @@ fn getPlatformPath obj = (
 		expNames = #()
 		expObjects = #()
 		expShapesNames = #()
+		expConvexNames = #()
 		expDiff = #()
 		expNormal = #()
 		expJoints = #()
@@ -2858,10 +2898,10 @@ fn getPlatformPath obj = (
 			getAmbientLight,
 			getDirectionalLight,
 			getDistanceText,
-			getJointPrismatic,
-			getJointHinge,
-			getJointD6,
-			getJointFixed,
+			--getJointPrismatic,
+			--getJointHinge,
+			--getJointD6,
+			--getJointFixed,
 			getPlatformPath,
 			getTrigger,
 			getRoomAABB,
@@ -2962,6 +3002,50 @@ fn getPlatformPath obj = (
 			)
 		
 		)
+		
+		--Add every joint in scene
+		local list = for o in $* where (classof o == UConstraint) collect o
+		local mJointString = ""
+		for mJoint in list do (
+			
+			mJointString = "\t<entity tag = \"level\" collisionTag = \"Level\">\n"			
+			mJointString += "<name " + "name=\"" + mJoint.name as string + "\" />\n"
+			
+			--Fixed Joint
+			if ((mJoint.constraintType == 0) == true) then 
+			(
+				mJointString += getJointFixed mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- Hinge joint
+			else if ((mJoint.constraintType == 6) == true) then 
+			(
+				mJointString += getJointD6 mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- Prismatic joint
+			else if ((mJoint.constraintType == 2) == true) then 
+			(
+				mJointString += getJointPrismatic mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- D6 joint
+			else if ((mJoint.constraintType == 4) == true) then 
+			(
+				mJointString += getJointHinge mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- InvalidJoint
+			else (
+				print "INVALID TYPE OF JOINT"
+				
+				mJointString = ""
+			)
+			
+			
+			mXML += mJointString
+		)
+		
 		
 		--mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
 		

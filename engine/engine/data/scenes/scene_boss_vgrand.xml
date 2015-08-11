@@ -1,0 +1,634 @@
+<scene>
+	<entity tag = "level" collisionTag = "Level">
+<name name="Floor_1.0" />
+<transform position="-0.241684 1.69393 10.1684" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Floor" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="Floor" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="Floor" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="Floor" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-43.8185 -1.69393 -44.4945" max="43.8185 1.69393 44.4945"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="43.8185" boxY="1.69393" boxZ="44.4945"/>
+<staticbody/>
+	</entity>
+	<entity  >
+<name name="Omni001_2.0" />
+<transform position="-0.952438 26.7033 9.82243" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
+	</entity>
+	<entity tag = "player" prefab="Player">
+<transform position="-29.486 6.43755 -1.59102" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<ragdoll name="prota"/>
+	</entity>
+	<entity  prefab="PlayerPivot">
+<transform position="-29.486 6.43755 -1.59102" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="CameraPivot">
+<transform position="-28.486 8.43755 -2.59102" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+	</entity>
+	<entity  prefab="PlayerCamera">
+<transform position="-21.486 12.4375 -1.59102"/>
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="Pared_8.0" />
+<transform position="-0.293762 4.49342e-007 10.2797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Pared" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="Pared" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="Pared" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="Pared" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-52.1296 0.0 -52.9338" max="52.1296 47.0118 52.9338"/>
+<colliderMesh path="Pared" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="BossBase_9.0" />
+<transform position="0.110719 3.52443 10.1507" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="BossBase" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="BossBase" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="BossBase" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="BossBase" sub_mesh="3" mat="Standardmaterial"/>
+<draw mesh="BossBase" sub_mesh="4" mat="Standardmaterial"/>
+<draw mesh="BossBase" sub_mesh="5" mat="Standardmaterial"/>
+</render>
+<aabb min="-7.5 -1.0 -7.5" max="7.5 1.0 7.5"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="7.5" boxY="1.0" boxZ="7.5"/>
+<staticbody/>
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="BossHead_11.0" />
+<transform position="-5.81127 13.5848 8.70343" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="BossHead" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-1.7 -1.7 -1.7" max="1.7 1.7 1.7"/>
+<colliderMesh path="BossHead" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere001_12.0" />
+<transform position="-7.38404 5.30492 -11.2278" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere001" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere012_13.0" />
+<transform position="20.6116 5.30492 17.7141" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere012" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere013_14.0" />
+<transform position="16.8439 5.30492 21.5992" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere013" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere014_15.0" />
+<transform position="13.0761 5.30492 25.4842" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere014" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere015_16.0" />
+<transform position="9.30834 5.30493 29.3693" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere015" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere016_17.0" />
+<transform position="5.54057 5.30493 33.2543" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere016" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere017_18.0" />
+<transform position="1.77281 5.30493 37.1394" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere017" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere018_19.0" />
+<transform position="-2.39912 5.30493 33.9241" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere018" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere019_20.0" />
+<transform position="-6.57104 5.30493 30.7089" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere019" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere020_21.0" />
+<transform position="-10.743 5.30493 27.4937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere020" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere021_22.0" />
+<transform position="-14.9149 5.30492 24.2785" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere021" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Sphere022_23.0" />
+<transform position="-19.0868 5.30492 21.0632" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Sphere022" sub_mesh="0" mat="Standardmaterial"/>
+</render>
+<aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+<colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+<rigidbody density="133.69"  />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="Ceiling_24.0" />
+<transform position="-0.241684 38.5991 10.1684" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="Ceiling" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="Ceiling" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="Ceiling" sub_mesh="2" mat="Standardmaterial"/>
+<draw mesh="Ceiling" sub_mesh="3" mat="Standardmaterial"/>
+</render>
+<aabb min="-43.8185 -1.69393 -44.4945" max="43.8185 1.69393 44.4945"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="43.8185" boxY="1.69393" boxZ="44.4945"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="armario_01_25.0" />
+<transform position="16.1883 6.29443 8.0825" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="armario_01" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-3.76477 0.0 -1.5" max="3.75 7.63561 1.5"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.17" boxY="2.2049" boxZ="0.866294"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="puerta_armario_01_central_26.0" />
+<transform position="15.3408 8.22732 8.87452" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="puerta_armario_01_central" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-0.0453414 -2.49206 -1.49423" max="2.9869 2.49206 1.49423"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.565737" boxY="1.43924" boxZ="0.668312"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="cajon_armario_01_27.0" />
+<transform position="16.1883 6.29443 8.0825" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="cajon_armario_01" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-1.42628 0.355347 -0.82415" max="1.39674 0.733278 1.46806"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.815187" boxY="0.109133" boxZ="0.661908"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="puerta_armario_01_derecha_28.0" />
+<transform position="14.1289 8.22732 8.74971" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="puerta_armario_01_derecha" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-0.0402343 -2.49206 -0.561541" max="2.14596 2.49206 0.684859"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.596556" boxY="1.43924" boxZ="0.212766"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="puerta_armario_01_izquierda_29.0" />
+<transform position="18.2574 8.22732 8.75105" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="puerta_armario_01_izquierda" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-2.13697 -2.49206 -1.02918" max="0.0450639 2.49206 1.02918"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.366882" boxY="1.43924" boxZ="0.512311"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="armario_01_30.0" />
+<transform position="14.6374 6.29443 18.401" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="armario_01" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-3.76477 0.0 -1.5" max="3.75 7.63561 1.5"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.17" boxY="2.2049" boxZ="0.866294"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="puerta_armario_01_central_31.0" />
+<transform position="13.7898 8.22732 19.193" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="puerta_armario_01_central" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-0.0453414 -2.49206 -1.49423" max="2.9869 2.49206 1.49423"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.565737" boxY="1.43924" boxZ="0.668312"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="cajon_armario_01_32.0" />
+<transform position="14.6374 6.29443 18.401" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="cajon_armario_01" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-1.42628 0.355347 -0.82415" max="1.39674 0.733278 1.46806"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.815187" boxY="0.109133" boxZ="0.661908"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="puerta_armario_01_derecha_33.0" />
+<transform position="12.5779 8.22732 19.0682" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="puerta_armario_01_derecha" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-0.0402343 -2.49206 -0.561541" max="2.14596 2.49206 0.684859"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.596556" boxY="1.43924" boxZ="0.212766"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="puerta_armario_01_izquierda_34.0" />
+<transform position="16.7064 8.22732 19.0695" rotation="0.0 0.0 0.0 1.0" scale="0.577529 0.577529 0.577529"/>
+<render>
+<draw mesh="puerta_armario_01_izquierda" sub_mesh="0" mat="armario"/>
+</render>
+<aabb min="-2.13697 -2.49206 -1.02918" max="0.0450639 2.49206 1.02918"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.366882" boxY="1.43924" boxZ="0.512311"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="biombo_01_35.0" />
+<transform position="-15.3106 6.55963 16.4204" rotation="0.0 0.0 0.0 1.0" scale="1.56115 1.56115 1.56115"/>
+<render>
+<draw mesh="biombo_01" sub_mesh="0" mat="biombo_01"/>
+</render>
+<aabb min="-1.16901 0.0 -0.389837" max="1.0866 2.21473 0.271774"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.76067" boxY="1.72876" boxZ="0.516437"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="banderolas_modificada_36.0" />
+<transform position="-15.0184 8.72379 16.1848" rotation="0.0264544 0.826493 -0.0476677 0.560301" scale="0.375035 0.375035 0.375035"/>
+<render>
+<draw mesh="banderolas_modificada" sub_mesh="0" mat="vigas_01"/>
+<draw mesh="banderolas_modificada" sub_mesh="1" mat="vigas_01"/>
+<draw mesh="banderolas_modificada" sub_mesh="2" mat="vigas_01"/>
+<draw mesh="banderolas_modificada" sub_mesh="3" mat="vigas_01"/>
+<draw mesh="banderolas_modificada" sub_mesh="4" mat="vigas_01"/>
+<draw mesh="banderolas_modificada" sub_mesh="5" mat="vigas_01"/>
+</render>
+<aabb min="-4.68774 -5.82397 -5.38133" max="4.01532 5.54869 5.11612"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.86807" boxY="1.49791" boxZ="1.24935"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="cruceta_01_37.0" />
+<transform position="-15.2884 8.98607 16.5481" rotation="-1.39039e-007 -0.583172 2.1917e-007 0.812349" scale="0.404381 0.404381 0.404381"/>
+<render>
+<draw mesh="cruceta_01" sub_mesh="0" mat="vigas_01"/>
+<draw mesh="cruceta_01" sub_mesh="1" mat="vigas_01"/>
+<draw mesh="cruceta_01" sub_mesh="2" mat="vigas_01"/>
+<draw mesh="cruceta_01" sub_mesh="3" mat="vigas_01"/>
+<draw mesh="cruceta_01" sub_mesh="4" mat="vigas_01"/>
+<draw mesh="cruceta_01" sub_mesh="5" mat="vigas_01"/>
+</render>
+<aabb min="-2.88605 -3.55432 -3.15352" max="2.88605 3.55432 3.15352"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.807161" boxY="0.936082" boxZ="0.771455"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="baul_01_38.0" />
+<transform position="-19.742 6.55963 0.183281" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="baul_01" sub_mesh="0" mat="Material #2280"/>
+</render>
+<aabb min="-0.809 -0.009 -0.577051" max="0.808999 0.7073 0.577049"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.809" boxY="0.35815" boxZ="0.57705"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="baul_01_tapa_39.0" />
+<transform position="-19.742 7.25452 -0.372807" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="baul_01_tapa" sub_mesh="0" mat="Material #2280"/>
+</render>
+<aabb min="-0.8155 0.0147098 -0.00736427" max="0.815499 0.34551 1.09914"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.8155" boxY="0.1654" boxZ="0.55325"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="bobiba_roja_40.0" />
+<transform position="-24.0383 6.55963 9.99086" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="bobiba_roja" sub_mesh="0" mat="Material #227"/>
+<draw mesh="bobiba_roja" sub_mesh="1" mat="Material #227"/>
+<draw mesh="bobiba_roja" sub_mesh="2" mat="Material #227"/>
+</render>
+<aabb min="-0.703627 -0.302499 -0.672984" max="0.703627 0.302498 0.672984"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.703627" boxY="0.302498" boxZ="0.672984"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="caja_organillo_41.0" />
+<transform position="-16.5491 6.55963 6.00143" rotation="0.0 0.0 0.0 1.0" scale="1.49343 1.49343 1.49343"/>
+<render>
+<draw mesh="caja_organillo" sub_mesh="0" mat="caja_organillo"/>
+</render>
+<aabb min="-0.537001 0.0 -0.385448" max="0.536999 0.9259 0.38545"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.801969" boxY="0.691381" boxZ="0.57564"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="caja_vintage_42.0" />
+<transform position="-14.9527 6.55963 25.1209" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>
+</render>
+<aabb min="-1.04616 0.0 -0.602041" max="1.04616 1.10986 0.602041"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.04616" boxY="0.554932" boxZ="0.602041"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="cojin_abuela_43.0" />
+<transform position="-17.6181 6.55963 27.7097" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="cojin_abuela" sub_mesh="0" mat="abuela"/>
+</render>
+<aabb min="-0.317549 0.0 -0.409557" max="0.317549 0.594764 0.409557"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.317549" boxY="0.297382" boxZ="0.409557"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="cuadro_d_44.0" />
+<transform position="-9.12725 6.55963 30.3372" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="cuadro_d" sub_mesh="0" mat="cuadros_01"/>
+<draw mesh="cuadro_d" sub_mesh="1" mat="cuadros_01"/>
+<draw mesh="cuadro_d" sub_mesh="2" mat="cuadros_01"/>
+<draw mesh="cuadro_d" sub_mesh="3" mat="cuadros_01"/>
+<draw mesh="cuadro_d" sub_mesh="4" mat="cuadros_01"/>
+<draw mesh="cuadro_d" sub_mesh="5" mat="cuadros_01"/>
+</render>
+<aabb min="-0.707578 -0.743959 -0.0397661" max="0.707578 0.743958 0.0397661"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.707578" boxY="0.743959" boxZ="0.0397661"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="cuadro_c_45.0" />
+<transform position="-14.2677 6.55963 32.7523" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="cuadro_c" sub_mesh="0" mat="cuadros_01"/>
+<draw mesh="cuadro_c" sub_mesh="1" mat="cuadros_01"/>
+<draw mesh="cuadro_c" sub_mesh="2" mat="cuadros_01"/>
+</render>
+<aabb min="-0.661276 -0.947006 -0.0622325" max="0.661277 0.947006 0.0622325"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.661276" boxY="0.947006" boxZ="0.0622325"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="lampara_mesita_01_46.0" />
+<transform position="-18.4536 6.55963 18.0326" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="lampara_mesita_01" sub_mesh="0" mat="lamparas_mesita"/>
+<draw mesh="lampara_mesita_01" sub_mesh="1" mat="lamparas_mesita"/>
+<draw mesh="lampara_mesita_01" sub_mesh="2" mat="lamparas_mesita"/>
+<draw mesh="lampara_mesita_01" sub_mesh="3" mat="lamparas_mesita"/>
+<draw mesh="lampara_mesita_01" sub_mesh="4" mat="lamparas_mesita"/>
+</render>
+<aabb min="-0.321934 0.0 -0.321934" max="0.321934 1.35631 0.321934"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.321934" boxY="0.678157" boxZ="0.321934"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="Maleta_01_47.0" />
+<transform position="-21.809 6.55963 20.4325" rotation="0.0 0.0 0.0 1.0" scale="3.56138 3.56138 3.56138"/>
+<render>
+<draw mesh="Maleta_01" sub_mesh="0" mat="maleta_01"/>
+<draw mesh="Maleta_01" sub_mesh="1" mat="maleta_01"/>
+<draw mesh="Maleta_01" sub_mesh="2" mat="maleta_01"/>
+<draw mesh="Maleta_01" sub_mesh="3" mat="maleta_01"/>
+<draw mesh="Maleta_01" sub_mesh="4" mat="maleta_01"/>
+</render>
+<aabb min="-0.213889 -0.0631036 -0.144511" max="0.213889 0.122221 0.192666"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.761741" boxY="0.330006" boxZ="0.600408"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="maniqui_48.0" />
+<transform position="-22.9441 6.55963 25.1017" rotation="0.0 0.0 0.0 1.0" scale="0.0236305 0.0236305 0.0236305"/>
+<render>
+<draw mesh="maniqui" sub_mesh="0" mat="maniqui"/>
+<draw mesh="maniqui" sub_mesh="1" mat="maniqui"/>
+</render>
+<aabb min="-18.0902 -1.90735e-006 -14.769" max="18.0902 130.537 14.769"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.427481" boxY="1.54233" boxZ="0.348998"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="mesa_grande_49.0" />
+<transform position="-0.749158 6.55963 30.9278" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="mesa_grande" sub_mesh="0" mat="mesa_grande"/>
+<draw mesh="mesa_grande" sub_mesh="1" mat="mesa_grande"/>
+<draw mesh="mesa_grande" sub_mesh="2" mat="mesa_grande"/>
+</render>
+<aabb min="-2.35796 1.84845e-007 -1.10105" max="2.35797 1.26219 1.10104"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.35796" boxY="0.631094" boxZ="1.10105"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="mesita_02_50.0" />
+<transform position="-24.6605 6.55963 16.123" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="mesita_02" sub_mesh="0" mat="lamparas_mesita"/>
+</render>
+<aabb min="-0.452844 0.0 -0.454351" max="0.452844 1.2523 0.454351"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.452844" boxY="0.626152" boxZ="0.454351"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="papelera_01_51.0" />
+<transform position="-12.2687 6.55963 23.4181" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="papelera_01" sub_mesh="0" mat="papelera_cartel"/>
+</render>
+<aabb min="-0.187739 0.0375282 -0.192329" max="0.187739 0.970196 0.192329"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.187739" boxY="0.466334" boxZ="0.192329"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="piano_maquinaescribir_52.0" />
+<transform position="-4.64454 6.55963 36.9135" rotation="0.0 -0.382683 0.0 0.92388" scale="1.25155 1.25155 1.25155"/>
+<render>
+<draw mesh="piano_maquinaescribir" sub_mesh="0" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="1" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="2" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="3" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="4" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="5" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="6" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="7" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="8" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="9" mat="piano_maquinaescribir"/>
+<draw mesh="piano_maquinaescribir" sub_mesh="10" mat="piano_maquinaescribir"/>
+</render>
+<aabb min="-1.49632 0.00685769 -1.1907" max="1.1907 1.95392 1.45153"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.68147" boxY="1.21842" boxZ="1.65345"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="banco_piano_53.0" />
+<transform position="-2.86538 6.55963 36.94" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="banco_piano" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+</render>
+<aabb min="-0.466369 0.0 -0.654984" max="0.466369 0.786854 0.654984"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.466369" boxY="0.393427" boxZ="0.654984"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="sillon_01_54.0" />
+<transform position="-20.798 6.55963 29.9723" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="sillon_01" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+</render>
+<aabb min="-0.954272 0.0 -0.913161" max="0.954273 2.63802 0.913162"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.954273" boxY="1.31901" boxZ="0.913161"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="reposapies0_55.0" />
+<transform position="-20.7357 6.55963 31.6436" rotation="0.0 0.0 0.0 1.0" scale="0.90198 0.90198 0.90198"/>
+<render>
+<draw mesh="reposapies0" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+</render>
+<aabb min="-0.699343 0.0 -0.568738" max="0.699343 0.840144 0.568738"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.630793" boxY="0.378897" boxZ="0.512991"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="reposapies_56.0" />
+<transform position="-16.6283 6.55963 35.2348" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="reposapies" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+</render>
+<aabb min="-0.699343 0.0 -0.568738" max="0.699343 0.840144 0.568738"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.699343" boxY="0.420072" boxZ="0.568738"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="sillon_01_57.0" />
+<transform position="-25.7456 6.55963 27.4418" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="sillon_01" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+</render>
+<aabb min="-0.954272 0.0 -0.913161" max="0.954273 2.63802 0.913162"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.954273" boxY="1.31901" boxZ="0.913161"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="silla_camerino_58.0" />
+<transform position="-9.10224 6.55963 17.1388" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="silla_camerino" sub_mesh="0" mat="silla_camerino"/>
+<draw mesh="silla_camerino" sub_mesh="1" mat="silla_camerino"/>
+<draw mesh="silla_camerino" sub_mesh="2" mat="silla_camerino"/>
+<draw mesh="silla_camerino" sub_mesh="3" mat="silla_camerino"/>
+<draw mesh="silla_camerino" sub_mesh="4" mat="silla_camerino"/>
+<draw mesh="silla_camerino" sub_mesh="5" mat="silla_camerino"/>
+</render>
+<aabb min="-0.497753 0.0229416 -1.33131" max="1.15581 3.13881 1.02454"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.826779" boxY="1.55793" boxZ="1.17792"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="silla_01_59.0" />
+<transform position="-9.10224 6.55963 17.1388" rotation="0.0 0.0 0.0 1.0" scale="0.953857 0.953857 0.953857"/>
+<render>
+<draw mesh="silla_01" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+<draw mesh="silla_01" sub_mesh="1" mat="silla_sillon_reposapies_taburete"/>
+</render>
+<aabb min="-0.397654 -1.19209e-007 -0.522832" max="0.429801 1.82134 0.44088"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.394637" boxY="0.868649" boxZ="0.459622"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="sofa_01_60.0" />
+<transform position="-27.3937 6.55963 14.8483" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="sofa_01" sub_mesh="0" mat="mesa_sofa"/>
+</render>
+<aabb min="-1.71289 0.0308146 -0.614528" max="1.71289 1.53931 0.614528"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.71289" boxY="0.754247" boxZ="0.614528"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor">
+<name name="tocador_01_61.0" />
+<transform position="-25.5279 6.55963 2.03649" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="tocador_01" sub_mesh="0" mat="tocador_01"/>
+<draw mesh="tocador_01" sub_mesh="1" mat="tocador_01"/>
+<draw mesh="tocador_01" sub_mesh="2" mat="tocador_01"/>
+<draw mesh="tocador_01" sub_mesh="3" mat="tocador_01"/>
+<draw mesh="tocador_01" sub_mesh="4" mat="tocador_01"/>
+</render>
+<aabb min="-1.28228 0.00589331 -0.490506" max="1.28228 2.98384 1.0203"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.28228" boxY="1.48897" boxZ="0.755405"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="BossBody" />
+<transform position="-0.407952 15.5877 10.9626" rotation="-3.02394e-006 -2.98023e-006 1.0 0.0" scale="1.0 1.0 1.0"/>
+<render>
+<draw mesh="BossBody" sub_mesh="0" mat="Standardmaterial"/>
+<draw mesh="BossBody" sub_mesh="1" mat="Standardmaterial"/>
+<draw mesh="BossBody" sub_mesh="2" mat="Standardmaterial"/>
+</render>
+<aabb min="-6.76776 -1.18331e-006 -6.76776" max="6.76776 10.7223 6.76776"/>
+<colliderMesh path="BossBody" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+    <aiBoss/>
+	</entity>
+</scene>

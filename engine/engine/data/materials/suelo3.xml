@@ -1,1 +1,1 @@
-<std_material name="suelo3" diffuse="pared3_diffuse" normal="pared3_normal" specular="" glossiness="" emissive=""/>
+<std_material name="suelo3" diffuse="pared3_diffuse" normal="pared3_normal" specular="" glossiness="" emissive="" emissive_off="" />

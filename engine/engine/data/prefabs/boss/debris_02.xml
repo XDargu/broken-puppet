@@ -1,0 +1,17 @@
+<prefab>
+<entity tag = "actor" collisionTag = "Actor">
+    <name name="silla_camerino_debris" />
+    <transform position="-9.10224 6.55963 17.1388" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="silla_camerino" sub_mesh="0" mat="silla_camerino"/>
+      <draw mesh="silla_camerino" sub_mesh="1" mat="silla_camerino"/>
+      <draw mesh="silla_camerino" sub_mesh="2" mat="silla_camerino"/>
+      <draw mesh="silla_camerino" sub_mesh="3" mat="silla_camerino"/>
+      <draw mesh="silla_camerino" sub_mesh="4" mat="silla_camerino"/>
+      <draw mesh="silla_camerino" sub_mesh="5" mat="silla_camerino"/>
+    </render>
+    <aabb min="-0.497753 0.0229416 -1.33131" max="1.15581 3.13881 1.02454"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.826779" boxY="1.55793" boxZ="1.17792"/>
+    <rigidbody density="500.0"  />
+  </entity>
+</prefab>

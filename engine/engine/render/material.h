@@ -13,6 +13,7 @@ class CMaterial : public CXMLParser {
 	const CTexture*           specular;
 	const CTexture*           glossiness;
 	const CTexture*           emissive;
+	const CTexture*           emissive_off;
 	const CTexture*           cubemap;
 	const CRenderTechnique*   tech;
 	std::string               name;

@@ -56,6 +56,7 @@ public:
 	void Dead(float elapsed);
 	void ReevaluatePriorities();
 	void WakeUp(float elapsed);
+	void WakeUpTeleport(float elapsed);
 
 	void Victory(float elapsed);
 

@@ -1,1 +1,1 @@
-<std_material name="suelo_metal" diffuse="suelo_dvn2_diffuse" normal="suelo_dvn2_normal" specular="suelo_dvn2_specular" glossiness="suelo_dvn2_gloss" emissive=""/>
+<std_material name="suelo_metal" diffuse="suelo_dvn2_diffuse" normal="suelo_dvn2_normal" specular="suelo_dvn2_specular" glossiness="suelo_dvn2_gloss" emissive="" emissive_off="" />

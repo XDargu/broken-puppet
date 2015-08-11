@@ -12,6 +12,7 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		std::string ao_name = atts["ao"];
 		std::string normal_name = atts["normal"];
 		std::string emissive_name = atts["emissive"];
+		std::string emissive_off_name = atts["emissive_off"];
 		std::string cubemap_name = atts["cubemap"];
 		std::string tech_name = atts["tech"];
 		std::string my_name = atts["name"];
@@ -43,6 +44,12 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 			emissive = texture_manager.getByName(emissive_name.c_str());
 		else
 			emissive = texture_manager.getByName("black");
+
+		if (emissive_off_name != "")
+			emissive_off = texture_manager.getByName(emissive_off_name.c_str());
+		else
+			emissive_off = texture_manager.getByName("black");
+
 		if (cubemap_name != "")
 			cubemap = texture_manager.getByName(cubemap_name.c_str());
 		tech = render_techniques_manager.getByName(tech_name.c_str());

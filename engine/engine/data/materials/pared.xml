@@ -1,1 +1,1 @@
-<std_material name="pared" diffuse="pared_diffuse" normal="pared_normal" specular="pared_specular" glossiness="pared_gloss" emissive=""/>
+<std_material name="pared" diffuse="pared_diffuse" normal="pared_normal" specular="pared_specular" glossiness="pared_gloss" emissive="" emissive_off="" />
