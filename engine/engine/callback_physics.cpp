@@ -35,15 +35,15 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(second_rigid->getMass(), pairs, i);
 				float force_float = force;
-				if (force_float >force_threshold)
+				if (force_float > force_threshold)
 					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
 			} else if((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
 			//Colision entre player y actor
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
 				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-     			float force_float = force;
-				if (force_float >force_threshold)
+				float force_float = force;
+				if (force_float > force_threshold)
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
 			}else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 			//Colision entre actor y enemigo

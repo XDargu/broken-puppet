@@ -60,6 +60,7 @@ void drawVPlanes(const VPlanes& planes);
 // Render world
 void setWorldMatrix(XMMATRIX world);
 void activateWorldMatrix(int slot);
+void setCinematicBands(float band);
 void activateCamera(const CCamera& camera, int slot);
 void activateLight(const CCamera& camera, int slot);
 void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int slot);

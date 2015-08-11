@@ -35,7 +35,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 	CApp &app = CApp::get();
 	app.loadConfig();
 
-	HANDLE myhandle;
+	//HANDLE myhandle;
 
 	// Initialize global strings
 	MyRegisterClass(hInstance);
@@ -134,7 +134,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 	   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
 		   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
-		   ShowCursor(FALSE);
+		   ShowCursor(TRUE);
 	   }
    }
 

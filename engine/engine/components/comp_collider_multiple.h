@@ -1,5 +1,5 @@
-#ifndef INC_COMP_COLLIDER_MESH_H
-#define INC_COMP_COLLIDER_MESH_H
+#ifndef INC_COMP_COLLIDER_MULTIPLE_H
+#define INC_COMP_COLLIDER_MULTIPLE_H
 
 #include "base_component.h"
 #include "nav_mesh_manager.h"
@@ -8,11 +8,15 @@
 #include "comp_aabb.h"
 #include "collider.h"
 
-struct TCompColliderMesh : public CCollider, TBaseComponent {
+struct TCompColliderMultiple : public CCollider, TBaseComponent {
+private:
+	PxMaterial* mat;
+	XMVECTOR t_current;
+	XMVECTOR t_previous;
 public:
-	char path[64];
-	TCompColliderMesh() : CCollider() { }
-	TCompColliderMesh(physx::PxShape* the_mesh_collider) { collider = the_mesh_collider; strcpy(path, "unknown"); }
+	std::vector<PxShape*> colliders;
+
+	TCompColliderMultiple() : CCollider() { }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
@@ -23,6 +27,8 @@ public:
 	void setCollisionGroups();
 
 	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
+
+	bool  getIfUpdated();
 };
 
 #endif

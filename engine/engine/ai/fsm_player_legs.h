@@ -8,6 +8,7 @@ class FSMPlayerLegs : public aifsmcontroller
 {
 private:
 	int current_animation_id;	
+	float idle_var_count;
 public:
 
 	physx::PxVec3 movement_dir;

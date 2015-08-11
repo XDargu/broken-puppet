@@ -50,6 +50,7 @@ public:
 	CNavmeshInput nav_mesh_input;
 	void setNeedNavMesh(bool need);
 	bool getNeedNavMesh();
+	void nav_mesh_init();
 	std::vector<CHandle>     colMeshes;
 	std::vector<CHandle>     colCapsules;
 	std::vector<CHandle>   colConvex;

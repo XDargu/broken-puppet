@@ -63,11 +63,14 @@ public:
 		, SPACEBAR
 		, Q
 		, E
+<<<<<<< HEAD
 		, O
-		, R
 		, I
 		, U
 		, L
+=======
+		, R
+>>>>>>> 01e080ffe322b5e4828c913ffbcdd8ef79ff7462
 		, CLUE_BUTTON
 		, BUTTONS_COUNT
 		

@@ -6,7 +6,9 @@
 #include "comp_rigid_body.h"
 #include "comp_character_controller.h"
 #include "comp_skeleton.h"
+#include "comp_ragdoll.h"
 #include "../audio/sound_manager.h"
+#include "io\iostatus.h"
 
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompLife>(this);
@@ -75,6 +77,11 @@ void TCompPlayerController::update(float elapsed) {
 	time_since_last_hit += elapsed;
 
 	fsm_player_torso.update(elapsed);	
+
+	CIOStatus& io = CIOStatus::get();
+	if (io.becomesReleased(CIOStatus::R)) {
+		fsm_player_legs.ChangeState("fbp_Ragdoll");
+	}
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
 	/*dbg((
@@ -162,11 +169,16 @@ void TCompPlayerController::fixedUpdate(float elapsed) {
 //}
 
 void TCompPlayerController::actorHit(const TActorHit& msg) {
-
-	if (time_since_last_hit >= hit_cool_down){
-		dbg("Force recieved is  %f\n", msg.damage);
-		fsm_player_legs.EvaluateHit(msg.damage);
-		time_since_last_hit = 0;
+	CHandle player_handle = CHandle(this).getOwner();
+	CEntity* player_entity = (CEntity*)player_handle;
+	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
+	TCompPlayerController* p_controller = player_entity->get<TCompPlayerController>();
+	if ((!(p_ragdoll->isRagdollActive()) || (p_controller->fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
+		if (time_since_last_hit >= hit_cool_down){
+			dbg("Force recieved is  %f\n", msg.damage);
+			fsm_player_legs.EvaluateHit(msg.damage);
+			time_since_last_hit = 0;
+		}
 	}
 }
 

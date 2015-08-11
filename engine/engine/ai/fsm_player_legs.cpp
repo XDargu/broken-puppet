@@ -57,6 +57,7 @@ void FSMPlayerLegs::Init()
 	falling = false;
 	canThrow = false;
 	dead_counter = 0.f;
+	idle_var_count = 0.f;
 
 	TCompCharacterController* character_controller = comp_character_controller;
 
@@ -99,35 +100,60 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton->loopAnimation(animation);
 	}
 
+	/*if (!torso->up_animation) {
+		idle_var_count += elapsed;
+		if (idle_var_count > 6.f) {
+			skeleton->stopAnimation(8);
+			skeleton->stopAnimation(0);
+			skeleton->loopAnimation(33);
+			idle_var_count = 0.f;
+		}
+	}*/
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
 
 	if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
+		skeleton->stopAnimation(33);
+		skeleton->stopAnimation(34);
+		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_Jump");
 	}
 	if (EvaluateMovement(false, elapsed)){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
+		skeleton->stopAnimation(33);
+		skeleton->stopAnimation(34);
+		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_Walk");
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
+		skeleton->stopAnimation(33);
+		skeleton->stopAnimation(34);
+		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowString");
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
+		skeleton->stopAnimation(33);
+		skeleton->stopAnimation(34);
+		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowStringGolden");
 	}
 	if (falling){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
+		skeleton->stopAnimation(33);
+		skeleton->stopAnimation(34);
+		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_Fall");
 	}
@@ -246,7 +272,7 @@ void FSMPlayerLegs::Run(float elapsed){
 
 	if (movement_dir.z == 0) {
 		if (movement_dir.x < 0) {
-			animation = torso->up_animation ? 25 : 15;
+			animation = torso->up_animation ? 27 : 15;
 		}
 		else if (movement_dir.x > 0) {
 			animation = torso->up_animation ? 26 : 14;
@@ -479,7 +505,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 		ChangeState("fbp_Jump");
 		skeleton->stopAnimation(6);
 	}
-	else if (state_time >= 1.f){
+	else if (state_time >= skeleton->getCancelTime(6)){
 		ChangeState("fbp_WrongFall");
 		skeleton->stopAnimation(6);
 	}

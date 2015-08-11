@@ -628,6 +628,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		CEntityManager::get().remove(c_rope.getOwner());*/
 		CRope_manager::get().removeBackString();
 
+		skeleton->playAnimation(31);
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -664,6 +665,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	CIOStatus& io = CIOStatus::get();
 	CEntityManager &entity_manager = CEntityManager::get();
+	TCompSkeleton* skeleton = comp_skeleton;
 
 	//Calculate the current number of strings
 	//unsigned int num_strings = getStringCount();
@@ -674,20 +676,22 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Simple cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 		float time_prueba = io.getTimePressed(CIOStatus::CANCEL_STRING);
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f ){ //&& num_strings > 0) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			/*CHandle c_rope = strings.back();
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
+			skeleton->playAnimation(31);			
 		}
 	}
 
 	// Multiple cancel
 	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
+			skeleton->playAnimation(31);
 			/*strings.clear();
 			for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 			{
@@ -706,6 +710,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		CLogicManager::get().stringsTensed();
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
+		skeleton->playAnimation(32);
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 		{
 			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			

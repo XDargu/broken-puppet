@@ -80,11 +80,17 @@ void TCompColliderCapsule::init() {
 
 		for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
 			TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
-			TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
-			AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
-			//if (recast_aabb.intersects(m_aabb)) {
-				addInputNavMesh();
-				CNav_mesh_manager::get().colCapsules.push_back(this);
+			if (recast_AABB){
+				TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+				AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+				//if (recast_aabb.intersects(m_aabb)) {
+				CHandle owner_handle = CHandle(this).getOwner();
+				CEntity* owner_entity = (CEntity*)owner_handle;
+				if (strcmp(owner_entity->tag,"enemy")!=0 ){
+					addInputNavMesh();
+					CNav_mesh_manager::get().colCapsules.push_back(this);
+				}
+			}
 			//}
 		}
 	//}
@@ -123,9 +129,9 @@ void TCompColliderCapsule::addInputNavMesh(){
 		float borders = 0.f;
 
 		if (((CEntity*)this)->tag == "player")
-			borders = 0.03f;
+			borders = 0.3f;
 		else if (((CEntity*)this)->tag == "enemy")
-			borders = 0.03f;
+			borders = 0.6f;
 
 		const float vertex[24] = {
 			min.x - borders, min.y, min.z - borders
@@ -150,6 +156,11 @@ void TCompColliderCapsule::addInputNavMesh(){
 		memcpy(t_v, indices, n_triangles * sizeof(int));
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+
+		m_v = nullptr;
+		delete m_v;
+		t_v = nullptr;
+		delete t_v;
 		//------------------------------------------------------------------------------------------------------------------------
 	}
 	else{

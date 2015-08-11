@@ -474,16 +474,69 @@
     <ClInclude Include="particles\particle_system_subtypes.h">
       <Filter>particles</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="rope_manager.h" />
-=======
     <ClInclude Include="particles\importer_particle_groups.h">
       <Filter>particles</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_particle_editor.h">
       <Filter>components\misc</Filter>
     </ClInclude>
->>>>>>> f1058f82f5a998f0e4782ff9469570883f86575a
+    <ClInclude Include="rope_manager.h" />
+    <ClInclude Include="components\comp_anim_editor.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="render\collision_convex.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_convex.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_joint_fixed.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\mcv_object.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ssrr_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_recast_aabb.h">
+      <Filter>components\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_golden_needle_logic.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_golden_needle.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_zone_aabb.h">
+      <Filter>components\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="render\silouette_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_golden_needle_item.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\bt_soldier.h">
+      <Filter>ai\behaviour trees</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_bt_soldier.h">
+      <Filter>components\ai\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_occlusion_plane.h">
+      <Filter>components\render</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\lua_quaternion.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="components\comp_ai_boss.h">
+      <Filter>components\ai\boss</Filter>
+=======
+    <ClInclude Include="components\comp_collider_multiple.h">
+      <Filter>components\physics</Filter>
+>>>>>>> 01e080ffe322b5e4828c913ffbcdd8ef79ff7462
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -885,16 +938,66 @@
     <ClCompile Include="particles\particle_system_subtypes.cpp">
       <Filter>particles</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="rope_manager.cpp" />
-=======
     <ClCompile Include="particles\importer_particle_groups.cpp">
       <Filter>particles</Filter>
     </ClCompile>
     <ClCompile Include="components\comp_particle_editor.cpp">
       <Filter>components\misc</Filter>
     </ClCompile>
->>>>>>> f1058f82f5a998f0e4782ff9469570883f86575a
+    <ClCompile Include="rope_manager.cpp" />
+    <ClCompile Include="components\comp_anim_editor.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="render\collision_convex.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_collider_convex.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_joint_fixed.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\mcv_object.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ssrr_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_recast_aabb.cpp">
+      <Filter>components\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_golden_needle_logic.cpp">
+      <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_golden_needle.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_zone_aabb.cpp">
+      <Filter>components\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="render\silouette_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_golden_needle_item.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\bt_soldier.cpp">
+      <Filter>ai\behaviour trees</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_bt_soldier.cpp">
+      <Filter>components\ai\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_occlusion_plane.cpp">
+      <Filter>components\render</Filter>
+    </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="components\comp_ai_boss.cpp">
+      <Filter>components\ai\boss</Filter>
+=======
+    <ClCompile Include="components\comp_collider_multiple.cpp">
+      <Filter>components\physics</Filter>
+>>>>>>> 01e080ffe322b5e4828c913ffbcdd8ef79ff7462
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -993,6 +1096,12 @@
     <Filter Include="particles">
       <UniqueIdentifier>{b66cdcab-9d81-457d-85e6-0c2377b87c59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{c8ce8d06-87ff-4d58-8520-d4025cd9cd37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai\boss">
+      <UniqueIdentifier>{d1c3d27c-7cf2-4e50-be7b-aae2e1532f77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="render\notes.txt" />
@@ -1003,6 +1112,11 @@
     <Xml Include="collision_table.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.lua" />
+    <None Include="data\lua\test.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="data\lua\scheduler.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
 </Project>

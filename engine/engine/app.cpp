@@ -29,7 +29,6 @@ using namespace DirectX;
 #include "skeletons/ik_handler.h"
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
-#include "audio\sound_manager.h"
 #include "particles\importer_particle_groups.h"
 
 #include <PxPhysicsAPI.h>
@@ -169,6 +168,7 @@ void createManagers() {
 	getObjManager<TCompColliderBox>()->init(1024);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
+	getObjManager<TCompColliderMultiple>()->init(512);
 	getObjManager<TCompRigidBody>()->init(2048);
 	getObjManager<TCompStaticBody>()->init(4096);
 	getObjManager<TCompAABB>()->init(4096);
@@ -253,6 +253,7 @@ void initManagers() {
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompColliderMesh>()->initHandlers();
 	getObjManager<TCompColliderConvex>()->initHandlers();
+	getObjManager<TCompColliderMultiple>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -373,9 +374,9 @@ bool CApp::create() {
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
-
+	loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
@@ -434,6 +435,8 @@ bool CApp::create() {
 
 	logic_manager.addRigidAnimation(anim);	*/
 
+	//Runs the ai thread
+	CNav_mesh_manager::get().nav_mesh_init();
 
 	return true;
 }
@@ -467,9 +470,9 @@ void CApp::doFrame() {
 		// Update input
 		io.update(delta_secs);
 
-		/*if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
 			pause = !pause;
-		}*/
+		}
 
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
@@ -510,7 +513,15 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}
 
+	if (CIOStatus::get().isPressed(CIOStatus::NUM9)){
+		band_heigth = lerp(band_heigth, 0.1f, 0.05f);
+	}
+	else
+	{
+		band_heigth = lerp(band_heigth, 0, 0.05f);
+	}
 
+	setCinematicBands(band_heigth);
 
 	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/anim_test.xml");
@@ -523,7 +534,7 @@ void CApp::update(float elapsed) {
 
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
-	if (io.becomesReleased(CIOStatus::E)) {
+	if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1)
 			time_modifier = 0.05f;
 		else
@@ -903,7 +914,7 @@ void CApp::render() {
 		activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
 		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 		for (int i = 0; i < life_val; ++i) {			
-			drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
+			//drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
 		}
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);
@@ -1308,6 +1319,7 @@ void CApp::loadScene(std::string scene_name) {
 	renderWireframe = false;
 	renderWireframeCurrent = false;
 	debug_map = 0;
+	band_heigth = 0;
 
 	//physics_manager.init();
 	logic_manager.init();
