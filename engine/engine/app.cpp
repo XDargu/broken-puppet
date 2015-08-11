@@ -364,13 +364,13 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
-	loadScene("data/scenes/test_dificultad.xml");
+	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
 	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
@@ -507,17 +507,7 @@ void CApp::update(float elapsed) {
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(0);
-	}
-
-	if (CIOStatus::get().isPressed(CIOStatus::NUM9)){
-		band_heigth = lerp(band_heigth, 0.1f, 0.05f);
-	}
-	else
-	{
-		band_heigth = lerp(band_heigth, 0, 0.05f);
-	}
-
-	setCinematicBands(band_heigth);
+	}	
 
 	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/anim_test.xml");
@@ -1312,7 +1302,6 @@ void CApp::loadScene(std::string scene_name) {
 	renderWireframe = false;
 	renderWireframeCurrent = false;
 	debug_map = 0;
-	band_heigth = 0;
 
 	//physics_manager.init();
 	logic_manager.init();

@@ -37,6 +37,7 @@ clearlistener()
 	NoEvalAttribute = "NOEVAL"
 	ClueZoneAttribute = "mCluePoint"
 	RecastAABBAttribute = "RECASTAABB"
+	NotChangeAttribute = "NotChange"
 	
 	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute, RoomAABBAttribute, ClueZoneAttribute, RecastAABBAttribute)
 	
@@ -77,7 +78,7 @@ clearlistener()
 	
 	WaterMaterial = "distorsion"
 	GlassMaterial = "glass"
-
+	LightShaftMaterial = "light_shaft"
 
 	-- List of special names
 	reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName, LevelName)
@@ -86,13 +87,14 @@ clearlistener()
 	mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
 	
 	-- List of no export materials
-	noExportMaterials = #(WaterMaterial, GlassMaterial)
+	noExportMaterials = #(WaterMaterial, GlassMaterial, LightShaftMaterial)
 
 	-- List of enemys
 	enemyNames = #(BasicEnemyName, grandmaEnemyName, soldierEnemyName)
 
 	-- List of prefabs
 	ex_prefabList = #()
+	changePivotList = #()
 	
 	grandma_ragdoll_ind = 0
 	soldier_ragdoll_ind = 0
@@ -668,7 +670,7 @@ clearlistener()
 	)
 
 	fn exportMesh obj_to_export = (
-		
+		--return false
 		-- Confirm obj is valid
 		if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
 		local obj = obj_to_export
@@ -1046,7 +1048,11 @@ clearlistener()
 	fn getRender obj= (
 		if(validateCompRender obj == false) then 
 		return ""
-		local mString = "<render>\n"
+		local mString = "<render "
+		if (classof obj.material == Standardmaterial) then (
+			mString += " color = \"" + (obj.wirecolor.r / 255.0) as string + " " + (obj.wirecolor.g / 255.0) as string + " " + (obj.wirecolor.b / 255.0) as string + "\""
+		)
+		mString += ">\n"
 		
 		-- Get the position of an array
 		local arrayPos = validateObjExported obj
@@ -2265,7 +2271,10 @@ fn getPlatformPath obj = (
 	
 
 	fn  validateTrigger obj = (
-		return  (isProperty obj.baseObject TriggerAttribute)
+		if (isProperty obj.baseObject TriggerAttribute) then (
+			return obj.TRIGGER
+			)
+		return  false
 	)
 	
 	/**********************************************************************************************
@@ -2276,9 +2285,15 @@ fn getPlatformPath obj = (
 	  - String with the component information
 	***********************************************************************************************/	
 	fn getTrigger obj = (
-			if (validateTrigger obj) then
-				return "<trigger/>\n"		
-		return ""
+		if (validateTrigger obj != true) then return ""
+		
+		local mString = ""
+		local mString = "<trigger " \
+											+ "botOnly=\"" + obj.bot_only as string + "\" " \
+											+ "playerOnly=\"" + obj.player_only as string + "\" " \
+											+ "/>\n"
+		return mString
+		
 	)
 	
 	fn  validateRecastAABB obj = (
@@ -2375,6 +2390,36 @@ fn getPlatformPath obj = (
 	)	
 
 	
+	fn validateOcclusionPlane obj = (
+		if (isProperty obj.baseObject #mOclusionPlane == true) then ( 
+			if obj.mOclusionPlane == true then return true
+		)			
+		return false
+	)
+
+	/**********************************************************************************************
+	Gets a Distance Text component
+	 Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/
+	fn getOcclusionPlane obj = (
+		
+		if((validateOcclusionPlane obj) == false) then
+		return ""
+		
+		local mWidth = obj.width
+		local mHeight = obj.length
+		
+		local mString = "<occlusionPlane " \
+											+ "width=\"" + mWidth as string + "\" " \
+											+ "height=\"" + mHeight as string + "\" " \
+											+ "/>\n"
+		return mString
+	)	
+
+	
 	
 	fn validateAudioSource obj = (
 		if (isProperty obj.baseObject #mAudioActive == true) then ( 
@@ -2417,6 +2462,16 @@ fn getPlatformPath obj = (
 	 Returns:
 	  - String with the component information
 	***********************************************************************************************/
+	fn validateChangePivot obj = (
+	-- If has no notchangepivot att
+		if (isProperty obj.baseObject NotChangeAttribute) then (
+			return obj.NotChange
+		)
+		return false
+	-- If is a box or a sphere 
+		
+	)
+		
 	fn getDistanceText obj = (
 		
 		if((validateDistanceText obj) == false) then
@@ -2761,6 +2816,7 @@ fn getPlatformPath obj = (
 		expNormal = #()
 		expJoints = #()
 		jointsToExp = #()
+		changePivotList = #()
 		
 		grandma_ragdoll_ind = 0
 		soldier_ragdoll_ind = 0
@@ -2814,7 +2870,8 @@ fn getPlatformPath obj = (
 			getClueZone,
 			getRecastAABB,
 			getParticleSystem,
-			getAudioSource
+			getAudioSource,
+			getOcclusionPlane
 		)
 
 		-- Initialize XML
@@ -2824,11 +2881,24 @@ fn getPlatformPath obj = (
 			progress.value = 0
 		count = 1
 		-- Calls every function in the function arrays
+		-- Check erevy entity looking for boxes and spheres
+		
 		for obj in allObject do 
-			(
+		(
+			if (validateChangePivot obj) then append changePivotList obj.name			
+		)
+				
+		for obj in allObject do 
+		(
 			-- Check if needs to be evaluate
 			if(validateEntity obj)then
 			(
+				local mPivot = obj.pivot
+				-- Change pivot if is necesary
+				if ((findItem changePivotList obj.name) != 0) then ( 
+					obj.pivot = obj.center
+				)
+				
 				-- Check if needs to check this after
 				if (validateLogicObj obj == false) then
 				(
@@ -2859,7 +2929,8 @@ fn getPlatformPath obj = (
 					-- add nuevas cosas					 
 					append logicObjs obj
 				)
-
+								
+				obj.pivot = mPivot
 			)
 			
 			if (progress != undefined) then

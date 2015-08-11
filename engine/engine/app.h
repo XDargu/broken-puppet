@@ -24,7 +24,6 @@ public:
 	double load_text_time;
 	double load_skel_time;
 	double load_ragdoll_time;
-	float band_heigth;
 
 	float time_modifier;
 	float water_level;

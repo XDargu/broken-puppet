@@ -16,6 +16,8 @@ struct TCompRender : TBaseComponent {
 	unsigned			submesh_id;
 	const CMaterial*	mat;
 
+	XMVECTOR color;
+
 	std::vector< RKey > keys;
 
 	TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr) { }

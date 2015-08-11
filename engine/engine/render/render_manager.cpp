@@ -43,10 +43,11 @@ void CRenderManager::addKey(const CMesh*      mesh
 	, int  mesh_id
 	, CHandle owner
 	, bool* active
+	, XMVECTOR color
 	) {
 
 	SET_ERROR_CONTEXT("Adding a render key", "")
-	TKey k = { material, mesh, mesh_id, owner };
+		TKey k = { material, mesh, mesh_id, owner };
 
 	// Pasar de comp_render a entity
 	CEntity* e = owner.getOwner();
@@ -63,6 +64,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 
 	k.transform = e->get< TCompTransform >();
 	k.aabb = e->get< TCompAABB >();
+	k.color = color;
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
 	//XASSERT(k.aabb.isValid(), "AABB from entity %s not valid", e->getName());
 
@@ -207,6 +209,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			// Activar la world del obj
 			setTransformType(tmx->getType() / 100.0f);
 			setWorldMatrix(tmx->getWorld());
+			setTint(it->color);
 
 			// Highligh border -- DOESN'T WORK WITH MULTIPLE SUBMESHES
 			/*if (tmx->getType() >= 80 && tmx->getType() <= 90) {
