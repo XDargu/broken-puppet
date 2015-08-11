@@ -52,6 +52,32 @@ function onSceneLoad_test_dificultad()
 
 end
 
+
+
+----------------------------------------------------------
+-- scene_boss --- scene scene_boss --- scene scene_boss --
+----------------------------------------------------------
+----------------------------------------------------------
+
+function onSceneLoad_scene_boss()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+	
+	function onTriggerEnter_PitTrigger(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+			--logicManager:pushPlayerLegsState("fbp_WakeUp");
+			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
+			player:teleportToPos(initPos);
+		end
+
+	end
+
+end
+
+
 -------------------------- MS3 ---------------------------
 
 ----------------------------------------------------------
@@ -64,7 +90,7 @@ function onSceneLoad_scene_1_noenemy()
 end
 
 function onSceneLoad_scene_1()
-
+	logicManager:loadScene("data/scenes/my_file.xml");
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
@@ -214,7 +240,7 @@ function onTriggerEnter_trigger_goto_scene_3(who)
 	end
 end
 ----------------------------------------------------------
-------- scene 3 ------- scene 3 ------- scene 3 -------
+------- scene 3 ------- scene 3 ------- scene 3 ----------
 ----------------------------------------------------------
 ----------------------------------------------------------
 

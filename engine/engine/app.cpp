@@ -210,10 +210,12 @@ void createManagers() {
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(256);
 
+	// AI
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 	getObjManager<TCompBtGrandma>()->init(64);
 	getObjManager<TCompBtSoldier>()->init(64);
+	getObjManager<TCompAiBoss>()->init(1);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -289,6 +291,8 @@ void initManagers() {
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompBtGrandma>()->initHandlers();
 	getObjManager<TCompBtSoldier>()->initHandlers();
+	getObjManager<TCompAiBoss>()->initHandlers();
+	
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
@@ -665,9 +669,11 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 
+	// AI
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
 	getObjManager<TCompBtSoldier>()->update(elapsed);
+	getObjManager<TCompAiBoss>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
@@ -723,6 +729,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
+	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {

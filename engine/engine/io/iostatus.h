@@ -63,8 +63,13 @@ public:
 		, SPACEBAR
 		, Q
 		, E
+		, O
+		, I
+		, U
+		, L
 		, CLUE_BUTTON
 		, BUTTONS_COUNT
+		
 		
 	};
 

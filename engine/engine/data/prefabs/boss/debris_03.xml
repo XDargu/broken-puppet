@@ -1,0 +1,12 @@
+<prefab>
+<entity tag = "actor" collisionTag = "Actor">
+    <name name="sillon_debris" />
+    <transform position="-25.7456 6.55963 27.4418" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render>
+      <draw mesh="sillon_01" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+    </render>
+    <aabb min="-0.954272 0.0 -0.913161" max="0.954273 2.63802 0.913162"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.954273" boxY="1.31901" boxZ="0.913161"/>
+    <rigidbody density="500.0"  />
+  </entity>
+</prefab>

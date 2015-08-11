@@ -472,7 +472,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_b_55.0" />
-<transform position="-20.0 -8.0 20.0" rotation="0.0 1.0 0.0 1.8998e-005" scale="1.0 1.0 1.0"/>
+<transform position="-20.0 -8.0 20.0" rotation="0.0 1.0 0.0 1.94748e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -621,22 +621,22 @@
 <colliderMesh path="esc2_arqui_pared_pared_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_pared_pared_b001_71.0" />
+<name name="esc2_arqui_pared_pared_b_71.0" />
 <transform position="-36.0 -8.0 20.0" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_pared_pared_b001" sub_mesh="0" mat="suelo3"/>
+<draw mesh="esc2_arqui_pared_pared_b" sub_mesh="0" mat="suelo3"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="-2.0 8.0 4.0"/>
-<colliderMesh path="esc2_arqui_pared_pared_b001" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_pared_pared_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_pared_pared_b002_72.0" />
+<name name="esc2_arqui_pared_pared_b_72.0" />
 <transform position="-36.0 -8.0 12.0" rotation="0.0 -0.707107 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_pared_pared_b002" sub_mesh="0" mat="suelo3"/>
+<draw mesh="esc2_arqui_pared_pared_b" sub_mesh="0" mat="suelo3"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="-2.0 8.0 4.0"/>
-<colliderMesh path="esc2_arqui_pared_pared_b002" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_pared_pared_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_a_73.0" />
@@ -924,22 +924,22 @@
 <colliderMesh path="esc2_arqui_pared_pared_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_102.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_102.0" />
 <transform position="-11.7858 7.35625 -32.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_103.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_103.0" />
 <transform position="-11.7858 7.35625 -28.238" rotation="0.0 0.707095 0.0 0.707119" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_suelo_suelo_a_104.0" />
@@ -969,22 +969,22 @@
 <colliderMesh path="esc2_arqui_pared_esqui_in_half_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_107.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_107.0" />
 <transform position="-7.78577 7.35625 -44.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_108.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_108.0" />
 <transform position="-11.7858 7.35625 -44.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_suelo_suelo_a_109.0" />
@@ -996,40 +996,40 @@
 <colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_110.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_110.0" />
 <transform position="-3.78577 7.35625 -44.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_111.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_111.0" />
 <transform position="0.214231 7.35625 -44.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_112.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_112.0" />
 <transform position="0.214231 7.35625 -32.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_113.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_113.0" />
 <transform position="0.214231 7.35625 -28.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_half_b_114.0" />
@@ -1042,7 +1042,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_half_b_115.0" />
-<transform position="-3.78577 7.35625 -24.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 7.35625 -24.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -1050,31 +1050,31 @@
 <colliderMesh path="esc2_arqui_pared_esqui_in_half_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_116.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_116.0" />
 <transform position="-7.78577 7.35625 -24.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_117.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_117.0" />
 <transform position="-3.78578 7.35625 -24.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_118.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_118.0" />
 <transform position="0.214231 7.35625 -24.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="1.04587e-005 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_ex_half_b_119.0" />
@@ -1096,7 +1096,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_half_bL_121.0" />
-<transform position="-3.78577 7.35625 -28.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 7.35625 -28.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_half_bL" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -1105,7 +1105,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_half_bL_122.0" />
-<transform position="-3.78577 7.35625 -24.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 7.35625 -24.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_half_bL" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -1114,7 +1114,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_half_bL_123.0" />
-<transform position="-3.78577 7.35625 -32.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 7.35625 -32.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_half_bL" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -1123,7 +1123,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_half_bL_124.0" />
-<transform position="-3.78577 7.35625 -36.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 7.35625 -36.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_half_bL" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -1146,139 +1146,139 @@
 <pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_01_127.0" />
+<name name="esc2_arqui_techo_techo_a_127.0" />
 <transform position="-11.68 7.35625 -27.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-8.0 7.82228 -4.0" max="9.33328e-006 8.0 4.0"/>
-<colliderMesh path="esc2_arqui_techo_techo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_01_128.0" />
+<name name="esc2_arqui_techo_techo_a_128.0" />
 <transform position="-3.68002 7.35625 -27.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-8.0 7.82228 -4.0" max="9.33328e-006 8.0 4.0"/>
-<colliderMesh path="esc2_arqui_techo_techo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_01_129.0" />
+<name name="esc2_arqui_techo_techo_a_129.0" />
 <transform position="-11.68 7.35625 -35.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-8.0 7.82228 -4.0" max="9.33328e-006 8.0 4.0"/>
-<colliderMesh path="esc2_arqui_techo_techo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_01_130.0" />
+<name name="esc2_arqui_techo_techo_a_130.0" />
 <transform position="-3.68001 7.35625 -35.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-8.0 7.82228 -4.0" max="9.33328e-006 8.0 4.0"/>
-<colliderMesh path="esc2_arqui_techo_techo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_131.0" />
+<name name="esc2_arqui_techo_techo_half_a_131.0" />
 <transform position="-15.68 7.35625 -39.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_132.0" />
+<name name="esc2_arqui_techo_techo_half_a_132.0" />
 <transform position="-11.68 7.35625 -39.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_133.0" />
+<name name="esc2_arqui_techo_techo_half_a_133.0" />
 <transform position="-7.68002 7.35625 -39.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_134.0" />
+<name name="esc2_arqui_techo_techo_half_a_134.0" />
 <transform position="-3.68002 7.35625 -39.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_135.0" />
+<name name="esc2_arqui_techo_techo_half_a_135.0" />
 <transform position="0.319983 7.35625 -39.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_136.0" />
+<name name="esc2_arqui_techo_techo_half_a_136.0" />
 <transform position="0.319983 7.35625 -35.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_137.0" />
+<name name="esc2_arqui_techo_techo_half_a_137.0" />
 <transform position="0.319983 7.35625 -31.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_138.0" />
+<name name="esc2_arqui_techo_techo_half_a_138.0" />
 <transform position="0.319983 7.35625 -27.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_139.0" />
+<name name="esc2_arqui_techo_techo_half_a_139.0" />
 <transform position="0.319983 7.35625 -23.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_140.0" />
+<name name="esc2_arqui_techo_techo_half_a_140.0" />
 <transform position="0.319983 7.35625 -19.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_techo_techo_half_01_141.0" />
+<name name="esc2_arqui_techo_techo_half_a_141.0" />
 <transform position="-3.68001 7.35625 -19.7311" rotation="0.0 -1.34389e-005 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_techo_techo_half_01" sub_mesh="0" mat="techo2"/>
+<draw mesh="esc2_arqui_techo_techo_half_a" sub_mesh="0" mat="techo2"/>
 </render>
 <aabb min="-4.0 7.82228 -4.0" max="9.33328e-006 8.0 5.39659e-007"/>
-<colliderMesh path="esc2_arqui_techo_techo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_techo_techo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="interruptor_pulsar_base_142.0" />
@@ -1294,13 +1294,13 @@
 <colliderMesh path="interruptor_pulsar_base" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_01_145.0" />
+<name name="esc2_arqui_suelo_suelo_a_145.0" />
 <transform position="-15.7858 39.3562 -60.238" rotation="0.0 -0.707116 0.0 0.707098" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-8.00001 -9.88644e-006 -4.00001" max="9.75929e-006 9.88644e-006 4.00001"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_a_146.0" />
@@ -1312,17 +1312,17 @@
 <colliderMesh path="esc2_arqui_pared_esqui_in_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_01_147.0" />
+<name name="esc2_arqui_suelo_suelo_a_147.0" />
 <transform position="0.214231 39.3562 -60.238" rotation="0.0 -0.707116 0.0 0.707098" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-8.00001 -9.88644e-006 -4.00001" max="9.75929e-006 9.88644e-006 4.00001"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_a_148.0" />
-<transform position="0.214231 39.3562 -72.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 39.3562 -72.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -1331,7 +1331,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_149.0" />
-<transform position="-15.7858 34.3562 -72.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-15.7858 34.3562 -72.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -1341,7 +1341,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_150.0" />
-<transform position="-11.7858 34.3562 -72.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 34.3562 -72.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -1351,7 +1351,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_151.0" />
-<transform position="-7.78578 34.3562 -72.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-7.78578 34.3562 -72.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -1361,7 +1361,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_152.0" />
-<transform position="0.214231 34.3562 -72.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 34.3562 -72.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -1370,17 +1370,17 @@
 <colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_01_153.0" />
+<name name="esc2_arqui_suelo_suelo_a_153.0" />
 <transform position="-7.78578 39.3562 -60.238" rotation="0.0 -0.707116 0.0 0.707098" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-8.00001 -9.88644e-006 -4.00001" max="9.75929e-006 9.88644e-006 4.00001"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_a_154.0" />
-<transform position="0.214231 39.3562 -64.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 39.3562 -64.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -1398,7 +1398,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_a_156.0" />
-<transform position="0.214231 39.3562 -80.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 39.3562 -80.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -1425,7 +1425,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_a_159.0" />
-<transform position="0.214231 39.3562 -88.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 39.3562 -88.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -1443,7 +1443,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_half_a_161.0" />
-<transform position="0.214231 39.3562 -92.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 39.3562 -92.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_half_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -1615,7 +1615,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_179.0" />
-<transform position="-3.78578 34.3562 -72.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78578 34.3562 -72.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -1825,7 +1825,7 @@
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor">
 <name name="escena_1_objeto_interruptor_204.0" />
-<transform position="-4.89896 10.5541 -23.6366" rotation="0.0 0.997067 0.0765289 6.37882e-007" scale="1.0 1.0 1.0"/>
+<transform position="-4.89896 10.5541 -23.6366" rotation="0.0 0.997067 0.0765289 1.11332e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="escena_1_objeto_interruptor" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="escena_1_objeto_interruptor" sub_mesh="1" mat="Standardmaterial"/>
@@ -1876,7 +1876,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="marco_puerta_209.0" />
-<transform position="-4.63805 9.85625 -41.5042" rotation="0.0 1.0 0.0 6.39758e-007" scale="1.0 1.0 1.0"/>
+<transform position="-4.63805 9.85625 -41.5042" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="marco_puerta" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="marco_puerta" sub_mesh="1" mat="Standardmaterial"/>
@@ -1891,7 +1891,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="marco_puerta_210.0" />
-<transform position="-10.6475 9.85625 -41.5591" rotation="0.0 1.0 0.0 6.39758e-007" scale="1.0 1.0 1.0"/>
+<transform position="-10.6475 9.85625 -41.5591" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="marco_puerta" sub_mesh="0" mat="Standardmaterial"/>
 <draw mesh="marco_puerta" sub_mesh="1" mat="Standardmaterial"/>
@@ -1976,7 +1976,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_selev_suelo_half_a_222.0" />
-<transform position="-7.78577 36.3562 -96.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-7.78577 36.3562 -96.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_selev_suelo_half_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_selev_suelo_half_a" sub_mesh="1" mat="pared"/>
@@ -1986,7 +1986,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_selev_suelo_half_a_223.0" />
-<transform position="-11.7858 36.3562 -96.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 36.3562 -96.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_selev_suelo_half_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_selev_suelo_half_a" sub_mesh="1" mat="pared"/>
@@ -1996,7 +1996,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_selev_suelo_half_a_224.0" />
-<transform position="-11.7858 37.3562 -96.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 37.3562 -96.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_selev_suelo_half_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="esc1_selev_suelo_half_a" sub_mesh="1" mat="pared"/>
@@ -2182,7 +2182,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_half_b_249.0" />
-<transform position="-3.78577 7.35625 -48.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 7.35625 -48.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -2227,7 +2227,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_a_255.0" />
-<transform position="-5.78578 15.3562 -50.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-5.78578 15.3562 -50.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -2254,7 +2254,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_a_258.0" />
-<transform position="-5.78578 23.3562 -50.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-5.78578 23.3562 -50.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -2290,7 +2290,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_suelo_parche_centr_a_265.0" />
-<transform position="-42.0 2.62268e-007 6.0" rotation="0.0 1.0 0.0 2.90473e-006" scale="1.0 1.0 1.0"/>
+<transform position="-42.0 2.62268e-007 6.0" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn2_arqui_suelo_parche_centr_a" sub_mesh="0" mat="suelo_metal"/>
 </render>
@@ -2346,7 +2346,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_half_b_271.0" />
-<transform position="-3.78577 39.3562 -48.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 39.3562 -48.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -2382,7 +2382,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_puert_suelo_pared_0m_2m_b_275.0" />
-<transform position="-7.78578 39.3562 -58.238" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
+<transform position="-7.78578 39.3562 -58.238" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_puert_suelo_pared_0m_2m_b" sub_mesh="0" mat="pared"/>
 <draw mesh="esc1_puert_suelo_pared_0m_2m_b" sub_mesh="1" mat="puerta"/>
@@ -2429,7 +2429,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_a_280.0" />
-<transform position="-5.78578 31.3562 -50.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-5.78578 31.3562 -50.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_a" sub_mesh="0" mat="pared2"/>
 </render>
@@ -2456,7 +2456,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_283.0" />
-<transform position="0.214231 34.3562 -76.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 34.3562 -76.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2466,7 +2466,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_284.0" />
-<transform position="-15.7858 34.3562 -76.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-15.7858 34.3562 -76.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2476,7 +2476,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_285.0" />
-<transform position="-11.7858 34.3562 -76.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 34.3562 -76.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2486,7 +2486,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_286.0" />
-<transform position="-7.78577 34.3562 -76.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-7.78577 34.3562 -76.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2496,7 +2496,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_287.0" />
-<transform position="-3.78577 34.3562 -76.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 34.3562 -76.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2506,7 +2506,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_288.0" />
-<transform position="0.214231 34.3562 -80.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 34.3562 -80.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2516,7 +2516,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_289.0" />
-<transform position="-3.78577 34.3562 -80.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 34.3562 -80.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2526,7 +2526,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_290.0" />
-<transform position="-7.78577 34.3562 -80.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-7.78577 34.3562 -80.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2536,7 +2536,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_291.0" />
-<transform position="-11.7858 34.3562 -80.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 34.3562 -80.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2546,7 +2546,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_292.0" />
-<transform position="-15.7858 34.3562 -80.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-15.7858 34.3562 -80.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2556,7 +2556,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_293.0" />
-<transform position="-15.7858 34.3562 -84.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-15.7858 34.3562 -84.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2566,7 +2566,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_294.0" />
-<transform position="-11.7858 34.3562 -84.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 34.3562 -84.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2576,7 +2576,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_295.0" />
-<transform position="-3.78577 34.3562 -84.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="-3.78577 34.3562 -84.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2586,7 +2586,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn_rampa_bloque_2m_simple_a_296.0" />
-<transform position="0.214231 34.3562 -84.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 34.3562 -84.238" rotation="0.0 1.0 0.0 1.59343e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
 <draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
@@ -2623,7 +2623,7 @@
 	</entity>
 	<entity  >
 <name name="esc2_arqui_pared_pared_half_bLe_300.0" />
-<transform position="0.214231 31.3562 -92.238" rotation="0.0 1.0 0.0 4.01339e-007" scale="1.0 1.0 1.0"/>
+<transform position="0.214231 31.3562 -92.238" rotation="0.0 1.0 0.0 6.39758e-007" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_half_bLe" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -2675,13 +2675,13 @@
 <colliderMesh path="esc1_arqui_suelo_parche_centr_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc1_arqui_suelo_parche_centr_a001_306.0" />
+<name name="esc1_arqui_suelo_parche_centr_a_306.0" />
 <transform position="-3.78577 39.3562 -50.238" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc1_arqui_suelo_parche_centr_a001" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="esc1_arqui_suelo_parche_centr_a" sub_mesh="0" mat="suelo_basico"/>
 </render>
 <aabb min="-1.99999 3.59215e-006 -4.00001" max="2.00001 9.13935e-006 -1.99999"/>
-<colliderMesh path="esc1_arqui_suelo_parche_centr_a001" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc1_arqui_suelo_parche_centr_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_techo_parche_compl_a_307.0" />
@@ -2703,7 +2703,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_techo_parche_compl_a_309.0" />
-<transform position="-5.78577 7.35625 -50.238" rotation="0.0 1.0 0.0 6.39758e-007" scale="1.0 1.0 1.0"/>
+<transform position="-5.78577 7.35625 -50.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn2_arqui_techo_parche_compl_a" sub_mesh="0" mat="techo_piscina"/>
 </render>
@@ -2721,7 +2721,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_techo_parche_centr_a_311.0" />
-<transform position="-11.7858 7.35625 -50.238" rotation="0.0 1.0 0.0 6.39758e-007" scale="1.0 1.0 1.0"/>
+<transform position="-11.7858 7.35625 -50.238" rotation="0.0 1.0 0.0 1.11659e-006" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="dvn2_arqui_techo_parche_centr_a" sub_mesh="0" mat="techo_piscina"/>
 </render>
@@ -2909,7 +2909,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_parche_later_R_a_334.0" />
-<transform position="-28.0699 -0.280815 -2.03352" rotation="0.0 1.0 0.0 1.51833e-005" scale="1.0 1.0 1.0"/>
+<transform position="-28.0699 -0.280815 -2.03352" rotation="0.0 1.0 0.0 1.56601e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_parche_later_R_a" sub_mesh="0" mat="suelo_parche"/>
 </render>
@@ -2918,7 +2918,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_parche_later_R_a_335.0" />
-<transform position="-34.0699 -0.280815 -2.03352" rotation="0.0 1.0 0.0 1.51833e-005" scale="1.0 1.0 1.0"/>
+<transform position="-34.0699 -0.280815 -2.03352" rotation="0.0 1.0 0.0 1.56601e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_parche_later_R_a" sub_mesh="0" mat="suelo_parche"/>
 </render>
@@ -2927,7 +2927,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_parche_later_R_a_336.0" />
-<transform position="-40.0699 -0.280815 -2.03352" rotation="0.0 1.0 0.0 1.51833e-005" scale="1.0 1.0 1.0"/>
+<transform position="-40.0699 -0.280815 -2.03352" rotation="0.0 1.0 0.0 1.56601e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc1_arqui_suelo_parche_later_R_a" sub_mesh="0" mat="suelo_parche"/>
 </render>
@@ -3042,69 +3042,69 @@
 <aabb min="-2.0 2.38419e-007 0.0" max="-2.0 8.0 4.0"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_349.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_349.0" />
 <transform position="-38.0699 -4.28082 -2.03352" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_350.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_350.0" />
 <transform position="-34.0699 -4.28082 -2.03352" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_351.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_351.0" />
 <transform position="-38.0699 -4.28082 -6.03352" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_352.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_352.0" />
 <transform position="-34.0699 -4.28082 -6.03352" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_353.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_353.0" />
 <transform position="-38.0699 -4.28082 -10.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 <distanceText text="inserte aqui su texto" distance="0.0" size="0.0" color="FFFFFFFF" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_354.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_354.0" />
 <transform position="-34.0699 -4.28082 -10.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_b_355.0" />
-<transform position="-28.0699 -8.28082 -10.0335" rotation="0.0 1.0 0.0 1.54217e-005" scale="1.0 1.0 1.0"/>
+<transform position="-28.0699 -8.28082 -10.0335" rotation="0.0 1.0 0.0 1.58985e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -3130,24 +3130,24 @@
 <colliderMesh path="esc1_arqui_suelo_parche_later_R_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_358.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_358.0" />
 <transform position="-24.0699 1.71918 -10.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_359.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_359.0" />
 <transform position="-20.0699 1.71918 -10.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_a_360.0" />
@@ -3186,24 +3186,24 @@
 <colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_364.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_364.0" />
 <transform position="-34.0699 -4.28082 -14.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_365.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_365.0" />
 <transform position="-38.0699 -4.28082 -14.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_suelo_suelo_a_366.0" />
@@ -3252,7 +3252,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_b_371.0" />
-<transform position="-28.0699 -8.28082 -18.0335" rotation="0.0 1.0 0.0 1.54217e-005" scale="1.0 1.0 1.0"/>
+<transform position="-28.0699 -8.28082 -18.0335" rotation="0.0 1.0 0.0 1.58985e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -3260,14 +3260,14 @@
 <colliderMesh path="esc2_arqui_pared_pared_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_372.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_372.0" />
 <transform position="-24.0699 1.71918 -16.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_parche_later_R_a_373.0" />
@@ -3288,64 +3288,64 @@
 <colliderMesh path="esc1_arqui_suelo_parche_later_R_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_375.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_375.0" />
 <transform position="-24.0699 -0.280816 -24.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_376.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_376.0" />
 <transform position="-24.0699 -0.280816 -10.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_377.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_377.0" />
 <transform position="-24.0699 -0.280816 -14.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_378.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_378.0" />
 <transform position="-24.0699 -0.280816 -18.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_379.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_379.0" />
 <transform position="-20.0699 3.71918 -16.0335" rotation="0.0 -6.27833e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_380.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_380.0" />
 <transform position="-20.0699 5.71918 -24.0335" rotation="0.0 -6.27833e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_suelo_suelo_a_381.0" />
@@ -3357,84 +3357,84 @@
 <colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_382.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_382.0" />
 <transform position="-20.0699 1.71918 -18.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_383.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_383.0" />
 <transform position="-20.0699 1.71918 -14.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_384.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_384.0" />
 <transform position="-20.0699 3.71918 -22.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_385.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_385.0" />
 <transform position="-20.0699 3.71918 -26.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_386.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_386.0" />
 <transform position="-20.0699 1.71918 -22.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_387.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_387.0" />
 <transform position="-20.0699 1.71918 -26.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_388.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_388.0" />
 <transform position="-20.0699 -0.280816 -26.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_389.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_389.0" />
 <transform position="-20.0699 -0.280816 -22.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_half_a_390.0" />
@@ -3455,44 +3455,44 @@
 <colliderMesh path="esc2_arqui_pared_esqui_in_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_392.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_392.0" />
 <transform position="-20.0699 -0.280816 -30.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_393.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_393.0" />
 <transform position="-20.0699 1.71918 -30.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_394.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_394.0" />
 <transform position="-20.0699 3.71918 -30.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_2m_simple_01_395.0" />
+<name name="dvn_rampa_bloque_2m_simple_a_395.0" />
 <transform position="-20.0699 5.71918 -30.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_2m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="0" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_bloque_2m_simple_a" sub_mesh="1" mat="pared"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 2.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_2m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_bloque_2m_simple_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_half_b_396.0" />
@@ -3549,58 +3549,58 @@
 <colliderMesh path="esc2_arqui_pared_pared_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_402.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_402.0" />
 <transform position="-32.0699 -4.28082 -24.0335" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_403.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_403.0" />
 <transform position="-28.0699 -4.28082 -24.0335" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_404.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_404.0" />
 <transform position="-24.0699 -4.28082 -24.0335" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_405.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_405.0" />
 <transform position="-36.0699 -4.28082 -24.0335" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_406.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_406.0" />
 <transform position="-40.0699 -4.28082 -24.0335" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_407.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_407.0" />
 <transform position="-44.0699 -4.28082 -24.0335" rotation="0.0 0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arqui_suelo_parche_later_R_a_408.0" />
@@ -3621,13 +3621,13 @@
 <colliderMesh path="esc1_arqui_suelo_parche_later_R_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_parche_esqui_01_410.0" />
+<name name="dvn_arqui_suelo_parche_esqui_a_410.0" />
 <transform position="-42.0699 -0.280816 -22.0335" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_arqui_suelo_parche_esqui_01" sub_mesh="0" mat="suelo_parche"/>
+<draw mesh="dvn_arqui_suelo_parche_esqui_a" sub_mesh="0" mat="suelo_parche"/>
 </render>
 <aabb min="-4.0 2.98817e-006 -4.00001" max="-1.99999 8.83736e-006 -2.0"/>
-<colliderMesh path="dvn_arqui_suelo_parche_esqui_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_arqui_suelo_parche_esqui_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_a_411.0" />
@@ -3657,13 +3657,13 @@
 <colliderMesh path="esc2_arqui_pared_pared_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_pared_esqui_in_half_01_414.0" />
+<name name="esc2_arqui_pared_esqui_in_half_a_414.0" />
 <transform position="-44.0699 -0.280816 -30.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_pared_esqui_in_half_01" sub_mesh="0" mat="pared2"/>
+<draw mesh="esc2_arqui_pared_esqui_in_half_a" sub_mesh="0" mat="pared2"/>
 </render>
 <aabb min="0.000192642 8.10544e-006 -1.85887e-005" max="2.11118 8.00001 2.10648"/>
-<colliderMesh path="esc2_arqui_pared_esqui_in_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_pared_esqui_in_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_a_415.0" />
@@ -3720,22 +3720,22 @@
 <colliderMesh path="esc2_arqui_suelo_suelo_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_421.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_421.0" />
 <transform position="-24.0699 -0.280816 -30.0335" rotation="0.0 -0.707108 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc2_arqui_suelo_suelo_half_01_422.0" />
+<name name="esc2_arqui_suelo_suelo_half_a_422.0" />
 <transform position="-20.0699 -0.280816 -30.0335" rotation="0.0 -0.707108 0.0 0.707106" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="esc2_arqui_suelo_suelo_half_01" sub_mesh="0" mat="suelo2"/>
+<draw mesh="esc2_arqui_suelo_suelo_half_a" sub_mesh="0" mat="suelo2"/>
 </render>
 <aabb min="-4.00001 -9.18706e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.77517e-006"/>
-<colliderMesh path="esc2_arqui_suelo_suelo_half_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="esc2_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_ex_half_a_423.0" />
@@ -3747,104 +3747,104 @@
 <colliderMesh path="esc2_arqui_pared_esqui_ex_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_424.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_424.0" />
 <transform position="-26.0699 -2.28082 -4.03352" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_425.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_425.0" />
 <transform position="-30.0699 -2.28082 -4.03352" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_426.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_426.0" />
 <transform position="-42.0699 -2.28082 -4.03352" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_427.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_427.0" />
 <transform position="-46.0699 -2.28082 -4.03352" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_428.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_428.0" />
 <transform position="-42.0699 -4.28082 -12.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_429.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_429.0" />
 <transform position="-46.0699 -4.28082 -12.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_430.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_430.0" />
 <transform position="-30.0699 -4.28082 -12.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_rampa_14g_doble_01_431.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_431.0" />
 <transform position="-26.0699 -4.28082 -12.0335" rotation="0.0 1.0 0.0 5.52335e-007" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="0" mat="pared"/>
-<draw mesh="dvn_rampa_rampa_14g_doble_01" sub_mesh="1" mat="suelo_basico"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -4.0" max="2.0 2.0 4.0"/>
-<colliderMesh path="dvn_rampa_rampa_14g_doble_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_432.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_432.0" />
 <transform position="-34.0699 -4.28082 -18.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_rampa_bloque_4m_simple_01_433.0" />
+<name name="dvn_rampa_rampa_14g_doble_a_433.0" />
 <transform position="-38.0699 -4.28082 -18.0335" rotation="0.0 -4.76837e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="0" mat="suelo_basico"/>
-<draw mesh="dvn_rampa_bloque_4m_simple_01" sub_mesh="1" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="0" mat="pared"/>
+<draw mesh="dvn_rampa_rampa_14g_doble_a" sub_mesh="1" mat="suelo_basico"/>
 </render>
 <aabb min="-2.0 0.0 -2.0" max="2.0 4.0 2.0"/>
-<colliderMesh path="dvn_rampa_bloque_4m_simple_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_rampa_rampa_14g_doble_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_b_434.0" />
@@ -3857,7 +3857,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_b_435.0" />
-<transform position="-28.0699 7.71919 5.96648" rotation="0.0 1.0 0.0 1.51833e-005" scale="1.0 1.0 1.0"/>
+<transform position="-28.0699 7.71919 5.96648" rotation="0.0 1.0 0.0 1.56601e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -3866,7 +3866,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_esqui_in_b_436.0" />
-<transform position="-20.0699 7.71918 -10.0335" rotation="0.0 1.0 0.0 1.51833e-005" scale="1.0 1.0 1.0"/>
+<transform position="-20.0699 7.71918 -10.0335" rotation="0.0 1.0 0.0 1.56601e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_esqui_in_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -3911,7 +3911,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_b_441.0" />
-<transform position="-28.0699 7.71918 -2.03352" rotation="0.0 1.0 0.0 1.53025e-005" scale="1.0 1.0 1.0"/>
+<transform position="-28.0699 7.71918 -2.03352" rotation="0.0 1.0 0.0 1.57793e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -3920,7 +3920,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_b_442.0" />
-<transform position="-20.0699 7.71918 -18.0335" rotation="0.0 1.0 0.0 1.53025e-005" scale="1.0 1.0 1.0"/>
+<transform position="-20.0699 7.71918 -18.0335" rotation="0.0 1.0 0.0 1.57793e-005" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="esc2_arqui_pared_pared_b" sub_mesh="0" mat="suelo3"/>
 </render>
@@ -3964,13 +3964,13 @@
 <colliderMesh path="esc1_arqui_suelo_parche_later_R_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn_arqui_suelo_parche_esqui_01_447.0" />
+<name name="dvn_arqui_suelo_parche_esqui_a_447.0" />
 <transform position="-14.0699 7.71918 -22.0335" rotation="0.0 -8.02679e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
-<draw mesh="dvn_arqui_suelo_parche_esqui_01" sub_mesh="0" mat="suelo_parche"/>
+<draw mesh="dvn_arqui_suelo_parche_esqui_a" sub_mesh="0" mat="suelo_parche"/>
 </render>
 <aabb min="-4.0 2.98817e-006 -4.00001" max="-1.99999 8.83736e-006 -2.0"/>
-<colliderMesh path="dvn_arqui_suelo_parche_esqui_01" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<colliderMesh path="dvn_arqui_suelo_parche_esqui_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc2_arqui_pared_pared_b_448.0" />
@@ -4346,7 +4346,7 @@
 <aabb min="-1.5 -2.5 -0.15" max="1.5 2.5 0.15"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.5" boxY="2.5" boxZ="0.15"/>
 <rigidbody density="500.0"  />
-<jointHinge actor1 = "marco_puerta_210.0"  jointRelativePosition0="-0.021493 0.38282 0.0" jointRelativeRotation0="0.0 0.0 0.707107 0.707106" actor2 = "scene_1_door_L"  jointRelativePosition1="1.47605 -0.147923 0.0" jointRelativeRotation1="0.0 0.0 1.0 -3.7392e-006"  jointPosition="-10.626 9.85625 -41.1762" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+<jointHinge actor1 = "marco_puerta_210.0"  jointRelativePosition0="-0.021493 0.38282 0.0" jointRelativeRotation0="0.0 0.0 0.707108 0.707106" actor2 = "scene_1_door_L"  jointRelativePosition1="1.47605 -0.147923 0.0" jointRelativeRotation1="0.0 0.0 1.0 -3.7392e-006"  jointPosition="-10.626 9.85625 -41.1762" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor">
 <name name="scene_1_door_R" />
@@ -4362,7 +4362,7 @@
 <aabb min="-1.5 -2.5 -0.15" max="1.5 2.5 0.15"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.5" boxY="2.5" boxZ="0.15"/>
 <rigidbody density="500.0"  />
-<jointHinge actor1 = "marco_puerta_209.0"  jointRelativePosition0="0.0100322 0.290932 0.0" jointRelativeRotation0="0.0 0.0 0.707107 0.707106" actor2 = "scene_1_door_R"  jointRelativePosition1="-1.50726 -0.157455 0.0" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="-4.64808 9.85625 -41.2132" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+<jointHinge actor1 = "marco_puerta_209.0"  jointRelativePosition0="0.0100317 0.290932 0.0" jointRelativeRotation0="0.0 0.0 0.707108 0.707106" actor2 = "scene_1_door_R"  jointRelativePosition1="-1.50726 -0.157455 0.0" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="-4.64808 9.85625 -41.2132" jointRotation="0.0 -0.707107 0.0 0.707107" linearPosition="100.0" linearRestitution="0.0" swingAngle="90.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 	<entity  >
 <name name="escene_1_room_init" />
@@ -4417,7 +4417,7 @@
 	</entity>
 	<entity  >
 <name name="scene_1_grandmacrasher_01_trigger" />
-<transform position="-7.66943 37.0504 -88.4078" rotation="0.0 1.0 0.0 4.01339e-007" scale="1.0 1.0 1.0"/>
+<transform position="-7.66943 37.0504 -88.4078" rotation="0.0 1.0 0.0 6.39758e-007" scale="1.0 1.0 1.0"/>
 <aabb min="-1.51078 -2.27615 -1.64942" max="1.51078 2.00301 1.64942"/>
 <trigger botOnly="false" playerOnly="false" />
 	</entity>

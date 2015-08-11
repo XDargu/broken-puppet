@@ -529,6 +529,9 @@
     <ClInclude Include="ai\lua_quaternion.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_ai_boss.h">
+      <Filter>components\ai\boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -982,6 +985,9 @@
     <ClCompile Include="components\comp_occlusion_plane.cpp">
       <Filter>components\render</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_ai_boss.cpp">
+      <Filter>components\ai\boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -1082,6 +1088,9 @@
     </Filter>
     <Filter Include="lua">
       <UniqueIdentifier>{c8ce8d06-87ff-4d58-8520-d4025cd9cd37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai\boss">
+      <UniqueIdentifier>{d1c3d27c-7cf2-4e50-be7b-aae2e1532f77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
