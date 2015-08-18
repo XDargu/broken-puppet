@@ -44,6 +44,7 @@ public:
   D3D11_VIEWPORT getViewport() const { return viewport; }
 
   // helpers
+  XMVECTOR CCamera::getWorldCoords(float norm_x, float norm_y);
   bool getScreenCoords(XMVECTOR world_coord, float *x, float *y) const;
 
   void setOcclusionProjection(float width, float height, float znear, float zfar);

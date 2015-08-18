@@ -79,6 +79,9 @@ using namespace DirectX;
 #include "comp_golden_needle_logic.h"
 #include "comp_zone_aabb.h"
 
+// GUI
+#include "comp_button.h"
+
 // Varios
 #include "comp_needle.h"
 #include "comp_rope.h"

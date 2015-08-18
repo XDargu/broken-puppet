@@ -535,6 +535,9 @@
     <ClInclude Include="components\comp_collider_multiple.h">
       <Filter>components\physics</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_button.h">
+      <Filter>components\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -994,6 +997,9 @@
     <ClCompile Include="components\comp_ai_boss.cpp">
       <Filter>components\ai\boss</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_button.cpp">
+      <Filter>components\gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -1097,6 +1103,9 @@
     </Filter>
     <Filter Include="components\ai\boss">
       <UniqueIdentifier>{d1c3d27c-7cf2-4e50-be7b-aae2e1532f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\gui">
+      <UniqueIdentifier>{cbb6c99d-d73e-4765-8418-106a47102f36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

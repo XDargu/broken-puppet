@@ -37,6 +37,16 @@ void CCamera::setViewport(float x0, float y0, float width, float height) {
 	setPerspective(fov_in_radians, znear, zfar);
 }
 
+XMVECTOR CCamera::getWorldCoords(float norm_x, float norm_y) {
+	XMVECTOR det;
+	XMMATRIX inv_view_proj = XMMatrixInverse(&det, view_projection);
+
+	XMVECTOR pos = XMVectorSet( 2 * norm_x - 1, 2 * (1 - norm_y) - 1, 0, 0);
+	XMVECTOR world_coords = XMVector3TransformCoord(pos, inv_view_proj);
+	
+	return world_coords;
+}
+
 // -----------------------------------------------
 bool CCamera::getScreenCoords(XMVECTOR world_coord, float *x, float *y) const {
 	XMVECTOR homo_coords = XMVector3TransformCoord(world_coord, view_projection);

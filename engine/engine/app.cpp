@@ -238,6 +238,9 @@ void createManagers() {
 
 	getObjManager<TCompOcclusionPlane>()->init(128);
 
+	// GUI
+	getObjManager<TCompButton>()->init(32);
+
 
 	registerAllComponentMsgs();
 }
@@ -305,6 +308,9 @@ void initManagers() {
 	//AUDIO
 	getObjManager<TCompAudioListener>()->initHandlers();
 	getObjManager<TCompAudioSource>()->initHandlers();
+
+	//GUI
+	getObjManager<TCompButton>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -694,6 +700,9 @@ void CApp::update(float elapsed) {
 	//AUDIO
 	getObjManager<TCompAudioListener>()->update(elapsed);
 	getObjManager<TCompAudioSource>()->update(elapsed);
+
+	//GUI
+	getObjManager<TCompButton>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
