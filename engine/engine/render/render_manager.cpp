@@ -144,7 +144,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
 		tmx = it->transform;
-		render = it->owner;
+		if (it->owner.isTypeOf<TCompRender>()) {
+			render = it->owner;
+		}
 		XASSERT(tmx, "Invalid transform");
 
 		if (!it->aabb.isValid()) {
@@ -197,7 +199,10 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				}
 				
 				// Activar shader y material de it
-				it->material->activateTextures(render->emissive_on);
+				if (it->owner.isTypeOf<TCompRender>()) 
+					it->material->activateTextures(render->emissive_on); 
+				else
+					it->material->activateTextures(true);
 			}
 
 			if (it->mesh != prev_it->mesh || is_first) {

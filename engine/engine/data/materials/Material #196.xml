@@ -1,1 +1,1 @@
-<std_material name="Material #196" diffuse="Candelabro_Diffuse" normal="Candelabro_Normal" specular="Candelabro_Specular" glossiness="Candelabro_Gloss" emissive=""/>
+<std_material name="Material #196" diffuse="Candelabro_Diffuse" normal="Candelabro_Normal" specular="Candelabro_Specular" glossiness="Candelabro_Gloss" emissive="" emissive_off="" />

@@ -255,11 +255,11 @@ void PSGBuffer(
 
   depth.x = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
   depth.y = t_type.x;
-  if (t_type.x == 0.95 || t_type.x == 0.9) {
-	  //albedo = float4(1, 0, 0, 1);	  
-	  albedo.g += 0.5;
-  }
-
+	if (t_type.x == 0.95 || t_type.x == 0.9) {
+		//albedo = float4(1, 0, 0, 1);	  
+		albedo.g += 0.5;
+	}
+  
   if (depth.y == 0) {
 	  for (int i = 0; i < 4; i++) {
 		  if (static_needles[i].w != -1) {

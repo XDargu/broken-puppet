@@ -1,1 +1,1 @@
-<std_material name="Material #227" diffuse="bobinas_diffuse" normal="bobinas_normal" specular="bobinas_specular" glossiness="bobinas_gloss" emissive=""/>
+<std_material name="Material #227" diffuse="bobinas_diffuse" normal="bobinas_normal" specular="bobinas_specular" glossiness="bobinas_gloss" emissive="" emissive_off="" />

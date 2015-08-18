@@ -14,16 +14,12 @@ _print = print
 clearCoroutines( )
 
 function onSceneLoad_my_file()
+--logicManager:loadScene("data/scenes/scene_1.xml");
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 	--logicManager:setBands(true)
 end
 
 initPos = 0;
-
-
-function onSceneLoad_my_file()
-
-end
 
 
 ----------------------------------------------------------

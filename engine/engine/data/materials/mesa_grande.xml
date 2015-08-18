@@ -1,1 +1,1 @@
-<std_material name="mesa_grande" diffuse="Mesas_Diffuse" normal="Mesas_Normal" specular="Mesas_Specular" glossiness="Mesas_Gloss" emissive=""/>
+<std_material name="mesa_grande" diffuse="Mesas_Diffuse" normal="Mesas_Normal" specular="Mesas_Specular" glossiness="Mesas_Gloss" emissive="" emissive_off="" />

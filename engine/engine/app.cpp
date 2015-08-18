@@ -376,13 +376,13 @@ bool CApp::create() {
 
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
+	//loadScene("data/scenes/scene_boss.xml");
 	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
-
 
 	//sm.playTrack(0,false);
 
@@ -1320,11 +1320,18 @@ void CApp::loadScene(std::string scene_name) {
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
 	XASSERT(ropeTech.load("rope"), "Error loading basic technique");
 
-	CEntity* e = entity_manager.getByName("PlayerCamera");
-	XASSERT(CHandle(e).isValid(), "Camera not valid");
+	CEntity* e = entity_manager.getByName("PlayerCamera");	
+	//XASSERT(CHandle(e).isValid(), "Camera not valid");
+	if (CHandle(e).isValid()) {
+		render_manager.activeCamera = e->get<TCompCamera>();
+	}
+	
+	e = entity_manager.getByName("camera_menu");
+	if (CHandle(e).isValid()) {
+		render_manager.activeCamera = e->get<TCompCamera>();
+	}
 
-	render_manager.activeCamera = e->get<TCompCamera>();
-
+	XASSERT(render_manager.activeCamera.isValid(), "Camera not valid");
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------

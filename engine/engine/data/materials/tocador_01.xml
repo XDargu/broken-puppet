@@ -1,1 +1,1 @@
-<std_material name="tocador_01" diffuse="tocador_01_diffuse" normal="tocador_01_normal" specular="tocador_01_specular" glossiness="tocador_01_gloss" emissive="tocador_01_emissive"/>
+<std_material name="tocador_01" diffuse="tocador_01_diffuse" normal="tocador_01_normal" specular="tocador_01_specular" glossiness="tocador_01_gloss" emissive="tocador_01_emissive" emissive_off="cartel_gloss" />

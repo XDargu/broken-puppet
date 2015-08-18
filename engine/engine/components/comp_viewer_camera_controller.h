@@ -57,6 +57,7 @@ public:
 			if (io.isPressed(CIOStatus::ALT)) {
 
 				XMVECTOR rot = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), -h_speed * mouse.dx * elapsed);
+				dbg("Dx: %f Dy: %f", mouse.dx, mouse.dy);
 				XMVECTOR rot2 = XMQuaternionRotationAxis(o_transform->getLeft(), v_speed * mouse.dy * elapsed);
 
 				//o_transform->rotation = XMQuaternionMultiply(o_transform->rotation, rot);
