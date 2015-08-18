@@ -9,6 +9,7 @@ CCamera::CCamera()
 	, znear( 1.0f )
 	, zfar( 1000.f )
 {
+	prev_view_projection = XMMatrixIdentity();
 	projection = XMMatrixIdentity();
 	setViewport(0, 0, 512, 512);    // Will update projection matrix
 }

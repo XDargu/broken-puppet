@@ -40,22 +40,28 @@ static float3x3 conv =
 //--------------------------------------------------------------------------------------
 float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 {
+	float depth = txDepth.Sample(samClampLinear, input.UV).x;
+
 	if (blur_amount > 0) {
 		float4 color = float4(0, 0, 0, 0);
-			float2 delta = float2(0, 0);
-			float factor = 1.f;		
+		float2 delta = float2(0, 0);
+		float factor = 1.f;
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				factor = conv[i][j];
-				delta = float2(blur_delta.x * (i - 1), blur_delta.y * (j - 1)) * blur_amount;
-				color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.3) * factor;
+
+				delta = float2(blur_delta.x * (i - 1), blur_delta.y * (j - 1)) * blur_amount * saturate(depth * 1) * 8;
+
+				color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.4) * factor;
 			}
 		}
 
 		return color * 1;
 	}
 
+	//return float4(input.UV.xy, 0, 0);
+	//return float4(depth, 0, 0, 0) * 30;
 	return txDiffuse.Sample(samClampLinear, input.UV);
 }
 

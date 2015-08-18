@@ -538,6 +538,9 @@
     <ClInclude Include="components\comp_button.h">
       <Filter>components\gui</Filter>
     </ClInclude>
+    <ClInclude Include="render\blur_camera_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -999,6 +1002,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_button.cpp">
       <Filter>components\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="render\blur_camera_step.cpp">
+      <Filter>render\postpro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

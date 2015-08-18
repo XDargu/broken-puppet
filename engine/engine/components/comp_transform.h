@@ -36,6 +36,8 @@ public:
 	int getType() { return (int)(type * 100); }
 
 	void setType(float atype) { type = atype; }
+
+	TTransform getPrevTransform() { return prev_transform; }
 };
 
 #endif

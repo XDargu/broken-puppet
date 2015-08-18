@@ -203,6 +203,7 @@
     <ClInclude Include="components\comp_bt_soldier.h" />
     <ClInclude Include="components\comp_ai_boss.h" />
     <ClInclude Include="components\comp_button.h" />
+    <ClInclude Include="render\blur_camera_step.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
@@ -394,6 +395,7 @@
     <ClCompile Include="components\comp_bt_soldier.cpp" />
     <ClCompile Include="components\comp_ai_boss.cpp" />
     <ClCompile Include="components\comp_button.cpp" />
+    <ClCompile Include="render\blur_camera_step.cpp" />
     <ClCompile Include="render\collision_convex.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />

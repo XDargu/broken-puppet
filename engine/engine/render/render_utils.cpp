@@ -22,6 +22,7 @@ CShaderCte<TCtesGUI>  ctes_gui;
 
 // Post process
 CShaderCte<TCtesBlur> ctes_blur;
+CShaderCte<TCtesBlurCamera> ctes_blur_camera;
 CShaderCte<TCtesSharpen> ctes_sharpen;
 CShaderCte<TCtesSSAO> ctes_ssao;
 CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
@@ -387,6 +388,7 @@ bool renderUtilsCreate() {
 	ctes_camera.activateInPS(1);
 
 	is_ok &= ctes_blur.create();
+	is_ok &= ctes_blur_camera.create();
 	is_ok &= ctes_sharpen.create();
 	is_ok &= ctes_ssao.create();
 	is_ok &= ctes_chromatic_aberration.create();
@@ -429,6 +431,7 @@ void renderUtilsDestroy() {
 	ctes_gui.destroy();
 
 	ctes_blur.destroy();
+	ctes_blur_camera.destroy();
 	ctes_sharpen.destroy();
 	ctes_ssao.destroy();
 	ctes_chromatic_aberration.destroy();
@@ -465,6 +468,7 @@ void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
 	ctes_camera.get()->ViewProjection = camera.getViewProjection();
+	ctes_camera.get()->PrevViewProjection = camera.getPrevViewProjection();
 	ctes_camera.get()->GameViewProjection = camera.getViewProjection();
 	ctes_camera.get()->cameraView = camera.getView();
 	ctes_camera.get()->cameraWorldPos = camera.getPosition();

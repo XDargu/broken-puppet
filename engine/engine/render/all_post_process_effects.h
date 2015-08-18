@@ -2,6 +2,7 @@
 #define INC_ALL_POSTPROCESS_EFFECTS_H_
 
 #include "blur_step.h"
+#include "blur_camera_step.h"
 #include "chromatic_aberration_step.h"
 #include "glow_step.h"
 #include "sharpen_step.h"

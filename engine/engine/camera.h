@@ -13,6 +13,7 @@ protected:
 	XMMATRIX       view;            // Where is and where is looking at
 	XMMATRIX       projection;      // Prespective info
 	XMMATRIX       view_projection;
+	XMMATRIX       prev_view_projection;
 
 	float          fov_in_radians;  // Field of view in radians
 	float          aspect_ratio;
@@ -27,6 +28,7 @@ public:
   XMMATRIX getView() const { return view; }
   XMMATRIX getProjection() const { return projection; }
   XMMATRIX getViewProjection() const { return view_projection; }
+  XMMATRIX getPrevViewProjection() const { return prev_view_projection; }
 
   XMVECTOR getPosition() const { return position; }
   XMVECTOR getFront() const { return front; }

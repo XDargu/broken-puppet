@@ -116,6 +116,7 @@ TSharpenStep sharpen;
 TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
+TBlurCameraStep blur_camera;
 TGlowStep glow;
 TSilouetteStep silouette;
 TUnderwaterEffect underwater;
@@ -560,11 +561,13 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
-		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("blur");
+		render_techniques_manager.reload("blur_camera");
+		/*render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("deferred_gbuffer");
-		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("deferred_resolve");*/
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -801,8 +804,9 @@ void CApp::render() {
 	//ssao.apply(ssrr.getOutput());
 	sharpen.apply(ssrr.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
-	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
+	blur.apply(underwater.getOutput());
+	blur_camera.apply(blur.getOutput());
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
@@ -820,7 +824,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
+	drawTexture2D(0, 0, xres, yres, blur_camera.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
@@ -1378,6 +1382,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= ssao.create("ssao", xres, yres, 1);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);

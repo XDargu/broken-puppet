@@ -1,0 +1,6 @@
+<technique 
+	fx="blur_camera.fx"
+	vs="VSBlurCamera"
+	vs_decl="vdcl_position_uv"
+	ps="PSBlurCamera"
+	/>
