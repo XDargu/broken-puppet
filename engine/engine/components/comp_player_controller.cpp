@@ -190,3 +190,8 @@ void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
 		time_since_last_hit = 0;
 	}
 }
+
+
+bool TCompPlayerController::canThrow() {
+	return fsm_player_torso.canThrow();
+}

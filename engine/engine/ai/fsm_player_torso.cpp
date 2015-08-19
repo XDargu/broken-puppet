@@ -772,3 +772,32 @@ void FSMPlayerTorso::ProcessHit(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
 }
+
+bool FSMPlayerTorso::canThrow() {
+	TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
+
+	// Raycast detecting the collider the mouse is pointing at
+	PxRaycastBuffer hit;
+	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
+
+	if (hit.hasBlock) {
+		PxRaycastHit blockHit = hit.block;
+
+		if (std::strcmp(blockHit.actor->getName(), "Player") != 0)
+		{
+
+			// First throw
+			if (first_actor == nullptr) {
+				return true;
+			}
+			else {
+				// The string can be thrown
+				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}

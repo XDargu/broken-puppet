@@ -49,6 +49,8 @@ public:
 
 	void ProcessHit(float elapsed);
 
+	bool canThrow();
+
 };
 
 #endif

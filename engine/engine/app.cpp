@@ -922,7 +922,10 @@ void CApp::render() {
 		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 		for (int i = 0; i < life_val; ++i) {			
 			//drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
-		}
+		}		
+			
+		bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
+		drawTexture2D(xres / 2.f - 32, yres / 2.f - 32, 64, 64, texture_manager.getByName(can_throw ? "crosshair_can" : "crosshair_cant"));
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);
 		activateBlendConfig(BLEND_CFG_DEFAULT);
@@ -938,6 +941,8 @@ void CApp::render() {
 		if (camera.getScreenCoords(XMVectorSet(-9.98f, 1.14f, 2.96f, 0), &x, &y))
 			font.print(x + 20, y + 20, "Partículas");
 		activateBlendConfig(BLEND_CFG_DEFAULT);*/
+
+		//const CTexture *cross = texture_manager.getByName("crosshair_can");
 	}
 
 	//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
@@ -953,7 +958,6 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
