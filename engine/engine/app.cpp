@@ -667,6 +667,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompGNLogic>()->update(elapsed);
 	getObjManager<TCompGNItem>()->update(elapsed);
+	
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -676,6 +677,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+	
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 
@@ -799,14 +801,15 @@ void CApp::render() {
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
 	activateCamera(camera, 1);
-	silouette.apply(rt_base);
-	ssrr.apply(silouette.getOutput());
+	
+	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	sharpen.apply(ssrr.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
 	blur.apply(underwater.getOutput());
 	blur_camera.apply(blur.getOutput());
+	silouette.apply(blur_camera.getOutput());
 	//glow.apply(blur.getOutput());
 
 	::render.activateBackbuffer();
@@ -824,7 +827,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, blur_camera.getOutput());
+	drawTexture2D(0, 0, xres, yres, silouette.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");

@@ -58,6 +58,11 @@ float4 PSBlurCamera(
 	
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
 	float depth = txDepth.Load(ss_load_coords).x;
+	float type = txDepth.Load(ss_load_coords).y;
+
+	if (type == 0.2) {
+		return txDiffuse.Sample(samClampLinear, input.UV);
+	}
 	
 	float4 wpos = float4(getWorldCoords(iPosition.xy, depth), 1);
 
@@ -79,23 +84,30 @@ float4 PSBlurCamera(
 
 	//return float4(velocity.xy, 0, 0);
 	texCoord += velocity;
-	float numSamples = 5;
+	float numSamples = 15;
 
 	for (int i = 1; i < numSamples; ++i)
 	{
 		// Sample the color buffer along the velocity vector.  
-		float4 currentColor = txDiffuse.Sample(samClampLinear, texCoord);
+		float4 currentColor = txDiffuse.Sample(samClampLinear, texCoord);		
+		
+		type = txDepth.Sample(samClampLinear, texCoord).y;
 
-		// Add the current color to our color sum.  
-		color += currentColor;
+		// Add the current color to our color sum.
+		// Avoid the player (type = 0.2, deal with interpolation taking values between 0 -static- and 0.8 -selected dynamic-)
+		if (type > 0 && type < 0.8)
+			color += origColor;
+		else
+			color += currentColor;
 
-		texCoord += velocity * 1;
+		texCoord += clamp(-velocity * 0.5, 0, 2) * 1 / 3;
+		
 	}
 
 	// Average all of the samples to get the final blur color.	
 	float4 finalColor = color / numSamples;
 	float radial = saturate(abs(H + 0.4));
-	
+	radial = 1;
 	return finalColor * radial + origColor * (1 - radial);
 
 	

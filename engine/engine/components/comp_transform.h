@@ -14,6 +14,7 @@ private:
 	TTransform parent_offset;
 	// Tipos:
 	// - 0: Static
+	// - 0.2: Player
 	// - 1: Dynamic
 	// - 0.8: Selected dynamic
 	// - 0.9: Selected dynamic with needle

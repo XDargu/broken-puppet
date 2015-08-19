@@ -216,7 +216,11 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			}
 
 			// Activar la world del obj
-			setTransformType(tmx->getType() / 100.0f);
+			if (((CEntity*)it->transform.getOwner())->hasTag("player"))
+				setTransformType(0.2f);
+			else
+				setTransformType(tmx->getType() / 100.0f);
+
 			setWorldMatrix(tmx->getWorld());
 			setTint(it->color);
 
