@@ -131,6 +131,10 @@ clearlistener()
 
 	fn getRelativeTransform obj parent = (	
 		return (obj.transform * (inverse parent.transform))
+	)
+		
+	fn getRelativeTransformTrans trans parent = (	
+		return (trans * (inverse parent))
 	)	
 	
 	/**********************************************************************************************
@@ -195,6 +199,14 @@ clearlistener()
 
 		obj.rotation = obj.rotation * rotateXMatrix 90
 		obj.pos = obj.pos * mcv2world
+	)
+	
+	fn max2mcvMatrixTrans trans = (
+		local max_world = trans
+		local max2mcv = rotatexmatrix -90
+		local mcv2max = inverse max2mcv
+		local mcv_world = mcv2max * max_world * max2mcv
+		return mcv_world
 	)
 
 	fn max2mcvQuat q = (
@@ -1331,6 +1343,71 @@ clearlistener()
 										 + " radius=\"" \
 															+ obj.modifiers[#PhysX_Rigid_Body].meshRadius as string + "\"" \
 				+ "/>\n"
+		)
+		
+		-- MULTISHAPE
+		modRb = obj.modifiers[#PhysX_Rigid_Body]
+		count = modRb.GetRBMeshCount()
+		
+		-- If the object has more than 1 collider
+		if (count > 1) then (
+			objPos = obj.position
+			objRef = getRelativeTransformTrans obj.objectTransform obj.transform
+			
+			mString = "<colliderMulti>\n"
+			
+			for i = 1 to count do (
+				local type = modRb.GetRBMeshType i
+				local trans = modRb.GetRBMeshTM i
+				/* NOTAS: 
+				 - El transform está en coordenadas LOCALES al centro de masas del objeto
+				 - La posición del transform es siempre el centro de la forma (el centro de la box, de la sphere, etc)	
+				*/
+				trans = trans * objRef
+
+				local mObj = max2mcvMatrixTrans trans
+				local qObj = mObj.rotationPart as quat
+				qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+				
+				local nam = modRb.GetRBMeshName i
+				local pos = [mObj.row4.x, mObj.row4.y, mObj.row4.z]
+				local rot = qObj
+				
+				mString += "\t<shape posOffset=\"" + pos.x as string + " " + pos.y as string + " " + pos.z as string + "\" rotOffset=\"" + rot.x as string + " " + rot.y as string + " " + rot.z as string + " " + rot.w as string + "\""
+				--format "\t<shape posOffset=\"% % %\" rotOffset=\"% % % %\"" pos.x pos.y pos.z rot.x rot.y rot.z rot.w
+				--format "Shape %: Name: %, Pos: %, Rot: %, Type: %" i nam pos rot type
+				
+				-- SPHERE
+				if type == 1 then (
+					local radius = modRb.GetRBMeshRadius i
+					mString += " type=\"SPHERE\" radius=\"" + radius as string +  "\" />" 
+					--format " type=\"%\" radius=\"%\" />" "SPHERE" radius
+					--format " (SPHERE), Radius: %" radius
+					
+					
+				)
+				-- BOX
+				if type == 2 then (
+					local blength = modRb.GetRBMeshLength i
+					local bwidth = modRb.GetRBMeshWidth i	
+					local bheight = modRb.GetRBMeshHeight i
+					
+					--format " (BOX), Length: %, Width: %, Height: %" blength bwidth bheight
+					mString += " type=\"BOX\" length=\""+ blength as string + "\" width=\""+ bwidth as string + "\" height=\""+ bheight as string + "\"/>" 
+					--format " type=\"%\" length=\"%\" width=\"%\" height=\"%\"/>" "BOX" blength bwidth bheight
+					
+					--b = box length: bwidth width: blength height: bheight 
+					--b.rotation = rot
+					--b.position = pos
+					
+					
+					
+				)
+				
+				mString += "\n"
+				
+			)
+			mString += "</colliderMulti>\n"
 		)
 		
 		return mString
@@ -2725,7 +2802,8 @@ fn getPlatformPath obj = (
 			getPointLight,
 			getAmbientLight,
 			getDirectionalLight,
-			getDistanceText	
+			getDistanceText,
+			getParticleSystem
 		)
 
 		-- Initialize XML
@@ -2741,6 +2819,8 @@ fn getPlatformPath obj = (
 		mXML += "<camera fov=\"75.0\" znear=\"0.1\" zfar=\"1000.0\"/>"
 		mXML += "<viewerCameraController/>"
 		mXML += "</entity>"
+		
+		mNoPreviewPrefab = #("EnemyGrandma", "EnemySoldier")
 
 		if (progress != undefined) then
 			progress.value = 0
@@ -2786,12 +2866,14 @@ fn getPlatformPath obj = (
 					)
 					else
 					(
-						local tag = getEntityTag obj
-						mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
-						for func in mPrefab.components do (
-							mXML += "" + func obj
+						if ((findItem mNoPreviewPrefab mPrefab.obj_name) == 0 ) then (
+							local tag = getEntityTag obj
+							mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+							for func in mPrefab.components do (
+								mXML += "" + func obj
+							)
+							mXML += "\t</entity>\n"	
 						)
-						mXML += "\t</entity>\n"	
 					)
 				)
 				else
@@ -2814,13 +2896,15 @@ fn getPlatformPath obj = (
 			
 			if (mPrefab == false) then 
 			(
-				local collisionTag = getEntityCollisionTag obj
-				local tag = getEntityTag obj
-				mXML += "\t<entity " + tag + " " + collisionTag +">\n"
-				for func in functions do (
-					mXML += "" + func obj
+				if ((findItem mNoPreviewPrefab mPrefab.obj_name) == 0 ) then (
+					local collisionTag = getEntityCollisionTag obj
+					local tag = getEntityTag obj
+					mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+					for func in functions do (
+						mXML += "" + func obj
+					)
+					mXML += "\t</entity>\n"		
 				)
-				mXML += "\t</entity>\n"		
 			)
 			else
 			(
@@ -3058,7 +3142,8 @@ fn getPlatformPath obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
---openCloseFile()
---removeObjectsID()
+/*export_materials = false
+addObjectsID()
+exportXMLScene()
+openCloseFile()
+removeObjectsID()*/
