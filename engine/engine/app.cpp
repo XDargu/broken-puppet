@@ -562,11 +562,12 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("blur");
-		render_techniques_manager.reload("blur_camera");
-		/*render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("blur_camera");		
+		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
-		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("silouette_glow");
+		/*render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");*/
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
@@ -810,7 +811,7 @@ void CApp::render() {
 	blur.apply(underwater.getOutput());
 	blur_camera.apply(blur.getOutput());
 	silouette.apply(blur_camera.getOutput());
-	//glow.apply(blur.getOutput());
+	//glow.apply(silouette.getOutput());
 
 	::render.activateBackbuffer();
 	static int sz = 150;

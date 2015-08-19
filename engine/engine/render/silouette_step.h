@@ -6,6 +6,7 @@
 
 // --------------------------------
 struct TSilouetteStep {
+	CRenderToTexture *rt_final;
 	CRenderToTexture *rt_sobel;
 	CRenderToTexture *rt_dynamic;
 	char name[64];

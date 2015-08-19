@@ -58,6 +58,13 @@ static float3x3 sobel_y =
 	1, 2,  1
 };
 
+static float3x3 conv =
+{
+	1. / 16., 1. / 8., 1. / 16.,
+	1. / 8., 1. / 4., 1. / 8.,
+	1. / 16., 1. / 8., 1. / 16.
+};
+
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
@@ -81,7 +88,7 @@ float4 PSSilouette(
 	float4 color_x = float4(0, 0, 0, 0);
 	float4 color_y = float4(0, 0, 0, 0);
 
-	float2 deltaaa = float2(1.0 / 1280.0, 1.0 / 1024.0);
+	float2 deltaaa = float2(1.0 / 1280.0, 1.0 / 1024.0) * 0.5;
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
 
@@ -108,21 +115,62 @@ float4 PSSilouette(
 	float border = abs(color_x.x + color_y.x);
 	//return abs(border);
 	if (border > 0)
-		diffuse = float4(0,0.7,0,0);
-	return diffuse;
+		return float4(0,0.5,0,0);	
+	return float4(0, 0, 0, 0);
 }
 
 float4 PSSilouetteType(
-VS_TEXTURED_OUTPUT input,
-in float4 iPosition : SV_Position
+	VS_TEXTURED_OUTPUT input,
+	in float4 iPosition : SV_Position
 ) : SV_Target
-	{
-		// New code
-		int3 screenCoords = uint3(iPosition.xy, 0);
+{
+	// New code
+	int3 screenCoords = uint3(iPosition.xy, 0);
 
-		float type = txDepth.Load(screenCoords).y;
+	float type = txDepth.Load(screenCoords).y;
+	
+	if (type >= 0.8 && type <= 0.9)
+		return float4(1, 0, 0, 1);
+	return float4(0, 0, 0, 1);
+}
 
-		if (type >= 0.8 && type <= 0.9)
-			return float4(1, 0, 0, 1);
-		return float4(0, 0, 0, 1);
+
+float4 PSSilouetteGlow(
+	VS_TEXTURED_OUTPUT input,
+	in float4 iPosition : SV_Position
+	) : SV_Target
+{
+
+	// New code
+	int3 screenCoords = uint3(iPosition.xy, 0);
+
+	float depth = txDepth.Load(screenCoords).x;
+	float4 diffuse = txDiffuse.Load(screenCoords);
+	float4 silouette = txType.Load(screenCoords);
+	float3 wPos = getWorldCoords(screenCoords, depth);
+
+	float3 normal = txNormal.Load(screenCoords).xyz;
+	float3 wNormal = normalize(normal * 2.0f - 1.0f);
+
+	float4 color = silouette;
+	float2 delta = float2(0, 0);
+	int samples = 3;
+	float factor = 1.f / (samples * samples);
+
+
+	for (int i = 0; i < samples; i++) {
+		for (int j = 0; j < samples; j++) {
+			//factor = conv[i][j];
+
+			delta = float2(blur_delta.y * (i - (samples / 2)), blur_delta.y * (j - (samples / 2)))	;
+
+			color += txType.Sample(samClampLinear, input.UV + delta * 0.0002) * factor;
+		}
 	}
+
+	return diffuse + color;
+	
+
+	//return abs(border);
+	return diffuse;
+}
