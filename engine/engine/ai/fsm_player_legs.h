@@ -72,6 +72,7 @@ public:
 	void stopAllAnimations();
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	bool canPlayerThrow();
 };
 
 #endif

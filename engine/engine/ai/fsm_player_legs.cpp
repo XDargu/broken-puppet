@@ -49,6 +49,7 @@ void FSMPlayerLegs::Init()
 	comp_ragdoll = ((CEntity*)entity)->get<TCompRagdoll>();
 	comp_skeleton_ik = ((CEntity*)entity)->get<TCompSkeletonIK>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
+	comp_player_controller = ((CEntity*)entity)->get<TCompPlayerController>();
 	comp_player_pivot_transform = ((CEntity*)(CEntityManager::get().getByName("PlayerPivot")))->get<TCompTransform>();
 	entity_camera = CEntityManager::get().getByName("PlayerCamera");
 
@@ -130,7 +131,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_Walk");
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton->stopAnimation(33);
@@ -139,7 +140,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowString");
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+	/*if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton->stopAnimation(33);
@@ -147,7 +148,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowStringGolden");
-	}
+	}*/
 	if (falling){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
@@ -216,7 +217,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			ChangeState("fbp_Idle");
 			return;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			skeleton->stopAnimation(25);
@@ -227,7 +228,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			skeleton->stopAnimation(16);
 			ChangeState("fbp_ThrowStringPartial");
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+		/*if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			skeleton->stopAnimation(25);
@@ -237,7 +238,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			skeleton->stopAnimation(22);
 			skeleton->stopAnimation(16);
 			ChangeState("fbp_ThrowStringGolden");
-		}
+		}*/
 		if (falling){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
@@ -320,7 +321,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			ChangeState("fbp_Idle");
 			return;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			skeleton->stopAnimation(25);
@@ -331,7 +332,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			skeleton->stopAnimation(21);
 			ChangeState("fbp_ThrowStringPartial");
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+		/*if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			skeleton->stopAnimation(25);
@@ -341,7 +342,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			skeleton->stopAnimation(23);
 			skeleton->stopAnimation(21);
 			ChangeState("fbp_ThrowStringGolden");
-		}
+		}*/
 		if (falling){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
@@ -390,7 +391,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 		skeleton->stopAnimation(6);
 		return;
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 		ChangeState("fbp_ThrowStringPartial");
 		skeleton->stopAnimation(6);
 	}
@@ -952,4 +953,9 @@ float FSMPlayerLegs::getAnimationDuration(int id) {
 
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
+}
+
+bool FSMPlayerLegs::canPlayerThrow() {
+	TCompPlayerController* controller = comp_player_controller;
+	return controller->canThrow();
 }
