@@ -173,7 +173,7 @@ int bt_soldier::actionRagdoll()
 					TCompTransform* c_transform = camera->get<TCompTransform>();
 					TCompCamera* c_camera = camera->get<TCompCamera>();
 					if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-						CApp::get().slowMotion(3);
+						CApp::get().slowMotion(1.5f);
 					}
 				}
 

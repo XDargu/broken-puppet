@@ -913,7 +913,7 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 	if (getCurrentNode() != "fbp_Dead") {		
 		if (damage > 300.f){ // Damage needed for ragdoll state
 			real_damage = 20;
-			CApp::get().slowMotion(4);
+			CApp::get().slowMotion(2);
 			ChangeState("fbp_Ragdoll");
 		}
 		else if (getCurrentNode() != "fbp_Ragdoll"){

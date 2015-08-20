@@ -205,7 +205,7 @@ int bt_grandma::actionRagdoll()
 				TCompTransform* c_transform = camera->get<TCompTransform>();
 				TCompCamera* c_camera = camera->get<TCompCamera>();
 				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					CApp::get().slowMotion(3);
+					CApp::get().slowMotion(1.5f);
 				}
 			}
 
@@ -1046,8 +1046,12 @@ int bt_grandma::actionTiedEvent()
 
 	if (state_time >= getAnimationDuration(11)){
 		TCompRope* rope = (TCompRope*)ropeRef;
-		CEntityManager::get().remove(rope->joint_aux.getOwner());
-		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+		if (ropeRef.isValid()) {
+			if (rope->joint_aux.isValid()) {
+				CEntityManager::get().remove(rope->joint_aux.getOwner());
+			}
+			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+		}
 		tied_event = false;
 		event_detected = false;
 		is_angry = true;
