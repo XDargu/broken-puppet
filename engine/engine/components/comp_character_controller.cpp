@@ -55,6 +55,7 @@ void TCompCharacterController::loadFromAtts(const std::string& elem, MKeyValue &
 	max_vel_y = -10.0f;
 
 	jumpPower = 8;
+	airTime = 0;
 	airSpeed = 6;
 	airControl = 10;
 	gravityMultiplier = 4;
@@ -84,7 +85,13 @@ void TCompCharacterController::fixedUpdate(float elapsed) {
 	TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
 
 	// remember when we were last in air, for jump delay
-	if (!onGround) lastAirTime = CApp::get().total_time;
+	if (!onGround) {
+		lastAirTime = CApp::get().total_time;
+		airTime += elapsed;
+	}
+	else {
+		airTime = 0;
+	}
 
 	// Get the rotation
 	physx::PxVec3 rot = physx::PxVec3(0, -0.1f, 0);
@@ -183,9 +190,9 @@ void TCompCharacterController::GroundCheck(float elapsed)
 
 	PxRaycastBuffer buf;
 
-	Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 0.25f, buf);
+	Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 0.4f, buf);
 
-	if (velocity.y < jumpPower*.5f)
+	if (velocity.y < jumpPower * 0.5f)
 	{
 		onGround = false;
 
@@ -323,7 +330,7 @@ void TCompCharacterController::HandleGroundedVelocities()
 	//bool animationGrounded = animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded");
 	bool animationGrounded = true;
 	bool okToRepeatJump = CApp::get().total_time > lastAirTime + jumpRepeatDelayTime;
-
+	
 	if (jumpInput && !crouchInput && okToRepeatJump && animationGrounded)
 	{
 		// jump!
