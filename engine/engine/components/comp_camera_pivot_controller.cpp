@@ -101,9 +101,10 @@ void TCompCameraPivotController::update(float elapsed) {
 
 	XMVECTOR m_rotation = XMQuaternionRotationRollPitchYaw(m_pitch, m_yaw, 0);
 	transform->rotation = m_rotation;
-
-	transform->position = XMVectorLerp(orig_pos, transform->position, 30.f * elapsed);
-	transform->rotation = XMQuaternionSlerp(orig_rot, transform->rotation, 30.f * elapsed);
+	
+	transform->position = XMVectorLerp(orig_pos, transform->position, min(30.f * elapsed, 1));
+	transform->rotation = XMQuaternionSlerp(orig_rot, transform->rotation, min(30.f * elapsed, 1));
+	
 
 	// Clamp values with quaternion multiplication fails, why?????!!!
 	//XMVECTOR max_pitch_correction = XMQuaternionRotationAxis(player_pivot_trans->getLeft(), max_tilt - m_pitch);

@@ -649,6 +649,7 @@ void CApp::update(float elapsed) {
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
+	ctes_global.get()->elapsed = elapsed;
 
 	int needle_count = 0;
 	for (auto& string : CRope_manager::get().getStrings()) {

@@ -551,7 +551,8 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		/*CHandle c_rope = strings.back();
 		strings.pop_front();
 		CEntityManager::get().remove(c_rope.getOwner());*/
-		CRope_manager::get().removeBackString();
+		if (first_throw)
+			CRope_manager::get().removeBackString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -800,4 +801,19 @@ bool FSMPlayerTorso::canThrow() {
 	}
 
 	return false;
+}
+
+void FSMPlayerTorso::CancelGrabString() {
+
+	if (first_throw)
+		CRope_manager::get().removeBackString();
+
+	// Reset the variables
+	current_rope_entity = CHandle();
+	first_actor = nullptr;
+	first_needle = CHandle();
+	first_throw = false;
+	entitycount++;
+
+	up_animation = false;
 }

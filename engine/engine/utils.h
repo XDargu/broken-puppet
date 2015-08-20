@@ -11,6 +11,7 @@
 #define XDEBUG(msg, ...) do { debug(__LINE__, __FILE__, "Debug message: ", msg, __VA_ARGS__);} while (0)
 #define SET_ERROR_CONTEXT(name, data) CErrorContext ec(name, data);
 
+#define clamp(v,x,y) max(min(v, y), x)
 
 int fatal(const char* fmt, ...);
 void dbg(const char* fmt, ...);
