@@ -1,7 +1,0 @@
-<skeleton>
-    <mesh name="enemy"/>
-    <anim name="enemy_idle"/>
-    <anim name="enemy_maximumAttack"/>
-	<dump_bone id="0"/>
-    <dump_anim id="1" bone="0"/>
-</skeleton>

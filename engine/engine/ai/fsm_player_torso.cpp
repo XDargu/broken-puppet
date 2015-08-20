@@ -642,7 +642,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	}
 
 	// Throw the second needle
-	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
+	if (io.becomesReleased(CIOStatus::THROW_STRING) && canThrow()) {
 		up_animation = false;
 		ChangeState("fbp_ThrowString");
 	}
@@ -754,18 +754,18 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Waits for the player to throw
-	if (io.isPressed(CIOStatus::THROW_STRING)) {
+	if (io.isPressed(CIOStatus::THROW_STRING) && canThrow()) {
 		ChangeState("fbp_ThrowString");
 	}
 
-	if (io.isPressed(CIOStatus::CLUE_BUTTON)) {
+	/*if (io.isPressed(CIOStatus::CLUE_BUTTON)) {
 		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 		bool inside = CLogicManager::get().playerInsideGNZone(point, GNLogic);
 		if ((inside) || (!first_throw)) {
 			ChangeState("fbp_ThrowGoldenNeedle");
 			golden_needle_point = point;
 		}
-	}
+	}*/
 }
 
 void FSMPlayerTorso::ProcessHit(float elapsed) {

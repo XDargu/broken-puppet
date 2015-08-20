@@ -49,6 +49,7 @@ void FSMPlayerLegs::Init()
 	comp_ragdoll = ((CEntity*)entity)->get<TCompRagdoll>();
 	comp_skeleton_ik = ((CEntity*)entity)->get<TCompSkeletonIK>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
+	comp_player_controller = ((CEntity*)entity)->get<TCompPlayerController>();
 	comp_player_pivot_transform = ((CEntity*)(CEntityManager::get().getByName("PlayerPivot")))->get<TCompTransform>();
 	entity_camera = CEntityManager::get().getByName("PlayerCamera");
 
@@ -63,13 +64,13 @@ void FSMPlayerLegs::Init()
 
 	//run_speed = ((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier;
 	run_speed = 6;
-	character_controller->jumpPower = 7;
+	//character_controller->jumpPower = 7;
 	walk_speed = 1.5f;
 
 	character_controller->lerpRotation = 0.15;
 
-	character_controller->gravityMultiplier = 32;
-	character_controller->jumpPower = 9.2;
+	//character_controller->gravityMultiplier = 32;
+	//character_controller->jumpPower = 9.2;
 
 	character_controller->gravityMultiplier = 48;
 	character_controller->jumpPower = 10.2;
@@ -130,7 +131,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_Walk");
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton->stopAnimation(33);
@@ -139,7 +140,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowString");
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+	/*if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton->stopAnimation(33);
@@ -147,7 +148,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton->stopAnimation(35);
 		skeleton_ik->active = false;
 		ChangeState("fbp_ThrowStringGolden");
-	}
+	}*/
 	if (falling){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
@@ -216,7 +217,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			ChangeState("fbp_Idle");
 			return;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			skeleton->stopAnimation(25);
@@ -227,7 +228,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			skeleton->stopAnimation(16);
 			ChangeState("fbp_ThrowStringPartial");
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+		/*if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			skeleton->stopAnimation(25);
@@ -237,7 +238,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			skeleton->stopAnimation(22);
 			skeleton->stopAnimation(16);
 			ChangeState("fbp_ThrowStringGolden");
-		}
+		}*/
 		if (falling){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
@@ -320,7 +321,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			ChangeState("fbp_Idle");
 			return;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			skeleton->stopAnimation(25);
@@ -331,7 +332,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			skeleton->stopAnimation(21);
 			ChangeState("fbp_ThrowStringPartial");
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
+		/*if (CIOStatus::get().isPressed(CIOStatus::CLUE_BUTTON)){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			skeleton->stopAnimation(25);
@@ -341,7 +342,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			skeleton->stopAnimation(23);
 			skeleton->stopAnimation(21);
 			ChangeState("fbp_ThrowStringGolden");
-		}
+		}*/
 		if (falling){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
@@ -390,7 +391,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 		skeleton->stopAnimation(6);
 		return;
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING)){
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
 		ChangeState("fbp_ThrowStringPartial");
 		skeleton->stopAnimation(6);
 	}
@@ -496,6 +497,7 @@ void FSMPlayerLegs::Fall(float elapsed){
 	canThrow = false;
 
 	if (on_enter) {
+		skeleton->resetAnimationTime();
 		skeleton->loopAnimation(6);
 	}
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_falling");
@@ -559,6 +561,7 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 
 	if (on_enter) {
+		skeleton->resetAnimationTime();
 		skeleton->loopAnimation(29);
 	}
 
@@ -570,7 +573,11 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
 		skeleton->stopAnimation(29);
-		ChangeState("fbp_WrongLand");
+		float a = ((TCompCharacterController*)comp_character_controller)->airTime;
+		if (((TCompCharacterController*)comp_character_controller)->airTime > 1.3)
+			ChangeState("fbp_WrongLand");
+		else
+			ChangeState("fbp_Land");
 		//ChangeState("fbp_Ragdoll");
 	}
 }
@@ -642,7 +649,7 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 	if (on_enter) {
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
-
+		stopAllAnimations();
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
 
 		/*rigidbody->setLockXRot(false);
@@ -887,6 +894,7 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 	// Evaluate falling
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
 	falling = velocity.y < -1.5f && !((TCompCharacterController*)comp_character_controller)->OnGround();	
+	dbg("Velocity y: %f, Falling: %d, OnGround: %d\n", velocity.y, falling, ((TCompCharacterController*)comp_character_controller)->OnGround());
 	return is_moving;
 }
 
@@ -905,7 +913,7 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 	if (getCurrentNode() != "fbp_Dead") {		
 		if (damage > 300.f){ // Damage needed for ragdoll state
 			real_damage = 20;
-			CApp::get().slowMotion(4);
+			CApp::get().slowMotion(2);
 			ChangeState("fbp_Ragdoll");
 		}
 		else if (getCurrentNode() != "fbp_Ragdoll"){
@@ -952,4 +960,9 @@ float FSMPlayerLegs::getAnimationDuration(int id) {
 
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
+}
+
+bool FSMPlayerLegs::canPlayerThrow() {
+	TCompPlayerController* controller = comp_player_controller;
+	return controller->canThrow();
 }
