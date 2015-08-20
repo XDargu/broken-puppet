@@ -495,10 +495,12 @@ void CApp::doFrame() {
 		// Fixed update
 		fixedUpdateCounter += delta_secs;
 
-		while (fixedUpdateCounter > pxStep) {
+		//while (fixedUpdateCounter > pxStep) {
+		//if (fixedUpdateCounter > pxStep) {
 			fixedUpdateCounter -= pxStep;
-			fixedUpdate(pxStep);
-		}
+			//fixedUpdateCounter = 0;
+			fixedUpdate(delta_secs);
+		//}
 
 		update(delta_secs);
 	}
@@ -738,7 +740,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompGoldenNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
-	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+	//getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
 	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
