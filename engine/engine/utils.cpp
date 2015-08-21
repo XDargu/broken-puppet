@@ -195,4 +195,8 @@ void files_in_directory(std::string directory, std::vector<std::string>& list) {
 	}
 }
 
-// Timers
+
+float getAngleBetweenVectors(XMVECTOR a, XMVECTOR b) {
+	float cos_angle = XMVectorGetX(XMVector3Dot(a, b));
+	return cos_angle;
+}

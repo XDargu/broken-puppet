@@ -6,6 +6,8 @@
 struct TCompSkeletonLookAt : TBaseComponent { 
   XMVECTOR target;
   float    amount;
+  bool active;
+
   TCompSkeletonLookAt() { }
   void loadFromAtts(const std::string& elem, MKeyValue &atts);
   void update(float elapsed);

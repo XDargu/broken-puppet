@@ -85,7 +85,7 @@ void CDeferredRender::generateLightBuffer() {
 		technique_deferred_point_lights->activate();
 		getObjManager<TCompPointLight>()->onAll(&TCompPointLight::draw);
 	}
-
+	
 	if (1) {
 		CTraceScoped scope("dir_lights");
 		technique_deferred_dir_lights->activate();

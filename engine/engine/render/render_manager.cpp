@@ -75,7 +75,10 @@ void CRenderManager::addKey(const CMesh*      mesh
 
 	// 
 	if (material->castsShadows()) {
-		TShadowCasterKey ck = { material, mesh, owner };
+		bool is_player = false;
+		if (c_name && c_name->name == "Player") { is_player = true; }
+
+		TShadowCasterKey ck = { material, mesh, is_player, owner };
 		ck.aabb = k.aabb;
 		ck.transform = k.transform;
 		shadow_casters_keys.push_back(ck);
@@ -273,7 +276,7 @@ void CRenderManager::destroyAllKeys() {
 }
 
 // ---------------------------------------------------------------
-void CRenderManager::renderShadowsCasters(const CCamera* camera) {
+void CRenderManager::renderShadowsCasters(const CCamera* camera, bool characters) {
 	planes2.create(camera->getViewProjection());
 	bool culling = true;
 	bool uploading_bones = false;
@@ -293,6 +296,9 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera) {
 		culling = planes_active_camera.isVisible(m_aabb);
 		if (culling)
 			culling &= planes2.isVisible(m_aabb);
+		
+		if (characters && !k.character)
+			culling = false;
 
 		if (culling) {
 

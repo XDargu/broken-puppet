@@ -487,6 +487,7 @@ float4 PSDirLights(
   // Currently, no attenuation based on distance
   // Attenuation based on shadowmap
   float att_factor = 0.0;
+  //float inner_att_factor = 1;
   att_factor = saturate(1 - ((max_cos - angle_cos) * 150));
   // Only check for shadows if inside the circle
   if (att_factor > 0) {
@@ -497,6 +498,7 @@ float4 PSDirLights(
 
   float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
   float4 output = float4(dir_light_color.xyz * diffuse_amount, spec_amount) * att_factor;
+  //float4 output = float4(dir_light_color.xyz * diffuse_amount, 0.2) *(1-inner_att_factor);
   return output;
 }
 
