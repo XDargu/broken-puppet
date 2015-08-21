@@ -13,6 +13,7 @@ public:
 	physx::PxRigidDynamic* rigidBody;
 	bool auto_translate_transform;
 	bool auto_rotate_transform;
+	int boss_level;
 
 	TCompRigidBody() :
 		rigidBody(nullptr),

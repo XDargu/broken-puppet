@@ -7,23 +7,32 @@
 #include "handle\prefabs_manager.h"
 
 void TCompAiBoss::init(){
+
+	m_fsm_boss.Init();
+	
 	mPlayer = CEntityManager::get().getByName("Player");
 	mBoss = CEntityManager::get().getByName("BossBody");
-	point_to_go = PxVec3(-10, 10, 10);
-	point_offset = PxVec3(0, -3, 0);
+	point_offset = PxVec3(0, -6, 0);
 	distance_to_point = 12;
 
 	activate = false;
 	shoot = false;
+	attack2Active = false;
+	attack2Time = 0;
+
 	move_things = 0;
 	debris_creation_delay = 0;
 	debris_created = 0;
 
 	force = 24;
 
+
 }
 
 void TCompAiBoss::update(float elapsed){
+
+	m_fsm_boss.update(elapsed);
+
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 
@@ -75,7 +84,11 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 	if (isKeyPressed('P')){
 		activate = true;
 	}
-
+	if (isKeyPressed('U'))
+	{
+		attack2Active = true;		
+		attack2Time = 0;
+	}
 	if (shoot){
 		activate = false;
 		shoot = false;
@@ -83,13 +96,18 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 		
 
 		for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
-			CEntity* e = entity_manager.rigid_list[i];
-			if (!e->hasTag("player")){
-				TCompRigidBody* rigid = e->get<TCompRigidBody>();
-				PxRigidBody*  px_rigid = rigid->rigidBody;
-				PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
+			CEntity* e = entity_manager.rigid_list[i];			
 
-				px_rigid->addForce(force_dir * force, PxForceMode::eVELOCITY_CHANGE, true);
+			if (!e->hasTag("player")){				
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();				
+				bool bossAccess = rigid->boss_level == 0;				
+
+				if (bossAccess){
+					PxRigidBody*  px_rigid = rigid->rigidBody;
+					PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
+					px_rigid->addForce(force_dir * force, PxForceMode::eVELOCITY_CHANGE, true);
+				}
+
 			}
 		}
 	}	
@@ -98,15 +116,16 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 		// apply to the point
 		CEntityManager& entity_manager = CEntityManager::get();
 		
-
 		for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
 			CEntity* e = entity_manager.rigid_list[i];
 			if (!e->hasTag("player")){
 				TCompRigidBody* rigid = e->get<TCompRigidBody>();
-				PxRigidBody*  px_rigid = rigid->rigidBody;
-				PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
-
-				px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
+				bool bossAccess = rigid->boss_level == 0;
+				if (bossAccess){
+					PxRigidBody*  px_rigid = rigid->rigidBody;
+					PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
+					px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
+				}				
 			}
 		}
 	}
@@ -136,16 +155,12 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 
 				debris_created++;
 			}
-
 		}
 		else {
 			debris_created = 0;
 			move_things = 0;
 			debris_creation_delay = 0;
-
 		}
-		
-		
 	}
 
 	// Move thing to the left
@@ -205,5 +220,27 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 		move_things = 0;
 	}
 
+	// Getting down Covers
+	if (attack2Active){
+
+		for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
+			CEntity* e = entity_manager.rigid_list[i];
+			TCompRigidBody* rigid = e->get<TCompRigidBody>();
+			bool bossAccess = rigid->boss_level == 1;
+			if (bossAccess){
+				PxRigidBody*  px_rigid = rigid->rigidBody;
+				PxVec3 force_dir = (PxVec3(0, -1, 0));
+				px_rigid->addForce(force_dir * force * 3, PxForceMode::eACCELERATION, true);
+			}
+	
+		}
+		
+
+		attack2Time += elapsed;
+		if (attack2Time > 5) {
+			attack2Active = false;
+			attack2Time = 0;
+		}
+	}
 
 }

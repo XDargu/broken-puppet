@@ -63,6 +63,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	density = atts.getFloat("density", 1);
 	bool temp_is_kinematic = atts.getBool("kinematic", false);
 	bool temp_use_gravity = atts.getBool("gravity", true);
+	boss_level = atts.getInt("bossLevel", 0);
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);

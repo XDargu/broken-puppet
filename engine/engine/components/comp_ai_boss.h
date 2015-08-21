@@ -3,9 +3,11 @@
 
 #include "base_component.h"
 #include "physics_manager.h"
+#include "../ai/fsm_boss.h"
 
 struct TCompAiBoss : TBaseComponent {
 private:
+	fsm_boss m_fsm_boss;
 	CHandle mPlayer;
 	CHandle mBoss;
 	PxVec3 point_to_go;
@@ -16,6 +18,8 @@ private:
 	bool activate;
 	bool shoot;
 	bool debris_debris;
+	bool attack2Active;
+	float attack2Time;
 
 	float debris_creation_delay;
 	int debris_created;
