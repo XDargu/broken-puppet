@@ -111,3 +111,7 @@ void TCompSensorNeedles::setAsociatedNeedle(needle_rope needle_ref){
 needle_rope TCompSensorNeedles::getAsociatedNeedle(){
 	return asociatedNeedle;
 }
+
+void TCompSensorNeedles::desAsociateNeedle(CHandle grandma){
+	Citem_manager::get().DesAsociatePriorityNeedleRope(grandma);
+}

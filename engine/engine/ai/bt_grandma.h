@@ -16,6 +16,8 @@ private:
 	float find_path_time;
 	float last_time_player_saw;
 	float time_searching_player;
+	float sensor_acum;
+	float sensor_const;
 	XMVECTOR previous_point_search;
 	XMVECTOR center;
 	XMVECTOR last_point_player_saw;
@@ -53,8 +55,6 @@ private:
 
 	bool player_previously_lost;
 	bool player_cant_reach;
-
-	float sensor_delay;
 
 	bool null_node;
 	bool player_out_navMesh;

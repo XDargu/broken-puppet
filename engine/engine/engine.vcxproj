@@ -202,6 +202,7 @@
     <ClInclude Include="components\comp_golden_needle_item.h" />
     <ClInclude Include="components\comp_bt_soldier.h" />
     <ClInclude Include="components\comp_ai_boss.h" />
+    <ClInclude Include="components\comp_hfx_zone.h" />
     <ClInclude Include="components\comp_button.h" />
     <ClInclude Include="render\blur_camera_step.h" />
     <ClInclude Include="render\collision_convex.h" />
@@ -393,6 +394,7 @@
     <ClCompile Include="components\comp_zone_aabb.cpp" />
     <ClCompile Include="components\comp_golden_needle_item.cpp" />
     <ClCompile Include="components\comp_bt_soldier.cpp" />
+    <ClCompile Include="components\comp_hfx_zone.cpp" />
     <ClCompile Include="components\comp_ai_boss.cpp" />
     <ClCompile Include="components\comp_button.cpp" />
     <ClCompile Include="render\blur_camera_step.cpp" />

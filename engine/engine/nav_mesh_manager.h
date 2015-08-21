@@ -26,6 +26,16 @@ private:
 	CHandle player;
 	bool builded;
 public:
+	bool lock;
+	std::vector<CHandle>     colMeshes;
+	std::vector<CHandle>     colCapsules;
+	std::vector<CHandle>   colConvex;
+	std::vector<CHandle>      colBoxes;
+	std::vector<CHandle>   colSpheres;
+	std::vector<CHandle> recastAABBs;
+	bool keep_updating_navmesh;
+	std::thread* AiThread;
+public:
 	CNav_mesh_manager();
 	~CNav_mesh_manager();
 	bool build_nav_mesh();
@@ -51,14 +61,7 @@ public:
 	void setNeedNavMesh(bool need);
 	bool getNeedNavMesh();
 	void nav_mesh_init();
-	std::vector<CHandle>     colMeshes;
-	std::vector<CHandle>     colCapsules;
-	std::vector<CHandle>   colConvex;
-	std::vector<CHandle>      colBoxes;
-	std::vector<CHandle>   colSpheres;
-	std::vector<CHandle> recastAABBs;
-	bool keep_updating_navmesh;
-	std::thread* AiThread;
+	bool getLock();
 	//std::vector<TCompColliderCapsule*>  colCapsules;
 };
 #endif

@@ -176,6 +176,7 @@ void createManagers() {
 	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompGNItem>()->init(64);
 	getObjManager<TCompZoneAABB>()->init(32);
+	getObjManager<TCompHfxZone>()->init(32);
 	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
@@ -264,6 +265,7 @@ void initManagers() {
 	getObjManager<TCompGNLogic>()->initHandlers();
 	getObjManager<TCompGNItem>()->initHandlers();
 	getObjManager<TCompZoneAABB>()->initHandlers();
+	getObjManager<TCompHfxZone>()->initHandlers();
 	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
@@ -375,7 +377,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -385,7 +387,7 @@ bool CApp::create() {
 	// XML Pruebas
 	//loadScene("data/scenes/scene_boss.xml");
 	//loadScene("data/scenes/scene_1.xml");
-	//loadScene("data/scenes/scene_2.xml");
+	loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
@@ -1282,8 +1284,14 @@ void CApp::loadScene(std::string scene_name) {
 	Citem_manager::get().clear();
 	CImporterParser p;
 	aimanager::get().clear();
-	entity_manager.clear();
+	dbg("lock:%b", CNav_mesh_manager::get().getLock());
+	while (CNav_mesh_manager::get().getLock()){
+		dbg("Dentro bucle");
+		continue;
+	}
+	dbg("Pasado bucle");
 	CRope_manager::get().clearStrings();
+	entity_manager.clear();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
 	render_techniques_manager.destroyAll();

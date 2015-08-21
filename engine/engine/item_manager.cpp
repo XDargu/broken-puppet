@@ -122,13 +122,13 @@ bool Citem_manager::getTargetNeedle(CHandle grandma, int i,float radius, float m
 	return true;
 }
 
-bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle grandma, float max_dist_reach_needle){
+bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, int i,float radius, CHandle grandma, float max_dist_reach_needle){
 	bool success = false;
 	int min_distance_rope = 100.f;
 	int min_distance_no_rope = 100.f;
 	int ind_priority=-1;
 	int ind_nearest = -1;
-	for (int i = 0; i < needles.size(); i++) {
+	//for (int i = 0; i < needles.size(); i++) {
 		//if ((!needles[i].grandma_asociated.isValid())){
 			CEntity* owner = needles[i].needleRef.getOwner();
 			/*TCompTransform* needle_trans = ((CEntity*)owner)->get<TCompTransform>();
@@ -138,35 +138,35 @@ bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 			if (V3DISTANCE(e_transform->position, pos) <= radius){
 				if (needles[i].rope_asociated.isValid()){
 					if (V3DISTANCE(e_transform->position, pos) < min_distance_rope){
-						std::vector<XMVECTOR> path;
+						/*std::vector<XMVECTOR> path;
 						CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
 						if (path.size() > 0){
 							XMVECTOR last_point = path[path.size() - 1];
-							if (V3DISTANCE(last_point, e_transform->position) <= max_dist_reach_needle){
+							if (V3DISTANCE(last_point, e_transform->position) <= max_dist_reach_needle){*/
 								if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandma)){
 									min_distance_rope = V3DISTANCE(e_transform->position, pos);
 									ind_priority = i;
 								}
-							}
-						}
+							//}
+						//}
 					}
 				}else{
 					if (V3DISTANCE(e_transform->position, pos) < min_distance_no_rope){
-						std::vector<XMVECTOR> path;
+						/*std::vector<XMVECTOR> path;
 						CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
 						if (path.size() > 0){
-							if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
+							if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){*/
 								if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandma)){
 									min_distance_no_rope = (V3DISTANCE(e_transform->position, pos));
 									ind_nearest = i;
 								}
-							}
-						}
+							//}
+						//}
 					}
 				}
 			}
 		//}
-	}
+	//}
 	if (ind_priority > -1){
 		//SI ESTA ABUELA TIENE ASOCIADA OTRA NEEDLE_ROPE, TENDRE QUE DESASOCIARLA Y ASOCIAR LA MAS PRIORITARIA
 		DesAsociatePriorityNeedleRope(grandma);
@@ -190,26 +190,29 @@ bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, float radius, CHandle gra
 
 int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius, float max_dist_reach_needle){
 	int result = 0;
-	for (int i = 0; i < needles.size();i++) {
-
-		XASSERT(needles[i].needleRef.isValid(), "Invalid needle");
-
-		CEntity* owner = needles[i].needleRef.getOwner();
-		TCompTransform* e_transform = ((CEntity*)owner)->get<TCompTransform>();
-		if (V3DISTANCE(e_transform->position, pos) <= radius){
-			std::vector<XMVECTOR> path;
-			CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
-			if (path.size() > 0){
-				int distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
-				if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
-					bool success=getTargetNeedle(grandmaRef, i,radius, max_dist_reach_needle);
-					if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandmaRef)){
-						result++;
+	//dbg("needles size: %i", needles.size());
+	for (int i = 0; i < needles.size(); i++) {
+		if (needles[i].needleRef.isValid()){
+			CEntity* owner = (CEntity*)needles[i].needleRef.getOwner();
+			TCompTransform* e_transform = owner->get<TCompTransform>();
+			if (V3DISTANCE(e_transform->position, pos) <= radius){
+				std::vector<XMVECTOR> path;
+				CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
+				if (path.size() > 0){
+					int distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
+					if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
+						TCompTransform* grand_trans = ((CEntity*)grandmaRef)->get<TCompTransform>();
+						//bool success = asociateTargetNeedle(grand_trans->position, i, radius, grandmaRef, max_dist_reach_needle);
+						bool success = getTargetNeedle(grandmaRef, i, radius, max_dist_reach_needle);
+						if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandmaRef)){
+							result++;
+						}
 					}
 				}
 			}
 		}
 	}
+	//dbg("result: %i", result);
 	return result;
 }
 

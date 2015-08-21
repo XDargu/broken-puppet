@@ -25,13 +25,9 @@ const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
 const float walk_speed = 0.8f;
-const float run_speed = 2.f;
-const float run_angry_speed = 2.2f;
-
-
-// Sensor
+const float run_speed = 2.2f;
+const float run_angry_speed = 4.f;
 const float sensor_delay = 1.f;
-float sensor_acum = 0.f;
 
 
 void bt_grandma::create(string s)
@@ -80,8 +76,8 @@ void bt_grandma::create(string s)
 	addChild("ExecuteRole", "AttackRoutine", PRIORITY, (btcondition)&bt_grandma::conditionis_attacker, NULL);
 	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL, (btcondition)&bt_grandma::conditioninitial_attack, (btaction)&bt_grandma::actionInitialAttack);
 	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_grandma::conditionnormal_attack, (btaction)&bt_grandma::actionNormalAttack);
-	addChild("AttackRoutine", "Situate18", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
-	addChild("AttackRoutine", "IdleWa19r", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionIdleWar);
+	addChild("AttackRoutine", "Situate18", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
+	addChild("AttackRoutine", "IdleWa19r", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionIdleWar);
 	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
 	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
@@ -151,8 +147,11 @@ void bt_grandma::create(string s)
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 	lastNumNeedlesViewed = 0;
+	currentNumNeedlesViewed = 0;
+	sensor_acum = 0.f;
+	sensor_const = 1.f;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.223f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.19f;
 
 	resetBot();
 }
@@ -195,7 +194,7 @@ int bt_grandma::actionRagdoll()
 			ragdoll_aabb->setIdentityMinMax(min, max);
 
 			aimanager::get().removeBot(this->getId());
-			aimanager::get().removeGrandma(this->getId());
+			//aimanager::get().removeGrandma(this->getId());
 
 			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 
@@ -205,7 +204,7 @@ int bt_grandma::actionRagdoll()
 				TCompTransform* c_transform = camera->get<TCompTransform>();
 				TCompCamera* c_camera = camera->get<TCompCamera>();
 				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					CApp::get().slowMotion(1.5f);
+					CApp::get().slowMotion(3);
 				}
 			}
 
@@ -295,8 +294,10 @@ int bt_grandma::actionCutOwn()
 		return STAY;
 	}else{
 		TCompRope* rope = (TCompRope*)ropeRef;
-		CEntityManager::get().remove(rope->joint_aux.getOwner());
-		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+		if (rope->joint_aux.getOwner().isValid())
+			CEntityManager::get().remove(rope->joint_aux.getOwner());
+		if (CHandle(ropeRef).getOwner().isValid())
+			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		tied_event = false;
 		event_detected = false;
 		is_angry = true;
@@ -315,10 +316,10 @@ int bt_grandma::actionLeave()
 //Attack to the player when he is too close
 int bt_grandma::actionTooCloseAttack()
 {
-	if (on_enter) {
-		TCompTransform* p_transform = player_transform;
-		TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = (TCompTransform*)player_transform;
+	TCompTransform* m_transform = (TCompTransform*)own_transform;
 
+	if (on_enter) {
 		//Play close attack animation 
 		if (m_transform->isInLeft(p_transform->position))
 			playAnimationIfNotPlaying(2);
@@ -331,7 +332,10 @@ int bt_grandma::actionTooCloseAttack()
 	//look_direction = last_look_direction;
 
 	if (state_time >= getAnimationDuration(7)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
+		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		if (distance <= max_distance_to_attack * 2){
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
+		}
 		return LEAVE;
 	}
 	else
@@ -442,8 +446,10 @@ int bt_grandma::actionCutRope()
 	// Exe the logic of cut the rope
 	if ((state_time >= duration_cut * 0.7f) && (!cut)){
 		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
-		CEntityManager::get().remove(CHandle(target_rope).getOwner());
-		cut = true;
+		if (target_rope.isValid()){
+			CEntityManager::get().remove(CHandle(target_rope).getOwner());
+			cut = true;
+		}
 	}
 
 	// Finish the animation
@@ -455,9 +461,13 @@ int bt_grandma::actionCutRope()
 		// Exe the logic of taking a needle
 		if ((state_time >= (getAnimationDuration(8) + getAnimationDuration(7)*0.6f)) && !animation_done){
 			CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-			((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-			CEntityManager::get().remove(CHandle(target_needle).getOwner());
-			animation_done = true;
+			if (target_needle.isValid()){
+				((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
+				if (CHandle(target_needle).getOwner().isValid()){
+					CEntityManager::get().remove(CHandle(target_needle).getOwner());
+					animation_done = true;
+				}
+			}
 		}
 
 		// When the animation finish, leave state and clean bools
@@ -488,10 +498,11 @@ int bt_grandma::actionTakeNeedle()
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
 
 		((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-		CEntityManager::get().remove(CHandle(target_needle).getOwner());
-		needle_to_take = false;
-		needle_is_valid = false;
-
+		if (CHandle(target_needle).getOwner().isValid()){
+			CEntityManager::get().remove(CHandle(target_needle).getOwner());
+			needle_to_take = false;
+			needle_is_valid = false;
+		}
 		return LEAVE;
 	}
 	else {
@@ -997,13 +1008,16 @@ int bt_grandma::actionNeedleAppearsEvent()
 {
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
-		//if (current != NULL){
+		if (current != NULL){
 			if ((current->getTypeInter() == EXTERNAL) || (current->getTypeInter() == BOTH)){
 				setCurrent(NULL);
 				lastNumNeedlesViewed = currentNumNeedlesViewed;
 				return LEAVE;
 			}
-		//}
+		}else{
+			lastNumNeedlesViewed = currentNumNeedlesViewed;
+			return LEAVE;
+		}
 	}
 	else{
 		return LEAVE;
@@ -1045,12 +1059,12 @@ int bt_grandma::actionTiedEvent()
 	}
 
 	if (state_time >= getAnimationDuration(11)){
-		TCompRope* rope = (TCompRope*)ropeRef;
-		if (ropeRef.isValid()) {
-			if (rope->joint_aux.isValid()) {
+		if (ropeRef.isValid()){
+			TCompRope* rope = (TCompRope*)ropeRef;
+			if (rope->joint_aux.getOwner().isValid())
 				CEntityManager::get().remove(rope->joint_aux.getOwner());
-			}
-			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+			if (CHandle(ropeRef).getOwner().isValid())
+				CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		}
 		tied_event = false;
 		event_detected = false;
@@ -1135,7 +1149,7 @@ int bt_grandma::conditiontoo_close_attack()
 //Check if there is a needle to take
 int bt_grandma::conditionneedle_to_take()
 {
-	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);
+	//currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);
 	if (currentNumNeedlesViewed > 0){
 		needle_to_take = true;
 	}else{
@@ -1379,6 +1393,8 @@ void bt_grandma::needleViewedSensor(){
 
 	//if (!needle_to_take){
 	currentNumNeedlesViewed = (unsigned int)((TCompSensorNeedles*)m_sensor)->getNumNeedles(entity, max_dist_reach_needle);//list_needles.size();
+	//dbg("currentNumNeedlesViewed: %u", currentNumNeedlesViewed);
+	//dbg("lastNumNeedlesViewed: %u", lastNumNeedlesViewed);
 	if (currentNumNeedlesViewed > lastNumNeedlesViewed){
 		//Si hay variacion reseteamos comprobamos si el nodo es interrumpible
 		//Hay que excluir el nodo root, puesto que no incluye niveles de interrupción
@@ -1389,6 +1405,8 @@ void bt_grandma::needleViewedSensor(){
 				//needle_to_take = true;
 				setCurrent(NULL);
 			}
+		}else{
+			setCurrent(NULL);
 		}
 	}
 	lastNumNeedlesViewed = currentNumNeedlesViewed;
@@ -1425,7 +1443,7 @@ void bt_grandma::hurtSensor(float damage){
 		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
-
+		((TCompSensorNeedles*)m_sensor)->desAsociateNeedle(entity);
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		stopAllAnimations();
@@ -1466,8 +1484,12 @@ void bt_grandma::PlayerFoundSensor(){
 void bt_grandma::update(float elapsed){
 
 	if (active){
+		//dbg("grandma_pr: %u", entity.asUnsigned());
+
 		sensor_acum += elapsed;
 
+		//dbg("sensor_acum: %f", sensor_acum);
+		//dbg("sensor_delay: %f", sensor_delay);
 		if (sensor_delay <= sensor_acum)
 		{
 			needleViewedSensor();

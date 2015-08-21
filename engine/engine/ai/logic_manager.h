@@ -10,6 +10,7 @@
 #include "hinge_joint.h"
 #include "lua_vector.h"
 #include "lua_quaternion.h"
+#include "audio\bass.h"
 #include "mcv_object.h"
 
 class CLogicManager
@@ -19,6 +20,7 @@ private:
 	std::vector<CHandle> triggers;
 	std::vector<CHandle> GNLogic;
 	std::vector<CHandle> ZonesAABB;
+	std::vector<CHandle> HFXZones;
 
 	std::vector<CRigidAnimation> animations;
 
@@ -57,11 +59,13 @@ public:
 	void registerTrigger(CHandle trigger);
 	void registerGNLogic(CHandle golden_logic);
 	void registerZoneAABB(CHandle zone_aabb);
+	void registerHFXZone(CHandle hfx_zone);
 	void onTriggerEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
 	void unregisterGNLogic(CHandle golden_logic);
 	void unregisterZoneAABB(CHandle zone_aabb);
+	void unregisterHFXZone(CHandle hfx_zone);
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
@@ -84,6 +88,9 @@ public:
 
 	//Golden Needle
 	bool playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN);
+
+	//HFX 
+	CHandle soundsInsideHFXZone(XMVECTOR sound_pos);
 
 	// LUA
 	void execute(std::string text);
