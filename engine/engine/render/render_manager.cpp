@@ -43,10 +43,11 @@ void CRenderManager::addKey(const CMesh*      mesh
 	, int  mesh_id
 	, CHandle owner
 	, bool* active
+	, XMVECTOR color
 	) {
 
 	SET_ERROR_CONTEXT("Adding a render key", "")
-	TKey k = { material, mesh, mesh_id, owner };
+		TKey k = { material, mesh, mesh_id, owner };
 
 	// Pasar de comp_render a entity
 	CEntity* e = owner.getOwner();
@@ -63,6 +64,7 @@ void CRenderManager::addKey(const CMesh*      mesh
 
 	k.transform = e->get< TCompTransform >();
 	k.aabb = e->get< TCompAABB >();
+	k.color = color;
 	XASSERT(k.transform.isValid(), "Transform from entity %s not valid", e->getName());
 	//XASSERT(k.aabb.isValid(), "AABB from entity %s not valid", e->getName());
 
@@ -129,6 +131,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	}
 
 	// ---------------------------------------------------------------
+	
+	TCompTransform* tmx = nullptr;
+	TCompRender* render = nullptr;
 
 	while (it != keys.end()) {
 		if (!it->material->isDoubleSided() && double_sided) {
@@ -138,7 +143,10 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 
 		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
-		TCompTransform* tmx = it->transform;
+		tmx = it->transform;
+		if (it->owner.isTypeOf<TCompRender>()) {
+			render = it->owner;
+		}
 		XASSERT(tmx, "Invalid transform");
 
 		if (!it->aabb.isValid()) {
@@ -191,7 +199,10 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				}
 				
 				// Activar shader y material de it
-				it->material->activateTextures();
+				if (it->owner.isTypeOf<TCompRender>()) 
+					it->material->activateTextures(render->emissive_on); 
+				else
+					it->material->activateTextures(true);
 			}
 
 			if (it->mesh != prev_it->mesh || is_first) {
@@ -205,8 +216,13 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			}
 
 			// Activar la world del obj
-			setTransformType(tmx->getType() / 100.0f);
+			if (((CEntity*)it->transform.getOwner())->hasTag("player"))
+				setTransformType(0.2f);
+			else
+				setTransformType(tmx->getType() / 100.0f);
+
 			setWorldMatrix(tmx->getWorld());
+			setTint(it->color);
 
 			// Highligh border -- DOESN'T WORK WITH MULTIPLE SUBMESHES
 			/*if (tmx->getType() >= 80 && tmx->getType() <= 90) {

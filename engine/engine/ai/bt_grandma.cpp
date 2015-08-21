@@ -316,10 +316,10 @@ int bt_grandma::actionLeave()
 //Attack to the player when he is too close
 int bt_grandma::actionTooCloseAttack()
 {
-	if (on_enter) {
-		TCompTransform* p_transform = player_transform;
-		TCompTransform* m_transform = own_transform;
+	TCompTransform* p_transform = (TCompTransform*)player_transform;
+	TCompTransform* m_transform = (TCompTransform*)own_transform;
 
+	if (on_enter) {
 		//Play close attack animation 
 		if (m_transform->isInLeft(p_transform->position))
 			playAnimationIfNotPlaying(2);
@@ -332,7 +332,10 @@ int bt_grandma::actionTooCloseAttack()
 	//look_direction = last_look_direction;
 
 	if (state_time >= getAnimationDuration(7)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
+		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		if (distance <= max_distance_to_attack * 2){
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
+		}
 		return LEAVE;
 	}
 	else

@@ -116,6 +116,7 @@ TSharpenStep sharpen;
 TSSAOStep ssao;
 TChromaticAberrationStep chromatic_aberration;
 TBlurStep blur;
+TBlurCameraStep blur_camera;
 TGlowStep glow;
 TSilouetteStep silouette;
 TUnderwaterEffect underwater;
@@ -168,6 +169,7 @@ void createManagers() {
 	getObjManager<TCompColliderBox>()->init(1024);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
+	getObjManager<TCompColliderMultiple>()->init(512);
 	getObjManager<TCompRigidBody>()->init(2048);
 	getObjManager<TCompStaticBody>()->init(4096);
 	getObjManager<TCompAABB>()->init(4096);
@@ -210,10 +212,12 @@ void createManagers() {
 	getObjManager<TCompAmbientLight>()->init(1);
 	getObjManager<TCompPointLight>()->init(256);
 
+	// AI
 	getObjManager<TCompAiFsmBasic>()->init(64);
 	getObjManager<TCompEnemyController>()->init(64);
 	getObjManager<TCompBtGrandma>()->init(64);
 	getObjManager<TCompBtSoldier>()->init(64);
+	getObjManager<TCompAiBoss>()->init(1);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -236,6 +240,9 @@ void createManagers() {
 
 	getObjManager<TCompOcclusionPlane>()->init(128);
 
+	// GUI
+	getObjManager<TCompButton>()->init(32);
+
 
 	registerAllComponentMsgs();
 }
@@ -251,6 +258,7 @@ void initManagers() {
 	getObjManager<TCompColliderCapsule>()->initHandlers();
 	getObjManager<TCompColliderMesh>()->initHandlers();
 	getObjManager<TCompColliderConvex>()->initHandlers();
+	getObjManager<TCompColliderMultiple>()->initHandlers();
 	getObjManager<TCompRigidBody>()->initHandlers();
 	getObjManager<TCompStaticBody>()->initHandlers();
 	getObjManager<TCompAABB>()->initHandlers();
@@ -290,6 +298,8 @@ void initManagers() {
 	getObjManager<TCompAiFsmBasic>()->initHandlers();
 	getObjManager<TCompBtGrandma>()->initHandlers();
 	getObjManager<TCompBtSoldier>()->initHandlers();
+	getObjManager<TCompAiBoss>()->initHandlers();
+	
 
 	getObjManager<TCompSkeleton>()->initHandlers();
 	getObjManager<TCompShadows>()->initHandlers();
@@ -301,6 +311,9 @@ void initManagers() {
 	//AUDIO
 	getObjManager<TCompAudioListener>()->initHandlers();
 	getObjManager<TCompAudioSource>()->initHandlers();
+
+	//GUI
+	getObjManager<TCompButton>()->initHandlers();
 }
 
 bool CApp::create() {
@@ -364,21 +377,21 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/scene_2.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
 
-
+	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
+	//loadScene("data/scenes/scene_boss.xml");
 	//loadScene("data/scenes/scene_1.xml");
-	//loadScene("data/scenes/scene_2.xml");
+	loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
-
 
 	//sm.playTrack(0,false);
 
@@ -484,10 +497,12 @@ void CApp::doFrame() {
 		// Fixed update
 		fixedUpdateCounter += delta_secs;
 
-		while (fixedUpdateCounter > pxStep) {
+		//while (fixedUpdateCounter > pxStep) {
+		//if (fixedUpdateCounter > pxStep) {
 			fixedUpdateCounter -= pxStep;
-			fixedUpdate(pxStep);
-		}
+			//fixedUpdateCounter = 0;
+			fixedUpdate(delta_secs);
+		//}
 
 		update(delta_secs);
 	}
@@ -507,9 +522,7 @@ void CApp::update(float elapsed) {
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(0);
-	}
-
-
+	}	
 
 	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
 		//loadScene("data/scenes/anim_test.xml");
@@ -552,11 +565,14 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+		render_techniques_manager.reload("blur");
+		render_techniques_manager.reload("blur_camera");		
 		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
-		render_techniques_manager.reload("deferred_gbuffer");
-		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("silouette_glow");
+		/*render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_resolve");*/
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -635,6 +651,7 @@ void CApp::update(float elapsed) {
 
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
+	ctes_global.get()->elapsed = elapsed;
 
 	int needle_count = 0;
 	for (auto& string : CRope_manager::get().getStrings()) {
@@ -656,6 +673,7 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompAABB>()->update(elapsed); // Update objects AABBs
 	getObjManager<TCompGNLogic>()->update(elapsed);
 	getObjManager<TCompGNItem>()->update(elapsed);
+	
 	getObjManager<TCompUnityCharacterController>()->update(elapsed);
 	getObjManager<TCompCharacterController>()->update(elapsed);
 	getObjManager<TCompSkeleton>()->update(elapsed);
@@ -665,12 +683,15 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompPlayerPivotController>()->update(elapsed);
 	getObjManager<TCompCameraPivotController>()->update(elapsed);
 	getObjManager<TCompThirdPersonCameraController>()->update(elapsed); // Then update camera transform, wich is relative to the player
+	
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
 
+	// AI
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
 	getObjManager<TCompBtGrandma>()->update(elapsed);
 	getObjManager<TCompBtSoldier>()->update(elapsed);
+	getObjManager<TCompAiBoss>()->update(elapsed);
 
 	// SWITCH
 	getObjManager<TCompSwitchController>()->update(elapsed);
@@ -690,6 +711,9 @@ void CApp::update(float elapsed) {
 	//AUDIO
 	getObjManager<TCompAudioListener>()->update(elapsed);
 	getObjManager<TCompAudioSource>()->update(elapsed);
+
+	//GUI
+	getObjManager<TCompButton>()->update(elapsed);
 
 	logic_manager.update(elapsed);
 
@@ -719,13 +743,14 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompGoldenNeedle>()->fixedUpdate(elapsed);
 	getObjManager<TCompUnityCharacterController>()->fixedUpdate(elapsed);
-	getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
+	//getObjManager<TCompBasicPlayerController>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlatformPath>()->fixedUpdate(elapsed);
 	getObjManager<TCompCharacterController>()->fixedUpdate(elapsed);
 	getObjManager<TCompRigidBody>()->fixedUpdate(elapsed); // Update rigidBodies of the scene
 	getObjManager<TCompStaticBody>()->fixedUpdate(elapsed);
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
+	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
 }
 
 void CApp::render() {
@@ -782,14 +807,16 @@ void CApp::render() {
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 	
 	activateCamera(camera, 1);
-	silouette.apply(rt_base);
-	ssrr.apply(silouette.getOutput());
+	
+	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	sharpen.apply(ssrr.getOutput());
 	chromatic_aberration.apply(sharpen.getOutput());
-	//blur.apply(chromatic_aberration.getOutput());
 	underwater.apply(chromatic_aberration.getOutput());
-	//glow.apply(blur.getOutput());
+	blur.apply(underwater.getOutput());
+	blur_camera.apply(blur.getOutput());
+	silouette.apply(blur_camera.getOutput());
+	//glow.apply(silouette.getOutput());
 
 	::render.activateBackbuffer();
 	static int sz = 150;
@@ -806,7 +833,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
+	drawTexture2D(0, 0, xres, yres, silouette.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
@@ -900,7 +927,10 @@ void CApp::render() {
 		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 		for (int i = 0; i < life_val; ++i) {			
 			//drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
-		}
+		}		
+			
+		bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
+		drawTexture2D(xres / 2.f - 32, yres / 2.f - 32, 64, 64, texture_manager.getByName(can_throw ? "crosshair_can" : "crosshair_cant"));
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);
 		activateBlendConfig(BLEND_CFG_DEFAULT);
@@ -916,6 +946,8 @@ void CApp::render() {
 		if (camera.getScreenCoords(XMVectorSet(-9.98f, 1.14f, 2.96f, 0), &x, &y))
 			font.print(x + 20, y + 20, "Partículas");
 		activateBlendConfig(BLEND_CFG_DEFAULT);*/
+
+		//const CTexture *cross = texture_manager.getByName("crosshair_can");
 	}
 
 	//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
@@ -931,7 +963,6 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
-	font.print(xres / 2.f - 12, yres / 2.f - 12, "+");
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -1321,11 +1352,18 @@ void CApp::loadScene(std::string scene_name) {
 	XASSERT(debugTech.load("basic"), "Error loading basic technique");
 	XASSERT(ropeTech.load("rope"), "Error loading basic technique");
 
-	CEntity* e = entity_manager.getByName("PlayerCamera");
-	XASSERT(CHandle(e).isValid(), "Camera not valid");
+	CEntity* e = entity_manager.getByName("PlayerCamera");	
+	//XASSERT(CHandle(e).isValid(), "Camera not valid");
+	if (CHandle(e).isValid()) {
+		render_manager.activeCamera = e->get<TCompCamera>();
+	}
+	
+	e = entity_manager.getByName("camera_menu");
+	if (CHandle(e).isValid()) {
+		render_manager.activeCamera = e->get<TCompCamera>();
+	}
 
-	render_manager.activeCamera = e->get<TCompCamera>();
-
+	XASSERT(render_manager.activeCamera.isValid(), "Camera not valid");
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
@@ -1363,6 +1401,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= ssao.create("ssao", xres, yres, 1);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
 	is_ok &= glow.create("glow", xres, yres, 1);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);

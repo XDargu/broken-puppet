@@ -14,6 +14,7 @@ private:
 	TTransform parent_offset;
 	// Tipos:
 	// - 0: Static
+	// - 0.2: Player
 	// - 1: Dynamic
 	// - 0.8: Selected dynamic
 	// - 0.9: Selected dynamic with needle
@@ -36,6 +37,8 @@ public:
 	int getType() { return (int)(type * 100); }
 
 	void setType(float atype) { type = atype; }
+
+	TTransform getPrevTransform() { return prev_transform; }
 };
 
 #endif

@@ -34,6 +34,7 @@ DECL_OBJ_MANAGER(TCompAiFsmBasic, "aiFSMBasic");
 DECL_OBJ_MANAGER(TCompAiBT, "aiBT");
 DECL_OBJ_MANAGER(TCompBtGrandma, "btGrandma");
 DECL_OBJ_MANAGER(TCompBtSoldier, "btSoldier");
+DECL_OBJ_MANAGER(TCompAiBoss, "aiBoss");
 DECL_OBJ_MANAGER(TCompRecastAABB, "recastAABB");
 DECL_OBJ_MANAGER(TCompGNLogic, "logicGoldenNeedle");
 DECL_OBJ_MANAGER(TCompEnemyController, "enemyController");
@@ -72,4 +73,6 @@ DECL_OBJ_MANAGER(TCompGNItem, "goldenNeedleItem");
 DECL_OBJ_MANAGER(TCompZoneAABB, "zoneAABB");
 DECL_OBJ_MANAGER(TCompHfxZone, "hfxZone");
 DECL_OBJ_MANAGER(TCompOcclusionPlane, "occlusionPlane");
+DECL_OBJ_MANAGER(TCompColliderMultiple, "colliderMulti");
+DECL_OBJ_MANAGER(TCompButton, "button");
 

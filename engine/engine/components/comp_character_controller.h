@@ -35,6 +35,7 @@ private:
 	
 
 public:
+	float airTime;
 	float airSpeed;							// determines the max speed of the character while airborne
 	float airControl;						// determines the response speed of controlling the character while airborne;
 	float gravityMultiplier;				// gravity modifier - often higher than natural gravity feels right for game characters

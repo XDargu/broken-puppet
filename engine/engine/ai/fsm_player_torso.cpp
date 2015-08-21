@@ -551,7 +551,8 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		/*CHandle c_rope = strings.back();
 		strings.pop_front();
 		CEntityManager::get().remove(c_rope.getOwner());*/
-		CRope_manager::get().removeBackString();
+		if (first_throw)
+			CRope_manager::get().removeBackString();
 
 		// Reset the variables
 		current_rope_entity = CHandle();
@@ -642,7 +643,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	}
 
 	// Throw the second needle
-	if (io.becomesReleased(CIOStatus::THROW_STRING)) {
+	if (io.becomesReleased(CIOStatus::THROW_STRING) && canThrow()) {
 		up_animation = false;
 		ChangeState("fbp_ThrowString");
 	}
@@ -676,19 +677,19 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	// Simple cancel
 	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
 		float time_prueba = io.getTimePressed(CIOStatus::CANCEL_STRING);
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f ){ //&& num_strings > 0) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			/*CHandle c_rope = strings.back();
 			strings.pop_back();
 			entity_manager.remove(c_rope.getOwner());*/
 			CRope_manager::get().removeBackString();
 			CLogicManager::get().stringCancelled();
-			skeleton->playAnimation(31);
+			skeleton->playAnimation(31);			
 		}
 	}
 
 	// Multiple cancel
 	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
-		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f){ //&& num_strings > 0) {
+		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
 			skeleton->playAnimation(31);
@@ -710,12 +711,11 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		CLogicManager::get().stringsTensed();
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
+		skeleton->playAnimation(32);
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 		{
 			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			
 			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
-
-			skeleton->playAnimation(32);
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
@@ -755,21 +755,65 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Waits for the player to throw
-	if (io.isPressed(CIOStatus::THROW_STRING)) {
+	if (io.isPressed(CIOStatus::THROW_STRING) && canThrow()) {
 		ChangeState("fbp_ThrowString");
 	}
 
-	if (io.isPressed(CIOStatus::CLUE_BUTTON)) {
+	/*if (io.isPressed(CIOStatus::CLUE_BUTTON)) {
 		XMVECTOR& point = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 		bool inside = CLogicManager::get().playerInsideGNZone(point, GNLogic);
 		if ((inside) || (!first_throw)) {
 			ChangeState("fbp_ThrowGoldenNeedle");
 			golden_needle_point = point;
 		}
-	}
+	}*/
 }
 
 void FSMPlayerTorso::ProcessHit(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
+}
+
+bool FSMPlayerTorso::canThrow() {
+	TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
+
+	// Raycast detecting the collider the mouse is pointing at
+	PxRaycastBuffer hit;
+	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
+
+	if (hit.hasBlock) {
+		PxRaycastHit blockHit = hit.block;
+
+		if (std::strcmp(blockHit.actor->getName(), "Player") != 0)
+		{
+
+			// First throw
+			if (first_actor == nullptr) {
+				return true;
+			}
+			else {
+				// The string can be thrown
+				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+void FSMPlayerTorso::CancelGrabString() {
+
+	if (first_throw)
+		CRope_manager::get().removeBackString();
+
+	// Reset the variables
+	current_rope_entity = CHandle();
+	first_actor = nullptr;
+	first_needle = CHandle();
+	first_throw = false;
+	entitycount++;
+
+	up_animation = false;
 }

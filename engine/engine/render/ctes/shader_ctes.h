@@ -15,11 +15,12 @@ cbuffer TCtesCamera SHADER_REGISTER(b1)
 	matrix ViewProjection;
 	matrix GameViewProjection;
 	matrix cameraView;
+	matrix PrevViewProjection;
 	float4 cameraWorldPos;
 	float4 cameraWorldFront;
 	float4 cameraWorldUp;
 	float4 cameraWorldLeft;
-	float  cameraZNear, cameraZFar, cameraViewD, cameraDummy1;
+	float  cameraZNear, cameraZFar, cameraViewD, cameraCinematicBands;
 	float  cameraHalfXRes, cameraHalfYRes, cameraXRes, cameraYRes;
 };
 
@@ -83,7 +84,7 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
   float4 static_needles[4];
   float  world_time;
   float use_lightmaps;
-  float  dummy3[2];
+  float elapsed, dummy_global1;
   
   // Aligned to 16 bytes  
 };
@@ -98,6 +99,13 @@ cbuffer TCtesBlur SHADER_REGISTER(b3)
 	float4 blur_delta;
 	float blur_amount;
 	float dummy_blur, dummy_blur2, dummy_blur3;
+};
+
+cbuffer TCtesBlurCamera SHADER_REGISTER(b3)
+{
+	float4 blur_camera_delta;
+	float blur_camera_amount;
+	float dummy_blur_camera, dummy_blur_camera2, dummy_blur_camera3;
 };
 
 cbuffer TCtesSharpen SHADER_REGISTER(b3)

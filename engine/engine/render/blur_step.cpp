@@ -7,7 +7,7 @@ bool TBlurStep::create(const char* name, int axres, int ayres, int afactor) {
 
 	//ctes_blur.create();
 
-	amount = 0;
+	amount = 1;
 	factor = afactor;
 	xres = axres;
 	yres = ayres;

@@ -38,6 +38,8 @@ public:
 	void actorHit(const TActorHit& msg);
 
 	void onAttackDamage(const TMsgAttackDamage& msg);
+
+	bool canThrow();
 };
 
 #endif

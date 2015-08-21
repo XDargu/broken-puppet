@@ -532,6 +532,18 @@
     <ClInclude Include="components\comp_hfx_zone.h">
       <Filter>components\audio</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_ai_boss.h">
+      <Filter>components\ai\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_collider_multiple.h">
+      <Filter>components\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_button.h">
+      <Filter>components\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="render\blur_camera_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -988,6 +1000,18 @@
     <ClCompile Include="components\comp_hfx_zone.cpp">
       <Filter>components\audio</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_collider_multiple.cpp">
+      <Filter>components\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_ai_boss.cpp">
+      <Filter>components\ai\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_button.cpp">
+      <Filter>components\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="render\blur_camera_step.cpp">
+      <Filter>render\postpro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -1088,6 +1112,12 @@
     </Filter>
     <Filter Include="lua">
       <UniqueIdentifier>{c8ce8d06-87ff-4d58-8520-d4025cd9cd37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\ai\boss">
+      <UniqueIdentifier>{d1c3d27c-7cf2-4e50-be7b-aae2e1532f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components\gui">
+      <UniqueIdentifier>{cbb6c99d-d73e-4765-8418-106a47102f36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

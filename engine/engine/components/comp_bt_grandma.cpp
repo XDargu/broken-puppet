@@ -67,11 +67,12 @@ void TCompBtGrandma::init(){
 
 	int ind_recast_aabb = CNav_mesh_manager::get().getIndexMyRecastAABB(m_aabb);
 	m_ai_controller->setIndRecastAABB(ind_recast_aabb);
-
 }
 
 void TCompBtGrandma::update(float elapsed){
 	m_ai_controller->update(elapsed);
+
+	TCompTransform* trans = getSibling<TCompTransform>(this);
 }
 
 void TCompBtGrandma::actorHit(const TActorHit& msg) {

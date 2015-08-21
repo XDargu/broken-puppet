@@ -569,6 +569,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_render) {
 		TwAddVarRW(bar, "RenderActive", TW_TYPE_BOOL8, &e_render->active, " group=Render label='Active'");
+		TwAddVarRW(bar, "RenderEmissiveOn", TW_TYPE_BOOL8, &e_render->emissive_on, " group=Render label='Emissive on'");
 		std::string aux = "";
 		for (int i = 0; i < e_render->keys.size(); ++i) {
 			aux = "RenderMesh" + i;

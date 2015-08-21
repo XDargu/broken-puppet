@@ -9,6 +9,7 @@ class FSMPlayerLegs : public aifsmcontroller
 private:
 	int current_animation_id;	
 	float idle_var_count;
+	float airTime;
 public:
 
 	physx::PxVec3 movement_dir;
@@ -56,6 +57,7 @@ public:
 	void Dead(float elapsed);
 	void ReevaluatePriorities();
 	void WakeUp(float elapsed);
+	void WakeUpTeleport(float elapsed);
 
 	void Victory(float elapsed);
 
@@ -71,6 +73,7 @@ public:
 	void stopAllAnimations();
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	bool canPlayerThrow();
 };
 
 #endif

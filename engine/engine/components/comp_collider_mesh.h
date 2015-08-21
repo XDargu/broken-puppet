@@ -1,3 +1,5 @@
+#ifndef INC_COMP_COLLIDER_MESH_H
+#define INC_COMP_COLLIDER_MESH_H
 
 #include "base_component.h"
 #include "nav_mesh_manager.h"
@@ -5,11 +7,6 @@
 #include "render\collision_mesh.h"
 #include "comp_aabb.h"
 #include "collider.h"
-#ifndef INC_COMP_COLLIDER_MESH_H
-#define INC_COMP_COLLIDER_MESH_H
-
-#include "base_component.h"
-#include "comp_aabb.h"
 
 struct TCompColliderMesh : public CCollider, TBaseComponent {
 private:

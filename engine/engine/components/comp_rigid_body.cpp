@@ -5,6 +5,7 @@
 #include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
 #include "comp_collider_sphere.h"
+#include "comp_collider_multiple.h"
 #include "physics_manager.h"
 
 void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) {
@@ -71,6 +72,8 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
 
+	TCompColliderMultiple* multiple_c = e->get<TCompColliderMultiple>();
+
 	TCompTransform* trans = (TCompTransform*)transform;
 
 	CCollider* col = nullptr;
@@ -84,19 +87,34 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		col = capsule_c;
 	if (capsule_cvx)
 		col = capsule_cvx;
-	
+	if (multiple_c)
+		col = multiple_c;
 
 
-	XASSERT(col != nullptr, "TRigidBody requieres a TCollider or TMeshCollider component");
+	XASSERT(col != nullptr, "TRigidBody requieres a Collider component");
 
-	rigidBody = physx::PxCreateDynamic(
-		*Physics.gPhysicsSDK
-		, physx::PxTransform(
-		Physics.XMVECTORToPxVec3(trans->position),
-		Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
-		, *col->collider
-		, density);
+	if (multiple_c) {
+		rigidBody = physx::PxCreateDynamic(
+			*Physics.gPhysicsSDK
+			, physx::PxTransform(
+			Physics.XMVECTORToPxVec3(trans->position),
+			Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
+			, *multiple_c->colliders[0]
+			, density);
 
+		for (int i = 1; i < multiple_c->colliders.size(); i++) {
+			rigidBody->attachShape(*multiple_c->colliders[i]);
+		}
+	}
+	else {
+		rigidBody = physx::PxCreateDynamic(
+			*Physics.gPhysicsSDK
+			, physx::PxTransform(
+			Physics.XMVECTORToPxVec3(trans->position),
+			Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
+			, *col->collider
+			, density);
+	}
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	physx::PxReal threshold = 410.f;
 	rigidBody->setContactReportThreshold(threshold);

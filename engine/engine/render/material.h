@@ -13,6 +13,7 @@ class CMaterial : public CXMLParser {
 	const CTexture*           specular;
 	const CTexture*           glossiness;
 	const CTexture*           emissive;
+	const CTexture*           emissive_off;
 	const CTexture*           cubemap;
 	const CRenderTechnique*   tech;
 	std::string               name;
@@ -31,7 +32,7 @@ public:
 	}
 	void destroy();
 	const std::string& getName() const { return name; }
-	void activateTextures() const;
+	void activateTextures(bool emissive_on) const;
 	const CRenderTechnique* getTech() const { return tech; }
 	bool castsShadows() const { return casts_shadows; }
 	bool isSolid() const { return solid; }

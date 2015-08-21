@@ -24,6 +24,10 @@ private:
 
 	std::vector<CRigidAnimation> animations;
 
+	float band_heigth_dest;
+	float band_heigth;
+	float lerp_bands;
+
 	float water_level_dest;
 	float lerp_water;
 	int particle_group_counter;
@@ -125,6 +129,9 @@ public:
 	void stringPulled();
 	void stringCancelled();
 	void stringAllCancelled();
+
+	// EFFECTS
+	void setBand(bool bands);
 
 	// MISC
 	void print(std::string text);

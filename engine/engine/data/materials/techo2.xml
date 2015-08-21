@@ -1,1 +1,1 @@
-<std_material name="techo2" diffuse="techo_esc2_diffuse" normal="techo_esc2_normal" specular="techo_esc2_specular" glossiness="techo_esc2_gloss" emissive=""/>
+<std_material name="techo2" diffuse="techo_esc2_diffuse" normal="techo_esc2_normal" specular="techo_esc2_specular" glossiness="techo_esc2_gloss" emissive="" emissive_off="" />

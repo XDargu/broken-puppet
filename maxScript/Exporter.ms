@@ -37,6 +37,7 @@ clearlistener()
 	NoEvalAttribute = "NOEVAL"
 	ClueZoneAttribute = "mCluePoint"
 	RecastAABBAttribute = "RECASTAABB"
+	NotChangeAttribute = "NotChange"
 	
 	NotMeshAttributes = #(DistanceTextAttributes, CameraAttribute, CameraPivotAttribute, PlayerPivotAttribute, TriggerAttribute, RoomAABBAttribute, ClueZoneAttribute, RecastAABBAttribute)
 	
@@ -51,6 +52,9 @@ clearlistener()
 
 	-- List of shapes exported
 	expShapesNames = #()
+	
+	-- List of convex meshes exported
+	expConvexNames = #()
 
 	-- List of diffuses exported
 	expDiff = #()
@@ -77,7 +81,7 @@ clearlistener()
 	
 	WaterMaterial = "distorsion"
 	GlassMaterial = "glass"
-
+	LightShaftMaterial = "light_shaft"
 
 	-- List of special names
 	reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName, LevelName)
@@ -86,13 +90,14 @@ clearlistener()
 	mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
 	
 	-- List of no export materials
-	noExportMaterials = #(WaterMaterial, GlassMaterial)
+	noExportMaterials = #(WaterMaterial, GlassMaterial, LightShaftMaterial)
 
 	-- List of enemys
 	enemyNames = #(BasicEnemyName, grandmaEnemyName, soldierEnemyName)
 
 	-- List of prefabs
 	ex_prefabList = #()
+	changePivotList = #()
 	
 	grandma_ragdoll_ind = 0
 	soldier_ragdoll_ind = 0
@@ -126,6 +131,10 @@ clearlistener()
 
 	fn getRelativeTransform obj parent = (	
 		return (obj.transform * (inverse parent.transform))
+	)
+		
+	fn getRelativeTransformTrans trans parent = (	
+		return (trans * (inverse parent))
 	)	
 	
 	/**********************************************************************************************
@@ -190,6 +199,14 @@ clearlistener()
 
 		obj.rotation = obj.rotation * rotateXMatrix 90
 		obj.pos = obj.pos * mcv2world
+	)
+	
+	fn max2mcvMatrixTrans trans = (
+		local max_world = trans
+		local max2mcv = rotatexmatrix -90
+		local mcv2max = inverse max2mcv
+		local mcv_world = mcv2max * max_world * max2mcv
+		return mcv_world
 	)
 
 	fn max2mcvQuat q = (
@@ -572,6 +589,7 @@ clearlistener()
 		local diff_name = importTexture m.diffusemap.filename
 		local normal_name = ""
 		local emissive_name = ""
+		local emissive_off_name = ""
 		local specular_name = ""
 		local gloss_name = ""
 		
@@ -581,6 +599,10 @@ clearlistener()
 		
 		if (m.selfIllumMap != undefined) then (
 			emissive_name = importTexture m.selfIllumMap.filename
+		)
+		
+		if (m.filterMap != undefined) then (
+			emissive_off_name = importTexture m.filterMap.filename
 		)
 		
 		if (m.specularMap != undefined) then (
@@ -596,7 +618,7 @@ clearlistener()
 		local out_filename = out_path + "materials\\" + m.name + ".xml"
 		local mfs = createfile out_filename
 		if mfs == undefined then throw ("Can't create material filename" + out_filename )
-		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" glossiness=\"%\" emissive=\"%\"/>\n" m.name diff_name normal_name specular_name gloss_name emissive_name to:mfs
+		format "<std_material name=\"%\" diffuse=\"%\" normal=\"%\" specular=\"%\" glossiness=\"%\" emissive=\"%\" emissive_off=\"%\" />\n" m.name diff_name normal_name specular_name gloss_name emissive_name emissive_off_name to:mfs
 		print ("Exported material: " + (m.name as string))
 		close mfs
 	)
@@ -668,7 +690,7 @@ clearlistener()
 	)
 
 	fn exportMesh obj_to_export = (
-		
+		--return false
 		-- Confirm obj is valid
 		if obj_to_export == undefined then throw "export_mesh: Obj is not valid" 
 		local obj = obj_to_export
@@ -865,7 +887,7 @@ clearlistener()
 			
 			-- Position
 			local face_pos = getFace obj face_id
-			local face_mapA = meshop.getMapFace obj channelA face_id
+			--local face_mapA = meshop.getMapFace obj channelA face_id
 			local face_normals = meshop.getFaceRNormals obj face_id
 			
 			--format "face_pos[%] = %\n" face_id face_pos
@@ -874,7 +896,8 @@ clearlistener()
 			local vid
 			for vid in #(1,3,2) do (
 				local wpos = meshop.getVert obj face_pos[ vid ]
-				local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+				--local uvA = meshop.getMapVert obj channelA face_mapA[ vid ]
+				local uvA = [0, 0]
 				local wn = face_normals[ vid ]
 				
 				local mpos = wpos * _world2mcv 
@@ -1046,7 +1069,11 @@ clearlistener()
 	fn getRender obj= (
 		if(validateCompRender obj == false) then 
 		return ""
-		local mString = "<render>\n"
+		local mString = "<render "
+		if (classof obj.material == Standardmaterial) then (
+			mString += " color = \"" + (obj.wirecolor.r / 255.0) as string + " " + (obj.wirecolor.g / 255.0) as string + " " + (obj.wirecolor.b / 255.0) as string + "\""
+		)
+		mString += ">\n"
 		
 		-- Get the position of an array
 		local arrayPos = validateObjExported obj
@@ -1291,6 +1318,98 @@ clearlistener()
 			)
 			mString = "<colliderMesh path=\"" + obj.name + "\" staticFriction=\"0.5\" dynamicFriction=\"0.8\" restitution=\"0.2\" />"
 		)
+		
+		-- CONVEX SHAPE
+		if (obj.modifiers[#PhysX_Rigid_Body].meshType == 4) then (
+			-- if not in expConvexNames export
+			if (findItem expConvexNames obj.name) == 0 then (
+				
+				-- Get the convex mesh, export it and delete it
+				modRb = obj.modifiers[#PhysX_Rigid_Body]
+				m = modRb.GetRBMeshShape 1
+				convexObj = mesh mesh: m
+				convexObj.name = obj.name
+				exportMeshShape convexObj
+				delete convexObj
+				
+				append expConvexNames obj.name
+			)
+			mString = "<colliderConvex path=\"" + obj.name + "\" staticFriction=\""  \
+															+ obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
+										 + " dynamicFriction=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].DynamicFriction as string + "\"" \
+										 + " restitution=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].Bounciness as string + "\"" \
+										 + " radius=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].meshRadius as string + "\"" \
+				+ "/>\n"
+		)
+		
+		-- MULTISHAPE
+		modRb = obj.modifiers[#PhysX_Rigid_Body]
+		count = modRb.GetRBMeshCount()
+		
+		-- If the object has more than 1 collider
+		if (count > 1) then (
+			objPos = obj.position
+			objRef = getRelativeTransformTrans obj.objectTransform obj.transform
+			
+			mString = "<colliderMulti>\n"
+			
+			for i = 1 to count do (
+				local type = modRb.GetRBMeshType i
+				local trans = modRb.GetRBMeshTM i
+				/* NOTAS: 
+				 - El transform está en coordenadas LOCALES al centro de masas del objeto
+				 - La posición del transform es siempre el centro de la forma (el centro de la box, de la sphere, etc)	
+				*/
+				trans = trans * objRef
+
+				local mObj = max2mcvMatrixTrans trans
+				local qObj = mObj.rotationPart as quat
+				qObj = quat -qObj.x -qObj.y -qObj.z qObj.w
+				
+				local nam = modRb.GetRBMeshName i
+				local pos = [mObj.row4.x, mObj.row4.y, mObj.row4.z]
+				local rot = qObj
+				
+				mString += "\t<shape posOffset=\"" + pos.x as string + " " + pos.y as string + " " + pos.z as string + "\" rotOffset=\"" + rot.x as string + " " + rot.y as string + " " + rot.z as string + " " + rot.w as string + "\""
+				--format "\t<shape posOffset=\"% % %\" rotOffset=\"% % % %\"" pos.x pos.y pos.z rot.x rot.y rot.z rot.w
+				--format "Shape %: Name: %, Pos: %, Rot: %, Type: %" i nam pos rot type
+				
+				-- SPHERE
+				if type == 1 then (
+					local radius = modRb.GetRBMeshRadius i
+					mString += " type=\"SPHERE\" radius=\"" + radius as string +  "\" />" 
+					--format " type=\"%\" radius=\"%\" />" "SPHERE" radius
+					--format " (SPHERE), Radius: %" radius
+					
+					
+				)
+				-- BOX
+				if type == 2 then (
+					local blength = modRb.GetRBMeshLength i
+					local bwidth = modRb.GetRBMeshWidth i	
+					local bheight = modRb.GetRBMeshHeight i
+					
+					--format " (BOX), Length: %, Width: %, Height: %" blength bwidth bheight
+					mString += " type=\"BOX\" length=\""+ blength as string + "\" width=\""+ bwidth as string + "\" height=\""+ bheight as string + "\"/>" 
+					--format " type=\"%\" length=\"%\" width=\"%\" height=\"%\"/>" "BOX" blength bwidth bheight
+					
+					--b = box length: bwidth width: blength height: bheight 
+					--b.rotation = rot
+					--b.position = pos
+					
+					
+					
+				)
+				
+				mString += "\n"
+				
+			)
+			mString += "</colliderMulti>\n"
+		)
+		
 		return mString
 	)
 
@@ -1590,64 +1709,75 @@ clearlistener()
 		return mString
 	)	
 	
+	
+fn printJointData myJoint = (
 
-	fn validateJointFixed obj = (
+		print "........................ list............................."
+		print expJoints
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
+		print "........................ bodies............................."
+		print myJoint.body0
+		print myJoint.body1
+		print "........................................................."
 	
-	local varJointReturn = undefined
+	
+)
+	
+fn validateJointFixed obj = (
+	
+	local list = for o in $* where (classof o == UConstraint) collect o
+	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
 		
 		--jointsToExp		
-		local ownerTest = false
 		
 		if ((mJoint.constraintType == 0) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then varJointReturn = mJoint
+			if (undefinedTest) then (
+				printJointData mJoint
+				return mJoint
+				
 			)
-			-- If there are two actor
-			-- It´s the secont time it appears
-			else (					
-				if ((varJointReturn == undefined) and (findItem jointsToExp mName) == 0) then		
-				varJointReturn = mJoint
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				printJointData mJoint
+				return mJoint
+				
 			)
-		)
-	)	
-	-- If didn´t exported it yet
-	if (varJointReturn != undefined) then(
-		append jointsToExp (getIdName varJointReturn)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				printJointData mJoint
+				return mJoint
+				
+			)
+			else (
+				append expJoints obj
+				print "No agrega"
+				printJointData mJoint
+			)		
+		)	
 	)
-	
-	return varJointReturn
+	return undefined
 )
 	
 /**********************************************************************************************
@@ -1658,7 +1788,8 @@ Gets a FixedJoint
   - String with the component information
 ***********************************************************************************************/
 fn getJointFixed obj = (
-	local mJoint = validateJointFixed obj
+	--local mJoint = validateJointFixed obj
+	local mJoint = obj
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointFixed "
@@ -1702,60 +1833,55 @@ fn getJointFixed obj = (
 	return mString
 )
 
-
-		
+	
 fn validateJointD6 obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
+	local list = for o in $* where (classof o == UConstraint) collect o
 	
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
 		
+		--jointsToExp		
+		
 		if ((mJoint.constraintType == 6) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
+			if (undefinedTest) then (
 				return mJoint
 			)
-		)
-	)	
-	
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				return mJoint
+			)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				return mJoint
+			)
+			else (
+				append expJoints obj
+			)		
+		)	
+	)
 	return undefined
 )
-
 /**********************************************************************************************
 Gets a Distance Text component
  Params:
@@ -1764,7 +1890,8 @@ Gets a Distance Text component
   - String with the component information
 ***********************************************************************************************/
 fn getJointD6 obj = (
-	local mJoint = validateJointD6 obj
+	--local mJoint = validateJointD6 obj
+	local mJoint = obj
 	if (mJoint == undefined) then return ""
 	
 	mString = "<jointD6 "
@@ -1870,56 +1997,51 @@ fn getJointD6 obj = (
 		
 fn validateJointPrismatic obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
+	local list = for o in $* where (classof o == UConstraint) collect o
 	
 	-- check if the obj is an actor in a Uconstraint
-	for mJoint in list do (
+	for mJoint in list do (		
+		--jointsToExp		
 		
 		if ((mJoint.constraintType == 2) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
+			if (undefinedTest) then (
 				return mJoint
 			)
-		)
-	)	
-	
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				return mJoint
+			)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				return mJoint
+			)
+			else (
+				append expJoints obj
+			)		
+		)	
+	)
 	return undefined
 )
-
 /**********************************************************************************************
 Gets a Distance Text component
  Params:
@@ -1928,7 +2050,8 @@ Gets a Distance Text component
   - String with the component information
 ***********************************************************************************************/
 fn getJointPrismatic obj = (
-	local mJoint = validateJointPrismatic obj
+	--local mJoint = validateJointPrismatic obj
+	local mJoint = obj
 	if (mJoint == undefined) then return ""
 		
 	local mObj = max2mcvMatrix mJoint
@@ -2021,55 +2144,52 @@ fn getJointPrismatic obj = (
 )	
 
 		
+	
 fn validateJointHinge obj = (
 	
-	-- Get all the Uconstraints in the scene
-	list = for o in $* where (classof o == UConstraint) collect o
-	
+	local list = for o in $* where (classof o == UConstraint) collect o
 	-- check if the obj is an actor in a Uconstraint
 	for mJoint in list do (
 		
+		--jointsToExp		
+		
 		if ((mJoint.constraintType == 4) == false) then continue
-		local body0 = false
-		local body1 = false
+		local body0Test = false
+		local body1Test = false
 		local undefinedTest = false
 		
 		if( mJoint.body0 != undefined) then (
-			body0 = mJoint.body0 == obj
+			body0Test = mJoint.body0 == obj
 		)
 		else (
 			undefinedTest = true
 		)
 
 		if( mJoint.body1 != undefined) then (
-			body1 = mJoint.body1 == obj
+			body1Test = mJoint.body1 == obj
 		)
 		else (
 			undefinedTest = true
 		)
-		
 			
-		if (body0) or (body1) then (
+		if (body0Test) or (body1Test) then (
 			
-			local mName = getIdName mJoint
-			
-			-- If the mJoint is not in the exp list add it and return false
-			if (findItem expJoints mName ) == 0 then (
-				-- Add it
-				
-				append expJoints mName
-				-- If have only one actor
-				if (undefinedTest) then return mJoint
-				-- return false
-				return undefined
-			)
-			-- If there are two actor
-			else (
+			if (undefinedTest) then (
 				return mJoint
 			)
-		)
-	)	
-	
+			
+			-- Contains any of my actors
+			if (findItem expJoints mJoint.body0) != 0 then(
+				return mJoint
+			)
+			else if (findItem expJoints mJoint.body1) != 0 then (
+				return mJoint
+			)
+			else (
+				append expJoints obj
+			)		
+		)	
+	)
 	return undefined
 )
 
@@ -2082,7 +2202,9 @@ Gets a Hinge joint component
 ***********************************************************************************************/
 fn getJointHinge obj = (
 		
-	local mJoint = validateJointHinge obj
+	--local mJoint = validateJointHinge obj
+	local mJoint = obj
+	
 	if (mJoint == undefined) then return ""
 		
 	local mObj = max2mcvMatrix mJoint
@@ -2260,12 +2382,15 @@ fn getPlatformPath obj = (
 
 	fn getSoldierRagdoll obj = (
 		soldier_ragdoll_ind = soldier_ragdoll_ind + 1;				
-		return "<ragdoll name=\"soldado#" + soldier_ragdoll_ind as string	 + "\"/>\n"	
+		return "<ragdoll name=\"soldier#" + soldier_ragdoll_ind as string	 + "\"/>\n"	
 	)	
 	
 
 	fn  validateTrigger obj = (
-		return  (isProperty obj.baseObject TriggerAttribute)
+		if (isProperty obj.baseObject TriggerAttribute) then (
+			return obj.TRIGGER
+			)
+		return  false
 	)
 	
 	/**********************************************************************************************
@@ -2276,9 +2401,15 @@ fn getPlatformPath obj = (
 	  - String with the component information
 	***********************************************************************************************/	
 	fn getTrigger obj = (
-			if (validateTrigger obj) then
-				return "<trigger/>\n"		
-		return ""
+		if (validateTrigger obj != true) then return ""
+		
+		local mString = ""
+		local mString = "<trigger " \
+											+ "botOnly=\"" + obj.bot_only as string + "\" " \
+											+ "playerOnly=\"" + obj.player_only as string + "\" " \
+											+ "/>\n"
+		return mString
+		
 	)
 	
 	fn  validateRecastAABB obj = (
@@ -2375,6 +2506,36 @@ fn getPlatformPath obj = (
 	)	
 
 	
+	fn validateOcclusionPlane obj = (
+		if (isProperty obj.baseObject #mOclusionPlane == true) then ( 
+			if obj.mOclusionPlane == true then return true
+		)			
+		return false
+	)
+
+	/**********************************************************************************************
+	Gets a Distance Text component
+	 Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/
+	fn getOcclusionPlane obj = (
+		
+		if((validateOcclusionPlane obj) == false) then
+		return ""
+		
+		local mWidth = obj.width
+		local mHeight = obj.length
+		
+		local mString = "<occlusionPlane " \
+											+ "width=\"" + mWidth as string + "\" " \
+											+ "height=\"" + mHeight as string + "\" " \
+											+ "/>\n"
+		return mString
+	)	
+
+	
 	
 	fn validateAudioSource obj = (
 		if (isProperty obj.baseObject #mAudioActive == true) then ( 
@@ -2417,6 +2578,16 @@ fn getPlatformPath obj = (
 	 Returns:
 	  - String with the component information
 	***********************************************************************************************/
+	fn validateChangePivot obj = (
+	-- If has no notchangepivot att
+		if (isProperty obj.baseObject NotChangeAttribute) then (
+			return obj.NotChange
+		)
+		return false
+	-- If is a box or a sphere 
+		
+	)
+		
 	fn getDistanceText obj = (
 		
 		if((validateDistanceText obj) == false) then
@@ -2599,10 +2770,10 @@ fn getPlatformPath obj = (
 		expNames = #()
 		expObjects = #()
 		expShapesNames = #()
+		expConvexNames = #()
 		expDiff = #()
 		expNormal = #()
-		expJoints = #()
-		
+		expJoints = #()		
 		initializePrefabs()
 		
 		/*if (validateScene true == false) then (
@@ -2631,7 +2802,8 @@ fn getPlatformPath obj = (
 			getPointLight,
 			getAmbientLight,
 			getDirectionalLight,
-			getDistanceText	
+			getDistanceText,
+			getParticleSystem
 		)
 
 		-- Initialize XML
@@ -2647,6 +2819,8 @@ fn getPlatformPath obj = (
 		mXML += "<camera fov=\"75.0\" znear=\"0.1\" zfar=\"1000.0\"/>"
 		mXML += "<viewerCameraController/>"
 		mXML += "</entity>"
+		
+		mNoPreviewPrefab = #("EnemyGrandma", "EnemySoldier")
 
 		if (progress != undefined) then
 			progress.value = 0
@@ -2692,12 +2866,14 @@ fn getPlatformPath obj = (
 					)
 					else
 					(
-						local tag = getEntityTag obj
-						mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
-						for func in mPrefab.components do (
-							mXML += "" + func obj
+						if ((findItem mNoPreviewPrefab mPrefab.obj_name) == 0 ) then (
+							local tag = getEntityTag obj
+							mXML += "\t<entity " + tag + " prefab=\"" + mPrefab.obj_name + "\">\n"
+							for func in mPrefab.components do (
+								mXML += "" + func obj
+							)
+							mXML += "\t</entity>\n"	
 						)
-						mXML += "\t</entity>\n"	
 					)
 				)
 				else
@@ -2720,13 +2896,15 @@ fn getPlatformPath obj = (
 			
 			if (mPrefab == false) then 
 			(
-				local collisionTag = getEntityCollisionTag obj
-				local tag = getEntityTag obj
-				mXML += "\t<entity " + tag + " " + collisionTag +">\n"
-				for func in functions do (
-					mXML += "" + func obj
+				if ((findItem mNoPreviewPrefab mPrefab.obj_name) == 0 ) then (
+					local collisionTag = getEntityCollisionTag obj
+					local tag = getEntityTag obj
+					mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+					for func in functions do (
+						mXML += "" + func obj
+					)
+					mXML += "\t</entity>\n"		
 				)
-				mXML += "\t</entity>\n"		
 			)
 			else
 			(
@@ -2757,10 +2935,12 @@ fn getPlatformPath obj = (
 		expNames = #()
 		expObjects = #()
 		expShapesNames = #()
+		expConvexNames = #()
 		expDiff = #()
 		expNormal = #()
 		expJoints = #()
 		jointsToExp = #()
+		changePivotList = #()
 		
 		grandma_ragdoll_ind = 0
 		soldier_ragdoll_ind = 0
@@ -2802,10 +2982,10 @@ fn getPlatformPath obj = (
 			getAmbientLight,
 			getDirectionalLight,
 			getDistanceText,
-			getJointPrismatic,
-			getJointHinge,
-			getJointD6,
-			getJointFixed,
+			--getJointPrismatic,
+			--getJointHinge,
+			--getJointD6,
+			--getJointFixed,
 			getPlatformPath,
 			getTrigger,
 			getRoomAABB,
@@ -2814,7 +2994,8 @@ fn getPlatformPath obj = (
 			getClueZone,
 			getRecastAABB,
 			getParticleSystem,
-			getAudioSource
+			getAudioSource,
+			getOcclusionPlane
 		)
 
 		-- Initialize XML
@@ -2824,11 +3005,24 @@ fn getPlatformPath obj = (
 			progress.value = 0
 		count = 1
 		-- Calls every function in the function arrays
+		-- Check erevy entity looking for boxes and spheres
+		
 		for obj in allObject do 
-			(
+		(
+			if (validateChangePivot obj) then append changePivotList obj.name			
+		)
+				
+		for obj in allObject do 
+		(
 			-- Check if needs to be evaluate
 			if(validateEntity obj)then
 			(
+				local mPivot = obj.pivot
+				-- Change pivot if is necesary
+				if ((findItem changePivotList obj.name) != 0) then ( 
+					obj.pivot = obj.center
+				)
+				
 				-- Check if needs to check this after
 				if (validateLogicObj obj == false) then
 				(
@@ -2859,7 +3053,8 @@ fn getPlatformPath obj = (
 					-- add nuevas cosas					 
 					append logicObjs obj
 				)
-
+								
+				obj.pivot = mPivot
 			)
 			
 			if (progress != undefined) then
@@ -2892,6 +3087,50 @@ fn getPlatformPath obj = (
 		
 		)
 		
+		--Add every joint in scene
+		local list = for o in $* where (classof o == UConstraint) collect o
+		local mJointString = ""
+		for mJoint in list do (
+			
+			mJointString = "\t<entity tag = \"level\" collisionTag = \"Level\">\n"			
+			mJointString += "<name " + "name=\"" + mJoint.name as string + "\" />\n"
+			
+			--Fixed Joint
+			if ((mJoint.constraintType == 0) == true) then 
+			(
+				mJointString += getJointFixed mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- Hinge joint
+			else if ((mJoint.constraintType == 6) == true) then 
+			(
+				mJointString += getJointD6 mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- Prismatic joint
+			else if ((mJoint.constraintType == 2) == true) then 
+			(
+				mJointString += getJointPrismatic mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- D6 joint
+			else if ((mJoint.constraintType == 4) == true) then 
+			(
+				mJointString += getJointHinge mJoint
+				mJointString +=  "\t</entity>\n"	
+			)
+			-- InvalidJoint
+			else (
+				print "INVALID TYPE OF JOINT"
+				
+				mJointString = ""
+			)
+			
+			
+			mXML += mJointString
+		)
+		
+		
 		--mXML += "<entity><name name=\"condicion_victoria\" /> <trigger/> <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <aabb min=\"-0.5 0.0 -0.866025\" max=\"1.0 0.1 0.866025\"/>    <victoryCondition/>  </entity>  <entity>    <name name=\"texto distancia\" />    <transform position=\"41.028 19.27 -63.12\" rotation=\"0.0 0.0 0.0 1.0\" scale=\"1.0 1.0 1.0\"/>    <distanceText text= \"YOU WIN\" distance=\"2\" size=\"100\" color=\"0xffff9999\"/>  </entity>  "
 		
 		mXML += "</scene>"
@@ -2903,7 +3142,8 @@ fn getPlatformPath obj = (
 
 
 -- Execution
---addObjectsID()
---exportXMLScene()
---openCloseFile()
---removeObjectsID()
+/*export_materials = false
+addObjectsID()
+exportXMLScene()
+openCloseFile()
+removeObjectsID()*/

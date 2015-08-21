@@ -31,7 +31,7 @@ VS_TEXTURED_OUTPUT VSUnderwater(
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PSUnderwater(VS_TEXTURED_OUTPUT input) : SV_Target
+float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input) : SV_Target
 {
 	float distortion = uw_amount;
 	float2 centerCoord = float2(0.5f, 0.5f);
@@ -58,6 +58,8 @@ float4 PSUnderwater(VS_TEXTURED_OUTPUT input) : SV_Target
 		float4 color = txDiffuse.Sample(samClampLinear, input.UV + (sinoffset*sinsign));
 		return color + float4(0, 0.0, 0.05, 1);
 	}
-
-	return txDiffuse.Sample(samClampLinear, input.UV);
+	if ((input.UV.y < cameraCinematicBands) || (input.UV.y >(1 - cameraCinematicBands)))
+		return float4(0, 0, 0, 0);
+	else
+		return txDiffuse.Sample(samClampLinear, input.UV);
 }

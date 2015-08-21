@@ -35,6 +35,7 @@ using namespace DirectX;
 #include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
 #include "comp_collider_convex.h"
+#include "comp_collider_multiple.h"
 #include "comp_rigid_body.h"
 #include "comp_static_body.h"
 #include "comp_distance_joint.h"
@@ -68,6 +69,7 @@ using namespace DirectX;
 #include "comp_bt_grandma.h"
 #include "comp_bt_soldier.h"
 #include "comp_recast_aabb.h"
+#include "comp_ai_boss.h"
 
 // Logic
 #include "comp_platform_path.h"
@@ -76,6 +78,9 @@ using namespace DirectX;
 #include "comp_switch_pull_controller.h"
 #include "comp_golden_needle_logic.h"
 #include "comp_zone_aabb.h"
+
+// GUI
+#include "comp_button.h"
 
 // Varios
 #include "comp_needle.h"

@@ -1,6 +1,6 @@
 macroScript MCVAssetBrowser
-	category:	"MCV tools"
-	buttonText:	"MCV Asset Browser"
+	category: "MCV tools"
+	buttonText: "MCV Asset Browser"
 	toolTip:	"Herramienta de edición de niveles y exportador del Broken Puppet"
 	icon:#("ViewportNavigationControls",9)
 (
@@ -409,6 +409,9 @@ macroScript MCVAssetBrowser
 			)			
 		)
 		
+			
+
+		
 		
 	/**********************************************************************************************
 		Activate all the particle systems in the scene
@@ -541,12 +544,16 @@ macroScript MCVAssetBrowser
 		(
 			TRIGGER type:#boolean ui:TRIGGER default:true
 			Logic_element type:#boolean ui:Logic_element default:true
+			bot_only type:#boolean ui:bot_only default:true
+			player_only type:#boolean ui:player_only default:true
 		)
 
 		rollout params "Object Custom Trigger"
 		(
-			checkbox TRIGGER "TRIGGER" type: #boolean
-			checkbox Logic_element "Logic_element" type: #boolean
+			checkbox TRIGGER "Trigger activo" type: #boolean
+			checkbox Logic_element "Logico" type: #boolean
+			checkbox bot_only "Solo Bot" type: #boolean
+			checkbox player_only "Solo Player" type: #boolean
 		)
 	)
 	
@@ -683,6 +690,44 @@ macroScript MCVAssetBrowser
 			custAttributes.add objSelected objectDataLogic		
 		)	
 	)
+	
+	
+		/**********************************************************************************************
+		Object OCLUSION PLANE structure
+		 Params:
+		  - MSTRING: text to show near the position
+		***********************************************************************************************/
+		objectOclusionPlane = attributes objectOclusionPlane
+		(
+			parameters main rollout:params
+			(
+				mOclusionPlane type:#boolean ui:mOclusionPlane default:true
+			)
+			 
+			rollout params "Object Oclusion Plane"
+			(
+				checkbox mOclusionPlane "Oclusion" type: #boolean
+			)
+		)
+
+		/**********************************************************************************************
+			Set the String of all the objects of the scene
+		***********************************************************************************************/
+		fn addObjectsOclusionPlane  = (		
+			local objSelected = $
+			if(classof objSelected == Plane) then(
+				if (isProperty objSelected.baseobject #mOclusionPlane != true) then(
+					custAttributes.add objSelected objectOclusionPlane
+					custAttributes.add objSelected objectDataLogic
+					custAttributes.add objSelected objectIsNotVisible							
+				)			
+			)
+			else(
+				messagebox "El Oclusion Plane debe hacerse sobre planos"
+			)
+			
+		)
+		
 		
 		-- Reloads all the instances of the asset with the given path
 		fn updateAsset dir assetName = (
@@ -727,6 +772,8 @@ macroScript MCVAssetBrowser
 			button botonDeactivateParticles "Deactivate Particles" pos:[89,130] width:75 height:25 toolTip:""
 			button botonNotVisible "Not Visible" pos:[167,130] width:75 height:25 toolTip:""
 			button botonAddAudioSource "Audio Source" pos:[248,130] width:75 height:25 toolTip:""
+			button botonAddOclusionPlane "OclusionPlane" pos:[5,161] width:75 height:25 toolTip:""
+			
 			
 							
 			on botonA pressed do	( 
@@ -805,7 +852,16 @@ macroScript MCVAssetBrowser
 			on botonAddAudioSource pressed do (
 				AddAudioSource()
 			)
+			on botonAddOclusionPlane pressed do (
+				addObjectsOclusionPlane()
+			)
 			
+			
+			
+		)
+		
+		rollout AttributesEdition "Edición de Atributos"
+		(
 			
 		)
 		
@@ -861,7 +917,7 @@ macroScript MCVAssetBrowser
 					removeObjectsID()
 					enableSceneRedraw()
 					
-					ShellLaunch  (engine_path + "engined.exe") ""
+					ShellLaunch  (engine_path + "engine.exe") ""
 				)
 				catch ( 
 					format "*** % ***\n" (getCurrentException())
@@ -886,12 +942,11 @@ macroScript MCVAssetBrowser
 			)
 			
 			on play pressed do (
-				ShellLaunch  (engine_path + "engined.exe") ""
+				ShellLaunch  (engine_path + "engine.exe") ""
 			)
 			
 			on exportLightmaps pressed do (
 				addObjectsID()
-				objs = geometry as array
 				for o in objs do (
 					if (o.modifiers[#PhysX_Rigid_Body] == undefined) then (
 						BakeLightmap o 256
@@ -1245,6 +1300,7 @@ macroScript MCVAssetBrowser
 		cui.RegisterDialogBar TestFloater style: #(#cui_handles, #cui_dock_left , #cui_dock_right, #cui_floatable)
 		
 		AddRollout LevelEdition TestFloater rolledUp:on heigth: 120
+		AddRollout AttributesEdition TestFloater rolledUp:on 
 		AddRollout Exporter TestFloater rolledUp:on
 		AddRollout Modules TestFloater rolledUp:on
 		AddRollout Prefabs TestFloater rolledUp:on

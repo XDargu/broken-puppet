@@ -192,6 +192,7 @@
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
+    <ClInclude Include="components\comp_collider_multiple.h" />
     <ClInclude Include="components\comp_joint_fixed.h" />
     <ClInclude Include="components\comp_occlusion_plane.h" />
     <ClInclude Include="components\comp_recast_aabb.h" />
@@ -200,7 +201,10 @@
     <ClInclude Include="components\comp_zone_aabb.h" />
     <ClInclude Include="components\comp_golden_needle_item.h" />
     <ClInclude Include="components\comp_bt_soldier.h" />
+    <ClInclude Include="components\comp_ai_boss.h" />
     <ClInclude Include="components\comp_hfx_zone.h" />
+    <ClInclude Include="components\comp_button.h" />
+    <ClInclude Include="render\blur_camera_step.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
     <ClInclude Include="components\all_components.h" />
@@ -381,6 +385,7 @@
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
+    <ClCompile Include="components\comp_collider_multiple.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
     <ClCompile Include="components\comp_occlusion_plane.cpp" />
     <ClCompile Include="components\comp_recast_aabb.cpp" />
@@ -390,6 +395,9 @@
     <ClCompile Include="components\comp_golden_needle_item.cpp" />
     <ClCompile Include="components\comp_bt_soldier.cpp" />
     <ClCompile Include="components\comp_hfx_zone.cpp" />
+    <ClCompile Include="components\comp_ai_boss.cpp" />
+    <ClCompile Include="components\comp_button.cpp" />
+    <ClCompile Include="render\blur_camera_step.cpp" />
     <ClCompile Include="render\collision_convex.cpp" />
     <ClCompile Include="collision_parser.cpp" />
     <ClCompile Include="components\all_components.cpp" />

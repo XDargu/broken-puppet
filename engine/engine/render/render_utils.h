@@ -60,6 +60,7 @@ void drawVPlanes(const VPlanes& planes);
 // Render world
 void setWorldMatrix(XMMATRIX world);
 void activateWorldMatrix(int slot);
+void setCinematicBands(float band);
 void activateCamera(const CCamera& camera, int slot);
 void activateLight(const CCamera& camera, int slot);
 void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int slot);
@@ -115,6 +116,7 @@ extern CMesh        plane3x3;
 // Post process
 extern  CShaderCte<TCtesGlobal> ctes_global;
 extern	CShaderCte<TCtesBlur> ctes_blur;
+extern	CShaderCte<TCtesBlurCamera> ctes_blur_camera;
 extern	CShaderCte<TCtesSharpen> ctes_sharpen;
 extern	CShaderCte<TCtesSSAO> ctes_ssao;
 extern  CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;

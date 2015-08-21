@@ -43,6 +43,18 @@ public:
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		view = XMMatrixLookAtRH(trans->position, trans->position + trans->getFront(), XMVectorSet(0, 1, 0, 1));
+
+		TTransform prev_trans = trans->getPrevTransform();
+
+		XMVECTOR lerp_pos = XMVectorLerp(prev_trans.position, trans->position, 0.5f);
+		XMVECTOR lerp_front = XMVectorLerp(prev_trans.getFront(), trans->getFront(), 0.5f);
+
+		XMMATRIX prev_view = XMMatrixLookAtRH(
+			lerp_pos,
+			lerp_pos + lerp_front,
+			XMVectorSet(0, 1, 0, 1));
+
+		prev_view_projection = prev_view * projection;
 		view_projection = view * projection;
 	}
 
@@ -56,6 +68,18 @@ public:
 		setViewport(0, 0, width, height);
 
 		updateViewProjection();
+	}
+
+	float getRotationOffset() {
+		TCompTransform* trans = (TCompTransform*)transform;
+
+		XMVECTOR diff = XMQuaternionMultiply(XMQuaternionInverse(trans->getPrevTransform().rotation), trans->rotation);
+
+		float angle;
+		XMVECTOR axis;
+		XMQuaternionToAxisAngle(&axis, &angle, diff);
+
+		return angle;
 	}
 };
 

@@ -51,6 +51,10 @@ void CLogicManager::init()
 	ambient_light = XMVectorSet(1, 1, 1, 1);
 	lerp_ambient_light = 0.05f;
 
+	band_heigth = 0;
+	band_heigth_dest = 0;
+	lerp_bands = 0.05f;
+
 	scene_to_load = "";
 
 	//triggers.clear();
@@ -91,7 +95,6 @@ void CLogicManager::update(float elapsed) {
 	// Clear the delete vector, if needed
 	if (timers_to_delete.size() > 0)
 		timers_to_delete.clear();
-
 
 	CErrorContext ce2("Updating animations", "");
 	for (auto& it : animations) {
@@ -175,6 +178,10 @@ void CLogicManager::update(float elapsed) {
 	if (scene_to_load != "") {
 		CApp::get().loadScene(scene_to_load);
 	}
+
+	// Update band height
+	band_heigth = lerp(band_heigth, band_heigth_dest, lerp_bands);
+	setCinematicBands(band_heigth);
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
@@ -430,6 +437,7 @@ void CLogicManager::bootLUA() {
 		.set("playMusic", &CLogicManager::playMusic)
 		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
 		.set("createParticleGroup", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createParticleGroup)
+		.set("setBands", &CLogicManager::setBand)
 	;
 
 	// Register the bot class
@@ -679,4 +687,11 @@ void CLogicManager::createParticleGroup(std::string pg_name, CVector position, C
 		particle_group_counter++;
 		particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
 	}
+}
+
+void CLogicManager::setBand(bool bands) {
+	if (bands)
+		band_heigth_dest = 0.1f;
+	else
+		band_heigth_dest = 0.0f;
 }

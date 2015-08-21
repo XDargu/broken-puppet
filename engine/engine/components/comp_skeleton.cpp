@@ -112,8 +112,8 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   bool a = mat->castsShadows();
   const CMesh* mesh = core_model->getMesh();
 
-  for (int i = 0; i < mesh->getNGroups(); ++i )
-    render_manager.addKey(mesh, mat, i, CHandle(this), &active);
+  for (int i = 0; i < mesh->getNGroups(); ++i)
+	  render_manager.addKey(mesh, mat, i, CHandle(this), &active, XMVectorSet(1, 1, 1, 1));
 
   // Guardar estado inicial del esqueleto
   model->update(0.05f);

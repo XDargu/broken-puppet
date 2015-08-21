@@ -22,6 +22,7 @@ CShaderCte<TCtesGUI>  ctes_gui;
 
 // Post process
 CShaderCte<TCtesBlur> ctes_blur;
+CShaderCte<TCtesBlurCamera> ctes_blur_camera;
 CShaderCte<TCtesSharpen> ctes_sharpen;
 CShaderCte<TCtesSSAO> ctes_ssao;
 CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
@@ -387,6 +388,7 @@ bool renderUtilsCreate() {
 	ctes_camera.activateInPS(1);
 
 	is_ok &= ctes_blur.create();
+	is_ok &= ctes_blur_camera.create();
 	is_ok &= ctes_sharpen.create();
 	is_ok &= ctes_ssao.create();
 	is_ok &= ctes_chromatic_aberration.create();
@@ -429,6 +431,7 @@ void renderUtilsDestroy() {
 	ctes_gui.destroy();
 
 	ctes_blur.destroy();
+	ctes_blur_camera.destroy();
 	ctes_sharpen.destroy();
 	ctes_ssao.destroy();
 	ctes_chromatic_aberration.destroy();
@@ -456,10 +459,16 @@ void activateTint(int slot) {
 	ctes_object.activateInPS(slot);
 }
 
+void setCinematicBands(float band) {
+	ctes_camera.get()->cameraCinematicBands = band;
+	ctes_camera.uploadToGPU();
+}
+
 void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.activateInVS(slot);    // as set in the shader.fx!!
 	ctes_camera.activateInPS(slot);    // as set in the shader.fx!!
 	ctes_camera.get()->ViewProjection = camera.getViewProjection();
+	ctes_camera.get()->PrevViewProjection = camera.getPrevViewProjection();
 	ctes_camera.get()->GameViewProjection = camera.getViewProjection();
 	ctes_camera.get()->cameraView = camera.getView();
 	ctes_camera.get()->cameraWorldPos = camera.getPosition();
@@ -468,7 +477,6 @@ void activateCamera(const CCamera& camera, int slot) {
 	ctes_camera.get()->cameraWorldUp = camera.getUp();
 	ctes_camera.get()->cameraZFar = camera.getZFar();
 	ctes_camera.get()->cameraZNear = camera.getZNear();
-	ctes_camera.get()->cameraDummy1 = 0.f;
 	
 	D3D11_VIEWPORT vp = camera.getViewport();
 	ctes_camera.get()->cameraHalfXRes = vp.Width / 2.f;

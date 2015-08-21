@@ -11,6 +11,10 @@ void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 	assertRequiredComponent<TCompTransform>(this);
 
+	if (elem == "render") {
+		color = atts.getPoint("color");
+	}
+
 	if (elem == "draw") {		
 		std::string mesh_name = atts.getString("mesh", "missing_mesh");
 		std::string mat_name = atts.getString("mat", "missing_mat");
@@ -20,7 +24,7 @@ void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		XASSERT(submesh_id >= 0, "Invalid submesh id: %i", submesh_id);
 		mat = material_manager.getByName(mat_name.c_str());
 
-		render_manager.addKey(mesh, mat, submesh_id, CHandle(this), &active);
+		render_manager.addKey(mesh, mat, submesh_id, CHandle(this), &active, color);
 
 		RKey k = { mesh_name, mat_name, submesh_id };
 		keys.push_back(k);

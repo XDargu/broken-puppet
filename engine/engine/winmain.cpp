@@ -134,7 +134,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 	   if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL){
 		   dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
+#ifdef _DEBUG
 		   ShowCursor(TRUE);
+#else
+		   ShowCursor(FALSE);
+#endif
 	   }
    }
 

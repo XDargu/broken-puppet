@@ -23,6 +23,7 @@ class CRenderManager {
 		CHandle            aabb;
 		bool*			   active;
 		const CTexture*	   lightmap;
+		XMVECTOR		   color;
 
 		bool operator==(const TKey &key) const {
 			return key.owner == owner && key.mesh_id == mesh_id && key.material == material && key.mesh == mesh;
@@ -68,6 +69,7 @@ public:
 		, int  mesh_id
 		, CHandle owner
 		, bool* active
+		, XMVECTOR color
 		);
 
 	void init();

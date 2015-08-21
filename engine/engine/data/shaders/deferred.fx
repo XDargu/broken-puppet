@@ -255,11 +255,11 @@ void PSGBuffer(
 
   depth.x = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
   depth.y = t_type.x;
-  if (t_type.x == 0.95 || t_type.x == 0.9) {
-	  //albedo = float4(1, 0, 0, 1);	  
-	  albedo.g += 0.5;
-  }
-
+	if (t_type.x == 0.95 || t_type.x == 0.9) {
+		//albedo = float4(1, 0, 0, 1);	  
+		albedo.g += 0.5;
+	}
+  
   if (depth.y == 0) {
 	  for (int i = 0; i < 4; i++) {
 		  if (static_needles[i].w != -1) {
@@ -289,7 +289,7 @@ void PSGBuffer(
   
   float4 emis = txEmissive.Sample(samWrapLinear, input.UV);
   acc_light += float4(emis.xyz, 0);
-
+  
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
 }
@@ -861,13 +861,13 @@ float4 PSLightShafts(VS_TEXTURED_OUTPUT input
 	float3 N = normalize(input.wNormal.xyz);
 	float fresnel = dot(N, dir_to_eye);
 
-	float4 color = txDiffuse.Sample(samClampLinear, input.UV) * float4(1, 0.5, 0.2, 1);
+	float4 color = txDiffuse.Sample(samClampLinear, input.UV) * float4(Tint.xyz, 1);//float4(1, 0.5, 0.2, 1);
 		
 	color.a *= txGloss.Sample(samWrapLinear, input.wPos.xz + world_time.xx * 0.1).x;
 	color.a *= txGloss.Sample(samWrapLinear, input.wPos.yz - cos(world_time.xx) * 0.05).x;
 	//color.a *= delta_z;
 	//color.a *= pow(1 - input.UV.y, 1);
-	color.a *= 0.6f;
+	//color.a *= 0.6f;
 	//color.a *= length(dir_to_eye);
 	float change = (sin(world_time) + 1) * 0.5;
 	color.a *= pow(fresnel, 2);

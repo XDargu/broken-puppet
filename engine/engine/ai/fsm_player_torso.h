@@ -21,12 +21,12 @@ private:
 	CHandle comp_skeleton;
 	CHandle current_rope_entity;
 	CHandle GNLogic;
-	bool first_throw;
 
 	PxVec3 standard_camera_offset;
 	XMVECTOR golden_needle_point;
 public:
 
+	bool first_throw;
 	bool up_animation;
 	bool can_move;
 	unsigned int max_num_string;
@@ -48,6 +48,10 @@ public:
 	void Inactive(float elapsed);
 
 	void ProcessHit(float elapsed);
+
+	bool canThrow();
+
+	void CancelGrabString();
 
 };
 

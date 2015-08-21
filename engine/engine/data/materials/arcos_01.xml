@@ -1,1 +1,1 @@
-<std_material name="arcos_01" diffuse="arcos_01_diffuse" normal="arcos_01_normal" specular="arcos_01_specular" glossiness="arcos_01_gloss" emissive=""/>
+<std_material name="arcos_01" diffuse="arcos_01_diffuse" normal="arcos_01_normal" specular="arcos_01_specular" glossiness="arcos_01_gloss" emissive="" emissive_off="" />

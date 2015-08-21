@@ -25,6 +25,11 @@ CIOStatus::CIOStatus( ) {
 	buttons[DIGITAL_DOWN].key = 'S';
 	buttons[Q].key = 'Q';
 	buttons[E].key = 'E';
+	buttons[O].key = 'O';
+	buttons[R].key = 'R';
+	buttons[I].key = 'I';
+	buttons[U].key = 'U';
+	buttons[L].key = 'L';
 
 	buttons[THROW_STRING].key = VK_LBUTTON;
 	buttons[TENSE_STRING].key = VK_RBUTTON;
@@ -117,8 +122,8 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 	normalized_x = (float)cursor_screen.x / App.xres;
 	normalized_y = (float)cursor_screen.y / App.yres;
 
-	prev_x = screen_x*elapsed;
-	prev_y = screen_y*elapsed;
+	prev_x = screen_x;
+	prev_y = screen_y;
 
 	if (centered) {
 		::SetCursorPos(mid_screen.x, mid_screen.y);

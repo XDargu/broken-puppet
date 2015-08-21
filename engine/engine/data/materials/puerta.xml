@@ -1,1 +1,1 @@
-<std_material name="puerta" diffuse="puerta_diffuse" normal="puerta_normal" specular="puerta_specular" glossiness="puerta_gloss" emissive=""/>
+<std_material name="puerta" diffuse="puerta_diffuse" normal="puerta_normal" specular="puerta_specular" glossiness="puerta_gloss" emissive="" emissive_off="" />

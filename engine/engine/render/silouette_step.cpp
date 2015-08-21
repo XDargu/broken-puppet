@@ -13,12 +13,14 @@ bool TSilouetteStep::create(const char* name, int axres, int ayres, int afactor)
 	yres = ayres;
 	rt_dynamic = new CRenderToTexture();
 	rt_sobel = new CRenderToTexture();
+	rt_final = new CRenderToTexture();
 
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
 	bool is_ok = rt_dynamic->create("sil_dynamic", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	is_ok &= rt_sobel->create("sil_sobel", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	is_ok &= rt_final->create("sil_final", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
 
@@ -43,8 +45,12 @@ void TSilouetteStep::apply(CTexture* in) {
 	((CTexture*)rt_dynamic)->activate(9);
 	drawTexture2D(0, 0, render.xres, render.yres, in, "silouette");
 
+	rt_final->activate();
+	((CTexture*)rt_sobel)->activate(9);
+	drawTexture2D(0, 0, render.xres, render.yres, in, "silouette_glow");
+
 }
 
 CTexture* TSilouetteStep::getOutput() {
-	return rt_sobel;
+	return rt_final;
 }
