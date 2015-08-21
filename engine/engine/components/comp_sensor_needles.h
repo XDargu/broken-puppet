@@ -34,5 +34,6 @@ public:
 	void removeNeedleRope(CHandle grandmaRef);
 	void setAsociatedNeedle(needle_rope needle_ref);
 	needle_rope getAsociatedNeedle();
+	void desAsociateNeedle(CHandle grandma);
 };
 #endif

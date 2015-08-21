@@ -9,12 +9,12 @@ struct TCompColliderBox : public CCollider, TBaseComponent {
 private:
 	XMVECTOR t_current;
 	XMVECTOR t_previous;
-	//float* m_v;
-	//int*   t_v;
+	float* m_v;
+	int*   t_v;
 public:
-	TCompColliderBox() : CCollider() { /*m_v = nullptr, t_v = nullptr;*/ }
+	TCompColliderBox() : CCollider() { m_v = nullptr, t_v = nullptr; }
 
-	//~TCompColliderBox();
+	~TCompColliderBox();
 
 	void setShape(float boxX, float boxY, float boxZ, float static_friction, float dynamic_friction, float restitution);
 

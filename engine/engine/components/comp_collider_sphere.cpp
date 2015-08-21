@@ -110,7 +110,7 @@ void TCompColliderSphere::addInputNavMesh(){
 			, max.x, max.y, max.z
 		};
 
-		float* m_v = new float[n_vertex * 3];
+		m_v = new float[n_vertex * 3];
 		memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
 
 		const int indices[] = {
@@ -118,7 +118,7 @@ void TCompColliderSphere::addInputNavMesh(){
 			, 0, 2, 1, 3, 4, 6, 5, 7
 			, 0, 4, 1, 5, 2, 6, 3, 7
 		};
-		int* t_v = new int[n_triangles];
+		t_v = new int[n_triangles];
 		memcpy(t_v, indices, n_triangles * sizeof(int));
 
 		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
@@ -182,10 +182,10 @@ bool TCompColliderSphere::getIfUpdated(){
 	return false;
 }
 
-/*TCompColliderSphere::~TCompColliderSphere(){
+TCompColliderSphere::~TCompColliderSphere(){
 	if (t_v)
 		delete[] t_v;
 
 	if (m_v)
 		delete[] m_v;
-}*/
+}

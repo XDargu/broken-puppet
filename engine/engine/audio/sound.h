@@ -18,6 +18,7 @@ public:
 	void init_sound(std::string name);
 	/*void setStream(std::string name);
 	void setChannel();*/
+	HCHANNEL getChannel();
 	void playSound();
 	bool is_playing();
 	void stopSound();

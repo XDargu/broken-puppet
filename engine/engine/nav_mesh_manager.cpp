@@ -105,7 +105,6 @@ void CNav_mesh_manager::checkUpdates(){
 void CNav_mesh_manager::updateNavmesh() {
 	while (true){
 		if (keep_updating_navmesh) {
-			bool lock = false;
 			if (need_update){
 
 				// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
@@ -113,6 +112,8 @@ void CNav_mesh_manager::updateNavmesh() {
 
 				// generamos la navmesh con los datos actualizados
 				updated_nav->build();
+
+				lock = true;
 
 				// activamos el mutex para asegurarnos de no acceder simultáneamente a una consulta de la IA
 				generating_navmesh.lock();
@@ -130,7 +131,11 @@ void CNav_mesh_manager::updateNavmesh() {
 				prepareInputNavMesh();
 
 				builded = true;
+
+				lock = false;
 			}
+		}else{
+			lock = false;
 		}
 	}
 }
@@ -333,9 +338,14 @@ CNav_mesh_manager::CNav_mesh_manager()
 	need_navmesh=false;
 	builded = false;
 	AiThread = nullptr;
+	lock = false;
 }
 
 
 CNav_mesh_manager::~CNav_mesh_manager()
 {
+}
+
+bool CNav_mesh_manager::getLock(){
+	return lock;
 }

@@ -68,16 +68,14 @@ void TCompColliderConvex::addInputNavMesh(){
 			//const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
 			if (c_m){
 				unsigned n_vertex = c_m->nvertexs;
-				float* m_v = new float[n_vertex * 8];
+				m_v = new float[n_vertex * 8];
 				memcpy(m_v, c_m->vertex_floats, n_vertex * 8 * sizeof(float));
 
 				unsigned n_triangles = c_m->nindices;
-				int* t_v = new int[n_triangles];
+				t_v = new int[n_triangles];
 				memcpy(t_v, c_m->index_int, n_triangles * sizeof(int));
 
 				CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.MODULE);
-				m_v = nullptr;
-				t_v = nullptr;
 			}
 		}
 	}
@@ -115,10 +113,10 @@ void TCompColliderConvex::setCollisionGroups(PxU32 own_mask, PxU32* vector_masks
 	setupFiltering(collider, own_mask, not_collide);
 }
 
-/*TCompColliderConvex::~TCompColliderConvex(){
+TCompColliderConvex::~TCompColliderConvex(){
 	if (t_v)
 		delete[] t_v;
 
 	if (m_v)
 		delete[] m_v;
-}*/
+}

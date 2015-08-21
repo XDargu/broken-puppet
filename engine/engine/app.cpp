@@ -174,6 +174,7 @@ void createManagers() {
 	getObjManager<TCompGNLogic>()->init(32);
 	getObjManager<TCompGNItem>()->init(64);
 	getObjManager<TCompZoneAABB>()->init(32);
+	getObjManager<TCompHfxZone>()->init(32);
 	getObjManager<TCompGoldenNeedle>()->init(32);
 	getObjManager<TCompPlayerController>()->init(1);
 	getObjManager<TCompPlayerPivotController>()->init(1);
@@ -256,6 +257,7 @@ void initManagers() {
 	getObjManager<TCompGNLogic>()->initHandlers();
 	getObjManager<TCompGNItem>()->initHandlers();
 	getObjManager<TCompZoneAABB>()->initHandlers();
+	getObjManager<TCompHfxZone>()->initHandlers();
 	//getObjManager<TCompGoldenNeedle>()->initHandlers();
 	//getObjManager<TCompUnityCharacterController>()->initHandlers();
 	getObjManager<TCompPlayerController>()->initHandlers();
@@ -1251,8 +1253,14 @@ void CApp::loadScene(std::string scene_name) {
 	Citem_manager::get().clear();
 	CImporterParser p;
 	aimanager::get().clear();
-	entity_manager.clear();
+	dbg("lock:%b", CNav_mesh_manager::get().getLock());
+	while (CNav_mesh_manager::get().getLock()){
+		dbg("Dentro bucle");
+		continue;
+	}
+	dbg("Pasado bucle");
 	CRope_manager::get().clearStrings();
+	entity_manager.clear();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
 	render_techniques_manager.destroyAll();

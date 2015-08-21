@@ -10,6 +10,7 @@
 #include "components\comp_camera_pivot_controller.h"
 #include "components\comp_golden_needle_logic.h"
 #include "components\comp_zone_aabb.h"
+#include "components\comp_hfx_zone.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -55,6 +56,7 @@ void CLogicManager::init()
 	//triggers.clear();
 	timers.clear();
 	GNLogic.clear();
+	HFXZones.clear();
 }
 
 CLogicManager::~CLogicManager() {}
@@ -193,6 +195,10 @@ void CLogicManager::registerZoneAABB(CHandle zone_aabb){
 	ZonesAABB.push_back(zone_aabb);
 }
 
+void CLogicManager::registerHFXZone(CHandle hfx_zone){
+	HFXZones.push_back(hfx_zone);
+}
+
 void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
@@ -223,6 +229,11 @@ void CLogicManager::unregisterZoneAABB(CHandle zone_aabb) {
 	ZonesAABB.erase(it);
 }
 
+void CLogicManager::unregisterHFXZone(CHandle hfx_zone){
+	auto it = std::find(HFXZones.begin(), HFXZones.end(), hfx_zone);
+	HFXZones.erase(it);
+}
+
 CHandle CLogicManager::getPlayerZoneName(){
 	for (int i = 0; i < ZonesAABB.size(); ++i){
 		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
@@ -230,6 +241,16 @@ CHandle CLogicManager::getPlayerZoneName(){
 			CHandle name = Zone_comp->getZoneName();
 			if (name.isValid())
 				return Zone_comp->getZoneName();
+		}
+	}
+	return CHandle();
+}	
+
+CHandle CLogicManager::soundsInsideHFXZone(XMVECTOR sound_pos){
+	for (int i = 0; i < HFXZones.size(); ++i){
+		TCompHfxZone* HFXZone_comp = (TCompHfxZone*)HFXZones[i];
+		if (HFXZone_comp->isEmitterInside(sound_pos)){
+			return HFXZone_comp;
 		}
 	}
 	return CHandle();

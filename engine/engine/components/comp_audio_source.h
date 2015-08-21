@@ -39,7 +39,7 @@ public:
 
 	void set3DAttributes(DWORD mode, float min, float max);
 
-
+	void setHFX(CHandle comp_hfx);
 };
 
 #endif

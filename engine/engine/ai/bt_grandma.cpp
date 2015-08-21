@@ -25,8 +25,8 @@ const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
 const float walk_speed = 0.8f;
-const float run_speed = 2.f;
-const float run_angry_speed = 2.2f;
+const float run_speed = 2.2f;
+const float run_angry_speed = 4.f;
 const float sensor_delay = 1.f;
 
 
@@ -151,7 +151,7 @@ void bt_grandma::create(string s)
 	sensor_acum = 0.f;
 	sensor_const = 1.f;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.223f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.19f;
 
 	resetBot();
 }
@@ -294,8 +294,10 @@ int bt_grandma::actionCutOwn()
 		return STAY;
 	}else{
 		TCompRope* rope = (TCompRope*)ropeRef;
-		CEntityManager::get().remove(rope->joint_aux.getOwner());
-		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+		if (rope->joint_aux.getOwner().isValid())
+			CEntityManager::get().remove(rope->joint_aux.getOwner());
+		if (CHandle(ropeRef).getOwner().isValid())
+			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		tied_event = false;
 		event_detected = false;
 		is_angry = true;
@@ -441,8 +443,10 @@ int bt_grandma::actionCutRope()
 	// Exe the logic of cut the rope
 	if ((state_time >= duration_cut * 0.7f) && (!cut)){
 		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
-		CEntityManager::get().remove(CHandle(target_rope).getOwner());
-		cut = true;
+		if (target_rope.isValid()){
+			CEntityManager::get().remove(CHandle(target_rope).getOwner());
+			cut = true;
+		}
 	}
 
 	// Finish the animation
@@ -454,9 +458,13 @@ int bt_grandma::actionCutRope()
 		// Exe the logic of taking a needle
 		if ((state_time >= (getAnimationDuration(8) + getAnimationDuration(7)*0.6f)) && !animation_done){
 			CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
-			((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-			CEntityManager::get().remove(CHandle(target_needle).getOwner());
-			animation_done = true;
+			if (target_needle.isValid()){
+				((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
+				if (CHandle(target_needle).getOwner().isValid()){
+					CEntityManager::get().remove(CHandle(target_needle).getOwner());
+					animation_done = true;
+				}
+			}
 		}
 
 		// When the animation finish, leave state and clean bools
@@ -487,10 +495,11 @@ int bt_grandma::actionTakeNeedle()
 		CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
 
 		((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
-		CEntityManager::get().remove(CHandle(target_needle).getOwner());
-		needle_to_take = false;
-		needle_is_valid = false;
-
+		if (CHandle(target_needle).getOwner().isValid()){
+			CEntityManager::get().remove(CHandle(target_needle).getOwner());
+			needle_to_take = false;
+			needle_is_valid = false;
+		}
 		return LEAVE;
 	}
 	else {
@@ -1049,8 +1058,10 @@ int bt_grandma::actionTiedEvent()
 	if (state_time >= getAnimationDuration(11)){
 		if (ropeRef.isValid()){
 			TCompRope* rope = (TCompRope*)ropeRef;
-			CEntityManager::get().remove(rope->joint_aux.getOwner());
-			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+			if (rope->joint_aux.getOwner().isValid())
+				CEntityManager::get().remove(rope->joint_aux.getOwner());
+			if (CHandle(ropeRef).getOwner().isValid())
+				CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 		}
 		tied_event = false;
 		event_detected = false;
@@ -1429,7 +1440,7 @@ void bt_grandma::hurtSensor(float damage){
 		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
-
+		((TCompSensorNeedles*)m_sensor)->desAsociateNeedle(entity);
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		stopAllAnimations();
