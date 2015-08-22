@@ -12,12 +12,6 @@
   <entity  prefab="PlayerCamera">
     <transform position="-6.856 -0.691215 13.2485"/>
   </entity>
-  <entity>
-    <name name="PlayerLight"/>
-    <transform position="-5.12909 -2.94404 2.0621" rotation="0.5 0.48 -0.5 0.53" scale="1.0 1.0 1.0" parent="Player"/>
-    <camera target="0 0 0" fov="75.0" znear="1" zfar="50"/>
-    <shadows res="4096" characterLight="false"/>
-  </entity>
   <entity tag = "actor" collisionTag = "Actor">
     <name name="scene_2_plataforma_breakable_6.0" />
     <transform position="102.792 0.230005 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
