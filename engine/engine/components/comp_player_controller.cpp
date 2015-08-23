@@ -81,14 +81,31 @@ void TCompPlayerController::update(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 	if (io.becomesReleased(CIOStatus::R)) {
 		fsm_player_legs.ChangeState("fbp_Ragdoll");
-	}
+	}	
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
+	TCompRigidBody* rigid = assertRequiredComponent<TCompRigidBody>(this);
+	TCompCharacterController* c_controller = assertRequiredComponent<TCompCharacterController>(this);
+	TCompSkeleton* skeleton = assertRequiredComponent<TCompSkeleton>(this);
+
 	/*dbg((
 		"X:" + std::to_string(XMVectorGetX(trans->position)) + ", "
 		+ "Y:" + std::to_string(XMVectorGetY(trans->position)) + ", "
 		+ "Z:" + std::to_string(XMVectorGetZ(trans->position)) + "\n"
 		).c_str());*/
+
+	float water_level = CApp::get().water_level;
+	float atten = 0.2f;
+	float water_multiplier = 1;
+
+	if (rigid->rigidBody->getGlobalPose().p.y < water_level - atten)  {
+		float proportion = min(1, (water_level - rigid->rigidBody->getGlobalPose().p.y) / atten);
+		water_multiplier = 1 - (proportion * 0.5f);
+	}
+
+	//c_controller->jumpPower = 10.2 / water_multiplier;
+	c_controller->gravityMultiplier = 48 * water_multiplier;
+	skeleton->model->getMixer()->setTimeFactor(water_multiplier);
 
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
 	TCompTransform* camera_transform = camera_entity->get<TCompTransform>();

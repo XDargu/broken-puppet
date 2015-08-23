@@ -294,10 +294,12 @@ int bt_grandma::actionCutOwn()
 		return STAY;
 	}else{
 		TCompRope* rope = (TCompRope*)ropeRef;
-		if (rope->joint_aux.getOwner().isValid())
-			CEntityManager::get().remove(rope->joint_aux.getOwner());
-		if (CHandle(ropeRef).getOwner().isValid())
-			CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+		if (ropeRef.isValid()) {
+			if (rope->joint_aux.getOwner().isValid())
+				CEntityManager::get().remove(rope->joint_aux.getOwner());
+			if (CHandle(ropeRef).getOwner().isValid())
+				CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+		}
 		tied_event = false;
 		event_detected = false;
 		is_angry = true;

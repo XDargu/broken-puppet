@@ -37,5 +37,12 @@
 	<anim name="idle_var01"/>33
 	<anim name="idle_var02"/>34
 	<anim name="idle_var03"/>35
+
+	bone_correction bone="Bip001 Spine1" local_dir="0 1 0" amount="0.1" render="0"/>
+  bone_correction bone="Bip001 Spine2" local_dir="0 1 0" amount="0.2" render="0"/>
+  bone_correction bone="Bip001 Spine3" local_dir="0 1 0" amount="0.3" render="0"/>
+  bone_correction bone="Bip001 Spine4" local_dir="0 1 0" amount="0.4" render="0"/>
+	bone_correction bone="Bip001 Neck" local_dir="0 1 0" amount="0.5" render="0"/>
+  <bone_correction bone="Bip001 Head" local_dir="0 1 0" amount="1" render="0"/>
 	
 </skeleton>

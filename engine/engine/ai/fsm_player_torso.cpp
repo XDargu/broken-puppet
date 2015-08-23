@@ -5,6 +5,7 @@
 #include "handle\prefabs_manager.h"
 #include "components\comp_skeleton.h"
 #include "ai\logic_manager.h"
+#include "components\comp_skeleton_lookat.h"
 
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
@@ -18,6 +19,7 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, first_throw(false)
 	, up_animation(false)
 	, max_num_string(0)
+	, looking_at_pointer(false)
 {}
 FSMPlayerTorso::~FSMPlayerTorso() {}
 
@@ -776,6 +778,15 @@ void FSMPlayerTorso::ProcessHit(float elapsed) {
 
 bool FSMPlayerTorso::canThrow() {
 	TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
+	TCompTransform* comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+	TCompSkeletonLookAt* comp_lookat = ((CEntity*)entity)->get<TCompSkeletonLookAt>();
+
+	TTransform head = *comp_trans;
+	float player_y = XMVectorGetY(comp_trans->position);
+	XMVectorSetY(head.position, player_y + 1.7f);
+
+	XMVECTOR head_front = head.position + head.getFront() + head.getUp() * 1.6f;
+	
 
 	// Raycast detecting the collider the mouse is pointing at
 	PxRaycastBuffer hit;
@@ -785,20 +796,49 @@ bool FSMPlayerTorso::canThrow() {
 		PxRaycastHit blockHit = hit.block;
 
 		if (std::strcmp(blockHit.actor->getName(), "Player") != 0)
-		{
+		{			
+			XMVECTOR pos = Physics.PxVec3ToXMVECTOR(blockHit.position);						
+			float pos_y = XMVectorGetY(pos);
+			XMVECTOR pos_aux = XMVectorSetY(pos, XMVectorGetY(head.position));
+			XMVECTOR target = comp_lookat->target;
 
+			bool inFovBig = head.isInFov(pos_aux, deg2rad(170));
+			bool inFovSmall = head.isInFov(pos_aux, deg2rad(110));
+
+			if ((inFovSmall) || (looking_at_pointer && inFovBig)) {
+				TCompSkeletonLookAt* comp_lookat = ((CEntity*)entity)->get<TCompSkeletonLookAt>();
+				//comp_lookat->target = XMVectorLerp(comp_lookat->target, pos, 0.03f);
+				target = pos;
+				looking_at_pointer = true;
+			}
+			else {
+				//comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.03f);
+				target = head_front;
+				looking_at_pointer = false;
+			}
+
+			comp_lookat->target = XMVectorLerp(comp_lookat->target, target, 0.03f);
+			
+			if (legs->getState() == "fbp_Idle")
+				comp_lookat->active = true;
+			else
+				comp_lookat->active = false;
+		
 			// First throw
 			if (first_actor == nullptr) {
 				return true;
 			}
 			else {
 				// The string can be thrown
-				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
+				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {					
 					return true;
 				}
 			}
 		}
-	}
+	}	
+
+	comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.05f);	
+	looking_at_pointer = false;
 
 	return false;
 }

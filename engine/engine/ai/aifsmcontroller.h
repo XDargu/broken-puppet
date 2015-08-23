@@ -55,6 +55,7 @@ public:
 	bool isAngry();
 	int getIndRecastAABB();
 	void setActive(bool act);
+	std::string getState() { return state; }
 	//---------------------------------------------
 };
 

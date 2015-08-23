@@ -392,7 +392,7 @@ void CalMixer::updateAnimation(float deltaTime)
   while(iteratorAnimationAction != m_listAnimationAction.end())
   {
     // update and check if animation action is still active
-    if((*iteratorAnimationAction)->update(deltaTime))
+	  if ((*iteratorAnimationAction)->update(deltaTime * m_timeFactor))
     {
       (*iteratorAnimationAction)->checkCallbacks((*iteratorAnimationAction)->getTime(),m_pModel);
       ++iteratorAnimationAction;
@@ -419,7 +419,7 @@ void CalMixer::updateAnimation(float deltaTime)
   while(iteratorAnimationCycle != m_listAnimationCycle.end())
   {
     // update and check if animation cycle is still active
-    if((*iteratorAnimationCycle)->update(deltaTime))
+	  if ((*iteratorAnimationCycle)->update(deltaTime * m_timeFactor))
     {
       // check if it is in sync. if yes, update accumulated weight and duration
       if((*iteratorAnimationCycle)->getState() == CalAnimation::STATE_SYNC)

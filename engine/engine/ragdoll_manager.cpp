@@ -181,7 +181,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 		// Break bones
 		if (breakable) {
-			mJoint->setBreakForce(10000, 10000);
+			mJoint->setBreakForce(100000, 100000);
 		}		
 
 		/*mJoint->setConstraintFlag(PxConstraintFlag::ePROJECTION, true);

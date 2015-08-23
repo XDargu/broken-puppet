@@ -27,6 +27,8 @@ XMVECTOR getVectorFromYaw(float yaw);
 
 float getPitchFromVector(XMVECTOR front);
 
+float getAngleBetweenVectors(XMVECTOR a, XMVECTOR b);
+
 bool isKeyPressed(int key);
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2);
