@@ -2,7 +2,6 @@
 #include "sound_manager.h"
 #include "components\comp_hfx_zone.h"
 #include "ai\logic_manager.h"
-#include "bass.h"
 
 static CSoundManager the_sound_manager;
 static float volume_factor = 1000;
@@ -36,6 +35,7 @@ CSoundManager::CSoundManager()
 	sounds = new std::map<std::string, sounds_map>();
 	sounds_categories = new std::map<std::string, std::vector<sounds_map>>();
 	BASS_Init(-1, 44100, BASS_DEVICE_3D, 0, NULL);
+	XASSERT(HIWORD(BASS_FX_GetVersion()) == BASSVERSION, "Error versión Bass_FX");
 	first = false;
 	slowed = false;
 	currentTrack = 0;
@@ -279,6 +279,10 @@ void CSoundManager::play3DFX(std::string name, TTransform* trans, float volume_l
 				setEchoHFX(comp_hfx, stream.first.stream);
 				zone = true;
 			}
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::FREE_REVERB){
+				setFreeReverbHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
 		}
 	}
 	BASS_ChannelPlay(stream.first.stream, 0);
@@ -322,6 +326,10 @@ void CSoundManager::play3DFX(std::string name, XMVECTOR pos){
 			}
 			if (comp_hfx_ent->getType()&TCompHfxZone::type::ECHO){
 				setEchoHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::FREE_REVERB){
+				setFreeReverbHFX(comp_hfx, stream.first.stream);
 				zone = true;
 			}
 		}
@@ -431,6 +439,56 @@ void CSoundManager::setReverbHFX(CHandle comp_hfx, HSTREAM channel){
 					}
 				}
 			}else{
+				int code = BASS_ErrorGetCode();
+				if (code == BASS_ERROR_HANDLE){
+					XASSERT(code, "Error, FX handle invalid");
+				}
+				else if (code == BASS_ERROR_ILLPARAM){
+					XASSERT(code, "Error, FX params invalid");
+				}
+				else if (code == BASS_ERROR_UNKNOWN){
+					XASSERT(code, "Error, FX Unknown error");
+				}
+			}
+		}
+	}
+}
+
+void CSoundManager::setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel){
+	if (comp_hfx.isValid()){
+		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::FREE_REVERB){
+			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_BFX_FREEVERB, 9);
+			if (FX != 0){
+				BASS_BFX_FREEVERB* r = ((TCompHfxZone*)comp_hfx)->getFreeReverb();
+				if (r != nullptr){
+					//HFX reverb=((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes();
+					//bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), r);
+					//if (success){
+					BASS_BFX_FREEVERB free_reverb;
+					free_reverb.fDryMix = r->fDryMix;
+					free_reverb.fWetMix = r->fWetMix;
+					free_reverb.fRoomSize = r->fRoomSize;
+					free_reverb.fDamp = r->fDamp;
+					free_reverb.fWidth = r->fWidth;
+					free_reverb.lChannel = r->lChannel;
+					free_reverb.lMode = r->lMode;
+					bool success = BASS_FXSetParameters(FX, &free_reverb);
+					//}
+					if (!success){
+						int code = BASS_ErrorGetCode();
+						if (code == BASS_ERROR_HANDLE){
+							XASSERT(code, "Error, FX handle invalid");
+						}
+						else if (code == BASS_ERROR_ILLPARAM){
+							XASSERT(code, "Error, FX params invalid");
+						}
+						else if (code == BASS_ERROR_UNKNOWN){
+							XASSERT(code, "Error, FX Unknown error");
+						}
+					}
+				}
+			}
+			else{
 				int code = BASS_ErrorGetCode();
 				if (code == BASS_ERROR_HANDLE){
 					XASSERT(code, "Error, FX handle invalid");

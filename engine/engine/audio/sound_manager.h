@@ -1,7 +1,8 @@
 #ifndef _SOUND_MANAGER_H_
 #define _SOUND_MANAGER_H_
 
-#include "bass.h" 
+#include "audio\bass.h"
+#include "audio\bass_fx.h"
 #include "components\comp_transform.h"
 
 class CSoundManager
@@ -76,6 +77,7 @@ public:
 	void setSound3DFactors(float distance, float roll, float doppler);
 
 	void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
+	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
 	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
 	//bool set3DPosition(std::string name);
 };

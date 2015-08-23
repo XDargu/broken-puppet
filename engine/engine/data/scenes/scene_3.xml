@@ -9,7 +9,8 @@
     <transform position="-4.00241 -1.02073 5.58466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-12.6537 -4.84886 -14.3092" max="12.6537 4.16885 14.3092"/>
     <hfxZone>
-      <HFX type="reverb" in_gain="0.f" reverb_mix="-5.f" reverb_time="0.f" high_freq_ratio="0.5f" />
+      <HFX type="free_reverb" dry_mix="0.5f" wet_mix="0.5f" room_size="0.5f" damp="1.f" width="1.f" freeze="false"/>
+      <!--<HFX type="reverb" in_gain="0.f" reverb_mix="-5.f" reverb_time="0.f" high_freq_ratio="0.5f" />-->
       <!--<HFX type="echo" wet_dry_mix="90.f" feedback="90.f" left_delay="1000.f" right_delay="1000.f" pan_delay="true" />-->
     </hfxZone>
   </entity>

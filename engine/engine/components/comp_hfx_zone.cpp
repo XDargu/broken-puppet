@@ -17,6 +17,8 @@ TCompHfxZone::~TCompHfxZone() {
 		delete echo_params;
 	if (reverb_params)
 		delete reverb_params;
+	if (free_reverb_params)
+		delete free_reverb_params;
 
 	CLogicManager::get().unregisterHFXZone(this);
 }
@@ -46,6 +48,23 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 			setEchoZoneAtributtes(fWetDryMix, fFeedback, fLeftDelay, fRightDelay, lPanDelay);
 			kind = kind | type::ECHO;
+		}
+
+		if (typeHFX == "free_reverb"){
+
+			float fDryMix = atts.getFloat("dry_mix", 0.f);
+			float fWetMix = atts.getFloat("wet_mix", 0.f);
+			float fRoomSize = atts.getFloat("room_size", 0.f);
+			float fDamp = atts.getFloat("damp", 0.f);
+			float fWidth = atts.getFloat("width", 0.f);
+			bool freeze = atts.getBool("freeze", false);
+			DWORD lMode = 0;
+			if (freeze)
+				DWORD lMode = BASS_BFX_FREEVERB_MODE_FREEZE;
+			else
+
+			setFreeReverbZoneAtributtes(fDryMix, fWetMix, fRoomSize, fDamp, fWidth, lMode);
+			kind = kind | type::FREE_REVERB;
 		}
 	}
 
@@ -88,6 +107,17 @@ void TCompHfxZone::setRevertZoneAtributtes(float fInGain, float fReverbMix, floa
 	}*/
 }
 
+void TCompHfxZone::setFreeReverbZoneAtributtes(float fDryMix, float fWetMix, float fRoomSize, float fDamp, float fWidth, DWORD lMode){
+	free_reverb_params = new BASS_BFX_FREEVERB();
+	free_reverb_params->fDryMix = fDryMix;
+	free_reverb_params->fWetMix = fWetMix;
+	free_reverb_params->fRoomSize = fRoomSize;
+	free_reverb_params->fDamp = fDamp;
+	free_reverb_params->fWidth = fWidth;
+	free_reverb_params->lChannel = BASS_BFX_CHAN1;
+	free_reverb_params->lMode = lMode;
+}
+
 void TCompHfxZone::setEchoZoneAtributtes(float fWetDryMix, float fFeedback, float fLeftDelay, float fRightDelay, bool lPanDelay){
 	echo_params = new BASS_DX8_ECHO();
 	echo_params->fWetDryMix = fWetDryMix;
@@ -119,6 +149,10 @@ BASS_DX8_ECHO* TCompHfxZone::getEcho(){
 
 BASS_DX8_REVERB* TCompHfxZone::getReverb(){
 	return reverb_params;
+}
+
+BASS_BFX_FREEVERB* TCompHfxZone::getFreeReverb(){
+	return free_reverb_params;
 }
 
 void TCompHfxZone::init() {
