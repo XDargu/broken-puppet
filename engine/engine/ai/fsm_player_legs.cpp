@@ -525,8 +525,17 @@ void FSMPlayerLegs::Land(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
+	
+
 	if (on_enter) {
 		skeleton->playAnimation(7);
+
+		// Jump particle
+		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
+		if (e) {
+			TCompParticleGroup* pg = ((CEntity*)e)->get<TCompParticleGroup>();
+			pg->restart();
+		}
 	}
 	bool is_moving = false;
 	if (state_time > 0.2f) {

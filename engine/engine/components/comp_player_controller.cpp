@@ -9,6 +9,7 @@
 #include "comp_ragdoll.h"
 #include "../audio/sound_manager.h"
 #include "io\iostatus.h"
+#include "components\comp_particle_group.h"
 
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompLife>(this);
@@ -62,6 +63,9 @@ void TCompPlayerController::init() {
 
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
+
+	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
+
 
 	float offset_size = 0.05f;
 	float offset_rot_size = 0.2f;
@@ -175,6 +179,12 @@ void TCompPlayerController::update(float elapsed) {
 		needle_back2_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back2) + bone_trans.getUp() * XMVectorGetY(offset_needle_back2);
 	}
 	
+	// Particles
+	/*if (entity_jump_dust.isValid()) {
+		TCompTransform* pg_trans = ((CEntity*)entity_jump_dust)->get<TCompTransform>();
+		pg_trans->position = trans->position;
+		pg_trans->lookAt(pg_trans->position + trans->getUp(), XMVectorSet(0, 1, 0, 0));
+	}*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

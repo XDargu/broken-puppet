@@ -184,7 +184,7 @@ void CSoundManager::playRandomFX(std::string category_name){
 	if (sounds_categories->operator[](category_name).size() > 0){
 		int random_ind = getRandomNumber(0, sounds_categories->operator[](category_name).size());
 		sounds_map stream = sounds_categories->operator[](category_name)[random_ind];
-		HCHANNEL channel = BASS_SampleGetChannel(stream.first.stream, FALSE);
+		HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 		BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 0.3f);
 		BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 		BASS_ChannelPlay(channel, 0);
@@ -214,7 +214,7 @@ void CSoundManager::playFXTrack(std::string name, bool loop) {
 void CSoundManager::playFX(std::string name){
 	// Play FX
 	sounds_map stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream.first.stream, FALSE);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 0.3f);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_ChannelPlay(channel, 0);
@@ -223,7 +223,7 @@ void CSoundManager::playFX(std::string name){
 void CSoundManager::playFX(std::string name, bool loop){
 	// Play FX
 	sounds_map stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream.first.stream, FALSE);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	if (loop){
 		BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 1.f);
 		BASS_ChannelFlags(channel, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
@@ -300,7 +300,7 @@ void CSoundManager::play3DFX(std::string name, TTransform* trans, float volume_l
 
 void CSoundManager::play3DFX(std::string name, XMVECTOR pos){
 	sounds_map stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream.first.stream, FALSE);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_3DVECTOR pos_ref;
 	BASS_3DVECTOR front_ref;
