@@ -381,11 +381,11 @@ bool CApp::create() {
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
-	loadScene("data/scenes/viewer_test.xml");	
+	//loadScene("data/scenes/viewer_test.xml");	
 
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
-	//loadScene("data/scenes/scene_boss.xml");
+	loadScene("data/scenes/scene_boss.xml");
 	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
@@ -1406,7 +1406,7 @@ void CApp::loadScene(std::string scene_name) {
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 2);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 	is_ok &= silouette.create("silouette", xres, yres, 1);

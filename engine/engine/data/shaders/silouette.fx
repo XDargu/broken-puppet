@@ -115,7 +115,7 @@ float4 PSSilouette(
 	float border = abs(color_x.x + color_y.x);
 	//return abs(border);
 	if (border > 0)
-		return float4(0,0.5,0,0);	
+		return float4(0.45,0.8,0.63,0) * 0.6;	
 	return float4(0, 0, 0, 0);
 }
 
