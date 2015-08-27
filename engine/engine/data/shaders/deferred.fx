@@ -288,7 +288,7 @@ void PSGBuffer(
   acc_light *= added_ambient_color;
   
   float4 emis = txEmissive.Sample(samWrapLinear, input.UV);
-  acc_light += float4(emis.xyz, 0);
+  acc_light += float4(emis.xyz * 10, 0);
   
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
@@ -677,6 +677,10 @@ float4 PSResolve(
 	float depth = txDepth.Load(ss_load_coords).x;
 	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
+
+	int mip_level = 10;
+	float2 uv = iPosition.xy / float2(cameraHalfXRes * 2, cameraHalfYRes * 2);
+	float luminance = txAccLight.SampleLevel(samClampLinear, uv, mip_level);
 		
 	float3 wPos = getWorldCoords(iPosition.xy, depth);
 	float3 I = wPos - cameraWorldPos.xyz;
@@ -714,9 +718,17 @@ float4 PSResolve(
 	
 	float4 base_color = albedo * (1 - gloss*0.5) + env * gloss * 0.5;
 	base_color = base_color * diffuse + saturate(specular);
-	return 
+	/*return 
 		(base_color)* (1 - ambient_val)
+		+ (base_color * ambient_color * ambient_val);*/
+	float4 final_color = (base_color)* (1 - ambient_val)
 		+ (base_color * ambient_color * ambient_val);
+
+	
+	float exposure = 2;//luminance;
+	float2 vtc = float2(uv - 0.5);
+	float vignette = pow(1 - (dot(vtc, vtc) * 1.0), 2.0);
+	return 1.0 - pow(2.71, -(vignette * final_color * exposure));
 }
 
 

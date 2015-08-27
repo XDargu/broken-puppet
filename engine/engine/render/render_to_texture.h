@@ -16,7 +16,7 @@ class CRenderToTexture : public CTexture {
 
 	friend class CDeferredRender;
 
-	bool createColorBuffer();
+	bool createColorBuffer(bool mipmaps = false);
 	bool createDepthBuffer();
 
 public:
@@ -25,7 +25,7 @@ public:
 
 	CRenderToTexture();
 	bool create(const char* name, int xres, int yres, DXGI_FORMAT color_fmt, DXGI_FORMAT depth_fmt
-		, TZBufferType zbuffer_type = USE_OWN_ZBUFFER);
+		, TZBufferType zbuffer_type = USE_OWN_ZBUFFER, bool mipmaps = false);
 	void activate();
 	void activateViewport();
 	void clearColorBuffer(const FLOAT ColorRGBA[4]);

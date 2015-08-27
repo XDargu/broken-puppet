@@ -566,13 +566,15 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("blur");
+		render_techniques_manager.reload("glow");
+		render_techniques_manager.reload("glow_lights");
 		render_techniques_manager.reload("blur_camera");		
 		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("silouette_glow");
-		/*render_techniques_manager.reload("deferred_gbuffer");
-		render_techniques_manager.reload("deferred_resolve");*/
+		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_resolve");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -816,7 +818,7 @@ void CApp::render() {
 	blur.apply(underwater.getOutput());
 	blur_camera.apply(blur.getOutput());
 	silouette.apply(blur_camera.getOutput());
-	//glow.apply(silouette.getOutput());
+	glow.apply(silouette.getOutput());
 
 	::render.activateBackbuffer();
 	static int sz = 150;
@@ -833,7 +835,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, silouette.getOutput());
+	drawTexture2D(0, 0, xres, yres, glow.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
@@ -1369,6 +1371,8 @@ void CApp::loadScene(std::string scene_name) {
 	// Ctes ---------------------------
 
 	is_ok &= deferred.create(xres, yres);
+
+	XASSERT(is_ok, "Error creating deferred targets");
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
