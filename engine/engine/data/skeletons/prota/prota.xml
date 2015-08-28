@@ -4,10 +4,10 @@
 	<anim name="idle"/>0	
 	<anim name="walk" blend="0.3" blend_out="0.3"/>1
 	<anim name="run"/>2
-        <anim name="dance"/>3
+    <anim name="dance"/>3
 	<anim name="throw" blend_out = "0"/>4
-	<anim name="jump" blend = "0" blend_out= "0.3"/>5 
-	<anim name="falling" blend = "0.1" blend_out="0.3" cancel="0.2"/>6 
+	<anim name="jump" blend = "0.05" blend_out= "0.3"/>5 
+	<anim name="falling" blend = "0.1" blend_out="0.3" cancel ="1.0"/>6 
 	<anim name="ground" blend = "0.3" blend_out="0.3" cancel="0"/>7
 	<anim name="idle_up"/>8
 	<anim name="walk_up"/>9
@@ -18,7 +18,7 @@
 	<anim name="run_left"/>14
 	<anim name="run_right"/>15
 	<anim name="walk_back"/>16
-	<anim name="pull_up"/>17
+	<anim name="pull"/>17
 	<anim name="stand_up"/>18
 	<anim name="throw_up"/>19
 	<anim name="throw_partial_up"/>20
@@ -30,14 +30,14 @@
 	<anim name="run_left_up"/>26
 	<anim name="run_right_up"/>27
 	<anim name="hit"/>28
-	<anim name="wrong_falling"/>29
+	<anim name="jump_loop"/>29
 	<anim name="ground_heavy"/>30
 	<anim name="cancel_partial"/>31
 	<anim name="tense_partial"/>32
 	<anim name="idle_var01"/>33
 	<anim name="idle_var02"/>34
 	<anim name="idle_var03"/>35
-
+	
 	bone_correction bone="Bip001 Spine1" local_dir="0 1 0" amount="0.1" render="0"/>
   bone_correction bone="Bip001 Spine2" local_dir="0 1 0" amount="0.2" render="0"/>
   bone_correction bone="Bip001 Spine3" local_dir="0 1 0" amount="0.3" render="0"/>
