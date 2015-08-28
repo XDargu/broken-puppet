@@ -2,10 +2,20 @@
 #define _FSM_BOSS_H_
 
 #include "aifsmcontroller.h"
+#include "physics_manager.h"
+#include "entity_manager.h"
 
 class fsm_boss : public aifsmcontroller
 {
+private:
+	PxVec3 point_offset;
+	float distance_to_point;
+	CEntityManager* m_entity_manager;
+	float obj_distance;
+	CHandle obj_selected;
+	float force;
 
+	CHandle m_player;
 public:
 	fsm_boss();
 	~fsm_boss();
@@ -20,7 +30,9 @@ public:
 
 	void Rain1();
 	void Ball1();
-	void Shoot1();
+	void Shoot1ReleaseDef();
+	void Shoot1DownDef();
+	void Shoot1Shoot();
 
 	void Damaged1();
 
@@ -34,7 +46,7 @@ public:
 
 	void Damaged2();
 
-	void FinalState();
+	void FinalState();	
 
 	void Dead();
 
