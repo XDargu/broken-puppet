@@ -16,7 +16,8 @@ void CSound::init_sound(std::string name, DWORD mode, float min, float max){
 		XASSERT(CSoundManager::get().sounds, "error, sonido inexistente %s", name.c_str());
 	}
 	else{
-		own_sample = CSoundManager::get().sounds->operator[](name);
+		CSoundManager::sounds_map val = CSoundManager::get().sounds->operator[](name);
+		own_sample = val.second;
 		/*bool setting = Set3DSampleAttributes(own_sample, mode, min, max);
 		if (!setting){
 			XASSERT(CSoundManager::get().sounds, "error, sample atribbutes %s", name.c_str());
@@ -41,7 +42,8 @@ void CSound::init_sound(std::string name){
 		XASSERT(CSoundManager::get().sounds, "error, sonido inexistente %s", name.c_str());
 	}
 	else{
-		own_sample = CSoundManager::get().sounds->operator[](name);
+		CSoundManager::sounds_map val = CSoundManager::get().sounds->operator[](name);
+		own_sample = val.second;
 		own_channel = BASS_SampleGetChannel(own_sample, FALSE);
 		if (own_channel){
 			XASSERT(CSoundManager::get().sounds, "error cargando channel %s", name.c_str());
@@ -62,6 +64,10 @@ void CSound::playSound(){
 			XASSERT(success, "error play channel");
 		}
 	}
+}
+
+HCHANNEL CSound::getChannel(){
+	return own_channel;
 }
 
 void CSound::setLoop(bool looped){

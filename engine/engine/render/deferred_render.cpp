@@ -18,7 +18,7 @@ bool CDeferredRender::create(int xres, int yres) {
 	technique_deferred_dir_lights = render_techniques_manager.getByName("deferred_dir_lights");
 
 
-	if (!rt_lights->create("rt_lights", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER))
+	if (!rt_lights->create("rt_lights", xres, yres, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER, true))
 		return false;
 	if (!rt_albedo->create("rt_albedo", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN))
 		return false;
@@ -85,7 +85,7 @@ void CDeferredRender::generateLightBuffer() {
 		technique_deferred_point_lights->activate();
 		getObjManager<TCompPointLight>()->onAll(&TCompPointLight::draw);
 	}
-
+	
 	if (1) {
 		CTraceScoped scope("dir_lights");
 		technique_deferred_dir_lights->activate();
@@ -112,6 +112,8 @@ void CDeferredRender::render(const CCamera* camera, CRenderToTexture& rt_out) {
 	generateGBuffer(camera);
 	activateCamera(*camera, 1);
 	generateLightBuffer();
+	
+	::render.ctx->GenerateMips(rt_lights->getResourceView());
 
 	rt_out.activate();
 	resolve(camera, rt_out);

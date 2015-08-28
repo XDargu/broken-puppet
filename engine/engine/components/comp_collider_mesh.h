@@ -9,10 +9,14 @@
 #include "collider.h"
 
 struct TCompColliderMesh : public CCollider, TBaseComponent {
+private:
+	float* m_v;
+	int*   t_v;
 public:
 	char path[64];
-	TCompColliderMesh() : CCollider() { }
-	TCompColliderMesh(physx::PxShape* the_mesh_collider) { collider = the_mesh_collider; strcpy(path, "unknown"); }
+	TCompColliderMesh() : CCollider() { m_v = nullptr, t_v = nullptr; }
+	TCompColliderMesh(physx::PxShape* the_mesh_collider) { collider = the_mesh_collider; strcpy(path, "unknown"); m_v = nullptr, t_v = nullptr; }
+	~TCompColliderMesh();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

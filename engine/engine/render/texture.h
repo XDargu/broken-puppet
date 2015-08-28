@@ -25,6 +25,8 @@ public:
 	void destroy();
 	void activate(int slot) const;
 	bool reload() { return load(name.c_str()); }
+
+	ID3D11ShaderResourceView* getResourceView() { return resource_view; }
 };
 
 typedef CItemsByName< CTexture > CTextureManager;

@@ -525,8 +525,17 @@ void FSMPlayerLegs::Land(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
+	
+
 	if (on_enter) {
 		skeleton->playAnimation(7);
+
+		// Jump particle
+		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
+		if (e) {
+			TCompParticleGroup* pg = ((CEntity*)e)->get<TCompParticleGroup>();
+			pg->restart();
+		}
 	}
 	bool is_moving = false;
 	if (state_time > 0.2f) {
@@ -651,6 +660,7 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
 		stopAllAnimations();
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
+		torso->CancelGrabString();
 
 		/*rigidbody->setLockXRot(false);
 		rigidbody->setLockYRot(false);
@@ -659,8 +669,8 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		rigidbody->auto_rotate_transform = true;
 		rigidbody->auto_translate_transform = true;*/
 	}
-	if (((state_time >= 4 && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
-		|| (state_time >= 5))
+	if (((state_time >= 1.5f && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
+		|| (state_time >= 4))
 	{
 		if (m_ragdoll) { m_ragdoll->setActive(false); }
 
@@ -894,7 +904,6 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 	// Evaluate falling
 	physx::PxVec3 velocity = rigidbody->rigidBody->getLinearVelocity();
 	falling = velocity.y < -1.5f && !((TCompCharacterController*)comp_character_controller)->OnGround();	
-	dbg("Velocity y: %f, Falling: %d, OnGround: %d\n", velocity.y, falling, ((TCompCharacterController*)comp_character_controller)->OnGround());
 	return is_moving;
 }
 

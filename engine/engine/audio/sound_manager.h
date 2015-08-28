@@ -1,12 +1,18 @@
 #ifndef _SOUND_MANAGER_H_
 #define _SOUND_MANAGER_H_
 
-#include "bass.h" 
+#include "audio\bass.h"
+#include "audio\bass_fx.h"
 #include "components\comp_transform.h"
 
 class CSoundManager
 {
 public:
+	struct stream_effects{
+		HSTREAM stream;
+		CHandle FX_zone;
+	};
+
 	struct TMusicTrack {
 		std::string name;
 		HSTREAM stream;
@@ -21,16 +27,21 @@ public:
 		TMusicTrack() : name(""), stream(3435973836) {}
 	};
 
+	typedef std::pair<stream_effects, HSAMPLE> sounds_map;
+
 	//vector of emiting channels
 	//typedef std::vector< CSound* > VSounds;
-	std::map<std::string, HSAMPLE>* sounds;
-	std::map<std::string, std::vector<HSAMPLE>>* sounds_categories;
+	
+	std::map<std::string, sounds_map>* sounds;
+	std::map<std::string, std::vector<sounds_map>>* sounds_categories;
 	//VSounds vector_sounds;
 
 private:
 	TMusicTrack music_tracks[8];
 	int currentTrack;
 	HSTREAM musicTracks[8];
+	bool first;
+	bool slowed;
 
 public:
 	CSoundManager();
@@ -64,6 +75,10 @@ public:
 	void playImpactFX(float force, CHandle transform);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
+
+	void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
+	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
+	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
 	//bool set3DPosition(std::string name);
 };
 

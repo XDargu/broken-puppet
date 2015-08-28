@@ -15,6 +15,7 @@ bool CRenderToTexture::create(
 	, DXGI_FORMAT acolor_fmt
 	, DXGI_FORMAT adepth_fmt
 	, TZBufferType zbuffer_type
+	, bool mipmaps
 	) {
 
 	// Save the params
@@ -27,7 +28,7 @@ bool CRenderToTexture::create(
 	// Use the name for the debug name
 
 	if (color_fmt != DXGI_FORMAT_UNKNOWN)
-		if (!createColorBuffer())
+		if (!createColorBuffer(mipmaps))
 			return false;
 
 	// Create ZBuffer
@@ -49,13 +50,13 @@ bool CRenderToTexture::create(
 }
 
 // ------------------------------------------------
-bool CRenderToTexture::createColorBuffer() {
+bool CRenderToTexture::createColorBuffer(bool mipmaps) {
 	// Create a color surface
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.Width = xres;
 	desc.Height = yres;
-	desc.MipLevels = 1;
+	desc.MipLevels = mipmaps ? 0 : 1;
 	desc.ArraySize = 1;
 	desc.Format = color_fmt;
 	desc.SampleDesc.Count = 1;
@@ -63,7 +64,7 @@ bool CRenderToTexture::createColorBuffer() {
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = 0;
-	desc.MiscFlags = 0;
+	desc.MiscFlags = mipmaps ? D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
 	HRESULT hr = render.device->CreateTexture2D(&desc, NULL, &resource);
 	if (FAILED(hr))
 		return false;
@@ -78,7 +79,7 @@ bool CRenderToTexture::createColorBuffer() {
 	memset(&SRVDesc, 0, sizeof(SRVDesc));
 	SRVDesc.Format = color_fmt;
 	SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	SRVDesc.Texture2D.MipLevels = desc.MipLevels;
+	SRVDesc.Texture2D.MipLevels = mipmaps ? -1 : desc.MipLevels;
 	hr = render.device->CreateShaderResourceView(resource, &SRVDesc, &resource_view);
 	if (FAILED(hr))
 		return false;

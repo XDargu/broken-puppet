@@ -36,6 +36,7 @@ class CRenderManager {
 	struct TShadowCasterKey {
 		const CMaterial*   material;
 		const CMesh*       mesh;
+		bool			   character;
 		CHandle            owner;
 		CHandle            transform;
 		CHandle            aabb;
@@ -79,7 +80,7 @@ public:
 	void renderAll(const CCamera* camera, bool solids, bool double_sided);
 	void renderAll(const CCamera* camera, TTransform* camera_transform, bool solids, bool double_sided);
 	
-	void renderShadowsCasters(const CCamera* camera);
+	void renderShadowsCasters(const CCamera* camera, bool characters);
 
 	void destroyAllKeys();
 

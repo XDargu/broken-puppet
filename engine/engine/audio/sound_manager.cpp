@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "sound_manager.h"
-#include "bass.h"
+#include "components\comp_hfx_zone.h"
+#include "ai\logic_manager.h"
 
 static CSoundManager the_sound_manager;
 static float volume_factor = 1000;
@@ -31,9 +32,12 @@ CSoundManager& CSoundManager::get() {
 
 CSoundManager::CSoundManager()
 {
-	sounds = new std::map<std::string, HSAMPLE>();
-	sounds_categories = new std::map<std::string, std::vector<HSAMPLE>>();
+	sounds = new std::map<std::string, sounds_map>();
+	sounds_categories = new std::map<std::string, std::vector<sounds_map>>();
 	BASS_Init(-1, 44100, BASS_DEVICE_3D, 0, NULL);
+	XASSERT(HIWORD(BASS_FX_GetVersion()) == BASSVERSION, "Error versión Bass_FX");
+	first = false;
+	slowed = false;
 	currentTrack = 0;
 }
 
@@ -132,36 +136,55 @@ void CSoundManager::crossFade(int trackID, float timeInSeconds, bool loop) {
 
 void CSoundManager::addFXTrack(const char* file, std::string name){
 	std::string filename = ("data/sounds/" + std::string(file));
-	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_3D);
-	sounds->operator[](name) = sample;
+	HSAMPLE h_sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_3D);
+	HSTREAM h_stream = BASS_StreamCreateFile(FALSE, filename.c_str(), 0, 0, BASS_SAMPLE_3D);
+	stream_effects stream_FX;
+	stream_FX.stream = h_stream;
+	stream_FX.FX_zone = CHandle();
+	sounds_map val = std::make_pair(stream_FX, h_sample);
+	sounds->operator[](name) = val;
 }
 
 void CSoundManager::addFXTrack(const char* file, std::string name, std::string category_name){
 	std::string filename = ("data/sounds/" + std::string(file));
-	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_3D);
-	sounds->operator[](name) = sample;
-	sounds_categories->operator[](category_name).push_back(sample);
+	HSAMPLE h_sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_3D);
+	HSTREAM h_stream = BASS_StreamCreateFile(FALSE, filename.c_str(), 0, 0, BASS_SAMPLE_3D);
+	stream_effects stream_FX;
+	stream_FX.stream = h_stream;
+	stream_FX.FX_zone = CHandle();
+	sounds_map val = std::make_pair(stream_FX, h_sample);
+	sounds->operator[](name) = val;
+	sounds_categories->operator[](category_name).push_back(val);
 }
 
 void CSoundManager::addFX2DTrack(const char* file, std::string name){
 	std::string filename = ("data/sounds/" + std::string(file));
-	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_MONO);
-	sounds->operator[](name) = sample;
+	HSAMPLE h_sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_MONO);
+	HSTREAM h_stream = BASS_StreamCreateFile(FALSE, filename.c_str(), 0, 0, BASS_SAMPLE_FX);
+	stream_effects stream_FX;
+	stream_FX.stream = h_stream;
+	stream_FX.FX_zone = CHandle();
+	sounds_map val = std::make_pair(stream_FX, h_sample);
+	sounds->operator[](name) = val;
 }
 
 void CSoundManager::addFX2DTrack(const char* file, std::string name, std::string category_name){
 	std::string filename = ("data/sounds/" + std::string(file));
-	HSAMPLE sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_MONO);
-	sounds->operator[](name) = sample;
-	sounds_categories->operator[](category_name).push_back(sample);
-	int prueba = 1;
+	HSAMPLE h_sample = BASS_SampleLoad(0, filename.c_str(), 0, 0, 200, BASS_SAMPLE_MONO);
+	HSTREAM h_stream = BASS_StreamCreateFile(FALSE, filename.c_str(), 0, 0, BASS_SAMPLE_FX);
+	stream_effects stream_FX;
+	stream_FX.stream = h_stream;
+	stream_FX.FX_zone = CHandle();
+	sounds_map val = std::make_pair(stream_FX, h_sample);
+	sounds->operator[](name) = val;
+	sounds_categories->operator[](category_name).push_back(val);
 }
 
 void CSoundManager::playRandomFX(std::string category_name){
 	if (sounds_categories->operator[](category_name).size() > 0){
 		int random_ind = getRandomNumber(0, sounds_categories->operator[](category_name).size());
-		HSTREAM stream = sounds_categories->operator[](category_name)[random_ind];
-		HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+		sounds_map stream = sounds_categories->operator[](category_name)[random_ind];
+		HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 		BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 0.3f);
 		BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 		BASS_ChannelPlay(channel, 0);
@@ -190,8 +213,8 @@ void CSoundManager::playFXTrack(std::string name, bool loop) {
 
 void CSoundManager::playFX(std::string name){
 	// Play FX
-	HSTREAM stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	sounds_map stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 0.3f);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_ChannelPlay(channel, 0);
@@ -199,8 +222,8 @@ void CSoundManager::playFX(std::string name){
 
 void CSoundManager::playFX(std::string name, bool loop){
 	// Play FX
-	HSTREAM stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	sounds_map stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	if (loop){
 		BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, 1.f);
 		BASS_ChannelFlags(channel, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
@@ -211,14 +234,14 @@ void CSoundManager::playFX(std::string name, bool loop){
 
 void CSoundManager::stopFX(std::string name){
 	// Play FX
-	HSTREAM stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	sounds_map stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.first.stream, FALSE);
 	BASS_ChannelStop(channel);
 }
 
 void CSoundManager::play3DFX(std::string name, TTransform* trans, float volume_lambda){
-	HSTREAM stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	sounds_map stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_3DVECTOR pos_ref;
 	BASS_3DVECTOR front_ref;
@@ -238,12 +261,46 @@ void CSoundManager::play3DFX(std::string name, TTransform* trans, float volume_l
 	BASS_ChannelGetAttribute(channel, BASS_ATTRIB_VOL, &volume);
 	float final_volume = volume + volume_lambda / volume_factor;
 	BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, final_volume);
-	BASS_ChannelPlay(channel, 0);
+
+
+	bool zone = false;
+	CHandle comp_hfx = CLogicManager::get().soundsInsideHFXZone(trans->position);
+	if (comp_hfx.isValid()){
+		if (stream.first.FX_zone == comp_hfx){
+			stream.first.FX_zone = comp_hfx;
+		}
+		else{
+			TCompHfxZone* comp_hfx_ent = (TCompHfxZone*)comp_hfx;
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::REVERB){
+				setReverbHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			} 
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::ECHO){
+				setEchoHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::FREE_REVERB){
+				setFreeReverbHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
+		}
+	}
+	BASS_ChannelPlay(stream.first.stream, 0);
+
+	if (zone){
+		stream.first.FX_zone = comp_hfx;
+		stream_effects stream_FX;
+		stream_FX.stream = stream.first.stream;
+		stream_FX.FX_zone = comp_hfx;
+		std::pair<stream_effects, HSAMPLE> val = std::make_pair(stream_FX, stream.second);
+		sounds->operator[](name) = val;
+	}
+	
 }
 
 void CSoundManager::play3DFX(std::string name, XMVECTOR pos){
-	HSTREAM stream = sounds->operator[](name);
-	HCHANNEL channel = BASS_SampleGetChannel(stream, FALSE);
+	sounds_map stream = sounds->operator[](name);
+	HCHANNEL channel = BASS_SampleGetChannel(stream.second, FALSE);
 	BASS_ChannelFlags(channel, BASS_STREAM_AUTOFREE, BASS_STREAM_AUTOFREE);
 	BASS_3DVECTOR pos_ref;
 	BASS_3DVECTOR front_ref;
@@ -254,6 +311,41 @@ void CSoundManager::play3DFX(std::string name, XMVECTOR pos){
 	position = &pos_ref;
 	BASS_ChannelSet3DPosition(channel, position, NULL, NULL);
 	BASS_Apply3D();
+
+	bool zone = false;
+	CHandle comp_hfx = CLogicManager::get().soundsInsideHFXZone(pos);
+	if (comp_hfx.isValid()){
+		if (stream.first.FX_zone == comp_hfx){
+			stream.first.FX_zone = comp_hfx;
+		}
+		else{
+			TCompHfxZone* comp_hfx_ent = (TCompHfxZone*)comp_hfx;
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::REVERB){
+				setReverbHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::ECHO){
+				setEchoHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
+			if (comp_hfx_ent->getType()&TCompHfxZone::type::FREE_REVERB){
+				setFreeReverbHFX(comp_hfx, stream.first.stream);
+				zone = true;
+			}
+		}
+	}
+	BASS_ChannelPlay(stream.first.stream, 0);
+
+	if (zone){
+		stream.first.FX_zone = comp_hfx;
+		stream_effects stream_FX;
+		stream_FX.stream = stream.first.stream;
+		stream_FX.FX_zone = comp_hfx;
+		std::pair<stream_effects, HSAMPLE> val = std::make_pair(stream_FX, stream.second);
+		sounds->operator[](name) = val;
+	}
+
+
 	BASS_ChannelPlay(channel, 0);
 }
 
@@ -263,12 +355,153 @@ void CSoundManager::setSound3DFactors(float distance, float roll, float doppler)
 
 void CSoundManager::playImpactFX(float force, CHandle transform){
 	TCompTransform* t_transform = (TCompTransform*)transform;
-	if ((force>10) && (force <= 5000))
+	if ((force > 10) && (force <= 5000)){
 		CSoundManager::get().play3DFX("hit_wood_light", (TTransform*)t_transform, force);
-	else if ((force>5000) && (force <= 8000))
+	}else if ((force > 5000) && (force <= 8000)){
 		CSoundManager::get().play3DFX("hit_wood_medium", (TTransform*)t_transform, force);
-	else if (force>8000)
+	}else if (force > 8000){
 		CSoundManager::get().play3DFX("hit_wood_heavy", (TTransform*)t_transform, force);
+	}
+}
+
+void CSoundManager::setEchoHFX(CHandle comp_hfx, HSTREAM channel){
+	if (comp_hfx.isValid()){
+		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::ECHO){
+			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_DX8_ECHO, 0);
+			if (FX != 0){
+				BASS_DX8_ECHO* e = ((TCompHfxZone*)comp_hfx)->getEcho();
+				if (e != nullptr){
+					BASS_DX8_ECHO echo;
+					echo.fFeedback = e->fFeedback;
+					echo.fLeftDelay = e->fLeftDelay;
+					echo.fRightDelay = e->fRightDelay;
+					echo.fWetDryMix = e->fWetDryMix;
+					echo.lPanDelay = e->lPanDelay;
+					bool success = BASS_FXSetParameters(FX, &echo);
+					if (!success){
+						int code = BASS_ErrorGetCode();
+						if (code == BASS_ERROR_HANDLE){
+							XASSERT(code, "Error, FX handle invalid");
+						}
+						else if (code == BASS_ERROR_ILLPARAM){
+							XASSERT(code, "Error, FX params invalid");
+						}
+						else if (code == BASS_ERROR_UNKNOWN){
+							XASSERT(code, "Error, FX Unknown error");
+						}
+					}
+				}
+			}
+			else{
+				int code = BASS_ErrorGetCode();
+				if (code == BASS_ERROR_HANDLE){
+					XASSERT(code, "Error, FX handle invalid");
+				}
+				else if (code == BASS_ERROR_ILLPARAM){
+					XASSERT(code, "Error, FX params invalid");
+				}
+				else if (code == BASS_ERROR_UNKNOWN){
+					XASSERT(code, "Error, FX Unknown error");
+				}
+			}
+		}
+	}
+}
+
+void CSoundManager::setReverbHFX(CHandle comp_hfx, HSTREAM channel){
+	if (comp_hfx.isValid()){
+		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::REVERB){
+			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_DX8_REVERB, 9);
+			if (FX != 0){
+				BASS_DX8_REVERB* r = ((TCompHfxZone*)comp_hfx)->getReverb();
+				if (r != nullptr){
+					//HFX reverb=((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes();
+					//bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), r);
+					//if (success){
+					BASS_DX8_REVERB reverb;
+					reverb.fInGain = r->fInGain;
+					reverb.fReverbMix = r->fReverbMix;
+					reverb.fReverbTime = r->fReverbTime;
+					reverb.fHighFreqRTRatio = r->fHighFreqRTRatio;
+					bool success = BASS_FXSetParameters(FX, &reverb);
+					//}
+					if (!success){
+						int code = BASS_ErrorGetCode();
+						if (code == BASS_ERROR_HANDLE){
+							XASSERT(code, "Error, FX handle invalid");
+						}
+						else if (code == BASS_ERROR_ILLPARAM){
+							XASSERT(code, "Error, FX params invalid");
+						}
+						else if (code == BASS_ERROR_UNKNOWN){
+							XASSERT(code, "Error, FX Unknown error");
+						}
+					}
+				}
+			}else{
+				int code = BASS_ErrorGetCode();
+				if (code == BASS_ERROR_HANDLE){
+					XASSERT(code, "Error, FX handle invalid");
+				}
+				else if (code == BASS_ERROR_ILLPARAM){
+					XASSERT(code, "Error, FX params invalid");
+				}
+				else if (code == BASS_ERROR_UNKNOWN){
+					XASSERT(code, "Error, FX Unknown error");
+				}
+			}
+		}
+	}
+}
+
+void CSoundManager::setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel){
+	if (comp_hfx.isValid()){
+		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::FREE_REVERB){
+			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_BFX_FREEVERB, 9);
+			if (FX != 0){
+				BASS_BFX_FREEVERB* r = ((TCompHfxZone*)comp_hfx)->getFreeReverb();
+				if (r != nullptr){
+					//HFX reverb=((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes();
+					//bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), r);
+					//if (success){
+					BASS_BFX_FREEVERB free_reverb;
+					free_reverb.fDryMix = r->fDryMix;
+					free_reverb.fWetMix = r->fWetMix;
+					free_reverb.fRoomSize = r->fRoomSize;
+					free_reverb.fDamp = r->fDamp;
+					free_reverb.fWidth = r->fWidth;
+					free_reverb.lChannel = r->lChannel;
+					free_reverb.lMode = r->lMode;
+					bool success = BASS_FXSetParameters(FX, &free_reverb);
+					//}
+					if (!success){
+						int code = BASS_ErrorGetCode();
+						if (code == BASS_ERROR_HANDLE){
+							XASSERT(code, "Error, FX handle invalid");
+						}
+						else if (code == BASS_ERROR_ILLPARAM){
+							XASSERT(code, "Error, FX params invalid");
+						}
+						else if (code == BASS_ERROR_UNKNOWN){
+							XASSERT(code, "Error, FX Unknown error");
+						}
+					}
+				}
+			}
+			else{
+				int code = BASS_ErrorGetCode();
+				if (code == BASS_ERROR_HANDLE){
+					XASSERT(code, "Error, FX handle invalid");
+				}
+				else if (code == BASS_ERROR_ILLPARAM){
+					XASSERT(code, "Error, FX params invalid");
+				}
+				else if (code == BASS_ERROR_UNKNOWN){
+					XASSERT(code, "Error, FX Unknown error");
+				}
+			}
+		}
+	}
 }
 
 

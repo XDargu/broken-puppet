@@ -94,5 +94,6 @@ using namespace DirectX;
 #include "comp_anim_editor.h"
 #include "comp_golden_needle.h"
 #include "comp_golden_needle_item.h"
+#include "comp_hfx_zone.h"
 
 #endif

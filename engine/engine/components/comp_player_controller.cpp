@@ -9,6 +9,7 @@
 #include "comp_ragdoll.h"
 #include "../audio/sound_manager.h"
 #include "io\iostatus.h"
+#include "components\comp_particle_group.h"
 
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompLife>(this);
@@ -63,6 +64,9 @@ void TCompPlayerController::init() {
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
 
+	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
+
+
 	float offset_size = 0.05f;
 	float offset_rot_size = 0.2f;
 	float offset_rot_size2 = 3.14f;
@@ -81,14 +85,31 @@ void TCompPlayerController::update(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 	if (io.becomesReleased(CIOStatus::R)) {
 		fsm_player_legs.ChangeState("fbp_Ragdoll");
-	}
+	}	
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
+	TCompRigidBody* rigid = assertRequiredComponent<TCompRigidBody>(this);
+	TCompCharacterController* c_controller = assertRequiredComponent<TCompCharacterController>(this);
+	TCompSkeleton* skeleton = assertRequiredComponent<TCompSkeleton>(this);
+
 	/*dbg((
 		"X:" + std::to_string(XMVectorGetX(trans->position)) + ", "
 		+ "Y:" + std::to_string(XMVectorGetY(trans->position)) + ", "
 		+ "Z:" + std::to_string(XMVectorGetZ(trans->position)) + "\n"
 		).c_str());*/
+
+	float water_level = CApp::get().water_level;
+	float atten = 0.2f;
+	float water_multiplier = 1;
+
+	if (rigid->rigidBody->getGlobalPose().p.y < water_level - atten)  {
+		float proportion = min(1, (water_level - rigid->rigidBody->getGlobalPose().p.y) / atten);
+		water_multiplier = 1 - (proportion * 0.5f);
+	}
+
+	//c_controller->jumpPower = 10.2 / water_multiplier;
+	c_controller->gravityMultiplier = 48 * water_multiplier;
+	skeleton->model->getMixer()->setTimeFactor(water_multiplier);
 
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
 	TCompTransform* camera_transform = camera_entity->get<TCompTransform>();
@@ -158,6 +179,12 @@ void TCompPlayerController::update(float elapsed) {
 		needle_back2_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back2) + bone_trans.getUp() * XMVectorGetY(offset_needle_back2);
 	}
 	
+	// Particles
+	/*if (entity_jump_dust.isValid()) {
+		TCompTransform* pg_trans = ((CEntity*)entity_jump_dust)->get<TCompTransform>();
+		pg_trans->position = trans->position;
+		pg_trans->lookAt(pg_trans->position + trans->getUp(), XMVectorSet(0, 1, 0, 0));
+	}*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

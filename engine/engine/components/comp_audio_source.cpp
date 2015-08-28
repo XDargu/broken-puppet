@@ -4,6 +4,7 @@
 #include "../audio/sound_manager.h"
 #include "comp_audio_source.h"
 #include "comp_transform.h"
+#include "comp_hfx_zone.h"
 #include "ai\logic_manager.h"
 
 TCompAudioSource::TCompAudioSource() {
@@ -59,6 +60,10 @@ void TCompAudioSource::update(float elapsed){
 	front = &front_ref;
 	asociated_sound.setSoundPosition(pos, front, NULL);
 	BASS_Apply3D();
+	//HFX ------------------------------------------------------------------
+	CHandle comp_hfx = CLogicManager::get().soundsInsideHFXZone(transform->position);
+	setHFX(comp_hfx);
+	//----------------------------------------------------------------------
 	if (autoPlaySound){
 		player_transform = ((CEntity*)player)->get<TCompTransform>();
 		TCompTransform* p_transform = (TCompTransform*)player_transform;
@@ -74,6 +79,53 @@ void TCompAudioSource::update(float elapsed){
 			if (loop){
 				if (distance >= distance_max){
 					asociated_sound.stopSound();
+				}
+			}
+		}
+	}
+}
+
+void TCompAudioSource::setHFX(CHandle comp_hfx){
+	if (comp_hfx.isValid()){
+		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::ECHO){
+			int prueba = BASS_ChannelSetFX(asociated_sound.getChannel(), BASS_FX_DX8_ECHO, 0);
+			BASS_DX8_ECHO* e = ((TCompHfxZone*)comp_hfx)->getEcho();
+			if (e != nullptr){
+				bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), e);
+				if (success){
+					BASS_FXSetParameters(prueba, e);
+				}
+				else{
+					int code = BASS_ErrorGetCode();
+					if (code == BASS_ERROR_HANDLE){
+						XASSERT(code, "Error, FX handle invalid");
+					}
+					else if (code == BASS_ERROR_ILLPARAM){
+						XASSERT(code, "Error, FX params invalid");
+					}
+					else if (code == BASS_ERROR_UNKNOWN){
+						XASSERT(code, "Error, FX Unknown error");
+					}
+				}
+			}
+		}else if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::REVERB){
+			int prueba = BASS_ChannelSetFX(asociated_sound.getChannel(), BASS_FX_DX8_REVERB, 0);
+			BASS_DX8_REVERB* r = ((TCompHfxZone*)comp_hfx)->getReverb();
+			if (r != nullptr){
+				bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), r);
+				if (success){
+					BASS_FXSetParameters(prueba, r);
+				}else{
+					int code = BASS_ErrorGetCode();
+					if (code == BASS_ERROR_HANDLE){
+						XASSERT(code, "Error, FX handle invalid");
+					}
+					else if (code == BASS_ERROR_ILLPARAM){
+						XASSERT(code, "Error, FX params invalid");
+					}
+					else if (code == BASS_ERROR_UNKNOWN){
+						XASSERT(code, "Error, FX Unknown error");
+					}
 				}
 			}
 		}

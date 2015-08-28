@@ -51,7 +51,7 @@ void TCompTransform::init() {
 	}
 
 	TCompRigidBody* r = getSibling<TCompRigidBody>(this);
-	if (r)
+	if (r && !r->isKinematic())
 		type = 1;
 
 }

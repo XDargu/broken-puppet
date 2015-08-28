@@ -7,6 +7,7 @@
 void TCompSkeletonLookAt::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   target = atts.getPoint("target");
   amount = atts.getFloat("amount", 1.0f);
+  active = true;
 }
 
 void TCompSkeletonLookAt::update(float elapsed) {
@@ -20,7 +21,7 @@ void TCompSkeletonLookAt::update(float elapsed) {
 
   CalModel* model = comp_skel->model;
   
-  if (isKeyPressed('H')) {
+  if (active) {
     // Apply all the corrections of the core skeleton definition
     CCoreModel *core = (CCoreModel*)model->getCoreModel();
     for (auto bc : core->bone_corrections) {

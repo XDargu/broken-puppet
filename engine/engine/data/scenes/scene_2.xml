@@ -12,6 +12,11 @@
   <entity  prefab="PlayerCamera">
     <transform position="-6.856 -0.691215 13.2485"/>
   </entity>
+  <entity>
+    <name name="PlayerParticleJumpDust"/>
+    <transform position="-5.12909 -6.94404 2.0621" rotation="0.71 0.0 0.0 0.71" scale="1.0 1.0 1.0" parent="Player"/>
+    <particleGroup name="ps_prota_jump_ring"/>  
+  </entity>
   <entity tag = "actor" collisionTag = "Actor">
     <name name="scene_2_plataforma_breakable_6.0" />
     <transform position="102.792 0.230005 32.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>

@@ -21,6 +21,7 @@ void TCompShadows::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	resolution = atts.getInt("res", 256);
 	color = atts.getPoint("color");
 	intensity = atts.getFloat("intensity", 1.f);
+	character_camera = atts.getBool("characterLight", false);
 
 	// TODO: Para que funcione desde max, es necesario rotarlas 90 grados, cambiar el exportador de max más adelante
 	if (atts.has("correction")) {
@@ -51,7 +52,7 @@ void TCompShadows::generate()  {
 	// 
 	render_techniques_manager.getByName("gen_shadows")->activate();
 
-	render_manager.renderShadowsCasters(camera);
+	render_manager.renderShadowsCasters(camera, character_camera);
 
 	activateRSConfig(RSCFG_DEFAULT);
 }

@@ -572,7 +572,7 @@
 </render>
 <aabb min="-0.0012 -0.0125 -0.0012" max="0.0012 0.0275 0.0012"/>
 	</entity>
-	<entity  >
+	<!--<entity  >
 <name name="Boss_49.0" />
 <transform position="-2.95984 4.56992 10.0571" rotation="-0.00697217 -0.845987 -0.0110654 0.533044" scale="8.52518 8.52518 8.52518"/>
 <render >
@@ -584,7 +584,10 @@
 </render>
 <aabb min="-2.20825 -0.420698 -0.554053" max="2.20825 1.63108 0.612058"/>
     <aiBoss/>
-	</entity>
+	</entity>-->
+  <entity prefab="EnemyBoss">
+    <transform position="-2.95984 1.92 10.0571" rotation="0.34 0.59 -0.65 0.32" scale="1 1 1"/>
+  </entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="Floor001_50.0" />
 <transform position="-0.241684 36.0444 10.1684" rotation="0.0 0.0 0.0 1.0" scale="1.52245 1.52245 1.52245"/>

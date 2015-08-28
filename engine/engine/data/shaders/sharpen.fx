@@ -33,6 +33,7 @@ VS_TEXTURED_OUTPUT VSSharpen(
 float4 PSSharpen(VS_TEXTURED_OUTPUT input) : SV_Target
 {
 	float4 original = txDiffuse.Sample(samClampLinear, input.UV);
+	
 	float4 color = float4(0, 0, 0, 0);
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
