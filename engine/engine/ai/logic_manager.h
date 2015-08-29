@@ -94,6 +94,8 @@ public:
 	//HFX 
 	CHandle soundsInsideHFXZone(XMVECTOR sound_pos);
 
+	CHandle getPlayerHandle() { return player; }
+
 	// LUA
 	void execute(std::string text);
 

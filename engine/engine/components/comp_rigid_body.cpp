@@ -20,6 +20,8 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
+	impact_timestamp = 0.f;
+
 	CCollider* col = nullptr;
 	if (box_c)
 		col = box_c;

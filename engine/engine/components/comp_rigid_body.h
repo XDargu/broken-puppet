@@ -11,6 +11,7 @@ private:
 	float density;
 public:
 	physx::PxRigidDynamic* rigidBody;
+	double impact_timestamp;
 	bool auto_translate_transform;
 	bool auto_rotate_transform;
 	int boss_level;

@@ -25,8 +25,10 @@ public:
 	virtual void							onSleep(physx::PxActor**, physx::PxU32){}
 private:
 	physx::PxReal getForce(physx::PxReal mass, const physx::PxContactPair* pairs, PxU32 index);
+	physx::PxReal getForceAndPosition(PxReal mass, const PxContactPair* pairs, PxU32 index, XMVECTOR& position, XMVECTOR& normal);
 	const physx::PxReal forceLargeImpact;
 	const physx::PxReal forceMediumImpact;
+	const float impact_threshold_time;
 };
 
 class CFilterCallback:public physx::PxSimulationFilterCallback
