@@ -679,10 +679,11 @@ float4 PSResolve(
 	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
 
-	int mip_level = 10;
+	int mip_level = 7;
 	float2 uv = iPosition.xy / float2(cameraHalfXRes * 2, cameraHalfYRes * 2);
 	float luminance = txAccLight.SampleLevel(samClampLinear, uv, mip_level);
-	
+
+
 	float3 wPos = getWorldCoords(iPosition.xy, depth);
 	float3 I = wPos - cameraWorldPos.xyz;
 	I = normalize(I);

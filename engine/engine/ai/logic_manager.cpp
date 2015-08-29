@@ -306,6 +306,24 @@ void CLogicManager::changeAmbientLight(float r, float g, float b, float time) {
 	lerp_ambient_light = time;
 }
 
+CHandle CLogicManager::instantiateParticleGroup(std::string pg_name, CVector position, CQuaterion rotation){
+	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
+	if (entity.isValid()) {
+		TCompName* name = ((CEntity*)entity)->get<TCompName>();
+		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+		std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
+		std::strcpy(name->name, n_pg_name.c_str());
+		particle_group_counter++;
+		particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+
+		return entity;
+	}
+
+	return CHandle();
+}
+
 /*void CLogicManager::addKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time) {
 	// Create the keyframe
 	TKeyFrame kf(the_target_transform, the_target_position, the_target_rotation, the_time);

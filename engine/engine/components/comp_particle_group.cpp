@@ -6,12 +6,12 @@
 #include "particles\importer_particle_groups.h"
 #include "entity_manager.h"
 #include "comp_aabb.h"
+#include "comp_name.h"
 #include "render\render_manager.h"
 
 TCompParticleGroup::~TCompParticleGroup() {
-	for (int i = 0; i < particle_systems.size(); ++i) {
-		particle_systems[i].destroy();
-	}
+	clearParticleSystems();
+	SAFE_DELETE(particle_systems);
 }
 
 void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -26,10 +26,10 @@ void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 		TParticleSystem ps = TParticleSystem();
 		ps.h_transform = h_transform;
 		ps.h_pg = CHandle(this);
-		particle_systems.push_back(ps);		
+		particle_systems->push_back(ps);		
 	}
-	else if (particle_systems.size() > 0) {
-		particle_systems.back().loadFromAtts(elem, atts);
+	else if (particle_systems->size() > 0) {
+		particle_systems->back().loadFromAtts(elem, atts);
 	}
 	
 }
@@ -40,13 +40,13 @@ void TCompParticleGroup::init() {
 		particle_groups_manager.addParticleGroupToEntity(m_entity, def_name);
 	}
 
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		ps.init();
 	}
 }
 
 void TCompParticleGroup::fixedUpdate(float elapsed) {
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		ps.fixedUpdate(elapsed);
 	}
 }
@@ -58,35 +58,18 @@ void TCompParticleGroup::update(float elapsed) {
 	}*/
 
 	bool all_dirty = true;
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		ps.visible = render_manager.planes_active_camera.isVisible(&ps.aabb);
 		ps.update(elapsed);
 		all_dirty &= ps.dirty_destroy_group;
 	}
 
 	if (destroy_on_death && all_dirty) {
-		clearParticleSystems();
-
-		/*CEntity* e = CHandle(this).getOwner();
-		CEntityManager::get().remove(e);*/
-	}
-
-	for (auto& it : particle_systems_to_destroy) {
-
-		auto it2 = std::find(particle_systems.begin(), particle_systems.end(), it);
-		
-		if (it2 == particle_systems.end()) { fatal("Trying to destroy not registered particle system"); }
-		it2->destroy();
-		particle_systems.erase(it2);
-		
-	};
-
-	particle_systems_to_destroy.clear();
-
-	if (destroy_on_death && all_dirty) {
-
 		CEntity* e = CHandle(this).getOwner();
 		CEntityManager::get().remove(e);
+		clearParticleSystems();
+		TCompName* name = e->get<TCompName>();
+		XDEBUG("Destroying name: %s", name);
 	}
 }
 
@@ -94,8 +77,10 @@ void TCompParticleGroup::render() {
 	/*TCompAABB* aabb = getSibling<TCompAABB>(this);
 	XMVECTOR minValue = XMVectorSet(D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, D3D11_FLOAT32_MAX, 1);
 	XMVECTOR maxValue = -minValue;*/
-
-	for (auto& ps : particle_systems) {
+	CEntity* e = CHandle(this).getOwner();
+	TCompName* name = e->get<TCompName>();
+	XDEBUG("Rendering name: %s", name);
+	for (auto& ps : *particle_systems) {
 
 		/*if (XMVectorGetX(ps.aabb.min) < XMVectorGetX(minValue))
 			minValue = XMVectorSetX(minValue, XMVectorGetX(ps.aabb.min));
@@ -120,35 +105,35 @@ void TCompParticleGroup::render() {
 
 
 void TCompParticleGroup::renderDistorsion() {
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		ps.render(true);
 	}
 }
 
 void TCompParticleGroup::renderDebug3D() const {
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		ps.renderDebug3D();
 	}
 }
 
 void TCompParticleGroup::removeParticleSystem(TParticleSystem* ps) {
-	for (auto& ps_2 : particle_systems) {
+	particle_systems->erase(std::remove(particle_systems->begin(), particle_systems->end(), *ps), particle_systems->end());
+	/*for (auto& ps_2 : *particle_systems) {
 		if (ps_2.emitter_generation == ps->emitter_generation) {
 			ps_2.dirty_destroy_group = true;
-			particle_systems_to_destroy.push_back(ps_2);
 		}
-	}
+	}*/
 }
 
 void TCompParticleGroup::clearParticleSystems() {
-	for (int i = 0; i < particle_systems.size(); ++i) {
-		particle_systems[i].destroy();
+	for (int i = 0; i < particle_systems->size(); ++i) {
+		(*particle_systems)[i].destroy();
 	}
-	particle_systems.clear();
+	particle_systems->clear();
 }
 
 void TCompParticleGroup::restart() {
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		ps.restart();
 	}
 }
@@ -158,7 +143,7 @@ std::string TCompParticleGroup::getXMLDefinition() {
 
 	def += "<particleGroup>";
 
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		def += ps.getXMLDefinition();
 	}
 
@@ -174,7 +159,7 @@ std::string TCompParticleGroup::getXMLDefinitionWithName(std::string name) {
 	def += name;
 	def += "\">";
 
-	for (auto& ps : particle_systems) {
+	for (auto& ps : *particle_systems) {
 		def += ps.getXMLDefinition();
 	}
 

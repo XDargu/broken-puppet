@@ -42,6 +42,8 @@ void CMCVObject::moveToPosition(CVector position, float speed) {
 		XMVECTOR newPos = XMVectorSet(position.x, position.y, position.z, 0);
 		float space = V3DISTANCE(transform->position, newPos);
 		float time = space / speed;
+		if (time == 0)
+			time = 0.1f;
 
 		r_anim.addKeyframe(newPos, transform->rotation, time);
 
