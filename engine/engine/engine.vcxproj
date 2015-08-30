@@ -195,10 +195,12 @@
     <ClInclude Include="components\comp_collider_convex.h" />
     <ClInclude Include="components\comp_collider_multiple.h" />
     <ClInclude Include="components\comp_joint_fixed.h" />
+    <ClInclude Include="components\comp_local_rotation.h" />
     <ClInclude Include="components\comp_occlusion_plane.h" />
     <ClInclude Include="components\comp_recast_aabb.h" />
     <ClInclude Include="components\comp_golden_needle_logic.h" />
     <ClInclude Include="components\comp_golden_needle.h" />
+    <ClInclude Include="components\comp_vibration.h" />
     <ClInclude Include="components\comp_zone_aabb.h" />
     <ClInclude Include="components\comp_golden_needle_item.h" />
     <ClInclude Include="components\comp_bt_soldier.h" />
@@ -389,10 +391,12 @@
     <ClCompile Include="components\comp_collider_convex.cpp" />
     <ClCompile Include="components\comp_collider_multiple.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
+    <ClCompile Include="components\comp_local_rotation.cpp" />
     <ClCompile Include="components\comp_occlusion_plane.cpp" />
     <ClCompile Include="components\comp_recast_aabb.cpp" />
     <ClCompile Include="components\comp_golden_needle_logic.cpp" />
     <ClCompile Include="components\comp_golden_needle.cpp" />
+    <ClCompile Include="components\comp_vibration.cpp" />
     <ClCompile Include="components\comp_zone_aabb.cpp" />
     <ClCompile Include="components\comp_golden_needle_item.cpp" />
     <ClCompile Include="components\comp_bt_soldier.cpp" />

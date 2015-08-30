@@ -547,6 +547,12 @@
     <ClInclude Include="ai\fsm_boss.h">
       <Filter>ai\boss</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_vibration.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_local_rotation.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1017,6 +1023,12 @@
     </ClCompile>
     <ClCompile Include="ai\fsm_boss.cpp">
       <Filter>ai\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_vibration.cpp">
+      <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_local_rotation.cpp">
+      <Filter>components\animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
