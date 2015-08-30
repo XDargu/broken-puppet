@@ -3,6 +3,9 @@
 #include "comp_static_body.h"
 #include "comp_collider_box.h"
 #include "comp_collider_mesh.h"
+#include "comp_collider_capsule.h"
+#include "comp_collider_convex.h"
+#include "comp_collider_multiple.h"
 
 TCompStaticBody::~TCompStaticBody() { Physics.gScene->removeActor(*staticBody); }
 
@@ -11,42 +14,57 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	h_transform = assertRequiredComponent<TCompTransform>(this);
 
 	CEntity* e = CHandle(this).getOwner();
-	TCompTransform* t = h_transform;
-	TCompColliderBox* c = e->get<TCompColliderBox>();
+	TCompColliderBox* box_c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
 
-	assert(t || fatal("TStaticBody requieres a TTransform component"));
-	assert((c || mesh_c) || fatal("TStaticBody requieres a TCollider or a TColliderMesh component"));
+	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
+	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
 
-	if (c) {
-		staticBody = physx::PxCreateStatic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(t->position),
-			Physics.XMVECTORToPxQuat(t->rotation))
-			, *c->collider
-			);
-	}
-	if (mesh_c) {
-		staticBody = physx::PxCreateStatic(
-			*Physics.gPhysicsSDK
-			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(t->position),
-			Physics.XMVECTORToPxQuat(t->rotation))
-			, *mesh_c->collider
-			);
-	}
+	TCompColliderMultiple* multiple_c = e->get<TCompColliderMultiple>();
 
-	if (capsule_cvx) {
+	TCompTransform* trans = (TCompTransform*)h_transform;
+
+	CCollider* col = nullptr;
+	if (box_c)
+		col = box_c;
+	if (mesh_c)
+		col = mesh_c;
+	if (sphere_c)
+		col = sphere_c;
+	if (capsule_c)
+		col = capsule_c;
+	if (capsule_cvx)
+		col = capsule_cvx;
+	if (multiple_c)
+		col = multiple_c;
+
+
+	XASSERT(col != nullptr, "TRigidBody requieres a Collider component");
+
+	if (multiple_c) {
 		staticBody = physx::PxCreateStatic(
 			*Physics.gPhysicsSDK
 			, physx::PxTransform(
-			Physics.XMVECTORToPxVec3(t->position),
-			Physics.XMVECTORToPxQuat(t->rotation))
-			, *capsule_cvx->collider
+			Physics.XMVECTORToPxVec3(trans->position),
+			Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
+			, *multiple_c->colliders[0]
+			);
+
+		for (int i = 1; i < multiple_c->colliders.size(); i++) {
+			staticBody->attachShape(*multiple_c->colliders[i]);
+		}
+	}
+	else {
+		staticBody = physx::PxCreateStatic(
+			*Physics.gPhysicsSDK
+			, physx::PxTransform(
+			Physics.XMVECTORToPxVec3(trans->position),
+			Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
+			, *col->collider
 			);
 	}
+		
 	Physics.gScene->addActor(*staticBody);
 
 	staticBody->setName(e->getName());

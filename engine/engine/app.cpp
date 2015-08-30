@@ -243,6 +243,9 @@ void createManagers() {
 	// GUI
 	getObjManager<TCompButton>()->init(32);
 
+	// Animation
+	getObjManager<TCompVibration>()->init(64);
+	getObjManager<TCompLocalRotation>()->init(64);
 
 	registerAllComponentMsgs();
 }
@@ -314,6 +317,10 @@ void initManagers() {
 
 	//GUI
 	getObjManager<TCompButton>()->initHandlers();
+
+	// Animation
+	//getObjManager<TCompVibration>()->initHandlers();
+
 }
 
 bool CApp::create() {
@@ -377,11 +384,11 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
-	loadScene("data/scenes/viewer_test.xml");	
+	//loadScene("data/scenes/viewer_test.xml");	
 
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
@@ -717,6 +724,10 @@ void CApp::update(float elapsed) {
 	//GUI
 	getObjManager<TCompButton>()->update(elapsed);
 
+	// ANIMATION
+	getObjManager<TCompVibration>()->update(elapsed);
+	getObjManager<TCompLocalRotation>()->update(elapsed);
+
 	logic_manager.update(elapsed);
 
 #ifdef _DEBUG
@@ -753,6 +764,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
+
 }
 
 void CApp::render() {

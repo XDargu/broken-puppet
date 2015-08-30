@@ -83,6 +83,8 @@ void TCompTransform::update(float elapsed) {
 		rotation = XMQuaternionMultiply(c_parent->rotation, parent_offset_rot);*/
 
 	}
+
+	
 }
 
 void TCompTransform::teleport(XMVECTOR the_position) {

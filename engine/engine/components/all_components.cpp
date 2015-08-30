@@ -75,4 +75,6 @@ DECL_OBJ_MANAGER(TCompHfxZone, "hfxZone");
 DECL_OBJ_MANAGER(TCompOcclusionPlane, "occlusionPlane");
 DECL_OBJ_MANAGER(TCompColliderMultiple, "colliderMulti");
 DECL_OBJ_MANAGER(TCompButton, "button");
+DECL_OBJ_MANAGER(TCompVibration, "vibration");
+DECL_OBJ_MANAGER(TCompLocalRotation, "localRotation");
 
