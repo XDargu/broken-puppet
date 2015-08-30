@@ -20,8 +20,7 @@ macroScript MCVAssetBrowser
 	 PrefabPath = AssetPath + "Prefabs\\"
 	 PrefabList = #()	
 	
-
-
+	
 	--clearListener()
 
 		fn saveModulePicture dir assetName m = (
@@ -480,6 +479,34 @@ macroScript MCVAssetBrowser
 	)
 	
 	
+		
+	/**********************************************************************************************
+	Object  structure CollisionTag
+	 Params:
+	  - Is an CollisionTag
+	***********************************************************************************************/
+	objectDataCollisionTag = attributes objectCollisionTag
+	(
+		parameters main rollout:params
+		(
+			collisionTag type:#string ui:collisionTag default:"undefined"
+		)
+
+		rollout params "Object Custom collision tag"
+		(
+			Edittext collisionTag "collisionTag" type: #string
+		)
+	)
+	
+	fn addObjectsCollisionTag = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #collisionTag != true) then
+		(
+			custAttributes.add objSelected objectDataCollisionTag	
+		)	
+		
+	)
 	
 	
 	objectIsNotVisible = attributes objectIsNotVisible
@@ -598,9 +625,8 @@ macroScript MCVAssetBrowser
 			custAttributes.add objSelected objectDataRecastAABB	
 						
 		)	
-		
 	)
-	
+
 	/**********************************************************************************************
 	Object  structure RoomAABB
 	 Params:
@@ -729,6 +755,19 @@ macroScript MCVAssetBrowser
 		)
 		
 		
+		fn funcionPlacePrefab = (
+		local aux = 0
+			for i in PrefabList do (				
+				local pos = Point3 (aux * 10) 3 0
+				print pos
+				print (PrefabPath + i as string + ".max")
+				newMod = createModuleInPoint (PrefabPath + i as string + ".max") pos	
+				aux = aux + 1
+			)
+			
+		
+		)
+		
 		-- Reloads all the instances of the asset with the given path
 		fn updateAsset dir assetName = (
 			amount = 0
@@ -773,6 +812,8 @@ macroScript MCVAssetBrowser
 			button botonNotVisible "Not Visible" pos:[167,130] width:75 height:25 toolTip:""
 			button botonAddAudioSource "Audio Source" pos:[248,130] width:75 height:25 toolTip:""
 			button botonAddOclusionPlane "OclusionPlane" pos:[5,161] width:75 height:25 toolTip:""
+			button botonAddCollisionTag "Collision Tag" pos:[86,161] width:75 height:25 toolTip:""
+			button botonPlacePrefab "Colocar Prefabs" pos:[86,192] width:75 height:25 toolTip:""
 			
 			
 							
@@ -854,6 +895,12 @@ macroScript MCVAssetBrowser
 			)
 			on botonAddOclusionPlane pressed do (
 				addObjectsOclusionPlane()
+			)
+			on botonAddCollisionTag pressed do (
+				addObjectsCollisionTag()
+			)
+			on botonPlacePrefab pressed do (
+				funcionPlacePrefab()
 			)
 			
 			
