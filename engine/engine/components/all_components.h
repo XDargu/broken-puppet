@@ -96,4 +96,8 @@ using namespace DirectX;
 #include "comp_golden_needle_item.h"
 #include "comp_hfx_zone.h"
 
+// Animation
+#include "comp_vibration.h"
+#include "comp_local_rotation.h"
+
 #endif

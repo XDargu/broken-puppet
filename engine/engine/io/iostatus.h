@@ -64,6 +64,7 @@ public:
 		, Q
 		, E
 		, O
+		, P
 		, R
 		, I
 		, U

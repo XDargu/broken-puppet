@@ -20,6 +20,8 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
+	impact_timestamp = 0.f;
+
 	CCollider* col = nullptr;
 	if (box_c)
 		col = box_c;
@@ -63,6 +65,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	density = atts.getFloat("density", 1);
 	bool temp_is_kinematic = atts.getBool("kinematic", false);
 	bool temp_use_gravity = atts.getBool("gravity", true);
+	boss_level = atts.getInt("bossLevel", 0);
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);

@@ -12,6 +12,7 @@ private:
 	CHandle parent;
 	char parent_name[64];
 	TTransform parent_offset;
+
 	// Tipos:
 	// - 0: Static
 	// - 0.2: Player
@@ -21,7 +22,10 @@ private:
 	// - 0.95: Dynamic with needle
 	float type;
 public:
-	TCompTransform() : TTransform(), parent(CHandle()) { parent_name[0] = 0x00; prev_transform = TTransform(); }
+
+	TTransform local_transform;
+
+	TCompTransform() : TTransform(), parent(CHandle()) { parent_name[0] = 0x00; prev_transform = TTransform(); local_transform = TTransform(); }
 	TCompTransform(XMVECTOR np, XMVECTOR nr, XMVECTOR ns) : TTransform(np, nr, ns), parent(CHandle()) { parent_name[0] = 0x00; }
 
 	void loadFromAtts(const std::string& elem, MKeyValue& atts);
@@ -34,11 +38,13 @@ public:
 
 	bool transformChanged();
 
-	int getType() { return (int)(type * 100); }
+	int getType();
 
 	void setType(float atype) { type = atype; }
 
 	TTransform getPrevTransform() { return prev_transform; }
+
+	bool hasParent() { return parent_name[0] != 0x00; }
 };
 
 #endif

@@ -36,7 +36,7 @@ cbuffer TCtesPointLight SHADER_REGISTER(b5)
 	float4 plight_world_pos;
 	float4 plight_color;
 	float  plight_max_radius, plight_inv_delta_radius;
-	float  plight_dummy1, plight_dummy2;
+	float  plight_intensity, plight_dummy2;
 };
 
 cbuffer TCtesDirLight SHADER_REGISTER(b5)   // using the same register as the point light

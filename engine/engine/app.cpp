@@ -243,6 +243,9 @@ void createManagers() {
 	// GUI
 	getObjManager<TCompButton>()->init(32);
 
+	// Animation
+	getObjManager<TCompVibration>()->init(64);
+	getObjManager<TCompLocalRotation>()->init(64);
 
 	registerAllComponentMsgs();
 }
@@ -314,6 +317,10 @@ void initManagers() {
 
 	//GUI
 	getObjManager<TCompButton>()->initHandlers();
+
+	// Animation
+	//getObjManager<TCompVibration>()->initHandlers();
+
 }
 
 bool CApp::create() {
@@ -717,6 +724,10 @@ void CApp::update(float elapsed) {
 	//GUI
 	getObjManager<TCompButton>()->update(elapsed);
 
+	// ANIMATION
+	getObjManager<TCompVibration>()->update(elapsed);
+	getObjManager<TCompLocalRotation>()->update(elapsed);
+
 	logic_manager.update(elapsed);
 
 #ifdef _DEBUG
@@ -753,6 +764,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
+
 }
 
 void CApp::render() {

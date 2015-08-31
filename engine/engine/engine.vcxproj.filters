@@ -544,6 +544,15 @@
     <ClInclude Include="render\blur_camera_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="ai\fsm_boss.h">
+      <Filter>ai\boss</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_vibration.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_local_rotation.h">
+      <Filter>components\animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1012,6 +1021,15 @@
     <ClCompile Include="render\blur_camera_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
+    <ClCompile Include="ai\fsm_boss.cpp">
+      <Filter>ai\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_vibration.cpp">
+      <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_local_rotation.cpp">
+      <Filter>components\animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -1118,6 +1136,9 @@
     </Filter>
     <Filter Include="components\gui">
       <UniqueIdentifier>{cbb6c99d-d73e-4765-8418-106a47102f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\boss">
+      <UniqueIdentifier>{ff04de47-5df1-45bf-8291-e099285e7be8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -452,10 +452,10 @@ float4 PSPointLights(
   float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
 
   // Attenuation based on distance:   1 - [( r - rmin ) / ( rmax - rmin )]
-  float  att_factor = saturate((plight_max_radius -  distance_to_light) * plight_inv_delta_radius * 0.4);
+  float  att_factor = saturate((plight_max_radius -  distance_to_light) * plight_inv_delta_radius * 0.4);  
 
   // Save spec amount in the alpha channel
-  float4 output = plight_color * diffuse_amount;
+  float4 output = plight_color * diffuse_amount * plight_intensity;
   output.a = spec_amount;
   return output * att_factor;
 }
@@ -679,10 +679,11 @@ float4 PSResolve(
 	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
 
-	int mip_level = 10;
+	int mip_level = 7;
 	float2 uv = iPosition.xy / float2(cameraHalfXRes * 2, cameraHalfYRes * 2);
 	float luminance = txAccLight.SampleLevel(samClampLinear, uv, mip_level);
-	
+
+
 	float3 wPos = getWorldCoords(iPosition.xy, depth);
 	float3 I = wPos - cameraWorldPos.xyz;
 	I = normalize(I);

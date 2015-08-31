@@ -8,6 +8,7 @@ Texture2D txType   : register(t9);
 
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
+SamplerState samClampPoint : register(s4);
 
 //--------------------------------------------------------------------------------------
 struct VS_TEXTURED_OUTPUT
@@ -88,24 +89,37 @@ float4 PSSilouette(
 	float4 color_x = float4(0, 0, 0, 0);
 	float4 color_y = float4(0, 0, 0, 0);
 
-	float2 deltaaa = float2(1.0 / 1280.0, 1.0 / 1024.0) * 0.5;
+	float2 deltaaa = float2(1.0 / cameraHalfXRes, 1.0 / cameraHalfYRes) * 0.5;
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
+	bool near_player = false;
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
+			float type_aux = txDepth.Sample(samClampPoint, input.UV + delta * 0.3).y;
+			if (type_aux == 0.2) {
+				near_player = true;
+			}
+
+			/*float m_depth = txDepth.Sample(samClampPoint, input.UV + delta * 0.3).x;
+			if (m_depth < depth && (type_aux < 0.8 || type_aux > 0.9) && type_aux > 0) {
+				near_player = true;
+			}*/
+
 			delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
-			float4 samp = txType.Sample(samClampLinear, input.UV + delta * 0.3);
+			float4 samp = txType.Sample(samClampPoint, input.UV + delta * 0.3);
 
 			factor = sobel_x[i][j];
 			color_x += samp * factor;
 		}
 	}
+
+	if (near_player) { return float4(0, 0, 0, 0); }
 	
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
-			float4 samp = txType.Sample(samClampLinear, input.UV + delta * 0.3);
+			float4 samp = txType.Sample(samClampPoint, input.UV + delta * 0.3);
 
 			factor = sobel_y[i][j];
 			color_y += samp * factor;

@@ -260,7 +260,7 @@ void TW_CALL CallBackParticleSystemCreate(void *clientData) {
 	ps.h_transform = m_trans;
 	ps.h_pg = CHandle(static_cast<TCompParticleGroup *>(clientData));
 	ps.loadDefaultPS();
-	static_cast<TCompParticleGroup *>(clientData)->particle_systems.push_back(ps);
+	static_cast<TCompParticleGroup *>(clientData)->particle_systems->push_back(ps);
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -669,7 +669,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_point_light) {
 		TwAddVarRW(bar, "PointLightActive", TW_TYPE_BOOL8, &e_point_light->active, " group='Point Light' label='Active' ");
-		TwAddVarRW(bar, "PointLightIntensity", TW_TYPE_FLOAT, &e_point_light->intensity, " min=0 max=10 group='Point Light' label='Intensity' ");
+		TwAddVarRW(bar, "PointLightIntensity", TW_TYPE_FLOAT, &e_point_light->intensity, " min=0 max=100 group='Point Light' label='Intensity' ");
 		TwAddVarRW(bar, "PointLightColor", TW_TYPE_COLOR3F, &e_point_light->color, " group='Point Light' label='Color' ");
 		TwAddVarRW(bar, "PointLightRadius", TW_TYPE_FLOAT, &e_point_light->radius, " group='Point Light' label='Radius' min=0.1");
 	}
@@ -727,146 +727,146 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddButton(bar, "PGRestartBtn", CallBackParticleSystemRestart, e_particle_group, "group=PG label='Restart particle group'");
 
 		// For each particle system
-		for (int i = 0; i < e_particle_group->particle_systems.size(); ++i) {
+		for (int i = 0; i < e_particle_group->particle_systems->size(); ++i) {
 
-			if (e_particle_group->particle_systems[i].dirty_destroy_group) { continue; }
+			if ((*e_particle_group->particle_systems)[i].dirty_destroy_group) { continue; }
 			
 			TwAddSeparator(bar, "", "group=PG");
 			aux = "ParticleSystem" + i;
 			aux2 = "group=PG label='PARTICLE SYSTEM " + std::to_string(i) + "'";
 			TwAddButton(bar, aux.c_str(), NULL, NULL, aux2.c_str());
 			aux = "ParticleSystemRemove" + i;
-			TwAddButton(bar, aux.c_str(), CallBackParticleSystemRemove, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+			TwAddButton(bar, aux.c_str(), CallBackParticleSystemRemove, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			TwAddSeparator(bar, "", "group=PG");			
 
 			// Emitter
 			aux = "Emitter" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Emitter'");
 			aux = "PGEmitterShape" + i;
-			TwAddVarCB(bar, aux.c_str(), particleEmitterShape, SetParticleSystemShape, GetParticleSystemShape, &e_particle_group->particle_systems[i], " group=PG label='Shape'");
+			TwAddVarCB(bar, aux.c_str(), particleEmitterShape, SetParticleSystemShape, GetParticleSystemShape, &(*e_particle_group->particle_systems)[i], " group=PG label='Shape'");
 
-			TParticleEmitterShape m_shape = e_particle_group->particle_systems[i].emitter_generation->shape;
+			TParticleEmitterShape m_shape = (*e_particle_group->particle_systems)[i].emitter_generation->shape;
 
 			if (m_shape == TParticleEmitterShape::SPHERE || m_shape == TParticleEmitterShape::SEMISPHERE || m_shape == TParticleEmitterShape::CONE || m_shape == TParticleEmitterShape::RING) {
 				aux = "PGEmitterRadius" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->radius, " group=PG label='Radius' min=0.01 step=0.05");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->radius, " group=PG label='Radius' min=0.01 step=0.05");
 			}
 			if (m_shape == TParticleEmitterShape::CONE) {
 				aux = "PGEmitterAngle" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->angle, " group=PG label='Angle' min=0.01 step=0.01");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->angle, " group=PG label='Angle' min=0.01 step=0.01");
 			}
 			if (m_shape == TParticleEmitterShape::BOX) {
 				aux = "PGEmitterBoxSize" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->box_size, " group=PG label='Box Size' min=0.01 step=0.05");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->box_size, " group=PG label='Box Size' min=0.01 step=0.05");
 			}
 			if (m_shape == TParticleEmitterShape::RING) {
 				aux = "PGEmitterInnerRadius" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->inner_radius, " group=PG label='Inner Radius' min=0.01 step=0.05");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->inner_radius, " group=PG label='Inner Radius' min=0.01 step=0.05");
 			}
 			aux = "PGEmitterLimit" + i;
 			//TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->limit, " group=PG label='Limit'");
-			TwAddVarCB(bar, aux.c_str(), TW_TYPE_INT32, SetParticleSystemLimit, GetParticleSystemLimit, &e_particle_group->particle_systems[i], " group=PG label='Limit' min=1");
+			TwAddVarCB(bar, aux.c_str(), TW_TYPE_INT32, SetParticleSystemLimit, GetParticleSystemLimit, &(*e_particle_group->particle_systems)[i], " group=PG label='Limit' min=1");
 			aux = "PGEmitterRate" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->rate, " group=PG label='Rate' min=0.0001 step=0.01");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->rate, " group=PG label='Rate' min=0.0001 step=0.01");
 			aux = "PGEmitterMinLT" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->min_life_time, " group=PG label='Min lifeTime' min=0.01 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->min_life_time, " group=PG label='Min lifeTime' min=0.01 step=0.1");
 			aux = "PGEmitterMaxLT" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->max_life_time, " group=PG label='Max lifeTime' min=0.01 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->max_life_time, " group=PG label='Max lifeTime' min=0.01 step=0.1");
 			aux = "PGEmitterBurstTime" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->burst_time, " group=PG label='Burst Time' min=0 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->burst_time, " group=PG label='Burst Time' min=0 step=0.1");
 			aux = "PGEmitterBurstAmount" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].emitter_generation->burst_amount, " group=PG label='Burst Amount' min=1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &(*e_particle_group->particle_systems)[i].emitter_generation->burst_amount, " group=PG label='Burst Amount' min=1");
 			aux = "PGEmitterDelay" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].emitter_generation->delay, " group=PG label='Delay' min=0 step=0.01");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->delay, " group=PG label='Delay' min=0 step=0.01");
 			aux = "PGEmitterLoop" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->loop, " group=PG label='Loop'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &(*e_particle_group->particle_systems)[i].emitter_generation->loop, " group=PG label='Loop'");
 			aux = "PGEmitterFillInitial" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->fill_initial, " group=PG label='Fill initial'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &(*e_particle_group->particle_systems)[i].emitter_generation->fill_initial, " group=PG label='Fill initial'");
 			aux = "PGEmitterRandomRot" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].emitter_generation->random_rotation, " group=PG label='Random rotation'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &(*e_particle_group->particle_systems)[i].emitter_generation->random_rotation, " group=PG label='Random rotation'");
 
 			// Updaters
-			if (e_particle_group->particle_systems[i].updater_lifetime != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_lifetime != nullptr) {
 				aux = "Lifetime" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Lifetime'");
 				aux = "RemoveLifetime" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterLifetime, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterLifetime, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_color != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_color != nullptr) {
 				aux = "Color over life" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Color over life'");
 				aux = "PGUpdaterColorIC" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->initial_color, " group=PG label='Initial Color'");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &(*e_particle_group->particle_systems)[i].updater_color->initial_color, " group=PG label='Initial Color'");
 				aux = "PGUpdaterColorFC" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &e_particle_group->particle_systems[i].updater_color->final_color, " group=PG label='Final Color'");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_COLOR3F, &(*e_particle_group->particle_systems)[i].updater_color->final_color, " group=PG label='Final Color'");
 				aux = "PGUpdaterColorCurve" + i;
-				TwAddVarRW(bar, aux.c_str(), particleCurve, &e_particle_group->particle_systems[i].updater_color->curve, " group=PG label='Curve'");
+				TwAddVarRW(bar, aux.c_str(), particleCurve, &(*e_particle_group->particle_systems)[i].updater_color->curve, " group=PG label='Curve'");
 				aux = "PGUpdaterColorCurveVal" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_color->curve_val, " group=PG label='Curve value' min=0.01 step=0.01");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].updater_color->curve_val, " group=PG label='Curve value' min=0.01 step=0.01");
 				aux = "RemovePGUpdaterColor" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterColor, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterColor, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_size != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_size != nullptr) {
 				aux = "Size over life" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Size over life'");
 				aux = "PGUpdaterSizeIS" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->initial_size, " group=PG label='Initial Size' min=0.01 step=0.01");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].updater_size->initial_size, " group=PG label='Initial Size' min=0.01 step=0.01");
 				aux = "PGUpdaterSizeFS" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_size->final_size, " group=PG label='Final Size' min=0.01 step=0.01");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].updater_size->final_size, " group=PG label='Final Size' min=0.01 step=0.01");
 				aux = "RemovePGUpdaterSize" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterSize, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterSize, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}			
 
-			if (e_particle_group->particle_systems[i].updater_movement != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_movement != nullptr) {
 				aux = "Initial movement" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Initial movement'");
 				aux = "PGUpdaterMovementSpeed" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_movement->speed, " group=PG label='Initial Speed' step=0.1");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].updater_movement->speed, " group=PG label='Initial Speed' step=0.1");
 				aux = "RemovePGUpdaterMovement" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterMovement, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_rotation != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_rotation != nullptr) {
 				aux = "PGRotation" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Rotation'");
 				aux = "PGUpdaterRotationSpeed" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_rotation->angular_speed, " group=PG label='Speed' step=0.005");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].updater_rotation->angular_speed, " group=PG label='Speed' step=0.005");
 				aux = "RemovePGUpdaterRotation" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterRotation, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterRotation, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_noise != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_noise != nullptr) {
 				aux = "Random speed over time" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Random speed over time'");
 				aux = "PGUpdaterNoiseMinNoise" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &e_particle_group->particle_systems[i].updater_noise->min_noise, " group=PG label='Min Speed' min=0.01 step=0.01");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &(*e_particle_group->particle_systems)[i].updater_noise->min_noise, " group=PG label='Min Speed' min=0.01 step=0.01");
 				aux = "PGUpdaterNoiseMaxNoise" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &e_particle_group->particle_systems[i].updater_noise->max_noise, " group=PG label='Max Speed' min=0.01 step=0.01");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_DIR3F, &(*e_particle_group->particle_systems)[i].updater_noise->max_noise, " group=PG label='Max Speed' min=0.01 step=0.01");
 				aux = "RemovePGUpdaterNoise" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterNoise, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterNoise, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 			
-			if (e_particle_group->particle_systems[i].updater_gravity != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_gravity != nullptr) {
 				aux = "Gravity" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Gravity'");
 				aux = "PGUpdaterGravityForce" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].updater_gravity->gravity, " group=PG label='Force' step=0.005");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].updater_gravity->gravity, " group=PG label='Force' step=0.005");
 				aux = "PGUpdaterGravityConstant" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].updater_gravity->constant, " group=PG label='Constant'");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &(*e_particle_group->particle_systems)[i].updater_gravity->constant, " group=PG label='Constant'");
 				aux = "RemovePGUpdaterGravity" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveUpdaterGravity, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 
 			// Subemitter
-			if (e_particle_group->particle_systems[i].subemitter != nullptr) {
+			if ((*e_particle_group->particle_systems)[i].subemitter != nullptr) {
 				aux = "Subemitter" + i;
 				TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Subemitters'");
 				aux = "SubemitterDeath" + i;
-				TwAddVarRW(bar, aux.c_str(), TW_TYPE_CSSTRING(sizeof(e_particle_group->particle_systems[i].subemitter->death_emitter)), &e_particle_group->particle_systems[i].subemitter->death_emitter, " group=PG label='onDeath'");
+				TwAddVarRW(bar, aux.c_str(), TW_TYPE_CSSTRING(sizeof((*e_particle_group->particle_systems)[i].subemitter->death_emitter)), &(*e_particle_group->particle_systems)[i].subemitter->death_emitter, " group=PG label='onDeath'");
 				aux = "RemovePGSubemitter" + i;
-				TwAddButton(bar, aux.c_str(), CallbackRemoveSubemitter, &e_particle_group->particle_systems[i], "group=PG label='Remove'");
+				TwAddButton(bar, aux.c_str(), CallbackRemoveSubemitter, &(*e_particle_group->particle_systems)[i], "group=PG label='Remove'");
 			}
 
 			// Renderer
@@ -876,78 +876,78 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			particleRenderTextureList = TwDefineEnum("ParticleRenderTextureList", particleRenderTextureListEV, texture_list.size());
 
 			aux = "PGRendererTextureList" + i;
-			TwAddVarCB(bar, aux.c_str(), particleRenderTextureList, SetParticleRenderTexture, GetParticleRenderTexture, &e_particle_group->particle_systems[i], " group=PG label='Texture'");
+			TwAddVarCB(bar, aux.c_str(), particleRenderTextureList, SetParticleRenderTexture, GetParticleRenderTexture, &(*e_particle_group->particle_systems)[i], " group=PG label='Texture'");
 
 			aux = "PGRendererAdditive" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->additive, " group=PG label='Additive'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &(*e_particle_group->particle_systems)[i].renderer->additive, " group=PG label='Additive'");
 
 			aux = "PGRendererDistorsion" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &e_particle_group->particle_systems[i].renderer->distorsion, " group=PG label='Distorsion'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_BOOL8, &(*e_particle_group->particle_systems)[i].renderer->distorsion, " group=PG label='Distorsion'");
 
 			aux = "PGRendererDistorsionAmount" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->distorsion_amount, " group=PG label='Distorsion amount' min=0 step=0.01");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].renderer->distorsion_amount, " group=PG label='Distorsion amount' min=0 step=0.01");
 
 			aux = "PGRendererNAnimX" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->n_anim_x, " group=PG label='Animation columns'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &(*e_particle_group->particle_systems)[i].renderer->n_anim_x, " group=PG label='Animation columns'");
 			aux = "PGRendererNAnimY" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &e_particle_group->particle_systems[i].renderer->n_anim_y, " group=PG label='Animation rows'");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_INT32, &(*e_particle_group->particle_systems)[i].renderer->n_anim_y, " group=PG label='Animation rows'");
 
 			aux = "PGRendererMode" + i;
-			TwAddVarRW(bar, aux.c_str(), particleRenderMode, &e_particle_group->particle_systems[i].renderer->render_type, " group=PG label='Render mode'");
+			TwAddVarRW(bar, aux.c_str(), particleRenderMode, &(*e_particle_group->particle_systems)[i].renderer->render_type, " group=PG label='Render mode'");
 
 			aux = "PGRendererAnimMode" + i;
-			TwAddVarRW(bar, aux.c_str(), particleRenderAnimationMode, &e_particle_group->particle_systems[i].renderer->particle_animation_mode, " group=PG label='Animation mode'");
+			TwAddVarRW(bar, aux.c_str(), particleRenderAnimationMode, &(*e_particle_group->particle_systems)[i].renderer->particle_animation_mode, " group=PG label='Animation mode'");
 
 			// TODO: Hacer que solo aparezca en modo stretch
 			aux = "PGRendererStretch" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &e_particle_group->particle_systems[i].renderer->stretch, " group=PG label='Stretch' step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].renderer->stretch, " group=PG label='Stretch' step=0.1");
 
 			aux = "PGRendererStretchMode" + i;
-			TwAddVarRW(bar, aux.c_str(), particleRenderStretchMode, &e_particle_group->particle_systems[i].renderer->stretch_mode, " group=PG label='Stretch mode'");
+			TwAddVarRW(bar, aux.c_str(), particleRenderStretchMode, &(*e_particle_group->particle_systems)[i].renderer->stretch_mode, " group=PG label='Stretch mode'");
 						
 			TwAddSeparator(bar, "", "group=PG");
 
 			// Updaters
 
-			if (e_particle_group->particle_systems[i].updater_lifetime == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_lifetime == nullptr) {
 				aux = "AddPGLifetime" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterLifetime, &e_particle_group->particle_systems[i], "group=PG label='Add lifetime updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterLifetime, &(*e_particle_group->particle_systems)[i], "group=PG label='Add lifetime updater'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_color == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_color == nullptr) {
 				aux = "AddPGColor" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterColor, &e_particle_group->particle_systems[i], "group=PG label='Add color updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterColor, &(*e_particle_group->particle_systems)[i], "group=PG label='Add color updater'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_size == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_size == nullptr) {
 				aux = "AddPGSize" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterSize, &e_particle_group->particle_systems[i], "group=PG label='Add size updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterSize, &(*e_particle_group->particle_systems)[i], "group=PG label='Add size updater'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_movement == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_movement == nullptr) {
 				aux = "AddPGMovement" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterMovement, &e_particle_group->particle_systems[i], "group=PG label='Add movement updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterMovement, &(*e_particle_group->particle_systems)[i], "group=PG label='Add movement updater'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_rotation == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_rotation == nullptr) {
 				aux = "AddPGRotation" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterRotation, &e_particle_group->particle_systems[i], "group=PG label='Add rotation updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterRotation, &(*e_particle_group->particle_systems)[i], "group=PG label='Add rotation updater'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_noise == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_noise == nullptr) {
 				aux = "AddPGNoise" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterNoise, &e_particle_group->particle_systems[i], "group=PG label='Add noise updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterNoise, &(*e_particle_group->particle_systems)[i], "group=PG label='Add noise updater'");
 			}
 
-			if (e_particle_group->particle_systems[i].updater_gravity == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].updater_gravity == nullptr) {
 				aux = "AddPGGravity" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterGravity, &e_particle_group->particle_systems[i], "group=PG label='Add gravity updater'");
+				TwAddButton(bar, aux.c_str(), CallbackAddUpdaterGravity, &(*e_particle_group->particle_systems)[i], "group=PG label='Add gravity updater'");
 			}
 
 			// Subemitter
-			if (e_particle_group->particle_systems[i].subemitter == nullptr) {
+			if ((*e_particle_group->particle_systems)[i].subemitter == nullptr) {
 				aux = "AddPGSubemitter" + i;
-				TwAddButton(bar, aux.c_str(), CallbackAddSubemitter, &e_particle_group->particle_systems[i], "group=PG label='Add subemitters'");
+				TwAddButton(bar, aux.c_str(), CallbackAddSubemitter, &(*e_particle_group->particle_systems)[i], "group=PG label='Add subemitters'");
 			}
 
 			/*if (i < e_particle_group->particle_systems.size() - 1) {
