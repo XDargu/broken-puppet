@@ -508,6 +508,7 @@ void activatePointLight(const TCompPointLight* plight, XMVECTOR light_pos, int s
 	c->plight_world_pos = light_pos;
 	c->plight_max_radius = plight->radius;
 	c->plight_inv_delta_radius = 1.0f / (plight->radius - plight->radius * plight->decay_factor);
+	c->plight_intensity = plight->intensity;
 	ctes_point_light.uploadToGPU();
 }
 

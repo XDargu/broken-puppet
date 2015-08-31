@@ -20,7 +20,8 @@ macroScript MCVAssetBrowser
 	 PrefabPath = AssetPath + "Prefabs\\"
 	 PrefabList = #()	
 	
-	
+
+
 	--clearListener()
 
 		fn saveModulePicture dir assetName m = (
@@ -145,8 +146,10 @@ macroScript MCVAssetBrowser
 			for s in sel do
 			(
 				append origTransforms s.transform
-				s.pos -= parentPos
-				--s.rotation = (quat 0 0 0 1)
+				if (s.parent == undefined) then (
+					s.pos -= parentPos
+					--s.rotation = (quat 0 0 0 1)
+				)
 				
 				progress.value = (100.0 / sel.count) * count
 				count += 1
@@ -165,7 +168,9 @@ macroScript MCVAssetBrowser
 			saveModulePicture dir assetName sel		
 			count = 1
 			for s in sel do (
+				if (s.parent == undefined) then (
 				s.transform = origTransforms[count]
+				)
 				count += 1
 			)
 		)
@@ -255,7 +260,10 @@ macroScript MCVAssetBrowser
 		fn createModuleInPoint dir p = (
 			mergeMaxFile (dir) #mergeDups #useSceneMtlDups #select
 			for obj in selection do (
-				obj.position += p
+				if (obj.parent == undefined) then 
+				(
+					obj.position += p
+				)
 			)		
 			-- If the imported max is a Prefab, group it
 			-- Grouping alters the pivot!!!!
@@ -389,7 +397,7 @@ macroScript MCVAssetBrowser
 				mSystemActive type:#boolean ui:mSystemActive default:true
 			)
 			 
-			rollout params "Object Distance Text"
+			rollout params "Object Particle System"
 			(
 				editText mSystemName "Nombre" type: #string
 				checkbox mSystemActive "Activo" type: #boolean
@@ -479,34 +487,6 @@ macroScript MCVAssetBrowser
 	)
 	
 	
-		
-	/**********************************************************************************************
-	Object  structure CollisionTag
-	 Params:
-	  - Is an CollisionTag
-	***********************************************************************************************/
-	objectDataCollisionTag = attributes objectCollisionTag
-	(
-		parameters main rollout:params
-		(
-			collisionTag type:#string ui:collisionTag default:"undefined"
-		)
-
-		rollout params "Object Custom collision tag"
-		(
-			Edittext collisionTag "collisionTag" type: #string
-		)
-	)
-	
-	fn addObjectsCollisionTag = 
-	(		
-		local objSelected = $
-		if (isProperty objSelected.baseobject #collisionTag != true) then
-		(
-			custAttributes.add objSelected objectDataCollisionTag	
-		)	
-		
-	)
 	
 	
 	objectIsNotVisible = attributes objectIsNotVisible
@@ -625,8 +605,9 @@ macroScript MCVAssetBrowser
 			custAttributes.add objSelected objectDataRecastAABB	
 						
 		)	
+		
 	)
-
+	
 	/**********************************************************************************************
 	Object  structure RoomAABB
 	 Params:
@@ -658,6 +639,209 @@ macroScript MCVAssetBrowser
 		)	
 		
 	)
+	
+	/**********************************************************************************************
+	Object  structure Parent
+	Params:
+	  - mParent: parent node
+	***********************************************************************************************/
+	objectDataParent = attributes objecParent
+	(
+		parameters main rollout:params
+		(
+			mParent type:#node
+		)
+
+		rollout params "Object Custom Parent"
+		(
+			pickbutton chooseParent "Select Parent"
+			
+			on params open do (
+				if (mParent != undefined) then (
+					chooseParent.text = mParent.name
+				)
+			)
+			
+			on chooseParent picked obj do  (
+				mParent = obj
+				chooseParent.text = obj.name
+			)
+		)		
+		
+	)
+	
+	fn addObjectsParent = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #mParent != true) then
+		(
+			custAttributes.add objSelected objectDataParent
+						
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure Vibration
+	Params:
+	  - mVibrationAmount: Intensity of the vibration
+	  - mVibrationFrequency: Frequency of the vibration
+	***********************************************************************************************/
+	objectDataVibration = attributes objectVibration
+	(
+		parameters main rollout:params
+		(
+			mVibrationAmount type:#float ui:mVibrationAmount default:0.01
+			mVibrationFrequency type:#float ui:mVibrationFrequency default:100
+		)
+
+		rollout params "Object Custom Vibration"
+		(
+			spinner  mVibrationAmount "Intensidad" type: #float
+			spinner  mVibrationFrequency "Frecuencia" type: #float
+		)
+	)
+	
+	fn addObjectsVibration = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #mVibrationAmount != true) then
+		(
+			custAttributes.add objSelected objectDataVibration
+						
+		)	
+	)
+	
+	/**********************************************************************************************
+	Object  structure LocalRotation
+	Params:
+	  - mLocalRotationSpeed: Speed of the rotation
+	  - mLocalRotationAxis: Local axis (0: fron, 1: right, 2: up)
+	***********************************************************************************************/
+	objectDataLocalRotation = attributes objectLocalRotation
+	(
+		parameters main rollout:params
+		(
+			mLocalRotationSpeed type:#float ui:mLocalRotationSpeed default:2
+			mLocalRotationAxis type:#string default: "X"
+		)
+
+		rollout params "Object Custom Local Rotation"
+		(
+			spinner  mLocalRotationSpeed "Velocidad" type: #float
+			dropdownlist mLocalRotationAxisList "Eje" items:# ("X","Y","Z")
+			
+			on params open do (
+				mLocalRotationAxisList.selection = findItem mLocalRotationAxisList.items mLocalRotationAxis
+			)
+			
+			on mLocalRotationAxisList selected i do  (
+				mLocalRotationAxis = mLocalRotationAxisList.items [i]
+			)
+		)		
+		
+	)
+	
+	fn addObjectsLocalRotation = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #mLocalRotationSpeed != true) then
+		(
+			custAttributes.add objSelected objectDataLocalRotation
+						
+		)	
+		
+	)
+	
+	/**********************************************************************************************
+	Object  structure RoomAABB
+	 Params:
+	  - ROOM: Indicate that the object is a room
+	***********************************************************************************************/
+	objectDataRoomAABB = attributes objectRoomAABB
+	(
+		parameters main rollout:params
+		(
+			ROOM type:#boolean ui:ROOM default:true
+			Logic_element type:#boolean ui:Logic_element default:true
+		)
+
+		rollout params "Object Custom Room AABB"
+		(
+			checkbox ROOM "ROOM" type: #boolean
+			checkbox Logic_element "Logic_element" type: #boolean
+		)
+	)
+	
+	fn addObjectsRoomAABB = 
+	(		
+		local objSelected = $
+		actionMan.executeAction 0 "373"
+		if (isProperty objSelected.baseobject #ROOM != true) then
+		(
+			custAttributes.add objSelected objectDataRoomAABB
+						
+		)	
+		
+	)
+	
+	
+	/**********************************************************************************************
+	Object  structure CollisionTag
+	 Params:
+	  - Is an collisionTag
+	***********************************************************************************************/
+	objectDataCollisionTag = attributes objectCollisionTag
+	(
+		parameters main rollout:params
+		(
+			collisionTag type:#string ui:collisionTag default:"undefined"
+		)
+
+		rollout params "Object Custom collision tag"
+		(
+			Edittext collisionTag "collisionTag" type: #string
+		)
+	)
+	
+	fn addObjectsCollisionTag = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #collisionTag != true) then
+		(
+			custAttributes.add objSelected objectDataCollisionTag	
+		)	
+		
+	)
+
+	/**********************************************************************************************
+	Object  structure materialTag
+	 Params:
+	  - Is an materialTag
+	***********************************************************************************************/
+	objectDataMaterialTag = attributes objectMaterialTag
+	(
+		parameters main rollout:params
+		(
+			materialTag type:#string ui:materialTag default:"wood"
+		)
+
+		rollout params "Object Custom material tag"
+		(
+			Edittext materialTag "materialTag" type: #string
+		)
+	)
+	
+	fn addObjectsMaterialTag = 
+	(		
+		local objSelected = $
+		if (isProperty objSelected.baseobject #materialTag != true) then
+		(
+			custAttributes.add objSelected objectDataMaterialTag	
+		)	
+		
+	)
+	
 	
 	/**********************************************************************************************
 	Object  structure NoEval
@@ -755,19 +939,6 @@ macroScript MCVAssetBrowser
 		)
 		
 		
-		fn funcionPlacePrefab = (
-		local aux = 0
-			for i in PrefabList do (				
-				local pos = Point3 (aux * 10) 3 0
-				print pos
-				print (PrefabPath + i as string + ".max")
-				newMod = createModuleInPoint (PrefabPath + i as string + ".max") pos	
-				aux = aux + 1
-			)
-			
-		
-		)
-		
 		-- Reloads all the instances of the asset with the given path
 		fn updateAsset dir assetName = (
 			amount = 0
@@ -813,8 +984,10 @@ macroScript MCVAssetBrowser
 			button botonAddAudioSource "Audio Source" pos:[248,130] width:75 height:25 toolTip:""
 			button botonAddOclusionPlane "OclusionPlane" pos:[5,161] width:75 height:25 toolTip:""
 			button botonAddCollisionTag "Collision Tag" pos:[86,161] width:75 height:25 toolTip:""
-			button botonPlacePrefab "Colocar Prefabs" pos:[86,192] width:75 height:25 toolTip:""
-			
+			button botonAddMaterialTag "Material Tag" pos:[167,161] width:75 height:25 toolTip:""			
+			button botonAddVibration "Add vibration" pos:[5,192] width:75 height:25 toolTip:""
+			button botonAddLocalRotation "Add Local Rotation" pos:[86,192] width:75 height:25 toolTip:""
+			button botonAddParent "Add Parent" pos:[167,192] width:75 height:25 toolTip:""
 			
 							
 			on botonA pressed do	( 
@@ -899,17 +1072,37 @@ macroScript MCVAssetBrowser
 			on botonAddCollisionTag pressed do (
 				addObjectsCollisionTag()
 			)
-			on botonPlacePrefab pressed do (
-				funcionPlacePrefab()
+			on botonAddMaterialTag pressed do (
+				addObjectsMaterialTag()
 			)
-			
-			
-			
+			on botonAddVibration pressed do (
+				addObjectsVibration()
+			)
+			on botonAddLocalRotation pressed do (
+				addObjectsLocalRotation()
+			)
+			on botonAddParent pressed do (
+				addObjectsParent()
+			)
 		)
 		
 		rollout AttributesEdition "Edición de Atributos"
 		(
+			group "Exportador"
+			(
+				button createPrefabs "Crear Prefabs" width:110 height:25 toolTip:"" across: 1
+			)
 			
+			on createPrefabs pressed do (
+				local aux = 0
+				for i in PrefabList do (				
+					local pos = Point3 (aux * 10) 3 0
+					print pos
+					print (PrefabPath + i as string + ".max")
+					newMod = createModuleInPoint (PrefabPath + i as string + ".max") pos	
+					aux = aux + 1
+				)		
+			)
 		)
 		
 		rollout Exporter "Exportador" 
@@ -1099,7 +1292,7 @@ macroScript MCVAssetBrowser
 			group "Búsqueda avanzada" (
 				checkbox searchArq "Arquitectónicos" align: #left triState: 1
 				
-				checkbox searchRmp "Rampas" align: #left across: 3				
+				checkbox searchRmp "Rampas" align: #left across: 3 triState: 1
 				checkbox searchTub "Tuberías" align: #left
 				checkbox searchSelev "Suelo elevado" align: #left
 				
@@ -1267,10 +1460,17 @@ macroScript MCVAssetBrowser
 			on Modules open do (
 				ModuleList = loadModules ModulePath
 				
+				local searchValues = #(searchText.text)
+				-- Advanced search
+				append searchValues "arqui"
+				append searchValues "rampa"
+				
+				local searchList = searchInList ModuleList searchValues
+				
 				for ro in moduleSubRollout.rollouts do
 					removeSubRollout moduleSubRollout ro
 				
-				addSubRollout moduleSubRollout (loadDynamicModules ModuleList)
+				addSubRollout moduleSubRollout (loadDynamicModules searchList)
 			)
 		)
 		
@@ -1301,7 +1501,7 @@ macroScript MCVAssetBrowser
 			)
 			
 			edittext searchText "" 
-			button searchButton "Buscar" 
+			button searchButton "Buscar" text: "Player"
 			subRollout moduleSubRollout "test1" height:400
 			button goToLocation "Abrir ubicación" across: 2
 			button reload "Actualizar"		
@@ -1333,11 +1533,14 @@ macroScript MCVAssetBrowser
 			
 			on Prefabs open do (
 				PrefabList = loadModules PrefabPath
+				local searchValues = #("Player")
+				
+				local searchList = searchInList PrefabList searchValues
 				
 				for ro in moduleSubRollout.rollouts do
 					removeSubRollout moduleSubRollout ro
 				
-				addSubRollout moduleSubRollout (loadDynamicPrefabs PrefabList)
+				addSubRollout moduleSubRollout (loadDynamicPrefabs searchList)
 			)		
 		)
 

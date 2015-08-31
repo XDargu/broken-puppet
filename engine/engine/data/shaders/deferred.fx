@@ -452,10 +452,10 @@ float4 PSPointLights(
   float spec_amount = getSpecular(wPos, L, N, ss_load_coords);
 
   // Attenuation based on distance:   1 - [( r - rmin ) / ( rmax - rmin )]
-  float  att_factor = saturate((plight_max_radius -  distance_to_light) * plight_inv_delta_radius * 0.4);
+  float  att_factor = saturate((plight_max_radius -  distance_to_light) * plight_inv_delta_radius * 0.4);  
 
   // Save spec amount in the alpha channel
-  float4 output = plight_color * diffuse_amount;
+  float4 output = plight_color * diffuse_amount * plight_intensity;
   output.a = spec_amount;
   return output * att_factor;
 }

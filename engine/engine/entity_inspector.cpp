@@ -669,7 +669,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 	}
 	if (e_point_light) {
 		TwAddVarRW(bar, "PointLightActive", TW_TYPE_BOOL8, &e_point_light->active, " group='Point Light' label='Active' ");
-		TwAddVarRW(bar, "PointLightIntensity", TW_TYPE_FLOAT, &e_point_light->intensity, " min=0 max=10 group='Point Light' label='Intensity' ");
+		TwAddVarRW(bar, "PointLightIntensity", TW_TYPE_FLOAT, &e_point_light->intensity, " min=0 max=100 group='Point Light' label='Intensity' ");
 		TwAddVarRW(bar, "PointLightColor", TW_TYPE_COLOR3F, &e_point_light->color, " group='Point Light' label='Color' ");
 		TwAddVarRW(bar, "PointLightRadius", TW_TYPE_FLOAT, &e_point_light->radius, " group='Point Light' label='Radius' min=0.1");
 	}

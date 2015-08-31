@@ -147,10 +147,53 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				}
 
 			}else if ((firstActorEntity->hasTag("level")) && (secondActorEntity->hasTag("actor"))){
-				TCompRigidBody* rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force = getForce(rigid->getMass(), pairs, i);
-					float force_float = force;
-					CSoundManager::get().playImpactFX(force_float, secondActorEntity->get<TCompTransform>());
+				
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+
+				XMVECTOR position;
+				XMVECTOR normal;
+
+				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
+
+				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+
+				// Sound
+				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+				if (timestamp_reached) {
+					CSoundManager::get().playImpactFX(force, entity_transform);
+					first_rigid->impact_timestamp = current_time;
+
+
+					CEntity* player_entity = CLogicManager::get().getPlayerHandle();
+					TCompTransform* player_transform = player_entity->get<TCompTransform>();
+
+					// Particle dust effect
+					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25)) {
+						TCompAABB* actorAABB = firstActorEntity->get<TCompAABB>();
+
+						float x = XMVectorGetX(actorAABB->getExtents());
+						float y = XMVectorGetY(actorAABB->getExtents());
+						float z = XMVectorGetZ(actorAABB->getExtents());
+
+						float radius = (x + y + z) / 3;
+
+						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
+						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+
+						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
+
+						if (particle_entity.isValid()) {
+							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+							pg->destroy_on_death = true;
+							if (pg->particle_systems->size() > 0)
+							{
+								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
+								(*pg->particle_systems)[0].emitter_generation->radius = radius;
+							}
+						}
+					}
+				}
+
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("actor"))){
 				TCompRigidBody* rigid = firstActorEntity->get<TCompRigidBody>();
 				PxReal force = getForce(rigid->getMass(), pairs, i);
