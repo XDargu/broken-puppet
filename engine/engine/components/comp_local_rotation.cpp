@@ -12,18 +12,32 @@ void TCompLocalRotation::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 void TCompLocalRotation::update(float elapsed) {
 
 	TCompTransform* c_transform = h_transform;
+	if (c_transform->hasParent()) {
+		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
+		if (axis == 0) {
+			rot = XMQuaternionRotationAxis(c_transform->local_transform.getFront(), speed * elapsed);
+		}
+		if (axis == 1) {
+			rot = XMQuaternionRotationAxis(-c_transform->local_transform.getLeft(), speed * elapsed);
+		}
+		if (axis == 2) {
+			rot = XMQuaternionRotationAxis(c_transform->local_transform.getUp(), speed * elapsed);
+		}
 
-	XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
-	if (axis == 0) {
-		rot = XMQuaternionRotationAxis(c_transform->getFront(), speed * elapsed);
+		c_transform->local_transform.rotation = XMQuaternionMultiply(c_transform->local_transform.rotation, rot);
 	}
-	if (axis == 1) {
-		rot = XMQuaternionRotationAxis(-c_transform->getLeft(), speed * elapsed);
-	}
-	if (axis == 2) {
-		rot = XMQuaternionRotationAxis(c_transform->getUp(), speed * elapsed);
-	}
+	else {
+		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
+		if (axis == 0) {
+			rot = XMQuaternionRotationAxis(c_transform->getFront(), speed * elapsed);
+		}
+		if (axis == 1) {
+			rot = XMQuaternionRotationAxis(-c_transform->getLeft(), speed * elapsed);
+		}
+		if (axis == 2) {
+			rot = XMQuaternionRotationAxis(c_transform->getUp(), speed * elapsed);
+		}
 
-	c_transform->rotation = XMQuaternionMultiply(c_transform->rotation, rot);
-
+		c_transform->rotation = XMQuaternionMultiply(c_transform->rotation, rot);
+	}
 }

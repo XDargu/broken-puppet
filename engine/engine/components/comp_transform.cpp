@@ -75,9 +75,24 @@ void TCompTransform::update(float elapsed) {
 		position = Physics.PxVec3ToXMVECTOR(my_transform.p);
 		rotation = Physics.PxQuatToXMVECTOR(my_transform.q);*/
 
+		TTransform t = c_parent->transform(parent_offset);
+		t = t.transform(local_transform);
+		position = t.position;
+		rotation = t.rotation;
+		
+		/*position = c_parent->position + XMVector3Rotate(local_transform.position, c_parent->rotation);
+		rotation = XMQuaternionMultiply(local_transform.rotation, c_parent->rotation);
 
-		rotation = XMQuaternionMultiply(parent_offset.rotation, c_parent->rotation);
+		position = position + XMVector3Rotate(parent_offset.position, rotation);
+		rotation = XMQuaternionMultiply(parent_offset.rotation, rotation);*/
+
+
+		/*
 		position = c_parent->position + XMVector3Rotate(parent_offset.position, c_parent->rotation);
+		rotation = XMQuaternionMultiply(parent_offset.rotation, c_parent->rotation);
+
+		position = position + XMVector3Rotate(local_transform.position, rotation);
+		rotation = XMQuaternionMultiply(local_transform.rotation, rotation);*/
 
 		/*position = parent_offset_pos + c_parent->position;
 		rotation = XMQuaternionMultiply(c_parent->rotation, parent_offset_rot);*/
@@ -105,4 +120,14 @@ bool TCompTransform::transformChanged() {
 	int equal = memcmp(&prev_transform, &*this, sizeof(*this));
 
 	return equal != 0;
+}
+
+int TCompTransform::getType() {
+	if (parent_name[0] != 0x00) {
+		TCompTransform* c_parent = parent;
+		return c_parent->getType();
+	}
+	else {
+		return (int)(type * 100);
+	}
 }
