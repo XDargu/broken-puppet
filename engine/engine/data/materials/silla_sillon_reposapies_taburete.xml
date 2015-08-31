@@ -1,1 +1,1 @@
-<std_material name="silla_sillon_reposapies_taburete" diffuse="sillas_Diffuse" normal="sillas_Normal" specular="sillas_Specular" glossiness="sillas_Gloss" emissive=""/>
+<std_material name="silla_sillon_reposapies_taburete" diffuse="sillas_Diffuse" normal="sillas_Normal" specular="sillas_Specular" glossiness="sillas_Gloss" emissive="" emissive_off="" />

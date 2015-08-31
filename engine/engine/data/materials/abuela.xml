@@ -1,1 +1,1 @@
-<std_material name="abuela" diffuse="cortahilos_diffuse" normal="cortahilos_normals" specular="cortahilos_specular" glossiness="cortahilos_gloss" emissive=""/>
+<std_material name="abuela" diffuse="cortahilos_diffuse" normal="cortahilos_normals" specular="cortahilos_specular" glossiness="cortahilos_gloss" emissive="" emissive_off="" />

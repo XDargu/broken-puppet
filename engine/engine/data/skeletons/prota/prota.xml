@@ -8,7 +8,7 @@
 	<anim name="throw" blend_out = "0"/>4
 	<anim name="jump" blend = "0.05" blend_out= "0.3"/>5 
 	<anim name="falling" blend = "0.1" blend_out="0.3" cancel ="1.0"/>6 
-	<anim name="ground" blend = "0.3" blend_out="0.3" cancel="0"/>7
+	<anim name="ground" blend = "0.3" blend_out="0.3" cancel="0.05"/>7
 	<anim name="idle_up"/>8
 	<anim name="walk_up"/>9
 	<anim name="run_up"/>10

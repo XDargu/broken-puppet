@@ -1,1 +1,1 @@
-<std_material name="Material #2280" diffuse="baul_01_diffuse" normal="baul_01_normal" specular="baul_01_specular" glossiness="baul_01_gloss" emissive=""/>
+<std_material name="Material #2280" diffuse="baul_01_diffuse" normal="baul_01_normal" specular="baul_01_specular" glossiness="baul_01_gloss" emissive="" emissive_off="" />
