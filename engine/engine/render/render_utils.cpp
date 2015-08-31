@@ -70,6 +70,7 @@ enum eSamplerType {
 	, SAMPLER_CLAMP_LINEAR
 	, SAMPLER_BORDER_LINEAR
 	, SAMPLER_PCF_SHADOWS
+	, SAMPLER_CLAMP_POINT
 	, SAMPLERS_COUNT
 };
 
@@ -138,6 +139,19 @@ bool createSamplers() {
 	};
 	hr = ::render.device->CreateSamplerState(
 		&sampler_desc, &all_samplers[SAMPLER_PCF_SHADOWS]);
+	if (FAILED(hr))
+		return false;
+
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = ::render.device->CreateSamplerState(
+		&sampDesc, &all_samplers[SAMPLER_CLAMP_POINT]);
 	if (FAILED(hr))
 		return false;
 
