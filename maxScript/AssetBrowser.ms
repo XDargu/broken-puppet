@@ -258,7 +258,9 @@ macroScript MCVAssetBrowser
 		)
 
 		fn createModuleInPoint dir p = (
-			mergeMaxFile (dir) #mergeDups #useSceneMtlDups #select
+			--mergeMaxFile (dir) #mergeDups #useSceneMtlDups #select
+			mergeMaxFile (dir) #mergeDups #useMergedMtlDups #select
+			
 			for obj in selection do (
 				if (obj.parent == undefined) then 
 				(
@@ -728,7 +730,7 @@ macroScript MCVAssetBrowser
 
 		rollout params "Object Custom Local Rotation"
 		(
-			spinner  mLocalRotationSpeed "Velocidad" type: #float
+			spinner  mLocalRotationSpeed "Velocidad" type: #float range:[-100, 100,2]
 			dropdownlist mLocalRotationAxisList "Eje" items:# ("X","Y","Z")
 			
 			on params open do (
