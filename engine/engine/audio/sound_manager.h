@@ -4,11 +4,31 @@
 #include "audio\bass.h"
 #include "audio\bass_fx.h"
 #include "components\comp_transform.h"
+#include "fmod.hpp"
+#include "fmod_studio.hpp"
+#include "fmod_errors.h"
 
 class CSoundManager
 {
+private:
+	FMOD::Studio::Bank* masterBank;
+	FMOD::Studio::Bank* stringsBank;
+
+	FMOD::Studio::System* system;
+	std::map<std::string, FMOD::Studio::EventDescription*> event_descriptions;
+
+	XMVECTOR invalidPosition;
+
+	bool slowed;
+
 public:
-	struct stream_effects{
+	
+	struct SoundParameter {
+		std::string name;
+		float value;
+	};
+
+	/*struct stream_effects{
 		HSTREAM stream;
 		CHandle FX_zone;
 	};
@@ -43,10 +63,20 @@ private:
 	bool first;
 	bool slowed;
 
-public:
+public:*/
 	CSoundManager();
 	~CSoundManager();
 	static CSoundManager& get();
+
+	void playEvent(std::string path, SoundParameter* parameters, int nparameters);
+	void playEvent(std::string path);
+
+	void playEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos);
+	void playEvent(std::string path, XMVECTOR pos);
+
+	void setListenerTransform(TTransform listener);
+
+	void update(float elapsed);
 
 	void addMusicTrack(int trackID, const char* file);
 
@@ -80,6 +110,13 @@ public:
 	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
 	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
 	//bool set3DPosition(std::string name);
+
+	FMOD_VECTOR XMVECTORtoFmod(XMVECTOR vector);
+	XMVECTOR FmodToXMVECTOR(FMOD_VECTOR vector);
+
+	void activateSlowMo();
+	void desactivateSlowMo();
+
 };
 
 

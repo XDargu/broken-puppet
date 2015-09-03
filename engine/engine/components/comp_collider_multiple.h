@@ -13,10 +13,14 @@ private:
 	PxMaterial* mat;
 	XMVECTOR t_current;
 	XMVECTOR t_previous;
+	float* m_v;
+	int*   t_v;
 public:
 	std::vector<PxShape*> colliders;
 
-	TCompColliderMultiple() : CCollider() { }
+	TCompColliderMultiple() : CCollider() { m_v = nullptr, t_v = nullptr; }
+
+	~TCompColliderMultiple();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
@@ -24,7 +28,7 @@ public:
 
 	void addInputNavMesh();
 
-	void setCollisionGroups();
+	void setCollisionGroups(physx::PxShape* collider);
 
 	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
 

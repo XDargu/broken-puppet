@@ -28,14 +28,14 @@ void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (found != std::string::npos){
 		sound_name.replace(sound_name.find('.'), sound_name.length(), "");
 		if (sound_name != "undefined"){
-			CSoundManager::get().addFXTrack(sound_char, sound_name);
+			/*CSoundManager::get().addFXTrack(sound_char, sound_name);
 			asociated_sound.init_sound(sound_name);
 			loop = atts.getBool("loop", false);
 			distance_max = atts.getFloat("distance", 5.5f);
 			volume = atts.getFloat("volume", 0.5f);
 			asociated_sound.setSoundVolume(volume);
 			asociated_sound.setLoop(loop);
-			autoPlaySound = true;
+			autoPlaySound = true;*/
 		}
 	}
 }
@@ -47,7 +47,7 @@ void TCompAudioSource::init() {
 
 void TCompAudioSource::update(float elapsed){
 	//Hacer metodo que convierta XMVECTOR en BASS_3DVECTOR
-	BASS_3DVECTOR pos_ref;
+	/*BASS_3DVECTOR pos_ref;
 	BASS_3DVECTOR front_ref;
 	TCompTransform* transform = getSibling<TCompTransform>(this);
 	pos_ref.x = XMVectorGetX(transform->position);
@@ -82,11 +82,11 @@ void TCompAudioSource::update(float elapsed){
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void TCompAudioSource::setHFX(CHandle comp_hfx){
-	if (comp_hfx.isValid()){
+	/*if (comp_hfx.isValid()){
 		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::ECHO){
 			int prueba = BASS_ChannelSetFX(asociated_sound.getChannel(), BASS_FX_DX8_ECHO, 0);
 			BASS_DX8_ECHO* e = ((TCompHfxZone*)comp_hfx)->getEcho();
@@ -129,15 +129,15 @@ void TCompAudioSource::setHFX(CHandle comp_hfx){
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void TCompAudioSource::setSoundAsociated(std::string name, DWORD mode, float min, float max){
-	asociated_sound.init_sound(name, mode, min, max);
+	//asociated_sound.init_sound(name, mode, min, max);
 }
 
 void TCompAudioSource::setSoundAsociated(std::string name){
-	asociated_sound.init_sound(name);
+	//asociated_sound.init_sound(name);
 }
 
 void TCompAudioSource::set3DAttributes(DWORD mode, float min, float max){

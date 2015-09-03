@@ -12,16 +12,16 @@ CSound::CSound()
 
 void CSound::init_sound(std::string name, DWORD mode, float min, float max){
 	//initialize all the properties
-	if (CSoundManager::get().sounds->find(name) == CSoundManager::get().sounds->end()){
+	/*if (CSoundManager::get().sounds->find(name) == CSoundManager::get().sounds->end()){
 		XASSERT(CSoundManager::get().sounds, "error, sonido inexistente %s", name.c_str());
 	}
 	else{
 		CSoundManager::sounds_map val = CSoundManager::get().sounds->operator[](name);
 		own_sample = val.second;
-		/*bool setting = Set3DSampleAttributes(own_sample, mode, min, max);
+		bool setting = Set3DSampleAttributes(own_sample, mode, min, max);
 		if (!setting){
 			XASSERT(CSoundManager::get().sounds, "error, sample atribbutes %s", name.c_str());
-		}*/
+		}
 		own_channel = BASS_SampleGetChannel(own_sample, FALSE);
 		if (BASS_ErrorGetCode()==BASS_ERROR_HANDLE){
 			XASSERT(CSoundManager::get().sounds, "error, codigo sample %s", name.c_str());
@@ -33,12 +33,12 @@ void CSound::init_sound(std::string name, DWORD mode, float min, float max){
 			XASSERT(CSoundManager::get().sounds, "error, timeout mingap %s", name.c_str());
 		}
 		//BASS_Apply3D();
-	}
+	}*/
 }
 
 void CSound::init_sound(std::string name){
 	//initialize all the properties
-	if (CSoundManager::get().sounds->find(name) == CSoundManager::get().sounds->end()){
+	/*if (CSoundManager::get().sounds->find(name) == CSoundManager::get().sounds->end()){
 		XASSERT(CSoundManager::get().sounds, "error, sonido inexistente %s", name.c_str());
 	}
 	else{
@@ -48,7 +48,7 @@ void CSound::init_sound(std::string name){
 		if (own_channel){
 			XASSERT(CSoundManager::get().sounds, "error cargando channel %s", name.c_str());
 		}
-	}
+	}*/
 }
 
 CSound::~CSound()

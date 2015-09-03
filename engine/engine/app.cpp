@@ -543,10 +543,14 @@ void CApp::update(float elapsed) {
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
 	if (io.becomesReleased(CIOStatus::Q)) {
-		if (time_modifier == 1)
+		if (time_modifier == 1) {
 			time_modifier = 0.05f;
-		else
+			CSoundManager::get().activateSlowMo();
+		}
+		else{
 			time_modifier = 1;
+			CSoundManager::get().desactivateSlowMo();
+		}
 	}
 #ifdef _DEBUG
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -563,9 +567,9 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM6)) { loadScene("data/scenes/scene_1_noenemy.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM7)) { loadScene("data/scenes/scene_3_noenemy.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/scene_5_noenemy.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM6)) {  }
+	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
+	if (io.becomesReleased(CIOStatus::NUM8)) { /*loadScene("data/scenes/scene_5_noenemy.xml");*/ }
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
@@ -735,6 +739,9 @@ void CApp::update(float elapsed) {
 	entity_lister.update();
 	entity_actioner.update();
 #endif
+
+	CSoundManager::get().update(elapsed);
+
 	//-----------------------------------------------------------------------------------------
 	CNav_mesh_manager::get().checkUpdates();
 	CNav_mesh_manager::get().checkDistaceToEnemies();
@@ -1505,4 +1512,5 @@ void CApp::loadPrefab(std::string prefab_name) {
 void CApp::slowMotion(float time) {
 	time_modifier = 0.05f;
 	slow_motion_counter = time;
+	CSoundManager::get().activateSlowMo();
 }

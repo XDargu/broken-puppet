@@ -8,6 +8,7 @@
 #include "components\comp_collider_box.h"
 #include "components\comp_collider_sphere.h"
 #include "components\comp_collider_capsule.h"
+#include "components\comp_collider_multiple.h"
 #include "physics_manager.h"
 
 #include <thread>
@@ -32,6 +33,7 @@ public:
 	std::vector<CHandle>   colConvex;
 	std::vector<CHandle>      colBoxes;
 	std::vector<CHandle>   colSpheres;
+	std::vector<CHandle>   colMultiples;
 	std::vector<CHandle> recastAABBs;
 	bool keep_updating_navmesh;
 	std::thread* AiThread;
