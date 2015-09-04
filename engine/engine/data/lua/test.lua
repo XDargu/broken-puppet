@@ -17,6 +17,21 @@ function onSceneLoad_my_file()
 --logicManager:loadScene("data/scenes/scene_1.xml");
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 	--logicManager:setBands(true)
+
+	
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+	
+	function onTriggerEnter_PitTrigger(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+			--logicManager:pushPlayerLegsState("fbp_WakeUp");
+			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
+			player:teleportToPos(initPos);
+		end
+
+	end
 end
 
 initPos = 0;

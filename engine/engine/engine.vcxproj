@@ -106,7 +106,7 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>.;./SLB/include;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./SLB/include;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir);./audio</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -146,7 +146,7 @@
       <PrecompiledHeaderFile>mcv_platform.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/MP10 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir);./SLB/include/SLB</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;./physx/Include;./antTweakBar/Include;$(ProjectDir)\recast\include;$(ProjectDir);./SLB/include/SLB;./audio</AdditionalIncludeDirectories>
       <CallingConvention>Cdecl</CallingConvention>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -172,6 +172,7 @@
     <ClInclude Include="ai\bt_node.h" />
     <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
+    <ClInclude Include="ai\fsm_boss.h" />
     <ClInclude Include="ai\fsm_player_legs.h" />
     <ClInclude Include="ai\fsm_player_torso.h" />
     <ClInclude Include="ai\hinge_joint.h" />
@@ -194,10 +195,12 @@
     <ClInclude Include="components\comp_collider_convex.h" />
     <ClInclude Include="components\comp_collider_multiple.h" />
     <ClInclude Include="components\comp_joint_fixed.h" />
+    <ClInclude Include="components\comp_local_rotation.h" />
     <ClInclude Include="components\comp_occlusion_plane.h" />
     <ClInclude Include="components\comp_recast_aabb.h" />
     <ClInclude Include="components\comp_golden_needle_logic.h" />
     <ClInclude Include="components\comp_golden_needle.h" />
+    <ClInclude Include="components\comp_vibration.h" />
     <ClInclude Include="components\comp_zone_aabb.h" />
     <ClInclude Include="components\comp_golden_needle_item.h" />
     <ClInclude Include="components\comp_bt_soldier.h" />
@@ -368,6 +371,7 @@
     <ClCompile Include="ai\bt_node.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
+    <ClCompile Include="ai\fsm_boss.cpp" />
     <ClCompile Include="ai\fsm_player_legs.cpp" />
     <ClCompile Include="ai\fsm_player_torso.cpp" />
     <ClCompile Include="ai\hinge_joint.cpp" />
@@ -387,10 +391,12 @@
     <ClCompile Include="components\comp_collider_convex.cpp" />
     <ClCompile Include="components\comp_collider_multiple.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
+    <ClCompile Include="components\comp_local_rotation.cpp" />
     <ClCompile Include="components\comp_occlusion_plane.cpp" />
     <ClCompile Include="components\comp_recast_aabb.cpp" />
     <ClCompile Include="components\comp_golden_needle_logic.cpp" />
     <ClCompile Include="components\comp_golden_needle.cpp" />
+    <ClCompile Include="components\comp_vibration.cpp" />
     <ClCompile Include="components\comp_zone_aabb.cpp" />
     <ClCompile Include="components\comp_golden_needle_item.cpp" />
     <ClCompile Include="components\comp_bt_soldier.cpp" />

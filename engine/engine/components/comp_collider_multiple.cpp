@@ -63,6 +63,15 @@ void TCompColliderMultiple::loadFromAtts(const std::string& elem, MKeyValue &att
 				,
 				true);			
 		}
+		if (type == "SPHERE") {
+			shape_collider = Physics.gPhysicsSDK->createShape(
+				physx::PxSphereGeometry(
+					physx::PxReal(atts.getFloat("radius", 0.5))
+				),
+				*mat
+				,
+				true);
+		}
 
 		shape_collider->setLocalPose(local_offset);
 		colliders.push_back(shape_collider);

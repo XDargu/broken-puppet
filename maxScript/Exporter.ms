@@ -25,7 +25,7 @@ clearlistener()
 	NotEval = #(targetobject, UConstraint, line)
 
 	-- List of object without mesh
-	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight, grid, line, freeSpot)
+	NotMesh = #(targetcamera, freecamera, Omnilight, Skylight, Directionallight, grid, line, freeSpot, Point)
 
 	DistanceTextAttributes = "distanceTextData"
 	CameraAttribute = "objectCameraData"
@@ -46,6 +46,8 @@ clearlistener()
 
 	-- List of objects exported
 	expNames = #()
+	
+	errorNamesNomes = #()
 
 	-- List of objects exported
 	expObjects = #()
@@ -82,6 +84,7 @@ clearlistener()
 	WaterMaterial = "distorsion"
 	GlassMaterial = "glass"
 	LightShaftMaterial = "light_shaft"
+	CubemapMaterial = "CubemapMaterial"
 
 	-- List of special names
 	reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName, LevelName)
@@ -90,7 +93,7 @@ clearlistener()
 	mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
 	
 	-- List of no export materials
-	noExportMaterials = #(WaterMaterial, GlassMaterial, LightShaftMaterial)
+	noExportMaterials = #(WaterMaterial, GlassMaterial, LightShaftMaterial, CubemapMaterial)
 
 	-- List of enemys
 	enemyNames = #(BasicEnemyName, grandmaEnemyName, soldierEnemyName)
@@ -283,6 +286,7 @@ clearlistener()
 		(	
 			contID +=1
 			if (isProperty o.baseObject #id != true) then
+			--if (true) then
 			(
 				custAttributes.add o objectDataID		
 			)	
@@ -353,68 +357,76 @@ clearlistener()
 		local data_path = out_path
 		local filename = data_path + "meshes\\"
 		filename += obj.name + ".mesh"
-		print obj.name
-		if vtxs.count == 0 then throw ( "Invalid mesh to export\n" )
-		
-		-- Open file in binary mode, destroy existing version
-		local fs = fopen filename "wb"
-		if fs == undefined then throw ( "Can't create mesh output file " + filename )
-		
-		local mesh_magic = 0x44776655
-		local version_number = 2
-		local vtxs_magic = 0x44774444
-		local idxs_magic = 0x44773333
-		local groups_magic = 0x44772222
-		local end_magic = 0x44444444
-		
-		local bytes_per_index = 2
-		local bytes_per_vertex = 4*vtxs[1].count
-		
-		-- Save a header
-		WriteLong fs mesh_magic
-		WriteLong fs version_number
-		WriteLong fs vtxs.count
-		WriteLong fs idxs.count
-		WriteLong fs 4002					-- Primitive type. CMesh::ePrimitiveType=>TriangleList
-		WriteLong fs bytes_per_vertex		-- # of bytes per vertex
-		WriteLong fs bytes_per_index		-- # of bytes per index
-		WriteLong fs vertex_type
-		-- Write AABB ...
-		
-		
-		WriteLong fs mesh_magic
-		
-		-- Save vtxs
-		WriteLong fs vtxs_magic
-		WriteLong fs (bytes_per_vertex*vtxs.count)
-		for v in vtxs do (
-			for c in v do (
-				WriteFloat fs c
+		/*
+		if vtxs.count == 0 then(
+			append errorNamesNomes obj.name
+			print ( obj.name +" Invalid mesh to export\n"  )
+		)
+		*/
+		--else
+		if vtxs.count == 0 then throw ( obj.name +" Invalid mesh to export\n"  )
+		(
+			-- Open file in binary mode, destroy existing version
+			local fs = fopen filename "wb"
+			if fs == undefined then throw ( "Can't create mesh output file " + filename )
+			
+			local mesh_magic = 0x44776655
+			local version_number = 2
+			local vtxs_magic = 0x44774444
+			local idxs_magic = 0x44773333
+			local groups_magic = 0x44772222
+			local end_magic = 0x44444444
+			
+			local bytes_per_index = 2
+			local bytes_per_vertex = 4*vtxs[1].count
+			
+			-- Save a header
+			WriteLong fs mesh_magic
+			WriteLong fs version_number
+			WriteLong fs vtxs.count
+			WriteLong fs idxs.count
+			WriteLong fs 4002					-- Primitive type. CMesh::ePrimitiveType=>TriangleList
+			WriteLong fs bytes_per_vertex		-- # of bytes per vertex
+			WriteLong fs bytes_per_index		-- # of bytes per index
+			WriteLong fs vertex_type
+			-- Write AABB ...
+			
+			
+			WriteLong fs mesh_magic
+			
+			-- Save vtxs
+			WriteLong fs vtxs_magic
+			WriteLong fs (bytes_per_vertex*vtxs.count)
+			for v in vtxs do (
+				for c in v do (
+					WriteFloat fs c
+				)
 			)
+			
+			-- Save indexs
+			WriteLong fs idxs_magic
+			WriteLong fs (bytes_per_index*idxs.count)
+			for v in idxs do (
+				WriteShort fs (v-1) #unsigned		-- Pasar a base 0
+			)
+			
+			-- Other chunks
+			WriteLong fs groups_magic
+			WriteLong fs (groups.count*2*4)
+			for g in groups do (
+				WriteLong fs g[1]		-- First index (already in base0)
+				WriteLong fs g[2]		-- Number of indices
+			)
+			
+			-- Final chunk
+			WriteLong fs end_magic
+			WriteLong fs 0
+			
+			format "Exported mesh with % vtxs and % idxs\n" vtxs.count idxs.count
+			
+			fclose fs
 		)
 		
-		-- Save indexs
-		WriteLong fs idxs_magic
-		WriteLong fs (bytes_per_index*idxs.count)
-		for v in idxs do (
-			WriteShort fs (v-1) #unsigned		-- Pasar a base 0
-		)
-		
-		-- Other chunks
-		WriteLong fs groups_magic
-		WriteLong fs (groups.count*2*4)
-		for g in groups do (
-			WriteLong fs g[1]		-- First index (already in base0)
-			WriteLong fs g[2]		-- Number of indices
-		)
-		
-		-- Final chunk
-		WriteLong fs end_magic
-		WriteLong fs 0
-		
-		format "Exported mesh with % vtxs and % idxs\n" vtxs.count idxs.count
-		
-		fclose fs
 	)
 	
 	fn computeTangentSpace vtxs idxs = (
@@ -579,10 +591,10 @@ clearlistener()
 		-- if has no diffuse
 		if (m.diffusemap == undefined) then return 0
 		-- If has already been exported
-		if (findItem expDiff m.diffusemap.filename) != 0 then return 0
+		if (findItem expDiff m.name) != 0 then return 0
 		--if (findItem expNormal m.bumpmap.normal_map.filename) != 0 then return 0
 		
-		append expDiff m.diffusemap.filename
+		append expDiff m.name
 		--append expNormal m.bumpmap.normal_map.filename
 		 
 		if classof m != Standardmaterial then throw( "No se importar materiales que no sean std" )
@@ -945,6 +957,10 @@ clearlistener()
 		
 		local mString = ""
 		
+		local parent = undefined
+		if (isProperty obj.baseObject #mParent == true) then (
+			parent = obj.mParent
+		)
 		-- Check if the obj is a target camera (it needs special attributes)
 		if ((classof obj) != targetcamera) then
 		(
@@ -960,16 +976,24 @@ clearlistener()
 									+"\" scale=\""\
 														+ obj.scale.x as string+ " "\
 														+ obj.scale.z as string+ " "\
-														+ obj.scale.y as string+ ""\
-			+"\"/>\n"
+														+ obj.scale.y as string+ ""
+			if (parent != undefined) then (
+				mString += "\" parent=\""\
+														+ (getIdName parent) as string + ""\
+			)
+			mString += "\"/>\n"
 		)
 		else
 		(
 						mString = "<transform position=\"" \
 														+ mObj.row4.x as string+" " \
 														+ mObj.row4.y as string+" " \
-														+ mObj.row4.z as string+"" \
-						+"\"/>\n"
+														+ mObj.row4.z as string+"" 
+			if (parent != undefined) then (
+						mString += "\" parent=\""\
+														+ (getIdName parent) as string + ""\
+			)
+						mString += "\"/>\n"
 		)
 		
 		return mString
@@ -2394,6 +2418,55 @@ fn getPlatformPath obj = (
 	)
 	
 	/**********************************************************************************************
+	Gets the vibration
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getVibration obj = (
+			if((validateVibration obj) == false) then
+		return ""
+		
+		local mString = "<vibration " \
+											+ "amount=\"" + obj.mVibrationAmount as string + "\" " \
+											+ "frequency=\"" + obj.mVibrationFrequency as string + "\" " \
+											+ "/>\n"
+		return mString
+	)
+	
+	fn  validateVibration obj = (
+		return (isProperty obj.baseObject #mVibrationAmount)
+	)
+	
+	/**********************************************************************************************
+	Gets the local rotation
+	Params:
+	  - obj: target object
+	 Returns:
+	  - String with the component information
+	***********************************************************************************************/	
+	fn getLocalRotation obj = (
+			if((validateLocalRotation obj) == false) then
+		return ""
+			
+		local axis = 0
+		if ( obj.mLocalRotationAxis == "X" ) then (axis = 0) 
+		if ( obj.mLocalRotationAxis == "Y" ) then (axis = 1) 
+		if ( obj.mLocalRotationAxis == "Z" ) then (axis = 2) 
+		
+		local mString = "<localRotation " \
+											+ "speed=\"" + obj.mLocalRotationSpeed as string + "\" " \
+											+ "axis=\"" + axis as string + "\" " \
+											+ "/>\n"
+		return mString
+	)
+	
+	fn  validateLocalRotation obj = (
+		return (isProperty obj.baseObject #mLocalRotationSpeed)
+	)
+	
+	/**********************************************************************************************
 	Gets the trigger component
 	Params:
 	  - obj: target object
@@ -2633,6 +2706,40 @@ fn getPlatformPath obj = (
 	fn validateEntity obj = (
 		return (((findItem NotEval (classof obj)) == 0) and (not  (isProperty obj.baseObject NoEvalAttribute)))
 	)
+
+	fn validateEntityMaterialTag obj = (	
+		if(obj != undefined)then (
+			return (isProperty obj.baseobject #materialTag)
+		)
+		return false
+	)
+	
+	fn getEntityMaterialTag obj = (
+		local materialTag = ""
+		
+		if(validateEntityMaterialTag obj) then (
+			materialTag = "materialTag = \"" + obj.materialTag + "\""
+		)
+		else
+		(		
+			if(obj.name == PlayerName) then
+			(
+				materialTag = "materialTag = \"player\""
+			)
+			else if(validateEnemy obj) then				
+			(
+				materialTag = "materialTag = \"enemy\""
+			)
+			else 				
+			(
+				materialTag = "materialTag = \"wood\""
+			)
+
+		)
+
+		return materialTag
+	)
+	
 	
 	fn validateEntityCollisionTag obj = (	
 		if(obj != undefined)then (
@@ -2803,7 +2910,9 @@ fn getPlatformPath obj = (
 			getAmbientLight,
 			getDirectionalLight,
 			getDistanceText,
-			getParticleSystem
+			getParticleSystem,
+			getLocalRotation,
+			getVibration
 		)
 
 		-- Initialize XML
@@ -2995,7 +3104,9 @@ fn getPlatformPath obj = (
 			getRecastAABB,
 			getParticleSystem,
 			getAudioSource,
-			getOcclusionPlane
+			getOcclusionPlane,
+			getLocalRotation,
+			getVibration
 		)
 
 		-- Initialize XML
@@ -3093,7 +3204,7 @@ fn getPlatformPath obj = (
 		for mJoint in list do (
 			
 			mJointString = "\t<entity tag = \"level\" collisionTag = \"Level\">\n"			
-			mJointString += "<name " + "name=\"" + mJoint.name as string + "\" />\n"
+			mJointString += "<name " + "name=\"" + getIdName mJoint as string + "\" />\n"
 			
 			--Fixed Joint
 			if ((mJoint.constraintType == 0) == true) then 
@@ -3138,6 +3249,10 @@ fn getPlatformPath obj = (
 		-- print result XML
 		--print mXML
 		saveXMLArchive mXML
+		
+		for obj in errorNamesNomes do (
+			print obj
+			)
 	)
 
 

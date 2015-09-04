@@ -1,1 +1,1 @@
-<std_material name="tijeras" diffuse="tijeras_diffuse" normal="tijeras_normal" specular="chiqui_specular_claro" glossiness="" emissive=""/>
+<std_material name="tijeras" diffuse="tijeras_diffuse" normal="tijeras_normal" specular="tijeras_specular" glossiness="" emissive="" emissive_off="" />

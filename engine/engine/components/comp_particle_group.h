@@ -7,15 +7,14 @@
 
 struct TCompParticleGroup : TBaseComponent {
 	
-	std::vector<TParticleSystem> particle_systems;
-	std::vector<TParticleSystem> particle_systems_to_destroy;
+	std::vector<TParticleSystem>* particle_systems;
 
 public:
 
 	bool destroy_on_death;
 	std::string def_name;
 
-	TCompParticleGroup() { def_name = ""; destroy_on_death = false; };
+	TCompParticleGroup() { def_name = ""; destroy_on_death = false; particle_systems = new std::vector<TParticleSystem>; };
 
 	~TCompParticleGroup();
 

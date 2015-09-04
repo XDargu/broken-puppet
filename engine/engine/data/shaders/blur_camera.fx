@@ -81,7 +81,7 @@ float4 PSBlurCamera(
 	float2 texCoord = input.UV;
 	float4 origColor = txDiffuse.Sample(samClampLinear, texCoord);
 	float4 color = txDiffuse.Sample(samClampLinear, texCoord);
-
+	
 	//return float4(velocity.xy, 0, 0);
 	texCoord += velocity;
 	float numSamples = 15;

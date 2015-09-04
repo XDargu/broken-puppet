@@ -17,8 +17,8 @@ bool TGlowStep::create(const char* name, int axres, int ayres, int afactor) {
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
-	bool is_ok = rt_lights->create(name_lights, xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
-	is_ok &= rt_glow->create(name_glow, xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_lights->create(name_lights, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	is_ok &= rt_glow->create(name_glow, xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
 

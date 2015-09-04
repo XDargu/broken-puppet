@@ -243,6 +243,9 @@ void createManagers() {
 	// GUI
 	getObjManager<TCompButton>()->init(32);
 
+	// Animation
+	getObjManager<TCompVibration>()->init(64);
+	getObjManager<TCompLocalRotation>()->init(64);
 
 	registerAllComponentMsgs();
 }
@@ -314,6 +317,10 @@ void initManagers() {
 
 	//GUI
 	getObjManager<TCompButton>()->initHandlers();
+
+	// Animation
+	//getObjManager<TCompVibration>()->initHandlers();
+
 }
 
 bool CApp::create() {
@@ -386,8 +393,8 @@ bool CApp::create() {
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
 	//loadScene("data/scenes/scene_boss.xml");
-	//loadScene("data/scenes/scene_1.xml");
-	loadScene("data/scenes/scene_2.xml");
+	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
 	//loadScene("data/scenes/scene_4.xml");
@@ -570,13 +577,16 @@ void CApp::update(float elapsed) {
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("blur");
+		render_techniques_manager.reload("glow");
+		render_techniques_manager.reload("glow_lights");
 		render_techniques_manager.reload("blur_camera");		
 		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("silouette_glow");
-		/*render_techniques_manager.reload("deferred_gbuffer");
-		render_techniques_manager.reload("deferred_resolve");*/
+		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("cubemap");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -725,6 +735,10 @@ void CApp::update(float elapsed) {
 	//GUI
 	getObjManager<TCompButton>()->update(elapsed);
 
+	// ANIMATION
+	getObjManager<TCompVibration>()->update(elapsed);
+	getObjManager<TCompLocalRotation>()->update(elapsed);
+
 	logic_manager.update(elapsed);
 
 #ifdef _DEBUG
@@ -761,6 +775,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
+
 }
 
 void CApp::render() {
@@ -826,7 +841,7 @@ void CApp::render() {
 	blur.apply(underwater.getOutput());
 	blur_camera.apply(blur.getOutput());
 	silouette.apply(blur_camera.getOutput());
-	//glow.apply(silouette.getOutput());
+	glow.apply(silouette.getOutput());
 
 	::render.activateBackbuffer();
 	static int sz = 150;
@@ -843,7 +858,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, silouette.getOutput());
+	drawTexture2D(0, 0, xres, yres, glow.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
@@ -1380,6 +1395,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	is_ok &= deferred.create(xres, yres);
 
+	XASSERT(is_ok, "Error creating deferred targets");
+
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	is_ok &= ctes_global.create();
 	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
@@ -1405,14 +1422,15 @@ void CApp::loadScene(std::string scene_name) {
 
 	h_player = entity_manager.getByName("Player");
 
-	texture_manager.getByName("room_env_test")->activate(8);
+	//texture_manager.getByName("room_env_test")->activate(8);
+	texture_manager.getByName("sunsetcube1024")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
 	is_ok &= ssao.create("ssao", xres, yres, 1);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 2);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 	is_ok &= silouette.create("silouette", xres, yres, 1);

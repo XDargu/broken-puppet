@@ -1,1 +1,1 @@
-<std_material name="plataforma_unir_02" diffuse="plataforma_unir_02_diffuse" normal="plataforma_unir_02_normal" specular="plataforma_unir_02_specular" glossiness="plataforma_unir_02_Gloss" emissive=""/>
+<std_material name="plataforma_unir_02" diffuse="plataforma_unir_02_diffuse" normal="plataforma_unir_02_normal" specular="plataforma_unir_02_specular" glossiness="plataforma_unir_02_Gloss" emissive="plataforma_unir_02_emissive" emissive_off="" />

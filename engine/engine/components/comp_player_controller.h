@@ -15,6 +15,8 @@ struct TCompPlayerController : TBaseComponent {
 	XMVECTOR offset_needle_back2;
 	XMVECTOR offset_rot_needle_back1;
 	XMVECTOR offset_rot_needle_back2;
+
+	CHandle entity_jump_dust;
 public:
 	FSMPlayerLegs fsm_player_legs;
 	FSMPlayerTorso fsm_player_torso;

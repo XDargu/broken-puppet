@@ -1,16 +1,15 @@
 #include "mcv_platform.h"
-#include "bass.h"
 #include "sound.h"
 
 
 CSound::CSound()
 {
-	own_stream = 0;
-	own_channel = 0;
-	loop = false;
+	//own_stream = 0;
+	//own_channel = 0;
+	//loop = false;
 }
 
-void CSound::init_sound(std::string name, DWORD mode, float min, float max){
+/*void CSound::init_sound(std::string name, DWORD mode, float min, float max){
 	//initialize all the properties
 	if (CSoundManager::get().sounds->find(name) == CSoundManager::get().sounds->end()){
 		XASSERT(CSoundManager::get().sounds, "error, sonido inexistente %s", name.c_str());
@@ -21,7 +20,7 @@ void CSound::init_sound(std::string name, DWORD mode, float min, float max){
 		if (!setting){
 			XASSERT(CSoundManager::get().sounds, "error, sample atribbutes %s", name.c_str());
 		}*/
-		own_channel = BASS_SampleGetChannel(val.second, FALSE);
+		/*own_channel = BASS_SampleGetChannel(val.second, FALSE);
 		if (BASS_ErrorGetCode()==BASS_ERROR_HANDLE){
 			XASSERT(CSoundManager::get().sounds, "error, codigo sample %s", name.c_str());
 		}
@@ -48,13 +47,13 @@ void CSound::init_sound(std::string name){
 			XASSERT(CSoundManager::get().sounds, "error cargando channel %s", name.c_str());
 		}
 	}
-}
+}*/
 
 CSound::~CSound()
 {
 }
 
-void CSound::playSound(){
+/*void CSound::playSound(){
 	if (!is_playing()){
 		if (loop)
 			BASS_ChannelFlags(own_stream, BASS_SAMPLE_LOOP, BASS_SAMPLE_LOOP);
@@ -73,7 +72,7 @@ bool CSound::getLoop(){
 	return loop;
 }*/
 
-void CSound::stopSound(){
+/*void CSound::stopSound(){
 	if (!loop){
 		if (is_playing()){
 			bool success = BASS_ChannelStop(own_stream);
@@ -146,4 +145,4 @@ void CSound::Set3DSampleAttributes(DWORD handle, DWORD mode, float min, float ma
 			XASSERT(code, "Error, FX params invalid");
 		}
 	}
-}
+}*/

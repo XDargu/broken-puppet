@@ -1,1 +1,1 @@
-<std_material name="alfombra_verde" diffuse="alfombra_roja_difusse" normal="alfombra_roja_normal" specular="alfombra_roja_specular" glossiness="alfombra_roja_gloss" emissive=""/>
+<std_material name="alfombra_verde" diffuse="alfombra_roja_difusse" normal="alfombra_roja_normal" specular="alfombra_roja_specular" glossiness="alfombra_roja_gloss" emissive="" emissive_off="" />

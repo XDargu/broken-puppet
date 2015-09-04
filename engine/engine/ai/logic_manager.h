@@ -70,6 +70,8 @@ public:
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
 
+	CHandle instantiateParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
+
 
 	void startPathMovement(const char* name);
 
@@ -92,6 +94,8 @@ public:
 	//HFX 
 	CHandle soundsInsideHFXZone(XMVECTOR sound_pos);
 	CHandle playerInsideHFXZone();
+
+	CHandle getPlayerHandle() { return player; }
 
 	// LUA
 	void execute(std::string text);

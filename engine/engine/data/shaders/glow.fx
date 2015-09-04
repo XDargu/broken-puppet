@@ -2,6 +2,8 @@
 
 Texture2D txDiffuse : register(t0);
 Texture2D txLuminance : register(t1);
+Texture2D txDepth     : register(t2);
+Texture2D txAccLight  : register(t3);
 
 SamplerState samWrapLinear : register(s0);
 SamplerState samClampLinear : register(s1);
@@ -62,9 +64,9 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 float4 PSGlowLights(VS_TEXTURED_OUTPUT input) : SV_Target
 {
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV);
-	float luminance = (color.r + color.g + color.b) / 3.0f;
-
-	if (luminance > 0.5) {
+	float luminance = txAccLight.SampleLevel(samClampLinear, input.UV, 3);
+	return color * (luminance - 1);
+	if (luminance > 3) {
 		return color;
 	}
 	else {
@@ -80,22 +82,26 @@ float4 PSGlowLights(VS_TEXTURED_OUTPUT input) : SV_Target
 float4 PSGlow(VS_TEXTURED_OUTPUT input) : SV_Target
 {
   float4 original = txDiffuse.Sample(samClampLinear, input.UV);
-
+  float4 depth = txDepth.Sample(samClampLinear, input.UV);
+  //return original;
+  //return txLuminance.Sample(samClampLinear, input.UV);
   // Blur the glow image
   float4 luminance = float4(0, 0, 0, 0);
   float2 delta = float2(0, 0);
   float factor = 1.f;
 
-  for (int i = 0; i < 3; i++) {
-	  for (int j = 0; j < 3; j++) {
-		  factor = conv[i][j];
+  for (int i = 0; i < 5; i++) {
+	  for (int j = 0; j < 5; j++) {
+		  //factor = conv[i][j];
+		  factor = 1.0 / 25.0;
 		  delta = float2(glow_delta.x * (i - 1), glow_delta.y * (j - 1)) * 20;
-		  luminance += txLuminance.Sample(samClampLinear, input.UV + delta * 0.3) * factor;
+		  luminance += txLuminance.SampleLevel(samClampLinear, input.UV + delta * 0.3, 9) * factor;
 	  }
   }
 
   
   
+  return (original + luminance * 0.5);
   //return original;
   //return blurred;
   //return luminance;

@@ -80,7 +80,7 @@ void error(int line, char* file, char* method, char* msg, ...) {
 }
 
 void debug(int line, char* file, char* method, char* msg, ...) {
-#ifdef DEBUG
+#ifdef _DEBUG
 	//return;
 	va_list ap;
 	va_start(ap, msg);

@@ -112,8 +112,10 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		// Physx
 		use_physx = atts.getBool("use_physx", false);
-		psx = new CPhysicsParticleSystem();
-		psx->createParticles(limit);
+		if (use_physx) {
+			psx = new CPhysicsParticleSystem();
+			psx->createParticles(limit);
+		}
 		
 		// Instancing
 		instanced_mesh = &mesh_textured_quad_xy_centered;
@@ -224,7 +226,7 @@ void TParticleSystem::update(float elapsed) {
 		emitter_generation->update(elapsed);
 
 		// If it has to be destroyed
-		if (emitter_generation->emitter_counter > emitter_generation->limit) {
+		if (emitter_generation->emitter_counter > emitter_generation->limit && particles.size() == 0) {
 			if (((TCompParticleGroup*)h_pg)->destroy_on_death) {
 				dirty_destroy_group = true;
 				//((TCompParticleGroup*)h_pg)->removeParticleSystem(this);

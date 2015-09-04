@@ -91,6 +91,13 @@ struct TTransform {     // 1
 		return XMQuaternionMultiply(rotation, dir);
 	}
 
+	TTransform transform(TTransform other_trans) {
+		TTransform ret = TTransform(position, rotation, scale);
+		ret.position = ret.position + XMVector3Rotate(other_trans.position, ret.rotation);
+		ret.rotation = XMQuaternionMultiply(other_trans.rotation, ret.rotation);
+		return ret;
+	}
+
 };
 
 #endif

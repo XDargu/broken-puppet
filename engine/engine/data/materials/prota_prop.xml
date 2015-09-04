@@ -1,1 +1,1 @@
-<std_material name="prota_prop" diffuse="prota_Diffuse" normal="prota_Normal" specular="prota_Specular" glossiness="prota_Gloss" emissive=""/>
+<std_material name="prota_prop" diffuse="prota_Diffuse" normal="prota_Normal" specular="prota_Specular" glossiness="prota_Gloss" emissive="prota_Emissive" emissive_off="" />

@@ -7,7 +7,7 @@
 
 CEntityManager entity_manager = CEntityManager::get();
 
-CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000) {
+CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000), impact_threshold_time(0.5f) {
 }
 
 void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
@@ -21,13 +21,14 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 		if (cp.events & PxPairFlag::eNOTIFY_TOUCH_FOUND){
 
 			PxActor* firstActor = pairHeader.actors[0];
-			PxActor* otherActor = pairHeader.actors[1];
+			PxActor* otherActor = pairHeader.actors[1];			
 
-			const char* name1 = firstActor->getName();
-			const char* name2 = otherActor->getName();
+			double current_time = CApp::get().total_time;
 
-			CEntity* firstActorEntity = CEntityManager::get().getByName(name1);
-			CEntity* secondActorEntity = CEntityManager::get().getByName(name2);
+			CEntity* firstActorEntity = CHandle(firstActor->userData);
+			CEntity* secondActorEntity = CHandle(otherActor->userData);
+
+			if (!(firstActorEntity && secondActorEntity)) { return; }
 
 			//Colision entre actor y player
 			if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("player"))){
@@ -77,7 +78,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				float force_float = force;
 				if (force_float >force_threshold)
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
-			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("enemy"))){
+			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("enemy"))) {
 				//Colision entre actor sin colisiones y player
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
 				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
@@ -85,7 +86,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				float force_float = force;
 				if (force_float > force_threshold)
 					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
-			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))){
+			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))) {
 			//Colision entre enemigo y actor
 				TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
 				PxReal force_threshold = firstActorEntity->rigidBody->getContactReportThreshold();
@@ -93,21 +94,106 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				float force_float = force;
 				if (force_float >force_threshold)
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
-			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))){
+			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))) {
 			//Colision entre enemigo y escenario
 				//TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
 				//CSoundManager::get().play3DFX("sonar", (TTransform*) entity_transform);
 			}
-			else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("level"))){
+			else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("level"))) {
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-				float force_float = force;
-				CSoundManager::get().playImpactFX(force_float, firstActorEntity->get<TCompTransform>());
+
+				XMVECTOR position;
+				XMVECTOR normal;
+
+				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
+
+				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+
+				// Sound
+				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+				if (timestamp_reached) {
+					CSoundManager::get().playImpactFX(force, entity_transform);
+					first_rigid->impact_timestamp = current_time;
+
+
+					CEntity* player_entity = CLogicManager::get().getPlayerHandle();
+					TCompTransform* player_transform = player_entity->get<TCompTransform>();
+
+					// Particle dust effect
+					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25)) {
+						TCompAABB* actorAABB = firstActorEntity->get<TCompAABB>();
+
+						float x = XMVectorGetX(actorAABB->getExtents());
+						float y = XMVectorGetY(actorAABB->getExtents());
+						float z = XMVectorGetZ(actorAABB->getExtents());
+
+						float radius = (x + y + z) / 3;
+
+						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
+						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+
+						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
+
+						if (particle_entity.isValid()) {
+							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+							pg->destroy_on_death = true;
+							if (pg->particle_systems->size() > 0)
+							{
+								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
+								(*pg->particle_systems)[0].emitter_generation->radius = radius;
+							}
+						}
+					}
+				}
+
 			}else if ((firstActorEntity->hasTag("level")) && (secondActorEntity->hasTag("actor"))){
-				TCompRigidBody* rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force = getForce(rigid->getMass(), pairs, i);
-					float force_float = force;
-					CSoundManager::get().playImpactFX(force_float, secondActorEntity->get<TCompTransform>());
+				
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+
+				XMVECTOR position;
+				XMVECTOR normal;
+
+				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
+
+				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+
+				// Sound
+				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+				if (timestamp_reached) {
+					CSoundManager::get().playImpactFX(force, entity_transform);
+					first_rigid->impact_timestamp = current_time;
+
+
+					CEntity* player_entity = CLogicManager::get().getPlayerHandle();
+					TCompTransform* player_transform = player_entity->get<TCompTransform>();
+
+					// Particle dust effect
+					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25)) {
+						TCompAABB* actorAABB = firstActorEntity->get<TCompAABB>();
+
+						float x = XMVectorGetX(actorAABB->getExtents());
+						float y = XMVectorGetY(actorAABB->getExtents());
+						float z = XMVectorGetZ(actorAABB->getExtents());
+
+						float radius = (x + y + z) / 3;
+
+						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
+						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+
+						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
+
+						if (particle_entity.isValid()) {
+							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+							pg->destroy_on_death = true;
+							if (pg->particle_systems->size() > 0)
+							{
+								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
+								(*pg->particle_systems)[0].emitter_generation->radius = radius;
+							}
+						}
+					}
+				}
+
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("actor"))){
 				TCompRigidBody* rigid = firstActorEntity->get<TCompRigidBody>();
 				PxReal force = getForce(rigid->getMass(), pairs, i);
@@ -129,6 +215,7 @@ PxReal CCallbacks_physx::getForce(PxReal mass, const PxContactPair* pairs, PxU32
 	PxContactPairPoint contacts[bufferSize];
 	const PxContactPair& cp = pairs[index];
 	PxU32 nbContacts = pairs[index].extractContacts(contacts, bufferSize);
+
 	for (PxU32 j = 0; j < nbContacts; j++)
 	{
 		XMVECTOR impulse = Physics.PxVec3ToXMVECTOR(contacts[j].impulse);
@@ -138,6 +225,35 @@ PxReal CCallbacks_physx::getForce(PxReal mass, const PxContactPair* pairs, PxU32
 	force = force / (float)nbContacts;
 	PxVec3 forcePhysics = Physics.XMVECTORToPxVec3(force);
 	PxReal forceMagnitude = forcePhysics.magnitude();
+	return forceMagnitude;
+}
+
+//Metodo para el calculo de fuerza media en colisiones
+PxReal CCallbacks_physx::getForceAndPosition(PxReal mass, const PxContactPair* pairs, PxU32 index, XMVECTOR& position, XMVECTOR& normal){
+	XMVECTOR force = { 0.f, 0.f, 0.f, 0.f };
+	const PxU32 bufferSize = 64;
+	PxContactPairPoint contacts[bufferSize];
+	const PxContactPair& cp = pairs[index];
+	PxU32 nbContacts = pairs[index].extractContacts(contacts, bufferSize);
+
+	position = XMVectorZero();
+	normal = XMVectorSet(1, 0, 0, 0);
+	if (nbContacts > 0)
+		normal = Physics.PxVec3ToXMVECTOR(contacts[0].normal);
+
+	for (PxU32 j = 0; j < nbContacts; j++)
+	{
+		XMVECTOR impulse = Physics.PxVec3ToXMVECTOR(contacts[j].impulse);
+		XMVECTOR normal = Physics.PxVec3ToXMVECTOR(contacts[j].normal);
+		force = force + (XMVector3Dot(normal, impulse));
+		position += Physics.PxVec3ToXMVECTOR(contacts[j].position);
+	}
+	force = force / (float)nbContacts;
+	PxVec3 forcePhysics = Physics.XMVECTORToPxVec3(force);
+	PxReal forceMagnitude = forcePhysics.magnitude();
+
+	position /= nbContacts;
+
 	return forceMagnitude;
 }
 

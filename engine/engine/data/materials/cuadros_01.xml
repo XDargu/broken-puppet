@@ -1,1 +1,1 @@
-<std_material name="cuadros_01" diffuse="cuadros_01_diffuse" normal="cuadros_01_normal" specular="cuadros_01_specular" glossiness="cuadros_01_gloss" emissive=""/>
+<std_material name="cuadros_01" diffuse="cuadros_01_diffuse" normal="cuadros_01_normal" specular="cuadros_01_specular" glossiness="cuadros_01_gloss" emissive="" emissive_off="" />

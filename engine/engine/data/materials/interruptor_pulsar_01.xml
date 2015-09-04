@@ -1,1 +1,1 @@
-<std_material name="interruptor_pulsar_01" diffuse="interruptor_pulsar_difuso" normal="Interruptor_pulsar_normals" specular="" glossiness="" emissive=""/>
+<std_material name="interruptor_pulsar_01" diffuse="interrup_pulsar_difusse" normal="interrup_pulsar_normal" specular="interrup_pulsar_specular" glossiness="interrup_pulsar_gloss" emissive="" emissive_off="" />
