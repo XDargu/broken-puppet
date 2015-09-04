@@ -1,1 +1,1 @@
-<std_material name="lamparas_mesita" diffuse="lamparas_mesita_Diffuse" normal="lamparas_mesita_Normal" specular="lamparas_mesita_Specular" glossiness="lamparas_mesita_Gloss" emissive="lamparas_mesita_Emissive"/>
+<std_material name="lamparas_mesita" diffuse="lamparas_mesita_Diffuse" normal="lamparas_mesita_Normal" specular="lamparas_mesita_Specular" glossiness="lamparas_mesita_Gloss" emissive="lamparas_mesita_Emissive" emissive_off="" />

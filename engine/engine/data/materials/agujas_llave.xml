@@ -1,1 +1,1 @@
-<std_material name="agujas_llave" diffuse="aguja_Diffuse" normal="aguja_Normal" specular="aguja_Specular" glossiness="aguja_Gloss" emissive="aguja_Emissive"/>
+<std_material name="agujas_llave" diffuse="aguja_Diffuse" normal="aguja_Normal" specular="aguja_Specular" glossiness="aguja_Gloss" emissive="aguja_Emissive" emissive_off="" />

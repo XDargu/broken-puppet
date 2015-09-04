@@ -588,6 +588,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("silouette_glow");
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("cubemap");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -1420,7 +1421,8 @@ void CApp::loadScene(std::string scene_name) {
 
 	h_player = entity_manager.getByName("Player");
 
-	texture_manager.getByName("room_env_test")->activate(8);
+	//texture_manager.getByName("room_env_test")->activate(8);
+	texture_manager.getByName("sunsetcube1024")->activate(8);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
 	is_ok &= ssao.create("ssao", xres, yres, 1);

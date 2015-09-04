@@ -1,1 +1,1 @@
-<std_material name="vigas_01" diffuse="vigas_diffuse" normal="vigas_normals" specular="vigas_specular" glossiness="vigas_gloss" emissive=""/>
+<std_material name="vigas_01" diffuse="vigas_diffuse" normal="vigas_normals" specular="vigas_specular" glossiness="vigas_gloss" emissive="" emissive_off="" />

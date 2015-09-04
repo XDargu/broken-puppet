@@ -1,1 +1,1 @@
-<std_material name="imperdible" diffuse="imperdible_difuso" normal="imperdible_normal" specular="chiqui_specular_claro" glossiness="chiqui_specular_claro" emissive=""/>
+<std_material name="imperdible" diffuse="imperdible_difuso" normal="imperdible_normal" specular="chiqui_specular_claro" glossiness="chiqui_specular_claro" emissive="" emissive_off="" />

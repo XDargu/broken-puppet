@@ -1,1 +1,1 @@
-<std_material name="tuberias_01" diffuse="tuberias_01_diffuse" normal="tuberias_01_normal" specular="tuberias_01_specular" glossiness="tuberias_01_gloss" emissive=""/>
+<std_material name="tuberias_01" diffuse="tuberias_01_diffuse" normal="tuberias_01_normal" specular="tuberias_01_specular" glossiness="tuberias_01_gloss" emissive="" emissive_off="" />

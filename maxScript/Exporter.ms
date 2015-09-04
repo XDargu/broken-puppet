@@ -84,6 +84,7 @@ clearlistener()
 	WaterMaterial = "distorsion"
 	GlassMaterial = "glass"
 	LightShaftMaterial = "light_shaft"
+	CubemapMaterial = "CubemapMaterial"
 
 	-- List of special names
 	reservedNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName, LevelName)
@@ -92,7 +93,7 @@ clearlistener()
 	mandatoryNames = #(PlayerName, PlayerPivotName, CameraPivotName, CameraName)
 	
 	-- List of no export materials
-	noExportMaterials = #(WaterMaterial, GlassMaterial, LightShaftMaterial)
+	noExportMaterials = #(WaterMaterial, GlassMaterial, LightShaftMaterial, CubemapMaterial)
 
 	-- List of enemys
 	enemyNames = #(BasicEnemyName, grandmaEnemyName, soldierEnemyName)
@@ -284,8 +285,8 @@ clearlistener()
 		for o in allObjects do
 		(	
 			contID +=1
-			--if (isProperty o.baseObject #id != true) then
-			if (true) then
+			if (isProperty o.baseObject #id != true) then
+			--if (true) then
 			(
 				custAttributes.add o objectDataID		
 			)	

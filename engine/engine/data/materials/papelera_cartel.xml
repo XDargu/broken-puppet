@@ -1,1 +1,1 @@
-<std_material name="papelera_cartel" diffuse="papelera_cartel_diffuse" normal="papelera_cartel_normal" specular="papelera_cartel_specular" glossiness="papelera_cartel_gloss" emissive=""/>
+<std_material name="papelera_cartel" diffuse="papelera_cartel_diffuse" normal="papelera_cartel_normal" specular="papelera_cartel_specular" glossiness="papelera_cartel_gloss" emissive="" emissive_off="" />

@@ -1,1 +1,1 @@
-<std_material name="silla_camerino" diffuse="silla_camerino_diffuse" normal="silla_camerino_normal" specular="silla_camerino_specular" glossiness="silla_camerino_gloss" emissive=""/>
+<std_material name="silla_camerino" diffuse="silla_camerino_diffuse" normal="silla_camerino_normal" specular="silla_camerino_specular" glossiness="silla_camerino_gloss" emissive="" emissive_off="" />

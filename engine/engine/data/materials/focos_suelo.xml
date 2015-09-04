@@ -1,1 +1,1 @@
-<std_material name="focos_suelo" diffuse="focos_suelo_diffuse" normal="focos_suelo_normal" specular="focos_suelo_specular" glossiness="focos_suelo_gloss" emissive=""/>
+<std_material name="focos_suelo" diffuse="focos_suelo_diffuse" normal="focos_suelo_gloss" specular="focos_suelo_specular" glossiness="focos_suelo_gloss" emissive="foco_basico_emisi" emissive_off="" />

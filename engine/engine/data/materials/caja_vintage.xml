@@ -1,1 +1,1 @@
-<std_material name="caja_vintage" diffuse="caja_vintage_difusse" normal="caja_vintage_normal" specular="caja_vintage_specular" glossiness="caja_vintage_gloss" emissive=""/>
+<std_material name="caja_vintage" diffuse="caja_vintage_difusse" normal="caja_vintage_normal" specular="caja_vintage_specular" glossiness="caja_vintage_gloss" emissive="" emissive_off="" />

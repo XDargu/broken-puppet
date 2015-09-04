@@ -1,1 +1,1 @@
-<std_material name="cartel_3" diffuse="cartel_sustituta" normal="chiqui_normal" specular="chiqui_specular" glossiness="chiqui_specular" emissive=""/>
+<std_material name="cartel_3" diffuse="cartel_sustituta" normal="chiqui_normal" specular="chiqui_specular" glossiness="chiqui_specular" emissive="" emissive_off="" />

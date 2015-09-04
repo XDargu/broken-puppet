@@ -1,1 +1,1 @@
-<std_material name="maniqui" diffuse="maniqui_Diffuse" normal="maniqui_Normal" specular="maniqui_Specular" glossiness="maniqui_Gloss" emissive=""/>
+<std_material name="maniqui" diffuse="maniqui_Diffuse" normal="maniqui_Gloss" specular="maniqui_Specular" glossiness="maniqui_Gloss" emissive="" emissive_off="" />

@@ -1,1 +1,1 @@
-<std_material name="lampara_steam_verde_01" diffuse="lampara_steam_verde__difusse" normal="lampara_steam_verde_normal" specular="lampara_steam_verde__specular" glossiness="lampara_steam_verde__gloss" emissive="lampara_steam_verde_emissive"/>
+<std_material name="lampara_steam_verde_01" diffuse="lampara_steam_verde__difusse" normal="lampara_steam_verde_normal" specular="lampara_steam_verde__specular" glossiness="lampara_steam_verde__gloss" emissive="lampara_steam_verde_emissive" emissive_off="" />
