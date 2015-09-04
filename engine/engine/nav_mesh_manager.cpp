@@ -56,6 +56,14 @@ void CNav_mesh_manager::prepareInputNavMesh(){
 		((TCompColliderCapsule*)colCapsules[i])->addInputNavMesh();
 	}
 
+	for (int i = 0; i < colMultiples.size(); ++i){
+		((TCompColliderMultiple*)colMultiples[i])->addInputNavMesh();
+	}
+
+	for (int i = 0; i < colConvex.size(); ++i){
+		((TCompColliderConvex*)colConvex[i])->addInputNavMesh();
+	}
+
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
 	nav_B.m_input = nav_mesh_input;
@@ -88,6 +96,14 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 		i = 0;
 		while ((!updatedChecked) && (i < colCapsules.size())){
 			updatedChecked = ((TCompColliderCapsule*)colCapsules[i])->getIfUpdated();
+			i++;
+		}
+	}
+
+	if (!updatedChecked){
+		i = 0;
+		while ((!updatedChecked) && (i < colMultiples.size())){
+			updatedChecked = ((TCompColliderMultiple*)colMultiples[i])->getIfUpdated();
 			i++;
 		}
 	}
@@ -226,6 +242,7 @@ void CNav_mesh_manager::clearNavMesh(){
 	colMeshes.clear();
 	colConvex.clear();
 	colCapsules.clear();
+	colMultiples.clear();
 	keep_updating_navmesh = false;
 	need_navmesh = false;
 	nav_mesh_input.clearInput();

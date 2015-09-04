@@ -45,6 +45,8 @@ public:
 	TTransform getPrevTransform() { return prev_transform; }
 
 	bool hasParent() { return parent_name[0] != 0x00; }
+
+	CHandle getParent() { return parent; }
 };
 
 #endif

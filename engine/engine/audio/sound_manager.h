@@ -4,17 +4,35 @@
 #include "audio\bass.h"
 #include "audio\bass_fx.h"
 #include "components\comp_transform.h"
+#include "fmod.hpp"
+#include "fmod_studio.hpp"
+#include "fmod_errors.h"
 
 class CSoundManager
 {
+private:
+	FMOD::Studio::Bank* masterBank;
+	FMOD::Studio::Bank* stringsBank;
+
+	FMOD::Studio::System* system;
+	std::map<std::string, FMOD::Studio::EventDescription*> event_descriptions;
+
+	XMVECTOR invalidPosition;
+
+	bool slowed;
+
+	FMOD::Studio::EventInstance* underwater_mixer;
+
 public:
-	struct stream_effects{
+	
+	struct SoundParameter {
+		std::string name;
+		float value;
+	};
+
+	/*struct stream_effects{
 		HSTREAM stream;
 		CHandle FX_zone;
-		bool slow;
-		HFX slow_effect;
-		bool under_water;
-		HFX under_water_effect;
 	};
 
 	struct TMusicTrack {
@@ -46,26 +64,21 @@ private:
 	HSTREAM musicTracks[8];
 	bool first;
 	bool slowed;
-	bool under_water;
 
-public:
-	float f_Bandwidth;
-	float f_Center;
-	float f_Gain;
-	float f_Q;
-	float f_S;
-
-	float f_PitchShift;
-	float f_Semitones;
-	float l_FFTsize;
-	float l_Osamp;
-
-public:
+public:*/
 	CSoundManager();
 	~CSoundManager();
 	static CSoundManager& get();
 
-	void init();
+	void playEvent(std::string path, SoundParameter* parameters, int nparameters);
+	void playEvent(std::string path);
+
+	void playEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos);
+	void playEvent(std::string path, XMVECTOR pos);
+
+	void setListenerTransform(TTransform listener);
+
+	void update(float elapsed);
 
 	void addMusicTrack(int trackID, const char* file);
 
@@ -94,27 +107,18 @@ public:
 	void playImpactFX(float force, CHandle transform);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
-	void setSound3DAttributes(DWORD handle);
 
-	void setReverbHFX(CHandle comp_hfx, HCHANNEL channel);
-	void setFreeReverbHFX(CHandle comp_hfx, HCHANNEL channel);
-	void setEchoHFX(CHandle comp_hfx, HCHANNEL channel);
-
-	void activateSlowMotionSounds();
-	void desactivateSlowMotionSounds();
-	void activateLowPassSounds();
-	void desactivateLowPassSounds();
-	bool getUnderWater();
-	bool getSlowMotion();
-	void activateSlowMoFilter(HCHANNEL channel, std::string name);
-	void desactivateSlowMoFilter(HCHANNEL channel, std::string name);
-	void activateSlowMoFilter(HCHANNEL channel, std::string category_name, int ind);
-	void desactivateSlowMoFilter(HCHANNEL channel, std::string category_name, int ind);
-	void activateLowPassFilter(HCHANNEL channel, std::string name);
-	void activateLowPassFilter(HCHANNEL channel, std::string category_name, int ind);
-	void desactivateLowPassFilter(HCHANNEL channel, std::string name);
-	void desactivateLowPassFilter(HCHANNEL channel, std::string category_name, int ind);
+	void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
+	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
+	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
 	//bool set3DPosition(std::string name);
+
+	FMOD_VECTOR XMVECTORtoFmod(XMVECTOR vector);
+	XMVECTOR FmodToXMVECTOR(FMOD_VECTOR vector);
+
+	void activateSlowMo();
+	void desactivateSlowMo();
+
 };
 
 

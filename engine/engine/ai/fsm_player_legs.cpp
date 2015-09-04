@@ -412,7 +412,11 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 		stopAllAnimations();
 		//skeleton->loopAnimation(0);
 		skeleton->playAnimation(animation);
-		CSoundManager::get().playRandomFX("throw");
+		CSoundManager::SoundParameter params[] = {
+			{ "type", 0 }
+		};
+
+		CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -436,8 +440,11 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 
 	if (on_enter) {
 		skeleton->playAnimation(animation);
-		//CSoundManager::get().playFX("string_throw_3");
-		CSoundManager::get().playRandomFX("throw");
+		CSoundManager::SoundParameter params[] = {
+			{ "type", 0 }
+		};
+
+		CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");

@@ -165,13 +165,14 @@ float4 PS(VS_TEXTURED_OUTPUT input
   color.a *= delta_z;
 
   // 0.2 = % of life during the begining and the end of the particle with opacity fade in/out
-  float opacity_change = input.ageLife.y * 0.2;
-  float begining_opacity_modifier = saturate(input.ageLife.x / opacity_change);
-  float end_opacity_modifier = 1 - saturate((input.ageLife.x - opacity_change) / (input.ageLife.y - opacity_change));
+  if (input.ageLife.y > 0) {
+	  float opacity_change = input.ageLife.y * 0.2;
+	  float begining_opacity_modifier = saturate(input.ageLife.x / opacity_change);
+	  float end_opacity_modifier = 1 - saturate((input.ageLife.x - opacity_change) / (input.ageLife.y - opacity_change));
 
-  color.a *= begining_opacity_modifier; // Begining of life opacity change
-  color.a *= end_opacity_modifier; // End of life opacity change
-
+	  color.a *= begining_opacity_modifier; // Begining of life opacity change
+	  color.a *= end_opacity_modifier; // End of life opacity change
+  }
   color.xyz *= input.color;
 
   

@@ -10,7 +10,7 @@
 #include "hinge_joint.h"
 #include "lua_vector.h"
 #include "lua_quaternion.h"
-#include "audio\bass.h"
+//#include "audio\bass.h"
 #include "mcv_object.h"
 
 class CLogicManager

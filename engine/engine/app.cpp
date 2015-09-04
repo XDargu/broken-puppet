@@ -384,7 +384,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -393,7 +393,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
 	//loadScene("data/scenes/scene_boss.xml");
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
@@ -493,6 +493,7 @@ void CApp::doFrame() {
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
 			if (slow_motion_counter <= 0) {
+				CSoundManager::get().desactivateSlowMo();
 				time_modifier = 1;
 				slow_motion_counter = 0;
 			}
@@ -543,13 +544,13 @@ void CApp::update(float elapsed) {
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
 	if (io.becomesReleased(CIOStatus::Q)) {
-		if (time_modifier == 1){
+		if (time_modifier == 1) {
 			time_modifier = 0.05f;
-			CSoundManager::get().activateSlowMotionSounds();
+			CSoundManager::get().activateSlowMo();
 		}
 		else{
 			time_modifier = 1;
-			CSoundManager::get().desactivateSlowMotionSounds();
+			CSoundManager::get().desactivateSlowMo();
 		}
 	}
 #ifdef _DEBUG
@@ -567,9 +568,10 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM6)) { loadScene("data/scenes/scene_1_noenemy.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM7)) { loadScene("data/scenes/scene_3_noenemy.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/scene_5_noenemy.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM6)) { }
+	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
+	if (io.becomesReleased(CIOStatus::NUM8)) { 
+	}
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
@@ -617,12 +619,6 @@ void CApp::update(float elapsed) {
 			TCompTransform* player_t = player->get<TCompTransform>();
 			float p_y = XMVectorGetY(player_t->position);
 			underwater.amount = p_y > water_level ? 0 : 1;
-			if (p_y < water_level){
-				CSoundManager::get().activateLowPassSounds();
-			}else{
-				if(CSoundManager::get().getUnderWater())
-					CSoundManager::get().desactivateLowPassSounds();
-			}
 		}
 	}
 	else
@@ -746,6 +742,9 @@ void CApp::update(float elapsed) {
 	entity_lister.update();
 	entity_actioner.update();
 #endif
+
+	CSoundManager::get().update(elapsed);
+
 	//-----------------------------------------------------------------------------------------
 	CNav_mesh_manager::get().checkUpdates();
 	CNav_mesh_manager::get().checkDistaceToEnemies();
@@ -1443,7 +1442,6 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
-	CSoundManager::get().init();
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_1.xml"){
@@ -1518,4 +1516,5 @@ void CApp::loadPrefab(std::string prefab_name) {
 void CApp::slowMotion(float time) {
 	time_modifier = 0.05f;
 	slow_motion_counter = time;
+	CSoundManager::get().activateSlowMo();
 }

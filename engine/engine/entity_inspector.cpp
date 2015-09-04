@@ -769,9 +769,9 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "PGEmitterRate" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->rate, " group=PG label='Rate' min=0.0001 step=0.01");
 			aux = "PGEmitterMinLT" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->min_life_time, " group=PG label='Min lifeTime' min=0.01 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->min_life_time, " group=PG label='Min lifeTime' min=0 step=0.1");
 			aux = "PGEmitterMaxLT" + i;
-			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->max_life_time, " group=PG label='Max lifeTime' min=0.01 step=0.1");
+			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->max_life_time, " group=PG label='Max lifeTime' min=0 step=0.1");
 			aux = "PGEmitterBurstTime" + i;
 			TwAddVarRW(bar, aux.c_str(), TW_TYPE_FLOAT, &(*e_particle_group->particle_systems)[i].emitter_generation->burst_time, " group=PG label='Burst Time' min=0 step=0.1");
 			aux = "PGEmitterBurstAmount" + i;

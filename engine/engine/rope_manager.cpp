@@ -27,7 +27,11 @@ void CRope_manager::removeBackString(){
 		CHandle c_rope = strings.back();
 		strings.pop_back();
 		if (c_rope.isValid()) {
-			CSoundManager::get().playRandomFX("throw");
+			CSoundManager::SoundParameter params[] = {
+				{ "type", 3 }
+			};
+
+			CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			TCompRope* rope = c_rope;
 			
 			if (rope->joint_aux.isValid())
@@ -81,7 +85,11 @@ void CRope_manager::clearStrings(){
 					CEntityManager::get().remove(m_rope->joint_aux.getOwner());
 
 				CEntityManager::get().remove(CHandle(rope).getOwner());
-				CSoundManager::get().playRandomFX("throw");
+				CSoundManager::SoundParameter params[] = {
+					{ "type", 3 }
+				};
+
+				CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			}
 		}
 	}

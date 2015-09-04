@@ -551,7 +551,7 @@ TParticleUpdaterSize::TParticleUpdaterSize(float the_initial_size, float the_fin
 }
 
 void TParticleUpdaterSize::update(TParticle* particle, float elapsed) {
-	particle->size = lerp(initial_size, final_size, particle->age / particle->lifespan);
+	particle->size = lerp(initial_size, final_size, particle->lifespan == 0 ? 0 : particle->age / particle->lifespan);
 }
 
 std::string TParticleUpdaterSize::getXMLDefinition() {

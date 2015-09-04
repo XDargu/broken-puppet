@@ -512,7 +512,11 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		TCompSkeleton* skeleton = comp_skeleton;		
 		skeleton->playAnimation(17);
 
-		CSoundManager::get().playRandomFX("pull");
+		CSoundManager::SoundParameter params[] = {
+			{ "type", 2 }
+		};
+
+		CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		
 	}
 
@@ -593,7 +597,6 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	if (on_enter)
 	{
 		//CSoundManager::get().playFX("string_grab_8");
-		CSoundManager::get().playRandomFX("tense");
 	}
 	up_animation = true;
 
@@ -721,7 +724,11 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
-					CSoundManager::get().playRandomFX("tense");
+					CSoundManager::SoundParameter params[] = {
+						{ "type", 1 }
+					};
+
+					CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 					rope->tensed = true;
 					djoint->joint->setMaxDistance(0.1f);
 					PxRigidActor* a1 = nullptr;
