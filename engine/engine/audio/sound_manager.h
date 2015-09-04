@@ -21,6 +21,8 @@ private:
 
 	bool slowed;
 
+	FMOD::Studio::EventInstance* underwater_mixer;
+
 public:
 	
 	struct SoundParameter {

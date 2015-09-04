@@ -493,6 +493,7 @@ void CApp::doFrame() {
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
 			if (slow_motion_counter <= 0) {
+				CSoundManager::get().desactivateSlowMo();
 				time_modifier = 1;
 				slow_motion_counter = 0;
 			}
@@ -567,9 +568,10 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM6)) {  }
+	if (io.becomesReleased(CIOStatus::NUM6)) { }
 	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
-	if (io.becomesReleased(CIOStatus::NUM8)) { /*loadScene("data/scenes/scene_5_noenemy.xml");*/ }
+	if (io.becomesReleased(CIOStatus::NUM8)) { 
+	}
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;

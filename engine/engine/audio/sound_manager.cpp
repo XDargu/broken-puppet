@@ -2,6 +2,9 @@
 #include "sound_manager.h"
 #include "components\comp_hfx_zone.h"
 #include "ai\logic_manager.h"
+#include "entity_manager.h"
+#include "render\render_manager.h"
+#include "components\comp_camera.h"
 
 static CSoundManager the_sound_manager;
 static float volume_factor = 1000;
@@ -60,7 +63,7 @@ CSoundManager::CSoundManager()
 	FMOD::System* lowLevelSystem = NULL;
 	ERRCHECK(system->getLowLevelSystem(&lowLevelSystem));
 	ERRCHECK(lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_5POINT1, 0));
-
+	
 	ERRCHECK(system->initialize(32, FMOD_STUDIO_INIT_NORMAL | FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, extraDriverData));
 
 	// Load sound bnaks
@@ -71,6 +74,20 @@ CSoundManager::CSoundManager()
 	ERRCHECK(system->loadBankFile("data/sounds/Master Bank.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank));
 
 	invalidPosition = XMVectorSet(0, 0, 0, -112233);
+
+
+	// Underwater mixer effect
+	FMOD::Studio::EventDescription* underwater_description;
+	system->getEvent("event:/underwater", &underwater_description);
+
+	underwater_mixer = NULL;
+	ERRCHECK(underwater_description->createInstance(&underwater_mixer));
+
+	FMOD::Studio::ParameterInstance* param = NULL;
+	FMOD_RESULT r = underwater_mixer->getParameter("deepness", &param);
+	ERRCHECK(param->setValue(0));
+	
+	ERRCHECK(underwater_mixer->start());
 }
 
 CSoundManager::~CSoundManager()
@@ -153,6 +170,19 @@ void CSoundManager::setListenerTransform(TTransform listener) {
 }
 
 void CSoundManager::update(float elapsed) {
+	// Update underwater effect
+	TCompCamera* cam = render_manager.activeCamera;
+	if (cam) {
+		float camera_pos = XMVectorGetY(cam->getPosition());
+		float level = CApp::get().water_level;
+
+		float deepness = level - camera_pos;
+
+		FMOD::Studio::ParameterInstance* param = NULL;
+		FMOD_RESULT r = underwater_mixer->getParameter("deepness", &param);
+		ERRCHECK(param->setValue(deepness));
+	}
+
 	system->update();
 }
 

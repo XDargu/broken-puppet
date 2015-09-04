@@ -21,23 +21,30 @@ TCompAudioSource::~TCompAudioSource() {
 }
 
 void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	std::string sound_name=atts.getString("sound", "undefined");
+	std::string sound_name = atts.getString("sound", "undefined");
+	own_transform = assertRequiredComponent<TCompTransform>(this);
+
+	TCompTransform* m_trans = own_transform;
+
+	CSoundManager::get().playEvent(sound_name, m_trans->position);
+
+	/*
 	std::string sound_name_copy = sound_name;
 	const char* sound_char = sound_name_copy.c_str();
 	std::size_t found = sound_name.find('.');
 	if (found != std::string::npos){
 		sound_name.replace(sound_name.find('.'), sound_name.length(), "");
 		if (sound_name != "undefined"){
-			/*CSoundManager::get().addFXTrack(sound_char, sound_name);
+			CSoundManager::get().addFXTrack(sound_char, sound_name);
 			asociated_sound.init_sound(sound_name);
 			loop = atts.getBool("loop", false);
 			distance_max = atts.getFloat("distance", 5.5f);
 			volume = atts.getFloat("volume", 0.5f);
 			asociated_sound.setSoundVolume(volume);
 			asociated_sound.setLoop(loop);
-			autoPlaySound = true;*/
+			autoPlaySound = true/
 		}
-	}
+	}*/
 }
 
 void TCompAudioSource::init() {
