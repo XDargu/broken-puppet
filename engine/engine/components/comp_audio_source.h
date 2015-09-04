@@ -39,7 +39,19 @@ public:
 
 	void set3DAttributes(DWORD mode, float min, float max);
 
-	void setHFX(CHandle comp_hfx);
+	void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
+
+	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
+
+	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
+
+	void activateSlowMoFilter(HSTREAM channel);
+
+	void desactivateSlowMoFilter(HSTREAM channel);
+
+	void activateLowPassFilter(HSTREAM channel);
+
+	void desactivateLowPassFilter(HSTREAM channel);
 };
 
 #endif

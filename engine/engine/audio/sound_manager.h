@@ -11,6 +11,10 @@ public:
 	struct stream_effects{
 		HSTREAM stream;
 		CHandle FX_zone;
+		bool slow;
+		HFX slow_effect;
+		bool under_water;
+		HFX under_water_effect;
 	};
 
 	struct TMusicTrack {
@@ -42,11 +46,26 @@ private:
 	HSTREAM musicTracks[8];
 	bool first;
 	bool slowed;
+	bool under_water;
+
+public:
+	float f_Bandwidth;
+	float f_Center;
+	float f_Gain;
+	float f_Q;
+	float f_S;
+
+	float f_PitchShift;
+	float f_Semitones;
+	float l_FFTsize;
+	float l_Osamp;
 
 public:
 	CSoundManager();
 	~CSoundManager();
 	static CSoundManager& get();
+
+	void init();
 
 	void addMusicTrack(int trackID, const char* file);
 
@@ -75,10 +94,26 @@ public:
 	void playImpactFX(float force, CHandle transform);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
+	void setSound3DAttributes(DWORD handle);
 
-	void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
-	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
-	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
+	void setReverbHFX(CHandle comp_hfx, HCHANNEL channel);
+	void setFreeReverbHFX(CHandle comp_hfx, HCHANNEL channel);
+	void setEchoHFX(CHandle comp_hfx, HCHANNEL channel);
+
+	void activateSlowMotionSounds();
+	void desactivateSlowMotionSounds();
+	void activateLowPassSounds();
+	void desactivateLowPassSounds();
+	bool getUnderWater();
+	bool getSlowMotion();
+	void activateSlowMoFilter(HCHANNEL channel, std::string name);
+	void desactivateSlowMoFilter(HCHANNEL channel, std::string name);
+	void activateSlowMoFilter(HCHANNEL channel, std::string category_name, int ind);
+	void desactivateSlowMoFilter(HCHANNEL channel, std::string category_name, int ind);
+	void activateLowPassFilter(HCHANNEL channel, std::string name);
+	void activateLowPassFilter(HCHANNEL channel, std::string category_name, int ind);
+	void desactivateLowPassFilter(HCHANNEL channel, std::string name);
+	void desactivateLowPassFilter(HCHANNEL channel, std::string category_name, int ind);
 	//bool set3DPosition(std::string name);
 };
 

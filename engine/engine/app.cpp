@@ -536,10 +536,14 @@ void CApp::update(float elapsed) {
 	//sm.StopLoopedFX("sonar");
 	// Slow motion
 	if (io.becomesReleased(CIOStatus::Q)) {
-		if (time_modifier == 1)
+		if (time_modifier == 1){
 			time_modifier = 0.05f;
-		else
+			CSoundManager::get().activateSlowMotionSounds();
+		}
+		else{
 			time_modifier = 1;
+			CSoundManager::get().desactivateSlowMotionSounds();
+		}
 	}
 #ifdef _DEBUG
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
@@ -603,6 +607,12 @@ void CApp::update(float elapsed) {
 			TCompTransform* player_t = player->get<TCompTransform>();
 			float p_y = XMVectorGetY(player_t->position);
 			underwater.amount = p_y > water_level ? 0 : 1;
+			if (p_y < water_level){
+				CSoundManager::get().activateLowPassSounds();
+			}else{
+				if(CSoundManager::get().getUnderWater())
+					CSoundManager::get().desactivateLowPassSounds();
+			}
 		}
 	}
 	else
@@ -1415,6 +1425,7 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
+	CSoundManager::get().init();
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_1.xml"){

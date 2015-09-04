@@ -7,6 +7,11 @@
 #include "ai\logic_manager.h"
 
 TCompHfxZone::TCompHfxZone() {
+	player = CEntityManager::get().getByName("Player");
+	
+	if (player.isValid())
+		player_transform = ((CEntity*)player)->get<TCompTransform>();
+	
 	echo_params = nullptr;
 	reverb_params = nullptr;
 	kind = 0;
@@ -157,6 +162,15 @@ BASS_BFX_FREEVERB* TCompHfxZone::getFreeReverb(){
 
 void TCompHfxZone::init() {
 	CLogicManager::get().registerHFXZone(this);
+}
+
+bool TCompHfxZone::isPlayerInside(){
+	TCompTransform* p_transform = (TCompTransform*)player_transform;
+	AABB struct_aabb = AABB(((TCompAABB*)m_aabb)->min, ((TCompAABB*)m_aabb)->max);
+	if (struct_aabb.containts(p_transform->position))
+		return true;
+	else
+		return false;
 }
 
 
