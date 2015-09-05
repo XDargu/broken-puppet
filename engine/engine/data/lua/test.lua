@@ -18,8 +18,6 @@ function onSceneLoad_my_file()
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 	--logicManager:setBands(true)
 
-	logicManager:playEvent("event:/gramola_music")
-
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 	

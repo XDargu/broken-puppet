@@ -505,15 +505,20 @@ void CSoundManager::setSound3DFactors(float distance, float roll, float doppler)
 	//BASS_Set3DFactors(distance, roll, doppler);
 }
 
-void CSoundManager::playImpactFX(float force, CHandle transform){
+void CSoundManager::playImpactFX(float force, CHandle transform, std::string material) {
+
+	float material_type = 0;
+	if (material == "metal")
+		material_type = 1;
 
 	float f = force * 8;
 	/*loadScene("data/scenes/scene_1_noenemy.xml");*/
 	CSoundManager::SoundParameter params[] = {
-		{ "force", f }
+		{ "force", f },
+		{ "material", material_type }
 	};
 
-	CSoundManager::get().playEvent("event:/parameter_test", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
+	CSoundManager::get().playEvent("event:/Enviroment/impact", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
 
 	/*if ((force > 10) && (force <= 5000)){
 		CSoundManager::get().play3DFX("hit_wood_light", (TTransform*)t_transform, force);
