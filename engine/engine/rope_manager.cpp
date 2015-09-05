@@ -31,7 +31,7 @@ void CRope_manager::removeBackString(){
 				{ "type", 3 }
 			};
 
-			CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			TCompRope* rope = c_rope;
 			
 			if (rope->joint_aux.isValid())
@@ -89,7 +89,7 @@ void CRope_manager::clearStrings(){
 					{ "type", 3 }
 				};
 
-				CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+				CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			}
 		}
 	}

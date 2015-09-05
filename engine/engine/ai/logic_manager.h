@@ -12,6 +12,7 @@
 #include "lua_quaternion.h"
 #include "audio\bass.h"
 #include "mcv_object.h"
+#include "audio\sound_manager.h"
 
 class CLogicManager
 {
@@ -116,6 +117,12 @@ public:
 	void changeCamera(std::string name);
 
 	// SOUND & MUSIC
+	void playEvent(std::string name);
+	void playEventAtPosition(std::string name, CVector pos);
+	void playEventParameter(std::string name, std::string parameter, float value);
+	void playEventParameterAtPosition(std::string name, std::string parameter, float value, CVector pos);
+
+	// BASS -- TODO: Delete deprecated methods
 	void changeTrack(std::string name, bool loop);
 	void stopMusic();
 	void playMusic(bool loop);
