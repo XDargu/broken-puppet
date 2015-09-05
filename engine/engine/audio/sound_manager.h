@@ -108,9 +108,9 @@ public:*/
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 
-	void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
+	/*void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
 	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
-	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
+	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);*/
 	//bool set3DPosition(std::string name);
 
 	FMOD_VECTOR XMVECTORtoFmod(XMVECTOR vector);

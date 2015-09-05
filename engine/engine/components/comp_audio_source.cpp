@@ -8,7 +8,7 @@
 #include "ai\logic_manager.h"
 
 TCompAudioSource::TCompAudioSource() {
-	m_mode = BASS_SAMPLE_3D;
+	//m_mode = BASS_SAMPLE_3D;
 	m_min= 3.5f;
 	m_max= 6.f;
 	autoPlaySound = false;
@@ -92,7 +92,7 @@ void TCompAudioSource::update(float elapsed){
 	}*/
 }
 
-void TCompAudioSource::setHFX(CHandle comp_hfx){
+//void TCompAudioSource::setHFX(CHandle comp_hfx){
 	/*if (comp_hfx.isValid()){
 		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::ECHO){
 			int prueba = BASS_ChannelSetFX(asociated_sound.getChannel(), BASS_FX_DX8_ECHO, 0);
@@ -137,7 +137,7 @@ void TCompAudioSource::setHFX(CHandle comp_hfx){
 			}
 		}
 	}*/
-}
+//}
 
 void TCompAudioSource::setSoundAsociated(std::string name, DWORD mode, float min, float max){
 	//asociated_sound.init_sound(name, mode, min, max);
@@ -147,9 +147,9 @@ void TCompAudioSource::setSoundAsociated(std::string name){
 	//asociated_sound.init_sound(name);
 }
 
-void TCompAudioSource::set3DAttributes(DWORD mode, float min, float max){
+/*void TCompAudioSource::set3DAttributes(DWORD mode, float min, float max){
 	m_mode = mode;
 	m_min = min;
 	m_max = max;
-}
+}*/
 

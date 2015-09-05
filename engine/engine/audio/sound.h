@@ -1,7 +1,7 @@
 #ifndef _SOUND_H_
 #define _SOUND_H_
 
-//#include "bass.h" 
+#include "bass.h" 
 #include "sound_manager.h"
 
 class CSound
