@@ -85,23 +85,25 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 		}
 	}
 	*/
-	/*float3 N = normalize(input.Normal);
+	float3 N = normalize(input.Normal);
 	float3 I = input.WorldPos - cameraWorldPos.xyz;
 	I = normalize(I);
-	float3 R = reflect(I, N);
+	float3 R = refract(I, N, 1);
 
-		float3 reflectedColor = txCubemap.Sample(samCube, R);*/
+		float3 reflectedColor = txCubemap.Sample(samCube, R);
 
+		return float4(reflectedColor.xyz, 0);
 		//float4 color = txDiffuse.Sample(samWrapLinear, input.UV);
 
 		//float4 finalColor = float4(reflectedColor * color, 1) * lightAccum * 10;
 
-		float3 dir_to_eye = normalize(cameraWorldPos.xyz - input.WorldPos);
-		float3 N = normalize(input.Normal.xyz);
+	/*float3 dir_to_eye = normalize(cameraWorldPos.xyz - input.WorldPos);
+	float3 N = normalize(input.Normal.xyz);
 
+	
 		float3 N_reflected = reflect(-dir_to_eye, N);
 		float4 env = txCubemap.Sample(samWrapLinear, N_reflected);
-		return env;
+		return env;*/
 	
 	
 	//return float4(reflectedColor, 0);
