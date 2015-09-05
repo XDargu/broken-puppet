@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "render/render_utils.h"
 #include "comp_point_light.h"
+#include "comp_render.h"
 #include "handle/handle.h"
 #include "components/comp_transform.h"
 #include "aabb.h"
@@ -19,8 +20,19 @@ void TCompPointLight::draw() {
 	AABB aabb = AABB(t->position - bounds, t->position + bounds);
 
 	bool culling = render_manager.planes_active_camera.isVisible(&aabb);
+	bool parent_emissive_on = true;
 
-	if (culling) {
+	if (t->hasParent()) {
+		CEntity* parent = t->getParent().getOwner();
+		if (parent) {
+			TCompRender* render = parent->get<TCompRender>();
+			if (render) {
+				parent_emissive_on = render->emissive_on;
+			}
+		}
+	}
+
+	if (culling && parent_emissive_on) {
 
 		XMMATRIX scale = XMMatrixScaling(radius, radius, radius);
 		XMMATRIX trans = XMMatrixTranslationFromVector(t->position);

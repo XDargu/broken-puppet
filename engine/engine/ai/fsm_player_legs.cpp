@@ -383,6 +383,8 @@ void FSMPlayerLegs::Jump(float elapsed){
 		skeleton->loopAnimation(6);
 	}
 
+	CSoundManager::get().playEvent("event:/Character/jump");
+
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
 	EvaluateMovement(true, elapsed);
 
@@ -416,7 +418,7 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 			{ "type", 0 }
 		};
 
-		CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -444,7 +446,7 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 			{ "type", 0 }
 		};
 
-		CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -511,11 +513,11 @@ void FSMPlayerLegs::Fall(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_falling");
 	EvaluateMovement(true, elapsed);
 
-	if (((TCompRigidBody*)comp_rigidbody)->rigidBody->getLinearVelocity().y > 0){
+	/*if (((TCompRigidBody*)comp_rigidbody)->rigidBody->getLinearVelocity().y > 0){
 		ChangeState("fbp_Jump");
 		skeleton->stopAnimation(6);
 	}
-	else if (state_time >= skeleton->getCancelTime(6)){
+	else*/ if (state_time >= skeleton->getCancelTime(6)){
 		ChangeState("fbp_WrongFall");
 		skeleton->stopAnimation(6);
 	}
@@ -531,12 +533,16 @@ void FSMPlayerLegs::Land(float elapsed){
 	canThrow = false;
 
 	TCompSkeleton* skeleton = comp_skeleton;
-	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
-
-	
+	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();	
 
 	if (on_enter) {
 		skeleton->playAnimation(7);
+
+		// Sound
+		CSoundManager::SoundParameter params[] = {
+			{ "force", 0 }
+		};
+		CSoundManager::get().playEvent("event:/Character/land", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 
 		// Jump particle
 		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
@@ -609,6 +615,11 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 
 	if (on_enter) {
 		skeleton->loopAnimation(30);
+
+		CSoundManager::SoundParameter params[] = {
+			{ "force", 1 }
+		};
+		CSoundManager::get().playEvent("event:/Character/land", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 	}
 
 	if (state_time > 0.2f) {
@@ -665,6 +676,9 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
+
+		CSoundManager::get().playEvent("event:/Character/ragdoll");
+
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
 		stopAllAnimations();
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
@@ -767,6 +781,8 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
+		CSoundManager::get().playEvent("event:/Character/wakeUp");
+
 		XMVECTOR head_pos = m_skeleton->getPositionOfBone(41);
 		XMVectorSetY(head_pos, XMVectorGetY(m_transform->position));
 		XMVECTOR head_dir = XMVector3Normalize(head_pos - m_transform->position);
@@ -792,6 +808,8 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 	TCompRagdoll* m_ragdoll = comp_ragdoll;
 
 	if (on_enter) {
+
+		CSoundManager::get().playEvent("event:/Character/wakeUp");
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -928,6 +946,12 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 	float real_damage = 0.f;
 
 	if (getCurrentNode() != "fbp_Dead") {		
+
+		CSoundManager::SoundParameter params[] = {
+			{ "damage", damage }
+		};
+		CSoundManager::get().playEvent("event:/Character/hit", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+
 		if (damage > 300.f){ // Damage needed for ragdoll state
 			real_damage = 20;
 			CApp::get().slowMotion(2);

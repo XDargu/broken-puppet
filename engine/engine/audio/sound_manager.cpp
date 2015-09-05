@@ -78,7 +78,7 @@ CSoundManager::CSoundManager()
 
 	// Underwater mixer effect
 	FMOD::Studio::EventDescription* underwater_description;
-	system->getEvent("event:/underwater", &underwater_description);
+	system->getEvent("event:/Mixer/underwater", &underwater_description);
 
 	underwater_mixer = NULL;
 	ERRCHECK(underwater_description->createInstance(&underwater_mixer));
@@ -123,6 +123,12 @@ void CSoundManager::playEvent(std::string path, SoundParameter* parameters, int 
 		// Load the event description
 		event_descriptions[path] = NULL;
 		system->getEvent(path.c_str(), &event_descriptions[path]);
+
+		// The event doesn't exists
+		if (event_descriptions[path] == NULL) {
+			event_descriptions.erase(path);
+			return;
+		}
 	}
 
 	// Play one shot

@@ -516,7 +516,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 			{ "type", 2 }
 		};
 
-		CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		
 	}
 
@@ -728,7 +728,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 						{ "type", 1 }
 					};
 
-					CSoundManager::get().playEvent("event:/string_events", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+					CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 					rope->tensed = true;
 					djoint->joint->setMaxDistance(0.1f);
 					PxRigidActor* a1 = nullptr;

@@ -470,6 +470,10 @@ void CLogicManager::bootLUA() {
 		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
 		.set("createParticleGroup", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createParticleGroup)
 		.set("setBands", &CLogicManager::setBand)
+		.set("playEvent", &CLogicManager::playEvent)
+		.set("playEventAtPosition", &CLogicManager::playEventAtPosition)
+		.set("playEventParameter", &CLogicManager::playEventParameter)
+		.set("playEventParameterAtPosition", &CLogicManager::playEventParameterAtPosition)
 	;
 
 	// Register the bot class
@@ -685,6 +689,31 @@ void CLogicManager::stopMusic() {
 
 void CLogicManager::playMusic(bool loop) {
 	CSoundManager::get().playMusic(loop);
+}
+
+void CLogicManager::playEvent(std::string name) {
+	CSoundManager::get().playEvent(name);
+}
+
+void CLogicManager::playEventAtPosition(std::string name, CVector pos){
+	CSoundManager::get().playEvent(name, XMVectorSet(pos.x, pos.y, pos.z, 0));
+}
+
+void CLogicManager::playEventParameterAtPosition(std::string name, std::string parameter, float value, CVector pos) {
+	CSoundManager::SoundParameter params[] = {
+		{ parameter, value }
+	};
+
+	CSoundManager::get().playEvent(name, params, sizeof(params) / sizeof(CSoundManager::SoundParameter), XMVectorSet(pos.x, pos.y, pos.z, 0));
+}
+
+void CLogicManager::playEventParameter(std::string name, std::string parameter, float value)
+{
+	CSoundManager::SoundParameter params[] = {
+		{ parameter, value }
+	};
+
+	CSoundManager::get().playEvent(name, params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 }
 
 void CLogicManager::stringThrown() {
