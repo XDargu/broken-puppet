@@ -1300,6 +1300,7 @@ void CDebugOptioner::init() {
 	debug_bar = TwNewBar("DebugOptioner");
 
 	CApp &app = CApp::get();
+	CIOStatus &io = CIOStatus::get();
 
 	// AntTweakBar test
 	int barSize[2] = { 224, 120 };
@@ -1313,6 +1314,7 @@ void CDebugOptioner::init() {
 	TwAddVarRW(debug_bar, "Draw axis", TW_TYPE_BOOL8, &app.renderAxis, "");
 	TwAddVarRW(debug_bar, "Draw names", TW_TYPE_BOOL8, &app.renderNames, "");
 	TwAddVarRW(debug_bar, "Draw AABBs", TW_TYPE_BOOL8, &app.renderAABB, "");
+	TwAddVarRW(debug_bar, "Mouse Sensibility", TW_TYPE_FLOAT, &io.mouse_sensibility, "");
 }
 
 // ------------------------------------------------------

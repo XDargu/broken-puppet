@@ -66,6 +66,8 @@ CIOStatus::CIOStatus( ) {
 
 	mouse.dx = 0;
 	mouse.dy = 0;
+	mouse_sensibility = 8;
+	mouse.sensibility = mouse_sensibility;
 
 	POINT cursor_screen;
 	::GetCursorPos(&cursor_screen);
@@ -113,9 +115,8 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 	::GetCursorPos(&cursor_screen);
 	::ScreenToClient(App.hWnd, &cursor_screen);
 	
-
-	dx = cursor_screen.x - prev_x;
-	dy = cursor_screen.y - prev_y;
+	dx = (cursor_screen.x - prev_x)*elapsed*sensibility;
+	dy = (cursor_screen.y - prev_y)*elapsed*sensibility;
 
 	screen_x = cursor_screen.x;
 	screen_y = cursor_screen.y;
@@ -168,6 +169,7 @@ void CIOStatus::update(float elapsed) {
 
 	if (CApp::get().has_focus){
 		//mouse	
+		mouse.sensibility = mouse_sensibility;
 		mouse.update(elapsed, mouse_pointer);
 
 		// update buttons
@@ -186,5 +188,13 @@ void CIOStatus::update(float elapsed) {
 			b.setPressed(now_is_pressed, elapsed);
 		}
 	}
+}
+
+void CIOStatus::setMouseSensibility(float sensibility){
+	mouse_sensibility = sensibility;
+}
+
+float CIOStatus::getMouseSensibility(){
+	return mouse_sensibility;
 }
 

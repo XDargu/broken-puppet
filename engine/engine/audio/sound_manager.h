@@ -1,8 +1,6 @@
 #ifndef _SOUND_MANAGER_H_
 #define _SOUND_MANAGER_H_
 
-#include "audio\bass.h"
-#include "audio\bass_fx.h"
 #include "components\comp_transform.h"
 #include "fmod.hpp"
 #include "fmod_studio.hpp"

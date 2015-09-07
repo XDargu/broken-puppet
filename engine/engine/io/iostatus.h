@@ -95,6 +95,7 @@ public:
     float normalized_y;
     int   dx;
     int   dy;
+	float sensibility;
     int   prev_x;
     int   prev_y;
 
@@ -108,6 +109,8 @@ public:
   void update( float elapsed );
   void setMousePointer(bool mode);
   bool getMousePointer();
+  void setMouseSensibility(float sensibility);
+  float getMouseSensibility();
 
 protected:
   TButton   buttons[BUTTONS_COUNT];
@@ -115,6 +118,9 @@ protected:
 
 private:
 	bool mouse_pointer;
+
+public:
+	float mouse_sensibility;
 };
 
 #endif

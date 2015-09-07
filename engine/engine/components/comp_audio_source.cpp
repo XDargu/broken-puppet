@@ -53,6 +53,8 @@ void TCompAudioSource::init() {
 }
 
 void TCompAudioSource::update(float elapsed){
+
+
 	//Hacer metodo que convierta XMVECTOR en BASS_3DVECTOR
 	/*BASS_3DVECTOR pos_ref;
 	BASS_3DVECTOR front_ref;
