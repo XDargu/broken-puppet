@@ -1,1 +1,1 @@
-<std_material name="Material #25" diffuse="botones_normal" normal="botones_difuso" specular="" glossiness="" emissive="" emissive_off="" />
+<std_material name="Material #25" diffuse="pasarela_diffuse" normal="pasarela_normal" specular="pasarela_specular" glossiness="pasarela_gloss" emissive="" emissive_off="" />
