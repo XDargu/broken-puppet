@@ -196,75 +196,87 @@ void TCompCharacterController::GroundCheck(float elapsed)
 	{
 		onGround = false;
 
-		// comprobamos si el el objeto es el más cercano, si lo es, obtenemos su movimiento
+		// TODO: comprobamos si el el objeto es el más cercano, si lo es, obtenemos su movimiento
+
+		float max_y = -1000000;
+		PxActor* ground_actor = nullptr;
+		PxVec3 ground_position;
 
 		for (int i = 0; i < (int)buf.nbTouches; i++)
 		{
 			if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
-				// check whether we hit a non-trigger collider (and not the character itself)
-
-				// this counts as being on ground.
-
-				// stick to surface - helps character stick to ground - specially when running down slopes
-				if (velocity.y <= 0)
-				{
-
-					if (elapsed == 0)
-						int i = 0;
-
-					// Colocamos en el ground a pelo
-					PxTransform px_trans = rigid->rigidBody->getGlobalPose();
-					px_trans.p = buf.touches[i].position + physx::PxVec3(0, 0.1f, 0);
-					rigid->rigidBody->setGlobalPose(px_trans);
-
-					PxActor* ground_actor = buf.touches[i].actor;
-					// If is a rigidbody
-					if (ground_actor->isRigidBody())
-					{
-
-						// Check if is moving
-						ground_velocity = ((PxRigidBody*)ground_actor)->getLinearVelocity();
-						ground_velocity = PxVec3(ground_velocity.x, 0, ground_velocity.z);
-
-						// Pruebas							
-						// restar última velocidad y añadir la nueva
-
-						PxVec3 diff = last_platform_speed - ground_velocity;
-						rigid->rigidBody->addForce(ground_velocity - diff, PxForceMode::eVELOCITY_CHANGE, true);
-						last_platform_speed = ground_velocity;
-
-						// Aply weight force
-						
-						if (rigid->rigidBody != (PxRigidBody*)ground_actor)
-						{
-							if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
-								PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 4;
-								((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
-							}
-						}
-						
-
-					}
-					else {
-						ground_velocity = PxVec3(0, 0, 0);
-					}
-
-
-
+				if (buf.touches[i].position.y > max_y) {
+					max_y = buf.touches[i].position.y;
+					ground_actor = buf.touches[i].actor;
+					ground_position = buf.touches[i].position;
 				}
-
-				// Comprobar velocidad aculumada en caida
-				if (velocity.y < max_vel_y){
-					//TODO: usar el metodo para eliminar enemigo
-					CEntity* e = CHandle(this).getOwner();
-					e->sendMsg(TGroundHit(e, velocity.y));
-				}
-
-				onGround = true;
-				//rigidbody.useGravity = false;
-				break;
 			}
 		}
+
+
+		// check whether we hit a non-trigger collider (and not the character itself)
+
+		// this counts as being on ground.
+
+		// stick to surface - helps character stick to ground - specially when running down slopes
+
+		if (ground_actor != nullptr) {
+			if (velocity.y <= 0)
+			{
+
+				if (elapsed == 0)
+					int i = 0;
+
+				// Colocamos en el ground a pelo
+				PxTransform px_trans = rigid->rigidBody->getGlobalPose();
+				px_trans.p = ground_position + physx::PxVec3(0, 0.1f, 0);
+				rigid->rigidBody->setGlobalPose(px_trans);
+
+				// If is a rigidbody
+				if (ground_actor->isRigidBody())
+				{
+
+					// Check if is moving
+					ground_velocity = ((PxRigidBody*)ground_actor)->getLinearVelocity();
+					ground_velocity = PxVec3(ground_velocity.x, 0, ground_velocity.z);
+
+					// Pruebas							
+					// restar última velocidad y añadir la nueva
+
+					PxVec3 diff = last_platform_speed - ground_velocity;
+					rigid->rigidBody->addForce(ground_velocity - diff, PxForceMode::eVELOCITY_CHANGE, true);
+					last_platform_speed = ground_velocity;
+
+					// Aply weight force
+
+					if (rigid->rigidBody != (PxRigidBody*)ground_actor)
+					{
+						if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+							PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 4;
+							((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
+						}
+					}
+
+
+				}
+				else {
+					ground_velocity = PxVec3(0, 0, 0);
+				}
+
+
+
+			}
+
+			// Comprobar velocidad aculumada en caida
+			if (velocity.y < max_vel_y){
+				//TODO: usar el metodo para eliminar enemigo
+				CEntity* e = CHandle(this).getOwner();
+				e->sendMsg(TGroundHit(e, velocity.y));
+			}
+
+			onGround = true;
+			//rigidbody.useGravity = false;
+		}		
 
 	}
 
