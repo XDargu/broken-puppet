@@ -157,7 +157,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		}
 		
 		TCompAABB* m_aabb = it->aabb;
-		//TCompName* m_name = ((CEntity*)it->transform.getOwner())->get<TCompName>();
+		TCompName* m_name = ((CEntity*)it->transform.getOwner())->get<TCompName>();
 		XASSERT(m_aabb, "Invalid AABB");
 		culling = planes_active_camera.isVisible(m_aabb);
 		
