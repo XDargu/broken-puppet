@@ -40,6 +40,7 @@ public:
 	void Init();
 
 	void Idle(float elapsed);
+	void IdleElevator(float elapsed);
 	void Walk(float elapsed);
 	void Jump(float elapsed);
 	void Run(float elapsed);

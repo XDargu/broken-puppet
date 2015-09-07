@@ -102,7 +102,7 @@ public:*/
 
 	void play3DFX(std::string name, XMVECTOR pos);
 
-	void playImpactFX(float force, CHandle transform);
+	void playImpactFX(float force, CHandle transform, std::string material);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 

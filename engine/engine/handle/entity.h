@@ -59,7 +59,7 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue& atts) {
 		std::strcpy(tag, atts.getString("tag", "untagged").c_str());
 		std::strcpy(collision_tag, atts.getString("collisionTag", "untagged").c_str());
-		std::strcpy(material_tag, atts.getString("materialTag", "untagged").c_str());
+		std::strcpy(material_tag, atts.getString("materialTag", "wood").c_str());
 	}
 
   // Mandar un msg a todos los componentes de esta entidad que se 

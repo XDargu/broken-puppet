@@ -52,10 +52,15 @@ void TCompLocalRotation::update(float elapsed) {
 				if (magnitude > 0) {
 					
 					XMVECTOR angle2 = XMVector3Cross(to_origin, rot_dot_vec);
-					rot_dot_vec = XMVector3Rotate(rot_dot_vec, XMQuaternionRotationAxis(angle2, deg2rad(90)));
-					float dot = XMVectorGetX(XMVector3Dot(rot_dot_vec, velocity));
+					if (V3DISTANCE(angle2, XMVectorZero()) > 0) {
+						rot_dot_vec = XMVector3Rotate(rot_dot_vec, XMQuaternionRotationAxis(angle2, deg2rad(90)));
+						float dot = XMVectorGetX(XMVector3Dot(rot_dot_vec, velocity));
 
-					parent_speed = dot * magnitude;
+						parent_speed = dot * magnitude;
+					}
+					else {
+						parent_speed = 0;
+					}
 				}
 				else {
 					parent_speed = 0;

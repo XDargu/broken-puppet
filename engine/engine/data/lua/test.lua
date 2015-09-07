@@ -18,8 +18,6 @@ function onSceneLoad_my_file()
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 	--logicManager:setBands(true)
 
-	logicManager:playEvent("event:/gramola_music")
-
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 	
@@ -33,6 +31,29 @@ function onSceneLoad_my_file()
 		end
 
 	end
+
+	-- ASCENSOOOOOOOOOR DE PRUEBA
+
+	function onTriggerEnter_escena1_ascensor_fin(who)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+	end
+
+	function onTriggerEnter_escena1_ascensor(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+
+			print(tostring(who) .. "Player en el trigger");
+			local scene1_elevator = logicManager:getObject("ascensor_desvan_cabina");
+			local platform_pos = scene1_elevator:getPos();
+			print(platform_pos);
+			logicManager:pushPlayerLegsState("fbp_IdleElevator");
+			scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 24), platform_pos.z), 5);
+
+		end
+
+	end
+
 end
 
 initPos = 0;
@@ -117,7 +138,6 @@ function onSceneLoad_scene_1()
 
 	local m_door_R = logicManager:getHingeJoint("scene_1_door_R");
 	m_door_R:setMotor( 1.55, 2000000);
-
 
 		-- PUZZLE ATREZZO
 

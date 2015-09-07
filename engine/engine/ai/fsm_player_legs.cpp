@@ -19,6 +19,7 @@ void FSMPlayerLegs::Init()
 {
 	// insert all states in the map
 	AddState("fbp_Idle", (statehandler)&FSMPlayerLegs::Idle);
+	AddState("fbp_IdleElevator", (statehandler)&FSMPlayerLegs::IdleElevator);
 	AddState("fbp_Walk", (statehandler)&FSMPlayerLegs::Walk);
 	AddState("fbp_Jump", (statehandler)&FSMPlayerLegs::Jump);
 	AddState("fbp_Run", (statehandler)&FSMPlayerLegs::Run);
@@ -158,6 +159,27 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_Fall");
 	}
+}
+
+void FSMPlayerLegs::IdleElevator(float elapsed){
+	TCompSkeleton* skeleton = comp_skeleton;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+
+	canThrow = false;
+
+	int animation = torso->up_animation ? 8 : 0;
+
+	if (animation != current_animation_id) {
+		skeleton->stopAnimation(current_animation_id);
+		skeleton->loopAnimation(animation);
+		current_animation_id = animation;
+	}
+
+	if (on_enter) {
+		skeleton->loopAnimation(animation);
+	}
+
+	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 }
 
 void FSMPlayerLegs::Walk(float elapsed){
