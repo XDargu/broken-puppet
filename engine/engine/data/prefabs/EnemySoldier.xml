@@ -11,7 +11,7 @@
     <sensorTied/>
     <sensorPlayerPos/>
     <sensorDistPlayer/>
-    <audioSource/>
+    <!--<audioSource/>-->
     <btSoldier/>
   </entity>
 </prefab>

@@ -263,6 +263,20 @@ CHandle CLogicManager::soundsInsideHFXZone(XMVECTOR sound_pos){
 	return CHandle();
 }
 
+CHandle CLogicManager::playerInsideHFXZone(){
+	for (int i = 0; i < HFXZones.size(); ++i){
+		TCompHfxZone* HFXZone_comp = (TCompHfxZone*)HFXZones[i];
+		if (player.isValid()) {
+			CEntity* p_entity = player;
+			TCompTransform* p_transform = p_entity->get<TCompTransform>();
+			if (HFXZone_comp->isEmitterInside(p_transform->position)){
+				return HFXZone_comp;
+			}
+		}
+	}
+	return CHandle();
+}
+
 void CLogicManager::onSwitchPressed(CHandle the_switch) {
 	TCompName* c_name = ((CEntity*)the_switch)->get<TCompName>();
 

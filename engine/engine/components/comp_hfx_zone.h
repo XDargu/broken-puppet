@@ -22,6 +22,8 @@ private:
 	BASS_BFX_FREEVERB* free_reverb_params;
 	CHandle m_transform;
 	CHandle m_aabb;
+	CHandle player_transform;
+	CHandle player;
 	HFX HFXEffect;
 	unsigned int kind;
 public:
@@ -39,6 +41,8 @@ public:
 	void setFreeReverbZoneAtributtes(float fDryMix, float fWetMix, float fRoomSize, float fDamp, float fWidth, DWORD lMode);
 
 	bool isEmitterInside(XMVECTOR emitter_pos);
+
+	bool isPlayerInside();
 
 	BASS_DX8_ECHO* getEcho();
 

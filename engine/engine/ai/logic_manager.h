@@ -10,7 +10,7 @@
 #include "hinge_joint.h"
 #include "lua_vector.h"
 #include "lua_quaternion.h"
-#include "audio\bass.h"
+//#include "audio\bass.h"
 #include "mcv_object.h"
 #include "audio\sound_manager.h"
 
@@ -94,6 +94,7 @@ public:
 
 	//HFX 
 	CHandle soundsInsideHFXZone(XMVECTOR sound_pos);
+	CHandle playerInsideHFXZone();
 
 	CHandle getPlayerHandle() { return player; }
 

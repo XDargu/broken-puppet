@@ -529,7 +529,7 @@ void CSoundManager::playImpactFX(float force, CHandle transform, std::string mat
 	}*/
 }
 
-void CSoundManager::setEchoHFX(CHandle comp_hfx, HSTREAM channel){
+//void CSoundManager::setEchoHFX(CHandle comp_hfx, HSTREAM channel){
 	/*if (comp_hfx.isValid()){
 		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::ECHO){
 			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_DX8_ECHO, 0);
@@ -571,9 +571,9 @@ void CSoundManager::setEchoHFX(CHandle comp_hfx, HSTREAM channel){
 			}
 		}
 	}*/
-}
+//}
 
-void CSoundManager::setReverbHFX(CHandle comp_hfx, HSTREAM channel){
+//void CSoundManager::setReverbHFX(CHandle comp_hfx, HSTREAM channel){
 	/*if (comp_hfx.isValid()){
 		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::REVERB){
 			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_DX8_REVERB, 9);
@@ -617,9 +617,9 @@ void CSoundManager::setReverbHFX(CHandle comp_hfx, HSTREAM channel){
 			}
 		}
 	}*/
-}
+//}
 
-void CSoundManager::setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel){
+//void CSoundManager::setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel){
 	/*if (comp_hfx.isValid()){
 		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::FREE_REVERB){
 			HFX FX = BASS_ChannelSetFX(channel, BASS_FX_BFX_FREEVERB, 9);
@@ -667,7 +667,7 @@ void CSoundManager::setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel){
 			}
 		}
 	}*/
-}
+//}
 
 void CSoundManager::activateSlowMo(){
 	slowed = true;
