@@ -13,7 +13,6 @@ private:
 	CHandle own_transform;
 	bool played;
 	bool autoPlay;
-	FMOD::Studio::EventInstance* asociated_sound;
 	std::vector<std::string> params_names;
 	std::vector<float> params_value;
 	CHandle name;
