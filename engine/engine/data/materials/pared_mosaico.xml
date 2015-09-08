@@ -1,1 +1,1 @@
-<std_material name="pared_mosaico" diffuse="pared_dvn2_diffuse" normal="pared_dvn2_gloss" specular="pared_dvn2_specular" glossiness="pared_dvn2_gloss" emissive="" emissive_off="" />
+<std_material name="pared_mosaico" diffuse="pared_dvn2_diffuse" normal="pared_dvn2_normal" specular="pared_dvn2_specular" glossiness="pared_dvn2_gloss" emissive="" emissive_off="" />

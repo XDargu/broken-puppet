@@ -169,7 +169,7 @@ function onSceneLoad_scene_1()
 			local scene1_elevator = logicManager:getObject("scene1_elevator");
 			local platform_pos = scene1_elevator:getPos();
 			print(platform_pos);
-			scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 32), platform_pos.z), 3);
+			scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 24), platform_pos.z), 5);
 
 		end
 
