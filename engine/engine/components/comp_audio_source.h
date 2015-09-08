@@ -11,19 +11,15 @@ private:
 	CHandle player;
 	CHandle player_transform;
 	CHandle own_transform;
-	//BASS_3DVECTOR* pos;
-	//BASS_3DVECTOR* front;
-	DWORD m_mode;
-	float m_min;
-	float m_max;
-	float distance_max;
-	float volume;
-	bool autoPlaySound;
 	bool played;
-	bool loop;
+	bool autoPlay;
+	FMOD::Studio::EventInstance* asociated_sound;
+	std::vector<std::string> params_names;
+	std::vector<float> params_value;
+	CHandle name;
 public:
-
-	FMOD::Studio::EventDescription* asociated_sound;
+	FMOD::Studio::EventInstance* asociated_sound;
+public:
 
 	TCompAudioSource();
 	~TCompAudioSource();
@@ -32,27 +28,13 @@ public:
 
 	void init();
 
+	void setInstance(std::string event_desc_name);
+
 	void update(float elapsed);
 
-	void setSoundAsociated(std::string name);
+	CHandle getName();
 
-	void setSoundAsociated(std::string name, DWORD mode, float min, float max);
-
-	void set3DAttributes(DWORD mode, float min, float max);
-
-	//void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
-
-	//void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
-
-	//void setEchoHFX(CHandle comp_hfx, HSTREAM channel);
-
-	//void activateSlowMoFilter(HSTREAM channel);
-
-	//void desactivateSlowMoFilter(HSTREAM channel);
-
-	//void activateLowPassFilter(HSTREAM channel);
-
-	//void desactivateLowPassFilter(HSTREAM channel);
+	void play();
 };
 
 #endif

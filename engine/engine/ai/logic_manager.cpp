@@ -11,6 +11,7 @@
 #include "components\comp_golden_needle_logic.h"
 #include "components\comp_zone_aabb.h"
 #include "components\comp_hfx_zone.h"
+#include "components\comp_audio_source.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -206,6 +207,10 @@ void CLogicManager::registerHFXZone(CHandle hfx_zone){
 	HFXZones.push_back(hfx_zone);
 }
 
+void CLogicManager::registerAudioSource(CHandle audioSource){
+	audioSources.push_back(audioSource);
+}
+
 void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
@@ -239,6 +244,25 @@ void CLogicManager::unregisterZoneAABB(CHandle zone_aabb) {
 void CLogicManager::unregisterHFXZone(CHandle hfx_zone){
 	auto it = std::find(HFXZones.begin(), HFXZones.end(), hfx_zone);
 	HFXZones.erase(it);
+}
+
+void CLogicManager::unregisterAudioSource(CHandle audioSource){
+	auto it = std::find(audioSources.begin(), audioSources.end(), audioSource);
+	audioSources.erase(it);
+}
+
+CHandle CLogicManager::getAudioSourceName(std::string name){
+	for (int i = 0; i < audioSources.size(); ++i){
+		TCompAudioSource* audioSourceAux = (TCompAudioSource*)audioSources[i];
+		CHandle name_aux=audioSourceAux->getName();
+		if (name_aux.isValid()){
+			int cmp = strcmp(((TCompName*)name_aux)->name, name.c_str());
+			if (cmp == 0){
+				return audioSourceAux;
+			}
+		}
+	}
+	return CHandle();
 }
 
 CHandle CLogicManager::getPlayerZoneName(){
@@ -464,9 +488,9 @@ void CLogicManager::bootLUA() {
 		.set("cameraLookAtPosition", (void (CLogicManager::*)(CVector)) &CLogicManager::cameraLookAtPosition)
 		.set("pushPlayerLegsState", &CLogicManager::pushPlayerLegsState)
 		.set("changeCamera", &CLogicManager::changeCamera)
-		.set("changeTrack", &CLogicManager::changeTrack)
+		/*.set("changeTrack", &CLogicManager::changeTrack)
 		.set("stopMusic", &CLogicManager::stopMusic)
-		.set("playMusic", &CLogicManager::playMusic)
+		.set("playMusic", &CLogicManager::playMusic)*/
 		.set("changeAmbientLight", &CLogicManager::changeAmbientLight)
 		.set("createParticleGroup", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createParticleGroup)
 		.set("setBands", &CLogicManager::setBand)
@@ -679,7 +703,7 @@ bool CLogicManager::playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN){
 	return false;
 }
 
-void CLogicManager::changeTrack(std::string name, bool loop) {
+/*void CLogicManager::changeTrack(std::string name, bool loop) {
 	CSoundManager::get().playTrack(name, loop);
 }
 
@@ -689,7 +713,7 @@ void CLogicManager::stopMusic() {
 
 void CLogicManager::playMusic(bool loop) {
 	CSoundManager::get().playMusic(loop);
-}
+}*/
 
 void CLogicManager::playEvent(std::string name) {
 	CSoundManager::get().playEvent(name);

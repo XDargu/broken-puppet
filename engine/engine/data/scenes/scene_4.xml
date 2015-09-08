@@ -16,6 +16,18 @@
 </render>
 <aabb min="-18.3539 -11.5639 -7.61116" max="19.3182 4.67523 10.5589"/>
 	</entity>
+  <!-- PRUEBAS-->
+  <entity>
+    <transform position="73.3405 4.50677 17.1179" rotation="4.76837e-007 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <name name="prueba_audioSource"/>
+    <audioSource autoplay="false">
+      <event sound="event:/Enviroment/impact"/>
+      <param param_name="force" param_value="500"/>
+      <param param_name="material" param_value="1"/>
+      <fin_param/>
+     </audioSource>
+  </entity>
+  <!-- END PRUEBAS-->
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn1_arqui_suelo_esqui_in_a_3.0" />
 <transform position="-33.0 -32.0 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
