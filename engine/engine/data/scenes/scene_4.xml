@@ -1181,7 +1181,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc3_arqui_suelo_pared_a_127.0" />
-<transform position="95.0 -6.31805e-006 30.0" rotation="0.0 1.0 0.0 2.97268e-005" scale="1.0 1.0 1.0"/>
+<transform position="95.0 -6.31805e-006 30.0" rotation="0.0 1.0 0.0 2.94884e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_esc3"/>
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="1" mat="pared_esc3"/>
@@ -1191,7 +1191,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc3_arqui_suelo_pared_a_128.0" />
-<transform position="95.0 -5.96836e-006 38.0" rotation="0.0 1.0 0.0 2.9846e-005" scale="1.0 1.0 1.0"/>
+<transform position="95.0 -5.96836e-006 38.0" rotation="0.0 1.0 0.0 2.96076e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_esc3"/>
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="1" mat="pared_esc3"/>
@@ -1201,7 +1201,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc3_arqui_suelo_pared_a_129.0" />
-<transform position="95.0 -1.80397e-006 46.0" rotation="0.0 1.0 0.0 2.97268e-005" scale="1.0 1.0 1.0"/>
+<transform position="95.0 -1.80397e-006 46.0" rotation="0.0 1.0 0.0 2.94884e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_esc3"/>
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="1" mat="pared_esc3"/>
@@ -1211,7 +1211,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc3_arqui_suelo_pared_a_130.0" />
-<transform position="95.0 -5.26898e-006 54.0" rotation="0.0 1.0 0.0 2.97268e-005" scale="1.0 1.0 1.0"/>
+<transform position="95.0 -5.26898e-006 54.0" rotation="0.0 1.0 0.0 2.94884e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_esc3"/>
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="1" mat="pared_esc3"/>
@@ -1241,7 +1241,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc3_arqui_suelo_pared_a_133.0" />
-<transform position="95.0 -4.91929e-006 62.0" rotation="0.0 1.0 0.0 2.925e-005" scale="1.0 1.0 1.0"/>
+<transform position="95.0 -4.91929e-006 62.0" rotation="0.0 1.0 0.0 2.90116e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="0" mat="suelo_esc3"/>
 <draw mesh="esc3_arqui_suelo_pared_a" sub_mesh="1" mat="pared_esc3"/>
@@ -1631,7 +1631,7 @@
 	</entity>
 	<entity  >
 <name name="esc3_parche_techo_c_173.0" />
-<transform position="47.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.50757e-006" scale="1.0 1.0 1.0"/>
+<transform position="47.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.38836e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0313726 0.0313726 0.533333">
 <draw mesh="esc3_parche_techo_c" sub_mesh="0" mat="techo_cristalera"/>
 <draw mesh="esc3_parche_techo_c" sub_mesh="1" mat="techo_cristalera"/>
@@ -1640,7 +1640,7 @@
 	</entity>
 	<entity  >
 <name name="esc3_parche_techo_c_174.0" />
-<transform position="31.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.62678e-006" scale="1.0 1.0 1.0"/>
+<transform position="31.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.50757e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0313726 0.0313726 0.533333">
 <draw mesh="esc3_parche_techo_c" sub_mesh="0" mat="techo_cristalera"/>
 <draw mesh="esc3_parche_techo_c" sub_mesh="1" mat="techo_cristalera"/>
@@ -1766,7 +1766,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc3_arqui_suelo_esqui_ex_half_c_187.0" />
-<transform position="79.0 9.61651e-007 22.0" rotation="0.0 1.0 0.0 1.45872e-005" scale="1.0 1.0 1.0"/>
+<transform position="79.0 9.61651e-007 22.0" rotation="0.0 1.0 0.0 1.43488e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="esc3_arqui_suelo_esqui_ex_half_c" sub_mesh="0" mat="pared_esc3"/>
 <draw mesh="esc3_arqui_suelo_esqui_ex_half_c" sub_mesh="1" mat="suelo_esc3"/>
@@ -2063,7 +2063,7 @@
 	</entity>
 	<entity  >
 <name name="ventana_b_219.0" />
-<transform position="96.8394 8.0 52.1177" rotation="0.0 1.0 0.0 8.38836e-006" scale="1.2027 2.93757 2.93757"/>
+<transform position="96.8394 8.0 52.1177" rotation="0.0 1.0 0.0 8.26915e-006" scale="1.2027 2.93757 2.93757"/>
 <render >
 <draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
 <draw mesh="ventana_b" sub_mesh="1" mat="pared2"/>
@@ -2631,7 +2631,7 @@
 	</entity>
 	<entity  >
 <name name="esc3_parche_techo_c_281.0" />
-<transform position="39.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.62678e-006" scale="1.0 1.0 1.0"/>
+<transform position="39.0 1.39876e-006 32.0" rotation="0.0 1.0 0.0 8.50757e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0313726 0.0313726 0.533333">
 <draw mesh="esc3_parche_techo_c" sub_mesh="0" mat="techo_cristalera"/>
 <draw mesh="esc3_parche_techo_c" sub_mesh="1" mat="techo_cristalera"/>
@@ -3417,7 +3417,7 @@
 	</entity>
 	<entity  >
 <name name="esc3_parche_techo_c_374.0" />
-<transform position="61.0 16.0 80.0" rotation="0.0 1.0 0.0 8.50757e-006" scale="1.0 1.0 1.0"/>
+<transform position="61.0 16.0 80.0" rotation="0.0 1.0 0.0 8.38836e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0313726 0.0313726 0.533333">
 <draw mesh="esc3_parche_techo_c" sub_mesh="0" mat="techo_cristalera"/>
 <draw mesh="esc3_parche_techo_c" sub_mesh="1" mat="techo_cristalera"/>
@@ -3575,7 +3575,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_392.0" />
-<transform position="55.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="55.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3599,7 +3599,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_395.0" />
-<transform position="59.0004 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="59.0004 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3664,7 +3664,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_403.0" />
-<transform position="62.9922 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="62.9922 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3729,7 +3729,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_411.0" />
-<transform position="67.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="67.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3794,7 +3794,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_419.0" />
-<transform position="71.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="71.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3850,7 +3850,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_426.0" />
-<transform position="75.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="75.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3906,7 +3906,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_433.0" />
-<transform position="79.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="79.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -3971,7 +3971,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_441.0" />
-<transform position="83.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="83.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4036,7 +4036,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_449.0" />
-<transform position="87.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="87.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4101,7 +4101,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_457.0" />
-<transform position="91.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="91.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4166,7 +4166,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_arco_medio_a_465.0" />
-<transform position="95.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.19627e-006" scale="1.0 1.0 1.0"/>
+<transform position="95.0 8.0 25.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_arco_medio_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4325,7 +4325,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_baran_poste_14g_a_482.0" />
-<transform position="65.0 5.0 19.0" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="65.0 5.0 19.0" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_baran_poste_14g_a" sub_mesh="0" mat="barandillas_01"/>
 <draw mesh="esc1_baran_poste_14g_a" sub_mesh="1" mat="barandillas_01"/>
@@ -4410,7 +4410,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_490.0" />
-<transform position="87.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="87.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4418,7 +4418,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_491.0" />
-<transform position="83.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="83.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4426,7 +4426,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_492.0" />
-<transform position="79.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="79.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4434,7 +4434,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_493.0" />
-<transform position="75.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="75.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4442,7 +4442,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_494.0" />
-<transform position="71.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="71.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4450,7 +4450,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_495.0" />
-<transform position="67.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="67.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4458,7 +4458,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_496.0" />
-<transform position="63.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="63.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4466,7 +4466,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_497.0" />
-<transform position="59.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="59.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4474,7 +4474,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_498.0" />
-<transform position="55.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="55.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4523,7 +4523,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_503.0" />
-<transform position="91.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="91.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4531,7 +4531,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_504.0" />
-<transform position="95.0 8.0 23.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="95.0 8.0 23.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4539,7 +4539,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_505.0" />
-<transform position="95.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="95.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4547,7 +4547,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_506.0" />
-<transform position="91.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="91.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4555,7 +4555,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_507.0" />
-<transform position="87.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="87.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4563,7 +4563,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_508.0" />
-<transform position="83.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="83.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4571,7 +4571,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_509.0" />
-<transform position="79.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="79.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4579,7 +4579,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_510.0" />
-<transform position="75.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="75.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4587,7 +4587,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_511.0" />
-<transform position="71.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="71.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4595,7 +4595,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_512.0" />
-<transform position="67.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="67.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4603,7 +4603,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_513.0" />
-<transform position="63.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="63.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4611,7 +4611,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_514.0" />
-<transform position="59.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="59.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4619,7 +4619,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_515.0" />
-<transform position="55.0 8.0 19.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="55.0 8.0 19.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4627,7 +4627,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_516.0" />
-<transform position="79.0 7.99999 15.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="79.0 7.99999 15.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4635,7 +4635,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_517.0" />
-<transform position="75.0 7.99999 15.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="75.0 7.99999 15.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4643,7 +4643,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_518.0" />
-<transform position="71.0 7.99999 15.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="71.0 7.99999 15.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4651,7 +4651,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_viga_a_519.0" />
-<transform position="67.0 7.99999 15.9021" rotation="0.0 1.0 0.0 7.07706e-006" scale="1.0 1.0 1.0"/>
+<transform position="67.0 7.99999 15.9021" rotation="0.0 1.0 0.0 6.95785e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_viga_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -4970,7 +4970,7 @@
 	</entity>
 	<entity  >
 <name name="dvn2_baran_recta_a_552.0" />
-<transform position="1.0 -24.0 -8.0" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
+<transform position="1.0 -24.0 -8.0" rotation="0.0 1.0 0.0 6.71943e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn2_baran_recta_a" sub_mesh="0" mat="barandillas_02"/>
 </render>
@@ -4978,7 +4978,7 @@
 	</entity>
 	<entity  >
 <name name="dvn2_baran_recta_a_553.0" />
-<transform position="1.0 -24.0 -6.0" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
+<transform position="1.0 -24.0 -6.0" rotation="0.0 1.0 0.0 6.71943e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn2_baran_recta_a" sub_mesh="0" mat="barandillas_02"/>
 </render>
@@ -4986,7 +4986,7 @@
 	</entity>
 	<entity  >
 <name name="dvn2_baran_recta_a_554.0" />
-<transform position="1.0 -24.0 -4.0" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
+<transform position="1.0 -24.0 -4.0" rotation="0.0 1.0 0.0 6.71943e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn2_baran_recta_a" sub_mesh="0" mat="barandillas_02"/>
 </render>
@@ -4994,7 +4994,7 @@
 	</entity>
 	<entity  >
 <name name="dvn2_baran_recta_a_555.0" />
-<transform position="1.0 -24.0 -2.0" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
+<transform position="1.0 -24.0 -2.0" rotation="0.0 1.0 0.0 6.71943e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn2_baran_recta_a" sub_mesh="0" mat="barandillas_02"/>
 </render>
@@ -5002,7 +5002,7 @@
 	</entity>
 	<entity  >
 <name name="dvn2_baran_recta_a_556.0" />
-<transform position="1.0 -24.0 1.04907e-006" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
+<transform position="1.0 -24.0 1.04907e-006" rotation="0.0 1.0 0.0 6.71943e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn2_baran_recta_a" sub_mesh="0" mat="barandillas_02"/>
 </render>
@@ -5470,7 +5470,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_suelo_esqui_in_a_608.0" />
-<transform position="33.0 -32.0 8.0" rotation="0.0 1.0 0.0 7.79232e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -32.0 8.0" rotation="0.0 1.0 0.0 7.5539e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn3_arqui_suelo_esqui_in_a" sub_mesh="0" mat="pared_dvn3"/>
 <draw mesh="dvn3_arqui_suelo_esqui_in_a" sub_mesh="1" mat="suelo_dvn3"/>
@@ -5480,7 +5480,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_suelo_parche_compl_a_609.0" />
-<transform position="15.0 -24.0 8.0" rotation="0.0 1.0 5.20548e-007 8.03073e-006" scale="1.0 1.0 1.0"/>
+<transform position="15.0 -24.0 8.0" rotation="0.0 1.0 5.20548e-007 7.79232e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_suelo_parche_compl_a" sub_mesh="0" mat="suelo_dvn3"/>
 </render>
@@ -5499,7 +5499,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_suelo_esqui_in_half_c_611.0" />
-<transform position="33.0 -32.0 -7.99999" rotation="0.0 1.0 0.0 7.67311e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -32.0 -7.99999" rotation="0.0 1.0 0.0 7.43469e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn3_arqui_suelo_esqui_in_half_c" sub_mesh="0" mat="pared_dvn3"/>
 <draw mesh="dvn3_arqui_suelo_esqui_in_half_c" sub_mesh="1" mat="suelo_dvn3"/>
@@ -5569,7 +5569,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_suelo_pared_half_a_618.0" />
-<transform position="33.0 -32.0 -8.0" rotation="0.0 1.0 0.0 7.67311e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -32.0 -8.0" rotation="0.0 1.0 0.0 7.43469e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn3_arqui_suelo_pared_half_a" sub_mesh="0" mat="pared_dvn3"/>
 <draw mesh="dvn3_arqui_suelo_pared_half_a" sub_mesh="1" mat="suelo_dvn3"/>
@@ -5579,7 +5579,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_suelo_pared_half_a_619.0" />
-<transform position="33.0 -32.0 4.0" rotation="0.0 1.0 0.0 7.5539e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -32.0 4.0" rotation="0.0 1.0 0.0 7.31548e-006" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="dvn3_arqui_suelo_pared_half_a" sub_mesh="0" mat="pared_dvn3"/>
 <draw mesh="dvn3_arqui_suelo_pared_half_a" sub_mesh="1" mat="suelo_dvn3"/>
@@ -5656,7 +5656,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_pared_esqui_in_half_b_627.0" />
-<transform position="33.0 -24.0 -8.0" rotation="0.0 1.0 0.0 7.67311e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -24.0 -8.0" rotation="0.0 1.0 0.0 7.43469e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="pared_dvn3"/>
 </render>
@@ -5908,7 +5908,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_pared_esqui_in_half_b_655.0" />
-<transform position="33.0 -16.0 -8.0" rotation="0.0 1.0 0.0 7.5539e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -16.0 -8.0" rotation="0.0 1.0 0.0 7.31548e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="pared_dvn3"/>
 </render>
@@ -6080,7 +6080,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn3_arqui_pared_esqui_in_half_b_674.0" />
-<transform position="33.0 -8.0 -8.0" rotation="0.0 1.0 0.0 7.5539e-006" scale="1.0 1.0 1.0"/>
+<transform position="33.0 -8.0 -8.0" rotation="0.0 1.0 0.0 7.31548e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="pared_dvn3"/>
 </render>
@@ -6471,7 +6471,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_pilar_empalme_suelto_c_716.0" />
-<transform position="23.0 -24.0 9.99999" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<transform position="23.0 -24.0 9.99999" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_empalme_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -6516,7 +6516,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_pilar_suelo_suelto_c_721.0" />
-<transform position="23.0 -32.0 9.99999" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<transform position="23.0 -32.0 9.99999" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_suelo_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -6525,7 +6525,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_pilar_empalme_suelto_c_722.0" />
-<transform position="23.0 -16.0 9.99999" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<transform position="23.0 -16.0 9.99999" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_empalme_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -6534,7 +6534,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_pilar_empalme_suelto_c_723.0" />
-<transform position="23.0 -8.0 9.99999" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<transform position="23.0 -8.0 9.99999" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_empalme_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -6543,7 +6543,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_pilar_empalme_suelto_c_724.0" />
-<transform position="23.0 4.37114e-007 9.99999" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<transform position="23.0 4.37114e-007 9.99999" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_empalme_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -6720,7 +6720,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="esc1_arco_pilar_bottom_a_745.0" />
-<transform position="21.0 -24.0 20.0" rotation="2.38419e-007 1.0 0.0 6.48101e-006" scale="1.0 1.0 1.0"/>
+<transform position="21.0 -24.0 20.0" rotation="2.38419e-007 1.0 0.0 6.24259e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_pilar_bottom_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -6729,7 +6729,7 @@
 	</entity>
 	<entity  >
 <name name="esc1_arco_pilar_top_a_746.0" />
-<transform position="21.0 -24.0 20.0" rotation="0.0 1.0 0.0 3.14315e-006" scale="1.0 1.0 1.0"/>
+<transform position="21.0 -24.0 20.0" rotation="0.0 1.0 0.0 3.02394e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="esc1_arco_pilar_top_a" sub_mesh="0" mat="arcos_01"/>
 </render>
@@ -7595,57 +7595,33 @@
 <aabb min="-4.00001 -9.18705e-006 -4.00001" max="9.75929e-006 9.18705e-006 9.53675e-006"/>
 <colliderMesh path="esc3_arqui_suelo_suelo_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn1_arqui_techo_tablones_L_862.0" />
-<transform position="-9.68138 -17.0167 -1.28279" rotation="0.0 -0.707107 0.0 0.707107" scale="1.13253 0.11465 0.638028"/>
-<render  color = "0.45098 0.45098 0.45098">
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="0" mat="techo_tablones"/>
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="1" mat="techo_tablones"/>
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="2" mat="techo_tablones"/>
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="3" mat="techo_tablones"/>
-</render>
-<aabb min="-15.5721 -4.13166 -24.0256" max="10.3578 3.07704 8.00478"/>
-<colliderMesh path="dvn1_arqui_techo_tablones_L" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
-	<entity tag = "level" collisionTag = "Level">
-<name name="dvn1_arqui_techo_tablones_L_863.0" />
-<transform position="-19.7973 -17.0167 -7.06996" rotation="0.0 0.707107 0.0 0.707107" scale="1.13253 0.11465 0.638028"/>
-<render  color = "0.45098 0.45098 0.45098">
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="0" mat="techo_tablones"/>
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="1" mat="techo_tablones"/>
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="2" mat="techo_tablones"/>
-<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="3" mat="techo_tablones"/>
-</render>
-<aabb min="-15.5721 -4.13166 -24.0256" max="10.3578 3.07704 8.00479"/>
-<colliderMesh path="dvn1_arqui_techo_tablones_L" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
-	</entity>
 	<entity  >
-<name name="Omni063_864.0" />
+<name name="Omni063_862.0" />
 <transform position="24.0719 -29.4603 1.96475" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="22.0528" intensity="1.0" color="1.0 0.25098 0.0392157 1"/>
 	</entity>
 	<entity  >
+<name name="ventana_b_863.0" />
+<transform position="96.8394 8.0 36.4782" rotation="0.0 1.0 0.0 8.26915e-006" scale="1.2027 2.93757 2.93757"/>
+<render >
+<draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
+<draw mesh="ventana_b" sub_mesh="1" mat="pared2"/>
+<draw mesh="ventana_b" sub_mesh="2" mat="CubemapMaterial"/>
+</render>
+<aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
+	</entity>
+	<entity  >
+<name name="ventana_b_864.0" />
+<transform position="96.8394 8.0 68.0096" rotation="0.0 1.0 0.0 8.26915e-006" scale="1.2027 2.93757 2.93757"/>
+<render >
+<draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
+<draw mesh="ventana_b" sub_mesh="1" mat="pared2"/>
+<draw mesh="ventana_b" sub_mesh="2" mat="CubemapMaterial"/>
+</render>
+<aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
+	</entity>
+	<entity  >
 <name name="ventana_b_865.0" />
-<transform position="96.8394 8.0 36.4782" rotation="0.0 1.0 0.0 8.38836e-006" scale="1.2027 2.93757 2.93757"/>
-<render >
-<draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
-<draw mesh="ventana_b" sub_mesh="1" mat="pared2"/>
-<draw mesh="ventana_b" sub_mesh="2" mat="CubemapMaterial"/>
-</render>
-<aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
-	</entity>
-	<entity  >
-<name name="ventana_b_866.0" />
-<transform position="96.8394 8.0 68.0096" rotation="0.0 1.0 0.0 8.38836e-006" scale="1.2027 2.93757 2.93757"/>
-<render >
-<draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
-<draw mesh="ventana_b" sub_mesh="1" mat="pared2"/>
-<draw mesh="ventana_b" sub_mesh="2" mat="CubemapMaterial"/>
-</render>
-<aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
-	</entity>
-	<entity  >
-<name name="ventana_b_867.0" />
 <transform position="81.7574 8.0 75.7765" rotation="0.0 0.707102 0.0 0.707111" scale="1.2027 2.93757 2.93757"/>
 <render >
 <draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
@@ -7655,7 +7631,7 @@
 <aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
 	</entity>
 	<entity  >
-<name name="ventana_b_868.0" />
+<name name="ventana_b_866.0" />
 <transform position="53.1431 8.0 51.9126" rotation="0.0 -6.76314e-006 0.0 1.0" scale="1.2027 2.93757 2.93757"/>
 <render >
 <draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
@@ -7665,7 +7641,7 @@
 <aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
 	</entity>
 	<entity  >
-<name name="ventana_b_869.0" />
+<name name="ventana_b_867.0" />
 <transform position="53.1431 8.0 38.4035" rotation="0.0 -6.76314e-006 0.0 1.0" scale="1.2027 2.93757 2.93757"/>
 <render >
 <draw mesh="ventana_b" sub_mesh="0" mat="suelo2"/>
@@ -7675,7 +7651,7 @@
 <aabb min="-0.0782013 0.580209 -1.91807" max="0.0782024 5.14267 1.91807"/>
 	</entity>
 	<entity  >
-<name name="luz_bonica_pasillo_870.0" />
+<name name="luz_bonica_pasillo_868.0" />
 <transform position="46.8215 2.43091 24.1487" rotation="0.0 0.0 0.0 1.0" scale="0.52053 0.891163 0.494278"/>
 <render  color = "1.0 0.662745 0.478431">
 <draw mesh="luz_bonica_pasillo" sub_mesh="0" mat="light_shaft"/>
@@ -7683,7 +7659,7 @@
 <aabb min="-43.3923 -1.36535 -7.8811" max="7.88084 12.978 7.86577"/>
 	</entity>
 	<entity  >
-<name name="luz_volumetrica_sala_reloj_871.0" />
+<name name="luz_volumetrica_sala_reloj_869.0" />
 <transform position="81.8908 0.312935 47.5471" rotation="0.0 0.0 0.0 1.0" scale="1.66492 2.81341 1.58096"/>
 <render  color = "0.882353 0.560784 0.341176">
 <draw mesh="luz_volumetrica_sala_reloj" sub_mesh="0" mat="light_shaft"/>
@@ -7691,27 +7667,27 @@
 <aabb min="-31.6426 -0.00775027 -15.5724" max="7.88084 12.978 16.4741"/>
 	</entity>
 	<entity  >
-<name name="Omni064_872.0" />
+<name name="Omni064_870.0" />
 <transform position="75.351 1.43723 43.5547" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="14.8264" intensity="1.0" color="1.0 0.439216 0.329412 1"/>
 	</entity>
 	<entity  >
-<name name="Omni065_873.0" />
+<name name="Omni065_871.0" />
 <transform position="67.168 11.9024 21.4967" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="14.8264" intensity="1.0" color="0.988235 0.592157 0.47451 1"/>
 	</entity>
 	<entity  >
-<name name="Omni066_874.0" />
+<name name="Omni066_872.0" />
 <transform position="79.9388 11.9024 21.4967" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="14.8264" intensity="1.0" color="0.988235 0.592157 0.47451 1"/>
 	</entity>
 	<entity  >
-<name name="Omni067_875.0" />
+<name name="Omni067_873.0" />
 <transform position="93.9378 8.04136 29.012" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="14.8264" intensity="1.0" color="1.0 0.439216 0.329412 1"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn3_arqui_pared_esqui_in_half_b_876.0" />
+<name name="dvn3_arqui_pared_esqui_in_half_b_874.0" />
 <transform position="25.0 -8.0 -16.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_esqui_in_half_b" sub_mesh="0" mat="pared_dvn3"/>
@@ -7720,7 +7696,7 @@
 <colliderMesh path="dvn3_arqui_pared_esqui_in_half_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn3_arqui_pared_esqui_ex_half_b_877.0" />
+<name name="dvn3_arqui_pared_esqui_ex_half_b_875.0" />
 <transform position="25.0 -8.0 -12.0" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_esqui_ex_half_b" sub_mesh="0" mat="pared_dvn3"/>
@@ -7729,8 +7705,8 @@
 <colliderMesh path="dvn3_arqui_pared_esqui_ex_half_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc1_pilar_suelo_suelto_c_878.0" />
-<transform position="53.0 3.2783e-006 30.0" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<name name="esc1_pilar_suelo_suelto_c_876.0" />
+<transform position="53.0 3.2783e-006 30.0" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_suelo_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -7738,8 +7714,8 @@
 <colliderMesh path="esc1_pilar_suelo_suelto_c" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc1_pilar_empalme_suelto_c_879.0" />
-<transform position="53.0 8.0 30.0" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<name name="esc1_pilar_empalme_suelto_c_877.0" />
+<transform position="53.0 8.0 30.0" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_empalme_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -7747,8 +7723,8 @@
 <colliderMesh path="esc1_pilar_empalme_suelto_c" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="esc1_pilar_empalme_suelto_c_880.0" />
-<transform position="53.0 16.0 30.0" rotation="0.0 1.0 0.0 3.61999e-006" scale="1.0 1.0 1.0"/>
+<name name="esc1_pilar_empalme_suelto_c_878.0" />
+<transform position="53.0 16.0 30.0" rotation="0.0 1.0 0.0 3.38157e-006" scale="1.0 1.0 1.0"/>
 <render  color = "0.721569 0.894118 0.6">
 <draw mesh="esc1_pilar_empalme_suelto_c" sub_mesh="0" mat="pilares_sueltos_01"/>
 </render>
@@ -7756,12 +7732,12 @@
 <colliderMesh path="esc1_pilar_empalme_suelto_c" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity  >
-<name name="Omni068_881.0" />
+<name name="Omni068_879.0" />
 <transform position="83.4113 7.10349 57.1777" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="14.8264" intensity="1.0" color="1.0 0.439216 0.329412 1"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn3_arqui_pared_pared_half_a_882.0" />
+<name name="dvn3_arqui_pared_pared_half_a_880.0" />
 <transform position="25.0 3.49691e-007 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_pared_half_a" sub_mesh="0" mat="pared_dvn3"/>
@@ -7770,7 +7746,7 @@
 <colliderMesh path="dvn3_arqui_pared_pared_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
-<name name="dvn3_arqui_pared_pared_half_a_883.0" />
+<name name="dvn3_arqui_pared_pared_half_a_881.0" />
 <transform position="17.0 -8.0 8.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="dvn3_arqui_pared_pared_half_a" sub_mesh="0" mat="pared_dvn3"/>
@@ -7779,7 +7755,7 @@
 <colliderMesh path="dvn3_arqui_pared_pared_half_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity  >
-<name name="volumetrica_reloj_02l_884.0" />
+<name name="volumetrica_reloj_02l_882.0" />
 <transform position="83.6957 2.34847e-006 53.7268" rotation="0.0 1.0 0.0 5.32071e-006" scale="1.2027 2.93757 2.93757"/>
 <render  color = "1.0 0.662745 0.478431">
 <draw mesh="volumetrica_reloj_02l" sub_mesh="0" mat="light_shaft"/>
@@ -7788,12 +7764,36 @@
 <aabb min="-19.6155 -0.000119448 -6.75555" max="17.4 7.67007 9.59938"/>
 	</entity>
 	<entity  >
-<name name="esc3_parche_techo_c_885.0" />
+<name name="esc3_parche_techo_c_883.0" />
 <transform position="23.0 9.29864e-007 24.0" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 <render  color = "0.0313726 0.0313726 0.533333">
 <draw mesh="esc3_parche_techo_c" sub_mesh="0" mat="techo_cristalera"/>
 <draw mesh="esc3_parche_techo_c" sub_mesh="1" mat="techo_cristalera"/>
 </render>
 <aabb min="-3.61973 7.95 3.80805" max="3.61934 9.5 4.06939"/>
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="dvn1_arqui_techo_tablones_L_884.0" />
+<transform position="-9.68138 -17.0167 -1.28279" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render  color = "0.45098 0.45098 0.45098">
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="0" mat="techo_tablones"/>
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="1" mat="techo_tablones"/>
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="2" mat="techo_tablones"/>
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="3" mat="techo_tablones"/>
+</render>
+<aabb min="-17.6359 -0.473695 -15.329" max="11.7305 0.352782 5.10727"/>
+<colliderMesh path="dvn1_arqui_techo_tablones_L" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="dvn1_arqui_techo_tablones_L_885.0" />
+<transform position="-19.7973 -17.0167 -7.06996" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render  color = "0.45098 0.45098 0.45098">
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="0" mat="techo_tablones"/>
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="1" mat="techo_tablones"/>
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="2" mat="techo_tablones"/>
+<draw mesh="dvn1_arqui_techo_tablones_L" sub_mesh="3" mat="techo_tablones"/>
+</render>
+<aabb min="-17.6359 -0.473695 -15.329" max="11.7305 0.352782 5.10727"/>
+<colliderMesh path="dvn1_arqui_techo_tablones_L" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 </scene>

@@ -102,7 +102,7 @@ public:*/
 
 	void play3DFX(std::string name, XMVECTOR pos);
 
-	void playImpactFX(float force, CHandle transform, std::string material);
+	void playImpactFX(float force, float mass, CHandle transform, std::string material);
 
 	void setSound3DFactors(float distance, float roll, float doppler);
 
@@ -116,6 +116,8 @@ public:*/
 
 	void activateSlowMo();
 	void desactivateSlowMo();
+
+	float getMaterialTagValue(std::string material);
 
 };
 

@@ -505,16 +505,15 @@ void CSoundManager::setSound3DFactors(float distance, float roll, float doppler)
 	//BASS_Set3DFactors(distance, roll, doppler);
 }
 
-void CSoundManager::playImpactFX(float force, CHandle transform, std::string material) {
+void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std::string material) {
 
-	float material_type = 0;
-	if (material == "metal")
-		material_type = 1;
+	float material_type = getMaterialTagValue(material);
 
 	float f = force * 8;
 	/*loadScene("data/scenes/scene_1_noenemy.xml");*/
 	CSoundManager::SoundParameter params[] = {
 		{ "force", f },
+		{ "mass", mass },
 		{ "material", material_type }
 	};
 
@@ -715,3 +714,18 @@ void CSoundManager::desactivateSlowMo(){
 }
 
 
+float CSoundManager::getMaterialTagValue(std::string material) {
+	if (material == "wood") { return 0; }
+	if (material == "metal") { return 1; }
+	if (material == "ceramics") { return 2; }
+	if (material == "cloth") { return 3; }
+	if (material == "wicker") { return 4; }
+	if (material == "leather") { return 5; }
+	if (material == "book") { return 6; }
+	if (material == "rattle") { return 7; }
+	if (material == "glass") { return 8; }
+	if (material == "plastic") { return 9; }
+	if (material == "piano") { return 10; }
+	// Default: Wood
+	return 0;
+}

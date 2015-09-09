@@ -3310,8 +3310,8 @@
 	</entity>
 	<entity  >
 <name name="Omni001_343.0" />
-<transform position="29.0 2.22928e-006 51.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
+<transform position="1.32611 12.8355 9.82143" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="16.416" intensity="1.0" color="0.941177 1.0 0.862745 1"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_ambos_ambos_half_e_344.0" />
@@ -5156,5 +5156,70 @@
 </render>
 <aabb min="-0.881824 -0.0777388 -0.881824" max="0.881824 8.05685 0.881824"/>
 <colliderMesh path="esc1_pilar_ambos_suelto_c" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+	</entity>
+	<entity  >
+<name name="Omni002_544.0" />
+<transform position="3.88568 15.504 38.2982" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="9.16" intensity="1.0" color="0.54902 0.996078 1.0 1"/>
+	</entity>
+	<entity  >
+<name name="Omni003_545.0" />
+<transform position="-15.1245 15.7028 70.0568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="6.20682" intensity="1.0" color="0.54902 0.996078 1.0 1"/>
+	</entity>
+	<entity  >
+<name name="Omni004_546.0" />
+<transform position="17.0772 14.9244 84.5906" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="7.36439" intensity="1.0" color="0.501961 0.929412 0.364706 1"/>
+	</entity>
+	<entity  >
+<name name="Omni005_547.0" />
+<transform position="17.0772 15.3636 96.4683" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="7.36439" intensity="1.0" color="0.203922 0.87451 0.647059 1"/>
+	</entity>
+	<entity  >
+<name name="Omni006_548.0" />
+<transform position="17.0772 15.3636 114.679" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+	</entity>
+	<entity  >
+<name name="Omni007_549.0" />
+<transform position="17.0772 4.69234 114.679" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+	</entity>
+	<entity  >
+<name name="Omni008_550.0" />
+<transform position="-1.35923 1.04536 101.477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+	</entity>
+	<entity  >
+<name name="Omni009_551.0" />
+<transform position="-1.35923 1.04536 85.7737" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+	</entity>
+	<entity  >
+<name name="Omni010_552.0" />
+<transform position="4.86652 9.68805 70.0568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="12.5603" intensity="1.0" color="0.54902 0.996078 1.0 1"/>
+	</entity>
+	<entity  >
+<name name="Omni011_553.0" />
+<transform position="-18.0268 12.2141 112.234" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="9.61347" intensity="1.0" color="0.85098 0.913726 0.439216 1"/>
+	</entity>
+	<entity  >
+<name name="Omni012_554.0" />
+<transform position="-5.53315 10.8988 112.234" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="11.1202" intensity="1.0" color="0.792157 0.878431 0.203922 1"/>
+	</entity>
+	<entity  >
+<name name="Omni013_555.0" />
+<transform position="11.2581 13.0968 84.5906" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="3.39056" intensity="1.0" color="0.866667 0.972549 0.545098 1"/>
+	</entity>
+	<entity  >
+<name name="Omni014_556.0" />
+<transform position="1.9986 15.504 51.1848" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<pointLight radius="9.16" intensity="1.0" color="0.54902 0.996078 1.0 1"/>
 	</entity>
 </scene>
