@@ -397,7 +397,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
-	loadScene("data/scenes/scene_4.xml");
+	//loadScene("data/scenes/scene_4.xml");
 	//loadScene("data/scenes/scene_5.xml");
 
 	//sm.playTrack(0,false);
