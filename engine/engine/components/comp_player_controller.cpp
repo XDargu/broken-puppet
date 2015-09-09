@@ -28,6 +28,18 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 
 	physx::PxReal threshold = 100.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
+
+	footsteps = CSoundManager::get().getInstance("event:/Character/Footprints/Footsteps");
+
+	FMOD::Studio::ParameterInstance* surface = NULL;
+	footsteps->getParameter("surface", &surface);
+	FMOD_RESULT r = surface->setValue(0);
+
+	FMOD::Studio::ParameterInstance* running = NULL;
+	footsteps->getParameter("surface", &running);
+	r = running->setValue(0);
+
+	footsteps->start();
 }
 
 /*float displacement;
@@ -185,6 +197,26 @@ void TCompPlayerController::update(float elapsed) {
 		pg_trans->position = trans->position;
 		pg_trans->lookAt(pg_trans->position + trans->getUp(), XMVectorSet(0, 1, 0, 0));
 	}*/
+
+	// Footsteps sound
+
+	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+
+	bool moving = c_controller->OnGround() && rigid->rigidBody->getLinearVelocity().magnitudeSquared() > 1;
+	float surface_value = moving ? (surface_tag + 1) : 0;
+	FMOD::Studio::ParameterInstance* surface = NULL;
+	footsteps->getParameter("surface", &surface);
+	FMOD_RESULT r = surface->setValue(surface_value);
+
+	float running_value = io.isPressed(CIOStatus::RUN);
+	FMOD::Studio::ParameterInstance* running = NULL;
+	footsteps->getParameter("running", &running);
+	r = running->setValue(running_value);
+
+	// 3D Attributes
+	FMOD_3D_ATTRIBUTES attributes = { { 0 } };
+	attributes.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
+	r = footsteps->set3DAttributes(&attributes);
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

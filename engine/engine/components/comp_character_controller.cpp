@@ -221,6 +221,13 @@ void TCompCharacterController::GroundCheck(float elapsed)
 		// stick to surface - helps character stick to ground - specially when running down slopes
 
 		if (ground_actor != nullptr) {
+
+			// Check material
+			CEntity* actor_e = CHandle(ground_actor->userData);
+			if (actor_e) {
+				std::strcpy(last_material_tag, actor_e->material_tag);
+			}
+
 			if (velocity.y <= 0)
 			{
 

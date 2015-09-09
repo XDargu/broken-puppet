@@ -5,6 +5,7 @@
 #include "handle/app_msgs.h"
 #include "ai\fsm_player_legs.h"
 #include "ai\fsm_player_torso.h"
+#include "audio\sound_manager.h"
 
 struct TCompPlayerController : TBaseComponent {
 
@@ -17,6 +18,8 @@ struct TCompPlayerController : TBaseComponent {
 	XMVECTOR offset_rot_needle_back2;
 
 	CHandle entity_jump_dust;
+
+	FMOD::Studio::EventInstance* footsteps;
 public:
 	FSMPlayerLegs fsm_player_legs;
 	FSMPlayerTorso fsm_player_torso;

@@ -47,6 +47,7 @@ public:
 	float moveSpeedMultiplier;				// how much the move speed of the character will be multiplied by
 	float lerpRotation;
 	float jumpPower;						// determines the jump force applied when jumping (and therefore the jump height)
+	char last_material_tag[32];
 
 	XMVECTOR high_friction_material;		// High friction material properties
 	XMVECTOR zero_friction_material;		// Zero friction material properties
