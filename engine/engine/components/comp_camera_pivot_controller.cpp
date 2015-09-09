@@ -81,29 +81,33 @@ void TCompCameraPivotController::update(float elapsed) {
 	// Get player pivot Y rotation
 	float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());
 	float m_yaw = getYawFromVector(transform->getFront());
+	float m_pitch = getPitchFromVector(transform->getFront());
 	XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw - m_yaw);
 
 	CIOStatus &io = CIOStatus::get();
 
 	CIOStatus::TMouse mouse = io.getMouse();
-	XMVECTOR rot = XMQuaternionRotationAxis(transform->getLeft(), tilt_velocity * mouse.dy * elapsed);
+
+	// Rotación vertical que debo añadir
+	float rot_increment = tilt_velocity * mouse.dy * elapsed * io.mouse_sensibility;
+	float max_rot = max_tilt - m_pitch;
+	float min_rot = min_tilt - m_pitch;
+
+	rot_increment = clamp(rot_increment, min_rot, max_rot);
+
+	XMVECTOR rot = XMQuaternionRotationAxis(transform->getLeft(), rot_increment);
+	//rot = XMQuaternionSlerp(XMQuaternionIdentity(), rot, clamp(0.25, 0, 1));
+
+	// Rotación mía + la que debo añadir
 	transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
+	transform->rotation = XMQuaternionSlerp(orig_rot, transform->rotation, clamp(0.25, 0, 1));
+
+	// Rotación mía + incremento de rotación del player pivot
 	transform->rotation = XMQuaternionMultiply(transform->rotation, player_pivot_rot);
-
-	// Clamp max and min camera Tilt
-	float m_pitch = getPitchFromVector(transform->getFront());
-	if (m_pitch > max_tilt)
-		m_pitch = max_tilt;
-	if (m_pitch < min_tilt)
-		m_pitch = min_tilt;
-
-	m_yaw = getYawFromVector(transform->getFront());
-
-	XMVECTOR m_rotation = XMQuaternionRotationRollPitchYaw(m_pitch, m_yaw, 0);
-	transform->rotation = m_rotation;
-	
-	transform->position = XMVectorLerp(orig_pos, transform->position, min(30.f * elapsed, 1));
-	transform->rotation = XMQuaternionSlerp(orig_rot, transform->rotation, min(30.f * elapsed, 1));
+		
+	float lerp_val = 0.8f;
+	transform->position = XMVectorLerp(orig_pos, transform->position, clamp(lerp_val, 0, 1));
+	//transform->rotation = XMQuaternionSlerp(orig_rot, transform->rotation, clamp(lerp_val, 0, 1));
 	
 
 	// Clamp values with quaternion multiplication fails, why?????!!!

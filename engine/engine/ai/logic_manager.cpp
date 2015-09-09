@@ -207,10 +207,6 @@ void CLogicManager::registerHFXZone(CHandle hfx_zone){
 	HFXZones.push_back(hfx_zone);
 }
 
-void CLogicManager::registerAudioSource(CHandle audioSource){
-	audioSources.push_back(audioSource);
-}
-
 void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
@@ -244,25 +240,6 @@ void CLogicManager::unregisterZoneAABB(CHandle zone_aabb) {
 void CLogicManager::unregisterHFXZone(CHandle hfx_zone){
 	auto it = std::find(HFXZones.begin(), HFXZones.end(), hfx_zone);
 	HFXZones.erase(it);
-}
-
-void CLogicManager::unregisterAudioSource(CHandle audioSource){
-	auto it = std::find(audioSources.begin(), audioSources.end(), audioSource);
-	audioSources.erase(it);
-}
-
-CHandle CLogicManager::getAudioSourceName(std::string name){
-	for (int i = 0; i < audioSources.size(); ++i){
-		TCompAudioSource* audioSourceAux = (TCompAudioSource*)audioSources[i];
-		CHandle name_aux=audioSourceAux->getName();
-		if (name_aux.isValid()){
-			int cmp = strcmp(((TCompName*)name_aux)->name, name.c_str());
-			if (cmp == 0){
-				return audioSourceAux;
-			}
-		}
-	}
-	return CHandle();
 }
 
 CHandle CLogicManager::getPlayerZoneName(){
