@@ -98,7 +98,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 
 			if (dist <= 0.f) {
 				if (!sound_1_played) {
-					CSoundManager::get().playFXTrack("nail1");
+					//CSoundManager::get().playFXTrack("nail1");
 					sound_1_played = true;
 				}
 			}
@@ -136,7 +136,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 
 			if (dist <= 0.f) {
 				if (!sound_2_played) {
-					CSoundManager::get().playFXTrack("nail1");
+					//CSoundManager::get().playFXTrack("nail1");
 					sound_2_played = true;
 				}
 			}

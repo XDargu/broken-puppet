@@ -22,6 +22,7 @@ private:
 	std::vector<CHandle> GNLogic;
 	std::vector<CHandle> ZonesAABB;
 	std::vector<CHandle> HFXZones;
+	std::vector<CHandle> audioSources;
 
 	std::vector<CRigidAnimation> animations;
 
@@ -61,12 +62,14 @@ public:
 	void registerGNLogic(CHandle golden_logic);
 	void registerZoneAABB(CHandle zone_aabb);
 	void registerHFXZone(CHandle hfx_zone);
+	void registerAudioSource(CHandle audioSource);
 	void onTriggerEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
 	void unregisterGNLogic(CHandle golden_logic);
 	void unregisterZoneAABB(CHandle zone_aabb);
 	void unregisterHFXZone(CHandle hfx_zone);
+	void unregisterAudioSource(CHandle audioSource);
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
@@ -85,6 +88,9 @@ public:
 	void clearAnimations();
 
 	void bootLUA();
+
+	//AudioSources
+	CHandle getAudioSourceName(std::string name);
 
 	//Zone AABB
 	CHandle getPlayerZoneName();
@@ -124,9 +130,9 @@ public:
 	void playEventParameterAtPosition(std::string name, std::string parameter, float value, CVector pos);
 
 	// BASS -- TODO: Delete deprecated methods
-	void changeTrack(std::string name, bool loop);
+	/*void changeTrack(std::string name, bool loop);
 	void stopMusic();
-	void playMusic(bool loop);
+	void playMusic(bool loop);*/
 
 	// LIGHT & ENVIROMENT
 	void changeWaterLevel(float pos1, float time);

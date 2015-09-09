@@ -20,7 +20,6 @@ void TCompZoneAABB::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_transform = assertRequiredComponent<TCompTransform>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
 	m_name = assertRequiredComponent<TCompName>(this);
-
 	CLogicManager::get().registerZoneAABB(this);
 }
 

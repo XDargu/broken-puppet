@@ -34,6 +34,8 @@ function onSceneLoad_my_file()
 
 	-- ASCENSOOOOOOOOOR DE PRUEBA
 
+	ascensor_usado = false
+
 	function onTriggerEnter_escena1_ascensor_fin(who)
 		logicManager:pushPlayerLegsState("fbp_Idle");
 	end
@@ -43,12 +45,15 @@ function onSceneLoad_my_file()
 
 		if who == "Player" then
 
-			print(tostring(who) .. "Player en el trigger");
-			local scene1_elevator = logicManager:getObject("ascensor_desvan_cabina");
-			local platform_pos = scene1_elevator:getPos();
-			print(platform_pos);
-			logicManager:pushPlayerLegsState("fbp_IdleElevator");
-			scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 24), platform_pos.z), 5);
+			if ascensor_usado == false then
+				ascensor_usado = true
+				print(tostring(who) .. "Player en el trigger");
+				local scene1_elevator = logicManager:getObject("ascensor_desvan_cabina");
+				local platform_pos = scene1_elevator:getPos();
+				print(platform_pos);
+				logicManager:pushPlayerLegsState("fbp_IdleElevator");
+				scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 24), platform_pos.z), 5);
+			end
 
 		end
 

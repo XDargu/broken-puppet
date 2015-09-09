@@ -40,7 +40,7 @@ void TCompPlayerController::init() {
 		Load sounds
 	*/
 
-	CSoundManager::get().addFX2DTrack("string_free_1.ogg", "string_free_1","throw");
+	/*CSoundManager::get().addFX2DTrack("string_free_1.ogg", "string_free_1","throw");
 	CSoundManager::get().addFX2DTrack("string_free_2.ogg", "string_free_2", "throw");
 	CSoundManager::get().addFX2DTrack("string_free_3.ogg", "string_free_3", "throw");
 	CSoundManager::get().addFX2DTrack("string_free_4.ogg", "string_free_4", "throw");
@@ -50,7 +50,7 @@ void TCompPlayerController::init() {
 
 
 	CSoundManager::get().addFX2DTrack("string_grab_9.ogg", "string_player_grab", "pull");
-	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_player_grab2", "pull");
+	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_player_grab2", "pull");*/
 
 	fsm_player_legs.Init();
 	fsm_player_torso.Init();

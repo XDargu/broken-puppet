@@ -5109,7 +5109,7 @@
 <aabb min="-17.6359 -0.473695 -15.329" max="11.7305 0.352782 5.10727"/>
 <colliderMesh path="dvn1_arqui_techo_tablones_L" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
-	<entity tag = "actor" collisionTag = "Actor">
+	<entity tag = "actor_no_col" collisionTag = "Actor">
 <name name="ascensor_desvan_cabina" />
 <transform position="-8.01878 16.0005 -58.0234" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render >

@@ -28,42 +28,7 @@ public:
 		float value;
 	};
 
-	/*struct stream_effects{
-		HSTREAM stream;
-		CHandle FX_zone;
-	};
-
-	struct TMusicTrack {
-		std::string name;
-		HSTREAM stream;
-		int sound_id;
-
-		TMusicTrack(std::string the_name);
-
-		void load();
-		void unload();
-		bool is_loaded();
-
-		TMusicTrack() : name(""), stream(3435973836) {}
-	};
-
-	typedef std::pair<stream_effects, HSAMPLE> sounds_map;
-
-	//vector of emiting channels
-	//typedef std::vector< CSound* > VSounds;
-	
-	std::map<std::string, sounds_map>* sounds;
-	std::map<std::string, std::vector<sounds_map>>* sounds_categories;
-	//VSounds vector_sounds;
-
-private:
-	TMusicTrack music_tracks[8];
-	int currentTrack;
-	HSTREAM musicTracks[8];
-	bool first;
-	bool slowed;
-
-public:*/
+public:
 	CSoundManager();
 	~CSoundManager();
 	static CSoundManager& get();
@@ -72,44 +37,18 @@ public:*/
 	void playEvent(std::string path);
 
 	void playEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos);
+
+	FMOD::Studio::EventInstance* getInstance(std::string path);
+	bool setInstanceParams(FMOD::Studio::EventInstance* eventInstance, SoundParameter* parameters, int nparameters);
+	bool setInstancePos(FMOD::Studio::EventInstance* eventInstance, TTransform trans);
+
 	void playEvent(std::string path, XMVECTOR pos);
 
 	void setListenerTransform(TTransform listener);
 
 	void update(float elapsed);
 
-	void addMusicTrack(int trackID, const char* file);
-
-	void playTrack(int trackID, bool loop);
-	void playTrack(std::string name, bool loop);
-	void playFXTrack(std::string name);
-	void playFXTrack(std::string name, bool loop);
-	void addFXTrack(const char* file, std::string name);
-	void addFXTrack(const char* file, std::string name, std::string category_name);
-	void addFX2DTrack(const char* file, std::string name);
-	void addFX2DTrack(const char* file, std::string name, std::string category_name);
-	void playRandomFX(std::string category_name);
-	void playMusic(bool loop);
-	void stopMusic();
-
-	void crossFade(int trackID, float timeInSeconds, bool loop);
-
-	void playFX(std::string name);
-	void playFX(std::string name, bool loop);
-	void stopFX(std::string name);
-
-	void play3DFX(std::string name, TTransform* trans, float volume_lambda);
-
-	void play3DFX(std::string name, XMVECTOR pos);
-
 	void playImpactFX(float force, float mass, CHandle transform, std::string material);
-
-	void setSound3DFactors(float distance, float roll, float doppler);
-
-	/*void setReverbHFX(CHandle comp_hfx, HSTREAM channel);
-	void setFreeReverbHFX(CHandle comp_hfx, HSTREAM channel);
-	void setEchoHFX(CHandle comp_hfx, HSTREAM channel);*/
-	//bool set3DPosition(std::string name);
 
 	FMOD_VECTOR XMVECTORtoFmod(XMVECTOR vector);
 	XMVECTOR FmodToXMVECTOR(FMOD_VECTOR vector);
@@ -119,6 +58,9 @@ public:*/
 
 	float getMaterialTagValue(std::string material);
 
+	void ERRCHECK(FMOD_RESULT result);
+
+	bool getSlow();
 };
 
 

@@ -5,153 +5,91 @@
 #include "comp_audio_source.h"
 #include "comp_transform.h"
 #include "comp_hfx_zone.h"
+#include "comp_name.h"
 #include "ai\logic_manager.h"
 
 TCompAudioSource::TCompAudioSource() {
-	//m_mode = BASS_SAMPLE_3D;
-	m_min= 3.5f;
-	m_max= 6.f;
-	autoPlaySound = false;
 	played = false;
-	loop = false;
+	autoPlay = false;
 }
 
 TCompAudioSource::~TCompAudioSource() {
-	//CLogicManager::get().unregisterTrigger(CHandle(this));	
+	//CLogicManager::get().unregisterTrigger(CHandle(this));
+	CSoundManager::get().ERRCHECK(asociated_sound->stop(FMOD_STUDIO_STOP_IMMEDIATE));
+	CSoundManager::get().ERRCHECK(asociated_sound->release());
+	CLogicManager::get().unregisterAudioSource(this);
 }
 
 void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	std::string sound_name = atts.getString("sound", "undefined");
-	own_transform = assertRequiredComponent<TCompTransform>(this);
 
-	TCompTransform* m_trans = own_transform;
+	if (elem == "audioSource"){
+		name = assertRequiredComponent<TCompName>(this);
+		autoPlay = atts.getBool("autoplay", "false");
+	}
 
-	CSoundManager::get().playEvent(sound_name, m_trans->position);
+	if (elem == "event"){
+		std::string sound_name = atts.getString("sound", "undefined");
+		own_transform = assertRequiredComponent<TCompTransform>(this);
 
-	/*
-	std::string sound_name_copy = sound_name;
-	const char* sound_char = sound_name_copy.c_str();
-	std::size_t found = sound_name.find('.');
-	if (found != std::string::npos){
-		sound_name.replace(sound_name.find('.'), sound_name.length(), "");
-		if (sound_name != "undefined"){
-			CSoundManager::get().addFXTrack(sound_char, sound_name);
-			asociated_sound.init_sound(sound_name);
-			loop = atts.getBool("loop", false);
-			distance_max = atts.getFloat("distance", 5.5f);
-			volume = atts.getFloat("volume", 0.5f);
-			asociated_sound.setSoundVolume(volume);
-			asociated_sound.setLoop(loop);
-			autoPlaySound = true/
+		//asociated_sound = CSoundManager::get().getInstance(sound_name);
+		setInstance(sound_name);
+	}
+
+	if (elem == "param") {
+		params_names.push_back(atts.getString("param_name", "undefined"));
+		params_value.push_back(atts.getFloat("param_value", 0.f));
+	}
+
+	if (elem=="fin_param"){
+		if (!params_value.empty()){
+			const int size = sizeof(params_value.size()) / sizeof(float);
+			CSoundManager::SoundParameter params[size];
+
+			for (int j = 0; j < size; ++j){
+				params[j].name = params_names[j];
+				params[j].value = params_value[j];
+			}
+
+			bool success = CSoundManager::get().setInstanceParams(asociated_sound, params, size);
+			XASSERT(success, "Error: invalid params in audio source");
 		}
-	}*/
+		CLogicManager::get().registerAudioSource(CHandle(this));
+	}
 }
 
 void TCompAudioSource::init() {
 	player = CEntityManager::get().getByName("Player");
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
+	if (autoPlay)
+		play();
 }
 
 void TCompAudioSource::update(float elapsed){
 
+	if (asociated_sound != nullptr){
+		TCompTransform* m_trans = own_transform;
+		bool success = CSoundManager::get().setInstancePos(asociated_sound, *m_trans);
+		if (success){
 
-	//Hacer metodo que convierta XMVECTOR en BASS_3DVECTOR
-	/*BASS_3DVECTOR pos_ref;
-	BASS_3DVECTOR front_ref;
-	TCompTransform* transform = getSibling<TCompTransform>(this);
-	pos_ref.x = XMVectorGetX(transform->position);
-	pos_ref.y = XMVectorGetY(transform->position);
-	pos_ref.z = XMVectorGetZ(transform->position);
-	front_ref.x = XMVectorGetX(transform->position+transform->getFront());
-	front_ref.y = XMVectorGetY(transform->position + transform->getFront());
-	front_ref.z = XMVectorGetZ(transform->position + transform->getFront());
-	pos = &pos_ref;
-	front = &front_ref;
-	asociated_sound.setSoundPosition(pos, front, NULL);
-	BASS_Apply3D();
-	//HFX ------------------------------------------------------------------
-	CHandle comp_hfx = CLogicManager::get().soundsInsideHFXZone(transform->position);
-	setHFX(comp_hfx);
-	//----------------------------------------------------------------------
-	if (autoPlaySound){
-		player_transform = ((CEntity*)player)->get<TCompTransform>();
-		TCompTransform* p_transform = (TCompTransform*)player_transform;
-		TCompTransform* m_transform = (TCompTransform*)own_transform;
-		float distance = V3DISTANCE(transform->position, p_transform->position);
-		if (!played){
-			if (distance < distance_max){
-				asociated_sound.playSound();
-				played = true;
-			}
 		}
-		else{
-			if (loop){
-				if (distance >= distance_max){
-					asociated_sound.stopSound();
-				}
-			}
-		}
-	}*/
+	}
 }
 
-//void TCompAudioSource::setHFX(CHandle comp_hfx){
-	/*if (comp_hfx.isValid()){
-		if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::ECHO){
-			int prueba = BASS_ChannelSetFX(asociated_sound.getChannel(), BASS_FX_DX8_ECHO, 0);
-			BASS_DX8_ECHO* e = ((TCompHfxZone*)comp_hfx)->getEcho();
-			if (e != nullptr){
-				bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), e);
-				if (success){
-					BASS_FXSetParameters(prueba, e);
-				}
-				else{
-					int code = BASS_ErrorGetCode();
-					if (code == BASS_ERROR_HANDLE){
-						XASSERT(code, "Error, FX handle invalid");
-					}
-					else if (code == BASS_ERROR_ILLPARAM){
-						XASSERT(code, "Error, FX params invalid");
-					}
-					else if (code == BASS_ERROR_UNKNOWN){
-						XASSERT(code, "Error, FX Unknown error");
-					}
-				}
-			}
-		}else if (((TCompHfxZone*)comp_hfx)->getType() & TCompHfxZone::type::REVERB){
-			int prueba = BASS_ChannelSetFX(asociated_sound.getChannel(), BASS_FX_DX8_REVERB, 0);
-			BASS_DX8_REVERB* r = ((TCompHfxZone*)comp_hfx)->getReverb();
-			if (r != nullptr){
-				bool success = BASS_FXGetParameters(((TCompHfxZone*)comp_hfx)->getHFXZoneAtributtes(), r);
-				if (success){
-					BASS_FXSetParameters(prueba, r);
-				}else{
-					int code = BASS_ErrorGetCode();
-					if (code == BASS_ERROR_HANDLE){
-						XASSERT(code, "Error, FX handle invalid");
-					}
-					else if (code == BASS_ERROR_ILLPARAM){
-						XASSERT(code, "Error, FX params invalid");
-					}
-					else if (code == BASS_ERROR_UNKNOWN){
-						XASSERT(code, "Error, FX Unknown error");
-					}
-				}
-			}
-		}
-	}*/
-//}
-
-void TCompAudioSource::setSoundAsociated(std::string name, DWORD mode, float min, float max){
-	//asociated_sound.init_sound(name, mode, min, max);
+void TCompAudioSource::play(){
+	CSoundManager::get().ERRCHECK(asociated_sound->start());
 }
 
-void TCompAudioSource::setSoundAsociated(std::string name){
-	//asociated_sound.init_sound(name);
+CHandle TCompAudioSource::getName(){
+	return name;
 }
 
-/*void TCompAudioSource::set3DAttributes(DWORD mode, float min, float max){
-	m_mode = mode;
-	m_min = min;
-	m_max = max;
-}*/
+void TCompAudioSource::setInstance(std::string event_desc_name){
+	if (asociated_sound != nullptr){
+		CSoundManager::get().ERRCHECK(asociated_sound->stop(FMOD_STUDIO_STOP_IMMEDIATE));
+		CSoundManager::get().ERRCHECK(asociated_sound->release());
+	}
+	asociated_sound = CSoundManager::get().getInstance(event_desc_name);
+	XASSERT(asociated_sound != nullptr, "Error: invalid event in audio source");
+}
+
 
