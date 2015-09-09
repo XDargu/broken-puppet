@@ -32,9 +32,13 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	m_transform = assertRequiredComponent<TCompTransform>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
-	if (elem == "HFX") {
-		std::string typeHFX = atts.getString("type", "none");
-		if (typeHFX == "reverb"){
+	
+	if (elem == "reverb"){
+		float FReverbTime = atts.getFloat("reverb_time", 0.f);
+		setRevertZoneAtributtes(FReverbTime);
+	}
+
+		/*if (typeHFX == "reverb"){
 			float FInG = atts.getFloat("in_gain", 0.f);
 			float FReverbMix = atts.getFloat("reverb_mix", 0.f);
 			float FReverbTime = atts.getFloat("reverb_time", 0.f);
@@ -71,7 +75,7 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			setFreeReverbZoneAtributtes(fDryMix, fWetMix, fRoomSize, fDamp, fWidth, lMode);
 			kind = kind | type::FREE_REVERB;
 		}
-	}
+	}*/
 
 }
 
@@ -91,7 +95,15 @@ bool TCompHfxZone::isEmitterInside(XMVECTOR emitter_pos){
 		return false;
 }
 
-void TCompHfxZone::setRevertZoneAtributtes(float fInGain, float fReverbMix, float fReverbTime, float fHighFreqRTRatio){
+void TCompHfxZone::setRevertZoneAtributtes(float fReverbTime){
+	FMOD::Studio::EventInstance* reverbTime=CSoundManager::get().getInstance("event:/Mixer/reverbTime");
+	CSoundManager::SoundParameter params[] = {
+		"time", fReverbTime
+	};
+	bool success = CSoundManager::get().setInstanceParams(reverbTime, params, 1);
+}
+
+/*void TCompHfxZone::setRevertZoneAtributtes(float fInGain, float fReverbMix, float fReverbTime, float fHighFreqRTRatio){
 	reverb_params = new BASS_DX8_REVERB();
 	reverb_params->fInGain = fInGain;
 	reverb_params->fReverbMix = fReverbMix;
@@ -110,9 +122,9 @@ void TCompHfxZone::setRevertZoneAtributtes(float fInGain, float fReverbMix, floa
 	}else{
 		delete reverb_params;
 	}*/
-}
+//}
 
-void TCompHfxZone::setFreeReverbZoneAtributtes(float fDryMix, float fWetMix, float fRoomSize, float fDamp, float fWidth, DWORD lMode){
+/*void TCompHfxZone::setFreeReverbZoneAtributtes(float fDryMix, float fWetMix, float fRoomSize, float fDamp, float fWidth, DWORD lMode){
 	free_reverb_params = new BASS_BFX_FREEVERB();
 	free_reverb_params->fDryMix = fDryMix;
 	free_reverb_params->fWetMix = fWetMix;
@@ -146,9 +158,9 @@ void TCompHfxZone::setEchoZoneAtributtes(float fWetDryMix, float fFeedback, floa
 	}else{
 		delete echo_params;
 	}*/
-}
+//}
 
-BASS_DX8_ECHO* TCompHfxZone::getEcho(){
+/*BASS_DX8_ECHO* TCompHfxZone::getEcho(){
 	return echo_params;
 }
 
@@ -158,7 +170,7 @@ BASS_DX8_REVERB* TCompHfxZone::getReverb(){
 
 BASS_BFX_FREEVERB* TCompHfxZone::getFreeReverb(){
 	return free_reverb_params;
-}
+}*/
 
 void TCompHfxZone::init() {
 	CLogicManager::get().registerHFXZone(this);
