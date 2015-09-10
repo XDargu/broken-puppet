@@ -117,7 +117,7 @@ void TCompColliderMultiple::init() {
 		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
 		if (recast_aabb.intersects(m_aabb)) {
 			addInputNavMesh();
-			CNav_mesh_manager::get().colBoxes.push_back(this);
+			CNav_mesh_manager::get().colMultiples.push_back(this);
 		}
 	}
 }
