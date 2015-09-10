@@ -230,7 +230,7 @@ void createManagers() {
 	getObjManager<TCompRagdoll>()->init(64);
 	getObjManager<TCompShadows>()->init(8);
 
-	getObjManager<TCompParticleGroup>()->init(256);
+	getObjManager<TCompParticleGroup>()->init(512);
 	getObjManager<TCompParticleEditor>()->init(1);
 	getObjManager<TCompAnimEditor>()->init(1);
 
@@ -384,7 +384,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -393,7 +393,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
 	//loadScene("data/scenes/scene_boss.xml");
-	loadScene("data/scenes/scene_1.xml");
+	//loadScene("data/scenes/scene_1.xml");
 	//loadScene("data/scenes/scene_2.xml");
 
 	//loadScene("data/scenes/scene_3.xml");
@@ -473,7 +473,6 @@ void CApp::doFrame() {
 	//double delta_secs = delta_ticks.QuadPart * 1e-6;
 	float delta_secs = delta_ticks.QuadPart * (1.0f / freq.LowPart);
 	delta_time = delta_secs;
-	total_time += delta_secs;
 
 	fps = 1.0f / delta_secs;
 	float pxStep = physics_manager.timeStep;
@@ -482,6 +481,7 @@ void CApp::doFrame() {
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
 
+		total_time += delta_secs;
 		CIOStatus& io = CIOStatus::get();
 		// Update input
 		io.update(delta_secs);
@@ -503,14 +503,16 @@ void CApp::doFrame() {
 		pxStep *= time_modifier;
 
 		// Fixed update
-		fixedUpdateCounter += delta_secs;
+		if (total_time > 0.5) {
+			fixedUpdateCounter += delta_secs;
 
-		//while (fixedUpdateCounter > pxStep) {
-		//if (fixedUpdateCounter > pxStep) {
+			//while (fixedUpdateCounter > pxStep) {
+			//if (fixedUpdateCounter > pxStep) {
 			fixedUpdateCounter -= pxStep;
 			//fixedUpdateCounter = 0;
 			fixedUpdate(delta_secs);
-		//}
+			//}
+		}
 
 		update(delta_secs);
 	}
@@ -577,12 +579,15 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM6)) { }
 	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
-	if (io.becomesReleased(CIOStatus::NUM8)) { 
-	}
+	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/prefab_test.xml"); }
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
 	}*/
+
+	if (io.becomesReleased(CIOStatus::F4_KEY)) {
+		CLogicManager::get().setBand(true);
+	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		render_techniques_manager.reload("blur");
@@ -1087,8 +1092,14 @@ void CApp::renderEntities() {
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
 			ropeTech.activate();
-			float color_tension = min(dist / maxDist * 0.25f, 1);
-			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));
+			
+			bool tensed = c_rope->tensed;// dist > maxDist * 0.001f;
+			if (tensed)
+				setTint(XMVectorSet(0.46f, 0.075f, 0.075f, 1));
+			else
+				setTint(XMVectorSet(0.45f, 0.8f, 0.63f, 1));
+			/*float color_tension = min(dist / maxDist * 0.25f, 1);
+			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));*/
 			setWorldMatrix(XMMatrixIdentity());
 			rope.activateAndRender();
 

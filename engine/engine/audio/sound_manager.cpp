@@ -14,7 +14,7 @@ void CSoundManager::ERRCHECK(FMOD_RESULT result)	// this is an error handling fu
 	if (result != FMOD_OK)
 	{
 		printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-	}
+	}	
 }
 
 CSoundManager& CSoundManager::get() {
@@ -23,7 +23,6 @@ CSoundManager& CSoundManager::get() {
 
 CSoundManager::CSoundManager()
 {
-
 	slowed = false;
 
 	void *extraDriverData = NULL;
@@ -47,19 +46,20 @@ CSoundManager::CSoundManager()
 
 	invalidPosition = XMVectorSet(0, 0, 0, -112233);
 
-
 	// Underwater mixer effect
 	FMOD::Studio::EventDescription* underwater_description;
 	system->getEvent("event:/Mixer/underwater", &underwater_description);
 
 	underwater_mixer = NULL;
 	ERRCHECK(underwater_description->createInstance(&underwater_mixer));
-
+	
 	FMOD::Studio::ParameterInstance* param = NULL;
 	FMOD_RESULT r = underwater_mixer->getParameter("deepness", &param);
 	ERRCHECK(param->setValue(0));
 	
 	ERRCHECK(underwater_mixer->start());
+
+	
 }
 
 CSoundManager::~CSoundManager()

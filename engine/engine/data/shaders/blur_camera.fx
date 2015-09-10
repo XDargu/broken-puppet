@@ -76,7 +76,7 @@ float4 PSBlurCamera(
 
 	//return currentPos;
 	float2 velocity = (currentPos - previousPos) / 2.f;
-
+	velocity *= elapsed;
 	// Get the initial color at this pixel.  
 	float2 texCoord = input.UV;
 	float4 origColor = txDiffuse.Sample(samClampLinear, texCoord);
@@ -100,7 +100,8 @@ float4 PSBlurCamera(
 		else
 			color += currentColor;
 
-		texCoord += clamp(-velocity * 0.5, 0, 2) * 1 / 3;
+		//texCoord += clamp(-velocity, 0, 2);
+		texCoord -= velocity * 5;
 		
 	}
 

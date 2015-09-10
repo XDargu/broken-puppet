@@ -337,9 +337,18 @@ void TParticleSystem::update(float elapsed) {
 	//  p.pos.y += 50.f;
 	++idx;
 	}*/
+	void *data = nullptr;
+	if (particles.empty()) {
+		particles.resize(1);
+		data = &particles[0];
+		particles.clear();
+	}
+	else {
+		data = &particles[0];
+	}
 
 	if (instances_data != nullptr && particles.size() > 0) {
-		instances_data->updateFromCPU(&particles[0], particles.size() * sizeof(TParticle));
+		instances_data->updateFromCPU(data, particles.size() * sizeof(TParticle));
 	}
 }
 

@@ -89,7 +89,7 @@ void TCompCameraPivotController::update(float elapsed) {
 	CIOStatus::TMouse mouse = io.getMouse();
 
 	// Rotación vertical que debo añadir
-	float rot_increment = tilt_velocity * mouse.dy * elapsed * io.mouse_sensibility;
+	float rot_increment = tilt_velocity * mouse.dy * 0.01/* elapsed*/ * io.mouse_sensibility;
 	float max_rot = max_tilt - m_pitch;
 	float min_rot = min_tilt - m_pitch;
 

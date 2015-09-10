@@ -7,7 +7,7 @@
 
 CEntityManager entity_manager = CEntityManager::get();
 
-CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000), impact_threshold_time(0.25f) {
+CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000), impact_threshold_time(0.35f) {
 }
 
 void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
