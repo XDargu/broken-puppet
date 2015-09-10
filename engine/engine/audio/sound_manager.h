@@ -8,12 +8,20 @@
 
 class CSoundManager
 {
+public:
+	struct SoundParameter {
+		std::string name;
+		float value;
+	};
 private:
 	FMOD::Studio::Bank* masterBank;
 	FMOD::Studio::Bank* stringsBank;
 
 	FMOD::Studio::System* system;
 	std::map<std::string, FMOD::Studio::EventDescription*> event_descriptions;
+	std::map<std::string, FMOD::Studio::EventInstance*> mixer_event_instances;
+
+	std::vector<CHandle> HFXZones;
 
 	XMVECTOR invalidPosition;
 
@@ -21,17 +29,15 @@ private:
 
 	FMOD::Studio::EventInstance* underwater_mixer;
 
-public:
+	void createMixerEvent(std::string mixer_event);
+	void setMixerEventParams(std::string mixer_event, SoundParameter param);
 	
-	struct SoundParameter {
-		std::string name;
-		float value;
-	};
-
 public:
 	CSoundManager();
 	~CSoundManager();
 	static CSoundManager& get();
+
+	void init();
 
 	void playEvent(std::string path, SoundParameter* parameters, int nparameters);
 	void playEvent(std::string path);
@@ -45,6 +51,12 @@ public:
 	void playEvent(std::string path, XMVECTOR pos);
 
 	void setListenerTransform(TTransform listener);
+
+	void registerHFXZone(CHandle hfx_zone);
+
+	void unregisterHFXZone(CHandle hfx_zone);
+
+	CHandle listenerInsideHFXZone(XMVECTOR cam_pos);
 
 	void update(float elapsed);
 
