@@ -593,6 +593,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("silouette_glow");
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("skin_basic");
 		render_techniques_manager.reload("cubemap");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");

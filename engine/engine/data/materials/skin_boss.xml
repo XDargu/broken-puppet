@@ -1,11 +1,8 @@
-<!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
-<std_material name="Standardmaterial"
-diffuse="StandardDiff"
-normal="Steel_Worn_00_N"
-specular="StandardDiff"
-glossiness="StandardDiff"
-emissive="black"
-cubemap="desertcube1024"
-cubemap2="sunsetcube1024"
-tech="deferred_gbuffer"
-/>
+<std_material name="skin_boss"
+              tech="skin_basic"
+              diffuse="prota_Diffuse"
+			  normal="prota_Normal"
+			  emissive="prota_Emissive"
+			specular="prota_Specular"
+			glossiness="prota_Gloss"
+			  />
