@@ -12,7 +12,6 @@
     <sensorNeedles radius="7"/>
     <sensorTied/>
     <sensorDistPlayer/>
-    <audioSource/>
     <btGrandma/>
   </entity>
 </prefab>

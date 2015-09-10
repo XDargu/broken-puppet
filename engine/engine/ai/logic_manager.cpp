@@ -41,6 +41,7 @@ void CLogicManager::init()
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
 	player = CEntityManager::get().getByName("Player");
+	camera = CEntityManager::get().getByName("PlayerCamera");
 	player_pivot = CEntityManager::get().getByName("PlayerPivot");
 	camera_pivot = CEntityManager::get().getByName("CameraPivot");
 	if (water_transform.isValid()) {		
@@ -61,7 +62,6 @@ void CLogicManager::init()
 	//triggers.clear();
 	timers.clear();
 	GNLogic.clear();
-	HFXZones.clear();
 }
 
 CLogicManager::~CLogicManager() {}
@@ -203,14 +203,6 @@ void CLogicManager::registerZoneAABB(CHandle zone_aabb){
 	ZonesAABB.push_back(zone_aabb);
 }
 
-void CLogicManager::registerHFXZone(CHandle hfx_zone){
-	HFXZones.push_back(hfx_zone);
-}
-
-void CLogicManager::registerAudioSource(CHandle audioSource){
-	audioSources.push_back(audioSource);
-}
-
 void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
@@ -241,30 +233,6 @@ void CLogicManager::unregisterZoneAABB(CHandle zone_aabb) {
 	ZonesAABB.erase(it);
 }
 
-void CLogicManager::unregisterHFXZone(CHandle hfx_zone){
-	auto it = std::find(HFXZones.begin(), HFXZones.end(), hfx_zone);
-	HFXZones.erase(it);
-}
-
-void CLogicManager::unregisterAudioSource(CHandle audioSource){
-	auto it = std::find(audioSources.begin(), audioSources.end(), audioSource);
-	audioSources.erase(it);
-}
-
-CHandle CLogicManager::getAudioSourceName(std::string name){
-	for (int i = 0; i < audioSources.size(); ++i){
-		TCompAudioSource* audioSourceAux = (TCompAudioSource*)audioSources[i];
-		CHandle name_aux=audioSourceAux->getName();
-		if (name_aux.isValid()){
-			int cmp = strcmp(((TCompName*)name_aux)->name, name.c_str());
-			if (cmp == 0){
-				return audioSourceAux;
-			}
-		}
-	}
-	return CHandle();
-}
-
 CHandle CLogicManager::getPlayerZoneName(){
 	for (int i = 0; i < ZonesAABB.size(); ++i){
 		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
@@ -276,30 +244,6 @@ CHandle CLogicManager::getPlayerZoneName(){
 	}
 	return CHandle();
 }	
-
-CHandle CLogicManager::soundsInsideHFXZone(XMVECTOR sound_pos){
-	for (int i = 0; i < HFXZones.size(); ++i){
-		TCompHfxZone* HFXZone_comp = (TCompHfxZone*)HFXZones[i];
-		if (HFXZone_comp->isEmitterInside(sound_pos)){
-			return HFXZone_comp;
-		}
-	}
-	return CHandle();
-}
-
-CHandle CLogicManager::playerInsideHFXZone(){
-	for (int i = 0; i < HFXZones.size(); ++i){
-		TCompHfxZone* HFXZone_comp = (TCompHfxZone*)HFXZones[i];
-		if (player.isValid()) {
-			CEntity* p_entity = player;
-			TCompTransform* p_transform = p_entity->get<TCompTransform>();
-			if (HFXZone_comp->isEmitterInside(p_transform->position)){
-				return HFXZone_comp;
-			}
-		}
-	}
-	return CHandle();
-}
 
 void CLogicManager::onSwitchPressed(CHandle the_switch) {
 	TCompName* c_name = ((CEntity*)the_switch)->get<TCompName>();

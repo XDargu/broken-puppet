@@ -66,6 +66,7 @@ public:
 	static CApp& get();
 
 	void slowMotion(float time);
+	bool isSlowMotion() { return slow_motion_counter > 0; }
 };
 
 #endif

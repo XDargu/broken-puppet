@@ -17,13 +17,11 @@ TCompAudioSource::~TCompAudioSource() {
 	//CLogicManager::get().unregisterTrigger(CHandle(this));
 	CSoundManager::get().ERRCHECK(asociated_sound->stop(FMOD_STUDIO_STOP_IMMEDIATE));
 	CSoundManager::get().ERRCHECK(asociated_sound->release());
-	CLogicManager::get().unregisterAudioSource(this);
 }
 
 void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	if (elem == "audioSource"){
-		name = assertRequiredComponent<TCompName>(this);
 		autoPlay = atts.getBool("autoplay", "false");
 	}
 
@@ -42,18 +40,18 @@ void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	if (elem=="fin_param"){
 		if (!params_value.empty()){
-			const int size = sizeof(params_value.size()) / sizeof(float);
-			CSoundManager::SoundParameter params[size];
+			const int size = params_value.size();
+			std::vector<CSoundManager::SoundParameter> params;
 
 			for (int j = 0; j < size; ++j){
-				params[j].name = params_names[j];
-				params[j].value = params_value[j];
+				CSoundManager::SoundParameter param;				
+				param.name = params_names[j];
+				param.value = params_value[j];
+				params.push_back(param);
 			}
 
-			bool success = CSoundManager::get().setInstanceParams(asociated_sound, params, size);
-			XASSERT(success, "Error: invalid params in audio source");
+			bool success = CSoundManager::get().setInstanceParams(asociated_sound, &params[0], size);			
 		}
-		CLogicManager::get().registerAudioSource(CHandle(this));
 	}
 }
 
@@ -69,18 +67,11 @@ void TCompAudioSource::update(float elapsed){
 	if (asociated_sound != nullptr){
 		TCompTransform* m_trans = own_transform;
 		bool success = CSoundManager::get().setInstancePos(asociated_sound, *m_trans);
-		if (success){
-
-		}
 	}
 }
 
 void TCompAudioSource::play(){
 	CSoundManager::get().ERRCHECK(asociated_sound->start());
-}
-
-CHandle TCompAudioSource::getName(){
-	return name;
 }
 
 void TCompAudioSource::setInstance(std::string event_desc_name){

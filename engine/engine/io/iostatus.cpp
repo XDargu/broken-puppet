@@ -66,7 +66,7 @@ CIOStatus::CIOStatus( ) {
 
 	mouse.dx = 0;
 	mouse.dy = 0;
-	mouse_sensibility = 8;
+	mouse_sensibility = 2;
 	mouse.sensibility = mouse_sensibility;
 
 	POINT cursor_screen;
@@ -115,8 +115,8 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 	::GetCursorPos(&cursor_screen);
 	::ScreenToClient(App.hWnd, &cursor_screen);
 	
-	dx = (cursor_screen.x - prev_x)*elapsed*sensibility;
-	dy = (cursor_screen.y - prev_y)*elapsed*sensibility;
+	dx = (cursor_screen.x - prev_x);
+	dy = (cursor_screen.y - prev_y);
 
 	screen_x = cursor_screen.x;
 	screen_y = cursor_screen.y;

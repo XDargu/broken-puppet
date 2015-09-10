@@ -38,8 +38,12 @@ void TCompPlayerPivotController::update(float elapsed) {
 	CIOStatus &io = CIOStatus::get();
 
 	CIOStatus::TMouse mouse = io.getMouse();
-	XMVECTOR rot = XMQuaternionRotationAxis(transform->getUp(), -rotation_velocity * mouse.dx * elapsed);
-	transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
+	XMVECTOR rot = XMQuaternionRotationAxis(transform->getUp(), -rotation_velocity * mouse.dx * elapsed * io.mouse_sensibility);
+
+	float lerp_value = 0.45f;
+	transform->rotation = XMQuaternionSlerp(transform->rotation, XMQuaternionMultiply(transform->rotation, rot), clamp(lerp_value, 0, 1));
+
+	//transform->rotation = XMQuaternionMultiply(transform->rotation, rot);
 }
 
 void TCompPlayerPivotController::pointAt(XMVECTOR target) {

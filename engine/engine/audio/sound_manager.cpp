@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "sound_manager.h"
+#include "components\comp_aabb.h"
 #include "components\comp_hfx_zone.h"
 #include "ai\logic_manager.h"
 #include "entity_manager.h"
@@ -21,6 +22,16 @@ CSoundManager& CSoundManager::get() {
 	return the_sound_manager;
 }
 
+CSoundManager::~CSoundManager()
+{
+
+	ERRCHECK(stringsBank->unload());
+	ERRCHECK(masterBank->unload());
+
+	ERRCHECK(system->release());
+	event_descriptions.clear();
+}
+
 CSoundManager::CSoundManager()
 {
 
@@ -40,36 +51,54 @@ CSoundManager::CSoundManager()
 
 	// Load sound bnaks
 	masterBank = NULL;
-	ERRCHECK(system->loadBankFile("data/sounds/Master Bank.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank));
+	ERRCHECK(system->loadBankFile("data/sounds/Desktop/Master Bank.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank));
 
 	stringsBank = NULL;
-	ERRCHECK(system->loadBankFile("data/sounds/Master Bank.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank));
+	ERRCHECK(system->loadBankFile("data/sounds/Desktop/Master Bank.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank));
 
 	invalidPosition = XMVectorSet(0, 0, 0, -112233);
 
 
 	// Underwater mixer effect
-	FMOD::Studio::EventDescription* underwater_description;
-	system->getEvent("event:/Mixer/underwater", &underwater_description);
-
-	underwater_mixer = NULL;
-	ERRCHECK(underwater_description->createInstance(&underwater_mixer));
-
-	FMOD::Studio::ParameterInstance* param = NULL;
-	FMOD_RESULT r = underwater_mixer->getParameter("deepness", &param);
-	ERRCHECK(param->setValue(0));
-	
-	ERRCHECK(underwater_mixer->start());
+	createMixerEvent("event:/Mixer/underwater");
+	createMixerEvent("event:/Mixer/reverbTime");
+	createMixerEvent("event:/Mixer/reverbHighCut");
+	createMixerEvent("event:/Mixer/reverbHFDecay");
+	createMixerEvent("event:/Mixer/reverbEarlyLate");
+	createMixerEvent("event:/Mixer/reverbLateDelay");
+	createMixerEvent("event:/Mixer/reverbHFReference");
+	createMixerEvent("event:/Mixer/reverbDiffusion");
+	createMixerEvent("event:/Mixer/reverbDensity");
+	createMixerEvent("event:/Mixer/reverbLowGain");
+	createMixerEvent("event:/Mixer/reverbLowFreq");
+	createMixerEvent("event:/Mixer/reverbWetLevel");
+	createMixerEvent("event:/Mixer/reverbDryLevel");
+	createMixerEvent("event:/Mixer/reverbEarlyDelay");
 }
 
-CSoundManager::~CSoundManager()
-{
+void CSoundManager::init(){
+	HFXZones.clear();
+}
 
-	ERRCHECK(stringsBank->unload());
-	ERRCHECK(masterBank->unload());
+void CSoundManager::createMixerEvent(std::string mixer_event) {
+	FMOD::Studio::EventDescription* event_description;
+	system->getEvent(mixer_event.c_str(), &event_description);
+	
+	FMOD::Studio::EventInstance* instance = NULL;
+	ERRCHECK(event_description->createInstance(&instance));
 
-	ERRCHECK(system->release());
-	event_descriptions.clear();
+	ERRCHECK(instance->start());
+
+	mixer_event_instances[mixer_event] = instance;
+}
+
+void CSoundManager::setMixerEventParams(std::string mixer_event, SoundParameter parameter) {
+
+	// Set the parameter
+	FMOD::Studio::ParameterInstance* param = NULL;
+	FMOD_RESULT r = mixer_event_instances[mixer_event]->getParameter(parameter.name.c_str(), &param);
+
+	ERRCHECK(param->setValue(parameter.value));
 }
 
 void CSoundManager::playEvent(std::string path) {
@@ -206,14 +235,125 @@ void CSoundManager::update(float elapsed) {
 	// Update underwater effect
 	TCompCamera* cam = render_manager.activeCamera;
 	if (cam) {
+
+		XMVECTOR camera_position = cam->getPosition();
+
 		float camera_pos = XMVectorGetY(cam->getPosition());
 		float level = CApp::get().water_level;
 
 		float deepness = level - camera_pos;
 
-		FMOD::Studio::ParameterInstance* param = NULL;
-		FMOD_RESULT r = underwater_mixer->getParameter("deepness", &param);
-		ERRCHECK(param->setValue(deepness));
+		CSoundManager::SoundParameter param = { "deepness", deepness };
+		setMixerEventParams("event:/Mixer/underwater", param);
+
+		TCompHfxZone* hfx_zone = listenerInsideHFXZone(cam->getPosition());
+		if (hfx_zone){
+			param.name = "time";
+			param.value = hfx_zone->FReverbTime;
+			setMixerEventParams("event:/Mixer/reverbTime", param);
+
+			param.name = "highcut";
+			param.value = hfx_zone->FHighCut;
+			setMixerEventParams("event:/Mixer/reverbHighCut", param);
+
+			param.name = "hfdecay";
+			param.value = hfx_zone->FHFDecay;
+			setMixerEventParams("event:/Mixer/reverbHFDecay", param);
+
+			param.name = "earlylate";
+			param.value = hfx_zone->FEarlyLate;
+			setMixerEventParams("event:/Mixer/reverbEarlyLate", param);
+
+			param.name = "latedelay";
+			param.value = hfx_zone->FLateDelay;
+			setMixerEventParams("event:/Mixer/reverbLateDelay", param);
+
+			param.name = "hfreference";
+			param.value = hfx_zone->FHFReference;
+			setMixerEventParams("event:/Mixer/reverbHFReference", param);
+
+			param.name = "diffusion";
+			param.value = hfx_zone->FDiffusion;
+			setMixerEventParams("event:/Mixer/reverbDiffusion", param);
+
+			param.name = "density";
+			param.value = hfx_zone->FDensity;
+			setMixerEventParams("event:/Mixer/reverbDensity", param);
+
+			param.name = "lowgain";
+			param.value = hfx_zone->FLowGain;
+			setMixerEventParams("event:/Mixer/reverbLowGain", param);
+
+			param.name = "lowfreq";
+			param.value = hfx_zone->FLowFreq;
+			setMixerEventParams("event:/Mixer/reverbLowFreq", param);
+
+			param.name = "wetlevel";
+			param.value = hfx_zone->FWetLevel;
+			setMixerEventParams("event:/Mixer/reverbWetLevel", param);
+
+			param.name = "drylevel";
+			param.value = hfx_zone->FDryLevel;
+			setMixerEventParams("event:/Mixer/reverbDryLevel", param);
+
+			param.name = "earlydelay";
+			param.value = hfx_zone->FEarlyDelay;
+			setMixerEventParams("event:/Mixer/reverbEarlyDelay", param);
+
+		}else{
+			param.name = "time";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbTime", param);
+
+			param.name = "highcut";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbHighCut", param);
+
+			param.name = "hfdecay";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbHFDecay", param);
+
+			param.name = "earlylate";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbEarlyLate", param);
+
+			param.name = "latedelay";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbLateDelay", param);
+
+			param.name = "hfreference";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbHFReference", param);
+
+			param.name = "diffusion";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbDiffusion", param);
+
+			param.name = "density";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbDensity", param);
+
+			param.name = "lowgain";
+			param.value = 75.f;
+			setMixerEventParams("event:/Mixer/reverbLowGain", param);
+
+			param.name = "lowfreq";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbLowFreq", param);
+
+			param.name = "wetlevel";
+			param.value = 89.f;
+			setMixerEventParams("event:/Mixer/reverbWetLevel", param);
+
+			param.name = "drylevel";
+			param.value = 89.f;
+			setMixerEventParams("event:/Mixer/reverbDryLevel", param);
+
+			param.name = "earlydelay";
+			param.value = 0.f;
+			setMixerEventParams("event:/Mixer/reverbEarlyDelay", param);
+
+		}
 	}
 
 	system->update();
@@ -309,4 +449,25 @@ float CSoundManager::getMaterialTagValue(std::string material) {
 	if (material == "piano") { return 10; }
 	// Default: Wood
 	return 0;
+}
+
+void CSoundManager::registerHFXZone(CHandle hfx_zone){
+	HFXZones.push_back(hfx_zone);
+}
+
+void CSoundManager::unregisterHFXZone(CHandle hfx_zone){
+	auto it = std::find(HFXZones.begin(), HFXZones.end(), hfx_zone);
+	HFXZones.erase(it);
+}
+
+CHandle CSoundManager::listenerInsideHFXZone(XMVECTOR cam_pos){
+	for (int i = 0; i < HFXZones.size(); ++i){
+		TCompHfxZone* HFXZone_comp = HFXZones[i];
+		CEntity* entity = HFXZones[i].getOwner();
+		TCompAABB* HFXAABB = entity->get<TCompAABB>();
+		if (HFXAABB->containts(cam_pos)){
+			return HFXZone_comp;
+		}
+	}
+	return CHandle();
 }
