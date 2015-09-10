@@ -5,6 +5,9 @@
 #include "audio\bass.h"
 #include "audio\bass_fx.h"
 #include "aabb.h"
+#include "fmod.hpp"
+#include "fmod_studio.hpp"
+#include "fmod_errors.h"
 
 struct TCompHfxZone : TBaseComponent {
 	struct type
@@ -33,6 +36,8 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
 	HFX getHFXZoneAtributtes();
+
+	void setRevertZoneAtributtes(float fReverbTime);
 
 	void setRevertZoneAtributtes(float fInGain, float fReverbMix, float fReverbTime, float fHighFreqRTRatio);
 

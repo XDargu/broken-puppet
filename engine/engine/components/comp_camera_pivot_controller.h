@@ -16,7 +16,7 @@ public:
 
 	physx::PxVec3 offset;
 
-	TCompCameraPivotController() : tilt_velocity(deg2rad(90.0f)), min_tilt(deg2rad(-75)), max_tilt(deg2rad(75)) {}
+	TCompCameraPivotController() : tilt_velocity(deg2rad(30.0f)), min_tilt(deg2rad(-75)), max_tilt(deg2rad(75)) {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

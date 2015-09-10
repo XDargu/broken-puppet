@@ -93,8 +93,8 @@ public:
     int   screen_y;
     float normalized_x;       
     float normalized_y;
-    int   dx;
-    int   dy;
+    float   dx;
+    float   dy;
 	float sensibility;
     int   prev_x;
     int   prev_y;

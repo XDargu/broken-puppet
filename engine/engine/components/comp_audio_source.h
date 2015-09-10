@@ -15,7 +15,6 @@ private:
 	bool autoPlay;
 	std::vector<std::string> params_names;
 	std::vector<float> params_value;
-	CHandle name;
 public:
 	FMOD::Studio::EventInstance* asociated_sound;
 public:
@@ -30,8 +29,6 @@ public:
 	void setInstance(std::string event_desc_name);
 
 	void update(float elapsed);
-
-	CHandle getName();
 
 	void play();
 };
