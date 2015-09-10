@@ -21,7 +21,6 @@ private:
 	std::vector<CHandle> triggers;
 	std::vector<CHandle> GNLogic;
 	std::vector<CHandle> ZonesAABB;
-	std::vector<CHandle> HFXZones;
 
 	std::vector<CRigidAnimation> animations;
 
@@ -43,6 +42,7 @@ private:
 	CHandle player;
 	CHandle player_pivot;
 	CHandle camera_pivot;
+	CHandle camera;
 
 	std::string scene_to_load;
 public:
@@ -60,13 +60,11 @@ public:
 	void registerTrigger(CHandle trigger);
 	void registerGNLogic(CHandle golden_logic);
 	void registerZoneAABB(CHandle zone_aabb);
-	void registerHFXZone(CHandle hfx_zone);
 	void onTriggerEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
 	void unregisterGNLogic(CHandle golden_logic);
 	void unregisterZoneAABB(CHandle zone_aabb);
-	void unregisterHFXZone(CHandle hfx_zone);
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
@@ -91,10 +89,6 @@ public:
 
 	//Golden Needle
 	bool playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN);
-
-	//HFX 
-	CHandle soundsInsideHFXZone(XMVECTOR sound_pos);
-	CHandle playerInsideHFXZone();
 
 	CHandle getPlayerHandle() { return player; }
 
