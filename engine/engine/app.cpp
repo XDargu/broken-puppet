@@ -532,9 +532,11 @@ void CApp::update(float elapsed) {
 		exit(0);
 	}	
 
-	if (io.becomesReleased(CIOStatus::EXTRA)) {
-		CHandle audioPrueba=CLogicManager::get().getAudioSourceName("prueba_audioSource");
-		((TCompAudioSource*)audioPrueba)->play();
+	if (io.isPressed(CIOStatus::EXTRA)) {
+		
+		/*CHandle audioPrueba=CLogicManager::get().getAudioSourceName("prueba_audioSource");
+		((TCompAudioSource*)audioPrueba)->play();*/
+		CLogicManager::get().cameraLookAtPosition(CLogicManager::get().getObject("EnemyGrandma_75.0").getPosition());
 	}
 
 	/*if (io.becomesReleased(CIOStatus::EXTRA)) {

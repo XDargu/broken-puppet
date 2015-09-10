@@ -7,7 +7,7 @@
 
 CEntityManager entity_manager = CEntityManager::get();
 
-CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000), impact_threshold_time(0.5f) {
+CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000), impact_threshold_time(0.25f) {
 }
 
 void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
@@ -108,10 +108,11 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
 
 				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+				bool slow_motion = CApp::get().isSlowMotion();
 
 				// Sound
 				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				if (timestamp_reached) {
+				if (timestamp_reached || slow_motion) {
 					
 					CSoundManager::get().playImpactFX(force, first_rigid->getMass(), entity_transform, firstActorEntity->material_tag);
 					first_rigid->impact_timestamp = current_time;
@@ -157,10 +158,11 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
 
 				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+				bool slow_motion = CApp::get().isSlowMotion();
 
 				// Sound
 				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				if (timestamp_reached) {
+				if (timestamp_reached || slow_motion) {
 					CSoundManager::get().playImpactFX(force, first_rigid->getMass(), entity_transform, secondActorEntity->material_tag);
 					first_rigid->impact_timestamp = current_time;
 
