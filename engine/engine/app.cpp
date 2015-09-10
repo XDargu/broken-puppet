@@ -44,6 +44,10 @@ using namespace physx;
 #include "audio\sound.h"
 #include "audio\sound_manager.h"
 
+#include "theoraplayer/TheoraPlayer.h"
+#include "theoraplayer/TheoraDataSource.h"
+#include "theoraplayer/TheoraVideoManager.h"
+
 
 static CApp the_app;
 
@@ -58,6 +62,15 @@ CSoundManager            &sm = CSoundManager::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
+
+// Video
+TheoraVideoManager *mgr;
+TheoraVideoClip *clip = nullptr;
+
+unsigned long endframe;
+ID3D11Texture2D* tex;
+CTexture* videoTexture;
+ID3D11ShaderResourceView* m_shaderResourceView;
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
@@ -339,6 +352,7 @@ bool CApp::create() {
 	srand((unsigned int)time(NULL));
 
 	createManagers();
+	loadVideo("bunny.ogg");
 
 #ifdef _DEBUG
 	// Init AntTweakBar
@@ -472,7 +486,6 @@ void CApp::doFrame() {
 	//delta_ticks.QuadPart /= freq.QuadPart;
 	//double delta_secs = delta_ticks.QuadPart * 1e-6;
 	float delta_secs = delta_ticks.QuadPart * (1.0f / freq.LowPart);
-	delta_time = delta_secs;
 
 	fps = 1.0f / delta_secs;
 	float pxStep = physics_manager.timeStep;
@@ -481,6 +494,7 @@ void CApp::doFrame() {
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
 
+		delta_time = delta_secs;
 		total_time += delta_secs;
 		CIOStatus& io = CIOStatus::get();
 		// Update input
@@ -790,6 +804,14 @@ void CApp::fixedUpdate(float elapsed) {
 }
 
 void CApp::render() {
+
+	
+	static bool playVideo = true;
+	if (playVideo) {
+		::render.activateBackbuffer();
+		playVideo = renderVideo();
+		return;
+	}
 
 	// Render ---------------------
 	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
@@ -1535,4 +1557,95 @@ void CApp::slowMotion(float time) {
 	time_modifier = 0.05f;
 	slow_motion_counter = time;
 	CSoundManager::get().activateSlowMo();
+}
+
+void CApp::loadVideo(const char* name)
+{
+#ifndef _DEBUG
+	mgr = new TheoraVideoManager();
+	char full_name[MAX_PATH];
+	::sprintf(full_name, "data/videos/%s", name);
+	clip = mgr->createVideoClip(full_name, TheoraOutputMode::TH_RGBX, 16);
+
+	int w = clip->getWidth();
+	int h = clip->getHeight();
+
+	D3D11_TEXTURE2D_DESC desc;
+	// Create tex2D
+	::ZeroMemory(&desc, sizeof(desc));
+	desc.Width = w;
+	desc.Height = h;
+	desc.ArraySize = 1;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.MipLevels = 1;
+
+	endframe = 0;
+
+	HRESULT hr = ::render.device->CreateTexture2D(&desc, NULL, &tex);
+	if (FAILED(hr)) {
+		dbg("FAILED CreateTexture2D\n");
+	}
+	videoTexture = new CTexture();
+	endframe = int(clip->getDuration() * clip->getFPS());
+	clip->play();
+#endif
+}
+
+bool CApp::renderVideo()
+{
+
+	TheoraVideoFrame *frame = clip->getNextFrame();
+
+	UINT w = clip->getWidth();
+	UINT h = clip->getHeight();
+
+	const float RED[4] = { 1.f, 0.f, 0.f, 1.0 };
+	::render.ctx->ClearRenderTargetView(::render.render_target_view, RED);
+	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	if (frame){
+		D3D11_MAPPED_SUBRESOURCE resource;
+		HRESULT hr = ::render.ctx->Map(tex, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+		if (FAILED(hr)) {
+			return false;
+		}
+		// Copy full memory block
+		unsigned char* buffer = frame->getBuffer();
+		BYTE* mappedData = reinterpret_cast<BYTE*>(resource.pData);
+		for (UINT i = 0; i < h; ++i)
+		{
+			memcpy(mappedData, buffer, w * 4);
+			mappedData += resource.RowPitch;
+			buffer += w * 4;
+		}
+		// Unlock resource
+		::render.ctx->Unmap(tex, 0);
+		clip->popFrame();
+		if (frame->getFrameNumber() >= (endframe - 1)){
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			clip = nullptr;
+			mgr = nullptr;
+			return false;
+		}
+	}
+
+	::render.device->CreateShaderResourceView(tex, 0, &m_shaderResourceView);
+	videoTexture->setResource(tex);
+	videoTexture->setResourceView(m_shaderResourceView);
+	drawTexture2D(0, 0, xres, yres, videoTexture);
+	//drawLoadingImage(0, 0, config.xres, config.yres, "", videoTexture);
+
+	::render.swap_chain->Present(0, 0);
+
+	//dbg("elaps: %f\n", elaps);
+	mgr->update(delta_time);
+
+	return true;
 }
