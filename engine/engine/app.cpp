@@ -886,7 +886,15 @@ void CApp::render() {
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
-	
+
+	renderEntities();
+	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
+	render_manager.renderAll(&camera, false, false);
+	activateRSConfig(RSCFG_REVERSE_CULLING);
+	render_manager.renderAll(&camera, false, true);
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DEFAULT);
+
 	activateCamera(camera, 1);
 	
 	ssrr.apply(rt_base);
@@ -954,15 +962,10 @@ void CApp::render() {
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
-	renderEntities();
+	
 
 	
-	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
-	render_manager.renderAll(&camera, false, false);
-	activateRSConfig(RSCFG_REVERSE_CULLING);
-	render_manager.renderAll(&camera, false, true);
-	activateRSConfig(RSCFG_DEFAULT);
-	activateZConfig(ZCFG_DEFAULT);
+	
 
 #ifdef _DEBUG
 	renderDebugEntities();
