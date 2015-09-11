@@ -726,12 +726,14 @@ macroScript MCVAssetBrowser
 		(
 			mLocalRotationSpeed type:#float ui:mLocalRotationSpeed default:2
 			mLocalRotationAxis type:#string default: "X"
+			mMoveSpeedParent type: #boolean ui: mMoveSpeedParent default: false
 		)
 
 		rollout params "Object Custom Local Rotation"
 		(
 			spinner  mLocalRotationSpeed "Velocidad" type: #float range:[-100, 100,2]
 			dropdownlist mLocalRotationAxisList "Eje" items:# ("X","Y","Z")
+			checkbox mMoveSpeedParent "Move with parent" type: #boolean
 			
 			on params open do (
 				mLocalRotationAxisList.selection = findItem mLocalRotationAxisList.items mLocalRotationAxis

@@ -1378,7 +1378,13 @@ clearlistener()
 			objPos = obj.position
 			objRef = getRelativeTransformTrans obj.objectTransform obj.transform
 			
-			mString = "<colliderMulti>\n"
+			mString = "<colliderMulti staticFriction=\""  \
+															+ obj.modifiers[#PhysX_Rigid_Body].StaticFriction as string + "\"" \
+										 + " dynamicFriction=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].DynamicFriction as string + "\"" \
+										 + " restitution=\"" \
+															+ obj.modifiers[#PhysX_Rigid_Body].Bounciness as string + "\"" \
+			+ ">\n"
 			
 			for i = 1 to count do (
 				local type = modRb.GetRBMeshType i
@@ -2455,9 +2461,12 @@ fn getPlatformPath obj = (
 		if ( obj.mLocalRotationAxis == "Y" ) then (axis = 1) 
 		if ( obj.mLocalRotationAxis == "Z" ) then (axis = 2) 
 		
+		local moveParent = "false"
+		if (obj.mMoveSpeedParent == true) then ( moveParent = "true" )
 		local mString = "<localRotation " \
 											+ "speed=\"" + obj.mLocalRotationSpeed as string + "\" " \
 											+ "axis=\"" + axis as string + "\" " \
+											+ "moveSpeedParent=\"" + moveParent as string + "\" " \
 											+ "/>\n"
 		return mString
 	)
@@ -2966,8 +2975,9 @@ fn getPlatformPath obj = (
 					if (mPrefab == false) then 
 					(
 						local collisionTag = getEntityCollisionTag obj
+						local materialTag = getEntityMaterialTag obj
 						local tag = getEntityTag obj
-						mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+						mXML += "\t<entity " + tag + " " + collisionTag + " " + materialTag + ">\n"
 						for func in functions do (
 							mXML += "" + func obj
 						)
@@ -3142,8 +3152,9 @@ fn getPlatformPath obj = (
 					if (mPrefab == false) then 
 					(
 						local collisionTag = getEntityCollisionTag obj
+						local materialTag = getEntityMaterialTag obj
 						local tag = getEntityTag obj
-						mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+						mXML += "\t<entity " + tag + " " + collisionTag + " " + materialTag + ">\n"
 						for func in functions do (
 							mXML += "" + func obj
 						)
@@ -3179,8 +3190,9 @@ fn getPlatformPath obj = (
 			if (mPrefab == false) then 
 			(
 				local collisionTag = getEntityCollisionTag obj
+				local materialTag = getEntityMaterialTag obj
 				local tag = getEntityTag obj
-				mXML += "\t<entity " + tag + " " + collisionTag +">\n"
+				mXML += "\t<entity " + tag + " " + collisionTag + " " + materialTag + ">\n"
 				for func in functions do (
 					mXML += "" + func obj
 				)
