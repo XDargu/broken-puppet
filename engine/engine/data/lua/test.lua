@@ -59,6 +59,29 @@ function onSceneLoad_my_file()
 
 	end
 
+	function onTriggerEnter_trigger_asc_crematorio_fin(who)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+	end
+
+	function onTriggerEnter_trigger_asc_crematorio(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+
+			if ascensor_usado == false then
+				ascensor_usado = true
+				print(tostring(who) .. "Player en el trigger");
+				local scene1_elevator = logicManager:getObject("ascensor_crematorio_cabina");
+				local platform_pos = scene1_elevator:getPos();
+				print(platform_pos);
+				logicManager:pushPlayerLegsState("fbp_IdleElevator");
+				scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 23), platform_pos.z), 5);
+			end
+
+		end
+
+	end
+
 end
 
 initPos = 0;
