@@ -352,7 +352,11 @@ bool CApp::create() {
 	srand((unsigned int)time(NULL));
 
 	createManagers();
+
+	game_state = TGameState::INITIAL_VIDEO;
+#ifndef _DEBUG
 	loadVideo("bunny.ogg");
+#endif
 
 #ifdef _DEBUG
 	// Init AntTweakBar
@@ -398,11 +402,16 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
+	loadScene("data/scenes/empty_scene.xml");
+#ifdef _DEBUG
+	game_state = TGameState::GAMEPLAY;
+	loadScene("data/scenes/my_file.xml");
+#endif
 
 	//loadScene("data/scenes/test_dificultad.xml");
 	// XML Pruebas
@@ -536,6 +545,14 @@ void CApp::doFrame() {
 }
 
 void CApp::update(float elapsed) {
+
+	if (game_state == TGameState::INITIAL_VIDEO) {
+		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+			game_state = TGameState::GAMEPLAY;
+			loadScene("data/scenes/my_file.xml");
+		}
+		return;
+	}
 
 	if (pause)
 		return;
@@ -780,6 +797,10 @@ void CApp::update(float elapsed) {
 
 // Physics update
 void CApp::fixedUpdate(float elapsed) {
+
+	if (game_state == TGameState::INITIAL_VIDEO)
+		return;
+
 	if (pause)
 		return;
 
@@ -805,11 +826,13 @@ void CApp::fixedUpdate(float elapsed) {
 
 void CApp::render() {
 
-	
-	static bool playVideo = true;
-	if (playVideo) {
+	if (game_state == TGameState::INITIAL_VIDEO) {
 		::render.activateBackbuffer();
-		playVideo = renderVideo();
+		bool playVideo = renderVideo();
+		if (!playVideo) {
+			game_state = TGameState::GAMEPLAY;
+			loadScene("data/scenes/my_file.xml");
+		}
 		return;
 	}
 
@@ -1427,7 +1450,7 @@ void CApp::loadScene(std::string scene_name) {
 		render_manager.activeCamera = e->get<TCompCamera>();
 	}
 
-	XASSERT(render_manager.activeCamera.isValid(), "Camera not valid");
+	//XASSERT(render_manager.activeCamera.isValid(), "Camera not valid");
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------

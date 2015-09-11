@@ -7,6 +7,15 @@ class CEntity;
 
 class CApp {
 
+	enum TGameState {
+		INITIAL_VIDEO,
+		MAIN_MENU,
+		GAMEPLAY,
+		FINAL_VIDEO
+	};
+
+	TGameState game_state;
+
 	void update(float elapsed);
 	void fixedUpdate(float elapsed); // Physx update
 	void render();
