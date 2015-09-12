@@ -83,7 +83,7 @@ struct TCompSwitchPushController : TBaseComponent{
 			onPress();
 			pressed = true;
 		}
-		else if ((pressed == true) && (dist_actual < limit / 2)){
+		else if ((pressed == true) && (dist_actual < limit / 6)){
 			// Call onPress function
 			onLeave();
 			pressed = false;
