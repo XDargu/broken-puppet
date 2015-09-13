@@ -1,1 +1,1 @@
-<std_material name="cristal_mat" diffuse="cristal_diffuse" normal="cristal_normal" specular="cristal_specular" glossiness="cristal_gloss" emissive="" emissive_off="" />
+<std_material name="cristal_mat" diffuse="cristal_diffuse" normal="exterior_normal" specular="cristal_specular" glossiness="cristal_gloss" emissive="cristal_diffuse" emissive_off="" />

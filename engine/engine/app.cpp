@@ -886,7 +886,15 @@ void CApp::render() {
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
-	
+
+	renderEntities();
+	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
+	render_manager.renderAll(&camera, false, false);
+	activateRSConfig(RSCFG_REVERSE_CULLING);
+	render_manager.renderAll(&camera, false, true);
+	activateRSConfig(RSCFG_DEFAULT);
+	activateZConfig(ZCFG_DEFAULT);
+
 	activateCamera(camera, 1);
 	
 	ssrr.apply(rt_base);
@@ -954,15 +962,10 @@ void CApp::render() {
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
 	//render_manager.renderAll((TCompCamera*)activeCamera, ((TCompTransform*)((CEntity*)activeCamera.getOwner())->get<TCompTransform>()));
-	renderEntities();
+	
 
 	
-	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
-	render_manager.renderAll(&camera, false, false);
-	activateRSConfig(RSCFG_REVERSE_CULLING);
-	render_manager.renderAll(&camera, false, true);
-	activateRSConfig(RSCFG_DEFAULT);
-	activateZConfig(ZCFG_DEFAULT);
+	
 
 #ifdef _DEBUG
 	renderDebugEntities();
@@ -1398,6 +1401,7 @@ void CApp::loadScene(std::string scene_name) {
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 
 	is_ok &= renderUtilsCreate();
+	is_ok &= deferred.create(xres, yres);
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
 	
@@ -1454,8 +1458,6 @@ void CApp::loadScene(std::string scene_name) {
 	font.camera = render_manager.activeCamera;
 
 	// Ctes ---------------------------
-
-	is_ok &= deferred.create(xres, yres);
 
 	XASSERT(is_ok, "Error creating deferred targets");
 
