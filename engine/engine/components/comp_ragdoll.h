@@ -29,13 +29,18 @@ public:
 
 	void setCollisonEnemy(bool active);
 
+	void setCollisonPlayerBone(bool active, int bone_id);
+
+	void setCollisonEnemyBone(bool active, int bone_id);
+
 	void setCollisionGroups();
 
 	void breakJoints();
 
 	PxRigidDynamic* getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir);
 
-	void disableBoneTree(PxRigidDynamic* bone);
+	void disableBoneTree(int bone);
+	void enableBoneTree(int bone);
 };
 
 #endif
