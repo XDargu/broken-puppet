@@ -23,6 +23,9 @@ function onSceneLoad_my_file()
 
 	logicManager:playSubtitles("SUST001");
 
+	logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
+	logicManager:setTimer("timerMolon", 1);
+
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
 
@@ -32,6 +35,10 @@ function onSceneLoad_my_file()
 			player:teleportToPos(initPos);
 		end
 
+	end
+
+	function onTimerEnd_timerMolon()
+		logicManager:releaseCameraLock();
 	end
 
 	-- ASCENSOOOOOOOOOR DE PRUEBA

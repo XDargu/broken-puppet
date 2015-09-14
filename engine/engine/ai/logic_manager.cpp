@@ -53,6 +53,8 @@ void CLogicManager::init()
 	current_subtitle.text = "notext";
 	subtitle_counter = 0;	
 
+	lock_on_target = CHandle();
+
 	particle_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
@@ -192,8 +194,24 @@ void CLogicManager::update(float elapsed) {
 		keyframes_to_delete.clear();
 	*/
 
-	if (scene_to_load != "") {
-		CApp::get().loadScene(scene_to_load);
+	// Update lock on
+	if (lock_on_target.isValid()) {
+		CEntity* lock_on_entity = lock_on_target;
+		if (lock_on_entity) {
+			TCompTransform* transform = lock_on_entity->get<TCompTransform>();
+			if (transform) {
+				if (player_pivot.isValid() && camera_pivot.isValid()) {
+					CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+					CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+					if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+						XMVECTOR aux_pos = transform->position + XMVectorSet(0, 1.5f, 0, 0);
+						((TCompPlayerPivotController*)player_pivot_c)->pointAt(aux_pos);
+						((TCompCameraPivotController*)camera_pivot_c)->pointAt(aux_pos);
+					}
+				}
+			}
+		}
 	}
 
 	// Update band height
@@ -215,6 +233,10 @@ void CLogicManager::update(float elapsed) {
 				current_subtitle.text = "notext";
 			}
 		}
+	}
+
+	if (scene_to_load != "") {
+		CApp::get().loadScene(scene_to_load);
 	}
 }
 
@@ -502,6 +524,8 @@ void CLogicManager::bootLUA() {
 		.set("setMediumShotActive", &CLogicManager::setPlayerCameraMediumShotActive)
 		.set("setLongShotActive", &CLogicManager::setPlayerCameraLongShotActive)
 		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
+		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
+		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
 	;
 
 	// Register the bot class
@@ -828,4 +852,12 @@ void CLogicManager::resetPlayerCamera() {
 			camera_controller->medium_shot = false;
 		}
 	}
+}
+
+void CLogicManager::lockOnBot(CBot bot) {
+	lock_on_target = bot.getEntityHandle();
+}
+
+void CLogicManager::releaseCameraLock() {
+	lock_on_target = CHandle();
 }

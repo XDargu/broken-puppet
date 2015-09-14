@@ -53,6 +53,9 @@ private:
 	CHandle camera_pivot;
 	CHandle camera;
 
+	// Lock on target
+	CHandle lock_on_target;
+
 	std::string scene_to_load;
 
 	// Subtitles
@@ -166,6 +169,8 @@ public:
 	void setPlayerCameraMediumShotActive(bool active);
 	void setPlayerCameraLongShotActive(bool active);
 	void resetPlayerCamera();
+	void lockOnBot(CBot bot);
+	void releaseCameraLock();
 
 	// MISC
 	void print(std::string text);
