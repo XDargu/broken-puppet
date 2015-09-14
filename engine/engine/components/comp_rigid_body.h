@@ -3,6 +3,7 @@
 
 #include "base_component.h"
 #include "physics_manager.h"
+#include "handle\app_msgs.h"
 
 struct TCompRigidBody : TBaseComponent {
 private:
@@ -59,6 +60,10 @@ public:
 	physx::PxReal getMass();
 
 	void setCollisionMask();
+
+	// Explosion
+
+	void onExplosion(const TMsgExplosion& msg);
 };
 
 #endif

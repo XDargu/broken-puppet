@@ -141,6 +141,7 @@ TSSRRStep ssrr;
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TCompRigidBody, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
 	SUBSCRIBE(TCompExplosion, TMsgOnDetonate, onDetonate);

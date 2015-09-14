@@ -6,7 +6,10 @@
 #include "comp_collider_mesh.h"
 #include "comp_collider_sphere.h"
 #include "comp_collider_multiple.h"
+#include "comp_rope.h"
+#include "comp_distance_joint.h"
 #include "physics_manager.h"
+#include "rope_manager.h"
 
 void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) {
 
@@ -241,4 +244,19 @@ void TCompRigidBody::setLockZRot(bool locked) {
 
 physx::PxReal TCompRigidBody::getMass(){
 	return rigidBody->getMass();
+}
+
+
+void TCompRigidBody::onExplosion(const TMsgExplosion& msg){
+
+	CEntity* e = CHandle(this).getOwner();
+
+	PxVec3 mpos = rigidBody->getGlobalPose().p;
+	PxVec3 opos = Physics.XMVECTORToPxVec3(msg.source);
+	PxVec3 dir = mpos - opos;
+	dir.x = dir.x + 7;
+	dir = dir.getNormalized();
+	PxVec3 aux_final_force = dir / msg.radius * msg.damage;
+	rigidBody->addForce(aux_final_force, PxForceMode::eVELOCITY_CHANGE, true);
+
 }
