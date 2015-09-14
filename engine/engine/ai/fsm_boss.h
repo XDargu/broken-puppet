@@ -54,9 +54,13 @@ public:
 	void Shoot1DownDef();
 	void Shoot1Shoot();
 
+	void WaveLeft();
+	void WaveRight();
+
 	void Proximity(float elapsed);
 
-	void Damaged1();
+	void Damaged1Left();
+	void Damaged1Right();
 
 	void Idle2();
 	void Stunned2();

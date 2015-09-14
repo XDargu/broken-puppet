@@ -19,18 +19,23 @@ void fsm_boss::Init()
 {
 	// insert all states in the map
 
+	
+	AddState("fbp_Proximity", (statehandler)&fsm_boss::Proximity);
 	AddState("fbp_Hidden", (statehandler)&fsm_boss::Hidden);
 	AddState("fbp_RiseUp", (statehandler)&fsm_boss::RiseUp);
 	AddState("fbp_Idle1", (statehandler)&fsm_boss::Idle1);
 	AddState("fbp_Hit1", (statehandler)&fsm_boss::Hit1);
 	AddState("fbp_Stunned1", (statehandler)&fsm_boss::Stunned1);	
 	AddState("fbp_Recover", (statehandler)&fsm_boss::Recover);
+	AddState("fbp_WaveRight", (statehandler)&fsm_boss::WaveRight);
+	AddState("fbp_WaveLeft", (statehandler)&fsm_boss::WaveLeft);
 	AddState("fbp_Rain1", (statehandler)&fsm_boss::Rain1);
 	AddState("fbp_Ball1", (statehandler)&fsm_boss::Ball1);
 	AddState("fbp_Shoot1DownDef", (statehandler)&fsm_boss::Shoot1DownDef);
 	AddState("fbp_Shoot1Shoot", (statehandler)&fsm_boss::Shoot1Shoot);
 	AddState("fbp_Shoot1ReleaseDef", (statehandler)&fsm_boss::Shoot1ReleaseDef);
-	AddState("fbp_Damaged1l", (statehandler)&fsm_boss::Damaged1);
+	AddState("fbp_Damaged1Left", (statehandler)&fsm_boss::Damaged1Left);
+	AddState("fbp_Damaged1Right", (statehandler)&fsm_boss::Damaged1Right);
 	AddState("fbp_Idle2", (statehandler)&fsm_boss::Idle2);
 	AddState("fbp_Stunned2", (statehandler)&fsm_boss::Stunned2);
 	AddState("fbp_Wave", (statehandler)&fsm_boss::Wave);
@@ -40,6 +45,7 @@ void fsm_boss::Init()
 	AddState("fbp_Damaged2", (statehandler)&fsm_boss::Damaged2);
 	AddState("fbp_FinalState", (statehandler)&fsm_boss::FinalState);
 	AddState("fbp_Dead", (statehandler)&fsm_boss::Dead);
+
 
 	// reset the state
 	ChangeState("fbp_Hidden");
@@ -79,6 +85,31 @@ void fsm_boss::Hidden(){
 	ChangeState("fbp_RiseUp");
 }
 
+void fsm_boss::Damaged1Left(){
+
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(7);
+		last_anim_id = -1;
+	}
+	if (state_time >= 3.9f){
+		ChangeState("fbp_Idle1");
+	}
+}
+void fsm_boss::Damaged1Right(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(8);
+		last_anim_id = -1;
+	}
+	if (state_time >= 3.9f){
+		ChangeState("fbp_Idle1");
+	}
+}
+
+
 void fsm_boss::RiseUp(){
 	int i = 0;
 	ChangeState("fbp_Idle1");
@@ -116,7 +147,15 @@ void fsm_boss::Idle1(float elapsed){
 	}
 	// Girar cosas a la izquierda
 	if (CIOStatus::get().becomesPressed(CIOStatus::L)){
-		ChangeState("");
+		ChangeState("fbp_Proximity");
+	}
+	// Girar cosas a la izquierda
+	if (CIOStatus::get().becomesPressed(CIOStatus::M)){
+		ChangeState("fbp_WaveRight");
+	}
+	// Girar cosas a la izquierda
+	if (CIOStatus::get().becomesPressed(CIOStatus::N)){
+		ChangeState("fbp_WaveLeft");
 	}
 }
 
@@ -125,24 +164,23 @@ void fsm_boss::Hit1(float elapsed){
 		Release_def();
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		skeleton->playAnimation(3);
+		skeleton->playAnimation(1);
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
 	}
 
 	float time = getAnimationDuration(last_anim_id);
 
-	if (state_time >= getAnimationDuration(last_anim_id)){
+	if (state_time >= 1.16f){
 		ChangeState("fbp_Stunned1");
 	}
-	
 }
 
 void fsm_boss::Stunned1(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		loopAnimationIfNotPlaying(8, true);
+		loopAnimationIfNotPlaying(2, true);
 	}
 	if (state_time >= 10){
 		ChangeState("fbp_Recover");
@@ -152,10 +190,10 @@ void fsm_boss::Recover(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		skeleton->playAnimation(4);
+		skeleton->playAnimation(3);
 		last_anim_id = -1;
 	}
-	if (state_time >= 4){
+	if (state_time >= 3.9f){
 		ChangeState("fbp_Idle1");
 	}
 	
@@ -171,20 +209,19 @@ void fsm_boss::Proximity(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		skeleton->playAnimation(2);
+		skeleton->playAnimation(4);
 		last_anim_id = -1;
 	}
-	if (state_time >= getAnimationDuration(last_anim_id)){
+	if (state_time >= 0.6f){
 		ChangeState("fbp_Idle1");
 	}
-	ChangeState("fbp_Idle1");
 }
 
 void fsm_boss::Ball1(float elapsed){
 
 	if (on_enter){
-		TCompSkeleton* skeleton = comp_skeleton;
-		skeleton->loopAnimation(1);
+		stopAllAnimations();
+		loopAnimationIfNotPlaying(2, true);
 	}
 
 	Reorientate(elapsed);
@@ -322,9 +359,31 @@ void fsm_boss::Shoot1ReleaseDef(){
 	ChangeState("fbp_Idle1");
 }
 
-//Damaged1
-void fsm_boss::Damaged1(){
-	ChangeState("fbp_Idle1");
+//Damaged2
+void fsm_boss::WaveLeft(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(5);
+		last_anim_id = -1;
+	}	
+	if (state_time >= 2.3f){
+		ChangeState("fbp_Idle1");
+	}
+
+}
+
+//Damaged2
+void fsm_boss::WaveRight(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(6);
+		last_anim_id = -1;
+	}
+	if (state_time >= 2.3f){
+		ChangeState("fbp_Idle1");
+	}
 }
 
 //Idle2

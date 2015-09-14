@@ -69,6 +69,8 @@ public:
 		, I
 		, U
 		, L
+		, M
+		, N
 		, CLUE_BUTTON
 		, BUTTONS_COUNT
 		
