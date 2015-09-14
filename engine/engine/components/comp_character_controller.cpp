@@ -185,18 +185,18 @@ void TCompCharacterController::TurnTowardsCameraForward()
 void TCompCharacterController::GroundCheck(float elapsed)
 {
 	TCompRigidBody* rigid = (TCompRigidBody*)rigidbody;
-
+	TCompTransform* trans = (TCompTransform*)transform;	
+	
 	PxTransform &px_trans = rigid->rigidBody->getGlobalPose();
-
-	PxRaycastBuffer buf;
-
-	Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.1f, -physx::PxVec3(0, 1, 0), 0.4f, buf);
 
 	if (velocity.y < jumpPower * 0.5f)
 	{
 		onGround = false;
 
 		// TODO: comprobamos si el el objeto es el más cercano, si lo es, obtenemos su movimiento
+		PxRaycastBuffer buf;
+
+		Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.2f, -physx::PxVec3(0, 1, 0), 0.45f, buf);
 
 		float max_y = -1000000;
 		PxActor* ground_actor = nullptr;
@@ -209,6 +209,53 @@ void TCompCharacterController::GroundCheck(float elapsed)
 					max_y = buf.touches[i].position.y;
 					ground_actor = buf.touches[i].actor;
 					ground_position = buf.touches[i].position;
+				}
+			}
+		}
+
+		PxVec3 relocation_vector = PxVec3(0, 0, 0);
+		// Double check
+		// Second raycast, a little in front of the capsule
+		if (ground_actor == nullptr) {
+
+			PxVec3 front = Physics.XMVECTORToPxVec3(trans->getFront()).getNormalized();
+			float f_dist = 0.2f;
+			relocation_vector = front * f_dist;
+
+			Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.2f + front * f_dist, -physx::PxVec3(0, 1, 0), 0.45f, buf);
+			
+
+			for (int i = 0; i < (int)buf.nbTouches; i++)
+			{
+				if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
+					if (buf.touches[i].position.y > max_y) {
+						max_y = buf.touches[i].position.y;
+						ground_actor = buf.touches[i].actor;
+						ground_position = buf.touches[i].position;
+					}
+				}
+			}
+		}
+
+		// Triple check
+		// Second raycast, a little behind the capsule
+		if (ground_actor == nullptr) {
+
+			PxVec3 front = Physics.XMVECTORToPxVec3(trans->getFront()).getNormalized();
+			float f_dist = -0.2f;
+			relocation_vector = front * f_dist;
+
+			Physics.raycastAll(px_trans.p + physx::PxVec3(0, 1, 0) *.2f + front * f_dist, -physx::PxVec3(0, 1, 0), 0.45f, buf);
+
+
+			for (int i = 0; i < (int)buf.nbTouches; i++)
+			{
+				if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
+					if (buf.touches[i].position.y > max_y) {
+						max_y = buf.touches[i].position.y;
+						ground_actor = buf.touches[i].actor;
+						ground_position = buf.touches[i].position;
+					}
 				}
 			}
 		}
@@ -236,7 +283,7 @@ void TCompCharacterController::GroundCheck(float elapsed)
 
 				// Colocamos en el ground a pelo
 				PxTransform px_trans = rigid->rigidBody->getGlobalPose();
-				px_trans.p = ground_position + physx::PxVec3(0, 0.1f, 0);
+				px_trans.p = ground_position + physx::PxVec3(0, 0.1f, 0) - relocation_vector;
 				rigid->rigidBody->setGlobalPose(px_trans);
 
 				// If is a rigidbody

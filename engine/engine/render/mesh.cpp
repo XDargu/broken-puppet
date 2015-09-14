@@ -137,6 +137,8 @@ void CMesh::render() const {
 
 // --------------------------------------
 void CMesh::renderGroup(int group_id) const {
+	// PELIGRO: ÑAPA DEL 15
+	if (group_id >= groups.size()) { return; }
 	assert(group_id < groups.size());
 	assert(current_active_mesh == this);  // Did you forget to activate this mesh?
 

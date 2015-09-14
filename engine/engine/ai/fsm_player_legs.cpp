@@ -614,7 +614,8 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 	physx::PxVec3 dir = Physics.XMVECTORToPxVec3(camera_transform->getFront());
 	dir.normalize();
 
-	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+	//((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
+	EvaluateMovement(true, elapsed);
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_wrong_falling");
 	if (((TCompCharacterController*)comp_character_controller)->OnGround()){
 		skeleton->stopAnimation(29);
@@ -743,7 +744,6 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		else{
 			if (m_ragdoll) { m_ragdoll->setActive(false); }
 			TCompSkeleton* m_skeleton = comp_skeleton;
-			m_skeleton->playAnimation(18);
 			ChangeState("fbp_WakeUp");
 		}
 	}
@@ -805,6 +805,9 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	if (on_enter) {
 		CSoundManager::get().playEvent("event:/Character/wakeUp");
 
+		stopAllAnimations();
+		m_skeleton->playAnimation(18);
+
 		XMVECTOR head_pos = m_skeleton->getPositionOfBone(41);
 		XMVectorSetY(head_pos, XMVectorGetY(m_transform->position));
 		XMVECTOR head_dir = XMVector3Normalize(head_pos - m_transform->position);
@@ -820,6 +823,7 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= 3.3f){
+		stopAllAnimations();
 		ChangeState("fbp_Idle");
 	}
 }
@@ -853,6 +857,7 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
 	if (state_time >= 3.3f){
+		stopAllAnimations();
 		ChangeState("fbp_Idle");
 	}
 }

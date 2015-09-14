@@ -124,22 +124,26 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					// Set the rotation of the needle according to the camera angle and normal of the surface
 					// The final rotation will be a quaternion between those two values, wigthed in one or other direction
-					XMVECTOR rotation;
-					if (first_position == physics_manager.XMVECTORToPxVec3(camera_transform->position)) {
-						XMMATRIX view = XMMatrixLookAtRH(camera_transform->position, camera_transform->position - (physics_manager.PxVec3ToXMVECTOR(first_position + physics_manager.XMVECTORToPxVec3(camera_transform->getFront() * 0.01f)) - camera_transform->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
-					else {
-						XMMATRIX view = XMMatrixLookAtRH(camera_transform->position, camera_transform->position - (physics_manager.PxVec3ToXMVECTOR(first_position) - camera_transform->position), XMVectorSet(0, 1, 0, 0));
-						rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-					}
+					TTransform rotation_aux;
+					rotation_aux.position = camera_transform->position;
 
-					XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(first_position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(first_position), XMVectorSet(0, 1, 0, 0));
-					XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
-					XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+					if (first_position == physics_manager.XMVECTORToPxVec3(camera_transform->position))
+						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
+					else
+						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position), XMVectorSet(0, 1, 0, 0));
+
+					TTransform normal_aux;
+					normal_aux.position = physics_manager.PxVec3ToXMVECTOR(first_position);
+					normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position - blockHit.normal), XMVectorSet(0, 1, 0, 0));
+
+					XMVECTOR finalQuat = XMQuaternionSlerp(rotation_aux.rotation, normal_aux.rotation, 0.35f);
+
+					if (!first_actor->isRigidStatic()) {
+						finalQuat = XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)));
+					}
 
 					// Get the needle component and initialize it
-					TCompNeedle* new_e_needle = new_needle->get<TCompNeedle>();
+					TCompNeedle* new_e_needle = new_needle->get<TCompNeedle>();					
 
 					/*new_e_needle->create(
 						first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
@@ -149,7 +153,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					new_e_needle->create(
 						first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
-						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)))
+						, finalQuat
 						, blockHit.actor
 						);
 
@@ -302,19 +306,23 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 						// Set the rotation of the needle according to the camera angle and normal of the surface
 						// The final rotation will be a quaternion between those two values, wigthed in one or other direction
-						XMVECTOR rotation;
-						if (blockHit.position == physics_manager.XMVECTORToPxVec3(camera_transform->position)) {
-							XMMATRIX view = XMMatrixLookAtRH(camera_transform->position, camera_transform->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position + physics_manager.XMVECTORToPxVec3(camera_transform->getFront() * 0.01f)) - camera_transform->position), XMVectorSet(0, 1, 0, 0));
-							rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-						}
-						else {
-							XMMATRIX view = XMMatrixLookAtRH(camera_transform->position, camera_transform->position - (physics_manager.PxVec3ToXMVECTOR(blockHit.position) - camera_transform->position), XMVectorSet(0, 1, 0, 0));
-							rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-						}
+						TTransform rotation_aux;
+						rotation_aux.position = camera_transform->position;
 
-						XMMATRIX view_normal = XMMatrixLookAtRH(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
-						XMVECTOR normal_rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view_normal));
-						XMVECTOR finalQuat = XMQuaternionSlerp(rotation, normal_rotation, 0.35f);
+						if (blockHit.position == physics_manager.XMVECTORToPxVec3(camera_transform->position))
+							rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(blockHit.position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
+						else
+							rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
+
+						TTransform normal_aux;
+						normal_aux.position = physics_manager.PxVec3ToXMVECTOR(blockHit.position);
+						normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), XMVectorSet(0, 1, 0, 0));
+
+						XMVECTOR finalQuat = XMQuaternionSlerp(rotation_aux.rotation, normal_aux.rotation, 0.35f);
+
+						if (!first_actor->isRigidStatic()) {
+							finalQuat = XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)));
+						}
 
 						// Get the needle component and initialize it
 						TCompNeedle* new_e_needle2 = new_needle_2->get<TCompNeedle>();
@@ -327,7 +335,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 						new_e_needle2->create(
 							blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
-							, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
+							, finalQuat
 							, blockHit.actor
 							);
 

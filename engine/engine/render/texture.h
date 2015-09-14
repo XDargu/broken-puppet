@@ -27,6 +27,9 @@ public:
 	bool reload() { return load(name.c_str()); }
 
 	ID3D11ShaderResourceView* getResourceView() { return resource_view; }
+
+	void setResource(ID3D11Texture2D* the_resource) { resource = the_resource; }
+	void setResourceView(ID3D11ShaderResourceView* rw) { resource_view = rw; }
 };
 
 typedef CItemsByName< CTexture > CTextureManager;
