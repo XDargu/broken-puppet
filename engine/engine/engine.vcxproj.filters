@@ -553,6 +553,7 @@
     <ClInclude Include="components\comp_local_rotation.h">
       <Filter>components\animation</Filter>
     </ClInclude>
+    <ClInclude Include="localization_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1030,6 +1031,7 @@
     <ClCompile Include="components\comp_local_rotation.cpp">
       <Filter>components\animation</Filter>
     </ClCompile>
+    <ClCompile Include="localization_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

@@ -5,7 +5,8 @@
 #include "entity_manager.h"
 
 void TCompThirdPersonCameraController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	offset = Physics.XMVECTORToPxVec3(atts.getPoint("offset"));
+	offset = atts.getPoint("offset");
+	current_offset = offset;
 }
 
 void TCompThirdPersonCameraController::init() {
@@ -29,7 +30,21 @@ void TCompThirdPersonCameraController::update(float elapsed) {
 	TCompTransform* camera_pivot_trans = (TCompTransform*)camera_pivot_transform;
 	TCompTransform* transform = (TCompTransform*)m_transform;
 	
-	XMVECTOR desired_pos = camera_pivot_trans->position + camera_pivot_trans->getLeft() * -offset.x + camera_pivot_trans->getUp() * offset.y + camera_pivot_trans->getFront() * (-offset.z);
+	if (medium_shot) {
+		current_offset = XMVectorLerp(current_offset, XMVectorSet(0, -0.45f, 1.10f, 0), 0.05f);
+	}
+	else if (long_shot) {
+		current_offset = XMVectorLerp(current_offset, XMVectorSet(0.3f, 0.0f, 4.0f, 0), 0.05f);
+	}
+	else {
+		current_offset = XMVectorLerp(current_offset, offset, 0.05f);
+	}
+	
+	XMVECTOR desired_pos = 
+		camera_pivot_trans->position + camera_pivot_trans->getLeft() * 
+		-XMVectorGetX(current_offset) + camera_pivot_trans->getUp() *
+		XMVectorGetY(current_offset) + camera_pivot_trans->getFront() *
+		(-XMVectorGetZ(current_offset));
 
 	// Raycast camera
 	float camera_dist = V3DISTANCE(desired_pos, camera_pivot_trans->position);

@@ -20,7 +20,9 @@ function onSceneLoad_my_file()
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
-	
+
+	logicManager:playSubtitles("SUST001");
+
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
 
