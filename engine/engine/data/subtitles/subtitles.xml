@@ -1,4 +1,7 @@
 <subtitles>
-  <subtitle guid="NARR001" size="24" color="0xffffff00" time="9" sound="NARR001" text="The gloom of the basement overwhelmed her.&#xD;She had to keep on moving forward." />
-  <subtitle guid="NARR002" size="24" color="0xffff00ff" time="9" sound="NARR002" text="She decided to try her new tools by clicking the left mouse button to throw needles, &#xD;and clicking the right mouse button to tighten the thread." />
+  <subtitle guid="SUST001" next="SUST002" size="24" color="0xffffff00" time="5" sound="SUST001" text="Do you really think you have the right to come here and steal my show?" />
+  <subtitle guid="SUST002" next="SUST003" size="24" color="0xffffff00" time="3" sound="SUST002" text="Have you even seen yourself?!" />
+  <subtitle guid="SUST003" next="SUST004" size="24" color="0xffffff00" time="4" sound="SUST003" text="Do you even think that somebody would pay a penny to watch a broken puppet?" />
+  <subtitle guid="SUST004" next="SUST005" size="24" color="0xffffff00" time="1" sound="SUST004" text="" />
+  <subtitle guid="SUST005" size="24" color="0xffffff00" time="5" sound="SUST005" text="You should not blame me for your disgrace. You’ve only got time to blame, sweetie." />
 </subtitles>

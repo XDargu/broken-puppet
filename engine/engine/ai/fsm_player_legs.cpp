@@ -515,7 +515,7 @@ void FSMPlayerLegs::PullString(float elapsed){
 	}
 
 	TCompThirdPersonCameraController* camera_controller = ((CEntity*)entity_camera)->get<TCompThirdPersonCameraController>();
-	camera_controller->offset = physx::PxVec3(0.5f, -0.22f, 1.07f);
+	camera_controller->offset = XMVectorSet(0.5f, -0.22f, 1.07f, 0);
 	
 	if (state_time > 2) {
 		skeleton->stopAnimation(15);

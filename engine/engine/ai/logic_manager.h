@@ -23,6 +23,7 @@ public:
 		std::string sound;
 		std::string text;
 		unsigned color;
+		std::string next;
 	};
 private:
 	std::map<std::string, CTimer> timers;
@@ -55,11 +56,8 @@ private:
 	std::string scene_to_load;
 
 	// Subtitles
+	Subtitle current_subtitle;
 	float subtitle_counter;
-	float subtitle_limit;
-	unsigned subtitle_color;
-	unsigned subtitle_size;
-	std::string current_subtitle;
 
 	std::map<std::string, Subtitle> subtitle_map;
 
@@ -130,7 +128,7 @@ public:
 	void cameraLookAt(XMVECTOR target);
 
 	void playerDead();
-	void changeCamera(std::string name);
+	
 
 	// SOUND & MUSIC
 	void playEvent(std::string name);
@@ -162,6 +160,12 @@ public:
 
 	// SUBTITLES
 	void playSubtitles(std::string guid);
+
+	// CAMERA
+	void changeCamera(std::string name);
+	void setPlayerCameraMediumShotActive(bool active);
+	void setPlayerCameraLongShotActive(bool active);
+	void resetPlayerCamera();
 
 	// MISC
 	void print(std::string text);

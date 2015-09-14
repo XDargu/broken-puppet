@@ -5,6 +5,7 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
+#include "components\comp_third_person_camera_controller.h"
 #include "components\comp_camera.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
@@ -48,10 +49,9 @@ void CLogicManager::init()
 		subtitles_font.create(L"Segoe UI");
 	}
 
-	current_subtitle = "";
-	subtitle_counter = 0;
-	subtitle_limit = 0;
-	subtitle_color = 0xffffffff;
+	current_subtitle = Subtitle();
+	current_subtitle.text = "notext";
+	subtitle_counter = 0;	
 
 	particle_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
@@ -201,28 +201,36 @@ void CLogicManager::update(float elapsed) {
 	setCinematicBands(band_heigth);
 
 	// Update subtitle counter
-	if (current_subtitle != "") {
+	if (current_subtitle.text != "notext") {
 		subtitle_counter += elapsed;
-		if (subtitle_counter >= subtitle_limit) {
+		if (subtitle_counter >= current_subtitle.time) {
 			subtitle_counter = 0;
-			current_subtitle = "";
+
+			// Next subtitle
+			if (current_subtitle.next != "") {
+				playSubtitles(current_subtitle.next);
+			}
+			else {
+				current_subtitle = Subtitle();
+				current_subtitle.text = "notext";
+			}
 		}
 	}
 }
 
 void CLogicManager::draw() {
-	if (current_subtitle != "") {
+	if (current_subtitle.text != "notext") {
 		unsigned old_col = subtitles_font.color;
 		float old_size = subtitles_font.size;
-		subtitles_font.color = subtitle_color;
-		subtitles_font.size = subtitle_size;
+		subtitles_font.color = current_subtitle.color;
+		subtitles_font.size = current_subtitle.size;
 
-		XMVECTOR measure = subtitles_font.measureString(current_subtitle.c_str());
-		float bottom_offset = CApp::get().yres / 20;
+		XMVECTOR measure = subtitles_font.measureString(current_subtitle.text.c_str());
+		float bottom_offset = CApp::get().yres / 15;
 		float width = XMVectorGetZ(measure);
 		float height = XMVectorGetW(measure);
 		
-		subtitles_font.printCentered(CApp::get().xres / 2, CApp::get().yres - height * 0.5f - bottom_offset, current_subtitle.c_str());
+		subtitles_font.printCentered(CApp::get().xres / 2, CApp::get().yres - height * 0.5f - bottom_offset, current_subtitle.text.c_str());
 
 		subtitles_font.color = old_col;
 		subtitles_font.size = old_size;
@@ -491,6 +499,9 @@ void CLogicManager::bootLUA() {
 		.set("playEventParameter", &CLogicManager::playEventParameter)
 		.set("playEventParameterAtPosition", &CLogicManager::playEventParameterAtPosition)
 		.set("playSubtitles", &CLogicManager::playSubtitles)
+		.set("setMediumShotActive", &CLogicManager::setPlayerCameraMediumShotActive)
+		.set("setLongShotActive", &CLogicManager::setPlayerCameraLongShotActive)
+		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
 	;
 
 	// Register the bot class
@@ -780,9 +791,41 @@ void CLogicManager::playSubtitles(std::string guid) {
 		// The subtitle exists
 		Subtitle subtitle = subtitle_map[guid];
 		playEvent(subtitle.sound);
-		current_subtitle = subtitle.text;
-		subtitle_limit = subtitle.time;
-		subtitle_color = subtitle.color;
-		subtitle_size = subtitle.size;
+		current_subtitle = subtitle;
 	}	
+}
+
+void CLogicManager::setPlayerCameraMediumShotActive(bool active) {
+	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	if (camera_entity) {
+		TCompThirdPersonCameraController* camera_controller = camera_entity->get<TCompThirdPersonCameraController>();
+		if (camera_controller) {
+			camera_controller->medium_shot = active;
+			if (active)
+				camera_controller->long_shot = false;
+		}
+	}
+}
+
+void CLogicManager::setPlayerCameraLongShotActive(bool active) {
+	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	if (camera_entity) {
+		TCompThirdPersonCameraController* camera_controller = camera_entity->get<TCompThirdPersonCameraController>();
+		if (camera_controller) {
+			camera_controller->long_shot = active;
+			if (active)
+				camera_controller->medium_shot = false;
+		}
+	}
+}
+
+void CLogicManager::resetPlayerCamera() {
+	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	if (camera_entity) {
+		TCompThirdPersonCameraController* camera_controller = camera_entity->get<TCompThirdPersonCameraController>();
+		if (camera_controller) {
+			camera_controller->long_shot = false;
+			camera_controller->medium_shot = false;
+		}
+	}
 }

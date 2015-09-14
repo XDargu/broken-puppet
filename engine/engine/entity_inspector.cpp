@@ -656,6 +656,8 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 
 	if (e_third_person_camera_controller) {
 		TwAddVarRW(bar, "ThirdPersonCameraControllerActive", TW_TYPE_BOOL8, &e_third_person_camera_controller->active, " group='Third Person Camera Controller' label='Active' ");
+		TwAddVarRW(bar, "ThirdPersonCameraControllerMediumShot", TW_TYPE_BOOL8, &e_third_person_camera_controller->medium_shot, " group='Third Person Camera Controller' label='Medium shot' ");
+		TwAddVarRW(bar, "ThirdPersonCameraControllerLongShot", TW_TYPE_BOOL8, &e_third_person_camera_controller->long_shot, " group='Third Person Camera Controller' label='Long shot' ");
 		TwAddVarRW(bar, "ThirdPersonCameraControllerOffset", TW_TYPE_DIR3F, &e_third_person_camera_controller->offset, " group='Third Person Camera Controller' label='Offset' axisx=-x axisz=-z");
 	}
 	if (e_directional_light) {

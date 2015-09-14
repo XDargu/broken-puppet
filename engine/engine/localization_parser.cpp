@@ -7,7 +7,8 @@ void CLocalizationParser::onStartElement(const std::string &elem, MKeyValue &att
 		CLogicManager::Subtitle subtitle;
 		std::string guid = atts.getString("guid", "undefined");
 		std::string sound = atts.getString("sound", "undefined");
-		std::string text = atts.getString("text", "undefined");
+		std::string text = atts.getString("text", "");
+		std::string next = atts.getString("next", "");
 		float time = atts.getFloat("time", 0);
 		float size = atts.getFloat("size", 16);
 		unsigned color = std::strtoul(atts.getString("color", "0xffffffff").c_str(), NULL, 16);
@@ -17,6 +18,7 @@ void CLocalizationParser::onStartElement(const std::string &elem, MKeyValue &att
 		subtitle.text = text;
 		subtitle.time = time;
 		subtitle.size = size;
+		subtitle.next = next;
 
 		CLogicManager::get().addSubtitle(guid, subtitle);
 	}

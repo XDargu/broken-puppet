@@ -10,9 +10,12 @@ private:
 	CHandle	camera_pivot_transform;
 public:
 
-	physx::PxVec3 offset;
+	XMVECTOR offset;
+	XMVECTOR current_offset;
+	bool medium_shot;
+	bool long_shot;
 
-	TCompThirdPersonCameraController() {}
+	TCompThirdPersonCameraController() : medium_shot(false), long_shot(false) {}
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
