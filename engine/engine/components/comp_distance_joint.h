@@ -11,6 +11,8 @@ private:
 
 public:
 	physx::PxDistanceJoint* joint;
+	CHandle e_a1;
+	CHandle e_a2;
 
 	TCompDistanceJoint() {}
 
