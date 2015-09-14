@@ -2,13 +2,19 @@
 #define INC_APP_MSGS_H_
 
 // Add here all the msgs of your game
-
 struct TMsgExplosion {
 	XMVECTOR source;
 	float    radius;
 	float    damage;
+	TMsgExplosion(XMVECTOR aSource, float aRadius, float aDamage) : source(aSource), radius(aRadius), damage(aDamage) { }
 	DECLARE_MSG_ID();
 };
+struct TMsgOnDetonate {
+	float    impact_force;
+	TMsgOnDetonate(float m_impact_force) : impact_force(m_impact_force) { }
+	DECLARE_MSG_ID();
+};
+
 
 struct TMsgDied {
 	int     who;

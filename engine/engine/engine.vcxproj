@@ -207,6 +207,7 @@
     <ClInclude Include="components\comp_ai_boss.h" />
     <ClInclude Include="components\comp_hfx_zone.h" />
     <ClInclude Include="components\comp_button.h" />
+    <ClInclude Include="components\comp_explosion.h" />
     <ClInclude Include="render\blur_camera_step.h" />
     <ClInclude Include="render\collision_convex.h" />
     <ClInclude Include="collision_parser.h" />
@@ -390,6 +391,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
     <ClCompile Include="components\comp_collider_multiple.cpp" />
+    <ClCompile Include="components\comp_explosion.cpp" />
     <ClCompile Include="components\comp_joint_fixed.cpp" />
     <ClCompile Include="components\comp_local_rotation.cpp" />
     <ClCompile Include="components\comp_occlusion_plane.cpp" />

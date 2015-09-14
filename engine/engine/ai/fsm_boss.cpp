@@ -19,7 +19,6 @@ void fsm_boss::Init()
 {
 	// insert all states in the map
 
-	
 	AddState("fbp_Proximity", (statehandler)&fsm_boss::Proximity);
 	AddState("fbp_Hidden", (statehandler)&fsm_boss::Hidden);
 	AddState("fbp_RiseUp", (statehandler)&fsm_boss::RiseUp);
@@ -80,6 +79,7 @@ void fsm_boss::Init()
 
 	last_anim_id = -1;
 }
+
 void fsm_boss::Hidden(){
 	int i = 0;
 	ChangeState("fbp_RiseUp");
@@ -97,6 +97,7 @@ void fsm_boss::Damaged1Left(){
 		ChangeState("fbp_Idle1");
 	}
 }
+
 void fsm_boss::Damaged1Right(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
@@ -186,6 +187,7 @@ void fsm_boss::Stunned1(){
 		ChangeState("fbp_Recover");
 	}
 }
+
 void fsm_boss::Recover(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;

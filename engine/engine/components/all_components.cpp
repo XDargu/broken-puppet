@@ -77,4 +77,5 @@ DECL_OBJ_MANAGER(TCompColliderMultiple, "colliderMulti");
 DECL_OBJ_MANAGER(TCompButton, "button");
 DECL_OBJ_MANAGER(TCompVibration, "vibration");
 DECL_OBJ_MANAGER(TCompLocalRotation, "localRotation");
+DECL_OBJ_MANAGER(TCompExplosion, "explosion");
 

@@ -143,6 +143,7 @@ void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompExplosion, TMsgOnDetonate, onDetonate);
 
 	//IA events
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
@@ -210,7 +211,9 @@ void createManagers() {
 	getObjManager<TCompTrigger>()->init(256);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
-	//
+	
+	// Otros
+	getObjManager<TCompExplosion>()->init(64);
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
@@ -298,6 +301,9 @@ void initManagers() {
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 	getObjManager<TCompSensorTied>()->initHandlers();
 	getObjManager<TCompViewerCameraController>()->initHandlers();
+
+	// OTHERS
+	getObjManager<TCompExplosion>()->initHandlers();
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();

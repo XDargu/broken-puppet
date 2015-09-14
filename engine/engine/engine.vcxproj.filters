@@ -553,6 +553,9 @@
     <ClInclude Include="components\comp_local_rotation.h">
       <Filter>components\animation</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_explosion.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1029,6 +1032,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_local_rotation.cpp">
       <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_explosion.cpp">
+      <Filter>components\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
