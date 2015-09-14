@@ -14,8 +14,10 @@ struct CFont {
   CHandle		   camera;
   CFont();
   bool create();
+  bool create(LPCWSTR name);
   void destroy();
   XMVECTOR print(float x, float y, const char *text) const;
+  XMVECTOR printCentered(float x, float y, const char *text) const;
   float printf(float x, float y, const char *fmt, ... ) const;
   XMVECTOR print3D(XMVECTOR p3d, const char *fmt) const;
 

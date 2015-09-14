@@ -20,7 +20,10 @@ function onSceneLoad_my_file()
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
-	
+
+	logicManager:playSubtitles("NARR002");
+	logicManager:setTimer("Subs001", 5);
+
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
 
@@ -30,6 +33,10 @@ function onSceneLoad_my_file()
 			player:teleportToPos(initPos);
 		end
 
+	end
+
+	function onTimerEnd_Subs001()
+		logicManager:playSubtitles("NARR001");
 	end
 
 	-- ASCENSOOOOOOOOOR DE PRUEBA

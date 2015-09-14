@@ -16,6 +16,14 @@
 
 class CLogicManager
 {
+public:
+	struct Subtitle {
+		float time;
+		float size;
+		std::string sound;
+		std::string text;
+		unsigned color;
+	};
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;
@@ -45,7 +53,17 @@ private:
 	CHandle camera;
 
 	std::string scene_to_load;
-public:
+
+	// Subtitles
+	float subtitle_counter;
+	float subtitle_limit;
+	unsigned subtitle_color;
+	unsigned subtitle_size;
+	std::string current_subtitle;
+
+	std::map<std::string, Subtitle> subtitle_map;
+
+public:	
 
 	static CLogicManager& get();
 
@@ -54,6 +72,7 @@ public:
 
 	void update(float elapsed);
 	void init();
+	void draw();
 
 	void setTimer(std::string, float time);
 
@@ -68,6 +87,8 @@ public:
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
+
+	void addSubtitle(std::string guid, Subtitle subtitle);
 
 	CHandle instantiateParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
 
@@ -138,6 +159,9 @@ public:
 
 	// EFFECTS
 	void setBand(bool bands);
+
+	// SUBTITLES
+	void playSubtitles(std::string guid);
 
 	// MISC
 	void print(std::string text);

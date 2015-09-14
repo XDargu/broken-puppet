@@ -22,6 +22,15 @@ bool CFont::create() {
 	return !FAILED(hResult);
 }
 
+bool CFont::create(LPCWSTR name) {
+	SET_ERROR_CONTEXT("Creating font", "");
+	XASSERT(render.device, "Render device not found");
+	XASSERT(font == nullptr, "Font already created");
+	HRESULT hResult = FW1CreateFactory(FW1_VERSION, &FW1Factory);
+	hResult = FW1Factory->CreateFontWrapper(render.device, name, &font);
+	return !FAILED(hResult);
+}
+
 void CFont::destroy() {
   if (font)
     font->Release();
@@ -61,6 +70,38 @@ XMVECTOR CFont::print(float x, float y, const char *text) const {
     );
 
   return XMVectorSet(rect2.Left, rect2.Top, rect2.Right, rect2.Bottom);
+}
+
+XMVECTOR CFont::printCentered(float x, float y, const char *text) const {
+	SET_ERROR_CONTEXT("Printing text", text);
+
+	if (!font)
+		return XMVectorZero();
+	XASSERT(font, "Invalid font");
+	WCHAR utf16[2048];
+	memset(utf16, 0x80, 2048 * 2);
+	size_t n = mbstowcs(utf16, text, strlen(text));
+	utf16[n] = 0x00;
+	FW1_RECTF rect;
+	rect.Left = 0;
+	rect.Top = 0;
+	rect.Right = 5000;
+	rect.Bottom = 5000;
+	FW1_RECTF rect2 = font->MeasureString(utf16, L"Lucida Console", size, &rect, FW1_NOWORDWRAP);
+	rect2.Left = rect.Left - rect2.Left;
+	rect2.Right = rect.Right + rect2.Right;
+	rect2.Bottom = rect.Bottom + rect2.Bottom;
+	rect2.Top = rect.Top - rect2.Top;
+	font->DrawString(
+		render.ctx,
+		utf16,
+		size,
+		x, y,
+		color,
+		FW1_CENTER | FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+		);
+
+	return XMVectorSet(rect2.Left, rect2.Top, rect2.Right, rect2.Bottom);
 }
 
 XMVECTOR CFont::measureString(const char *text) const {

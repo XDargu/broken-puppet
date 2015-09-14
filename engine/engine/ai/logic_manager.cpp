@@ -23,9 +23,13 @@
 #include "handle\prefabs_manager.h"
 #include "render\render_utils.h"
 #include "particles\importer_particle_groups.h"
+#include "font/font.h"
+#include "localization_parser.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
+
+CFont         subtitles_font;
 
 CLogicManager& CLogicManager::get() {
 	return logic_manager;
@@ -37,6 +41,18 @@ CLogicManager::CLogicManager() {
 
 void CLogicManager::init()
 {
+	if (subtitles_font.font == nullptr) {
+		// Load subtitles
+		CLocalizationParser p;
+		p.xmlParseFile("data/subtitles/subtitles.xml");
+		subtitles_font.create(L"Segoe UI");
+	}
+
+	current_subtitle = "";
+	subtitle_counter = 0;
+	subtitle_limit = 0;
+	subtitle_color = 0xffffffff;
+
 	particle_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
@@ -183,6 +199,38 @@ void CLogicManager::update(float elapsed) {
 	// Update band height
 	band_heigth = lerp(band_heigth, band_heigth_dest, lerp_bands);
 	setCinematicBands(band_heigth);
+
+	// Update subtitle counter
+	if (current_subtitle != "") {
+		subtitle_counter += elapsed;
+		if (subtitle_counter >= subtitle_limit) {
+			subtitle_counter = 0;
+			current_subtitle = "";
+		}
+	}
+}
+
+void CLogicManager::draw() {
+	if (current_subtitle != "") {
+		unsigned old_col = subtitles_font.color;
+		float old_size = subtitles_font.size;
+		subtitles_font.color = subtitle_color;
+		subtitles_font.size = subtitle_size;
+
+		XMVECTOR measure = subtitles_font.measureString(current_subtitle.c_str());
+		float bottom_offset = CApp::get().yres / 20;
+		float width = XMVectorGetZ(measure);
+		float height = XMVectorGetW(measure);
+		
+		subtitles_font.printCentered(CApp::get().xres / 2, CApp::get().yres - height * 0.5f - bottom_offset, current_subtitle.c_str());
+
+		subtitles_font.color = old_col;
+		subtitles_font.size = old_size;
+	}
+}
+
+void CLogicManager::addSubtitle(std::string guid, Subtitle subtitle) {
+	subtitle_map[guid] = subtitle;
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
@@ -442,6 +490,7 @@ void CLogicManager::bootLUA() {
 		.set("playEventAtPosition", &CLogicManager::playEventAtPosition)
 		.set("playEventParameter", &CLogicManager::playEventParameter)
 		.set("playEventParameterAtPosition", &CLogicManager::playEventParameterAtPosition)
+		.set("playSubtitles", &CLogicManager::playSubtitles)
 	;
 
 	// Register the bot class
@@ -723,4 +772,17 @@ void CLogicManager::setBand(bool bands) {
 		band_heigth_dest = 0.1f;
 	else
 		band_heigth_dest = 0.0f;
+}
+
+// SUBTITLES
+void CLogicManager::playSubtitles(std::string guid) {
+	if (subtitle_map.count(guid)) {
+		// The subtitle exists
+		Subtitle subtitle = subtitle_map[guid];
+		playEvent(subtitle.sound);
+		current_subtitle = subtitle.text;
+		subtitle_limit = subtitle.time;
+		subtitle_color = subtitle.color;
+		subtitle_size = subtitle.size;
+	}	
 }
