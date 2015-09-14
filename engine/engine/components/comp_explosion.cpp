@@ -8,6 +8,7 @@
 #include "comp_particle_group.h"
 #include "ai\logic_manager.h"
 #include "rope_manager.h"
+#include "audio\sound_manager.h"
 
 void TCompExplosion::init(){
 	mEntity = ((CEntity*)CHandle(this).getOwner());
@@ -80,6 +81,7 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 		CEntityManager::get().remove(mEntity);
 
 		// Play Explosion sound
+		CSoundManager::get().playEvent("event:/test_event", m_pos);
 
 		// Adding particle sistem
 		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", m_pos, m_rot);
