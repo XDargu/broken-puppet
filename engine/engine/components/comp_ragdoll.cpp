@@ -89,7 +89,7 @@ void TCompRagdoll::setActive(bool active) {
 		/*disableBoneTree(8);
 		enableBoneTree(8);*/
 	}else if(e->hasTag("enemy")){
-		setCollisonEnemy(active);
+		setCollisonEnemy(active);		
 	}
 }
 
@@ -323,10 +323,10 @@ void TCompRagdoll::disableBoneTree(int bone_id) {
 
 					CEntity* e = (CEntity*)CHandle(this).getOwner();
 					if (e->hasTag("player")){
-						setCollisonPlayer(true);
+						setCollisonPlayerBone(true, bone_id);
 					}
 					else if (e->hasTag("enemy")){
-						setCollisonEnemy(true);
+						setCollisonEnemyBone(true, bone_id);
 					}
 				}
 			}
@@ -356,10 +356,10 @@ void TCompRagdoll::enableBoneTree(int bone_id) {
 				if (it.first == bone_id) {
 					CEntity* e = (CEntity*)CHandle(this).getOwner();
 					if (e->hasTag("player")){
-						setCollisonPlayer(false);
+						setCollisonPlayerBone(false, bone_id);
 					}
 					else if (e->hasTag("enemy")){
-						setCollisonEnemy(false);
+						setCollisonEnemyBone(false, bone_id);
 					}
 				}
 			}
