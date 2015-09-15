@@ -48,7 +48,10 @@ public:
 
 	void Stunned1();
 
-	void Rain1();
+	void Rain1Prepare();
+	void Rain1Loop();
+	void Rain1Recover();
+
 	void Ball1(float elapsed);
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();

@@ -28,7 +28,9 @@ void fsm_boss::Init()
 	AddState("fbp_Recover", (statehandler)&fsm_boss::Recover);
 	AddState("fbp_WaveRight", (statehandler)&fsm_boss::WaveRight);
 	AddState("fbp_WaveLeft", (statehandler)&fsm_boss::WaveLeft);
-	AddState("fbp_Rain1", (statehandler)&fsm_boss::Rain1);
+	AddState("fbp_Rain1Prepare", (statehandler)&fsm_boss::Rain1Prepare);
+	AddState("fbp_Rain1Loop", (statehandler)&fsm_boss::Rain1Loop);
+	AddState("fbp_Rain1Recover", (statehandler)&fsm_boss::Rain1Recover);
 	AddState("fbp_Ball1", (statehandler)&fsm_boss::Ball1);
 	AddState("fbp_Shoot1DownDef", (statehandler)&fsm_boss::Shoot1DownDef);
 	AddState("fbp_Shoot1Shoot", (statehandler)&fsm_boss::Shoot1Shoot);
@@ -140,7 +142,7 @@ void fsm_boss::Idle1(float elapsed){
 	}
 	// Girar cosas a la izquierda
 	if (CIOStatus::get().becomesPressed(CIOStatus::I)){
-		ChangeState("fbp_Rain1");
+		ChangeState("fbp_Rain1Prepare");
 	}
 	// Girar cosas a la izquierda
 	if (CIOStatus::get().becomesPressed(CIOStatus::U)){
@@ -202,10 +204,41 @@ void fsm_boss::Recover(float elapsed){
 }
 
 
-void fsm_boss::Rain1(){
-	int i = 0;
-	ChangeState("fbp_Idle1");
+void fsm_boss::Rain1Prepare(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(11);
+		last_anim_id = -1;
+	}
+	if (state_time >= 1.3f){
+		ChangeState("fbp_Rain1Loop");
+	}
 }
+
+void fsm_boss::Rain1Loop(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		loopAnimationIfNotPlaying(12, true);
+	}
+	if (state_time >= 5){
+		ChangeState("fbp_Rain1Recover");
+	}
+}
+
+void fsm_boss::Rain1Recover(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(13);
+		last_anim_id = -1;
+	}
+	if (state_time >= 0.6f){
+		ChangeState("fbp_Idle1");
+	}
+}
+
 
 void fsm_boss::Proximity(float elapsed){
 	if (on_enter){
