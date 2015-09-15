@@ -39,6 +39,7 @@ public:
 
 	PxRigidDynamic* getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir);
 
+	void disableBoneTree(PxRigidDynamic* rigid_bone);
 	void disableBoneTree(int bone);
 	void enableBoneTree(int bone);
 };

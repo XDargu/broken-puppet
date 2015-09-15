@@ -293,6 +293,14 @@ PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir)
 	return nullptr;
 }
 
+void TCompRagdoll::disableBoneTree(PxRigidDynamic* rigid_bone) {
+	for (auto& it : ragdoll->bone_map) {
+		if (it.second == rigid_bone) {
+			disableBoneTree(it.first);
+		}
+	}
+}
+
 void TCompRagdoll::disableBoneTree(int bone_id) {
 	TCompSkeleton* skel = skeleton;
 	CalSkeleton* m_skel = skel->model->getSkeleton();

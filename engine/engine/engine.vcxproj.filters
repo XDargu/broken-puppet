@@ -554,6 +554,12 @@
       <Filter>components\animation</Filter>
     </ClInclude>
     <ClInclude Include="localization_parser.h" />
+    <ClInclude Include="ai\cinematic_parser.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\cinematic_manager.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1032,6 +1038,12 @@
       <Filter>components\animation</Filter>
     </ClCompile>
     <ClCompile Include="localization_parser.cpp" />
+    <ClCompile Include="ai\cinematic_parser.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\cinematic_manager.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
