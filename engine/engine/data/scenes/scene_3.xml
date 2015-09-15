@@ -9,7 +9,7 @@
     <name name="escene_3_hfx" />
     <transform position="-4.00241 -1.02073 5.58466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-12.6537 -4.84886 -14.3092" max="12.6537 40.16885 14.3092"/>
-      <hfxZone kind="preset" preset_name="stonecorridor" intensity="100"/>
+      <hfxZone kind="preset" preset_name="plain" intensity="100"/>
   </entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_ambos_ambos_a_1.0" />

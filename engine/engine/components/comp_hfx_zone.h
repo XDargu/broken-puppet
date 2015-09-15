@@ -44,7 +44,11 @@ public:
 		HANGAR,
 		ALLEY,
 		SEWERPIPE,
-		STONECORRIDOR
+		STONECORRIDOR,
+		PADDEDCELL,
+		ROOM,
+		QUARRY,
+		PLAIN
 	};
 
 	preset_kind kind;
