@@ -108,12 +108,14 @@ void TCompRope::fixedUpdate(float elapsed) {
 		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
 		if (needle->getAttachedRigid() != nullptr) {
 			CHandle attached_entity(needle->getAttachedRigid()->userData);
-			TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
+			if (attached_entity.isValid()) {
+				TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
 
-			if (attached_transform->getType() == 80)
-				attached_transform->setType(0.9f);
-			if (attached_transform->getType() == 100)
-				attached_transform->setType(0.95f);
+				if (attached_transform->getType() == 80)
+					attached_transform->setType(0.9f);
+				if (attached_transform->getType() == 100)
+					attached_transform->setType(0.95f);
+			}
 		}
 
 		//pos_1 = trans_1->position;
