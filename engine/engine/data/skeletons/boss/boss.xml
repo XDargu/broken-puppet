@@ -15,6 +15,12 @@
   <anim name="Rain_Prepare" blend="0" blend_out="0"/>11
   <anim name="rain_loop" blend="0" blend_out="0"/>12
   <anim name="rain_recover" blend="0" blend_out="0"/>13
+  <anim name="defense_down" blend="0" blend_out="0"/>14
+  <anim name="defense_down_loop" blend="0" blend_out="0"/>15
+  <anim name="defense_down_recover" blend="0" blend_out="0"/>16
+  <anim name="Ball_initial" blend="0" blend_out="0"/>17
+  <anim name="ball_launch" blend="0" blend_out="0"/>18
+  <anim name="ball_loop" blend="0" blend_out="0"/>19
 
 
   <bone_correction bone="Bip001 Head" local_dir="0 1 0" amount="1" render="0"/>

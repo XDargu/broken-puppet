@@ -31,7 +31,9 @@ void fsm_boss::Init()
 	AddState("fbp_Rain1Prepare", (statehandler)&fsm_boss::Rain1Prepare);
 	AddState("fbp_Rain1Loop", (statehandler)&fsm_boss::Rain1Loop);
 	AddState("fbp_Rain1Recover", (statehandler)&fsm_boss::Rain1Recover);
-	AddState("fbp_Ball1", (statehandler)&fsm_boss::Ball1);
+	AddState("fbp_Ball1Initial", (statehandler)&fsm_boss::Ball1Initial);
+	AddState("fbp_Ball1Loop", (statehandler)&fsm_boss::Ball1Loop);
+	AddState("fbp_Ball1Launch", (statehandler)&fsm_boss::Ball1Launch);
 	AddState("fbp_Shoot1DownDef", (statehandler)&fsm_boss::Shoot1DownDef);
 	AddState("fbp_Shoot1Shoot", (statehandler)&fsm_boss::Shoot1Shoot);
 	AddState("fbp_Shoot1ReleaseDef", (statehandler)&fsm_boss::Shoot1ReleaseDef);
@@ -134,7 +136,7 @@ void fsm_boss::Idle1(float elapsed){
 	// Update input
 
 	if (CIOStatus::get().becomesPressed(CIOStatus::P)){
-		ChangeState("fbp_Ball1");
+		ChangeState("fbp_Ball1Initial");
 	}
 	// Girar cosas a la derecha
 	if (CIOStatus::get().becomesPressed(CIOStatus::O)){
@@ -252,14 +254,33 @@ void fsm_boss::Proximity(float elapsed){
 	}
 }
 
-void fsm_boss::Ball1(float elapsed){
-
-	if (on_enter){
-		stopAllAnimations();
-		loopAnimationIfNotPlaying(2, true);
-	}
+void fsm_boss::Ball1Initial(float elapsed){
 
 	Reorientate(elapsed);
+
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(17);
+		last_anim_id = -1;
+	}
+
+	if (state_time >= 0.4f){
+		ChangeState("fbp_Ball1Loop");
+	}
+
+}
+
+
+void fsm_boss::Ball1Loop(float elapsed){
+	Reorientate(elapsed);
+
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		loopAnimationIfNotPlaying(19, true);
+	}
+
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 
 	// Get the enemy position
@@ -284,13 +305,31 @@ void fsm_boss::Ball1(float elapsed){
 				bool bossAccess = rigid->boss_level == 0;
 				if (bossAccess){
 					PxRigidBody*  px_rigid = rigid->rigidBody;
-					PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();	
+					PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
 					px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
 				}
 			}
 		}
 	}
 	else {
+		ChangeState("fbp_Ball1Launch");
+	}
+}
+
+void fsm_boss::Ball1Launch(float elapsed){
+
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(18);
+		last_anim_id = -1;
+	}
+
+	if (on_enter){
+
+		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+
 		for (int i = 0; i < CEntityManager::get().rigid_list.size(); ++i){
 			CEntity* e = CEntityManager::get().rigid_list[i];
 
@@ -306,12 +345,23 @@ void fsm_boss::Ball1(float elapsed){
 
 			}
 		}
+	}
+
+	if (state_time >= 1.1f){
 		ChangeState("fbp_Idle1");
 	}
-}
 
+
+}
 //Shoot1
 void fsm_boss::Shoot1DownDef(){
+
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(14);
+		last_anim_id = -1;
+	}
 
 	if (on_enter){
 		// Set Down protections
@@ -332,33 +382,22 @@ void fsm_boss::Shoot1DownDef(){
 			}
 		}
 	}
-	ChangeState("fbp_Shoot1Shoot");
+	if (state_time >= 2.3f){
+		ChangeState("fbp_Shoot1Shoot");
+	}
+	
 }
 
 //Shoot
 void fsm_boss::Shoot1Shoot(){
 	
-	// Init vars
 	if (on_enter){
-//		obj_distance = float
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		loopAnimationIfNotPlaying(15, true);
 	}
 
 	// Take and shoot loop
-	for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
-		CEntity* e = m_entity_manager->rigid_list[i];
-		TCompRigidBody* rigid = e->get<TCompRigidBody>();
-
-		bool bossAccess = rigid->boss_level == 0;
-		if (bossAccess){
-			PxRigidBody*  px_rigid = rigid->rigidBody;
-			//PxVec3 force_dir = (PxVec3(0, -1, 0));
-			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
-			PxVec3 force_dir = Physics.XMVECTORToPxVec3(enemy_comp_trans->getFront());
-			px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
-			px_rigid->setMass(10000000);
-		}
-
-	}
 	// take obj
 	// check distance
 	// shoot
@@ -366,7 +405,7 @@ void fsm_boss::Shoot1Shoot(){
 	// Leave protections
 
 	// Set Down protections
-	if (state_time >= 3){
+	if (state_time >= 5){
 		ChangeState("fbp_Shoot1ReleaseDef");
 	}
 }
@@ -374,27 +413,39 @@ void fsm_boss::Shoot1Shoot(){
 //Shoot1ReleaseDef
 void fsm_boss::Shoot1ReleaseDef(){
 
-	for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
-		CEntity* e = m_entity_manager->rigid_list[i];
-		TCompRigidBody* rigid = e->get<TCompRigidBody>();
-		bool bossAccess = rigid->boss_level == 1;
-		if (bossAccess){
-			PxRigidBody*  px_rigid = rigid->rigidBody;
-			PxVec3 force_dir = (PxVec3(0, -1, 0));
-			//px_rigid->addForce(force_dir * force * 3, PxForceMode::eACCELERATION, true);
-			px_rigid->setMass(700);
-			if (((PxRigidDynamic*)px_rigid)->isRigidActor()){
-				if (((PxRigidDynamic*)px_rigid)->isSleeping()){
-					((PxRigidDynamic*)px_rigid)->wakeUp();
-				}
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(16);
+		last_anim_id = -1;
+	}
+	if (on_enter){
 
+		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+			CEntity* e = m_entity_manager->rigid_list[i];
+			TCompRigidBody* rigid = e->get<TCompRigidBody>();
+			bool bossAccess = rigid->boss_level == 1;
+			if (bossAccess){
+				PxRigidBody*  px_rigid = rigid->rigidBody;
+				PxVec3 force_dir = (PxVec3(0, -1, 0));
+				//px_rigid->addForce(force_dir * force * 3, PxForceMode::eACCELERATION, true);
+				px_rigid->setMass(700);
+				if (((PxRigidDynamic*)px_rigid)->isRigidActor()){
+					if (((PxRigidDynamic*)px_rigid)->isSleeping()){
+						((PxRigidDynamic*)px_rigid)->wakeUp();
+					}
+
+				}
 			}
 		}
 	}	
-	ChangeState("fbp_Idle1");
+	if (state_time >= 1.3f){
+		ChangeState("fbp_Idle1");
+	}
+	
 }
 
-//Damaged2
+//WaveLeft
 void fsm_boss::WaveLeft(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
@@ -408,7 +459,7 @@ void fsm_boss::WaveLeft(){
 
 }
 
-//Damaged2
+//WaveRight
 void fsm_boss::WaveRight(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;

@@ -52,7 +52,11 @@ public:
 	void Rain1Loop();
 	void Rain1Recover();
 
-	void Ball1(float elapsed);
+	
+	void Ball1Initial(float elapsed);
+	void Ball1Loop(float elapsed);
+	void Ball1Launch(float elapsed);
+
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
 	void Shoot1Shoot();
