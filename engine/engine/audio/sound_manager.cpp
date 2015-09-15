@@ -83,6 +83,10 @@ CSoundManager::CSoundManager()
 	createMixerEvent("event:/Mixer/presetAlley");
 	createMixerEvent("event:/Mixer/presetSewerPipe");
 	createMixerEvent("event:/Mixer/presetStoneCorridor");
+	createMixerEvent("event:/Mixer/presetPaddedCell");
+	createMixerEvent("event:/Mixer/presetRoom");
+	createMixerEvent("event:/Mixer/presetQuarry");
+	createMixerEvent("event:/Mixer/presetPlain");
 }
 
 void CSoundManager::init(){
@@ -404,6 +408,22 @@ void CSoundManager::update(float elapsed) {
 					param.name = "intensity";
 					param.value = hfx_zone->intensity;
 					setMixerEventParams("event:/Mixer/presetStoneCorridor", param);
+				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::PADDEDCELL){
+					param.name = "intensity";
+					param.value = hfx_zone->intensity;
+					setMixerEventParams("event:/Mixer/presetPaddedCell", param);
+				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::ROOM){
+					param.name = "intensity";
+					param.value = hfx_zone->intensity;
+					setMixerEventParams("event:/Mixer/presetRoom", param);
+				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::QUARRY){
+					param.name = "intensity";
+					param.value = hfx_zone->intensity;
+					setMixerEventParams("event:/Mixer/presetQuarry", param);
+				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::PLAIN){
+					param.name = "intensity";
+					param.value = hfx_zone->intensity;
+					setMixerEventParams("event:/Mixer/presetPlain", param);
 				}
 			}else{
 				param.name = "intensity";
@@ -418,6 +438,10 @@ void CSoundManager::update(float elapsed) {
 				setMixerEventParams("event:/Mixer/presetAlley", param);
 				setMixerEventParams("event:/Mixer/presetSewerPipe", param);
 				setMixerEventParams("event:/Mixer/presetStoneCorridor", param);
+				setMixerEventParams("event:/Mixer/presetPaddedCell", param);
+				setMixerEventParams("event:/Mixer/presetRoom", param);
+				setMixerEventParams("event:/Mixer/presetQuarry", param);
+				setMixerEventParams("event:/Mixer/presetPlain", param);
 			}
 		}
 	}

@@ -76,6 +76,22 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			kind = STONECORRIDOR;
 			parametred = false;
 			intensity = atts.getFloat("intensity", 0.f);
+		}else if (preset_name == "paddedcell"){
+			kind = PADDEDCELL;
+			parametred = false;
+			intensity = atts.getFloat("intensity", 0.f);
+		}else if (preset_name == "room"){
+			kind = ROOM;
+			parametred = false;
+			intensity = atts.getFloat("intensity", 0.f);
+		}else if (preset_name == "quarry"){
+			kind = QUARRY;
+			parametred = false;
+			intensity = atts.getFloat("intensity", 0.f);
+		}else if (preset_name == "plain"){
+			kind = PLAIN;
+			parametred = false;
+			intensity = atts.getFloat("intensity", 0.f);
 		}
 	}
 }
