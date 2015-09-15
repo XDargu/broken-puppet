@@ -89,7 +89,7 @@ CApp::CApp()
 void CApp::loadConfig() {
 	// Parse xml file...
 	COptionsParser p;
-	bool success = p.xmlParseFile("resolution.xml");
+	bool success = p.xmlParseFile("settings.xml");
 	if (success){
 		int x_res;
 		int y_res;
@@ -1055,6 +1055,8 @@ void CApp::render() {
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
+
+	logic_manager.draw();
 
 	::render.swap_chain->Present(0, 0);
 }

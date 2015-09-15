@@ -13,6 +13,8 @@ struct TCompHfxZone : TBaseComponent {
 private:
 	CHandle m_transform;
 	CHandle m_aabb;
+	std::string type;
+	std::string preset_name;
 public:
 	float FReverbTime;
 	float FHighCut;
@@ -27,6 +29,26 @@ public:
 	float FWetLevel;
 	float FDryLevel;
 	float FEarlyDelay;
+
+	float intensity;
+	bool parametred;
+
+	enum preset_kind{
+		UNDEFINED,
+		CARPETTEDHALLWAY,
+		BATHROOM,
+		AUDITORIUM,
+		CONCERTHALL,
+		LIVINGROOM,
+		HALLWAY,
+		HANGAR,
+		ALLEY,
+		SEWERPIPE,
+		STONECORRIDOR
+	};
+
+	preset_kind kind;
+
 public:
 	TCompHfxZone();
 	~TCompHfxZone();

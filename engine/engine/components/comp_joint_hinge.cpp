@@ -67,13 +67,14 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	else {
 		e_a1 = CEntityManager::get().getByName(actor1.c_str());
 	}
-	XASSERT(e_a1.isValid(), "The prismatic joint requires an actor1");
+	XASSERT(e_a1.isValid(), "The hinge joint: %s, requires an actor1", nombre);
 	if (nombre == actor2){
 		e_a2 = owner_entity;
 	}
 	else{
 		e_a2 = CEntityManager::get().getByName(actor2.c_str());
 	}
+	XASSERT(e_a2.isValid(), "The hinge joint: %s, requires an actor2", nombre);
 
 	CHandle r1;
 	CHandle r2;

@@ -295,10 +295,11 @@ int bt_grandma::actionCutOwn()
 	}else{
 		TCompRope* rope = (TCompRope*)ropeRef;
 		if (ropeRef.isValid()) {
-			if (rope->joint_aux.getOwner().isValid())
+			/*if (rope->joint_aux.getOwner().isValid())
 				CEntityManager::get().remove(rope->joint_aux.getOwner());
 			if (CHandle(ropeRef).getOwner().isValid())
-				CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+				CEntityManager::get().remove(CHandle(ropeRef).getOwner());*/
+			CRope_manager::get().removeString(ropeRef);
 		}
 		tied_event = false;
 		event_detected = false;
@@ -449,7 +450,8 @@ int bt_grandma::actionCutRope()
 	if ((state_time >= duration_cut * 0.7f) && (!cut)){
 		CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
 		if (target_rope.isValid()){
-			CEntityManager::get().remove(CHandle(target_rope).getOwner());
+			CRope_manager::get().removeString(target_rope);
+			//CEntityManager::get().remove(CHandle(target_rope).getOwner());
 			cut = true;
 		}
 	}
@@ -1063,10 +1065,11 @@ int bt_grandma::actionTiedEvent()
 	if (state_time >= getAnimationDuration(11)){
 		if (ropeRef.isValid()){
 			TCompRope* rope = (TCompRope*)ropeRef;
-			if (rope->joint_aux.getOwner().isValid())
+			CRope_manager::get().removeString(ropeRef);
+			/*if (rope->joint_aux.getOwner().isValid())
 				CEntityManager::get().remove(rope->joint_aux.getOwner());
 			if (CHandle(ropeRef).getOwner().isValid())
-				CEntityManager::get().remove(CHandle(ropeRef).getOwner());
+				CEntityManager::get().remove(CHandle(ropeRef).getOwner());*/
 		}
 		tied_event = false;
 		event_detected = false;

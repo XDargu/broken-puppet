@@ -16,6 +16,15 @@
 
 class CLogicManager
 {
+public:
+	struct Subtitle {
+		float time;
+		float size;
+		std::string sound;
+		std::string text;
+		unsigned color;
+		std::string next;
+	};
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;
@@ -44,8 +53,18 @@ private:
 	CHandle camera_pivot;
 	CHandle camera;
 
+	// Lock on target
+	CHandle lock_on_target;
+
 	std::string scene_to_load;
-public:
+
+	// Subtitles
+	Subtitle current_subtitle;
+	float subtitle_counter;
+
+	std::map<std::string, Subtitle> subtitle_map;
+
+public:	
 
 	static CLogicManager& get();
 
@@ -54,6 +73,7 @@ public:
 
 	void update(float elapsed);
 	void init();
+	void draw();
 
 	void setTimer(std::string, float time);
 
@@ -68,6 +88,8 @@ public:
 
 	void onSwitchPressed(CHandle the_switch);
 	void onSwitchReleased(CHandle the_switch);
+
+	void addSubtitle(std::string guid, Subtitle subtitle);
 
 	CHandle instantiateParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
 
@@ -109,7 +131,7 @@ public:
 	void cameraLookAt(XMVECTOR target);
 
 	void playerDead();
-	void changeCamera(std::string name);
+	
 
 	// SOUND & MUSIC
 	void playEvent(std::string name);
@@ -138,6 +160,17 @@ public:
 
 	// EFFECTS
 	void setBand(bool bands);
+
+	// SUBTITLES
+	void playSubtitles(std::string guid);
+
+	// CAMERA
+	void changeCamera(std::string name);
+	void setPlayerCameraMediumShotActive(bool active);
+	void setPlayerCameraLongShotActive(bool active);
+	void resetPlayerCamera();
+	void lockOnBot(CBot bot);
+	void releaseCameraLock();
 
 	// MISC
 	void print(std::string text);

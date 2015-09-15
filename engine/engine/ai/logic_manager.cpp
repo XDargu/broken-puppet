@@ -5,6 +5,7 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
+#include "components\comp_third_person_camera_controller.h"
 #include "components\comp_camera.h"
 #include "components\comp_player_pivot_controller.h"
 #include "components\comp_camera_pivot_controller.h"
@@ -23,9 +24,13 @@
 #include "handle\prefabs_manager.h"
 #include "render\render_utils.h"
 #include "particles\importer_particle_groups.h"
+#include "font/font.h"
+#include "localization_parser.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
+
+CFont         subtitles_font;
 
 CLogicManager& CLogicManager::get() {
 	return logic_manager;
@@ -37,6 +42,19 @@ CLogicManager::CLogicManager() {
 
 void CLogicManager::init()
 {
+	if (subtitles_font.font == nullptr) {
+		// Load subtitles
+		CLocalizationParser p;
+		p.xmlParseFile("data/subtitles/subtitles.xml");
+		subtitles_font.create(L"Segoe UI");
+	}
+
+	current_subtitle = Subtitle();
+	current_subtitle.text = "notext";
+	subtitle_counter = 0;	
+
+	lock_on_target = CHandle();
+
 	particle_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
@@ -176,13 +194,73 @@ void CLogicManager::update(float elapsed) {
 		keyframes_to_delete.clear();
 	*/
 
-	if (scene_to_load != "") {
-		CApp::get().loadScene(scene_to_load);
+	// Update lock on
+	if (lock_on_target.isValid()) {
+		CEntity* lock_on_entity = lock_on_target;
+		if (lock_on_entity) {
+			TCompTransform* transform = lock_on_entity->get<TCompTransform>();
+			if (transform) {
+				if (player_pivot.isValid() && camera_pivot.isValid()) {
+					CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+					CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+					if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+						XMVECTOR aux_pos = transform->position + XMVectorSet(0, 1.5f, 0, 0);
+						((TCompPlayerPivotController*)player_pivot_c)->pointAt(aux_pos);
+						((TCompCameraPivotController*)camera_pivot_c)->pointAt(aux_pos);
+					}
+				}
+			}
+		}
 	}
 
 	// Update band height
 	band_heigth = lerp(band_heigth, band_heigth_dest, lerp_bands);
 	setCinematicBands(band_heigth);
+
+	// Update subtitle counter
+	if (current_subtitle.text != "notext") {
+		subtitle_counter += elapsed;
+		if (subtitle_counter >= current_subtitle.time) {
+			subtitle_counter = 0;
+
+			// Next subtitle
+			if (current_subtitle.next != "") {
+				playSubtitles(current_subtitle.next);
+			}
+			else {
+				current_subtitle = Subtitle();
+				current_subtitle.text = "notext";
+			}
+		}
+	}
+
+	if (scene_to_load != "") {
+		CApp::get().loadScene(scene_to_load);
+	}
+}
+
+void CLogicManager::draw() {
+	if (current_subtitle.text != "notext") {
+		unsigned old_col = subtitles_font.color;
+		float old_size = subtitles_font.size;
+		subtitles_font.color = current_subtitle.color;
+		subtitles_font.size = current_subtitle.size;
+
+		XMVECTOR measure = subtitles_font.measureString(current_subtitle.text.c_str());
+		float bottom_offset = CApp::get().yres / 15;
+		float width = XMVectorGetZ(measure);
+		float height = XMVectorGetW(measure);
+		
+		subtitles_font.printCentered(CApp::get().xres / 2, CApp::get().yres - height * 0.5f - bottom_offset, current_subtitle.text.c_str());
+
+		subtitles_font.color = old_col;
+		subtitles_font.size = old_size;
+	}
+}
+
+void CLogicManager::addSubtitle(std::string guid, Subtitle subtitle) {
+	subtitle_map[guid] = subtitle;
 }
 
 void CLogicManager::setTimer(std::string the_name, float time) {
@@ -442,6 +520,12 @@ void CLogicManager::bootLUA() {
 		.set("playEventAtPosition", &CLogicManager::playEventAtPosition)
 		.set("playEventParameter", &CLogicManager::playEventParameter)
 		.set("playEventParameterAtPosition", &CLogicManager::playEventParameterAtPosition)
+		.set("playSubtitles", &CLogicManager::playSubtitles)
+		.set("setMediumShotActive", &CLogicManager::setPlayerCameraMediumShotActive)
+		.set("setLongShotActive", &CLogicManager::setPlayerCameraLongShotActive)
+		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
+		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
+		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
 	;
 
 	// Register the bot class
@@ -723,4 +807,57 @@ void CLogicManager::setBand(bool bands) {
 		band_heigth_dest = 0.1f;
 	else
 		band_heigth_dest = 0.0f;
+}
+
+// SUBTITLES
+void CLogicManager::playSubtitles(std::string guid) {
+	if (subtitle_map.count(guid)) {
+		// The subtitle exists
+		Subtitle subtitle = subtitle_map[guid];
+		playEvent(subtitle.sound);
+		current_subtitle = subtitle;
+	}	
+}
+
+void CLogicManager::setPlayerCameraMediumShotActive(bool active) {
+	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	if (camera_entity) {
+		TCompThirdPersonCameraController* camera_controller = camera_entity->get<TCompThirdPersonCameraController>();
+		if (camera_controller) {
+			camera_controller->medium_shot = active;
+			if (active)
+				camera_controller->long_shot = false;
+		}
+	}
+}
+
+void CLogicManager::setPlayerCameraLongShotActive(bool active) {
+	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	if (camera_entity) {
+		TCompThirdPersonCameraController* camera_controller = camera_entity->get<TCompThirdPersonCameraController>();
+		if (camera_controller) {
+			camera_controller->long_shot = active;
+			if (active)
+				camera_controller->medium_shot = false;
+		}
+	}
+}
+
+void CLogicManager::resetPlayerCamera() {
+	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
+	if (camera_entity) {
+		TCompThirdPersonCameraController* camera_controller = camera_entity->get<TCompThirdPersonCameraController>();
+		if (camera_controller) {
+			camera_controller->long_shot = false;
+			camera_controller->medium_shot = false;
+		}
+	}
+}
+
+void CLogicManager::lockOnBot(CBot bot) {
+	lock_on_target = bot.getEntityHandle();
+}
+
+void CLogicManager::releaseCameraLock() {
+	lock_on_target = CHandle();
 }

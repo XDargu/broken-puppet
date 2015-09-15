@@ -554,8 +554,9 @@
       <Filter>components\animation</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_explosion.h">
-      <Filter>components\misc</Filter>
+          <Filter>components\misc</Filter>
     </ClInclude>
+    <ClInclude Include="localization_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1036,6 +1037,7 @@
     <ClCompile Include="components\comp_explosion.cpp">
       <Filter>components\misc</Filter>
     </ClCompile>
+    <ClCompile Include="localization_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

@@ -26,6 +26,7 @@ void TCompExplosion::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 
 	CEntityManager& entity_manager = CEntityManager::get();
+	bool rope_removed = false;
 
 	float aux_force = msg.impact_force;
 
@@ -68,7 +69,7 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 							rope_manager.removeString(string);
 						}
 					}
-					else if (actor2){
+					if (actor2){
 						if (mEntity == CHandle(actor2->userData)){
 							rope_manager.removeString(string);
 						}
@@ -78,6 +79,7 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 		}
 
 		// Remove Entity
+
 		CEntityManager::get().remove(mEntity);
 
 		// Play Explosion sound

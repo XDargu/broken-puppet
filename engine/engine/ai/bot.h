@@ -22,6 +22,7 @@ public:
 	void setLife(float value);
 	void hurt(float value);
 	void help();
+	CHandle getEntityHandle();
 };
 
 #endif

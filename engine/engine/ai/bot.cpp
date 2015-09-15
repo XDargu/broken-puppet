@@ -67,3 +67,12 @@ void CBot::hurt(float value) {
 void CBot::help() {
 	CLogicManager::get().execute("logicManager:print(tostring(LogicManager))");
 }
+
+CHandle CBot::getEntityHandle() {
+	if (entity.isValid()) {
+		return entity;
+	}
+	else {
+		return CHandle();
+	}
+}

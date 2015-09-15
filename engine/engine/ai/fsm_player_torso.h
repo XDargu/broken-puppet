@@ -22,7 +22,7 @@ private:
 	CHandle current_rope_entity;
 	CHandle GNLogic;
 
-	PxVec3 standard_camera_offset;
+	XMVECTOR standard_camera_offset;
 	XMVECTOR golden_needle_point;
 	bool looking_at_pointer;
 public:

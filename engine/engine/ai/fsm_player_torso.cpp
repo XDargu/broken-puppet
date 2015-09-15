@@ -15,7 +15,7 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, first_needle(CHandle())
 	, first_offset(PxVec3(0, 0, 0))
 	, first_position(PxVec3(0, 0, 0))
-	, standard_camera_offset(PxVec3(0, 0, 0))
+	, standard_camera_offset(XMVectorZero())
 	, first_throw(false)
 	, up_animation(false)
 	, max_num_string(0)
@@ -529,7 +529,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	}
 
 	TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
-	camera_controller->offset = Physics.XMVECTORToPxVec3(XMVectorLerp(Physics.PxVec3ToXMVECTOR(camera_controller->offset), XMVectorSet(0.56f, -0.22f, 1.07f, 0), 0.05f));
+	camera_controller->offset = XMVectorSet(0.56f, -0.22f, 1.07f, 0);// XMVectorLerp(camera_controller->offset, XMVectorSet(0.56f, -0.22f, 1.07f, 0), 0.05f);
 
 	if (current_rope_entity.isValid()) {
 		CEntity* rope_entity = current_rope_entity;
@@ -589,7 +589,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		//CHandle c_rope = strings.back();
 		//strings.pop_back();
 		//CEntityManager::get().remove(c_rope.getOwner());
-		CRope_manager::get().removeString();
+		CRope_manager::get().removeString(current_rope_entity);
 
 		// Reset the variables
 		current_rope_entity = CHandle();

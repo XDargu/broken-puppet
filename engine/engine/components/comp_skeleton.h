@@ -44,6 +44,8 @@ public:
 	CCoreModel* getCCoreModel() { return core_model; }
 
 	float getCancelTime(int id);
+
+	void setBoneRagdoll(int id, bool active);
 };
 
 #endif

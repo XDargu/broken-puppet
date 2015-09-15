@@ -10,7 +10,6 @@ TCompRagdoll::TCompRagdoll() {
 }
 
 TCompRagdoll::~TCompRagdoll() {
-
 }
 
 void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -50,7 +49,10 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			CalBone* cal_bone = skel->model->getSkeleton()->getBone(it.first);
 			const CalVector& cal_pos = cal_bone->getTranslationAbsolute();
 			const CalQuaternion& cal_mtx = cal_bone->getRotationAbsolute();
-			it.second->setKinematicTarget(PxTransform(Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)), Physics.XMVECTORToPxQuat(Cal2DX(cal_mtx))));
+			if (cal_bone->getCoreBone()->getUserData() == false) {
+			//if (it.second->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+				it.second->setKinematicTarget(PxTransform(Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)), Physics.XMVECTORToPxQuat(Cal2DX(cal_mtx))));
+			}
 			/*PxVec3 targetVel = Physics.XMVECTORToPxVec3(Cal2DX(cal_pos)) - it.second->getGlobalPose().p;
 			targetVel.normalize();
 			it.second->setLinearVelocity(targetVel);*/
@@ -80,6 +82,12 @@ void TCompRagdoll::setActive(bool active) {
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (e->hasTag("player")){
 		setCollisonPlayer(active);
+		/*disableBoneTree(10);
+		disableBoneTree(26);
+		disableBoneTree(74);
+		disableBoneTree(79);*/
+		/*disableBoneTree(8);
+		enableBoneTree(8);*/
 	}else if(e->hasTag("enemy")){
 		setCollisonEnemy(active);
 	}
@@ -140,6 +148,74 @@ void TCompRagdoll::setCollisonEnemy(bool active){
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			it.second->getShapes(&collider, 1);
 			setupFiltering(collider, myMask, notCollide);
+		}
+	}
+}
+
+void TCompRagdoll::setCollisonPlayerBone(bool active, int bone_id){
+	CEntity* e = (CEntity*)CHandle(this).getOwner();
+	if (active){
+		PxU32 myMask = FilterGroup::ePLAYER_RG;
+		PxU32 notCollide = FilterGroup::ePLAYER;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			if (it.first == bone_id) {
+				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+				it.second->getShapes(&collider, 1);
+				setupFiltering(collider, myMask, notCollide);
+			}
+		}
+	}
+	else{
+		PxU32 myMask = FilterGroup::eNON_COLLISION;
+		PxU32 notCollide = FilterGroup::eACTOR
+			| FilterGroup::eACTOR_NON_COLLISION
+			| FilterGroup::ePLAYER
+			| FilterGroup::eENEMY
+			| FilterGroup::eENEMY_RG
+			| FilterGroup::eLEVEL
+			| FilterGroup::eNON_COLLISION;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			if (it.first == bone_id) {
+				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+				it.second->getShapes(&collider, 1);
+				setupFiltering(collider, myMask, notCollide);
+			}
+		}
+	}
+}
+
+void TCompRagdoll::setCollisonEnemyBone(bool active, int bone_id){
+	CEntity* e = (CEntity*)CHandle(this).getOwner();
+	if (active){
+		PxU32 myMask = FilterGroup::eENEMY_RG;
+		PxU32 notCollide = FilterGroup::eENEMY;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			if (it.first == bone_id) {
+				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+				it.second->getShapes(&collider, 1);
+				setupFiltering(collider, myMask, notCollide);
+			}
+		}
+	}
+	else{
+		PxU32 myMask = FilterGroup::eNON_COLLISION;
+		PxU32 notCollide = FilterGroup::eACTOR
+			| FilterGroup::eACTOR_NON_COLLISION
+			| FilterGroup::ePLAYER
+			| FilterGroup::eENEMY
+			| FilterGroup::ePLAYER_RG
+			| FilterGroup::eLEVEL
+			| FilterGroup::eNON_COLLISION;
+		PxShape* collider;
+		for (auto& it : ragdoll->bone_map) {
+			if (it.first == bone_id) {
+				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+				it.second->getShapes(&collider, 1);
+				setupFiltering(collider, myMask, notCollide);
+			}
 		}
 	}
 }
@@ -217,10 +293,69 @@ PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir)
 	return nullptr;
 }
 
-void TCompRagdoll::disableBoneTree(PxRigidDynamic* bone) {
-	for (auto& rigid : ragdoll->bone_map) {
-		if (bone == rigid.second) {
-			// TODO: Activate the bone and its parents
+void TCompRagdoll::disableBoneTree(int bone_id) {
+	TCompSkeleton* skel = skeleton;
+	CalSkeleton* m_skel = skel->model->getSkeleton();
+	auto& cal_bones = m_skel->getVectorBone();
+
+	int size = cal_bones.size();
+
+	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+		CalBone* bone = cal_bones[bone_idx];
+		int parent_id = bone->getCoreBone()->getParentId();
+
+		// If my parents is disabled, disable me too
+		if (bone_id == parent_id) {
+			disableBoneTree(bone_idx);
+		}
+
+		if (bone_id == bone_idx) {
+			for (auto& it : ragdoll->bone_map) {
+				if (it.first == bone_id) {
+
+					CEntity* e = (CEntity*)CHandle(this).getOwner();
+					if (e->hasTag("player")){
+						setCollisonPlayer(true);
+					}
+					else if (e->hasTag("enemy")){
+						setCollisonEnemy(true);
+					}
+				}
+			}
+			skel->setBoneRagdoll(bone_id, true);
+		}
+	}
+}
+
+void TCompRagdoll::enableBoneTree(int bone_id) {
+	TCompSkeleton* skel = skeleton;
+	CalSkeleton* m_skel = skel->model->getSkeleton();
+	auto& cal_bones = m_skel->getVectorBone();
+
+	int size = cal_bones.size();
+
+	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+		CalBone* bone = cal_bones[bone_idx];
+		int parent_id = bone->getCoreBone()->getParentId();
+
+		// If my parents is disabled, disable me too
+		if (bone_id == parent_id) {
+			enableBoneTree(bone_idx);
+		}
+
+		if (bone_id == bone_idx) {
+			for (auto& it : ragdoll->bone_map) {
+				if (it.first == bone_id) {
+					CEntity* e = (CEntity*)CHandle(this).getOwner();
+					if (e->hasTag("player")){
+						setCollisonPlayer(false);
+					}
+					else if (e->hasTag("enemy")){
+						setCollisonEnemy(false);
+					}
+				}
+			}
+			skel->setBoneRagdoll(bone_id, false);
 		}
 	}
 }
