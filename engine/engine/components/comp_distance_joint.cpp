@@ -124,7 +124,8 @@ void TCompDistanceJoint::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 				, m_ridig_Actor2
 				, t_1
 				);
-		
+	joint->setDamping(1);
+	joint->setStiffness(500);
 	if (breakable) {
 		joint->setBreakForce(breakForce, breakTorque);
 	}

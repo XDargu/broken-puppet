@@ -26,6 +26,7 @@ class CApp {
 public:
 
 	std::string current_scene_name;
+	std::string first_scene;
 	// Timer and stats
 	CDBGTimer load_timer;
 	CDBGTimer aux_timer;

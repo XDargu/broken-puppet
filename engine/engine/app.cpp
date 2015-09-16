@@ -198,7 +198,7 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompViewerCameraController>()->init(1);
-	getObjManager<TCompDistanceJoint>()->init(32);
+	getObjManager<TCompDistanceJoint>()->init(256);
 	getObjManager<TCompJointPrismatic>()->init(256);
 	getObjManager<TCompJointHinge>()->init(256);
 	getObjManager<TCompJointD6>()->init(512);
@@ -380,6 +380,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
+	first_scene = "data/scenes/my_file.xml";
+	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
 	//sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 	//sm.addFXTrack("light.wav", "light");
@@ -409,7 +411,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -417,7 +419,7 @@ bool CApp::create() {
 	loadScene("data/scenes/empty_scene.xml");
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
-	loadScene("data/scenes/my_file.xml");
+	loadScene(first_scene);
 #endif
 
 	//loadScene("data/scenes/test_dificultad.xml");
@@ -556,7 +558,7 @@ void CApp::update(float elapsed) {
 	if (game_state == TGameState::INITIAL_VIDEO) {
 		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
-			loadScene("data/scenes/my_file.xml");
+			loadScene(first_scene);
 		}
 		return;
 	}
@@ -839,7 +841,7 @@ void CApp::render() {
 		bool playVideo = renderVideo();
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
-			loadScene("data/scenes/my_file.xml");
+			loadScene(first_scene);
 		}
 		return;
 	}
