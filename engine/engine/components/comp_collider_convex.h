@@ -12,6 +12,7 @@ struct TCompColliderConvex : public CCollider, TBaseComponent {
 private:
 	float* m_v;
 	int*   t_v;
+	bool inside_recastAABB;
 public:
 	char path[64];
 
@@ -30,6 +31,8 @@ public:
 	void setCollisionGroups();
 
 	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
+
+	void checkIfInsideRecastAABB();
 
 };
 

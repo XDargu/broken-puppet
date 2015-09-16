@@ -21,7 +21,7 @@ function onSceneLoad_my_file()
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
-	logicManager:playSubtitles("SUST001");
+	--logicManager:playSubtitles("SUST001");
 
 	--logicManager:setMediumShotActive(true);
 	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));

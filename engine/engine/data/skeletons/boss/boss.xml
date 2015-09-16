@@ -21,6 +21,11 @@
   <anim name="Ball_initial" blend="0" blend_out="0"/>17
   <anim name="ball_launch" blend="0" blend_out="0"/>18
   <anim name="ball_loop" blend="0" blend_out="0"/>19
+  <anim name="death" blend="0" blend_out="0"/>20
+  <anim name="damaged_left" blend="0" blend_out="0"/>21
+  <anim name="damaged_left_final" blend="0" blend_out="0"/>22
+  <anim name="damaged_right" blend="0" blend_out="0"/>23
+  <anim name="damaged_right_final" blend="0" blend_out="0"/>24
 
 
   <bone_correction bone="Bip001 Head" local_dir="0 1 0" amount="1" render="0"/>

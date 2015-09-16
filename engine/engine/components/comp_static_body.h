@@ -7,6 +7,17 @@
 struct TCompStaticBody : TBaseComponent {
 private:
 	CHandle h_transform;
+	CHandle static_entity;
+public:
+	enum colliderType {
+		BOX,
+		SPHERE,
+		CAPSULE,
+		MULTIPLE,
+		CONVEX,
+		MESH
+	};
+	colliderType kind;
 public:
 	physx::PxRigidStatic* staticBody;
 
@@ -19,6 +30,8 @@ public:
 	void init();
 
 	void fixedUpdate(float elapsed);
+
+	void checkIfInsideRecastAABB();
 };
 
 #endif

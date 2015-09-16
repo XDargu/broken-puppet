@@ -11,8 +11,6 @@
 
 struct TCompHfxZone : TBaseComponent {
 private:
-	CHandle m_transform;
-	CHandle m_aabb;
 	std::string type;
 	std::string preset_name;
 public:
@@ -52,6 +50,8 @@ public:
 	};
 
 	preset_kind kind;
+	CHandle m_transform;
+	CHandle m_aabb;
 
 public:
 	TCompHfxZone();

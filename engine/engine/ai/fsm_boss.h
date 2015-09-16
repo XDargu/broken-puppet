@@ -32,6 +32,9 @@ private:
 	void loopAnimationIfNotPlaying(int id, bool restart);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	
+	int hurt_state;
+	int arm_state;
 
 public:
 	fsm_boss();
@@ -81,11 +84,12 @@ public:
 
 	void FinalState();	
 
-	void Dead();
+	void Death();
 
-	void EvaluateHit();
+	bool EvaluateHit(int arm_damaged);
 
 	CHandle Player;
+
 
 	
 };

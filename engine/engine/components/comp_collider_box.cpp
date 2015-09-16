@@ -68,21 +68,11 @@ void TCompColliderBox::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 		//AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
 		setCollisionGroups();
+		inside_recastAABB = false;
 		//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 	}
 
 void TCompColliderBox::init() {
-	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
-
-	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
-		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
-		TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
-		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
-		if (recast_aabb.intersects(m_aabb)) {
-			addInputNavMesh();
-			CNav_mesh_manager::get().colBoxes.push_back(this);
-		}
-	}
 }
 
 void TCompColliderBox::addInputNavMesh(){
@@ -189,4 +179,26 @@ TCompColliderBox::~TCompColliderBox(){
 
 	if (m_v)
 		delete [] m_v;
+}
+
+void TCompColliderBox::checkIfInsideRecastAABB(){
+	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+
+	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
+		TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+		if (recast_aabb.intersects(m_aabb)) {
+			if (!inside_recastAABB){
+				addInputNavMesh();
+				CNav_mesh_manager::get().colBoxes.push_back(this);
+				inside_recastAABB = true;
+			}
+		}else{
+			if (inside_recastAABB){
+				CNav_mesh_manager::get().removeBox(this);
+				inside_recastAABB = false;
+			}
+		}
+	}
 }

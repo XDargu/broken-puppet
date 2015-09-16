@@ -29,6 +29,11 @@ private:
 
 	FMOD::Studio::EventInstance* underwater_mixer;
 
+	FMOD::Studio::EventInstance* current_event_instance;
+
+	CEntity* player;
+	TCompTransform* p_transform;
+
 	void createMixerEvent(std::string mixer_event);
 	void setMixerEventParams(std::string mixer_event, SoundParameter param);
 	

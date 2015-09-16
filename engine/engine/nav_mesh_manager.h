@@ -27,6 +27,7 @@ private:
 	CHandle player;
 	bool builded;
 public:
+	bool generate_nav_mesh;
 	bool lock;
 	std::vector<CHandle>     colMeshes;
 	std::vector<CHandle>     colCapsules;
@@ -58,6 +59,10 @@ public:
 	void checkDistaceToEnemies();
 	XMVECTOR getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos);
 	void removeCapsule(CHandle cap);
+	void removeBox(CHandle cap);
+	void removeConvex(CHandle cap);
+	void removeSphere(CHandle cap);
+	void removeMultiple(CHandle cap);
 	static CNav_mesh_manager& get();
 	CNavmeshInput nav_mesh_input;
 	void setNeedNavMesh(bool need);

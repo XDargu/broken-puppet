@@ -10,16 +10,17 @@
 #include "comp_distance_joint.h"
 #include "physics_manager.h"
 #include "rope_manager.h"
+#include "comp_recast_aabb.h"
 
 void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) {
 
-	CEntity* e = CHandle(this).getOwner();
+	rigid_entity = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
-	TCompColliderBox* box_c = e->get<TCompColliderBox>();
-	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
-	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
-	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
-	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
+	TCompColliderBox* box_c = ((CEntity*)rigid_entity)->get<TCompColliderBox>();
+	TCompColliderMesh* mesh_c = ((CEntity*)rigid_entity)->get<TCompColliderMesh>();
+	TCompColliderSphere* sphere_c = ((CEntity*)rigid_entity)->get<TCompColliderSphere>();
+	TCompColliderCapsule* capsule_c = ((CEntity*)rigid_entity)->get<TCompColliderCapsule>();
+	TCompColliderConvex* capsule_cvx = ((CEntity*)rigid_entity)->get<TCompColliderConvex>();
 
 	TCompTransform* trans = (TCompTransform*)transform;
 
@@ -56,7 +57,7 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 	setUseGravity(use_gravity);
 
 	// Set the owner entity as the rigidbody user data
-	rigidBody->setName(e->getName());
+	rigidBody->setName(((CEntity*)rigid_entity)->getName());
 	rigidBody->userData = CHandle(this).getOwner().asVoidPtr();
 
 	// Default drag
@@ -65,6 +66,7 @@ void TCompRigidBody::create(float density, bool is_kinematic, bool use_gravity) 
 }
 
 void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
+	rigid_entity = CHandle(this).getOwner();
 	density = atts.getFloat("density", 1);
 	bool temp_is_kinematic = atts.getBool("kinematic", false);
 	bool temp_use_gravity = atts.getBool("gravity", true);
@@ -83,19 +85,30 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	TCompTransform* trans = (TCompTransform*)transform;
 
 	CCollider* col = nullptr;
-	if (box_c)
+	if (box_c){
 		col = box_c;
-	if (mesh_c)
+		kind = colliderType::BOX;
+	}
+	if (mesh_c){
 		col = mesh_c;
-	if (sphere_c)
+		kind = colliderType::MESH;
+	}
+	if (sphere_c){
 		col = sphere_c;
-	if (capsule_c)
+		kind = colliderType::SPHERE;
+	}
+	if (capsule_c){
 		col = capsule_c;
-	if (capsule_cvx)
+		kind = colliderType::CAPSULE;
+	}
+	if (capsule_cvx){
 		col = capsule_cvx;
-	if (multiple_c)
+		kind = colliderType::CONVEX;
+	}
+	if (multiple_c){
 		col = multiple_c;
-
+		kind = colliderType::MULTIPLE;
+	}
 
 	XASSERT(col != nullptr, "TRigidBody requieres a Collider component");
 
@@ -172,25 +185,28 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 
 	bool kinematic = rigidBody->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC);
 
+	//Check if rigidBody is inside a recastAABB
+	checkIfInsideRecastAABB();
+
 	if (kinematic) { return; }
-		if (!e->hasTag("player")) {
-			float water_level = CApp::get().water_level;
-			float atten = 0.2f;
-			float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
+	if (!e->hasTag("player")) {
+		float water_level = CApp::get().water_level;
+		float atten = 0.2f;
+		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
 
-			if (rigidBody->getGlobalPose().p.y < water_level) {
-				float volume = rigidBody->getMass() / density;
-				float water_density = 500;
+		if (rigidBody->getGlobalPose().p.y < water_level) {
+			float volume = rigidBody->getMass() / density;
+			float water_density = 500;
 
-				rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
-				rigidBody->setLinearDamping(1);
-				rigidBody->setAngularDamping(0.5f);
-			}
-			else {
-				rigidBody->setLinearDamping(0.05f);
-				rigidBody->setAngularDamping(0.05f);
-			}
+			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
+			rigidBody->setLinearDamping(1);
+			rigidBody->setAngularDamping(0.5f);
 		}
+		else {
+			rigidBody->setLinearDamping(0.05f);
+			rigidBody->setAngularDamping(0.05f);
+		}
+	}
 
 }
 
@@ -259,4 +275,21 @@ void TCompRigidBody::onExplosion(const TMsgExplosion& msg){
 	PxVec3 aux_final_force = dir / msg.radius * msg.damage;
 	rigidBody->addForce(aux_final_force, PxForceMode::eVELOCITY_CHANGE, true);
 
+}
+
+void TCompRigidBody::checkIfInsideRecastAABB(){
+	CEntity* r_entity = ((CEntity*)rigid_entity);
+	if (kind == colliderType::BOX){
+		TCompColliderBox* col_box = r_entity->get<TCompColliderBox>();
+		col_box->checkIfInsideRecastAABB();
+	}else if (kind == colliderType::CAPSULE){
+		TCompColliderCapsule* col_capsule = r_entity->get<TCompColliderCapsule>();
+		col_capsule->checkIfInsideRecastAABB();
+	}else if (kind == colliderType::CONVEX){
+		TCompColliderConvex* col_convex = r_entity->get<TCompColliderConvex>();
+		col_convex->checkIfInsideRecastAABB();
+	}else if (kind == colliderType::SPHERE){
+		TCompColliderSphere* col_sphere = r_entity->get<TCompColliderSphere>();
+		col_sphere->checkIfInsideRecastAABB();
+	}
 }
