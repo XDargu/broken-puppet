@@ -9,13 +9,12 @@ private:
 	CHandle transform_1;
 	CHandle transform_2;
 
-	CHandle joint;
-
 	float remove_counter;
 
 	bool sound_1_played;
 	bool sound_2_played;
 public:
+	CHandle joint;
 
 	CHandle transform_1_aux;
 	CHandle transform_2_aux;

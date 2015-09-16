@@ -141,8 +141,10 @@ TSSRRStep ssrr;
 
 void registerAllComponentMsgs() {
 	//SUBSCRIBE(TCompLife, TMsgExplosion, onExplosion);
+	SUBSCRIBE(TCompRigidBody, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+	SUBSCRIBE(TCompExplosion, TMsgOnDetonate, onDetonate);
 
 	//IA events
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
@@ -210,7 +212,9 @@ void createManagers() {
 	getObjManager<TCompTrigger>()->init(256);
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
-	//
+	
+	// Otros
+	getObjManager<TCompExplosion>()->init(64);
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
@@ -298,6 +302,9 @@ void initManagers() {
 	getObjManager<TCompSensorNeedles>()->initHandlers();
 	getObjManager<TCompSensorTied>()->initHandlers();
 	getObjManager<TCompViewerCameraController>()->initHandlers();
+
+	// OTHERS
+	getObjManager<TCompExplosion>()->initHandlers();
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();
@@ -402,7 +409,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
+	loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -631,6 +638,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("silouette_glow");
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");
+		render_techniques_manager.reload("skin_basic");
 		render_techniques_manager.reload("cubemap");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");

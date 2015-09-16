@@ -8,10 +8,11 @@
 
 void TCompAiBoss::init(){
 
-	m_fsm_boss.Init();
+	
 	
 	mPlayer = CEntityManager::get().getByName("Player");
-	mBoss = CEntityManager::get().getByName("BossBody");
+	mBoss = CEntityManager::get().getByName("Boss");
+
 	point_offset = PxVec3(0, -6, 0);
 	distance_to_point = 12;
 
@@ -26,16 +27,17 @@ void TCompAiBoss::init(){
 
 	force = 24;
 
-
+	m_fsm_boss.entity = mBoss;
+	m_fsm_boss.Init();
 }
 
 void TCompAiBoss::update(float elapsed){
 
-	m_fsm_boss.update(elapsed);
+	
 
 	CIOStatus& io = CIOStatus::get();
 	// Update input
-
+	/*
 	if (CIOStatus::get().becomesPressed(CIOStatus::ALT)){
 		shoot = true;
 	}
@@ -57,10 +59,14 @@ void TCompAiBoss::update(float elapsed){
 	if (CIOStatus::get().becomesPressed(CIOStatus::L)){
 		move_things = 3;
 	}
+	*/
 }
 
 void TCompAiBoss::fixedUpdate(float elapsed){
 
+	m_fsm_boss.update(elapsed);
+	
+	/*
 	// Calculate the point to go
 	TCompTransform* enemy_comp_trans = ((CEntity*)mBoss)->get<TCompTransform>();
 	
@@ -242,5 +248,6 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 			attack2Time = 0;
 		}
 	}
+	*/
 
 }

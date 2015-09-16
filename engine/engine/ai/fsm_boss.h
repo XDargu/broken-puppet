@@ -14,8 +14,25 @@ private:
 	float obj_distance;
 	CHandle obj_selected;
 	float force;
+	bool need_reorientate;
+	float reorientate_angle;
+	float no_reorientate_angle;
 
+	CHandle comp_skeleton;
+	CHandle comp_skeleton_lookat;
 	CHandle m_player;
+
+	void Reorientate(float elapsed);
+	void Release_def();
+
+	// Animation
+	int last_anim_id;
+
+	void stopAllAnimations();
+	void loopAnimationIfNotPlaying(int id, bool restart);
+	void stopAnimation(int id);
+	float getAnimationDuration(int id);
+
 public:
 	fsm_boss();
 	~fsm_boss();
@@ -25,16 +42,32 @@ public:
 	void Hidden();
 	void RiseUp();
 
-	void Idle1();
+	void Idle1(float elapsed);
+	void Hit1(float elapsed);
+	void Recover(float elapsed);
+
 	void Stunned1();
 
-	void Rain1();
-	void Ball1();
+	void Rain1Prepare();
+	void Rain1Loop();
+	void Rain1Recover();
+
+	
+	void Ball1Initial(float elapsed);
+	void Ball1Loop(float elapsed);
+	void Ball1Launch(float elapsed);
+
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
 	void Shoot1Shoot();
 
-	void Damaged1();
+	void WaveLeft();
+	void WaveRight();
+
+	void Proximity(float elapsed);
+
+	void Damaged1Left();
+	void Damaged1Right();
 
 	void Idle2();
 	void Stunned2();
@@ -53,6 +86,8 @@ public:
 	void EvaluateHit();
 
 	CHandle Player;
+
+	
 };
 
 #endif

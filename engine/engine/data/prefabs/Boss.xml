@@ -1,0 +1,10 @@
+<prefab>
+  <entity collisionTag="Enemy">
+    <name name="Boss"/>
+    <transform position="0 10 0" rotation="0.0 0.0 0.0 1.0" scale="0.01 0.01 0.01"/>
+    <skeleton name="boss"/>
+    <skeleton_lookat target="0 0 0"/>
+    <aabb min="-10.5 0 -10.5" max="10.5 12 10.5"/>
+    <aiBoss/>
+  </entity>
+</prefab>

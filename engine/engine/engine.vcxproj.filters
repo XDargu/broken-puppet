@@ -553,6 +553,9 @@
     <ClInclude Include="components\comp_local_rotation.h">
       <Filter>components\animation</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_explosion.h">
+          <Filter>components\misc</Filter>
+    </ClInclude>
     <ClInclude Include="localization_parser.h" />
     <ClInclude Include="ai\cinematic_parser.h">
       <Filter>ai\logic</Filter>
@@ -1036,6 +1039,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_local_rotation.cpp">
       <Filter>components\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_explosion.cpp">
+      <Filter>components\misc</Filter>
     </ClCompile>
     <ClCompile Include="localization_parser.cpp" />
     <ClCompile Include="ai\cinematic_parser.cpp">
