@@ -3,6 +3,15 @@
 #include "components\comp_transform.h"
 #include "components\comp_rigid_body.h"
 
+CRigidAnimation::CRigidAnimation() {
+	target_kinematic = CHandle();
+	target_transform = CHandle();
+	current_keyframe = 0;
+	playing = false;
+	reverted = false;
+	loop = false;
+}
+
 CRigidAnimation::CRigidAnimation(CHandle the_target_transform) {
 	SET_ERROR_CONTEXT("Creating an animation", "")
 
@@ -22,6 +31,21 @@ CRigidAnimation::CRigidAnimation(CHandle the_target_transform) {
 	playing = false;
 	reverted = false;
 	loop = false;
+}
+
+void CRigidAnimation::setTargetTransfrom(CHandle transform) {
+	TCompTransform* t = transform;
+
+	XASSERT(t, "Animation must have a valid Transform");
+
+	CEntity* e = transform.getOwner();
+	TCompRigidBody* r = e->get<TCompRigidBody>();
+
+	target_transform = transform;
+	if (r)
+		target_kinematic = r;
+	else
+		target_kinematic = CHandle();
 }
 
 void CRigidAnimation::update(float elapsed) {

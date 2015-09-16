@@ -26,6 +26,7 @@
 #include "particles\importer_particle_groups.h"
 #include "font/font.h"
 #include "localization_parser.h"
+#include "cinematic_manager.h"
 
 static CLogicManager logic_manager;
 lua_State* L;
@@ -526,6 +527,7 @@ void CLogicManager::bootLUA() {
 		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
 		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
 		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
+		.set("playAnimation", &CLogicManager::playAnimation)
 	;
 
 	// Register the bot class
@@ -860,4 +862,17 @@ void CLogicManager::lockOnBot(CBot bot) {
 
 void CLogicManager::releaseCameraLock() {
 	lock_on_target = CHandle();
+}
+
+void CLogicManager::playAnimation(std::string name, CMCVObject target_object) {
+	CEntity* e = target_object.getEntity();
+	if (e) {
+		CHandle t = e->get<TCompTransform>();
+		if (t.isValid()) {
+			addRigidAnimation(
+				cinematic_manager.getInstanceByName(name.c_str(), t)
+				);
+		}
+	}
+	
 }

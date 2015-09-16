@@ -293,6 +293,14 @@ PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir)
 	return nullptr;
 }
 
+void TCompRagdoll::disableBoneTree(PxRigidDynamic* rigid_bone) {
+	for (auto& it : ragdoll->bone_map) {
+		if (it.second == rigid_bone) {
+			disableBoneTree(it.first);
+		}
+	}
+}
+
 void TCompRagdoll::disableBoneTree(int bone_id) {
 	TCompSkeleton* skel = skeleton;
 	CalSkeleton* m_skel = skel->model->getSkeleton();
@@ -315,10 +323,10 @@ void TCompRagdoll::disableBoneTree(int bone_id) {
 
 					CEntity* e = (CEntity*)CHandle(this).getOwner();
 					if (e->hasTag("player")){
-						setCollisonPlayer(true);
+						setCollisonPlayerBone(true, bone_id);
 					}
 					else if (e->hasTag("enemy")){
-						setCollisonEnemy(true);
+						setCollisonEnemyBone(true, bone_id);
 					}
 				}
 			}
@@ -348,10 +356,10 @@ void TCompRagdoll::enableBoneTree(int bone_id) {
 				if (it.first == bone_id) {
 					CEntity* e = (CEntity*)CHandle(this).getOwner();
 					if (e->hasTag("player")){
-						setCollisonPlayer(false);
+						setCollisonPlayerBone(false, bone_id);
 					}
 					else if (e->hasTag("enemy")){
-						setCollisonEnemy(false);
+						setCollisonEnemyBone(false, bone_id);
 					}
 				}
 			}

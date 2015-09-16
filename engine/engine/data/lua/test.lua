@@ -23,8 +23,14 @@ function onSceneLoad_my_file()
 
 	--logicManager:playSubtitles("SUST001");
 
-	logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
-	logicManager:setTimer("timerMolon", 1);
+	--logicManager:setMediumShotActive(true);
+	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
+	logicManager:setTimer("timerMolon", 3);
+
+	logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
+	--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
+	--logicManager:changeCamera("Camera001_34.0");
+	
 
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -38,7 +44,13 @@ function onSceneLoad_my_file()
 	end
 
 	function onTimerEnd_timerMolon()
-		logicManager:releaseCameraLock();
+		--logicManager:releaseCameraLock();
+		--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
+		--logicManager:changeCamera("Camera001_34.0");
+		--logicManager:playAnimation("plataforma_test", logicManager:getObject("plataforma_test_36.0"))
+		--logicManager:playAnimation("modulo1", logicManager:getObject("esc1_arqui_suelo_esqui_in_b_7.0"))
+		--logicManager:playAnimation("modulo2", logicManager:getObject("esc1_arqui_suelo_pared_b_5.0"))
+		--logicManager:playAnimation("modulo3", logicManager:getObject("esc1_arqui_suelo_pared_b_8.0"))
 	end
 
 	-- ASCENSOOOOOOOOOR DE PRUEBA
