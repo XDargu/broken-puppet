@@ -91,6 +91,8 @@ CSoundManager::CSoundManager()
 
 void CSoundManager::init(){
 	HFXZones.clear();
+	player = (CEntity*)CEntityManager::get().getByName("Player");
+	p_transform = (TCompTransform*)player->get<TCompTransform>();
 }
 
 void CSoundManager::createMixerEvent(std::string mixer_event) {
@@ -110,6 +112,10 @@ void CSoundManager::setMixerEventParams(std::string mixer_event, SoundParameter 
 	// Set the parameter
 	FMOD::Studio::ParameterInstance* param = NULL;
 	FMOD_RESULT r = mixer_event_instances[mixer_event]->getParameter(parameter.name.c_str(), &param);
+
+	float prev_value;
+	param->getValue(&prev_value);
+	parameter.value = lerp(prev_value, parameter.value, 0.02f);
 
 	ERRCHECK(param->setValue(parameter.value));
 }

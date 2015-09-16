@@ -7,6 +7,7 @@
 
 struct TCompRigidBody : TBaseComponent {
 private:
+	CHandle rigid_entity;
 	CHandle transform;
 	physx::PxD6Joint* block_joint;
 	float density;
@@ -16,6 +17,15 @@ public:
 	bool auto_translate_transform;
 	bool auto_rotate_transform;
 	int boss_level;
+	enum colliderType {
+		BOX,
+		SPHERE,
+		CAPSULE,
+		MULTIPLE,
+		CONVEX,
+		MESH
+	};
+	colliderType kind;
 
 	TCompRigidBody() :
 		rigidBody(nullptr),
@@ -64,6 +74,8 @@ public:
 	// Explosion
 
 	void onExplosion(const TMsgExplosion& msg);
+
+	void checkIfInsideRecastAABB();
 };
 
 #endif

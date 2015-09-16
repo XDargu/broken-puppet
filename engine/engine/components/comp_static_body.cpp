@@ -13,33 +13,43 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	h_transform = assertRequiredComponent<TCompTransform>(this);
 
-	CEntity* e = CHandle(this).getOwner();
-	TCompColliderBox* box_c = e->get<TCompColliderBox>();
-	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
-	TCompColliderConvex* capsule_cvx = e->get<TCompColliderConvex>();
+	static_entity = CHandle(this).getOwner();
+	TCompColliderBox* box_c = ((CEntity*)static_entity)->get<TCompColliderBox>();
+	TCompColliderMesh* mesh_c = ((CEntity*)static_entity)->get<TCompColliderMesh>();
+	TCompColliderConvex* capsule_cvx = ((CEntity*)static_entity)->get<TCompColliderConvex>();
 
-	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
-	TCompColliderCapsule* capsule_c = e->get<TCompColliderCapsule>();
+	TCompColliderSphere* sphere_c = ((CEntity*)static_entity)->get<TCompColliderSphere>();
+	TCompColliderCapsule* capsule_c = ((CEntity*)static_entity)->get<TCompColliderCapsule>();
 
-	TCompColliderMultiple* multiple_c = e->get<TCompColliderMultiple>();
+	TCompColliderMultiple* multiple_c = ((CEntity*)static_entity)->get<TCompColliderMultiple>();
 
 	TCompTransform* trans = (TCompTransform*)h_transform;
 
 	CCollider* col = nullptr;
-	if (box_c)
+	if (box_c){
 		col = box_c;
-	if (mesh_c)
+		kind = colliderType::BOX;
+	}
+	if (mesh_c){
 		col = mesh_c;
-	if (sphere_c)
+		kind = colliderType::MESH;
+	}
+	if (sphere_c){
 		col = sphere_c;
-	if (capsule_c)
+		kind = colliderType::SPHERE;
+	}
+	if (capsule_c){
 		col = capsule_c;
-	if (capsule_cvx)
+		kind = colliderType::CAPSULE;
+	}
+	if (capsule_cvx){
 		col = capsule_cvx;
-	if (multiple_c)
+		kind = colliderType::CONVEX;
+	}
+	if (multiple_c){
 		col = multiple_c;
-
-
+		kind = colliderType::MULTIPLE;
+	}
 	XASSERT(col != nullptr, "TRigidBody requieres a Collider component");
 
 	if (multiple_c) {
@@ -67,8 +77,10 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		
 	Physics.gScene->addActor(*staticBody);
 
-	staticBody->setName(e->getName());
+	staticBody->setName(((CEntity*)static_entity)->getName());
 	staticBody->userData = CHandle(this).getOwner().asVoidPtr();
+
+	checkIfInsideRecastAABB();
 }
 
 void TCompStaticBody::init() {
@@ -86,3 +98,25 @@ void TCompStaticBody::fixedUpdate(float elapsed) {
 			);
 	}
 }
+
+void TCompStaticBody::checkIfInsideRecastAABB(){
+	CEntity* r_entity = ((CEntity*)static_entity);
+	std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+	if (kind == colliderType::BOX){
+		TCompColliderBox* col_box = r_entity->get<TCompColliderBox>();
+		col_box->checkIfInsideRecastAABB();
+	}
+	else if (kind == colliderType::CAPSULE){
+		TCompColliderCapsule* col_capsule = r_entity->get<TCompColliderCapsule>();
+		col_capsule->checkIfInsideRecastAABB();
+	}
+	else if (kind == colliderType::CONVEX){
+		TCompColliderConvex* col_convex = r_entity->get<TCompColliderConvex>();
+		col_convex->checkIfInsideRecastAABB();
+	}
+	else if (kind == colliderType::SPHERE){
+		TCompColliderSphere* col_sphere = r_entity->get<TCompColliderSphere>();
+		col_sphere->checkIfInsideRecastAABB();
+	}
+}
+

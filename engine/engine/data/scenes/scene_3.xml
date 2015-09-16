@@ -3,13 +3,13 @@
     <name name="escene_3_hfx" />
     <transform position="-4.00241 -1.02073 5.58466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-12.6537 -4.84886 -14.3092" max="12.6537 40.16885 14.3092"/>
-      <hfxZone kind="reverb" reverbTime="0" highCut="70" hfDecay="50" earlyLate="64" lateDelay="50" hfReference="70" diffusion="100" density="100" lowGain="75" lowFreq="40" wetLevel="60" dryLevel="0" earlyDelay="25"/>
+      <hfxZone kind="reverb" reverbTime="4300" highCut="5850" hfDecay="59" earlyLate="56" lateDelay="30" hfReference="5000" diffusion="100" density="100" lowGain="0" lowFreq="250" wetLevel="-11.7" dryLevel="0" earlyDelay="64"/>
   </entity>-->
   <entity  >
     <name name="escene_3_hfx" />
     <transform position="-4.00241 -1.02073 5.58466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-12.6537 -4.84886 -14.3092" max="12.6537 40.16885 14.3092"/>
-      <hfxZone kind="preset" preset_name="plain" intensity="100"/>
+      <hfxZone kind="preset" preset_name="hangar" intensity="100"/>
   </entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="dvn2_arqui_ambos_ambos_a_1.0" />

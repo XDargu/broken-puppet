@@ -29,6 +29,7 @@ bool CNav_mesh_manager::build_nav_mesh(){
 }
 
 void CNav_mesh_manager::nav_mesh_init(){
+	generate_nav_mesh = true;
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
 	nav_B.m_input = nav_mesh_input;
@@ -76,6 +77,30 @@ void CNav_mesh_manager::removeCapsule(CHandle cap){
 		colCapsules.erase(it);
 }
 
+void CNav_mesh_manager::removeBox(CHandle cap){
+	auto it = std::find(colBoxes.begin(), colBoxes.end(), cap);
+	if (it != colBoxes.end())
+		colBoxes.erase(it);
+}
+
+void CNav_mesh_manager::removeSphere(CHandle cap){
+	auto it = std::find(colSpheres.begin(), colSpheres.end(), cap);
+	if (it != colSpheres.end())
+		colSpheres.erase(it);
+}
+
+void CNav_mesh_manager::removeMultiple(CHandle cap){
+	auto it = std::find(colMultiples.begin(), colMultiples.end(), cap);
+	if (it != colMultiples.end())
+		colMultiples.erase(it);
+}
+
+void CNav_mesh_manager::removeConvex(CHandle cap){
+	auto it = std::find(colConvex.begin(), colConvex.end(), cap);
+	if (it != colConvex.end())
+		colMultiples.erase(it);
+}
+
 bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 	int i = 0;
 	bool updatedChecked = false;
@@ -119,7 +144,7 @@ void CNav_mesh_manager::checkUpdates(){
 }
 
 void CNav_mesh_manager::updateNavmesh() {
-	while (true){
+	while (generate_nav_mesh){
 		if (keep_updating_navmesh) {
 			if (need_update){
 
@@ -146,9 +171,9 @@ void CNav_mesh_manager::updateNavmesh() {
 				nav_mesh_input.clearInput();
 				prepareInputNavMesh();
 
+				lock = false;
 				builded = true;
 
-				lock = false;
 			}
 		}else{
 			lock = false;

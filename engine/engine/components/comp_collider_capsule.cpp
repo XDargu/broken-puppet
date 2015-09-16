@@ -72,11 +72,12 @@ void TCompColliderCapsule::loadFromAtts(const std::string& elem, MKeyValue &atts
 
 		//addInputNavMesh();
 		setCollisionGroups();
+		inside_recastAABB = false;
 	}
 
 void TCompColliderCapsule::init() {
 	//if (((CEntity*)this)->tag == "player"){
-		TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+		/*TCompAABB* m_aabb = getSibling<TCompAABB>(this);
 
 		for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
 			TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
@@ -92,7 +93,7 @@ void TCompColliderCapsule::init() {
 				}
 			}
 			//}
-		}
+		}*/
 	//}
 }
 
@@ -222,4 +223,32 @@ TCompColliderCapsule::~TCompColliderCapsule(){
 
 	if (m_v)
 		delete[] m_v;
+}
+
+void TCompColliderCapsule::checkIfInsideRecastAABB(){
+TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+
+		for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+			TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
+			if (recast_AABB){
+				TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+				AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+				if (recast_aabb.intersects(m_aabb)) {
+					CHandle owner_handle = CHandle(this).getOwner();
+					CEntity* owner_entity = (CEntity*)owner_handle;
+					if (strcmp(owner_entity->tag, "enemy") != 0){
+						if (!inside_recastAABB){
+							addInputNavMesh();
+							CNav_mesh_manager::get().colCapsules.push_back(this);
+							inside_recastAABB = true;
+						}
+					}
+				}else{
+					if (inside_recastAABB){
+						CNav_mesh_manager::get().removeCapsule(this);
+						inside_recastAABB = false;
+					}
+				}
+			}
+		}
 }
