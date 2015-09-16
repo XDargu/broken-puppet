@@ -625,13 +625,13 @@ bool createViewVolume(CMesh& mesh) {
 
 // -----------------------------------------------------
 bool createTexturedQuadXY(CMesh& mesh) {
-	std::vector< CVertexPosUV > vtxs;
+	std::vector< CVertexPosUVNormal > vtxs;
 	vtxs.resize(4);
-	CVertexPosUV *v = &vtxs[0];
-	v->Pos = XMFLOAT3(0.f, 0.f, 0.f); v->UV = XMFLOAT2(0, 0); ++v;
-	v->Pos = XMFLOAT3(1.f, 0.f, 0.f); v->UV = XMFLOAT2(1, 0); ++v;
-	v->Pos = XMFLOAT3(0.f, 1.f, 0.f); v->UV = XMFLOAT2(0, 1); ++v;
-	v->Pos = XMFLOAT3(1.f, 1.f, 0.f); v->UV = XMFLOAT2(1, 1); ++v;
+	CVertexPosUVNormal *v = &vtxs[0];
+	v->Pos = XMFLOAT3(0.f, 0.f, 0.f); v->UV = XMFLOAT2(0, 0); v->Normal = XMFLOAT3(1, 0, 0); ++v; 
+	v->Pos = XMFLOAT3(1.f, 0.f, 0.f); v->UV = XMFLOAT2(1, 0); v->Normal = XMFLOAT3(1, 0, 0); ++v;
+	v->Pos = XMFLOAT3(0.f, 1.f, 0.f); v->UV = XMFLOAT2(0, 1); v->Normal = XMFLOAT3(1, 0, 0); ++v;
+	v->Pos = XMFLOAT3(1.f, 1.f, 0.f); v->UV = XMFLOAT2(1, 1); v->Normal = XMFLOAT3(1, 0, 0); ++v;
 	return mesh.create((unsigned)vtxs.size(), &vtxs[0], 0, nullptr, CMesh::TRIANGLE_STRIP);
 }
 

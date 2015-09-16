@@ -55,6 +55,7 @@ void TCompShadows::generate()  {
 	render_manager.renderShadowsCasters(camera, character_camera);
 
 	activateRSConfig(RSCFG_DEFAULT);
+
 }
 
 // This renders the light volume into the light accumulation buffer

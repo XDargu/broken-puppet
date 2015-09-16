@@ -843,7 +843,7 @@ void CApp::render() {
 		}
 		return;
 	}
-
+	CTraceScoped scope1("render_init");
 	// Render ---------------------
 	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
@@ -866,12 +866,12 @@ void CApp::render() {
 
 	// Generate the culling for the active camera
 	render_manager.cullActiveCamera();
-
+	scope1.~CTraceScoped();
 	// Generate all shadows maps
 	CTraceScoped scope("gen_shadows");
 	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
-	scope.end();
-	
+	scope.~CTraceScoped();
+
 	deferred.render(&camera, *rt_base);
 
 	deferred.rt_albedo->activate();
@@ -904,7 +904,7 @@ void CApp::render() {
 	activateZConfig(ZCFG_DEFAULT);
 
 	activateCamera(camera, 1);
-	
+	CTraceScoped scope_post("Postprocesado");
 	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	sharpen.apply(ssrr.getOutput());
@@ -998,7 +998,7 @@ void CApp::render() {
 
 	CTraceScoped t0("AntTweak");
 	TwDraw();
-	t0.end();
+	t0.~CTraceScoped();
 #endif
 
 	/*TCompName* zone_name = logic_manager.getPlayerZoneName();
@@ -1010,7 +1010,7 @@ void CApp::render() {
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(500, 30, s_fps.c_str());*/
 	// Test GUI
-
+	CTraceScoped scope_gui("GUI");
 	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 		life_val /= 20;
@@ -1063,6 +1063,7 @@ void CApp::render() {
 
 void CApp::renderEntities() {
 
+	CTraceScoped t0("Render entities");
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	debugTech.activate();

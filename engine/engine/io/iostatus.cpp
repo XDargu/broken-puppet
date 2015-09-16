@@ -33,6 +33,9 @@ CIOStatus::CIOStatus( ) {
 	buttons[P].key = 'P';
 	buttons[M].key = 'M';
 	buttons[N].key = 'N';
+	buttons[H].key = 'H';
+	buttons[B].key = 'B';
+	buttons[V].key = 'V';
 
 	buttons[THROW_STRING].key = VK_LBUTTON;
 	buttons[TENSE_STRING].key = VK_RBUTTON;

@@ -71,6 +71,9 @@ public:
 		, L
 		, M
 		, N
+		, H
+		, B
+		, V
 		, CLUE_BUTTON
 		, BUTTONS_COUNT
 		
