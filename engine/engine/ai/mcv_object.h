@@ -13,6 +13,8 @@ public:
 	CMCVObject(CHandle the_entity);
 	~CMCVObject();
 
+	CHandle getEntity() { return entity; }
+
 	// LUA
 	CVector getPosition();
 	void setPosition(CVector newPos);

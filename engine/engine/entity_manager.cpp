@@ -38,20 +38,22 @@ bool CEntityManager::remove(CHandle the_handle) {
 void CEntityManager::destroyRemovedHandles() {
 
 	for (auto& it : handles_to_destroy) {
-		if (getObjManager<CEntity>()->getType() == it.getType()) { 
-			// The handle is an entity
-			auto it2 = std::find(entities.begin(), entities.end(), it);
-			if (it2 == entities.end()) { fatal(" Trying to destroy an entity %s not registered in the entity manager", ((CEntity*)it)->getName());  }
-			entities.erase(it2);
+		if (it.isValid()) {
+			if (getObjManager<CEntity>()->getType() == it.getType()) {
+				// The handle is an entity
+				auto it2 = std::find(entities.begin(), entities.end(), it);
+				if (it2 == entities.end()) { fatal(" Trying to destroy an entity %s not registered in the entity manager", ((CEntity*)it)->getName()); }
+				entities.erase(it2);
 
-			// Remove from rigidbody list
-			auto it3 = std::find(rigid_list.begin(), rigid_list.end(), it);
-			if (it3 != rigid_list.end())
-				rigid_list.erase(it3);
+				// Remove from rigidbody list
+				auto it3 = std::find(rigid_list.begin(), rigid_list.end(), it);
+				if (it3 != rigid_list.end())
+					rigid_list.erase(it3);
 
-			entity_event_count++;
+				entity_event_count++;
+			}
+			it.destroy();
 		}
-		it.destroy();
 	};	
 
 	handles_to_destroy.clear();
@@ -66,7 +68,8 @@ bool CEntityManager::clear() {
 	}
 
 	rigid_list.clear();
-
+	
+	handles_to_destroy.clear();
 	entity_event_count = 0;
 	entities.clear();
 	return true;

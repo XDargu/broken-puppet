@@ -171,6 +171,7 @@ public:
 	void resetPlayerCamera();
 	void lockOnBot(CBot bot);
 	void releaseCameraLock();
+	void playAnimation(std::string name, CMCVObject target_object);
 
 	// MISC
 	void print(std::string text);

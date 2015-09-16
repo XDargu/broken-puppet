@@ -170,6 +170,8 @@
     <ClInclude Include="ai\bt_basic_enemy.h" />
     <ClInclude Include="ai\bt_grandma.h" />
     <ClInclude Include="ai\bt_node.h" />
+    <ClInclude Include="ai\cinematic_manager.h" />
+    <ClInclude Include="ai\cinematic_parser.h" />
     <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
     <ClInclude Include="ai\fsm_boss.h" />
@@ -371,6 +373,8 @@
     <ClCompile Include="ai\bt_basic_enemy.cpp" />
     <ClCompile Include="ai\bt_grandma.cpp" />
     <ClCompile Include="ai\bt_node.cpp" />
+    <ClCompile Include="ai\cinematic_manager.cpp" />
+    <ClCompile Include="ai\cinematic_parser.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
     <ClCompile Include="ai\fsm_boss.cpp" />
@@ -671,6 +675,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\..\GoogleDrive\UPF Studio 1.0\Artistas\Animaciones\Boss - Guardian del Desvan\Death\CAL\death.CAF" />
     <None Include="data\lua\scheduler.lua" />
     <None Include="data\lua\test.lua" />
   </ItemGroup>

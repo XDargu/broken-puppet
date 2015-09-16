@@ -50,6 +50,7 @@ struct CDbgTrace {
 
 struct CTraceScoped : public CDbgTrace {
 	CTraceScoped(const char *name) : CDbgTrace(name) {
+		dbg("Dibujando: %s", name);
 		begin();
 	}
 	~CTraceScoped() {

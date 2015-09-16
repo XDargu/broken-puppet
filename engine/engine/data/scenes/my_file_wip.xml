@@ -1,0 +1,1173 @@
+<scene>
+  <entity tag = "level" collisionTag = "Level" >
+    <name name="Floor_1.0" />
+    <transform position="-0.241684 -18.6359 10.1684" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0235294 0.529412 0.443137">
+      <draw mesh="Floor" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="Floor" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="Floor" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="Floor" sub_mesh="3" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-35.4576 -1.69393 -36.0046" max="35.4576 22.8681 36.0046"/>
+    <colliderMesh path="Floor" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="Omni001_2.0" />
+    <transform position="-0.952438 26.7033 9.82243" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="200.0" intensity="1.0" color="1.0 1.0 1.0 1"/>
+  </entity>
+  <entity tag = "player" prefab="Player">
+    <transform position="-29.486 6.43755 -1.59102" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="prota"/>
+  </entity>
+  <entity  prefab="PlayerPivot">
+    <transform position="-29.486 6.43755 -1.59102" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="CameraPivot">
+    <transform position="-28.486 8.43755 -2.59102" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="PlayerCamera">
+    <transform position="-21.486 12.4375 -1.59102"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="Pared_8.0" />
+    <transform position="-0.293762 -15.9113 10.2797" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-64.9725 0.0 -65.9748" max="64.9725 85.5615 65.9748"/>
+    <colliderMesh path="Pared" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="BossFloor_9.0" />
+    <transform position="0.110719 3.52443 10.1507" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.690196 0.101961 0.101961">
+      <draw mesh="BossFloor" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="BossFloor" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="BossFloor" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="BossFloor" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="BossFloor" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="BossFloor" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-7.5 -1.0 -7.5" max="7.5 1.0 7.5"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="7.5" boxY="1.0" boxZ="7.5"/>
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="BossHead_11.0" />
+    <transform position="-6.08428 11.087 11.337" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>
+    <aabb min="-1.7 -1.7 -1.7" max="1.7 1.7 1.7"/>
+    <colliderMesh path="BossHead" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere001_13.0" />
+    <transform position="-7.38404 5.30492 -11.2278" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere001" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere012_14.0" />
+    <transform position="20.6116 5.30492 17.7141" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere012" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere013_15.0" />
+    <transform position="16.8439 5.30492 21.5992" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere013" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere014_16.0" />
+    <transform position="13.0761 5.30492 25.4842" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere014" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere015_17.0" />
+    <transform position="9.30834 5.30493 29.3693" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere015" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere016_18.0" />
+    <transform position="5.54057 5.30493 33.2543" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere016" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere017_19.0" />
+    <transform position="1.77281 5.30493 37.1394" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere017" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere018_20.0" />
+    <transform position="-2.39912 5.30493 33.9241" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere018" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere019_21.0" />
+    <transform position="-6.57104 5.30493 30.7089" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere019" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere020_22.0" />
+    <transform position="-10.743 5.30493 27.4937" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere020" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere021_23.0" />
+    <transform position="-14.9149 5.30492 24.2785" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere021" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="Sphere022_24.0" />
+    <transform position="-19.0868 5.30492 21.0632" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.552941 0.027451 0.227451">
+      <draw mesh="Sphere022" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -0.5 -0.5" max="0.5 0.5 0.5"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.5"/>
+    <rigidbody density="133.69"  />
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="FloorBellow_25.0" />
+    <transform position="-0.241684 -14.6475 10.1684" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-53.4586 -1.69393 -54.2833" max="53.4586 1.69393 54.2833"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="53.4586" boxY="1.69393" boxZ="54.2833"/>
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="Top_26.0" />
+    <transform position="-0.241684 68.9087 10.1684" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-53.4586 -1.69393 -54.2833" max="53.4586 1.69393 54.2833"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="53.4586" boxY="1.69393" boxZ="54.2833"/>
+    <staticbody/>
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x2_28.0" />
+    <transform position="11.1574 13.9767 9.18881" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x2" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x2" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x2" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x2" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x2" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x2" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana_29.0" />
+    <transform position="12.9125 13.9767 18.78" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x2_30.0" />
+    <transform position="26.3227 13.2267 14.4648" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x2" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x2" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x2" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x2" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x2" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x2" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x003_31.0" />
+    <transform position="26.3227 13.2267 1.40965" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x003" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x003" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x003" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x003" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x003" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x003" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana001_32.0" />
+    <transform position="12.9125 13.9767 5.72483" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana001" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana001" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana001" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana001" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana001" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana001" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x003_33.0" />
+    <transform position="11.1574 13.9767 -3.86636" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x003" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x003" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x003" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x003" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x003" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x003" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x004_34.0" />
+    <transform position="18.4183 13.2267 23.5226" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x004" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x004" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x004" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x004" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x004" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x004" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana002_35.0" />
+    <transform position="5.00812 13.9767 27.8377" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana002" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana002" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana002" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana002" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana002" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana002" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x004_36.0" />
+    <transform position="3.25301 13.9767 18.2465" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x004" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x004" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x004" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x004" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x004" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x004" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x005_37.0" />
+    <transform position="-7.7911 13.2267 20.5021" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x005" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x005" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x005" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x005" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x005" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x005" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana003_38.0" />
+    <transform position="-21.2013 13.9767 24.8173" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana003" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana003" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana003" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana003" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana003" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana003" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x005_39.0" />
+    <transform position="-22.9564 13.9767 15.2261" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x005" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x005" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x005" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x005" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x005" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x005" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x006_40.0" />
+    <transform position="-7.7911 13.2267 5.10968" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x006" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x006" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x006" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x006" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x006" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x006" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana004_41.0" />
+    <transform position="-21.2013 13.9767 9.42485" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana004" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana004" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana004" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana004" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana004" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana004" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x006_42.0" />
+    <transform position="-22.9564 13.9767 -0.166333" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x006" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x006" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x006" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x006" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x006" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x006" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x007_43.0" />
+    <transform position="5.04255 13.2267 -5.77741" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x007" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x007" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x007" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x007" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x007" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x007" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana005_44.0" />
+    <transform position="-8.36767 13.9767 -1.46224" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana005" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana005" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana005" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana005" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana005" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana005" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x007_45.0" />
+    <transform position="-10.1228 13.9767 -11.0534" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x007" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x007" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x007" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x007" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x007" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x007" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana2x008_46.0" />
+    <transform position="-12.2789 13.2267 17.9166" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBossPlana2x008" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x008" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x008" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x008" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x008" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana2x008" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -0.25 -1.0" max="1.0 0.25 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="0.25" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBossPlana006_47.0" />
+    <transform position="-25.6891 13.9767 22.2318" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.894118 0.6 0.721569">
+      <draw mesh="CajaBossPlana006" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana006" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana006" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana006" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana006" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBossPlana006" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -1.0 -0.1" max="0.5 1.0 0.1"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="1.0" boxZ="0.1"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="CajaBoss2x008_48.0" />
+    <transform position="-27.4442 13.9767 12.6406" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.898039 0.65098 0.843137">
+      <draw mesh="CajaBoss2x008" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x008" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x008" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x008" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x008" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="CajaBoss2x008" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 -1.0 -1.0" max="1.0 1.0 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.0" boxY="1.0" boxZ="1.0"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity  >
+    <name name="Cylinder011_49.0" />
+    <transform position="-2.19257 5.72093 8.94487" rotation="0.492939 -0.145035 0.0837362 0.853794" scale="1.08814 1.08814 1.08814"/>
+    <render  color = "0.45098 0.45098 0.45098">
+      <draw mesh="Cylinder011" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.0012 -0.0125 -0.0012" max="0.0012 0.0275 0.0012"/>
+  </entity>
+  <entity  collisionTag = "Level">
+    <name name="baja1_52.0" />
+    <transform position="-22.4072 4.05978 13.6197" rotation="0.0 0.0 -0.577123 0.816657" scale="0.554 0.606591 0.522164"/>
+    <render  color = "0.0666667 0.0666667 0.0666667">
+      <draw mesh="baja1" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="baja1" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="baja1" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="baja1" sub_mesh="3" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.823056 -0.737746 -4.66018" max="12.7161 0.737746 4.66019"/>
+  </entity>
+  <entity  >
+    <name name="Cylinder001_55.0" />
+    <transform position="-0.634888 -84.7097 9.79726" rotation="0.0 0.0 0.0 1.0" scale="1.0 0.718052 1.0"/>
+    <render  color = "0.105882 0.694118 0.580392">
+      <draw mesh="Cylinder001" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="Cylinder001" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="Cylinder001" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-82.7979 0.0 -81.54" max="82.7979 337.129 81.54"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss046_56.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.0 0.0 1.0" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss046" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss046" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss046" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss046" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss046" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss046" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss047_57.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 -0.173648 0.0 0.984808" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss047" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss047" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss047" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss047" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss047" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss047" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss048_58.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 -0.34202 0.0 0.939693" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss048" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss048" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss048" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss048" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss048" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss048" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss049_59.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 -0.5 0.0 0.866025" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss049" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss049" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss049" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss049" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss049" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss049" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss050_60.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 -0.642788 0.0 0.766044" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss050" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss050" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss050" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss050" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss050" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss050" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss051_61.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 -0.766045 0.0 0.642788" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss051" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss051" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss051" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss051" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss051" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss051" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss052_62.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.866025 0.0 -0.5" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss052" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss052" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss052" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss052" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss052" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss052" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss053_63.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.939693 0.0 -0.34202" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss053" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss053" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss053" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss053" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss053" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss053" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss054_64.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.984808 0.0 -0.173648" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss054" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss054" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss054" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss054" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss054" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss054" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss055_65.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 1.0 0.0 0.0" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss055" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss055" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss055" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss055" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss055" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss055" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.3961" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss056_66.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.984808 0.0 0.173648" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss056" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss056" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss056" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss056" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss056" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss056" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss057_67.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.939693 0.0 0.34202" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss057" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss057" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss057" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss057" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss057" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss057" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss058_68.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.866025 0.0 0.5" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss058" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss058" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss058" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss058" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss058" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss058" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss059_69.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.766045 0.0 0.642788" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss059" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss059" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss059" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss059" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss059" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss059" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss060_70.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.642788 0.0 0.766044" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss060" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss060" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss060" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss060" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss060" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss060" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss061_71.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.5 0.0 0.866025" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss061" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss061" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss061" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss061" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss061" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss061" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss062_72.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.34202 0.0 0.939693" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss062" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss062" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss062" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss062" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss062" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss062" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss063_73.0" />
+    <transform position="-0.634888 -71.6331 9.79726" rotation="0.0 0.173648 0.0 0.984808" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss063" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss063" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss063" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss063" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss063" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss063" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="41.9246 11.1983 -10.396" max="59.3894 73.7341 10.3962"/>
+  </entity>
+  <entity  >
+    <name name="Omni002_74.0" />
+    <transform position="3.77528 88.4729 7.72062" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="124.488" intensity="1.0" color="1.0 1.0 1.0 1"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="pasarela_75.0" />
+    <transform position="6.47957 5.17896 -33.3711" rotation="0.185302 -0.0779356 0.00126208 0.979585" scale="1.0 1.0 1.0"/>
+    <render  color = "0.45098 0.45098 0.45098">
+      <draw mesh="pasarela" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pasarela" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pasarela" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pasarela" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pasarela" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pasarela" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-3.84192 0.0 -9.12077" max="3.84192 0.864303 9.12077"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="3.84192" boxY="0.432152" boxZ="9.12076"/>
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="Omni003_76.0" />
+    <transform position="3.77528 22.272 7.72063" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="124.488" intensity="1.0" color="1.0 1.0 1.0 1"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka_77.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 -3.25841e-007 0.0 1.0" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka001_78.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 -0.173648 0.0 0.984808" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka001" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka001" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka001" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka001" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka001" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka001" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.723315 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka002_79.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 -0.34202 0.0 0.939693" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka002" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka002" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka002" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka002" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka002" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka002" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka003_80.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 -0.5 0.0 0.866025" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka003" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka003" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka003" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka003" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka003" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka003" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka004_81.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 -0.642788 0.0 0.766044" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka004" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka004" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka004" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka004" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka004" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka004" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka005_82.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 -0.766045 0.0 0.642788" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka005" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka005" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka005" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka005" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka005" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka005" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka006_83.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.866025 0.0 -0.5" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka006" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka006" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka006" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka006" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka006" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka006" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka007_84.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.939693 0.0 -0.34202" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka007" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka007" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka007" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka007" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka007" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka007" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka008_85.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.984808 0.0 -0.173648" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka008" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka008" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka008" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka008" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka008" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka008" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka009_86.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 1.0 0.0 0.0" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka009" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka009" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka009" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka009" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka009" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka009" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka010_87.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.984808 0.0 0.173648" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka010" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka010" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka010" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka010" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka010" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka010" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka011_88.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.939693 0.0 0.34202" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka011" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka011" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka011" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka011" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka011" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka011" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka012_89.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.866025 0.0 0.5" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka012" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka012" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka012" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka012" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka012" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka012" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka013_90.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.766045 0.0 0.642788" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka013" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka013" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka013" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka013" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka013" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka013" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka014_91.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.642788 0.0 0.766044" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka014" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka014" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka014" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka014" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka014" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka014" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka015_92.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.5 0.0 0.866025" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka015" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka015" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka015" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka015" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka015" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka015" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka016_93.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.34202 0.0 0.939693" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka016" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka016" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka016" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka016" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka016" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka016" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4736 11.1983 -59.8612" max="0.852655 129.967 -14.8099"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_loka017_94.0" />
+    <transform position="-0.634888 -8.37354 9.79726" rotation="0.0 0.173648 0.0 0.984808" scale="1.0387 1.0387 1.0387"/>
+    <render  color = "0.580392 0.694118 0.105882">
+      <draw mesh="pared_boss_loka017" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka017" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka017" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka017" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka017" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="pared_boss_loka017" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-20.4737 11.1983 -59.8612" max="0.852645 129.967 -14.8099"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="eje1_M_95.0" />
+    <transform position="-5.57956 -6.80807e-006 -155.751" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="eje1_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="eje1_M" sub_mesh="1" mat="mecanismo_mat"/>
+      <draw mesh="eje1_M" sub_mesh="2" mat="mecanismo_mat"/>
+      <draw mesh="eje1_M" sub_mesh="3" mat="mecanismo_mat"/>
+      <draw mesh="eje1_M" sub_mesh="4" mat="mecanismo_mat"/>
+      <draw mesh="eje1_M" sub_mesh="5" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-1.43347 -1.44312 -2.68759" max="1.44827 1.44312 2.68759"/>
+    <colliderMesh path="eje1_M" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="eje2_96.0" />
+    <transform position="-20.6846 -6.86829e-006 -157.128" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="eje2" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="eje2" sub_mesh="1" mat="mecanismo_mat"/>
+      <draw mesh="eje2" sub_mesh="2" mat="mecanismo_mat"/>
+      <draw mesh="eje2" sub_mesh="3" mat="mecanismo_mat"/>
+      <draw mesh="eje2" sub_mesh="4" mat="mecanismo_mat"/>
+      <draw mesh="eje2" sub_mesh="5" mat="mecanismo_mat"/>
+      <draw mesh="eje2" sub_mesh="6" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-2.16697 -2.10544 -4.48606" max="2.15465 2.20039 4.48606"/>
+    <colliderMesh path="eje2" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="eje3_M_97.0" />
+    <transform position="-33.1218 -6.8401e-006 -156.483" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="eje3_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="eje3_M" sub_mesh="1" mat="mecanismo_mat"/>
+      <draw mesh="eje3_M" sub_mesh="2" mat="mecanismo_mat"/>
+      <draw mesh="eje3_M" sub_mesh="3" mat="mecanismo_mat"/>
+      <draw mesh="eje3_M" sub_mesh="4" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-1.27317 -1.27317 -4.10365" max="1.27317 1.27317 4.10365"/>
+  </entity>
+  <entity  >
+    <name name="eje4_M_98.0" />
+    <transform position="-41.8277 -6.72316e-006 -153.808" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="eje4_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="eje4_M" sub_mesh="1" mat="mecanismo_mat"/>
+      <draw mesh="eje4_M" sub_mesh="2" mat="mecanismo_mat"/>
+      <draw mesh="eje4_M" sub_mesh="3" mat="mecanismo_mat"/>
+      <draw mesh="eje4_M" sub_mesh="4" mat="mecanismo_mat"/>
+      <draw mesh="eje4_M" sub_mesh="5" mat="mecanismo_mat"/>
+      <draw mesh="eje4_M" sub_mesh="6" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-2.03883 -2.02766 -2.41358" max="2.03883 2.02766 2.41358"/>
+  </entity>
+  <entity  >
+    <name name="eje5_M_99.0" />
+    <transform position="-44.9344 -7.00546e-006 -160.266" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="eje5_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="eje5_M" sub_mesh="1" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-2.30786 -2.31146 -1.13931" max="2.30786 2.31146 1.13931"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="engranaje_4_radios_100.0" />
+    <transform position="-87.4626 -6.74827e-006 -153.973" rotation="0.0 0.0 0.0 1.0" scale="0.7 0.7 0.7"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="engranaje_4_radios" sub_mesh="0" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-2.347 -2.35066 -0.465489" max="2.347 2.35066 0.465489"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.97148" boxY="1.99806" boxZ="0.465489"/>
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="engranaje_6_radios_101.0" />
+    <transform position="-88.8085 -7.12363e-006 -162.561" rotation="0.0 0.0 0.0 1.0" scale="0.7 0.7 0.7"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="engranaje_6_radios" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="engranaje_6_radios" sub_mesh="1" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-3.22701 -3.21522 -0.641312" max="3.22701 3.21522 0.641311"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.51707" boxY="2.66863" boxZ="0.641311"/>
+    <staticbody/>
+  </entity>
+  <entity tag = "level" prefab="Boss">
+    <transform position="-0.407952 2.58021 10.9626" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  >
+    <name name="BossBody" />
+    <transform position="-0.485358 2.58021 10.9626" rotation="0.0 -1.74856e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-6.76776 0.431214 -6.76776" max="6.76776 11.1536 6.76776"/>
+  </entity>
+  <entity  >
+    <name name="PitTrigger" />
+    <transform position="-0.161076 -18.5978 9.6552" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-55.0 -10.0 -55.0" max="55.0 10.0 55.0"/>
+    <trigger botOnly="false" playerOnly="true" />
+  </entity>
+  <entity tag = "actor" collisionTag = "Level" >
+    <name name="ObstaculoBossPrueba01" />
+    <transform position="-22.1026 4.2553 7.94881" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.6 0.894118 0.721569">
+      <draw mesh="ObstaculoBossPrueba01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossPrueba01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossPrueba01" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossPrueba01" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossPrueba01" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossPrueba01" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.281187 -1.51542 -1.67338" max="0.281187 1.51542 1.67338"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.281187" boxY="1.51542" boxZ="1.67338"/>
+    
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="ObstaculoBossCarlos01" />
+    <transform position="-22.6856 4.86892 13.5989" rotation="0.0 0.0 -0.577123 0.816657" scale="0.554 0.554 0.554"/>
+    <render  color = "0.0666667 0.0666667 0.0666667">
+      <draw mesh="ObstaculoBossCarlos01" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossCarlos01" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossCarlos01" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossCarlos01" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossCarlos01" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ObstaculoBossCarlos01" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-3.07556 -0.475767 -3.02827" max="3.07556 0.475767 3.02827"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.70386" boxY="0.428575" boxZ="1.67766"/>
+    <rigidbody density="52.5905"  bossLevel="1"/>
+    <rigidbody density="44.4397"  />
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="JointCover01_51.0" />
+    <jointPrismatic actor1 = "Floor_1.0"  jointRelativePosition0="-21.8609 2.2196 24.2682" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "ObstaculoBossPrueba01"  jointRelativePosition1="0.0 0.0 1.37704" jointRelativeRotation1="0.0 0.0 0.0 1.0"  jointPosition="-22.1026 5.63234 7.94881" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="1.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" parentCollition="false" />
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="JointCover02_54.0" />
+    <jointPrismatic actor1 = "Floor_1.0"  jointRelativePosition0="-22.6497 -3.43045 24.0697" jointRelativeRotation0="0.0 -0.169376 0.0 0.985552" actor2 = "ObstaculoBossCarlos01"  jointRelativePosition1="-1.08508 0.0 -0.00979614" jointRelativeRotation1="0.0 -0.707107 0.0 0.707107"  jointPosition="-22.8914 5.43376 13.5989" jointRotation="0.0 0.0 0.169376 0.985552" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="1.3" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" parentCollition="false" />
+  </entity>
+</scene>

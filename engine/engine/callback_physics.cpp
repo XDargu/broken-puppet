@@ -151,7 +151,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
 						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 
-						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
+						/*CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
 
 						if (particle_entity.isValid()) {
 							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
@@ -161,7 +161,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
 								(*pg->particle_systems)[0].emitter_generation->radius = radius;
 							}
-						}
+						}*/
 					}
 				}
 
@@ -200,7 +200,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
 						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 
-						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
+						/*CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
 
 						if (particle_entity.isValid()) {
 							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
@@ -210,7 +210,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
 								(*pg->particle_systems)[0].emitter_generation->radius = radius;
 							}
-						}
+						}*/
 					}
 				}
 

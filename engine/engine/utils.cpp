@@ -80,7 +80,7 @@ void error(int line, char* file, char* method, char* msg, ...) {
 }
 
 void debug(int line, char* file, char* method, char* msg, ...) {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	//return;
 	va_list ap;
 	va_start(ap, msg);
@@ -93,7 +93,7 @@ void debug(int line, char* file, char* method, char* msg, ...) {
 	}
 
 	dbg("%s%s\n\t%s\n\tLine: %i\n\tFile: %s\n", error_context.c_str(), method, buf, line, file);
-#endif
+//#endif
 }
 
 bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {

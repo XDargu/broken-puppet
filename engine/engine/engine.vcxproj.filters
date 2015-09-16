@@ -554,9 +554,15 @@
       <Filter>components\animation</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_explosion.h">
-          <Filter>components\misc</Filter>
+      <Filter>components\misc</Filter>
     </ClInclude>
     <ClInclude Include="localization_parser.h" />
+    <ClInclude Include="ai\cinematic_parser.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ai\cinematic_manager.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1038,6 +1044,12 @@
       <Filter>components\misc</Filter>
     </ClCompile>
     <ClCompile Include="localization_parser.cpp" />
+    <ClCompile Include="ai\cinematic_parser.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\cinematic_manager.cpp">
+      <Filter>ai\logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">
@@ -1164,5 +1176,6 @@
     <None Include="data\lua\scheduler.lua">
       <Filter>lua</Filter>
     </None>
+    <None Include="..\..\..\..\..\..\GoogleDrive\UPF Studio 1.0\Artistas\Animaciones\Boss - Guardian del Desvan\Death\CAL\death.CAF" />
   </ItemGroup>
 </Project>

@@ -32,6 +32,9 @@ private:
 	void loopAnimationIfNotPlaying(int id, bool restart);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	
+	int hurt_state;
+	int arm_state;
 
 public:
 	fsm_boss();
@@ -52,7 +55,11 @@ public:
 	void Rain1Loop();
 	void Rain1Recover();
 
-	void Ball1(float elapsed);
+	
+	void Ball1Initial(float elapsed);
+	void Ball1Loop(float elapsed);
+	void Ball1Launch(float elapsed);
+
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
 	void Shoot1Shoot();
@@ -77,11 +84,12 @@ public:
 
 	void FinalState();	
 
-	void Dead();
+	void Death();
 
-	void EvaluateHit();
+	bool EvaluateHit(int arm_damaged);
 
 	CHandle Player;
+
 
 	
 };
