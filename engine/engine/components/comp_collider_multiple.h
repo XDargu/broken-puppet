@@ -15,6 +15,7 @@ private:
 	XMVECTOR t_previous;
 	float* m_v;
 	int*   t_v;
+	bool inside_recastAABB;
 public:
 	std::vector<PxShape*> colliders;
 
@@ -33,6 +34,8 @@ public:
 	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
 
 	bool  getIfUpdated();
+
+	void checkIfInsideRecastAABB();
 };
 
 #endif

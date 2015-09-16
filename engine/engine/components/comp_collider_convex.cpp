@@ -29,11 +29,12 @@ void TCompColliderConvex::loadFromAtts(const std::string& elem, MKeyValue &atts)
 	//Una vez creado el shape, no necesitamos el triangleMesh
 	convex_mesh->release();
 
+	inside_recastAABB = false;
 	//collider->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, true);
 }
 
 void TCompColliderConvex::init() {
-	const CCollision_Convex* c_nv = convex_collision_manager.getByName(path);
+	/*const CCollision_Convex* c_nv = convex_collision_manager.getByName(path);
 	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
 
 	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
@@ -44,7 +45,7 @@ void TCompColliderConvex::init() {
 			addInputNavMesh();
 			CNav_mesh_manager::get().colConvex.push_back(this);
 		}
-	}
+	}*/
 }
 
 void TCompColliderConvex::addInputNavMesh(){
@@ -119,4 +120,26 @@ TCompColliderConvex::~TCompColliderConvex(){
 
 	if (m_v)
 		delete[] m_v;
+}
+
+void TCompColliderConvex::checkIfInsideRecastAABB(){
+	TCompAABB* m_aabb = getSibling<TCompAABB>(this);
+
+	for (int i = 0; i < CNav_mesh_manager::get().recastAABBs.size(); i++){
+		TCompRecastAABB* recast_AABB = ((TCompRecastAABB*)CNav_mesh_manager::get().recastAABBs[i]);
+		TCompAABB* aabb_comp = (TCompAABB*)recast_AABB->m_aabb;
+		AABB recast_aabb = AABB(aabb_comp->min, aabb_comp->max);
+		if (recast_aabb.intersects(m_aabb)) {
+			if (!inside_recastAABB){
+				addInputNavMesh();
+				CNav_mesh_manager::get().colConvex.push_back(this);
+				inside_recastAABB = true;
+			}
+		}else{
+			if (inside_recastAABB){
+				CNav_mesh_manager::get().removeConvex(this);
+				inside_recastAABB = false;
+			}
+		}
+	}
 }

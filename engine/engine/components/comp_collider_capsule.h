@@ -11,6 +11,7 @@ private:
 	XMVECTOR t_previous;
 	float* m_v;
 	int*   t_v;
+	bool inside_recastAABB;
 public:
 	TCompColliderCapsule() : CCollider() { m_v = nullptr, t_v = nullptr; }
 
@@ -35,6 +36,8 @@ public:
 	void setCollisionGroups(PxU32 own_mask, PxU32* vector_masks, int num_elems);
 
 	bool  getIfUpdated();
+
+	void checkIfInsideRecastAABB();
 };
 
 #endif
