@@ -1,0 +1,5 @@
+<skeleton>
+    <mesh name="violin"/>
+	
+	<anim name="idle"/>
+</skeleton>

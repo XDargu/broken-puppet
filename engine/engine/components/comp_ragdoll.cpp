@@ -89,7 +89,7 @@ void TCompRagdoll::setActive(bool active) {
 		/*disableBoneTree(8);
 		enableBoneTree(8);*/
 	}else if(e->hasTag("enemy")){
-		setCollisonEnemy(active);		
+		setCollisonEnemy(active);
 	}
 }
 
