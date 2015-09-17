@@ -345,7 +345,7 @@ void CalSubmesh::setLodLevel(float lodLevel)
   std::vector<CalCoreSubmesh::Vertex>& vectorVertex = m_pCoreSubmesh->getVectorVertex();
 
   // calculate the new number of faces
-  m_faceCount = vectorFace.size();
+  m_faceCount = (int)vectorFace.size();
 
   int vertexId;
   for(vertexId = vectorVertex.size() - 1; vertexId >= m_vertexCount; vertexId--)

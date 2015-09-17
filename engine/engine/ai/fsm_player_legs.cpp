@@ -68,13 +68,13 @@ void FSMPlayerLegs::Init()
 	//character_controller->jumpPower = 7;
 	walk_speed = 1.5f;
 
-	character_controller->lerpRotation = 0.15;
+	character_controller->lerpRotation = 0.15f;
 
 	//character_controller->gravityMultiplier = 32;
 	//character_controller->jumpPower = 9.2;
 
 	character_controller->gravityMultiplier = 48;
-	character_controller->jumpPower = 10.2;
+	character_controller->jumpPower = 10.2f;
 
 	current_animation_id = -1;
 
@@ -179,7 +179,7 @@ void FSMPlayerLegs::IdleElevator(float elapsed){
 		skeleton->loopAnimation(animation);
 	}
 
-	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
+	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 }
 
 void FSMPlayerLegs::Walk(float elapsed){

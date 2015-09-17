@@ -273,7 +273,7 @@ PxReal CCallbacks_physx::getForceAndPosition(PxReal mass, const PxContactPair* p
 	PxVec3 forcePhysics = Physics.XMVECTORToPxVec3(force);
 	PxReal forceMagnitude = forcePhysics.magnitude();
 
-	position /= nbContacts;
+	position /= (float)nbContacts;
 
 	return forceMagnitude;
 }

@@ -123,7 +123,7 @@ void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positions
 	mTmpIndexArray.resize(numNewParticles);
 	PxStrideIterator<PxU32> indexData(&mTmpIndexArray[0]);
 	PxU32 numAllocated = indexPool->allocateIndices(numNewParticles, indexData);
-	for (int i = 0; i < numNewParticles; i++){
+	for (PxU32 i = 0; i < numNewParticles; i++){
 		myIndexBuffer.push_back(mTmpIndexArray[i]);
 		newIndexBuffer.push_back(mTmpIndexArray[i]);
 		newIndices->push_back(mTmpIndexArray[i]);

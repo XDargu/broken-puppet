@@ -239,7 +239,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 	float force_s = 100;
 
 	bool colliding = false;
-	for (int i = 0; i < buf.nbTouches; i++)
+	for (unsigned int i = 0; i < buf.nbTouches; i++)
 	{
 		CHandle e(buf.touches[i].actor->userData);
 		if (!(e == e1) && !(e == e2) && !(e == e3)) {

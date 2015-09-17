@@ -22,8 +22,8 @@ void TUnderwaterEffect::apply(CTexture* in) {
 	ctes_underwater.activateInPS(3);
 
 	// Sample to the left & right
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesUnderwater* cb = ctes_underwater.get();
 	cb->uw_delta = XMVectorSet(inv_resolution_x, inv_resolution_y, 0, 0);
 	cb->uw_amount = amount;

@@ -392,7 +392,7 @@ void TW_CALL CallbackRemoveSubemitter(void *clientData)
 
 void TW_CALL CallbackAddUpdaterNoise(void *clientData)
 {
-	static_cast<TParticleSystem *>(clientData)->updater_noise = new TParticleUpdaterNoise(XMVectorSet(-0.1, -0.1, -0.1, 0), XMVectorSet(0.1, 0.1, 0.1, 0));
+	static_cast<TParticleSystem *>(clientData)->updater_noise = new TParticleUpdaterNoise(XMVectorSet(-0.1f, -0.1f, -0.1f, 0), XMVectorSet(0.1f, 0.1f, 0.1f, 0));
 	entity_inspector.inspectEntity(entity_inspector.getInspectedEntity());
 }
 
@@ -875,7 +875,7 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 			aux = "Renderer" + i;
 			TwAddButton(bar, aux.c_str(), NULL, NULL, "group=PG label='Renderer'");
 			
-			particleRenderTextureList = TwDefineEnum("ParticleRenderTextureList", particleRenderTextureListEV, texture_list.size());
+			particleRenderTextureList = TwDefineEnum("ParticleRenderTextureList", particleRenderTextureListEV, (int)texture_list.size());
 
 			aux = "PGRendererTextureList" + i;
 			TwAddVarCB(bar, aux.c_str(), particleRenderTextureList, SetParticleRenderTexture, GetParticleRenderTexture, &(*e_particle_group->particle_systems)[i], " group=PG label='Texture'");

@@ -140,15 +140,15 @@ void TCompPlayerController::update(float elapsed) {
 						if (old_t_transform->getType() == 80)
 							old_t_transform->setType(1);
 						if (((TCompTransform*)old_target_transform)->getType() == 90)
-							((TCompTransform*)old_target_transform)->setType(0.95);
+							((TCompTransform*)old_target_transform)->setType(0.95f);
 					}
 				}
 				if (target_transform->getType() == 100) {
-					target_transform->setType(0.8);
+					target_transform->setType(0.8f);
 					old_target_transform = target_transform;
 				}
 				if (target_transform->getType() == 95) {
-					target_transform->setType(0.9);
+					target_transform->setType(0.9f);
 					old_target_transform = target_transform;
 				}
 			}
@@ -179,7 +179,7 @@ void TCompPlayerController::update(float elapsed) {
 		TTransform bone_trans = TTransform(back_pos, back_rot, XMVectorSet(1, 1, 1, 0));
 
 		bone_trans.rotation = XMQuaternionMultiply(bone_trans.rotation, XMQuaternionRotationAxis(bone_trans.getUp(), deg2rad(90)));
-		bone_trans.position += bone_trans.getFront() * -0.15;
+		bone_trans.position += bone_trans.getFront() * -0.15f;
 
 		// Here we have the bone_trans transform with the neutral position of a needle
 		// Now, add some random rotation/poasition to the needles

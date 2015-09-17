@@ -235,6 +235,7 @@ bool CSoundManager::setInstancePos(FMOD::Studio::EventInstance* eventInstance, T
 			return false;
 		return false;
 	}
+	return false;
 }
 
 void CSoundManager::playEvent(std::string path, XMVECTOR pos) {
