@@ -218,7 +218,7 @@ TParticleEmitterGeneration::TParticleEmitterGeneration(TParticleSystem* the_ps, 
 	emitter_counter = 0;
 	random_rotation = the_random_rotation;
 
-	inner_radius = 0.05;
+	inner_radius = 0.05f;
 	box_size = the_radius_or_box_size;
 	angle = deg2rad(30);
 

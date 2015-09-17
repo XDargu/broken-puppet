@@ -68,13 +68,13 @@ void FSMPlayerLegs::Init()
 	//character_controller->jumpPower = 7;
 	walk_speed = 1.5f;
 
-	character_controller->lerpRotation = 0.15;
+	character_controller->lerpRotation = 0.15f;
 
 	//character_controller->gravityMultiplier = 32;
 	//character_controller->jumpPower = 9.2;
 
 	character_controller->gravityMultiplier = 48;
-	character_controller->jumpPower = 10.2;
+	character_controller->jumpPower = 10.2f;
 
 	current_animation_id = -1;
 
@@ -179,7 +179,7 @@ void FSMPlayerLegs::IdleElevator(float elapsed){
 		skeleton->loopAnimation(animation);
 	}
 
-	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
+	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 }
 
 void FSMPlayerLegs::Walk(float elapsed){
@@ -436,11 +436,14 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 		stopAllAnimations();
 		//skeleton->loopAnimation(0);
 		skeleton->playAnimation(animation);
-		CSoundManager::SoundParameter params[] = {
-			{ "type", 0 }
-		};
+		//CSoundManager::SoundParameter params[] = {
+			//{ "type", 0 }
+		//};
 
-		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+
+		CSoundManager::get().playEvent("event:/Strings/stringThrow");
+	
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");
@@ -464,11 +467,14 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 
 	if (on_enter) {
 		skeleton->playAnimation(animation);
-		CSoundManager::SoundParameter params[] = {
+		/*CSoundManager::SoundParameter params[] = {
 			{ "type", 0 }
 		};
 
-		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));*/
+
+		CSoundManager::get().playEvent("event:/Strings/stringThrow");
+	
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_throw");

@@ -120,7 +120,7 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   CalSkeleton* skel = model->getSkeleton();
   auto& cal_bones = skel->getVectorBone();
 
-  int size = cal_bones.size();
+  int size = (int)cal_bones.size();
   bone_ragdoll_transforms = new CalTransform[size];
 
   for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
@@ -191,7 +191,7 @@ void TCompSkeleton::update(float elapsed) {
 	  auto& cal_bones = skel->getVectorBone();
 	  for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
 
-		  PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
+		  PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid((int)bone_idx);
 
 		  if (rigid_bone) {
 			  CalBone* bone = cal_bones[bone_idx];
@@ -267,7 +267,7 @@ void TCompSkeleton::update(float elapsed) {
 			  CalSkeleton* skel = model->getSkeleton();
 			  auto& cal_bones = skel->getVectorBone();
 
-			  int size = cal_bones.size();
+			  int size = (int)cal_bones.size();
 
 			  for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
 				  CalBone* bone = cal_bones[bone_idx];
@@ -297,11 +297,11 @@ void TCompSkeleton::update(float elapsed) {
 		  CalSkeleton* skel = model->getSkeleton();
 		  auto& cal_bones = skel->getVectorBone();
 
-		  int size = cal_bones.size();
+		  int size = (int)cal_bones.size();
 
 		  for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
-			  PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid(bone_idx);
-			  bool rigid_bone_ragdoll = cal_bones[bone_idx]->getCoreBone()->getUserData();
+			  PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid((int)bone_idx);
+			  bool rigid_bone_ragdoll = cal_bones[bone_idx]->getCoreBone()->getUserData() != 0;
 
 			  if (rigid_bone && rigid_bone_ragdoll) {
 				  CalBone* bone = cal_bones[bone_idx];
@@ -472,7 +472,8 @@ void TCompSkeleton::renderDebug3D() const {
   TCompRigidBody* rigid = h_rigidbody;
   if (rigid) {
 	  CEntity* e = CHandle(rigid->rigidBody->userData);
-	  if (!e->hasTag("player")) { return; }
+	  //if (!e->hasTag("player")) { return; }
+	  if (!e->hasTag("boss")) { return; }
   }
   auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;
@@ -591,7 +592,7 @@ void TCompSkeleton::ragdollUnactive() {
 	CalSkeleton* skel = model->getSkeleton();
 	auto& cal_bones = skel->getVectorBone();
 
-	int size = cal_bones.size();
+	int size = (int)cal_bones.size();
 
 	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
 		CalBone* bone = cal_bones[bone_idx];

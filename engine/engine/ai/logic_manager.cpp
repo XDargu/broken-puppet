@@ -38,7 +38,6 @@ CLogicManager& CLogicManager::get() {
 }
 
 CLogicManager::CLogicManager() {
-
 }
 
 void CLogicManager::init()
@@ -57,6 +56,7 @@ void CLogicManager::init()
 	lock_on_target = CHandle();
 
 	particle_group_counter = 0;
+	p_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
 	player = CEntityManager::get().getByName("Player");
@@ -249,11 +249,11 @@ void CLogicManager::draw() {
 		subtitles_font.size = current_subtitle.size;
 
 		XMVECTOR measure = subtitles_font.measureString(current_subtitle.text.c_str());
-		float bottom_offset = CApp::get().yres / 15;
+		float bottom_offset = CApp::get().yres / 15.0f;
 		float width = XMVectorGetZ(measure);
 		float height = XMVectorGetW(measure);
 		
-		subtitles_font.printCentered(CApp::get().xres / 2, CApp::get().yres - height * 0.5f - bottom_offset, current_subtitle.text.c_str());
+		subtitles_font.printCentered(CApp::get().xres / 2.0f, CApp::get().yres - height * 0.5f - bottom_offset, current_subtitle.text.c_str());
 
 		subtitles_font.color = old_col;
 		subtitles_font.size = old_size;

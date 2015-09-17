@@ -124,8 +124,8 @@ bool Citem_manager::getTargetNeedle(CHandle grandma, int i,float radius, float m
 
 bool Citem_manager::asociateTargetNeedle(XMVECTOR pos, int i,float radius, CHandle grandma, float max_dist_reach_needle){
 	bool success = false;
-	int min_distance_rope = 100.f;
-	int min_distance_no_rope = 100.f;
+	float min_distance_rope = 100.f;
+	float min_distance_no_rope = 100.f;
 	int ind_priority=-1;
 	int ind_nearest = -1;
 	//for (int i = 0; i < needles.size(); i++) {

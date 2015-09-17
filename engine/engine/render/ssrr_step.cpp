@@ -24,8 +24,8 @@ bool TSSRRStep::create(const char* name, int axres, int ayres, int afactor) {
 void TSSRRStep::apply(CTexture* in) {
 	ctes_ssrr.activateInPS(3);
 
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesSSRR* cssrr = ctes_ssrr.get();
 	cssrr->ssrr_amount = amount;
 	cssrr->ssrr_quality = quality;

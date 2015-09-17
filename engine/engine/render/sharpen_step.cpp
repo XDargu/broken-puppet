@@ -22,8 +22,8 @@ void TSharpenStep::apply(CTexture* in) {
 	ctes_sharpen.activateInPS(3);
 
 	// Sample to the left & right
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesSharpen* cb = ctes_sharpen.get();	
 	cb->sharpen_delta = XMVectorSet(inv_resolution_x, inv_resolution_y, 0, 0);
 	cb->amount = amount;

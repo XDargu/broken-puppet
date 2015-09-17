@@ -21,8 +21,8 @@ void TChromaticAberrationStep::apply(CTexture* in) {
 	texture_manager.getByName("rt_depth")->activate(2);
 
 	// Sample to the left & right
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesChromaticAberration* cb = ctes_chromatic_aberration.get();
 	cb->ca_delta = XMVectorSet(inv_resolution_x, inv_resolution_y, 0, 0);
 	cb->chromatic_amount = amount;

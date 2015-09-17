@@ -30,8 +30,8 @@ void TSilouetteStep::apply(CTexture* in) {
 
 	ctes_glow.activateInPS(3);
 
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesGlow* cb = ctes_glow.get();
 	cb->glow_delta = XMVectorSet(inv_resolution_x, inv_resolution_y, 0, 0);
 	cb->glow_amount = amount;

@@ -14,7 +14,7 @@ void TCompVibration::update(float elapsed) {
 	TCompTransform* c_transform = h_transform;
 
 	double time = CApp::get().total_time;
-	float delta = sin(time * frequency) * amount;
+	float delta = sin((float)time * frequency) * amount;
 
 	XMVECTOR v_delta = XMVectorSet(delta, delta, delta,0);
 

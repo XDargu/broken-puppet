@@ -43,19 +43,6 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (mJoint)
 		mJoint->release();
 
-
-	// Physics var
-	PxReal lower_limit;
-	PxReal upper_limit;
-	PxReal stiffness;
-	PxReal damping;
-
-	PxRigidActor* actor;
-
-	PxReal linearModeX;
-	PxReal linearModeY;
-	PxReal linearModeZ;
-
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 

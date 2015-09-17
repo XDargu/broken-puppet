@@ -8,13 +8,18 @@
 struct TCompParticleGroup : TBaseComponent {
 	
 	std::vector<TParticleSystem>* particle_systems;
-
+public:
+	enum flag{
+		UNDEFINED,
+		IMPACT
+	};
+	flag kind;
 public:
 
 	bool destroy_on_death;
 	std::string def_name;
 
-	TCompParticleGroup() { def_name = ""; destroy_on_death = false; particle_systems = new std::vector<TParticleSystem>; };
+	TCompParticleGroup() { def_name = ""; destroy_on_death = false; particle_systems = new std::vector < TParticleSystem > ; kind = UNDEFINED; };
 
 	~TCompParticleGroup();
 

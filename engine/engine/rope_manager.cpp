@@ -27,12 +27,23 @@ void CRope_manager::removeBackString(){
 		CHandle c_rope = strings.back();
 		strings.pop_back();
 		if (c_rope.isValid()) {
-			CSoundManager::SoundParameter params[] = {
-				{ "type", 3 }
-			};
+			//CSoundManager::SoundParameter params[] = {
+				//{ "type", 3 }
+			//};
 
-			CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			TCompRope* rope = c_rope;
+			if (rope){
+				float distance = 0.f;
+				distance = V3DISTANCE(rope->pos_1, rope->pos_2);
+
+				CSoundManager::SoundParameter params[] = {
+					{ "distance", distance }
+				};
+
+				CSoundManager::get().playEvent("event:/Strings/stringCancel", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			}
+
 			
 			if (rope->joint_aux.isValid())
 				CEntityManager::get().remove(rope->joint_aux.getOwner());
@@ -85,11 +96,19 @@ void CRope_manager::clearStrings(){
 					CEntityManager::get().remove(m_rope->joint_aux.getOwner());
 
 				CEntityManager::get().remove(CHandle(rope).getOwner());
+				//CSoundManager::SoundParameter params[] = {
+					//{ "type", 3 }
+				//};
+				float distance = 0.f;
+				distance = V3DISTANCE(rope->pos_1, rope->pos_2);
+
 				CSoundManager::SoundParameter params[] = {
-					{ "type", 3 }
+					{ "distance", distance }
 				};
 
-				CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+				CSoundManager::get().playEvent("event:/Strings/stringCancel", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+
+				//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			}
 		}
 	}

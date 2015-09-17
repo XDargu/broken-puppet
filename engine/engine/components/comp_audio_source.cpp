@@ -40,7 +40,7 @@ void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	if (elem=="fin_param"){
 		if (!params_value.empty()){
-			const int size = params_value.size();
+			const int size = (int)params_value.size();
 			std::vector<CSoundManager::SoundParameter> params;
 
 			for (int j = 0; j < size; ++j){

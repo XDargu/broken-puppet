@@ -671,7 +671,7 @@ void CApp::update(float elapsed) {
 		if (player) {
 			TCompTransform* player_t = player->get<TCompTransform>();
 			float p_y = XMVectorGetY(player_t->position);
-			underwater.amount = p_y > water_level ? 0 : 1;
+			underwater.amount = p_y > water_level ? 0.0f : 1.0f;
 		}
 	}
 	else
@@ -1015,7 +1015,7 @@ void CApp::render() {
 	if (debug_map == 5) { mode = "Lights"; }
 	if (debug_map == 6) { mode = "Depth"; }
 
-	font.print(xres / 2 - 30, 10, mode.c_str());
+	font.print(xres / 2.0f - 30, 10.0f, mode.c_str());
 
 	CTraceScoped t0("AntTweak");
 	TwDraw();
@@ -1166,7 +1166,7 @@ void CApp::renderEntities() {
 			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
-			tension = maxDist < 0.2 ? 0 : 1;
+			tension = maxDist < 0.2f ? 0.f : 1.f;
 
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);

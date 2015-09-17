@@ -98,7 +98,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		XASSERT(emitter_generation == nullptr, "Emitter already declared, a particle system can't have two different emitters");
 		std::string emitter_type = atts.getString("type", "");
 
-		float rate = atts.getFloat("rate", 0.1);
+		float rate = atts.getFloat("rate", 0.1f);
 		float min_life_time = atts.getFloat("minLifeTime", 5);
 		float max_life_time = atts.getFloat("maxLifeTime", 5);
 		bool fill_initial = atts.getBool("fillInitial", false);
@@ -395,7 +395,7 @@ void TParticleSystem::renderDebug3D() const {
 	for (auto& particle : particles) {
 		XMVECTOR pos = XMLoadFloat3(&particle.position);
 		XMVECTOR rot = XMVectorSet(0, 0, 0, 1);
-		XMVECTOR scale = XMVectorSet(0.1, 0.1, 0.1, 0.1);
+		XMVECTOR scale = XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f);
 		XMVECTOR zero = XMVectorSet(0, 0, 0, 0);
 		setWorldMatrix(XMMatrixAffineTransformation(scale, zero, rot, pos));
 		axis.activateAndRender();
