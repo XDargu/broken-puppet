@@ -472,7 +472,8 @@ void TCompSkeleton::renderDebug3D() const {
   TCompRigidBody* rigid = h_rigidbody;
   if (rigid) {
 	  CEntity* e = CHandle(rigid->rigidBody->userData);
-	  if (!e->hasTag("player")) { return; }
+	  //if (!e->hasTag("player")) { return; }
+	  if (!e->hasTag("boss")) { return; }
   }
   auto actions = model->getMixer()->getAnimationActionList();
   float x0 = 20.f;

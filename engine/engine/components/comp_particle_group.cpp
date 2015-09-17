@@ -8,8 +8,11 @@
 #include "comp_aabb.h"
 #include "comp_name.h"
 #include "render\render_manager.h"
+#include "ai\logic_manager.h"
 
 TCompParticleGroup::~TCompParticleGroup() {
+	if (kind == flag::IMPACT)
+		CLogicManager::get().p_group_counter--;
 	clearParticleSystems();
 	SAFE_DELETE(particle_systems);
 }

@@ -29,6 +29,8 @@ private:
 	const physx::PxReal forceLargeImpact;
 	const physx::PxReal forceMediumImpact;
 	const float impact_threshold_time;
+	unsigned int particle_systems_counter;
+	void createParticle(CEntity* entity, XMVECTOR position, XMVECTOR normal, std::string material);
 };
 
 class CFilterCallback:public physx::PxSimulationFilterCallback
