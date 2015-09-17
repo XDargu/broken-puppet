@@ -25,9 +25,9 @@ function onSceneLoad_my_file()
 
 	--logicManager:setMediumShotActive(true);
 	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
-	logicManager:setTimer("timerMolon", 3);
-
-	logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
+	--logicManager:setTimer("timerMolon", 3);
+	
+	--logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
 	--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
 	--logicManager:changeCamera("Camera001_34.0");
 	

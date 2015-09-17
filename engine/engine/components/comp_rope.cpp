@@ -15,7 +15,7 @@ TCompRope::~TCompRope() {
 	if (valid_trans_1.isValid()) {
 
 		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
-		if (needle->getAttachedRigid() != nullptr) {
+		if (needle && needle->getAttachedRigid() != nullptr) {
 			CHandle attached_entity(needle->getAttachedRigid()->userData);
 			if (attached_entity.isValid()) {
 				TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
@@ -33,7 +33,7 @@ TCompRope::~TCompRope() {
 	// Update the second pos
 	if (valid_trans_2.isValid()) {
 		TCompNeedle* needle = ((CEntity*)valid_trans_2.getOwner())->get<TCompNeedle>();
-		if (needle->getAttachedRigid() != nullptr) {
+		if (needle && needle->getAttachedRigid() != nullptr) {
 			CHandle attached_entity(needle->getAttachedRigid()->userData);
 			if (attached_entity.isValid()) {
 				TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
@@ -72,6 +72,60 @@ void TCompRope::setPositions(CHandle the_transform_1, CHandle the_transform_2) {
 void TCompRope::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	joint = assertRequiredComponent<TCompDistanceJoint>(this);
 
+	TCompDistanceJoint* m_joint = joint;
+
+	PxRigidActor* a1 = nullptr;
+	PxRigidActor* a2 = nullptr;
+
+	m_joint->joint->getActors(a1, a2);
+
+	CEntity* e1 = CHandle(a1->userData);
+	CEntity* e2 = CHandle(a2->userData);
+
+	transform_1 = e1->get<TCompTransform>();
+	transform_2 = e2->get<TCompTransform>();
+
+	XMVECTOR initialPos = XMVectorZero();
+	XMVECTOR finalPos = XMVectorZero();
+
+	XMVECTOR rot1 = XMQuaternionIdentity();
+	XMVECTOR rot2 = XMQuaternionIdentity();
+
+	if (a1) {
+		XMVECTOR offset_pos1 = Physics.PxVec3ToXMVECTOR(m_joint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+
+		XMVECTOR pos1 = Physics.PxVec3ToXMVECTOR(a1->getGlobalPose().p);
+		rot1 = Physics.PxQuatToXMVECTOR(a1->getGlobalPose().q);
+
+		XMVECTOR offset_rotado_1 = XMVector3Rotate(offset_pos1, rot1);
+
+		//   RECREATE ROPE
+		// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+		initialPos = pos1 + offset_rotado_1;
+	}
+	else {
+		initialPos = Physics.PxVec3ToXMVECTOR(m_joint->joint->getLocalPose(PxJointActorIndex::eACTOR0).p);
+	}
+	if (a2) {
+		XMVECTOR offset_pos2 = Physics.PxVec3ToXMVECTOR(m_joint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+
+		XMVECTOR pos2 = Physics.PxVec3ToXMVECTOR(a2->getGlobalPose().p);
+		rot2 = Physics.PxQuatToXMVECTOR(a2->getGlobalPose().q);
+
+		XMVECTOR offset_rotado_2 = XMVector3Rotate(offset_pos2, rot2);
+
+		//   RECREATE ROPE
+		// Obtener el punto en coordenadas de mundo = Offset * rotación + posición
+		finalPos = pos2 + offset_rotado_2;
+	}
+	else {
+		finalPos = Physics.PxVec3ToXMVECTOR(m_joint->joint->getLocalPose(PxJointActorIndex::eACTOR1).p);
+	}
+
+	// TODO: Va al centro, no a donde debería ¿?
+	pos_1 = initialPos;
+	pos_2 = finalPos;
+
 	width = atts.getFloat("width", 0.02f);
 	max_distance = atts.getFloat("maxDistance", 20);
 }
@@ -106,7 +160,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 		
 
 		TCompNeedle* needle = ((CEntity*)valid_trans_1.getOwner())->get<TCompNeedle>();
-		if (needle->getAttachedRigid() != nullptr) {
+		if (needle && needle->getAttachedRigid() != nullptr) {
 			CHandle attached_entity(needle->getAttachedRigid()->userData);
 			if (attached_entity.isValid()) {
 				TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
@@ -145,7 +199,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 		}
 
 		TCompNeedle* needle = ((CEntity*)valid_trans_2.getOwner())->get<TCompNeedle>();
-		if (needle->getAttachedRigid() != nullptr) {
+		if (needle && needle->getAttachedRigid() != nullptr) {
 			CHandle attached_entity(needle->getAttachedRigid()->userData);
 			TCompTransform* attached_transform = ((CEntity*)attached_entity)->get<TCompTransform>();
 

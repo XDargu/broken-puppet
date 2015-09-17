@@ -662,9 +662,6 @@
     <Xml Include="my_file.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="resolution.xml">
-      <SubType>Designer</SubType>
-    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="cal3d\cal3d.vcxproj">

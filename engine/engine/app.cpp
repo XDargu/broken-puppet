@@ -198,7 +198,7 @@ void createManagers() {
 	getObjManager<TCompCameraPivotController>()->init(1);
 	getObjManager<TCompThirdPersonCameraController>()->init(1);
 	getObjManager<TCompViewerCameraController>()->init(1);
-	getObjManager<TCompDistanceJoint>()->init(32);
+	getObjManager<TCompDistanceJoint>()->init(256);
 	getObjManager<TCompJointPrismatic>()->init(256);
 	getObjManager<TCompJointHinge>()->init(256);
 	getObjManager<TCompJointD6>()->init(512);
@@ -380,6 +380,8 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
+	first_scene = "data/scenes/my_file.xml";
+	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
 	//sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
 	//sm.addFXTrack("light.wav", "light");
@@ -409,7 +411,7 @@ bool CApp::create() {
 	//loadScene("data/scenes/escena_2_ms3.xml");
 	//loadScene("data/scenes/scene_volum_light.xml");
 	//loadScene("data/scenes/viewer.xml");
-	loadScene("data/scenes/my_file.xml");
+	//loadScene("data/scenes/my_file.xml");
 	//loadScene("data/scenes/desvan_test.xml");
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
@@ -417,7 +419,7 @@ bool CApp::create() {
 	loadScene("data/scenes/empty_scene.xml");
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
-	loadScene("data/scenes/my_file.xml");
+	loadScene(first_scene);
 #endif
 
 	//loadScene("data/scenes/test_dificultad.xml");
@@ -556,7 +558,7 @@ void CApp::update(float elapsed) {
 	if (game_state == TGameState::INITIAL_VIDEO) {
 		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
-			loadScene("data/scenes/my_file.xml");
+			loadScene(first_scene);
 		}
 		return;
 	}
@@ -839,7 +841,7 @@ void CApp::render() {
 		bool playVideo = renderVideo();
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
-			loadScene("data/scenes/my_file.xml");
+			loadScene(first_scene);
 		}
 		return;
 	}
@@ -894,27 +896,46 @@ void CApp::render() {
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
-
+	
+	activateBlendConfig(BLEND_CFG_DEFAULT);
 	renderEntities();
+
+	CTraceScoped scope2("transparency");
 	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 	render_manager.renderAll(&camera, false, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
 	render_manager.renderAll(&camera, false, true);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
+	scope2.~CTraceScoped();
 
 	activateCamera(camera, 1);
-	CTraceScoped scope_post("Postprocesado");
+	CTraceScoped scope_post1("SSR");
 	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
+	scope_post1.~CTraceScoped();
+	CTraceScoped scope_post2("Sharpen");
 	sharpen.apply(ssrr.getOutput());
+	scope_post2.~CTraceScoped();
+	CTraceScoped scope_post3("Chromatic aberration");
 	chromatic_aberration.apply(sharpen.getOutput());
+	scope_post3.~CTraceScoped();
+	CTraceScoped scope_post4("Underwater");
 	underwater.apply(chromatic_aberration.getOutput());
+	scope_post4.~CTraceScoped();
+	CTraceScoped scope_post5("Depth of field");
 	blur.apply(underwater.getOutput());
+	scope_post5.~CTraceScoped();
+	CTraceScoped scope_post6("Motion blur");
 	blur_camera.apply(blur.getOutput());
+	scope_post6.~CTraceScoped();
+	CTraceScoped scope_post7("Silouette");
 	silouette.apply(blur_camera.getOutput());
+	scope_post7.~CTraceScoped();
+	CTraceScoped scope_post8("Glow");
 	glow.apply(silouette.getOutput());
-
+	scope_post8.~CTraceScoped();
+	CTraceScoped scope_final("Final draw");
 	::render.activateBackbuffer();
 	static int sz = 150;
 
