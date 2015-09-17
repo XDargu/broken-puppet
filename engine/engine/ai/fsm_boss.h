@@ -22,7 +22,7 @@ private:
 	CHandle comp_skeleton_lookat;
 	CHandle m_player;
 
-	void Reorientate(float elapsed);
+	void Reorientate(float elapsed, bool just_look);
 	void Release_def();
 
 	// Animation
@@ -35,6 +35,8 @@ private:
 	
 	int hurt_state;
 	int arm_state;
+
+	int shoots_amount;
 
 public:
 	fsm_boss();
@@ -63,14 +65,18 @@ public:
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
 	void Shoot1Shoot();
+	void Shoot1Reload();
 
 	void WaveLeft();
 	void WaveRight();
 
 	void Proximity(float elapsed);
 
-	void Damaged1Left();
-	void Damaged1Right();
+	void Damaged1Left(float elapsed);
+	void Damaged1Right(float elapsed);
+
+	void Damaged1LeftFinal();
+	void Damaged1RightFinal();
 
 	void Idle2();
 	void Stunned2();

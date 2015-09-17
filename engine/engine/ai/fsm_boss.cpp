@@ -36,9 +36,12 @@ void fsm_boss::Init()
 	AddState("fbp_Ball1Launch", (statehandler)&fsm_boss::Ball1Launch);
 	AddState("fbp_Shoot1DownDef", (statehandler)&fsm_boss::Shoot1DownDef);
 	AddState("fbp_Shoot1Shoot", (statehandler)&fsm_boss::Shoot1Shoot);
+	AddState("fbp_Shoot1Reload", (statehandler)&fsm_boss::Shoot1Reload);
 	AddState("fbp_Shoot1ReleaseDef", (statehandler)&fsm_boss::Shoot1ReleaseDef);
 	AddState("fbp_Damaged1Left", (statehandler)&fsm_boss::Damaged1Left);
 	AddState("fbp_Damaged1Right", (statehandler)&fsm_boss::Damaged1Right);
+	AddState("fbp_Damaged1LeftFinal", (statehandler)&fsm_boss::Damaged1LeftFinal);
+	AddState("fbp_Damaged1RightFinal", (statehandler)&fsm_boss::Damaged1RightFinal);
 
 	AddState("fbp_Idle2", (statehandler)&fsm_boss::Idle2);
 	AddState("fbp_Stunned2", (statehandler)&fsm_boss::Stunned2);
@@ -70,6 +73,7 @@ void fsm_boss::Init()
 	state_time = 0.f;
 	arm_state = 0;
 	hurt_state = 0;
+	shoots_amount = 0;
 
 	// Init vars
 	point_offset = PxVec3(0, 10, 0);
@@ -106,9 +110,11 @@ void fsm_boss::Idle1(float elapsed){
 		loopAnimationIfNotPlaying(0, true);
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = true;
+
+		shoots_amount = 0;
 	}
 
-	Reorientate(elapsed);
+	Reorientate(elapsed, false);
 	
 	CIOStatus& io = CIOStatus::get();
 	// Update input
@@ -152,6 +158,14 @@ void fsm_boss::Idle1(float elapsed){
 	if (CIOStatus::get().becomesPressed(CIOStatus::B)){
 		EvaluateHit(1);
 	}
+	// Hacer danio a la izquierda final
+	if (CIOStatus::get().becomesPressed(CIOStatus::K)){
+		EvaluateHit(2);
+	}
+	// Hacer danio a la derecha final
+	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
+		EvaluateHit(3);
+	}
 }
 
 void fsm_boss::Hit1(float elapsed){
@@ -177,6 +191,24 @@ void fsm_boss::Stunned1(){
 		stopAllAnimations();
 		loopAnimationIfNotPlaying(2, true);
 	}
+
+	// Hacer danio a la izquierda
+	if (CIOStatus::get().becomesPressed(CIOStatus::V)){
+		EvaluateHit(0);
+	}
+	// Hacer danio a la derecha
+	if (CIOStatus::get().becomesPressed(CIOStatus::B)){
+		EvaluateHit(1);
+	}
+	// Hacer danio a la izquierda final
+	if (CIOStatus::get().becomesPressed(CIOStatus::K)){
+		EvaluateHit(2);
+	}
+	// Hacer danio a la derecha final
+	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
+		EvaluateHit(3);
+	}
+
 	if (state_time >= 10){
 		ChangeState("fbp_Recover");
 	}
@@ -246,7 +278,7 @@ void fsm_boss::Proximity(float elapsed){
 
 void fsm_boss::Ball1Initial(float elapsed){
 
-	Reorientate(elapsed);
+	Reorientate(elapsed, false);
 
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
@@ -263,7 +295,7 @@ void fsm_boss::Ball1Initial(float elapsed){
 
 
 void fsm_boss::Ball1Loop(float elapsed){
-	Reorientate(elapsed);
+	Reorientate(elapsed, false);
 
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
@@ -345,6 +377,7 @@ void fsm_boss::Ball1Launch(float elapsed){
 }
 //Shoot1
 void fsm_boss::Shoot1DownDef(){
+	Reorientate(0.f, true);
 
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
@@ -373,18 +406,37 @@ void fsm_boss::Shoot1DownDef(){
 		}
 	}
 	if (state_time >= 2.3f){
-		ChangeState("fbp_Shoot1Shoot");
+		ChangeState("fbp_Shoot1Reload");
 	}
 	
 }
 
-//Shoot
-void fsm_boss::Shoot1Shoot(){
-	
+void fsm_boss::Shoot1Reload(){
+	Reorientate(0.f, true);
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		loopAnimationIfNotPlaying(15, true);
+		loopAnimationIfNotPlaying(25, true);
+	}
+	
+	if ((shoots_amount == 1) && (state_time >= 1.f)){
+		ChangeState("fbp_Shoot1ReleaseDef");
+	}
+	else if ((state_time >= 10.f) || ((shoots_amount == 1)&&(state_time >= 1.f))){
+		ChangeState("fbp_Shoot1Shoot");
+	}
+}
+
+
+//Shoot
+void fsm_boss::Shoot1Shoot(){
+	Reorientate(0.f, true);
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(15);
+		last_anim_id = -1;
+		shoots_amount += 1;
 	}
 
 	// Take and shoot loop
@@ -395,14 +447,14 @@ void fsm_boss::Shoot1Shoot(){
 	// Leave protections
 
 	// Set Down protections
-	if (state_time >= 5){
-		ChangeState("fbp_Shoot1ReleaseDef");
+	if (state_time >= 1.3f){
+		ChangeState("fbp_Shoot1Reload");
 	}
 }
 
 //Shoot1ReleaseDef
 void fsm_boss::Shoot1ReleaseDef(){
-
+	Reorientate(0.f, true);
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -429,7 +481,7 @@ void fsm_boss::Shoot1ReleaseDef(){
 			}
 		}
 	}	
-	if (state_time >= 1.3f){
+	if (state_time >= 1.f){
 		ChangeState("fbp_Idle1");
 	}
 	
@@ -437,6 +489,7 @@ void fsm_boss::Shoot1ReleaseDef(){
 
 //WaveLeft
 void fsm_boss::WaveLeft(){
+	Reorientate(0.f, true);
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -451,6 +504,7 @@ void fsm_boss::WaveLeft(){
 
 //WaveRight
 void fsm_boss::WaveRight(){
+	Reorientate(0.f, true);
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -499,10 +553,19 @@ void fsm_boss::Damaged2(){
 
 //FinalState
 void fsm_boss::FinalState(){
-	int i = 0;
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		loopAnimationIfNotPlaying(26, true);
+		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
+		skeleton_lookat->active = false;
+	}
+	if (state_time >= 5.f){
+		ChangeState("fbp_Death");
+	}
 }
 
-void fsm_boss::Damaged1Left(){
+void fsm_boss::Damaged1Left(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -511,12 +574,16 @@ void fsm_boss::Damaged1Left(){
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
 	}
+	if (state_time >= 1.f){
+		Reorientate(elapsed, false);
+	}
+
 	if (state_time >= 2.6f){
 		ChangeState("fbp_Idle1");
 	}
 }
 
-void fsm_boss::Damaged1Right(){
+void fsm_boss::Damaged1Right(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -525,8 +592,40 @@ void fsm_boss::Damaged1Right(){
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
 	}
+	if (state_time >= 1.f){
+		Reorientate(elapsed, false);
+	}
 	if (state_time >= 2.6f){
 		ChangeState("fbp_Idle1");
+	}
+}
+
+
+void fsm_boss::Damaged1LeftFinal(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(22);
+		last_anim_id = -1;
+		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
+		skeleton_lookat->active = false;
+	}
+	if (state_time >= 1.f){
+		ChangeState("fbp_FinalState");
+	}
+}
+
+void fsm_boss::Damaged1RightFinal(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(24);
+		last_anim_id = -1;
+		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
+		skeleton_lookat->active = false;
+	}
+	if (state_time >= 1.f){
+		ChangeState("fbp_FinalState");
 	}
 }
 
@@ -547,43 +646,45 @@ void fsm_boss::Death(){
 }
 
 //Reorientate: this method handle the look at player and the reorientation
-void fsm_boss::Reorientate(float elapsed){
+void fsm_boss::Reorientate(float elapsed, bool just_look){
 
 	TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());	
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 
 	TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 	skeleton_lookat->target = player_comp_trans->position;
+	skeleton_lookat->active = true;
 
+	if (!just_look){
 
-	// Get the enemy position
-	PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+		// Get the enemy position
+		PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
+		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 
-	PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+		// Calculate direction player enemy
+		PxVec3 player_boss_dir = (player_pos - enemy_pos);
+		player_boss_dir.y = 0;
+		player_boss_dir = player_boss_dir.getNormalized();
 
-	// Calculate direction player enemy
-	PxVec3 player_boss_dir = (player_pos - enemy_pos);
-	player_boss_dir.y = 0;
-	player_boss_dir = player_boss_dir.getNormalized();
+		// Get the enemy front	
 
-	// Get the enemy front	
+		float angle = getAngleBetweenVectors(enemy_comp_trans->getFront(), Physics.PxVec3ToXMVECTOR(player_boss_dir));
+		// check if rotation is necesary
+		// if angle between boss forward and player and boss direction
+		if ((angle <= reorientate_angle) && (!need_reorientate)){
+			need_reorientate = true;
+		}
+		if (need_reorientate){
+			XMVECTOR aux_pos = player_comp_trans->position;
+			aux_pos = XMVectorSetY(aux_pos, XMVectorGetY(enemy_comp_trans->position));
 
-	 float angle = getAngleBetweenVectors(enemy_comp_trans->getFront(), Physics.PxVec3ToXMVECTOR(player_boss_dir));
-	// check if rotation is necesary
-	// if angle between boss forward and player and boss direction
-	 if ((angle <= reorientate_angle) && (!need_reorientate)){
-		 need_reorientate = true;
-	 }
-	 if (need_reorientate){
-		 XMVECTOR aux_pos = player_comp_trans->position;
-		 aux_pos = XMVectorSetY(aux_pos, XMVectorGetY(enemy_comp_trans->position));
-		 
-		 enemy_comp_trans->aimAt(aux_pos, enemy_comp_trans->getUp(), 0.8f * elapsed);
-		 if (angle >= no_reorientate_angle){
-			 need_reorientate = false;
-		 }
-	 }
+			enemy_comp_trans->aimAt(aux_pos, enemy_comp_trans->getUp(), 0.8f * elapsed);
+			if (angle >= no_reorientate_angle){
+				need_reorientate = false;
+			}
+		}
+	}
 
 }
 
@@ -611,8 +712,8 @@ void fsm_boss::Release_def(){
 
 void fsm_boss::stopAllAnimations() {
 	TCompSkeleton* m_skeleton = comp_skeleton;
-
-	for (int i = 0; i < 20; ++i) {
+	
+	for (int i = 0; i < 50; ++i) {
 		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
 	}
 }
@@ -649,6 +750,13 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 	}
 	if (arm_damaged == 1){
 		ChangeState("fbp_Damaged1Right");
+	}
+	// Simplificada	
+	if (arm_damaged == 2){
+		ChangeState("fbp_Damaged1LeftFinal");
+	}
+	if (arm_damaged == 3){
+		ChangeState("fbp_Damaged1RightFinal");
 	}
 
 	return false;

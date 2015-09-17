@@ -20,4 +20,4 @@
   <collision_table own_tag="Actor_non_collision">
     <collision_filter not_collides_tag="Actor"/>
   </collision_table>
-</collisions>
+</collisions> 
