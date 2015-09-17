@@ -20,6 +20,7 @@ private:
 
 	CHandle comp_skeleton;
 	CHandle comp_skeleton_lookat;
+	CHandle comp_ragdoll;
 	CHandle m_player;
 
 	void Reorientate(float elapsed, bool just_look);

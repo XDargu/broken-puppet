@@ -36,6 +36,7 @@ public:
 	void setCollisionGroups();
 
 	void breakJoints();
+	void breakJoint(int id);
 
 	PxRigidDynamic* getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir);
 

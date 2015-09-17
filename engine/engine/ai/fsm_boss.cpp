@@ -59,6 +59,11 @@ void fsm_boss::Init()
 
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
 	comp_skeleton_lookat = ((CEntity*)entity)->get<TCompSkeletonLookAt>();
+	comp_ragdoll = ((CEntity*)entity)->get<TCompRagdoll>();
+
+	if (comp_ragdoll.isValid()) {
+		((TCompRagdoll*)comp_ragdoll)->setActive(false);
+	}
 
 	TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 	skeleton_lookat->active = true;
@@ -419,10 +424,10 @@ void fsm_boss::Shoot1Reload(){
 		loopAnimationIfNotPlaying(25, true);
 	}
 	
-	if ((shoots_amount == 1) && (state_time >= 1.f)){
+	if ((shoots_amount >= 1) && (state_time >= 2.f)){
 		ChangeState("fbp_Shoot1ReleaseDef");
 	}
-	else if ((state_time >= 10.f) || ((shoots_amount == 1)&&(state_time >= 1.f))){
+	else if (state_time >= 6.f){
 		ChangeState("fbp_Shoot1Shoot");
 	}
 }
@@ -573,6 +578,11 @@ void fsm_boss::Damaged1Left(float elapsed){
 		last_anim_id = -1;
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		// Brazo izquierdo desabilitado y su joint roto
+		TCompRagdoll* ragdoll = comp_ragdoll;
+		ragdoll->disableBoneTree(11);
+		ragdoll->breakJoint(6);
 	}
 	if (state_time >= 1.f){
 		Reorientate(elapsed, false);
@@ -591,6 +601,11 @@ void fsm_boss::Damaged1Right(float elapsed){
 		last_anim_id = -1;
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		// Brazo derecho desabilitado y su joint roto
+		TCompRagdoll* ragdoll = comp_ragdoll;
+		ragdoll->disableBoneTree(36);
+		ragdoll->breakJoint(4);
 	}
 	if (state_time >= 1.f){
 		Reorientate(elapsed, false);
@@ -632,6 +647,7 @@ void fsm_boss::Damaged1RightFinal(){
 
 //Dead
 void fsm_boss::Death(){
+
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -639,8 +655,15 @@ void fsm_boss::Death(){
 		last_anim_id = -1;
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		// Prueba: desactivar árbol base (para que el ragdoll esté activo, pero solo la parte superior)
+		TCompRagdoll* ragdoll = comp_ragdoll;
+		ragdoll->disableBoneTree(4);
 	}
-	if (state_time >= 7.f){
+	
+	if (state_time >= 7.f){		
+		TCompRagdoll* ragdoll = comp_ragdoll;
+		ragdoll->enableBoneTree(4);
 		ChangeState("fbp_Idle1");
 	}
 }
