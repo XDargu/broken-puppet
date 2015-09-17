@@ -7099,7 +7099,7 @@
 <rigidbody density="500.0"  />
 <jointFixed actor1 = "dvn2_arqui_ambos_pared_half_h_123.0" actor2 = "cuadro_a_838.0"  jointPosition="9.87254 -0.30451 11.1659" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="1000.0" maxTorqueForce="1000.0" />
 	</entity>
-	<entity tag = "actor" collisionTag = "Actor">
+	<entity tag = "actor" collisionTag = "Actor" materialTag="metal">
 <name name="cuadro_b_839.0" />
 <transform position="9.85452 0.192361 12.2247" rotation="0.0 -0.707107 0.0 0.707107" scale="0.5 0.5 0.5"/>
 <render>

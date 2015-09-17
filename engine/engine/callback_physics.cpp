@@ -6,6 +6,7 @@
 #include <PxSimulationEventCallback.h>
 
 CEntityManager entity_manager = CEntityManager::get();
+const unsigned int max_impact_particles = 50;
 
 CCallbacks_physx::CCallbacks_physx() : forceLargeImpact(6000), forceMediumImpact(1000), impact_threshold_time(0.35f) {
 }
@@ -139,29 +140,8 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					TCompTransform* player_transform = player_entity->get<TCompTransform>();
 
 					// Particle dust effect
-					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25)) {
-						TCompAABB* actorAABB = firstActorEntity->get<TCompAABB>();
-
-						float x = XMVectorGetX(actorAABB->getExtents());
-						float y = XMVectorGetY(actorAABB->getExtents());
-						float z = XMVectorGetZ(actorAABB->getExtents());
-
-						float radius = (x + y + z) / 3;
-
-						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
-						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-
-						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
-
-						if (particle_entity.isValid()) {
-							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-							pg->destroy_on_death = true;
-							if (pg->particle_systems->size() > 0)
-							{
-								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
-								(*pg->particle_systems)[0].emitter_generation->radius = radius;
-							}
-						}
+					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25) && (CLogicManager::get().p_group_counter<max_impact_particles)) {
+						createParticle(firstActorEntity, position, normal, firstActorEntity->material_tag);
 					}
 				}
 
@@ -188,29 +168,8 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					TCompTransform* player_transform = player_entity->get<TCompTransform>();
 
 					// Particle dust effect
-					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25)) {
-						TCompAABB* actorAABB = firstActorEntity->get<TCompAABB>();
-
-						float x = XMVectorGetX(actorAABB->getExtents());
-						float y = XMVectorGetY(actorAABB->getExtents());
-						float z = XMVectorGetZ(actorAABB->getExtents());
-
-						float radius = (x + y + z) / 3;
-
-						XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
-						XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
-
-						CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", position, rotation);
-
-						if (particle_entity.isValid()) {
-							TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-							pg->destroy_on_death = true;
-							if (pg->particle_systems->size() > 0)
-							{
-								(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
-								(*pg->particle_systems)[0].emitter_generation->radius = radius;
-							}
-						}
+					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25) && (CLogicManager::get().p_group_counter<max_impact_particles)) {
+						createParticle(firstActorEntity, position, normal, secondActorEntity->material_tag);
 					}
 				}
 
@@ -369,4 +328,41 @@ CFilterCallback::CFilterCallback(){};
 
 PxFilterFlags 	CFilterCallback::pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor *a0, const PxShape *s0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor *a1, const PxShape *s1, PxPairFlags &pairFlags){
 	return PxFilterFlag::eSUPPRESS;
+}
+
+void CCallbacks_physx::createParticle(CEntity* entity, XMVECTOR position, XMVECTOR normal, std::string material) {
+	TCompAABB* actorAABB = entity->get<TCompAABB>();
+
+	float x = XMVectorGetX(actorAABB->getExtents());
+	float y = XMVectorGetY(actorAABB->getExtents());
+	float z = XMVectorGetZ(actorAABB->getExtents());
+
+	float radius = (x + y + z) / 3;
+
+	XMMATRIX view = XMMatrixLookAtRH(position, position + normal, XMVectorSet(0, 1, 0, 0));
+	XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+
+	std::string particle_name = "ps_prota_jump_ring";
+	if (material == "metal") {
+		particle_name = "ps_metal_hit";
+	}
+
+	// Final test (underwater)
+	if (XMVectorGetY(position) < CApp::get().water_level) {
+		particle_name = "ps_bubble_one_shot";
+	}
+
+	CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name, position, rotation);
+
+	if (particle_entity.isValid()) {
+		TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+		pg->kind = TCompParticleGroup::flag::IMPACT;
+		pg->destroy_on_death = true;
+		if (pg->particle_systems->size() > 0)
+		{
+			(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
+			(*pg->particle_systems)[0].emitter_generation->radius = radius;
+		}
+		CLogicManager::get().p_group_counter++;
+	}
 }

@@ -38,7 +38,6 @@ CLogicManager& CLogicManager::get() {
 }
 
 CLogicManager::CLogicManager() {
-
 }
 
 void CLogicManager::init()
@@ -57,6 +56,7 @@ void CLogicManager::init()
 	lock_on_target = CHandle();
 
 	particle_group_counter = 0;
+	p_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
 	water2_transform = CEntityManager::get().getByName("water2");
 	player = CEntityManager::get().getByName("Player");

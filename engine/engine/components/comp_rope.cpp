@@ -151,9 +151,9 @@ void TCompRope::fixedUpdate(float elapsed) {
 			dist = V3DISTANCE(trans_1->position, pos_1);
 
 			if (dist <= 0.f) {
-				if (!sound_1_played) {
-					//CSoundManager::get().playFXTrack("nail1");
-					sound_1_played = true;
+				if (!sound_1_played){
+					CSoundManager::get().playEvent("event:/Strings/needle_hit");
+					sound_1_played=true;
 				}
 			}
 		}
@@ -191,8 +191,8 @@ void TCompRope::fixedUpdate(float elapsed) {
 			dist = V3DISTANCE(trans_2->position, pos_2);
 
 			if (dist <= 0.f) {
-				if (!sound_2_played) {
-					//CSoundManager::get().playFXTrack("nail1");
+				if (!sound_2_played){
+					CSoundManager::get().playEvent("event:/Strings/needle_hit");
 					sound_2_played = true;
 				}
 			}
