@@ -725,6 +725,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		skeleton->playAnimation(32);
+		
 		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 		{
 			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			

@@ -896,27 +896,46 @@ void CApp::render() {
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
-
+	
+	activateBlendConfig(BLEND_CFG_DEFAULT);
 	renderEntities();
+
+	CTraceScoped scope2("transparency");
 	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
 	render_manager.renderAll(&camera, false, false);
 	activateRSConfig(RSCFG_REVERSE_CULLING);
 	render_manager.renderAll(&camera, false, true);
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DEFAULT);
+	scope2.~CTraceScoped();
 
 	activateCamera(camera, 1);
-	CTraceScoped scope_post("Postprocesado");
+	CTraceScoped scope_post1("SSR");
 	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
+	scope_post1.~CTraceScoped();
+	CTraceScoped scope_post2("Sharpen");
 	sharpen.apply(ssrr.getOutput());
+	scope_post2.~CTraceScoped();
+	CTraceScoped scope_post3("Chromatic aberration");
 	chromatic_aberration.apply(sharpen.getOutput());
+	scope_post3.~CTraceScoped();
+	CTraceScoped scope_post4("Underwater");
 	underwater.apply(chromatic_aberration.getOutput());
+	scope_post4.~CTraceScoped();
+	CTraceScoped scope_post5("Depth of field");
 	blur.apply(underwater.getOutput());
+	scope_post5.~CTraceScoped();
+	CTraceScoped scope_post6("Motion blur");
 	blur_camera.apply(blur.getOutput());
+	scope_post6.~CTraceScoped();
+	CTraceScoped scope_post7("Silouette");
 	silouette.apply(blur_camera.getOutput());
+	scope_post7.~CTraceScoped();
+	CTraceScoped scope_post8("Glow");
 	glow.apply(silouette.getOutput());
-
+	scope_post8.~CTraceScoped();
+	CTraceScoped scope_final("Final draw");
 	::render.activateBackbuffer();
 	static int sz = 150;
 

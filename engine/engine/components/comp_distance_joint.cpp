@@ -124,11 +124,17 @@ void TCompDistanceJoint::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 				, m_ridig_Actor2
 				, t_1
 				);
-	joint->setDamping(1);
-	joint->setStiffness(500);
+	
 	if (breakable) {
 		joint->setBreakForce(breakForce, breakTorque);
 	}
+
+	joint->setMaxDistance(0.1);
+	joint->setDamping(2);
+	joint->setStiffness(200);
+	joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+	//joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
+	joint->setTolerance(0.2f);
 
 }
 
@@ -200,7 +206,7 @@ void TCompDistanceJoint::awakeActors() {
 }
 
 void TCompDistanceJoint::init() {
-	CEntity* e_a1 = CEntityManager::get().getByName(actor1.c_str());
+	/*CEntity* e_a1 = CEntityManager::get().getByName(actor1.c_str());
 	CEntity* e_a2 = CEntityManager::get().getByName(actor2.c_str());
 
 	TCompRigidBody* r1 = e_a1->get<TCompRigidBody>();
@@ -228,5 +234,5 @@ void TCompDistanceJoint::init() {
 	joint->setMaxDistance(2.5f);
 	joint->setConstraintFlag(physx::PxConstraintFlag::eCOLLISION_ENABLED, true);
 	joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
-	joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);
+	joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eSPRING_ENABLED, true);*/
 }

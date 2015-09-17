@@ -1166,7 +1166,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="my_file.xml" />
-    <Xml Include="resolution.xml" />
     <Xml Include="collision_table.xml" />
   </ItemGroup>
   <ItemGroup>
