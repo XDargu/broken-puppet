@@ -83,9 +83,6 @@ float4 PSSilouette(
 	float4 type = txType.Load(screenCoords);
 	float3 wPos = getWorldCoords(screenCoords, depth);
 
-	float3 normal = txNormal.Load(screenCoords).xyz;
-	float3 wNormal = normalize(normal * 2.0f - 1.0f);
-
 	float4 color_x = float4(0, 0, 0, 0);
 	float4 color_y = float4(0, 0, 0, 0);
 

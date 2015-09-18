@@ -23,6 +23,8 @@ private:
 	float type;
 public:
 
+	int room_id;
+
 	TTransform local_transform;
 
 	TCompTransform() : TTransform(), parent(CHandle()) { parent_name[0] = 0x00; prev_transform = TTransform(); local_transform = TTransform(); }
