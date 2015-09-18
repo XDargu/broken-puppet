@@ -36,6 +36,14 @@ void TCompAiBoss::update(float elapsed){
 	
 
 	CIOStatus& io = CIOStatus::get();
+
+	if (CIOStatus::get().becomesPressed(CIOStatus::H)){
+		m_fsm_boss.HeadHit();
+	}
+	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
+		m_fsm_boss.HeartHit();
+	}
+
 	// Update input
 	/*
 	if (CIOStatus::get().becomesPressed(CIOStatus::ALT)){
