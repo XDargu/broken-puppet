@@ -9,6 +9,7 @@
 
 static CSoundManager the_sound_manager;
 static float volume_factor = 1000;
+const unsigned int max_dist_events = 40;
 
 void CSoundManager::ERRCHECK(FMOD_RESULT result)	// this is an error handling function
 {						// for FMOD errors
@@ -130,6 +131,7 @@ void CSoundManager::playEvent(std::string path, SoundParameter* parameters, int 
 }
 
 void CSoundManager::playEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos) {
+
 	if (event_descriptions.count(path)) {
 		// The event exists
 	}
@@ -239,7 +241,14 @@ bool CSoundManager::setInstancePos(FMOD::Studio::EventInstance* eventInstance, T
 }
 
 void CSoundManager::playEvent(std::string path, XMVECTOR pos) {
-	playEvent(path, 0, 0, pos);
+	TCompCamera* cam = render_manager.activeCamera;
+	if (cam) {
+		XMVECTOR camera_position = cam->getPosition();
+		float distance_to_listener = V3DISTANCE(camera_position, pos);
+		if (distance_to_listener <= max_dist_events){
+			playEvent(path, 0, 0, pos);
+		}
+	}
 }
 
 void CSoundManager::setListenerTransform(TTransform listener) {

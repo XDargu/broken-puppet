@@ -9,7 +9,8 @@
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 2.1f;
+const float max_dist_reach_needle = 1.95f;
+const float max_dist_to_needle = 2.05f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
 const float max_time_tied = 2.f;
@@ -381,7 +382,7 @@ int bt_grandma::actionChaseNeedlePosition()
 				if (path.size() > 0){
 					if (ind_path < path.size()){
 						float distance = V3DISTANCE((path[path.size() - 1]), n_transform->position);
-						if (distance <= max_dist_reach_needle){
+						if (distance < max_dist_reach_needle){
 							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
 							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
 								ind_path++;
@@ -1299,7 +1300,7 @@ int bt_grandma::conditioncan_reach_needle()
 
 			float distance_prueba = V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position);
 
-			if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_reach_needle){
+			if (V3DISTANCE(wander_target, ((TCompTransform*)own_transform)->position) <= max_dist_to_needle){
 				return true;
 			}
 			else{
