@@ -20,8 +20,8 @@ const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 4.5f;
 const float distance_change_way_point = 0.55f;
-const float force_large_impact = 500.f;
-const float force_medium_impact = 100.f;
+const float force_large_impact = 80000.f;
+const float force_medium_impact = 50000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 

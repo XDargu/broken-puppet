@@ -27,9 +27,13 @@ public:
 
 	void setCollisonPlayer(bool active);
 
+	void setCollisonBoss(bool active);
+
 	void setCollisonEnemy(bool active);
 
 	void setCollisonPlayerBone(bool active, int bone_id);
+
+	void setCollisonBossBone(bool active, int bone_id);
 
 	void setCollisonEnemyBone(bool active, int bone_id);
 

@@ -8466,7 +8466,7 @@
 	</entity>
 	<entity  >
 <name name="water" />
-<transform position="6.24763 -4.65007 94.7489" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="6.24763 0.65007 94.7489" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render>
 <draw mesh="water" sub_mesh="0" mat="distorsion"/>
 </render>
