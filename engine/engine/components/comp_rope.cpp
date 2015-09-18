@@ -168,6 +168,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 								XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 
 								std::string name = target_entity->getName();
+								XDEBUG("Needle shot to %s", name);
 								std::string material = target_entity->material_tag;
 								std::string particle_name = "ps_prota_jump_ring";
 
@@ -250,6 +251,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 								XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 
 								std::string name = target_entity->getName();
+								XDEBUG("Needle shot to %s", name.c_str());
 								std::string material = target_entity->material_tag;
 								std::string particle_name = "ps_prota_jump_ring";
 

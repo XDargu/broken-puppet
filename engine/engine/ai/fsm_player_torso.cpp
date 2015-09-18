@@ -221,7 +221,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						}
 
 						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
-						tied_sensor->changeTiedState(true, CHandle(new_e_r));
+						if (tied_sensor) {
+							tied_sensor->changeTiedState(true, CHandle(new_e_r));
+						}
 
 						// Get the ragdoll
 						TCompRagdoll* ragdoll = firstActorEntity->get<TCompRagdoll>();
@@ -372,7 +374,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						CEntity* secondActorEntity = CHandle(second_actor->userData);
 						if (secondActorEntity->hasTag("enemy")){
 							TCompSensorTied* tied_sensor = secondActorEntity->get<TCompSensorTied>();
-							tied_sensor->changeTiedState(true, CHandle(new_e_r));
+							if (tied_sensor) {
+								tied_sensor->changeTiedState(true, CHandle(new_e_r));
+							}
 							second_is_enemy = true;
 						}
 						else{
