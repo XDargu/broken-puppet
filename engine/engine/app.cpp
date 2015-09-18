@@ -909,13 +909,14 @@ void CApp::render() {
 	activateZConfig(ZCFG_DEFAULT);
 	scope2.~CTraceScoped();
 
+	CTraceScoped scope_post_all("Post procesado");
 	activateCamera(camera, 1);
 	CTraceScoped scope_post1("SSR");
-	ssrr.apply(rt_base);
+	//ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	scope_post1.~CTraceScoped();
 	CTraceScoped scope_post2("Sharpen");
-	sharpen.apply(ssrr.getOutput());
+	sharpen.apply(rt_base);
 	scope_post2.~CTraceScoped();
 	CTraceScoped scope_post3("Chromatic aberration");
 	chromatic_aberration.apply(sharpen.getOutput());
@@ -927,15 +928,16 @@ void CApp::render() {
 	blur.apply(underwater.getOutput());
 	scope_post5.~CTraceScoped();
 	CTraceScoped scope_post6("Motion blur");
-	blur_camera.apply(blur.getOutput());
+	//blur_camera.apply(blur.getOutput());
 	scope_post6.~CTraceScoped();
 	CTraceScoped scope_post7("Silouette");
-	silouette.apply(blur_camera.getOutput());
+	silouette.apply(blur.getOutput());
 	scope_post7.~CTraceScoped();
 	CTraceScoped scope_post8("Glow");
 	glow.apply(silouette.getOutput());
 	scope_post8.~CTraceScoped();
-	CTraceScoped scope_final("Final draw");
+	scope_post_all.~CTraceScoped();
+	CTraceScoped scope_final("Final draw");	
 	::render.activateBackbuffer();
 	static int sz = 150;
 

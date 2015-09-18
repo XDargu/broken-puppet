@@ -72,7 +72,7 @@ void TCompParticleGroup::update(float elapsed) {
 		CEntityManager::get().remove(e);
 		clearParticleSystems();
 		TCompName* name = e->get<TCompName>();
-		XDEBUG("Destroying name: %s", name);
+		//XDEBUG("Destroying name: %s", name);
 	}
 }
 
@@ -82,7 +82,7 @@ void TCompParticleGroup::render() {
 	XMVECTOR maxValue = -minValue;*/
 	CEntity* e = CHandle(this).getOwner();
 	TCompName* name = e->get<TCompName>();
-	XDEBUG("Rendering name: %s", name);
+	//XDEBUG("Rendering name: %s", name);
 	for (auto& ps : *particle_systems) {
 
 		/*if (XMVectorGetX(ps.aabb.min) < XMVectorGetX(minValue))
