@@ -14,6 +14,7 @@
 #include "components\comp_render.h"
 #include "components\comp_aabb.h"
 #include "entity_manager.h"
+#include "ai\logic_manager.h"
 
 CRenderManager render_manager;
 
@@ -134,6 +135,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	}
 
 	// ---------------------------------------------------------------
+
+	// Room AABB culling
+	int current_player_zone = CLogicManager::get().getPlayerZoneID();
 	
 	TCompTransform* tmx = nullptr;
 	TCompRender* render = nullptr;
@@ -171,7 +175,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			}
 			culling &= it->material->isSolid() == solids;
 		}		
-				
+
+		culling &= abs(current_player_zone - tmx->room_id) <= 1;		
+
 		//culling = true;
 		if (*it->active && culling)
 		{			

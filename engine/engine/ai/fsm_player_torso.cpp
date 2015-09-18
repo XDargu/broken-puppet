@@ -556,7 +556,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		CLogicManager::get().stringPulled();
 
 		if (joint) {
-			// -------------- Shorten the distance joint
+			// -------------- Shorten the distance joint			
 			float oldDistance = sqrt(joint->joint->getDistance());
 			if (oldDistance > 0.1f) {
 				joint->joint->setMaxDistance(oldDistance - 1000.f * elapsed);
@@ -568,6 +568,26 @@ void FSMPlayerTorso::PullString(float elapsed) {
 			}
 
 			joint->awakeActors();
+			
+			if (rope->joint_aux.isValid()) {
+				TCompDistanceJoint* joint2 = rope->joint_aux;
+				float oldDistance = sqrt(joint2->joint->getDistance());
+				joint2->joint->setMaxDistance(oldDistance - 100.f * elapsed);
+				joint2->awakeActors();
+			}
+			
+			// -- Send tensed MSG (to enter in ragdoll)
+			PxRigidActor* a1 = nullptr;
+			PxRigidActor* a2 = nullptr;
+
+			joint->joint->getActors(a1, a2);
+			// Wake up the actors, if dynamic
+			if (a1 && a1->isRigidDynamic()) {
+				((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(0));
+			}
+			if (a2 && a2->isRigidDynamic()) {
+				((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(0));
+			}
 		}
 	}
 

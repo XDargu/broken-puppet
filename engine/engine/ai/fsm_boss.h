@@ -35,9 +35,13 @@ private:
 	float getAnimationDuration(int id);
 	
 	int hurt_state;
-	int arm_state;
+	bool has_left;
+	bool has_right;
 
 	int shoots_amount;
+
+	float last_attack;
+	int Calculate_attack();
 
 public:
 	fsm_boss();
@@ -79,23 +83,16 @@ public:
 	void Damaged1LeftFinal();
 	void Damaged1RightFinal();
 
-	void Idle2();
-	void Stunned2();
-
-	void Wave();
-	void Rain2();
-	void Ball2();
-	void Shoot2();
-
-	void Damaged2();
-
 	void FinalState();	
 
 	void Death();
 
 	bool EvaluateHit(int arm_damaged);
+	bool HeartHit();
 
 	CHandle Player;
+
+	void HeadHit();
 
 
 	

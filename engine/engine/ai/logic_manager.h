@@ -109,6 +109,8 @@ public:
 
 	//Zone AABB
 	CHandle getPlayerZoneName();
+	int getPlayerZoneID();
+	int getPointZoneID(XMVECTOR position);
 
 	//Golden Needle
 	bool playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN);

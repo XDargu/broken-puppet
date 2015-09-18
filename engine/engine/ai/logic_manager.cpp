@@ -324,6 +324,27 @@ CHandle CLogicManager::getPlayerZoneName(){
 	return CHandle();
 }	
 
+int CLogicManager::getPlayerZoneID(){
+	for (int i = 0; i < ZonesAABB.size(); ++i){
+		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
+		if (Zone_comp->isPlayerInside()){
+			return Zone_comp->getID();
+		}
+	}
+	return 0;
+}
+
+int CLogicManager::getPointZoneID(XMVECTOR position) {
+	for (int i = 0; i < ZonesAABB.size(); ++i){
+		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
+		if (Zone_comp->isPointInside(position)){
+			return Zone_comp->getID();
+		}
+	}
+	return 0;
+}
+
+
 void CLogicManager::onSwitchPressed(CHandle the_switch) {
 	TCompName* c_name = ((CEntity*)the_switch)->get<TCompName>();
 
