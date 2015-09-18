@@ -23,8 +23,8 @@ bool TBlurStep::create(const char* name, int axres, int ayres, int afactor) {
 void TBlurStep::apply(CTexture* in) {
 	ctes_blur.activateInPS(3);
 
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesBlur* cb = ctes_blur.get();
 	cb->blur_delta = XMVectorSet(inv_resolution_x, inv_resolution_y, 0, 0);
 	cb->blur_amount = amount;

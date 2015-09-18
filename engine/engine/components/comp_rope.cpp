@@ -7,6 +7,8 @@
 #include "physics_manager.h"
 #include "comp_needle.h"
 #include "audio\sound_manager.h"
+#include "ai\logic_manager.h"
+#include "comp_particle_group.h"
 
 TCompRope::~TCompRope() {
 	CHandle valid_trans_1 = transform_1_aux.isValid() ? transform_1_aux : transform_1;
@@ -151,9 +153,52 @@ void TCompRope::fixedUpdate(float elapsed) {
 			dist = V3DISTANCE(trans_1->position, pos_1);
 
 			if (dist <= 0.f) {
-				if (!sound_1_played) {
-					//CSoundManager::get().playFXTrack("nail1");
-					sound_1_played = true;
+				if (!sound_1_played){					
+
+					CEntity* entity_1 = transform_1.getOwner();
+					if (entity_1) {
+
+						TCompNeedle* needle = entity_1->get<TCompNeedle>();
+						if (needle) {
+
+							CEntity* target_entity = CHandle(needle->getAttachedRigid()->userData);
+							if (target_entity) {
+
+								XMMATRIX view = XMMatrixLookAtRH(pos_1, pos_1 + normal_dir, XMVectorSet(0, 1, 0, 0));
+								XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+
+								std::string name = target_entity->getName();
+								XDEBUG("Needle shot to %s", name);
+								std::string material = target_entity->material_tag;
+								std::string particle_name = "ps_prota_jump_ring";
+
+								if (material == "metal") {
+									particle_name = "ps_metal_hit";
+								}
+
+								// Final test (underwater)
+								if (XMVectorGetY(pos_1) < CApp::get().water_level) {
+									particle_name = "ps_bubble_one_shot";
+								}
+
+								CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name, pos_1 + normal_dir * 0.1f, trans_1->rotation);
+
+								if (particle_entity.isValid()) {
+									TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+									pg->kind = TCompParticleGroup::flag::IMPACT;
+									pg->destroy_on_death = true;
+									if (pg->particle_systems->size() > 0)
+									{
+										(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.0f / 2.f;
+										(*pg->particle_systems)[0].emitter_generation->radius = 1.0f;
+									}
+									CLogicManager::get().p_group_counter++;
+								}
+							}
+						}
+					}
+					CSoundManager::get().playEvent("event:/Strings/needle_hit");
+					sound_1_played=true;
 				}
 			}
 		}
@@ -191,8 +236,52 @@ void TCompRope::fixedUpdate(float elapsed) {
 			dist = V3DISTANCE(trans_2->position, pos_2);
 
 			if (dist <= 0.f) {
-				if (!sound_2_played) {
-					//CSoundManager::get().playFXTrack("nail1");
+				if (!sound_2_played){
+
+					CEntity* entity_2 = transform_2.getOwner();
+					if (entity_2) {
+
+						TCompNeedle* needle = entity_2->get<TCompNeedle>();
+						if (needle) {
+
+							CEntity* target_entity = CHandle(needle->getAttachedRigid()->userData);
+							if (target_entity) {
+
+								XMMATRIX view = XMMatrixLookAtRH(pos_2, pos_2 + normal_dir, XMVectorSet(0, 1, 0, 0));
+								XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
+
+								std::string name = target_entity->getName();
+								XDEBUG("Needle shot to %s", name.c_str());
+								std::string material = target_entity->material_tag;
+								std::string particle_name = "ps_prota_jump_ring";
+
+								if (material == "metal") {
+									particle_name = "ps_metal_hit";
+								}
+
+								// Final test (underwater)
+								if (XMVectorGetY(pos_2) < CApp::get().water_level) {
+									particle_name = "ps_bubble_one_shot";
+								}
+
+								CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name, pos_2 + normal_dir * 0.1f, trans_2->rotation);
+
+								if (particle_entity.isValid()) {
+									TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+									pg->kind = TCompParticleGroup::flag::IMPACT;
+									pg->destroy_on_death = true;
+									if (pg->particle_systems->size() > 0)
+									{
+										(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.0f / 2.f;
+										(*pg->particle_systems)[0].emitter_generation->radius = 1.0f;
+									}
+									CLogicManager::get().p_group_counter++;
+								}
+							}
+						}
+					}
+
+					CSoundManager::get().playEvent("event:/Strings/needle_hit");
 					sound_2_played = true;
 				}
 			}
@@ -239,7 +328,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 	float force_s = 100;
 
 	bool colliding = false;
-	for (int i = 0; i < buf.nbTouches; i++)
+	for (unsigned int i = 0; i < buf.nbTouches; i++)
 	{
 		CHandle e(buf.touches[i].actor->userData);
 		if (!(e == e1) && !(e == e2) && !(e == e3)) {

@@ -25,6 +25,7 @@ public:
 		unsigned color;
 		std::string next;
 	};
+	unsigned int p_group_counter;
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;

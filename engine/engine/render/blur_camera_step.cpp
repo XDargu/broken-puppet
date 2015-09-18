@@ -23,8 +23,8 @@ bool TBlurCameraStep::create(const char* name, int axres, int ayres, int afactor
 void TBlurCameraStep::apply(CTexture* in) {
 	ctes_blur_camera.activateInPS(3);
 
-	float inv_resolution_x = 1.0 / (float)xres;
-	float inv_resolution_y = 1.0 / (float)yres;
+	float inv_resolution_x = 1.0f / (float)xres;
+	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesBlurCamera* cb = ctes_blur_camera.get();
 	cb->blur_camera_delta = XMVectorSet(inv_resolution_x, inv_resolution_y, 0, 0);
 	cb->blur_camera_amount = amount;

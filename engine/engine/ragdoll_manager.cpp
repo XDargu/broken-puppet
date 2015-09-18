@@ -16,8 +16,8 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 
 	if (elem == "BoneRigidbody") {
 
-		float radius = atts.getFloat("radius", 0.2);
-		float half_height = (atts.getFloat("height", 0.2)) / 2;
+		float radius = atts.getFloat("radius", 0.2f);
+		float half_height = (atts.getFloat("height", 0.2f)) / 2;
 		float density = atts.getFloat("density", 1000);
 
 		XMVECTOR rotation_in_max_coords = atts.getQuat("rotation");

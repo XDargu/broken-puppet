@@ -131,7 +131,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
 					else
 						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position), XMVectorSet(0, 1, 0, 0));
-
+					
 					TTransform normal_aux;
 					normal_aux.position = physics_manager.PxVec3ToXMVECTOR(first_position);
 					normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position - blockHit.normal), XMVectorSet(0, 1, 0, 0));
@@ -498,6 +498,8 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				}
 			}
 		}
+
+
 	}
 
 	// Animation ends
@@ -524,11 +526,20 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		TCompSkeleton* skeleton = comp_skeleton;		
 		skeleton->playAnimation(17);
 
+		float distance=0.f;
+		CEntity* rope_entity = current_rope_entity;
+		if (rope_entity){
+			TCompRope* rope = rope_entity->get<TCompRope>();
+			if (rope){
+				distance = V3DISTANCE(rope->pos_1, rope->pos_2);
+			}
+		}
+
 		CSoundManager::SoundParameter params[] = {
-			{ "type", 2 }
+			{ "distance", distance }
 		};
 
-		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("event:/Strings/stringGrab", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		
 	}
 
@@ -737,11 +748,24 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
+					//CSoundManager::SoundParameter params[] = {
+						//{ "type", 1 }
+					//};
+
+					//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+					//Sound with distance --------------------------------------------------------------------------------------------------------
+					float distance = 0.f;
+					if (rope){
+						distance = V3DISTANCE(rope->pos_1, rope->pos_2);
+					}
+
 					CSoundManager::SoundParameter params[] = {
-						{ "type", 1 }
+						{ "distance", distance }
 					};
 
-					CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+					CSoundManager::get().playEvent("event:/Strings/stringTense", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+					//----------------------------------------------------------------------------------------------------------------------------
+					
 					rope->tensed = true;
 					djoint->joint->setMaxDistance(0.1f);
 					PxRigidActor* a1 = nullptr;

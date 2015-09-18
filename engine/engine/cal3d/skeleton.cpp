@@ -40,7 +40,7 @@ CalSkeleton::CalSkeleton(CalCoreSkeleton* pCoreSkeleton)
   std::vector<CalCoreBone *>& vectorCoreBone = pCoreSkeleton->getVectorCoreBone();
 
   // get the number of bones
-  int boneCount = vectorCoreBone.size();
+  int boneCount = (int)vectorCoreBone.size();
 
   // reserve space in the bone vector
   m_vectorBone.reserve(boneCount);

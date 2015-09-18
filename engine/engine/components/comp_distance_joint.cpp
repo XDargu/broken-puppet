@@ -129,7 +129,7 @@ void TCompDistanceJoint::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 		joint->setBreakForce(breakForce, breakTorque);
 	}
 
-	joint->setMaxDistance(0.1);
+	joint->setMaxDistance(0.1f);
 	joint->setDamping(2);
 	joint->setStiffness(200);
 	joint->setDistanceJointFlag(physx::PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);

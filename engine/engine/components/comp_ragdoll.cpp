@@ -283,10 +283,10 @@ PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir)
 	Physics.raycastAll(origin, dir, 10, buf);
 
 	// TODO: Return the nearest if no raycast collision
-	PxRigidDynamic* nearest;
-	float nearest_dist;
+	//PxRigidDynamic* nearest;
+	//float nearest_dist;
 
-	for (int i = 0; i < buf.nbTouches; i++)
+	for (unsigned int i = 0; i < buf.nbTouches; i++)
 	{
 		for (auto& rigid : ragdoll->bone_map) {
 			if (buf.touches[i].actor == rigid.second) {
@@ -312,9 +312,9 @@ void TCompRagdoll::disableBoneTree(int bone_id) {
 	CalSkeleton* m_skel = skel->model->getSkeleton();
 	auto& cal_bones = m_skel->getVectorBone();
 
-	int size = cal_bones.size();
+	int size = (int)cal_bones.size();
 
-	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+	for (int bone_idx = 0; bone_idx < (int)cal_bones.size(); ++bone_idx) {
 		CalBone* bone = cal_bones[bone_idx];
 		int parent_id = bone->getCoreBone()->getParentId();
 
@@ -346,9 +346,9 @@ void TCompRagdoll::enableBoneTree(int bone_id) {
 	CalSkeleton* m_skel = skel->model->getSkeleton();
 	auto& cal_bones = m_skel->getVectorBone();
 
-	int size = cal_bones.size();
+	int size = (int)cal_bones.size();
 
-	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+	for (int bone_idx = 0; bone_idx < (int)cal_bones.size(); ++bone_idx) {
 		CalBone* bone = cal_bones[bone_idx];
 		int parent_id = bone->getCoreBone()->getParentId();
 

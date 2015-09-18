@@ -8,8 +8,11 @@
 #include "comp_aabb.h"
 #include "comp_name.h"
 #include "render\render_manager.h"
+#include "ai\logic_manager.h"
 
 TCompParticleGroup::~TCompParticleGroup() {
+	if (kind == flag::IMPACT)
+		CLogicManager::get().p_group_counter--;
 	clearParticleSystems();
 	SAFE_DELETE(particle_systems);
 }
@@ -69,7 +72,7 @@ void TCompParticleGroup::update(float elapsed) {
 		CEntityManager::get().remove(e);
 		clearParticleSystems();
 		TCompName* name = e->get<TCompName>();
-		XDEBUG("Destroying name: %s", name);
+		//XDEBUG("Destroying name: %s", name);
 	}
 }
 
@@ -79,7 +82,7 @@ void TCompParticleGroup::render() {
 	XMVECTOR maxValue = -minValue;*/
 	CEntity* e = CHandle(this).getOwner();
 	TCompName* name = e->get<TCompName>();
-	XDEBUG("Rendering name: %s", name);
+	//XDEBUG("Rendering name: %s", name);
 	for (auto& ps : *particle_systems) {
 
 		/*if (XMVectorGetX(ps.aabb.min) < XMVectorGetX(minValue))

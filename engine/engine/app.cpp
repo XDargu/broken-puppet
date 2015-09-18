@@ -671,7 +671,7 @@ void CApp::update(float elapsed) {
 		if (player) {
 			TCompTransform* player_t = player->get<TCompTransform>();
 			float p_y = XMVectorGetY(player_t->position);
-			underwater.amount = p_y > water_level ? 0 : 1;
+			underwater.amount = p_y > water_level ? 0.0f : 1.0f;
 		}
 	}
 	else
@@ -909,13 +909,14 @@ void CApp::render() {
 	activateZConfig(ZCFG_DEFAULT);
 	scope2.~CTraceScoped();
 
+	CTraceScoped scope_post_all("Post procesado");
 	activateCamera(camera, 1);
 	CTraceScoped scope_post1("SSR");
-	ssrr.apply(rt_base);
+	//ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	scope_post1.~CTraceScoped();
 	CTraceScoped scope_post2("Sharpen");
-	sharpen.apply(ssrr.getOutput());
+	sharpen.apply(rt_base);
 	scope_post2.~CTraceScoped();
 	CTraceScoped scope_post3("Chromatic aberration");
 	chromatic_aberration.apply(sharpen.getOutput());
@@ -927,15 +928,16 @@ void CApp::render() {
 	blur.apply(underwater.getOutput());
 	scope_post5.~CTraceScoped();
 	CTraceScoped scope_post6("Motion blur");
-	blur_camera.apply(blur.getOutput());
+	//blur_camera.apply(blur.getOutput());
 	scope_post6.~CTraceScoped();
 	CTraceScoped scope_post7("Silouette");
-	silouette.apply(blur_camera.getOutput());
+	silouette.apply(blur.getOutput());
 	scope_post7.~CTraceScoped();
 	CTraceScoped scope_post8("Glow");
 	glow.apply(silouette.getOutput());
 	scope_post8.~CTraceScoped();
-	CTraceScoped scope_final("Final draw");
+	scope_post_all.~CTraceScoped();
+	CTraceScoped scope_final("Final draw");	
 	::render.activateBackbuffer();
 	static int sz = 150;
 
@@ -1015,7 +1017,7 @@ void CApp::render() {
 	if (debug_map == 5) { mode = "Lights"; }
 	if (debug_map == 6) { mode = "Depth"; }
 
-	font.print(xres / 2 - 30, 10, mode.c_str());
+	font.print(xres / 2.0f - 30, 10.0f, mode.c_str());
 
 	CTraceScoped t0("AntTweak");
 	TwDraw();
@@ -1166,7 +1168,7 @@ void CApp::renderEntities() {
 			}
 
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
-			tension = maxDist < 0.2 ? 0 : 1;
+			tension = maxDist < 0.2f ? 0.f : 1.f;
 
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
