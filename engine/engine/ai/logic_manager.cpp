@@ -55,6 +55,8 @@ void CLogicManager::init()
 
 	lock_on_target = CHandle();
 
+	current_player_zone = 0;
+
 	particle_group_counter = 0;
 	p_group_counter = 0;
 	water_transform = CEntityManager::get().getByName("water");
@@ -90,6 +92,15 @@ std::vector<TKeyFrame> keyframes_to_delete;
 
 void CLogicManager::update(float elapsed) {
 	
+	// Update player zone
+	for (int i = 0; i < ZonesAABB.size(); ++i){
+		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
+		if (Zone_comp->isPlayerInside()){
+			current_player_zone = Zone_comp->getID();
+			break;
+		}
+	}
+
 	char buffer[64];
 	sprintf(buffer, "updateCoroutines( %f )", elapsed);
 	luaL_dostring(L, buffer);
@@ -325,13 +336,7 @@ CHandle CLogicManager::getPlayerZoneName(){
 }	
 
 int CLogicManager::getPlayerZoneID(){
-	for (int i = 0; i < ZonesAABB.size(); ++i){
-		TCompZoneAABB* Zone_comp = (TCompZoneAABB*)ZonesAABB[i];
-		if (Zone_comp->isPlayerInside()){
-			return Zone_comp->getID();
-		}
-	}
-	return 0;
+	return current_player_zone;
 }
 
 int CLogicManager::getPointZoneID(XMVECTOR position) {

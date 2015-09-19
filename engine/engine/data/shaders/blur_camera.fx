@@ -55,7 +55,6 @@ float4 PSBlurCamera(
 	in float4 iPosition : SV_Position
 	) : SV_Target
 {
-	
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
 	float depth = txDepth.Load(ss_load_coords).x;
 	float type = txDepth.Load(ss_load_coords).y;
@@ -83,8 +82,16 @@ float4 PSBlurCamera(
 	float4 color = txDiffuse.Sample(samClampLinear, texCoord);
 	
 	//return float4(velocity.xy, 0, 0);
+	if (length(velocity) < 0.01 * elapsed) {
+		return color;
+	}
+
+	float factor = length(velocity) / elapsed * 20;
+	//return float4(factor, 0, 0, 0);
+
 	texCoord += velocity;
-	float numSamples = 15;
+	float numSamples = clamp(10 * factor, 5, 10);
+	numSamples = 10;
 
 	for (int i = 1; i < numSamples; ++i)
 	{
@@ -101,7 +108,7 @@ float4 PSBlurCamera(
 			color += currentColor;
 
 		//texCoord += clamp(-velocity, 0, 2);
-		texCoord -= velocity * 5;
+		texCoord -= velocity * 5 * (10 / numSamples);
 		
 	}
 

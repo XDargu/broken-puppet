@@ -6,7 +6,9 @@
 
 // --------------------------------
 struct TBlurStep {
-	CRenderToTexture *rt_blur;
+	CRenderToTexture *rt_blur_x;
+	//CRenderToTexture *rt_blur_y;
+
 	char name_by_x[64];
 	char name_by_y[64];
 	int  factor;

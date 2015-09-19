@@ -640,7 +640,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("glow");
 		render_techniques_manager.reload("glow_lights");
 		render_techniques_manager.reload("blur_camera");		
-		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("ssrr");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("silouette_glow");
@@ -1203,16 +1203,16 @@ void CApp::renderEntities() {
 		}
 
 		// If the component has no transform it can't be rendered
-		if (!t)
-			continue;
+		/*if (!t)
+			continue;*/
 
 		/*if (mesh)
 		setTint(mesh->color);*/
 
-		setWorldMatrix(t->getWorld());
+		/*setWorldMatrix(t->getWorld());
 
 		if (mesh && mesh->active)
-			mesh->mesh->activateAndRender();
+			mesh->mesh->activateAndRender();*/
 
 		// Draw texts
 		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();

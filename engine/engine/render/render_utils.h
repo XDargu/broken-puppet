@@ -124,4 +124,6 @@ extern  CShaderCte<TCtesGlow> ctes_glow;
 extern  CShaderCte<TCtesUnderwater> ctes_underwater;
 extern  CShaderCte<TCtesSSRR> ctes_ssrr;
 
+extern  CShaderCte<TCtesCamera> ctes_camera;
+
 #endif

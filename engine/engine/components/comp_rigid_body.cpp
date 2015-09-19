@@ -175,6 +175,9 @@ void TCompRigidBody::init() {
 void TCompRigidBody::fixedUpdate(float elapsed) {
 	TCompTransform* trans = (TCompTransform*)transform;
 
+	int current_player_zone = CLogicManager::get().getPlayerZoneID();
+	if (abs(current_player_zone - trans->room_id) > 1) { return; }
+
 	CEntity* e = CHandle(rigidBody->userData);
 
 	if (auto_translate_transform)

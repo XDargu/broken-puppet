@@ -1,6 +1,6 @@
 <std_material name="distorsion"
 diffuse="deferred_output"
-glossiness="dither_noise"
+emissive="dither_noise"
 tech="glass"
 solid="0"
 blendMode="additive"

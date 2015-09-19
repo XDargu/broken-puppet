@@ -45,12 +45,13 @@ void TSilouetteStep::apply(CTexture* in) {
 	((CTexture*)rt_dynamic)->activate(9);
 	drawTexture2D(0, 0, render.xres, render.yres, in, "silouette");
 
-	rt_final->activate();
+	// If we want to post-process the silouette
+	/*rt_final->activate();
 	((CTexture*)rt_sobel)->activate(9);
-	drawTexture2D(0, 0, render.xres, render.yres, in, "silouette_glow");
+	drawTexture2D(0, 0, render.xres, render.yres, in, "silouette_glow");*/
 
 }
 
 CTexture* TSilouetteStep::getOutput() {
-	return rt_final;
+	return rt_sobel;
 }
