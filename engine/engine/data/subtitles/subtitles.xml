@@ -4,4 +4,14 @@
   <subtitle guid="SUST003" next="SUST004" size="24" color="0xffffff00" time="4" sound="SUST003" text="Do you even think that somebody would pay a penny to watch a broken puppet?" />
   <subtitle guid="SUST004" next="SUST005" size="24" color="0xffffff00" time="1" sound="SUST004" text="" />
   <subtitle guid="SUST005" size="24" color="0xffffff00" time="5" sound="SUST005" text="You should not blame me for your disgrace. You’ve only got time to blame, sweetie." />
+
+  <subtitle guid="SCENE101" next="SCENE102" size="24" color="0xffffffff" time="9" sound="event:/VO/EN/SCENE101" text="Había llegado el momento de escapar de aquel lugar. Comprobó si podía moverse pulsando las teclas de dirección" />
+  <subtitle guid="SCENE102" next="" size="24" color="0xffffffff" time="11" sound="event:/VO/EN/SCENE102" text="Decidió probar sus nuevas herramientas usando click izquierdo para lanzar agujas y click derecho para tensar los hilos" />
+  <subtitle guid="SCENE103" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE103" text="La desolación del desván la sobrecogió. Debía seguir avanzando" />
+  <subtitle guid="SCENE104" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE104" text="Soldados. Los hostiles guardianes del teatro. Ahora Katherine era una intrusa..." />
+
+  <subtitle guid="SCENE201" next="" size="24" color="0xffffffff" time="9" sound="event:/VO/EN/SCENE200" text="Ya estaba cerca de su amado camerino" />
+  <subtitle guid="SCENE202" next="" size="24" color="0xffffffff" time="11" sound="event:/VO/EN/SCENE201" text="Ya no quedaba nada. Cualquier rastro suyo había sido eliminado" />
+  <subtitle guid="SCENE203" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE202" text="Y cayó..." />
+  <subtitle guid="SCENE204" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE203" text="...al más profundo de los abismos del teatro. Al inexplorado foso" />
 </subtitles>

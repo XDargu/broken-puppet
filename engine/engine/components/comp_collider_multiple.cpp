@@ -216,12 +216,12 @@ void TCompColliderMultiple::checkIfInsideRecastAABB(){
 		if (recast_aabb.intersects(m_aabb)) {
 			if (!inside_recastAABB){
 				addInputNavMesh();
-				CNav_mesh_manager::get().colMultiples.push_back(this);
+				CNav_mesh_manager::get().colMultiples.push_back(CHandle(this));
 				inside_recastAABB = true;
 			}
 		}else{
 			if (inside_recastAABB){
-				CNav_mesh_manager::get().removeMultiple(this);
+				CNav_mesh_manager::get().removeMultiple(CHandle(this));
 				inside_recastAABB = false;
 			}
 		}

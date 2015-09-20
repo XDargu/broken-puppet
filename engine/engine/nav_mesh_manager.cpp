@@ -98,7 +98,7 @@ void CNav_mesh_manager::removeMultiple(CHandle cap){
 void CNav_mesh_manager::removeConvex(CHandle cap){
 	auto it = std::find(colConvex.begin(), colConvex.end(), cap);
 	if (it != colConvex.end())
-		colMultiples.erase(it);
+		colConvex.erase(it);
 }
 
 bool CNav_mesh_manager::checkIfUpdatedNavMesh(){

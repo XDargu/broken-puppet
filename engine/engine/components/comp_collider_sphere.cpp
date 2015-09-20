@@ -201,12 +201,12 @@ void TCompColliderSphere::checkIfInsideRecastAABB(){
 		if (recast_aabb.intersects(m_aabb)) {
 			if (!inside_recastAABB){
 				addInputNavMesh();
-				CNav_mesh_manager::get().colSpheres.push_back(this);
+				CNav_mesh_manager::get().colSpheres.push_back(CHandle(this));
 				inside_recastAABB = true;
 			}
 		}else{
 			if (inside_recastAABB){
-				CNav_mesh_manager::get().removeSphere(this);
+				CNav_mesh_manager::get().removeSphere(CHandle(this));
 				inside_recastAABB = false;
 			}
 		}

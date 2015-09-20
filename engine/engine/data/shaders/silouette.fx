@@ -94,20 +94,20 @@ float4 PSSilouette(
 
 	// SOBEL, Manual TABS (for optimization purposes)
 	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
-	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * 0) * 1.5) * sobel_x[0][1];
-	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * 1) * 1.5) * sobel_x[0][2];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * 0)  * 1.5) * sobel_x[0][1];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * 1)  * 1.5) * sobel_x[0][2];
 
-	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1) * 1.5) * sobel_x[2][0];
-	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * 0) * 1.5) * sobel_x[2][1];
-	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * 1) * 1.5) * sobel_x[2][2];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1)  * 1.5) * sobel_x[2][0];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * 0)   * 1.5) * sobel_x[2][1];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * 1)   * 1.5) * sobel_x[2][2];
 
-	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
-	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 0, deltaaa.y * -1) * 1.5) * sobel_x[1][0];
-	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1) * 1.5) * sobel_x[2][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_y[0][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 0, deltaaa.y * -1)  * 1.5) * sobel_y[1][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1)  * 1.5) * sobel_y[2][0];
 		  
-	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
-	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 0, deltaaa.y * -1) * 1.5) * sobel_x[1][0];
-	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1) * 1.5) * sobel_x[2][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_y[0][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 0, deltaaa.y * -1)  * 1.5) * sobel_y[1][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1)  * 1.5) * sobel_y[2][0];
 
 
 	// Old loops
@@ -151,7 +151,6 @@ float4 PSSilouette(
 			}
 		}
 	}*/
-
 	float border = abs(color_x.x + color_y.x);
 	//return abs(border);
 	/*if (border > 0)

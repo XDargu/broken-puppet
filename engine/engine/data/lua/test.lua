@@ -16,21 +16,66 @@ clearCoroutines( )
 function onSceneLoad_my_file()
 --logicManager:loadScene("data/scenes/scene_1.xml");
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
-	--logicManager:setBands(true)
+	logicManager:setBands(true)
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
-	--logicManager:playSubtitles("SUST001");
-
 	--logicManager:setMediumShotActive(true);
 	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
-	--logicManager:setTimer("timerMolon", 3);
+	logicManager:setTimer("timerMolon", 3);
 	
 	--logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
 	--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
 	--logicManager:changeCamera("Camera001_34.0");
 	
+
+	local narr1_played = false
+	function onTriggerEnter_scene1_trigger_narr1(who)
+		if narr1_played == false then
+			logicManager:playSubtitles("SCENE103");
+			narr1_played = true
+		end
+	end
+
+	local narr2_played = false
+	function onTriggerEnter_scene1_trigger_narr2(who)
+		if narr2_played == false then
+			logicManager:playSubtitles("SCENE104");
+			narr2_played = true
+		end
+	end
+
+	-- NARRADOR TEST
+
+	local sc2_narr2_played = false
+	function onTriggerEnter_scene2_trigger_narr2(who)
+		if sc2_narr2_played == false then
+			logicManager:playSubtitles("SCENE202");
+			sc2_narr2_played = true
+		end
+	end
+
+	local sc2_narr3_played = false
+	function onTriggerEnter_scene2_trigger_narr3(who)
+		if sc2_narr3_played == false then
+			logicManager:playSubtitles("SCENE203");
+			sc2_narr3_played = true
+		end
+	end
+
+	local sc2_narr4_played = false
+	function onTriggerEnter_scene2_trigger_narr4(who)
+		if sc2_narr4_played == false then
+			logicManager:setTimer("timerSc2Narr4", 1);
+			sc2_narr4_played = true
+		end
+	end
+
+	function onTimerEnd_timerSc2Narr4()
+		logicManager:playSubtitles("SCENE204");
+	end
+
 
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -44,6 +89,8 @@ function onSceneLoad_my_file()
 	end
 
 	function onTimerEnd_timerMolon()
+		logicManager:playSubtitles("SCENE101");
+		logicManager:setBands(false)
 		--logicManager:releaseCameraLock();
 		--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
 		--logicManager:changeCamera("Camera001_34.0");

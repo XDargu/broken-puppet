@@ -191,12 +191,12 @@ void TCompColliderBox::checkIfInsideRecastAABB(){
 		if (recast_aabb.intersects(m_aabb)) {
 			if (!inside_recastAABB){
 				addInputNavMesh();
-				CNav_mesh_manager::get().colBoxes.push_back(this);
+				CNav_mesh_manager::get().colBoxes.push_back(CHandle(this));
 				inside_recastAABB = true;
 			}
 		}else{
 			if (inside_recastAABB){
-				CNav_mesh_manager::get().removeBox(this);
+				CNav_mesh_manager::get().removeBox(CHandle(this));
 				inside_recastAABB = false;
 			}
 		}

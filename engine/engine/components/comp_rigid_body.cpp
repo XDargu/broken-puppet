@@ -124,6 +124,8 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		for (int i = 1; i < multiple_c->colliders.size(); i++) {
 			rigidBody->attachShape(*multiple_c->colliders[i]);
 		}
+		PxRigidBodyExt::updateMassAndInertia(*rigidBody, density);
+
 	}
 	else {
 		rigidBody = physx::PxCreateDynamic(
@@ -176,7 +178,10 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	TCompTransform* trans = (TCompTransform*)transform;
 
 	int current_player_zone = CLogicManager::get().getPlayerZoneID();
-	if (abs(current_player_zone - trans->room_id) > 1) { return; }
+	if (abs(current_player_zone - trans->room_id) > 1) {
+		// Not visible by player
+		return; 
+	}
 
 	CEntity* e = CHandle(rigidBody->userData);
 
@@ -294,5 +299,8 @@ void TCompRigidBody::checkIfInsideRecastAABB(){
 	}else if (kind == colliderType::SPHERE){
 		TCompColliderSphere* col_sphere = r_entity->get<TCompColliderSphere>();
 		col_sphere->checkIfInsideRecastAABB();
+	} else if (kind == colliderType::MULTIPLE){
+		TCompColliderMultiple* col_multi = r_entity->get<TCompColliderMultiple>();
+		col_multi->checkIfInsideRecastAABB();
 	}
 }

@@ -239,13 +239,13 @@ TCompAABB* m_aabb = getSibling<TCompAABB>(this);
 					if (strcmp(owner_entity->tag, "enemy") != 0){
 						if (!inside_recastAABB){
 							addInputNavMesh();
-							CNav_mesh_manager::get().colCapsules.push_back(this);
+							CNav_mesh_manager::get().colCapsules.push_back(CHandle(this));
 							inside_recastAABB = true;
 						}
 					}
 				}else{
 					if (inside_recastAABB){
-						CNav_mesh_manager::get().removeCapsule(this);
+						CNav_mesh_manager::get().removeCapsule(CHandle(this));
 						inside_recastAABB = false;
 					}
 				}

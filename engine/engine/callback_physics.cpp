@@ -38,7 +38,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(second_rigid->getMass(), pairs, i);
 				//float force_float = force;
-				//DEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+				XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
 				if (force > force_threshold)
 					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force));
 			} else if((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
@@ -49,7 +49,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force = getForce(first_rigid->getMass(), pairs, i);
 				//float force_float = force;
 				
-				//XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+				XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
 				if (force > force_threshold)
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force));
 			}

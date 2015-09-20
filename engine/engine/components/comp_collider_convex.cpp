@@ -132,12 +132,12 @@ void TCompColliderConvex::checkIfInsideRecastAABB(){
 		if (recast_aabb.intersects(m_aabb)) {
 			if (!inside_recastAABB){
 				addInputNavMesh();
-				CNav_mesh_manager::get().colConvex.push_back(this);
+				CNav_mesh_manager::get().colConvex.push_back(CHandle(this));
 				inside_recastAABB = true;
 			}
 		}else{
 			if (inside_recastAABB){
-				CNav_mesh_manager::get().removeConvex(this);
+				CNav_mesh_manager::get().removeConvex(CHandle(this));
 				inside_recastAABB = false;
 			}
 		}

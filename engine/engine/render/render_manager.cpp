@@ -148,7 +148,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			continue; 			
 		}
 
-		CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
+		//CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
 		tmx = it->transform;
 		if (it->owner.isTypeOf<TCompRender>()) {
@@ -184,7 +184,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		//culling = true;
 		if (*it->active && culling)
 		{			
-			CTraceScoped scope(((TCompName*)((CEntity*)it->transform.getOwner())->get<TCompName>())->name);
+			//CTraceScoped scope(((TCompName*)((CEntity*)it->transform.getOwner())->get<TCompName>())->name);
 			render_count++;
 
 			if (it->material->getBlendMode() != prev_it->material->getBlendMode() || is_first) {

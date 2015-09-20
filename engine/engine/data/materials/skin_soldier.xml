@@ -3,6 +3,6 @@
               diffuse="soldado_difusse"
 			  normal="soldado_normal"
 			  emissive="black"
-			specular="black"
-			glossiness="black"
+			specular="soldado_specular"
+			glossiness="soldado_gloss"
 			  />

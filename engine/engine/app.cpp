@@ -1183,7 +1183,7 @@ void CApp::renderEntities() {
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
 			ropeTech.activate();
-			
+
 			bool tensed = c_rope->tensed;// dist > maxDist * 0.001f;
 			if (tensed)
 				setTint(XMVectorSet(0.46f, 0.075f, 0.075f, 1));
@@ -1212,7 +1212,7 @@ void CApp::renderEntities() {
 		/*setWorldMatrix(t->getWorld());
 
 		if (mesh && mesh->active)
-			mesh->mesh->activateAndRender();*/
+		mesh->mesh->activateAndRender();*/
 
 		// Draw texts
 		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
@@ -1253,10 +1253,10 @@ void CApp::renderDebugEntities() {
 	getObjManager<TCompParticleGroup>()->renderDebug3D();
 
 	//--------- NavMesh render Prueba --------------
-	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+	/*if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		exit(-1);
-	}
+	}*/
 	renderNavMesh = true;
 	if (renderNavMesh){
 		CNav_mesh_manager::get().render_nav_mesh();

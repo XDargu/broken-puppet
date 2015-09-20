@@ -478,6 +478,9 @@ XMVECTOR CSoundManager::FmodToXMVECTOR(FMOD_VECTOR vector) {
 }
 
 void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std::string material) {
+
+	if (CApp::get().total_time < 2.5f) { return; }
+
 	float material_type = getMaterialTagValue(material);
 
 	//float f = force * 8;
