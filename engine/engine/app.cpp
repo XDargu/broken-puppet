@@ -942,6 +942,7 @@ void CApp::render() {
 	CTraceScoped scope_post7("Silouette");
 	silouette.apply(blur_camera.getOutput());
 	scope_post7.~CTraceScoped();
+	texture_manager.getByName("noise")->activate(9);
 	CTraceScoped scope_post8("Glow");
 	glow.apply(silouette.getOutput());
 	scope_post8.~CTraceScoped();

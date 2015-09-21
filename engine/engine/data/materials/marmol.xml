@@ -1,1 +1,11 @@
-<std_material name="marmol" diffuse="marmol_albedo" normal="marmol_normal" specular="marmol_specular" glossiness="marmol_gloss" emissive="" emissive_off="" />
+<!--<std_material name="Standardmaterial" diffuse="StandardDiff" />-->
+<std_material name="Standardmaterial"
+diffuse="StandardDiff"
+normal="Steel_Worn_00_N"
+specular="StandardDiff"
+glossiness="StandardDiff"
+emissive="black"
+cubemap="desertcube1024"
+cubemap2="sunsetcube1024"
+tech="deferred_gbuffer"
+/>

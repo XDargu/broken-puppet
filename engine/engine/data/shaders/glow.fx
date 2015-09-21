@@ -74,12 +74,10 @@ float4 PSGlowLights(VS_TEXTURED_OUTPUT input) : SV_Target
 	}
 }
 
-
-
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PSGlow(VS_TEXTURED_OUTPUT input) : SV_Target
+float4 PSGlow(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_Target
 {
   float4 original = txDiffuse.Sample(samClampLinear, input.UV);
   float4 depth = txDepth.Sample(samClampLinear, input.UV);
@@ -112,9 +110,7 @@ float4 PSGlow(VS_TEXTURED_OUTPUT input) : SV_Target
 		  luminance += txLuminance.SampleLevel(samClampLinear, input.UV + delta * 0.3, 9) * factor;
 	  }
   }*/
-
-  
-  
+    
   return (original + luminance * 0.5);
   //return original;
   //return blurred;
