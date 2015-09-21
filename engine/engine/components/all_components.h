@@ -96,6 +96,8 @@ using namespace DirectX;
 #include "comp_golden_needle_item.h"
 #include "comp_hfx_zone.h"
 #include "comp_explosion.h"
+#include "comp_boss_prefab.h"
+
 
 // Animation
 #include "comp_vibration.h"

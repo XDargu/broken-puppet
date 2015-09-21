@@ -8,8 +8,6 @@
 
 void TCompAiBoss::init(){
 
-	
-	
 	mPlayer = CEntityManager::get().getByName("Player");
 	mBoss = CEntityManager::get().getByName("Boss");
 
@@ -32,8 +30,6 @@ void TCompAiBoss::init(){
 }
 
 void TCompAiBoss::update(float elapsed){
-
-	
 
 	CIOStatus& io = CIOStatus::get();
 

@@ -209,12 +209,13 @@ void createManagers() {
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
 	getObjManager<TCompSensorDistPlayer>()->init(64);
-	getObjManager<TCompTrigger>()->init(256);
+	getObjManager<TCompTrigger>()->init(256);	
 	getObjManager<TCompDistanceText>()->init(32);
 	getObjManager<TCompVictoryCond>()->init(1);
 	
 	// Otros
 	getObjManager<TCompExplosion>()->init(64);
+	getObjManager<TCompBossPrefab>()->init(512);
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
@@ -305,6 +306,8 @@ void initManagers() {
 
 	// OTHERS
 	getObjManager<TCompExplosion>()->initHandlers();
+	getObjManager<TCompBossPrefab>()->initHandlers();
+	
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();
@@ -356,7 +359,7 @@ bool CApp::create() {
 		return false;
 
 	// Start random seed
-	srand((unsigned int)time(NULL));
+	srand((unsigned int)time(0));
 
 	createManagers();
 
@@ -755,6 +758,9 @@ void CApp::update(float elapsed) {
 	
 	getObjManager<TCompViewerCameraController>()->update(elapsed);
 	getObjManager<TCompCamera>()->update(elapsed);  // Then, update camera view and projection matrix
+
+	// OTHER
+	getObjManager<TCompBossPrefab>()->update(elapsed);
 
 	// AI
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);

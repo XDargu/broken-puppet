@@ -15,6 +15,9 @@ private:
 	float force_threshold;
 
 public:
+	TCompExplosion();
+	~TCompExplosion();
+
 	void init();
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void onDetonate(const TMsgOnDetonate& msg);

@@ -1,6 +1,6 @@
 <std_material name="skin_boss"
               tech="skin_basic"
-              diffuse="atrezzo_diffuse"
+              diffuse="boss_difuso"
 			  normal="atrezzo_normal"
 			  emissive=""
 			specular="atrezzo_specular"
