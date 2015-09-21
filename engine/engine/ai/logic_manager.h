@@ -168,6 +168,7 @@ public:
 	void setCanPull(bool active);
 	void setCanCancel(bool active);
 	void setCanTense(bool active);
+	void setCanMove(bool active);
 
 	// EFFECTS
 	void setBand(bool bands);

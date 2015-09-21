@@ -79,6 +79,7 @@ void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
 
 void FSMPlayerTorso::ThrowString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
+	TCompSkeleton* skeleton = comp_skeleton;
 
 	// Throw the string
 	if (on_enter) {
@@ -202,7 +203,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					// Assing the positions (needle transform + current player position)
 					new_e_r->setPositions(needle_transform, p_transform->position);
-					new_e_r->pos_1 = p_transform->position;
+					new_e_r->pos_1 = skeleton->getPositionOfBone(29);
 
 					// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
 					current_rope_entity = new_e;
@@ -506,6 +507,19 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 	}
 
+	else{
+		// Not on enter
+		// Make the distance joint from the rope follow the player
+		CEntity* rope_entity = current_rope_entity;
+		if (rope_entity) {
+			TCompRope* rope = rope_entity->get<TCompRope>();
+			if (rope) {
+				rope->pos_2 = skeleton->getPositionOfBone(29);
+			}
+		}
+	}
+
+
 	// Animation ends
 	if (state_time >= 0.1f) {
 		if (current_rope_entity == CHandle())
@@ -596,7 +610,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	}
 
 	// Animation ends
-	if (io.isReleased(CIOStatus::PULL_STRING) && can_pull) {
+	if (io.isReleased(CIOStatus::PULL_STRING)) {	
 		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
 		camera_controller->offset = standard_camera_offset;
 
@@ -657,18 +671,22 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	// Get the player transform
 	TCompTransform* p_transform = comp_transform;
 
+	// Set the rope position
+	rope->pos_2 = skeleton->getPositionOfBone(29);
+
+	// Se the joints position
 	if (joint) {
-		joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(p_transform->position + XMVectorSet(0, 2, 0, 0))));
+		joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
 		joint->awakeActors();
 	}
 
 	if (rope->joint_aux.isValid()) {
 		TCompDistanceJoint* joint2 = rope->joint_aux;
-		joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(p_transform->position + XMVectorSet(0, 2, 0, 0))));
+		joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
 		joint2->awakeActors();
 	}
 
-	rope->pos_2 = skeleton->getPositionOfBone(29);
+	
 
 	// Cancel
 	

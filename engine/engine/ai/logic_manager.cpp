@@ -946,3 +946,13 @@ void CLogicManager::setCanTense(bool active) {
 		}
 	}
 }
+
+void CLogicManager::setCanMove(bool active) {
+	CEntity* player_entity = CEntityManager::get().getByName("Player");
+	if (player_entity) {
+		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
+		if (player_controller) {
+			player_controller->fsm_player_legs.can_move = active;
+		}
+	}
+}

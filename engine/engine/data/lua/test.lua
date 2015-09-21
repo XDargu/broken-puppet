@@ -88,6 +88,30 @@ function onSceneLoad_my_file()
 
 	end
 
+	local trigger_boss0 = false
+	function onTriggerEnter_trigger_boss0(who)
+		if sc2_narr4_played == false then
+			logicManager:setBands(true);
+			logicManager:setMediumShotActive(true);
+			logicManager:setCanThrow(false);
+			logicManager:setCanTense(false);
+			logicManager:setCanCancel(false);
+			logicManager:setCanPull(false);
+			trigger_boss0 = true
+		end
+	end
+
+	local trigger_boss1 = false
+	function onTriggerEnter_trigger_boss1(who)
+		if sc2_narr4_played == false then
+			logicManager:pushPlayerLegsState("fbp_Idle");
+			logicManager:setMediumShotActive(true);
+			logicManager:setCanMove(false);
+			trigger_boss1 = true
+		end
+	end
+	
+
 	function onTimerEnd_timerMolon()
 		logicManager:playSubtitles("SCENE101");
 		logicManager:setBands(false)

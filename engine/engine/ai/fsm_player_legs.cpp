@@ -528,6 +528,12 @@ void FSMPlayerLegs::PullString(float elapsed){
 		skeleton->stopAnimation(15);
 		ChangeState("fbp_Idle");
 	}
+
+	CIOStatus& io = CIOStatus::get();
+
+	if (io.isReleased(CIOStatus::PULL_STRING)) {
+
+	}
 }
 
 void FSMPlayerLegs::Fall(float elapsed){
