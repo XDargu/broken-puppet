@@ -1,14 +1,14 @@
 <prefab>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
-    <name name="engranaje_6_radios_M" />
-    <transform position="-19.6185 2.48322e-007 5.68094" rotation="0.0 0.0 0.0 1.0" scale="0.49 0.49 0.49"/>
+    <name name="engranaje_6_radios_boss_M" />
+    <transform position="-20.2848 1.41669 1.16464" rotation="0.0 0.0 0.0 1.0" scale="0.613259 0.613259 0.613259"/>
     <render  color = "0.0 0.0 0.0">
-      <draw mesh="engranaje_6_radios_M" sub_mesh="0" mat="mecanismo_mat"/>
-      <draw mesh="engranaje_6_radios_M" sub_mesh="1" mat="mecanismo_mat"/>
+      <draw mesh="engranaje_6_radios_boss_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="engranaje_6_radios_boss_M" sub_mesh="1" mat="mecanismo_mat"/>
     </render>
     <aabb min="-3.22701 -3.21522 -0.641312" max="3.22701 3.21522 0.641311"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.58123" boxY="1.57546" boxZ="0.314243"/>
-    <rigidbody density="500.0"  />
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.97899" boxY="1.97176" boxZ="0.39329"/>
+    <rigidbody density="500.0" bossLevel="0" />
     <bossPrefab/>
   </entity>
 </prefab>

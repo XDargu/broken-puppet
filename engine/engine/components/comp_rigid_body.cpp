@@ -70,7 +70,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	density = atts.getFloat("density", 1);
 	bool temp_is_kinematic = atts.getBool("kinematic", false);
 	bool temp_use_gravity = atts.getBool("gravity", true);
-	boss_level = atts.getInt("bossLevel", 0);
+	boss_level = atts.getInt("bossLevel", 10);
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
@@ -197,7 +197,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	checkIfInsideRecastAABB();
 
 	if (kinematic) { return; }
-	if (!e->hasTag("player")) {
+	if (!e->hasTag("player") && (boss_level > 3)) {
 		float water_level = CApp::get().water_level;
 		float atten = 0.2f;
 		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);

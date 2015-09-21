@@ -19,87 +19,109 @@ void TCompExplosion::init(){
 	comp_trans = assertRequiredComponent<TCompTransform>(this);
 
 	force_threshold = 2000;
+	count_down = 0;
+	
 }
 
 void TCompExplosion::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	damage = atts.getFloat("damage", 20);
 	radius = atts.getFloat("radius", 6);
+	bomb_active = atts.getBool("active", false);
+	just_boss = atts.getBool("just_boss", false);
 }
+
+void TCompExplosion::update(float elapsed){
+	if (!bomb_active){
+		count_down += elapsed;
+		if (count_down >= 10.f){
+			bomb_active = true;
+		}
+	}
+}
+
 
 void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 
-	CEntityManager& entity_manager = CEntityManager::get();
-	bool rope_removed = false;
+	if ((bomb_active) && (mEntity.isValid()) && (comp_trans.isValid())){
+		CEntityManager& entity_manager = CEntityManager::get();
+		bool rope_removed = false;
 
-	float aux_force = msg.impact_force;
+		float aux_force = msg.impact_force;
 
-	if (msg.impact_force > force_threshold){
-		XMVECTOR m_pos = ((TCompTransform*)comp_trans)->position;
-		CQuaterion m_rot = ((TCompTransform*)comp_trans)->rotation;
-
-		for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
-			CEntity* e = entity_manager.rigid_list[i];
-
-			if ((e != ((CEntity*)mEntity)) && (!e->hasTag("player")) && (e->has<TCompTransform>())){
-				XMVECTOR pos_e = ((TCompTransform*)e->get<TCompTransform>())->position;
-				
-
-				XMVECTOR v_distance = pos_e - m_pos;
-				float distance = XMVectorGetX(XMVector3Length(v_distance));
-
-				if (distance < radius){
-					e->sendMsg(TMsgExplosion(m_pos, distance, damage));
-				}
-			}
+ 		bool boss_check = true;
+		if (just_boss){
+			boss_check = msg.is_boss;
 		}
 
+		if ((msg.impact_force > force_threshold)&&(boss_check)){
+			XMVECTOR m_pos = ((TCompTransform*)comp_trans)->position;
+			CQuaterion m_rot = ((TCompTransform*)comp_trans)->rotation;
 
-		// Remove rope
-		CRope_manager& rope_manager = CRope_manager::get();
+			for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
+				CEntity* e = entity_manager.rigid_list[i];
 
-		for (auto& string : CRope_manager::get().getStrings()) {
-			TCompRope* rope = string;
-			if (rope) {
-				TCompDistanceJoint* mJoint = rope->joint;
-				if (mJoint){
-					PxDistanceJoint* px_joint = mJoint->joint;
-					PxRigidActor* actor1;
-					PxRigidActor* actor2;
-					px_joint->getActors(actor1, actor2);
+				if ((e != ((CEntity*)mEntity)) && (!e->hasTag("player")) && (e->has<TCompTransform>())){
+					XMVECTOR pos_e = ((TCompTransform*)e->get<TCompTransform>())->position;
 
-					if (actor1)	{
-						if (mEntity == CHandle(actor1->userData)){
-							rope_manager.removeString(string);
-						}
-					}
-					if (actor2){
-						if (mEntity == CHandle(actor2->userData)){
-							rope_manager.removeString(string);
-						}
+					XMVECTOR v_distance = pos_e - m_pos;
+					float distance = XMVectorGetX(XMVector3Length(v_distance));
+
+					if (distance < radius){
+						e->sendMsg(TMsgExplosion(m_pos, distance, damage));
 					}
 				}
 			}
-		}
 
-		// Remove Entity
 
-		CEntityManager::get().remove(mEntity);
+			// Remove rope
+			CRope_manager& rope_manager = CRope_manager::get();
 
-		// Play Explosion sound
-		CSoundManager::get().playEvent("event:/test_event", m_pos);
+			for (auto& string : CRope_manager::get().getStrings()) {
+				TCompRope* rope = string;
+				if (rope) {
+					TCompDistanceJoint* mJoint = rope->joint;
+					if (mJoint){
+						PxDistanceJoint* px_joint = mJoint->joint;
+						PxRigidActor* actor1;
+						PxRigidActor* actor2;
+						px_joint->getActors(actor1, actor2);
 
-		// Adding particle sistem
-		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", m_pos, m_rot);
-
-		if (particle_entity.isValid()) {
-			TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-			pg->destroy_on_death = true;
-			if (pg->particle_systems->size() > 0)
-			{
-				(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
-				(*pg->particle_systems)[0].emitter_generation->radius = radius;
+						if (actor1)	{
+							if (mEntity == CHandle(actor1->userData)){
+								rope_manager.removeString(string);
+							}
+						}
+						if (actor2){
+							if (mEntity == CHandle(actor2->userData)){
+								rope_manager.removeString(string);
+							}
+						}
+					}
+				}
 			}
+
+			// Remove Entity
+
+			CEntityManager::get().remove(mEntity);
+
+			// Play Explosion sound
+			CSoundManager::get().playEvent("event:/test_event", m_pos);
+
+			// Adding particle sistem
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", m_pos, m_rot);
+
+			if (particle_entity.isValid()) {
+				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+				pg->destroy_on_death = true;
+				if (pg->particle_systems->size() > 0)
+				{
+					(*pg->particle_systems)[0].emitter_generation->inner_radius = radius / 2.f;
+					(*pg->particle_systems)[0].emitter_generation->radius = radius;
+				}
+			}
+
+
 		}
-		
+
 	}
 }

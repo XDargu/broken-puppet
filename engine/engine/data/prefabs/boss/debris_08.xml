@@ -1,13 +1,13 @@
 <prefab>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="tablon_largo_e" />
-    <transform position="-10.3567 1.36758 14.2765" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <name name="tablon_largo_boss_e" />
+    <transform position="-10.2865 2.90488 18.1471" rotation="0.0 0.0 0.0 1.0" scale="1.5031 1.5031 1.5031"/>
     <render  color = "0.0 0.0 0.0">
-      <draw mesh="tablon_largo_e" sub_mesh="0" mat="flechas"/>
+      <draw mesh="tablon_largo_boss_e" sub_mesh="0" mat="flechas"/>
     </render>
     <aabb min="-2.08967 -0.157119 -0.218944" max="2.08967 0.157119 0.218943"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.08967" boxY="0.0321192" boxZ="0.218943"/>
-    <rigidbody density="500.0"  />
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="3.14098" boxY="0.236166" boxZ="0.329094"/>
+    <rigidbody density="500.0" bossLevel="0" />
 	<bossPrefab/>
   </entity>
 </prefab>

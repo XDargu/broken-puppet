@@ -144,14 +144,15 @@ void TCompRagdoll::setCollisonBoss(bool active){
 			| FilterGroup::eBOSSHEAD
 			| FilterGroup::eBOSSPARTS;
 		PxShape* collider;
-		for (auto& it : ragdoll->bone_map) {
+		for (auto& it : ragdoll->bone_map) {			
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			it.second->getShapes(&collider, 1);
 			if (it.first == 6){
-				myMask = FilterGroup::eBOSSHEAD;
-				notCollide = FilterGroup::eBOSSRAGDOLL;
+				setupFiltering(collider, FilterGroup::eBOSSHEAD, FilterGroup::eBOSSRAGDOLL);
 			}
-			setupFiltering(collider, myMask, notCollide);
+			else {
+				setupFiltering(collider, myMask, notCollide);
+			}
 		}
 	}
 }
@@ -244,10 +245,11 @@ void TCompRagdoll::setCollisonBossBone(bool active, int bone_id){
 				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 				it.second->getShapes(&collider, 1);
 				if (it.first == 6){
-					myMask = FilterGroup::eBOSSHEAD;
-					notCollide = FilterGroup::eBOSSRAGDOLL;
+					setupFiltering(collider, FilterGroup::eBOSSHEAD, FilterGroup::eBOSSRAGDOLL);
 				}
-				setupFiltering(collider, myMask, notCollide);
+				else {
+					setupFiltering(collider, myMask, notCollide);
+				}
 			}
 		}
 	}
@@ -321,12 +323,12 @@ void TCompRagdoll::setCollisionGroups(){
 		}
 	}
 
-	for (auto& it : ragdoll->bone_map) {
+	/*for (auto& it : ragdoll->bone_map) {
 		PxShape* collider;
 		it.second->getShapes(&collider, 1);
 
 		setupFiltering(collider, myMask, notCollide);
-	}
+	}*/
 }
 
 void TCompRagdoll::breakJoints() {

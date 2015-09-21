@@ -39,17 +39,20 @@ private:
 	bool has_right;
 
 	int shoots_amount;
-
+	
 	float last_attack;
 	int Calculate_attack();
 
 	bool RainDebris(float elapsed);
 	int debris_created;
 	float debris_creation_delay;
+	float bomb_creation_delay;
 
-	int ball_size;
+	float ball_size;
+	vector<CHandle> ball_list;
 
 	void SelectObjToShoot();
+	float distance_to_hand;
 
 	CHandle obj_to_shoot;
 

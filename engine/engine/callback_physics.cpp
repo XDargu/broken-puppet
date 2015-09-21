@@ -65,10 +65,22 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			else if ((secondActorEntity->hasTag("bomb")) && (firstActorEntity->hasTag("boss"))){
 				//Colision entre actor y enemigo
 				XDEBUG("Boss head collision actor_name=%s", secondActorEntity->getName());
+				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(second_rigid->getMass(), pairs, i);
+				//float force_float = force;
+				if (force > force_threshold)
+					firstActorEntity->sendMsg(TMsgOnDetonate(force, true));
 			}
 			else if ((secondActorEntity->hasTag("boss")) && (firstActorEntity->hasTag("bomb"))){
 				//Colision entre actor y enemigo;
 				XDEBUG("Boss head collision actor_name=%s", firstActorEntity->getName());
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(first_rigid->getMass(), pairs, i);
+				//float force_float = force;
+				if (force > force_threshold)
+					firstActorEntity->sendMsg(TMsgOnDetonate(force, true));
 			}else if ((firstActorEntity->hasTag("bomb"))){
 					//Colision entre actor y enemigo
 					TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
@@ -76,7 +88,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					PxReal force = getForce(first_rigid->getMass(), pairs, i);
 					//float force_float = force;
 					if (force > force_threshold)
-						firstActorEntity->sendMsg(TMsgOnDetonate(force));
+						firstActorEntity->sendMsg(TMsgOnDetonate(force,false));
 			}else if ((secondActorEntity->hasTag("bomb"))){
 					//Colision entre actor y enemigo
 					TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
@@ -84,7 +96,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					PxReal force = getForce(second_rigid->getMass(), pairs, i);
 					//float force_float = force;
 					if (force > force_threshold)
-						secondActorEntity->sendMsg(TMsgOnDetonate(force));
+						secondActorEntity->sendMsg(TMsgOnDetonate(force, false));
 			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("player"))){
 				//Colision entre actor sin colisiones y player
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();

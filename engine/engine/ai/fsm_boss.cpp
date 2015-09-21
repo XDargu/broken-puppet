@@ -79,10 +79,11 @@ void fsm_boss::Init()
 
 	debris_created = 0;
 	debris_creation_delay = 0;
+	bomb_creation_delay = 0;
 
 	// Init vars
 	point_offset = PxVec3(0, 10, 0);
-	distance_to_point = 3;
+	distance_to_point = 12;
 	
 	m_entity_manager = &CEntityManager::get();
 
@@ -90,9 +91,10 @@ void fsm_boss::Init()
 
 	obj_distance = 0;
 	obj_selected = CHandle();
+	distance_to_hand = 2.f;
 
 	force = 24;
-	ball_size = 100;
+	ball_size = 60000;
 
 	last_anim_id = -1;
 }
@@ -124,7 +126,7 @@ void fsm_boss::Idle1(float elapsed){
 	last_attack += elapsed;
 	
 	CIOStatus& io = CIOStatus::get();
-	/**/
+	/*
 	if (last_attack > 3){
 		int attack = Calculate_attack();
 		//int attack = 2;
@@ -280,7 +282,8 @@ void fsm_boss::Rain1Loop(float elapsed){
 
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
-
+		bomb_creation_delay = 0;
+		debris_creation_delay = 0;
 		debris_created = 0;
 	}
 
@@ -327,6 +330,24 @@ void fsm_boss::Ball1Initial(float elapsed){
 		stopAllAnimations();
 		skeleton->playAnimation(17);
 		last_anim_id = -1;
+
+		ball_list.clear();
+		float aux_ball_size = 0;
+
+		// Get obj till mass
+
+		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+			CEntity* e = m_entity_manager->rigid_list[i];
+			if (!e->hasTag("player")){
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();
+				bool bossAccess = rigid->boss_level == 0;
+				if (bossAccess){
+					aux_ball_size += rigid->getMass();
+					ball_list.push_back((CHandle)e);					
+				}
+			}
+			if (aux_ball_size >= ball_size) break;
+		}
 	}
 
 	if (state_time >= 2.6f){
@@ -362,17 +383,24 @@ void fsm_boss::Ball1Loop(float elapsed){
 	PxVec3	point_to_go = enemy_pos + point_offset + (player_boss_dir * distance_to_point);
 
 	if (state_time < 10){
-		int cant = m_entity_manager->rigid_list.size();
-		if (cant > ball_size) cant = ball_size;
-		for (int i = 0; i < cant; ++i){
-			CEntity* e = m_entity_manager->rigid_list[i];
-			if (!e->hasTag("player")){
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+			if (((CHandle)e).isValid()){
 				TCompRigidBody* rigid = e->get<TCompRigidBody>();
-				bool bossAccess = rigid->boss_level == 0;
-				if (bossAccess){
-					PxRigidBody*  px_rigid = rigid->rigidBody;
+				if (((CHandle)rigid).isValid()){
+
+					PxRigidDynamic*  px_rigid = rigid->rigidBody;
+
 					PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
 					px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
+					px_rigid->setLinearDamping(0.05f);
+					px_rigid->setAngularDamping(0.05f);
+
+					float aux_dist = (px_rigid->getGlobalPose().p - point_to_go).magnitude();
+					if (aux_dist < 4){
+						px_rigid->setLinearDamping(1);
+						px_rigid->setAngularDamping(0.5f);
+					}
 				}
 			}
 		}
@@ -396,30 +424,24 @@ void fsm_boss::Ball1Launch(float elapsed){
 		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
 		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 
-		int cant = m_entity_manager->rigid_list.size();
-		if (cant > ball_size) cant = ball_size;
-		for (int i = 0; i < cant; ++i){
-			CEntity* e = CEntityManager::get().rigid_list[i];
-
-			if (!e->hasTag("player")){
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+			if (((CHandle)e).isValid()){
 				TCompRigidBody* rigid = e->get<TCompRigidBody>();
-				bool bossAccess = rigid->boss_level == 0;
-
-				if (bossAccess){
-					PxRigidBody*  px_rigid = rigid->rigidBody;
+				if (((CHandle)rigid).isValid()){
+					TCompRigidBody* rigid = e->get<TCompRigidBody>();
+					PxRigidDynamic*  px_rigid = rigid->rigidBody;
 					PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
-					px_rigid->addForce(force_dir * force, PxForceMode::eVELOCITY_CHANGE, true);
+					px_rigid->addForce(force_dir * force * 2, PxForceMode::eVELOCITY_CHANGE, true);
+					px_rigid->setLinearDamping(0.05f);
+					px_rigid->setAngularDamping(0.05f);
 				}
-
 			}
 		}
 	}
-
 	if (state_time >= 2.3f){
 		ChangeState("fbp_Idle1");
 	}
-
-
 }
 //Shoot1
 void fsm_boss::Shoot1DownDef(){
@@ -487,7 +509,7 @@ void fsm_boss::Shoot1Reload(){
 			player_boss_dir.y = 0;
 			player_boss_dir = player_boss_dir.getNormalized();
 
-			PxVec3	point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * distance_to_point);
+			PxVec3	point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * (distance_to_hand));
 
 			CEntity* m_e = obj_to_shoot;
 			TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
@@ -497,11 +519,11 @@ void fsm_boss::Shoot1Reload(){
 			PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
 			float dist = (point_to_go - px_rigid->getGlobalPose().p).magnitude();
 
-			if (dist > 5) {
-				px_rigid->addForce(force_dir * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
+			if (dist > 10) {
+				px_rigid->addForce(force_dir * 0.8f, PxForceMode::eVELOCITY_CHANGE, true);
 			}
 			else {
-				px_rigid->setLinearVelocity(force_dir * clamp(dist, 0, 1));
+				px_rigid->setLinearVelocity(force_dir * clamp(dist, 0, 6));
 			}
 
 			if (state_time >= 2.f){
@@ -516,8 +538,6 @@ void fsm_boss::Shoot1Reload(){
 		ChangeState("fbp_Shoot1ReleaseDef");
 	}
 }
-
-
 
 //Shoot
 void fsm_boss::Shoot1Shoot(){
@@ -551,7 +571,7 @@ void fsm_boss::Shoot1Shoot(){
 		if (rigid) {
 			PxRigidBody*  px_rigid = rigid->rigidBody;
 
-			px_rigid->addForce(force_dir * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
+			px_rigid->addForce(force_dir, PxForceMode::eVELOCITY_CHANGE, true);
 			//px_rigid->setLinearVelocity(force_dir);
 		}
 	}
@@ -587,7 +607,6 @@ void fsm_boss::Shoot1ReleaseDef(){
 					if (((PxRigidDynamic*)px_rigid)->isSleeping()){
 						((PxRigidDynamic*)px_rigid)->wakeUp();
 					}
-
 				}
 			}
 		}
@@ -884,16 +903,16 @@ int fsm_boss::Calculate_attack() {
 	
 	last_attack = 0.f;
 	int rnd = 0;	
-	if (m_entity_manager->rigid_list.size() < 150){
+	if (m_entity_manager->rigid_list.size() < 70){
 		rnd = 0;
 	}
 	else if (m_entity_manager->rigid_list.size() > 330){
-		rnd = 1;
-		//rnd = getRandomNumber(1, 4);
+		//rnd = 1;
+		rnd = getRandomNumber(1, 4);
 	}
 	else {
-		rnd = 1;
-		//rnd = getRandomNumber(0, 4);
+		//rnd = 1;
+		rnd = getRandomNumber(1, 4);
 	}
 	return rnd;
 }
@@ -901,14 +920,15 @@ int fsm_boss::Calculate_attack() {
 bool fsm_boss::RainDebris(float elapsed){
 
 	// Cargar un prefab
-	int debris_amount = 150;
-	float debris_respawn_time = 0.1f;
+	int debris_amount = 200;
+	float debris_respawn_time = 0.05f;
+	float bomb_respawn_time = 1.f;
 	bool active = true;
 
 	if (debris_created <= debris_amount){
 
 		debris_creation_delay += elapsed;
-
+		// Debris
 		if (debris_creation_delay >= debris_respawn_time){
 			debris_creation_delay = 0;
 
@@ -922,6 +942,24 @@ bool fsm_boss::RainDebris(float elapsed){
 			prefab_t->teleport(random_point);
 
 			debris_created++;
+		}
+
+		bomb_creation_delay += elapsed;
+		// Bombs
+		if (bomb_creation_delay >= bomb_respawn_time){
+			bomb_creation_delay = 0;
+			std::string name = "boss/bomb";
+			CEntity* prefab_entity = prefabs_manager.getInstanceByName(name.c_str());
+
+			XMVECTOR random_point = getRandomVector3(-20, 60, -10, 20, 61, 30);
+			TCompTransform* prefab_t = prefab_entity->get<TCompTransform>();
+			prefab_t->init();
+			TCompParticleGroup* prefab_pg = prefab_entity->get<TCompParticleGroup>();
+			prefab_pg->init();
+			TCompExplosion* prefab_E = prefab_entity->get<TCompExplosion>();
+			prefab_E->init();
+
+			prefab_t->teleport(random_point);
 		}
 	}
 	else{
@@ -986,7 +1024,9 @@ void fsm_boss::SelectObjToShoot() {
 
 				if (!obj_to_shoot.isValid()) { obj_to_shoot = e; }
 				
-				float dist_aux = V3DISTANCE(enemy_comp_trans->position, obj_comp_trans->position);
+				TCompSkeleton* skeleton = comp_skeleton;
+				
+				float dist_aux = V3DISTANCE(skeleton->getPositionOfBone(40), obj_comp_trans->position);
 				if ((dist_aux <= dist)&&(rigid->getMass() > 1500.f)){
 					dist = dist_aux;
 					obj_to_shoot = e;

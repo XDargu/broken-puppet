@@ -767,6 +767,7 @@ void CApp::update(float elapsed) {
 
 	// OTHER
 	getObjManager<TCompBossPrefab>()->update(elapsed);
+	getObjManager<TCompExplosion>()->update(elapsed);
 
 	// AI
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);

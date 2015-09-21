@@ -11,7 +11,8 @@ struct TMsgExplosion {
 };
 struct TMsgOnDetonate {
 	float    impact_force;
-	TMsgOnDetonate(float m_impact_force) : impact_force(m_impact_force) { }
+	bool is_boss;
+	TMsgOnDetonate(float m_impact_force, bool m_is_boss) : impact_force(m_impact_force), is_boss(m_is_boss){}
 	DECLARE_MSG_ID();
 };
 

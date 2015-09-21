@@ -11,7 +11,7 @@
       <shape posOffset="-0.146588 -2.14509 0.052537" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.61798" width="1.70929" height="0.284875"/>
       <shape posOffset="-0.13412 -2.64329 -0.0222768" rotOffset="0.0 0.0 0.0 1.0" type="SPHERE" radius="0.739965" />
     </colliderMulti>
-    <rigidbody density="1134.61"  />
+    <rigidbody density="1134.61" bossLevel="0" />
     <bossPrefab/>
   </entity>
 </prefab>

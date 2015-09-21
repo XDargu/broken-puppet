@@ -9,7 +9,7 @@
     </render>
     <aabb min="-0.661276 -0.947006 -0.0622325" max="0.661276 0.947006 0.0622325"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.250372" boxY="0.358554" boxZ="0.0235624"/>
-    <rigidbody density="500.0"  />
+    <rigidbody density="500.0" bossLevel="0" />
     <bossPrefab/>
   </entity>
 </prefab>

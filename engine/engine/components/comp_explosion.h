@@ -13,12 +13,16 @@ private:
 	float damage;
 	float radius;
 	float force_threshold;
+	bool bomb_active;
+	bool just_boss;
+	float count_down;
 
 public:
 	TCompExplosion();
 	~TCompExplosion();
 
 	void init();
+	void update(float elapsed);
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void onDetonate(const TMsgOnDetonate& msg);
 	
