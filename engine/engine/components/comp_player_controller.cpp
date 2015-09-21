@@ -26,7 +26,8 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	hit_cool_down = 1;
 	time_since_last_hit = 0;
 
-	physx::PxReal threshold = 100000.f;
+	//55000.f
+	physx::PxReal threshold = 55000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
 	footsteps = CSoundManager::get().getInstance("event:/Character/Footprints/Footsteps");

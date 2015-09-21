@@ -56,9 +56,11 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 				//Colision entre actor y enemigo
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
 				PxReal force = getForce(second_rigid->getMass(), pairs, i);
 				//float force_float = force;
+				XDEBUG("force impact enmey to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, secondActorEntity->getName(), force_threshold);
 				if (force > force_threshold)
 					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force));
 			}
@@ -119,10 +121,13 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force));
 			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))) {
 			//Colision entre enemigo y actor
-				TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = firstActorEntity->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(firstActorEntity->getMass(), pairs, i);
+				//TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
+				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+				PxReal force = getForce(first_rigid->getMass(), pairs, i);
 				//float force_float = force;
+				XDEBUG("force impact enemy to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
 				if (force >force_threshold)
 					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force));
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))) {

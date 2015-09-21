@@ -18,10 +18,10 @@ const float max_distance_to_attack = 1.5f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
-const float delta_time_close_attack = 4.5f;
+const float delta_time_close_attack = 3.5f;
 const float distance_change_way_point = 0.55f;
-const float force_large_impact = 80000.f;
-const float force_medium_impact = 50000.f;
+const float force_large_impact = 60000.f;
+const float force_medium_impact = 40000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
@@ -338,7 +338,7 @@ int bt_grandma::actionTooCloseAttack()
 	if (state_time >= getAnimationDuration(7)) {
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2){
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
 		}
 		return LEAVE;
 	}
@@ -607,6 +607,7 @@ int bt_grandma::actionWander()
 int bt_grandma::actionWarcry()
 {
 	if (on_enter) {
+		stopAllAnimations();
 		playAnimationIfNotPlaying(18);
 	}
 
@@ -834,16 +835,20 @@ int bt_grandma::actionInitialAttack()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time > getAnimationDuration(11) / 5) && (!attacked)) {
+	if ((state_time >= getAnimationDuration(4) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 300.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			attacked = true;
 		}
-		attacked = true;
-		return LEAVE;
-	}else{
+
+		if (state_time >= getAnimationDuration(4)){
+			return LEAVE;
+		}
+	}
+	else{
 		attacked = false;
 		return STAY;
 	}
@@ -926,15 +931,18 @@ int bt_grandma::actionNormalAttack()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time  >= getAnimationDuration(4) / 5) && (!attacked)) {
+	if ((state_time >= getAnimationDuration(4) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 250.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			attacked = true;
 		}
-		attacked = true;
-		return LEAVE;
+
+		if (state_time >= getAnimationDuration(4)){
+			return LEAVE;
+		}
 	}else{
 		attacked = false;
 		return STAY;
@@ -1250,14 +1258,14 @@ int bt_grandma::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	float random_time_attack = getRandomNumber(delta_time_close_attack - 2.8f, delta_time_close_attack);
+	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= random_time_attack)){
 		last_time = timer;
 		return true;
 	}
 	else{
 		return false;
 	}
-
 }
 
 //Init on false
@@ -1683,7 +1691,7 @@ void bt_grandma::drawdebug() {
 void bt_grandma::stopAllAnimations() {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 50; ++i) {
 		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
 	}
 }
