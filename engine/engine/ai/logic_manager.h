@@ -163,6 +163,13 @@ public:
 	void stringCancelled();
 	void stringAllCancelled();
 
+	// PLAYER
+	void setCanThrow(bool active);
+	void setCanPull(bool active);
+	void setCanCancel(bool active);
+	void setCanTense(bool active);
+	void setCanMove(bool active);
+
 	// EFFECTS
 	void setBand(bool bands);
 

@@ -8,7 +8,7 @@
 
 FSMPlayerLegs::FSMPlayerLegs()
 {
-	
+	can_move = true;
 }
 
 FSMPlayerLegs::~FSMPlayerLegs()
@@ -113,26 +113,27 @@ void FSMPlayerLegs::Idle(float elapsed){
 	}*/
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
-
-	if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
-		skeleton->stopAnimation(8);
-		skeleton->stopAnimation(0);
-		skeleton->stopAnimation(33);
-		skeleton->stopAnimation(34);
-		skeleton->stopAnimation(35);
-		skeleton_ik->active = false;
-		ChangeState("fbp_Jump");
+	if (can_move) {
+		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
+			skeleton->stopAnimation(8);
+			skeleton->stopAnimation(0);
+			skeleton->stopAnimation(33);
+			skeleton->stopAnimation(34);
+			skeleton->stopAnimation(35);
+			skeleton_ik->active = false;
+			ChangeState("fbp_Jump");
+		}
+		if (EvaluateMovement(false, elapsed)){
+			skeleton->stopAnimation(8);
+			skeleton->stopAnimation(0);
+			skeleton->stopAnimation(33);
+			skeleton->stopAnimation(34);
+			skeleton->stopAnimation(35);
+			skeleton_ik->active = false;
+			ChangeState("fbp_Walk");
+		}
 	}
-	if (EvaluateMovement(false, elapsed)){
-		skeleton->stopAnimation(8);
-		skeleton->stopAnimation(0);
-		skeleton->stopAnimation(33);
-		skeleton->stopAnimation(34);
-		skeleton->stopAnimation(35);
-		skeleton_ik->active = false;
-		ChangeState("fbp_Walk");
-	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 		skeleton->stopAnimation(8);
 		skeleton->stopAnimation(0);
 		skeleton->stopAnimation(33);
@@ -239,7 +240,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 			ChangeState("fbp_Idle");
 			return;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
 			skeleton->stopAnimation(25);
@@ -343,7 +344,7 @@ void FSMPlayerLegs::Run(float elapsed){
 			ChangeState("fbp_Idle");
 			return;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
+		if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
 			skeleton->stopAnimation(25);
@@ -415,7 +416,7 @@ void FSMPlayerLegs::Jump(float elapsed){
 		skeleton->stopAnimation(6);
 		return;
 	}
-	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow()){
+	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 		ChangeState("fbp_ThrowStringPartial");
 		skeleton->stopAnimation(6);
 	}
@@ -526,6 +527,12 @@ void FSMPlayerLegs::PullString(float elapsed){
 	if (state_time > 2) {
 		skeleton->stopAnimation(15);
 		ChangeState("fbp_Idle");
+	}
+
+	CIOStatus& io = CIOStatus::get();
+
+	if (io.isReleased(CIOStatus::PULL_STRING)) {
+
 	}
 }
 
@@ -889,7 +896,6 @@ void FSMPlayerLegs::Victory(float elapsed){
 // NO FSM FUNCTIONS
 
 bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
-
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 	TCompRigidBody* rigidbody = (TCompRigidBody*)comp_rigidbody;
@@ -958,6 +964,7 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 
 	dir.normalize();
 	bool ragdoll = (getCurrentNode() == "fbp_Ragdoll");
+
 	((TCompCharacterController*)comp_character_controller)->Move(movement_vector, false, jump, dir, elapsed);
 
 	// Evaluate falling

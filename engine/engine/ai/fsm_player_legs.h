@@ -34,6 +34,8 @@ public:
 	float run_speed;
 	float dead_counter;
 
+	bool can_move;
+
 	FSMPlayerLegs();
 	~FSMPlayerLegs();
 

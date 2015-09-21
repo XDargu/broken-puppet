@@ -20,6 +20,10 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, up_animation(false)
 	, max_num_string(0)
 	, looking_at_pointer(false)
+	, can_throw(true)
+	, can_cancel(true)
+	, can_pull(true)
+	, can_tense(true)
 {}
 FSMPlayerTorso::~FSMPlayerTorso() {}
 
@@ -75,6 +79,7 @@ void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
 
 void FSMPlayerTorso::ThrowString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
+	TCompSkeleton* skeleton = comp_skeleton;
 
 	// Throw the string
 	if (on_enter) {
@@ -198,7 +203,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					// Assing the positions (needle transform + current player position)
 					new_e_r->setPositions(needle_transform, p_transform->position);
-					new_e_r->pos_1 = p_transform->position;
+					new_e_r->pos_1 = skeleton->getPositionOfBone(29);
 
 					// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
 					current_rope_entity = new_e;
@@ -502,6 +507,19 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 	}
 
+	else{
+		// Not on enter
+		// Make the distance joint from the rope follow the player
+		CEntity* rope_entity = current_rope_entity;
+		if (rope_entity) {
+			TCompRope* rope = rope_entity->get<TCompRope>();
+			if (rope) {
+				rope->pos_2 = skeleton->getPositionOfBone(29);
+			}
+		}
+	}
+
+
 	// Animation ends
 	if (state_time >= 0.1f) {
 		if (current_rope_entity == CHandle())
@@ -592,7 +610,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	}
 
 	// Animation ends
-	if (io.isReleased(CIOStatus::PULL_STRING)) {
+	if (io.isReleased(CIOStatus::PULL_STRING)) {	
 		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
 		camera_controller->offset = standard_camera_offset;
 
@@ -653,23 +671,27 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	// Get the player transform
 	TCompTransform* p_transform = comp_transform;
 
+	// Set the rope position
+	rope->pos_2 = skeleton->getPositionOfBone(29);
+
+	// Se the joints position
 	if (joint) {
-		joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(p_transform->position + XMVectorSet(0, 2, 0, 0))));
+		joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
 		joint->awakeActors();
 	}
 
 	if (rope->joint_aux.isValid()) {
 		TCompDistanceJoint* joint2 = rope->joint_aux;
-		joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(p_transform->position + XMVectorSet(0, 2, 0, 0))));
+		joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
 		joint2->awakeActors();
 	}
 
-	rope->pos_2 = skeleton->getPositionOfBone(29);
+	
 
 	// Cancel
 	
 
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING) && can_cancel) {
 
 		// Remove the current string
 		/*CHandle c_rope = strings.back();
@@ -691,7 +713,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	}
 
 	// Throw the second needle
-	if (io.becomesReleased(CIOStatus::THROW_STRING) && canThrow()) {
+	if (io.becomesReleased(CIOStatus::THROW_STRING) && canThrow() && can_throw) {
 		up_animation = false;
 		ChangeState("fbp_ThrowString");
 	}
@@ -700,7 +722,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		return;
 
 	// Pull
-	if (io.isPressed(CIOStatus::PULL_STRING)) {
+	if (io.isPressed(CIOStatus::PULL_STRING) && can_pull) {
 		up_animation = false;
 		ChangeState("fbp_PullString");
 	}
@@ -723,7 +745,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	// Cancel previous strings
 	// Simple cancel
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING) && can_cancel) {
 		float time_prueba = io.getTimePressed(CIOStatus::CANCEL_STRING);
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			/*CHandle c_rope = strings.back();
@@ -736,7 +758,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Multiple cancel
-	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
+	if (io.isPressed(CIOStatus::CANCEL_STRING) && can_cancel) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
@@ -754,7 +776,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Tense the string
-	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
+	if (io.becomesPressed(CIOStatus::TENSE_STRING) && can_tense) {
 
 		CLogicManager::get().stringsTensed();
 
@@ -821,7 +843,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Waits for the player to throw
-	if (io.isPressed(CIOStatus::THROW_STRING) && canThrow()) {
+	if (io.isPressed(CIOStatus::THROW_STRING) && canThrow() && can_throw) {
 		ChangeState("fbp_ThrowString");
 	}
 

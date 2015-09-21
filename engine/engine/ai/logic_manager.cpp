@@ -554,6 +554,10 @@ void CLogicManager::bootLUA() {
 		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
 		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
 		.set("playAnimation", &CLogicManager::playAnimation)
+		.set("setCanThrow", &CLogicManager::setCanThrow)
+		.set("setCanTense", &CLogicManager::setCanTense)
+		.set("setCanCancel", &CLogicManager::setCanCancel)
+		.set("setCanPull", &CLogicManager::setCanPull)
 	;
 
 	// Register the bot class
@@ -901,4 +905,54 @@ void CLogicManager::playAnimation(std::string name, CMCVObject target_object) {
 		}
 	}
 	
+}
+
+void CLogicManager::setCanThrow(bool active) {
+	CEntity* player_entity = CEntityManager::get().getByName("Player");
+	if (player_entity) {		
+		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
+		if (player_controller) {
+			player_controller->fsm_player_torso.can_throw = active;
+		}
+	}
+}
+
+void CLogicManager::setCanPull(bool active) {
+	CEntity* player_entity = CEntityManager::get().getByName("Player");
+	if (player_entity) {
+		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
+		if (player_controller) {
+			player_controller->fsm_player_torso.can_pull = active;
+		}
+	}
+}
+
+void CLogicManager::setCanCancel(bool active) {
+	CEntity* player_entity = CEntityManager::get().getByName("Player");
+	if (player_entity) {
+		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
+		if (player_controller) {
+			player_controller->fsm_player_torso.can_cancel = active;
+		}
+	}
+}
+
+void CLogicManager::setCanTense(bool active) {
+	CEntity* player_entity = CEntityManager::get().getByName("Player");
+	if (player_entity) {
+		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
+		if (player_controller) {
+			player_controller->fsm_player_torso.can_tense = active;
+		}
+	}
+}
+
+void CLogicManager::setCanMove(bool active) {
+	CEntity* player_entity = CEntityManager::get().getByName("Player");
+	if (player_entity) {
+		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
+		if (player_controller) {
+			player_controller->fsm_player_legs.can_move = active;
+		}
+	}
 }
