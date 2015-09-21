@@ -1,0 +1,13 @@
+<prefab>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
+    <name name="lampara_steam_verde_boss_S" />
+    <transform position="-18.6131 7.7522 -3.83426" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.721569 0.607843 0.898039">
+      <draw mesh="lampara_steam_verde_boss_S" sub_mesh="0" mat="lampara_steam_verde_01"/>
+      <draw mesh="lampara_steam_verde_boss_S" sub_mesh="1" mat="lampara_steam_verde_01"/>
+    </render>
+    <aabb min="-1.12069 -3.5113 -1.02774" max="0.852452 -2.00809 0.983189"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.808989" boxY="0.392438" boxZ="0.854646"/>
+    <rigidbody density="500.0"  />
+  </entity>
+</prefab>

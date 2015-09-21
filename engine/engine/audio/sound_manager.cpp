@@ -508,7 +508,7 @@ void CSoundManager::activateSlowMo(){
 		int size = 0;
 		it->second->getInstanceCount(&size);
 		for (int i = 0; i < size; ++i){
-			FMOD::Studio::EventInstance* instace_array[256];
+			FMOD::Studio::EventInstance* instace_array[1024];
 			int count=0;
 			it->second->getInstanceList(instace_array, size, &count);
 			for (int j = 0; j < count; ++j) {
@@ -530,7 +530,7 @@ void CSoundManager::desactivateSlowMo(){
 		int size = 0;
 		it->second->getInstanceCount(&size);
 		for (int i = 0; i < size; ++i){
-			FMOD::Studio::EventInstance* instace_array[256];
+			FMOD::Studio::EventInstance* instace_array[1024];
 			int count = 0;
 			it->second->getInstanceList(instace_array, size, &count);
 			for (int j = 0; j < count; ++j) {

@@ -3,6 +3,7 @@
 #include "../components/all_components.h"
 #include "components\comp_skeleton.h"
 #include "components\comp_skeleton_lookat.h"
+#include "handle\prefabs_manager.h"
 #include "io\iostatus.h"
 
 using namespace DirectX;
@@ -76,9 +77,12 @@ void fsm_boss::Init()
 
 	last_attack = 0.f;
 
+	debris_created = 0;
+	debris_creation_delay = 0;
+
 	// Init vars
 	point_offset = PxVec3(0, 10, 0);
-	distance_to_point = 12;
+	distance_to_point = 3;
 	
 	m_entity_manager = &CEntityManager::get();
 
@@ -88,6 +92,7 @@ void fsm_boss::Init()
 	obj_selected = CHandle();
 
 	force = 24;
+	ball_size = 100;
 
 	last_anim_id = -1;
 }
@@ -119,13 +124,14 @@ void fsm_boss::Idle1(float elapsed){
 	last_attack += elapsed;
 	
 	CIOStatus& io = CIOStatus::get();
-
+	/**/
 	if (last_attack > 3){
 		int attack = Calculate_attack();
+		//int attack = 2;
 		switch (attack)
 		{
 		case 0:
-			ChangeState("fbp_Ball1Initial");
+			ChangeState("fbp_Rain1Prepare");
 			break;
 
 		case 1:
@@ -133,7 +139,7 @@ void fsm_boss::Idle1(float elapsed){
 			break;
 
 		case 2:
-			ChangeState("fbp_Rain1Prepare");
+			ChangeState("fbp_Ball1Initial");
 			break;
 
 		case 3:
@@ -147,9 +153,10 @@ void fsm_boss::Idle1(float elapsed){
 		}
 	}
 
+	/*
 
 	// Update input
-	/*
+	/**
 	if (CIOStatus::get().becomesPressed(CIOStatus::P)){
 		ChangeState("fbp_Ball1Initial");
 	}
@@ -197,7 +204,7 @@ void fsm_boss::Idle1(float elapsed){
 	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
 		EvaluateHit(3);
 	}
-	*/
+	/**/
 }
 
 void fsm_boss::Hit1(float elapsed){
@@ -212,7 +219,7 @@ void fsm_boss::Hit1(float elapsed){
 
 	float time = getAnimationDuration(last_anim_id);
 
-	if (state_time >= 1.16f){
+	if (state_time >= 1.6f){
 		ChangeState("fbp_Stunned1");
 	}
 }
@@ -265,7 +272,7 @@ void fsm_boss::Rain1Prepare(){
 	}
 }
 
-void fsm_boss::Rain1Loop(){
+void fsm_boss::Rain1Loop(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -273,10 +280,14 @@ void fsm_boss::Rain1Loop(){
 
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		debris_created = 0;
 	}
-	if (state_time >= 5){
+
+	if (!RainDebris(elapsed)){
 		ChangeState("fbp_Rain1Recover");
 	}
+
 }
 
 void fsm_boss::Rain1Recover(){
@@ -302,7 +313,7 @@ void fsm_boss::Proximity(float elapsed){
 		skeleton->playAnimation(4);
 		last_anim_id = -1;
 	}
-	if (state_time >= 0.6f){
+	if (state_time >= 1.49f){
 		ChangeState("fbp_Idle1");
 	}
 }
@@ -318,7 +329,7 @@ void fsm_boss::Ball1Initial(float elapsed){
 		last_anim_id = -1;
 	}
 
-	if (state_time >= 0.4f){
+	if (state_time >= 2.6f){
 		ChangeState("fbp_Ball1Loop");
 	}
 
@@ -351,7 +362,9 @@ void fsm_boss::Ball1Loop(float elapsed){
 	PxVec3	point_to_go = enemy_pos + point_offset + (player_boss_dir * distance_to_point);
 
 	if (state_time < 10){
-		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+		int cant = m_entity_manager->rigid_list.size();
+		if (cant > ball_size) cant = ball_size;
+		for (int i = 0; i < cant; ++i){
 			CEntity* e = m_entity_manager->rigid_list[i];
 			if (!e->hasTag("player")){
 				TCompRigidBody* rigid = e->get<TCompRigidBody>();
@@ -383,7 +396,9 @@ void fsm_boss::Ball1Launch(float elapsed){
 		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
 		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 
-		for (int i = 0; i < CEntityManager::get().rigid_list.size(); ++i){
+		int cant = m_entity_manager->rigid_list.size();
+		if (cant > ball_size) cant = ball_size;
+		for (int i = 0; i < cant; ++i){
 			CEntity* e = CEntityManager::get().rigid_list[i];
 
 			if (!e->hasTag("player")){
@@ -400,7 +415,7 @@ void fsm_boss::Ball1Launch(float elapsed){
 		}
 	}
 
-	if (state_time >= 1.1f){
+	if (state_time >= 2.3f){
 		ChangeState("fbp_Idle1");
 	}
 
@@ -443,39 +458,104 @@ void fsm_boss::Shoot1DownDef(){
 }
 
 void fsm_boss::Shoot1Reload(){
+
 	Reorientate(0.f, true);
+
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		loopAnimationIfNotPlaying(25, true);
+
+		obj_to_shoot = nullptr;
+
+		SelectObjToShoot();
 	}
-	
-	if ((shoots_amount >= 1) && (state_time >= 2.f)){
+
+	if (obj_to_shoot.isValid()){
+		if (shoots_amount <= 2){
+			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+
+			// Get the enemy position
+			PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+			TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+			PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+			TCompSkeleton* skeleton = comp_skeleton;
+
+
+			// Calculate direction player enemy
+			PxVec3 player_boss_dir = (player_pos - enemy_pos);
+			player_boss_dir.y = 0;
+			player_boss_dir = player_boss_dir.getNormalized();
+
+			PxVec3	point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * distance_to_point);
+
+			CEntity* m_e = obj_to_shoot;
+			TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
+
+			const char *name = m_e->getName();
+			PxRigidBody*  px_rigid = rigid->rigidBody;
+			PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
+			float dist = (point_to_go - px_rigid->getGlobalPose().p).magnitude();
+
+			if (dist > 5) {
+				px_rigid->addForce(force_dir * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
+			}
+			else {
+				px_rigid->setLinearVelocity(force_dir * clamp(dist, 0, 1));
+			}
+
+			if (state_time >= 2.f){
+				ChangeState("fbp_Shoot1Shoot");
+			}
+		}
+		else if (state_time >= 2.f){
+			ChangeState("fbp_Shoot1ReleaseDef");
+		}
+	}
+	else if (state_time >= 2.f){
 		ChangeState("fbp_Shoot1ReleaseDef");
 	}
-	else if (state_time >= 6.f){
-		ChangeState("fbp_Shoot1Shoot");
-	}
 }
+
 
 
 //Shoot
 void fsm_boss::Shoot1Shoot(){
 	Reorientate(0.f, true);
+	
+	static PxVec3 force_dir;
+
 	if (on_enter){
+		CEntity* m_e = obj_to_shoot;
+		TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
+		PxRigidBody*  px_rigid = rigid->rigidBody;
+
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		skeleton->playAnimation(15);
 		last_anim_id = -1;
 		shoots_amount += 1;
+
+		//Shoot 
+		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+
+		force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
+
+
 	}
 
-	// Take and shoot loop
-	// take obj
-	// check distance
-	// shoot
+	CEntity* m_e = obj_to_shoot;
+	if (m_e) {
+		TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
+		if (rigid) {
+			PxRigidBody*  px_rigid = rigid->rigidBody;
 
-	// Leave protections
+			px_rigid->addForce(force_dir * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
+			//px_rigid->setLinearVelocity(force_dir);
+		}
+	}
+
 
 	// Set Down protections
 	if (state_time >= 1.3f){
@@ -803,9 +883,52 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 int fsm_boss::Calculate_attack() {
 	
 	last_attack = 0.f;
-	int rnd = getRandomNumber(0, 4);
-
+	int rnd = 0;	
+	if (m_entity_manager->rigid_list.size() < 150){
+		rnd = 0;
+	}
+	else if (m_entity_manager->rigid_list.size() > 330){
+		rnd = 1;
+		//rnd = getRandomNumber(1, 4);
+	}
+	else {
+		rnd = 1;
+		//rnd = getRandomNumber(0, 4);
+	}
 	return rnd;
+}
+
+bool fsm_boss::RainDebris(float elapsed){
+
+	// Cargar un prefab
+	int debris_amount = 150;
+	float debris_respawn_time = 0.1f;
+	bool active = true;
+
+	if (debris_created <= debris_amount){
+
+		debris_creation_delay += elapsed;
+
+		if (debris_creation_delay >= debris_respawn_time){
+			debris_creation_delay = 0;
+
+			int rnd = getRandomNumber(1, 20);
+			std::string name = "boss/debris_0" + std::to_string(rnd);
+			CEntity* prefab_entity = prefabs_manager.getInstanceByName(name.c_str());
+
+			XMVECTOR random_point = getRandomVector3(-20, 60, -10, 20, 61, 30);
+			TCompTransform* prefab_t = prefab_entity->get<TCompTransform>();
+			prefab_t->init();
+			prefab_t->teleport(random_point);
+
+			debris_created++;
+		}
+	}
+	else{
+		active = false;
+	}
+
+	return active;
 }
 
 
@@ -844,4 +967,31 @@ bool fsm_boss::HeartHit() {
 	}
 
 	return hitted;
+}
+
+void fsm_boss::SelectObjToShoot() {
+	CHandle obj_aux;
+	float dist = 10000000000;
+
+	for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+		CEntity* e = m_entity_manager->rigid_list[i];
+
+		if (!e->hasTag("player")){
+			TCompRigidBody* rigid = e->get<TCompRigidBody>();
+			bool bossAccess = rigid->boss_level == 0;
+			if (bossAccess){
+				// Take the distance
+				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+				TCompTransform* obj_comp_trans = e->get<TCompTransform>();
+
+				if (!obj_to_shoot.isValid()) { obj_to_shoot = e; }
+				
+				float dist_aux = V3DISTANCE(enemy_comp_trans->position, obj_comp_trans->position);
+				if ((dist_aux <= dist)&&(rigid->getMass() > 1500.f)){
+					dist = dist_aux;
+					obj_to_shoot = e;
+				}				
+			}
+		}
+	}
 }

@@ -1,12 +1,15 @@
 <prefab>
-<entity tag = "actor" collisionTag = "Actor">
-    <name name="sillon_debris" />
-    <transform position="-25.7456 6.55963 27.4418" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="sillon_01" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
+    <name name="cuadro_c" />
+    <transform position="-18.0354 -3.3258e-007 -7.60853" rotation="0.0 0.0 0.0 1.0" scale="0.378619 0.378619 0.378619"/>
+    <render  color = "0.341176 0.882353 0.341176">
+      <draw mesh="cuadro_c" sub_mesh="0" mat="cuadros_01"/>
+      <draw mesh="cuadro_c" sub_mesh="1" mat="cuadros_01"/>
+      <draw mesh="cuadro_c" sub_mesh="2" mat="cuadros_01"/>
     </render>
-    <aabb min="-0.954272 0.0 -0.913161" max="0.954273 2.63802 0.913162"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.954273" boxY="1.31901" boxZ="0.913161"/>
+    <aabb min="-0.661276 -0.947006 -0.0622325" max="0.661276 0.947006 0.0622325"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.250372" boxY="0.358554" boxZ="0.0235624"/>
     <rigidbody density="500.0"  />
+    <bossPrefab/>
   </entity>
 </prefab>

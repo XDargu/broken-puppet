@@ -1,16 +1,17 @@
 <prefab>
-<entity tag = "actor" collisionTag = "Actor">
-    <name name="tocador_debris" />
-    <transform position="-25.5279 6.55963 2.03649" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render>
-      <draw mesh="tocador_01" sub_mesh="0" mat="tocador_01"/>
-      <draw mesh="tocador_01" sub_mesh="1" mat="tocador_01"/>
-      <draw mesh="tocador_01" sub_mesh="2" mat="tocador_01"/>
-      <draw mesh="tocador_01" sub_mesh="3" mat="tocador_01"/>
-      <draw mesh="tocador_01" sub_mesh="4" mat="tocador_01"/>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
+    <name name="lampara_steam_rejilla_boss_S" />
+    <transform position="-13.085 8.08508 -8.16492" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.721569 0.607843 0.898039">
+      <draw mesh="lampara_steam_rejilla_boss_S" sub_mesh="0" mat="lampara_steam_rejilla_01"/>
+      <draw mesh="lampara_steam_rejilla_boss_S" sub_mesh="1" mat="lampara_steam_rejilla_01"/>
     </render>
-    <aabb min="-1.28228 0.00589331 -0.490506" max="1.28228 2.98384 1.0203"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.28228" boxY="1.48897" boxZ="0.755405"/>
-    <rigidbody density="500.0"  />
+    <aabb min="-1.12069 -3.5113 -1.02774" max="0.852452 -2.00809 0.983189"/>
+    <colliderMulti staticFriction="0.3" dynamicFriction="0.3" restitution="0.5">
+      <shape posOffset="-0.146588 -2.14509 0.052537" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.61798" width="1.70929" height="0.284875"/>
+      <shape posOffset="-0.13412 -2.64329 -0.0222768" rotOffset="0.0 0.0 0.0 1.0" type="SPHERE" radius="0.739965" />
+    </colliderMulti>
+    <rigidbody density="1134.61"  />
+    <bossPrefab/>
   </entity>
 </prefab>

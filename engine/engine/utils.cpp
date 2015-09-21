@@ -134,8 +134,8 @@ XMVECTOR getRandomVector3(XMFLOAT3 minXYZ, XMFLOAT3 maxXYZ) {
 
 
 float getRandomNumber(float min, float max){
-	//srand(static_cast<float>(time(NULL)));
-	float rand_num = (max - min) * ((((float)rand()) / (float)RAND_MAX)) + min;
+	//srand(static_cast<float>(time(NULL)));	
+	float rand_num = min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
 	return rand_num;
 }
 

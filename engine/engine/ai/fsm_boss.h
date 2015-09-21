@@ -43,6 +43,16 @@ private:
 	float last_attack;
 	int Calculate_attack();
 
+	bool RainDebris(float elapsed);
+	int debris_created;
+	float debris_creation_delay;
+
+	int ball_size;
+
+	void SelectObjToShoot();
+
+	CHandle obj_to_shoot;
+
 public:
 	fsm_boss();
 	~fsm_boss();
@@ -59,7 +69,7 @@ public:
 	void Stunned1();
 
 	void Rain1Prepare();
-	void Rain1Loop();
+	void Rain1Loop(float elapsed);
 	void Rain1Recover();
 
 	
@@ -83,7 +93,7 @@ public:
 	void Damaged1LeftFinal();
 	void Damaged1RightFinal();
 
-	void FinalState();	
+	void FinalState();
 
 	void Death();
 

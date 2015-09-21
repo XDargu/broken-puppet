@@ -563,6 +563,9 @@
     <ClInclude Include="ai\cinematic_manager.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_boss_prefab.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1049,6 +1052,9 @@
     </ClCompile>
     <ClCompile Include="ai\cinematic_manager.cpp">
       <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_boss_prefab.cpp">
+      <Filter>components\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

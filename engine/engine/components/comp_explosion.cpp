@@ -10,6 +10,9 @@
 #include "rope_manager.h"
 #include "audio\sound_manager.h"
 
+TCompExplosion::TCompExplosion(){}
+TCompExplosion::~TCompExplosion(){}
+
 void TCompExplosion::init(){
 	mEntity = ((CEntity*)CHandle(this).getOwner());
 	const char *mName = ((CEntity*)mEntity)->getName();

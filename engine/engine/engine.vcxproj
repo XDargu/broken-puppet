@@ -194,6 +194,7 @@
     <ClInclude Include="callback_controllers.h" />
     <ClInclude Include="callback_physics.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="components\comp_boss_prefab.h" />
     <ClInclude Include="localization_parser.h" />
     <ClInclude Include="components\comp_collider_convex.h" />
     <ClInclude Include="components\comp_collider_multiple.h" />
@@ -394,6 +395,7 @@
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="components\comp_boss_prefab.cpp" />
     <ClCompile Include="localization_parser.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />
     <ClCompile Include="components\comp_collider_multiple.cpp" />
