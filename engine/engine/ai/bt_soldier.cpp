@@ -15,10 +15,10 @@ const float max_distance_to_attack = 1.f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
-const float delta_time_close_attack = 3.3f;
+const float delta_time_close_attack = 2.8f;
 const float distance_change_way_point = 0.55f;
-const float force_large_impact = 80000.f;
-const float force_medium_impact = 50000.f;
+const float force_large_impact = 60000.f;
+const float force_medium_impact = 40000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
@@ -125,7 +125,7 @@ void bt_soldier::create(string s)
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.19f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.23f;
 
 	resetBot();
 }
@@ -257,7 +257,7 @@ int bt_soldier::actionTooCloseAttack()
 	//look_direction = last_look_direction;
 
 	if (state_time >= getAnimationDuration(7)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 150.f));
+		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
 		return LEAVE;
 	}
 	else
@@ -393,13 +393,26 @@ int bt_soldier::actionPlayerAlert()
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 
-	if (state_time > getAnimationDuration(17)) {
+	if (!findPlayer()) {
 		//Call the iaManager method for warning the rest of the grandmas
 		aimanager::get().warningPlayerFound(this);
 		return LEAVE;
+	}else{
+		CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
+		if (path.size() > 0){
+			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+			if (distance > 2.f){
+				return STAY;
+			}else{ 
+				player_viewed_sensor = true;
+				see_player = true;
+				return LEAVE;
+			}
+		}else{
+			return STAY;
+		}
 	}
-	else
-		return STAY;
+	return STAY;
 }
 
 //Leave the angry state, go to peacefull
@@ -486,6 +499,8 @@ int bt_soldier::actionSelectRole()
 	XMVECTOR right = XMVectorSet(1, 0, 0, 0);
 	XMVECTOR front = XMVectorSet(0, 0, 1, 0);
 
+	see_player = false;
+
 	time_searching_player = 0;
 	if ((V3DISTANCE(m_transform->position, p_transform->position))<4.f){
 		aimanager::get().setEnemyRol(this);
@@ -519,7 +534,7 @@ int bt_soldier::actionChaseRoleDistance()
 		if (path.size() > 0){
 
 			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
-			if (distance>2.f){
+			if (distance>2.5f){
 				player_out_navMesh = true;
 				playAnimationIfNotPlaying(0);
 				return LEAVE;
@@ -584,16 +599,20 @@ int bt_soldier::actionInitialAttack()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time > getAnimationDuration(11) / 5) && (!attacked)) {
+	if ((state_time >= getAnimationDuration(4) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 300.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			attacked = true;
 		}
-		attacked = true;
-		return LEAVE;
-	}else{
+
+		if (state_time >= getAnimationDuration(4)){
+			return LEAVE;
+		}
+	}
+	else{
 		attacked = false;
 		return STAY;
 	}
@@ -679,16 +698,20 @@ int bt_soldier::actionNormalAttack()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time  > getAnimationDuration(4)) && (!attacked)) {
+	if ((state_time >= getAnimationDuration(4) / 5) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 250.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			attacked = true;
 		}
-		attacked = true;
-		return LEAVE;
-	}else{
+
+		if (state_time >= getAnimationDuration(4)){
+			return LEAVE;
+		}
+	}
+	else{
 		attacked = false;
 		return STAY;
 	}
@@ -884,32 +907,32 @@ int bt_soldier::conditionhave_to_warcry()
 //Check if there player is not visible for any grandma (and reach the last position)
 int bt_soldier::conditionplayer_lost()
 {
-	if (!player_out_navMesh){
+
+	if (findPlayer()&&(!see_player)){
+		return false;
+	}else{
 		if ((last_time_player_saw) > max_time_player_lost){
 			player_previously_lost = true;
-			initial_attack = false;
+			player_viewed_sensor = false;
+			initial_attack = true;
+			see_player = false;
 			return true;
+		} else if (!see_player){
+			return true;
+		}else{
+			return false;
 		}
 	}
-	else{
-		player_out_navMesh = false;
-		return true;
-	}
-	return false;
 }
 
 //check if the player is visible
 int bt_soldier::conditionsee_player()
 {
-	//Podría quitar see_player
-	if ((findPlayer()) && (player_previously_lost)){
-		see_player = true;
-		player_previously_lost = false;
+	if (findPlayer()&&(!see_player)){
+		return true;
+	}else{
+		return false;
 	}
-	else{
-		see_player = false;
-	}
-	return see_player;
 }
 
 //Check the look for timer
@@ -945,7 +968,8 @@ int bt_soldier::conditionnormal_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= delta_time_close_attack)){
+	float random_time_attack = getRandomNumber(delta_time_close_attack - 1.5f, delta_time_close_attack);
+	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= random_time_attack)){
 		last_time = timer;
 		return true;
 	}
