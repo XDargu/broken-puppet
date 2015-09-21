@@ -22,7 +22,10 @@ struct FilterGroup
 		eENEMY_RG = (1 << 7),
 		eACTOR_NON_COLLISION = (1 << 8),
 		eNON_COLLISION = (1 << 9),
-		ePARTICLES = (1 << 10)
+		ePARTICLES = (1 << 10),
+		eBOSSRAGDOLL = (1 << 11),
+		eBOSSPARTS = (1 << 12),
+		eBOSSHEAD = (1 << 13)
 	};
 };
 

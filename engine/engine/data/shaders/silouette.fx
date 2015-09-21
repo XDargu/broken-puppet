@@ -83,9 +83,6 @@ float4 PSSilouette(
 	float4 type = txType.Load(screenCoords);
 	float3 wPos = getWorldCoords(screenCoords, depth);
 
-	float3 normal = txNormal.Load(screenCoords).xyz;
-	float3 wNormal = normalize(normal * 2.0f - 1.0f);
-
 	float4 color_x = float4(0, 0, 0, 0);
 	float4 color_y = float4(0, 0, 0, 0);
 
@@ -93,44 +90,77 @@ float4 PSSilouette(
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
 	bool near_player = false;
+	float color_acum = color_x;
 
+	// SOBEL, Manual TABS (for optimization purposes)
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * 0) * 1.5) * sobel_x[0][1];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * 1) * 1.5) * sobel_x[0][2];
+
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1) * 1.5) * sobel_x[2][0];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * 0) * 1.5) * sobel_x[2][1];
+	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * 1) * 1.5) * sobel_x[2][2];
+
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 0, deltaaa.y * -1) * 1.5) * sobel_x[1][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1) * 1.5) * sobel_x[2][0];
+		  
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 0, deltaaa.y * -1) * 1.5) * sobel_x[1][0];
+	color_y += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * 1, deltaaa.y * -1) * 1.5) * sobel_x[2][0];
+
+
+	// Old loops
+	/*
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			float type_aux = txDepth.Sample(samClampPoint, input.UV + delta * 0.3).y;
-			if (type_aux == 0.2) {
-				near_player = true;
-			}
-
-			/*float m_depth = txDepth.Sample(samClampPoint, input.UV + delta * 0.3).x;
-			if (m_depth < depth && (type_aux < 0.8 || type_aux > 0.9) && type_aux > 0) {
-				near_player = true;
-			}*/
-
-			delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
-			float4 samp = txType.Sample(samClampPoint, input.UV + delta * 0.3);
-
 			factor = sobel_x[i][j];
-			color_x += samp * factor;
+			if (factor != 0) {
+				float type_aux = txDepth.Sample(samClampPoint, input.UV + delta * 0.3).y;
+				if (type_aux == 0.2) {
+					near_player = true;
+				}
+
+				//float m_depth = txDepth.Sample(samClampPoint, input.UV + delta * 0.3).x;
+				//if (m_depth < depth && (type_aux < 0.8 || type_aux > 0.9) && type_aux > 0) {
+				//near_player = true;
+				//}
+
+				delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
+				float4 samp = txType.Sample(samClampPoint, input.UV + delta * 0.3);
+
+				color_acum += color_x;
+
+				color_x += samp * factor;
+			}
 		}
 	}
 
-	if (near_player) { return float4(0, 0, 0, 0); }
+	if (near_player) { return diffuse; }
+	// There is no color, don't make the next step
+	if (length(color_acum) == 0) { return diffuse; }
 	
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
-			float4 samp = txType.Sample(samClampPoint, input.UV + delta * 0.3);
-
 			factor = sobel_y[i][j];
-			color_y += samp * factor;
+			if (factor != 0) {
+				delta = float2(deltaaa.x * (i - 1), deltaaa.y * (j - 1)) * 5;
+				float4 samp = txType.Sample(samClampPoint, input.UV + delta * 0.3);
+
+					color_y += samp * factor;
+			}
 		}
-	}
+	}*/
 
 	float border = abs(color_x.x + color_y.x);
 	//return abs(border);
-	if (border > 0)
+	/*if (border > 0)
 		return float4(0.45,0.8,0.63,0) * 0.6;	
-	return float4(0, 0, 0, 0);
+	return float4(0, 0, 0, 0);*/
+
+	if (border > 0)
+		return float4(0.45, 0.8, 0.63, 0) * 0.6 + diffuse;
+	return diffuse;
 }
 
 float4 PSSilouetteType(

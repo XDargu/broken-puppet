@@ -35,6 +35,11 @@ static float3x3 conv =
 	1. / 16., 1. / 8., 1. / 16.
 };
 
+static float3x1 conv_linear =
+{
+	1. / 4., 1. / 2., 1. / 4.
+};
+
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
@@ -43,11 +48,23 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 	float depth = txDepth.Sample(samClampLinear, input.UV).x;
 
 	if (blur_amount > 0) {
-		float4 color = float4(0, 0, 0, 0);
-		float2 delta = float2(0, 0);
-		float factor = 1.f;
+		float4 color = float4(0, 0, 0, 0);		
 
-		for (int i = 0; i < 3; i++) {
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * -1) * blur_amount * saturate(depth) * 5) * (1./16.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * 0)  * blur_amount * saturate(depth) * 5) * (1./8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * 1)  * blur_amount * saturate(depth) * 5) * (1./16.);
+																																			
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * -1)  * blur_amount * saturate(depth) * 5) * (1. / 8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * 0)   * blur_amount * saturate(depth) * 5) * (1./4.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * 1)   * blur_amount * saturate(depth) * 5) * (1./8.);
+																																			
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * -1)  * blur_amount * saturate(depth) * 5) * (1. / 16.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * 0)   * blur_amount * saturate(depth) * 5) * (1./8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * 1)   * blur_amount * saturate(depth) * 5) * (1./16.);
+
+		// Old loop
+		//float2 delta = float2(0, 0);
+		/*for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				factor = conv[i][j];
 
@@ -55,7 +72,7 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 
 				color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.4) * factor;
 			}
-		}
+		}*/
 
 		return color * 1;
 	}
@@ -65,6 +82,54 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 	return txDiffuse.Sample(samClampLinear, input.UV);
 }
 
+//--------------------------------------------------------------------------------------
+// Pixel Shader
+//--------------------------------------------------------------------------------------
+float4 PSBlurX(VS_TEXTURED_OUTPUT input) : SV_Target
+{
+	float depth = txDepth.Sample(samClampLinear, input.UV).x;
+
+	if (blur_amount > 0) {
+		float4 color = float4(0, 0, 0, 0);
+		float2 delta = float2(0, 0);
+		float factor = 1.f;
+
+		for (int i = 0; i < 3; i++) {
+			factor = conv_linear[i];
+			delta = float2(blur_delta.x * (i - 1), 0) * blur_amount * saturate(depth) * 8;
+			color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.4) * factor;
+		}
+
+		return color * 1;
+	}
+
+	return txDiffuse.Sample(samClampLinear, input.UV);
+}
+
+//--------------------------------------------------------------------------------------
+// Pixel Shader
+//--------------------------------------------------------------------------------------
+float4 PSBlurY(VS_TEXTURED_OUTPUT input) : SV_Target
+{
+	float depth = txDepth.Sample(samClampLinear, input.UV).x;
+
+	if (blur_amount > 0) {
+		float4 color = float4(0, 0, 0, 0);
+			float2 delta = float2(0, 0);
+			float factor = 1.f;
+
+		for (int i = 0; i < 3; i++) {
+			factor = conv_linear[i];
+			delta = float2(0, blur_delta.y * (i - 1)) * blur_amount * saturate(depth) * 8;
+			color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.4) * factor;
+		}
+
+		return color * 1;
+	}
+
+	return txDiffuse.Sample(samClampLinear, input.UV);
+
+}
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader

@@ -18,6 +18,7 @@ void CMaterial::onStartElement(const std::string &elem, MKeyValue &atts) {
 		std::string my_name = atts["name"];
 		if (tech_name.empty())
 			tech_name = "deferred_gbuffer";
+
 		diffuse = texture_manager.getByName(diffuse_name.c_str());
 		if (normal_name != "")
 			normal = texture_manager.getByName(normal_name.c_str());

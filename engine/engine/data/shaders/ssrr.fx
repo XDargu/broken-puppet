@@ -52,7 +52,7 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 	float4 color = float4(0, 0, 0, 0);
 
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
-	//float4 origColor = txDiffuse.Load(ss_load_coords);
+	//return txDiffuse.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
 	//float3 normal = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	
@@ -73,7 +73,6 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 	return txDiffuse.Sample(samClampLinear, sc.xy);*/
 	//return float4(refl, 1);
 	//float2 m_coords = sc.xy;
-
 
 	if (dot(refl, cameraToWorldNorm) < 0) {
 		// Ignore reflections going backwards towards the camera, indicate with white
@@ -126,9 +125,8 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 		fact = 1.0; // Falling outside of screen
 	else if (cameraToWorldDist > currentWorldDist)
 		fact = 1.0;
-
 	color = origColor*fact + color*(1 - fact);
-
+	
 	/*if (cameraToWorldDist > currentWorldDist)
 	color = float4(1, 1, 0, 1); // Yellow indicates we found a pixel hidden behind another object
 	else if (newScreen.x > 1 || newScreen.x < -1 || newScreen.y > 1 || newScreen.y < -1)

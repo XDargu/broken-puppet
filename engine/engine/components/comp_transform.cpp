@@ -4,6 +4,7 @@
 #include "comp_unity_character_controller.h"
 #include "entity_manager.h"
 #include "physics_manager.h"
+#include "ai\logic_manager.h"
 
 void TCompTransform::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	position = atts.getPoint("position");
@@ -16,6 +17,7 @@ void TCompTransform::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	}
 
 	type = 0;
+	room_id = 0;
 
 	TCompRigidBody* r = getSibling<TCompRigidBody>(this);
 	TCompUnityCharacterController* u = getSibling<TCompUnityCharacterController>(this);
@@ -54,6 +56,8 @@ void TCompTransform::init() {
 	if (r && !r->isKinematic())
 		type = 1;
 
+	// Room id
+	room_id = CLogicManager::get().getPointZoneID(position);
 }
 
 void TCompTransform::update(float elapsed) {

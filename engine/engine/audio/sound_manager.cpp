@@ -480,10 +480,13 @@ XMVECTOR CSoundManager::FmodToXMVECTOR(FMOD_VECTOR vector) {
 void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std::string material) {
 	float material_type = getMaterialTagValue(material);
 
-	float f = force * 8;
+	//float f = force * 8;
 	/*loadScene("data/scenes/scene_1_noenemy.xml");*/
+
+	XDEBUG("force sound+ %f", force);
+
 	CSoundManager::SoundParameter params[] = {
-		{ "force", f },
+		{ "force", force },
 		{ "mass", mass },
 		{ "material", material_type }
 	};

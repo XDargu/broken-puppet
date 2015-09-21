@@ -38,13 +38,16 @@ float4 PSSharpen(VS_TEXTURED_OUTPUT input) : SV_Target
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
 
-	/*float3x3 conv =
-	{
-		1. / 16., 1. / 8., 1. / 16.,
-		1. / 8., 1. / 4., 1. / 8.,
-		1. / 16., 1. / 8., 1. / 16.
-	};*/
+	color += txDiffuse.Sample(samClampLinear, input.UV + float2(sharpen_delta.x * -1, sharpen_delta.y * 0) * 0.3) * -1;
 
+	color += txDiffuse.Sample(samClampLinear, input.UV + float2(sharpen_delta.x * 0, sharpen_delta.y * -1) * 0.3) * -1;
+	color += txDiffuse.Sample(samClampLinear, input.UV + float2(sharpen_delta.x * 0, sharpen_delta.y * 0) * 0.3) * 5;
+	color += txDiffuse.Sample(samClampLinear, input.UV + float2(sharpen_delta.x * 0, sharpen_delta.y * 1) * 0.3) * -1;
+
+	color += txDiffuse.Sample(samClampLinear, input.UV + float2(sharpen_delta.x * 1, sharpen_delta.y * 0) * 0.3) * -1;
+
+	// Old loop
+	/*
 	float3x3 conv =
 	{
 		0, -1, 0,
@@ -58,9 +61,8 @@ float4 PSSharpen(VS_TEXTURED_OUTPUT input) : SV_Target
 			delta = float2(sharpen_delta.x * (i - 1), sharpen_delta.y * (j - 1));
 			color += txDiffuse.Sample(samClampLinear, input.UV + delta * 0.3) * factor;
 		}
-	}
+	}*/
 
-	float alfa = amount;
-	return original *(1 - alfa) + color * alfa;
+	return original *(1 - amount) + color * amount;
 }
 

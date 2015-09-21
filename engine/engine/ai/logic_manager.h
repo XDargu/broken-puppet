@@ -65,6 +65,8 @@ private:
 
 	std::map<std::string, Subtitle> subtitle_map;
 
+	int current_player_zone;
+
 public:	
 
 	static CLogicManager& get();
@@ -109,6 +111,8 @@ public:
 
 	//Zone AABB
 	CHandle getPlayerZoneName();
+	int getPlayerZoneID();
+	int getPointZoneID(XMVECTOR position);
 
 	//Golden Needle
 	bool playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN);

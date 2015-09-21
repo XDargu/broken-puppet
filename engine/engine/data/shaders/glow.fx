@@ -87,9 +87,23 @@ float4 PSGlow(VS_TEXTURED_OUTPUT input) : SV_Target
   //return txLuminance.Sample(samClampLinear, input.UV);
   // Blur the glow image
   float4 luminance = float4(0, 0, 0, 0);
-  float2 delta = float2(0, 0);
-  float factor = 1.f;
 
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * -1) * 6) * (1. / 16.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * 0)  * 6) * (1. / 8.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * 1)  * 6) * (1. / 16.);
+																											  
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * -1)  * 6) * (1. / 8.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * 0)   * 6) * (1. / 4.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * 1)   * 6) * (1. / 8.);
+																											  
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * -1)  * 6) * (1. / 16.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * 0)   * 6) * (1. / 8.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * 1)   * 6) * (1. / 16.);
+
+  // Old loop
+  /*
+  //float2 delta = float2(0, 0);
+  //float factor = 1.f;
   for (int i = 0; i < 5; i++) {
 	  for (int j = 0; j < 5; j++) {
 		  //factor = conv[i][j];
@@ -97,7 +111,7 @@ float4 PSGlow(VS_TEXTURED_OUTPUT input) : SV_Target
 		  delta = float2(glow_delta.x * (i - 1), glow_delta.y * (j - 1)) * 20;
 		  luminance += txLuminance.SampleLevel(samClampLinear, input.UV + delta * 0.3, 9) * factor;
 	  }
-  }
+  }*/
 
   
   

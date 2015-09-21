@@ -23,6 +23,16 @@ bool TBlurCameraStep::create(const char* name, int axres, int ayres, int afactor
 void TBlurCameraStep::apply(CTexture* in) {
 	ctes_blur_camera.activateInPS(3);
 
+	// Check if neccessary
+	// Binary compare matrix not working
+	/*TCtesCamera* cc = ctes_camera.get();
+	int equal = memcmp(&cc->GameViewProjection, &cc->ViewProjection, sizeof(XMMATRIX));
+	if (equal == 0) {
+		rt_blur->activate();
+		drawTexture2D(0, 0, render.xres, render.yres, in);
+		return;
+	}*/
+
 	float inv_resolution_x = 1.0f / (float)xres;
 	float inv_resolution_y = 1.0f / (float)yres;
 	TCtesBlurCamera* cb = ctes_blur_camera.get();

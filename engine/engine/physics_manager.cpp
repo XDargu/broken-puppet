@@ -387,6 +387,8 @@ PxU32 convertStrInCollisionFilter(std::string name){
 		result = FilterGroup::eENEMY_RG;
 	}else if (name == "Player_Ragdoll"){
 		result = FilterGroup::ePLAYER_RG;
+	}else if (name == "Boss_Ragdoll"){
+		result = FilterGroup::eBOSSRAGDOLL;
 	}else if (name == "Actor_non_collision"){
 		result = FilterGroup::eACTOR_NON_COLLISION;
 	}else{

@@ -543,10 +543,16 @@ void CApp::doFrame() {
 
 			//while (fixedUpdateCounter > pxStep) {
 			//if (fixedUpdateCounter > pxStep) {
-			fixedUpdateCounter -= pxStep;
+			//fixedUpdateCounter -= pxStep;
 			//fixedUpdateCounter = 0;
 			fixedUpdate(delta_secs);
 			//}
+
+
+			/*while (fixedUpdateCounter > pxStep) {
+				fixedUpdateCounter -= pxStep;
+				fixedUpdate(pxStep);
+			}*/			
 		}
 
 		update(delta_secs);
@@ -637,7 +643,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("glow");
 		render_techniques_manager.reload("glow_lights");
 		render_techniques_manager.reload("blur_camera");		
-		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("ssrr");
 		render_techniques_manager.reload("silouette");
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("silouette_glow");
@@ -887,11 +893,14 @@ void CApp::render() {
 	drawTexture2D(0, 0, xres, yres, rt_base);
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
-	
+	CTraceScoped scope_part("Particles");
+
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	texture_manager.getByName("noise")->activate(9);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
+
+	scope_part.~CTraceScoped();
 
 	deferred.rt_albedo->activate();
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
@@ -918,11 +927,11 @@ void CApp::render() {
 	CTraceScoped scope_post_all("Post procesado");
 	activateCamera(camera, 1);
 	CTraceScoped scope_post1("SSR");
-	//ssrr.apply(rt_base);
+	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	scope_post1.~CTraceScoped();
 	CTraceScoped scope_post2("Sharpen");
-	sharpen.apply(rt_base);
+	sharpen.apply(ssrr.getOutput());
 	scope_post2.~CTraceScoped();
 	CTraceScoped scope_post3("Chromatic aberration");
 	chromatic_aberration.apply(sharpen.getOutput());
@@ -934,10 +943,10 @@ void CApp::render() {
 	blur.apply(underwater.getOutput());
 	scope_post5.~CTraceScoped();
 	CTraceScoped scope_post6("Motion blur");
-	//blur_camera.apply(blur.getOutput());
+	blur_camera.apply(blur.getOutput());
 	scope_post6.~CTraceScoped();
 	CTraceScoped scope_post7("Silouette");
-	silouette.apply(blur.getOutput());
+	silouette.apply(blur_camera.getOutput());
 	scope_post7.~CTraceScoped();
 	CTraceScoped scope_post8("Glow");
 	glow.apply(silouette.getOutput());
@@ -1200,16 +1209,16 @@ void CApp::renderEntities() {
 		}
 
 		// If the component has no transform it can't be rendered
-		if (!t)
-			continue;
+		/*if (!t)
+			continue;*/
 
 		/*if (mesh)
 		setTint(mesh->color);*/
 
-		setWorldMatrix(t->getWorld());
+		/*setWorldMatrix(t->getWorld());
 
 		if (mesh && mesh->active)
-			mesh->mesh->activateAndRender();
+			mesh->mesh->activateAndRender();*/
 
 		// Draw texts
 		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();

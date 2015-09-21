@@ -4,11 +4,13 @@
 #include "base_component.h"
 #include "comp_transform.h"
 #include "aabb.h"
+#include "ai\logic_manager.h"
 
 struct TCompAABB : public AABB, TBaseComponent{
 private:
 	CHandle		transform;
-	XMVECTOR		bbpoints[8];	// Bounding Box with no rotation
+	XMVECTOR	bbpoints[8];	// Bounding Box with no rotation
+	float		counter;
 
 	void recalcMinMax() {
 		// Recalcultate AABB:
@@ -54,6 +56,7 @@ public:
 		TCompTransform* trans = (TCompTransform*)transform;
 
 		recalcMinMax();
+		counter = 0;
 	}
 
 	void init() {
@@ -68,8 +71,14 @@ public:
 		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, trans->rotation));
 		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, trans->scale));*/
 		
-		if (trans->transformChanged())
+		counter += elapsed;
+		if (trans->transformChanged()) {
 			recalcMinMax();
+			if (counter > 1) {
+				((TCompTransform*)transform)->room_id = CLogicManager::get().getPointZoneID(((TCompTransform*)transform)->position);
+				counter = 0;
+			}
+		}
 	}
 
 	// Sets the identity rotation AABB points

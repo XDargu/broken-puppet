@@ -743,6 +743,10 @@ void fsm_boss::Death(){
 	}
 	
 	if (state_time >= 7.f){
+		TCompRagdoll* ragdoll = comp_ragdoll;
+		ragdoll->enableBoneTree(4);
+		ragdoll->enableBoneTree(36);
+		ragdoll->enableBoneTree(11);
 		ChangeState("fbp_Idle1");
 	}
 }

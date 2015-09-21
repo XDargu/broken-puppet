@@ -11,6 +11,7 @@ private:
 	CHandle m_name;
 	CHandle player_transform;
 	CHandle player;
+	int id;
 
 public:
 	TCompZoneAABB();
@@ -21,8 +22,11 @@ public:
 	CHandle getZoneName();
 
 	bool isPlayerInside();
+	bool isPointInside(XMVECTOR point);
 
 	void init();
+
+	int getID() { return id; }
 
 };
 #endif
