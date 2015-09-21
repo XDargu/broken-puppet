@@ -20,6 +20,10 @@ FSMPlayerTorso::FSMPlayerTorso()
 	, up_animation(false)
 	, max_num_string(0)
 	, looking_at_pointer(false)
+	, can_throw(true)
+	, can_cancel(true)
+	, can_pull(true)
+	, can_tense(true)
 {}
 FSMPlayerTorso::~FSMPlayerTorso() {}
 
@@ -592,7 +596,7 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	}
 
 	// Animation ends
-	if (io.isReleased(CIOStatus::PULL_STRING)) {
+	if (io.isReleased(CIOStatus::PULL_STRING) && can_pull) {
 		TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
 		camera_controller->offset = standard_camera_offset;
 
@@ -669,7 +673,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	// Cancel
 	
 
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING) && can_cancel) {
 
 		// Remove the current string
 		/*CHandle c_rope = strings.back();
@@ -691,7 +695,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 	}
 
 	// Throw the second needle
-	if (io.becomesReleased(CIOStatus::THROW_STRING) && canThrow()) {
+	if (io.becomesReleased(CIOStatus::THROW_STRING) && canThrow() && can_throw) {
 		up_animation = false;
 		ChangeState("fbp_ThrowString");
 	}
@@ -700,7 +704,7 @@ void FSMPlayerTorso::GrabString(float elapsed) {
 		return;
 
 	// Pull
-	if (io.isPressed(CIOStatus::PULL_STRING)) {
+	if (io.isPressed(CIOStatus::PULL_STRING) && can_pull) {
 		up_animation = false;
 		ChangeState("fbp_PullString");
 	}
@@ -723,7 +727,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 	// Cancel previous strings
 	// Simple cancel
-	if (io.becomesReleased(CIOStatus::CANCEL_STRING)) {
+	if (io.becomesReleased(CIOStatus::CANCEL_STRING) && can_cancel) {
 		float time_prueba = io.getTimePressed(CIOStatus::CANCEL_STRING);
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) < .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			/*CHandle c_rope = strings.back();
@@ -736,7 +740,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Multiple cancel
-	if (io.isPressed(CIOStatus::CANCEL_STRING)) {
+	if (io.isPressed(CIOStatus::CANCEL_STRING) && can_cancel) {
 		if (io.getTimePressed(CIOStatus::CANCEL_STRING) >= .5f && CRope_manager::get().getRopeCount() > 0){ //&& num_strings > 0) {
 			CRope_manager::get().clearStrings();
 			CLogicManager::get().stringAllCancelled();
@@ -754,7 +758,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Tense the string
-	if (io.becomesPressed(CIOStatus::TENSE_STRING)) {
+	if (io.becomesPressed(CIOStatus::TENSE_STRING) && can_tense) {
 
 		CLogicManager::get().stringsTensed();
 
@@ -821,7 +825,7 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 	}
 
 	// Waits for the player to throw
-	if (io.isPressed(CIOStatus::THROW_STRING) && canThrow()) {
+	if (io.isPressed(CIOStatus::THROW_STRING) && canThrow() && can_throw) {
 		ChangeState("fbp_ThrowString");
 	}
 

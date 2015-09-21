@@ -634,11 +634,16 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarCB(bar, "Znear", TW_TYPE_STDSTRING, NULL, GetZNear, e_camera, " group=Camera min=0.1");
 		TwAddVarCB(bar, "Zfar", TW_TYPE_STDSTRING, NULL, GetZFar, e_camera, " group=Camera");*/
 	}
-
+	
 	if (e_player_controller) {
 		TwAddVarRW(bar, "PlayerControllerActive", TW_TYPE_BOOL8, &e_player_controller->active, " group='Player Controller' label='Active'");
 		TwAddVarCB(bar, "PlayerControllerLegsState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMLegsState, e_player_controller, " group='Player Controller' label='Legs State'");
 		TwAddVarCB(bar, "PlayerControllerTorsoState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMTorsoState, e_player_controller, " group='Player Controller' label='Torso State'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanThrow", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_throw, " group='Player Controller' label='Can throw'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanPull", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_pull, " group='Player Controller' label='Can pull'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanTense", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_tense, " group='Player Controller' label='Can tense'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanCancel", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_cancel, " group='Player Controller' label='Can cancel'");
+		TwAddVarRW(bar, "PlayerControllerLegsCanMove", TW_TYPE_BOOL8, &e_player_controller->fsm_player_legs.can_move, " group='Player Controller' label='Can move'");
 	}
 
 	if (e_player_pivot_controller) {

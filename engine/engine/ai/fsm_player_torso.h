@@ -32,6 +32,11 @@ public:
 	bool can_move;
 	unsigned int max_num_string;
 
+	bool can_throw;
+	bool can_cancel;
+	bool can_tense;
+	bool can_pull;
+
 	CHandle comp_transform;
 	CHandle camera_entity;
 
