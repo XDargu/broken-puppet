@@ -194,7 +194,9 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	bool kinematic = rigidBody->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC);
 
 	//Check if rigidBody is inside a recastAABB
-	checkIfInsideRecastAABB();
+	if (getMass() > 120.f){
+		checkIfInsideRecastAABB();
+	}
 
 	if (kinematic) { return; }
 	if (!e->hasTag("player") && (boss_level > 3)) {

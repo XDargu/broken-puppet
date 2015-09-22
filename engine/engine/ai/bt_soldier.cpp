@@ -565,7 +565,7 @@ int bt_soldier::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.2f)){
 				ind_path++;
 				return STAY;
 			}
