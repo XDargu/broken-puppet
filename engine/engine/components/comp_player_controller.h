@@ -20,6 +20,8 @@ struct TCompPlayerController : TBaseComponent {
 	CHandle entity_jump_dust;
 
 	FMOD::Studio::EventInstance* footsteps;
+
+	void bossImpact(CHandle boss);
 public:
 	FSMPlayerLegs fsm_player_legs;
 	FSMPlayerTorso fsm_player_torso;

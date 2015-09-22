@@ -279,12 +279,18 @@ void TCompPlayerController::actorHit(const TActorHit& msg) {
 	CHandle player_handle = CHandle(this).getOwner();
 	CEntity* player_entity = (CEntity*)player_handle;
 	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
-	TCompPlayerController* p_controller = player_entity->get<TCompPlayerController>();
-	if ((!(p_ragdoll->isRagdollActive()) || (p_controller->fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
+	if ((!(p_ragdoll->isRagdollActive()) || (fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
 		if (time_since_last_hit >= hit_cool_down){
 			dbg("Force recieved is  %f\n", msg.damage);
 			fsm_player_legs.EvaluateHit(msg.damage);
 			time_since_last_hit = 0;
+
+			// Boss
+			if (msg.is_boss){
+				bossImpact(msg.who);
+			}			
+			
+			
 		}
 	}
 }
@@ -301,4 +307,30 @@ void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
 
 bool TCompPlayerController::canThrow() {
 	return fsm_player_torso.canThrow();
+}
+
+
+void TCompPlayerController::bossImpact(CHandle boss){
+	/**/
+	// hit the player
+	CHandle m_player = (CHandle(this).getOwner());
+	CHandle m_player_rigid = (((CEntity*)m_player)->get<TCompRigidBody>());
+	CHandle m_player_ragdoll = (((CEntity*)m_player)->get<TCompRagdoll>());
+	if (m_player_rigid.isValid() && m_player_ragdoll.isValid()){
+
+		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)boss)->get<TCompTransform>();
+		PxVec3 force_dir = (player_pos - Physics.XMVECTORToPxVec3(enemy_comp_trans->position));
+		PxVec3 up_aux = PxVec3(0, 30, 0);
+		force_dir = (force_dir + up_aux).getNormalized();
+		//force_dir = PxVec3(0, 10, 0);
+
+		//((PxRigidDynamic*)((TCompRagdoll*)m_player_ragdoll)->getBoneRigid(1))->setLinearVelocity(force_dir * 2);
+
+		fsm_player_legs.ragdoll_force = force_dir * 10;
+	}
+	// hurt the player
+	/**/
 }

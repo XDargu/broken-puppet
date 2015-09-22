@@ -40,6 +40,20 @@ void TCompAiBoss::update(float elapsed){
 		m_fsm_boss.HeartHit();
 	}
 
+
+	if (m_fsm_boss.can_proximity &&(mBoss.isValid()) && (mPlayer.isValid())){
+		player_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+		boss_trans = ((CEntity*)mPlayer)->get<TCompTransform>();
+
+		if ((boss_trans.isValid()) && (player_trans.isValid())){
+			
+			if (V3DISTANCE(((TCompTransform*)boss_trans)->position, ((TCompTransform*)player_trans)->position) < 20){
+				m_fsm_boss.ChangeState("fbp_Proximity");
+			}
+		}
+		
+	}
+	
 	// Update input
 	/*
 	if (CIOStatus::get().becomesPressed(CIOStatus::ALT)){

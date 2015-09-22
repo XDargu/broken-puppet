@@ -129,19 +129,22 @@ void TCompColliderCapsule::addInputNavMesh(){
 		int n_triangles = 24;
 		float borders = 0.f;
 
-		if (((CEntity*)this)->tag == "player")
-			borders = 0.3f;
-		else if (((CEntity*)this)->tag == "enemy")
+		CEntity* my_entity = CHandle(this).getOwner();
+
+		bool is_player = my_entity->hasTag("player");
+		if (is_player)
 			borders = 0.6f;
+		//else if (my_entity->hasTag("enemy"))
+			//borders = 0.6f;
 
 		const float vertex[24] = {
-			min.x - borders, min.y, min.z - borders
-			, max.x - borders, min.y, min.z - borders
-			, min.x - borders, max.y, min.z - borders
-			, max.x - borders, max.y, min.z - borders
-			, min.x - borders, min.y, max.z - borders
+			  min.x + borders, min.y, min.z + borders
+			, max.x - borders, min.y, min.z + borders
+			, min.x + borders, max.y, min.z + borders
+			, max.x - borders, max.y, min.z + borders
+			, min.x + borders, min.y, max.z - borders
 			, max.x - borders, min.y, max.z - borders
-			, min.x - borders, max.y, max.z - borders
+			, min.x + borders, max.y, max.z - borders
 			, max.x - borders, max.y, max.z - borders
 		};
 

@@ -107,8 +107,8 @@ public:
 
 	void HeadHit();
 
-
-	
+	bool can_proximity;
+	bool can_proximity_hit;
 };
 
 #endif

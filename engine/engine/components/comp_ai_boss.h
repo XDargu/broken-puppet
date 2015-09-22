@@ -8,8 +8,12 @@
 struct TCompAiBoss : TBaseComponent {
 private:
 	fsm_boss m_fsm_boss;
+
 	CHandle mPlayer;
+	CHandle player_trans;
 	CHandle mBoss;
+	CHandle boss_trans;
+
 	PxVec3 point_to_go;
 	PxVec3 point_offset;
 	float distance_to_point;
