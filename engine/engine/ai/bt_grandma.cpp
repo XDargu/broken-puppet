@@ -499,7 +499,6 @@ int bt_grandma::actionCutRope()
 		if (state_time >= duration_cut + duration_get_needle) {
 			needle_to_take = false;
 			needle_is_valid = false;
-			animation_done = false;
 			cut = false;
 			return LEAVE;
 		}
