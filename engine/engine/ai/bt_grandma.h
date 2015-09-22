@@ -36,7 +36,6 @@ private:
 	bool jump;
 	bool tied_event;
 	bool event_detected;
-	bool tied_succesfull;
 	bool needle_to_take;
 	bool needle_is_valid;
 	bool can_reach_needle;
@@ -50,6 +49,8 @@ private:
 	bool initial_attack;
 	bool animation_done;
 	bool active;
+	bool cut_animation_done;
+	bool take_animation_done;
 	//bool player_touch;
 	int last_anim_id;
 
@@ -222,6 +223,7 @@ public:
 	void playAnimationIfNotPlaying(int id);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	void resetTimeAnimation();
 
 	void setActive(bool act);
 

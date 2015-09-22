@@ -102,7 +102,9 @@ bool vectorEqual(XMVECTOR v1, XMVECTOR v2) {
 
 
 int getRandomNumber(int num1, int num2){
-	return rand() % num2 + num1;
+	int range = num2 - num1 + 1;
+	return rand() % range + num1;
+
 }
 
 XMVECTOR getRandomVector3(float minXYZ, float maxXYZ) {
