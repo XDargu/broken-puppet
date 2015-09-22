@@ -200,6 +200,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					// Get the transform of the needle
 					TCompTransform* needle_transform = new_needle->get<TCompTransform>();
+					needle_transform->init();
 
 					// Assing the positions (needle transform + current player position)
 					new_e_r->setPositions(needle_transform, p_transform->position);
@@ -370,6 +371,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 						// Get the transform of the needle
 						TCompTransform* second_needle_transform = new_needle_2->get<TCompTransform>();
+						second_needle_transform->init();
 
 						new_e_r->setPositions(first_needle_transform, second_needle_transform);
 
@@ -605,6 +607,18 @@ void FSMPlayerTorso::PullString(float elapsed) {
 			}
 			if (a2 && a2->isRigidDynamic()) {
 				((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(0));
+			}
+
+			// Se the joints position
+			if (joint) {
+				joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
+				joint->awakeActors();
+			}
+
+			if (rope->joint_aux.isValid()) {
+				TCompDistanceJoint* joint2 = rope->joint_aux;
+				joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
+				joint2->awakeActors();
 			}
 		}
 	}

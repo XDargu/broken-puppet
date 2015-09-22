@@ -21,6 +21,7 @@ CRenderManager render_manager;
 void CRenderManager::init() {
 	technique_gen_shadows = render_techniques_manager.getByName("gen_shadows");
 	technique_gen_shadows_skel = render_techniques_manager.getByName("gen_shadows_skel");
+	prev_it_emissive_on = false;
 }
 
 bool CRenderManager::sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2) {
@@ -115,7 +116,8 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	bool is_first = true;
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
-	
+	prev_it_emissive_on = false;
+
 	bool culling = true;
 	int render_count = 0;
 
@@ -198,7 +200,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				light->activate(9);
 			else
 				texture_manager.getByName("black")->activate(9);*/
-
+			
 			if (it->material != prev_it->material || is_first) {
 				
 				// La tech
@@ -216,6 +218,14 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				else
 					it->material->activateTextures(true);
 			}
+			else {
+				// No need to change the material and techinique, but maybe the emissive
+				if (prev_it_emissive_on != render->emissive_on) {
+					it->material->activateEmissive(render->emissive_on);
+				}
+			}
+
+			prev_it_emissive_on = render->emissive_on;
 
 			if (it->mesh != prev_it->mesh || is_first) {
 				it->mesh->activate();

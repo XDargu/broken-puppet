@@ -558,6 +558,7 @@ void CLogicManager::bootLUA() {
 		.set("setCanTense", &CLogicManager::setCanTense)
 		.set("setCanCancel", &CLogicManager::setCanCancel)
 		.set("setCanPull", &CLogicManager::setCanPull)
+		.set("setCanMove", &CLogicManager::setCanMove)
 	;
 
 	// Register the bot class
@@ -576,6 +577,7 @@ void CLogicManager::bootLUA() {
 		.set("getPos", &CMCVObject::getPosition)
 		.set("setPos", (void (CMCVObject::*)(CVector)) &CMCVObject::setPosition)
 		.set("move", (void (CMCVObject::*)(CVector, float)) &CMCVObject::moveToPosition)
+		.set("setEmissive", &CMCVObject::setEmissive)
 		;
 
 	SLB::Class<CVector>("Vector")

@@ -113,6 +113,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 	}*/
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
+	bool eval_movement = EvaluateMovement(false, elapsed);
 	if (can_move) {
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(8);
@@ -123,7 +124,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 			skeleton_ik->active = false;
 			ChangeState("fbp_Jump");
 		}
-		if (EvaluateMovement(false, elapsed)){
+		if (eval_movement){
 			skeleton->stopAnimation(8);
 			skeleton->stopAnimation(0);
 			skeleton->stopAnimation(33);

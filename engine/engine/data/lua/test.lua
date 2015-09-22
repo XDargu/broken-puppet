@@ -14,6 +14,67 @@ _print = print
 clearCoroutines( )
 
 function onSceneLoad_my_file()
+
+	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
+
+	-- Apagar cable
+	local cable = logicManager:getObject("cable_int_sc1_door")	
+	cable:setEmissive(false)
+
+	-- Cerrar puerta
+	local sc1_door = logicManager:getHingeJoint("sc1_hingue_door");
+	sc1_door:setLimit(0.1)
+
+	function onSwitchPressed_int_sc1_door(who)
+		-- Encender cable
+		cable:setEmissive(true)
+		-- Abrir puerta
+		sc1_door:setLimit(90)
+		sc1_door:setMotor(-1.55, 2000000);
+	end
+
+	local ascensor_usado = false
+
+	function onTriggerEnter_escena1_ascensor_fin(who)
+		logicManager:setCanMove(true)
+		logicManager:setCanThrow(true)
+		logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
+	end
+
+	function onTriggerEnter_escena1_ascensor(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+
+			if ascensor_usado == false then
+				ascensor_usado = true
+				local scene1_elevator = logicManager:getObject("ascensor_desvan_cabina");
+				local platform_pos = scene1_elevator:getPos();
+				scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 23), platform_pos.z), 5);
+
+				logicManager:setCanMove(false)
+				logicManager:setCanThrow(false)
+				logicManager:setCanPull(false)
+				logicManager:setCanCancel(false)
+				logicManager:setCanTense(false)
+				logicManager:pushPlayerLegsState("fbp_Idle");
+			end
+
+		end
+
+	end
+	
+
+	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 1 ********
+
+
+
+
+
+
+
 --logicManager:loadScene("data/scenes/scene_1.xml");
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
 	logicManager:setBands(true)
@@ -126,30 +187,7 @@ function onSceneLoad_my_file()
 
 	-- ASCENSOOOOOOOOOR DE PRUEBA
 
-	ascensor_usado = false
-
-	function onTriggerEnter_escena1_ascensor_fin(who)
-		logicManager:pushPlayerLegsState("fbp_Idle");
-	end
-
-	function onTriggerEnter_escena1_ascensor(who)
-		print(tostring(who) .. "Entrado en el trigger");
-
-		if who == "Player" then
-
-			if ascensor_usado == false then
-				ascensor_usado = true
-				print(tostring(who) .. "Player en el trigger");
-				local scene1_elevator = logicManager:getObject("ascensor_desvan_cabina");
-				local platform_pos = scene1_elevator:getPos();
-				print(platform_pos);
-				logicManager:pushPlayerLegsState("fbp_IdleElevator");
-				scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 24), platform_pos.z), 5);
-			end
-
-		end
-
-	end
+	
 
 	function onTriggerEnter_trigger_asc_crematorio_fin(who)
 		logicManager:pushPlayerLegsState("fbp_Idle");

@@ -81,6 +81,13 @@ void CMaterial::activateTextures(bool emissive_on) const {
 		glossiness->activate(5);
 }
 
+void CMaterial::activateEmissive(bool emissive_on) const {
+	// textures ... activate	
+	if (emissive && emissive_on)
+		emissive->activate(7);
+	if (emissive_off && !emissive_on)
+		emissive_off->activate(7);
+}
 
 
 bool CMaterial::load(const char* name) {

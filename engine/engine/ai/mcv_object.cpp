@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "mcv_object.h"
 #include "components\comp_transform.h"
+#include "components\comp_render.h"
 #include "rigid_animation.h"
 #include "logic_manager.h"
 
@@ -50,5 +51,14 @@ void CMCVObject::moveToPosition(CVector position, float speed) {
 		CLogicManager::get().addRigidAnimation(
 			r_anim
 			);
+	}
+}
+
+void CMCVObject::setEmissive(bool active) {
+	if (!entity.isValid())
+		return;
+	TCompRender* render = ((CEntity*)entity)->get<TCompRender>();
+	if (render) {
+		render->emissive_on = active;
 	}
 }

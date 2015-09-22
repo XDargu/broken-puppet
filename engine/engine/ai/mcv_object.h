@@ -20,6 +20,7 @@ public:
 	void setPosition(CVector newPos);
 
 	void moveToPosition(CVector position, float speed);
+	void setEmissive(bool active);
 };
 
 #endif

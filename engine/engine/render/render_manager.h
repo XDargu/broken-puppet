@@ -52,6 +52,7 @@ class CRenderManager {
 	VShadowCasterKeys shadow_casters_keys;
 
 	bool  sort_required;
+	bool  prev_it_emissive_on;
 
 	static bool sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2);
 
