@@ -131,7 +131,6 @@ void bt_grandma::create(string s)
 	player_previously_lost = false;
 	initial_attack = false;
 	see_player = false;
-	animation_done = false;
 	player_cant_reach = false;
 	cut_animation_done = false;
 	take_animation_done = false;
@@ -446,7 +445,6 @@ bool cut = false;
 int bt_grandma::actionCutRope()
 {
 	if (on_enter){
-		animation_done = false;
 		cut = false;
 		cut_animation_done = false;
 		take_animation_done = false;

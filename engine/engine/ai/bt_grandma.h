@@ -47,7 +47,6 @@ private:
 	bool hurt_event;
 	bool see_player;
 	bool initial_attack;
-	bool animation_done;
 	bool active;
 	bool cut_animation_done;
 	bool take_animation_done;
