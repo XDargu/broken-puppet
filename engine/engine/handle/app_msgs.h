@@ -39,7 +39,8 @@ struct TGroundHit {
 struct TActorHit {
 	CEntity* who;
 	float damage;
-	TActorHit(CEntity* awho, float hurt) :who(awho), damage(hurt) { }
+	bool is_boss;
+	TActorHit(CEntity* awho, float hurt, bool ais_boss) :who(awho), damage(hurt), is_boss(ais_boss){ }
 	DECLARE_MSG_ID();
 };
 

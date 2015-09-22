@@ -451,3 +451,21 @@ void TCompRagdoll::enableBoneTree(int bone_id) {
 		}
 	}
 }
+
+void TCompRagdoll::cancelLinearVelocity() {	
+	for (auto& it : ragdoll->bone_map) {
+		// Check if the rigid is not kinematic, even if the ragdoll is still active
+		if (!it.second->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+			it.second->setLinearVelocity(PxVec3(0, 0, 0));
+		}
+	}	
+}
+
+void TCompRagdoll::addForce(PxVec3 force, PxForceMode::Enum mode) {
+	for (auto& it : ragdoll->bone_map) {
+		// Check if the rigid is not kinematic, even if the ragdoll is still active
+		if (!it.second->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+			it.second->addForce(force, mode);
+		}
+	}
+}

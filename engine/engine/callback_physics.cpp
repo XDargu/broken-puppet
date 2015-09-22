@@ -40,7 +40,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				//float force_float = force;
 				XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
 				if (force > force_threshold)
-					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force));
+					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
 			} else if((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
 			//Colision entre player y actor
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
@@ -51,7 +51,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				
 				XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
 				if (force > force_threshold)
-					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force));
+					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
 			}
 			else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 				//Colision entre actor y enemigo
@@ -62,7 +62,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				//float force_float = force;
 				XDEBUG("force impact enmey to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, secondActorEntity->getName(), force_threshold);
 				if (force > force_threshold)
-					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force));
+					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
 			}
 			else if ((secondActorEntity->hasTag("bomb")) && (firstActorEntity->hasTag("boss"))){
 				//Colision entre actor y enemigo
@@ -122,7 +122,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force = getForce(firstActorEntity->getMass(), pairs, i);
 				//float force_float = force;
 				if (force >force_threshold)
-					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force));
+					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
 			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("enemy"))) {
 				//Colision entre actor sin colisiones y player
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
@@ -130,7 +130,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				PxReal force = getForce(second_rigid->getMass(), pairs, i);
 				//float force_float = force;
 				if (force > force_threshold)
-					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force));
+					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
 			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))) {
 			//Colision entre enemigo y actor
 				//TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
@@ -141,7 +141,7 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 				//float force_float = force;
 				XDEBUG("force impact enemy to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
 				if (force >force_threshold)
-					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force));
+					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))) {
 			//Colision entre enemigo y escenario
 				//TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();

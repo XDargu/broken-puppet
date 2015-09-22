@@ -61,6 +61,8 @@ void FSMPlayerLegs::Init()
 	dead_counter = 0.f;
 	idle_var_count = 0.f;
 
+	ragdoll_force = PxVec3(0, 0, 0);
+
 	TCompCharacterController* character_controller = comp_character_controller;
 
 	//run_speed = ((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier;
@@ -720,6 +722,13 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		stopAllAnimations();
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
 		torso->CancelGrabString();
+
+		// Add pendant foce
+		m_ragdoll->cancelLinearVelocity();
+		m_ragdoll->addForce(ragdoll_force, PxForceMode::eVELOCITY_CHANGE);
+		ragdoll_force = PxVec3(0, 0, 0);
+		
+
 
 		/*rigidbody->setLockXRot(false);
 		rigidbody->setLockYRot(false);
