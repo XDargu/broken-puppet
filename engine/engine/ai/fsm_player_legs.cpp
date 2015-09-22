@@ -113,7 +113,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 	}*/
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
-	bool eval_movement = EvaluateMovement(false, elapsed);
+	
 	if (can_move) {
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(8);
@@ -124,7 +124,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 			skeleton_ik->active = false;
 			ChangeState("fbp_Jump");
 		}
-		if (eval_movement){
+		if (EvaluateMovement(false, elapsed)){
 			skeleton->stopAnimation(8);
 			skeleton->stopAnimation(0);
 			skeleton->stopAnimation(33);
@@ -133,6 +133,11 @@ void FSMPlayerLegs::Idle(float elapsed){
 			skeleton_ik->active = false;
 			ChangeState("fbp_Walk");
 		}
+	}
+	else {
+		// Don't move
+		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+		((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 		skeleton->stopAnimation(8);

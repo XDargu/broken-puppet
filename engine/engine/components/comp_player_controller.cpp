@@ -127,6 +127,53 @@ void TCompPlayerController::update(float elapsed) {
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
 	TCompTransform* camera_transform = camera_entity->get<TCompTransform>();
 
+	// Raycast all
+	PxRaycastBuffer buf;
+	Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
+
+	float max_dist = 1000000;
+	PxActor* hit_actor = nullptr;
+	PxVec3 actor_position;
+
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
+			float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
+			if (dist < max_dist) {
+				actor_position = buf.touches[i].position;
+				hit_actor = buf.touches[i].actor;
+				max_dist = dist;
+			}
+		}
+	}
+
+	if (hit_actor != nullptr) {
+		CHandle target_entity(hit_actor->userData);
+		if (target_entity.isValid()) {
+			if (!(((CEntity*)target_entity)->hasTag("player"))) {
+				TCompTransform* target_transform = ((CEntity*)target_entity)->get<TCompTransform>();
+				if (!(CHandle(target_transform) == old_target_transform)) {
+					if (old_target_transform.isValid()) {
+						TCompTransform* old_t_transform = old_target_transform;
+						if (old_t_transform->getType() == 80)
+							old_t_transform->setType(1);
+						if (((TCompTransform*)old_target_transform)->getType() == 90)
+							((TCompTransform*)old_target_transform)->setType(0.95f);
+					}
+				}
+				if (target_transform->getType() == 100) {
+					target_transform->setType(0.8f);
+					old_target_transform = target_transform;
+				}
+				if (target_transform->getType() == 95) {
+					target_transform->setType(0.9f);
+					old_target_transform = target_transform;
+				}
+			}
+		}
+	}
+
+	/*
 	PxRaycastBuffer hit;
 	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
 
@@ -154,7 +201,7 @@ void TCompPlayerController::update(float elapsed) {
 				}
 			}
 		}
-	}
+	}*/
 	/*displacement += V3DISTANCE(prev_pos, trans->position);
 	counter += elapsed;
 	if (counter >= 1) {
