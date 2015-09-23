@@ -492,6 +492,15 @@ void TParticleSystem::restart() {
 	emitter_generation->restart();
 }
 
+void TParticleSystem::setParticlePositions(XMFLOAT3* positions, int numPositions) {
+	int counter = 0;
+	for (auto& particle : particles) {
+		if (counter >= numPositions) { break; }
+		particle.position = positions[counter];
+		counter++;
+	}
+}
+
 std::string TParticleSystem::getXMLDefinition() {
 
 	std::string def = "";
@@ -532,3 +541,4 @@ std::string TParticleSystem::getXMLDefinition() {
 
 	return def;
 }
+

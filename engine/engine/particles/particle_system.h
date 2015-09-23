@@ -101,6 +101,8 @@ public:
 	bool operator==(const TParticleSystem ps) const {
 		return ps.emitter_generation == emitter_generation;
 	}
+
+	void setParticlePositions(XMFLOAT3* positions, int numPositions);
 };
 
 #endif

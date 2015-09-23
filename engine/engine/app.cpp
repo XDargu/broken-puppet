@@ -1713,6 +1713,7 @@ void CApp::loadVideo(const char* name)
 	}
 	videoTexture = new CTexture();
 	endframe = int(clip->getDuration() * clip->getFPS());
+	::render.device->CreateShaderResourceView(tex, 0, &m_shaderResourceView);
 	clip->play();
 #endif
 }
@@ -1756,7 +1757,7 @@ bool CApp::renderVideo()
 		}
 	}
 
-	::render.device->CreateShaderResourceView(tex, 0, &m_shaderResourceView);
+	
 	videoTexture->setResource(tex);
 	videoTexture->setResourceView(m_shaderResourceView);
 	drawTexture2D(0, 0, xres, yres, videoTexture);

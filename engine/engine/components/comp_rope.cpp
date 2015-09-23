@@ -49,6 +49,91 @@ TCompRope::~TCompRope() {
 			}
 		}
 	}
+
+	// Create particle system
+	XMVECTOR position = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR rotation = XMQuaternionIdentity(); //XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), deg2rad(0));
+	CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_rope_destroy2", position, rotation);
+	
+	std::vector<XMFLOAT3> positions;
+
+	XMVECTOR init = pos_1;
+	XMVECTOR end = pos_2;
+	XMFLOAT3 value;
+	float pos = 0;
+	for (int i = 0; i < 50; i++) {
+		if (i > 0) {
+			pos = i / 50.0f;
+		}		
+		XMStoreFloat3(&value, XMVectorLerp(pos_1, pos_2, pos));
+		positions.push_back(value);
+	}
+
+
+	// ************** HORRIBLE PRUEBA PARA QUE SIGA AL A CUERDA ********************
+	float dist = XMVectorGetX(XMVector3Length(pos_2 - pos_1));
+
+	const int epsilon = 50;
+	const int sizes = 4;
+	//float width = 0.1;
+	XMFLOAT3 ropeReferences[epsilon];
+	CVertexPosUVNormal ropeVertices[epsilon * sizes];
+	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * 6];
+	float y = 0;
+	float pow_r = 4;	// Suavidad de la onda
+	int velocity = 10;	// Velocidad de movimiento
+	float wave_freq = 0.5f;	// frecuencia del ruido de la onda
+	float amplitude = 0.0f;	// amplitud del ruido de la onda
+	float elapsed = CApp::get().total_time;
+
+	for (int i = 0; i < epsilon; i++)
+	{
+		XMVECTOR midPos = XMVectorLerp(pos_1, pos_2, (float)i / (epsilon - 1));
+
+		if (i < epsilon / 2)
+			y = (float)(pow(epsilon - i, pow_r) / pow(epsilon, pow_r));
+		else
+			y = (float)(pow(i, pow_r) / pow(epsilon, pow_r));
+
+		float noise = (sin(elapsed*velocity + i*wave_freq) + 1) * amplitude;
+		if (i != 0 && i != epsilon - 1)
+			y += noise;
+
+		y -= 1;
+
+		PxRaycastBuffer hit;
+		float y_offset = 1;
+		Physics.raycast(midPos + XMVectorSet(0, y_offset, 0, 0), XMVectorSet(0, -1, 0, 0), 2, hit);
+		CEntity* entity;
+
+		if (hit.hasBlock) {
+			PxRaycastHit blockHit = hit.block;
+			entity = CHandle(hit.block.actor->userData);
+
+			if ((!entity->hasTag("enemy")) && (!entity->hasTag("player"))) {
+				float m_dist = blockHit.distance - y_offset;
+				if (m_dist < abs(y))
+					y = -m_dist;
+			}
+
+		}
+
+		y *= tensed ? 0 : 1;
+		// Guardar la referencia de posición de la cuerda
+		ropeReferences[i] = XMFLOAT3(XMVectorGetX(midPos), XMVectorGetY(midPos) + y, XMVectorGetZ(midPos));
+	}
+	// *****************************************************************************
+
+	if (particle_entity.isValid()) {
+		TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+		pg->destroy_on_death = true;
+		if (pg->particle_systems->size() > 0)
+		{
+			(*pg->particle_systems)[0].restart();
+			(*pg->particle_systems)[0].setParticlePositions(ropeReferences, epsilon);
+		}
+		CLogicManager::get().p_group_counter++;
+	}
 }
 
 void TCompRope::setPositions(CHandle the_transform_1, XMVECTOR the_pos_2) {
