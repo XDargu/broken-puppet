@@ -26,20 +26,66 @@ void Citem_manager::addNeedle(CHandle needle, CHandle rope){
 	needles.push_back(needle_rope_struct);
 }
 
-void Citem_manager::removeNeedle(CHandle n){
-	std::vector<needle_rope>::iterator iter = needles.begin();
-	int i = 0;
-	while (iter != needles.end())
-	{
-		if (needles[i].needleRef==n)
-		{
-			iter = needles.erase(iter);
-			return;
+void Citem_manager::checkAndRemoveFirstNeedle(){
+	if (all_needles_vector.size() > CApp::get().getMaxNumNeedles()-2){
+		std::vector<needle_rope>::iterator iter = all_needles_vector.begin();
+		CHandle first=iter->needleRef;
+		while (iter != all_needles_vector.end()){
+			if ((first.isValid()) && (iter->rope_asociated.isValid())){
+				CEntityManager::get().remove(CHandle(first).getOwner());
+				removeNeedleFromVector(first);
+				removeNeedle(first);
+				return;
+			}
+			iter++;
 		}
-		else
+	}
+}
+
+void Citem_manager::addNeedleToVector(CHandle needle, CHandle rope){
+	needle_rope needle_rope_struct;
+	needle_rope_struct.needleRef = needle;
+	needle_rope_struct.rope_asociated = rope;
+	needle_rope_struct.grandma_asociated = CHandle();
+	all_needles_vector.push_back(needle_rope_struct);
+}
+
+void Citem_manager::removeNeedleFromVector(CHandle needle){
+	if (needle.isValid()){
+		std::vector<needle_rope>::iterator iter = all_needles_vector.begin();
+		int i = 0;
+		while (iter != all_needles_vector.end())
 		{
-			++iter;
-			++i;
+			if (all_needles_vector[i].needleRef == needle)
+			{
+				iter = all_needles_vector.erase(iter);
+				return;
+			}
+			else
+			{
+				++iter;
+				++i;
+			}
+		}
+	}
+}
+
+void Citem_manager::removeNeedle(CHandle n){
+	if (n.isValid()){
+		std::vector<needle_rope>::iterator iter = needles.begin();
+		int i = 0;
+		while (iter != needles.end())
+		{
+			if (needles[i].needleRef == n)
+			{
+				iter = needles.erase(iter);
+				return;
+			}
+			else
+			{
+				++iter;
+				++i;
+			}
 		}
 	}
 }
@@ -199,7 +245,7 @@ int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius
 				std::vector<XMVECTOR> path;
 				CNav_mesh_manager::get().findPath(pos, e_transform->position, path);
 				if (path.size() > 0){
-					int distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
+					float distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
 					if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
 						TCompTransform* grand_trans = ((CEntity*)grandmaRef)->get<TCompTransform>();
 						bool success = asociateTargetNeedle(grand_trans->position, i, radius, grandmaRef, max_dist_reach_needle);
@@ -249,9 +295,10 @@ bool Citem_manager::DesAsociateNoPriorityNeedleRope(CHandle grandma){
 CHandle Citem_manager::getNeedleAsociated(CHandle grandma){
 	for (auto & element : needles) {
 
-		XASSERT(element.needleRef.isValid(), "Invalid needle");
-		if (element.grandma_asociated == grandma){
-			return element.needleRef;
+		if (element.needleRef.isValid()){
+			if (element.grandma_asociated == grandma){
+				return element.needleRef;
+			}
 		}
 	}
 

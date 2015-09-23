@@ -9,6 +9,7 @@ class Citem_manager
 {
 public:
 	std::vector<needle_rope> needles;
+	std::vector<needle_rope> all_needles_vector;
 	Citem_manager();
 	~Citem_manager();
 	void addNeedle(CHandle needle, CHandle rope);
@@ -23,6 +24,10 @@ public:
 	void removeNeedle(CHandle n);
 	static Citem_manager& get();
 	void clear();
+
+	void addNeedleToVector(CHandle needle, CHandle rope);
+	void removeNeedleFromVector(CHandle needle);
+	void checkAndRemoveFirstNeedle();
 };
 #endif
 

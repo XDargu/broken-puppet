@@ -397,7 +397,7 @@ int bt_grandma::actionChaseNeedlePosition()
 						float distance = V3DISTANCE((path[path.size() - 1]), n_transform->position);
 						if (distance < max_dist_reach_needle){
 							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
+							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 1.0f)){
 								ind_path++;
 								return STAY;
 							}
@@ -592,7 +592,7 @@ int bt_grandma::actionWander()
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = walk_speed;
-		((TCompCharacterController*)character_controller)->lerpRotation = 0.09f;
+		((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
 		//m_char_controller->airSpeed = walk_speed * 0.8f;
 
 	}
@@ -852,7 +852,7 @@ int bt_grandma::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.21f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
 				ind_path++;
 				return STAY;
 			}

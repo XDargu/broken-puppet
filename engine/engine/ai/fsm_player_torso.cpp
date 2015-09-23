@@ -117,6 +117,8 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					entity_manager.remove(c_rope.getOwner());
 					}*/
 
+					Citem_manager::get().checkAndRemoveFirstNeedle();
+
 					// Get the needle prefab
 					CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
 
@@ -164,6 +166,8 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 					first_needle = new_needle;
 
+
+
 					// Create the rope, between the player and the target
 					CEntity* new_e = entity_manager.createEmptyEntity();
 
@@ -197,6 +201,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					// Add the rope component
 					TCompRope* new_e_r = CHandle::create<TCompRope>();
 					new_e->add(new_e_r);
+
+					//Store the needle_rop
+					Citem_manager::get().addNeedleToVector(CHandle(new_e_needle), CHandle(new_e_r));
 
 					// Get the transform of the needle
 					TCompTransform* needle_transform = new_needle->get<TCompTransform>();
@@ -303,6 +310,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 						// -------------- Create the new needle
 						// Get the needle prefab
+						Citem_manager::get().checkAndRemoveFirstNeedle();
 						CEntity* new_needle_2 = prefabs_manager.getInstanceByName("Needle");
 
 						// Get the entity of the rigidbody on wich the needle is pierced
@@ -368,6 +376,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						// -------------- Update the rope component
 						TCompRope* new_e_r = rope_entity->get<TCompRope>();
 						TCompTransform* first_needle_transform = first_needle_entity->get<TCompTransform>();
+
+						//Store the needle_rop
+						Citem_manager::get().addNeedleToVector(CHandle(new_e_needle2), CHandle(new_e_r));
 
 						// Get the transform of the needle
 						TCompTransform* second_needle_transform = new_needle_2->get<TCompTransform>();

@@ -13,6 +13,7 @@ CRope_manager::CRope_manager()
 
 CRope_manager::~CRope_manager()
 {
+	strings.clear();
 }
 
 void CRope_manager::addString(CHandle string){

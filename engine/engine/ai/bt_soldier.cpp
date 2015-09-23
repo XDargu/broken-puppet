@@ -565,7 +565,7 @@ int bt_soldier::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.2f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.10f)){
 				ind_path++;
 				return STAY;
 			}
@@ -631,7 +631,7 @@ int bt_soldier::actionSituate()
 			TCompCharacterController* m_char_controller = character_controller;
 
 			float distance = V3DISTANCE(wander_target, path[path.size() - 1]);
-			if (distance>2.f){
+			if (distance>=2.5f){
 				player_out_navMesh = true;
 				playAnimationIfNotPlaying(0);
 				return LEAVE;
@@ -662,7 +662,7 @@ int bt_soldier::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 1.3f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.10f)){
 				ind_path++;
 				return STAY;
 			}
@@ -673,8 +673,7 @@ int bt_soldier::actionSituate()
 		else{
 			return LEAVE;
 		}
-	}
-	else{
+	}else{
 		return LEAVE;
 	}
 }

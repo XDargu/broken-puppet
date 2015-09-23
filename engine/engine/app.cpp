@@ -72,6 +72,8 @@ ID3D11Texture2D* tex;
 CTexture* videoTexture;
 ID3D11ShaderResourceView* m_shaderResourceView;
 
+const unsigned int max_num_needles = 10;
+
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
 
@@ -204,7 +206,7 @@ void createManagers() {
 	getObjManager<TCompJointD6>()->init(512);
 	getObjManager<TCompJointFixed>()->init(512);
 	getObjManager<TCompRope>()->init(32);
-	getObjManager<TCompNeedle>()->init(1024);
+	getObjManager<TCompNeedle>()->init(max_num_needles);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
 	getObjManager<TCompSensorTied>()->init(64);
@@ -383,7 +385,7 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	first_scene = "data/scenes/my_file.xml";
+	first_scene = "data/scenes/scene_3_old.xml";
 	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
 	//sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -580,6 +582,7 @@ void CApp::update(float elapsed) {
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
+		destroy();
 		exit(0);
 	}	
 
@@ -1247,6 +1250,12 @@ void CApp::renderEntities() {
 			}
 		}
 	}
+	renderNavMesh = true;
+	if (renderNavMesh){
+		CNav_mesh_manager::get().render_nav_mesh();
+		CNav_mesh_manager::get().pathRender();
+	}
+	getObjManager<TCompBtSoldier>()->renderDebug3D();
 }
 
 void CApp::renderDebugEntities() {
@@ -1379,6 +1388,7 @@ void CApp::destroy() {
 	particle_groups_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	::render.destroyDevice();
+	CNav_mesh_manager().get().~CNav_mesh_manager();
 }
 
 unsigned int CApp::numStrings(){
@@ -1724,4 +1734,8 @@ bool CApp::renderVideo()
 	mgr->update(delta_time);
 
 	return true;
+}
+
+unsigned int CApp::getMaxNumNeedles(){
+	return max_num_needles;
 }
