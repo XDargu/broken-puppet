@@ -98,18 +98,31 @@ void fsm_boss::Init()
 
 	last_anim_id = -1;
 
-	can_proximity = true;
+	can_proximity = false;
 	can_proximity_hit = true;
 }
 
 void fsm_boss::Hidden(){
 	int i = 0;
-	ChangeState("fbp_RiseUp");
+	if (CIOStatus::get().becomesPressed(CIOStatus::V)){		
+		ChangeState("fbp_RiseUp");
+	}
+	
 }
 
 void fsm_boss::RiseUp(){
-	int i = 0;
-	ChangeState("fbp_Idle1");
+	if (on_enter){
+		Release_def();
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(35);
+		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
+		skeleton_lookat->active = false;
+	}
+	if (state_time >= 20.9f){
+		ChangeState("fbp_Idle1");
+	}
+	
 }
 
 void fsm_boss::Idle1(float elapsed){
