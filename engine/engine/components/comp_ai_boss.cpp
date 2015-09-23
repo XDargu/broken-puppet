@@ -3,8 +3,17 @@
 #include "entity_manager.h"
 #include "comp_rigid_body.h"
 #include "comp_transform.h"
+#include "comp_skeleton.h"
+#include "comp_ragdoll.h"
 #include "io\iostatus.h"
 #include "handle\prefabs_manager.h"
+
+
+void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){ 
+	L_hitch_joint = nullptr; 
+	R_hitch_joint = nullptr; 
+	can_break_hitch = false; 
+};
 
 void TCompAiBoss::init(){
 
@@ -24,9 +33,65 @@ void TCompAiBoss::init(){
 	debris_created = 0;
 
 	force = 24;
+	R_hitch_joint = nullptr;
 
 	m_fsm_boss.entity = mBoss;
 	m_fsm_boss.Init();
+
+
+	// Create Right Hitch
+	/**/
+	comp_skeleton = ((CEntity*)mBoss)->get<TCompSkeleton>();
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	// Right Arm
+	std::string rname = "boss/enganche_R";
+	R_hitch = prefabs_manager.getInstanceByName(rname.c_str());
+	TCompRigidBody* R_hitch_rigid = ((CEntity*)R_hitch)->get<TCompRigidBody>();
+	R_hitch_rigid->init();
+	PxRigidDynamic*  R_hitch_px_rigid = R_hitch_rigid->rigidBody;
+
+	PxQuat r_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(48));
+	PxVec3 r_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(48));
+
+	PxTransform r_bone_trans = PxTransform(r_pos, r_rot);
+	
+	R_hitch_joint = PxFixedJointCreate(
+		*Physics.gPhysicsSDK
+		, R_hitch_px_rigid
+		, PxTransform(PxVec3(0, 0, 0))
+		, NULL
+		, r_bone_trans
+		);
+
+	R_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, r_bone_trans);
+	R_hitch_px_rigid->setGlobalPose(r_bone_trans);
+	/**/
+
+
+	//Left Arm
+	std::string lname = "boss/enganche_L";
+	L_hitch = prefabs_manager.getInstanceByName(lname.c_str());
+	TCompRigidBody* L_hitch_rigid = ((CEntity*)L_hitch)->get<TCompRigidBody>();
+	L_hitch_rigid->init();
+	PxRigidDynamic*  L_hitch_px_rigid = L_hitch_rigid->rigidBody;
+
+	PxQuat l_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(23));
+	PxVec3 l_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(23));
+
+	PxTransform l_bone_trans = PxTransform(l_pos, l_rot);
+
+	L_hitch_joint = PxFixedJointCreate(
+		*Physics.gPhysicsSDK
+		, L_hitch_px_rigid
+		, PxTransform(PxVec3(0, 0, 0))
+		, NULL
+		, l_bone_trans
+		);
+
+	L_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, l_bone_trans);
+	L_hitch_px_rigid->setGlobalPose(l_bone_trans);
+	/**/
 }
 
 void TCompAiBoss::update(float elapsed){
@@ -51,9 +116,44 @@ void TCompAiBoss::update(float elapsed){
 				m_fsm_boss.ChangeState("fbp_Proximity");
 			}
 		}
-		
 	}
 	
+	/**/
+	comp_skeleton = ((CEntity*)mBoss)->get<TCompSkeleton>();
+	TCompSkeleton* skeleton = comp_skeleton;
+	/**/
+
+	TCompRigidBody* R_hitch_rigid = ((CEntity*)R_hitch)->get<TCompRigidBody>();
+	PxRigidDynamic*  R_hitch_px_rigid = R_hitch_rigid->rigidBody;
+
+	PxQuat r_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(48));
+	PxVec3 r_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(48));
+	PxTransform r_bone_trans = PxTransform(r_pos, r_rot);
+
+	R_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, r_bone_trans);
+	R_hitch_px_rigid->setGlobalPose(r_bone_trans);
+
+	/**/
+	TCompRigidBody* L_hitch_rigid = ((CEntity*)L_hitch)->get<TCompRigidBody>();
+	PxRigidDynamic*  L_hitch_px_rigid = L_hitch_rigid->rigidBody;
+
+	PxQuat l_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(23));
+	PxVec3 l_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(23));
+	PxTransform l_bone_trans = PxTransform(l_pos, l_rot);
+
+	L_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, l_bone_trans);
+	L_hitch_px_rigid->setGlobalPose(l_bone_trans);
+
+	/**/
+
+	if (m_fsm_boss.getState() == "fbp_Stunned1"){
+		can_break_hitch = true;
+	}
+	else {
+		can_break_hitch = false;
+	}
+
+
 	// Update input
 	/*
 	if (CIOStatus::get().becomesPressed(CIOStatus::ALT)){
@@ -268,4 +368,16 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 	}
 	*/
 
+}
+
+
+void TCompAiBoss::breakHitch(CHandle m_hitch){
+	if ((m_hitch == R_hitch)&&(can_break_hitch)) { 
+		m_fsm_boss.EvaluateHit(1);
+		//R_hitch_joint->setBreakForce(0, 0);
+	}
+	if ((m_hitch == L_hitch)&&(can_break_hitch)) { 
+		m_fsm_boss.EvaluateHit(0);
+		//L_hitch_joint->setBreakForce(0, 0);
+	}
 }

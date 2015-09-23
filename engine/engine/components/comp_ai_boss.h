@@ -14,6 +14,14 @@ private:
 	CHandle mBoss;
 	CHandle boss_trans;
 
+	CHandle comp_skeleton;
+
+	CHandle R_hitch;
+	PxFixedJoint* R_hitch_joint;
+
+	CHandle L_hitch;
+	PxFixedJoint* L_hitch_joint;
+
 	PxVec3 point_to_go;
 	PxVec3 point_offset;
 	float distance_to_point;
@@ -30,10 +38,14 @@ private:
 	int move_things;
 
 public:
-	void loadFromAtts(const std::string& elem, MKeyValue &atts){};
+	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void fixedUpdate(float elapsed);
 	void update(float elapsed);
+
+	void breakHitch(CHandle m_hitch);
+
+	bool can_break_hitch;
 	
 };
 

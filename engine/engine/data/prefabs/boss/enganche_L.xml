@@ -1,0 +1,18 @@
+<prefab>
+  <entity tag = "boss" collisionTag = "Boss_Part">
+    <name name="Enganche_brazo_boss_L" />
+    <transform position="-2.58447 2.5 9.39206" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.443137 0.529412 0.0235294">
+      <draw mesh="Enganche_brazo_boss" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="Enganche_brazo_boss" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="Enganche_brazo_boss" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="Enganche_brazo_boss" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="Enganche_brazo_boss" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="Enganche_brazo_boss" sub_mesh="5" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.5 -2.5 -1.0" max="0.5 2.5 1.0"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.5" boxY="2.5" boxZ="1.0"/>
+    <rigidbody density="20.0"  />
+    <bossHitch/>
+  </entity>
+</prefab>

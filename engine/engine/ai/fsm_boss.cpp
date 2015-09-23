@@ -235,6 +235,8 @@ void fsm_boss::Hit1(float elapsed){
 		skeleton->playAnimation(1);
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		can_proximity = false;
 	}
 
 	float time = getAnimationDuration(last_anim_id);
