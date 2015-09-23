@@ -106,8 +106,8 @@ void CApp::loadConfig() {
 }
 
 // Debug 
-CRenderTechnique debugTech;
-CRenderTechnique ropeTech;
+const CRenderTechnique* debugTech;
+const CRenderTechnique* ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
@@ -361,7 +361,7 @@ bool CApp::create() {
 	// Start random seed
 	srand((unsigned int)time(0));
 
-	createManagers();
+	createManagers();	
 
 	game_state = TGameState::INITIAL_VIDEO;
 #ifndef _DEBUG
@@ -419,10 +419,11 @@ bool CApp::create() {
 	//loadScene("data/scenes/lightmap_test.xml");
 	//loadScene("data/scenes/anim_test.xml");
 	//loadScene("data/scenes/viewer_test.xml");	
-	loadScene("data/scenes/empty_scene.xml");
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
 	loadScene(first_scene);
+#else
+	loadScene("data/scenes/empty_scene.xml");
 #endif
 
 	//loadScene("data/scenes/test_dificultad.xml");
@@ -579,7 +580,10 @@ void CApp::update(float elapsed) {
 	// Update input
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
-		CNav_mesh_manager::get().keep_updating_navmesh = false;
+		destroy();
+
+		CNav_mesh_manager::get().keep_updating_navmesh = false;				
+		
 		exit(0);
 	}	
 
@@ -1019,7 +1023,7 @@ void CApp::render() {
 	renderDebugEntities();
 
 	if (renderWireframe) {
-		debugTech.activate();
+		debugTech->activate();
 		renderWireframeCurrent = true;
 		render_manager.renderAll(&camera, true, false);
 		renderWireframeCurrent = false;
@@ -1106,7 +1110,7 @@ void CApp::renderEntities() {
 	CTraceScoped t0("Render entities");
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
-	debugTech.activate();
+	debugTech->activate();
 	const CTexture *tex = texture_manager.getByName("grass");
 	tex->activate(0);
 
@@ -1190,7 +1194,7 @@ void CApp::renderEntities() {
 			rope.destroy();
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
-			ropeTech.activate();
+			ropeTech->activate();
 
 			bool tensed = c_rope->tensed;// dist > maxDist * 0.001f;
 			if (tensed)
@@ -1207,7 +1211,7 @@ void CApp::renderEntities() {
 
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
 			wiredCube.activateAndRender();
-			debugTech.activate();
+			debugTech->activate();
 		}
 
 		// If the component has no transform it can't be rendered
@@ -1274,7 +1278,7 @@ void CApp::renderDebugEntities() {
 
 	//CNav_mesh_manager::get().pathRender();
 
-	debugTech.activate();
+	debugTech->activate();
 	setWorldMatrix(XMMatrixIdentity());
 	if (renderGrid)
 		grid.activateAndRender();
@@ -1364,21 +1368,49 @@ void CApp::activateDebugMode(bool active) {
 
 void CApp::destroy() {
 	TwTerminate();
+	/*sharpen.destroy();
+	ssao.destroy();
+	chromatic_aberration.destroy();
+	blur.destroy();
+	blur_camera.destroy();
+	glow.destroy();
+	silouette.destroy();
+	underwater.destroy();
+	ssrr.destroy();*/
+	CRope_manager::get().clearStrings();
+	Citem_manager::get().clear();
+	aimanager::get().clear();
+	entity_manager.clear();
+	render_manager.destroyAllKeys();
+	render_manager.clearOcclusionPlanes();
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
+	material_manager.destroyAll();
 	render_techniques_manager.destroyAll();
+	renderUtilsDestroy();
+	ctes_global.destroy();
+	particle_groups_manager.destroy();
+	logic_manager.destroy();
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
+	deferred.destroy();
+
+	// Destroy app resources
+	wiredCube.destroy();
+	intersectsWiredCube.destroy();
 	axis.destroy();
 	grid.destroy();
 	rope.destroy();
-	intersectsWiredCube.destroy();
-	wiredCube.destroy();
-	renderUtilsDestroy();
-	debugTech.destroy();
-	ropeTech.destroy();
 	font.destroy();
-	particle_groups_manager.destroy();
-	CNav_mesh_manager::get().keep_updating_navmesh = false;
-	::render.destroyDevice();
+	//rt_base->destroy();
+	// Video
+	if (mgr != nullptr) {
+		mgr->destroyVideoClip(clip);
+		videoTexture->destroy();
+		delete mgr;
+		tex->Release();
+		m_shaderResourceView->Release();
+	}
+	::render.destroyDevice();	
 }
 
 unsigned int CApp::numStrings(){
@@ -1447,12 +1479,24 @@ void CApp::loadScene(std::string scene_name) {
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
+	deferred.destroy();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
 
 	is_ok &= renderUtilsCreate();
+
 	is_ok &= deferred.create(xres, yres);
+
+	is_ok &= sharpen.create("sharpen", xres, yres, 1);
+	is_ok &= ssao.create("ssao", xres, yres, 1);
+	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
+	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 2);
+	is_ok &= underwater.create("underwater", xres, yres, 1);
+	is_ok &= ssrr.create("ssrr", xres, yres, 1);
+	is_ok &= silouette.create("silouette", xres, yres, 1);
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
 	
@@ -1491,8 +1535,8 @@ void CApp::loadScene(std::string scene_name) {
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 
 	// Create Debug Technique
-	XASSERT(debugTech.load("basic"), "Error loading basic technique");
-	XASSERT(ropeTech.load("rope"), "Error loading basic technique");
+	debugTech = render_techniques_manager.getByName("basic");
+	ropeTech = render_techniques_manager.getByName("rope");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");	
 	//XASSERT(CHandle(e).isValid(), "Camera not valid");
@@ -1540,15 +1584,15 @@ void CApp::loadScene(std::string scene_name) {
 	//texture_manager.getByName("room_env_test")->activate(8);
 	texture_manager.getByName("sunsetcube1024")->activate(8);
 
-	is_ok &= sharpen.create("sharpen", xres, yres, 1);
-	is_ok &= ssao.create("ssao", xres, yres, 1);
-	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
-	is_ok &= blur.create("blur", xres, yres, 1);
-	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 2);
-	is_ok &= underwater.create("underwater", xres, yres, 1);
-	is_ok &= ssrr.create("ssrr", xres, yres, 1);
-	is_ok &= silouette.create("silouette", xres, yres, 1);
+	/*sharpen.destroy();
+	ssao.destroy();
+	chromatic_aberration.destroy();
+	blur.destroy();
+	blur_camera.destroy();
+	glow.destroy();
+	silouette.destroy();
+	underwater.destroy();
+	ssrr.destroy();*/
 
 	water_level = -1000;
 	CEntity* water = entity_manager.getByName("water");

@@ -17,6 +17,27 @@ function onSceneLoad_my_file()
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
 
+	-- Machacaabuelas
+	local crasher = logicManager:getPrismaticJoint("scene1_grandmacrasher_joint1");
+	crasher:setLinearLimit(0.1, 10000000, 10000000);
+	
+	function onTimerEnd_scene_1_grandma_crasher01Restore()
+		crasher:setLinearLimit(0.1, 10000000, 10000000)
+		print("Timer ends")
+	end
+
+
+	function onTriggerEnter_grandmacrasher_trigger(who)
+		print(tostring(who) .. " ha entrado en el trigger")
+		crasher:setLinearLimit(1000, 0, 0)
+
+		--local crasher_body = logicManager:getObject("machacabuelas")		
+		--crasher_body:applyForce(Vector(0, -10, 0))
+
+		logicManager:setTimer("scene_1_grandma_crasher01Restore", 3)
+	end
+		
+
 	-- Apagar cable
 	local cable = logicManager:getObject("cable_int_sc1_door")	
 	cable:setEmissive(false)
@@ -50,15 +71,20 @@ function onSceneLoad_my_file()
 	sc1_hinge_asc3:setLimit(0.1)
 	sc1_hinge_asc4:setLimit(0.1)
 
+	local int_ascensor_pulsado = false
+
 	function onTriggerEnter_sc1_trigger_int_asc(who)
 		if (who == "int_ascensor_brazo") then
-			hinge_int_asc:setMotor(1.55, 1000);
-			-- Abrir puertas delanteras
-			sc1_hinge_asc1:setLimit(90)
-			sc1_hinge_asc2:setLimit(90)
+			if int_ascensor_pulsado == false then
+				hinge_int_asc:setMotor(1.55, 1000);
+				-- Abrir puertas delanteras
+				sc1_hinge_asc1:setLimit(90)
+				sc1_hinge_asc2:setLimit(90)
 
-			sc1_hinge_asc1:setMotor(1.55, 3000);
-			sc1_hinge_asc2:setMotor(-1.55, 3000);
+				sc1_hinge_asc1:setMotor(1.55, 3000);
+				sc1_hinge_asc2:setMotor(-1.55, 3000);
+				int_ascensor_pulsado = true
+			end
 		end
 	end
 	

@@ -31,8 +31,8 @@ bool CTexture::load(const char* name) {
 		);
 	if (FAILED(hr))
 		return false;
-
 	
+	setDbgName(resource, full_name);
 	dbg("Load texture %s took %g seconds. Seconds since scene load: %g\n", name, tm.seconds(), CApp::get().load_timer.seconds());
 	CApp::get().load_text_time += tm.seconds();
 

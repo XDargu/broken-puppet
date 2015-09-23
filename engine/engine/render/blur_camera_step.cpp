@@ -46,3 +46,7 @@ void TBlurCameraStep::apply(CTexture* in) {
 CTexture* TBlurCameraStep::getOutput() {
 	return rt_blur;
 }
+
+void TBlurCameraStep::destroy() {
+	SAFE_DESTROY(rt_blur);
+}

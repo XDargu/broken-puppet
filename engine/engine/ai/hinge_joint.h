@@ -15,6 +15,7 @@ public:
 	// LUA
 	void setMotor(float velocity, float force_limit);
 	void setLimit(float limit);
+	void setLimit(float angle_lower_limit, float angle_upper_limit);
 };
 
 #endif

@@ -36,3 +36,7 @@ void TUnderwaterEffect::apply(CTexture* in) {
 CTexture* TUnderwaterEffect::getOutput() {
 	return rt_underwater;
 }
+
+void TUnderwaterEffect::destroy() {
+	SAFE_DESTROY(rt_underwater);
+}

@@ -375,7 +375,7 @@ bool createBlendStates() {
 }
 
 void destroyBlendStates() {
-	for (int i = 0; i < RSCFG_COUNT; ++i)
+	for (int i = 0; i < BLEND_CFG_COUNT; ++i)
 		SAFE_RELEASE(blend_states[i]);
 }
 

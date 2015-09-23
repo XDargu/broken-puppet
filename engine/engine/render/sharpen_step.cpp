@@ -35,3 +35,7 @@ void TSharpenStep::apply(CTexture* in) {
 CTexture* TSharpenStep::getOutput() {
 	return rt_sharpen;
 }
+
+void TSharpenStep::destroy() {
+	SAFE_DESTROY(rt_sharpen);
+}

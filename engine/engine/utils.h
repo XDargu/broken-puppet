@@ -55,6 +55,7 @@ void files_in_directory(std::string directory, std::vector<std::string>& list);
 #define V4COMPARE(v1, v2) memcmp(&v1, &v2, 16)
 
 #define SAFE_DELETE(x) if (x != nullptr) { delete x; x = nullptr; }
+#define SAFE_DESTROY(x) if (x != nullptr) { x->destroy(); x = nullptr; }
 
 // Timers
 struct CDBGTimer {

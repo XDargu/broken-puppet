@@ -37,3 +37,7 @@ void TSSRRStep::apply(CTexture* in) {
 CTexture* TSSRRStep::getOutput() {
 	return rt_ssrr;
 }
+
+void TSSRRStep::destroy() {
+	SAFE_DESTROY(rt_ssrr);
+}

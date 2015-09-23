@@ -18,6 +18,7 @@ struct TSilouetteStep {
 	float water_level;
 
 	bool create(const char* name, int axres, int ayres, int afactor);
+	void destroy();
 
 	void apply(CTexture* in);
 

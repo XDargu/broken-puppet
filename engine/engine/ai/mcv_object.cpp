@@ -2,6 +2,7 @@
 #include "mcv_object.h"
 #include "components\comp_transform.h"
 #include "components\comp_render.h"
+#include "components\comp_rigid_body.h"
 #include "rigid_animation.h"
 #include "logic_manager.h"
 
@@ -60,5 +61,16 @@ void CMCVObject::setEmissive(bool active) {
 	TCompRender* render = ((CEntity*)entity)->get<TCompRender>();
 	if (render) {
 		render->emissive_on = active;
+	}
+}
+
+void CMCVObject::applyForce(CVector force) {
+	if (!entity.isValid())
+		return;
+	TCompRigidBody* rigid = ((CEntity*)entity)->get<TCompRigidBody>();
+	if (rigid) {
+		if (!rigid->isKinematic()) {
+			rigid->rigidBody->addForce(PxVec3(force.x, force.y, force.z), PxForceMode::eVELOCITY_CHANGE);
+		}
 	}
 }

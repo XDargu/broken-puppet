@@ -34,3 +34,7 @@ void TChromaticAberrationStep::apply(CTexture* in) {
 CTexture* TChromaticAberrationStep::getOutput() {
 	return rt_ca;
 }
+
+void TChromaticAberrationStep::destroy() {
+	SAFE_DESTROY(rt_ca);
+}

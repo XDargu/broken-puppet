@@ -42,3 +42,7 @@ void TBlurStep::apply(CTexture* in) {
 CTexture* TBlurStep::getOutput() {
 	return rt_blur_x;
 }
+
+void TBlurStep::destroy() {
+	SAFE_DESTROY(rt_blur_x);
+}

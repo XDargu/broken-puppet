@@ -34,3 +34,7 @@ void TSSAOStep::apply(CTexture* in) {
 CTexture* TSSAOStep::getOutput() {
 	return rt_ssao;
 }
+
+void TSSAOStep::destroy() {
+	SAFE_DESTROY(rt_ssao);
+}

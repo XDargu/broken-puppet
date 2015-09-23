@@ -48,3 +48,8 @@ void TGlowStep::apply(CTexture* in) {
 CTexture* TGlowStep::getOutput() {
 	return rt_glow;
 }
+
+void TGlowStep::destroy() {
+	SAFE_DESTROY(rt_lights);
+	SAFE_DESTROY(rt_glow);
+}

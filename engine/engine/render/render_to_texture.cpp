@@ -45,7 +45,7 @@ bool CRenderToTexture::create(
 		assert(zbuffer_type == USE_BACK_ZBUFFER);
 		depth_stencil_view = render.depth_stencil_view;
 	}
-
+	
 	return true;
 }
 
@@ -73,7 +73,7 @@ bool CRenderToTexture::createColorBuffer(bool mipmaps) {
 	hr = render.device->CreateRenderTargetView(resource, NULL, &render_target_view);
 	if (FAILED(hr))
 		return false;
-
+	setDbgName(render_target_view, name);
 	// Create a resource view so we can use it in the shaders as input
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
 	memset(&SRVDesc, 0, sizeof(SRVDesc));
@@ -222,4 +222,16 @@ void CRenderToTexture::clearColorBuffer(const FLOAT ColorRGBA[4]) {
 void CRenderToTexture::clearDepthBuffer() {
 	assert(depth_stencil_view);
 	::render.ctx->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void CRenderToTexture::destroyAll() {	
+	SAFE_RELEASE(render_target_view);
+	SAFE_RELEASE(depth_stencil_view);
+	if (ztexture != nullptr) {
+		ztexture->destroy();
+	}
+	destroy();
+	render_target_view = nullptr;
+	depth_stencil_view = nullptr;
+	name = nullptr;
 }

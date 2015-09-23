@@ -90,6 +90,11 @@ CLogicManager::~CLogicManager() {}
 std::vector<std::string> timers_to_delete;
 std::vector<TKeyFrame> keyframes_to_delete;
 
+void CLogicManager::destroy() {
+	subtitles_font.destroy();
+	clearAnimations();
+}
+
 void CLogicManager::update(float elapsed) {
 	
 	// Update player zone
@@ -578,6 +583,7 @@ void CLogicManager::bootLUA() {
 		.set("setPos", (void (CMCVObject::*)(CVector)) &CMCVObject::setPosition)
 		.set("move", (void (CMCVObject::*)(CVector, float)) &CMCVObject::moveToPosition)
 		.set("setEmissive", &CMCVObject::setEmissive)
+		.set("applyForce", (void (CMCVObject::*)(CVector)) &CMCVObject::applyForce)
 		;
 
 	SLB::Class<CVector>("Vector")
@@ -667,7 +673,7 @@ CPrismaticJoint CLogicManager::getPrismaticJoint(std::string name) {
 CHingeJoint CLogicManager::getHingeJoint(std::string name) {
 	CHandle entity = CEntityManager::get().getByName(name.c_str());
 	if (!entity.isValid())
-		execute("error(\"Invalid prismatic joint name: " + name + "\")");
+		execute("error(\"Invalid hinge joint name: " + name + "\")");
 
 	return CHingeJoint(entity);
 }

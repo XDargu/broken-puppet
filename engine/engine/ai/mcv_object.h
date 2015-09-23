@@ -21,6 +21,7 @@ public:
 
 	void moveToPosition(CVector position, float speed);
 	void setEmissive(bool active);
+	void applyForce(CVector force);
 };
 
 #endif

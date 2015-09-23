@@ -15,8 +15,11 @@ struct TSSAOStep {
 	float radius;
 
 	bool create(const char* name, int axres, int ayres, int afactor);
+	void destroy();
 
 	void apply(CTexture* in);
+
+	TSSAOStep() :rt_ssao(nullptr) {} 
 
 	CTexture* getOutput();
 };

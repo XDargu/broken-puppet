@@ -937,17 +937,6 @@ bool FSMPlayerTorso::canThrow() {
 		looking_at_pointer = false;
 		return false;
 	}
-	
-	// First throw
-	if (first_actor == nullptr) {
-		return true;
-	}
-	else {
-		// The string can be thrown
-		if ((hit_actor != first_actor) && !(hit_actor->isRigidStatic() && first_actor->isRigidStatic())) {
-			return true;
-		}
-	}
 
 	XMVECTOR pos = Physics.PxVec3ToXMVECTOR(actor_position);
 	float pos_y = XMVectorGetY(pos);
@@ -975,6 +964,17 @@ bool FSMPlayerTorso::canThrow() {
 		comp_lookat->active = true;
 	else
 		comp_lookat->active = false;
+
+	// First throw
+	if (first_actor == nullptr) {
+		return true;
+	}
+	else {
+		// The string can be thrown
+		if ((hit_actor != first_actor) && !(hit_actor->isRigidStatic() && first_actor->isRigidStatic())) {
+			return true;
+		}
+	}
 		
 	return false;
 }

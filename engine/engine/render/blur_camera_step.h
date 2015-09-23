@@ -15,6 +15,7 @@ struct TBlurCameraStep {
 	float amount;
 
 	bool create(const char* name, int axres, int ayres, int afactor);
+	void destroy();
 
 	void apply(CTexture* in);
 

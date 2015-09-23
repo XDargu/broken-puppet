@@ -16,6 +16,7 @@ struct TSSRRStep {
 	float quality;
 
 	bool create(const char* name, int axres, int ayres, int afactor);
+	void destroy();
 
 	void apply(CTexture* in);
 

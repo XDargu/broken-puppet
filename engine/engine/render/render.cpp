@@ -25,6 +25,9 @@ bool CRender::createDevice() {
 	UINT height = rc.bottom - rc.top;
 
 	UINT createDeviceFlags = 0;
+	#ifdef _DEBUG
+		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+	#endif
 	D3D_DRIVER_TYPE driverTypes[] =
 	{
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -140,6 +143,11 @@ void CRender::destroyDevice() {
 	SAFE_RELEASE(render_target_view);
 	SAFE_RELEASE(swap_chain);
 	SAFE_RELEASE(ctx);
+
+	ID3D11Debug *d3dDebug = nullptr;
+	::render.device->QueryInterface(__uuidof(ID3D11Debug), (void**)(&d3dDebug));
+	d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY | D3D11_RLDO_DETAIL);
+
 	SAFE_RELEASE(device);
 }
 

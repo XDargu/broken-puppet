@@ -119,3 +119,12 @@ void CDeferredRender::render(const CCamera* camera, CRenderToTexture& rt_out) {
 	resolve(camera, rt_out);
 }
 
+void CDeferredRender::destroy() {
+	/*rt_lights->destroyAll();
+	SAFE_DESTROY(rt_lights);
+	SAFE_DESTROY(rt_albedo);
+	SAFE_DESTROY(rt_normals);
+	SAFE_DESTROY(rt_specular);
+	SAFE_DESTROY(rt_gloss);
+	SAFE_DESTROY(rt_depth);*/
+}

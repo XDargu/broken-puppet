@@ -26,6 +26,8 @@ public:
 	CRenderToTexture*  rt_depth;
 
 	bool create(int xres, int yres);
+	void destroy();
+
 	void render(const CCamera* camera, CRenderToTexture& rt_out);
 
 	// CTexture* getOutput();

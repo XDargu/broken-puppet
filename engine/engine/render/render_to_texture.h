@@ -30,6 +30,7 @@ public:
 	void activateViewport();
 	void clearColorBuffer(const FLOAT ColorRGBA[4]);
 	void clearDepthBuffer();
+	void destroyAll();
 
 	CTexture* getZTexture() { return ztexture; }
 

@@ -77,6 +77,7 @@ public:
 	void update(float elapsed);
 	void init();
 	void draw();
+	void destroy();
 
 	void setTimer(std::string, float time);
 

@@ -55,3 +55,10 @@ void TSilouetteStep::apply(CTexture* in) {
 CTexture* TSilouetteStep::getOutput() {
 	return rt_sobel;
 }
+
+void TSilouetteStep::destroy() {
+	SAFE_DESTROY(rt_final);
+	SAFE_DESTROY(rt_sobel);
+	SAFE_DESTROY(rt_dynamic);
+
+}
