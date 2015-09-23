@@ -202,8 +202,8 @@ int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius
 					int distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
 					if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
 						TCompTransform* grand_trans = ((CEntity*)grandmaRef)->get<TCompTransform>();
-						//bool success = asociateTargetNeedle(grand_trans->position, i, radius, grandmaRef, max_dist_reach_needle);
-						bool success = getTargetNeedle(grandmaRef, i, radius, max_dist_reach_needle);
+						bool success = asociateTargetNeedle(grand_trans->position, i, radius, grandmaRef, max_dist_reach_needle);
+						//bool success = getTargetNeedle(grandmaRef, i, radius, max_dist_reach_needle);
 						if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandmaRef)){
 							result++;
 						}

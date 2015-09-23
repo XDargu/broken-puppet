@@ -19,7 +19,7 @@ const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
-const float distance_change_way_point = 0.20f;
+const float distance_change_way_point = 0.38f;
 const float force_large_impact = 60000.f;
 const float force_medium_impact = 40000.f;
 const float max_time_ragdoll = 3.f;
@@ -65,12 +65,13 @@ void bt_grandma::create(string s)
 	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_grandma::conditionplayer_lost, NULL);
 	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_grandma::conditionsee_player, (btaction)&bt_grandma::actionPlayerAlert);
 
-	addChild("LookForPlayer", "CalmDown13", ACTION, (btcondition)&bt_grandma::conditionLook_for_timeout, (btaction)&bt_grandma::actionCalmDown);
-
-	addChild("LookForPlayer", "LookAroundSequence", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
+	addChild("LookForPlayer", "LookAroundPriority", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
+	addChild("LookAroundPriority", "LookAroundSequence", SEQUENCE, (btcondition)&bt_grandma::conditionLook_time, NULL);
+	addChild("LookAroundPriority", "CalmDown13", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionCalmDown);
 	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_grandma::actionSearchArroundLastPoint);
-	//addChild("LookAroundSequence", "LookingForPlayer", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::action);
 	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_grandma::actionLookAround);
+	addChild("LookAroundSequence", "LookingForPlayer", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionLookingFor);
+
 
 	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_grandma::actionSelectRole);
@@ -153,7 +154,7 @@ void bt_grandma::create(string s)
 	sensor_acum = 0.f;
 	sensor_const = 1.f;
 
-	((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+	((TCompCharacterController*)character_controller)->lerpRotation = 0.08f;
 
 	resetBot();
 }
@@ -372,7 +373,8 @@ int bt_grandma::actionChaseNeedlePosition()
 				TCompCharacterController* m_char_controller = character_controller;
 
 				m_char_controller->moveSpeedMultiplier = run_speed+0.3f;
-				m_char_controller->airSpeed = run_speed * 0.8f;
+				((TCompCharacterController*)character_controller)->lerpRotation = 0.15f;
+				//m_char_controller->airSpeed = run_speed * 0.8f;
 
 				stopAllAnimations();
 				resetTimeAnimation();
@@ -395,7 +397,7 @@ int bt_grandma::actionChaseNeedlePosition()
 						float distance = V3DISTANCE((path[path.size() - 1]), n_transform->position);
 						if (distance < max_dist_reach_needle){
 							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < distance_change_way_point)){
+							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
 								ind_path++;
 								return STAY;
 							}
@@ -590,7 +592,8 @@ int bt_grandma::actionWander()
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = walk_speed;
-		m_char_controller->airSpeed = walk_speed * 0.8f;
+		((TCompCharacterController*)character_controller)->lerpRotation = 0.09f;
+		//m_char_controller->airSpeed = walk_speed * 0.8f;
 
 	}
 
@@ -699,6 +702,23 @@ int bt_grandma::actionSearchArroundLastPoint()
 
 }
 
+//plays the looking for player animation
+int bt_grandma::actionLookingFor(){
+	if (on_enter) {
+		stopAllAnimations();
+		resetTimeAnimation();
+		playAnimationIfNotPlaying(21);
+	}
+
+	time_searching_player += CApp::get().delta_time;
+	stopMovement();
+
+	if (state_time > getAnimationDuration(21)*2.f)
+		return LEAVE;
+	else
+		return STAY;
+}
+
 //look the player around the his last point
 int bt_grandma::actionLookAround()
 {
@@ -712,6 +732,7 @@ int bt_grandma::actionLookAround()
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = run_speed;
+		((TCompCharacterController*)character_controller)->lerpRotation = 0.13f;
 		//m_char_controller->airSpeed = run_speed * 0.8f;
 		stopAllAnimations();
 		resetTimeAnimation();
@@ -725,17 +746,17 @@ int bt_grandma::actionLookAround()
 		aimanager::get().RemoveEnemyAttacker(this);
 		//----------------------------------------------------------------------------------------------
 	}
-	else{
+	/*else{
 		if ((state_time - find_path_time) > 1.f){
 			CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 			find_path_time = state_time;
 		}
-	}
+	}*/
 
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.2f)){
+			if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 0.4f)){
 				ind_path++;
 				return STAY;
 			}
@@ -809,6 +830,7 @@ int bt_grandma::actionChaseRoleDistance()
 
 			m_char_controller->moveSpeedMultiplier = run_angry_speed;
 			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			((TCompCharacterController*)character_controller)->lerpRotation = 0.11f;
 			ind_path = 0;
 		}
 		else{
@@ -830,7 +852,7 @@ int bt_grandma::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.20f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.21f)){
 				ind_path++;
 				return STAY;
 			}
@@ -1307,6 +1329,15 @@ int bt_grandma::conditionLook_for_timeout()
 	//return Look_for_timeout;
 }
 
+int bt_grandma::conditionLook_time(){
+	if (time_searching_player <= max_time_player_search){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 //Check if the role is attacker and is close enought
 int bt_grandma::conditionis_attacker()
 {
@@ -1645,13 +1676,7 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	}
 	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
-	/*XMVECTOR diff = XMVector3AngleBetweenVectors(own_position->getFront(), chase_point - own_position->position);
-	if ((XMVectorGetX(diff)>0.3f) || (XMVectorGetZ(diff) > 0.3f)){
-		own_position->rotation = own_position->rotation*0.2f;
-	}
-	else{*/
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
-	//}
+	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 }
 
 /*void bt_grandma::setId(unsigned int id){
