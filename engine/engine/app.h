@@ -80,6 +80,7 @@ public:
 
 	bool renderVideo();
 	void loadVideo(const char* name);
+	unsigned int getMaxNumNeedles();
 };
 
 #endif

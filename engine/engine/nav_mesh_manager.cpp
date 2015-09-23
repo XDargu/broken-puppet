@@ -272,9 +272,6 @@ void CNav_mesh_manager::clearNavMesh(){
 	need_navmesh = false;
 	nav_mesh_input.clearInput();
 	nav_mesh = nullptr;
-	/*if (AiThread != nullptr){
-		TerminateThread(AiThread, 0);
-	}*/
 }
 
 XMVECTOR CNav_mesh_manager::getRandomNavMeshPoint(XMVECTOR center, float radius, XMVECTOR current_pos){
@@ -386,6 +383,9 @@ CNav_mesh_manager::CNav_mesh_manager()
 
 CNav_mesh_manager::~CNav_mesh_manager()
 {
+	if (AiThread != nullptr){
+		TerminateThread(AiThread, 0);
+	}
 }
 
 bool CNav_mesh_manager::getLock(){

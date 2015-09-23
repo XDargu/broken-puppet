@@ -70,6 +70,7 @@ using namespace DirectX;
 #include "comp_bt_soldier.h"
 #include "comp_recast_aabb.h"
 #include "comp_ai_boss.h"
+#include "comp_hitch.h"
 
 // Logic
 #include "comp_platform_path.h"

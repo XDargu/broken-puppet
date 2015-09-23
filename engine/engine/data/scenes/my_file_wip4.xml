@@ -1,0 +1,889 @@
+<scene>
+  <entity  >
+    <name name="Omni001_1.0" />
+    <transform position="0.788955 15.7476 0.992668" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="39.644" intensity="1.0" color="1.0 0.6 0.407843 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni002_2.0" />
+    <transform position="-0.21394 45.3075 -1.80361" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="61.4369" intensity="1.0" color="1.0 0.219608 0.219608 1"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="pasarela_3.0" />
+    <transform position="1.75339 -0.312973 -39.854" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="pasarela" sub_mesh="0" mat="marmol"/>
+      <draw mesh="pasarela" sub_mesh="1" mat="marmol"/>
+      <draw mesh="pasarela" sub_mesh="2" mat="marmol"/>
+      <draw mesh="pasarela" sub_mesh="3" mat="marmol"/>
+      <draw mesh="pasarela" sub_mesh="4" mat="marmol"/>
+      <draw mesh="pasarela" sub_mesh="5" mat="marmol"/>
+    </render>
+    <aabb min="-4.10162 -1.28284 -7.33136" max="4.14235 1.28262 7.33078"/>
+    <colliderMesh path="pasarela" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_e_4.0" />
+    <transform position="-0.187376 -73.3879 0.30038" rotation="0.0 3.25841e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render >
+      <draw mesh="pared_boss_e" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_e" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-22.0699 71.6337 -47.9421" max="24.7622 120.145 -19.9427"/>
+  </entity>
+  <entity  >
+    <name name="telon_5.0" />
+    <transform position="3.46422 22.1191 -44.4077" rotation="0.0 0.0 0.0 1.0" scale="1.22253 1.68568 1.22253"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon" sub_mesh="0" mat="telas1"/>
+    </render>
+    <aabb min="-8.07757 -2.32859 4.9791" max="8.34526 6.09227 9.55165"/>
+  </entity>
+  <entity  >
+    <name name="Omni003_6.0" />
+    <transform position="-1.14753 38.0595 31.9793" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="6.75806" intensity="1.0" color="1.0 0.219608 0.219608 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni004_7.0" />
+    <transform position="-1.14753 27.484 42.0135" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="6.75806" intensity="1.0" color="1.0 0.219608 0.219608 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni005_8.0" />
+    <transform position="-2.56459 10.1785 49.7438" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="7.97452" intensity="1.0" color="1.0 0.219608 0.219608 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni007_9.0" />
+    <transform position="-0.213941 -6.51876 -102.67" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="19.6598" intensity="1.0" color="1.0 0.219608 0.219608 1"/>
+  </entity>
+  <entity  >
+    <name name="Omni008_10.0" />
+    <transform position="-0.213939 9.35758 -68.6944" rotation="0.0 0.0871558 0.0 0.996195" scale="1.0 1.0 1.0"/>
+    <pointLight radius="29.1948" intensity="1.0" color="1.0 0.219608 0.219608 1"/>
+  </entity>
+  <entity  >
+    <name name="telon_a_11.0" />
+    <transform position="-13.3005 12.4085 -42.4068" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_a" sub_mesh="0" mat="telas1"/>
+    </render>
+    <aabb min="-6.8126 -11.7347 -0.923258" max="3.84817 18.1496 5.38875"/>
+  </entity>
+  <entity  >
+    <name name="telon_b_12.0" />
+    <transform position="-10.6012 21.6463 -40.383" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_b" sub_mesh="0" mat="telas1"/>
+    </render>
+    <aabb min="-6.54164 -2.72346 2.15535" max="6.88614 13.1617 5.85681"/>
+  </entity>
+  <entity  >
+    <name name="telon_c_13.0" />
+    <transform position="-6.56602 12.9473 -41.8072" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="telon_c" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-6.8831 -12.4646 -0.873934" max="4.91677 19.0373 5.39416"/>
+  </entity>
+  <entity  >
+    <name name="telon_d_14.0" />
+    <transform position="2.15451 22.192 -39.9626" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_d" sub_mesh="0" mat="telas1"/>
+    </render>
+    <aabb min="-8.80531 -3.2982 1.76072" max="8.49946 13.6325 6.36556"/>
+  </entity>
+  <entity  >
+    <name name="telon_e_15.0" />
+    <transform position="9.44681 12.7917 -41.3866" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_e" sub_mesh="0" mat="telas1"/>
+      <draw mesh="telon_e" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-4.52656 -11.6141 -0.540817" max="6.6673 18.0813 5.28966"/>
+  </entity>
+  <entity  >
+    <name name="telon_f_16.0" />
+    <transform position="13.7462 22.7004 -40.5862" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_f" sub_mesh="0" mat="telas1"/>
+    </render>
+    <aabb min="-6.49052 -1.75212 2.4816" max="5.94726 12.687 6.02434"/>
+  </entity>
+  <entity  >
+    <name name="telon_g_17.0" />
+    <transform position="16.2508 12.2876 -42.6157" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="telon_g" sub_mesh="0" mat="telas1"/>
+    </render>
+    <aabb min="-3.93758 -11.7679 -0.751493" max="7.01971 18.168 5.05702"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_18.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.965926 0.0 -0.258819" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_19.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.996195 0.0 -0.0871558" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07338"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_20.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.906308 0.0 -0.422618" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_21.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.996195 0.0 -0.0871553" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_22.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.965926 0.0 0.25882" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_23.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.996194 0.0 0.0871646" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_24.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.906308 0.0 0.422618" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_25.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.819152 0.0 0.573577" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_26.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.573577 0.0 0.819152" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_27.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.258819 0.0 0.965926" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_28.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.422618 0.0 0.906308" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_29.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.0871559 0.0 0.996195" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_30.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 0.707107 0.0 0.707107" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_31.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.0871556 0.0 0.996195" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_32.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.258819 0.0 0.965926" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_33.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.422618 0.0 0.906308" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_34.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_35.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.819152 0.0 0.573577" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c_36.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.573577 0.0 0.819152" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_37.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.906308 0.0 -0.422618" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07338"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_38.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.965925 0.0 0.258821" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07337"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_39.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.819152 0.0 0.573577" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07337"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_40.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.573577 0.0 0.819152" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07337"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_41.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 -0.0871556 0.0 0.996195" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00143"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_42.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.258819 0.0 0.965926" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07337"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_a_43.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 -0.0871556 0.0 0.996195" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_a" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_a" sub_mesh="1" mat="telas1"/>
+    </render>
+    <aabb min="-57.1186 11.1974 -34.2608" max="-17.2669 58.3153 4.07337"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_c001_44.0" />
+    <transform position="-0.187376 -76.1268 0.30038" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_c001" sub_mesh="0" mat="telas1"/>
+      <draw mesh="pared_boss_c001" sub_mesh="1" mat="modulo_inferior_boss"/>
+    </render>
+    <aabb min="-61.3386 34.2248 -11.9796" max="-39.1257 72.2392 10.2574"/>
+  </entity>
+  <entity  >
+    <name name="Torus001_45.0" />
+    <transform position="4.76837e-007 -2.13757 0.0" rotation="0.0 0.0 0.0 1.0" scale="5.55839 5.55839 5.55839"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="Torus001" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-8.78711 -0.2218 -8.79708" max="8.78711 0.2218 8.79708"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="ornamento1_46.0" />
+    <transform position="-6.90236 -3.44293 -45.5811" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 0.500694"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamento1" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-2.49067 -2.18588 -2.65455" max="2.49067 3.42967 6.09731"/>
+    <colliderMesh path="ornamento1" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="pre_boss_47.0" />
+    <transform position="-0.187376 -73.2955 0.30038" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render >
+      <draw mesh="pre_boss" sub_mesh="0" mat="pre_boss"/>
+      <draw mesh="pre_boss" sub_mesh="1" mat="suelos_boss_01"/>
+      <draw mesh="pre_boss" sub_mesh="2" mat="CubemapMaterial"/>
+    </render>
+    <aabb min="-20.6365 73.4494 -77.1698" max="23.8294 106.584 -27.9687"/>
+    <colliderMesh path="pre_boss" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="ornamento_2_48.0" />
+    <transform position="-13.1085 21.193 -74.5483" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 0.670814"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamento_2" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamento_2" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamento_2" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamento_2" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamento_2" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamento_2" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamento_2" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-2.49067 -2.18588 -2.65455" max="2.49067 3.42967 6.09731"/>
+    <colliderMesh path="ornamento_2" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="ornamento_3_49.0" />
+    <transform position="15.0124 21.193 -74.5483" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamento_3" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-4.09016 -2.18588 -2.49067" max="1.78071 3.42967 2.49067"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="ornamentocentral_50.0" />
+    <transform position="-1.96866 29.8812 -32.4803" rotation="0.0 1.62921e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamentocentral" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamentocentral" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamentocentral" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamentocentral" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamentocentral" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamentocentral" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamentocentral" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-14.2603 -3.78266 -3.28874" max="20.5862 3.71113 2.96825"/>
+    <colliderMesh path="ornamentocentral" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="ornamento_3_51.0" />
+    <transform position="-13.9281 21.193 -43.3658" rotation="0.0 1.0 0.0 1.27991e-005" scale="1.72593 1.0 0.879421"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamento_3" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-4.11519 -2.18588 -2.49067" max="2.53616 3.42967 2.49067"/>
+    <colliderMesh path="ornamento_3" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="ornamento_3_52.0" />
+    <transform position="16.073 21.193 -43.3658" rotation="0.0 -3.25841e-007 0.0 1.0" scale="1.72593 1.0 0.879421"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamento_3" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamento_3" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-4.11519 -2.18588 -2.49067" max="2.53616 3.42967 2.49067"/>
+    <colliderMesh path="ornamento_3" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_53.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.573577 0.0 0.819152" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00143"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_54.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.258819 0.0 0.965926" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00143"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_55.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.819152 0.0 0.573577" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00143"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_56.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.965926 0.0 0.25882" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00143"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_57.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.996195 0.0 -0.0871553" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00142"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_58.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 0.906308 0.0 -0.422618" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00142"/>
+  </entity>
+  <entity  >
+    <name name="pared_boss_b_59.0" />
+    <transform position="-0.187376 -13.2838 0.300377" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0387 1.02959 1.0387"/>
+    <render >
+      <draw mesh="pared_boss_b" sub_mesh="0" mat="modulo_superior_boss"/>
+      <draw mesh="pared_boss_b" sub_mesh="1" mat="telas1"/>
+      <draw mesh="pared_boss_b" sub_mesh="2" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-47.6448 11.2274 -46.6128" max="-12.7107 58.3153 -6.00142"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="puerta_b_60.0" />
+    <transform position="1.11086 -1.11492 -74.4038" rotation="0.0 0.0 0.0 1.0" scale="0.877453 0.877453 0.877453"/>
+    <render >
+      <draw mesh="puerta_b" sub_mesh="0" mat="ornamentos_01"/>
+    </render>
+    <aabb min="-4.89628 1.53463 -2.85692" max="4.89629 12.5887 1.56668"/>
+    <colliderMesh path="puerta_b" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="silla_61.0" />
+    <transform position="-68.675 -2.89658 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.66758 0.704163 1.66758"/>
+    <render  color = "0.45098 0.45098 0.45098">
+      <draw mesh="silla" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="silla" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="silla" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="silla" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="silla" sub_mesh="4" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-1.0 0.0 -3.85947" max="1.0 7.43945 1.0"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="ornamento1_62.0" />
+    <transform position="9.72491 -3.44293 -45.5811" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 0.500694"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="ornamento1" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="2" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="3" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="4" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="5" mat="Standardmaterial"/>
+      <draw mesh="ornamento1" sub_mesh="6" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-2.49067 -2.18588 -2.65455" max="2.49067 3.42967 6.09731"/>
+    <colliderMesh path="ornamento1" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="Scene_collider_63.0" />
+    <transform position="4.76837e-007 -12.1608 3.52751e-007" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="Scene_collider" sub_mesh="0" mat="marmol"/>
+      <draw mesh="Scene_collider" sub_mesh="1" mat="marmol"/>
+      <draw mesh="Scene_collider" sub_mesh="2" mat="marmol"/>
+    </render>
+    <aabb min="-35.0883 -30.6172 -35.0883" max="35.0883 13.8774 35.0883"/>
+    <colliderMesh path="Scene_collider" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="Object007_64.0" />
+    <transform position="4.76837e-007 -12.1017 3.50166e-007" rotation="0.0 0.939693 0.0 0.34202" scale="1.91913 1.91912 6.64102"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="Object007" sub_mesh="0" mat="marmol"/>
+      <draw mesh="Object007" sub_mesh="1" mat="marmol"/>
+      <draw mesh="Object007" sub_mesh="2" mat="marmol"/>
+      <draw mesh="Object007" sub_mesh="3" mat="marmol"/>
+      <draw mesh="Object007" sub_mesh="4" mat="marmol"/>
+      <draw mesh="Object007" sub_mesh="5" mat="marmol"/>
+    </render>
+    <aabb min="-17.9371 -0.143638 -5.15615" max="17.7403 0.87229 5.16154"/>
+    <colliderMesh path="Object007" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="techo_roto_65.0" />
+    <transform position="4.76837e-007 45.4738 -2.16654e-006" rotation="0.0 0.0 0.0 1.0" scale="2.83892 2.83892 2.83892"/>
+    <render >
+      <draw mesh="techo_roto" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="techo_roto" sub_mesh="1" mat="Standardmaterial"/>
+      <draw mesh="techo_roto" sub_mesh="2" mat="mecanismo_mat"/>
+      <draw mesh="techo_roto" sub_mesh="3" mat="piano_maquinaescribir"/>
+    </render>
+    <aabb min="-9.21084 -0.889469 -8.58016" max="8.67278 3.62463 8.62266"/>
+  </entity>
+  <entity  >
+    <name name="Cylinder011_66.0" />
+    <transform position="-2.1949 2.725 8.95155" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0235294 0.52549 0.0235294">
+      <draw mesh="Cylinder011" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.00749993 -0.0120001 -0.0185499" max="0.00749993 0.0120001 0.0185509"/>
+  </entity>
+  <entity  >
+    <name name="Object009_67.0" />
+    <transform position="-78.3151 -12.1608 3.52751e-007" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="Object009" sub_mesh="0" mat="marmol"/>
+    </render>
+    <aabb min="-7.00054 10.078 -6.96176" max="7.60968 10.078 7.4265"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_C_68.0" />
+    <transform position="11.9768 3.60135 -51.8428" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_C" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.30512 -3.4869 -0.105473" max="1.30512 3.4869 0.105473"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_L_69.0" />
+    <transform position="14.2696 3.50662 -52.4982" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_L" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.08066 -3.39217 -0.759282" max="1.08066 3.39217 0.759282"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_R_70.0" />
+    <transform position="9.48965 3.50662 -51.6669" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_R" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.22477 -3.39217 -0.29528" max="1.22477 3.39217 0.295281"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_R001_71.0" />
+    <transform position="-12.1677 3.50662 -51.6669" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_R001" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.22477 -3.39217 -0.29528" max="1.22477 3.39217 0.295281"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_C001_72.0" />
+    <transform position="-9.68058 3.60135 -51.8428" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_C001" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.30512 -3.4869 -0.105473" max="1.30512 3.4869 0.105473"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_L001_73.0" />
+    <transform position="-7.38777 3.50662 -52.4982" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_L001" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.08066 -3.39217 -0.759282" max="1.08066 3.39217 0.759282"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_R002_74.0" />
+    <transform position="-13.1757 3.50662 -53.0133" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_R002" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.22477 -3.39217 -0.29528" max="1.22477 3.39217 0.295281"/>
+  </entity>
+  <entity  >
+    <name name="biombo_a_L002_75.0" />
+    <transform position="15.1671 3.50662 -54.4229" rotation="0.0 0.461749 0.0 0.887011" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0901961 0.0901961 0.0901961">
+      <draw mesh="biombo_a_L002" sub_mesh="0" mat="biombo_01"/>
+    </render>
+    <aabb min="-1.08066 -3.39217 -0.759282" max="1.08066 3.39217 0.759282"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="esc1_baran_76.0" />
+    <transform position="5.5108 0.172228 -46.8688" rotation="0.0 -5.6426e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="esc1_baran" sub_mesh="0" mat="barandillas_01"/>
+      <draw mesh="esc1_baran" sub_mesh="1" mat="barandillas_01"/>
+      <draw mesh="esc1_baran" sub_mesh="2" mat="barandillas_01"/>
+      <draw mesh="esc1_baran" sub_mesh="3" mat="barandillas_01"/>
+      <draw mesh="esc1_baran" sub_mesh="4" mat="barandillas_01"/>
+    </render>
+    <aabb min="-21.3858 -4.85136e-007 -0.329211" max="13.875 1.13923 3.09826"/>
+    <colliderMesh path="esc1_baran" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+  <entity  >
+    <name name="luz_oo_77.0" />
+    <transform position="1.76384 26.8851 0.884307" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.882353 0.560784 0.341176">
+      <draw mesh="luz_oo" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-12.1479 -26.886 -11.6521" max="12.1479 26.886 11.6521"/>
+  </entity>
+  <entity  >
+    <name name="luz_oo001_78.0" />
+    <transform position="1.76384 26.8851 -4.98446" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.882353 0.560784 0.341176">
+      <draw mesh="luz_oo001" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-12.1479 -26.886 -11.6521" max="12.1479 26.886 11.6521"/>
+  </entity>
+  <entity  >
+    <name name="luz_oo002_79.0" />
+    <transform position="1.76384 26.8851 -9.5263" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.882353 0.560784 0.341176">
+      <draw mesh="luz_oo002" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-12.1479 -26.886 -11.6521" max="12.1479 26.886 11.6521"/>
+  </entity>
+  <entity  >
+    <name name="luz_oo003_80.0" />
+    <transform position="1.76384 26.8851 -5.87461" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.882353 0.560784 0.341176">
+      <draw mesh="luz_oo003" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-12.1479 -26.886 -11.6521" max="12.1479 26.886 11.6521"/>
+  </entity>
+  <entity  >
+    <name name="luz_oo004_81.0" />
+    <transform position="1.76384 26.8851 7.67975" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.882353 0.560784 0.341176">
+      <draw mesh="luz_oo004" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-12.1479 -26.886 -11.6521" max="12.1479 26.886 11.6521"/>
+  </entity>
+  <entity  >
+    <name name="luz_oo005_82.0" />
+    <transform position="1.76384 26.8851 -18.6851" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.882353 0.560784 0.341176">
+      <draw mesh="luz_oo005" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-12.1479 -26.886 -11.6521" max="12.1479 26.886 11.6521"/>
+  </entity>
+  <entity tag = "player" prefab="Player">
+    <transform position="0.629135 6.13855 -68.6347" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ragdoll name="prota"/>
+  </entity>
+  <entity  prefab="PlayerPivot">
+    <transform position="0.629135 6.13855 -68.6347" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="CameraPivot">
+    <transform position="1.62914 8.13855 -69.6347" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+  </entity>
+  <entity  prefab="PlayerCamera">
+    <transform position="8.62914 12.1385 -68.6347"/>
+  </entity>
+  <entity tag = "level" collisionTag = "Level">
+    <name name="escenario_pared_collider_91.0" />
+    <transform position="0.37085 0.0 -0.255112" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-40.0285 0.0 -40.646" max="40.0285 51.2912 40.646"/>
+    <colliderMesh path="escenario_pared_collider" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+
+  <entity tag = "bomb" collisionTag = "Actor" materialTag = "metal">
+    <name name="bomb" />
+    <transform position="-14.3209 1.93056e-007 4.4166" rotation="0.0 0.0 0.0 1.0" scale="0.49 0.49 0.49"/>
+    <render >
+      <draw mesh="bomb" sub_mesh="0" mat="Standardmaterial"/>
+    </render>
+    <aabb min="-0.786767 -0.786767 -0.786767" max="0.786767 0.786767 0.786767"/>
+    <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.786767"/>
+    <rigidbody density="50.0" bossLevel="2" />
+    <bossPrefab/>
+    <explosion active="false" just_boss="true"/>
+    <particleGroup name="ps_fire"/>
+  </entity>
+  
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="engranaje_6_radios_boss_M_97.0" />
+    <transform position="-19.6185 2.48322e-007 5.68094" rotation="0.0 0.0 0.0 1.0" scale="0.49 0.49 0.49"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="engranaje_6_radios_boss_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="engranaje_6_radios_boss_M" sub_mesh="1" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-3.22701 -3.21522 -0.641312" max="3.22701 3.21522 0.641311"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.58123" boxY="1.57546" boxZ="0.314243"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="engranaje_6_radios_boss_M_98.0" />
+    <transform position="-20.2848 1.41669 1.16464" rotation="0.0 0.0 0.0 1.0" scale="0.613259 0.613259 0.613259"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="engranaje_6_radios_boss_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="engranaje_6_radios_boss_M" sub_mesh="1" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-3.22701 -3.21522 -0.641312" max="3.22701 3.21522 0.641311"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.97899" boxY="1.97176" boxZ="0.39329"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="engranaje_4_radios_boss_M_99.0" />
+    <transform position="-13.6546 1.41669 -0.417745" rotation="0.0 0.0 0.0 1.0" scale="0.613259 0.613259 0.613259"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="engranaje_4_radios_boss_M" sub_mesh="0" mat="mecanismo_mat"/>
+    </render>
+    <aabb min="-2.347 -2.35066 -0.465489" max="2.347 2.35066 0.465489"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.43932" boxY="1.44156" boxZ="0.285466"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "enemy" prefab="Boss" >
+    <transform position="0.315582 -1.48346 0.296021" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>
+    <ragdoll name="boss#1"/>
+  </entity>
+  <entity  >
+    <name name="BossBody" />
+    <transform position="0.238177 -1.48346 0.296021" rotation="0.0 -1.74856e-007 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-6.76776 0.431214 -6.76776" max="6.76776 11.1536 6.76776"/>
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="tablon_largo_boss_a" />
+    <transform position="-9.35915 2.37438 8.40703" rotation="0.0 0.0 0.0 1.0" scale="1.5031 1.5031 1.5031"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="tablon_largo_boss_a" sub_mesh="0" mat="flechas"/>
+    </render>
+    <aabb min="-1.19327 -0.146387 -0.191428" max="1.19327 0.17949 0.191428"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.7936" boxY="0.244913" boxZ="0.287735"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="tablon_largo_boss_c" />
+    <transform position="-11.3533 3.12305 11.2246" rotation="0.0 0.0 0.0 1.0" scale="1.5031 1.5031 1.5031"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="tablon_largo_boss_c" sub_mesh="0" mat="flechas"/>
+    </render>
+    <aabb min="-1.59091 -0.139342 -0.179203" max="1.59091 0.15136 0.130885"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.3913" boxY="0.218477" boxZ="0.233047"/>
+    <rigidbody density="968.493"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="tablon_largo_boss_d" />
+    <transform position="-10.9861 2.79961 14.2535" rotation="0.0 0.0 0.0 1.0" scale="1.5031 1.5031 1.5031"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="tablon_largo_boss_d" sub_mesh="0" mat="flechas"/>
+    </render>
+    <aabb min="-1.79791 -0.152135 -0.175266" max="1.79791 0.152135 0.175266"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.70244" boxY="0.228675" boxZ="0.263442"/>
+    <rigidbody density="500.0"  />
+  </entity>
+  <entity tag = "actor" collisionTag = "Actor">
+    <name name="tablon_largo_boss_e" />
+    <transform position="-10.2865 2.90488 18.1471" rotation="0.0 0.0 0.0 1.0" scale="1.5031 1.5031 1.5031"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="tablon_largo_boss_e" sub_mesh="0" mat="flechas"/>
+    </render>
+    <aabb min="-2.08967 -0.157119 -0.218944" max="2.08967 0.157119 0.218943"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="3.14098" boxY="0.236166" boxZ="0.329094"/>
+    <rigidbody density="500.0"  />
+  </entity>
+</scene>

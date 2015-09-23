@@ -112,7 +112,11 @@ public:
 	int actionCalmDown();
 	//look the player around the his last point
 	int actionLookAround();
-	//Takes a roll, attacker or taunter and a poisition to go
+	//plays the looking for player animation
+	int actionLookingFor();
+	// Plays the animation of looking for
+	int actionLookingForPlayer();
+	//Takes a rol, attacker or taunter and a poisition to go
 	int actionSelectRole();
 	//Go to his position
 	int actionChaseRoleDistance();
@@ -163,6 +167,8 @@ public:
 	int conditionsee_player();
 	//Check the look for timer
 	int conditionLook_for_timeout();
+	//Check the time for looking the player
+	int conditionLook_time();
 	//Search random point around the last place player wasnotify saw
 	int actionSearchArroundLastPoint();
 	//Check if the role is attacker and is close enought
