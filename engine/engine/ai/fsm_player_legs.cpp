@@ -61,6 +61,8 @@ void FSMPlayerLegs::Init()
 	dead_counter = 0.f;
 	idle_var_count = 0.f;
 
+	ragdoll_force = PxVec3(0, 0, 0);
+
 	TCompCharacterController* character_controller = comp_character_controller;
 
 	//run_speed = ((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier;
@@ -113,7 +115,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 	}*/
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_idle");	
-	bool eval_movement = EvaluateMovement(false, elapsed);
+	
 	if (can_move) {
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(8);
@@ -124,7 +126,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 			skeleton_ik->active = false;
 			ChangeState("fbp_Jump");
 		}
-		if (eval_movement){
+		if (EvaluateMovement(false, elapsed)){
 			skeleton->stopAnimation(8);
 			skeleton->stopAnimation(0);
 			skeleton->stopAnimation(33);
@@ -133,6 +135,11 @@ void FSMPlayerLegs::Idle(float elapsed){
 			skeleton_ik->active = false;
 			ChangeState("fbp_Walk");
 		}
+	}
+	else {
+		// Don't move
+		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+		((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 		skeleton->stopAnimation(8);
@@ -720,6 +727,13 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		stopAllAnimations();
 		collider->setMaterialProperties(1, 0.7f, 0.7f);
 		torso->CancelGrabString();
+
+		// Add pendant foce
+		m_ragdoll->cancelLinearVelocity();
+		m_ragdoll->addForce(ragdoll_force, PxForceMode::eVELOCITY_CHANGE);
+		ragdoll_force = PxVec3(0, 0, 0);
+		
+
 
 		/*rigidbody->setLockXRot(false);
 		rigidbody->setLockYRot(false);

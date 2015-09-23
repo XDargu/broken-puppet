@@ -127,6 +127,53 @@ void TCompPlayerController::update(float elapsed) {
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
 	TCompTransform* camera_transform = camera_entity->get<TCompTransform>();
 
+	// Raycast all
+	PxRaycastBuffer buf;
+	Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
+
+	float max_dist = 1000000;
+	PxActor* hit_actor = nullptr;
+	PxVec3 actor_position;
+
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
+			float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
+			if (dist < max_dist) {
+				actor_position = buf.touches[i].position;
+				hit_actor = buf.touches[i].actor;
+				max_dist = dist;
+			}
+		}
+	}
+
+	if (hit_actor != nullptr) {
+		CHandle target_entity(hit_actor->userData);
+		if (target_entity.isValid()) {
+			if (!(((CEntity*)target_entity)->hasTag("player"))) {
+				TCompTransform* target_transform = ((CEntity*)target_entity)->get<TCompTransform>();
+				if (!(CHandle(target_transform) == old_target_transform)) {
+					if (old_target_transform.isValid()) {
+						TCompTransform* old_t_transform = old_target_transform;
+						if (old_t_transform->getType() == 80)
+							old_t_transform->setType(1);
+						if (((TCompTransform*)old_target_transform)->getType() == 90)
+							((TCompTransform*)old_target_transform)->setType(0.95f);
+					}
+				}
+				if (target_transform->getType() == 100) {
+					target_transform->setType(0.8f);
+					old_target_transform = target_transform;
+				}
+				if (target_transform->getType() == 95) {
+					target_transform->setType(0.9f);
+					old_target_transform = target_transform;
+				}
+			}
+		}
+	}
+
+	/*
 	PxRaycastBuffer hit;
 	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
 
@@ -154,7 +201,7 @@ void TCompPlayerController::update(float elapsed) {
 				}
 			}
 		}
-	}
+	}*/
 	/*displacement += V3DISTANCE(prev_pos, trans->position);
 	counter += elapsed;
 	if (counter >= 1) {
@@ -232,12 +279,18 @@ void TCompPlayerController::actorHit(const TActorHit& msg) {
 	CHandle player_handle = CHandle(this).getOwner();
 	CEntity* player_entity = (CEntity*)player_handle;
 	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
-	TCompPlayerController* p_controller = player_entity->get<TCompPlayerController>();
-	if ((!(p_ragdoll->isRagdollActive()) || (p_controller->fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
+	if ((!(p_ragdoll->isRagdollActive()) || (fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
 		if (time_since_last_hit >= hit_cool_down){
 			dbg("Force recieved is  %f\n", msg.damage);
 			fsm_player_legs.EvaluateHit(msg.damage);
 			time_since_last_hit = 0;
+
+			// Boss
+			if (msg.is_boss){
+				bossImpact(msg.who);
+			}			
+			
+			
 		}
 	}
 }
@@ -254,4 +307,30 @@ void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
 
 bool TCompPlayerController::canThrow() {
 	return fsm_player_torso.canThrow();
+}
+
+
+void TCompPlayerController::bossImpact(CHandle boss){
+	/**/
+	// hit the player
+	CHandle m_player = (CHandle(this).getOwner());
+	CHandle m_player_rigid = (((CEntity*)m_player)->get<TCompRigidBody>());
+	CHandle m_player_ragdoll = (((CEntity*)m_player)->get<TCompRagdoll>());
+	if (m_player_rigid.isValid() && m_player_ragdoll.isValid()){
+
+		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)boss)->get<TCompTransform>();
+		PxVec3 force_dir = (player_pos - Physics.XMVECTORToPxVec3(enemy_comp_trans->position));
+		PxVec3 up_aux = PxVec3(0, 30, 0);
+		force_dir = (force_dir + up_aux).getNormalized();
+		//force_dir = PxVec3(0, 10, 0);
+
+		//((PxRigidDynamic*)((TCompRagdoll*)m_player_ragdoll)->getBoneRigid(1))->setLinearVelocity(force_dir * 2);
+
+		fsm_player_legs.ragdoll_force = force_dir * 10;
+	}
+	// hurt the player
+	/**/
 }

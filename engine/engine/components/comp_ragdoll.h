@@ -47,6 +47,8 @@ public:
 	void disableBoneTree(PxRigidDynamic* rigid_bone);
 	void disableBoneTree(int bone);
 	void enableBoneTree(int bone);
+	void cancelLinearVelocity();
+	void addForce(PxVec3 force, PxForceMode::Enum mode);
 };
 
 #endif

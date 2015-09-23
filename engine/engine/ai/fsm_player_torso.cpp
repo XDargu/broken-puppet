@@ -89,59 +89,266 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 		
 		TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
 
+		// Raycast all
+		PxRaycastBuffer buf;
+		Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
+
+		float max_dist = 1000000;
+		PxRigidActor* hit_actor = nullptr;
+		PxVec3 hit_position = PxVec3(0, 0, 0);
+		PxVec3 hit_normal = PxVec3(0, 0, 0);
+
+		for (int i = 0; i < (int)buf.nbTouches; i++)
+		{
+			if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
+				float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
+				if (dist < max_dist) {
+					hit_position = buf.touches[i].position;
+					hit_actor = buf.touches[i].actor;
+					hit_normal = buf.touches[i].normal;
+					max_dist = dist;
+				}
+			}
+		}
+
 		// Raycast detecting the collider the mouse is pointing at
-		PxRaycastBuffer hit;
+		// Old single raycast
+		/*PxRaycastBuffer hit;
 		Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
 
 		if (hit.hasBlock) {
 			PxRaycastHit blockHit = hit.block;
 
 			if (std::strcmp(blockHit.actor->getName(), "Player") != 0)
-			{
+			{*/
+		if (hit_actor != nullptr) {
 
-				// First throw
-				if (first_actor == nullptr) {
+			// First throw
+			if (first_actor == nullptr) {
+				CLogicManager::get().stringThrown();
+				first_throw = true;
+
+				first_actor = hit_actor;
+				first_position = hit_position;
+				first_offset = first_actor->getGlobalPose().q.rotateInv(hit_position - first_actor->getGlobalPose().p);
+
+				/*unsigned int num_strings = getStringCount();
+
+				// If there are more strings than the maximun available, remove the oldest one
+				if (num_strings >= max_num_string){
+				CHandle c_rope = strings.front();
+				strings.pop_front();
+				entity_manager.remove(c_rope.getOwner());
+				}*/
+
+				// Get the needle prefab
+				CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
+
+				// Get the entity of the rigidbody on wich the needle is pierced
+				//CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName()); //CHandle(blockHit.actor->userData);
+
+				// Rename the needle
+				TCompName* new_needle_name = new_needle->get<TCompName>();
+				std::strcpy(new_needle_name->name, ("Needle" + to_string(entitycount)).c_str());
+
+				// Set the rotation of the needle according to the camera angle and normal of the surface
+				// The final rotation will be a quaternion between those two values, wigthed in one or other direction
+				TTransform rotation_aux;
+				rotation_aux.position = camera_transform->position;
+
+				if (first_position == physics_manager.XMVECTORToPxVec3(camera_transform->position))
+					rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
+				else
+					rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position), XMVectorSet(0, 1, 0, 0));
+
+				TTransform normal_aux;
+				normal_aux.position = physics_manager.PxVec3ToXMVECTOR(first_position);
+				normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position - hit_normal), XMVectorSet(0, 1, 0, 0));
+
+				XMVECTOR finalQuat = XMQuaternionSlerp(rotation_aux.rotation, normal_aux.rotation, 0.35f);
+
+				if (!first_actor->isRigidStatic()) {
+					finalQuat = XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)));
+				}
+
+				// Get the needle component and initialize it
+				TCompNeedle* new_e_needle = new_needle->get<TCompNeedle>();
+
+				/*new_e_needle->create(
+					first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
+					, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)))
+					, rigidbody_e->get<TCompRigidBody>()
+					);*/
+
+				new_e_needle->create(
+					first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
+					, finalQuat
+					, hit_actor
+					);
+
+				first_needle = new_needle;
+
+				// Create the rope, between the player and the target
+				CEntity* new_e = entity_manager.createEmptyEntity();
+
+				// Rename it
+				TCompName* new_e_name = CHandle::create<TCompName>();
+				std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
+				new_e->add(new_e_name);
+
+				// Get the player transform
+				TCompTransform* p_transform = comp_transform;
+
+				// Only add a distance joint in the first throw if the first actor is a rigidbody
+				if (first_actor->isRigidDynamic()) {
+					TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
+
+					// The first position is the actor position with offset in world coords
+					PxVec3 pos = first_actor->getGlobalPose().q.rotate(first_offset) + first_actor->getGlobalPose().p;
+
+					// The second position is the player
+					PxVec3 pos2 = physics_manager.XMVECTORToPxVec3(p_transform->position);
+
+					// Offsets
+					PxVec3 offset_1 = first_offset;
+					PxVec3 offset_2 = PxVec3(0, 0, 0);
+
+					new_e_j->create(first_actor, NULL, 1, first_position, pos2, PxTransform(offset_1), physx::PxTransform(offset_2));
+
+					new_e->add(new_e_j);
+				}
+
+				// Add the rope component
+				TCompRope* new_e_r = CHandle::create<TCompRope>();
+				new_e->add(new_e_r);
+
+				// Get the transform of the needle
+				TCompTransform* needle_transform = new_needle->get<TCompTransform>();
+				needle_transform->init();
+
+				// Assing the positions (needle transform + current player position)
+				new_e_r->setPositions(needle_transform, p_transform->position);
+				new_e_r->pos_1 = skeleton->getPositionOfBone(29);
+
+				// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
+				current_rope_entity = new_e;
+
+				// Add the string to the strings vector
+				//strings.push_back(CHandle(new_e_r));
+				CRope_manager::get().addString(new_e_r);
+
+				entitycount++;
+
+				//Checking if enemy tied
+				CEntity* firstActorEntity = CHandle(first_actor->userData);
+
+				//aicontroller::types kind=bot_ai->m_ai_controller->getType();
+				if (firstActorEntity->hasTag("enemy")){
+
+					TCompBtSoldier* bot_ai = firstActorEntity->get<TCompBtSoldier>();
+					if (bot_ai){
+						Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
+					}
+
+					TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
+					if (tied_sensor) {
+						tied_sensor->changeTiedState(true, CHandle(new_e_r));
+					}
+
+					// Get the ragdoll
+					TCompRagdoll* ragdoll = firstActorEntity->get<TCompRagdoll>();
+					if (ragdoll) {
+						// Get the bone 
+						PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(first_position), camera_transform->getFront());
+						if (bone != nullptr)
+						{
+							// ************ Change needle target ***********
+							new_e_needle->create(
+								XMVectorSet(0, 0, 0, 0)
+								, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(bone->getGlobalPose().q)))
+								, bone
+								);
+
+							// ************ Create aux entity ************
+							CEntity* aux_e = entity_manager.createEmptyEntity();
+
+							TCompName* new_e_name = CHandle::create<TCompName>();
+							std::strcpy(new_e_name->name, ("JointAux" + to_string(entitycount)).c_str());
+							aux_e->add(new_e_name);
+
+							// ************ Create aux joint ************
+							TCompDistanceJoint* aux_joint = CHandle::create<TCompDistanceJoint>();
+
+							// The first position is the actor position with offset in world coords
+							// TODO: Get the real position, to get a valid offset. Temporally, no offset.
+							PxVec3 aux_pos = bone->getGlobalPose().p;
+							PxVec3 aux_offset = bone->getGlobalPose().q.rotateInv(aux_pos - bone->getGlobalPose().p);
+
+							PxVec3 pos = bone->getGlobalPose().q.rotate(aux_offset) + bone->getGlobalPose().p;
+
+							// The second position is the player
+							PxVec3 pos2 = physics_manager.XMVECTORToPxVec3(p_transform->position);
+
+							// Offsets
+							PxVec3 offset_1 = aux_offset;
+							PxVec3 offset_2 = PxVec3(0, 0, 0);
+
+							aux_joint->create(bone, NULL, 1, bone->getGlobalPose().p, pos2, PxTransform(offset_1), physx::PxTransform(offset_2));
+
+							aux_e->add(aux_joint);
+
+							new_e_r->joint_aux = CHandle(aux_joint);
+						}
+					}
+
+				}
+				else{
+					//adding needle and rope to item manager
+					Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
+				}
+			}
+			// Second throw
+			else {
+				// The string can be thrown
+				if ((hit_actor != first_actor) && !(hit_actor->isRigidStatic() && first_actor->isRigidStatic())) {
 					CLogicManager::get().stringThrown();
-					first_throw = true;
+					first_throw = false;
 
-					first_actor = blockHit.actor;
-					first_position = blockHit.position;
-					first_offset = first_actor->getGlobalPose().q.rotateInv(blockHit.position - first_actor->getGlobalPose().p);
+					// -------------- Get the offsets
+					// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)
+					PxVec3 offset_1 = first_offset;
+					PxVec3 offset_2 = hit_actor->getGlobalPose().q.rotateInv(hit_position - hit_actor->getGlobalPose().p);
 
-					/*unsigned int num_strings = getStringCount();
+					// -------------- Whats here so far:
+					// - We have an entity with a rope component, pointing to a needle transform and a position
+					// - A distance joint may or may not exists in this entity
+					CEntity* rope_entity = current_rope_entity;
+					CEntity* first_needle_entity = first_needle;
 
-					// If there are more strings than the maximun available, remove the oldest one
-					if (num_strings >= max_num_string){
-					CHandle c_rope = strings.front();
-					strings.pop_front();
-					entity_manager.remove(c_rope.getOwner());
-					}*/
-
-					Citem_manager::get().checkAndRemoveFirstNeedle();
-
+					// -------------- Create the new needle
 					// Get the needle prefab
-					CEntity* new_needle = prefabs_manager.getInstanceByName("Needle");
+					CEntity* new_needle_2 = prefabs_manager.getInstanceByName("Needle");
 
 					// Get the entity of the rigidbody on wich the needle is pierced
-					//CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName()); //CHandle(blockHit.actor->userData);
+					//CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
 
 					// Rename the needle
-					TCompName* new_needle_name = new_needle->get<TCompName>();
-					std::strcpy(new_needle_name->name, ("Needle" + to_string(entitycount)).c_str());
+					TCompName* new_e_name2 = new_needle_2->get<TCompName>();
+					std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
 
 					// Set the rotation of the needle according to the camera angle and normal of the surface
 					// The final rotation will be a quaternion between those two values, wigthed in one or other direction
 					TTransform rotation_aux;
 					rotation_aux.position = camera_transform->position;
 
-					if (first_position == physics_manager.XMVECTORToPxVec3(camera_transform->position))
-						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
+					if (hit_position == physics_manager.XMVECTORToPxVec3(camera_transform->position))
+						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(hit_position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
 					else
-						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position), XMVectorSet(0, 1, 0, 0));
-					
+						rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(hit_position), XMVectorSet(0, 1, 0, 0));
+
 					TTransform normal_aux;
-					normal_aux.position = physics_manager.PxVec3ToXMVECTOR(first_position);
-					normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(first_position - blockHit.normal), XMVectorSet(0, 1, 0, 0));
+					normal_aux.position = physics_manager.PxVec3ToXMVECTOR(hit_position);
+					normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(hit_position - hit_normal), XMVectorSet(0, 1, 0, 0));
 
 					XMVECTOR finalQuat = XMQuaternionSlerp(rotation_aux.rotation, normal_aux.rotation, 0.35f);
 
@@ -150,103 +357,121 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					}
 
 					// Get the needle component and initialize it
-					TCompNeedle* new_e_needle = new_needle->get<TCompNeedle>();					
+					TCompNeedle* new_e_needle2 = new_needle_2->get<TCompNeedle>();
 
-					/*new_e_needle->create(
-						first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
-						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)))
+					/*new_e_needle2->create(
+						blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
+						, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
 						, rigidbody_e->get<TCompRigidBody>()
 						);*/
 
-					new_e_needle->create(
-						first_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(first_offset) : physics_manager.PxVec3ToXMVECTOR(first_position)
+					new_e_needle2->create(
+						hit_actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(hit_position)
 						, finalQuat
-						, blockHit.actor
+						, hit_actor
 						);
 
-					first_needle = new_needle;
+					// -------------- If the distance joint doesn't exists, create one
 
-
-
-					// Create the rope, between the player and the target
-					CEntity* new_e = entity_manager.createEmptyEntity();
-
-					// Rename it
-					TCompName* new_e_name = CHandle::create<TCompName>();
-					std::strcpy(new_e_name->name, ("Joint" + to_string(entitycount)).c_str());
-					new_e->add(new_e_name);
-
-					// Get the player transform
-					TCompTransform* p_transform = comp_transform;
-
-					// Only add a distance joint in the first throw if the first actor is a rigidbody
-					if (first_actor->isRigidDynamic()) {
+					TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
+					if (!joint) {
+						// Create a new distance joint
 						TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
 
-						// The first position is the actor position with offset in world coords
-						PxVec3 pos = first_actor->getGlobalPose().q.rotate(first_offset) + first_actor->getGlobalPose().p;
+						new_e_j->create(first_actor, hit_actor, 1, first_position, hit_position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
 
-						// The second position is the player
-						PxVec3 pos2 = physics_manager.XMVECTORToPxVec3(p_transform->position);
-
-						// Offsets
-						PxVec3 offset_1 = first_offset;
-						PxVec3 offset_2 = PxVec3(0, 0, 0);
-
-						new_e_j->create(first_actor, NULL, 1, first_position, pos2, PxTransform(offset_1), physx::PxTransform(offset_2));
-
-						new_e->add(new_e_j);
+						rope_entity->add(new_e_j);
 					}
 
-					// Add the rope component
-					TCompRope* new_e_r = CHandle::create<TCompRope>();
-					new_e->add(new_e_r);
+					// If the distance joint already exists, update it
+					else {
+						joint->joint->release();
+						joint->create(first_actor, hit_actor, 1, first_position, hit_position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
+					}
 
-					//Store the needle_rop
-					Citem_manager::get().addNeedleToVector(CHandle(new_e_needle), CHandle(new_e_r));
+					// -------------- Update the rope component
+					TCompRope* new_e_r = rope_entity->get<TCompRope>();
+					TCompTransform* first_needle_transform = first_needle_entity->get<TCompTransform>();
 
 					// Get the transform of the needle
-					TCompTransform* needle_transform = new_needle->get<TCompTransform>();
-					needle_transform->init();
+					TCompTransform* second_needle_transform = new_needle_2->get<TCompTransform>();
+					second_needle_transform->init();
 
-					// Assing the positions (needle transform + current player position)
-					new_e_r->setPositions(needle_transform, p_transform->position);
-					new_e_r->pos_1 = skeleton->getPositionOfBone(29);
+					new_e_r->setPositions(first_needle_transform, second_needle_transform);
 
-					// Set the distance joint of the needle as the current one (to move it while grabbing and pulling the string)
-					current_rope_entity = new_e;
-
-					// Add the string to the strings vector
-					//strings.push_back(CHandle(new_e_r));
-					CRope_manager::get().addString(new_e_r);
-
-					entitycount++;
-
+					bool second_is_enemy = false;
 					//Checking if enemy tied
-					CEntity* firstActorEntity = CHandle(first_actor->userData);
-
-					//aicontroller::types kind=bot_ai->m_ai_controller->getType();
-					if (firstActorEntity->hasTag("enemy")){
-
-						TCompBtSoldier* bot_ai = firstActorEntity->get<TCompBtSoldier>();
-						if (bot_ai){
-							Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
-						}
-
-						TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
+					PxRigidActor* second_actor = hit_actor;
+					CEntity* secondActorEntity = CHandle(second_actor->userData);
+					if (secondActorEntity->hasTag("enemy")){
+						TCompSensorTied* tied_sensor = secondActorEntity->get<TCompSensorTied>();
 						if (tied_sensor) {
 							tied_sensor->changeTiedState(true, CHandle(new_e_r));
 						}
+						second_is_enemy = true;
+					}
+					else{
+						//adding needle to item manager
+						Citem_manager::get().addNeedle(CHandle(new_e_needle2), CHandle(new_e_r));
+					}
 
+					// ****************** Aux joint ******************
+					TCompDistanceJoint* aux_joint = new_e_r->joint_aux;
+					if (aux_joint) {
+						PxRigidActor* a1 = nullptr;
+						PxRigidActor* a2 = nullptr;
+
+						aux_joint->joint->getActors(a1, a2);
+
+						// Second actor is a wall
+						if (!second_is_enemy) {
+							aux_joint->joint->release();
+							aux_joint->create(a1, hit_actor, 1, a1->getGlobalPose().p, hit_position, physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)), physx::PxTransform(offset_2));
+						}
+						// Second actor is an enemy
+						else {
+
+							// Get the ragdoll
+							TCompRagdoll* ragdoll = secondActorEntity->get<TCompRagdoll>();
+							if (ragdoll) {
+								// Get the bone 
+								PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(first_position), camera_transform->getFront());
+								if (bone != nullptr)
+								{
+									// ************ Change needle target ***********
+									new_e_needle2->create(
+										XMVectorSet(0, 0, 0, 0)
+										, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(bone->getGlobalPose().q)))
+										, bone
+										);
+
+									// ************ Change existing joint ***********
+									aux_joint->joint->release();
+									if (a1 != bone) {
+										aux_joint->create(a1, bone, 1, a1->getGlobalPose().p, bone->getGlobalPose().p, physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)), physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)));
+									}
+									else {
+										CEntityManager::get().remove(CHandle(aux_joint).getOwner());
+										aux_joint->joint = nullptr;
+										aux_joint = CHandle();
+										new_e_r->joint_aux = CHandle();
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						// Second actor is an enemy, but first one is a wall
 						// Get the ragdoll
-						TCompRagdoll* ragdoll = firstActorEntity->get<TCompRagdoll>();
+						TCompRagdoll* ragdoll = secondActorEntity->get<TCompRagdoll>();
 						if (ragdoll) {
 							// Get the bone 
 							PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(first_position), camera_transform->getFront());
 							if (bone != nullptr)
 							{
 								// ************ Change needle target ***********
-								new_e_needle->create(
+								new_e_needle2->create(
 									XMVectorSet(0, 0, 0, 0)
 									, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(bone->getGlobalPose().q)))
 									, bone
@@ -269,254 +494,41 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 								PxVec3 pos = bone->getGlobalPose().q.rotate(aux_offset) + bone->getGlobalPose().p;
 
-								// The second position is the player
-								PxVec3 pos2 = physics_manager.XMVECTORToPxVec3(p_transform->position);
+								if (hit_actor != bone) {
+									aux_joint->create(bone, hit_actor, 1, bone->getGlobalPose().p, hit_position, physx::PxTransform(aux_offset), physx::PxTransform(offset_2));
+									aux_e->add(aux_joint);
+								}
+								else {
+									CEntityManager::get().remove(aux_e);
+									aux_joint->joint = nullptr;
+									aux_joint = CHandle();
+								}
 
-								// Offsets
-								PxVec3 offset_1 = aux_offset;
-								PxVec3 offset_2 = PxVec3(0, 0, 0);
-
-								aux_joint->create(bone, NULL, 1, bone->getGlobalPose().p, pos2, PxTransform(offset_1), physx::PxTransform(offset_2));
-
-								aux_e->add(aux_joint);
-
-								new_e_r->joint_aux = CHandle(aux_joint);
+								if (aux_joint == CHandle())
+									new_e_r->joint_aux = CHandle();
+								else
+									new_e_r->joint_aux = CHandle(aux_joint);
 							}
 						}
 
+
 					}
-					else{
-						//adding needle and rope to item manager
-						Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
-					}
+
+					// Set the current rope entity as an invalid Handle
+					current_rope_entity = CHandle();
+
+					first_actor = nullptr;
+					first_needle = CHandle();
+					entitycount++;
+
 				}
-				// Second throw
+				// The string can't be thrown (same actor or two static bodies)
 				else {
-					// The string can be thrown
-					if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {
-						CLogicManager::get().stringThrown();
-						first_throw = false;
-
-						// -------------- Get the offsets
-						// Obtener el offset con coordenadas de mundo = (Offset_mundo - posición) * inversa(rotación)
-						PxVec3 offset_1 = first_offset;
-						PxVec3 offset_2 = blockHit.actor->getGlobalPose().q.rotateInv(blockHit.position - blockHit.actor->getGlobalPose().p);
-
-						// -------------- Whats here so far:
-						// - We have an entity with a rope component, pointing to a needle transform and a position
-						// - A distance joint may or may not exists in this entity
-						CEntity* rope_entity = current_rope_entity;
-						CEntity* first_needle_entity = first_needle;
-
-						// -------------- Create the new needle
-						// Get the needle prefab
-						Citem_manager::get().checkAndRemoveFirstNeedle();
-						CEntity* new_needle_2 = prefabs_manager.getInstanceByName("Needle");
-
-						// Get the entity of the rigidbody on wich the needle is pierced
-						//CEntity* rigidbody_e = entity_manager.getByName(blockHit.actor->getName());
-
-						// Rename the needle
-						TCompName* new_e_name2 = new_needle_2->get<TCompName>();
-						std::strcpy(new_e_name2->name, ("Needle" + to_string(entitycount)).c_str());
-
-						// Set the rotation of the needle according to the camera angle and normal of the surface
-						// The final rotation will be a quaternion between those two values, wigthed in one or other direction
-						TTransform rotation_aux;
-						rotation_aux.position = camera_transform->position;
-
-						if (blockHit.position == physics_manager.XMVECTORToPxVec3(camera_transform->position))
-							rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(blockHit.position) + camera_transform->getFront() * 0.1f, XMVectorSet(0, 1, 0, 0));
-						else
-							rotation_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(blockHit.position), XMVectorSet(0, 1, 0, 0));
-
-						TTransform normal_aux;
-						normal_aux.position = physics_manager.PxVec3ToXMVECTOR(blockHit.position);
-						normal_aux.lookAt(physics_manager.PxVec3ToXMVECTOR(blockHit.position - blockHit.normal), XMVectorSet(0, 1, 0, 0));
-
-						XMVECTOR finalQuat = XMQuaternionSlerp(rotation_aux.rotation, normal_aux.rotation, 0.35f);
-
-						if (!first_actor->isRigidStatic()) {
-							finalQuat = XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(first_actor->getGlobalPose().q)));
-						}
-
-						// Get the needle component and initialize it
-						TCompNeedle* new_e_needle2 = new_needle_2->get<TCompNeedle>();
-
-						/*new_e_needle2->create(
-							blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
-							, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(blockHit.actor->getGlobalPose().q)))
-							, rigidbody_e->get<TCompRigidBody>()
-							);*/
-
-						new_e_needle2->create(
-							blockHit.actor->isRigidDynamic() ? physics_manager.PxVec3ToXMVECTOR(offset_2) : physics_manager.PxVec3ToXMVECTOR(blockHit.position)
-							, finalQuat
-							, blockHit.actor
-							);
-
-						// -------------- If the distance joint doesn't exists, create one
-
-						TCompDistanceJoint* joint = rope_entity->get<TCompDistanceJoint>();
-						if (!joint) {
-							// Create a new distance joint
-							TCompDistanceJoint* new_e_j = CHandle::create<TCompDistanceJoint>();
-
-							new_e_j->create(first_actor, blockHit.actor, 1, first_position, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
-
-							rope_entity->add(new_e_j);
-						}
-
-						// If the distance joint already exists, update it
-						else {
-							joint->joint->release();
-							joint->create(first_actor, blockHit.actor, 1, first_position, blockHit.position, physx::PxTransform(offset_1), physx::PxTransform(offset_2));
-						}
-
-						// -------------- Update the rope component
-						TCompRope* new_e_r = rope_entity->get<TCompRope>();
-						TCompTransform* first_needle_transform = first_needle_entity->get<TCompTransform>();
-
-						//Store the needle_rop
-						Citem_manager::get().addNeedleToVector(CHandle(new_e_needle2), CHandle(new_e_r));
-
-						// Get the transform of the needle
-						TCompTransform* second_needle_transform = new_needle_2->get<TCompTransform>();
-						second_needle_transform->init();
-
-						new_e_r->setPositions(first_needle_transform, second_needle_transform);
-
-						bool second_is_enemy = false;
-						//Checking if enemy tied
-						PxRigidActor* second_actor = blockHit.actor;
-						CEntity* secondActorEntity = CHandle(second_actor->userData);
-						if (secondActorEntity->hasTag("enemy")){
-							TCompSensorTied* tied_sensor = secondActorEntity->get<TCompSensorTied>();
-							if (tied_sensor) {
-								tied_sensor->changeTiedState(true, CHandle(new_e_r));
-							}
-							second_is_enemy = true;
-						}
-						else{
-							//adding needle to item manager
-							Citem_manager::get().addNeedle(CHandle(new_e_needle2), CHandle(new_e_r));
-						}
-
-						// ****************** Aux joint ******************
-						TCompDistanceJoint* aux_joint = new_e_r->joint_aux;
-						if (aux_joint) {
-							PxRigidActor* a1 = nullptr;
-							PxRigidActor* a2 = nullptr;
-
-							aux_joint->joint->getActors(a1, a2);
-
-							// Second actor is a wall
-							if (!second_is_enemy) {
-								aux_joint->joint->release();
-								aux_joint->create(a1, blockHit.actor, 1, a1->getGlobalPose().p, blockHit.position, physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)), physx::PxTransform(offset_2));
-							}
-							// Second actor is an enemy
-							else {
-
-								// Get the ragdoll
-								TCompRagdoll* ragdoll = secondActorEntity->get<TCompRagdoll>();
-								if (ragdoll) {
-									// Get the bone 
-									PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(first_position), camera_transform->getFront());
-									if (bone != nullptr)
-									{
-										// ************ Change needle target ***********
-										new_e_needle2->create(
-											XMVectorSet(0, 0, 0, 0)
-											, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(bone->getGlobalPose().q)))
-											, bone
-											);
-
-										// ************ Change existing joint ***********
-										aux_joint->joint->release();
-										if (a1 != bone) {
-											aux_joint->create(a1, bone, 1, a1->getGlobalPose().p, bone->getGlobalPose().p, physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)), physx::PxTransform(PxVec3(0, 0, 0), PxQuat(0, 0, 0, 1)));
-										}
-										else {
-											CEntityManager::get().remove(CHandle(aux_joint).getOwner());
-											aux_joint->joint = nullptr;
-											aux_joint = CHandle();
-											new_e_r->joint_aux = CHandle();
-										}
-									}
-								}
-							}
-						}
-						else
-						{
-							// Second actor is an enemy, but first one is a wall
-							// Get the ragdoll
-							TCompRagdoll* ragdoll = secondActorEntity->get<TCompRagdoll>();
-							if (ragdoll) {
-								// Get the bone 
-								PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(first_position), camera_transform->getFront());
-								if (bone != nullptr)
-								{
-									// ************ Change needle target ***********
-									new_e_needle2->create(
-										XMVectorSet(0, 0, 0, 0)
-										, XMQuaternionMultiply(finalQuat, XMQuaternionInverse(physics_manager.PxQuatToXMVECTOR(bone->getGlobalPose().q)))
-										, bone
-										);
-
-									// ************ Create aux entity ************
-									CEntity* aux_e = entity_manager.createEmptyEntity();
-
-									TCompName* new_e_name = CHandle::create<TCompName>();
-									std::strcpy(new_e_name->name, ("JointAux" + to_string(entitycount)).c_str());
-									aux_e->add(new_e_name);
-
-									// ************ Create aux joint ************
-									TCompDistanceJoint* aux_joint = CHandle::create<TCompDistanceJoint>();
-
-									// The first position is the actor position with offset in world coords
-									// TODO: Get the real position, to get a valid offset. Temporally, no offset.
-									PxVec3 aux_pos = bone->getGlobalPose().p;
-									PxVec3 aux_offset = bone->getGlobalPose().q.rotateInv(aux_pos - bone->getGlobalPose().p);
-
-									PxVec3 pos = bone->getGlobalPose().q.rotate(aux_offset) + bone->getGlobalPose().p;
-
-									if (blockHit.actor != bone) {
-										aux_joint->create(bone, blockHit.actor, 1, bone->getGlobalPose().p, blockHit.position, physx::PxTransform(aux_offset), physx::PxTransform(offset_2));
-										aux_e->add(aux_joint);
-									}
-									else {
-										CEntityManager::get().remove(aux_e);
-										aux_joint->joint = nullptr;
-										aux_joint = CHandle();
-									}
-
-									if (aux_joint == CHandle())
-										new_e_r->joint_aux = CHandle();
-									else
-										new_e_r->joint_aux = CHandle(aux_joint);
-								}
-							}
-
-
-						}
-
-						// Set the current rope entity as an invalid Handle
-						current_rope_entity = CHandle();
-
-						first_actor = nullptr;
-						first_needle = CHandle();
-						entitycount++;
-
-					}
-					// The string can't be thrown (same actor or two static bodies)
-					else {
-						// Visual effects when the string can't be thrown
-					}
+					// Visual effects when the string can't be thrown
 				}
 			}
+			//}
 		}
-
 
 	}
 
@@ -897,60 +909,73 @@ bool FSMPlayerTorso::canThrow() {
 	XMVectorSetY(head.position, player_y + 1.7f);
 
 	XMVECTOR head_front = head.position + head.getFront() + head.getUp() * 1.6f;
-	
 
-	// Raycast detecting the collider the mouse is pointing at
-	PxRaycastBuffer hit;
-	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
+	// Raycast all
 
-	if (hit.hasBlock) {
-		PxRaycastHit blockHit = hit.block;
+	PxRaycastBuffer buf;
 
-		if (std::strcmp(blockHit.actor->getName(), "Player") != 0)
-		{			
-			XMVECTOR pos = Physics.PxVec3ToXMVECTOR(blockHit.position);						
-			float pos_y = XMVectorGetY(pos);
-			XMVECTOR pos_aux = XMVectorSetY(pos, XMVectorGetY(head.position));
-			XMVECTOR target = comp_lookat->target;
+	Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
 
-			bool inFovBig = head.isInFov(pos_aux, deg2rad(170));
-			bool inFovSmall = head.isInFov(pos_aux, deg2rad(110));
+	float max_dist = 1000000;
+	PxActor* hit_actor = nullptr;
+	PxVec3 actor_position;
 
-			if ((inFovSmall) || (looking_at_pointer && inFovBig)) {
-				TCompSkeletonLookAt* comp_lookat = ((CEntity*)entity)->get<TCompSkeletonLookAt>();
-				//comp_lookat->target = XMVectorLerp(comp_lookat->target, pos, 0.03f);
-				target = pos;
-				looking_at_pointer = true;
-			}
-			else {
-				//comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.03f);
-				target = head_front;
-				looking_at_pointer = false;
-			}
-
-			comp_lookat->target = XMVectorLerp(comp_lookat->target, target, 0.03f);
-			
-			if (legs->getState() == "fbp_Idle")
-				comp_lookat->active = true;
-			else
-				comp_lookat->active = false;
-		
-			// First throw
-			if (first_actor == nullptr) {
-				return true;
-			}
-			else {
-				// The string can be thrown
-				if ((blockHit.actor != first_actor) && !(blockHit.actor->isRigidStatic() && first_actor->isRigidStatic())) {					
-					return true;
-				}
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {			
+			float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
+			if (dist < max_dist) {
+				actor_position = buf.touches[i].position;
+				hit_actor = buf.touches[i].actor;
+				max_dist = dist;
 			}
 		}
-	}	
+	}
 
-	comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.05f);	
-	looking_at_pointer = false;
+	if (hit_actor == nullptr) {
+		comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.05f);
+		looking_at_pointer = false;
+		return false;
+	}
+	
+	// First throw
+	if (first_actor == nullptr) {
+		return true;
+	}
+	else {
+		// The string can be thrown
+		if ((hit_actor != first_actor) && !(hit_actor->isRigidStatic() && first_actor->isRigidStatic())) {
+			return true;
+		}
+	}
 
+	XMVECTOR pos = Physics.PxVec3ToXMVECTOR(actor_position);
+	float pos_y = XMVectorGetY(pos);
+	XMVECTOR pos_aux = XMVectorSetY(pos, XMVectorGetY(head.position));
+	XMVECTOR target = comp_lookat->target;
+
+	bool inFovBig = head.isInFov(pos_aux, deg2rad(170));
+	bool inFovSmall = head.isInFov(pos_aux, deg2rad(110));
+
+	if ((inFovSmall) || (looking_at_pointer && inFovBig)) {
+		TCompSkeletonLookAt* comp_lookat = ((CEntity*)entity)->get<TCompSkeletonLookAt>();
+		//comp_lookat->target = XMVectorLerp(comp_lookat->target, pos, 0.03f);
+		target = pos;
+		looking_at_pointer = true;
+	}
+	else {
+		//comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.03f);
+		target = head_front;
+		looking_at_pointer = false;
+	}
+
+	comp_lookat->target = XMVectorLerp(comp_lookat->target, target, 0.03f);
+
+	if (legs->getState() == "fbp_Idle")
+		comp_lookat->active = true;
+	else
+		comp_lookat->active = false;
+		
 	return false;
 }
 

@@ -146,7 +146,10 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompRigidBody, TMsgExplosion, onExplosion);
 	SUBSCRIBE(TCompAiFsmBasic, TGroundHit, groundHit);
 	SUBSCRIBE(TCompBasicPlayerController, TActorHit, actorHit);
+
+	// Boss Events
 	SUBSCRIBE(TCompExplosion, TMsgOnDetonate, onDetonate);
+	SUBSCRIBE(TCompHitch, TMsgRopeTensed, onRopeTensed);
 
 	//IA events
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
@@ -238,6 +241,8 @@ void createManagers() {
 	getObjManager<TCompBtGrandma>()->init(64);
 	getObjManager<TCompBtSoldier>()->init(64);
 	getObjManager<TCompAiBoss>()->init(1);
+	
+	getObjManager<TCompHitch>()->init(4);
 
 	getObjManager<TCompCharacterController>()->init(64);
 	getObjManager<TCompUnityCharacterController>()->init(64);
@@ -306,9 +311,10 @@ void initManagers() {
 	getObjManager<TCompSensorTied>()->initHandlers();
 	getObjManager<TCompViewerCameraController>()->initHandlers();
 
-	// OTHERS
+	// BOSS
 	getObjManager<TCompExplosion>()->initHandlers();
 	getObjManager<TCompBossPrefab>()->initHandlers();
+	getObjManager<TCompHitch>()->initHandlers();
 	
 
 	// PLATFORMS

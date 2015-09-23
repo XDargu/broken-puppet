@@ -33,6 +33,37 @@ function onSceneLoad_my_file()
 		sc1_door:setMotor(-1.55, 2000000);
 	end
 
+	-- *** Ascensor *** 
+	-- *** Interruptor del ascensor *** 
+	-- Motor
+	local hinge_int_asc = logicManager:getHingeJoint("hinge_ascensor_brazo");
+	hinge_int_asc:setMotor(-1.55, 1000);
+	
+	-- Bloquear puertas	
+	local sc1_hinge_asc1 = logicManager:getHingeJoint("sc1_hingue_asc1");
+	local sc1_hinge_asc2 = logicManager:getHingeJoint("sc1_hingue_asc2");
+	local sc1_hinge_asc3 = logicManager:getHingeJoint("sc1_hingue_asc3");
+	local sc1_hinge_asc4 = logicManager:getHingeJoint("sc1_hingue_asc4");
+
+	sc1_hinge_asc1:setLimit(0.1)
+	sc1_hinge_asc2:setLimit(0.1)
+	sc1_hinge_asc3:setLimit(0.1)
+	sc1_hinge_asc4:setLimit(0.1)
+
+	function onTriggerEnter_sc1_trigger_int_asc(who)
+		if (who == "int_ascensor_brazo") then
+			hinge_int_asc:setMotor(1.55, 1000);
+			-- Abrir puertas delanteras
+			sc1_hinge_asc1:setLimit(90)
+			sc1_hinge_asc2:setLimit(90)
+
+			sc1_hinge_asc1:setMotor(1.55, 3000);
+			sc1_hinge_asc2:setMotor(-1.55, 3000);
+		end
+	end
+	
+	-- Subida del ascensor
+
 	local ascensor_usado = false
 
 	function onTriggerEnter_escena1_ascensor_fin(who)
@@ -41,6 +72,14 @@ function onSceneLoad_my_file()
 		logicManager:setCanPull(true)
 		logicManager:setCanCancel(true)
 		logicManager:setCanTense(true)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+
+		-- Abrir puertas traseras
+		sc1_hinge_asc3:setLimit(90)
+		sc1_hinge_asc4:setLimit(90)
+
+		sc1_hinge_asc3:setMotor(-1.55, 3000);
+		sc1_hinge_asc4:setMotor(1.55, 3000);
 	end
 
 	function onTriggerEnter_escena1_ascensor(who)
@@ -60,6 +99,14 @@ function onSceneLoad_my_file()
 				logicManager:setCanCancel(false)
 				logicManager:setCanTense(false)
 				logicManager:pushPlayerLegsState("fbp_Idle");
+
+				-- Cerrar puertas delanteras
+				-- Abrir puertas delanteras
+				sc1_hinge_asc1:setLimit(0.01)
+				sc1_hinge_asc2:setLimit(0.01)
+
+				sc1_hinge_asc1:setMotor(0,0);
+				sc1_hinge_asc2:setMotor(0,0);
 			end
 
 		end

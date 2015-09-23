@@ -257,7 +257,7 @@ int bt_soldier::actionTooCloseAttack()
 	//look_direction = last_look_direction;
 
 	if (state_time >= getAnimationDuration(7)) {
-		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+		((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 		return LEAVE;
 	}
 	else
@@ -604,7 +604,7 @@ int bt_soldier::actionInitialAttack()
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
 		}
 
@@ -702,7 +702,7 @@ int bt_soldier::actionNormalAttack()
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
 		}
 

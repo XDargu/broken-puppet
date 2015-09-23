@@ -348,7 +348,7 @@ int bt_grandma::actionTooCloseAttack()
 	if (state_time >= getAnimationDuration(3)) {
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack * 2){
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 		}
 		return LEAVE;
 	}
@@ -899,7 +899,7 @@ int bt_grandma::actionInitialAttack()
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if ((distance <= max_distance_to_attack * 2) && (!attacked))
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
 		}
 
@@ -1010,7 +1010,7 @@ int bt_grandma::actionNormalAttack()
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if ((distance <= max_distance_to_attack * 2) && (!attacked))
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
 		}
 

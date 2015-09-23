@@ -97,16 +97,32 @@ void fsm_boss::Init()
 	ball_size = 60000;
 
 	last_anim_id = -1;
+
+	can_proximity = false;
+	can_proximity_hit = true;
 }
 
 void fsm_boss::Hidden(){
 	int i = 0;
-	ChangeState("fbp_RiseUp");
+	if (CIOStatus::get().becomesPressed(CIOStatus::V)){		
+		ChangeState("fbp_RiseUp");
+	}
+	
 }
 
 void fsm_boss::RiseUp(){
-	int i = 0;
-	ChangeState("fbp_Idle1");
+	if (on_enter){
+		Release_def();
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		skeleton->playAnimation(35);
+		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
+		skeleton_lookat->active = false;
+	}
+	if (state_time >= 20.9f){
+		ChangeState("fbp_Idle1");
+	}
+	
 }
 
 void fsm_boss::Idle1(float elapsed){
@@ -120,16 +136,18 @@ void fsm_boss::Idle1(float elapsed){
 
 		shoots_amount = 0;
 		last_attack = 0.f;
+		can_proximity = true;
+		can_proximity_hit = true;
 	}
 
 	Reorientate(elapsed, false);
 	last_attack += elapsed;
 	
 	CIOStatus& io = CIOStatus::get();
-	/*
+	/**/
 	if (last_attack > 3){
 		int attack = Calculate_attack();
-		//int attack = 2;
+		//int attack = 1;
 		switch (attack)
 		{
 		case 0:
@@ -155,7 +173,7 @@ void fsm_boss::Idle1(float elapsed){
 		}
 	}
 
-	/*
+	/**/
 
 	// Update input
 	/**
@@ -217,6 +235,8 @@ void fsm_boss::Hit1(float elapsed){
 		skeleton->playAnimation(1);
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		can_proximity = false;
 	}
 
 	float time = getAnimationDuration(last_anim_id);
@@ -315,9 +335,22 @@ void fsm_boss::Proximity(float elapsed){
 		stopAllAnimations();
 		skeleton->playAnimation(4);
 		last_anim_id = -1;
+		can_proximity = false;
+
+		
 	}
+
+	if ((state_time >= 0.6f)&&(can_proximity_hit)){
+
+		can_proximity_hit = false;
+		((CEntity*)m_player)->sendMsg(TActorHit(entity, 110000.f, true));
+
+	}
+	
+
 	if (state_time >= 1.49f){
 		ChangeState("fbp_Idle1");
+		
 	}
 }
 
@@ -450,7 +483,19 @@ void fsm_boss::Shoot1DownDef(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		skeleton->playAnimation(14);
+
+		if (hurt_state > 0){
+			if (has_left){
+				skeleton->playAnimation(27);
+			}
+			else{
+				skeleton->playAnimation(31);
+			}
+		}
+		else { 
+			skeleton->playAnimation(14); 
+		}
+
 		last_anim_id = -1;
 	}
 
@@ -486,7 +531,18 @@ void fsm_boss::Shoot1Reload(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		loopAnimationIfNotPlaying(25, true);
+
+		if (hurt_state > 0){
+			if (has_left){
+				loopAnimationIfNotPlaying(30, true);
+			}
+			else{
+				loopAnimationIfNotPlaying(34, true);
+			}
+		}
+		else {
+			loopAnimationIfNotPlaying(25, true);
+		}
 
 		obj_to_shoot = nullptr;
 
@@ -509,7 +565,14 @@ void fsm_boss::Shoot1Reload(){
 			player_boss_dir.y = 0;
 			player_boss_dir = player_boss_dir.getNormalized();
 
-			PxVec3	point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * (distance_to_hand));
+			PxVec3	point_to_go = PxVec3(0, 0, 0);
+			if (has_right)	{
+				point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * (distance_to_hand));
+			}
+			else{
+				point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(15)) + (player_boss_dir * (distance_to_hand));
+			}
+			
 
 			CEntity* m_e = obj_to_shoot;
 			TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
@@ -520,10 +583,10 @@ void fsm_boss::Shoot1Reload(){
 			float dist = (point_to_go - px_rigid->getGlobalPose().p).magnitude();
 
 			if (dist > 10) {
-				px_rigid->addForce(force_dir * 0.8f, PxForceMode::eVELOCITY_CHANGE, true);
+				px_rigid->addForce(force_dir * 2, PxForceMode::eVELOCITY_CHANGE, true);
 			}
 			else {
-				px_rigid->setLinearVelocity(force_dir * clamp(dist, 0, 6));
+				px_rigid->setLinearVelocity(force_dir * clamp(dist * 2, 0, 12));
 			}
 
 			if (state_time >= 2.f){
@@ -552,7 +615,20 @@ void fsm_boss::Shoot1Shoot(){
 
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		skeleton->playAnimation(15);
+
+		if (hurt_state > 0){
+			if (has_left){
+				skeleton->playAnimation(28);
+			}
+			else{
+				skeleton->playAnimation(32);
+			}
+		}
+		else {
+			skeleton->playAnimation(15);
+		}
+
+		
 		last_anim_id = -1;
 		shoots_amount += 1;
 
@@ -589,7 +665,19 @@ void fsm_boss::Shoot1ReleaseDef(){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		skeleton->playAnimation(16);
+
+		if (hurt_state < 1){
+			if (has_left){
+				skeleton->playAnimation(29);
+			}
+			else{
+				skeleton->playAnimation(33);
+			}
+		}
+		else {
+			skeleton->playAnimation(16);
+		}
+		
 		last_anim_id = -1;
 	}
 	if (on_enter){

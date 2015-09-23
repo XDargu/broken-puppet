@@ -566,6 +566,9 @@
     <ClInclude Include="components\comp_boss_prefab.h">
       <Filter>components\misc</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_hitch.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1054,6 +1057,9 @@
       <Filter>ai\logic</Filter>
     </ClCompile>
     <ClCompile Include="components\comp_boss_prefab.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_hitch.cpp">
       <Filter>components\misc</Filter>
     </ClCompile>
   </ItemGroup>
