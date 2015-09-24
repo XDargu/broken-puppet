@@ -927,6 +927,7 @@ void FSMPlayerTorso::getThrowingData(PxActor* &the_hit_actor, PxVec3 &the_actor_
 					hit_actor = buf.touches[i].actor;
 					max_dist = dist;
 				}
+				if (is_priority_entity) { priority_entity = true; }
 			}
 			else if (is_priority_entity) {
 				// Else, if the current entity is priority, override the current actor

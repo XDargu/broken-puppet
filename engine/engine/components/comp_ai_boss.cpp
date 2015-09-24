@@ -13,6 +13,7 @@ void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){
 	L_hitch_joint = nullptr; 
 	R_hitch_joint = nullptr; 
 	can_break_hitch = false; 
+	death_time = false;
 };
 
 void TCompAiBoss::init(){
@@ -214,8 +215,8 @@ void TCompAiBoss::update(float elapsed){
 		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
 		if (L_hitch_trans) L_hitch_trans->setType(0);
 	}
-	else if ((m_fsm_boss.getState() == "fbp_FinalState") && (!can_break_hitch)) {
-		can_break_hitch = true;
+	else if ((m_fsm_boss.getState() == "fbp_FinalState") && (!death_time)) {
+		death_time = true;
 
 		TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
 		if (H_hitch_trans) H_hitch_trans->setType(1);

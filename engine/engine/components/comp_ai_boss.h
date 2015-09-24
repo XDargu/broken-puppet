@@ -41,6 +41,7 @@ private:
 	int move_things;
 
 	bool is_death;
+	bool death_time;
 
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);

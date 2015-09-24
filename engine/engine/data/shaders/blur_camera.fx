@@ -55,10 +55,10 @@ float4 PSBlurCamera(
 	in float4 iPosition : SV_Position
 	) : SV_Target
 {
+	
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
 	float depth = txDepth.Load(ss_load_coords).x;
 	float type = txDepth.Load(ss_load_coords).y;
-
 	if (type == 0.2) {
 		return txDiffuse.Sample(samClampLinear, input.UV);
 	}

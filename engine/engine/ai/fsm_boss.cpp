@@ -100,12 +100,21 @@ void fsm_boss::Init()
 
 	can_proximity = false;
 	can_proximity_hit = true;
+
+	// Pruebas init
+	original_pos = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
+	
 }
 
-void fsm_boss::Hidden(){
-	int i = 0;
+void fsm_boss::Hidden(float elapsed){
+	Reorientate(elapsed,false);
+
+	if (on_enter){
+		XMVECTOR aux_pos = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
+		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = XMVectorSetY(aux_pos, -30);
+	}
 	if (CIOStatus::get().becomesPressed(CIOStatus::V)){		
-		ChangeState("fbp_RiseUp");
+		ChangeState("fbp_RiseUp");	
 	}
 	
 }
@@ -118,6 +127,22 @@ void fsm_boss::RiseUp(){
 		skeleton->playAnimation(35);
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		XMVectorSetY(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position, XMVectorGetY(original_pos));
+
+		// Hacer desaparecer silla
+		CHandle m_silla = m_entity_manager->getByName("silla");
+		if (m_silla.isValid()){
+			((TCompRender*)((CEntity*)m_silla)->get<TCompRender>())->active = false;
+
+
+			// Emitir particula
+			XMVECTOR aux_rot = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_entry", original_pos + XMVectorSet(0, 1, 0, 0), aux_rot);
+		}
+
+		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = original_pos;
+
 	}
 	if (state_time >= 20.9f){
 		ChangeState("fbp_Idle1");

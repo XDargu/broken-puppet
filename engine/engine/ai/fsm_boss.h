@@ -62,7 +62,7 @@ public:
 
 	void Init();
 
-	void Hidden();
+	void Hidden(float elapsed);
 	void RiseUp();
 
 	void Idle1(float elapsed);
@@ -109,6 +109,8 @@ public:
 
 	bool can_proximity;
 	bool can_proximity_hit;
+
+	XMVECTOR original_pos;
 };
 
 #endif

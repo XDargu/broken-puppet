@@ -144,7 +144,7 @@ void TParticleSystem::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
 
-		if (emitter_type == "semiSphere") {
+		if (emitter_type == "semisphere") {
 			float radius = atts.getFloat("radius", 1);
 			emitter_generation = new TParticleEmitterGeneration(this, TParticleEmitterShape::SEMISPHERE, h_transform, rate, min_life_time, max_life_time, radius, fill_initial, limit, burst_time, burst_amount, delay, loop, random_rotation);
 		}
