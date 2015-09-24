@@ -1,8 +1,8 @@
 <std_material name="skin_boss"
               tech="skin_basic"
               diffuse="boss_difuso"
-			  normal="atrezzo_normal"
+			  normal="boss_normal"
 			  emissive=""
-			specular="atrezzo_specular"
-			glossiness="atrezzo_gloss"
+			specular="boss_specular"
+			glossiness="boss_gloss"
 			  />
