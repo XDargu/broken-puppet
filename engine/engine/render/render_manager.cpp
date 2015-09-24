@@ -103,6 +103,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	activateCamera(*camera, 1);
 
 	bool uploading_bones = false;
+	bool is_render = false;
 	
 	auto first_transparent = std::lower_bound(keys.begin(), keys.end(), false
 		, [](const CRenderManager::TKey&k1, bool is_solid) {
@@ -153,7 +154,8 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		//CErrorContext ce2("Rendering key with material", it->material->getName().c_str());
 		
 		tmx = it->transform;
-		if (it->owner.isTypeOf<TCompRender>()) {
+		is_render = it->owner.isTypeOf<TCompRender>();
+		if (is_render) {
 			render = it->owner;
 		}
 		XASSERT(tmx, "Invalid transform");
@@ -213,19 +215,22 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				}
 				
 				// Activar shader y material de it
-				if (it->owner.isTypeOf<TCompRender>()) 
+				if (is_render)
 					it->material->activateTextures(render->emissive_on); 
 				else
 					it->material->activateTextures(true);
 			}
 			else {
 				// No need to change the material and techinique, but maybe the emissive
-				if (prev_it_emissive_on != render->emissive_on) {
-					it->material->activateEmissive(render->emissive_on);
+				if (is_render) {
+					if (prev_it_emissive_on != render->emissive_on) {
+						it->material->activateEmissive(render->emissive_on);
+					}
 				}
 			}
-
-			prev_it_emissive_on = render->emissive_on;
+			if (is_render) {
+				prev_it_emissive_on = render->emissive_on;
+			}
 
 			if (it->mesh != prev_it->mesh || is_first) {
 				it->mesh->activate();

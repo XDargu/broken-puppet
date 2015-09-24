@@ -110,7 +110,7 @@ TCompRope::~TCompRope() {
 			PxRaycastHit blockHit = hit.block;
 			entity = CHandle(hit.block.actor->userData);
 
-			if ((!entity->hasTag("enemy")) && (!entity->hasTag("player"))) {
+			if (entity && (!entity->hasTag("enemy")) && (!entity->hasTag("player"))) {
 				float m_dist = blockHit.distance - y_offset;
 				if (m_dist < abs(y))
 					y = -m_dist;

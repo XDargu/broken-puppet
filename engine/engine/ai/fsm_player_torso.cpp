@@ -89,27 +89,13 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 		
 		TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
 
-		// Raycast all
-		PxRaycastBuffer buf;
-		Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
+		PxActor* m_hit_actor = nullptr;
+		PxVec3 hit_position;
+		PxVec3 hit_normal;
 
-		float max_dist = 1000000;
-		PxRigidActor* hit_actor = nullptr;
-		PxVec3 hit_position = PxVec3(0, 0, 0);
-		PxVec3 hit_normal = PxVec3(0, 0, 0);
+		getThrowingData(m_hit_actor, hit_position, hit_normal);
 
-		for (int i = 0; i < (int)buf.nbTouches; i++)
-		{
-			if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
-				float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
-				if (dist < max_dist) {
-					hit_position = buf.touches[i].position;
-					hit_actor = buf.touches[i].actor;
-					hit_normal = buf.touches[i].normal;
-					max_dist = dist;
-				}
-			}
-		}
+		PxRigidActor* hit_actor = (PxRigidActor*)m_hit_actor;
 
 		// Raycast detecting the collider the mouse is pointing at
 		// Old single raycast
@@ -899,6 +885,72 @@ void FSMPlayerTorso::ProcessHit(float elapsed) {
 
 }
 
+void FSMPlayerTorso::getThrowingData(PxActor* &the_hit_actor, PxVec3 &the_actor_position, PxVec3 &the_actor_normal) {
+	TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
+
+	// Raycast all
+	PxRaycastBuffer buf;	
+	Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
+
+	float max_dist = 1000000;
+	PxActor* hit_actor = nullptr;
+	PxVec3 actor_position = PxVec3(0, 0, 0);
+	PxVec3 actor_normal = PxVec3(0, 0, 0);
+	bool priority_entity = false;
+
+	// Loop variables
+	CEntity* entity = nullptr;
+	float dist;
+	bool is_priority_entity = false;
+
+	for (int i = 0; i < (int)buf.nbTouches; i++)
+	{
+		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
+			// Reset variables
+			is_priority_entity = false;
+			entity = nullptr;
+
+			// Check distance
+			dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);			
+
+			// Check if the entity has priority
+			entity = CHandle(buf.touches[i].actor->userData);
+			if (entity) {
+				is_priority_entity = entity->hasCollisionTag("Boss_Part");
+			}				
+
+			// If is priority and isn't the first one or is not priority and there isn't a priority entity, act as usually
+			if (is_priority_entity == priority_entity) {
+				if (dist < max_dist) {
+					actor_position = buf.touches[i].position;
+					actor_normal = buf.touches[i].normal;
+					hit_actor = buf.touches[i].actor;
+					max_dist = dist;
+				}
+			}
+			else if (is_priority_entity) {
+				// Else, if the current entity is priority, override the current actor
+				actor_position = buf.touches[i].position;
+				actor_normal = buf.touches[i].normal;
+				hit_actor = buf.touches[i].actor;
+				max_dist = dist;
+			}
+
+			// Old code
+			/*if (dist < max_dist) {
+				actor_position = buf.touches[i].position;
+				actor_normal = buf.touches[i].normal;
+				hit_actor = buf.touches[i].actor;
+				max_dist = dist;
+			}*/
+		}
+	}
+
+	the_hit_actor = hit_actor;
+	the_actor_position = actor_position;
+	the_actor_normal = actor_normal;
+}
+
 bool FSMPlayerTorso::canThrow() {
 	TCompTransform* camera_transform = ((CEntity*)camera_entity)->get<TCompTransform>();
 	TCompTransform* comp_trans = ((CEntity*)entity)->get<TCompTransform>();
@@ -910,27 +962,11 @@ bool FSMPlayerTorso::canThrow() {
 
 	XMVECTOR head_front = head.position + head.getFront() + head.getUp() * 1.6f;
 
-	// Raycast all
-
-	PxRaycastBuffer buf;
-
-	Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
-
-	float max_dist = 1000000;
 	PxActor* hit_actor = nullptr;
 	PxVec3 actor_position;
+	PxVec3 actor_normal;
 
-	for (int i = 0; i < (int)buf.nbTouches; i++)
-	{
-		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {			
-			float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
-			if (dist < max_dist) {
-				actor_position = buf.touches[i].position;
-				hit_actor = buf.touches[i].actor;
-				max_dist = dist;
-			}
-		}
-	}
+	getThrowingData(hit_actor, actor_position, actor_normal);
 
 	if (hit_actor == nullptr) {
 		comp_lookat->target = XMVectorLerp(comp_lookat->target, head_front, 0.05f);

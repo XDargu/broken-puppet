@@ -3,5 +3,6 @@
 	<name name="animation"/>
     <transform rotation="0.0 0.0 0.0 1.0" position="0.0 0.0 0.0" scale="0.05 0.05 0.05"/>
 	<skeleton name="prota" />
+  <aabb min="-2 -2 -2" max="2 2 2"/>
 </entity>
 </prefab>

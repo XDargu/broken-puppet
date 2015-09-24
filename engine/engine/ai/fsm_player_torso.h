@@ -55,6 +55,7 @@ public:
 
 	void ProcessHit(float elapsed);
 
+	void getThrowingData(PxActor* &hit_actor, PxVec3 &actor_position, PxVec3 &actor_normal);
 	bool canThrow();
 
 	void CancelGrabString();

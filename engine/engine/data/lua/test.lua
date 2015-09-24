@@ -27,7 +27,7 @@ function onSceneLoad_my_file()
 	end
 
 
-	function onTriggerEnter_grandmacrasher_trigger(who)
+	function onTriggerEnter_scene1_grandmacrasher_trigger1(who)
 		print(tostring(who) .. " ha entrado en el trigger")
 		crasher:setLinearLimit(1000, 0, 0)
 
@@ -43,7 +43,7 @@ function onSceneLoad_my_file()
 	cable:setEmissive(false)
 
 	-- Cerrar puerta
-	local sc1_door = logicManager:getHingeJoint("sc1_hingue_door");
+	local sc1_door = logicManager:getHingeJoint("sc1_hinge_door");
 	sc1_door:setLimit(0.1)
 
 	function onSwitchPressed_int_sc1_door(who)
@@ -61,10 +61,10 @@ function onSceneLoad_my_file()
 	hinge_int_asc:setMotor(-1.55, 1000);
 	
 	-- Bloquear puertas	
-	local sc1_hinge_asc1 = logicManager:getHingeJoint("sc1_hingue_asc1");
-	local sc1_hinge_asc2 = logicManager:getHingeJoint("sc1_hingue_asc2");
-	local sc1_hinge_asc3 = logicManager:getHingeJoint("sc1_hingue_asc3");
-	local sc1_hinge_asc4 = logicManager:getHingeJoint("sc1_hingue_asc4");
+	local sc1_hinge_asc1 = logicManager:getHingeJoint("sc1_hinge_asc1");
+	local sc1_hinge_asc2 = logicManager:getHingeJoint("sc1_hinge_asc2");
+	local sc1_hinge_asc3 = logicManager:getHingeJoint("sc1_hinge_asc3");
+	local sc1_hinge_asc4 = logicManager:getHingeJoint("sc1_hinge_asc4");
 
 	sc1_hinge_asc1:setLimit(0.1)
 	sc1_hinge_asc2:setLimit(0.1)
@@ -99,6 +99,12 @@ function onSceneLoad_my_file()
 		logicManager:setCanCancel(true)
 		logicManager:setCanTense(true)
 		logicManager:pushPlayerLegsState("fbp_Idle");
+		
+		-- Cerrar puertas traseras
+		sc1_hinge_asc3:setMotor(0, 0);
+		sc1_hinge_asc3:setMotor(0, 0);
+		sc1_hinge_asc1:setLimit(0.1)
+		sc1_hinge_asc2:setLimit(0.1)
 
 		-- Abrir puertas traseras
 		sc1_hinge_asc3:setLimit(90)
@@ -137,6 +143,12 @@ function onSceneLoad_my_file()
 
 		end
 
+	end
+
+	-- Salir de la escena
+
+	function onTriggerEnter_sc_trigger_fin(who)
+		--logicManager:loadScene("data/scenes/scene_2.xml");
 	end
 	
 
