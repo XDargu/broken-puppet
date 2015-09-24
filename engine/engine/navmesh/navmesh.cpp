@@ -10,8 +10,13 @@
 CNavmesh::CNavmesh()
 	: m_navMesh(nullptr)
 {
+	climb = 1;
 	m_navQuery = dtAllocNavMeshQuery();
 	m_ctx = &m_context;
+}
+
+void CNavmesh::setClimb(int Climb){
+	climb = Climb;
 }
 
 void CNavmesh::build() {
@@ -40,7 +45,7 @@ void CNavmesh::build() {
 
 	config.walkableHeight = 2;
 	config.walkableRadius = 3;
-	config.walkableClimb = 0;
+	config.walkableClimb = climb;
 	config.walkableSlopeAngle = 45.0f;
 	config.minRegionArea = 1;
 	config.mergeRegionArea = 1;

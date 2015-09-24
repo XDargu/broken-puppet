@@ -589,6 +589,7 @@ void CApp::update(float elapsed) {
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
+		CNav_mesh_manager::get().setNeedNavMesh(false);
 		destroy();
 		exit(0);
 	}	
@@ -631,8 +632,8 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
 #endif
 
-	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/my_file.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_3_old.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
@@ -1547,6 +1548,9 @@ void CApp::loadScene(std::string scene_name) {
 	logic_manager.init();
 
 	// Navmesh initialization
+	CNav_mesh_manager::get().setNeedNavMesh(true);
+	//Check the scene and change the climb atributte from the navmesh 
+
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 
 	// Create Debug Technique

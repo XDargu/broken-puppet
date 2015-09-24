@@ -54,7 +54,10 @@ private:
   rcBuildContext*       m_ctx;
   unsigned char*        m_triareas;
 
-  //----------------------------------
+  //--------------------------------
+  int climb;
+  //--------------------------------
+
   int m_maxTiles;
   int m_maxPolysPerTile;
   float m_tileSize;
@@ -78,6 +81,7 @@ public:
   CNavmeshInput         m_input;
   EDrawMode             m_draw_mode;
 
+
 public:
   CNavmesh( );
   void build( );
@@ -87,6 +91,7 @@ public:
   void dumpLog( );
   void buildAllTiles();
   unsigned char* buildTileMesh(const int tx, const int ty, const float* bmin, const float* bmax, int& dataSize);
+  void setClimb(int Climb);
 };
 
 
