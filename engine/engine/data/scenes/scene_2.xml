@@ -15565,55 +15565,152 @@
 <rigidbody density="16.1704"  />
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
-<name name="esc1_baran_recta_larga_a_1701.0" />
-<transform position="104.312 12.0 15.8088" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<render  color = "0.341176 0.882353 0.341176">
-<draw mesh="esc1_baran_recta_larga_a" sub_mesh="0" mat="barandillas_01"/>
+<name name="cartel_onstage_1699.0" />
+<transform position="100.269 6.61613 37.9573" rotation="-0.143666 -0.692358 0.692358 0.143666" scale="0.343425 0.25574 0.343425"/>
+<render  color = "0.0 0.0 0.0">
+<draw mesh="cartel_onstage" sub_mesh="0" mat="flechas"/>
 </render>
-<aabb min="0.124998 1.19209e-007 -0.366726" max="2.0 1.02368 0.366727"/>
-<colliderMesh path="esc1_baran_recta_larga_a" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
+<aabb min="-7.84421 -1.40103 -3.54479" max="7.42437 1.40103 6.97488"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.6218" boxY="0.358299" boxZ="1.28251"/>
+<staticbody/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
+<name name="plataforma_caidafalsa_base_1700.0" />
+<transform position="103.072 7.58938 31.9546" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caidafalsa_base" sub_mesh="0" mat="plataforma_railes"/>
+</render>
+<aabb min="-1.985 -0.247959 -2.01585" max="1.985 0.247959 2.01584"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.985" boxY="0.247959" boxZ="2.01585"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_l_1701.0" />
+<transform position="101.547 7.43784 34.313" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_l" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-1.29473 -0.0990614 -0.444914" max="0.151112 0.734315 3.88706"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="200000.0"  />
+	</entity>
+	<entity   materialTag = "wood">
+<name name="plat_caida_sujeccion_1705.0" />
+<transform position="99.9676 7.87086 32.1066" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plat_caida_sujeccion" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-0.506758 -0.143962 -6.57577" max="0.466923 0.454554 6.57577"/>
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_l_1707.0" />
+<transform position="101.386 7.51182 29.909" rotation="0.0 0.954919 0.0 -0.296865" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_l" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-1.29473 -0.0990614 -0.444914" max="0.151112 0.734315 3.88706"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="200000.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
+<name name="plataforma_caidafalsa_base_1709.0" />
+<transform position="96.766 7.58938 32.2997" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caidafalsa_base" sub_mesh="0" mat="plataforma_railes"/>
+</render>
+<aabb min="-1.985 -0.247959 -2.01585" max="1.985 0.247959 2.01584"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.985" boxY="0.247959" boxZ="2.01585"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_s_1710.0" />
+<transform position="104.929 7.97341 29.249" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_s" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-0.239263 -0.477617 -3.56116" max="1.20658 0.477617 0.770815"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_s_1711.0" />
+<transform position="105.112 7.97341 34.4134" rotation="0.0 0.954282 0.0 -0.298907" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_s" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-0.239263 -0.477617 -3.56116" max="1.20658 0.477617 0.770815"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_s_1712.0" />
+<transform position="98.4343 7.84219 29.5941" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_s" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-0.239263 -0.477617 -3.56116" max="1.20658 0.477617 0.770815"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_l_1714.0" />
+<transform position="95.3305 7.43784 30.0026" rotation="0.0 0.952835 0.0 -0.303489" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_l" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-1.29473 -0.0990614 -0.444914" max="0.151112 0.734315 3.88706"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="200000.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_l_1716.0" />
+<transform position="95.0278 7.43784 34.658" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_l" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-1.29473 -0.0990614 -0.444914" max="0.151112 0.734315 3.88706"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="200000.0"  />
+	</entity>
+	<entity tag = "actor" collisionTag = "Level" materialTag = "wood">
+<name name="plataforma_caida_cadena_s_1719.0" />
+<transform position="98.4535 7.75686 34.5995" rotation="0.0 0.950576 0.0 -0.310492" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="plataforma_caida_cadena_s" sub_mesh="0" mat="mecanismo_mat"/>
+</render>
+<aabb min="-0.239263 -0.477617 -3.56116" max="1.20658 0.477617 0.770815"/>
+<collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.05" boxY="0.05" boxZ="0.05"/>
+<rigidbody density="500.0"  />
+	</entity>
+	<entity   materialTag = "wood">
+<name name="scene2_room0" />
+<transform position="8.30703 -5.59374 4.33364" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-20.2079 0.0 -17.2515" max="20.2079 24.9979 17.2515"/>
+<zoneAABB id="0.0" />
 	</entity>
 	<entity   materialTag = "wood">
 <name name="scene2_room1" />
-<transform position="15.1779 -5.59374 3.58627" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-13.7068 0.0 -17.1039" max="13.7068 24.9979 17.1039"/>
+<transform position="58.8673 -3.92807 7.62181" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-30.4796 0.0 -14.4457" max="30.4796 25.7148 14.4457"/>
 <zoneAABB id="1.0" />
 	</entity>
 	<entity   materialTag = "wood">
 <name name="scene2_room2" />
-<transform position="58.8673 -3.92807 7.62181" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-30.4796 0.0 -14.4457" max="30.4796 25.7148 14.4457"/>
+<transform position="100.83 1.17497e-006 26.8801" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-16.4499 0.0 -35.027" max="16.4499 27.9365 35.027"/>
 <zoneAABB id="2.0" />
 	</entity>
 	<entity   materialTag = "wood">
 <name name="scene2_room3" />
-<transform position="101.961 4.76556e-007 10.9023" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-12.9954 0.0 -13.3102" max="12.9954 27.9365 13.3102"/>
+<transform position="100.286 -19.8733 21.2258" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<aabb min="-7.89854 0.0 -20.4485" max="7.89854 24.5129 20.4485"/>
 <zoneAABB id="3.0" />
 	</entity>
 	<entity   materialTag = "wood">
 <name name="scene2_room4" />
-<transform position="100.286 7.78 21.2258" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
-<aabb min="-17.0609 0.0 -19.8924" max="17.0609 40.2012 19.8924"/>
+<transform position="90.0125 -41.9237 58.5831" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-18.2713 0.0 -14.8502" max="18.2713 14.0904 14.8502"/>
 <zoneAABB id="4.0" />
-	</entity>
-	<entity   materialTag = "wood">
-<name name="scene2_room5" />
-<transform position="99.6386 -41.9237 33.4834" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-8.59657 0.0 -12.601" max="8.59657 30.0126 12.601"/>
-<zoneAABB id="5.0" />
-	</entity>
-	<entity   materialTag = "wood">
-<name name="scene2_room0" />
-<transform position="-5.97665 -1.74728 2.933" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-7.67853 0.0 -13.5931" max="7.67853 20.9084 13.5931"/>
-<zoneAABB id="0" />
-	</entity>
-	<entity   materialTag = "wood">
-<name name="scene2_room6" />
-<transform position="92.0981 -43.9874 58.7343" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<aabb min="-16.4754 0.0 -14.735" max="16.4754 14.524 14.735"/>
-<zoneAABB id="6" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="HingeConstraint43_571.0" />
@@ -15890,5 +15987,45 @@
 	<entity tag = "level" collisionTag = "Level">
 <name name="SlideConstraint018_1693.0" />
 <jointPrismatic actor1 = "tope_cajon_cajonera_1661.0"  jointRelativePosition0="3.69204 -3.31322 -2.49344" jointRelativeRotation0="0.0 0.0 4.76837e-007 1.0" actor2 = "cajon_cajonera_L_1686.0"  jointRelativePosition1="0.0 0.0 0.0" jointRelativeRotation1="0.0 0.0 4.76837e-007 1.0"  jointPosition="38.2443 1.28261 14.5096" jointRotation="0.0 1.0 0.0 0.0" parentChildCollision="true" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="1" linearModeY="1" linearModeZ="2" linearPosition="3.0" linearRestitution="0.0" posSpring="1500.0" posDamping="500.0" parentCollition="true" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida2" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="5.83761 4.75014 0.22093" jointRelativeRotation0="0.448516 0.546657 -0.546655 -0.448517" actor2 = "plataforma_caida_cadena_s_1711.0"  jointRelativePosition1="1.02253 2.74339 0.2475" jointRelativeRotation1="-0.387598 0.591412 -0.591412 0.387598"  jointPosition="105.838 8.22091 37.2499" jointRotation="-0.448518 0.546655 0.546655 0.448518" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida1" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="0.396736 4.28292 -0.0427365" jointRelativeRotation0="-0.499998 -0.500002 0.5 0.5" actor2 = "plataforma_caida_cadena_l_1701.0"  jointRelativePosition1="-1.15015 -3.40411 0.519409" jointRelativeRotation1="-0.5 -0.5 0.5 0.5"  jointPosition="100.397 7.95725 37.7171" jointRotation="-0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_fixed_caida1" />
+<jointFixed actor1 = "esc1_arqui_suelo_suelo_a_248.0" actor2 = "plataforma_caidafalsa_base_1700.0"  jointPosition="103.448 7.58938 31.9546" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida3" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="0.340569 15.6288 -0.0174279" jointRelativeRotation0="-0.5 0.5 -0.499998 0.500002" actor2 = "plataforma_caida_cadena_l_1707.0"  jointRelativePosition1="-1.14439 -3.50723 0.470703" jointRelativeRotation1="-0.625892 -0.329027 0.329027 0.625892"  jointPosition="100.341 7.98252 26.3712" jointRotation="0.5 0.5 0.5 -0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida4" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="5.92971 15.8398 0.193747" jointRelativeRotation0="-0.409099 0.576749 -0.576747 0.4091" actor2 = "plataforma_caida_cadena_s_1710.0"  jointRelativePosition1="1.00037 3.08886 0.220279" jointRelativeRotation1="-0.409098 0.576748 -0.576748 0.409098"  jointPosition="105.93 8.19369 26.1602" jointRotation="0.409098 0.576748 0.576748 -0.409098" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida5" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="-0.470604 15.6459 0.00819921" jointRelativeRotation0="-0.5 0.5 -0.499998 0.500002" actor2 = "plataforma_caida_cadena_s_1712.0"  jointRelativePosition1="1.09511 3.23998 0.165957" jointRelativeRotation1="-0.5 0.5 -0.5 0.5"  jointPosition="99.5295 8.00815 26.3541" jointRotation="0.5 0.5 0.5 -0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida6" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="-5.77489 15.8165 -0.0174274" jointRelativeRotation0="-0.557281 0.435244 -0.435242 0.557283" actor2 = "plataforma_caida_cadena_l_1714.0"  jointRelativePosition1="-1.30711 -3.75492 0.544678" jointRelativeRotation1="-0.583844 -0.398906 0.398905 0.583844"  jointPosition="94.2252 7.98252 26.1834" jointRotation="-0.557281 -0.435244 -0.435244 0.557281" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida7" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="-5.98062 4.0696 -0.042737" jointRelativeRotation0="-0.552535 -0.441253 0.441252 0.552537" actor2 = "plataforma_caida_cadena_l_1716.0"  jointRelativePosition1="-1.00838 -3.27235 0.519409" jointRelativeRotation1="-0.552537 -0.441252 0.441252 0.552537"  jointPosition="94.0194 7.95725 37.9304" jointRotation="-0.552537 0.441252 0.441252 0.552537" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_hinge_caida8" />
+<jointHinge actor1 = "esc1_arqui_suelo_suelo_a_248.0"  jointRelativePosition0="-0.583023 4.20053 0.220928" jointRelativeRotation0="0.499998 0.500002 -0.5 -0.5" actor2 = "plataforma_caida_cadena_s_1719.0"  jointRelativePosition1="1.11116 3.15172 0.464053" jointRelativeRotation1="-0.320042 0.630534 -0.630534 0.320042"  jointPosition="99.417 8.22091 37.7995" jointRotation="-0.5 0.5 0.5 0.5" linearPosition="100.0" linearRestitution="0.0" swingAngle="80.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+	</entity>
+	<entity tag = "level" collisionTag = "Level">
+<name name="sc2_fixed_caida2_1720.0" />
+<jointFixed actor1 = "esc1_arqui_suelo_suelo_a_248.0" actor2 = "plataforma_caidafalsa_base_1709.0"  jointPosition="96.3586 7.58938 32.2997" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 </scene>
