@@ -36,6 +36,7 @@ private:
 	float debris_creation_delay;
 	int debris_created;
 	int move_things;
+	bool state_changed;
 
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);

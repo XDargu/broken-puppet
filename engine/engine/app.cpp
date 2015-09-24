@@ -391,7 +391,7 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 
-	first_scene = "data/scenes/scene_3_old.xml";
+	first_scene = "data/scenes/my_file.xml";
 	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
 	//sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");

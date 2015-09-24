@@ -49,6 +49,9 @@ void TCompAiBoss::init(){
 	R_hitch = prefabs_manager.getInstanceByName(rname.c_str());
 	TCompRigidBody* R_hitch_rigid = ((CEntity*)R_hitch)->get<TCompRigidBody>();
 	R_hitch_rigid->init();
+
+	TCompTransform* R_hitch_trans = ((CEntity*)R_hitch)->get<TCompTransform>();
+	if (R_hitch_trans) R_hitch_trans->setType(0);
 	PxRigidDynamic*  R_hitch_px_rigid = R_hitch_rigid->rigidBody;
 
 	PxQuat r_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(48));
@@ -75,6 +78,9 @@ void TCompAiBoss::init(){
 	TCompRigidBody* L_hitch_rigid = ((CEntity*)L_hitch)->get<TCompRigidBody>();
 	L_hitch_rigid->init();
 	PxRigidDynamic*  L_hitch_px_rigid = L_hitch_rigid->rigidBody;
+
+	TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
+	if (L_hitch_trans) L_hitch_trans->setType(0);
 
 	PxQuat l_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(23));
 	PxVec3 l_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(23));
@@ -146,11 +152,22 @@ void TCompAiBoss::update(float elapsed){
 
 	/**/
 
-	if (m_fsm_boss.getState() == "fbp_Stunned1"){
-		can_break_hitch = true;
+	if ((m_fsm_boss.getState() == "fbp_Stunned1") && (!can_break_hitch)) {
+		can_break_hitch = true;		
+
+		TCompTransform* R_hitch_trans = ((CEntity*)R_hitch)->get<TCompTransform>();
+		if (R_hitch_trans) R_hitch_trans->setType(1);
+		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
+		if (L_hitch_trans) L_hitch_trans->setType(1);
+
 	}
-	else {
+	else if ((m_fsm_boss.getState() != "fbp_Stunned1") && (can_break_hitch)) {
 		can_break_hitch = false;
+
+		TCompTransform* R_hitch_trans = ((CEntity*)R_hitch)->get<TCompTransform>();
+		if (R_hitch_trans) R_hitch_trans->setType(0);
+		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
+		if (L_hitch_trans) L_hitch_trans->setType(0);
 	}
 
 
