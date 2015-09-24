@@ -27,6 +27,7 @@ private:
 	CHandle player;
 	bool builded;
 public:
+	bool first_build;
 	bool generate_nav_mesh;
 	bool lock;
 	std::vector<CHandle>     colMeshes;
@@ -69,6 +70,7 @@ public:
 	bool getNeedNavMesh();
 	void nav_mesh_init();
 	bool getLock();
+	void setNavMeshClimb(int climb);
 	//std::vector<TCompColliderCapsule*>  colCapsules;
 };
 #endif

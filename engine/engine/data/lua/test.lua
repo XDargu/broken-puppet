@@ -154,10 +154,27 @@ function onSceneLoad_my_file()
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 1 ********
 
+	local sc2_hinge_caida1 = logicManager:getHingeJoint("sc2_hinge_caida1");
+	local sc2_hinge_caida2 = logicManager:getHingeJoint("sc2_hinge_caida2");
+	local sc2_hinge_caida3 = logicManager:getHingeJoint("sc2_hinge_caida3");
+	local sc2_hinge_caida4 = logicManager:getHingeJoint("sc2_hinge_caida4");
+	local sc2_hinge_caida5 = logicManager:getHingeJoint("sc2_hinge_caida5");
+	local sc2_hinge_caida6 = logicManager:getHingeJoint("sc2_hinge_caida6");
+	local sc2_hinge_caida7 = logicManager:getHingeJoint("sc2_hinge_caida7");
+	
+	sc2_hinge_caida1:setLimit(0.1)
+	sc2_hinge_caida2:setLimit(0.1)
+	sc2_hinge_caida3:setLimit(0.1)
+	sc2_hinge_caida4:setLimit(0.1)
+	sc2_hinge_caida5:setLimit(0.1)
+	sc2_hinge_caida6:setLimit(0.1)
+	sc2_hinge_caida7:setLimit(0.1)
+
+	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
 
 
 
-
+	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 2 ********
 
 
 --logicManager:loadScene("data/scenes/scene_1.xml");

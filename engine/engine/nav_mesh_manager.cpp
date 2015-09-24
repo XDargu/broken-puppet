@@ -19,16 +19,6 @@ CNav_mesh_manager& CNav_mesh_manager::get() {
 
 bool CNav_mesh_manager::build_nav_mesh(){
 	navMeshQuery = nullptr;
-	builded = false;
-	first = true;
-	player = CEntityManager::get().getByName("Player");
-	if (need_navmesh){
-		keep_updating_navmesh = true;
-	}
-	return true;
-}
-
-void CNav_mesh_manager::nav_mesh_init(){
 	generate_nav_mesh = true;
 	nav_A.m_input = nav_mesh_input;
 	nav_A.m_input.computeBoundaries();
@@ -36,6 +26,25 @@ void CNav_mesh_manager::nav_mesh_init(){
 	nav_B.m_input.computeBoundaries();
 	nav_A.build();
 	nav_mesh = &nav_A;
+	builded = false;
+	first = true;
+	first_build = true;
+	player = CEntityManager::get().getByName("Player");
+	if (need_navmesh){
+		keep_updating_navmesh = true;
+		need_update = true;
+	}
+	return true;
+}
+
+void CNav_mesh_manager::nav_mesh_init(){
+	/*generate_nav_mesh = true;
+	nav_A.m_input = nav_mesh_input;
+	nav_A.m_input.computeBoundaries();
+	nav_B.m_input = nav_mesh_input;
+	nav_B.m_input.computeBoundaries();
+	nav_A.build();
+	nav_mesh = &nav_A;*/
 	AiThread = new std::thread(&CNav_mesh_manager::updateNavmesh, this);
 }
 
@@ -140,13 +149,16 @@ bool CNav_mesh_manager::checkIfUpdatedNavMesh(){
 }
 
 void CNav_mesh_manager::checkUpdates(){
-	need_update = checkIfUpdatedNavMesh();
+	if (!first)
+		need_update = checkIfUpdatedNavMesh();
 }
 
 void CNav_mesh_manager::updateNavmesh() {
 	while (generate_nav_mesh){
 		if (keep_updating_navmesh) {
 			if (need_update){
+
+				first_build = false;
 
 				// seleccionamos navmesh a actualizar (las actualizamso alternativamente)
 				CNavmesh* updated_nav = nav_mesh == &nav_A ? &nav_B : &nav_A;
@@ -378,6 +390,7 @@ CNav_mesh_manager::CNav_mesh_manager()
 	builded = false;
 	AiThread = nullptr;
 	lock = false;
+	first_build = true;
 }
 
 
@@ -390,4 +403,9 @@ CNav_mesh_manager::~CNav_mesh_manager()
 
 bool CNav_mesh_manager::getLock(){
 	return lock;
+}
+
+void CNav_mesh_manager::setNavMeshClimb(int climb){
+	nav_A.setClimb(climb);
+	nav_B.setClimb(climb);
 }

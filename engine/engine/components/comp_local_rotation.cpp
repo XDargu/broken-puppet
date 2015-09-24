@@ -8,6 +8,7 @@ void TCompLocalRotation::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 	speed = atts.getFloat("speed", 1);
 	axis = atts.getInt("axis", 0);
 	move_with_speed = atts.getBool("moveSpeedParent", false);
+	lock_position = atts.getBool("lockPosition", false);
 
 	TCompTransform* c_transform = h_transform;
 	origin = c_transform->position;
