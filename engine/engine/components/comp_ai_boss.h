@@ -22,6 +22,9 @@ private:
 	CHandle L_hitch;
 	PxFixedJoint* L_hitch_joint;
 
+	CHandle H_hitch;
+	PxFixedJoint* H_hitch_joint;
+
 	PxVec3 point_to_go;
 	PxVec3 point_offset;
 	float distance_to_point;
@@ -36,7 +39,8 @@ private:
 	float debris_creation_delay;
 	int debris_created;
 	int move_things;
-	bool state_changed;
+
+	bool is_death;
 
 public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
@@ -45,6 +49,7 @@ public:
 	void update(float elapsed);
 
 	void breakHitch(CHandle m_hitch);
+	void breakHeart(CHandle m_heart);
 
 	bool can_break_hitch;
 	

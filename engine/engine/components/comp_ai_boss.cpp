@@ -32,6 +32,8 @@ void TCompAiBoss::init(){
 	debris_creation_delay = 0;
 	debris_created = 0;
 
+	is_death = false;
+
 	force = 24;
 	R_hitch_joint = nullptr;
 
@@ -44,7 +46,7 @@ void TCompAiBoss::init(){
 	comp_skeleton = ((CEntity*)mBoss)->get<TCompSkeleton>();
 	TCompSkeleton* skeleton = comp_skeleton;
 
-	// Right Arm
+	// Right Arm 72
 	std::string rname = "boss/enganche_R";
 	R_hitch = prefabs_manager.getInstanceByName(rname.c_str());
 	TCompRigidBody* R_hitch_rigid = ((CEntity*)R_hitch)->get<TCompRigidBody>();
@@ -98,6 +100,34 @@ void TCompAiBoss::init(){
 	L_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, l_bone_trans);
 	L_hitch_px_rigid->setGlobalPose(l_bone_trans);
 	/**/
+
+	// Right Arm
+	std::string hname = "boss/heart";
+	H_hitch = prefabs_manager.getInstanceByName(hname.c_str());
+	TCompRigidBody* H_hitch_rigid = ((CEntity*)H_hitch)->get<TCompRigidBody>();
+	H_hitch_rigid->init();
+
+	TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
+	if (H_hitch_trans) H_hitch_trans->setType(0);
+	PxRigidDynamic*  H_hitch_px_rigid = H_hitch_rigid->rigidBody;
+
+	PxQuat h_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(72));
+	PxVec3 h_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(72));
+
+	PxTransform h_bone_trans = PxTransform(h_pos, h_rot);
+
+	H_hitch_joint = PxFixedJointCreate(
+		*Physics.gPhysicsSDK
+		, H_hitch_px_rigid
+		, PxTransform(PxVec3(0, 0, 0))
+		, NULL
+		, h_bone_trans
+		);
+
+	H_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, h_bone_trans);
+	H_hitch_px_rigid->setGlobalPose(h_bone_trans);
+	/**/
+
 }
 
 void TCompAiBoss::update(float elapsed){
@@ -151,6 +181,22 @@ void TCompAiBoss::update(float elapsed){
 	L_hitch_px_rigid->setGlobalPose(l_bone_trans);
 
 	/**/
+	
+
+	if (!is_death){
+		/**/
+		TCompRigidBody* H_hitch_rigid = ((CEntity*)H_hitch)->get<TCompRigidBody>();
+		PxRigidDynamic*  H_hitch_px_rigid = H_hitch_rigid->rigidBody;
+
+		PxQuat h_rot = Physics.XMVECTORToPxQuat(skeleton->getRotationOfBone(72));
+		PxVec3 h_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(72));
+		PxTransform h_bone_trans = PxTransform(h_pos, h_rot);
+
+		H_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, h_bone_trans);
+		H_hitch_px_rigid->setGlobalPose(h_bone_trans);
+
+		/**/
+	}	
 
 	if ((m_fsm_boss.getState() == "fbp_Stunned1") && (!can_break_hitch)) {
 		can_break_hitch = true;		
@@ -159,7 +205,6 @@ void TCompAiBoss::update(float elapsed){
 		if (R_hitch_trans) R_hitch_trans->setType(1);
 		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
 		if (L_hitch_trans) L_hitch_trans->setType(1);
-
 	}
 	else if ((m_fsm_boss.getState() != "fbp_Stunned1") && (can_break_hitch)) {
 		can_break_hitch = false;
@@ -168,6 +213,12 @@ void TCompAiBoss::update(float elapsed){
 		if (R_hitch_trans) R_hitch_trans->setType(0);
 		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
 		if (L_hitch_trans) L_hitch_trans->setType(0);
+	}
+	else if ((m_fsm_boss.getState() == "fbp_FinalState") && (!can_break_hitch)) {
+		can_break_hitch = true;
+
+		TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
+		if (H_hitch_trans) H_hitch_trans->setType(1);
 	}
 
 
@@ -396,5 +447,10 @@ void TCompAiBoss::breakHitch(CHandle m_hitch){
 	if ((m_hitch == L_hitch)&&(can_break_hitch)) { 
 		m_fsm_boss.EvaluateHit(0);
 		//L_hitch_joint->setBreakForce(0, 0);
+	}
+	if ((m_hitch == H_hitch) && (can_break_hitch)) {
+		m_fsm_boss.HeartHit();
+		H_hitch_joint->setBreakForce(0, 0);
+		is_death = true;
 	}
 }
