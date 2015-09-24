@@ -12,9 +12,10 @@ struct TCompLocalRotation : TBaseComponent {
 	CHandle h_transform;
 	CHandle h_rigidbody;
 	bool move_with_speed;
+	bool lock_position;
 	XMVECTOR origin;
 
-	TCompLocalRotation() : speed(1), axis(0), move_with_speed(false){}
+	TCompLocalRotation() : speed(1), axis(0), move_with_speed(false), lock_position(false){}
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void update(float elapsed);
 
