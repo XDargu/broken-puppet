@@ -4,6 +4,7 @@
     <transform position="0 0 0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render>
       <draw mesh="mSphere" sub_mesh="0" mat="CubemapMaterial"/>
-    </render>   
+    </render>
+  <aabb min="-2 -2 -2" max="2 2 2"/>
   </entity>
 </prefab>

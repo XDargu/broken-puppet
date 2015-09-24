@@ -155,7 +155,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hWnd = CreateWindowEx(
 	   WS_EX_ACCEPTFILES
 	   , "MCVClass"
-	   , "MCV Engine 2014"
+	   , "Broken Puppet"
 	   , dwStyle
 	   , CW_USEDEFAULT, CW_USEDEFAULT		// Position
 	   , width				// Width

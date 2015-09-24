@@ -127,25 +127,11 @@ void TCompPlayerController::update(float elapsed) {
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
 	TCompTransform* camera_transform = camera_entity->get<TCompTransform>();
 
-	// Raycast all
-	PxRaycastBuffer buf;
-	Physics.raycastAll(camera_transform->position, camera_transform->getFront(), 1000, buf);
-
-	float max_dist = 1000000;
 	PxActor* hit_actor = nullptr;
 	PxVec3 actor_position;
+	PxVec3 actor_normal;
 
-	for (int i = 0; i < (int)buf.nbTouches; i++)
-	{
-		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
-			float dist = V3DISTANCE(Physics.PxVec3ToXMVECTOR(buf.touches[i].position), camera_transform->position);
-			if (dist < max_dist) {
-				actor_position = buf.touches[i].position;
-				hit_actor = buf.touches[i].actor;
-				max_dist = dist;
-			}
-		}
-	}
+	fsm_player_torso.getThrowingData(hit_actor, actor_position, actor_normal);
 
 	if (hit_actor != nullptr) {
 		CHandle target_entity(hit_actor->userData);
