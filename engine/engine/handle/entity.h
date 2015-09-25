@@ -8,12 +8,13 @@ public:
 	char tag[32];
 	char material_tag[32];
 	char collision_tag[32];
+	bool tagBoss;
 	~CEntity() {
 		for (uint32_t i = 0; i < CHandle::max_types; i++)
 			components[i].destroy();
 	}
 
-	CEntity() { }
+	CEntity() { bool tagBoss = false; }
 	CEntity(const CEntity& e);
 	//CEntity operator=( const CEntity& e );
 
@@ -60,6 +61,10 @@ public:
 		std::strcpy(tag, atts.getString("tag", "untagged").c_str());
 		std::strcpy(collision_tag, atts.getString("collisionTag", "untagged").c_str());
 		std::strcpy(material_tag, atts.getString("materialTag", "wood").c_str());
+		tagBoss = atts.getBool("tagBoss", false);
+		if (tagBoss){
+			int i = 0;
+		}
 	}
 
   // Mandar un msg a todos los componentes de esta entidad que se 
@@ -97,6 +102,11 @@ public:
 	bool hasMaterialTag(char* the_tag) {
 		return std::strcmp(material_tag, the_tag) == 0;
 	}
+
+	bool hasTagBoss(char* the_tag) {
+		return tagBoss;
+	}
+
 
 	/*
 	template <class TMsgType>

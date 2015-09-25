@@ -6,6 +6,7 @@
 #include "comp_rope.h"
 #include "comp_distance_joint.h"
 #include "comp_particle_group.h"
+#include "comp_ai_boss.h"
 #include "ai\logic_manager.h"
 #include "rope_manager.h"
 #include "audio\sound_manager.h"
@@ -68,6 +69,13 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 
 					if (distance < radius){
 						e->sendMsg(TMsgExplosion(m_pos, distance, damage));
+					}
+					CHandle m_boss = entity_manager.getByName("Boss");
+					if (m_boss.isValid()){
+						CHandle comp_boss = ((CEntity*)m_boss)->get<TCompAiBoss>();
+						if (comp_boss.isValid()){
+							((TCompAiBoss*)comp_boss)->stun();
+						}
 					}
 				}
 			}

@@ -85,7 +85,7 @@ public:
 	void Shoot1Shoot();
 	void Shoot1Reload();
 
-	void WaveLeft();
+	void WaveLeft(float elapsed);
 	void WaveRight();
 
 	void Proximity(float elapsed);

@@ -89,7 +89,12 @@ void TCompRagdoll::setActive(bool active) {
 		/*disableBoneTree(8);
 		enableBoneTree(8);*/
 	}else if(e->hasTag("enemy")){
-		setCollisonEnemy(active);
+		if (e->hasTagBoss("boss")) {
+			setCollisonBoss(active);
+		}
+		else {
+			setCollisonEnemy(active);
+		}
 	}
 	else if (e->hasTag("boss")){
 		setCollisonBoss(active);
@@ -303,7 +308,10 @@ void TCompRagdoll::setCollisionGroups(){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	PxU32 myMask;
 	if (e->hasTag("enemy")){
-		myMask = convertStrInCollisionFilter("Enemy_Ragdoll");
+		if (e->hasTagBoss("boss"))
+			myMask = convertStrInCollisionFilter("Boss_Ragdoll");
+		else
+			myMask = convertStrInCollisionFilter("Enemy_Ragdoll");
 	}
 	else if (e->hasTag("player")){
 		myMask = convertStrInCollisionFilter("Player_Ragdoll");
@@ -404,7 +412,10 @@ void TCompRagdoll::disableBoneTree(int bone_id) {
 						setCollisonPlayerBone(true, bone_id);
 					}
 					else if (e->hasTag("enemy")){
-						setCollisonEnemyBone(true, bone_id);
+						if (e->hasTagBoss("boss"))
+							setCollisonBossBone(true, bone_id);
+						else
+							setCollisonEnemyBone(true, bone_id);
 					}
 					else if (e->hasTag("boss")){
 						setCollisonBossBone(true, bone_id);
@@ -440,7 +451,12 @@ void TCompRagdoll::enableBoneTree(int bone_id) {
 						setCollisonPlayerBone(false, bone_id);
 					}
 					else if (e->hasTag("enemy")){
-						setCollisonEnemyBone(false, bone_id);
+						if (e->hasTagBoss("boss")) {
+							setCollisonBossBone(true, bone_id);
+						}
+						else {
+							setCollisonEnemyBone(false, bone_id);
+						}
 					}
 					else if (e->hasTag("boss")){
 						setCollisonBossBone(true, bone_id);

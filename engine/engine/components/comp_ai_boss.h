@@ -29,6 +29,7 @@ private:
 	PxVec3 point_offset;
 	float distance_to_point;
 	float force;
+	float proximity_distance;
 
 	bool activate;
 	bool shoot;
@@ -49,10 +50,12 @@ public:
 	void fixedUpdate(float elapsed);
 	void update(float elapsed);
 
-	void breakHitch(CHandle m_hitch);
+	void breakHitch(CHandle m_hitch);	
 	void breakHeart(CHandle m_heart);
+	void stun();
 
 	bool can_break_hitch;
+
 	
 };
 
