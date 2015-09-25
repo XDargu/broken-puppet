@@ -247,11 +247,19 @@ int Citem_manager::getNumInRangle(CHandle grandmaRef, XMVECTOR pos, float radius
 				if (path.size() > 0){
 					float distance_prueba = V3DISTANCE(path[path.size() - 1], e_transform->position);
 					if (V3DISTANCE(path[path.size() - 1], e_transform->position) <= max_dist_reach_needle){
-						TCompTransform* grand_trans = ((CEntity*)grandmaRef)->get<TCompTransform>();
-						bool success = asociateTargetNeedle(grand_trans->position, i, radius, grandmaRef, max_dist_reach_needle);
-						//bool success = getTargetNeedle(grandmaRef, i, radius, max_dist_reach_needle);
-						if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandmaRef)){
-							result++;
+						
+						float distance_x = abs(XMVectorGetX(path[path.size() - 1]) - XMVectorGetX(path[0]));
+						float distance_y = abs(XMVectorGetY(path[path.size() - 1]) - XMVectorGetY(path[0]));
+						float distance_z = abs(XMVectorGetZ(path[path.size() - 1]) - XMVectorGetZ(path[0]));
+						if ((distance_x <= 2.f) && (distance_z <= 2.f) && (distance_y >= 1.5f)){
+							removeNeedle(needles[i].needleRef);
+						}else{
+							TCompTransform* grand_trans = ((CEntity*)grandmaRef)->get<TCompTransform>();
+							bool success = asociateTargetNeedle(grand_trans->position, i, radius, grandmaRef, max_dist_reach_needle);
+							//bool success = getTargetNeedle(grandmaRef, i, radius, max_dist_reach_needle);
+							if ((!needles[i].grandma_asociated.isValid()) || (needles[i].grandma_asociated == grandmaRef)){
+								result++;
+							}
 						}
 					}
 				}

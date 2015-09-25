@@ -181,7 +181,10 @@ void CNav_mesh_manager::updateNavmesh() {
 				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 				nav_mesh_input.clearInput();
-				prepareInputNavMesh();
+
+				if (keep_updating_navmesh){
+					prepareInputNavMesh();
+				}
 
 				lock = false;
 				builded = true;

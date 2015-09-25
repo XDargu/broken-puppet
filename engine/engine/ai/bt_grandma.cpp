@@ -369,7 +369,8 @@ int bt_grandma::actionChaseNeedlePosition()
 			TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 
 			if (on_enter){
-
+				time_searching_needle = 0.f;
+				distance_old = 100.f;
 				TCompCharacterController* m_char_controller = character_controller;
 
 				m_char_controller->moveSpeedMultiplier = run_speed+0.3f;
@@ -394,14 +395,24 @@ int bt_grandma::actionChaseNeedlePosition()
 			else{
 				if (path.size() > 0){
 					if (ind_path < path.size()){
-						float distance = V3DISTANCE((path[path.size() - 1]), n_transform->position);
-						if (distance < max_dist_reach_needle){
+						if (distance_new > distance_old){
+							time_searching_needle += state_time;
+						}
+						if (time_searching_needle > 10.f){
+							time_searching_needle = 100.f;
+							Citem_manager::get().removeNeedle(target_needle);
+							return LEAVE;
+						}
+						if (V3DISTANCE((path[path.size() - 1]), n_transform->position) < max_dist_reach_needle){
 							chasePoint(((TCompTransform*)own_transform), path[ind_path]);
-							if ((V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]) < 1.0f)){
+							distance_new = V3DISTANCE(((TCompTransform*)own_transform)->position, path[ind_path]);
+							if (distance_new < 1.0f){
+								distance_old = distance_new;
 								ind_path++;
 								return STAY;
 							}
 							else{
+								distance_old = distance_new;
 								return STAY;
 							}
 						}

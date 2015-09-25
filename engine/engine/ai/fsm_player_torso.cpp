@@ -74,7 +74,6 @@ void FSMPlayerTorso::ThrowGoldenNeedle(float elapsed){
 	if (state_time >= 0.1f) {
 		ChangeState("fbp_Inactive");
 	}
-
 }
 
 void FSMPlayerTorso::ThrowString(float elapsed) {
