@@ -1547,6 +1547,12 @@ void CApp::loadScene(std::string scene_name) {
 	//physics_manager.init();
 	logic_manager.init();
 
+	if (scene_name == "data/scenes/my_file.xml"){
+		CNav_mesh_manager::get().setNavMeshClimb(1);
+	}
+	else if (scene_name == "data/scenes/scene_3_old.xml"){
+		CNav_mesh_manager::get().setNavMeshClimb(0);
+	}
 	// Navmesh initialization
 	CNav_mesh_manager::get().setNeedNavMesh(true);
 	//Check the scene and change the climb atributte from the navmesh 

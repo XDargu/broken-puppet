@@ -34,181 +34,208 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 			//Colision entre actor y player
 			if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("player"))){
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(second_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
-				if (force > force_threshold)
-					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+				if (first_rigid){
+					TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+					PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(second_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+					if (force > force_threshold)
+						firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+				}
 			} else if((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
 			//Colision entre player y actor
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				
-				XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
-				if (force > force_threshold)
-					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
+				if (second_rigid){
+					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(first_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+					if (force > force_threshold)
+						secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
+				}
 			}
 			else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
 				//Colision entre actor y enemigo
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(second_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				XDEBUG("force impact enmey to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, secondActorEntity->getName(), force_threshold);
-				if (force > force_threshold)
-					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+				if (first_rigid){
+					PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(second_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact enmey to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, secondActorEntity->getName(), force_threshold);
+					if (force > force_threshold)
+						firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+				}
 			}
-			else if ((secondActorEntity->hasTag("bomb")) && (firstActorEntity->hasTag("boss"))){
+			else if ((secondActorEntity->hasTag("bomb")) && (firstActorEntity->hasTag("enemy"))){
 				//Colision entre actor y enemigo
 				XDEBUG("Boss head collision actor_name=%s", secondActorEntity->getName());
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(second_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				if (force > force_threshold)
-					firstActorEntity->sendMsg(TMsgOnDetonate(force, true));
+				if (second_rigid){
+					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(second_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact boss to bomb: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, secondActorEntity->getName(), force_threshold);
+					//if (force > force_threshold)
+					secondActorEntity->sendMsg(TMsgOnDetonate(force, true));
+				}
 			}
-			else if ((secondActorEntity->hasTag("boss")) && (firstActorEntity->hasTag("bomb"))){
+			else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("bomb"))){
 				//Colision entre actor y enemigo;
 				XDEBUG("Boss head collision actor_name=%s", firstActorEntity->getName());
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				if (force > force_threshold)
+				if (first_rigid){
+					PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(first_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact boss to bomb: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+					//if (force > force_threshold)
 					firstActorEntity->sendMsg(TMsgOnDetonate(force, true));
+				}
 			}else if ((firstActorEntity->hasTag("bomb"))){
 					//Colision entre actor y enemigo
 					TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+					if (first_rigid){
+						PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+						PxReal force = getForce(first_rigid->getMass(), pairs, i);
+						//float force_float = force;
+						if (force > force_threshold)
+							firstActorEntity->sendMsg(TMsgOnDetonate(force, false));
+					}
+			}else if ((secondActorEntity->hasTag("bomb"))){
+					//Colision entre actor y enemigo
+					TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+					if (second_rigid){
+						PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+						PxReal force = getForce(second_rigid->getMass(), pairs, i);
+						//float force_float = force;
+						if (force > force_threshold)
+							secondActorEntity->sendMsg(TMsgOnDetonate(force, false));
+					}
+			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("player"))){
+				//Colision entre actor sin colisiones y player
+				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				if (second_rigid){
+					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(second_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					//if (force_float > force_threshold)
+					//firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
+				}
+			}else if ((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor_no_coll"))){
+				//Colision entre actor sin colisiones y player
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				if (first_rigid){
+					PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(first_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					//if (force_float > force_threshold)
+					//secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
+				}
+			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor_no_coll"))){
+				//Colision entre actor sin colisiones y player
+				TCompRigidBody* first_rigid = secondActorEntity->get<TCompRigidBody>();
+				if (first_rigid){
 					PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
 					PxReal force = getForce(first_rigid->getMass(), pairs, i);
 					//float force_float = force;
 					if (force > force_threshold)
-						firstActorEntity->sendMsg(TMsgOnDetonate(force,false));
-			}else if ((secondActorEntity->hasTag("bomb"))){
-					//Colision entre actor y enemigo
-					TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+						secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
+				}
+			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("enemy"))) {
+				//Colision entre actor sin colisiones y player
+				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				if (second_rigid){
 					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
 					PxReal force = getForce(second_rigid->getMass(), pairs, i);
 					//float force_float = force;
 					if (force > force_threshold)
-						secondActorEntity->sendMsg(TMsgOnDetonate(force, false));
-			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("player"))){
-				//Colision entre actor sin colisiones y player
-				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(second_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				//if (force_float > force_threshold)
-					//firstActorEntity->sendMsg(TActorHit(firstActorEntity, force_float));
-			}else if ((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor_no_coll"))){
-				//Colision entre actor sin colisiones y player
-				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = first_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				//if (force_float > force_threshold)
-					//secondActorEntity->sendMsg(TActorHit(secondActorEntity, force_float));
-			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor_no_coll"))){
-				//Colision entre actor sin colisiones y player
-				TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = firstActorEntity->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(firstActorEntity->getMass(), pairs, i);
-				//float force_float = force;
-				if (force >force_threshold)
-					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
-			}else if ((secondActorEntity->hasTag("actor_no_coll")) && (firstActorEntity->hasTag("enemy"))) {
-				//Colision entre actor sin colisiones y player
-				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(second_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				if (force > force_threshold)
-					firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+						firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+				}
 			}else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))) {
 			//Colision entre enemigo y actor
 				//TCompRigidBody* firstActorEntity = secondActorEntity->get<TCompRigidBody>();
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
-				PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
-				PxReal force = getForce(first_rigid->getMass(), pairs, i);
-				//float force_float = force;
-				XDEBUG("force impact enemy to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
-				if (force >force_threshold)
-					secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
-			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("level"))) {
-			//Colision entre enemigo y escenario
-				//TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				//CSoundManager::get().play3DFX("sonar", (TTransform*) entity_transform);
+				if ((first_rigid) && (second_rigid)){
+					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(first_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact enemy to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+					if (force > force_threshold)
+						secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
+				}
 			}
 			else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("level"))) {
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
 
-				XMVECTOR position;
-				XMVECTOR normal;
+				if (first_rigid){
+					XMVECTOR position;
+					XMVECTOR normal;
 
-				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
+					PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
 
-				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
-				bool slow_motion = CApp::get().isSlowMotion();
+					bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+					bool slow_motion = CApp::get().isSlowMotion();
 
-				// Sound
-				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				if (timestamp_reached || slow_motion) {
-					
-					CSoundManager::get().playImpactFX(force, first_rigid->getMass(), entity_transform, firstActorEntity->material_tag);
-					first_rigid->impact_timestamp = current_time;
+					// Sound
+					TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+					if (timestamp_reached || slow_motion) {
+
+						CSoundManager::get().playImpactFX(force, first_rigid->getMass(), entity_transform, firstActorEntity->material_tag);
+						first_rigid->impact_timestamp = current_time;
 
 
-					CEntity* player_entity = CLogicManager::get().getPlayerHandle();
-					TCompTransform* player_transform = player_entity->get<TCompTransform>();
+						CEntity* player_entity = CLogicManager::get().getPlayerHandle();
+						TCompTransform* player_transform = player_entity->get<TCompTransform>();
 
-					// Particle dust effect
-					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25) && (CLogicManager::get().p_group_counter<max_impact_particles)) {
-						createParticle(firstActorEntity, position, normal, firstActorEntity->material_tag);
+						// Particle dust effect
+						if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25) && (CLogicManager::get().p_group_counter < max_impact_particles)) {
+							createParticle(firstActorEntity, position, normal, firstActorEntity->material_tag);
+						}
 					}
 				}
 
 			}else if ((firstActorEntity->hasTag("level")) && (secondActorEntity->hasTag("actor"))){
 				
 				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				if (first_rigid){
 
-				XMVECTOR position;
-				XMVECTOR normal;
+					XMVECTOR position;
+					XMVECTOR normal;
 
-				PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
+					PxReal force = getForceAndPosition(first_rigid->getMass(), pairs, i, position, normal);
 
-				bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
-				bool slow_motion = CApp::get().isSlowMotion();
+					bool timestamp_reached = current_time - first_rigid->impact_timestamp > impact_threshold_time;
+					bool slow_motion = CApp::get().isSlowMotion();
 
-				// Sound
-				TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
-				if (timestamp_reached || slow_motion) {
-					CSoundManager::get().playImpactFX(force, first_rigid->getMass(), entity_transform, secondActorEntity->material_tag);
-					first_rigid->impact_timestamp = current_time;
+					// Sound
+					TCompTransform* entity_transform = firstActorEntity->get<TCompTransform>();
+					if (timestamp_reached || slow_motion) {
+						CSoundManager::get().playImpactFX(force, first_rigid->getMass(), entity_transform, secondActorEntity->material_tag);
+						first_rigid->impact_timestamp = current_time;
 
 
-					CEntity* player_entity = CLogicManager::get().getPlayerHandle();
-					TCompTransform* player_transform = player_entity->get<TCompTransform>();
+						CEntity* player_entity = CLogicManager::get().getPlayerHandle();
+						TCompTransform* player_transform = player_entity->get<TCompTransform>();
 
-					// Particle dust effect
-					if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25) && (CLogicManager::get().p_group_counter<max_impact_particles)) {
-						createParticle(firstActorEntity, position, normal, secondActorEntity->material_tag);
+						// Particle dust effect
+						if ((force > 100) && (V3DISTANCE(player_transform->position, entity_transform->position) < 25) && (CLogicManager::get().p_group_counter < max_impact_particles)) {
+							createParticle(firstActorEntity, position, normal, secondActorEntity->material_tag);
+						}
 					}
 				}
 
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("actor"))){
 				TCompRigidBody* rigid = firstActorEntity->get<TCompRigidBody>();
 				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
-				PxReal force = getForce(rigid->getMass(), pairs, i);
-				float force_float = force;
-				CSoundManager::get().playImpactFX(force_float, second_rigid->getMass(), secondActorEntity->get<TCompTransform>(), secondActorEntity->material_tag);
+				if ((rigid) && (second_rigid)){
+					PxReal force = getForce(rigid->getMass(), pairs, i);
+					float force_float = force;
+					CSoundManager::get().playImpactFX(force_float, second_rigid->getMass(), secondActorEntity->get<TCompTransform>(), secondActorEntity->material_tag);
+				}
 			}else if ((firstActorEntity->hasTag("enemy")) && (secondActorEntity->hasTag("player"))){
 				firstActorEntity->sendMsg(TPlayerTouch(firstActorEntity, true));
 			}else if ((firstActorEntity->hasTag("player")) && (secondActorEntity->hasTag("enemy"))){

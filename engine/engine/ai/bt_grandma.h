@@ -18,6 +18,9 @@ private:
 	float time_searching_player;
 	float sensor_acum;
 	float sensor_const;
+	float distance_old;
+	float distance_new;
+	float time_searching_needle;
 	XMVECTOR previous_point_search;
 	XMVECTOR center;
 	XMVECTOR last_point_player_saw;

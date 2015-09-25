@@ -14,6 +14,7 @@ void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){
 	R_hitch_joint = nullptr; 
 	can_break_hitch = false; 
 	death_time = false;
+	proximity_distance = 8.f;
 };
 
 void TCompAiBoss::init(){
@@ -147,9 +148,8 @@ void TCompAiBoss::update(float elapsed){
 		player_trans = ((CEntity*)mBoss)->get<TCompTransform>();
 		boss_trans = ((CEntity*)mPlayer)->get<TCompTransform>();
 
-		if ((boss_trans.isValid()) && (player_trans.isValid())){
-			
-			if (V3DISTANCE(((TCompTransform*)boss_trans)->position, ((TCompTransform*)player_trans)->position) < 20){
+		if ((boss_trans.isValid()) && (player_trans.isValid())){			
+			if (V3DISTANCE(((TCompTransform*)boss_trans)->position, ((TCompTransform*)player_trans)->position) < proximity_distance){
 				m_fsm_boss.ChangeState("fbp_Proximity");
 			}
 		}
@@ -454,4 +454,8 @@ void TCompAiBoss::breakHitch(CHandle m_hitch){
 		H_hitch_joint->setBreakForce(0, 0);
 		is_death = true;
 	}
+}
+
+void TCompAiBoss::stun(){
+	m_fsm_boss.HeadHit();
 }

@@ -731,15 +731,75 @@ void fsm_boss::Shoot1ReleaseDef(){
 }
 
 //WaveLeft
-void fsm_boss::WaveLeft(){
+void fsm_boss::WaveLeft(float elapsed){
 	Reorientate(0.f, true);
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		skeleton->playAnimation(5);
 		last_anim_id = -1;
+
+		// Get boss pos
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3( enemy_comp_trans->position);
+
+		// Get obj to move
+		ball_list.clear();
+
+		
+
+		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+			CEntity* e = m_entity_manager->rigid_list[i];
+			if (!e->hasTag("player")){
+				TCompRigidBody* rigid = ((CEntity*)e)->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+					bool bossAccess = rigid->boss_level == 0;
+					if (bossAccess){
+
+						ball_list.push_back(e);
+					}
+				}
+
+			}
+		}
 	}	
+	
+	if ((state_time >= 1.1f)&&(state_time < 2.f)){
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+			if (((CHandle)e).isValid()){
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+					PxRigidBody*  px_rigid = rigid->rigidBody;
+					PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
+					PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
+					//px_rigid->addForce(m_force * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
+					px_rigid->setLinearVelocity(m_force * 40);
+				}
+			}
+		}
+	}
+
+
 	if (state_time >= 2.3f){
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+			if (((CHandle)e).isValid()){
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+					PxRigidBody*  px_rigid = rigid->rigidBody;
+					px_rigid->setLinearVelocity(px_rigid->getLinearVelocity() * 0.2f);
+				}
+			}
+		}
+
 		ChangeState("fbp_Idle1");
 	}
 
@@ -753,8 +813,68 @@ void fsm_boss::WaveRight(){
 		stopAllAnimations();
 		skeleton->playAnimation(6);
 		last_anim_id = -1;
+
+		// Get boss pos
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+		// Get obj to move
+		ball_list.clear();
+
+
+
+		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+			CEntity* e = m_entity_manager->rigid_list[i];
+			if (!e->hasTag("player")){
+				TCompRigidBody* rigid = ((CEntity*)e)->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+					bool bossAccess = rigid->boss_level == 0;
+					if (bossAccess){
+
+						ball_list.push_back(e);
+					}
+				}
+
+			}
+		}
 	}
+
+	if ((state_time >= 1.1f) && (state_time < 2.f)){
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+			if (((CHandle)e).isValid()){
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+					PxRigidBody*  px_rigid = rigid->rigidBody;
+					PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
+					PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
+					//px_rigid->addForce(m_force * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
+					px_rigid->setLinearVelocity(-m_force * 40);
+				}
+			}
+		}
+	}
+
+
 	if (state_time >= 2.3f){
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+			if (((CHandle)e).isValid()){
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+					PxRigidBody*  px_rigid = rigid->rigidBody;
+					px_rigid->setLinearVelocity(px_rigid->getLinearVelocity() * 0.2f);
+				}
+			}
+		}
+
 		ChangeState("fbp_Idle1");
 	}
 }
@@ -1016,15 +1136,15 @@ int fsm_boss::Calculate_attack() {
 	
 	last_attack = 0.f;
 	int rnd = 0;	
-	if (m_entity_manager->rigid_list.size() < 70){
+	if (m_entity_manager->rigid_list.size() < 130){
 		rnd = 0;
 	}
 	else if (m_entity_manager->rigid_list.size() > 330){
-		//rnd = 1;
+		//rnd = 3;
 		rnd = getRandomNumber(1, 4);
 	}
 	else {
-		//rnd = 1;
+		//rnd = 3;
 		rnd = getRandomNumber(1, 4);
 	}
 	return rnd;
