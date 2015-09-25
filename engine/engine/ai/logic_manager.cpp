@@ -28,6 +28,7 @@
 #include "localization_parser.h"
 #include "cinematic_manager.h"
 
+
 static CLogicManager logic_manager;
 lua_State* L;
 
@@ -534,6 +535,7 @@ void CLogicManager::bootLUA() {
 		.set("getObject", &CLogicManager::getObject)
 		.set("getPrismaticJoint", &CLogicManager::getPrismaticJoint)
 		.set("getHingeJoint", &CLogicManager::getHingeJoint)
+		.set("getFixedJoint", &CLogicManager::getFixedJoint)
 		.set("getMovingPlatform", &CLogicManager::getMovingPlatform)
 		.set("changeWaterLevel", (void (CLogicManager::*)(float, float)) &CLogicManager::changeWaterLevel)
 		.set("print", &CLogicManager::print)
@@ -620,6 +622,11 @@ void CLogicManager::bootLUA() {
 		.set("setLimit", (void (CHingeJoint::*)(float))&CHingeJoint::setLimit)
 	;
 
+	// Fixed joint
+	SLB::Class<CFixedJoint>("FixedJoint")
+		.set("breakJoint", &CFixedJoint::breakJoint)
+		;
+
 	SLB::setGlobal<CLogicManager*>(L, &get(), "logicManager");
 
 	luaL_dofile(L, "data/lua/scheduler.lua");
@@ -668,6 +675,14 @@ CPrismaticJoint CLogicManager::getPrismaticJoint(std::string name) {
 		execute("error(\"Invalid prismatic joint name: " + name + "\")");
 
 	return CPrismaticJoint(entity);
+}
+
+CFixedJoint CLogicManager::getFixedJoint(std::string name) {
+	CHandle entity = CEntityManager::get().getByName(name.c_str());
+	if (!entity.isValid())
+		execute("error(\"Invalid fixed joint name: " + name + "\")");
+
+	return CFixedJoint(entity);
 }
 
 CHingeJoint CLogicManager::getHingeJoint(std::string name) {

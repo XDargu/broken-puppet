@@ -269,8 +269,8 @@ void createManagers() {
 	getObjManager<TCompButton>()->init(32);
 
 	// Animation
-	getObjManager<TCompVibration>()->init(64);
-	getObjManager<TCompLocalRotation>()->init(64);
+	getObjManager<TCompVibration>()->init(256);
+	getObjManager<TCompLocalRotation>()->init(256);
 
 	registerAllComponentMsgs();
 }
@@ -632,14 +632,14 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
 #endif
 
-	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/my_file.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_3_old.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
 	if (io.becomesReleased(CIOStatus::NUM6)) { }
 	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
-	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/prefab_test.xml"); }
+	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/my_file.xml"); }
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
