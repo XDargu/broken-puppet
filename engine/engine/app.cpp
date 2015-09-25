@@ -72,7 +72,7 @@ ID3D11Texture2D* tex;
 CTexture* videoTexture;
 ID3D11ShaderResourceView* m_shaderResourceView;
 
-const unsigned int max_num_needles = 1024;
+const unsigned int max_num_needles = 512;
 
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"

@@ -31,7 +31,7 @@ void Citem_manager::checkAndRemoveFirstNeedle(){
 		std::vector<needle_rope>::iterator iter = all_needles_vector.begin();
 		CHandle first=iter->needleRef;
 		while (iter != all_needles_vector.end()){
-			if ((first.isValid()) && (iter->rope_asociated.isValid())){
+			if ((first.isValid()) && (!iter->rope_asociated.isValid())){
 				CEntityManager::get().remove(CHandle(first).getOwner());
 				removeNeedleFromVector(first);
 				removeNeedle(first);
