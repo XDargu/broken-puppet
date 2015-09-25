@@ -148,50 +148,10 @@ function onSceneLoad_my_file()
 	-- Salir de la escena
 
 	function onTriggerEnter_sc_trigger_fin(who)
-		--logicManager:loadScene("data/scenes/scene_2.xml");
+		logicManager:loadScene("data/scenes/scene_2.xml");
 	end
-	
 
-	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 1 ********
-
-	local sc2_hinge_caida1 = logicManager:getHingeJoint("sc2_hinge_caida1");
-	local sc2_hinge_caida2 = logicManager:getHingeJoint("sc2_hinge_caida2");
-	local sc2_hinge_caida3 = logicManager:getHingeJoint("sc2_hinge_caida3");
-	local sc2_hinge_caida4 = logicManager:getHingeJoint("sc2_hinge_caida4");
-	local sc2_hinge_caida5 = logicManager:getHingeJoint("sc2_hinge_caida5");
-	local sc2_hinge_caida6 = logicManager:getHingeJoint("sc2_hinge_caida6");
-	local sc2_hinge_caida7 = logicManager:getHingeJoint("sc2_hinge_caida7");
-	
-	sc2_hinge_caida1:setLimit(0.1)
-	sc2_hinge_caida2:setLimit(0.1)
-	sc2_hinge_caida3:setLimit(0.1)
-	sc2_hinge_caida4:setLimit(0.1)
-	sc2_hinge_caida5:setLimit(0.1)
-	sc2_hinge_caida6:setLimit(0.1)
-	sc2_hinge_caida7:setLimit(0.1)
-
-	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
-
-
-
-	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 2 ********
-
-
---logicManager:loadScene("data/scenes/scene_1.xml");
-	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
-	logicManager:setBands(true)
-
-	player = logicManager:getBot("Player");
-	initPos = player:getPos();
-
-	--logicManager:setMediumShotActive(true);
-	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
-	logicManager:setTimer("timerMolon", 3);
-	
-	--logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
-	--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
-	--logicManager:changeCamera("Camera001_34.0");
-	
+	-- Narrador 
 
 	local narr1_played = false
 	function onTriggerEnter_scene1_trigger_narr1(who)
@@ -208,8 +168,49 @@ function onSceneLoad_my_file()
 			narr2_played = true
 		end
 	end
+	
 
-	-- NARRADOR TEST
+	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 1 ********
+
+	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
+
+	-- Cadenas
+	local sc2_hinge_caida1 = logicManager:getHingeJoint("sc2_hinge_caida1");
+	local sc2_hinge_caida2 = logicManager:getHingeJoint("sc2_hinge_caida2");
+	local sc2_hinge_caida3 = logicManager:getHingeJoint("sc2_hinge_caida3");
+	local sc2_hinge_caida4 = logicManager:getHingeJoint("sc2_hinge_caida4");
+	local sc2_hinge_caida5 = logicManager:getHingeJoint("sc2_hinge_caida5");
+	local sc2_hinge_caida6 = logicManager:getHingeJoint("sc2_hinge_caida6");
+	local sc2_hinge_caida7 = logicManager:getHingeJoint("sc2_hinge_caida7");
+	
+	sc2_hinge_caida1:setLimit(0.1)
+	sc2_hinge_caida2:setLimit(0.1)
+	sc2_hinge_caida3:setLimit(0.1)
+	sc2_hinge_caida4:setLimit(0.1)
+	sc2_hinge_caida5:setLimit(0.1)
+	sc2_hinge_caida6:setLimit(0.1)
+	sc2_hinge_caida7:setLimit(0.1)
+
+
+	-- Plataforma elevadora
+	local sc2_plataforma_elevadora = logicManager:getObject("sc2_plataforma_elevadora")
+	local sc2_plataforma_elevadora_orig = sc2_plataforma_elevadora:getPos()
+
+	function onSwitchPressed_sc2_int_pelev(who)
+
+		print(tostring(who) .. " Interruptor subir plataforma");
+		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
+
+	end
+
+	function onSwitchReleased_sc2_int_pelev(who)
+
+		print(tostring(who) .. " Interruptor bajar plataforma");
+		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
+	end
+	
+	-- sc2_fixed_caida1
+	-- Narrador
 
 	local sc2_narr2_played = false
 	function onTriggerEnter_scene2_trigger_narr2(who)
@@ -238,6 +239,33 @@ function onSceneLoad_my_file()
 	function onTimerEnd_timerSc2Narr4()
 		logicManager:playSubtitles("SCENE204");
 	end
+
+	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 2 ********
+
+
+
+
+--logicManager:loadScene("data/scenes/scene_1.xml");
+	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
+	logicManager:setBands(true)
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
+	--logicManager:setMediumShotActive(true);
+	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
+	logicManager:setTimer("timerMolon", 3);
+	
+	--logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
+	--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
+	--logicManager:changeCamera("Camera001_34.0");
+	
+
+	
+
+	-- NARRADOR TEST
+
+	
 
 
 	function onTriggerEnter_PitTrigger(who)

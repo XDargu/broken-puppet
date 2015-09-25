@@ -7,6 +7,7 @@
 #include "bot.h"
 #include "moving_platform.h"
 #include "prismatic_joint.h"
+#include "fixed_joint.h"
 #include "hinge_joint.h"
 #include "lua_vector.h"
 #include "lua_quaternion.h"
@@ -129,6 +130,7 @@ public:
 	CMCVObject getObject(std::string name);
 	CMovingPlatform getMovingPlatform(std::string name);
 	CPrismaticJoint getPrismaticJoint(std::string name);
+	CFixedJoint getFixedJoint(std::string name);
 	CHingeJoint getHingeJoint(std::string name);
 
 	void pushPlayerLegsState(std::string state_name);

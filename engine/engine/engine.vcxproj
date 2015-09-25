@@ -173,6 +173,7 @@
     <ClInclude Include="ai\bt_node.h" />
     <ClInclude Include="ai\cinematic_manager.h" />
     <ClInclude Include="ai\cinematic_parser.h" />
+    <ClInclude Include="ai\fixed_joint.h" />
     <ClInclude Include="ai\fsm_basic_enemy.h" />
     <ClInclude Include="ai\fsm_basic_player.h" />
     <ClInclude Include="ai\fsm_boss.h" />
@@ -378,6 +379,7 @@
     <ClCompile Include="ai\bt_node.cpp" />
     <ClCompile Include="ai\cinematic_manager.cpp" />
     <ClCompile Include="ai\cinematic_parser.cpp" />
+    <ClCompile Include="ai\fixed_joint.cpp" />
     <ClCompile Include="ai\fsm_basic_enemy.cpp" />
     <ClCompile Include="ai\fsm_basic_player.cpp" />
     <ClCompile Include="ai\fsm_boss.cpp" />

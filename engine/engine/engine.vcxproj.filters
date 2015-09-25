@@ -569,6 +569,9 @@
     <ClInclude Include="components\comp_hitch.h">
       <Filter>components\misc</Filter>
     </ClInclude>
+    <ClInclude Include="ai\fixed_joint.h">
+      <Filter>ai\logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1061,6 +1064,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_hitch.cpp">
       <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ai\fixed_joint.cpp">
+      <Filter>ai\logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
