@@ -39,59 +39,59 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		if (preset_name=="carpettedHallway"){
 			kind = CARPETTEDHALLWAY;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "bathroom"){
 			kind = BATHROOM;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "auditorium"){
 			kind = AUDITORIUM;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "concerthall"){
 			kind = CONCERTHALL;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "livingroom"){
 			kind = LIVINGROOM;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "hallway"){
 			kind = HALLWAY;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "hangar"){
 			kind = HANGAR;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "alley"){
 			kind = ALLEY;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "sewerpipe"){
 			kind = SEWERPIPE;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "stonecorridor"){
 			kind = STONECORRIDOR;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "paddedcell"){
 			kind = PADDEDCELL;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "room"){
 			kind = ROOM;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "quarry"){
 			kind = QUARRY;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}else if (preset_name == "plain"){
 			kind = PLAIN;
 			parametred = false;
-			intensity = atts.getFloat("intensity", 0.f);
+			intensity = 100;// atts.getFloat("intensity", 0.f);
 		}
 	}
 }

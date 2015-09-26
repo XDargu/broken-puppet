@@ -78,6 +78,8 @@ public:
 	void ERRCHECK(FMOD_RESULT result);
 
 	bool getSlow();
+
+	void setCurrentPresetEvent(TCompHfxZone::preset_kind preset_type, SoundParameter param);
 };
 
 

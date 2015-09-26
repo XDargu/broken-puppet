@@ -275,194 +275,114 @@ void CSoundManager::update(float elapsed) {
 		CSoundManager::SoundParameter param = { "deepness", deepness };
 		setMixerEventParams("event:/Mixer/underwater", param);
 
+		// Reverb zones
 		TCompHfxZone* hfx_zone = listenerInsideHFXZone(cam->getPosition());
-		if ((hfx_zone) && ((hfx_zone->parametred))){
 
-			param.name = "time";
-			param.value = hfx_zone->FReverbTime;
-			setMixerEventParams("event:/Mixer/reverbTime", param);
+		if ((hfx_zone) && (!hfx_zone->parametred)){
 
-			param.name = "highcut";
-			param.value = hfx_zone->FHighCut;
-			setMixerEventParams("event:/Mixer/reverbHighCut", param);
-
-			param.name = "hfdecay";
-			param.value = hfx_zone->FHFDecay;
-			setMixerEventParams("event:/Mixer/reverbHFDecay", param);
-
-			param.name = "earlylate";
-			param.value = hfx_zone->FEarlyLate;
-			setMixerEventParams("event:/Mixer/reverbEarlyLate", param);
-
-			param.name = "latedelay";
-			param.value = hfx_zone->FLateDelay;
-			setMixerEventParams("event:/Mixer/reverbLateDelay", param);
-
-			param.name = "hfreference";
-			param.value = hfx_zone->FHFReference;
-			setMixerEventParams("event:/Mixer/reverbHFReference", param);
-
-			param.name = "diffusion";
-			param.value = hfx_zone->FDiffusion;
-			setMixerEventParams("event:/Mixer/reverbDiffusion", param);
-
-			param.name = "density";
-			param.value = hfx_zone->FDensity;
-			setMixerEventParams("event:/Mixer/reverbDensity", param);
-
-			param.name = "lowgain";
-			param.value = hfx_zone->FLowGain;
-			setMixerEventParams("event:/Mixer/reverbLowGain", param);
-
-			param.name = "lowfreq";
-			param.value = hfx_zone->FLowFreq;
-			setMixerEventParams("event:/Mixer/reverbLowFreq", param);
-
-			param.name = "wetlevel";
-			param.value = hfx_zone->FWetLevel;
-			setMixerEventParams("event:/Mixer/reverbWetLevel", param);
-
-			param.name = "drylevel";
-			param.value = hfx_zone->FDryLevel;
-			setMixerEventParams("event:/Mixer/reverbDryLevel", param);
-
-			param.name = "earlydelay";
-			param.value = hfx_zone->FEarlyDelay;
-			setMixerEventParams("event:/Mixer/reverbEarlyDelay", param);
-
-		}else{
-
-			param.name = "time";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbTime", param);
-
-			param.name = "highcut";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbHighCut", param);
-
-			param.name = "hfdecay";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbHFDecay", param);
-
-			param.name = "earlylate";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbEarlyLate", param);
-
-			param.name = "latedelay";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbLateDelay", param);
-
-			param.name = "hfreference";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbHFReference", param);
-
-			param.name = "diffusion";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbDiffusion", param);
-
-			param.name = "density";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbDensity", param);
-
-			param.name = "lowgain";
-			param.value = 75.f;
-			setMixerEventParams("event:/Mixer/reverbLowGain", param);
-
-			param.name = "lowfreq";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbLowFreq", param);
-
-			param.name = "wetlevel";
-			param.value = 89.f;
-			setMixerEventParams("event:/Mixer/reverbWetLevel", param);
-
-			param.name = "drylevel";
-			param.value = 89.f;
-			setMixerEventParams("event:/Mixer/reverbDryLevel", param);
-
-			param.name = "earlydelay";
-			param.value = 0.f;
-			setMixerEventParams("event:/Mixer/reverbEarlyDelay", param);
-			if (hfx_zone){
-				if (hfx_zone->kind == TCompHfxZone::preset_kind::CARPETTEDHALLWAY){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetCarpettedHallway", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::BATHROOM){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetBathroom", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::AUDITORIUM){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetAuditorium", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::CONCERTHALL){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetConcerthall", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::LIVINGROOM){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetLivingRoom", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::HALLWAY){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetHallway", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::HANGAR){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetHangar", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::ALLEY){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetAlley", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::SEWERPIPE){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetSewerPipe", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::STONECORRIDOR){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetStoneCorridor", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::PADDEDCELL){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetPaddedCell", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::ROOM){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetRoom", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::QUARRY){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetQuarry", param);
-				}else if (hfx_zone->kind == TCompHfxZone::preset_kind::PLAIN){
-					param.name = "intensity";
-					param.value = hfx_zone->intensity;
-					setMixerEventParams("event:/Mixer/presetPlain", param);
-				}
-			}else{
+			if (hfx_zone->kind == TCompHfxZone::preset_kind::CARPETTEDHALLWAY){
 				param.name = "intensity";
-				param.value = 0.f;
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetCarpettedHallway", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::BATHROOM){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetBathroom", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::AUDITORIUM){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetAuditorium", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::CONCERTHALL){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetConcerthall", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::LIVINGROOM){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetLivingRoom", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::HALLWAY){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetHallway", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::HANGAR){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetHangar", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::ALLEY){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetAlley", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::SEWERPIPE){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetSewerPipe", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::STONECORRIDOR){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetStoneCorridor", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::PADDEDCELL){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetPaddedCell", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::ROOM){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetRoom", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::QUARRY){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetQuarry", param);
+			}
+			else if (hfx_zone->kind == TCompHfxZone::preset_kind::PLAIN){
+				param.name = "intensity";
+				param.value = hfx_zone->intensity;
 				setMixerEventParams("event:/Mixer/presetPlain", param);
 			}
+		}
+		else {
+			// setDefaultReverb();
 		}
 	}
 
 	system->update();
+}
+
+void CSoundManager::setCurrentPresetEvent(std::string event_path, float value){
+	//if (preset_type == TCompHfxZone::preset_kind::CARPETTEDHALLWAY){
+		SoundParameter param1;
+		param1.name = "intensity";
+		param1.value = value;
+
+		SoundParameter param2;
+		param2.name = "intensity";
+		param2.value = 0;
+
+		setMixerEventParams("event:/Mixer/presetCarpettedHallway", "event:/Mixer/presetCarpettedHallway" == event_path ? param1 : param2);
+		setMixerEventParams("event:/Mixer/presetBathroom", param);
+		setMixerEventParams("event:/Mixer/presetAuditorium", param);
+		setMixerEventParams("event:/Mixer/presetConcerthall", param);
+		setMixerEventParams("event:/Mixer/presetLivingRoom", param);
+		setMixerEventParams("event:/Mixer/presetHallway", param);
+		setMixerEventParams("event:/Mixer/presetHangar", param);
+		setMixerEventParams("event:/Mixer/presetAlley", param);
+		setMixerEventParams("event:/Mixer/presetSewerPipe", param);
+		setMixerEventParams("event:/Mixer/presetStoneCorridor", param);
+		setMixerEventParams("event:/Mixer/presetPaddedCell", param);
+		setMixerEventParams("event:/Mixer/presetRoom", param);
+		setMixerEventParams("event:/Mixer/presetQuarry", param);
+		setMixerEventParams("event:/Mixer/presetPlain", param);
 }
 
 FMOD_VECTOR CSoundManager::XMVECTORtoFmod(XMVECTOR vector) {
