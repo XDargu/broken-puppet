@@ -194,6 +194,7 @@ public:
 	void playAnimationIfNotPlaying(int id);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	void resetTimeAnimation();
 
 	void setActive(bool act);
 

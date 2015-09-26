@@ -11,8 +11,8 @@
 
 struct TCompHfxZone : TBaseComponent {
 private:
-	std::string type;
-	std::string preset_name;
+	char type[64];
+	char preset_name[64];
 public:
 	float FReverbTime;
 	float FHighCut;

@@ -396,9 +396,9 @@ int bt_grandma::actionChaseNeedlePosition()
 				if (path.size() > 0){
 					if (ind_path < path.size()){
 						if (distance_new >= distance_old){
-							time_searching_needle += state_time;
+							time_searching_needle += CApp::get().delta_time;
 						}
-						if ((time_searching_needle > 15.f) || (state_time >= 2000.f)){
+						if ((time_searching_needle > 15.f) || (state_time > 20.f)){
 							time_searching_needle = 100.f;
 							Citem_manager::get().removeNeedle(target_needle);
 							return LEAVE;
