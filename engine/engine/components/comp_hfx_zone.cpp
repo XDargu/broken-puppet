@@ -22,7 +22,7 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 	strcpy(type, atts.getString("kind", "undefined").c_str());
 	//type = atts.getString("kind", "undefined");
-	if (char_equal(type, "reverb")==true){
+	if (char_equal(type, "free_reverb")){
 		FReverbTime = atts.getFloat("reverbTime", 0.f);
 		FHighCut = atts.getFloat("highCut", 0.f);
 		FHFDecay = atts.getFloat("hfDecay", 0.f);
@@ -40,7 +40,7 @@ void TCompHfxZone::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		strcpy(preset_name, "undefined");
 		//preset_name = "undefined";
 		parametred = true;
-	}else if (char_equal(type, "preset")==true){
+	}else if (char_equal(type, "preset")){
 		strcpy(preset_name, atts.getString("preset_name", "undefined").c_str());
 		//preset_name = atts.getString("preset_name", "undefined");
 		if (char_equal(preset_name, "carpettedHallway")){
