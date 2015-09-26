@@ -51,6 +51,13 @@ public:
 		return true;
 	}
 
+	void unregister(const char* name) {
+		auto it = all_items.find(name);
+		if (it != all_items.end()) {
+			all_items.erase(it);
+		}
+	}
+
 	bool reload(const char* name) {
 
 		// Search ...

@@ -58,11 +58,11 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 			, physx::PxTransform(
 			Physics.XMVECTORToPxVec3(trans->position),
 			Physics.XMVECTORToPxQuat(XMQuaternionNormalize(trans->rotation)))
-			, *multiple_c->colliders[0]
+			, *(*multiple_c->colliders)[0]
 			);
 
-		for (int i = 1; i < multiple_c->colliders.size(); i++) {
-			staticBody->attachShape(*multiple_c->colliders[i]);
+		for (int i = 1; i < multiple_c->colliders->size(); i++) {
+			staticBody->attachShape(*(*multiple_c->colliders)[i]);
 		}
 	}
 	else {

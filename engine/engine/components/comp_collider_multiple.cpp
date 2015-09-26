@@ -3,6 +3,23 @@
 #include "comp_recast_aabb.h"
 #include "nav_mesh_manager.h"
 
+
+TCompColliderMultiple::TCompColliderMultiple() : CCollider() {
+	m_v = nullptr;
+	t_v = nullptr;
+	colliders = new std::vector<PxShape*>();
+}
+
+TCompColliderMultiple::~TCompColliderMultiple(){
+	if (t_v)
+		delete[] t_v;
+
+	if (m_v)
+		delete[] m_v;
+
+	delete colliders;
+}
+
 void TCompColliderMultiple::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	if (elem == "colliderMulti") {
@@ -74,7 +91,7 @@ void TCompColliderMultiple::loadFromAtts(const std::string& elem, MKeyValue &att
 		}
 
 		shape_collider->setLocalPose(local_offset);
-		colliders.push_back(shape_collider);
+		colliders->push_back(shape_collider);
 
 		
 		//AABB recast_aabb = AABB(XMVectorSet(-22.f, 0.f, -33.f, 0.f), XMVectorSet(5.0f, 1.f, -8.f, 0));
@@ -196,14 +213,6 @@ void TCompColliderMultiple::addInputNavMesh(){
 		if (!trans)
 			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
 	}
-}
-
-TCompColliderMultiple::~TCompColliderMultiple(){
-	if (t_v)
-		delete[] t_v;
-
-	if (m_v)
-		delete[] m_v;
 }
 
 void TCompColliderMultiple::checkIfInsideRecastAABB(){

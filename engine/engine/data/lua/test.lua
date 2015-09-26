@@ -153,20 +153,12 @@ function onSceneLoad_my_file()
 
 	-- Narrador 
 
-	local narr1_played = false
-	function onTriggerEnter_scene1_trigger_narr1(who)
-		if narr1_played == false then
-			logicManager:playSubtitles("SCENE103");
-			narr1_played = true
-		end
+	function onTriggerFirstEnter_scene1_trigger_narr1(who)
+		logicManager:playSubtitles("SCENE103");
 	end
 
-	local narr2_played = false
-	function onTriggerEnter_scene1_trigger_narr2(who)
-		if narr2_played == false then
-			logicManager:playSubtitles("SCENE104");
-			narr2_played = true
-		end
+	function onTriggerFirstEnter_scene1_trigger_narr2(who)
+		logicManager:playSubtitles("SCENE104");
 	end
 	
 
@@ -183,6 +175,7 @@ function onSceneLoad_my_file()
 	local sc2_hinge_caida6 = logicManager:getHingeJoint("sc2_hinge_caida6");
 	local sc2_hinge_caida7 = logicManager:getHingeJoint("sc2_hinge_caida7");
 	
+	-- Limitar cadenas al inicio
 	sc2_hinge_caida1:setLimit(0.1)
 	sc2_hinge_caida2:setLimit(0.1)
 	sc2_hinge_caida3:setLimit(0.1)
@@ -191,6 +184,27 @@ function onSceneLoad_my_file()
 	sc2_hinge_caida6:setLimit(0.1)
 	sc2_hinge_caida7:setLimit(0.1)
 
+	-- Caída
+	function onTriggerFirstEnter_trigger_caida(who)
+		-- Quitar límites a cadenas
+		sc2_hinge_caida1:setLimit(90)
+		sc2_hinge_caida2:setLimit(90)
+		sc2_hinge_caida3:setLimit(90)
+		sc2_hinge_caida4:setLimit(90)
+		sc2_hinge_caida5:setLimit(90)
+		sc2_hinge_caida6:setLimit(90)
+		sc2_hinge_caida7:setLimit(90)
+
+		-- Romper fixed joints
+		local sc2_fixed_1 = logicManager:getFixedJoint("sc2_fixed_caida1");
+		sc2_fixed_1:breakJoint();
+
+		local sc2_fixed_2 = logicManager:getFixedJoint("sc2_fixed_caida2");
+		sc2_fixed_2:breakJoint();
+
+		-- Quitar luces
+		logicManager:changeAmbientLight(0.2,0.2,0.2,0.95);
+	end
 
 	-- Plataforma elevadora
 	local sc2_plataforma_elevadora = logicManager:getObject("sc2_plataforma_elevadora")
@@ -209,31 +223,23 @@ function onSceneLoad_my_file()
 		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
 	end
 	
-	-- sc2_fixed_caida1
+	-- Salir de la escena
+	function onTriggerEnter_sc2_trigger_fin(who)
+		logicManager:loadScene("data/scenes/scene_3.xml");
+	end
+
 	-- Narrador
 
-	local sc2_narr2_played = false
-	function onTriggerEnter_scene2_trigger_narr2(who)
-		if sc2_narr2_played == false then
-			logicManager:playSubtitles("SCENE202");
-			sc2_narr2_played = true
-		end
+	function onTriggerFirstEnter_scene2_trigger_narr2(who)
+		logicManager:playSubtitles("SCENE202");
 	end
 
-	local sc2_narr3_played = false
-	function onTriggerEnter_scene2_trigger_narr3(who)
-		if sc2_narr3_played == false then
-			logicManager:playSubtitles("SCENE203");
-			sc2_narr3_played = true
-		end
+	function onTriggerFirstEnter_scene2_trigger_narr3(who)
+		logicManager:playSubtitles("SCENE203");
 	end
 
-	local sc2_narr4_played = false
-	function onTriggerEnter_scene2_trigger_narr4(who)
-		if sc2_narr4_played == false then
-			logicManager:setTimer("timerSc2Narr4", 1);
-			sc2_narr4_played = true
-		end
+	function onTriggerFirstEnter_scene2_trigger_narr4(who)
+		logicManager:setTimer("timerSc2Narr4", 1);
 	end
 
 	function onTimerEnd_timerSc2Narr4()

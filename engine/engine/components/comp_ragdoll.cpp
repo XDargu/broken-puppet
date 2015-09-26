@@ -351,8 +351,6 @@ void TCompRagdoll::breakJoints() {
 }
 
 void TCompRagdoll::breakJoint(int id) {
-	float force;
-	float torque;
 	ragdoll->articulations[id]->setBreakForce(0.05f, 0.05f);
 }
 

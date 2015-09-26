@@ -90,7 +90,7 @@ void DebugDrawGL::vertex(const float* pos, unsigned int color)
 {
   assert( num_colored_vertices < MAX_VERTICES-1 );
   //colored_vertices[ num_colored_vertices ].assign( pos[0], pos[1], pos[2], color );
-  colored_vertices[num_colored_vertices] = XMVectorSet(pos[0], pos[1], pos[2], color);
+  colored_vertices[num_colored_vertices] = XMVectorSet(pos[0], pos[1], pos[2], (float)color);
   ++num_colored_vertices;
 }
 
@@ -98,7 +98,7 @@ void DebugDrawGL::vertex(const float x, const float y, const float z, unsigned i
 {
   assert( num_colored_vertices < MAX_VERTICES-1 );
   //colored_vertices[ num_colored_vertices ].assign( x, y, z, color );
-  colored_vertices[num_colored_vertices] = XMVectorSet(x, y, z, color);
+  colored_vertices[num_colored_vertices] = XMVectorSet(x, y, z, (float)color);
   ++num_colored_vertices;
 }
 

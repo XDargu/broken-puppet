@@ -18,6 +18,8 @@ struct TCompShadows : TBaseComponent {
 		color = DirectX::XMVectorSet(1, 1, 1, 1);
 	}
 
+	~TCompShadows() { rt.destroyAll(); }
+
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
 	void init();

@@ -168,7 +168,8 @@ bool CRenderToTexture::createDepthBuffer() {
 	hr = device->CreateDepthStencilView(ztexture2d, &depthStencilViewDesc, &depth_stencil_view);
 	if (FAILED(hr))
 		return false;
-	setDbgName(depth_stencil_view, "ZTextureDSV");
+	std::string m_name = "ZTextureDSV_" + std::string(name);
+	setDbgName(depth_stencil_view, m_name.c_str());
 
 	// Setup the description of the shader resource view.
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
@@ -224,7 +225,8 @@ void CRenderToTexture::clearDepthBuffer() {
 	::render.ctx->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void CRenderToTexture::destroyAll() {	
+void CRenderToTexture::destroyAll() {
+	texture_manager.unregister(name);
 	SAFE_RELEASE(render_target_view);
 	SAFE_RELEASE(depth_stencil_view);
 	if (ztexture != nullptr) {

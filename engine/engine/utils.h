@@ -12,6 +12,7 @@
 #define SET_ERROR_CONTEXT(name, data) CErrorContext ec(name, data);
 
 #define clamp(v,x,y) max(min(v, y), x)
+#define char_equal(x, y) (std::strcmp(x, y) == 0)
 
 int fatal(const char* fmt, ...);
 void dbg(const char* fmt, ...);

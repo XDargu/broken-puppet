@@ -50,8 +50,8 @@ void TCompJointD6::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	float breakForce = atts.getFloat("maxBreakForce", 1000);
 	float breakTorque = atts.getFloat("maxTorqueForcemaxTorqueForce", 1000);
 
-	actor1 = atts.getString("actor1", "");
-	actor2 = atts.getString("actor2", "");
+	std::string actor1 = atts.getString("actor1", "");
+	std::string actor2 = atts.getString("actor2", "");
 
 	CEntity* owner_entity = (CEntity*)CHandle(this).getOwner();
 	const char* nombre = owner_entity->getName();

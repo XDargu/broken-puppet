@@ -19,9 +19,9 @@ struct TCompRender : TBaseComponent {
 
 	XMVECTOR color;
 
-	std::vector< RKey > keys;
+	std::vector< RKey >* keys;
 
-	TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr), emissive_on(true){}
+	TCompRender();
 	~TCompRender();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);

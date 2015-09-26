@@ -24,10 +24,11 @@ struct TCompPlatformPath : TBaseComponent{
 	float distance_enough;
 	float movement_speed;
 
-	std::vector<PxVec3> mPath;
+	std::vector<PxVec3>* mPath;
 	PxVec3 next_pos;
 
-	TCompPlatformPath() { }
+	TCompPlatformPath();
+	~TCompPlatformPath();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

@@ -38,8 +38,8 @@ TCompJointFixed::~TCompJointFixed() {
 }
 
 void TCompJointFixed::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	actor1 = atts.getString("actor1", "");
-	actor2 = atts.getString("actor2", "");
+	std::string actor1 = atts.getString("actor1", "");
+	std::string actor2 = atts.getString("actor2", "");
 	PxVec3 joint_position = Physics.XMVECTORToPxVec3(atts.getPoint("jointPosition"));
 	PxQuat joint_rotation = Physics.XMVECTORToPxQuat(atts.getQuat("jointRotation"));
 

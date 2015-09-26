@@ -17,8 +17,8 @@ bool TGlowStep::create(const char* name, int axres, int ayres, int afactor) {
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
-	bool is_ok = rt_lights->create(name_lights, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
-	is_ok &= rt_glow->create(name_glow, xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_lights->create("glow_lights_pp", xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	is_ok &= rt_glow->create("glow_glow_pp", xres, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
 
@@ -50,6 +50,8 @@ CTexture* TGlowStep::getOutput() {
 }
 
 void TGlowStep::destroy() {
-	SAFE_DESTROY(rt_lights);
-	SAFE_DESTROY(rt_glow);
+	//SAFE_DESTROY(rt_lights);
+	//SAFE_DESTROY(rt_glow);
+	if (rt_lights) { rt_lights->destroyAll(); rt_lights = nullptr; }
+	if (rt_glow) { rt_glow->destroyAll(); rt_glow = nullptr; }
 }

@@ -3,8 +3,13 @@
 #include "comp_transform.h"
 #include "comp_render.h"
 
+TCompRender::TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr), emissive_on(true) {
+	keys = new std::vector< RKey >();
+}
+
 TCompRender::~TCompRender() {
 	render_manager.removeKeysFromOwner(CHandle(this));
+	delete keys;
 }
 
 void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -27,6 +32,6 @@ void TCompRender::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		render_manager.addKey(mesh, mat, submesh_id, CHandle(this), &active, color);
 
 		RKey k = { mesh_name, mat_name, submesh_id };
-		keys.push_back(k);
+		keys->push_back(k);
 	}
 }

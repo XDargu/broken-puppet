@@ -16,7 +16,7 @@ bool TBlurCameraStep::create(const char* name, int axres, int ayres, int afactor
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
-	bool is_ok = rt_blur->create(name, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_blur->create("depth_of_field_pp", xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
 
@@ -48,5 +48,6 @@ CTexture* TBlurCameraStep::getOutput() {
 }
 
 void TBlurCameraStep::destroy() {
-	SAFE_DESTROY(rt_blur);
+	//SAFE_DESTROY(rt_blur);
+	if (rt_blur) { rt_blur->destroyAll(); rt_blur = nullptr; }
 }

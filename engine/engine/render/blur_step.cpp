@@ -17,7 +17,7 @@ bool TBlurStep::create(const char* name, int axres, int ayres, int afactor) {
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
-	bool is_ok = rt_blur_x->create(name_by_x, xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_blur_x->create("blur_pp", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	//is_ok &= rt_blur_y->create(name_by_y, xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
@@ -44,5 +44,6 @@ CTexture* TBlurStep::getOutput() {
 }
 
 void TBlurStep::destroy() {
-	SAFE_DESTROY(rt_blur_x);
+	//SAFE_DESTROY(rt_blur_x);
+	if (rt_blur_x) { rt_blur_x->destroyAll(); rt_blur_x = nullptr; }
 }

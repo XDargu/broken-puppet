@@ -306,6 +306,13 @@ void CLogicManager::onTriggerEnter(CHandle trigger, CHandle who) {
 	if (c_name && c_name_who)
 		execute("onTriggerEnter_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
 }
+void CLogicManager::onTriggerFirstEnter(CHandle trigger, CHandle who) {
+	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
+	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
+
+	if (c_name && c_name_who)
+		execute("onTriggerFirstEnter_" + std::string(c_name->name) + "(\"" + std::string(c_name_who->name) + "\");");
+}
 void CLogicManager::onTriggerExit(CHandle trigger, CHandle who) {
 	TCompName* c_name = ((CEntity*)trigger)->get<TCompName>();
 	TCompName* c_name_who = ((CEntity*)who)->get<TCompName>();
@@ -757,7 +764,7 @@ void CLogicManager::pushPlayerLegsState(std::string state_name) {
 		CHandle p_controller = p_entity->get<TCompPlayerController>();
 		if (p_controller.isValid()) {
 			TCompPlayerController* controller = p_controller;
-			controller->fsm_player_legs.ChangeState(state_name);
+			controller->fsm_player_legs->ChangeState(state_name);
 		}
 	}
 
@@ -935,7 +942,7 @@ void CLogicManager::setCanThrow(bool active) {
 	if (player_entity) {		
 		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
 		if (player_controller) {
-			player_controller->fsm_player_torso.can_throw = active;
+			player_controller->fsm_player_torso->can_throw = active;
 		}
 	}
 }
@@ -945,7 +952,7 @@ void CLogicManager::setCanPull(bool active) {
 	if (player_entity) {
 		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
 		if (player_controller) {
-			player_controller->fsm_player_torso.can_pull = active;
+			player_controller->fsm_player_torso->can_pull = active;
 		}
 	}
 }
@@ -955,7 +962,7 @@ void CLogicManager::setCanCancel(bool active) {
 	if (player_entity) {
 		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
 		if (player_controller) {
-			player_controller->fsm_player_torso.can_cancel = active;
+			player_controller->fsm_player_torso->can_cancel = active;
 		}
 	}
 }
@@ -965,7 +972,7 @@ void CLogicManager::setCanTense(bool active) {
 	if (player_entity) {
 		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
 		if (player_controller) {
-			player_controller->fsm_player_torso.can_tense = active;
+			player_controller->fsm_player_torso->can_tense = active;
 		}
 	}
 }
@@ -975,7 +982,7 @@ void CLogicManager::setCanMove(bool active) {
 	if (player_entity) {
 		TCompPlayerController* player_controller = player_entity->get<TCompPlayerController>();
 		if (player_controller) {
-			player_controller->fsm_player_legs.can_move = active;
+			player_controller->fsm_player_legs->can_move = active;
 		}
 	}
 }

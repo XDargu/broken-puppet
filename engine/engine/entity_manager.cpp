@@ -117,8 +117,9 @@ bool CEntityManager::removeFromChunk(CHandle the_handle) {
 }
 
 TEntityChunk* CEntityManager::addChunk(char name[32], XMVECTOR min, XMVECTOR max) {
-	TEntityChunk new_chunk(name, min, max);
-	entity_chunks.push_back(new_chunk);
+	/*TEntityChunk new_chunk(name, min, max);
+	entity_chunks.push_back(new_chunk);*/
 
-	return &new_chunk;
+	// Deprecated
+	return nullptr;
 }

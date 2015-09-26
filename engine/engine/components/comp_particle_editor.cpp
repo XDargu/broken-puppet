@@ -53,7 +53,7 @@ void TW_CALL CallBackParticleGroupCreate(void *clientData) {
 	TCompParticleGroup* e_pg = new_e->get<TCompParticleGroup>();
 
 	CParticleGroupDef def;
-	def.setName(pg_editor->aux_pg_name.c_str());
+	def.setName(pg_editor->aux_pg_name);
 	def.xml_as_text = e_pg->getXMLDefinitionWithName(pg_editor->aux_pg_name);
 	particle_groups_manager.particle_group_definitions.push_back(def);	
 	
@@ -112,7 +112,7 @@ void TCompParticleEditor::reloadParticleGroups() {
 
 	TwRemoveAllVars(particle_list_bar);
 
-	TwAddVarRW(particle_list_bar, "CreationName", TW_TYPE_STDSTRING, &aux_pg_name, "group='Creation' label='Name'");
+	TwAddVarRW(particle_list_bar, "CreationName", TW_TYPE_CSSTRING(sizeof(aux_pg_name)), &aux_pg_name, "group='Creation' label='Name'");
 	TwAddButton(particle_list_bar, "Create new Particle Group", CallBackParticleGroupCreate, ((TCompParticleEditor*)this), "group='Creation'");
 	TwAddSeparator(particle_list_bar, "CreationSeparator", "group='Creation'");
 

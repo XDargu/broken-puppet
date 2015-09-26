@@ -17,9 +17,9 @@ private:
 	int*   t_v;
 	bool inside_recastAABB;
 public:
-	std::vector<PxShape*> colliders;
+	std::vector<PxShape*>* colliders;
 
-	TCompColliderMultiple() : CCollider() { m_v = nullptr, t_v = nullptr; }
+	TCompColliderMultiple();
 
 	~TCompColliderMultiple();
 

@@ -8,12 +8,13 @@ private:
 	CHandle player_entity;
 	CHandle m_transform;
 	CHandle m_aabb;
-	std::vector<CHandle> inside;
+	std::vector<CHandle>* inside;
 	bool player_only;
 	bool bots_only;
+	bool first_enter;
 public:
 
-	TCompTrigger() : m_transform(CHandle()), m_aabb(CHandle()), player_only(false), bots_only(false) {}
+	TCompTrigger();
 	~TCompTrigger();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);

@@ -616,6 +616,7 @@ int bt_soldier::actionInitialAttack()
 		attacked = false;
 		return STAY;
 	}
+	return LEAVE;
 }
 
 //Move step by step to the roll position (leave on reach or lost)
@@ -714,6 +715,7 @@ int bt_soldier::actionNormalAttack()
 		attacked = false;
 		return STAY;
 	}
+	return LEAVE;
 }
 
 //Play a Idle war animation
