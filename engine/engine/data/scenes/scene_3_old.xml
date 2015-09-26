@@ -50,6 +50,11 @@
     <ragdoll name="soldier#4"/>
   </entity>
   -->
+  <entity>
+    <transform position="-4.00241 -1.02073 5.58466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-12.6537 -4.84886 -14.3092" max="12.6537 4.16885 14.3092"/>
+    <hfxZone kind="preset" preset_name="hangar"/>
+  </entity>
 	<entity tag = "player" prefab="Player">
 <transform position="-1.49808 -1.77333 -3.06559" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <ragdoll name="prota"/>

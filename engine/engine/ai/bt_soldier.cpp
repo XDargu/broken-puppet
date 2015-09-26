@@ -540,12 +540,14 @@ int bt_soldier::actionChaseRoleDistance()
 				return LEAVE;
 			}
 
+			stopAllAnimations();
+			resetTimeAnimation();
 			playAnimationIfNotPlaying(15);
 
 			TCompCharacterController* m_char_controller = character_controller;
 
-			m_char_controller->moveSpeedMultiplier = run_angry_speed;
-			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			m_char_controller->moveSpeedMultiplier = 7.f;
+			//m_char_controller->airSpeed = run_angry_speed * 0.8f;
 			ind_path = 0;
 		}else{
 			player_out_navMesh = true;
@@ -1338,6 +1340,11 @@ float bt_soldier::getAnimationDuration(int id) {
 
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
+}
+
+void bt_soldier::resetTimeAnimation(){
+	TCompSkeleton* m_skeleton = enemy_skeleton;
+	m_skeleton->resetAnimationTime();
 }
 
 void bt_soldier::setActive(bool act){
