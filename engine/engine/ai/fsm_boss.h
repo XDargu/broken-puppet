@@ -5,6 +5,17 @@
 #include "physics_manager.h"
 #include "entity_manager.h"
 
+// ----------------------------------------
+struct TPattern{
+	int attack;
+	float wait_time;
+};
+
+struct TAttackPattern {
+	vector<TPattern> pattern;
+};
+
+
 class fsm_boss : public aifsmcontroller
 {
 private:
@@ -82,7 +93,7 @@ public:
 
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
-	void Shoot1Shoot();
+	void Shoot1Shoot(float elapsed);
 	void Shoot1Reload();
 
 	void WaveLeft(float elapsed);
@@ -111,6 +122,14 @@ public:
 	bool can_proximity_hit;
 
 	XMVECTOR original_pos;
+
+	int last_attack_it;
+	int pattern_it;
+	int pattern_current;
+
+	std::vector<TAttackPattern> attack_pattern_list;
 };
+
+
 
 #endif

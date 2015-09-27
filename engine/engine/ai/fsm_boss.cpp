@@ -10,6 +10,66 @@ using namespace DirectX;
 
 fsm_boss::fsm_boss()
 {
+	/**
+	0: Rain
+	1: Shoot
+	2: Ball
+	3: WaveRight
+	4: WaveLeft
+	/**/
+	
+	TPattern p1;
+	p1.attack = 1; // Shoot
+	p1.wait_time = 3.f;
+
+	TPattern p2;
+	p2.attack = 2; // Ball
+	p2.wait_time = 3.f;
+
+	TPattern p3;
+	p3.attack = 3; // WaveRight
+	p3.wait_time = 3.f;
+
+	TPattern p4;
+	p4.attack = 4; // WaveLeft
+	p4.wait_time = 3.f;
+
+	TPattern p5;
+	p5.attack = 5; // Random
+	p5.wait_time = 3.f;
+
+	// Basic "El de toda la vida"
+	TAttackPattern ap1;
+	ap1.pattern.push_back(p2);
+	ap1.pattern.push_back(p1);
+	ap1.pattern.push_back(p3);
+	ap1.pattern.push_back(p4);
+
+	// SemiBasic "Busca refugio madafaca"
+	TAttackPattern ap2;
+	ap2.pattern.push_back(p1);
+	ap2.pattern.push_back(p2);
+	ap2.pattern.push_back(p3);
+
+	// Fully ground "El meneito"
+	TAttackPattern ap3;
+	ap3.pattern.push_back(p4);
+	ap3.pattern.push_back(p2);
+	ap3.pattern.push_back(p1);
+	ap3.pattern.push_back(p3);
+
+	// Big Bang "Correeee, que noooo"
+	TAttackPattern ap4;
+	ap4.pattern.push_back(p2);
+	ap4.pattern.push_back(p1);
+	ap4.pattern.push_back(p2);
+
+	// Add all ap to list
+	attack_pattern_list.push_back(ap1);
+	attack_pattern_list.push_back(ap2);
+	attack_pattern_list.push_back(ap3);
+	attack_pattern_list.push_back(ap4);
+							  
 }
 
 fsm_boss::~fsm_boss()
@@ -101,6 +161,10 @@ void fsm_boss::Init()
 	can_proximity = false;
 	can_proximity_hit = true;
 
+	pattern_it = 0;
+	pattern_current = -1;
+	last_attack_it = -1;
+
 	// Pruebas init
 	original_pos = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	
@@ -111,7 +175,7 @@ void fsm_boss::Hidden(float elapsed){
 
 	if (on_enter){
 		XMVECTOR aux_pos = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
-		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = XMVectorSetY(aux_pos, -30);
+		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = XMVectorSetY(aux_pos, -500);
 	}
 	if (CIOStatus::get().becomesPressed(CIOStatus::V)){		
 		ChangeState("fbp_RiseUp");	
@@ -614,13 +678,19 @@ void fsm_boss::Shoot1Reload(){
 				px_rigid->setLinearVelocity(force_dir * clamp(dist * 2, 0, 12));
 			}
 
-			if (state_time >= 2.f){
+			if ((state_time >= 2.f)&&(dist<1)){
 				ChangeState("fbp_Shoot1Shoot");
+			}
+			else if (state_time >= 4.f){
+				state_time = 0;
+				shoots_amount++;
+				SelectObjToShoot();
 			}
 		}
 		else if (state_time >= 2.f){
 			ChangeState("fbp_Shoot1ReleaseDef");
 		}
+
 	}
 	else if (state_time >= 2.f){
 		ChangeState("fbp_Shoot1ReleaseDef");
@@ -628,7 +698,7 @@ void fsm_boss::Shoot1Reload(){
 }
 
 //Shoot
-void fsm_boss::Shoot1Shoot(){
+void fsm_boss::Shoot1Shoot(float elapsed){
 	Reorientate(0.f, true);
 	
 	static PxVec3 force_dir;
@@ -663,17 +733,16 @@ void fsm_boss::Shoot1Shoot(){
 
 		force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
 
-
 	}
 
 	CEntity* m_e = obj_to_shoot;
-	if (m_e) {
+	if ((m_e)&&(state_time < 0.4f)) {
 		TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
 		if (rigid) {
 			PxRigidBody*  px_rigid = rigid->rigidBody;
 
-			px_rigid->addForce(force_dir, PxForceMode::eVELOCITY_CHANGE, true);
-			//px_rigid->setLinearVelocity(force_dir);
+			//px_rigid->addForce(force_dir, PxForceMode::eVELOCITY_CHANGE, true);
+			px_rigid->setLinearVelocity(force_dir * 70);
 		}
 	}
 
@@ -1134,20 +1203,31 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 
 int fsm_boss::Calculate_attack() {
 	
+	int next_attack = 0;
 	last_attack = 0.f;
-	int rnd = 0;	
 	if (m_entity_manager->rigid_list.size() < 130){
-		rnd = 0;
+		next_attack = 0;
 	}
-	else if (m_entity_manager->rigid_list.size() > 330){
-		//rnd = 3;
-		rnd = getRandomNumber(1, 4);
+	else{
+		// Comprobamos si el patron es nulo, si lo es elegimos uno aleatorio
+		if (pattern_current < 0){
+			pattern_current = getRandomNumber(0, attack_pattern_list.size() - 1);
+			pattern_it = 0;
+		}
+		// Comprobamos que no hemos acabado el patron
+		int aux = attack_pattern_list[pattern_current].pattern.size();
+		if (aux > (pattern_it)){
+			next_attack = attack_pattern_list[pattern_current].pattern[pattern_it].attack;
+			pattern_it++;
+		}
+		else{
+			pattern_current = -1;
+			next_attack = Calculate_attack();
+		}
 	}
-	else {
-		//rnd = 3;
-		rnd = getRandomNumber(1, 4);
-	}
-	return rnd;
+
+	last_attack_it = next_attack;
+	return next_attack;
 }
 
 bool fsm_boss::RainDebris(float elapsed){
@@ -1255,14 +1335,25 @@ void fsm_boss::SelectObjToShoot() {
 				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 				TCompTransform* obj_comp_trans = e->get<TCompTransform>();
 
-				if (!obj_to_shoot.isValid()) { obj_to_shoot = e; }
+				if (!obj_to_shoot.isValid()) { 
+					obj_to_shoot = e; 
+				}
 				
 				TCompSkeleton* skeleton = comp_skeleton;
 				
 				float dist_aux = V3DISTANCE(skeleton->getPositionOfBone(40), obj_comp_trans->position);
 				if ((dist_aux <= dist)&&(rigid->getMass() > 1500.f)){
-					dist = dist_aux;
-					obj_to_shoot = e;
+					if (obj_to_shoot.isValid()){
+						if (obj_to_shoot != e)
+						{
+							dist = dist_aux;
+							obj_to_shoot = e;
+						}							
+					}
+					else{
+						dist = dist_aux;
+						obj_to_shoot = e;
+					}
 				}				
 			}
 		}

@@ -30,7 +30,7 @@ void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		rigid.second->setName(name->name);
 	}
 
-	setCollisionGroups();
+	//setCollisionGroups();
 	setActive(false);
 }
 
@@ -135,7 +135,7 @@ void TCompRagdoll::setCollisonBoss(bool active){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::eBOSSRAGDOLL;
-		PxU32 notCollide = FilterGroup::eUNDEFINED;
+		PxU32 notCollide = 0;// FilterGroup::eUNDEFINED;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
