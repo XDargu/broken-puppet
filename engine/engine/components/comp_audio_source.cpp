@@ -14,6 +14,8 @@ TCompAudioSource::TCompAudioSource() {
 
 	params_names = new std::vector<std::string>();
 	params_value = new std::vector<float>();
+
+	asociated_sound = nullptr;
 }
 
 TCompAudioSource::~TCompAudioSource() {

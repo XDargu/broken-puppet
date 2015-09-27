@@ -166,6 +166,10 @@ function onSceneLoad_my_file()
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
 
+	-- Apagar cable
+	local sc2_cable = logicManager:getObject("sc2_cable_plat")	
+	sc2_cable:setEmissive(false)
+
 	-- Cadenas
 	local sc2_hinge_caida1 = logicManager:getHingeJoint("sc2_hinge_caida1");
 	local sc2_hinge_caida2 = logicManager:getHingeJoint("sc2_hinge_caida2");
@@ -214,6 +218,7 @@ function onSceneLoad_my_file()
 
 		print(tostring(who) .. " Interruptor subir plataforma");
 		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
+		sc2_cable:setEmissive(true)
 
 	end
 
@@ -221,6 +226,7 @@ function onSceneLoad_my_file()
 
 		print(tostring(who) .. " Interruptor bajar plataforma");
 		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
+		sc2_cable:setEmissive(false)
 	end
 	
 	-- Salir de la escena
@@ -253,7 +259,7 @@ function onSceneLoad_my_file()
 
 --logicManager:loadScene("data/scenes/scene_1.xml");
 	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
-	logicManager:setBands(true)
+	--logicManager:setBands(true)
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
