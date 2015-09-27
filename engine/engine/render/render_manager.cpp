@@ -317,7 +317,7 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera, bool characters
 		TCompAABB* m_aabb = k.aabb;
 
 		XASSERT(k.aabb.isValid(), "Invalid AABB");
-		culling = planes_active_camera.isVisible(m_aabb);
+		culling = true;// planes_active_camera.isVisible(m_aabb);
 		if (culling)
 			culling &= planes2.isVisible(m_aabb);
 		

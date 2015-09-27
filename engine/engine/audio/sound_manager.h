@@ -2,6 +2,7 @@
 #define _SOUND_MANAGER_H_
 
 #include "components\comp_transform.h"
+#include "components\comp_hfx_zone.h"
 #include "fmod.hpp"
 #include "fmod_studio.hpp"
 #include "fmod_errors.h"
@@ -23,6 +24,7 @@ public:
 	struct MixerInstance {
 		FMOD::Studio::EventInstance* instance;
 		MixerInstanceType type;
+		CHandle hfz_zone;
 	};
 private:
 	FMOD::Studio::Bank* masterBank;
@@ -45,10 +47,10 @@ private:
 	CEntity* player;
 	TCompTransform* p_transform;
 
-	void createMixerEvent(std::string mixer_event, MixerInstanceType type);
+	void createMixerEvent(std::string mixer_event, MixerInstanceType type, CHandle hfx_zone = CHandle());
 	void setMixerEventParams(std::string mixer_event, SoundParameter param, float lerp_val = 0.02f);
 	float getMixerEventParamValue(std::string mixer_event, std::string param_name);
-	void setCurrentReverbEvent(std::string event_path);
+	void setCurrentReverbEvent(std::string event_path, TCompHfxZone* hfx_zone, XMVECTOR listener_pos);
 	
 public:
 	CSoundManager();
