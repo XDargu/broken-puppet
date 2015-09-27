@@ -5,12 +5,12 @@
 
 struct TCompButton : TBaseComponent {
 private:
-	std::string scene_change_name;
+	char scene_change_name[128];
 	bool exit_action;
 public:
 
 	TCompButton(){
-		scene_change_name = "";
+		scene_change_name[0] = 0x00;
 		exit_action = false;
 	}
 

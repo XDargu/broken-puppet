@@ -7,7 +7,7 @@
 
 struct TCompAiBoss : TBaseComponent {
 private:
-	fsm_boss m_fsm_boss;
+	fsm_boss* m_fsm_boss;
 
 	CHandle mPlayer;
 	CHandle player_trans;
@@ -45,6 +45,10 @@ private:
 	bool death_time;
 
 public:
+
+	TCompAiBoss();
+	~TCompAiBoss();
+
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void fixedUpdate(float elapsed);

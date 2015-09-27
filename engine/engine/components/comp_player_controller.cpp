@@ -11,6 +11,16 @@
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
 
+TCompPlayerController::TCompPlayerController() : old_target_transform(CHandle()) {
+	fsm_player_legs = new FSMPlayerLegs;
+	fsm_player_torso = new FSMPlayerTorso;
+}
+
+TCompPlayerController::~TCompPlayerController() {
+	delete fsm_player_legs;
+	delete fsm_player_torso;
+}
+
 void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompLife>(this);
 	assertRequiredComponent<TCompTransform>(this);
@@ -18,10 +28,10 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	TCompRigidBody* rigidBody = assertRequiredComponent<TCompRigidBody>(this);
 	assertRequiredComponent<TCompCharacterController>(this);
 
-	fsm_player_legs.SetEntity(CHandle(this).getOwner());
-	fsm_player_torso.SetEntity(CHandle(this).getOwner());
-	fsm_player_legs.torso = &fsm_player_torso;
-	fsm_player_torso.legs = &fsm_player_legs;
+	fsm_player_legs->SetEntity(CHandle(this).getOwner());
+	fsm_player_torso->SetEntity(CHandle(this).getOwner());
+	fsm_player_legs->torso = fsm_player_torso;
+	fsm_player_torso->legs = fsm_player_legs;
 
 	hit_cool_down = 1;
 	time_since_last_hit = 0;
@@ -65,8 +75,8 @@ void TCompPlayerController::init() {
 	CSoundManager::get().addFX2DTrack("string_grab_9.ogg", "string_player_grab", "pull");
 	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_player_grab2", "pull");*/
 
-	fsm_player_legs.Init();
-	fsm_player_torso.Init();
+	fsm_player_legs->Init();
+	fsm_player_torso->Init();
 	
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
 
@@ -93,11 +103,11 @@ void TCompPlayerController::init() {
 void TCompPlayerController::update(float elapsed) {
 	time_since_last_hit += elapsed;
 
-	fsm_player_torso.update(elapsed);	
+	fsm_player_torso->update(elapsed);
 
 	CIOStatus& io = CIOStatus::get();
 	if (io.becomesReleased(CIOStatus::R)) {
-		fsm_player_legs.ChangeState("fbp_Ragdoll");
+		fsm_player_legs->ChangeState("fbp_Ragdoll");
 	}	
 
 	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
@@ -131,7 +141,7 @@ void TCompPlayerController::update(float elapsed) {
 	PxVec3 actor_position;
 	PxVec3 actor_normal;
 
-	fsm_player_torso.getThrowingData(hit_actor, actor_position, actor_normal);
+	fsm_player_torso->getThrowingData(hit_actor, actor_position, actor_normal);
 
 	if (hit_actor != nullptr) {
 		CHandle target_entity(hit_actor->userData);
@@ -254,7 +264,7 @@ void TCompPlayerController::update(float elapsed) {
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {
-	fsm_player_legs.update(elapsed);
+	fsm_player_legs->update(elapsed);
 }
 
 //unsigned int TCompPlayerController::getStringCount() {
@@ -265,10 +275,10 @@ void TCompPlayerController::actorHit(const TActorHit& msg) {
 	CHandle player_handle = CHandle(this).getOwner();
 	CEntity* player_entity = (CEntity*)player_handle;
 	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
-	if ((!(p_ragdoll->isRagdollActive()) || (fsm_player_legs.getCurrentNode() == "fbp_WakeUp"))){
+	if ((!(p_ragdoll->isRagdollActive()) || (fsm_player_legs->getCurrentNode() == "fbp_WakeUp"))){
 		if (time_since_last_hit >= hit_cool_down){
 			dbg("Force recieved is  %f\n", msg.damage);
-			fsm_player_legs.EvaluateHit(msg.damage);
+			fsm_player_legs->EvaluateHit(msg.damage);
 			time_since_last_hit = 0;
 
 			// Boss
@@ -285,14 +295,14 @@ void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
 	if (time_since_last_hit >= hit_cool_down){
 		dbg("Damage recieved is  %f\n", msg.damage);
 		//fsm_player_legs.last_hit = 2;
-		fsm_player_legs.EvaluateHit(msg.damage);
+		fsm_player_legs->EvaluateHit(msg.damage);
 		time_since_last_hit = 0;
 	}
 }
 
 
 bool TCompPlayerController::canThrow() {
-	return fsm_player_torso.canThrow();
+	return fsm_player_torso->canThrow();
 }
 
 
@@ -315,7 +325,7 @@ void TCompPlayerController::bossImpact(CHandle boss){
 
 		//((PxRigidDynamic*)((TCompRagdoll*)m_player_ragdoll)->getBoneRigid(1))->setLinearVelocity(force_dir * 2);
 
-		fsm_player_legs.ragdoll_force = force_dir * 10;
+		fsm_player_legs->ragdoll_force = force_dir * 10;
 	}
 	// hurt the player
 	/**/

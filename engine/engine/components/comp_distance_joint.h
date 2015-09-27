@@ -5,10 +5,6 @@
 #include "physics_manager.h"
 
 struct  TCompDistanceJoint : TBaseComponent {
-private:
-	std::string actor1;
-	std::string actor2;
-
 public:
 	physx::PxDistanceJoint* joint;
 	CHandle e_a1;

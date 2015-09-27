@@ -9,7 +9,7 @@
 
 void TCompButton::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	if (elem == "actionChangeScene") {
-		scene_change_name = atts.getString("name", "noscene");
+		strcpy(scene_change_name, atts.getString("name", "noscene").c_str());
 	}
 	if (elem == "actionExit") {
 		exit_action = true;
@@ -56,7 +56,7 @@ void TCompButton::update(float elapsed) {
 				if (CIOStatus::get().becomesReleased(CIOStatus::MOUSE_LEFT)){
 					// Actions
 					// Change scene
-					if (scene_change_name != "") {
+					if (!char_equal(scene_change_name, "")) {
 						CLogicManager::get().loadScene(scene_change_name);
 					}
 

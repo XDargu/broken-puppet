@@ -62,7 +62,7 @@ cbuffer TCtesParticleSystem SHADER_REGISTER(b5)   // using the same register as 
 {
 	int n_imgs_x;
 	int n_imgs_y;
-	int stretch;
+	float stretch;
 	int render_mode;
 	int animation_mode;
 	int stretch_mode;

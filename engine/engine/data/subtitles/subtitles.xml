@@ -11,7 +11,8 @@
   <subtitle guid="SCENE104" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE104" text="Soldados. Los hostiles guardianes del teatro. Ahora Katherine era una intrusa..." />
 
   <subtitle guid="SCENE201" next="" size="24" color="0xffffffff" time="9" sound="event:/VO/EN/SCENE200" text="Ya estaba cerca de su amado camerino" />
-  <subtitle guid="SCENE202" next="" size="24" color="0xffffffff" time="11" sound="event:/VO/EN/SCENE201" text="Ya no quedaba nada. Cualquier rastro suyo había sido eliminado" />
+  <subtitle guid="SCENE202" next="SCENE202_1" size="24" color="0xffffffff" time="5" sound="event:/VO/EN/SCENE201" text="Ya no quedaba nada. Cualquier rastro suyo había sido eliminado" />
+  <subtitle guid="SCENE202_1" next="" size="24" color="0xff88ff00" time="4" sound="event:/VO/EN/KATH201" text="No es posible... ¡Es todo culpa tuya!" />
   <subtitle guid="SCENE203" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE202" text="Y cayó..." />
   <subtitle guid="SCENE204" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE203" text="...al más profundo de los abismos del teatro. Al inexplorado foso" />
 </subtitles>

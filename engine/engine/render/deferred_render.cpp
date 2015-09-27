@@ -120,8 +120,14 @@ void CDeferredRender::render(const CCamera* camera, CRenderToTexture& rt_out) {
 }
 
 void CDeferredRender::destroy() {
-	/*rt_lights->destroyAll();
-	SAFE_DESTROY(rt_lights);
+	if (rt_lights) { rt_lights->destroyAll(); rt_lights = nullptr; }
+	if (rt_albedo) { rt_albedo->destroyAll(); rt_albedo = nullptr; }
+	if (rt_normals) { rt_normals->destroyAll(); rt_normals = nullptr; }
+	if (rt_specular) { rt_specular->destroyAll(); rt_specular = nullptr; }
+	if (rt_gloss) { rt_gloss->destroyAll(); rt_gloss = nullptr; }
+	if (rt_depth) { rt_depth->destroyAll(); rt_depth = nullptr; }
+	
+	/*SAFE_DESTROY(rt_lights);
 	SAFE_DESTROY(rt_albedo);
 	SAFE_DESTROY(rt_normals);
 	SAFE_DESTROY(rt_specular);

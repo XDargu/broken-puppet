@@ -22,7 +22,7 @@ void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 	TCompTransform* m_transform = h_transform;
 
 	if (elem == "particleGroup") {
-		def_name = atts.getString("name", "unnamed");
+		strcpy(def_name, atts.getString("name", "unnamed").c_str());
 	}
 
 	if (elem == "particleSystem") {
@@ -37,10 +37,10 @@ void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) 
 	
 }
 
-void TCompParticleGroup::init() {
-	if (def_name != "unnamed") {
+void TCompParticleGroup::init() {	
+	if (!char_equal(def_name, "undefined")) {
 		CEntity* m_entity = CHandle(this).getOwner();
-		particle_groups_manager.addParticleGroupToEntity(m_entity, def_name);
+		particle_groups_manager.addParticleGroupToEntity(m_entity, std::string(def_name));
 	}
 
 	for (auto& ps : *particle_systems) {

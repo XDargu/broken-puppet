@@ -9,6 +9,11 @@
 
 TCompTrigger::~TCompTrigger() {
 	CLogicManager::get().unregisterTrigger(CHandle(this));
+	delete inside;
+}
+
+TCompTrigger::TCompTrigger() : m_transform(CHandle()), m_aabb(CHandle()), player_only(false), bots_only(false) {
+	inside = new std::vector<CHandle>();
 }
 
 void TCompTrigger::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -24,6 +29,8 @@ void TCompTrigger::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	TCompAABB* aabb = (TCompAABB*)m_aabb;
 
 	CLogicManager::get().registerTrigger(CHandle(this));
+
+	first_enter = false;
 }
 
 void TCompTrigger::init() {
@@ -48,9 +55,13 @@ bool TCompTrigger::onEnter(){
 				TCompAABB* i_aabb = e->get<TCompAABB>();
 				CEntity* own = CHandle(this).getOwner();
 				if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
-					inside.push_back(e);
+					inside->push_back(e);
 					CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
-					XDEBUG("On enter: %s", e->getName());
+					//XDEBUG("On enter: %s", e->getName());
+					if (!first_enter) {						
+						CLogicManager::get().onTriggerFirstEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
+						first_enter = true;
+					}
 					return true;
 				}
 			}
@@ -69,9 +80,13 @@ bool TCompTrigger::onEnter(){
 					TCompAABB* i_aabb = e->get<TCompAABB>();
 					CEntity* own = CHandle(this).getOwner();
 					if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
-						inside.push_back(e);
+						inside->push_back(e);
 						CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
-						XDEBUG("On enter: %s", e->getName());
+						//XDEBUG("On enter: %s", e->getName());
+						if (!first_enter) {
+							CLogicManager::get().onTriggerFirstEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
+							first_enter = true;
+						}
 						return true;
 					}
 				}
@@ -91,9 +106,13 @@ bool TCompTrigger::onEnter(){
 					TCompAABB* i_aabb = e->get<TCompAABB>();
 					CEntity* own = CHandle(this).getOwner();
 					if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
-						inside.push_back(e);
+						inside->push_back(e);
 						CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
-						XDEBUG("On enter: %s", e->getName());
+						//XDEBUG("On enter: %s", e->getName());
+						if (!first_enter) {
+							CLogicManager::get().onTriggerFirstEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
+							first_enter = true;
+						}
 						return true;
 					}
 				}
@@ -104,17 +123,17 @@ bool TCompTrigger::onEnter(){
 }
 
 bool TCompTrigger::onExit(){
-	if (inside.size() > 0){
-		for (std::vector<CEntity*>::size_type i = 0; i != inside.size(); i++) {
+	if (inside->size() > 0){
+		for (std::vector<CEntity*>::size_type i = 0; i != inside->size(); i++) {
 			TCompAABB* aabb = (TCompAABB*)m_aabb;
-			CEntity* e = inside[i];
+			CEntity* e = (*inside)[i];
 			if (e->has<TCompAABB>()){
 				TCompAABB* i_aabb = e->get<TCompAABB>();
 				CEntity* own = CHandle(this).getOwner();
 				if ((e != own) && (!aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
-					remove(inside, i);
+					remove(*inside, i);
 					CLogicManager::get().onTriggerExit(CHandle(CHandle(this).getOwner()), CHandle(e));
-					XDEBUG("On exit: %s", e->getName());
+					//XDEBUG("On exit: %s", e->getName());
 					return true;
 				}
 			}
@@ -124,8 +143,8 @@ bool TCompTrigger::onExit(){
 }
 
 bool TCompTrigger::checkIfInside(CHandle entity){
-	for (std::vector<CEntity*>::size_type i = 0; i != inside.size(); ++i) {
-		if (inside[i] == entity) {
+	for (std::vector<CEntity*>::size_type i = 0; i != inside->size(); ++i) {
+		if ((*inside)[i] == entity) {
 			return true;
 		}
 	}
@@ -143,8 +162,8 @@ void TCompTrigger::remove(std::vector<CHandle>& vec, size_t pos)
 
 void TCompTrigger::renderDebug3D() {
 	std::string a = "";
-	for (std::vector<CHandle>::size_type i = 0; i < inside.size(); i++) {
-		CEntity* e = (CEntity*)inside[i];
+	for (std::vector<CHandle>::size_type i = 0; i < inside->size(); i++) {
+		CEntity* e = (CEntity*)(*inside)[i];
 		a += e->getName();
 		a += "\n";
 	}

@@ -23,13 +23,14 @@ struct TCompPlayerController : TBaseComponent {
 
 	void bossImpact(CHandle boss);
 public:
-	FSMPlayerLegs fsm_player_legs;
-	FSMPlayerTorso fsm_player_torso;
+	FSMPlayerLegs* fsm_player_legs;
+	FSMPlayerTorso* fsm_player_torso;
 	
 	float hit_cool_down;
 	float time_since_last_hit;
 
-	TCompPlayerController() : old_target_transform(CHandle()) {}
+	TCompPlayerController();
+	~TCompPlayerController();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

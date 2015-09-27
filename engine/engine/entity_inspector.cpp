@@ -238,14 +238,14 @@ void TW_CALL GetGrandmaState(void *value, void *clientData)
 void TW_CALL GetPlayerFSMLegsState(void *value, void *clientData)
 {
 	std::string *destPtr = static_cast<std::string *>(value);
-	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_legs.getCurrentNode());
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_legs->getCurrentNode());
 
 }
 
 void TW_CALL GetPlayerFSMTorsoState(void *value, void *clientData)
 {
 	std::string *destPtr = static_cast<std::string *>(value);
-	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_torso.getCurrentNode());
+	TwCopyStdStringToLibrary(*destPtr, static_cast<TCompPlayerController *>(clientData)->fsm_player_torso->getCurrentNode());
 
 }
 
@@ -571,15 +571,15 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarRW(bar, "RenderActive", TW_TYPE_BOOL8, &e_render->active, " group=Render label='Active'");
 		TwAddVarRW(bar, "RenderEmissiveOn", TW_TYPE_BOOL8, &e_render->emissive_on, " group=Render label='Emissive on'");
 		std::string aux = "";
-		for (int i = 0; i < e_render->keys.size(); ++i) {
+		for (int i = 0; i < e_render->keys->size(); ++i) {
 			aux = "RenderMesh" + i;
-			TwAddVarRO(bar, aux.c_str(), TW_TYPE_STDSTRING, &e_render->keys[i].meshName, " group=Render label='Mesh'");
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_STDSTRING, &(*e_render->keys)[i].meshName, " group=Render label='Mesh'");
 			aux = "RenderMat" + i;
-			TwAddVarRO(bar, aux.c_str(), TW_TYPE_STDSTRING, &e_render->keys[i].matName, " group=Render label='Material'");
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_STDSTRING, &(*e_render->keys)[i].matName, " group=Render label='Material'");
 			aux = "RenderGroupID" + i;
-			TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &e_render->keys[i].subMeshId, " group=Render label='Subgroup ID'");
+			TwAddVarRO(bar, aux.c_str(), TW_TYPE_INT32, &(*e_render->keys)[i].subMeshId, " group=Render label='Subgroup ID'");
 
-			if (i < e_render->keys.size() - 1)
+			if (i < e_render->keys->size() - 1)
 				TwAddSeparator(bar, "", "group=Render");
 		}
 	}
@@ -639,11 +639,11 @@ void CEntityInspector::inspectEntity(CHandle the_entity) {
 		TwAddVarRW(bar, "PlayerControllerActive", TW_TYPE_BOOL8, &e_player_controller->active, " group='Player Controller' label='Active'");
 		TwAddVarCB(bar, "PlayerControllerLegsState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMLegsState, e_player_controller, " group='Player Controller' label='Legs State'");
 		TwAddVarCB(bar, "PlayerControllerTorsoState", TW_TYPE_STDSTRING, NULL, GetPlayerFSMTorsoState, e_player_controller, " group='Player Controller' label='Torso State'");
-		TwAddVarRW(bar, "PlayerControllerTorsoCanThrow", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_throw, " group='Player Controller' label='Can throw'");
-		TwAddVarRW(bar, "PlayerControllerTorsoCanPull", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_pull, " group='Player Controller' label='Can pull'");
-		TwAddVarRW(bar, "PlayerControllerTorsoCanTense", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_tense, " group='Player Controller' label='Can tense'");
-		TwAddVarRW(bar, "PlayerControllerTorsoCanCancel", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso.can_cancel, " group='Player Controller' label='Can cancel'");
-		TwAddVarRW(bar, "PlayerControllerLegsCanMove", TW_TYPE_BOOL8, &e_player_controller->fsm_player_legs.can_move, " group='Player Controller' label='Can move'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanThrow", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso->can_throw, " group='Player Controller' label='Can throw'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanPull", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso->can_pull, " group='Player Controller' label='Can pull'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanTense", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso->can_tense, " group='Player Controller' label='Can tense'");
+		TwAddVarRW(bar, "PlayerControllerTorsoCanCancel", TW_TYPE_BOOL8, &e_player_controller->fsm_player_torso->can_cancel, " group='Player Controller' label='Can cancel'");
+		TwAddVarRW(bar, "PlayerControllerLegsCanMove", TW_TYPE_BOOL8, &e_player_controller->fsm_player_legs->can_move, " group='Player Controller' label='Can move'");
 	}
 
 	if (e_player_pivot_controller) {

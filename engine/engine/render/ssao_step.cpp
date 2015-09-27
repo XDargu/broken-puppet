@@ -11,7 +11,7 @@ bool TSSAOStep::create(const char* name, int axres, int ayres, int afactor) {
 	yres = ayres;
 	rt_ssao = new CRenderToTexture();
 
-	bool is_ok = rt_ssao->create(name, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_ssao->create("ssao_pp", xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 
 	return is_ok;
 }
@@ -36,5 +36,6 @@ CTexture* TSSAOStep::getOutput() {
 }
 
 void TSSAOStep::destroy() {
-	SAFE_DESTROY(rt_ssao);
+	//SAFE_DESTROY(rt_ssao);
+	if (rt_ssao) { rt_ssao->destroyAll(); rt_ssao = nullptr; }
 }

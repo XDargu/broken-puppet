@@ -9,6 +9,14 @@
 #include "handle\prefabs_manager.h"
 
 
+TCompAiBoss::TCompAiBoss() {
+	m_fsm_boss = new fsm_boss;
+}
+
+TCompAiBoss::~TCompAiBoss() {
+	delete m_fsm_boss;
+}
+
 void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){ 
 	L_hitch_joint = nullptr; 
 	R_hitch_joint = nullptr; 
@@ -39,8 +47,8 @@ void TCompAiBoss::init(){
 	force = 24;
 	R_hitch_joint = nullptr;
 
-	m_fsm_boss.entity = mBoss;
-	m_fsm_boss.Init();
+	m_fsm_boss->entity = mBoss;
+	m_fsm_boss->Init();
 
 
 	// Create Right Hitch
@@ -137,20 +145,20 @@ void TCompAiBoss::update(float elapsed){
 	CIOStatus& io = CIOStatus::get();
 
 	if (CIOStatus::get().becomesPressed(CIOStatus::H)){
-		m_fsm_boss.HeadHit();
+		m_fsm_boss->HeadHit();
 	}
 	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
-		m_fsm_boss.HeartHit();
+		m_fsm_boss->HeartHit();
 	}
 
 
-	if (m_fsm_boss.can_proximity &&(mBoss.isValid()) && (mPlayer.isValid())){
+	if (m_fsm_boss->can_proximity && (mBoss.isValid()) && (mPlayer.isValid())){
 		player_trans = ((CEntity*)mBoss)->get<TCompTransform>();
 		boss_trans = ((CEntity*)mPlayer)->get<TCompTransform>();
 
 		if ((boss_trans.isValid()) && (player_trans.isValid())){			
 			if (V3DISTANCE(((TCompTransform*)boss_trans)->position, ((TCompTransform*)player_trans)->position) < proximity_distance){
-				m_fsm_boss.ChangeState("fbp_Proximity");
+				m_fsm_boss->ChangeState("fbp_Proximity");
 			}
 		}
 	}
@@ -199,7 +207,7 @@ void TCompAiBoss::update(float elapsed){
 		/**/
 	}	
 
-	if ((m_fsm_boss.getState() == "fbp_Stunned1") && (!can_break_hitch)) {
+	if ((m_fsm_boss->getState() == "fbp_Stunned1") && (!can_break_hitch)) {
 		can_break_hitch = true;		
 
 		TCompTransform* R_hitch_trans = ((CEntity*)R_hitch)->get<TCompTransform>();
@@ -207,7 +215,7 @@ void TCompAiBoss::update(float elapsed){
 		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
 		if (L_hitch_trans) L_hitch_trans->setType(1);
 	}
-	else if ((m_fsm_boss.getState() != "fbp_Stunned1") && (can_break_hitch)) {
+	else if ((m_fsm_boss->getState() != "fbp_Stunned1") && (can_break_hitch)) {
 		can_break_hitch = false;
 
 		TCompTransform* R_hitch_trans = ((CEntity*)R_hitch)->get<TCompTransform>();
@@ -215,7 +223,7 @@ void TCompAiBoss::update(float elapsed){
 		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
 		if (L_hitch_trans) L_hitch_trans->setType(0);
 	}
-	else if ((m_fsm_boss.getState() == "fbp_FinalState") && (!death_time)) {
+	else if ((m_fsm_boss->getState() == "fbp_FinalState") && (!death_time)) {
 		death_time = true;
 
 		TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
@@ -251,7 +259,7 @@ void TCompAiBoss::update(float elapsed){
 
 void TCompAiBoss::fixedUpdate(float elapsed){
 
-	m_fsm_boss.update(elapsed);
+	m_fsm_boss->update(elapsed);
 	
 	/*
 	// Calculate the point to go
@@ -442,20 +450,20 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 
 void TCompAiBoss::breakHitch(CHandle m_hitch){
 	if ((m_hitch == R_hitch)&&(can_break_hitch)) { 
-		m_fsm_boss.EvaluateHit(1);
+		m_fsm_boss->EvaluateHit(1);
 		//R_hitch_joint->setBreakForce(0, 0);
 	}
 	if ((m_hitch == L_hitch)&&(can_break_hitch)) { 
-		m_fsm_boss.EvaluateHit(0);
+		m_fsm_boss->EvaluateHit(0);
 		//L_hitch_joint->setBreakForce(0, 0);
 	}
 	if ((m_hitch == H_hitch) && (can_break_hitch)) {
-		m_fsm_boss.HeartHit();
+		m_fsm_boss->HeartHit();
 		H_hitch_joint->setBreakForce(0, 0);
 		is_death = true;
 	}
 }
 
 void TCompAiBoss::stun(){
-	m_fsm_boss.HeadHit();
+	m_fsm_boss->HeadHit();
 }

@@ -6,10 +6,6 @@
 
 	
 struct  TCompJointFixed : TBaseComponent {
-private:
-	std::string actor1;
-	std::string actor2;
-
 public:
 
 	CHandle e_a1;

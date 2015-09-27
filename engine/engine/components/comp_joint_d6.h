@@ -6,9 +6,6 @@
 
 struct  TCompJointD6 : TBaseComponent {
 private:
-	std::string actor1;
-	std::string actor2;
-
 	PxTransform getAnchorConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot);
 	PxTransform getAxisConfiguration(PxTransform body_transform, PxVec3 joint_pos, PxQuat joint_rot);
 public:

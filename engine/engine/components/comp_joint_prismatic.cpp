@@ -38,8 +38,8 @@ TCompJointPrismatic::~TCompJointPrismatic() {
 
 void TCompJointPrismatic::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
-	actor1 = atts.getString("actor1", "");
-	actor2 = atts.getString("actor2", "");
+	std::string actor1 = atts.getString("actor1", "");
+	std::string actor2 = atts.getString("actor2", "");
 
 	PxReal linearModeX = atts.getFloat("linearModeX", 1);
 	PxReal linearModeY = atts.getFloat("linearModeY", 1);

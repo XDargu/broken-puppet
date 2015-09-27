@@ -13,13 +13,24 @@ public:
 		std::string name;
 		float value;
 	};
+
+	enum MixerInstanceType {
+		UNDERWATER,
+		REVERB,
+		COUNT
+	};
+
+	struct MixerInstance {
+		FMOD::Studio::EventInstance* instance;
+		MixerInstanceType type;
+	};
 private:
 	FMOD::Studio::Bank* masterBank;
 	FMOD::Studio::Bank* stringsBank;
 
 	FMOD::Studio::System* system;
 	std::map<std::string, FMOD::Studio::EventDescription*> event_descriptions;
-	std::map<std::string, FMOD::Studio::EventInstance*> mixer_event_instances;
+	std::map<std::string, MixerInstance> mixer_event_instances;
 
 	std::vector<CHandle> HFXZones;
 
@@ -34,8 +45,10 @@ private:
 	CEntity* player;
 	TCompTransform* p_transform;
 
-	void createMixerEvent(std::string mixer_event);
-	void setMixerEventParams(std::string mixer_event, SoundParameter param);
+	void createMixerEvent(std::string mixer_event, MixerInstanceType type);
+	void setMixerEventParams(std::string mixer_event, SoundParameter param, float lerp_val = 0.02f);
+	float getMixerEventParamValue(std::string mixer_event, std::string param_name);
+	void setCurrentReverbEvent(std::string event_path);
 	
 public:
 	CSoundManager();
@@ -78,6 +91,8 @@ public:
 	void ERRCHECK(FMOD_RESULT result);
 
 	bool getSlow();
+
+	void setCurrentPresetEvent(std::string event_path);
 };
 
 

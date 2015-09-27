@@ -100,10 +100,11 @@ void CApp::loadConfig() {
 		xres = x_res;
 		yres = y_res;
 		fullscreen = mode;
+		first_scene = p.first_scene;
 	}
 	else{
-		xres = 1024;
-		yres = 768;
+		xres = 800;
+		yres = 600;
 	}
 }
 
@@ -390,8 +391,9 @@ bool CApp::create() {
 	logic_manager.bootLUA();
 
 	XASSERT(font.create(), "Error creating the font");
+		
 
-	first_scene = "data/scenes/my_file.xml";
+	//first_scene = "data/scenes/viewer_test.xml";
 	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
 	//sm.addMusicTrack(0, "CANCION.mp3");
 	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
@@ -1382,7 +1384,9 @@ void CApp::activateDebugMode(bool active) {
 
 void CApp::destroy() {
 	TwTerminate();
-	/*sharpen.destroy();
+	deferred.destroy();
+
+	sharpen.destroy();
 	ssao.destroy();
 	chromatic_aberration.destroy();
 	blur.destroy();
@@ -1390,7 +1394,9 @@ void CApp::destroy() {
 	glow.destroy();
 	silouette.destroy();
 	underwater.destroy();
-	ssrr.destroy();*/
+	ssrr.destroy();
+	rt_base->destroyAll();
+
 	CRope_manager::get().clearStrings();
 	Citem_manager::get().clear();
 	aimanager::get().clear();
@@ -1406,7 +1412,6 @@ void CApp::destroy() {
 	particle_groups_manager.destroy();
 	logic_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
-	deferred.destroy();
 
 	// Destroy app resources
 	wiredCube.destroy();
@@ -1480,6 +1485,20 @@ void CApp::loadScene(std::string scene_name) {
 		continue;
 	}
 	dbg("Pasado bucle");
+
+	deferred.destroy();
+	sharpen.destroy();
+	ssao.destroy();
+	chromatic_aberration.destroy();
+	blur.destroy();
+	blur_camera.destroy();
+	glow.destroy();
+	silouette.destroy();
+	underwater.destroy();
+	ssrr.destroy();
+	if (rt_base) { rt_base->destroyAll(); rt_base = nullptr; }
+	
+
 	CRope_manager::get().clearStrings();
 	entity_manager.clear();
 	mesh_manager.destroyAll();
@@ -1496,7 +1515,6 @@ void CApp::loadScene(std::string scene_name) {
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
-	deferred.destroy();
 
 	rt_base = new CRenderToTexture;
 	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
@@ -1712,7 +1730,7 @@ void CApp::loadVideo(const char* name)
 	char full_name[MAX_PATH];
 	::sprintf(full_name, "data/videos/%s", name);
 	clip = mgr->createVideoClip(full_name, TheoraOutputMode::TH_RGBX, 16);
-
+	
 	int w = clip->getWidth();
 	int h = clip->getHeight();
 
@@ -1748,7 +1766,7 @@ bool CApp::renderVideo()
 {
 
 	TheoraVideoFrame *frame = clip->getNextFrame();
-
+	
 	UINT w = clip->getWidth();
 	UINT h = clip->getHeight();
 
@@ -1778,7 +1796,11 @@ bool CApp::renderVideo()
 			clip->stop();
 			mgr->destroyVideoClip(clip);
 			clip = nullptr;
+			delete mgr;
 			mgr = nullptr;
+			videoTexture->destroy();
+			tex->Release();
+			m_shaderResourceView->Release();
 			return false;
 		}
 	}
@@ -1787,7 +1809,6 @@ bool CApp::renderVideo()
 	videoTexture->setResource(tex);
 	videoTexture->setResourceView(m_shaderResourceView);
 	drawTexture2D(0, 0, xres, yres, videoTexture);
-	//drawLoadingImage(0, 0, config.xres, config.yres, "", videoTexture);
 
 	::render.swap_chain->Present(0, 0);
 

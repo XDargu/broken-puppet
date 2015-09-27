@@ -86,6 +86,7 @@ public:
 	void registerGNLogic(CHandle golden_logic);
 	void registerZoneAABB(CHandle zone_aabb);
 	void onTriggerEnter(CHandle trigger, CHandle who);
+	void onTriggerFirstEnter(CHandle trigger, CHandle who);
 	void onTriggerExit(CHandle trigger, CHandle who);
 	void unregisterTrigger(CHandle trigger);
 	void unregisterGNLogic(CHandle golden_logic);

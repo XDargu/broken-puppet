@@ -13,6 +13,7 @@ void CFixedJoint::breakJoint() {
 	TCompJointFixed* joint = ((CEntity*)entity)->get<TCompJointFixed>();
 	if (joint)
 	{
+		joint->mJoint->setBreakForce(1, 1);
 		joint->mJoint->setConstraintFlag(PxConstraintFlag::eBROKEN, true);
 	}
 }

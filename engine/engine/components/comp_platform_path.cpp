@@ -2,13 +2,21 @@
 #include "comp_platform_path.h"
 #include "comp_rigid_body.h"
 
+TCompPlatformPath::TCompPlatformPath() {
+	mPath = new std::vector<PxVec3>();
+}
+
+TCompPlatformPath::~TCompPlatformPath() {
+	delete mPath;
+}
+
 void TCompPlatformPath::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	if (elem == "platformPath") {
 		movement_speed = atts.getFloat("speed", 2);
 	}
 	// Get the list of points
 	if (elem == "point") {
-		mPath.push_back(Physics.XMVECTORToPxVec3(atts.getPoint("position")));
+		mPath->push_back(Physics.XMVECTORToPxVec3(atts.getPoint("position")));
 	}
 }
 
@@ -32,15 +40,15 @@ void TCompPlatformPath::fixedUpdate(float elapsed) {
 	PxRigidDynamic* px_platform = ((TCompRigidBody*)mRigidbody)->rigidBody;
 
 	// Check if we have arrived
-	float distance = (px_platform->getGlobalPose().p - mPath[next_target]).magnitude();
+	float distance = (px_platform->getGlobalPose().p - (*mPath)[next_target]).magnitude();
 
 	if (distance <= distance_enough){
 		// If the platform arrived, then change objetive
 		next_target++;
-		next_target = next_target % mPath.size();
+		next_target = next_target % mPath->size();
 	}
 
-	next_pos = mPath[next_target];
+	next_pos = (*mPath)[next_target];
 
 	// Follow the point
 	PxTransform my_trans = px_platform->getGlobalPose();

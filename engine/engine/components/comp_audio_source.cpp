@@ -11,10 +11,17 @@
 TCompAudioSource::TCompAudioSource() {
 	played = false;
 	autoPlay = false;
+
+	params_names = new std::vector<std::string>();
+	params_value = new std::vector<float>();
+
+	asociated_sound = nullptr;
 }
 
 TCompAudioSource::~TCompAudioSource() {
 	//CLogicManager::get().unregisterTrigger(CHandle(this));
+	delete params_names;
+	delete params_value;
 	CSoundManager::get().ERRCHECK(asociated_sound->stop(FMOD_STUDIO_STOP_IMMEDIATE));
 	CSoundManager::get().ERRCHECK(asociated_sound->release());
 }
@@ -23,30 +30,25 @@ void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	if (elem == "audioSource"){
 		autoPlay = atts.getBool("autoplay", "false");
-	}
-
-	if (elem == "event"){
 		std::string sound_name = atts.getString("sound", "undefined");
 		own_transform = assertRequiredComponent<TCompTransform>(this);
-
-		//asociated_sound = CSoundManager::get().getInstance(sound_name);
 		setInstance(sound_name);
 	}
 
 	if (elem == "param") {
-		params_names.push_back(atts.getString("param_name", "undefined"));
-		params_value.push_back(atts.getFloat("param_value", 0.f));
+		params_names->push_back(atts.getString("paramName", "undefined"));
+		params_value->push_back(atts.getFloat("paramValue", 0.f));
 	}
 
-	if (elem=="fin_param"){
-		if (!params_value.empty()){
-			const int size = (int)params_value.size();
+	if (elem=="paramEnd"){
+		if (!params_value->empty()){
+			const int size = (int)params_value->size();
 			std::vector<CSoundManager::SoundParameter> params;
 
 			for (int j = 0; j < size; ++j){
 				CSoundManager::SoundParameter param;				
-				param.name = params_names[j];
-				param.value = params_value[j];
+				param.name = (*params_names)[j];
+				param.value = (*params_value)[j];
 				params.push_back(param);
 			}
 

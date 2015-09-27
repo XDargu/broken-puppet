@@ -82,7 +82,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(SolutionDir)$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)\</OutDir>
-    <TargetName>Broken Puppet</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -664,9 +664,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="collision_table.xml">
-      <SubType>Designer</SubType>
-    </Xml>
-    <Xml Include="my_file.xml">
       <SubType>Designer</SubType>
     </Xml>
   </ItemGroup>

@@ -32,7 +32,7 @@ bool TCompPlayerPosSensor::playerInRange(){
 		bool player_visible = false;
 
 		if (buf.nbTouches > 1){
-			for (int i = 0; i < buf.nbTouches; ++i){
+			for (unsigned int i = 0; i < buf.nbTouches; ++i){
 				const char* aux_name = buf.touches[1].actor->getName();
 				// Ignore own entity
 				PxRigidActor* m_actor = buf.touches[i].actor;

@@ -77,7 +77,7 @@ void TParticleEmitterGeneration::update(float elapsed) {
 
 		// If we have to make a new particle
 		if (loop_condition && burst_time == 0 && rate != 0 && rate_counter > rate && ps->particles.size() < limit) {
-			int num_new_particles = max(elapsed / rate, 1);
+			int num_new_particles = (int)max(elapsed / rate, 1);
 			rate_counter = 0;
 			for (int i = 0; i < num_new_particles; ++i) {
 				addParticle();

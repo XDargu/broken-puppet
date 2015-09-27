@@ -18,9 +18,9 @@ bool TSilouetteStep::create(const char* name, int axres, int ayres, int afactor)
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
-	bool is_ok = rt_dynamic->create("sil_dynamic", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
-	is_ok &= rt_sobel->create("sil_sobel", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
-	is_ok &= rt_final->create("sil_final", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_dynamic->create("sil_dynamic_pp", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	is_ok &= rt_sobel->create("sil_sobel_pp", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	is_ok &= rt_final->create("sil_final_pp", xres / factor, yres, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
 
@@ -57,8 +57,10 @@ CTexture* TSilouetteStep::getOutput() {
 }
 
 void TSilouetteStep::destroy() {
-	SAFE_DESTROY(rt_final);
-	SAFE_DESTROY(rt_sobel);
-	SAFE_DESTROY(rt_dynamic);
-
+	//SAFE_DESTROY(rt_final);
+	//SAFE_DESTROY(rt_sobel);
+	//SAFE_DESTROY(rt_dynamic);
+	if (rt_final) { rt_final->destroyAll(); rt_final = nullptr; }
+	if (rt_sobel) { rt_sobel->destroyAll(); rt_sobel = nullptr; }
+	if (rt_dynamic) { rt_dynamic->destroyAll(); rt_dynamic = nullptr; }
 }

@@ -17,7 +17,7 @@ bool TSSRRStep::create(const char* name, int axres, int ayres, int afactor) {
 	// xres, yres = 800 x 600
 	// by_x => 400x600
 	// by_y => 400x300
-	bool is_ok = rt_ssrr->create(name, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_ssrr->create("ssrr_pp", xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 	return is_ok;
 }
 
@@ -39,5 +39,6 @@ CTexture* TSSRRStep::getOutput() {
 }
 
 void TSSRRStep::destroy() {
-	SAFE_DESTROY(rt_ssrr);
+	//SAFE_DESTROY(rt_ssrr);
+	if (rt_ssrr) { rt_ssrr->destroyAll(); rt_ssrr = nullptr; }
 }

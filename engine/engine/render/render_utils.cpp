@@ -940,7 +940,7 @@ bool createString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float ten
 
 	XMFLOAT3 a = ropeVertices[epsilon - 1].Pos;	
 
-	return mesh.create(epsilon, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
+	return mesh.create(epsilon, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color, false);
 }
 
 bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float tension, float width)
@@ -958,7 +958,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 	int velocity = 10;	// Velocidad de movimiento
 	float wave_freq = 0.5f;	// frecuencia del ruido de la onda
 	float amplitude = 0.0f;	// amplitud del ruido de la onda
-	float elapsed = CApp::get().total_time;
+	float elapsed = (float)CApp::get().total_time;
 
 	for (int i = 0; i < epsilon; i++)
 	{
@@ -1119,7 +1119,7 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 
 	XMFLOAT3 a = ropeVertices[epsilon - 1].Pos;
 
-	return mesh.create(epsilon * sizes, ropeVertices, (epsilon - 1) * sizes * 6, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal);
+	return mesh.create(epsilon * sizes, ropeVertices, (epsilon - 1) * sizes * 6, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal, false);
 	//return mesh.create(epsilon * sizes, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
 }
 
@@ -1211,13 +1211,13 @@ void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const 
 	// Activate a ortho camera view projection matrix
 	XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
 	ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
-		0, render.xres,
-		render.yres, 0.f,
+		0, (float)render.xres,
+		(float)render.yres, 0.f,
 		-1.f, 1.f);
 	ctes_camera.uploadToGPU();
 
 	// Update the world matrix to match the params
-	ctes_object.get()->World = XMMatrixScaling(w, h, 1) * XMMatrixTranslation(x0, y0, 0);
+	ctes_object.get()->World = XMMatrixScaling((float)w, (float)h, 1) * XMMatrixTranslation((float)x0, (float)y0, 0);
 	ctes_object.uploadToGPU();
 
 	mesh_textured_quad_xy.activateAndRender();
@@ -1232,7 +1232,7 @@ void drawTexture3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTex
 	float x, y;
 	if (camera.getScreenCoords(world_p3d, &x, &y)) {
 
-		drawTexture2D(x, y, w, h, texture, tech_name);
+		drawTexture2D((int)x, (int)y, w, h, texture, tech_name);
 	}
 }
 
@@ -1244,7 +1244,7 @@ void drawTexture3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, con
 	float x, y;
 	if (camera.getScreenCoords(world_p3d, &x, &y)) {
 
-		drawTexture2D(x, y, w * dist, h * dist, texture, tech_name);
+		drawTexture2D((int)x, (int)y, (int)(w * dist), (int)(h * dist), texture, tech_name);
 	}
 }
 
@@ -1261,18 +1261,19 @@ void drawDialogBox(int x0, int y0, int w, int h, const CTexture* texture, const 
 	// Activate a ortho camera view projection matrix
 	XMMATRIX prev_view_proj = ctes_camera.get()->ViewProjection;
 	ctes_camera.get()->ViewProjection = XMMatrixOrthographicOffCenterRH(
-		0, render.xres,
-		render.yres, 0.f,
+		0, 
+		(float)render.xres,
+		(float)render.yres, 0.f,
 		-1.f, 1.f);
 	ctes_camera.uploadToGPU();
 
 	// Update the world matrix to match the params
-	ctes_object.get()->World = XMMatrixScaling(w, h, 1) * XMMatrixTranslation(x0, y0, 0);
+	ctes_object.get()->World = XMMatrixScaling((float)w, (float)h, 1) * XMMatrixTranslation((float)x0, (float)y0, 0);
 	ctes_object.uploadToGPU();
 
 	// Update gui constants
-	ctes_gui.get()->gui_height = h;
-	ctes_gui.get()->gui_width = w;
+	ctes_gui.get()->gui_height = (float)h;
+	ctes_gui.get()->gui_width = (float)w;
 	ctes_gui.get()->gui_offset = 32;
 
 	ctes_gui.uploadToGPU();
@@ -1290,7 +1291,7 @@ void drawDialogBox3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CT
 	float x, y;
 	if (camera.getScreenCoords(world_p3d, &x, &y)) {
 
-		drawDialogBox(x, y, w, h, texture, tech_name);
+		drawDialogBox((int)x, (int)y, w, h, texture, tech_name);
 	}
 }
 
@@ -1302,6 +1303,6 @@ void drawDialogBox3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, c
 	float x, y;
 	if (camera.getScreenCoords(world_p3d, &x, &y)) {
 
-		drawDialogBox(x, y, w * dist, h * dist, texture, tech_name);
+		drawDialogBox((int)x, (int)y, (int)(w * dist), (int)(h * dist), texture, tech_name);
 	}
 }

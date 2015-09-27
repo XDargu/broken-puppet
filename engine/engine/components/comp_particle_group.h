@@ -17,9 +17,9 @@ public:
 public:
 
 	bool destroy_on_death;
-	std::string def_name;
+	char def_name[128];
 
-	TCompParticleGroup() { def_name = ""; destroy_on_death = false; particle_systems = new std::vector < TParticleSystem > ; kind = UNDEFINED; };
+	TCompParticleGroup() { def_name[0] = 0x00; destroy_on_death = false; particle_systems = new std::vector < TParticleSystem >; kind = UNDEFINED; };
 
 	~TCompParticleGroup();
 

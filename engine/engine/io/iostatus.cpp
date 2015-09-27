@@ -122,8 +122,8 @@ void CIOStatus::TMouse::update(float elapsed, bool centered){
 	::GetCursorPos(&cursor_screen);
 	::ScreenToClient(App.hWnd, &cursor_screen);
 	
-	dx = (cursor_screen.x - prev_x);
-	dy = (cursor_screen.y - prev_y);
+	dx = (float)(cursor_screen.x - prev_x);
+	dy = (float)(cursor_screen.y - prev_y);
 
 	screen_x = cursor_screen.x;
 	screen_y = cursor_screen.y;

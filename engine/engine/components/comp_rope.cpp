@@ -78,13 +78,13 @@ TCompRope::~TCompRope() {
 	//float width = 0.1;
 	XMFLOAT3 ropeReferences[epsilon];
 	CVertexPosUVNormal ropeVertices[epsilon * sizes];
-	CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * 6];
+	//CMesh::TIndex ropeIndices[(epsilon - 1) * sizes * 6];
 	float y = 0;
 	float pow_r = 4;	// Suavidad de la onda
 	int velocity = 10;	// Velocidad de movimiento
 	float wave_freq = 0.5f;	// frecuencia del ruido de la onda
 	float amplitude = 0.0f;	// amplitud del ruido de la onda
-	float elapsed = CApp::get().total_time;
+	float elapsed = (float)CApp::get().total_time;
 
 	for (int i = 0; i < epsilon; i++)
 	{

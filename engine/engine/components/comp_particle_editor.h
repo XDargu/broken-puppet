@@ -11,10 +11,13 @@ private:
 	bool random_rotate;
 public:
 
-	std::string aux_pg_name;
-	std::string pg_selected_name;
+	char aux_pg_name[128];
+	char pg_selected_name[128];
 
-	TCompParticleEditor() : random_move(false), random_rotate(false), particle_list_bar(nullptr) {}
+	TCompParticleEditor() : random_move(false), random_rotate(false), particle_list_bar(nullptr) {
+		aux_pg_name[0] = 0x00;
+		pg_selected_name[0] = 0x00;
+	}
 
 	void loadFromAtts(const std::string& elem, MKeyValue& atts) {}
 

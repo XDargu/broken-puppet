@@ -13,7 +13,7 @@ bool TSharpenStep::create(const char* name, int axres, int ayres, int afactor) {
 	yres = ayres;
 	rt_sharpen = new CRenderToTexture();
 
-	bool is_ok = rt_sharpen->create(name, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_sharpen->create("sharpen_pp", xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 
 	return is_ok;
 }
@@ -37,5 +37,6 @@ CTexture* TSharpenStep::getOutput() {
 }
 
 void TSharpenStep::destroy() {
-	SAFE_DESTROY(rt_sharpen);
+	//SAFE_DESTROY(rt_sharpen);
+	if (rt_sharpen) { rt_sharpen->destroyAll(); rt_sharpen = nullptr; }
 }

@@ -13,7 +13,7 @@ bool TUnderwaterEffect::create(const char* name, int axres, int ayres, int afact
 	yres = ayres;
 	rt_underwater = new CRenderToTexture();
 
-	bool is_ok = rt_underwater->create(name, xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
+	bool is_ok = rt_underwater->create("underwater_pp", xres / factor, yres / factor, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::NO_ZBUFFER);
 
 	return is_ok;
 }
@@ -38,5 +38,6 @@ CTexture* TUnderwaterEffect::getOutput() {
 }
 
 void TUnderwaterEffect::destroy() {
-	SAFE_DESTROY(rt_underwater);
+	//SAFE_DESTROY(rt_underwater);
+	if (rt_underwater) { rt_underwater->destroyAll(); rt_underwater = nullptr; }
 }
