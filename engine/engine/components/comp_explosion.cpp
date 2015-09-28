@@ -8,6 +8,7 @@
 #include "comp_particle_group.h"
 #include "comp_ai_boss.h"
 #include "ai\logic_manager.h"
+#include "item_manager.h"
 #include "rope_manager.h"
 #include "audio\sound_manager.h"
 
@@ -92,11 +93,24 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 						PxDistanceJoint* px_joint = mJoint->joint;
 						PxRigidActor* actor1;
 						PxRigidActor* actor2;
-						px_joint->getActors(actor1, actor2);
+						px_joint->getActors(actor1, actor2);						 
 
 						if (actor1)	{
 							if (mEntity == CHandle(actor1->userData)){
 								rope_manager.removeString(string);
+								// Remove needles
+								CHandle needle1 = rope->transform_1_aux;
+								CHandle needle2 = rope->transform_2_aux;
+								if (needle1.isValid()){
+									Citem_manager::get().removeNeedleFromVector(CHandle(needle1).getOwner());
+									Citem_manager::get().removeNeedle(CHandle(needle1).getOwner());
+									CEntityManager::get().remove(CHandle(needle1).getOwner());
+								}
+								if (needle2.isValid()){
+									Citem_manager::get().removeNeedleFromVector(CHandle(needle2).getOwner());
+									Citem_manager::get().removeNeedle(CHandle(needle2).getOwner());
+									CEntityManager::get().remove(CHandle(needle2).getOwner());
+								}
 							}
 						}
 						if (actor2){
@@ -109,7 +123,6 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 			}
 
 			// Remove Entity
-
 			CEntityManager::get().remove(mEntity);
 
 			// Play Explosion sound

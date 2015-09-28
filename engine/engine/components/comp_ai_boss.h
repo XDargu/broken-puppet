@@ -55,7 +55,6 @@ public:
 	void update(float elapsed);
 
 	void breakHitch(CHandle m_hitch);	
-	void breakHeart(CHandle m_heart);
 	void stun();
 
 	bool can_break_hitch;

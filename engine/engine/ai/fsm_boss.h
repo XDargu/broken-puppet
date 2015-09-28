@@ -76,6 +76,9 @@ private:
 	float r_hand_pos_y;
 	bool r_hand_change;
 
+	float l_hand_pos_y;
+	bool l_hand_change;
+
 public:
 	fsm_boss();
 	~fsm_boss();

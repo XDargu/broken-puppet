@@ -144,6 +144,7 @@ void fsm_boss::Init()
 	debris_creation_delay = 0;
 	bomb_creation_delay = 0;
 	r_hand_change = false;
+	l_hand_change = false;
 
 	// Init vars
 	point_offset = PxVec3(0, 10, 0);
@@ -245,7 +246,7 @@ void fsm_boss::Idle1(float elapsed){
 	/**/
 	if (last_attack > 3){
 		int attack = Calculate_attack();
-		XDEBUG("switch de attack");
+		//XDEBUG("switch de attack");
 		//int attack = 1;
 		switch (attack)
 		{
@@ -406,36 +407,71 @@ void fsm_boss::Rain1Loop(float elapsed){
 		debris_created = 0;
 
 		r_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(40));
+		l_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(21));
 	}
 
+
 	TCompSkeleton* skeleton = comp_skeleton;
-	XMVECTOR hand_pos = skeleton->getPositionOfBone(40);
-	XMVECTOR hand_rot = skeleton->getRotationOfBone(40);
+
+	XMVECTOR r_hand_pos = skeleton->getPositionOfBone(40);
+	XMVECTOR r_hand_rot = skeleton->getRotationOfBone(40);
 	
-	if ((r_hand_change) && (r_hand_pos_y < XMVectorGetY(hand_pos)))
+	if ((r_hand_change) && (r_hand_pos_y < XMVectorGetY(r_hand_pos)))
 	{
 		int i = 0;
 		// Adding particle sistem
-		/**
-		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_prota_jump_ring", hand_pos, hand_rot);
+		/**/
+		
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(r_hand_pos, 0) , r_hand_rot);
 
 		if (particle_entity.isValid()) {
 			TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
 			pg->destroy_on_death = true;
 			if (pg->particle_systems->size() > 0)
 			{
-				(*pg->particle_systems)[0].emitter_generation->inner_radius = 3.f;
+				(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
 				(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
 			}
 		}
 		/**/
 	}
-
-	if (r_hand_pos_y > XMVectorGetY(hand_pos))
+	// 
+	if (r_hand_pos_y > XMVectorGetY(r_hand_pos))
 		r_hand_change = true;
 	else
 		r_hand_change = false;
-	
+	r_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(40));
+
+
+
+	XMVECTOR l_hand_pos = skeleton->getPositionOfBone(21);
+	XMVECTOR l_hand_rot = skeleton->getRotationOfBone(21);
+
+	if ((l_hand_change) && (l_hand_pos_y < XMVectorGetY(l_hand_pos)))
+	{
+		int i = 0;
+		// Adding particle sistem
+		/**/
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(l_hand_pos, 0) , l_hand_rot);
+
+		if (particle_entity.isValid()) {
+			TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+			pg->destroy_on_death = true;
+			if (pg->particle_systems->size() > 0)
+			{
+				(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+				(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+			}
+		}
+		/**/
+	}
+	// 
+	if (l_hand_pos_y > XMVectorGetY(l_hand_pos))
+		l_hand_change = true;
+	else
+		l_hand_change = false;
+
+	l_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(21));
 
 
 	if (!RainDebris(elapsed)){
@@ -1300,7 +1336,7 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 
 int fsm_boss::Calculate_attack() {
 	
-	XDEBUG("entrando al calculo de estado");
+	//XDEBUG("entrando al calculo de estado");
 
 	int next_attack = 0;
 	last_attack = 0.f;
@@ -1332,7 +1368,7 @@ int fsm_boss::Calculate_attack() {
 		}
 		/**/
 	}
-	XDEBUG("devolviendo estado: %d", next_attack);
+	//XDEBUG("devolviendo estado: %d", next_attack);
 
 	ball_list.clear();
 	return next_attack;

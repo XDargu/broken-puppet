@@ -271,7 +271,7 @@ void TCompAiBoss::breakHitch(CHandle m_hitch){
 	if ((m_hitch == L_hitch)&&(can_break_hitch)) { 
 		m_fsm_boss->EvaluateHit(0);
 	}
-	if ((m_hitch == H_hitch) && (can_break_hitch)) {
+	if ((m_hitch == H_hitch)) {
 		m_fsm_boss->HeartHit();
 		H_hitch_joint->setBreakForce(0, 0);
 		is_death = true;
