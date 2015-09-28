@@ -589,23 +589,20 @@ int bt_soldier::actionChaseRoleDistance()
 //First attack
 int bt_soldier::actionInitialAttack()
 {
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+
 	if (on_enter) {
 		initial_attack = true;
 		stopAllAnimations();
 		resetTimeAnimation();
 		playAnimationIfNotPlaying(19);
+		XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+		((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 5.f;
+		mov_direction = Physics.XMVECTORToPxVec3(dir);
+		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
 		attacked = false;
 	}
-
-	TCompTransform* p_transform = player_transform;
-	TCompTransform* m_transform = own_transform;
-	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 5.f;
-	mov_direction = Physics.XMVECTORToPxVec3(dir);
-	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
-	//stopMovement();
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
 	if ((state_time >= getAnimationDuration(4) / 2) && (!attacked)) {
 		// Check if the attack reach the player
@@ -1074,7 +1071,7 @@ int bt_soldier::conditionfar_from_target_pos()
 	XMVECTOR target = p_transform->position;// + slot_position;
 
 	float distance = V3DISTANCE(m_transform->position, target);
-	if (distance > 6.f){
+	if (distance > 2.f){
 		return true;
 	}
 	else{
