@@ -6,6 +6,7 @@
 #include "entity_manager.h"
 
 // ----------------------------------------
+/**/
 struct TPattern{
 	int attack;
 	float wait_time;
@@ -14,6 +15,7 @@ struct TPattern{
 struct TAttackPattern {
 	vector<TPattern> pattern;
 };
+/**/
 
 
 class fsm_boss : public aifsmcontroller
@@ -107,7 +109,7 @@ public:
 	void Damaged1LeftFinal();
 	void Damaged1RightFinal();
 
-	void FinalState();
+	void FinalState(float elapsed);
 
 	void Death();
 
@@ -127,7 +129,9 @@ public:
 	int pattern_it;
 	int pattern_current;
 
+	/**/
 	std::vector<TAttackPattern> attack_pattern_list;
+	/**/
 };
 
 
