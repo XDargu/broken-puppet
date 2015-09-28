@@ -1456,13 +1456,16 @@ int bt_grandma::conditioninitial_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	XMVECTOR dir = XMVector3AngleBetweenVectors(p_transform->position, m_transform->position);
+	XMVECTOR attack_direction = (p_transform->position - m_transform->position);
+	attack_direction = XMVector3Normalize(attack_direction);
+	XMVECTOR front = XMVector3Normalize(m_transform->getFront());
+	XMVECTOR dir = XMVector3AngleBetweenVectors(attack_direction, front);
 	float rads = XMVectorGetX(dir);
 	float angle_deg = rad2deg(rads);
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if ((!initial_attack) && ((distance < 3.4f))){
-		if (angle_deg < 35.f)
+		if (angle_deg < 30.f)
 			return true;
 		else{
 			initial_attack = true;
