@@ -9,6 +9,7 @@
 
 class CSoundManager
 {
+friend class CSoundEventsParser;
 public:
 	struct SoundParameter {
 		std::string name;
@@ -34,6 +35,8 @@ private:
 	std::map<std::string, FMOD::Studio::EventDescription*> event_descriptions;
 	std::map<std::string, MixerInstance> mixer_event_instances;
 
+	std::map<std::string, std::string> sound_events;
+
 	std::vector<CHandle> HFXZones;
 
 	XMVECTOR invalidPosition;
@@ -47,10 +50,10 @@ private:
 	CEntity* player;
 	TCompTransform* p_transform;
 
-	void createMixerEvent(std::string mixer_event, MixerInstanceType type, CHandle hfx_zone = CHandle());
-	void setMixerEventParams(std::string mixer_event, SoundParameter param, float lerp_val = 0.02f);
-	float getMixerEventParamValue(std::string mixer_event, std::string param_name);
-	void setCurrentReverbEvent(std::string event_path, TCompHfxZone* hfx_zone, XMVECTOR listener_pos);
+	void createMixerEvent(std::string sound_id, MixerInstanceType type, CHandle hfx_zone = CHandle());
+	void setMixerEventParams(std::string sound_id, SoundParameter param, float lerp_val = 0.02f);
+	float getMixerEventParamValue(std::string sound_id, std::string param_name);
+	void setCurrentReverbEvent(std::string sound_id, TCompHfxZone* hfx_zone, XMVECTOR listener_pos);
 	
 public:
 	CSoundManager();
@@ -59,12 +62,12 @@ public:
 
 	void init();
 
-	void playEvent(std::string path, SoundParameter* parameters, int nparameters);
-	void playEvent(std::string path);
+	void playEvent(std::string sound_id, SoundParameter* parameters, int nparameters);
+	void playEvent(std::string sound_id);
 
-	void playEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos);
+	void playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos);
 
-	FMOD::Studio::EventInstance* getInstance(std::string path);
+	FMOD::Studio::EventInstance* getInstance(std::string sound_id);
 	bool setInstanceParams(FMOD::Studio::EventInstance* eventInstance, SoundParameter* parameters, int nparameters);
 	bool setInstancePos(FMOD::Studio::EventInstance* eventInstance, TTransform trans);
 

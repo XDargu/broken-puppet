@@ -282,7 +282,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 							}
 						}
 					}
-					CSoundManager::get().playEvent("event:/Strings/needle_hit");
+					CSoundManager::get().playEvent("NEEDLE_HIT", pos_1);
 					sound_1_played=true;
 				}
 			}
@@ -366,7 +366,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 						}
 					}
 
-					CSoundManager::get().playEvent("event:/Strings/needle_hit");
+					CSoundManager::get().playEvent("NEEDLE_HIT", pos_2);
 					sound_2_played = true;
 				}
 			}

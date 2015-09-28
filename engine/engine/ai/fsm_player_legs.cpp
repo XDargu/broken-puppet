@@ -408,13 +408,12 @@ void FSMPlayerLegs::Jump(float elapsed){
 	if (on_enter) {
 		//skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
+		CSoundManager::get().playEvent("KATH_JUMP");
 	}
 
 	if (state_time > 0.5) {		
 		skeleton->loopAnimation(6);
 	}
-
-	CSoundManager::get().playEvent("event:/Character/jump");
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_jump");
 	EvaluateMovement(true, elapsed);
@@ -450,8 +449,24 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 		//};
 
 		//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
 
-		CSoundManager::get().playEvent("event:/Strings/stringThrow");
+		PxActor* hit_actor = nullptr;
+		PxVec3 actor_position;
+		PxVec3 actor_normal;
+		
+		if (hit_actor != nullptr) {
+
+			torso->getThrowingData(hit_actor, actor_position, actor_normal);
+
+			XMVECTOR actor_pos = Physics.PxVec3ToXMVECTOR(actor_position);
+			float dist = V3DISTANCE(camera_transform->position, actor_pos);
+			// Sound
+			CSoundManager::SoundParameter params[] = {
+				{ "TargetDist", dist }
+			};
+			CSoundManager::get().playEvent("STRING_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		}
 	
 	}
 
@@ -482,7 +497,24 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 
 		CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));*/
 
-		CSoundManager::get().playEvent("event:/Strings/stringThrow");
+		TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();
+
+		PxActor* hit_actor = nullptr;
+		PxVec3 actor_position;
+		PxVec3 actor_normal;
+
+		if (hit_actor != nullptr) {
+
+			torso->getThrowingData(hit_actor, actor_position, actor_normal);
+
+			XMVECTOR actor_pos = Physics.PxVec3ToXMVECTOR(actor_position);
+			float dist = V3DISTANCE(camera_transform->position, actor_pos);
+			// Sound
+			CSoundManager::SoundParameter params[] = {
+				{ "TargetDist", dist }
+			};
+			CSoundManager::get().playEvent("STRING_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		}
 	
 	}
 
@@ -585,7 +617,7 @@ void FSMPlayerLegs::Land(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 0 }
 		};
-		CSoundManager::get().playEvent("event:/Character/land", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 
 		// Jump particle
 		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
@@ -663,7 +695,7 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 1 }
 		};
-		CSoundManager::get().playEvent("event:/Character/land", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 	}
 
 	if (state_time > 0.2f) {
@@ -721,7 +753,7 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 	if (on_enter) {
 
-		CSoundManager::get().playEvent("event:/Character/ragdoll");
+		CSoundManager::get().playEvent("KATH_RAGDOLL");
 
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
 		stopAllAnimations();
@@ -831,7 +863,7 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
-		CSoundManager::get().playEvent("event:/Character/wakeUp");
+		CSoundManager::get().playEvent("KATH_WAKEUP");
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -863,7 +895,7 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 
 	if (on_enter) {
 
-		CSoundManager::get().playEvent("event:/Character/wakeUp");
+		CSoundManager::get().playEvent("KATH_WAKEUP");
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -1005,7 +1037,7 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 		CSoundManager::SoundParameter params[] = {
 			{ "damage", damage }
 		};
-		CSoundManager::get().playEvent("event:/Character/hit", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("KATH_HIT", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 
 		if (damage > 100000.f){ // Damage needed for ragdoll state
 			real_damage = 20;
