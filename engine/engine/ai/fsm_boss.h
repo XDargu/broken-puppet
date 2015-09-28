@@ -60,14 +60,21 @@ private:
 	int debris_created;
 	float debris_creation_delay;
 	float bomb_creation_delay;
+	XMVECTOR last_random_pos;
+	XMVECTOR last_created_pos;
+	
 
 	float ball_size;
 	vector<CHandle> ball_list;
 
 	void SelectObjToShoot();
 	float distance_to_hand;
+	float max_shoot_angle;
 
 	CHandle obj_to_shoot;
+
+	float r_hand_pos_y;
+	bool r_hand_change;
 
 public:
 	fsm_boss();
@@ -96,7 +103,7 @@ public:
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
 	void Shoot1Shoot(float elapsed);
-	void Shoot1Reload();
+	void Shoot1Reload(float elapsed);
 
 	void WaveLeft(float elapsed);
 	void WaveRight();
