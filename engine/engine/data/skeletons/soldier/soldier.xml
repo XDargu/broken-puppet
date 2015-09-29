@@ -21,4 +21,5 @@
   <anim name="run"/>16
   <anim name="idle_war"/>17
   <anim name="idle_war"/>18
+  <anim name="first_attack_salto"/>19
 </skeleton>

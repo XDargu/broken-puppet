@@ -197,6 +197,7 @@ public:
 	void resetTimeAnimation();
 
 	void setActive(bool act);
+	void needleHitSensor();
 
 	void setIndRecastAABB(int ind);
 	int getIndRecastAABB();
