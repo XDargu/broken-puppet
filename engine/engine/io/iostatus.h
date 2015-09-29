@@ -50,6 +50,7 @@ public:
 		, ALT
 		, F8_KEY
 		, F4_KEY
+		, CTRL
 		, NUM0
 		, NUM1
 		, NUM2

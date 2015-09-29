@@ -25,9 +25,8 @@ void TCompShadows::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	// TODO: Para que funcione desde max, es necesario rotarlas 90 grados, cambiar el exportador de max más adelante
 	if (atts.has("correction")) {
-		XMVECTOR corrector = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(90));
 		TCompTransform* m_trans = getSibling<TCompTransform>(this);
-		m_trans->rotation = XMQuaternionMultiply(m_trans->rotation, corrector);
+		m_trans->lookAt(m_trans->position - m_trans->getUp(), m_trans->getUp());
 	}
 
 }

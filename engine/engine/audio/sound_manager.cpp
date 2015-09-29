@@ -65,7 +65,7 @@ CSoundManager::CSoundManager()
 	invalidPosition = XMVectorSet(0, 0, 0, -112233);
 
 	// Underwater mixer effect
-	createMixerEvent("event:/Mixer/Underwater", MixerInstanceType::UNDERWATER);
+	createMixerEvent("UNDERWATER", MixerInstanceType::UNDERWATER);
 }
 
 void CSoundManager::init(){
@@ -273,7 +273,7 @@ void CSoundManager::update(float elapsed) {
 		float deepness = level - camera_pos;
 
 		CSoundManager::SoundParameter param = { "Deepness", deepness };
-		setMixerEventParams("event:/Mixer/Underwater", param, 1);
+		setMixerEventParams("UNDERWATER", param, 1);
 		
 		// Reverb zones
 		TCompHfxZone* hfx_zone = listenerInsideHFXZone(cam->getPosition());

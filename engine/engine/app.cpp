@@ -186,7 +186,7 @@ void createManagers() {
 	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompColliderMesh>()->init(4096);
 	getObjManager<TCompColliderConvex>()->init(512);
-	getObjManager<TCompCamera>()->init(4);
+	getObjManager<TCompCamera>()->init(32);
 	getObjManager<TCompColliderBox>()->init(1024);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
@@ -633,15 +633,16 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
 #endif
-
-	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM6)) { }
-	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
-	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/my_file.xml"); }
+	if (io.isPressed(CIOStatus::CTRL)) {
+		if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM6)) {}
+		if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
+		if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/my_file.xml"); }
+	}
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
@@ -908,7 +909,7 @@ void CApp::render() {
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
 	CTraceScoped scope_part("Particles");
-
+	
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	texture_manager.getByName("noise")->activate(9);
@@ -1495,7 +1496,7 @@ void CApp::loadScene(std::string scene_name) {
 	silouette.destroy();
 	underwater.destroy();
 	ssrr.destroy();
-	if (rt_base) { rt_base->destroyAll(); rt_base = nullptr; }
+	//if (rt_base) { rt_base->destroyAll(); delete rt_base; rt_base = nullptr; }
 	
 
 	CRope_manager::get().clearStrings();
