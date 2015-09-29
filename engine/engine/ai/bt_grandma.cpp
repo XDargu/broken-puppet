@@ -56,12 +56,19 @@ void bt_grandma::create(string s)
 	addChild("Ragdoll", "GetAngry6", ACTION, NULL, (btaction)&bt_grandma::actionGetAngry);
 	addChild("Root", "events", PRIORITY, (btcondition)&bt_grandma::conditionare_events, NULL);
 	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_grandma::conditionhurt_event, (btaction)&bt_grandma::actionHurtEvent);
+	//addChild("events", "NeedleHit", ACTION, (btcondition)&bt_grandma::conditionneedle_hit_event, (btaction)&bt_grandma::actionNeedleHit);
 	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_grandma::conditionfalling_event, (btaction)&bt_grandma::actionFallingEvent);
-	addChild("events", "TiedEvent9", ACTION, (btcondition)&bt_grandma::conditiontied_event, (btaction)&bt_grandma::actionTiedEvent);
+
+
+	addChild("events", "TiedEvent9", SEQUENCE, (btcondition)&bt_grandma::conditiontied_event, NULL);
+	addChild("TiedEvent9", "TiedHit", ACTION, NULL, (btaction)&bt_grandma::actionHurtEvent);
+	addChild("TiedEvent9", "TiedBreakDown", ACTION, NULL, (btaction)&bt_grandma::actionTiedEvent);
+	//	addChild("events", "TiedEvent9", SEQUENCE, (btcondition)&bt_grandma::conditiontied_event, (btaction)&bt_grandma::actionTiedEvent);
+
 	addChild("events", "No events10", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionNoevents);
 	addChild("Root", "Angry", PRIORITY, (btcondition)&bt_grandma::conditionis_angry, NULL);
 
-	addChild("Angry", "Warcry11", ACTION, (btcondition)&bt_grandma::conditionhave_to_warcry, (btaction)&bt_grandma::actionWarcry);
+	addChild("Angry", "Warcry11", ACTION, INTERNAL, (btcondition)&bt_grandma::conditionhave_to_warcry, (btaction)&bt_grandma::actionWarcry);
 	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_grandma::conditionplayer_lost, NULL);
 	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_grandma::conditionsee_player, (btaction)&bt_grandma::actionPlayerAlert);
 
@@ -128,6 +135,7 @@ void bt_grandma::create(string s)
 	have_to_warcry = false;
 	is_ragdoll = false;
 	hurt_event = false;
+	needle_hit = false;
 	player_viewed_sensor = false;
 	player_previously_lost = false;
 	initial_attack = false;
@@ -1087,6 +1095,35 @@ int bt_grandma::actionTaunter()
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 int bt_grandma::actionHurtEvent()
 {
+	if (!needle_hit){
+		if (on_enter) {
+			stopAllAnimations();
+			resetTimeAnimation();
+			playAnimationIfNotPlaying(10);
+		}
+
+		TCompTransform* p_transform = player_transform;
+		TCompTransform* m_transform = own_transform;
+		XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+		stopMovement();
+		//mov_direction = PxVec3(0, 0, 0);
+		//look_direction = Physics.XMVECTORToPxVec3(dir);
+
+		if (state_time > getAnimationDuration(10)) {
+			//Call the iaManager method for warning the rest of the grandmas
+			aimanager::get().warningPlayerFound(this);
+			event_detected = false;
+			return LEAVE;
+		}
+		else
+			return STAY;
+	}else{
+		needle_hit = false;
+		return LEAVE;
+	}
+}
+
+int bt_grandma::actionNeedleHit(){
 	if (on_enter) {
 		stopAllAnimations();
 		resetTimeAnimation();
@@ -1167,7 +1204,7 @@ int bt_grandma::actionTiedEvent()
 
 	}
 
-	if (state_time >= getAnimationDuration(12)/2){
+	if (state_time >= getAnimationDuration(12)/5){
 		if (ropeRef.isValid()){
 			TCompRope* rope = (TCompRope*)ropeRef;
 			CRope_manager::get().removeString(ropeRef);
@@ -1393,6 +1430,11 @@ int bt_grandma::conditionhurt_event()
 	return hurt_event;
 }
 
+//Check if is a needle hit event
+int bt_grandma::conditionneedle_hit_event(){
+	return needle_hit;
+}
+
 //Check if is a falling event
 int bt_grandma::conditionfalling_event()
 {
@@ -1555,14 +1597,21 @@ void bt_grandma::needleViewedSensor(){
 
 void bt_grandma::tiedSensor(){
 	((TCompSensorTied*)tied_sensor)->keepTied();
+	if (tied_sensor.isValid()){
 		if (!tied_event){
 			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
 				ropeRef = (TCompRope*)((TCompSensorTied*)tied_sensor)->getRopeRef();
-				setCurrent(NULL);
-				tied_event = true;
-				event_detected = true;
+				if ((current) && ((current->getTypeInter() == EXTERNAL))){
+					setCurrent(NULL);
+					tied_event = true;
+					event_detected = true;
+				}else{
+					needle_hit = true;
+				}
 			}
 		}
+	}
+
 	/*}
 	else{
 		if (!((TCompSensorTied*)tied_sensor)->getTiedState()){
@@ -1674,6 +1723,11 @@ bool bt_grandma::trueEveryXSeconds(float time)
 	return false;
 }
 
+void bt_grandma::needleHitSensor(){
+	hurt_event = true;
+	setCurrent(NULL);
+}
+
 void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	physx::PxRaycastBuffer buf;
 	Physics.raycastAll(own_position->position + XMVectorSet(0, 0.1f, 0, 0), own_position->getFront(), 1.f, buf);
@@ -1692,14 +1746,6 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 }
-
-/*void bt_grandma::setId(unsigned int id){
-	my_id = id;
-}
-
-unsigned int bt_grandma::getId(){
-	return my_id;
-}*/
 
 CHandle bt_grandma::getPlayerTransform(){
 	return player_transform;

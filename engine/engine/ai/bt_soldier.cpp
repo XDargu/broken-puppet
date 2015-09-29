@@ -542,7 +542,7 @@ int bt_soldier::actionChaseRoleDistance()
 
 			TCompCharacterController* m_char_controller = character_controller;
 
-			m_char_controller->moveSpeedMultiplier = 7.5f;
+			m_char_controller->moveSpeedMultiplier = 9.2f;
 
 			stopAllAnimations();
 			resetTimeAnimation();
@@ -644,7 +644,7 @@ int bt_soldier::actionSituate()
 				return LEAVE;
 			}
 
-			m_char_controller->moveSpeedMultiplier = 7.f;
+			m_char_controller->moveSpeedMultiplier = 9.2f;
 			stopAllAnimations();
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(15);
@@ -736,6 +736,8 @@ int bt_soldier::actionNormalAttack()
 int bt_soldier::actionIdleWar()
 {
 	if (on_enter) {
+		stopAllAnimations();
+		resetTimeAnimation();
 		playAnimationIfNotPlaying(10);
 	}
 
@@ -1378,6 +1380,10 @@ void bt_soldier::resetTimeAnimation(){
 
 void bt_soldier::setActive(bool act){
 	active = act;
+}
+
+void bt_soldier::needleHitSensor(){
+
 }
 
 void bt_soldier::setIndRecastAABB(int ind){
