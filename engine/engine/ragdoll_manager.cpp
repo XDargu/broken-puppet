@@ -71,7 +71,7 @@ void CCoreRagdoll::onStartElement(const std::string &elem, MKeyValue &atts) {
 			Physics.XMVECTORToPxQuat(dx_rot))
 			, *collider
 			, density);
-
+		rigidBody->setGlobalPose(PxTransform(rigidBody->getGlobalPose().p + PxVec3(0, 100000, 0), rigidBody->getGlobalPose().q));
 		Physics.gScene->addActor(*rigidBody);
 
 		// More solver iteration (precise rigidbody collision)

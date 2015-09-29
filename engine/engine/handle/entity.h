@@ -14,7 +14,7 @@ public:
 			components[i].destroy();
 	}
 
-	CEntity() { bool tagBoss = false; }
+	CEntity() {};
 	CEntity(const CEntity& e);
 	//CEntity operator=( const CEntity& e );
 

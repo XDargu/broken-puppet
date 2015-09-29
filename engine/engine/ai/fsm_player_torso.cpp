@@ -943,6 +943,7 @@ void FSMPlayerTorso::getThrowingData(PxActor* &the_hit_actor, PxVec3 &the_actor_
 				actor_normal = buf.touches[i].normal;
 				hit_actor = buf.touches[i].actor;
 				max_dist = dist;
+				priority_entity = true;
 			}
 
 			// Old code

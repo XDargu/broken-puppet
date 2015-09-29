@@ -5,6 +5,19 @@
 #include "physics_manager.h"
 #include "entity_manager.h"
 
+// ----------------------------------------
+/**/
+struct TPattern{
+	int attack;
+	float wait_time;
+};
+
+struct TAttackPattern {
+	vector<TPattern> pattern;
+};
+/**/
+
+
 class fsm_boss : public aifsmcontroller
 {
 private:
@@ -47,14 +60,24 @@ private:
 	int debris_created;
 	float debris_creation_delay;
 	float bomb_creation_delay;
+	XMVECTOR last_random_pos;
+	XMVECTOR last_created_pos;
+	
 
 	float ball_size;
 	vector<CHandle> ball_list;
 
 	void SelectObjToShoot();
 	float distance_to_hand;
+	float max_shoot_angle;
 
 	CHandle obj_to_shoot;
+
+	float r_hand_pos_y;
+	bool r_hand_change;
+
+	float l_hand_pos_y;
+	bool l_hand_change;
 
 public:
 	fsm_boss();
@@ -82,8 +105,8 @@ public:
 
 	void Shoot1ReleaseDef();
 	void Shoot1DownDef();
-	void Shoot1Shoot();
-	void Shoot1Reload();
+	void Shoot1Shoot(float elapsed);
+	void Shoot1Reload(float elapsed);
 
 	void WaveLeft(float elapsed);
 	void WaveRight();
@@ -96,7 +119,7 @@ public:
 	void Damaged1LeftFinal();
 	void Damaged1RightFinal();
 
-	void FinalState();
+	void FinalState(float elapsed);
 
 	void Death();
 
@@ -111,6 +134,16 @@ public:
 	bool can_proximity_hit;
 
 	XMVECTOR original_pos;
+
+	int last_attack_it;
+	int pattern_it;
+	int pattern_current;
+
+	/**/
+	std::vector<TAttackPattern> attack_pattern_list;
+	/**/
 };
+
+
 
 #endif

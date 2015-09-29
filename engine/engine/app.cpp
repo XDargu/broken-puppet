@@ -942,7 +942,7 @@ void CApp::render() {
 	CTraceScoped scope_post_all("Post procesado");
 	activateCamera(camera, 1);
 	CTraceScoped scope_post1("SSR");
-	ssrr.apply(rt_base);
+	/*ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	scope_post1.~CTraceScoped();
 	CTraceScoped scope_post2("Sharpen");
@@ -959,9 +959,10 @@ void CApp::render() {
 	scope_post5.~CTraceScoped();
 	CTraceScoped scope_post6("Motion blur");
 	blur_camera.apply(blur.getOutput());
-	scope_post6.~CTraceScoped();
+	scope_post6.~CTraceScoped();*/
 	CTraceScoped scope_post7("Silouette");
-	silouette.apply(blur_camera.getOutput());
+	silouette.apply(rt_base);
+	//silouette.apply(blur_camera.getOutput());
 	scope_post7.~CTraceScoped();
 	texture_manager.getByName("noise")->activate(9);
 	CTraceScoped scope_post8("Glow");
