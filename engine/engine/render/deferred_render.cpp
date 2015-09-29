@@ -126,7 +126,6 @@ void CDeferredRender::destroy() {
 	if (rt_specular) { rt_specular->destroyAll(); rt_specular = nullptr; }
 	if (rt_gloss) { rt_gloss->destroyAll(); rt_gloss = nullptr; }
 	if (rt_depth) { rt_depth->destroyAll(); rt_depth = nullptr; }
-	
 	/*SAFE_DESTROY(rt_lights);
 	SAFE_DESTROY(rt_albedo);
 	SAFE_DESTROY(rt_normals);

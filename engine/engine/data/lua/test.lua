@@ -254,6 +254,75 @@ function onSceneLoad_my_file()
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 2 ********
 
+	-- ******** PRUEBA PUZZLES FINALES ESCENA 3 **********
+
+	function onTriggerExit_sc3_trigger_tuber(who)
+		print(tostring(who) .. " ha dejado en el trigger de tuber");
+	
+		if who == "tapa_agua_puzle" then
+			logicManager:changeWaterLevel(7.58, 0.25);
+		end
+	
+	end
+
+	function onTriggerExit_sc3_trigger_desag(who)
+		print(tostring(who) .. " ha dejado en el trigger de desag");
+	
+		if who == "tapa_desague_puzle" then
+			logicManager:changeWaterLevel(-3.3, 0.25);
+		end
+	
+	end
+
+	-- Plataforma elevadora
+
+	-- Apagar cable
+	local sc3_cable_fin = logicManager:getObject("cable_int_sc3_door")	
+	sc3_cable_fin:setEmissive(false)
+	
+	-- Obtener plataforma	 
+	local sc3_plataforma_elevadora = logicManager:getObject("sc3_plataforma_cajon")
+	local sc3_plataforma_elevadora_orig = sc3_plataforma_elevadora:getPos()
+
+	function onSwitchPressed_sc3_int_final(who)
+		sc3_plataforma_elevadora:move(Vector(sc3_plataforma_elevadora_orig.x, sc3_plataforma_elevadora_orig.y + 4, sc3_plataforma_elevadora_orig.z), 3);
+		sc3_cable_fin:setEmissive(true)
+	end
+
+	function onSwitchReleased_sc3_int_final(who)
+		sc3_plataforma_elevadora:move(sc3_plataforma_elevadora_orig, 3);
+		sc3_cable_fin:setEmissive(false)
+	end
+	
+	-- Plataforma elevada
+	-- Apagar cable
+	local sc3_cable_inicio = logicManager:getObject("cable_int_sc3_platform")	
+	sc3_cable_inicio:setEmissive(false)
+
+	local sc3_plataform = logicManager:getPrismaticJoint("sc3_int_prismatic_inicio");
+	sc3_plataform:setLinearLimit(1000, 10000000, 10000000)
+
+	function onSwitchPressed_sc3_int_inicio(who)
+		sc3_plataform:setLinearLimit(0.1, 10000000, 10000000)
+		sc3_cable_inicio:setEmissive(true)
+	end
+
+	function onSwitchReleased_sc3_int_inicio(who)
+		sc3_plataform:setLinearLimit(1000, 10000000, 10000000)
+		sc3_cable_inicio:setEmissive(false)
+	end
+
+	-- Cerrar puerta
+	function onTriggerEnter_sc3_trigger_close_door(who)
+		
+	end	
+
+	-- Salir de la escena
+	function onTriggerEnter_sc3_trigger_fin(who)
+		logicManager:loadScene("data/scenes/scene_4.xml");
+	end
+
+	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 3 ********
 
 
 

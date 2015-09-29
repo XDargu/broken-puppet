@@ -20,10 +20,8 @@ void TCompHitch::onRopeTensed(const TMsgRopeTensed& msg){
 	m_boss = CEntityManager::get().getByName("Boss");
 	if (m_boss.isValid()){
 		TCompAiBoss* ai_boss = ((CEntity*)m_boss)->get<TCompAiBoss>();
-		if (ai_boss){
-			if (!is_heart){
-				ai_boss->breakHitch(CHandle(this).getOwner());
-			}	
+		if (ai_boss){	
+			ai_boss->breakHitch(CHandle(this).getOwner());
 		}		
 	}	
 

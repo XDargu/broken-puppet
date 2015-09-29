@@ -373,12 +373,12 @@ PxFilterFlags FilterShader(
 				}
 				else if ((filterData0.word0 == FilterGroup::eBOSSHEAD) && (filterData1.word0 == FilterGroup::eACTOR)){
 					//Colisiones entre actores (cajas) y enemigos
-					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 					return PxFilterFlag::eDEFAULT;
 				}
 				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eBOSSHEAD)){
 					//Colisiones entre actores (cajas) y enemigos
-					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 					return PxFilterFlag::eDEFAULT;
 				}
 				else{

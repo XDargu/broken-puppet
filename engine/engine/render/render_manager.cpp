@@ -168,7 +168,12 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 		TCompName* m_name = ((CEntity*)it->transform.getOwner())->get<TCompName>();
 		XASSERT(m_aabb, "Invalid AABB");
 
-		culling = abs(current_player_zone - tmx->room_id) <= 1;
+		if (!char_equal(m_name->name, "water")) {
+			culling = abs(current_player_zone - tmx->room_id) <= 1;
+		}
+		else {
+			culling = true;
+		}
 
 		if (culling) {
 			culling &= planes_active_camera.isVisible(m_aabb);
@@ -184,7 +189,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 			}
 			culling &= it->material->isSolid() == solids;
 		}				
-
+		
 		//culling = true;
 		if (*it->active && culling)
 		{			
@@ -302,6 +307,8 @@ void CRenderManager::destroyAllKeys() {
 // ---------------------------------------------------------------
 void CRenderManager::renderShadowsCasters(const CCamera* camera, bool characters) {
 	planes2.create(camera->getViewProjection());
+	int current_player_zone = CLogicManager::get().getPlayerZoneID();
+
 	bool culling = true;
 	bool uploading_bones = false;
 
@@ -315,9 +322,13 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera, bool characters
 		}
 
 		TCompAABB* m_aabb = k.aabb;
+		TCompTransform* tmx = k.transform;
 
 		XASSERT(k.aabb.isValid(), "Invalid AABB");
-		culling = planes_active_camera.isVisible(m_aabb);
+		culling = true;// planes_active_camera.isVisible(m_aabb);
+
+		culling &= abs(current_player_zone - tmx->room_id) <= 1;
+
 		if (culling)
 			culling &= planes2.isVisible(m_aabb);
 		
@@ -327,7 +338,7 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera, bool characters
 		if (culling) {
 
 			// Activar la world del obj
-			TCompTransform* tmx = k.transform;
+			
 			assert(tmx);
 			setWorldMatrix(tmx->getWorld());
 

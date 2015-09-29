@@ -573,10 +573,10 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		}
 
 		CSoundManager::SoundParameter params[] = {
-			{ "distance", distance }
+			{ "LongCuerda", distance }
 		};
 
-		CSoundManager::get().playEvent("event:/Strings/stringGrab", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("STRING_GRAB", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		
 	}
 
@@ -833,10 +833,10 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 					}
 
 					CSoundManager::SoundParameter params[] = {
-						{ "distance", distance }
+						{ "LongCuerda", distance }
 					};
 
-					CSoundManager::get().playEvent("event:/Strings/stringTense", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+					CSoundManager::get().playEvent("STRING_TENSE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 					//----------------------------------------------------------------------------------------------------------------------------
 					
 					rope->tensed = true;
@@ -943,6 +943,7 @@ void FSMPlayerTorso::getThrowingData(PxActor* &the_hit_actor, PxVec3 &the_actor_
 				actor_normal = buf.touches[i].normal;
 				hit_actor = buf.touches[i].actor;
 				max_dist = dist;
+				priority_entity = true;
 			}
 
 			// Old code

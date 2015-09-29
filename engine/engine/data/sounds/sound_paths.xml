@@ -1,0 +1,75 @@
+<fmodEvents>
+  
+  <!-- Katherine -->
+  <event id="KATH_JUMP" path="event:/Expresion/Katherine/Salto" />
+  <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />
+  <event id="KATH_RAGDOLL" path="" />
+  <event id="KATH_WAKEUP" path="" />
+  <event id="KATH_HIT" path="" />
+  
+  <!-- Strings & needles -->
+  <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" />
+  <event id="STRING_GRAB" path="event:/Expresion/Katherine/Tirar" />
+  <event id="STRING_CANCEL" path="event:/Expresion/Katherine/Cancelar" />
+  <event id="STRING_TENSE" path="event:/Expresion/Katherine/Tensar" />
+  
+  <event id="NEEDLE_HIT" path="event:/Aguja/Aguja" />
+  
+  <!-- Steps -->
+  <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" />
+  <event id="STEPS_GRANDMA" path="" />
+  <event id="STEPS_SOLDIER" path="" />
+  
+  <!-- Collisions -->
+  <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
+  
+  <!-- Ambient -->
+  
+  <event id="BUZZING" path="" />
+  
+  
+  <!-- Mixer -->
+  <event id="UNDERWATER" path="event:/Mixer/Underwater" />
+
+  <!-- Reverb zones -->
+  <event id="SC1ROOM1" path="event:/Mixer/reverbTest1" /> Primera sala
+  <event id="SC1ROOM2" path="event:/Mixer/reverbTest2" /> Sala de los juguetes
+  <event id="SC1ROOM3" path="event:/Mixer/reverbTest1" /> Sala te dejar caer la caja
+  <event id="SC1ROOM4" path="event:/Mixer/reverbTest1" /> Sala grande
+  <event id="SC1ROOM5" path="event:/Mixer/reverbTest1" /> Sala de taller de herramientas
+  <event id="SC1ROOM6" path="event:/Mixer/reverbTest1" /> Subida en ascensor
+  <event id="SC1ROOM7" path="event:/Mixer/reverbTest1" /> Sala de los soldados
+  <event id="SC1ROOM8" path="event:/Mixer/reverbTest1" /> Salita final
+  
+  <event id="SC2ROOM1" path="event:/Mixer/reverbTest1" /> Salita inicio
+  <event id="SC2ROOM2" path="event:/Mixer/reverbTest1" /> Pasillo inicial
+  <event id="SC2ROOM3" path="event:/Mixer/reverbTest1" /> Camerino
+  <event id="SC2ROOM4" path="event:/Mixer/reverbTest1" /> Sala de la cajonera
+  <event id="SC2ROOM5" path="event:/Mixer/reverbTest1" /> Sala de la plataforma que sube
+  <event id="SC2ROOM6" path="event:/Mixer/reverbTest1" /> Sala del violín
+  <event id="SC2ROOM7" path="event:/Mixer/reverbTest1" /> Sala antes de caída
+  <event id="SC2ROOM8" path="event:/Mixer/reverbTest1" /> Caída
+  <event id="SC2ROOM9" path="event:/Mixer/reverbTest1" /> Pasillo final
+  <event id="SC2ROOM10" path="event:/Mixer/reverbTest1" /> Salita final
+  
+  <event id="SC3ROOM0" path="event:/Mixer/reverbTest1" /> Salita inicio
+  <event id="SC3ROOM1" path="event:/Mixer/reverbTest1" /> Habitación de las abuelas
+  <event id="SC3ROOM2" path="event:/Mixer/reverbTest1" /> Pasillo doble
+  <event id="SC3ROOM3" path="event:/Mixer/reverbTest1" /> Habitación de subida del agua
+  <event id="SC3ROOM4" path="event:/Mixer/reverbTest1" /> Túnel del ventilador
+  <event id="SC3ROOM5" path="event:/Mixer/reverbTest1" /> Habitación de antes de la caída
+  <event id="SC3ROOM6" path="event:/Mixer/reverbTest1" /> Caída
+  <event id="SC3ROOM7" path="event:/Mixer/reverbTest1" /> Habitación grande del final
+  <event id="SC3ROOM8" path="event:/Mixer/reverbTest1" /> Pasillo hacia la habitación del desagüe
+  <event id="SC3ROOM9" path="event:/Mixer/reverbTest1" /> Habitación del desagüe
+  <event id="SC3ROOM10" path="event:/Mixer/reverbTest1" /> Salita final
+  
+  <event id="SC4ROOM1" path="event:/Mixer/reverbTest1" /> Salita inicio
+  <event id="SC4ROOM2" path="event:/Mixer/reverbTest1" />
+  <event id="SC4ROOM3" path="event:/Mixer/reverbTest1" />
+  <event id="SC4ROOM4" path="event:/Mixer/reverbTest1" />
+  <event id="SC4ROOM5" path="event:/Mixer/reverbTest1" />
+  <event id="SC4ROOM6" path="event:/Mixer/reverbTest1" />
+  <event id="SC4ROOM7" path="event:/Mixer/reverbTest1" />
+
+</fmodEvents>

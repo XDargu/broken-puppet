@@ -226,7 +226,7 @@ void CRenderToTexture::clearDepthBuffer() {
 }
 
 void CRenderToTexture::destroyAll() {
-	texture_manager.unregister(name);
+	/*texture_manager.unregister(name);
 	SAFE_RELEASE(render_target_view);
 	SAFE_RELEASE(depth_stencil_view);
 	if (ztexture != nullptr) {
@@ -235,5 +235,5 @@ void CRenderToTexture::destroyAll() {
 	destroy();
 	render_target_view = nullptr;
 	depth_stencil_view = nullptr;
-	name = nullptr;
+	name = nullptr;*/
 }

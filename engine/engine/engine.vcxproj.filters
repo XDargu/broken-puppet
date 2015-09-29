@@ -572,6 +572,9 @@
     <ClInclude Include="ai\fixed_joint.h">
       <Filter>ai\logic</Filter>
     </ClInclude>
+    <ClInclude Include="audio\sound_events_parser.h">
+      <Filter>audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1067,6 +1070,9 @@
     </ClCompile>
     <ClCompile Include="ai\fixed_joint.cpp">
       <Filter>ai\logic</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\sound_events_parser.cpp">
+      <Filter>audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

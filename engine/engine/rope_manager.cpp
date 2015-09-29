@@ -39,10 +39,10 @@ void CRope_manager::removeBackString(){
 				distance = V3DISTANCE(rope->pos_1, rope->pos_2);
 
 				CSoundManager::SoundParameter params[] = {
-					{ "distance", distance }
+					{ "LongCuerda", distance }
 				};
 
-				CSoundManager::get().playEvent("event:/Strings/stringCancel", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+				CSoundManager::get().playEvent("STRING_CANCEL", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			}
 
 			
@@ -104,10 +104,10 @@ void CRope_manager::clearStrings(){
 				distance = V3DISTANCE(rope->pos_1, rope->pos_2);
 
 				CSoundManager::SoundParameter params[] = {
-					{ "distance", distance }
+					{ "LongCuerda", distance }
 				};
 
-				CSoundManager::get().playEvent("event:/Strings/stringCancel", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+				CSoundManager::get().playEvent("STRING_CANCEL", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 
 				//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			}

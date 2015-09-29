@@ -127,6 +127,8 @@ void fsm_boss::Init()
 	reorientate_angle = cosf(reorientate_angle);
 	no_reorientate_angle = deg2rad(5.f);
 	no_reorientate_angle = cosf(no_reorientate_angle);
+	max_shoot_angle = deg2rad(100.f);
+	max_shoot_angle = cosf(max_shoot_angle);
 
 
 	state_time = 0.f;
@@ -141,6 +143,8 @@ void fsm_boss::Init()
 	debris_created = 0;
 	debris_creation_delay = 0;
 	bomb_creation_delay = 0;
+	r_hand_change = false;
+	l_hand_change = false;
 
 	// Init vars
 	point_offset = PxVec3(0, 10, 0);
@@ -242,7 +246,7 @@ void fsm_boss::Idle1(float elapsed){
 	/**/
 	if (last_attack > 3){
 		int attack = Calculate_attack();
-		XDEBUG("switch de attack");
+		//XDEBUG("switch de attack");
 		//int attack = 1;
 		switch (attack)
 		{
@@ -401,7 +405,74 @@ void fsm_boss::Rain1Loop(float elapsed){
 		bomb_creation_delay = 0;
 		debris_creation_delay = 0;
 		debris_created = 0;
+
+		r_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(40));
+		l_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(21));
 	}
+
+
+	TCompSkeleton* skeleton = comp_skeleton;
+
+	XMVECTOR r_hand_pos = skeleton->getPositionOfBone(40);
+	XMVECTOR r_hand_rot = skeleton->getRotationOfBone(40);
+	
+	if ((r_hand_change) && (r_hand_pos_y < XMVectorGetY(r_hand_pos)))
+	{
+		int i = 0;
+		// Adding particle sistem
+		/**/
+		
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(r_hand_pos, 0) , r_hand_rot);
+
+		if (particle_entity.isValid()) {
+			TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+			pg->destroy_on_death = true;
+			if (pg->particle_systems->size() > 0)
+			{
+				(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+				(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+			}
+		}
+		/**/
+	}
+	// 
+	if (r_hand_pos_y > XMVectorGetY(r_hand_pos))
+		r_hand_change = true;
+	else
+		r_hand_change = false;
+	r_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(40));
+
+
+
+	XMVECTOR l_hand_pos = skeleton->getPositionOfBone(21);
+	XMVECTOR l_hand_rot = skeleton->getRotationOfBone(21);
+
+	if ((l_hand_change) && (l_hand_pos_y < XMVectorGetY(l_hand_pos)))
+	{
+		int i = 0;
+		// Adding particle sistem
+		/**/
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(l_hand_pos, 0) , l_hand_rot);
+
+		if (particle_entity.isValid()) {
+			TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+			pg->destroy_on_death = true;
+			if (pg->particle_systems->size() > 0)
+			{
+				(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+				(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+			}
+		}
+		/**/
+	}
+	// 
+	if (l_hand_pos_y > XMVectorGetY(l_hand_pos))
+		l_hand_change = true;
+	else
+		l_hand_change = false;
+
+	l_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(21));
+
 
 	if (!RainDebris(elapsed)){
 		ChangeState("fbp_Rain1Recover");
@@ -620,9 +691,7 @@ void fsm_boss::Shoot1DownDef(){
 	
 }
 
-void fsm_boss::Shoot1Reload(){
-
-	Reorientate(0.f, true);
+void fsm_boss::Shoot1Reload(float elapsed){
 
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
@@ -643,6 +712,28 @@ void fsm_boss::Shoot1Reload(){
 		obj_to_shoot = nullptr;
 
 		SelectObjToShoot();
+	}
+
+	if (has_left && has_right){
+
+		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+
+		// Get the enemy position
+		PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+
+		// Calculate direction player enemy
+		PxVec3 player_boss_dir = (player_pos - enemy_pos);
+
+		Reorientate(0.f, true);
+		float angle = getAngleBetweenVectors(enemy_comp_trans->getFront(), Physics.PxVec3ToXMVECTOR(player_boss_dir));
+		if ((angle >= max_shoot_angle)){
+			ChangeState("fbp_Shoot1ReleaseDef");
+		}
+	}
+	else{
+		Reorientate(elapsed, false);
 	}
 
 	if (obj_to_shoot.isValid()){
@@ -985,36 +1076,18 @@ void fsm_boss::FinalState(float elapsed){
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 	PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
-
 	for (int i = 0; i < ball_list.size(); ++i){
 		CEntity* e = ball_list[i];
 		if (((CHandle)e).isValid()){
 			TCompRigidBody* rigid = e->get<TCompRigidBody>();
 			if (((CHandle)rigid).isValid()){
+				PxRigidBody*  px_rigid = rigid->rigidBody;
+				PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
 
-				//if (state_time < 5.f){
-				if (true){
-					PxRigidBody*  px_rigid = rigid->rigidBody;
-					PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
-
-					PxVec3 aux_up = PxVec3(0, 1, 0);
-					PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
-					m_force = (m_force + (aux_up * 1)).getNormalized();
-					px_rigid->addForce(m_force * 40.f * elapsed, PxForceMode::eVELOCITY_CHANGE, true);
-					//px_rigid->setLinearVelocity(-m_force * 50);
-				}
-				else{
-					PxRigidBody*  px_rigid = rigid->rigidBody;
-					PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
-
-					float desv = cos(i * 172 + elapsed * 0.01);
-					PxVec3 aux_up = PxVec3(0, 1, 0);
-					PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
-					m_force = (m_force + aux_up).getNormalized();
-					
-					px_rigid->setLinearVelocity(-m_force * 30);
-				}
-
+				PxVec3 aux_up = PxVec3(0, 1, 0);
+				PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
+				m_force = (m_force + (aux_up * 1)).getNormalized();
+				px_rigid->addForce(m_force * 40.f * elapsed, PxForceMode::eVELOCITY_CHANGE, true);				
 			}
 		}
 	}
@@ -1263,7 +1336,7 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 
 int fsm_boss::Calculate_attack() {
 	
-	XDEBUG("entrando al calculo de estado");
+	//XDEBUG("entrando al calculo de estado");
 
 	int next_attack = 0;
 	last_attack = 0.f;
@@ -1295,7 +1368,7 @@ int fsm_boss::Calculate_attack() {
 		}
 		/**/
 	}
-	XDEBUG("devolviendo estado: %d", next_attack);
+	//XDEBUG("devolviendo estado: %d", next_attack);
 
 	ball_list.clear();
 	return next_attack;
@@ -1313,46 +1386,71 @@ bool fsm_boss::RainDebris(float elapsed){
 	if (debris_created <= debris_amount){
 
 		debris_creation_delay += elapsed;
-		// Debris
+		bomb_creation_delay += elapsed;
+
 		if (debris_creation_delay >= debris_respawn_time){
 			debris_creation_delay = 0;
 
-			int rnd = getRandomNumber(1, 20);
-			std::string name = "boss/debris_0" + std::to_string(rnd);
+			XMVECTOR create_position;
+			XMVECTOR random_point = getRandomVector3(-17, 60, -10, 17, 61, 30);	
+			
+			bool equal =(Physics.XMVECTORToPxVec3(random_point) == Physics.XMVECTORToPxVec3(last_random_pos));
+			if (equal){
+				// Calculate a new pos
+				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+				PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+				PxVec3 obj_boss_dir = Physics.XMVECTORToPxVec3(last_created_pos) - m_boss_pos;
+				PxVec3 aux_up = PxVec3(0, 0.01f, 0);
+				PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
+	
+				create_position = last_created_pos + Physics.PxVec3ToXMVECTOR(m_force * 6);
+
+			}
+			else{
+				create_position = random_point;
+			}
+
+			last_created_pos = create_position;
+			last_random_pos = random_point;
+
+			std::string name = "";
+
+			// Bombs
+			if (bomb_creation_delay >= bomb_respawn_time){
+				bomb_creation_delay = 0;
+				name = "boss/bomb";
+			}
+			// Debris
+			else{				
+				int rnd = getRandomNumber(1, 20);
+				name = "boss/debris_0" + std::to_string(rnd);
+			}
+
 			CEntity* prefab_entity = prefabs_manager.getInstanceByName(name.c_str());
 
-			XMVECTOR random_point = getRandomVector3(-20, 60, -10, 20, 61, 30);
-			//XMVECTOR random_point = getRandomVector3(-20, -60, -10, 20, -61, 30);
 			TCompTransform* prefab_t = prefab_entity->get<TCompTransform>();
-			prefab_t->init();
-			prefab_t->teleport(random_point);
+			if (prefab_t){
+				prefab_t->init();
+				prefab_t->teleport(create_position);
+			}				
+
+			TCompParticleGroup* prefab_pg = prefab_entity->get<TCompParticleGroup>();
+			if (prefab_pg)
+				prefab_pg->init();
+
+			TCompExplosion* prefab_E = prefab_entity->get<TCompExplosion>();
+			if (prefab_E)
+				prefab_E->init();
 
 			debris_created++;
-		}
-
-		bomb_creation_delay += elapsed;
-		// Bombs
-		if (bomb_creation_delay >= bomb_respawn_time){		
-			bomb_creation_delay = 0;
-			std::string name = "boss/bomb";
-			CEntity* prefab_entity = prefabs_manager.getInstanceByName(name.c_str());
-			
-			XMVECTOR random_point = getRandomVector3(-20, 60, -10, 20, 61, 30);
-			//XMVECTOR random_point = getRandomVector3(-20, -60, -10, 20, -61, 30);
-			TCompTransform* prefab_t = prefab_entity->get<TCompTransform>();
-			prefab_t->init();
-			TCompParticleGroup* prefab_pg = prefab_entity->get<TCompParticleGroup>();
-			prefab_pg->init();
-			TCompExplosion* prefab_E = prefab_entity->get<TCompExplosion>();
-			prefab_E->init();
-
-			prefab_t->teleport(random_point);
 		}
 	}
 	else{
 		active = false;
 	}
 
+	
 	return active;
 }
 

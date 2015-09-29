@@ -13,9 +13,9 @@ struct TCompHfxZone : TBaseComponent {
 private:	
 
 	CHandle m_transform;
-	CHandle m_aabb;
 
 public:
+	CHandle m_aabb;
 	char preset_name[128];
 
 	TCompHfxZone();

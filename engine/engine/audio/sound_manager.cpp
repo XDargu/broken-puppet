@@ -6,10 +6,11 @@
 #include "entity_manager.h"
 #include "render\render_manager.h"
 #include "components\comp_camera.h"
+#include "sound_events_parser.h"
 
 static CSoundManager the_sound_manager;
 static float volume_factor = 1000;
-const unsigned int max_dist_events = 40;
+const unsigned int max_dist_events = 400;
 
 void CSoundManager::ERRCHECK(FMOD_RESULT result)	// this is an error handling function
 {						// for FMOD errors
@@ -35,6 +36,11 @@ CSoundManager::~CSoundManager()
 
 CSoundManager::CSoundManager()
 {
+
+	// Load sound events
+	CSoundEventsParser sep(this);
+	sep.xmlParseFile("data/sounds/sound_paths.xml");
+
 	slowed = false;
 
 	void *extraDriverData = NULL;
@@ -59,7 +65,7 @@ CSoundManager::CSoundManager()
 	invalidPosition = XMVectorSet(0, 0, 0, -112233);
 
 	// Underwater mixer effect
-	createMixerEvent("event:/Mixer/underwater", MixerInstanceType::UNDERWATER);
+	createMixerEvent("UNDERWATER", MixerInstanceType::UNDERWATER);
 }
 
 void CSoundManager::init(){
@@ -68,9 +74,11 @@ void CSoundManager::init(){
 	p_transform = (TCompTransform*)player->get<TCompTransform>();
 }
 
-void CSoundManager::createMixerEvent(std::string mixer_event, MixerInstanceType type) {
+void CSoundManager::createMixerEvent(std::string sound_id, MixerInstanceType type, CHandle hfx_zone) {
+	std::string path = sound_events[sound_id];
+
 	FMOD::Studio::EventDescription* event_description;
-	system->getEvent(mixer_event.c_str(), &event_description);
+	system->getEvent(path.c_str(), &event_description);
 	
 	FMOD::Studio::EventInstance* instance = NULL;
 	ERRCHECK(event_description->createInstance(&instance));
@@ -80,15 +88,16 @@ void CSoundManager::createMixerEvent(std::string mixer_event, MixerInstanceType 
 	MixerInstance m_instance;
 	m_instance.instance = instance;
 	m_instance.type = type;
+	m_instance.hfz_zone = hfx_zone;
 
-	mixer_event_instances[mixer_event] = m_instance;
+	mixer_event_instances[sound_id] = m_instance;
 }
 
-void CSoundManager::setMixerEventParams(std::string mixer_event, SoundParameter parameter, float lerp_val) {
+void CSoundManager::setMixerEventParams(std::string sound_id, SoundParameter parameter, float lerp_val) {
 
 	// Set the parameter
 	FMOD::Studio::ParameterInstance* param = NULL;
-	FMOD_RESULT r = mixer_event_instances[mixer_event].instance->getParameter(parameter.name.c_str(), &param);
+	FMOD_RESULT r = mixer_event_instances[sound_id].instance->getParameter(parameter.name.c_str(), &param);
 
 	float prev_value;
 	param->getValue(&prev_value);
@@ -97,26 +106,28 @@ void CSoundManager::setMixerEventParams(std::string mixer_event, SoundParameter 
 	ERRCHECK(param->setValue(parameter.value));
 }
 
-float CSoundManager::getMixerEventParamValue(std::string mixer_event, std::string param_name) {
+float CSoundManager::getMixerEventParamValue(std::string sound_id, std::string param_name) {
 	FMOD::Studio::ParameterInstance* param = NULL;
-	FMOD_RESULT r = mixer_event_instances[mixer_event].instance->getParameter(param_name.c_str(), &param);
+	FMOD_RESULT r = mixer_event_instances[sound_id].instance->getParameter(param_name.c_str(), &param);
 
 	float prev_value;
 	param->getValue(&prev_value);
 	return prev_value;
 }
 
-void CSoundManager::playEvent(std::string path) {
-	playEvent(path, 0, 0, invalidPosition);
+void CSoundManager::playEvent(std::string sound_id) {
+	playEvent(sound_id, 0, 0, invalidPosition);
 }
 
-void CSoundManager::playEvent(std::string path, SoundParameter* parameters, int nparameters) {
+void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, int nparameters) {
 		
-	playEvent(path, parameters, nparameters, invalidPosition);
+	playEvent(sound_id, parameters, nparameters, invalidPosition);
 }
 
-void CSoundManager::playEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos) {
+void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos) {
+	if (sound_id == "") { return; }
 
+	std::string path = sound_events[sound_id];
 	if (event_descriptions.count(path)) {
 		// The event exists
 	}
@@ -164,7 +175,11 @@ void CSoundManager::playEvent(std::string path, SoundParameter* parameters, int 
 	ERRCHECK(eventInstance->release());
 }
 
-FMOD::Studio::EventInstance* CSoundManager::getInstance(std::string path) {
+FMOD::Studio::EventInstance* CSoundManager::getInstance(std::string sound_id) {
+	if (sound_id == "") { return nullptr; }
+
+	std::string path = sound_events[sound_id];
+
 	if (event_descriptions.count(path)) {
 		// The event exists
 	}
@@ -257,49 +272,57 @@ void CSoundManager::update(float elapsed) {
 
 		float deepness = level - camera_pos;
 
-		CSoundManager::SoundParameter param = { "deepness", deepness };
-		setMixerEventParams("event:/Mixer/underwater", param);
-
+		CSoundManager::SoundParameter param = { "Deepness", deepness };
+		setMixerEventParams("UNDERWATER", param, 1);
+		
 		// Reverb zones
 		TCompHfxZone* hfx_zone = listenerInsideHFXZone(cam->getPosition());
 		if (hfx_zone) {
-			setCurrentReverbEvent(hfx_zone->preset_name);
+			setCurrentReverbEvent(hfx_zone->preset_name, hfx_zone, camera_position);
 		}
 		else {
-			setCurrentReverbEvent("");
+			setCurrentReverbEvent("", hfx_zone, camera_position);
 		}
 	}
 
 	system->update();
 }
 
-void CSoundManager::setCurrentReverbEvent(std::string event_path) {
+void CSoundManager::setCurrentReverbEvent(std::string sound_id, TCompHfxZone* hfx_zone, XMVECTOR listener_pos) {
 
 	SoundParameter param;
-	param.name = "intensity";
+	param.name = "DistanceReverb";
 	param.value = 0;
 
+	//TCompAABB* hfx_aabb = hfx_zone->m_aabb;
+	//float dist = sqrt(hfx_aabb->sqrDistance(listener_pos));
+
 	// If the event is not registered, create one with intensity 0
-	if (!mixer_event_instances.count(event_path)) {
-		if (event_path != "") {
-			createMixerEvent(event_path, MixerInstanceType::REVERB);
-			param.value = 100;
-			setMixerEventParams(event_path, param, 0.2f);
+	if (!mixer_event_instances.count(sound_id)) {
+		if (sound_id != "") {
+			createMixerEvent(sound_id, MixerInstanceType::REVERB, CHandle(hfx_zone));
+			/*param.value = dist;
+			setMixerEventParams(event_path, param, 1);*/
 		}
 	}
 
 	// Lerp values
 	for (auto& it : mixer_event_instances) {
 		if (it.second.type == MixerInstanceType::REVERB) {
+			// Get reverb zone
+			TCompHfxZone* hfx = it.second.hfz_zone;
+			TCompAABB* hfx_aabb = hfx->m_aabb;
+			float dist = sqrt(hfx_aabb->sqrDistance(listener_pos));
+
 			// Lerp to 100 if the value exists
-			if (it.first == event_path) {
-				param.value = 100;
-				setMixerEventParams(it.first, param, 0.2f);
+			if (it.first == sound_id) {
+				param.value = dist;
+				setMixerEventParams(it.first, param, 1);
 			}
 			// Lerp to 0 if it doesn't exists
 			else {
-				param.value = 0;
-				setMixerEventParams(it.first, param, 0.2f);
+				param.value = dist;
+				setMixerEventParams(it.first, param, 1);
 			}
 		}
 	}
@@ -309,13 +332,16 @@ void CSoundManager::setCurrentReverbEvent(std::string event_path) {
 	// Delete event where value afert lerping is 0
 	while (it != mixer_event_instances.end()) {
 		if (it->second.type == MixerInstanceType::REVERB) {
-			if (getMixerEventParamValue(it->first, "intensity") < 0.02) {
-				ERRCHECK(it->second.instance->stop(FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE));
+			float dist = getMixerEventParamValue(it->first, "DistanceReverb");
+			if (dist > 4) {
+				ERRCHECK(it->second.instance->stop(FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT));
 				ERRCHECK(it->second.instance->release());
 				it = mixer_event_instances.erase(it);
 			}
 		}
-		it++;
+		if (mixer_event_instances.end() != it) {
+			++it;
+		}
 	}
 }
 
@@ -348,7 +374,8 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 		{ "material", material_type }
 	};
 
-	CSoundManager::get().playEvent("event:/Enviroment/impact", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
+	//CSoundManager::get().playEvent("event:/Enviroment/impact", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
+	playEvent("HIT_WOOD", ((TCompTransform*)transform)->position);
 }
 
 void CSoundManager::activateSlowMo(){

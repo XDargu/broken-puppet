@@ -249,40 +249,18 @@ void TCompRope::fixedUpdate(float elapsed) {
 							CEntity* target_entity = CHandle(needle->getAttachedRigid()->userData);
 							if (target_entity) {
 
-								XMMATRIX view = XMMatrixLookAtRH(pos_1, pos_1 + normal_dir, XMVectorSet(0, 1, 0, 0));
+								XMMATRIX view = XMMatrixLookAtRH(pos_1, pos_1 - normal_dir, XMVectorSet(0, 1, 0, 0));
 								XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 
 								std::string name = target_entity->getName();
 								XDEBUG("Needle shot to %s", name);
 								std::string material = target_entity->material_tag;
-								std::string particle_name = "ps_prota_jump_ring";
 
-								if (material == "metal") {
-									particle_name = "ps_metal_hit";
-								}
-
-								// Final test (underwater)
-								if (XMVectorGetY(pos_1) < CApp::get().water_level) {
-									particle_name = "ps_bubble_one_shot";
-								}
-
-								CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name, pos_1 + normal_dir * 0.1f, trans_1->rotation);
-
-								if (particle_entity.isValid()) {
-									TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-									pg->kind = TCompParticleGroup::flag::IMPACT;
-									pg->destroy_on_death = true;
-									if (pg->particle_systems->size() > 0)
-									{
-										(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.0f / 2.f;
-										(*pg->particle_systems)[0].emitter_generation->radius = 1.0f;
-									}
-									CLogicManager::get().p_group_counter++;
-								}
+								createParticle(material, pos_1, normal_dir, trans_1->rotation);
 							}
 						}
 					}
-					CSoundManager::get().playEvent("event:/Strings/needle_hit");
+					CSoundManager::get().playEvent("NEEDLE_HIT", pos_1);
 					sound_1_played=true;
 				}
 			}
@@ -332,41 +310,19 @@ void TCompRope::fixedUpdate(float elapsed) {
 							CEntity* target_entity = CHandle(needle->getAttachedRigid()->userData);
 							if (target_entity) {
 
-								XMMATRIX view = XMMatrixLookAtRH(pos_2, pos_2 + normal_dir, XMVectorSet(0, 1, 0, 0));
+								XMMATRIX view = XMMatrixLookAtRH(pos_2, pos_2 - normal_dir, XMVectorSet(0, 1, 0, 0));
 								XMVECTOR rotation = XMQuaternionInverse(XMQuaternionRotationMatrix(view));
 
 								std::string name = target_entity->getName();
 								XDEBUG("Needle shot to %s", name.c_str());
 								std::string material = target_entity->material_tag;
-								std::string particle_name = "ps_prota_jump_ring";
 
-								if (material == "metal") {
-									particle_name = "ps_metal_hit";
-								}
-
-								// Final test (underwater)
-								if (XMVectorGetY(pos_2) < CApp::get().water_level) {
-									particle_name = "ps_bubble_one_shot";
-								}
-
-								CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name, pos_2 + normal_dir * 0.1f, trans_2->rotation);
-
-								if (particle_entity.isValid()) {
-									TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-									pg->kind = TCompParticleGroup::flag::IMPACT;
-									pg->destroy_on_death = true;
-									if (pg->particle_systems->size() > 0)
-									{
-										(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.0f / 2.f;
-										(*pg->particle_systems)[0].emitter_generation->radius = 1.0f;
-									}
-									CLogicManager::get().p_group_counter++;
-								}
+								createParticle(material, pos_2, normal_dir, trans_2->rotation);
 							}
 						}
 					}
 
-					CSoundManager::get().playEvent("event:/Strings/needle_hit");
+					CSoundManager::get().playEvent("NEEDLE_HIT", pos_2);
 					sound_2_played = true;
 				}
 			}
@@ -492,4 +448,55 @@ bool TCompRope::getStaticPosition(XMVECTOR& position) {
 
 void TCompRope::tenseRope() {
 
+}
+
+void TCompRope::createParticle(std::string material, XMVECTOR position, XMVECTOR normal, XMVECTOR rotation) {
+	std::string particle_name = "ps_prota_jump_ring";
+
+	if (material == "wood") {
+		particle_name = "ps_wood_hit";
+	}
+	else if (material == "wood_old") {
+		particle_name = "ps_wood_hit";
+	}
+	else if (material == "metal") {
+		particle_name = "ps_metal_hit";
+	}
+	else if (material == "metal_floor") {
+		particle_name = "ps_metal_hit";
+	}
+	else if (material == "ceramics") {
+		particle_name = "ps_porcelain_hit";
+	}
+	else if (material == "stone") {
+		particle_name = "ps_stone_hit";
+	}
+	else if (material == "glass") {
+		particle_name = "ps_glass_hit";
+	}
+	else if (material == "rattle") {
+		particle_name = "ps_metal_hit";
+	}
+	else if (material == "piano") {
+		particle_name = "ps_metal_hit";
+	}
+
+	// Final test (underwater)
+	if (XMVectorGetY(pos_2) < CApp::get().water_level) {
+		particle_name = "ps_bubble_one_shot";
+	}
+
+	CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name, position + normal * 0.1f, rotation);
+
+	if (particle_entity.isValid()) {
+		TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+		pg->kind = TCompParticleGroup::flag::IMPACT;
+		pg->destroy_on_death = true;
+		if (pg->particle_systems->size() > 0)
+		{
+			(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.0f / 2.f;
+			(*pg->particle_systems)[0].emitter_generation->radius = 1.0f;
+		}
+		CLogicManager::get().p_group_counter++;
+	}
 }
