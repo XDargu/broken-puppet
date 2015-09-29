@@ -1,7 +1,7 @@
 <skeleton>
     <mesh name="boss"/>
   
-  <anim name="idle" blend="0" blend_out="0"/>0
+  <anim name="idle" blend="0.3" blend_out="0"/>0
   <anim name="hit" blend="0.5" blend_out="0.5"/>1
   <anim name="stunned" blend="0.5" blend_out="0.5"/>2
   <anim name="recover" blend="0.5" blend_out="0.5"/>3
@@ -12,9 +12,9 @@
   <anim name="damaged_right" blend="0.5" blend_out="0.5"/>8
   <anim name="damaged_Left_final" blend="0.5" blend_out="0.5"/>9
   <anim name="damaged_right_final" blend="0.5" blend_out="0.5"/>10
-  <anim name="Rain_Prepare" blend="0.5" blend_out="0.5"/>11
-  <anim name="rain_loop" blend="0.5" blend_out="0.5"/>12
-  <anim name="rain_recover" blend="0.5" blend_out="0.5"/>13
+  <anim name="Rain_Prepare" blend="0" blend_out="0.1"/>11
+  <anim name="rain_loop" blend="0.1" blend_out="0.1"/>12
+  <anim name="rain_recover" blend="0.1" blend_out="0.1"/>13
   <anim name="defense_down" blend="0.5" blend_out="0.5"/>14
   <anim name="defense_down_reload" blend="0.5" blend_out="0.5"/>15
   <anim name="defense_down_recover" blend="0.5" blend_out="0.5"/>16

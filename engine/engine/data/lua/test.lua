@@ -353,8 +353,8 @@ function onSceneLoad_my_file()
 		print(tostring(who) .. "Entrado en el trigger");
 
 		if who == "Player" then
-			--logicManager:pushPlayerLegsState("fbp_WakeUp");
-			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
+			logicManager:pushPlayerLegsState("fbp_Idle");
+			--logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
 			player:teleportToPos(initPos);
 		end
 
