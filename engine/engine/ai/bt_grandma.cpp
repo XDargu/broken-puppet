@@ -77,7 +77,7 @@ void bt_grandma::create(string s)
 	addChild("LookAroundPriority", "CalmDown13", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionCalmDown);
 	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_grandma::actionSearchArroundLastPoint);
 	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_grandma::actionLookAround);
-	addChild("LookAroundSequence", "LookingForPlayer", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionLookingFor);
+	addChild("LookAroundSequence", "LookingForPlayer", ACTION, NULL, (btaction)&bt_grandma::actionLookingFor);
 
 
 	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
@@ -92,7 +92,7 @@ void bt_grandma::create(string s)
 	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
 
-	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
+	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
 
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
