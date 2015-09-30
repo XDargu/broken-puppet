@@ -311,18 +311,15 @@ void CSoundManager::setCurrentReverbEvent(std::string sound_id, TCompHfxZone* hf
 		if (it.second.type == MixerInstanceType::REVERB) {
 			// Get reverb zone
 			TCompHfxZone* hfx = it.second.hfz_zone;
-			TCompAABB* hfx_aabb = hfx->m_aabb;
-			float dist = sqrt(hfx_aabb->sqrDistance(listener_pos));
+			if (hfx) {
+				TCompAABB* hfx_aabb = hfx->m_aabb;
+				if (hfx_aabb) {
+					float dist = sqrt(hfx_aabb->sqrDistance(listener_pos));
 
-			// Lerp to 100 if the value exists
-			if (it.first == sound_id) {
-				param.value = dist;
-				setMixerEventParams(it.first, param, 1);
-			}
-			// Lerp to 0 if it doesn't exists
-			else {
-				param.value = dist;
-				setMixerEventParams(it.first, param, 1);
+					// Set the distance
+					param.value = dist;
+					setMixerEventParams(it.first, param, 1);
+				}
 			}
 		}
 	}

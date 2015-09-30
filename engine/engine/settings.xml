@@ -1,4 +1,4 @@
 <settings>
    <resolution xres="1920" yres="1080" fullscreen="true" />
-   <first_scene name="my_file"/>
+   <first_scene name="scene_1"/>
  </settings>
