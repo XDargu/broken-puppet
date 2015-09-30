@@ -144,6 +144,7 @@ void bt_grandma::create(string s)
 	cut_animation_done = false;
 	take_animation_done = false;
 	active = false;
+	lost_player = false;
 
 	null_node = false;
 	player_out_navMesh=false;
@@ -668,6 +669,7 @@ int bt_grandma::actionWarcry()
 	if (state_time >= getAnimationDuration(19)) {
 		aimanager::get().warningToClose(this, 20.f, player_transform);
 		have_to_warcry = false;
+		lost_player = false;
 		time_searching_player = 0;
 		return LEAVE;
 	}
@@ -1379,11 +1381,12 @@ int bt_grandma::conditionLook_for_timeout()
 
 int bt_grandma::conditionLook_time(){
 	if (time_searching_player <= max_time_player_search){
-		return true;
+		lost_player=true;
 	}
 	else{
-		return false;
+		lost_player=false;
 	}
+	return lost_player;
 }
 
 //Check if the role is attacker and is close enought
@@ -1661,6 +1664,7 @@ void bt_grandma::WarWarningSensor(XMVECTOR player_position){
 void bt_grandma::PlayerFoundSensor(){
 
 	last_time_player_saw = 0;
+	lost_player = false;
 	setCurrent(NULL);
 }
 /*void bt_grandma::PlayerTouchSensor(bool touch){
@@ -1685,6 +1689,7 @@ void bt_grandma::update(float elapsed){
 
 
 		playerViewedSensor();
+		findLostPlayer();
 		tiedSensor();
 		if (findPlayer()){
 			last_point_player_saw = ((TCompTransform*)player_transform)->position;
@@ -1723,11 +1728,6 @@ bool bt_grandma::trueEveryXSeconds(float time)
 	return false;
 }
 
-void bt_grandma::needleHitSensor(){
-	hurt_event = true;
-	setCurrent(NULL);
-}
-
 void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 	physx::PxRaycastBuffer buf;
 	Physics.raycastAll(own_position->position + XMVectorSet(0, 0.1f, 0, 0), own_position->getFront(), 1.f, buf);
@@ -1749,6 +1749,16 @@ void bt_grandma::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 
 CHandle bt_grandma::getPlayerTransform(){
 	return player_transform;
+}
+
+void bt_grandma::findLostPlayer(){
+	if (lost_player){
+		if (findPlayer()){
+			lost_player = false;
+			player_previously_lost = true;
+			setCurrent(NULL);
+		}
+	}
 }
 
 bool bt_grandma::findPlayer(){
