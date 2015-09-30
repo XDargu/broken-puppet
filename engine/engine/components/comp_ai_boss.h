@@ -16,8 +16,14 @@ private:
 
 	CHandle comp_skeleton;
 
+	bool hitchs_opened;
+
 	CHandle R_hitch;
 	PxFixedJoint* R_hitch_joint;
+	CHandle R_hitch_light;
+	
+	void open_light();
+	void close_light();
 
 	CHandle L_hitch;
 	PxFixedJoint* L_hitch_joint;

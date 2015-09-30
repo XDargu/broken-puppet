@@ -1466,7 +1466,7 @@ bool fsm_boss::RainDebris(float elapsed){
 }
 
 
-void fsm_boss::HeadHit() {
+bool fsm_boss::HeadHit() {
 
 	std::string m_current_state = getState();
 
@@ -1484,8 +1484,9 @@ void fsm_boss::HeadHit() {
 		&& (m_current_state != "fbp_Death");
 	
 	if (can_hit){
-		ChangeState("fbp_Hit1");
+		ChangeState("fbp_Hit1");		
 	}
+	return can_hit;
 }
 
 bool fsm_boss::HeartHit() {
