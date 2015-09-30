@@ -586,7 +586,7 @@ TParticleUpdaterColor::TParticleUpdaterColor(XMVECTOR the_initial_color, XMVECTO
 
 void TParticleUpdaterColor::update(TParticle* particle, float elapsed) {
 	//XMStoreFloat3(&particle->color, XMVectorLerp(initial_color, final_color, particle->age / particle->lifespan));
-	particle->color = getCurveVal(curve, curve_val, initial_color, final_color, particle->age / particle->lifespan);
+	particle->color = getCurveVal(curve, curve_val, initial_color, final_color, particle->lifespan == 0 ? 0 : particle->age / particle->lifespan);
 }
 
 std::string TParticleUpdaterColor::getXMLDefinition() {

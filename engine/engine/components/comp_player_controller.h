@@ -20,6 +20,7 @@ struct TCompPlayerController : TBaseComponent {
 	CHandle entity_jump_dust;
 
 	FMOD::Studio::EventInstance* footsteps;
+	float footstep_counter;
 
 	void bossImpact(CHandle boss);
 public:

@@ -54,9 +54,11 @@ private:
 	int shoots_amount;
 	
 	float last_attack;
-	int Calculate_attack();
+	int CalculateAttack();
 
 	bool RainDebris(float elapsed);
+	void rainJustBombs();
+	void FistParticles(float elapsed);
 	int debris_created;
 	float debris_creation_delay;
 	float bomb_creation_delay;
@@ -66,6 +68,8 @@ private:
 
 	float ball_size;
 	vector<CHandle> ball_list;
+	
+	int times_stunned;
 
 	void SelectObjToShoot();
 	float distance_to_hand;
@@ -78,6 +82,14 @@ private:
 
 	float l_hand_pos_y;
 	bool l_hand_change;
+
+	//bool extrem_need_bombs; // When we need bombs but there are too much objs in the scene. Not implemented
+	bool need_bombs;
+
+	bool bombs_destroyed;
+	void destroyBombs();
+	
+	bool appear;
 
 public:
 	fsm_boss();
@@ -128,7 +140,7 @@ public:
 
 	CHandle Player;
 
-	void HeadHit();
+	bool HeadHit();
 
 	bool can_proximity;
 	bool can_proximity_hit;

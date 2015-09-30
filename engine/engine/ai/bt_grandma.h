@@ -53,7 +53,7 @@ private:
 	bool active;
 	bool cut_animation_done;
 	bool take_animation_done;
-	//bool player_touch;
+	bool needle_hit;
 	int last_anim_id;
 
 	bool player_previously_lost;
@@ -135,6 +135,8 @@ public:
 	int actionTaunter();
 	//Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 	int actionHurtEvent();
+	//A needle just hit, play the hit animation
+	int actionNeedleHit();
 	//
 	int actionNeedleAppearsEvent();
 	//
@@ -182,6 +184,8 @@ public:
 	int conditionare_events();
 	//Check if is a hurt event
 	int conditionhurt_event();
+	//Check if is a needle hit event
+	int conditionneedle_hit_event();
 	//Check if is a falling event
 	int conditionfalling_event();
 	//Check if is a tied event
@@ -241,6 +245,8 @@ public:
 	void resetBot();
 	void stopMovement();
 	void BeAngry();
+
+	void needleHitSensor();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };

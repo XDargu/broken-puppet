@@ -573,10 +573,10 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		}
 
 		CSoundManager::SoundParameter params[] = {
-			{ "distance", distance }
+			{ "LongCuerda", distance }
 		};
 
-		CSoundManager::get().playEvent("event:/Strings/stringGrab", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("STRING_GRAB", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		
 	}
 
@@ -833,10 +833,10 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 					}
 
 					CSoundManager::SoundParameter params[] = {
-						{ "distance", distance }
+						{ "LongCuerda", distance }
 					};
 
-					CSoundManager::get().playEvent("event:/Strings/stringTense", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+					CSoundManager::get().playEvent("STRING_TENSE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 					//----------------------------------------------------------------------------------------------------------------------------
 					
 					rope->tensed = true;

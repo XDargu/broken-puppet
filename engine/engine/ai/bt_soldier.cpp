@@ -502,7 +502,7 @@ int bt_soldier::actionSelectRole()
 	see_player = false;
 
 	time_searching_player = 0;
-	if ((V3DISTANCE(m_transform->position, p_transform->position))<4.f){
+	if ((V3DISTANCE(m_transform->position, p_transform->position))<7.5f){
 		aimanager::get().setEnemyRol(this);
 		if (rol == role::ATTACKER){
 			if (slot == attacker_slots::NORTH){
@@ -540,13 +540,14 @@ int bt_soldier::actionChaseRoleDistance()
 				return LEAVE;
 			}
 
+			TCompCharacterController* m_char_controller = character_controller;
+
+			m_char_controller->moveSpeedMultiplier = 9.2f;
+
 			stopAllAnimations();
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(15);
 
-			TCompCharacterController* m_char_controller = character_controller;
-
-			m_char_controller->moveSpeedMultiplier = 7.f;
 			//m_char_controller->airSpeed = run_angry_speed * 0.8f;
 			ind_path = 0;
 		}else{
@@ -560,7 +561,7 @@ int bt_soldier::actionChaseRoleDistance()
 		wander_target = p_transform->position;// last_point_player_saw;
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
-	if (distance < 4.f) {
+	if (distance < 7.5f) {
 		return LEAVE;
 	}
 
@@ -588,29 +589,32 @@ int bt_soldier::actionChaseRoleDistance()
 //First attack
 int bt_soldier::actionInitialAttack()
 {
+	TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+
 	if (on_enter) {
 		initial_attack = true;
-		playAnimationIfNotPlaying(11);
+		stopAllAnimations();
+		resetTimeAnimation();
+		playAnimationIfNotPlaying(19);
+		XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+		((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 5.f;
+		mov_direction = Physics.XMVECTORToPxVec3(dir);
+		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
 		attacked = false;
 	}
 
-	TCompTransform* p_transform = player_transform;
-	TCompTransform* m_transform = own_transform;
-	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	stopMovement();
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = Physics.XMVECTORToPxVec3(dir);
-
-	if ((state_time >= getAnimationDuration(4) / 5) && (!attacked)) {
+	if ((state_time >= getAnimationDuration(4) / 2) && (!attacked)) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
-		if (distance <= max_distance_to_attack * 2)
+		if (distance <= 1.5f * 2)
 		{
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 101000.f, false));
 			attacked = true;
 		}
 
 		if (state_time >= getAnimationDuration(4)){
+			last_time = timer;
 			return LEAVE;
 		}
 	}
@@ -640,8 +644,9 @@ int bt_soldier::actionSituate()
 				return LEAVE;
 			}
 
-			m_char_controller->moveSpeedMultiplier = run_angry_speed;
-			m_char_controller->airSpeed = run_angry_speed * 0.8f;
+			m_char_controller->moveSpeedMultiplier = 9.2f;
+			stopAllAnimations();
+			resetTimeAnimation();
 			playAnimationIfNotPlaying(15);
 		}
 		else{
@@ -656,8 +661,15 @@ int bt_soldier::actionSituate()
 	}
 
 	float distance = V3DISTANCE(m_transform->position, wander_target);
-	if (distance < 1.5f) {
-		return LEAVE;
+	if (!initial_attack){
+		if (distance < 6.5f){
+			return LEAVE;
+		}
+	}
+	else{
+		if (distance < 1.5f){
+			return LEAVE;
+		}
 	}
 
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
@@ -724,6 +736,8 @@ int bt_soldier::actionNormalAttack()
 int bt_soldier::actionIdleWar()
 {
 	if (on_enter) {
+		stopAllAnimations();
+		resetTimeAnimation();
 		playAnimationIfNotPlaying(10);
 	}
 
@@ -957,7 +971,7 @@ int bt_soldier::conditionis_attacker()
 	TCompTransform* p_transform = player_transform;
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);// + slot_position);
-	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) <= 4.5f)){
+	if ((rol == role::ATTACKER) && (V3DISTANCE(m_transform->position, p_transform->position) <= 7.5f)){
 		return true;
 	}
 	else{
@@ -1027,8 +1041,23 @@ int bt_soldier::conditioninitial_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	if ((!initial_attack) && ((V3DISTANCE(m_transform->position, p_transform->position) < 2.f))){
-		return true;
+	XMVECTOR attack_direction = (p_transform->position - m_transform->position);
+	attack_direction = XMVector3Normalize(attack_direction);
+	XMVECTOR front = XMVector3Normalize(m_transform->getFront());
+	XMVECTOR dir = XMVector3AngleBetweenVectors(attack_direction, front);
+	float rads = XMVectorGetX(dir);
+	float angle_deg = rad2deg(rads);
+	float distance = V3DISTANCE(m_transform->position, p_transform->position);
+
+	if ((!initial_attack) && (distance < 7.5f)){
+		if (angle_deg < 30.f){
+			XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front));
+			return true;
+		}else{
+			XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front));
+			initial_attack = true;
+			return false;
+		}
 	}
 	else{
 		return false;
@@ -1351,6 +1380,10 @@ void bt_soldier::resetTimeAnimation(){
 
 void bt_soldier::setActive(bool act){
 	active = act;
+}
+
+void bt_soldier::needleHitSensor(){
+
 }
 
 void bt_soldier::setIndRecastAABB(int ind){

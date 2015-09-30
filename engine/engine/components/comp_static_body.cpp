@@ -80,10 +80,10 @@ void TCompStaticBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	staticBody->setName(((CEntity*)static_entity)->getName());
 	staticBody->userData = CHandle(this).getOwner().asVoidPtr();
 
-	checkIfInsideRecastAABB();
 }
 
 void TCompStaticBody::init() {
+	checkIfInsideRecastAABB();
 }
 
 void TCompStaticBody::fixedUpdate(float elapsed) {
@@ -117,6 +117,10 @@ void TCompStaticBody::checkIfInsideRecastAABB(){
 	else if (kind == colliderType::SPHERE){
 		TCompColliderSphere* col_sphere = r_entity->get<TCompColliderSphere>();
 		col_sphere->checkIfInsideRecastAABB();
+	}
+	else if (kind == colliderType::MULTIPLE){
+		TCompColliderMultiple* col_multi = r_entity->get<TCompColliderMultiple>();
+		col_multi->checkIfInsideRecastAABB();
 	}
 }
 

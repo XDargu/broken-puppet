@@ -13,6 +13,8 @@ private:
 
 	bool sound_1_played;
 	bool sound_2_played;
+
+	void createParticle(std::string material, XMVECTOR position, XMVECTOR normal, XMVECTOR rotation);
 public:
 	CHandle joint;
 

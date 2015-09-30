@@ -50,17 +50,17 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 	if (blur_amount > 0) {
 		float4 color = float4(0, 0, 0, 0);		
 
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * -1) * blur_amount * saturate(depth) * 5) * (1./16.);
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * 0)  * blur_amount * saturate(depth) * 5) * (1./8.);
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * 1)  * blur_amount * saturate(depth) * 5) * (1./16.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * -1) * blur_amount * saturate(depth) * 3) * (1./16.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * 0)  * blur_amount * saturate(depth) * 3) * (1./8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * -1, blur_delta.y * 1)  * blur_amount * saturate(depth) * 3) * (1./16.);
 																																			
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * -1)  * blur_amount * saturate(depth) * 5) * (1. / 8.);
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * 0)   * blur_amount * saturate(depth) * 5) * (1./4.);
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * 1)   * blur_amount * saturate(depth) * 5) * (1./8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * -1)  * blur_amount * saturate(depth) * 3) * (1. / 8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * 0)   * blur_amount * saturate(depth) * 3) * (1./4.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 0, blur_delta.y * 1)   * blur_amount * saturate(depth) * 3) * (1./8.);
 																																			
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * -1)  * blur_amount * saturate(depth) * 5) * (1. / 16.);
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * 0)   * blur_amount * saturate(depth) * 5) * (1./8.);
-		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * 1)   * blur_amount * saturate(depth) * 5) * (1./16.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * -1)  * blur_amount * saturate(depth) * 3) * (1. / 16.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * 0)   * blur_amount * saturate(depth) * 3) * (1./8.);
+		color += txDiffuse.Sample(samClampLinear, input.UV + float2(blur_delta.x * 1, blur_delta.y * 1)   * blur_amount * saturate(depth) * 3) * (1./16.);
 
 		// Old loop
 		//float2 delta = float2(0, 0);

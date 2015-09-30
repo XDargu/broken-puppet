@@ -48,6 +48,7 @@ CIOStatus::CIOStatus( ) {
 	buttons[DEBUG_MODE].key = VK_F3;
 	buttons[EXIT].key = VK_ESCAPE;
 	buttons[RUN].key = VK_LSHIFT;
+	buttons[CTRL].key = VK_LCONTROL;
 
 	buttons[VIEWER_MOVE_CAM].key = VK_RBUTTON;
 	buttons[VIEWER_PAN].key = VK_MBUTTON;

@@ -40,9 +40,10 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	physx::PxReal threshold = 55000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
-	footsteps = CSoundManager::get().getInstance("event:/Character/Footprints/Footsteps");
+	footsteps = CSoundManager::get().getInstance("STEPS_KATH");
+	footstep_counter = 0;
 
-	FMOD::Studio::ParameterInstance* surface = NULL;
+	/*FMOD::Studio::ParameterInstance* surface = NULL;
 	footsteps->getParameter("surface", &surface);
 	FMOD_RESULT r = surface->setValue(0);
 
@@ -50,7 +51,7 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	footsteps->getParameter("surface", &running);
 	r = running->setValue(0);
 
-	footsteps->start();
+	footsteps->start();*/
 }
 
 /*float displacement;
@@ -246,9 +247,25 @@ void TCompPlayerController::update(float elapsed) {
 
 	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
 
-	bool moving = c_controller->OnGround() && rigid->rigidBody->getLinearVelocity().magnitudeSquared() > 1;
+	bool moving = c_controller->OnGround() && rigid->rigidBody->getLinearVelocity().magnitudeSquared() > 0.4f;
 	float surface_value = moving ? (surface_tag + 1) : 0;
-	FMOD::Studio::ParameterInstance* surface = NULL;
+	bool running_value = io.isPressed(CIOStatus::RUN);
+
+	if (moving) {
+		footstep_counter += elapsed;
+
+		float base_step = 0.5f;
+		float time_modifier = (running_value ? 0.75f : 1) * (1 / water_multiplier);
+
+		if (footstep_counter >= base_step * time_modifier) {
+			CSoundManager::get().playEvent("STEPS_KATH", trans->position);
+			footstep_counter = 0.0f;
+		}
+	}
+	
+	
+	
+	/*FMOD::Studio::ParameterInstance* surface = NULL;
 	footsteps->getParameter("surface", &surface);
 	FMOD_RESULT r = surface->setValue(surface_value);
 
@@ -260,7 +277,7 @@ void TCompPlayerController::update(float elapsed) {
 	// 3D Attributes
 	FMOD_3D_ATTRIBUTES attributes = { { 0 } };
 	attributes.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
-	r = footsteps->set3DAttributes(&attributes);
+	r = footsteps->set3DAttributes(&attributes);*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

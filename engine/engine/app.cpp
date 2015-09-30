@@ -186,7 +186,7 @@ void createManagers() {
 	getObjManager<TCompRecastAABB>()->init(32);
 	getObjManager<TCompColliderMesh>()->init(4096);
 	getObjManager<TCompColliderConvex>()->init(512);
-	getObjManager<TCompCamera>()->init(4);
+	getObjManager<TCompCamera>()->init(32);
 	getObjManager<TCompColliderBox>()->init(1024);
 	getObjManager<TCompColliderSphere>()->init(512);
 	getObjManager<TCompColliderCapsule>()->init(512);
@@ -624,7 +624,7 @@ void CApp::update(float elapsed) {
 			CSoundManager::get().desactivateSlowMo();
 		}
 	}
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	if (io.becomesReleased(CIOStatus::NUM0)) { debug_map = 0; }
 	if (io.becomesReleased(CIOStatus::NUM1)) { debug_map = 1; }
 	if (io.becomesReleased(CIOStatus::NUM2)) { debug_map = 2; }
@@ -632,16 +632,17 @@ void CApp::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::NUM4)) { debug_map = 4; }
 	if (io.becomesReleased(CIOStatus::NUM5)) { debug_map = 5; }
 	if (io.becomesReleased(CIOStatus::NUM6)) { debug_map = 6; }
-#endif
-
-	if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
-	if (io.becomesReleased(CIOStatus::NUM6)) { }
-	if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
-	if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/my_file.xml"); }
+//#endif
+	if (io.isPressed(CIOStatus::CTRL)) {
+		if (io.becomesReleased(CIOStatus::NUM1)) { loadScene("data/scenes/scene_1.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM6)) {}
+		if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
+		if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/my_file.xml"); }
+	}
 
 	/*if (io.becomesReleased(CIOStatus::F8_KEY)) {
 		renderWireframe = !renderWireframe;
@@ -908,7 +909,7 @@ void CApp::render() {
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
 	CTraceScoped scope_part("Particles");
-
+	
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	texture_manager.getByName("noise")->activate(9);
@@ -941,7 +942,7 @@ void CApp::render() {
 	CTraceScoped scope_post_all("Post procesado");
 	activateCamera(camera, 1);
 	CTraceScoped scope_post1("SSR");
-	/*ssrr.apply(rt_base);
+	ssrr.apply(rt_base);
 	//ssao.apply(ssrr.getOutput());
 	scope_post1.~CTraceScoped();
 	CTraceScoped scope_post2("Sharpen");
@@ -958,9 +959,9 @@ void CApp::render() {
 	scope_post5.~CTraceScoped();
 	CTraceScoped scope_post6("Motion blur");
 	blur_camera.apply(blur.getOutput());
-	scope_post6.~CTraceScoped();*/
+	scope_post6.~CTraceScoped();
 	CTraceScoped scope_post7("Silouette");
-	silouette.apply(rt_base);
+	silouette.apply(blur_camera.getOutput());
 	//silouette.apply(blur_camera.getOutput());
 	scope_post7.~CTraceScoped();
 	texture_manager.getByName("noise")->activate(9);
@@ -995,7 +996,7 @@ void CApp::render() {
 
 	// 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	/*drawTexture2D(0, 0, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_depth"));
 	drawTexture2D(0, sz, sz * camera.getAspectRatio(), sz, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 2*sz, sz * camera.getAspectRatio(), sz, shadow->rt.getZTexture());	
@@ -1010,7 +1011,7 @@ void CApp::render() {
 	if (debug_map == 4) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_gloss")); }
 	if (debug_map == 5) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights")); }
 	if (debug_map == 6) { drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); }
-#endif
+//#endif
 
 	/*render_techniques_manager.getByName("basic")->activate();
 	activateWorldMatrix(0);
@@ -1496,7 +1497,7 @@ void CApp::loadScene(std::string scene_name) {
 	silouette.destroy();
 	underwater.destroy();
 	ssrr.destroy();
-	if (rt_base) { rt_base->destroyAll(); rt_base = nullptr; }
+	//if (rt_base) { rt_base->destroyAll(); delete rt_base; rt_base = nullptr; }
 	
 
 	CRope_manager::get().clearStrings();

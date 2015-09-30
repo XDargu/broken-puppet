@@ -191,6 +191,7 @@
     <ClInclude Include="app.h" />
     <ClInclude Include="audio\bass.h" />
     <ClInclude Include="audio\sound.h" />
+    <ClInclude Include="audio\sound_events_parser.h" />
     <ClInclude Include="audio\sound_manager.h" />
     <ClInclude Include="ai\bt_soldier.h" />
     <ClInclude Include="callback_controllers.h" />
@@ -394,6 +395,7 @@
     <ClCompile Include="ai\timer.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="audio\sound.cpp" />
+    <ClCompile Include="audio\sound_events_parser.cpp" />
     <ClCompile Include="audio\sound_manager.cpp" />
     <ClCompile Include="ai\bt_soldier.cpp" />
     <ClCompile Include="callback_controllers.cpp" />
