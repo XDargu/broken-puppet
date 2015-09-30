@@ -267,6 +267,11 @@ function onSceneLoad_my_file()
 	
 	end
 
+	-- Subir el agua si no se ha subido aún
+	function onTriggerFirstEnter_sc3_trigger_rise_water(who)
+		logicManager:changeWaterLevel(7.58, 0.5);
+	end
+
 	-- Bajar el nivel del agua
 	function onTriggerExit_sc3_trigger_desag(who)
 		print(tostring(who) .. " ha dejado en el trigger de desag");
@@ -443,8 +448,8 @@ function onSceneLoad_my_file()
 	sc4_atrezzo_hinge_3 = logicManager:getHingeJoint("sc4_atrezzo_hinge_3");
 	
 	-- Cerrar puertas
-	sc4_reloj_hinge_1:setLimit(80)
-	sc4_reloj_hinge_2:setLimit(80)
+	sc4_reloj_hinge_1:setLimit(40)
+	sc4_reloj_hinge_2:setLimit(40)
 	sc4_reloj_hinge_1:setMotor(-1.55, 800000)
 	sc4_reloj_hinge_2:setMotor(1.55, 800000)
 
@@ -472,7 +477,7 @@ function onSceneLoad_my_file()
 
 			-- Desbloquear aguja y moverla
 			sc4_aguja_hinge_2:setLimit(0)
-			sc4_aguja_hinge_2:setMotor(1.55, 6000)
+			sc4_aguja_hinge_2:setMotor(1.55, 15000)
 		end
 	end
 
