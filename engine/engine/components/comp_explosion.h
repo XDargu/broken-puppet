@@ -25,6 +25,7 @@ public:
 	void update(float elapsed);
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void onDetonate(const TMsgOnDetonate& msg);
+	void Explote(bool force_explosion);
 	
 };
 
