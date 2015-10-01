@@ -25,7 +25,8 @@ struct FilterGroup
 		ePARTICLES = (1 << 10),
 		eBOSSRAGDOLL = (1 << 11),
 		eBOSSPARTS = (1 << 12),
-		eBOSSHEAD = (1 << 13)
+		eBOSSHEAD = (1 << 13),
+		eBOMB = (1 << 14)
 	};
 };
 

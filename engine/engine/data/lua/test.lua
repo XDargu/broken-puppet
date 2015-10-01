@@ -13,6 +13,31 @@ end
 _print = print
 clearCoroutines( )
 
+
+----------------------------------------------------------
+-- scene_boss --- scene scene_boss --- scene scene_boss --
+----------------------------------------------------------
+----------------------------------------------------------
+
+function onSceneLoad_scene_boss()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+	
+	function onTriggerEnter_PitTrigger(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+			--logicManager:pushPlayerLegsState("fbp_WakeUp");
+			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
+			player:teleportToPos(initPos);
+		end
+
+	end
+
+end
+
+
 function onSceneLoad_my_file()
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
@@ -663,28 +688,7 @@ end
 
 
 
-----------------------------------------------------------
--- scene_boss --- scene scene_boss --- scene scene_boss --
-----------------------------------------------------------
-----------------------------------------------------------
 
-function onSceneLoad_scene_boss()
-
-	player = logicManager:getBot("Player");
-	initPos = player:getPos();
-	
-	function onTriggerEnter_PitTrigger(who)
-		print(tostring(who) .. "Entrado en el trigger");
-
-		if who == "Player" then
-			--logicManager:pushPlayerLegsState("fbp_WakeUp");
-			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
-			player:teleportToPos(initPos);
-		end
-
-	end
-
-end
 
 
 -------------------------- MS3 ---------------------------
