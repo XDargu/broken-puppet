@@ -1,0 +1,10 @@
+<prefab>
+  <entity>
+    <name name="l_arm_light" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.694118 0.345098 0.105882">
+      <draw mesh="l_arm_light" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-13.0298 -5.65762 -60.7827" max="54.1125 49.4966 45.5955"/>
+  </entity>
+</prefab>

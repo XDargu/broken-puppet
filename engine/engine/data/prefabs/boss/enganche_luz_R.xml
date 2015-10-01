@@ -1,0 +1,10 @@
+<prefab>
+  <entity tag = "level" collisionTag = "Level" materialTag = "wood">
+    <name name="r_arm_light_1.0" />
+    <transform position="0.0 0.0 0.0" rotation="-0.183058 -0.440378 -0.238566 0.845957" scale="0.461361 0.461361 0.461361"/>
+    <render  color = "0.694118 0.345098 0.105882">
+      <draw mesh="r_arm_light" sub_mesh="0" mat="light_shaft"/>
+    </render>
+    <aabb min="-20.7379 -15.9618 0.046669" max="16.4785 21.2547 96.1189"/>
+  </entity>
+</prefab>

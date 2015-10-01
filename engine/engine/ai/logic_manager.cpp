@@ -701,6 +701,7 @@ CHingeJoint CLogicManager::getHingeJoint(std::string name) {
 }
 
 void CLogicManager::print(std::string text) {
+	dbg(text.c_str());
 #ifdef _DEBUG
 	CConsole::get().print(text);
 #endif

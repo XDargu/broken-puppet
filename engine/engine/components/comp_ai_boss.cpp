@@ -5,6 +5,7 @@
 #include "comp_transform.h"
 #include "comp_skeleton.h"
 #include "comp_ragdoll.h"
+#include "comp_render.h"
 #include "io\iostatus.h"
 #include "handle\prefabs_manager.h"
 
@@ -44,19 +45,20 @@ void TCompAiBoss::init(){
 
 	is_death = false;
 
+	hitchs_opened = false;
 	force = 24;
 	R_hitch_joint = nullptr;
 
 	m_fsm_boss->entity = mBoss;
 	m_fsm_boss->Init();
 
-
-	// Create Right Hitch
-	/**/
+	/**********************************************************
+					RIGHT ARM, HITCH, LITH
+	/**********************************************************/
 	comp_skeleton = ((CEntity*)mBoss)->get<TCompSkeleton>();
 	TCompSkeleton* skeleton = comp_skeleton;
 
-	// Right Arm 72
+	// Right Arm hitch
 	std::string rname = "boss/enganche_R";
 	R_hitch = prefabs_manager.getInstanceByName(rname.c_str());
 	TCompRigidBody* R_hitch_rigid = ((CEntity*)R_hitch)->get<TCompRigidBody>();
@@ -82,9 +84,25 @@ void TCompAiBoss::init(){
 	R_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, r_bone_trans);
 	R_hitch_px_rigid->setGlobalPose(r_bone_trans);
 	/**/
+	
+	// R_light
+ 
+	R_hitch_light = prefabs_manager.getInstanceByName("boss/enganche_luz_R");
+	TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
+	// Follow
+	if (R_light_trans){ 
+		R_light_trans->setType(0);
+		R_light_trans->position = R_hitch_trans->position;
+	}
+	// Hacerlas visibles
+	if (R_hitch_light.isValid()){
+		((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = false;
+	}
 
 
-	//Left Arm
+	/**********************************************************
+					LEFT ARM, HITCH, LITH
+	/**********************************************************/
 	std::string lname = "boss/enganche_L";
 	L_hitch = prefabs_manager.getInstanceByName(lname.c_str());
 	TCompRigidBody* L_hitch_rigid = ((CEntity*)L_hitch)->get<TCompRigidBody>();
@@ -111,7 +129,23 @@ void TCompAiBoss::init(){
 	L_hitch_px_rigid->setGlobalPose(l_bone_trans);
 	/**/
 
-	// Right Arm
+	// L_light
+	L_hitch_light = prefabs_manager.getInstanceByName("boss/enganche_luz_L");
+	TCompTransform* L_light_trans = ((CEntity*)L_hitch_light)->get<TCompTransform>();
+	// Follow
+	if (L_light_trans){
+		L_light_trans->setType(0);
+		L_light_trans->position = L_hitch_trans->position;
+	}
+	// Hacerlas visibles
+	if (L_hitch_light.isValid()){
+		((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = false;
+	}
+
+
+	/**********************************************************
+							HEART
+	/**********************************************************/
 	std::string hname = "boss/heart";
 	H_hitch = prefabs_manager.getInstanceByName(hname.c_str());
 	TCompRigidBody* H_hitch_rigid = ((CEntity*)H_hitch)->get<TCompRigidBody>();
@@ -145,7 +179,9 @@ void TCompAiBoss::update(float elapsed){
 	CIOStatus& io = CIOStatus::get();
 
 	if (CIOStatus::get().becomesPressed(CIOStatus::H)){
-		m_fsm_boss->HeadHit();
+		stun();
+		// Pruebas a eliminar cambiar scale de transform
+		
 	}
 	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
 		m_fsm_boss->HeartHit();
@@ -178,6 +214,14 @@ void TCompAiBoss::update(float elapsed){
 	R_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, r_bone_trans);
 	R_hitch_px_rigid->setGlobalPose(r_bone_trans);
 
+	// Follow
+	TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
+	if (R_light_trans){
+		R_light_trans->setType(0);
+		R_light_trans->position = Physics.PxVec3ToXMVECTOR(r_pos);
+		R_light_trans->rotation = Physics.PxQuatToXMVECTOR(r_rot);
+	}
+
 	/**/
 	TCompRigidBody* L_hitch_rigid = ((CEntity*)L_hitch)->get<TCompRigidBody>();
 	PxRigidDynamic*  L_hitch_px_rigid = L_hitch_rigid->rigidBody;
@@ -188,8 +232,14 @@ void TCompAiBoss::update(float elapsed){
 
 	L_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, l_bone_trans);
 	L_hitch_px_rigid->setGlobalPose(l_bone_trans);
-
-	/**/
+	
+	// Follow
+	TCompTransform* L_light_trans = ((CEntity*)L_hitch_light)->get<TCompTransform>();
+	if (L_light_trans){
+		L_light_trans->setType(0);
+		L_light_trans->position = Physics.PxVec3ToXMVECTOR(l_pos);
+		L_light_trans->rotation = Physics.PxQuatToXMVECTOR(l_rot);
+	}
 	
 
 	if (!is_death){
@@ -231,30 +281,19 @@ void TCompAiBoss::update(float elapsed){
 	}
 
 
-	// Update input
-	/*
-	if (CIOStatus::get().becomesPressed(CIOStatus::ALT)){
-		shoot = true;
-	}
+	// Check the hitch
+	/**/
+		if (m_fsm_boss->getState() == "fbp_Stunned1")
+		{
+			open_light();
+			hitchs_opened = true;
+		}
+		else{
+			close_light();
+			hitchs_opened = false;
+		}
+	/**/
 
-	
-	// Girar cosas a la derecha
-	if (CIOStatus::get().becomesPressed(CIOStatus::O)){
-		move_things = 2;
-	}
-	// Girar cosas a la izquierda
-	if (CIOStatus::get().becomesPressed(CIOStatus::I)){
-		move_things = 1;
-	}
-	// Girar cosas a la izquierda
-	if (CIOStatus::get().becomesPressed(CIOStatus::U)){
-		move_things = 0;
-	}
-	// Girar cosas a la izquierda
-	if (CIOStatus::get().becomesPressed(CIOStatus::L)){
-		move_things = 3;
-	}
-	*/
 }
 
 void TCompAiBoss::fixedUpdate(float elapsed){
@@ -279,5 +318,43 @@ void TCompAiBoss::breakHitch(CHandle m_hitch){
 }
 
 void TCompAiBoss::stun(){
-	m_fsm_boss->HeadHit();
+	if (m_fsm_boss->HeadHit()){		
+		hitchs_opened = true;
+	}
+}
+
+void TCompAiBoss::open_light(){
+
+	if (!hitchs_opened){
+		TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
+		if (R_light_trans){
+			R_light_trans->setType(0);
+			// Hacer que giren
+			// Hacerlas visibles
+			if (R_hitch_light.isValid()){
+				((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = true;
+			}
+		}
+		TCompTransform* L_light_trans = ((CEntity*)L_hitch_light)->get<TCompTransform>();
+		if (L_light_trans){
+			L_light_trans->setType(0);
+			// Hacer que giren
+			// Hacerlas visibles
+			if (L_hitch_light.isValid()){
+				((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = true;
+			}
+		}
+	}
+}
+
+void TCompAiBoss::close_light(){
+	if (hitchs_opened){
+		if (R_hitch_light.isValid()){
+			((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = false;
+		}
+		if (L_hitch_light.isValid()){
+			((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = false;
+		}
+	}
+	
 }

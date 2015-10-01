@@ -140,7 +140,7 @@ public:
 
 	CHandle Player;
 
-	void HeadHit();
+	bool HeadHit();
 
 	bool can_proximity;
 	bool can_proximity_hit;
