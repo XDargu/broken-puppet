@@ -44,8 +44,12 @@ bool CRenderToTexture::create(
 	else {
 		assert(zbuffer_type == USE_BACK_ZBUFFER);
 		depth_stencil_view = render.depth_stencil_view;
+		depth_stencil_view->AddRef();
 	}
 	
+	// Registrarlo en el texturemanager
+	texture_manager.registerNew(name, this);
+
 	return true;
 }
 
@@ -84,8 +88,7 @@ bool CRenderToTexture::createColorBuffer(bool mipmaps) {
 	if (FAILED(hr))
 		return false;
 
-	// Registrarlo en el texturemanager
-	texture_manager.registerNew(name, this);
+	
 	return true;
 }
 
@@ -225,15 +228,12 @@ void CRenderToTexture::clearDepthBuffer() {
 	::render.ctx->ClearDepthStencilView(depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void CRenderToTexture::destroyAll() {
-	/*texture_manager.unregister(name);
+void CRenderToTexture::destroy() {
+	//texture_manager.unregister(name);
 	SAFE_RELEASE(render_target_view);
 	SAFE_RELEASE(depth_stencil_view);
-	if (ztexture != nullptr) {
-		ztexture->destroy();
-	}
-	destroy();
-	render_target_view = nullptr;
-	depth_stencil_view = nullptr;
-	name = nullptr;*/
+	if (ztexture != nullptr)
+		ztexture->destroy(), ztexture = nullptr;
+	CTexture::destroy();
+	name = nullptr;
 }

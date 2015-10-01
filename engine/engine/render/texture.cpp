@@ -9,6 +9,21 @@ void CTexture::activate(int slot) const {
 	::render.ctx->PSSetShaderResources(slot, 1, &resource_view);
 }
 
+void CTextureManager::destroyAllTextures() {
+	auto it = all_items.begin();
+	while (it != all_items.end() ) {
+		if (!it->second->isRenderTexture()) {
+			it->second->destroy();
+			delete it->second;
+			it = all_items.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+
 // ------------------------------------------
 bool CTexture::load(const char* name) {
 

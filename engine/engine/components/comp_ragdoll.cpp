@@ -345,7 +345,8 @@ void TCompRagdoll::breakJoints() {
 	for (PxD6Joint* joint : ragdoll->articulations) {
 		joint->getBreakForce(force, torque);
 		if (force == 10000) {
-			joint->setBreakForce(0.05f, 0.05f);
+			joint->setBreakForce(0, 0);
+			joint->setConstraintFlag(PxConstraintFlag::eBROKEN, true);
 		}
 	}
 }

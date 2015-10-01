@@ -52,6 +52,6 @@ CTexture* TGlowStep::getOutput() {
 void TGlowStep::destroy() {
 	//SAFE_DESTROY(rt_lights);
 	//SAFE_DESTROY(rt_glow);
-	if (rt_lights) { rt_lights->destroyAll(); rt_lights = nullptr; }
-	if (rt_glow) { rt_glow->destroyAll(); rt_glow = nullptr; }
+	//if (rt_lights) { rt_lights->destroyAll(); rt_lights = nullptr; }
+	//if (rt_glow) { rt_glow->destroyAll(); rt_glow = nullptr; }
 }

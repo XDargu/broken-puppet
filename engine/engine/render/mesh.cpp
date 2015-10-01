@@ -230,7 +230,7 @@ bool CMesh::load(CDataProvider& dp) {
 	CApp::get().load_mesh_time += tm.seconds();
 
 	// Use our create mesh function
-	return create(header.nvertexs
+	bool is_ok = create(header.nvertexs
 		, &vtxs[0]
 		, header.nidxs
 		, &idxs[0]
@@ -238,6 +238,13 @@ bool CMesh::load(CDataProvider& dp) {
 		, vtx_decl
 		, false
 	);
+
+	if (ib)
+		setDbgName(ib, dp.getName());
+	if (vb)
+		setDbgName(vb, dp.getName());
+
+	return is_ok;
 }
 
 bool CMesh::load(const char* name) {

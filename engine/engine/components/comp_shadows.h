@@ -8,17 +8,15 @@
 #include "render/render_manager.h"
 
 struct TCompShadows : TBaseComponent {
-	int              resolution;
-	CRenderToTexture rt;
-	XMVECTOR         color;
+	int               resolution;
+	CRenderToTexture* rt;					// Not owned by us
+	XMVECTOR          color;
 	float intensity;
 	bool character_camera;
 
-	TCompShadows() : resolution(256), intensity(1), character_camera(false){
+	TCompShadows() : resolution(256), rt( nullptr ), intensity(1), character_camera(false){
 		color = DirectX::XMVectorSet(1, 1, 1, 1);
 	}
-
-	~TCompShadows() { rt.destroyAll(); }
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 

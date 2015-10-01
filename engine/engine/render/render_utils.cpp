@@ -1225,6 +1225,7 @@ void drawTexture2D(int x0, int y0, int w, int h, const CTexture* texture, const 
 	// Restore old view proj
 	ctes_camera.get()->ViewProjection = prev_view_proj;
 	ctes_camera.uploadToGPU();
+
 }
 
 void drawTexture3D(CCamera& camera, XMVECTOR world_p3d, int w, int h, const CTexture* texture, const char* tech_name){
