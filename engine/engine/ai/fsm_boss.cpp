@@ -370,10 +370,10 @@ void fsm_boss::Stunned1(){
 		EvaluateHit(1);
 	}
 
-	if ((state_time >= 1) && (times_stunned <= 1)){
+	if ((state_time >= 2) && (times_stunned <= 1)){
 		ChangeState("fbp_Recover");
 	}
-	else if ((state_time >= 4) && (times_stunned <= 2)){
+	else if ((state_time >= 6) && (times_stunned <= 2)){
 		ChangeState("fbp_Recover");
 	}
 	if (state_time >= 10){
@@ -1070,7 +1070,7 @@ void fsm_boss::Damaged1Left(float elapsed){
 		ragdoll->disableBoneTree(11);
 		ragdoll->breakJoint(6);
 
-		times_stunned = 0;
+		times_stunned = 1;
 		pattern_current = -1;
 	}
 	if (state_time >= 1.f){
@@ -1099,7 +1099,7 @@ void fsm_boss::Damaged1Right(float elapsed){
 		ragdoll->disableBoneTree(36);
 		ragdoll->breakJoint(4);
 
-		times_stunned = 0;
+		times_stunned = 1;
 		pattern_current = -1;
 	}
 	if (state_time >= 1.f){
@@ -1128,7 +1128,7 @@ void fsm_boss::Damaged1LeftFinal(){
 		ragdoll->disableBoneTree(11);
 		ragdoll->breakJoint(6);
 
-		times_stunned = 0;
+		times_stunned = 1;
 		pattern_current = -1;
 	}
 
@@ -1155,7 +1155,7 @@ void fsm_boss::Damaged1RightFinal(){
 		ragdoll->disableBoneTree(36);
 		ragdoll->breakJoint(4);
 
-		times_stunned = 0;
+		times_stunned = 1;
 		pattern_current = -1;
 	}
 	if (state_time >= 0.5f){

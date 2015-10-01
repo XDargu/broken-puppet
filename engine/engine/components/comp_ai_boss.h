@@ -27,6 +27,7 @@ private:
 
 	CHandle L_hitch;
 	PxFixedJoint* L_hitch_joint;
+	CHandle L_hitch_light;
 
 	CHandle H_hitch;
 	PxFixedJoint* H_hitch_joint;

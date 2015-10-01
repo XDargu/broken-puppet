@@ -1,13 +1,10 @@
 <prefab>
-  <entity tag = "boss" collisionTag = "Boss_Part">
-    <name name="enganche_iz" />
-    <transform position="-1687.29 864.413 28.822" rotation="0.0 0.0 0.0 1.0" scale="0.0852518 0.0852519 0.0852519"/>
-    <render  color = "0.6 0.894118 0.839216">
-      <draw mesh="enganche_iz" sub_mesh="0" mat="Standardmaterial"/>
+  <entity>
+    <name name="l_arm_light" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render  color = "0.694118 0.345098 0.105882">
+      <draw mesh="l_arm_light" sub_mesh="0" mat="light_shaft"/>
     </render>
-    <aabb min="-4.7711 -5.34596 -0.920531" max="4.77106 5.34594 0.920538"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.406743" boxY="0.455752" boxZ="0.0784773"/>
-    <rigidbody density="50.0"  />
-    <bossHitch/>
+    <aabb min="-13.0298 -5.65762 -60.7827" max="54.1125 49.4966 45.5955"/>
   </entity>
 </prefab>
