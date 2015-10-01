@@ -6,5 +6,6 @@
       <draw mesh="l_arm_light" sub_mesh="0" mat="light_shaft"/>
     </render>
     <aabb min="-13.0298 -5.65762 -60.7827" max="54.1125 49.4966 45.5955"/>
+    <pointLight radius="12.0" decay_factor="0.7" intensity="1.0" color="0.694118 0.345098 0.105882 1"/>
   </entity>
 </prefab>

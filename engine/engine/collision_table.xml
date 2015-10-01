@@ -25,4 +25,7 @@
     <collision_filter not_collides_tag="Boss_Ragdoll"/>
     <collision_filter not_collides_tag="Boss_Head"/>
   </collision_table>
+  <collision_table own_tag="Bomb">
+    <collision_filter not_collides_tag="Actor_non_collision"/>
+  </collision_table>
 </collisions> 

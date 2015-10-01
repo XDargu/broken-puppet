@@ -100,12 +100,15 @@ void TCompBtSoldier::groundHit(const TGroundHit& msg) {
 }
 
 void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
+	float damage = 0.f;
 	if (msg.sqrRopeDistance < 12 * 12) {
-		m_ai_controller->setRagdoll();
+		damage = 50000.f;
+		//m_ai_controller->setRagdoll();
 	}
 	else {
-		m_ai_controller->hurtSensor(100000);
+		damage = 100000.f;
 	}
+	m_ai_controller->hurtSensor(damage);
 	//m_ai_controller->setRagdoll();
 }
 

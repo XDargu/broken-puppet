@@ -20,7 +20,7 @@ void TCompExplosion::init(){
 	const char *mName = ((CEntity*)mEntity)->getName();
 	comp_trans = assertRequiredComponent<TCompTransform>(this);
 
-	force_threshold = 2000;
+	force_threshold = 10;
 	count_down = 0;
 	
 }
@@ -53,7 +53,8 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 			boss_check = msg.is_boss;
 		}
 
-		if ((msg.impact_force > force_threshold)&&(boss_check)){
+		if ((boss_check)){
+			//XDEBUG("bomb force: %f", msg.impact_force);
 			Explote(false);
 		}
 

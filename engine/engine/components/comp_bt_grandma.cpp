@@ -105,7 +105,7 @@ void TCompBtGrandma::groundHit(const TGroundHit& msg) {
 void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
 	float damage = 0.f;
 	if (msg.sqrRopeDistance < 12 * 12) {
-		damage = 100.f;
+		damage = 50000.f;
 		//m_ai_controller->setRagdoll();
 	}
 	else {

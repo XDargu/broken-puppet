@@ -1371,8 +1371,7 @@ int fsm_boss::CalculateAttack() {
 						}
 					}
 				}
-				need_bombs = aux_bomb_number < 0;			
-				
+				need_bombs = aux_bomb_number < 0;							
 			}
 			
 		}

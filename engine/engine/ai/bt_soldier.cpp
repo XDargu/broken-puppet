@@ -647,12 +647,7 @@ int bt_soldier::actionSituate()
 	if (on_enter) {
 		if (path.size() > 0){
 
-			float distance = V3DISTANCE(wander_target, path[path.size() - 1]);
-			if (distance >= 2.5f){
-				player_out_navMesh = true;
-				playAnimationIfNotPlaying(0);
-				return LEAVE;
-			}
+			ind_path = 0;
 
 			stopAllAnimations();
 			resetTimeAnimation();
@@ -665,8 +660,11 @@ int bt_soldier::actionSituate()
 		}
 	}
 
-	if (on_enter){
-		ind_path = 0;
+	float distance_path = V3DISTANCE(wander_target, path[path.size() - 1]);
+	if (distance_path >= 2.0f){
+		player_out_navMesh = true;
+		playAnimationIfNotPlaying(0);
+		return LEAVE;
 	}
 
 	m_char_controller->moveSpeedMultiplier = run_angry_speed;
@@ -687,7 +685,7 @@ int bt_soldier::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.10f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.2f)){
 				ind_path++;
 				return STAY;
 			}
@@ -1065,22 +1063,43 @@ int bt_soldier::conditioninitial_attack()
 	XMVECTOR dir = XMVector3AngleBetweenVectors(attack_direction, front);
 	float rads = XMVectorGetX(dir);
 	float angle_deg = rad2deg(rads);
-	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 
-	if ((!initial_attack) && (distance < 7.5f)){
-		if (angle_deg < 30.f){
-			XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front));
-			return true;
+	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
+
+	XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
+	attack_direction_path = XMVector3Normalize(attack_direction_path);
+	XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+	XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+	float rads_path = XMVectorGetX(dir_path);
+	float angle_deg_path = rad2deg(rads_path);
+
+	float distance = V3DISTANCE(m_transform->position, p_transform->position);
+	
+	if (path.size() > 0){
+		float distance_path = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+		float distance_path_enemy = V3DISTANCE(m_transform->position, path[path.size() - 1]);
+		if ((!initial_attack) && (distance < 7.5f) && (distance_path<1.0f)){
+			if ((angle_deg < 30.f) && (angle_deg_path<30.f)){
+				if (distance_path_enemy < 7.5f){
+					XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
+					return true;
+				}else{
+					initial_attack = true;
+					return false;
+				}
+			}
+			else{
+				XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
+				initial_attack = true;
+				return false;
+			}
 		}
 		else{
-			XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front));
 			initial_attack = true;
 			return false;
 		}
 	}
-	else{
-		return false;
-	}
+	return false;
 }
 
 //Check if it is too far from the target position
