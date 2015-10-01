@@ -144,3 +144,33 @@
 		)	
 		
 	)
+	
+		
+	/**********************************************************************************************
+	Object  structure Boss Tag
+	 Params:
+	  - Set if is a collision mesh
+	***********************************************************************************************/
+	objectDatatagBoss = attributes objecttagBoss
+	(
+		parameters main rollout:params
+		(
+			tagBoss type:#boolean ui:tagBoss default:true
+		)
+
+		rollout params "Object Custom tagBoss"
+		(
+			checkbox tagBoss "tagBoss" type: #boolean
+		)
+	)
+	
+	fn addObjectstagBoss = 
+	(		
+		local objSelected = $
+		--if (isProperty objSelected.baseobject #collisionMesh != true) then
+		if true then
+		(
+			custAttributes.add objSelected objectDatatagBoss	
+		)	
+		
+	)
