@@ -415,9 +415,96 @@ function onSceneLoad_my_file()
 
 
 	-- Reloj
+	-- Mover engranajes de dentro
+	sc4_hinge_eje_1 = logicManager:getHingeJoint("sc4_hinge_eje_1");
+	sc4_hinge_eje_2 = logicManager:getHingeJoint("sc4_hinge_eje_2");
+	sc4_hinge_eje_3 = logicManager:getHingeJoint("sc4_hinge_eje_3");
+	sc4_hinge_eje_4 = logicManager:getHingeJoint("sc4_hinge_eje_4");
+	sc4_hinge_eje_5 = logicManager:getHingeJoint("sc4_hinge_eje_5");
+
+	sc4_hinge_eje_1:setLimit(0)
+	sc4_hinge_eje_2:setLimit(0)
+	sc4_hinge_eje_3:setLimit(0)
+	sc4_hinge_eje_4:setLimit(0)
+	sc4_hinge_eje_5:setLimit(0)
+
+	sc4_hinge_eje_1:setMotor(1.55, 800000)
+	sc4_hinge_eje_2:setMotor(-1.55, 800000)
+	sc4_hinge_eje_3:setMotor(1.55, 800000)
+	sc4_hinge_eje_4:setMotor(-1.55, 800000)
+	sc4_hinge_eje_5:setMotor(1.55, 800000)
+
+
+	sc4_reloj_hinge_1 = logicManager:getHingeJoint("sc4_reloj_hinge_1");
+	sc4_reloj_hinge_2 = logicManager:getHingeJoint("sc4_reloj_hinge_2");
+	sc4_aguja_hinge_2 = logicManager:getHingeJoint("HingeMinutero");
+	sc4_atrezzo_hinge_1 = logicManager:getHingeJoint("sc4_atrezzo_hinge_1");
+	sc4_atrezzo_hinge_2 = logicManager:getHingeJoint("sc4_atrezzo_hinge_2");
+	sc4_atrezzo_hinge_3 = logicManager:getHingeJoint("sc4_atrezzo_hinge_3");
+	
+	-- Cerrar puertas
+	sc4_reloj_hinge_1:setLimit(80)
+	sc4_reloj_hinge_2:setLimit(80)
+	sc4_reloj_hinge_1:setMotor(-1.55, 800000)
+	sc4_reloj_hinge_2:setMotor(1.55, 800000)
+
+	-- Bloquear aguja
+	sc4_aguja_hinge_2:setLimit(0.01)
+
+	-- Bloquear atrezzos
+	sc4_atrezzo_hinge_1:setMotor(-1.55, 800000)
+	sc4_atrezzo_hinge_2:setMotor(-1.55, 800000)
+	sc4_atrezzo_hinge_3:setMotor(-1.55, 800000)
+
+	local vuelta_completa = false
+
 	-- Interruptor
 	function onSwitchPressed_sc4_int_reloj(who)
-		
+		if (vuelta_completa == false) then
+			-- Abrir puertas
+			sc4_reloj_hinge_1:setMotor(1.55, 800000)
+			sc4_reloj_hinge_2:setMotor(-1.55, 800000)
+
+			-- Abrir atrezzos
+			sc4_atrezzo_hinge_1:setMotor(1.55, 800000)
+			sc4_atrezzo_hinge_2:setMotor(1.55, 800000)
+			sc4_atrezzo_hinge_3:setMotor(1.55, 800000)
+
+			-- Desbloquear aguja y moverla
+			sc4_aguja_hinge_2:setLimit(0)
+			sc4_aguja_hinge_2:setMotor(1.55, 6000)
+		end
+	end
+
+	-- Aguja
+	
+
+	function onTriggerEnter_sc4_trigger_aguja_alto(who)
+		if (who == "minutero") then
+			if (vuelta_completa == true) then
+				-- Volver a colocar los atrezzos
+				sc4_atrezzo_hinge_1:setMotor(-1.55, 800000)
+				sc4_atrezzo_hinge_2:setMotor(-1.55, 800000)
+				sc4_atrezzo_hinge_3:setMotor(-1.55, 800000)
+
+				-- Volver a cerrar las puertas
+				sc4_reloj_hinge_1:setMotor(-1.55, 800000)
+				sc4_reloj_hinge_2:setMotor(1.55, 800000)
+
+				-- Bloquear aguja
+				sc4_aguja_hinge_2:setLimit(0.01)
+				sc4_aguja_hinge_2:setMotor(0, 0)
+
+				-- Reiniciar variable de vuelta completa
+				vuelta_completa = false
+			end
+		end
+	end
+
+	function onTriggerEnter_sc4_trigger_aguja_bajo(who)
+		if (who == "minutero") then
+			vuelta_completa = true
+		end
 	end
 
 	-- Narrador
