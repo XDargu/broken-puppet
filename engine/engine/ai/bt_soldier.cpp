@@ -24,7 +24,7 @@ const float radius = 7.f;
 
 const float walk_speed = 0.8f;
 const float run_speed = 2.f;
-const float run_angry_speed = 2.2f;
+const float run_angry_speed = 5.2f;
 
 
 // Sensor
@@ -210,14 +210,14 @@ int bt_soldier::actionWakeUp()
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		TCompSkeleton* m_skeleton = enemy_skeleton;
 		m_ragdoll->setActive(false);
-		m_skeleton->playAnimation(16);
+		m_skeleton->playAnimation(20);
 
 	}
 	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
-	if (state_time > getAnimationDuration(16)) {
+	if (state_time > getAnimationDuration(20)) {
 		playAnimationIfNotPlaying(0);
 		return LEAVE;
 	}
@@ -383,7 +383,7 @@ int bt_soldier::actionWarcry()
 int bt_soldier::actionPlayerAlert()
 {
 	if (on_enter) {
-		playAnimationIfNotPlaying(17);
+		playAnimationIfNotPlaying(21);
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -542,7 +542,7 @@ int bt_soldier::actionChaseRoleDistance()
 
 			TCompCharacterController* m_char_controller = character_controller;
 
-			m_char_controller->moveSpeedMultiplier = 9.2f;
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
 
 			stopAllAnimations();
 			resetTimeAnimation();
@@ -632,10 +632,10 @@ int bt_soldier::actionSituate()
 	TCompTransform* p_transform = player_transform;
 
 	wander_target = p_transform->position;// + slot_position;
+	TCompCharacterController* m_char_controller = character_controller;
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (on_enter) {
 		if (path.size() > 0){
-			TCompCharacterController* m_char_controller = character_controller;
 
 			float distance = V3DISTANCE(wander_target, path[path.size() - 1]);
 			if (distance>=2.5f){
@@ -644,7 +644,6 @@ int bt_soldier::actionSituate()
 				return LEAVE;
 			}
 
-			m_char_controller->moveSpeedMultiplier = 9.2f;
 			stopAllAnimations();
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(15);
@@ -660,6 +659,7 @@ int bt_soldier::actionSituate()
 		ind_path = 0;
 	}
 
+	m_char_controller->moveSpeedMultiplier = run_angry_speed;
 	float distance = V3DISTANCE(m_transform->position, wander_target);
 	if (!initial_attack){
 		if (distance < 6.5f){
@@ -738,7 +738,7 @@ int bt_soldier::actionIdleWar()
 	if (on_enter) {
 		stopAllAnimations();
 		resetTimeAnimation();
-		playAnimationIfNotPlaying(10);
+		playAnimationIfNotPlaying(18);
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -746,10 +746,8 @@ int bt_soldier::actionIdleWar()
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 	stopMovement();
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(10))
+	if (state_time > getAnimationDuration(18))
 		return LEAVE;
 	else
 		return STAY;

@@ -538,8 +538,6 @@ int bt_grandma::actionTakeNeedle()
 		playAnimationIfNotPlaying(8);
 	}
 
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = last_look_direction;
 	stopMovement();
 
 	if (state_time >= getAnimationDuration(8)) {
