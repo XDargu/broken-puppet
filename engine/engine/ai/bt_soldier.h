@@ -53,6 +53,7 @@ private:
 	bool player_previously_lost;
 	bool cut;
 	bool attacked;
+	bool lost_player;
 	CHandle ropeRef;
 	CHandle m_sensor;
 	CHandle own_transform;
@@ -98,6 +99,8 @@ public:
 	int actionCalmDown();
 	//look the player around the his last point
 	int actionLookAround();
+	//plays the looking for player animation
+	int actionLookingFor();
 	//Takes a roll, attacker or taunter and a poisition to go
 	int actionSelectRole();
 	//Go to his position
@@ -143,6 +146,8 @@ public:
 	int conditionsee_player();
 	//Check the look for timer
 	int conditionLook_for_timeout();
+	//
+	int conditionLook_time();
 	//Search random point around the last place player wasnotify saw
 	int actionSearchArroundLastPoint();
 	//Check if the role is attacker and is close enought
@@ -179,6 +184,7 @@ public:
 	bool player_viewed_sensor;
 
 	CHandle getPlayerTransform();
+	void findLostPlayer();
 	bool findPlayer();
 	bool isAngry();
 	void setRol(int r);
