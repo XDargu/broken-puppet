@@ -35,6 +35,12 @@ bool CDeferredRender::create(int xres, int yres) {
 
 void CDeferredRender::generateGBuffer(const CCamera* camera) {
 	CTraceScoped scope("gbuffer");
+	setSlotNull(0);
+	setSlotNull(1);
+	setSlotNull(2);
+	setSlotNull(3);
+	setSlotNull(4);
+	setSlotNull(5);
 
 	ID3D11RenderTargetView* rts[6] = {
 		rt_albedo->render_target_view

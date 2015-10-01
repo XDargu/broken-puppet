@@ -1307,3 +1307,8 @@ void drawDialogBox3DDynamic(CCamera& camera, XMVECTOR world_p3d, int w, int h, c
 		drawDialogBox((int)x, (int)y, (int)(w * dist), (int)(h * dist), texture, tech_name);
 	}
 }
+
+void setSlotNull(int slot) {
+	ID3D11ShaderResourceView* slots = nullptr;
+	::render.ctx->PSSetShaderResources(slot, 1, &slots);
+}

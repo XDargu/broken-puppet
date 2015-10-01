@@ -105,6 +105,9 @@ enum BlendConfig {
 void activateBlendConfig(enum BlendConfig cfg);
 
 // ---------------------------------------
+
+void setSlotNull(int slot);
+
 // Shared meshes
 extern CMesh        grid;
 extern CMesh        axis;

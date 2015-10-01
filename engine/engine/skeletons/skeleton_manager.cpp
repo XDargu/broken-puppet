@@ -48,7 +48,7 @@ void CCoreModel::onStartElement(const std::string &elem, MKeyValue &atts) {
     assert(is_ok);
     mesh = my_mesh;
 
-	//mesh_manager.registerNew(name.c_str(), my_mesh);
+	mesh_manager.registerNew(name.c_str(), my_mesh);
 
   }
   else if (elem == "anim") {
