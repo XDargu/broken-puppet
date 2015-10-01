@@ -256,15 +256,18 @@ function onSceneLoad_my_file()
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 3 **********
 
+	-- Subir el nivel del agua
 	function onTriggerExit_sc3_trigger_tuber(who)
 		print(tostring(who) .. " ha dejado en el trigger de tuber");
 	
 		if who == "tapa_agua_puzle" then
 			logicManager:changeWaterLevel(7.58, 0.25);
+			logicManager:createParticleGroup("ps_jet", Vector(16.23, 11.14, 69.9), Quaternion( 0.7071067811865476, 0, 0.7071067811865476, 0));
 		end
 	
 	end
 
+	-- Bajar el nivel del agua
 	function onTriggerExit_sc3_trigger_desag(who)
 		print(tostring(who) .. " ha dejado en el trigger de desag");
 	
@@ -323,6 +326,122 @@ function onSceneLoad_my_file()
 	end
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 3 ********
+
+
+	-- ******** PRUEBA PUZZLES FINALES ESCENA 4 **********
+
+
+	-- *** Ascensor ***
+
+	-- *** Ascensor *** 
+	-- *** Interruptor del ascensor *** 
+	-- Motor
+	local sc4_hinge_int_asc = logicManager:getHingeJoint("sc4_hinge_ascensor_brazo");
+	sc4_hinge_int_asc:setMotor(-1.55, 1000);
+	
+	-- Bloquear puertas	
+	local sc4_hinge_asc_1 = logicManager:getHingeJoint("sc4_hinge_asc_1");
+	local sc4_hinge_asc_2 = logicManager:getHingeJoint("sc4_hinge_asc_2");
+	local sc4_hinge_asc_3 = logicManager:getHingeJoint("sc4_hinge_asc_3");
+	local sc4_hinge_asc_4 = logicManager:getHingeJoint("sc4_hinge_asc_4");
+
+	sc4_hinge_asc_1:setLimit(0.1)
+	sc4_hinge_asc_2:setLimit(0.1)
+	sc4_hinge_asc_3:setLimit(0.1)
+	sc4_hinge_asc_4:setLimit(0.1)
+
+	local sc4_int_ascensor_pulsado = false
+
+	function onTriggerEnter_sc4_trigger_int_asc(who)
+		if (who == "sc4_int_ascensor_brazo") then
+			if sc4_int_ascensor_pulsado == false then
+				sc4_hinge_int_asc:setMotor(1.55, 1000);
+				-- Abrir puertas delanteras
+				sc4_hinge_asc_1:setLimit(90)
+				sc4_hinge_asc_2:setLimit(90)
+
+				sc4_hinge_asc_1:setMotor(-1.55, 3000);
+				sc4_hinge_asc_2:setMotor(1.55, 3000);
+				sc4_int_ascensor_pulsado = true
+			end
+		end
+	end
+	
+	-- Subida del ascensor
+
+	function onTriggerEnter_trigger_asc_crematorio_fin(who)
+		logicManager:setCanMove(true)
+		logicManager:setCanThrow(true)
+		logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+		
+		-- Cerrar puertas traseras
+		sc4_hinge_asc_1:setMotor(0, 0);
+		sc4_hinge_asc_2:setMotor(0, 0);
+		sc4_hinge_asc_1:setLimit(0.1)
+		sc4_hinge_asc_2:setLimit(0.1)
+
+		-- Abrir puertas traseras
+		sc4_hinge_asc_3:setLimit(90)
+		sc4_hinge_asc_4:setLimit(90)
+
+		sc4_hinge_asc_3:setMotor(-1.55, 3000);
+		sc4_hinge_asc_4:setMotor(1.55, 3000);
+	end
+
+	function onTriggerFirstEnter_trigger_asc_crematorio(who)
+		print(tostring(who) .. "Entrado en el trigger");
+		local scene4_elevator = logicManager:getObject("ascensor_crematorio_cabina");
+		local platform_pos = scene4_elevator:getPos();
+		scene4_elevator:move(Vector(platform_pos.x, (platform_pos.y + 23), platform_pos.z), 5);
+
+		logicManager:setCanMove(false)
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+
+		-- Cerrar puertas delanteras
+		-- Abrir puertas delanteras
+		sc4_hinge_asc_1:setLimit(0.01)
+		sc4_hinge_asc_2:setLimit(0.01)
+
+		sc4_hinge_asc_1:setMotor(0,0);
+		sc4_hinge_asc_2:setMotor(0,0);
+	end
+
+
+	-- Reloj
+	-- Interruptor
+	function onSwitchPressed_sc4_int_reloj(who)
+		
+	end
+
+	-- Narrador
+
+	function onTriggerFirstEnter_sc4_trigger_narr_1(who)
+		
+	end
+
+	function onTriggerFirstEnter_sc4_trigger_narr_2(who)
+		
+	end
+
+	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 4 ********
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -396,38 +515,33 @@ function onSceneLoad_my_file()
 		--logicManager:playAnimation("modulo3", logicManager:getObject("esc1_arqui_suelo_pared_b_8.0"))
 	end
 
-	-- ASCENSOOOOOOOOOR DE PRUEBA
-
-	
-
-	function onTriggerEnter_trigger_asc_crematorio_fin(who)
-		logicManager:pushPlayerLegsState("fbp_Idle");
-	end
-
-	function onTriggerEnter_trigger_asc_crematorio(who)
-		print(tostring(who) .. "Entrado en el trigger");
-
-		if who == "Player" then
-
-			if ascensor_usado == false then
-				ascensor_usado = true
-				print(tostring(who) .. "Player en el trigger");
-				local scene1_elevator = logicManager:getObject("ascensor_crematorio_cabina");
-				local platform_pos = scene1_elevator:getPos();
-				print(platform_pos);
-				logicManager:pushPlayerLegsState("fbp_IdleElevator");
-				scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 23), platform_pos.z), 5);
-			end
-
-		end
-
-	end
 
 end
 
 initPos = 0;
 
 
+					-- VICTORY --
+
+function onTriggerEnter_Trigger_Victory(who)
+	if who == "Player" then
+		print(tostring(who) .. " VICTORIAAAA!!!");
+		--logicManager:pushPlayerLegsState("fbp_Victory");
+	end
+end
+
+
+                     -- DEAD --
+
+function onPlayerDead()
+	local player = logicManager:getBot("Player");
+	player:teleportToPos(initPos);
+end
+
+
+-- ******************** MILESTONES VIEJOS (TODO COMENTADO) ***********************
+
+--[[
 ----------------------------------------------------------
 --- scene my_file --- scene my_file --- scene my_file ----
 ----------------------------------------------------------
@@ -1055,24 +1169,9 @@ function onSceneLoad_scene_5()
 
 end
 
+--]]
 
 
-					-- VICTORY --
-
-function onTriggerEnter_Trigger_Victory(who)
-	if who == "Player" then
-		print(tostring(who) .. " VICTORIAAAA!!!");
-		--logicManager:pushPlayerLegsState("fbp_Victory");
-	end
-end
-
-
-                     -- DEAD --
-
-function onPlayerDead()
-	local player = logicManager:getBot("Player");
-	player:teleportToPos(initPos);
-end
 
 
 
