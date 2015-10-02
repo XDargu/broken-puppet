@@ -61,7 +61,7 @@ void bt_grandma::create(string s)
 
 
 	addChild("events", "TiedEvent9", SEQUENCE, (btcondition)&bt_grandma::conditiontied_event, NULL);
-	addChild("TiedEvent9", "TiedHit", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionHurtEvent);
+	//addChild("TiedEvent9", "TiedHit", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionHurtEvent);
 	addChild("TiedEvent9", "TiedBreakDown", ACTION, NULL, (btaction)&bt_grandma::actionTiedEvent);
 	//	addChild("events", "TiedEvent9", SEQUENCE, (btcondition)&bt_grandma::conditiontied_event, (btaction)&bt_grandma::actionTiedEvent);
 
@@ -1122,32 +1122,23 @@ int bt_grandma::actionTaunter()
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 int bt_grandma::actionHurtEvent()
 {
-	if (!needle_hit){
-		if (on_enter) {
-			stopAllAnimations();
-			resetTimeAnimation();
-			playAnimationIfNotPlaying(10);
-		}
+if (on_enter) {
+		playAnimationIfNotPlaying(10);
+	}
 
-		TCompTransform* p_transform = player_transform;
-		TCompTransform* m_transform = own_transform;
-		XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-		stopMovement();
-		//mov_direction = PxVec3(0, 0, 0);
-		//look_direction = Physics.XMVECTORToPxVec3(dir);
+	stopMovement();
+	//mov_direction = PxVec3(0, 0, 0);
+	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-		if (state_time > getAnimationDuration(10)) {
-			//Call the iaManager method for warning the rest of the grandmas
-			aimanager::get().warningPlayerFound(this);
-			event_detected = false;
-			return LEAVE;
-		}
-		else
-			return STAY;
-	}else{
-		needle_hit = false;
+	if (state_time > getAnimationDuration(10)) {
+		//Call the iaManager method for warning the rest of the grandmas
+		aimanager::get().warningPlayerFound(this);
+		event_detected = false;
 		return LEAVE;
 	}
+	else
+		return STAY;
+
 }
 
 int bt_grandma::actionNeedleHit(){
@@ -1633,21 +1624,10 @@ void bt_grandma::tiedSensor(){
 					setCurrent(NULL);
 					tied_event = true;
 					event_detected = true;
-				}else{
-					needle_hit = true;
 				}
 			}
 		}
 	}
-
-	/*}
-	else{
-		if (!((TCompSensorTied*)tied_sensor)->getTiedState()){
-			tied_succesfull = false;
-			tied_event = false;
-			event_detected = false;
-		}
-	}*/
 }
 
 void bt_grandma::hurtSensor(float damage){
