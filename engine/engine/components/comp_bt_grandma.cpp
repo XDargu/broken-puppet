@@ -115,6 +115,9 @@ void TCompBtGrandma::onRopeTensed(const TMsgRopeTensed& msg) {
 	//m_ai_controller->setRagdoll();
 }
 
+void TCompBtGrandma::onNeedleHit(const TMsgNeedleHit& msg) {
+}
+
 
 void TCompBtGrandma::renderDebug3D() {
 	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();

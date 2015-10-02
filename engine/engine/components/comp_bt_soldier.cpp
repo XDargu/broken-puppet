@@ -112,6 +112,10 @@ void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
 	//m_ai_controller->setRagdoll();
 }
 
+void TCompBtSoldier::onNeedleHit(const TMsgNeedleHit& msg) {
+	m_ai_controller->needleHitSensor();
+}
+
 
 void TCompBtSoldier::renderDebug3D() {
 	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();

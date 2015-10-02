@@ -63,6 +63,10 @@ struct TCompAiBT : TBaseComponent {
 	void onRopeTensed(const TMsgRopeTensed& msg) {
 		//m_ai_controller.ChangeState("aibe_Ragdoll");		
 	}
+
+	void onNeedleHit(const TMsgNeedleHit& msg) {
+		//m_ai_controller.ChangeState("aibe_Ragdoll");		
+	}
 };
 #endif
 

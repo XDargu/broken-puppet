@@ -237,6 +237,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 					TCompBtSoldier* bot_ai = firstActorEntity->get<TCompBtSoldier>();
 					if (bot_ai){
 						Citem_manager::get().addNeedle(CHandle(new_e_needle), CHandle(new_e_r));
+						firstActorEntity->sendMsg(TMsgNeedleHit(firstActorEntity));
 					}
 
 					TCompSensorTied* tied_sensor = firstActorEntity->get<TCompSensorTied>();
@@ -401,6 +402,10 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						TCompSensorTied* tied_sensor = secondActorEntity->get<TCompSensorTied>();
 						if (tied_sensor) {
 							tied_sensor->changeTiedState(true, CHandle(new_e_r));
+						}
+						TCompBtSoldier* bot_ai = secondActorEntity->get<TCompBtSoldier>();
+						if (bot_ai){
+							secondActorEntity->sendMsg(TMsgNeedleHit(secondActorEntity));
 						}
 						second_is_enemy = true;
 					}
