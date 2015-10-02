@@ -79,6 +79,8 @@ void CLogicManager::init()
 	band_heigth_dest = 0;
 	lerp_bands = 0.05f;
 
+	lock_on_position = XMVectorSet(0, 0, 0, -1);
+
 	scene_to_load = "";
 
 	//triggers.clear();
@@ -228,6 +230,18 @@ void CLogicManager::update(float elapsed) {
 						((TCompCameraPivotController*)camera_pivot_c)->pointAt(aux_pos);
 					}
 				}
+			}
+		}
+	}
+
+	if (XMVectorGetW(lock_on_position) != -1) {
+		if (player_pivot.isValid() && camera_pivot.isValid()) {
+			CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+			CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+			if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+				((TCompPlayerPivotController*)player_pivot_c)->pointAt(lock_on_position);
+				((TCompCameraPivotController*)camera_pivot_c)->pointAt(lock_on_position);
 			}
 		}
 	}
@@ -566,6 +580,7 @@ void CLogicManager::bootLUA() {
 		.set("setLongShotActive", &CLogicManager::setPlayerCameraLongShotActive)
 		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
 		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
+		.set("lockCameraOnPosition", &CLogicManager::lockOnPosition)
 		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
 		.set("playAnimation", &CLogicManager::playAnimation)
 		.set("setCanThrow", &CLogicManager::setCanThrow)
@@ -921,8 +936,13 @@ void CLogicManager::lockOnBot(CBot bot) {
 	lock_on_target = bot.getEntityHandle();
 }
 
+void CLogicManager::lockOnPosition(CVector position) {
+	lock_on_position = XMVectorSet(position.x, position.y, position.z, 0);
+}
+
 void CLogicManager::releaseCameraLock() {
 	lock_on_target = CHandle();
+	lock_on_position = XMVectorSetW(lock_on_position, -1);
 }
 
 void CLogicManager::playAnimation(std::string name, CMCVObject target_object) {

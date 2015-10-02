@@ -90,7 +90,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_Target
 	I = normalize(I);
 	float3 R = refract(I, N, 1);
 
-		float3 reflectedColor = txCubemap.Sample(samCube, R);
+		float3 reflectedColor = txCubemap.Sample(samCube, R).xyz;
 
 		return float4(reflectedColor.xyz, 0);
 		//float4 color = txDiffuse.Sample(samWrapLinear, input.UV);

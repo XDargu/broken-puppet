@@ -138,7 +138,7 @@ float4 PSBlurByZ(VS_TEXTURED_OUTPUT input) : SV_Target
 {
   float4 original = txDiffuse.Sample(samClampLinear, input.UV);
   float4 blurred = txBlurred.Sample(samClampLinear, input.UV);
-  float  depth = txDepth.Sample(samClampLinear, input.UV);
+  float  depth = txDepth.Sample(samClampLinear, input.UV).x;
   float alfa = 1-saturate(abs( depth - 0.1) * 10);
   
   //return original;

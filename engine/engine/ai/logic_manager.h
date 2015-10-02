@@ -57,6 +57,7 @@ private:
 
 	// Lock on target
 	CHandle lock_on_target;
+	XMVECTOR lock_on_position;
 
 	std::string scene_to_load;
 
@@ -186,6 +187,7 @@ public:
 	void setPlayerCameraLongShotActive(bool active);
 	void resetPlayerCamera();
 	void lockOnBot(CBot bot);
+	void lockOnPosition(CVector position);
 	void releaseCameraLock();
 	void playAnimation(std::string name, CMCVObject target_object);
 

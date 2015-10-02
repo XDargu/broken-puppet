@@ -575,6 +575,7 @@
     <ClInclude Include="audio\sound_events_parser.h">
       <Filter>audio</Filter>
     </ClInclude>
+    <ClInclude Include="importer_resource_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1074,6 +1075,7 @@
     <ClCompile Include="audio\sound_events_parser.cpp">
       <Filter>audio</Filter>
     </ClCompile>
+    <ClCompile Include="importer_resource_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

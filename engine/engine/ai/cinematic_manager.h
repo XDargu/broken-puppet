@@ -13,6 +13,8 @@ public:
 		name = new_name;
 	}
 	const std::string& getName() const { return name; }
+
+	void destroy() {}
 };
 
 class CCinematicManager : public CItemsByName < CCinematicDef > {

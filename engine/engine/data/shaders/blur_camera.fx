@@ -74,7 +74,7 @@ float4 PSBlurCamera(
 	previousPos /= previousPos.w;
 
 	//return currentPos;
-	float2 velocity = (currentPos - previousPos) / 2.f;
+	float2 velocity = (currentPos - previousPos).xy / 2.f;
 	velocity *= elapsed;
 	// Get the initial color at this pixel.  
 	float2 texCoord = input.UV;
@@ -114,8 +114,8 @@ float4 PSBlurCamera(
 
 	// Average all of the samples to get the final blur color.	
 	float4 finalColor = color / numSamples;
-	float radial = saturate(abs(H + 0.4));
-	radial = 1;
+	//float radial = saturate(abs(H + 0.4));
+	float radial = 1;
 	return finalColor * radial + origColor * (1 - radial);
 
 	

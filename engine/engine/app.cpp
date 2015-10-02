@@ -31,6 +31,7 @@ using namespace DirectX;
 #include "render/render_to_texture.h"
 #include "render/deferred_render.h"
 #include "particles\importer_particle_groups.h"
+#include "importer_resource_loader.h"
 
 #include <PxPhysicsAPI.h>
 #include <foundation\PxFoundation.h>
@@ -418,61 +419,24 @@ bool CApp::create() {
 
 	// global ctes
 	is_ok &= ctes_global.create();
-
-	//first_scene = "data/scenes/viewer_test.xml";
-	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
-	//sm.addMusicTrack(0, "CANCION.mp3");
-	//sm.addMusicTrack(1, "More than a feeling - Boston.mp3");
-	//sm.addFXTrack("light.wav", "light");
-	//sm.addFXTrack("steam.wav", "steam");
-	//sm.addFXTrack("sonar.wav", "sonar");
-	/*sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
-	sm.addFX2DTrack("ambient_orquestal.ogg", "ambiental_orq");
-	sm.addFX2DTrack("ambient_no_orquest.ogg", "ambiental_no_orq");
-	sm.addFX2DTrack("ambient_neutral.ogg", "ambiental_neutral");
-	sm.addFX2DTrack("ambient_neutral_louder.ogg", "ambiental_neutral_louder");*/
-
-	/*sm.addFX2DTrack("needle_nail_1.ogg", "nail1");
-
-	sm.addMusicTrack(0, "ambient_orquestal.ogg");
-	sm.addMusicTrack(1, "ambient_no_orquest.ogg");
-	sm.addMusicTrack(2, "ambient_neutral.ogg");
-	sm.addMusicTrack(3, "ambient_neutral_louder.ogg");
-
-	sm.addFXTrack("hit_wood_light.ogg", "hit_wood_light");
-	sm.addFXTrack("hit_wood_medium.ogg", "hit_wood_medium");
-	sm.addFXTrack("hit_wood_heavy.ogg", "hit_wood_heavy");*/
-
+	
 	physics_manager.init();
+	
+	// Preload scenes
+	XDEBUG("First load");
+	CImporterResourceLoader loader;
+	loader.xmlParseFile("data/scenes/scene_1.xml");
+	loader.xmlParseFile("data/scenes/scene_2.xml");
+	loader.xmlParseFile("data/scenes/scene_3.xml");
+	loader.xmlParseFile("data/scenes/scene_4.xml");
+	XDEBUG("First load ended");
 
-	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/escena_ms2.xml");
-	//loadScene("data/scenes/escena_2_ms3.xml");
-	//loadScene("data/scenes/scene_volum_light.xml");
-	//loadScene("data/scenes/viewer.xml");
-	//loadScene("data/scenes/my_file.xml");
-	//loadScene("data/scenes/desvan_test.xml");
-	//loadScene("data/scenes/lightmap_test.xml");
-	//loadScene("data/scenes/anim_test.xml");
-	//loadScene("data/scenes/viewer_test.xml");	
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
 	loadScene(first_scene);
 #else
 	loadScene("data/scenes/empty_scene.xml");
-#endif
-
-	//loadScene("data/scenes/test_dificultad.xml");
-	// XML Pruebas
-	//loadScene("data/scenes/scene_boss.xml");
-	//loadScene("data/scenes/scene_1.xml");
-	//loadScene("data/scenes/scene_2.xml");
-
-	//loadScene("data/scenes/scene_3.xml");
-	//loadScene("data/scenes/scene_4.xml");
-	//loadScene("data/scenes/scene_5.xml");
-
-	//sm.playTrack(0,false);
+#endif;
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -623,22 +587,8 @@ void CApp::update(float elapsed) {
 	}	
 
 	if (io.isPressed(CIOStatus::EXTRA)) {
-
-		/*CHandle audioPrueba=CLogicManager::get().getAudioSourceName("prueba_audioSource");
-		((TCompAudioSource*)audioPrueba)->play();*/
-		CLogicManager::get().cameraLookAtPosition(CLogicManager::get().getObject("EnemyGrandma_75.0").getPosition());
 	}
 
-	/*if (io.becomesReleased(CIOStatus::EXTRA)) {
-		//loadScene("data/scenes/anim_test.xml");
-		//CEntity* e = entity_manager.getByName("fire_ps");
-		//particle_groups_manager.addParticleGroupToEntity(e, "Humo");
-		//sm.playFX("ambiental_orq");
-		//CEntity* e = entity_manager.getByName("Fspot001_49.0");		
-		//render_manager.activeCamera = e->get<TCompCamera>();
-	}*/
-
-	//sm.StopLoopedFX("sonar");
 	// Slow motion
 	if (io.becomesReleased(CIOStatus::Q)) {
 		if (time_modifier == 1) {
@@ -664,7 +614,7 @@ void CApp::update(float elapsed) {
 		if (io.becomesReleased(CIOStatus::NUM2)) { loadScene("data/scenes/scene_2.xml"); }
 		if (io.becomesReleased(CIOStatus::NUM3)) { loadScene("data/scenes/scene_3.xml"); }
 		if (io.becomesReleased(CIOStatus::NUM4)) { loadScene("data/scenes/scene_4.xml"); }
-		if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_5.xml"); }
+		if (io.becomesReleased(CIOStatus::NUM5)) { loadScene("data/scenes/scene_final_boss.xml"); }
 		if (io.becomesReleased(CIOStatus::NUM6)) {}
 		if (io.becomesReleased(CIOStatus::NUM7)) { /*loadScene("data/scenes/scene_3_noenemy.xml");*/ }
 		if (io.becomesReleased(CIOStatus::NUM8)) { loadScene("data/scenes/my_file.xml"); }
@@ -890,7 +840,6 @@ void CApp::fixedUpdate(float elapsed) {
 void CApp::render() {
 
 	if (game_state == TGameState::INITIAL_VIDEO) {
-		::render.activateBackbuffer();
 		bool playVideo = renderVideo();
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
@@ -1556,7 +1505,7 @@ void CApp::loadScene(std::string scene_name) {
 	//texture_manager.destroyAllTextures();
 	//render_techniques_manager.destroyAll();
 	//material_manager.destroyAll();
-	skeleton_manager.destroyAll();
+	//skeleton_manager.destroyAll();
 
 	render_manager.destroyAllKeys();
 	render_manager.clearOcclusionPlanes();
@@ -1693,26 +1642,31 @@ void CApp::loadScene(std::string scene_name) {
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(60.f);
 		ctes_global.get()->use_lightmaps = 0;
+		CSoundManager::get().setSceneID(1);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(77.f);
 		ctes_global.get()->use_lightmaps = 0;		
+		CSoundManager::get().setSceneID(2);
 	}
 	else if (scene_name == "data/scenes/scene_3.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
 		ctes_global.get()->use_lightmaps = 0;
+		CSoundManager::get().setSceneID(3);
 	}
 	else if (scene_name == "data/scenes/scene_3_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
 		ctes_global.get()->use_lightmaps = 1;
+		CSoundManager::get().setSceneID(3);
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(90.f);
 		ctes_global.get()->use_lightmaps = 0;
+		CSoundManager::get().setSceneID(4);
 	}
 	else if (scene_name == "data/scenes/scene_5.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
@@ -1723,6 +1677,11 @@ void CApp::loadScene(std::string scene_name) {
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(65.f);
 		ctes_global.get()->use_lightmaps = 0;
+	}
+	else if (scene_name == "data/scenes/scene_final_boss.xml"){
+		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(65.f);
+		ctes_global.get()->use_lightmaps = 5;
 	}
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());
@@ -1780,7 +1739,7 @@ void CApp::loadVideo(const char* name)
 
 bool CApp::renderVideo()
 {
-
+	::render.activateBackbuffer();
 	TheoraVideoFrame *frame = clip->getNextFrame();
 	
 	UINT w = clip->getWidth();

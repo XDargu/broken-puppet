@@ -44,9 +44,14 @@ public:
 	bool registerNew(const char* name, TItem *t) {
 		// Confirm it does NOT exists
 		auto it = all_items.find(name);
-		if (it != all_items.end())
-			return false;
-
+		if (it != all_items.end()) {			
+			// Remove the previous one
+			it->second->destroy();
+			delete it->second;
+			all_items.erase(it);
+			//return false;
+		}
+		
 		// So, register it
 		t->setName(name);
 		all_items[name] = t;

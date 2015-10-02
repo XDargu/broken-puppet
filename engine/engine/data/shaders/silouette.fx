@@ -81,7 +81,7 @@ float4 PSSilouette(
 	float depth = txDepth.Load(screenCoords).x;
 	float4 diffuse = txDiffuse.Load(screenCoords);
 	float4 type = txType.Load(screenCoords);
-	float3 wPos = getWorldCoords(screenCoords, depth);
+	float3 wPos = getWorldCoords(screenCoords.xy, depth);
 
 	float4 color_x = float4(0, 0, 0, 0);
 	float4 color_y = float4(0, 0, 0, 0);
@@ -90,7 +90,6 @@ float4 PSSilouette(
 	float2 delta = float2(0, 0);
 	float factor = 1.f;
 	bool near_player = false;
-	float color_acum = color_x;
 
 	// SOBEL, Manual TABS (for optimization purposes)
 	color_x += txType.Sample(samClampPoint, input.UV + float2(deltaaa.x * -1, deltaaa.y * -1) * 1.5) * sobel_x[0][0];
@@ -190,7 +189,7 @@ float4 PSSilouetteGlow(
 	float depth = txDepth.Load(screenCoords).x;
 	float4 diffuse = txDiffuse.Load(screenCoords);
 	float4 silouette = txType.Load(screenCoords);
-	float3 wPos = getWorldCoords(screenCoords, depth);
+	float3 wPos = getWorldCoords(screenCoords.xy, depth);
 
 	float3 normal = txNormal.Load(screenCoords).xyz;
 	float3 wNormal = normalize(normal * 2.0f - 1.0f);

@@ -19,6 +19,7 @@ public:
 	enum MixerInstanceType {
 		UNDERWATER,
 		REVERB,
+		ROOM,
 		COUNT
 	};
 
@@ -54,6 +55,8 @@ private:
 	void setMixerEventParams(std::string sound_id, SoundParameter param, float lerp_val = 0.02f);
 	float getMixerEventParamValue(std::string sound_id, std::string param_name);
 	void setCurrentReverbEvent(std::string sound_id, TCompHfxZone* hfx_zone, XMVECTOR listener_pos);
+
+	int scene_id;
 	
 public:
 	CSoundManager();
@@ -98,6 +101,8 @@ public:
 	bool getSlow();
 
 	void setCurrentPresetEvent(std::string event_path);
+
+	void setSceneID(int id) { scene_id = id; }
 };
 
 

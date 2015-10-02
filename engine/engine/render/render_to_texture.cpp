@@ -48,9 +48,9 @@ bool CRenderToTexture::create(
 	}
 	
 	// Registrarlo en el texturemanager
-	texture_manager.registerNew(name, this);
+	return texture_manager.registerNew(name, this);
 
-	return true;
+	//return true;
 }
 
 // ------------------------------------------------
@@ -190,9 +190,8 @@ bool CRenderToTexture::createDepthBuffer() {
 	ztexture = new CTexture();
 	ztexture->resource_view = depth_resource_view;
 	ztexture->setName(("Z" + std::string(name)).c_str());
-	texture_manager.registerNew(ztexture->getName(), ztexture);
 	setDbgName(ztexture->resource_view, ztexture->getName());
-
+	texture_manager.registerNew(ztexture->getName(), ztexture);
 	SAFE_RELEASE(ztexture2d);
 	return true;
 }
@@ -232,8 +231,8 @@ void CRenderToTexture::destroy() {
 	//texture_manager.unregister(name);
 	SAFE_RELEASE(render_target_view);
 	SAFE_RELEASE(depth_stencil_view);
-	if (ztexture != nullptr)
-		ztexture->destroy(), ztexture = nullptr;
+	/*if (ztexture != nullptr)
+		ztexture->destroy(), ztexture = nullptr;*/
 	CTexture::destroy();
 	name = nullptr;
 }

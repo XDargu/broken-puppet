@@ -61,7 +61,7 @@ VS_TEXTURED_OUTPUT VSNormal(float4 Pos : POSITION
   output.Pos = mul(output.Pos, ViewProjection);
   output.Normal = mul(Normal, (float3x3)World);
   output.UV = UV /*+ world_time * Normal.xz*/;
-  output.WorldPos = mul(Pos, World);
+  output.WorldPos = mul(Pos, World).xyz;
   return output;
 }
 
@@ -103,7 +103,7 @@ VS_TEXTURED_OUTPUT VSGUIDialogBox(float4 Pos : POSITION
 	output.Pos = mul(output.Pos, ViewProjection);
 	output.Normal = mul(Normal, (float3x3)World);
 	output.UV = UV /*+ world_time * Normal.xz*/;
-	output.WorldPos = mul(Pos, World);
+	output.WorldPos = mul(Pos, World).xyz;
 	return output;
 }
 

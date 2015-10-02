@@ -85,7 +85,7 @@ VS_TEXTURED_OUTPUT VS(
 		  particles_up = normalize(particles_up);
 		  real_stretch = stretch;
 	  }
-	  particles_left = normalize(cross(particles_up, cameraWorldFront));
+	  particles_left = normalize(cross(particles_up.xyz, cameraWorldFront.xyz).xyz);
 	  
   }
 
@@ -153,7 +153,7 @@ float4 PS(VS_TEXTURED_OUTPUT input
   ) : SV_Target
 {
 
-  float my_depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+  float my_depth = dot(input.wPos - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
   
   int3 ss_load_coords = uint3(iPosition.xy, 0);
   float pixel_detph = txDepth.Load(ss_load_coords).x;
@@ -188,7 +188,7 @@ float4 PSDistorsion(VS_TEXTURED_OUTPUT input
 ) : SV_Target
 {
 
-	float my_depth = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
+	float my_depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
 
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
 	float pixel_detph = txDepth.Load(ss_load_coords).x;

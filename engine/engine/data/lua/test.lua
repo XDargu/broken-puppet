@@ -18,7 +18,7 @@ clearCoroutines()
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_scene_boss()
+function onSceneLoad_my_file()
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
@@ -34,10 +34,39 @@ function onSceneLoad_scene_boss()
 
 	end
 
+	function onTriggerFirstEnter_scb_trigger_bandas(who)
+		logicManager:setBands(true)
+	end
+
+	function onTimerEnd_boss_init_animation()
+		logicManager:setCanMove(true)
+		logicManager:setCanThrow(true)
+		logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
+		logicManager:setBands(false)
+		logicManager:releaseCameraLock()
+	end
+
+	function onTriggerFirstEnter_scb_trigger_block_control(who)
+		logicManager:setCanMove(false)
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+		local boss = logicManager:getBot("Boss")
+		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
+		logicManager:setTimer("boss_init_animation", 21)
+	end
+	
 end
 
 
 function onSceneLoad_scene_1()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
 
@@ -190,6 +219,10 @@ function onSceneLoad_scene_1()
 end
 
 function onSceneLoad_scene_2()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
 
 	-- Apagar cable
@@ -282,6 +315,10 @@ function onSceneLoad_scene_2()
 end
 
 function onSceneLoad_scene_3()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 3 **********
 
 	-- Subir el nivel del agua
@@ -362,6 +399,10 @@ function onSceneLoad_scene_3()
 end
 
 function onSceneLoad_scene_4()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 4 **********
 
 
