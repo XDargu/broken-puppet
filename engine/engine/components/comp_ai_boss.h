@@ -68,6 +68,8 @@ public:
 
 	bool can_break_hitch;
 
+	void initBoss();
+
 	
 };
 

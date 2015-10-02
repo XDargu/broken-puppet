@@ -166,6 +166,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtSoldier, TPlayerFound, notifyPlayerFound);
 	//SUBSCRIBE(TCompBtSoldier, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtSoldier, TMsgRopeTensed, onRopeTensed);
+	SUBSCRIBE(TCompBtSoldier, TMsgNeedleHit, onNeedleHit);
 
 
 	SUBSCRIBE(TCompBasicPlayerController, TMsgAttackDamage, onAttackDamage);

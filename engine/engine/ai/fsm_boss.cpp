@@ -179,6 +179,7 @@ void fsm_boss::Init()
 	original_pos = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	
 	appear = false;
+	lua_boss_init = false;
 }
 
 void fsm_boss::Hidden(float elapsed){
@@ -189,14 +190,14 @@ void fsm_boss::Hidden(float elapsed){
 		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = XMVectorSetY(aux_pos, -500);
 	}
 
-	if (CIOStatus::get().becomesPressed(CIOStatus::V)){
+	if (CIOStatus::get().becomesPressed(CIOStatus::V) || lua_boss_init){
 		// Emitir particula
 		XMVECTOR aux_rot = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
 		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_entry", XMVectorSet(0, 1, 0, 0), aux_rot);
-		
-		
+				
 		appear = true;
 		state_time = 0;
+		lua_boss_init = false;
 	}
 
 	if (appear && (state_time >= 1.f)){		
@@ -207,22 +208,28 @@ void fsm_boss::Hidden(float elapsed){
 
 void fsm_boss::RiseUp(){
 	if (on_enter){
-		Release_def();
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
 		TCompSkeleton* skeleton = comp_skeleton;
+
+		// Liberar defensas
+		Release_def();
+		
+		// Play rise up animation
 		stopAllAnimations();
 		skeleton->playAnimation(35);
+
+		// Look at the player
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
-
-		XMVectorSetY(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position, XMVectorGetY(original_pos));
 
 		// Hacer desaparecer silla
 		CHandle m_silla = m_entity_manager->getByName("silla");
 		if (m_silla.isValid()){
-			((TCompRender*)((CEntity*)m_silla)->get<TCompRender>())->active = false;
-		
+			((TCompRender*)((CEntity*)m_silla)->get<TCompRender>())->active = false;		
 		}
-		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = original_pos;
+
+		// Move to the initial position
+		trans->position = original_pos;
 
 	}
 	if (state_time >= 20.9f){

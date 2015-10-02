@@ -83,21 +83,23 @@ void TCompAiBoss::init(){
 
 	R_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, r_bone_trans);
 	R_hitch_px_rigid->setGlobalPose(r_bone_trans);
-	/**/
-	
+
 	// R_light
  
 	R_hitch_light = prefabs_manager.getInstanceByName("boss/enganche_luz_R");
 	TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
+
 	// Follow
 	if (R_light_trans){ 
 		R_light_trans->setType(0);
 		R_light_trans->position = R_hitch_trans->position;
 	}
+
 	// Hacerlas visibles
 	if (R_hitch_light.isValid()){
 		((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = false;
 	}
+
 	// Apagar la luz
 	TCompPointLight* R_point_light = ((CEntity*)R_hitch_light)->get<TCompPointLight>();
 	if (R_point_light){
@@ -445,3 +447,8 @@ LOS HOMBRES DE VERDAD NO DECIMOS: ME VOY A MIMIR
 
 NOS MIMIMOS Y PUNTO ¬¬
 /**/
+
+void TCompAiBoss::initBoss(){
+	// Change the state to: RiseUp
+	m_fsm_boss->lua_boss_init = true;
+}

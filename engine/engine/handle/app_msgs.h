@@ -82,6 +82,12 @@ struct TMsgRopeTensed {
 	DECLARE_MSG_ID();
 };
 
+struct TMsgNeedleHit {
+	CEntity* who;
+	TMsgNeedleHit(CEntity* awho) : who(awho) { }
+	DECLARE_MSG_ID();
+};
+
 struct TVictoryCondition {
 	CEntity* whoEnter;
 	TVictoryCondition(CEntity* awho):whoEnter(awho) { }

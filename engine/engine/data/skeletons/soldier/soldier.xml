@@ -24,5 +24,6 @@
   <anim name="wake_up"/>20
   <anim name="player_detected"/>21
   <anim name="looking_for"/>22
+  <anim name="hit01"/>23
 
 </skeleton>

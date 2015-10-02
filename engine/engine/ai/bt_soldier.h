@@ -54,6 +54,7 @@ private:
 	bool cut;
 	bool attacked;
 	bool lost_player;
+	bool needle_hit;
 	CHandle ropeRef;
 	CHandle m_sensor;
 	CHandle own_transform;

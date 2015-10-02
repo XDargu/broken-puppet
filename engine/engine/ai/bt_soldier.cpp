@@ -39,44 +39,50 @@ void bt_soldier::create(string s)
 	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_soldier::conditionis_ragdoll, NULL);
 	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
-	addChild("Awake", "WakeUp", SEQUENCE, (btcondition)&bt_soldier::conditionTied, NULL);
+	addChild("Awake", "WakeUp", SEQUENCE, INTERNAL, (btcondition)&bt_soldier::conditiontied_event, NULL);
+	addChild("Awake", "GroundedTied", PRIORITY, NULL, NULL);
+	addChild("GroundedTied", "ActionWakeUp2", ACTION, INTERNAL, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 
 	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionLeave);
 
 	addChild("Root", "events", PRIORITY, (btcondition)&bt_soldier::conditionare_events, NULL);
-	addChild("events", "HurtEvent7", ACTION, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
-	addChild("events", "FallingEvent8", ACTION, (btcondition)&bt_soldier::conditionfalling_event, (btaction)&bt_soldier::actionFallingEvent);
+	addChild("events", "HurtEvent7", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
+	addChild("events", "TiedEvent9", SEQUENCE, (btcondition)&bt_soldier::conditiontied_event, NULL);
+	addChild("TiedEvent9", "TiedHit", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionHurtEvent);
+
+
 	addChild("events", "No events10", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionNoevents);
 	addChild("Root", "Angry", PRIORITY, (btcondition)&bt_soldier::conditionis_angry, NULL);
 
+
 	addChild("Angry", "Warcry11", ACTION, (btcondition)&bt_soldier::conditionhave_to_warcry, (btaction)&bt_soldier::actionWarcry);
-	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_soldier::conditionplayer_lost, NULL);
-	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_soldier::conditionsee_player, (btaction)&bt_soldier::actionPlayerAlert);
+	addChild("Angry", "LookForPlayer", PRIORITY, EXTERNAL, (btcondition)&bt_soldier::conditionplayer_lost, NULL);
+	addChild("Angry", "PlayerAlert12", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditionsee_player, (btaction)&bt_soldier::actionPlayerAlert);
 
-	addChild("LookForPlayer", "LookAroundPriority", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
-	addChild("LookAroundPriority", "LookAroundSequence", SEQUENCE, (btcondition)&bt_soldier::conditionLook_time, NULL);
-	addChild("LookAroundPriority", "CalmDown13", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionCalmDown);
-	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_soldier::actionSearchArroundLastPoint);
-	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_soldier::actionLookAround);
-	addChild("LookAroundSequence", "LookingForPlayer", ACTION, NULL, (btaction)&bt_soldier::actionLookingFor);
+	addChild("LookForPlayer", "LookAroundPriority", PRIORITY, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("LookAroundPriority", "LookAroundSequence", SEQUENCE, EXTERNAL, (btcondition)&bt_soldier::conditionLook_time, NULL);
+	addChild("LookAroundPriority", "CalmDown13", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionCalmDown);
+	addChild("LookAroundSequence", "SearchLastPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionSearchArroundLastPoint);
+	addChild("LookAroundSequence", "LookAround14", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionLookAround);
+	addChild("LookAroundSequence", "LookingForPlayer", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionLookingFor);
 
-	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
-	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_soldier::actionSelectRole);
-	addChild("TryAttack", "ExecuteRole", PRIORITY, NULL, NULL);
-	addChild("ExecuteRole", "AttackRoutine", PRIORITY, (btcondition)&bt_soldier::conditionis_attacker, NULL);
+	addChild("Angry", "TryAttack", SEQUENCE, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("TryAttack", "SelectRole15", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionSelectRole);
+	addChild("TryAttack", "ExecuteRole", PRIORITY, EXTERNAL, NULL, NULL);
+	addChild("ExecuteRole", "AttackRoutine", PRIORITY, EXTERNAL, (btcondition)&bt_soldier::conditionis_attacker, NULL);
 	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL, (btcondition)&bt_soldier::conditioninitial_attack, (btaction)&bt_soldier::actionInitialAttack);
 	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_soldier::conditionnormal_attack, (btaction)&bt_soldier::actionNormalAttack);
-	addChild("AttackRoutine", "Situate18", ACTION, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
-	addChild("AttackRoutine", "IdleWa19r", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionIdleWar);
-	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_soldier::conditionis_taunter, NULL);
-	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
-	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_soldier::actionTaunter);
+	addChild("AttackRoutine", "Situate18", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
+	addChild("AttackRoutine", "IdleWa19r", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionIdleWar);
+	addChild("ExecuteRole", "Taunter", PRIORITY, EXTERNAL, (btcondition)&bt_soldier::conditionis_taunter, NULL);
+	addChild("Taunter", "Situate20", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
+	addChild("Taunter", "Taunter21", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionTaunter);
 
-	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseRoleDistance);
+	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseRoleDistance);
 
-	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("Root", "Peacefull", PRIORITY, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, NULL);
 
 
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_soldier::conditiontrue, NULL);
@@ -116,6 +122,7 @@ void bt_soldier::create(string s)
 	active = false;
 	attacked = false;
 	lost_player = false;
+	needle_hit = false;
 
 	player_out_navMesh = false;
 
@@ -124,6 +131,7 @@ void bt_soldier::create(string s)
 	previous_point_search = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	slot_position = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	player_pos_sensor = ((CEntity*)entity)->get<TCompPlayerPosSensor>();
+	tied_sensor = ((CEntity*)entity)->get<TCompSensorTied>();
 	player_transform = ((CEntity*)player)->get<TCompTransform>();
 	rol = role::UNASIGNATED;
 
@@ -787,7 +795,9 @@ int bt_soldier::actionTaunter()
 int bt_soldier::actionHurtEvent()
 {
 	if (on_enter) {
-		playAnimationIfNotPlaying(9);
+		stopAllAnimations();
+		resetTimeAnimation();
+		playAnimationIfNotPlaying(23);
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -797,59 +807,16 @@ int bt_soldier::actionHurtEvent()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(9)) {
+	if (state_time > getAnimationDuration(23)) {
 		//Call the iaManager method for warning the rest of the grandmas
 		aimanager::get().warningPlayerFound(this);
 		event_detected = false;
+		tied_event = false;
+
 		return LEAVE;
 	}
 	else
 		return STAY;
-}
-
-int bt_soldier::actionTiedEvent()
-{
-	stopMovement();
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = last_look_direction;
-
-	if (on_enter) {
-
-		if (ropeRef == nullptr){
-			tied_event = false;
-			event_detected = false;
-			return LEAVE;
-		}
-		else{
-			//Plays the cut own string animation
-			int dice = getRandomNumber(0, 10);
-			if (dice < max_bf_posibilities){
-				// Ninja animation
-				playAnimationIfNotPlaying(11);
-				tied_event = false;
-				event_detected = false;
-			}
-			else{
-				tied_event = false;
-				event_detected = false;
-				tied_succesfull = true;
-				return LEAVE;
-			}
-		}
-
-	}
-
-	if (state_time < getAnimationDuration(11)){
-		return STAY;
-	}
-	else{
-		CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-		tied_event = false;
-		event_detected = false;
-		is_angry = true;
-		have_to_warcry = true;
-		return LEAVE;
-	}
 
 }
 
@@ -1149,27 +1116,6 @@ void bt_soldier::playerViewedSensor(){
 	}
 }
 
-void bt_soldier::tiedSensor(){
-	((TCompSensorTied*)tied_sensor)->keepTied();
-	if (!tied_succesfull){
-		if (!tied_event){
-			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
-				ropeRef = (TCompRope*)((TCompSensorTied*)tied_sensor)->getRopeRef();
-				setCurrent(NULL);
-				tied_event = true;
-				event_detected = true;
-			}
-		}
-	}
-	else{
-		if (!((TCompSensorTied*)tied_sensor)->getTiedState()){
-			tied_succesfull = false;
-			tied_event = false;
-			event_detected = false;
-		}
-	}
-}
-
 void bt_soldier::hurtSensor(float damage){
 
 	if (!is_angry)
@@ -1219,18 +1165,10 @@ void bt_soldier::update(float elapsed){
 
 		playerViewedSensor();
 		findLostPlayer();
-		//tiedSensor();
 		if (findPlayer()){
 			last_point_player_saw = ((TCompTransform*)player_transform)->position;
 			last_time_player_saw = 0;
 		}
-		/*else{
-		float prueba = V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position);
-		if ((is_angry) && (V3DISTANCE(((TCompTransform*)own_transform)->position, ((TCompTransform*)player_transform)->position)>radius)){
-		if (rol == role::ATTACKER)
-		aimanager::get().RemoveEnemyAttacker(this);
-		}
-		}*/
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		if (m_ragdoll) {
 			if (!m_ragdoll->isRagdollActive()) {
@@ -1432,7 +1370,11 @@ void bt_soldier::setActive(bool act){
 }
 
 void bt_soldier::needleHitSensor(){
-
+	if ((current) && ((current->getTypeInter() == EXTERNAL))){
+		setCurrent(NULL);
+		tied_event = true;
+		event_detected = true;
+	}
 }
 
 void bt_soldier::setIndRecastAABB(int ind){

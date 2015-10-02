@@ -32,6 +32,8 @@ struct TCompBtSoldier : TBaseComponent {
 
 	void onRopeTensed(const TMsgRopeTensed& msg);
 
+	void onNeedleHit(const TMsgNeedleHit& msg);
+
 	void renderDebug3D();
 };
 #endif
