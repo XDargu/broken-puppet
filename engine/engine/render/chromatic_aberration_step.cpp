@@ -37,5 +37,5 @@ CTexture* TChromaticAberrationStep::getOutput() {
 
 void TChromaticAberrationStep::destroy() {
 	//SAFE_DESTROY(rt_ca);
-	if (rt_ca) { rt_ca->destroyAll(); rt_ca = nullptr; }
+	//if (rt_ca) { rt_ca->destroyAll(); rt_ca = nullptr; }
 }

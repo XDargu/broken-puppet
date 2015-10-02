@@ -5,6 +5,8 @@
 #include "render/render.h"
 
 struct TCompPointLight : TBaseComponent {
+
+public:	
 	float               radius;
 	float               decay_factor;       // Amount of radius where energy stars to decay
 	float               intensity;

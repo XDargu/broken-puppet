@@ -39,5 +39,5 @@ CTexture* TUnderwaterEffect::getOutput() {
 
 void TUnderwaterEffect::destroy() {
 	//SAFE_DESTROY(rt_underwater);
-	if (rt_underwater) { rt_underwater->destroyAll(); rt_underwater = nullptr; }
+	//if (rt_underwater) { rt_underwater->destroyAll(); rt_underwater = nullptr; }
 }

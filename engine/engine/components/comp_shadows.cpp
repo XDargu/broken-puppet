@@ -11,7 +11,9 @@ void TCompShadows::init() {
 	CEntity* e = CHandle(this).getOwner();
 	assert(e);
 
-	bool is_ok = rt.create(e->getName(), resolution, resolution
+	// Create a give ownership to texture mananger
+	rt = new CRenderToTexture;
+	bool is_ok = rt->create(e->getName(), resolution, resolution
 		, DXGI_FORMAT_UNKNOWN     // I do NOT want COLOR Buffer
 		, DXGI_FORMAT_R32_TYPELESS
 		);
@@ -44,8 +46,8 @@ void TCompShadows::generate()  {
 	activateRSConfig(RSCFG_SHADOWS);
 
 	// Start rendering in the rt of the depth buffer
-	rt.activate();
-	rt.clearDepthBuffer();
+	rt->activate();
+	rt->clearDepthBuffer();
 
 	activateCamera(*camera, 1);
 
@@ -81,7 +83,7 @@ void TCompShadows::draw() {
 		setWorldMatrix(inv_view_proj);
 
 		// Activate the previously generated shadow map
-		rt.getZTexture()->activate(6);
+		rt->getZTexture()->activate(6);
 
 		// Activate color, radius and intensity
 		activateLight(*c, 4);

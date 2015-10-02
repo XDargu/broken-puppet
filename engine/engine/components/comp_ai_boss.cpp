@@ -8,7 +8,7 @@
 #include "comp_render.h"
 #include "io\iostatus.h"
 #include "handle\prefabs_manager.h"
-
+#include "comp_point_light.h"
 
 TCompAiBoss::TCompAiBoss() {
 	m_fsm_boss = new fsm_boss;
@@ -83,21 +83,29 @@ void TCompAiBoss::init(){
 
 	R_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, r_bone_trans);
 	R_hitch_px_rigid->setGlobalPose(r_bone_trans);
-	/**/
-	
+
 	// R_light
  
 	R_hitch_light = prefabs_manager.getInstanceByName("boss/enganche_luz_R");
 	TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
+
 	// Follow
 	if (R_light_trans){ 
 		R_light_trans->setType(0);
 		R_light_trans->position = R_hitch_trans->position;
 	}
+
 	// Hacerlas visibles
 	if (R_hitch_light.isValid()){
 		((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = false;
 	}
+
+	// Apagar la luz
+	TCompPointLight* R_point_light = ((CEntity*)R_hitch_light)->get<TCompPointLight>();
+	if (R_point_light){
+		R_point_light->radius = 0.00001f;
+	}
+
 
 
 	/**********************************************************
@@ -141,6 +149,11 @@ void TCompAiBoss::init(){
 	if (L_hitch_light.isValid()){
 		((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = false;
 	}
+	// Apagar la luz
+	TCompPointLight* L_point_light = ((CEntity*)L_hitch_light)->get<TCompPointLight>();
+	if (L_point_light){
+		L_point_light->radius = 0.00001f;
+	}
 
 
 	/**********************************************************
@@ -170,8 +183,24 @@ void TCompAiBoss::init(){
 
 	H_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, h_bone_trans);
 	H_hitch_px_rigid->setGlobalPose(h_bone_trans);
-	/**/
 
+	// Heart_light
+	H_hitch_light = prefabs_manager.getInstanceByName("boss/heart_luz");
+	TCompTransform* H_light_trans = ((CEntity*)H_hitch_light)->get<TCompTransform>();
+	// Follow
+	if (H_light_trans){
+		H_light_trans->setType(0);
+		H_light_trans->position = H_hitch_trans->position;
+	}
+	// Hacerlas visibles
+	if (H_hitch_light.isValid()){
+		((TCompRender*)((CEntity*)H_hitch_light)->get<TCompRender>())->active = false;
+	}
+	// Apagar la luz
+	TCompPointLight* H_point_light = ((CEntity*)H_hitch_light)->get<TCompPointLight>();
+	if (H_point_light){
+		H_point_light->radius = 0.00001f;
+	}
 }
 
 void TCompAiBoss::update(float elapsed){
@@ -198,11 +227,17 @@ void TCompAiBoss::update(float elapsed){
 			}
 		}
 	}
-	
 	/**/
 	comp_skeleton = ((CEntity*)mBoss)->get<TCompSkeleton>();
 	TCompSkeleton* skeleton = comp_skeleton;
 	/**/
+
+
+	/**********************************************************
+						RIGHT ARM, FOLLOW
+	/**********************************************************/
+	
+
 
 	TCompRigidBody* R_hitch_rigid = ((CEntity*)R_hitch)->get<TCompRigidBody>();
 	PxRigidDynamic*  R_hitch_px_rigid = R_hitch_rigid->rigidBody;
@@ -222,7 +257,9 @@ void TCompAiBoss::update(float elapsed){
 		R_light_trans->rotation = Physics.PxQuatToXMVECTOR(r_rot);
 	}
 
-	/**/
+	/**********************************************************
+					LEFT ARM, FOLLOW
+	/**********************************************************/
 	TCompRigidBody* L_hitch_rigid = ((CEntity*)L_hitch)->get<TCompRigidBody>();
 	PxRigidDynamic*  L_hitch_px_rigid = L_hitch_rigid->rigidBody;
 
@@ -242,6 +279,9 @@ void TCompAiBoss::update(float elapsed){
 	}
 	
 
+	/**********************************************************
+					HEART FOLLOW
+	/**********************************************************/
 	if (!is_death){
 		/**/
 		TCompRigidBody* H_hitch_rigid = ((CEntity*)H_hitch)->get<TCompRigidBody>();
@@ -253,9 +293,17 @@ void TCompAiBoss::update(float elapsed){
 
 		H_hitch_joint->setLocalPose(PxJointActorIndex::eACTOR1, h_bone_trans);
 		H_hitch_px_rigid->setGlobalPose(h_bone_trans);
-
-		/**/
+		
+		// light
+		TCompTransform* H_light_trans = ((CEntity*)H_hitch_light)->get<TCompTransform>();
+		if (H_light_trans){
+			H_light_trans->setType(0);
+			H_light_trans->position = Physics.PxVec3ToXMVECTOR(h_pos);
+			H_light_trans->rotation = Physics.PxQuatToXMVECTOR(h_rot);
+		}	
 	}	
+
+
 
 	if ((m_fsm_boss->getState() == "fbp_Stunned1") && (!can_break_hitch)) {
 		can_break_hitch = true;		
@@ -275,7 +323,7 @@ void TCompAiBoss::update(float elapsed){
 	}
 	else if ((m_fsm_boss->getState() == "fbp_FinalState") && (!death_time)) {
 		death_time = true;
-
+		openHeart();
 		TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
 		if (H_hitch_trans) H_hitch_trans->setType(1);
 	}
@@ -285,11 +333,11 @@ void TCompAiBoss::update(float elapsed){
 	/**/
 		if (m_fsm_boss->getState() == "fbp_Stunned1")
 		{
-			open_light();
+			openLight();
 			hitchs_opened = true;
 		}
 		else{
-			close_light();
+			closeLight();
 			hitchs_opened = false;
 		}
 	/**/
@@ -314,6 +362,9 @@ void TCompAiBoss::breakHitch(CHandle m_hitch){
 		m_fsm_boss->HeartHit();
 		H_hitch_joint->setBreakForce(0, 0);
 		is_death = true;
+		if (H_hitch_light.isValid()){
+			((TCompRender*)((CEntity*)H_hitch_light)->get<TCompRender>())->active = false;
+		}
 	}
 }
 
@@ -323,38 +374,81 @@ void TCompAiBoss::stun(){
 	}
 }
 
-void TCompAiBoss::open_light(){
+void TCompAiBoss::openLight(){
 
 	if (!hitchs_opened){
-		TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
-		if (R_light_trans){
-			R_light_trans->setType(0);
-			// Hacer que giren
-			// Hacerlas visibles
-			if (R_hitch_light.isValid()){
-				((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = true;
+		if (m_fsm_boss->has_right){
+			TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
+			if (R_light_trans){
+				R_light_trans->setType(0);
+				// Hacer que giren
+				// Hacerlas visibles
+				if (R_hitch_light.isValid()){
+					((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = true;
+				}
+			}
+			TCompPointLight* R_point_light = ((CEntity*)R_hitch_light)->get<TCompPointLight>();
+			if (R_point_light){
+				R_point_light->radius = 3.f;
 			}
 		}
-		TCompTransform* L_light_trans = ((CEntity*)L_hitch_light)->get<TCompTransform>();
-		if (L_light_trans){
-			L_light_trans->setType(0);
-			// Hacer que giren
-			// Hacerlas visibles
-			if (L_hitch_light.isValid()){
-				((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = true;
+		if (m_fsm_boss->has_left){
+			TCompTransform* L_light_trans = ((CEntity*)L_hitch_light)->get<TCompTransform>();
+			if (L_light_trans){
+				L_light_trans->setType(0);
+				// Hacer que giren
+				// Hacerlas visibles
+				if (L_hitch_light.isValid()){
+					((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = true;
+				}
+			}
+			TCompPointLight* L_point_light = ((CEntity*)L_hitch_light)->get<TCompPointLight>();
+			if (L_point_light){
+				L_point_light->radius = 3.f;
 			}
 		}
 	}
 }
 
-void TCompAiBoss::close_light(){
+void TCompAiBoss::closeLight(){
 	if (hitchs_opened){
 		if (R_hitch_light.isValid()){
 			((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = false;
+			
+			TCompPointLight* R_point_light = ((CEntity*)R_hitch_light)->get<TCompPointLight>();
+			if (R_point_light){
+				R_point_light->radius = 0.0001f;
+			}
 		}
 		if (L_hitch_light.isValid()){
 			((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = false;
+
+			TCompPointLight* L_point_light = ((CEntity*)L_hitch_light)->get<TCompPointLight>();
+			if (L_point_light){
+				L_point_light->radius = 0.0001f;
+			}
 		}
+	}	
+}
+
+void TCompAiBoss::openHeart(){
+	// Hacerlas visibles
+	if (H_hitch_light.isValid()){
+		((TCompRender*)((CEntity*)H_hitch_light)->get<TCompRender>())->active = true;
 	}
-	
+	TCompPointLight* H_point_light = ((CEntity*)H_hitch_light)->get<TCompPointLight>();
+	if (H_point_light){
+		H_point_light->radius = 4.f;
+	}
+}
+
+/**
+LOS HOMBRES DE VERDAD NO DECIMOS: ME VOY A MIMIR
+
+NOS MIMIMOS Y PUNTO ¬¬
+/**/
+
+void TCompAiBoss::initBoss(){
+	// Change the state to: RiseUp
+	m_fsm_boss->lua_boss_init = true;
 }

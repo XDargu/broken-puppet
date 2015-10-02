@@ -756,7 +756,7 @@ void CLogicManager::cameraLookAtPosition(CVector target){
 }
 
 void CLogicManager::playerDead() {
-	execute("onPlayerDead();");
+	execute("onPlayerDead()");
 }
 
 void CLogicManager::pushPlayerLegsState(std::string state_name) {

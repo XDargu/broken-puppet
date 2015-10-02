@@ -40,5 +40,5 @@ CTexture* TSSRRStep::getOutput() {
 
 void TSSRRStep::destroy() {
 	//SAFE_DESTROY(rt_ssrr);
-	if (rt_ssrr) { rt_ssrr->destroyAll(); rt_ssrr = nullptr; }
+	//if (rt_ssrr) { rt_ssrr->destroyAll(); rt_ssrr = nullptr; }
 }

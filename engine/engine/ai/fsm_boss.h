@@ -48,8 +48,6 @@ private:
 	float getAnimationDuration(int id);
 	
 	int hurt_state;
-	bool has_left;
-	bool has_right;
 
 	int shoots_amount;
 	
@@ -94,6 +92,9 @@ private:
 public:
 	fsm_boss();
 	~fsm_boss();
+
+	bool has_left;
+	bool has_right;
 
 	void Init();
 
@@ -150,6 +151,8 @@ public:
 	int last_attack_it;
 	int pattern_it;
 	int pattern_current;
+
+	bool lua_boss_init;
 
 	/**/
 	std::vector<TAttackPattern> attack_pattern_list;

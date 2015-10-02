@@ -3,7 +3,7 @@
   <BoneRigidbody name= "Bip001 Spine" rotation= "0.699354 -0.182091 0.681457 -0.115597" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "1.17411" height= "0.148523"  />
   <BoneRigidbody name= "Bip001 Spine1" rotation= "0.724402 -0.139172 0.664092 -0.12188" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "3.11817" height= "0.217741"  />
   <BoneRigidbody name= "Bip001 Spine2" rotation= "0.720206 -0.176621 0.666198 -0.0793054" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "3.29137" height= "1.24952"  />
-  <BoneRigidbody name= "Bip001 Head" rotation= "0.672261 -0.0867767 0.732378 0.064481" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "3" height= "0.0648239"  />
+  <BoneRigidbody name= "Bip001 Head" rotation= "0.672261 -0.0867767 0.732378 0.064481" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "1" height= "0.01"  />
   <BoneRigidbody name= "Bip001 L UpperArm" rotation= "-0.187931 -0.189028 0.338584 0.902392" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "1.42789" height= "2.95589"  />
   <BoneRigidbody name= "Bip001 L Forearm" rotation= "-0.0599935 -0.259712 0.76355 0.588169" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "1.14514" height= "2.05129"  />
   <BoneRigidbody name= "Bip001 L Hand" rotation= "-0.373294 0.723413 -0.356555 -0.458469" density= "1000" staticfriction= "0.3" dynamicfriction= "0.3" bounciness= "0.5" meshtype= "3" radius= "2.11988" height= "0.937347"  />

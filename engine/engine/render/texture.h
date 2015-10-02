@@ -17,12 +17,13 @@ public:
 	// name
 
 	CTexture() : resource_view(nullptr), resource(nullptr) {}
+	virtual ~CTexture() { }
 	bool load(const char* name);
 	void setName(const char *new_name) {
 		name = new_name;
 	}
 	const char* getName() const { return name.c_str(); }
-	void destroy();
+	virtual void destroy();
 	void activate(int slot) const;
 	bool reload() { return load(name.c_str()); }
 
@@ -30,9 +31,14 @@ public:
 
 	void setResource(ID3D11Texture2D* the_resource) { resource = the_resource; }
 	void setResourceView(ID3D11ShaderResourceView* rw) { resource_view = rw; }
+	
+	virtual bool isRenderTexture() const { return false; }
 };
 
-typedef CItemsByName< CTexture > CTextureManager;
+class CTextureManager : public  CItemsByName < CTexture > {
+public:
+	void destroyAllTextures();
+};
 extern CTextureManager texture_manager;
 
 #endif

@@ -4,6 +4,8 @@
 template < class TItem >
 class CItemsByName {
 
+protected:
+
 	typedef std::map< std::string, TItem* > MItems;
 	MItems all_items;
 

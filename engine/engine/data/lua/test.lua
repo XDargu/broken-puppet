@@ -11,9 +11,33 @@ end
 
 
 _print = print
-clearCoroutines( )
+clearCoroutines()
 
-function onSceneLoad_my_file()
+----------------------------------------------------------
+-- scene_boss --- scene scene_boss --- scene scene_boss --
+----------------------------------------------------------
+----------------------------------------------------------
+
+function onSceneLoad_scene_boss()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+	
+	function onTriggerEnter_PitTrigger(who)
+		print(tostring(who) .. "Entrado en el trigger");
+
+		if who == "Player" then
+			--logicManager:pushPlayerLegsState("fbp_WakeUp");
+			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
+			player:teleportToPos(initPos);
+		end
+
+	end
+
+end
+
+
+function onSceneLoad_scene_1()
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
 
@@ -39,8 +63,8 @@ function onSceneLoad_my_file()
 		
 
 	-- Apagar cable
-	local cable = logicManager:getObject("cable_int_sc1_door")	
-	cable:setEmissive(false)
+	local sc1_cable = logicManager:getObject("cable_int_sc1_door")	
+	sc1_cable:setEmissive(false)
 
 	-- Cerrar puerta
 	local sc1_door = logicManager:getHingeJoint("sc1_hinge_door");
@@ -48,7 +72,7 @@ function onSceneLoad_my_file()
 
 	function onSwitchPressed_int_sc1_door(who)
 		-- Encender cable
-		cable:setEmissive(true)
+		sc1_cable:setEmissive(true)
 		-- Abrir puerta
 		sc1_door:setLimit(90)
 		sc1_door:setMotor(-1.55, 2000000);
@@ -163,7 +187,9 @@ function onSceneLoad_my_file()
 	
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 1 ********
+end
 
+function onSceneLoad_scene_2()
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
 
 	-- Apagar cable
@@ -253,14 +279,16 @@ function onSceneLoad_my_file()
 	end
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 2 ********
+end
 
+function onSceneLoad_scene_3()
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 3 **********
 
 	-- Subir el nivel del agua
 	function onTriggerExit_sc3_trigger_tuber(who)
 		print(tostring(who) .. " ha dejado en el trigger de tuber");
 	
-		if who == "tapa_agua_puzle" then
+		if (who == "tapa_agua_puzle") then
 			logicManager:changeWaterLevel(7.58, 0.25);
 			logicManager:createParticleGroup("ps_jet", Vector(16.23, 11.14, 69.9), Quaternion( 0.7071067811865476, 0, 0.7071067811865476, 0));
 		end
@@ -331,12 +359,11 @@ function onSceneLoad_my_file()
 	end
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 3 ********
+end
 
-
+function onSceneLoad_scene_4()
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 4 **********
 
-
-	-- *** Ascensor ***
 
 	-- *** Ascensor *** 
 	-- *** Interruptor del ascensor *** 
@@ -523,95 +550,14 @@ function onSceneLoad_my_file()
 	end
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 4 ********
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---logicManager:loadScene("data/scenes/scene_1.xml");
-	--logicManager:loadScene("data/scenes/scene_3_iluminada_ps.xml");
-	--logicManager:setBands(true)
-
-	player = logicManager:getBot("Player");
-	initPos = player:getPos();
-
-	--logicManager:setMediumShotActive(true);
-	--logicManager:lockCameraOnBot(logicManager:getBot("EnemyGrandma_33.0"));
-	logicManager:setTimer("timerMolon", 3);
-	
-	--logicManager:playAnimation("prueba_cosa", logicManager:getObject("test_anim_35.0"))
-	--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
-	--logicManager:changeCamera("Camera001_34.0");
-	
-
-	
-
-	-- NARRADOR TEST
-
-	
-
-
-	function onTriggerEnter_PitTrigger(who)
-		print(tostring(who) .. "Entrado en el trigger");
-
-		if who == "Player" then
-			logicManager:pushPlayerLegsState("fbp_Idle");
-			--logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
-			player:teleportToPos(initPos);
-		end
-
-	end
-
-	local trigger_boss0 = false
-	function onTriggerEnter_trigger_boss0(who)
-		if sc2_narr4_played == false then
-			logicManager:setBands(true);
-			logicManager:setMediumShotActive(true);
-			logicManager:setCanThrow(false);
-			logicManager:setCanTense(false);
-			logicManager:setCanCancel(false);
-			logicManager:setCanPull(false);
-			trigger_boss0 = true
-		end
-	end
-
-	local trigger_boss1 = false
-	function onTriggerEnter_trigger_boss1(who)
-		if sc2_narr4_played == false then
-			logicManager:pushPlayerLegsState("fbp_Idle");
-			logicManager:setMediumShotActive(true);
-			logicManager:setCanMove(false);
-			trigger_boss1 = true
-		end
-	end
-	
-
-	function onTimerEnd_timerMolon()
-		logicManager:playSubtitles("SCENE101");
-		logicManager:setBands(false)
-		--logicManager:releaseCameraLock();
-		--logicManager:playAnimation("test", logicManager:getObject("Camera001_34.0"))
-		--logicManager:changeCamera("Camera001_34.0");
-		--logicManager:playAnimation("plataforma_test", logicManager:getObject("plataforma_test_36.0"))
-		--logicManager:playAnimation("modulo1", logicManager:getObject("esc1_arqui_suelo_esqui_in_b_7.0"))
-		--logicManager:playAnimation("modulo2", logicManager:getObject("esc1_arqui_suelo_pared_b_5.0"))
-		--logicManager:playAnimation("modulo3", logicManager:getObject("esc1_arqui_suelo_pared_b_8.0"))
-	end
-
-
 end
 
-initPos = 0;
+                     -- DEAD --
 
+function onPlayerDead()
+	local player = logicManager:getBot("Player");
+	player:teleportToPos(initPos);
+end
 
 					-- VICTORY --
 
@@ -623,12 +569,28 @@ function onTriggerEnter_Trigger_Victory(who)
 end
 
 
-                     -- DEAD --
 
-function onPlayerDead()
-	local player = logicManager:getBot("Player");
-	player:teleportToPos(initPos);
-end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- ******************** MILESTONES VIEJOS (TODO COMENTADO) ***********************
@@ -663,28 +625,7 @@ end
 
 
 
-----------------------------------------------------------
--- scene_boss --- scene scene_boss --- scene scene_boss --
-----------------------------------------------------------
-----------------------------------------------------------
 
-function onSceneLoad_scene_boss()
-
-	player = logicManager:getBot("Player");
-	initPos = player:getPos();
-	
-	function onTriggerEnter_PitTrigger(who)
-		print(tostring(who) .. "Entrado en el trigger");
-
-		if who == "Player" then
-			--logicManager:pushPlayerLegsState("fbp_WakeUp");
-			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
-			player:teleportToPos(initPos);
-		end
-
-	end
-
-end
 
 
 -------------------------- MS3 ---------------------------
@@ -1262,8 +1203,4 @@ function onSceneLoad_scene_5()
 end
 
 --]]
-
-
-
-
 
