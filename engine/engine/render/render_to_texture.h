@@ -30,9 +30,10 @@ public:
 	void activateViewport();
 	void clearColorBuffer(const FLOAT ColorRGBA[4]);
 	void clearDepthBuffer();
-	void destroyAll();
+	void destroy() override;
 
 	CTexture* getZTexture() { return ztexture; }
+	bool isRenderTexture() const override { return true; }
 
 };
 

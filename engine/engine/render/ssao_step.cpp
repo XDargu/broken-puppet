@@ -37,5 +37,5 @@ CTexture* TSSAOStep::getOutput() {
 
 void TSSAOStep::destroy() {
 	//SAFE_DESTROY(rt_ssao);
-	if (rt_ssao) { rt_ssao->destroyAll(); rt_ssao = nullptr; }
+	//if (rt_ssao) { rt_ssao->destroyAll(); rt_ssao = nullptr; }
 }

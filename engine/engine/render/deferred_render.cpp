@@ -35,6 +35,12 @@ bool CDeferredRender::create(int xres, int yres) {
 
 void CDeferredRender::generateGBuffer(const CCamera* camera) {
 	CTraceScoped scope("gbuffer");
+	setSlotNull(0);
+	setSlotNull(1);
+	setSlotNull(2);
+	setSlotNull(3);
+	setSlotNull(4);
+	setSlotNull(5);
 
 	ID3D11RenderTargetView* rts[6] = {
 		rt_albedo->render_target_view
@@ -44,6 +50,9 @@ void CDeferredRender::generateGBuffer(const CCamera* camera) {
 		, rt_specular->render_target_view
 		, rt_gloss->render_target_view
 	};
+
+	//::render.ctx->PSSetShaderResources(1, 1, nullptr);
+	//::render.ctx->PSSetShaderResources(2, 1, nullptr);
 
 	::render.ctx->OMSetRenderTargets(6, rts, ::render.depth_stencil_view);
 	rt_albedo->activateViewport();
@@ -120,12 +129,6 @@ void CDeferredRender::render(const CCamera* camera, CRenderToTexture& rt_out) {
 }
 
 void CDeferredRender::destroy() {
-	if (rt_lights) { rt_lights->destroyAll(); rt_lights = nullptr; }
-	if (rt_albedo) { rt_albedo->destroyAll(); rt_albedo = nullptr; }
-	if (rt_normals) { rt_normals->destroyAll(); rt_normals = nullptr; }
-	if (rt_specular) { rt_specular->destroyAll(); rt_specular = nullptr; }
-	if (rt_gloss) { rt_gloss->destroyAll(); rt_gloss = nullptr; }
-	if (rt_depth) { rt_depth->destroyAll(); rt_depth = nullptr; }
 	/*SAFE_DESTROY(rt_lights);
 	SAFE_DESTROY(rt_albedo);
 	SAFE_DESTROY(rt_normals);

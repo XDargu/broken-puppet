@@ -173,10 +173,10 @@ void aimanager::warningPlayerFound(aicontroller* me){
 		aicontroller* bt_bot = (aicontroller*)bots[i];
 		// TENDRIA QUE DESCARTAR A LA ABUELA QUE INVOCA ESTE METODO!!
 		if (me != bots[i]){
-			if (bt_bot->isAngry()){
+			//if (bt_bot->isAngry()){
 				if ((CEntity*)bots[i]!=nullptr)
 					((CEntity*)bots[i]->GetEntity())->sendMsg(TPlayerFound());
-			}
+			//}
 		}
 	}
 

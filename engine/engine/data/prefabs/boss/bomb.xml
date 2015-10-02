@@ -1,5 +1,5 @@
 <prefab>
-  <entity tag = "bomb" collisionTag = "Actor" materialTag = "metal">
+  <entity tag = "bomb" collisionTag = "Bomb" materialTag = "metal">
     <name name="bomb" />
     <transform position="-1.58365 12.4581 26.568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >

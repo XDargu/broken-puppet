@@ -22,8 +22,8 @@ private:
 	PxFixedJoint* R_hitch_joint;
 	CHandle R_hitch_light;
 	
-	void open_light();
-	void close_light();
+	void openLight();
+	void closeLight();
 
 	CHandle L_hitch;
 	PxFixedJoint* L_hitch_joint;
@@ -31,6 +31,7 @@ private:
 
 	CHandle H_hitch;
 	PxFixedJoint* H_hitch_joint;
+	CHandle H_hitch_light;
 
 	PxVec3 point_to_go;
 	PxVec3 point_offset;
@@ -63,6 +64,7 @@ public:
 
 	void breakHitch(CHandle m_hitch);	
 	void stun();
+	void openHeart();
 
 	bool can_break_hitch;
 

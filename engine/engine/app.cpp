@@ -17,6 +17,7 @@ using namespace DirectX;
 #include "render/ctes/shader_ctes.h"
 #include "render/render_manager.h"
 #include "handle\prefabs_manager.h"
+#include "skeletons\skeleton_manager.h"
 
 #include "item_manager.h"
 #include "navmesh\navmesh.h"
@@ -392,6 +393,31 @@ bool CApp::create() {
 
 	XASSERT(font.create(), "Error creating the font");
 		
+
+	// Initialize render
+	rt_base = new CRenderToTexture;
+	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
+
+	is_ok &= renderUtilsCreate();
+
+	is_ok &= deferred.create(xres, yres);
+
+	is_ok &= sharpen.create("sharpen", xres, yres, 1);
+	is_ok &= ssao.create("ssao", xres, yres, 1);
+	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
+	is_ok &= blur.create("blur", xres, yres, 1);
+	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
+	is_ok &= glow.create("glow", xres, yres, 2);
+	is_ok &= underwater.create("underwater", xres, yres, 1);
+	is_ok &= ssrr.create("ssrr", xres, yres, 1);
+	is_ok &= silouette.create("silouette", xres, yres, 1);
+
+	// Create Debug Technique
+	debugTech = render_techniques_manager.getByName("basic");
+	ropeTech = render_techniques_manager.getByName("rope");
+
+	// global ctes
+	is_ok &= ctes_global.create();
 
 	//first_scene = "data/scenes/viewer_test.xml";
 	//first_scene = "data/scenes/scene1_mediovestir_ms4.xml"; 
@@ -872,103 +898,125 @@ void CApp::render() {
 		}
 		return;
 	}
-	CTraceScoped scope1("render_init");
-	// Render ---------------------
-	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
-	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
-	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	ctes_global.uploadToGPU();
-	ctes_global.activateInVS(2);
-	ctes_global.activateInPS(2);
-	activateTextureSamplers();
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
+	{
+		CTraceScoped scope1("render_init");
+		// Render ---------------------
+		float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+		::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
+		::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	/*CHandle h_light = entity_manager.getByName("the_light");
-	CEntity* e_light = h_light;
-	if (e_light) {
-	TCompCamera* cam_light = e_light->get<TCompCamera>();
-	activateLight(*cam_light, 4);
-	}*/
+		ctes_global.uploadToGPU();
+		ctes_global.activateInVS(2);
+		ctes_global.activateInPS(2);
+		activateTextureSamplers();
 
-	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
-	// Generate the culling for the active camera
-	render_manager.cullActiveCamera();
-	scope1.~CTraceScoped();
+		/*CHandle h_light = entity_manager.getByName("the_light");
+		CEntity* e_light = h_light;
+		if (e_light) {
+		TCompCamera* cam_light = e_light->get<TCompCamera>();
+		activateLight(*cam_light, 4);
+		}*/
+
+		activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+		// Generate the culling for the active camera
+		render_manager.cullActiveCamera();
+	}
+
 	// Generate all shadows maps
-	CTraceScoped scope("gen_shadows");
-	getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
-	scope.~CTraceScoped();
+	{
+		CTraceScoped scope("gen_shadows");
+		getObjManager<TCompShadows>()->onAll(&TCompShadows::generate);
+	}
 
 	deferred.render(&camera, *rt_base);
 
-	deferred.rt_albedo->activate();
-	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
-	drawTexture2D(0, 0, xres, yres, rt_base);
-	activateZConfig(ZConfig::ZCFG_DEFAULT);
-
-	CTraceScoped scope_part("Particles");
-	
-	rt_base->activate();
-	texture_manager.getByName("rt_albedo")->activate(0);
-	texture_manager.getByName("noise")->activate(9);
-	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
-
-	scope_part.~CTraceScoped();
+	setSlotNull(0);
 
 	deferred.rt_albedo->activate();
 	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
 	drawTexture2D(0, 0, xres, yres, rt_base);
 	activateZConfig(ZConfig::ZCFG_DEFAULT);
 
+	{
+		CTraceScoped scope_part("Particles");
+
+		setSlotNull(0);
+
+		rt_base->activate();
+		texture_manager.getByName("rt_albedo")->activate(0);
+		texture_manager.getByName("noise")->activate(9);
+		getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::render);
+	}
+
+	setSlotNull(0);
+
+	deferred.rt_albedo->activate();
+	activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
+	drawTexture2D(0, 0, xres, yres, rt_base);
+	activateZConfig(ZConfig::ZCFG_DEFAULT);
+
+	setSlotNull(0);
 
 	rt_base->activate();
 	texture_manager.getByName("rt_albedo")->activate(0);
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
-	
+
 	activateBlendConfig(BLEND_CFG_DEFAULT);
 	renderEntities();
 
-	CTraceScoped scope2("transparency");
-	activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
-	render_manager.renderAll(&camera, false, false);
-	activateRSConfig(RSCFG_REVERSE_CULLING);
-	render_manager.renderAll(&camera, false, true);
-	activateRSConfig(RSCFG_DEFAULT);
-	activateZConfig(ZCFG_DEFAULT);
-	scope2.~CTraceScoped();
+	setSlotNull(0);
+	{
+		CTraceScoped scope2("transparency");
+		activateZConfig(ZCFG_TEST_BUT_NO_WRITE);
+		render_manager.renderAll(&camera, false, false);
+		activateRSConfig(RSCFG_REVERSE_CULLING);
+		render_manager.renderAll(&camera, false, true);
+		activateRSConfig(RSCFG_DEFAULT);
+		activateZConfig(ZCFG_DEFAULT);
+	}
+	{
+		CTraceScoped scope_post_all("Post procesado");
+		activateCamera(camera, 1);
+		{
+			CTraceScoped scope_post1("SSR");
+			ssrr.apply(rt_base);
+		}
+		{
+			CTraceScoped scope_post2("Sharpen");
+			sharpen.apply(ssrr.getOutput());
+		}
+		{
+			CTraceScoped scope_post3("Chromatic aberration");
+			chromatic_aberration.apply(sharpen.getOutput());
+		}
+		{
+			CTraceScoped scope_post4("Underwater");
+			underwater.apply(chromatic_aberration.getOutput());
+		}
+		{
+			CTraceScoped scope_post5("Depth of field");
+			blur.apply(underwater.getOutput());
+		}
+		{
+			CTraceScoped scope_post6("Motion blur");
+			blur_camera.apply(blur.getOutput());
+		}
+		{
+			CTraceScoped scope_post7("Silouette");
+			silouette.apply(blur_camera.getOutput());
+			//silouette.apply(blur_camera.getOutput());
+		}
+		texture_manager.getByName("noise")->activate(9);
+		{
+			CTraceScoped scope_post8("Glow");
+			glow.apply(silouette.getOutput());
+		}
+	}
 
-	CTraceScoped scope_post_all("Post procesado");
-	activateCamera(camera, 1);
-	CTraceScoped scope_post1("SSR");
-	ssrr.apply(rt_base);
-	//ssao.apply(ssrr.getOutput());
-	scope_post1.~CTraceScoped();
-	CTraceScoped scope_post2("Sharpen");
-	sharpen.apply(ssrr.getOutput());
-	scope_post2.~CTraceScoped();
-	CTraceScoped scope_post3("Chromatic aberration");
-	chromatic_aberration.apply(sharpen.getOutput());
-	scope_post3.~CTraceScoped();
-	CTraceScoped scope_post4("Underwater");
-	underwater.apply(chromatic_aberration.getOutput());
-	scope_post4.~CTraceScoped();
-	CTraceScoped scope_post5("Depth of field");
-	blur.apply(underwater.getOutput());
-	scope_post5.~CTraceScoped();
-	CTraceScoped scope_post6("Motion blur");
-	blur_camera.apply(blur.getOutput());
-	scope_post6.~CTraceScoped();
-	CTraceScoped scope_post7("Silouette");
-	silouette.apply(blur_camera.getOutput());
-	//silouette.apply(blur_camera.getOutput());
-	scope_post7.~CTraceScoped();
-	texture_manager.getByName("noise")->activate(9);
-	CTraceScoped scope_post8("Glow");
-	glow.apply(silouette.getOutput());
-	scope_post8.~CTraceScoped();
-	scope_post_all.~CTraceScoped();
 	CTraceScoped scope_final("Final draw");	
 	::render.activateBackbuffer();
 	static int sz = 150;
@@ -1396,7 +1444,7 @@ void CApp::destroy() {
 	silouette.destroy();
 	underwater.destroy();
 	ssrr.destroy();
-	rt_base->destroyAll();
+	//rt_base->destroyl();
 
 	CRope_manager::get().clearStrings();
 	Citem_manager::get().clear();
@@ -1407,6 +1455,7 @@ void CApp::destroy() {
 	mesh_manager.destroyAll();
 	texture_manager.destroyAll();
 	material_manager.destroyAll();
+	skeleton_manager.destroyAll();
 	render_techniques_manager.destroyAll();
 	renderUtilsDestroy();
 	ctes_global.destroy();
@@ -1417,9 +1466,8 @@ void CApp::destroy() {
 	// Destroy app resources
 	wiredCube.destroy();
 	intersectsWiredCube.destroy();
-	axis.destroy();
-	grid.destroy();
 	rope.destroy();
+
 	font.destroy();
 	//rt_base->destroy();
 	// Video
@@ -1454,8 +1502,8 @@ void CApp::activateVictory(){
 void CApp::loadScene(std::string scene_name) {
 
 	// Load picture
-	renderUtilsDestroy();
-	renderUtilsCreate();
+	/*renderUtilsDestroy();
+	renderUtilsCreate();*/
 	float ClearColor[4] = { 0.1f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, ClearColor);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -1487,7 +1535,7 @@ void CApp::loadScene(std::string scene_name) {
 	}
 	dbg("Pasado bucle");
 
-	deferred.destroy();
+	/*deferred.destroy();
 	sharpen.destroy();
 	ssao.destroy();
 	chromatic_aberration.destroy();
@@ -1496,43 +1544,30 @@ void CApp::loadScene(std::string scene_name) {
 	glow.destroy();
 	silouette.destroy();
 	underwater.destroy();
-	ssrr.destroy();
+	ssrr.destroy();*/
 	//if (rt_base) { rt_base->destroyAll(); delete rt_base; rt_base = nullptr; }
 	
 
 	CRope_manager::get().clearStrings();
 	entity_manager.clear();
-	mesh_manager.destroyAll();
-	texture_manager.destroyAll();
-	render_techniques_manager.destroyAll();
-	material_manager.destroyAll();
+
+	// No destruir recursos en el cambio de escena
+	//mesh_manager.destroyAll();
+	//texture_manager.destroyAllTextures();
+	//render_techniques_manager.destroyAll();
+	//material_manager.destroyAll();
+	skeleton_manager.destroyAll();
+
 	render_manager.destroyAllKeys();
 	render_manager.clearOcclusionPlanes();
-	ctes_global.destroy();
-	renderUtilsDestroy();
+	//ctes_global.destroy();
+	//renderUtilsDestroy();
 	entity_lister.resetEventCount();
 	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
-
-	rt_base = new CRenderToTexture;
-	rt_base->create("deferred_output", xres, yres, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN, CRenderToTexture::USE_BACK_ZBUFFER);
-
-	is_ok &= renderUtilsCreate();
-
-	is_ok &= deferred.create(xres, yres);
-
-	is_ok &= sharpen.create("sharpen", xres, yres, 1);
-	is_ok &= ssao.create("ssao", xres, yres, 1);
-	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
-	is_ok &= blur.create("blur", xres, yres, 1);
-	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 2);
-	is_ok &= underwater.create("underwater", xres, yres, 1);
-	is_ok &= ssrr.create("ssrr", xres, yres, 1);
-	is_ok &= silouette.create("silouette", xres, yres, 1);
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
 	
@@ -1579,9 +1614,6 @@ void CApp::loadScene(std::string scene_name) {
 
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
 
-	// Create Debug Technique
-	debugTech = render_techniques_manager.getByName("basic");
-	ropeTech = render_techniques_manager.getByName("rope");
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");	
 	//XASSERT(CHandle(e).isValid(), "Camera not valid");
@@ -1602,7 +1634,7 @@ void CApp::loadScene(std::string scene_name) {
 	XASSERT(is_ok, "Error creating deferred targets");
 
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
-	is_ok &= ctes_global.create();
+	
 	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	
@@ -1647,6 +1679,7 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	render_manager.init();
+	ctes_global.get()->use_lightmaps = 0;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_1.xml"){
@@ -1659,55 +1692,37 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_1_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(60.f);
-		//sm.playTrack("ambient_orquestal.ogg", true);
 		ctes_global.get()->use_lightmaps = 0;
-		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
-		//sm.playTrack("ambient_no_orquest.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(77.f);
-		ctes_global.get()->use_lightmaps = 0;
-		/*sm.stopFX("ambiental_orq");
-		sm.playFXTrack("ambiental_no_orq", true);*/
+		ctes_global.get()->use_lightmaps = 0;		
 	}
 	else if (scene_name == "data/scenes/scene_3.xml"){
-		//sm.playTrack("ambient_neutral.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
-		ctes_global.get()->use_lightmaps = 1;
-		/*sm.stopFX("ambiental_no_orq");
-		sm.playFXTrack("ambiental_neutral", true);*/
+		ctes_global.get()->use_lightmaps = 0;
 	}
 	else if (scene_name == "data/scenes/scene_3_noenemy.xml"){
-		//sm.playTrack("ambient_neutral.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
 		ctes_global.get()->use_lightmaps = 1;
-		/*sm.stopFX("ambiental_no_orq");
-		sm.playFXTrack("ambiental_neutral", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
-		//sm.playTrack("ambient_neutral_louder.ogg", true);
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(70.f);
+		cam->changeZFar(90.f);
 		ctes_global.get()->use_lightmaps = 0;
-		/*sm.stopFX("ambiental_neutral");
-		sm.playFXTrack("ambiental_neutral_louder", true);*/
 	}
 	else if (scene_name == "data/scenes/scene_5.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(65.f);
-		//sm.playTrack("ambient_orquestal.ogg", true);
 		ctes_global.get()->use_lightmaps = 0;
-		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_5_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(65.f);
-		//sm.playTrack("ambient_orquestal.ogg", true);
 		ctes_global.get()->use_lightmaps = 0;
-		//sm.playFXTrack("ambiental_orq", true);
 	}
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());

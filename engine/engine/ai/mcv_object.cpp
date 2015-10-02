@@ -58,9 +58,9 @@ void CMCVObject::moveToPosition(CVector position, float speed) {
 void CMCVObject::setEmissive(bool active) {
 	if (!entity.isValid())
 		return;
-	TCompRender* render = ((CEntity*)entity)->get<TCompRender>();
-	if (render) {
-		render->emissive_on = active;
+	TCompRender* m_render = ((CEntity*)entity)->get<TCompRender>();
+	if (m_render) {
+		m_render->emissive_on = active;
 	}
 }
 

@@ -45,5 +45,5 @@ CTexture* TBlurStep::getOutput() {
 
 void TBlurStep::destroy() {
 	//SAFE_DESTROY(rt_blur_x);
-	if (rt_blur_x) { rt_blur_x->destroyAll(); rt_blur_x = nullptr; }
+	//if (rt_blur_x) { rt_blur_x->destroyAll(); rt_blur_x = nullptr; }
 }

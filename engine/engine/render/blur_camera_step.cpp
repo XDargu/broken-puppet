@@ -49,5 +49,5 @@ CTexture* TBlurCameraStep::getOutput() {
 
 void TBlurCameraStep::destroy() {
 	//SAFE_DESTROY(rt_blur);
-	if (rt_blur) { rt_blur->destroyAll(); rt_blur = nullptr; }
+	//if (rt_blur) { rt_blur->destroyAll(); rt_blur = nullptr; }
 }

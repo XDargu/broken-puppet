@@ -9,8 +9,8 @@
   <anim name="attack01"/>5
   <anim name="attack02"/>6
   <anim name="attack03"/>7
-  <anim name="coger"/>8
-  <anim name="cortar"/>9
+  <anim name="recuperar"/>8
+  <anim name="cut"/>9
   <anim name="hit01"/>10
   <anim name="idle_war"/>11
   <anim name="ninja"/>12
@@ -23,4 +23,5 @@
   <anim name="warcry"/>19
   <anim name="first_attack"/>20
   <anim name="looking_for"/>21
+  <anim name="recuperar"/>22
 </skeleton>

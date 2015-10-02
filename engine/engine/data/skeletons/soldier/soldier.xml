@@ -6,20 +6,23 @@
   <anim name="idle"/>2
   <anim name="idle"/>3
   <anim name="attack01"/>4
-  <anim name="attack01"/>5
-  <anim name="attack01"/>6
+  <anim name="attack02"/>5
+  <anim name="attack03"/>6
   <anim name="idle"/>7
   <anim name="idle"/>8
   <anim name="idle"/>9
-  <anim name="idle_war"/>10
+  <anim name="idlewar"/>10
   <anim name="idle"/>11
-  anim name="initial_attack"/>11
   <anim name="idle"/>12
   <anim name="idle"/>13
   <anim name="run"/>14
   <anim name="run"/>15
   <anim name="run"/>16
-  <anim name="idle_war"/>17
-  <anim name="idle_war"/>18
-  <anim name="first_attack_salto"/>19
+  <anim name="idlewar"/>17
+  <anim name="idlewar"/>18
+  <anim name="first_attack_salto"/>19  
+  <anim name="wake_up"/>20
+  <anim name="player_detected"/>21
+  <anim name="looking_for"/>22
+
 </skeleton>

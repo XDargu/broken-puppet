@@ -24,7 +24,7 @@ const float radius = 7.f;
 
 const float walk_speed = 0.8f;
 const float run_speed = 2.f;
-const float run_angry_speed = 2.2f;
+const float run_angry_speed = 5.2f;
 
 
 // Sensor
@@ -55,11 +55,12 @@ void bt_soldier::create(string s)
 	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_soldier::conditionplayer_lost, NULL);
 	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_soldier::conditionsee_player, (btaction)&bt_soldier::actionPlayerAlert);
 
-	addChild("LookForPlayer", "CalmDown13", ACTION, (btcondition)&bt_soldier::conditionLook_for_timeout, (btaction)&bt_soldier::actionCalmDown);
-
-	addChild("LookForPlayer", "LookAroundSequence", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("LookForPlayer", "LookAroundPriority", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
+	addChild("LookAroundPriority", "LookAroundSequence", SEQUENCE, (btcondition)&bt_soldier::conditionLook_time, NULL);
+	addChild("LookAroundPriority", "CalmDown13", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionCalmDown);
 	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_soldier::actionSearchArroundLastPoint);
 	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_soldier::actionLookAround);
+	addChild("LookAroundSequence", "LookingForPlayer", ACTION, NULL, (btaction)&bt_soldier::actionLookingFor);
 
 	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("TryAttack", "SelectRole15", ACTION, NULL, (btaction)&bt_soldier::actionSelectRole);
@@ -76,8 +77,8 @@ void bt_soldier::create(string s)
 	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionChaseRoleDistance);
 
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
-	
-	
+
+
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionIdle, 70);
 	addChild("FreeTime", "Wander30", SEQUENCE, EXTERNAL, NULL, NULL, 30);
@@ -114,6 +115,7 @@ void bt_soldier::create(string s)
 	animation_done = false;
 	active = false;
 	attacked = false;
+	lost_player = false;
 
 	player_out_navMesh = false;
 
@@ -210,14 +212,14 @@ int bt_soldier::actionWakeUp()
 		TCompRagdoll* m_ragdoll = enemy_ragdoll;
 		TCompSkeleton* m_skeleton = enemy_skeleton;
 		m_ragdoll->setActive(false);
-		m_skeleton->playAnimation(16);
+		m_skeleton->playAnimation(20);
 
 	}
 	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
-	if (state_time > getAnimationDuration(16)) {
+	if (state_time > getAnimationDuration(20)) {
 		playAnimationIfNotPlaying(0);
 		return LEAVE;
 	}
@@ -371,6 +373,7 @@ int bt_soldier::actionWarcry()
 	if (state_time >= getAnimationDuration(18) + 1) {
 		aimanager::get().warningToClose(this, 20.f, player_transform);
 		have_to_warcry = false;
+		lost_player = false;
 		time_searching_player = 0;
 		return LEAVE;
 	}
@@ -383,7 +386,9 @@ int bt_soldier::actionWarcry()
 int bt_soldier::actionPlayerAlert()
 {
 	if (on_enter) {
-		playAnimationIfNotPlaying(17);
+		stopAllAnimations();
+		resetTimeAnimation();
+		playAnimationIfNotPlaying(21);
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -393,26 +398,13 @@ int bt_soldier::actionPlayerAlert()
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 
-	if (!findPlayer()) {
+	if (state_time > getAnimationDuration(18)) {
 		//Call the iaManager method for warning the rest of the grandmas
 		aimanager::get().warningPlayerFound(this);
 		return LEAVE;
-	}else{
-		CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
-		if (path.size() > 0){
-			float distance = V3DISTANCE(p_transform->position, path[path.size() - 1]);
-			if (distance > 2.f){
-				return STAY;
-			}else{ 
-				player_viewed_sensor = true;
-				see_player = true;
-				return LEAVE;
-			}
-		}else{
-			return STAY;
-		}
 	}
-	return STAY;
+	else
+		return STAY;
 }
 
 //Leave the angry state, go to peacefull
@@ -428,12 +420,29 @@ int bt_soldier::actionCalmDown()
 int bt_soldier::actionSearchArroundLastPoint()
 {
 	rand_point = CNav_mesh_manager::get().getRandomNavMeshPoint(last_point_player_saw, radius, ((TCompTransform*)own_transform)->position);
-	stopMovement();
+	//stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
 	return LEAVE;
 
+}
+
+//plays the looking for player animation
+int bt_soldier::actionLookingFor(){
+	if (on_enter) {
+		stopAllAnimations();
+		resetTimeAnimation();
+		playAnimationIfNotPlaying(21);
+	}
+
+	time_searching_player += CApp::get().delta_time;
+	stopMovement();
+
+	if (state_time > getAnimationDuration(22))
+		return LEAVE;
+	else
+		return STAY;
 }
 
 //look the player around the his last point
@@ -542,7 +551,7 @@ int bt_soldier::actionChaseRoleDistance()
 
 			TCompCharacterController* m_char_controller = character_controller;
 
-			m_char_controller->moveSpeedMultiplier = 9.2f;
+			m_char_controller->moveSpeedMultiplier = run_angry_speed;
 
 			stopAllAnimations();
 			resetTimeAnimation();
@@ -550,7 +559,8 @@ int bt_soldier::actionChaseRoleDistance()
 
 			//m_char_controller->airSpeed = run_angry_speed * 0.8f;
 			ind_path = 0;
-		}else{
+		}
+		else{
 			player_out_navMesh = true;
 			playAnimationIfNotPlaying(0);
 			return LEAVE;
@@ -632,19 +642,13 @@ int bt_soldier::actionSituate()
 	TCompTransform* p_transform = player_transform;
 
 	wander_target = p_transform->position;// + slot_position;
+	TCompCharacterController* m_char_controller = character_controller;
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
 	if (on_enter) {
 		if (path.size() > 0){
-			TCompCharacterController* m_char_controller = character_controller;
 
-			float distance = V3DISTANCE(wander_target, path[path.size() - 1]);
-			if (distance>=2.5f){
-				player_out_navMesh = true;
-				playAnimationIfNotPlaying(0);
-				return LEAVE;
-			}
+			ind_path = 0;
 
-			m_char_controller->moveSpeedMultiplier = 9.2f;
 			stopAllAnimations();
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(15);
@@ -656,10 +660,14 @@ int bt_soldier::actionSituate()
 		}
 	}
 
-	if (on_enter){
-		ind_path = 0;
+	float distance_path = V3DISTANCE(wander_target, path[path.size() - 1]);
+	if (distance_path >= 2.0f){
+		player_out_navMesh = true;
+		playAnimationIfNotPlaying(0);
+		return LEAVE;
 	}
 
+	m_char_controller->moveSpeedMultiplier = run_angry_speed;
 	float distance = V3DISTANCE(m_transform->position, wander_target);
 	if (!initial_attack){
 		if (distance < 6.5f){
@@ -677,7 +685,7 @@ int bt_soldier::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.10f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.2f)){
 				ind_path++;
 				return STAY;
 			}
@@ -688,7 +696,8 @@ int bt_soldier::actionSituate()
 		else{
 			return LEAVE;
 		}
-	}else{
+	}
+	else{
 		return LEAVE;
 	}
 }
@@ -738,7 +747,7 @@ int bt_soldier::actionIdleWar()
 	if (on_enter) {
 		stopAllAnimations();
 		resetTimeAnimation();
-		playAnimationIfNotPlaying(10);
+		playAnimationIfNotPlaying(18);
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -746,10 +755,8 @@ int bt_soldier::actionIdleWar()
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 	stopMovement();
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(10))
+	if (state_time > getAnimationDuration(18))
 		return LEAVE;
 	else
 		return STAY;
@@ -924,32 +931,41 @@ int bt_soldier::conditionhave_to_warcry()
 //Check if there player is not visible for any grandma (and reach the last position)
 int bt_soldier::conditionplayer_lost()
 {
-
-	if (findPlayer()&&(!see_player)){
-		return false;
-	}else{
+	if (!player_out_navMesh){
 		if ((last_time_player_saw) > max_time_player_lost){
 			player_previously_lost = true;
-			player_viewed_sensor = false;
-			initial_attack = true;
-			see_player = false;
+			initial_attack = false;
 			return true;
-		} else if (!see_player){
-			return true;
-		}else{
-			return false;
 		}
 	}
+	else{
+		player_out_navMesh = false;
+		return true;
+	}
+	return false;
 }
 
 //check if the player is visible
 int bt_soldier::conditionsee_player()
 {
-	if (findPlayer()&&(!see_player)){
-		return true;
-	}else{
-		return false;
+	if ((findPlayer()) && (player_previously_lost)){
+		see_player = true;
+		player_previously_lost = false;
 	}
+	else{
+		see_player = false;
+	}
+	return see_player;
+}
+
+int bt_soldier::conditionLook_time(){
+	if (time_searching_player <= max_time_player_search){
+		lost_player = true;
+	}
+	else{
+		lost_player = false;
+	}
+	return lost_player;
 }
 
 //Check the look for timer
@@ -1047,21 +1063,43 @@ int bt_soldier::conditioninitial_attack()
 	XMVECTOR dir = XMVector3AngleBetweenVectors(attack_direction, front);
 	float rads = XMVectorGetX(dir);
 	float angle_deg = rad2deg(rads);
-	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 
-	if ((!initial_attack) && (distance < 7.5f)){
-		if (angle_deg < 30.f){
-			XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front));
-			return true;
-		}else{
-			XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front));
+	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
+
+	XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
+	attack_direction_path = XMVector3Normalize(attack_direction_path);
+	XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+	XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+	float rads_path = XMVectorGetX(dir_path);
+	float angle_deg_path = rad2deg(rads_path);
+
+	float distance = V3DISTANCE(m_transform->position, p_transform->position);
+	
+	if (path.size() > 0){
+		float distance_path = V3DISTANCE(p_transform->position, path[path.size() - 1]);
+		float distance_path_enemy = V3DISTANCE(m_transform->position, path[path.size() - 1]);
+		if ((!initial_attack) && (distance < 7.5f) && (distance_path<1.0f)){
+			if ((angle_deg < 30.f) && (angle_deg_path<30.f)){
+				if (distance_path_enemy < 7.5f){
+					XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
+					return true;
+				}else{
+					initial_attack = true;
+					return false;
+				}
+			}
+			else{
+				XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
+				initial_attack = true;
+				return false;
+			}
+		}
+		else{
 			initial_attack = true;
 			return false;
 		}
 	}
-	else{
-		return false;
-	}
+	return false;
 }
 
 //Check if it is too far from the target position
@@ -1103,7 +1141,7 @@ void bt_soldier::playerViewedSensor(){
 		else{
 			player_viewed_sensor = false;
 			have_to_warcry = false;
-			is_angry=false;
+			is_angry = false;
 		}
 	}
 	else{
@@ -1163,8 +1201,8 @@ void bt_soldier::WarWarningSensor(XMVECTOR player_position){
 }
 
 void bt_soldier::PlayerFoundSensor(){
-
 	last_time_player_saw = 0;
+	lost_player = false;
 	setCurrent(NULL);
 }
 
@@ -1180,6 +1218,7 @@ void bt_soldier::update(float elapsed){
 
 
 		playerViewedSensor();
+		findLostPlayer();
 		//tiedSensor();
 		if (findPlayer()){
 			last_point_player_saw = ((TCompTransform*)player_transform)->position;
@@ -1240,6 +1279,16 @@ void bt_soldier::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 
 CHandle bt_soldier::getPlayerTransform(){
 	return player_transform;
+}
+
+void bt_soldier::findLostPlayer(){
+	if (lost_player){
+		if (findPlayer()){
+			lost_player = false;
+			player_previously_lost = true;
+			setCurrent(NULL);
+		}
+	}
 }
 
 bool bt_soldier::findPlayer(){

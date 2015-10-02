@@ -38,5 +38,5 @@ CTexture* TSharpenStep::getOutput() {
 
 void TSharpenStep::destroy() {
 	//SAFE_DESTROY(rt_sharpen);
-	if (rt_sharpen) { rt_sharpen->destroyAll(); rt_sharpen = nullptr; }
+	//if (rt_sharpen) { rt_sharpen->destroyAll(); rt_sharpen = nullptr; }
 }

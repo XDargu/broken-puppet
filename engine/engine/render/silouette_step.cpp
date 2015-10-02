@@ -60,7 +60,7 @@ void TSilouetteStep::destroy() {
 	//SAFE_DESTROY(rt_final);
 	//SAFE_DESTROY(rt_sobel);
 	//SAFE_DESTROY(rt_dynamic);
-	if (rt_final) { rt_final->destroyAll(); rt_final = nullptr; }
-	if (rt_sobel) { rt_sobel->destroyAll(); rt_sobel = nullptr; }
-	if (rt_dynamic) { rt_dynamic->destroyAll(); rt_dynamic = nullptr; }
+	//if (rt_final) { rt_final->destroyAll(); rt_final = nullptr; }
+	//if (rt_sobel) { rt_sobel->destroyAll(); rt_sobel = nullptr; }
+	//if (rt_dynamic) { rt_dynamic->destroyAll(); rt_dynamic = nullptr; }
 }

@@ -37,6 +37,8 @@ public:
 	}
   };
 
+  void destroy() { }
+
   typedef std::vector <TBoneCorrector> VBoneCorrections;
   VBoneCorrections bone_corrections;
 

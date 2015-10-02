@@ -54,6 +54,8 @@ private:
 	bool cut_animation_done;
 	bool take_animation_done;
 	bool needle_hit;
+	bool lost_player;
+
 	int last_anim_id;
 
 	bool player_previously_lost;
@@ -246,7 +248,7 @@ public:
 	void stopMovement();
 	void BeAngry();
 
-	void needleHitSensor();
+	void findLostPlayer();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 };

@@ -393,6 +393,8 @@ PxU32 convertStrInCollisionFilter(std::string name){
 		result = FilterGroup::eBOSSPARTS;
 	}else if (name == "Boss_Head"){
 		result = FilterGroup::eBOSSHEAD;
+	}else if (name == "Bomb"){
+		result = FilterGroup::eBOMB;
 	}else if (name == "Actor_non_collision"){
 		result = FilterGroup::eACTOR_NON_COLLISION;
 	}else{
