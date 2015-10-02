@@ -152,6 +152,7 @@ public:
 	int pattern_it;
 	int pattern_current;
 
+	bool lua_boss_init;
 
 	/**/
 	std::vector<TAttackPattern> attack_pattern_list;
