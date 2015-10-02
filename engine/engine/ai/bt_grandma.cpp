@@ -72,12 +72,12 @@ void bt_grandma::create(string s)
 	addChild("Angry", "LookForPlayer", PRIORITY, (btcondition)&bt_grandma::conditionplayer_lost, NULL);
 	addChild("Angry", "PlayerAlert12", ACTION, (btcondition)&bt_grandma::conditionsee_player, (btaction)&bt_grandma::actionPlayerAlert);
 
-	addChild("LookForPlayer", "LookAroundPriority", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
-	addChild("LookAroundPriority", "LookAroundSequence", SEQUENCE, (btcondition)&bt_grandma::conditionLook_time, NULL);
-	addChild("LookAroundPriority", "CalmDown13", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionCalmDown);
-	addChild("LookAroundSequence", "SearchLastPoint", ACTION, NULL, (btaction)&bt_grandma::actionSearchArroundLastPoint);
-	addChild("LookAroundSequence", "LookAround14", ACTION, NULL, (btaction)&bt_grandma::actionLookAround);
-	addChild("LookAroundSequence", "LookingForPlayer", ACTION, NULL, (btaction)&bt_grandma::actionLookingFor);
+	addChild("LookForPlayer", "LookAroundPriority", PRIORITY, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, NULL);
+	addChild("LookAroundPriority", "LookAroundSequence", SEQUENCE, EXTERNAL, (btcondition)&bt_grandma::conditionLook_time, NULL);
+	addChild("LookAroundPriority", "CalmDown13", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionCalmDown);
+	addChild("LookAroundSequence", "SearchLastPoint", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSearchArroundLastPoint);
+	addChild("LookAroundSequence", "LookAround14", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionLookAround);
+	addChild("LookAroundSequence", "LookingForPlayer", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionLookingFor);
 
 
 	addChild("Angry", "TryAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontrue, NULL);
@@ -89,23 +89,23 @@ void bt_grandma::create(string s)
 	addChild("AttackRoutine", "Situate18", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
 	addChild("AttackRoutine", "IdleWa19r", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionIdleWar);
 	addChild("ExecuteRole", "Taunter", PRIORITY, (btcondition)&bt_grandma::conditionis_taunter, NULL);
-	addChild("Taunter", "Situate20", ACTION, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
-	addChild("Taunter", "Taunter21", ACTION, NULL, (btaction)&bt_grandma::actionTaunter);
+	addChild("Taunter", "Situate20", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditionfar_from_target_pos, (btaction)&bt_grandma::actionSituate);
+	addChild("Taunter", "Taunter21", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionTaunter);
 
 	addChild("ExecuteRole", "ChaseRoleDistance22", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseRoleDistance);
 
 	addChild("Root", "Peacefull", PRIORITY, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("Peacefull", "XSecAttack", SEQUENCE, (btcondition)&bt_grandma::conditiontoo_close_attack, NULL);
 	addChild("XSecAttack", "TooCloseAttack23", ACTION, INTERNAL, NULL, (btaction)&bt_grandma::actionTooCloseAttack);
-	addChild("Peacefull", "TakeNeedle", SEQUENCE, (btcondition)&bt_grandma::conditionneedle_to_take, NULL);
-	addChild("TakeNeedle", "XSecsNeedle", SEQUENCE, NULL, NULL);
-	addChild("XSecsNeedle", "NeedleAppearsEvent24", ACTION, NULL, (btaction)&bt_grandma::actionNeedleAppearsEvent);
-	addChild("TakeNeedle", "SelectNeedleToTake25", ACTION, NULL, (btaction)&bt_grandma::actionSelectNeedleToTake);
-	addChild("TakeNeedle", "ChaseAndTakeNeedle", PRIORITY, NULL, NULL);
-	addChild("ChaseAndTakeNeedle", "HowToCutAndTakeNeedle", PRIORITY, (btcondition)&bt_grandma::conditioncan_reach_needle, NULL);
-	addChild("HowToCutAndTakeNeedle", "CutRope26", ACTION, (btcondition)&bt_grandma::conditionis_needle_tied, (btaction)&bt_grandma::actionCutRope);
-	addChild("HowToCutAndTakeNeedle", "TakeNeedle27", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionTakeNeedle);
-	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseNeedlePosition);
+	addChild("Peacefull", "TakeNeedle", SEQUENCE, EXTERNAL, (btcondition)&bt_grandma::conditionneedle_to_take, NULL);
+	addChild("TakeNeedle", "XSecsNeedle", SEQUENCE, EXTERNAL, NULL, NULL);
+	addChild("XSecsNeedle", "NeedleAppearsEvent24", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionNeedleAppearsEvent);
+	addChild("TakeNeedle", "SelectNeedleToTake25", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionSelectNeedleToTake);
+	addChild("TakeNeedle", "ChaseAndTakeNeedle", PRIORITY, EXTERNAL, NULL, NULL);
+	addChild("ChaseAndTakeNeedle", "HowToCutAndTakeNeedle", PRIORITY, EXTERNAL, (btcondition)&bt_grandma::conditioncan_reach_needle, NULL);
+	addChild("HowToCutAndTakeNeedle", "CutRope26", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditionis_needle_tied, (btaction)&bt_grandma::actionCutRope);
+	addChild("HowToCutAndTakeNeedle", "TakeNeedle27", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionTakeNeedle);
+	addChild("ChaseAndTakeNeedle", "ChaseNeedlePosition28", ACTION, EXTERNAL, (btcondition)&bt_grandma::conditiontrue, (btaction)&bt_grandma::actionChaseNeedlePosition);
 	
 	addChild("Peacefull", "FreeTime", RANDOM, (btcondition)&bt_grandma::conditiontrue, NULL);
 	addChild("FreeTime", "Idle29", ACTION, EXTERNAL, NULL, (btaction)&bt_grandma::actionIdle, 70);
@@ -693,7 +693,7 @@ int bt_grandma::actionPlayerAlert()
 
 	if (state_time > getAnimationDuration(18)) {
 		//Call the iaManager method for warning the rest of the grandmas
-		aimanager::get().warningPlayerFound(this);
+		aimanager::get().warningToClose(this, 10.f, player_transform);
 		return LEAVE;
 	}
 	else
@@ -1655,6 +1655,8 @@ void bt_grandma::BeAngry(){
 void bt_grandma::WarWarningSensor(XMVECTOR player_position){
 	is_angry = true;
 	have_to_warcry = false;
+	last_time_player_saw = 0;
+	lost_player = false;
 	player_detected_pos = player_position;
 	setCurrent(NULL);
 }
@@ -1663,6 +1665,7 @@ void bt_grandma::PlayerFoundSensor(){
 
 	last_time_player_saw = 0;
 	lost_player = false;
+	//is_angry = true;
 	setCurrent(NULL);
 }
 /*void bt_grandma::PlayerTouchSensor(bool touch){
