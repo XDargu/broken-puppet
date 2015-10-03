@@ -237,7 +237,7 @@ void createManagers() {
 	// Lights (temporary)
 	getObjManager<TCompDirectionalLight>()->init(16);
 	getObjManager<TCompAmbientLight>()->init(1);
-	getObjManager<TCompPointLight>()->init(256);
+	getObjManager<TCompPointLight>()->init(512);
 
 	// AI
 	getObjManager<TCompAiFsmBasic>()->init(64);
@@ -424,13 +424,13 @@ bool CApp::create() {
 	physics_manager.init();
 	
 	// Preload scenes
-	XDEBUG("First load");
+	/*XDEBUG("First load");
 	CImporterResourceLoader loader;
 	loader.xmlParseFile("data/scenes/scene_1.xml");
 	loader.xmlParseFile("data/scenes/scene_2.xml");
 	loader.xmlParseFile("data/scenes/scene_3.xml");
 	loader.xmlParseFile("data/scenes/scene_4.xml");
-	XDEBUG("First load ended");
+	XDEBUG("First load ended");*/
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
@@ -1075,7 +1075,12 @@ void CApp::render() {
 		}		
 			
 		bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
-		drawTexture2D(xres / 2.f - 32, yres / 2.f - 32, 64, 64, texture_manager.getByName(can_throw ? "crosshair_can" : "crosshair_cant"));
+		if (can_throw) {
+			drawTexture2D(xres / 2.f - 24, yres / 2.f - 24, 48, 48, texture_manager.getByName("crosshair_can"));
+		}
+		else {
+			drawTexture2D(xres / 2.f - 16, yres / 2.f - 16, 32, 32, texture_manager.getByName("crosshair_cant"));
+		}
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);
 		activateBlendConfig(BLEND_CFG_DEFAULT);
@@ -1609,7 +1614,8 @@ void CApp::loadScene(std::string scene_name) {
 	h_player = entity_manager.getByName("Player");
 
 	//texture_manager.getByName("room_env_test")->activate(8);
-	texture_manager.getByName("sunsetcube1024")->activate(8);
+	//texture_manager.getByName("sunsetcube1024")->activate(8);
+	texture_manager.getByName("storm")->activate(8);
 
 	/*sharpen.destroy();
 	ssao.destroy();
