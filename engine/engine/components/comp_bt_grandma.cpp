@@ -58,7 +58,7 @@ void TCompBtGrandma::init(){
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	TCompRigidBody* rigidBody = getSibling<TCompRigidBody>(this);
 
-	physx::PxReal threshold = 35000.f;
+	physx::PxReal threshold = 10000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
 	TCompTransform* pos = assertRequiredComponent<TCompTransform>(this);

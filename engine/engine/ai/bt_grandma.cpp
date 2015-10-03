@@ -21,7 +21,7 @@ const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
 const float distance_change_way_point = 0.38f;
 const float force_large_impact = 60000.f;
-const float force_medium_impact = 40000.f;
+const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
@@ -493,10 +493,11 @@ int bt_grandma::actionCutRope()
 		XMVECTOR dir = XMVector3Normalize(n_transform->position - m_transform->position);
 		mov_direction = PxVec3(0, 0, 0);
 		look_direction = Physics.XMVECTORToPxVec3(dir);
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+
+		stopMovement();
 
 		// Exe the logic of cut the rope
-		if ((state_time >= duration_cut * 0.7f) && (!cut)){
+		if ((state_time >= getAnimationDuration(9) * 0.7f) && (!cut)){
 			CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
 			if (target_rope.isValid()){
 				CRope_manager::get().removeString(target_rope);
@@ -506,7 +507,7 @@ int bt_grandma::actionCutRope()
 		}
 
 		// Finish the animation
-		if (state_time >= duration_cut) {
+		if (state_time >= getAnimationDuration(9)) {
 			if (!take_animation_done){
 				stopAllAnimations();
 				resetTimeAnimation();
@@ -515,7 +516,7 @@ int bt_grandma::actionCutRope()
 			}
 
 			// Exe the logic of taking a needle
-			if ((state_time >= ((duration_cut + duration_get_needle)*0.6f))){ //&& !animation_done){			
+			if ((state_time >= ((getAnimationDuration(9) + getAnimationDuration(8))*0.6f))){ //&& !animation_done){			
 				//CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
 				//if (target_needle.isValid()){
 					((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
@@ -527,7 +528,7 @@ int bt_grandma::actionCutRope()
 			}
 
 			// When the animation finish, leave state and clean bools
-			if (state_time >= duration_cut + duration_get_needle) {
+			if (state_time >= getAnimationDuration(9) + getAnimationDuration(8)) {
 				needle_to_take = false;
 				needle_is_valid = false;
 				cut = false;
@@ -555,9 +556,10 @@ int bt_grandma::actionTakeNeedle()
 		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 		TCompTransform* m_transform = own_transform;
 		XMVECTOR dir = XMVector3Normalize(n_transform->position - m_transform->position);
-		mov_direction = PxVec3(0, 0, 0);
+		
 		look_direction = Physics.XMVECTORToPxVec3(dir);
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+
+		stopMovement();
 
 		if (state_time >= getAnimationDuration(8)) {
 
