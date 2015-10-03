@@ -25,6 +25,8 @@
   
   <!-- Ambient -->
   
+  <event id="CURRENT_ROOM" path="event:/TestRoom" />
+  
   <event id="BUZZING" path="" />
   
   

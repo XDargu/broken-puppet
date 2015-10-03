@@ -42,13 +42,12 @@ void CCoreModel::onStartElement(const std::string &elem, MKeyValue &atts) {
     bool is_ok = convertCMF(mesh_id, smesh.c_str());
     assert(is_ok);
 
-    CMesh *my_mesh = new CMesh;
-    CFileDataProvider fdp(smesh.c_str());
-    is_ok = my_mesh->load(fdp);
-    assert(is_ok);
-    mesh = my_mesh;
-
-	mesh_manager.registerNew(name.c_str(), my_mesh);
+	CMesh* my_mesh = new CMesh;
+	CFileDataProvider fdp(smesh.c_str());
+	is_ok = my_mesh->load(fdp);
+	assert(is_ok);
+	mesh = my_mesh;
+	mesh_manager.registerNew(name.c_str(), my_mesh);	
 
   }
   else if (elem == "anim") {

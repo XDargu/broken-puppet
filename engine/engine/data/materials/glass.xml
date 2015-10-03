@@ -1,5 +1,5 @@
 <std_material name="distorsion"
-diffuse="deferred_output"
+diffuse="rt_albedo"
 emissive="dither_noise"
 tech="glass"
 solid="0"

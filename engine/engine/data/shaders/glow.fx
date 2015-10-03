@@ -64,7 +64,7 @@ float4 PSBlur(VS_TEXTURED_OUTPUT input) : SV_Target
 float4 PSGlowLights(VS_TEXTURED_OUTPUT input) : SV_Target
 {
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV);
-	float luminance = txAccLight.SampleLevel(samClampLinear, input.UV, 3);
+	float luminance = txAccLight.SampleLevel(samClampLinear, input.UV, 3).x;
 	return color * (luminance - 1);
 	if (luminance > 3) {
 		return color;

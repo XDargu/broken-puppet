@@ -54,6 +54,8 @@ CSoundManager::CSoundManager()
 	ERRCHECK(lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_5POINT1, 0));
 	
 	ERRCHECK(system->initialize(32, FMOD_STUDIO_INIT_NORMAL | FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, extraDriverData));
+	
+	ERRCHECK(FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_WARNING, FMOD_DEBUG_MODE_TTY, 0, "fmod_log.txt"));
 
 	// Load sound bnaks
 	masterBank = NULL;
@@ -66,12 +68,14 @@ CSoundManager::CSoundManager()
 
 	// Underwater mixer effect
 	createMixerEvent("UNDERWATER", MixerInstanceType::UNDERWATER);
+	createMixerEvent("CURRENT_ROOM", MixerInstanceType::ROOM);
 }
 
 void CSoundManager::init(){
 	HFXZones.clear();
 	player = (CEntity*)CEntityManager::get().getByName("Player");
 	p_transform = (TCompTransform*)player->get<TCompTransform>();
+	scene_id = 0;
 }
 
 void CSoundManager::createMixerEvent(std::string sound_id, MixerInstanceType type, CHandle hfx_zone) {
@@ -274,6 +278,12 @@ void CSoundManager::update(float elapsed) {
 
 		CSoundManager::SoundParameter param = { "Deepness", deepness };
 		setMixerEventParams("UNDERWATER", param, 1);
+
+		int player_room = CLogicManager::get().getPointZoneID(camera_position);
+		CSoundManager::SoundParameter param2 = { "Scene", scene_id };
+		setMixerEventParams("CURRENT_ROOM", param2, 1);
+		CSoundManager::SoundParameter param3 = { "Room", player_room };
+		setMixerEventParams("CURRENT_ROOM", param3, 1);
 		
 		// Reverb zones
 		TCompHfxZone* hfx_zone = listenerInsideHFXZone(cam->getPosition());
@@ -363,7 +373,7 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 	//float f = force * 8;
 	/*loadScene("data/scenes/scene_1_noenemy.xml");*/
 
-	XDEBUG("force sound+ %f", force);
+	//XDEBUG("force sound+ %f", force);
 
 	CSoundManager::SoundParameter params[] = {
 		{ "force", force },

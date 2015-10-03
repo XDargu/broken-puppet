@@ -18,7 +18,7 @@ clearCoroutines()
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-function onSceneLoad_scene_boss()
+function onSceneLoad_my_file()
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
@@ -34,10 +34,43 @@ function onSceneLoad_scene_boss()
 
 	end
 
+	function onTriggerFirstEnter_scb_trigger_bandas(who)
+		logicManager:setBands(true)
+	end
+
+	function onTimerEnd_boss_init_animation()
+		logicManager:setCanMove(true)
+		logicManager:setCanThrow(true)
+		logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
+		logicManager:setBands(false)
+		logicManager:releaseCameraLock()
+	end
+
+	function onTriggerFirstEnter_scb_trigger_block_control(who)
+		logicManager:setCanMove(false)
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+		local boss = logicManager:getBot("Boss")
+		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
+		logicManager:setTimer("boss_init_animation", 21)
+	end
+
+	onSceneLoad_scene_4()
+	onSceneLoad_scene_3()
+	onSceneLoad_scene_2()
+	onSceneLoad_scene_1()
 end
 
 
 function onSceneLoad_scene_1()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
 
@@ -190,6 +223,10 @@ function onSceneLoad_scene_1()
 end
 
 function onSceneLoad_scene_2()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
 
 	-- Apagar cable
@@ -282,6 +319,10 @@ function onSceneLoad_scene_2()
 end
 
 function onSceneLoad_scene_3()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 3 **********
 
 	-- Subir el nivel del agua
@@ -361,7 +402,12 @@ function onSceneLoad_scene_3()
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 3 ********
 end
 
+
 function onSceneLoad_scene_4()
+
+	player = logicManager:getBot("Player");
+	initPos = player:getPos();
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 4 **********
 
 
@@ -548,6 +594,70 @@ function onSceneLoad_scene_4()
 	function onTriggerFirstEnter_sc4_trigger_narr_2(who)
 		
 	end
+
+	-- Machacaabuelas del crematorio
+	-- Obtener los joints
+	sc4_prismatic_crasher_1 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_1");
+	sc4_prismatic_crasher_2 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_2");
+	sc4_prismatic_crasher_3 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_3");
+	sc4_prismatic_crasher_4 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_4");
+
+	-- Activar sus límites
+	sc4_prismatic_crasher_1:setLinearLimit(0.1, 10000000, 10000000);
+	sc4_prismatic_crasher_2:setLinearLimit(0.1, 10000000, 10000000);
+	sc4_prismatic_crasher_3:setLinearLimit(0.1, 10000000, 10000000);
+	sc4_prismatic_crasher_4:setLinearLimit(0.1, 10000000, 10000000);
+
+	-- Activar sus temporizadores
+	logicManager:setTimer("scene_4_crasher_1_down", 1)
+	logicManager:setTimer("scene_4_crasher_2_down", 2)
+	logicManager:setTimer("scene_4_crasher_3_down", 3)
+	logicManager:setTimer("scene_4_crasher_4_down", 4)
+
+	-- Crasher 1
+	function onTimerEnd_scene_4_crasher_1_up()
+		sc4_prismatic_crasher_1:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_1_down", 4)
+	end
+
+	function onTimerEnd_scene_4_crasher_1_down()
+		sc4_prismatic_crasher_1:setLinearLimit(1000, 0, 0);
+		logicManager:setTimer("scene_4_crasher_1_up", 2)
+	end
+
+	-- Crasher 2 (roto)
+	function onTimerEnd_scene_4_crasher_2_up()
+		sc4_prismatic_crasher_2:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_2_down", 3)
+	end
+
+	function onTimerEnd_scene_4_crasher_2_down()
+		sc4_prismatic_crasher_2:setLinearLimit(3, 0, 0);
+		logicManager:setTimer("scene_4_crasher_2_up", 2)
+	end
+
+	-- Crasher 3
+	function onTimerEnd_scene_4_crasher_3_up()
+		sc4_prismatic_crasher_3:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_3_down", 3.4)
+	end
+
+	function onTimerEnd_scene_4_crasher_3_down()
+		sc4_prismatic_crasher_3:setLinearLimit(1000, 0, 0);
+		logicManager:setTimer("scene_4_crasher_3_up", 1.6)
+	end
+
+	-- Crasher 4
+	function onTimerEnd_scene_4_crasher_4_up()
+		sc4_prismatic_crasher_4:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_4_down", 2.8)
+	end
+
+	function onTimerEnd_scene_4_crasher_4_down()
+		sc4_prismatic_crasher_4:setLinearLimit(1000, 0, 0);
+		logicManager:setTimer("scene_4_crasher_4_up", 2)
+	end
+
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 4 ********
 end

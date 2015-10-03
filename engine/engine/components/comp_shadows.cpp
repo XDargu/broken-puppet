@@ -46,6 +46,7 @@ void TCompShadows::generate()  {
 	activateRSConfig(RSCFG_SHADOWS);
 
 	// Start rendering in the rt of the depth buffer
+	setSlotNull(6);
 	rt->activate();
 	rt->clearDepthBuffer();
 

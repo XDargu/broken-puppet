@@ -102,7 +102,7 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 		//float2 coords = newScreen.xy / 2.0 + 0.5;
 
 		//return float4(coords * float2(cameraHalfXRes, cameraHalfYRes) * 0.5, 0, 0);
-		float n_depth = txDepth.Sample(samClampLinear, coords);
+		float n_depth = txDepth.Sample(samClampLinear, coords).x;
 		//return float4(n_depth, 0, 0, 1);
 		newPos = getWorldCoords(coords * float2(cameraHalfXRes * 2, cameraHalfYRes * 2), n_depth);
 		//return txDiffuse.Sample(samClampLinear, coords);
@@ -125,6 +125,7 @@ float4 ssrrColor(float2 iPosition, matrix viewproj, float4 origColor, float3 wor
 		fact = 1.0; // Falling outside of screen
 	else if (cameraToWorldDist > currentWorldDist)
 		fact = 1.0;
+
 	color = origColor*fact + color*(1 - fact);
 	
 	/*if (cameraToWorldDist > currentWorldDist)
