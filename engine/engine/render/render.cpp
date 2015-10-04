@@ -149,8 +149,7 @@ void CRender::destroyDevice() {
 	::render.device->QueryInterface(__uuidof(ID3D11Debug), (void**)(&d3dDebug));
 	d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY | D3D11_RLDO_DETAIL);
 #endif
-	device->Release();
-	//SAFE_RELEASE(device);
+	SAFE_RELEASE(device);
 }
 
 //--------------------------------------------------------------------------------------

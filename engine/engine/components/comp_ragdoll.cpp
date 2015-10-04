@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_ragdoll.h"
 #include "comp_skeleton.h"
+#include "comp_aabb.h"
 #include "comp_name.h"
 #include "skeletons/skeleton_manager.h"
 #include "io\iostatus.h"
@@ -14,6 +15,7 @@ TCompRagdoll::~TCompRagdoll() {
 
 void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	skeleton = assertRequiredComponent<TCompSkeleton>(this);
+	h_aabb = assertRequiredComponent<TCompAABB>(this);
 
 	std::string ragdoll_name = atts["name"];
 
@@ -57,6 +59,27 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			targetVel.normalize();
 			it.second->setLinearVelocity(targetVel);*/
 		}
+	}
+
+	else {
+		TCompAABB* aabb = h_aabb;
+		// AABB Min max
+		XMFLOAT3 aabb_min = XMFLOAT3(1000000, 1000000, 1000000);
+		XMFLOAT3 aabb_max = XMFLOAT3(-1000000, -1000000, -1000000);
+		PxVec3 pos;
+		for (auto& it : ragdoll->bone_map) {
+			
+			pos = it.second->getGlobalPose().p;
+			aabb_min.x = min(aabb_min.x, pos.x - 10);
+			aabb_min.y = min(aabb_min.y, pos.y - 10);
+			aabb_min.z = min(aabb_min.z, pos.z - 10);
+
+			aabb_max.x = max(aabb_max.x, pos.x + 10);
+			aabb_max.y = max(aabb_max.y, pos.y + 10);
+			aabb_max.z = max(aabb_max.z, pos.z + 10);
+		}				
+		aabb->min = XMLoadFloat3(&aabb_min);
+		aabb->min = XMLoadFloat3(&aabb_max);
 	}
 }
 
@@ -344,7 +367,7 @@ void TCompRagdoll::breakJoints() {
 	float torque;
 	for (PxD6Joint* joint : ragdoll->articulations) {
 		joint->getBreakForce(force, torque);
-		if (force == 10000) {
+		if (force == 100000) {
 			joint->setBreakForce(0, 0);
 			joint->setConstraintFlag(PxConstraintFlag::eBROKEN, true);
 		}

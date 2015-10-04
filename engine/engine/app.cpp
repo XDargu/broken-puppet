@@ -1434,7 +1434,7 @@ void CApp::destroy() {
 		m_shaderResourceView->Release();
 	}
 	::render.destroyDevice();
-
+	
 	// Destro navmesh
 	CNav_mesh_manager().get().~CNav_mesh_manager();
 }
@@ -1687,8 +1687,8 @@ void CApp::loadScene(std::string scene_name) {
 	}
 	else if (scene_name == "data/scenes/scene_final_boss.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(65.f);
-		ctes_global.get()->use_lightmaps = 5;
+		cam->changeZFar(150.0f);
+		ctes_global.get()->use_lightmaps = 0;
 	}
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());

@@ -37,7 +37,7 @@ void bt_soldier::create(string s)
 	name = s;
 	createRoot("Root", PRIORITY, NULL, NULL);
 	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_soldier::conditionis_ragdoll, NULL);
-	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
+	addChild("Ragdoll", "ActionRagdoll1", ACTION, INTERNAL, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, INTERNAL, (btcondition)&bt_soldier::conditiontied_event, NULL);
 	addChild("Awake", "GroundedTied", PRIORITY, NULL, NULL);
@@ -149,54 +149,57 @@ int bt_soldier::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
-	stopAllAnimations();
+	if (on_enter) {
+		stopAllAnimations();
 
-	if (m_ragdoll) {
 
-		if (!m_ragdoll->isRagdollActive()) {
-			m_ragdoll->setActive(true);
+		if (m_ragdoll) {
 
-			TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
-			if (m_life->life <= 0) {
-				TCompRagdoll* m_ragdoll = enemy_ragdoll;
-				m_ragdoll->breakJoints();
-				TCompTransform* m_transform = own_transform;
-				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
-				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
+			if (!m_ragdoll->isRagdollActive()) {
+				m_ragdoll->setActive(true);
 
-				//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
-				if (this->getRol() == role::ATTACKER)
-					aimanager::get().RemoveEnemyAttacker(this);
-				else
-					aimanager::get().RemoveEnemyTaunt(this);
+				TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
+				if (m_life->life <= 0) {
+					TCompRagdoll* m_ragdoll = enemy_ragdoll;
+					m_ragdoll->breakJoints();
+					TCompTransform* m_transform = own_transform;
+					TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
+					//XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
+					//XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
-				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+					//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+					if (this->getRol() == role::ATTACKER)
+						aimanager::get().RemoveEnemyAttacker(this);
+					else
+						aimanager::get().RemoveEnemyTaunt(this);
 
-				CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
-				ragdoll_aabb->setIdentityMinMax(min, max);
+					//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+					//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 
-				aimanager::get().removeBot(this->getId());
+					CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
+					//ragdoll_aabb->setIdentityMinMax(min, max);
 
-				CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
+					aimanager::get().removeBot(this->getId());
 
-				TCompTransform* p_transform = player_transform;
-				if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
-					CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
-					TCompTransform* c_transform = camera->get<TCompTransform>();
-					TCompCamera* c_camera = camera->get<TCompCamera>();
-					if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-						CApp::get().slowMotion(1.5f);
+					CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
+
+					TCompTransform* p_transform = player_transform;
+					if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
+						CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
+						TCompTransform* c_transform = camera->get<TCompTransform>();
+						TCompCamera* c_camera = camera->get<TCompCamera>();
+						if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
+							CApp::get().slowMotion(1.5f);
+						}
 					}
+
 				}
 
 			}
-
 		}
 	}
 
-	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
+	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(17);
 
 	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
 	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
@@ -231,7 +234,7 @@ int bt_soldier::actionWakeUp()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
-	if (state_time > getAnimationDuration(20)) {
+	if (state_time > 3.9f) {
 		playAnimationIfNotPlaying(0);
 		return LEAVE;
 	}
@@ -524,29 +527,31 @@ int bt_soldier::actionSelectRole()
 
 	time_searching_player = 0;
 	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
-	float distance_x = abs(XMVectorGetX(path[path.size() - 1]) - XMVectorGetX(path[0]));
-	float distance_y = abs(XMVectorGetY(path[path.size() - 1]) - XMVectorGetY(path[0]));
-	float distance_z = abs(XMVectorGetZ(path[path.size() - 1]) - XMVectorGetZ(path[0]));
-	if ((distance_x <= 7.5f) && (distance_z <= 7.5f) && (distance_y <= 1.5f)){
-		if ((V3DISTANCE(m_transform->position, p_transform->position)) < 7.5f){
-			aimanager::get().setEnemyRol(this);
-			if (rol == role::ATTACKER){
-				if (slot == attacker_slots::NORTH){
-					slot_position = front * max_distance_to_attack;
+	if (path.size() > 0) {
+		float distance_x = abs(XMVectorGetX(path[path.size() - 1]) - XMVectorGetX(path[0]));
+		float distance_y = abs(XMVectorGetY(path[path.size() - 1]) - XMVectorGetY(path[0]));
+		float distance_z = abs(XMVectorGetZ(path[path.size() - 1]) - XMVectorGetZ(path[0]));
+		if ((distance_x <= 7.5f) && (distance_z <= 7.5f) && (distance_y <= 1.5f)){
+			if ((V3DISTANCE(m_transform->position, p_transform->position)) < 7.5f){
+				aimanager::get().setEnemyRol(this);
+				if (rol == role::ATTACKER){
+					if (slot == attacker_slots::NORTH){
+						slot_position = front * max_distance_to_attack;
+					}
+					else if (slot == attacker_slots::EAST){
+						slot_position = left * max_distance_to_attack;
+					}
+					else if (slot == attacker_slots::WEST){
+						slot_position = right * max_distance_to_attack;
+					}
 				}
-				else if (slot == attacker_slots::EAST){
-					slot_position = left * max_distance_to_attack;
-				}
-				else if (slot == attacker_slots::WEST){
-					slot_position = right * max_distance_to_attack;
+				else if (rol == role::TAUNTER){
+					slot_position = -(p_transform->position - m_transform->position);
+					slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
 				}
 			}
-			else if (rol == role::TAUNTER){
-				slot_position = -(p_transform->position - m_transform->position);
-				slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
-			}
+			return LEAVE;
 		}
-		return LEAVE;
 	}
 	return LEAVE;
 }
@@ -1173,13 +1178,11 @@ void bt_soldier::hurtSensor(float damage){
 	if (damage >= force_large_impact){
 		TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 		life->life = 0;
-		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
-		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
 	}
