@@ -114,6 +114,8 @@ public:
 	int actionNormalAttack();
 	//Play a Idle war animation
 	int actionIdleWar();
+	//Play an Idle war animation as delay after the initial attack
+	int actionIdleWarDelay();
 	//Play a taunter routine
 	int actionTaunter();
 	//Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
