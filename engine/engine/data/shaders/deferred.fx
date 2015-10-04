@@ -672,12 +672,13 @@ float4 PSResolve(
   ) :SV_Target0{
 
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
-	float4 albedo = txDiffuse.Load(ss_load_coords);
+	float4 albedo = txDiffuse.Load(ss_load_coords);	
 	float4 specular_color = txSpecular.Load(ss_load_coords);
 	float4 gloss = txGloss.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
 	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
+	//albedo = albedo * 0.2 + diffuse * 0.8;
 
 	int mip_level = 7;
 	float2 uv = iPosition.xy / float2(cameraHalfXRes * 2, cameraHalfYRes * 2);

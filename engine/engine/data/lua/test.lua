@@ -36,6 +36,9 @@ function onSceneLoad_my_file()
 
 	function onTriggerFirstEnter_scb_trigger_bandas(who)
 		logicManager:setBands(true)
+
+		-- Bajar luz ambiental
+		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
 	end
 
 	function onTimerEnd_boss_init_animation()
@@ -73,6 +76,13 @@ function onSceneLoad_scene_1()
 	initPos = player:getPos();
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
+
+	-- Iluminación inicial
+	logicManager:changeAmbientLight(0.6, 0.6, 0.6, 1);
+
+	function onTriggerEnter_sc1_trigger_change_light(who)
+		logicManager:changeAmbientLight(1, 1, 1, 0.75);
+	end
 
 	-- Machacaabuelas
 	local crasher = logicManager:getPrismaticJoint("scene1_grandmacrasher_joint1");
@@ -241,6 +251,7 @@ function onSceneLoad_scene_2()
 	local sc2_hinge_caida5 = logicManager:getHingeJoint("sc2_hinge_caida5");
 	local sc2_hinge_caida6 = logicManager:getHingeJoint("sc2_hinge_caida6");
 	local sc2_hinge_caida7 = logicManager:getHingeJoint("sc2_hinge_caida7");
+	local sc2_hinge_caida8 = logicManager:getHingeJoint("sc2_hinge_caida8");
 	
 	-- Limitar cadenas al inicio
 	sc2_hinge_caida1:setLimit(0.1)
@@ -250,6 +261,7 @@ function onSceneLoad_scene_2()
 	sc2_hinge_caida5:setLimit(0.1)
 	sc2_hinge_caida6:setLimit(0.1)
 	sc2_hinge_caida7:setLimit(0.1)
+	sc2_hinge_caida8:setLimit(0.1)
 
 	-- Caída
 	function onTriggerFirstEnter_trigger_caida(who)
@@ -261,6 +273,7 @@ function onSceneLoad_scene_2()
 		sc2_hinge_caida5:setLimit(90)
 		sc2_hinge_caida6:setLimit(90)
 		sc2_hinge_caida7:setLimit(90)
+		sc2_hinge_caida8:setLimit(90)
 
 		-- Romper fixed joints
 		local sc2_fixed_1 = logicManager:getFixedJoint("sc2_fixed_caida1");
@@ -270,17 +283,18 @@ function onSceneLoad_scene_2()
 		sc2_fixed_2:breakJoint();
 
 		-- Quitar luces
-		logicManager:changeAmbientLight(0.2,0.2,0.2,0.95);
+		logicManager:changeAmbientLight(0.4,0.4,0.4,0.95);
 	end
 
 	-- Plataforma elevadora
 	local sc2_plataforma_elevadora = logicManager:getObject("sc2_plataforma_elevadora")
 	local sc2_plataforma_elevadora_orig = sc2_plataforma_elevadora:getPos()
+	sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
 
 	function onSwitchPressed_sc2_int_pelev(who)
 
 		print(tostring(who) .. " Interruptor subir plataforma");
-		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
+		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
 		sc2_cable:setEmissive(true)
 
 	end
@@ -288,7 +302,7 @@ function onSceneLoad_scene_2()
 	function onSwitchReleased_sc2_int_pelev(who)
 
 		print(tostring(who) .. " Interruptor bajar plataforma");
-		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
+		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
 		sc2_cable:setEmissive(false)
 	end
 	
