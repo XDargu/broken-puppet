@@ -172,6 +172,7 @@ void bt_grandma::create(string s)
 int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
+	TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
 
 	if (on_enter) {
 		stopAllAnimations();
@@ -179,7 +180,6 @@ int bt_grandma::actionRagdoll()
 		if (!m_ragdoll->isRagdollActive()) {
 			m_ragdoll->setActive(true);
 
-			TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
 			if (m_life->life <= 0) {
 				TCompRagdoll* m_ragdoll = enemy_ragdoll;
 				m_ragdoll->breakJoints();
@@ -230,6 +230,10 @@ int bt_grandma::actionRagdoll()
 
 	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
 	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+
+	if (m_life->life <= 0) {
+		pos_final = XMVectorSet(10000, 10000, 10000, 0);
+	}
 
 	((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
 		physx::PxTransform(
