@@ -22,7 +22,10 @@ private:
 	PxFixedJoint* R_hitch_joint;
 	CHandle R_hitch_light;
 	
-	void openLight();
+
+	XMVECTOR original_ligh_color;
+	float openedTime;
+	bool openLight(float elapsed);
 	void closeLight();
 
 	CHandle L_hitch;
@@ -51,6 +54,10 @@ private:
 
 	bool is_death;
 	bool death_time;
+	bool calculate_break_point;
+	XMVECTOR break_point;
+
+	void brokeHeart();
 
 public:
 
