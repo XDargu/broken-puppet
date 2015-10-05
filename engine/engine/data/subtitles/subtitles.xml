@@ -1,10 +1,4 @@
 <subtitles>
-  <subtitle guid="SUST001" next="SUST002" size="24" color="0xffffff00" time="5" sound="SUST001" text="Do you really think you have the right to come here and steal my show?" />
-  <subtitle guid="SUST002" next="SUST003" size="24" color="0xffffff00" time="3" sound="SUST002" text="Have you even seen yourself?!" />
-  <subtitle guid="SUST003" next="SUST004" size="24" color="0xffffff00" time="4" sound="SUST003" text="Do you even think that somebody would pay a penny to watch a broken puppet?" />
-  <subtitle guid="SUST004" next="SUST005" size="24" color="0xffffff00" time="1" sound="SUST004" text="" />
-  <subtitle guid="SUST005" size="24" color="0xffffff00" time="5" sound="SUST005" text="You should not blame me for your disgrace. You’ve only got time to blame, sweetie." />
-
   <subtitle guid="SCENE101" next="SCENE102" size="24" color="0xffffffff" time="9" sound="event:/VO/EN/SCENE101" text="Había llegado el momento de escapar de aquel lugar. Comprobó si podía moverse pulsando las teclas de dirección" />
   <subtitle guid="SCENE102" next="" size="24" color="0xffffffff" time="11" sound="event:/VO/EN/SCENE102" text="Decidió probar sus nuevas herramientas usando click izquierdo para lanzar agujas y click derecho para tensar los hilos" />
   <subtitle guid="SCENE103" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE103" text="La desolación del desván la sobrecogió. Debía seguir avanzando" />

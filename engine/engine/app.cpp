@@ -362,16 +362,16 @@ void initManagers() {
 }
 
 void CApp::preLoad(){
-	XDEBUG("First load");
+	//XDEBUG("First load");
 	preLoadMutex.lock();
-	CImporterResourceLoader loader;
+	/*CImporterResourceLoader loader;
 	loader.xmlParseFile("data/scenes/scene_final_boss.xml");
 	loader.xmlParseFile("data/scenes/scene_4.xml");
 	loader.xmlParseFile("data/scenes/scene_3.xml");
 	loader.xmlParseFile("data/scenes/scene_2.xml");
-	loader.xmlParseFile("data/scenes/scene_1.xml");	
+	loader.xmlParseFile("data/scenes/scene_1.xml");	*/
 	preLoadMutex.unlock();
-	XDEBUG("First load ended");
+	//XDEBUG("First load ended");
 }
 
 bool CApp::create() {

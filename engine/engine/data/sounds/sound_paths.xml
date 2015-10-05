@@ -26,10 +26,14 @@
   <!-- Ambient -->
   
   <event id="CURRENT_ROOM" path="event:/TestRoom" />
+
+  <event id="BUZZING" path="event:/buzz" /> Zumbido eléctrico
+  <event id="BOILER" path="event:/boiler" /> Calderas (vibración + vapor)
+  <event id="BIGFAN" path="event:/big fan" /> Ventiladores gigantes
+  <event id="WATERPIPES" path="event:/water_pipes" /> Agua por tuberías
+  <event id="SPARKS1" path="event:/sparks1" /> Agua por tuberías
   
-  <event id="BUZZING" path="" />
-  
-  
+
   <!-- Mixer -->
   <event id="UNDERWATER" path="event:/Mixer/Underwater" />
 

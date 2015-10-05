@@ -348,6 +348,7 @@ void CRenderManager::renderShadowsCasters(const CCamera* camera, bool characters
 				technique_gen_shadows_skel->activate();
 
 				const TCompSkeleton* skel = k.owner;
+				
 				XASSERT(skel, "Invalid skeleton");
 				skel->uploadBonesToGPU();
 			}
