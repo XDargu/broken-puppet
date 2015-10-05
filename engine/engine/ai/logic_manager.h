@@ -59,6 +59,10 @@ private:
 	CHandle lock_on_target;
 	XMVECTOR lock_on_position;
 
+	// Shakecam
+	bool shake_cam;
+	float shake_amount;
+
 	std::string scene_to_load;
 
 	// Subtitles
@@ -190,6 +194,8 @@ public:
 	void lockOnPosition(CVector position);
 	void releaseCameraLock();
 	void playAnimation(std::string name, CMCVObject target_object);
+	void shakeCamera(float amount);
+	void stopShakeCamera();
 
 	// MISC
 	void print(std::string text);

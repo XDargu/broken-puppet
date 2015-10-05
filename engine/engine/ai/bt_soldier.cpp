@@ -1407,7 +1407,7 @@ void bt_soldier::stopAnimation(int id) {
 
 float bt_soldier::getAnimationDuration(int id) {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
-
+	float dur = m_skeleton->model->getMixer()->getAnimationVector()[id]->getCoreAnimation()->getDuration();
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
 }

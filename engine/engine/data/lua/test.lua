@@ -36,6 +36,7 @@ function onSceneLoad_my_file()
 
 	function onTriggerFirstEnter_scb_trigger_bandas(who)
 		logicManager:setBands(true)
+		logicManager:setMediumShotActive(true)
 
 		-- Bajar luz ambiental
 		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
@@ -49,9 +50,14 @@ function onSceneLoad_my_file()
 		logicManager:setCanTense(true)
 		logicManager:setBands(false)
 		logicManager:releaseCameraLock()
+		logicManager:resetPlayerCamera()
+
 	end
 
 	function onTriggerFirstEnter_scb_trigger_block_control(who)
+		local boss = logicManager:getObject("Boss")	
+		boss:riseUpBoss()
+
 		logicManager:setCanMove(false)
 		logicManager:setCanThrow(false)
 		logicManager:setCanPull(false)
@@ -61,6 +67,63 @@ function onSceneLoad_my_file()
 		local boss = logicManager:getBot("Boss")
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
 		logicManager:setTimer("boss_init_animation", 21)
+		
+		startCoroutine("bossShake", bossShake)
+	end
+
+	function bossShake()
+		-- Tiempos
+		local first_arm = 2.72
+		local second_arm = 6.79
+		local get_up = 9.8
+		local first_arm_2 = 14.1
+		local second_arm_2 = 14.8
+		local scream = 20.44
+
+		local elapsed = 0
+
+		logicManager:shakeCamera(0.03)
+		waitTime(first_arm)
+		elapsed = first_arm
+
+		logicManager:shakeCamera(0.1) -- Primer brazo
+		waitTime(0.5)
+		elapsed = elapsed + 0.5
+		logicManager:shakeCamera(0.03)
+		waitTime(second_arm - elapsed)
+		elapsed = second_arm
+
+		logicManager:shakeCamera(0.1) -- Segundo brazo
+		waitTime(0.5)
+		elapsed = elapsed + 0.5
+		logicManager:shakeCamera(0.03)
+		waitTime(get_up - elapsed)
+		elapsed = get_up
+
+		logicManager:shakeCamera(0.12) -- Levantarse
+		waitTime(0.5)
+		elapsed = elapsed + 0.5
+		logicManager:stopShakeCamera()
+		waitTime(first_arm_2 - elapsed)
+		elapsed = first_arm_2
+
+		logicManager:shakeCamera(0.03) -- Pequeño movimiento del primer brazo
+		waitTime(0.5)
+		elapsed = elapsed + 0.5
+		logicManager:stopShakeCamera()
+		waitTime(second_arm_2 - elapsed)
+		elapsed = second_arm_2
+
+		logicManager:shakeCamera(0.03) -- Pequeño movimiento del segundo brazo
+		waitTime(0.5)
+		elapsed = elapsed + 0.5
+		logicManager:stopShakeCamera()
+		waitTime(scream - elapsed)
+		elapsed = scream
+
+		logicManager:shakeCamera(0.15) -- Grito
+		waitTime(1)
+		logicManager:stopShakeCamera()
 	end
 
 	onSceneLoad_scene_4()

@@ -139,3 +139,20 @@ void TCompCameraPivotController::pointAt(XMVECTOR target) {
 	// Set the new rotation
 	transform->rotation = XMQuaternionRotationRollPitchYaw(camera_pivot_pitch, player_pivot_yaw, 0);
 }
+
+void TCompCameraPivotController::aimAt(XMVECTOR target, float t) {
+	TCompTransform* transform = (TCompTransform*)m_transform;
+	TCompTransform* player_pivot_trans = (TCompTransform*)player_pivot_transform;
+
+	// Get player pivot Y rotation
+	float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());
+	XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw);
+
+	transform->aimAt(target, player_pivot_trans->getUp(), t);
+
+	// Get only the Y axis rotation from yaw
+	float camera_pivot_pitch = getPitchFromVector(transform->getFront());
+
+	// Set the new rotation
+	transform->rotation = XMQuaternionRotationRollPitchYaw(camera_pivot_pitch, player_pivot_yaw, 0);
+}

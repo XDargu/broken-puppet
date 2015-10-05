@@ -3,6 +3,7 @@
 #include "components\comp_transform.h"
 #include "components\comp_render.h"
 #include "components\comp_rigid_body.h"
+#include "components\comp_ai_boss.h"
 #include "rigid_animation.h"
 #include "logic_manager.h"
 
@@ -72,5 +73,14 @@ void CMCVObject::applyForce(CVector force) {
 		if (!rigid->isKinematic()) {
 			rigid->rigidBody->addForce(PxVec3(force.x, force.y, force.z), PxForceMode::eVELOCITY_CHANGE);
 		}
+	}
+}
+
+void CMCVObject::riseUpBoss() {
+	if (!entity.isValid())
+		return;
+	TCompAiBoss* boss = ((CEntity*)entity)->get<TCompAiBoss>();
+	if (boss) {
+		boss->initBoss();
 	}
 }

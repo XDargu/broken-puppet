@@ -58,3 +58,16 @@ void TCompPlayerPivotController::pointAt(XMVECTOR target) {
 	// Set the new rotation
 	transform->rotation = player_pivot_rot;
 }
+
+void TCompPlayerPivotController::aimAt(XMVECTOR target, float t) {
+	TCompTransform* transform = (TCompTransform*)m_transform;
+
+	transform->aimAt(target, transform->getUp(), t);
+
+	// Get only the Y axis rotation from yaw
+	float player_pivot_yaw = getYawFromVector(transform->getFront());
+	XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), player_pivot_yaw);
+
+	// Set the new rotation
+	transform->rotation = player_pivot_rot;
+}
