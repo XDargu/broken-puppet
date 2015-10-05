@@ -19,7 +19,7 @@ const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
-const float distance_change_way_point = 0.38f;
+const float distance_change_way_point = 0.42f;
 const float force_large_impact = 60000.f;
 const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
@@ -266,7 +266,7 @@ int bt_grandma::actionWakeUp()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
-	if (state_time > getAnimationDuration(17)) {
+	if (state_time > 1.8f) {
 		return LEAVE;
 	}
 	else
@@ -638,7 +638,7 @@ int bt_grandma::actionWander()
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = walk_speed;
-		((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+		((TCompCharacterController*)character_controller)->lerpRotation = 0.11f;
 		//m_char_controller->airSpeed = walk_speed * 0.8f;
 
 	}
@@ -1525,16 +1525,16 @@ int bt_grandma::conditioninitial_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	XMVECTOR attack_direction = (p_transform->position - m_transform->position);
-	attack_direction = XMVector3Normalize(attack_direction);
-	XMVECTOR front = XMVector3Normalize(m_transform->getFront());
-	XMVECTOR dir = XMVector3AngleBetweenVectors(attack_direction, front);
-	float rads = XMVectorGetX(dir);
-	float angle_deg = rad2deg(rads);
+	XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
+	attack_direction_path = XMVector3Normalize(attack_direction_path);
+	XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+	XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+	float rads_path = XMVectorGetX(dir_path);
+	float angle_deg_path = rad2deg(rads_path);
 
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if ((!initial_attack) && ((distance < 3.4f))){
-		if (angle_deg < 30.f)
+		if (angle_deg_path < 30.f)
 			return true;
 		else{
 			initial_attack = true;

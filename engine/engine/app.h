@@ -2,7 +2,8 @@
 #define INC_APP_H_
 
 #include "utils.h"
-
+#include <thread>
+#include <mutex>
 class CEntity;
 
 class CApp {
@@ -23,8 +24,10 @@ class CApp {
 	void renderDebugEntities();
 	void activateDebugMode(bool active);
 	float slow_motion_counter;
-public:
 
+	std::thread* bar;
+
+public:
 	std::string current_scene_name;
 	std::string first_scene;
 	// Timer and stats
@@ -63,6 +66,7 @@ public:
 
 	CApp();
 	void loadConfig();
+	void preLoad();
 	bool create();
 	void doFrame();
 	void destroy();
