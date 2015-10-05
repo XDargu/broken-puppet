@@ -32,6 +32,7 @@
   <event id="BIGFAN" path="event:/big fan" /> Ventiladores gigantes
   <event id="WATERPIPES" path="event:/water_pipes" /> Agua por tuberías
   <event id="SPARKS1" path="event:/sparks1" /> Agua por tuberías
+  <event id="RUNNINGWATER" path="event:/running_water" /> Agua que sale al destaponar
   
 
   <!-- Mixer -->

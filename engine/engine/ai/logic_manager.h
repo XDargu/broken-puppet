@@ -165,6 +165,9 @@ public:
 	// PARTICLES
 	void createParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
 
+	// OBJECTS
+	void createPrefab(std::string name, CVector position, CQuaterion rotation);
+
 	// STRING EVENTS
 	void stringThrown();
 	void stringsTensed();

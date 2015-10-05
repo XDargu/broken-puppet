@@ -13,6 +13,7 @@
 #include "components\comp_zone_aabb.h"
 #include "components\comp_hfx_zone.h"
 #include "components\comp_audio_source.h"
+#include "components\comp_particle_group.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -576,6 +577,7 @@ void CLogicManager::bootLUA() {
 		.set("setCanMove", &CLogicManager::setCanMove)
 		.set("shakeCamera", &CLogicManager::shakeCamera)
 		.set("stopShakeCamera", &CLogicManager::stopShakeCamera)
+		.set("createPrefab", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createPrefab)
 	;
 
 	// Register the bot class
@@ -1034,4 +1036,19 @@ void CLogicManager::shakeCamera(float amount) {
 
 void CLogicManager::stopShakeCamera() {
 	shake_cam = false;
+}
+
+void CLogicManager::createPrefab(std::string name, CVector position, CQuaterion rotation) {
+	CHandle entity = prefabs_manager.getInstanceByName(name.c_str());
+	if (entity.isValid()) {
+		XDEBUG("Created prefab: %s at x: %f, y: %f, z: %f", name, position.x, position.y, position.z);
+		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+		transform->init();
+		TCompAudioSource* audio = ((CEntity*)entity)->get<TCompAudioSource>();
+		audio->init();
+		TCompParticleGroup* particle = ((CEntity*)entity)->get<TCompParticleGroup>();
+		particle->init();
+	}
 }

@@ -1,0 +1,10 @@
+<prefab>
+  <entity>
+    <name name="ps_running_water" />
+    <transform position="0 0 0" rotation="0 0 0 1" scale="1.0 1.0 1.0"/>
+    <particleGroup name="ps_jet" />
+    <audioSource sound="RUNNINGWATER" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
+  </entity>
+</prefab>

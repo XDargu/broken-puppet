@@ -413,7 +413,7 @@ function onSceneLoad_scene_3()
 	
 		if (who == "tapa_agua_puzle") then
 			logicManager:changeWaterLevel(7.58, 0.25);
-			logicManager:createParticleGroup("ps_jet", Vector(16.23, 11.14, 69.9), Quaternion( 0.7071067811865476, 0, 0.7071067811865476, 0));
+			logicManager:createPrefab("running_water", Vector(-16.88, 11.135, 69.9094), Quaternion( 0.7071067811865476, 0, 0.7071067811865476, 0));
 		end
 	
 	end
