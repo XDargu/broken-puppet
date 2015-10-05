@@ -615,9 +615,12 @@ void FSMPlayerTorso::PullString(float elapsed) {
 				TCompDistanceJoint* joint2 = rope->joint_aux;
 				float oldDistance = sqrt(joint2->joint->getDistance());
 				joint2->joint->setMaxDistance(oldDistance - 100.f * elapsed);
+				joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
+
 				joint2->awakeActors();
-			}
-			
+			}			
+
+			// Se the joints position
 			// -- Send tensed MSG (to enter in ragdoll)
 			PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
@@ -625,23 +628,21 @@ void FSMPlayerTorso::PullString(float elapsed) {
 			joint->joint->getActors(a1, a2);
 			// Wake up the actors, if dynamic
 			if (a1 && a1->isRigidDynamic()) {
-				((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(0));
+				CHandle actor = CHandle(a1->userData);
+				if (actor.isValid()) {
+					((CEntity*)actor)->sendMsg(TMsgRopeTensed(0));
+				}
 			}
 			if (a2 && a2->isRigidDynamic()) {
-				((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(0));
+				CHandle actor = CHandle(a2->userData);
+				if (actor.isValid()) {
+					((CEntity*)actor)->sendMsg(TMsgRopeTensed(0));
+				}
 			}
 
-			// Se the joints position
-			if (joint) {
-				joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
-				joint->awakeActors();
-			}
-
-			if (rope->joint_aux.isValid()) {
-				TCompDistanceJoint* joint2 = rope->joint_aux;
-				joint2->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
-				joint2->awakeActors();
-			}
+			joint->joint->setLocalPose(PxJointActorIndex::eACTOR1, PxTransform(Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(29))));
+			joint->awakeActors();
+			
 		}
 	}
 

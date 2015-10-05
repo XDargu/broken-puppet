@@ -2,8 +2,8 @@
   <entity tag = "boss" collisionTag = "Boss_Part">
     <name name="corazon" />
     <transform position="-1685.73 863.363 28.9992" rotation="-0.013069 0.0386362 0.000505356 0.999168" scale="1 1 1"/>
-    <render  color = "0.6 0.894118 0.839216">
-      <draw mesh="corazon" sub_mesh="0" mat="Standardmaterial"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="corazon" sub_mesh="0" mat="corazon_roto_material"/>
     </render>
     <aabb min="-5.78371 -6.64587 -3.42933" max="5.78372 6.64587 3.42933"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.493072" boxY="0.566573" boxZ="0.292356"/>

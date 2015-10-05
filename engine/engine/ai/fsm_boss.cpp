@@ -80,7 +80,6 @@ fsm_boss::~fsm_boss()
 void fsm_boss::Init()
 {
 	// insert all states in the map
-
 	AddState("fbp_Proximity", (statehandler)&fsm_boss::Proximity);//
 	AddState("fbp_Hidden", (statehandler)&fsm_boss::Hidden);
 	AddState("fbp_RiseUp", (statehandler)&fsm_boss::RiseUp);
@@ -130,7 +129,6 @@ void fsm_boss::Init()
 	max_shoot_angle = deg2rad(100.f);
 	max_shoot_angle = cosf(max_shoot_angle);
 
-
 	state_time = 0.f;
 	has_left = true;
 	has_right = true;
@@ -175,7 +173,6 @@ void fsm_boss::Init()
 
 	times_stunned = 0;
 
-	// Pruebas init
 	original_pos = ((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position;
 	
 	appear = false;
@@ -590,7 +587,6 @@ void fsm_boss::Ball1Launch(float elapsed){
 	}
 
 	if (on_enter){
-
 		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
 		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 
@@ -716,7 +712,6 @@ void fsm_boss::Shoot1Reload(float elapsed){
 			PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 			TCompSkeleton* skeleton = comp_skeleton;
 
-
 			// Calculate direction player enemy
 			PxVec3 player_boss_dir = (player_pos - enemy_pos);
 			player_boss_dir.y = 0;
@@ -730,7 +725,6 @@ void fsm_boss::Shoot1Reload(float elapsed){
 				point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(15)) + (player_boss_dir * (distance_to_hand));
 			}
 			
-
 			CEntity* m_e = obj_to_shoot;
 			TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
 
@@ -758,7 +752,6 @@ void fsm_boss::Shoot1Reload(float elapsed){
 		else if (state_time >= 2.f){
 			ChangeState("fbp_Shoot1ReleaseDef");
 		}
-
 	}
 	else if (state_time >= 2.f){
 		ChangeState("fbp_Shoot1ReleaseDef");
@@ -813,8 +806,6 @@ void fsm_boss::Shoot1Shoot(float elapsed){
 			px_rigid->setLinearVelocity(force_dir * 70);
 		}
 	}
-
-
 	// Set Down protections
 	if (state_time >= 1.3f){
 		ChangeState("fbp_Shoot1Reload");
@@ -843,7 +834,6 @@ void fsm_boss::Shoot1ReleaseDef(){
 		last_anim_id = -1;
 	}
 	if (on_enter){
-
 		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
 			CEntity* e = m_entity_manager->rigid_list[i];
 			TCompRigidBody* rigid = e->get<TCompRigidBody>();
@@ -864,7 +854,6 @@ void fsm_boss::Shoot1ReleaseDef(){
 	if (state_time >= 1.f){
 		ChangeState("fbp_Idle1");
 	}
-	
 }
 
 //WaveLeft
@@ -875,51 +864,48 @@ void fsm_boss::WaveLeft(float elapsed){
 		stopAllAnimations();
 		skeleton->playAnimation(5);
 		last_anim_id = -1;
+	}	
+	
+	// Get boss pos
+	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+	PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
-		// Get boss pos
-		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
-		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3( enemy_comp_trans->position);
-
-		// Get obj to move
-		ball_list.clear();
-
-		
+	if ((state_time >= 1.1f) && (state_time < 2.f)){
 
 		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
 			CEntity* e = m_entity_manager->rigid_list[i];
 			if (!e->hasTag("player")){
+
+				// Get obj to move
 				TCompRigidBody* rigid = ((CEntity*)e)->get<TCompRigidBody>();
 				if (((CHandle)rigid).isValid()){
 					bool bossAccess = rigid->boss_level == 0;
 					if (bossAccess){
+						// If is in angle
+						TCompSkeleton* skeleton = comp_skeleton;
 
-						ball_list.push_back(e);
+						PxVec3 aux_hand_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(15));
+						XMVECTOR aux_hand_dir = Physics.PxVec3ToXMVECTOR(PxVec3(aux_hand_pos.x, m_boss_pos.y, aux_hand_pos.z) - m_boss_pos);
+						aux_hand_dir = XMVector3Normalize(aux_hand_dir);
+
+						XMVECTOR aux_obj_pos = rigid->getPosition();
+						aux_obj_pos = XMVectorSetY(aux_obj_pos, m_boss_pos.y);
+						XMVECTOR aux_obj_dir = XMVector3Normalize(aux_obj_pos - Physics.PxVec3ToXMVECTOR(m_boss_pos));
+
+						float aux_angle = getAngleBetweenVectors(aux_obj_dir, aux_hand_dir);
+
+						if (aux_angle >= 0.95f)
+						{
+							PxRigidBody*  px_rigid = rigid->rigidBody;
+							PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
+							PxVec3 m_force = (PxVec3(0, 1, 0).cross(obj_boss_dir).getNormalized());
+							px_rigid->setLinearVelocity(-m_force * 40);
+						}
 					}
-				}
-
-			}
-		}
-	}	
-	
-	if ((state_time >= 1.1f)&&(state_time < 2.f)){
-		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
-		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
-
-		for (int i = 0; i < ball_list.size(); ++i){
-			CEntity* e = ball_list[i];
-			if (((CHandle)e).isValid()){
-				TCompRigidBody* rigid = e->get<TCompRigidBody>();
-				if (((CHandle)rigid).isValid()){
-					PxRigidBody*  px_rigid = rigid->rigidBody;
-					PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
-					PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
-					//px_rigid->addForce(m_force * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
-					px_rigid->setLinearVelocity(m_force * 40);
 				}
 			}
 		}
 	}
-
 
 	if (state_time >= 2.3f){
 
@@ -950,46 +936,44 @@ void fsm_boss::WaveRight(){
 		stopAllAnimations();
 		skeleton->playAnimation(6);
 		last_anim_id = -1;
+	}
 
+	if ((state_time >= 1.1f) && (state_time < 2.f)){
 		// Get boss pos
 		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
-		// Get obj to move
-		ball_list.clear();
-
-
-
 		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
 			CEntity* e = m_entity_manager->rigid_list[i];
 			if (!e->hasTag("player")){
+				
+				// Get obj to move
+								
 				TCompRigidBody* rigid = ((CEntity*)e)->get<TCompRigidBody>();
 				if (((CHandle)rigid).isValid()){
 					bool bossAccess = rigid->boss_level == 0;
 					if (bossAccess){
+						// If is in angle
+						TCompSkeleton* skeleton = comp_skeleton;
 
-						ball_list.push_back(e);
+						PxVec3 aux_hand_pos = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40));
+						XMVECTOR aux_hand_dir = Physics.PxVec3ToXMVECTOR(PxVec3(aux_hand_pos.x, m_boss_pos.y, aux_hand_pos.z) - m_boss_pos);
+						aux_hand_dir = XMVector3Normalize(aux_hand_dir);
+
+						XMVECTOR aux_obj_pos = rigid->getPosition();
+						aux_obj_pos = XMVectorSetY(aux_obj_pos, m_boss_pos.y);
+						XMVECTOR aux_obj_dir = XMVector3Normalize(aux_obj_pos - Physics.PxVec3ToXMVECTOR(m_boss_pos));
+
+						float aux_angle = getAngleBetweenVectors(aux_obj_dir, aux_hand_dir);					
+
+						if (aux_angle >= 0.95f)
+						{
+							PxRigidBody*  px_rigid = rigid->rigidBody;
+							PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
+							PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
+							px_rigid->setLinearVelocity(-m_force * 40);
+						}
 					}
-				}
-
-			}
-		}
-	}
-
-	if ((state_time >= 1.1f) && (state_time < 2.f)){
-		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
-		PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
-
-		for (int i = 0; i < ball_list.size(); ++i){
-			CEntity* e = ball_list[i];
-			if (((CHandle)e).isValid()){
-				TCompRigidBody* rigid = e->get<TCompRigidBody>();
-				if (((CHandle)rigid).isValid()){
-					PxRigidBody*  px_rigid = rigid->rigidBody;
-					PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
-					PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
-					//px_rigid->addForce(m_force * 0.5f, PxForceMode::eVELOCITY_CHANGE, true);
-					px_rigid->setLinearVelocity(-m_force * 40);
 				}
 			}
 		}
@@ -1011,7 +995,6 @@ void fsm_boss::WaveRight(){
 				}
 			}
 		}
-
 		ChangeState("fbp_Idle1");
 	}
 }
@@ -1025,7 +1008,6 @@ void fsm_boss::FinalState(float elapsed){
 		loopAnimationIfNotPlaying(26, true);
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
-
 
 		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
 			CEntity* e = m_entity_manager->rigid_list[i];
@@ -1053,7 +1035,6 @@ void fsm_boss::FinalState(float elapsed){
 			if (((CHandle)rigid).isValid()){
 				PxRigidBody*  px_rigid = rigid->rigidBody;
 				PxVec3 obj_boss_dir = px_rigid->getGlobalPose().p - m_boss_pos;
-
 				PxVec3 aux_up = PxVec3(0, 1, 0);
 				PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
 				m_force = (m_force + (aux_up * 1)).getNormalized();
@@ -1076,7 +1057,6 @@ void fsm_boss::Damaged1Left(float elapsed){
 		TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->disableBoneTree(11);
 		ragdoll->breakJoint(6);
-
 		times_stunned = 1;
 		pattern_current = -1;
 	}
@@ -1105,7 +1085,6 @@ void fsm_boss::Damaged1Right(float elapsed){
 		TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->disableBoneTree(36);
 		ragdoll->breakJoint(4);
-
 		times_stunned = 1;
 		pattern_current = -1;
 	}
@@ -1134,7 +1113,6 @@ void fsm_boss::Damaged1LeftFinal(){
 		TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->disableBoneTree(11);
 		ragdoll->breakJoint(6);
-
 		times_stunned = 1;
 		pattern_current = -1;
 	}
@@ -1332,8 +1310,6 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 }
 
 int fsm_boss::CalculateAttack() {
-	
-	//XDEBUG("entrando al calculo de estado");
 
 	int next_attack = 0;
 	last_attack = 0.f;
@@ -1341,7 +1317,7 @@ int fsm_boss::CalculateAttack() {
 		next_attack = 0;
 	}
 	else{
-
+		return 4;
 		/**/
 		// Comprobamos si el patron es nulo, si lo es elegimos uno aleatorio
 		if (pattern_current < 0){
