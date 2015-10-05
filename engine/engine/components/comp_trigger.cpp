@@ -21,7 +21,7 @@ void TCompTrigger::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
 
 	player_only = atts.getBool("playerOnly", false);
-	bots_only = atts.getBool("botsOnly", false);
+	bots_only = atts.getBool("botOnly", false);
 	if (bots_only)
 		player_only = true;
 

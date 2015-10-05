@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_rigid_body.h"
 #include "comp_transform.h"
+#include "comp_name.h"
 #include "comp_collider_box.h"
 #include "comp_collider_capsule.h"
 #include "comp_collider_mesh.h"
@@ -74,6 +75,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
+	TCompName* c_name = assertRequiredComponent<TCompName>(this);
 	TCompColliderBox* box_c = e->get<TCompColliderBox>();
 	TCompColliderMesh* mesh_c = e->get<TCompColliderMesh>();
 	TCompColliderSphere* sphere_c = e->get<TCompColliderSphere>();
@@ -124,7 +126,10 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 		for (int i = 1; i < multiple_c->colliders->size(); i++) {
 			rigidBody->attachShape(*(*multiple_c->colliders)[i]);
 		}
-		PxRigidBodyExt::updateMassAndInertia(*rigidBody, density);
+		// Ignore lamps (ñapa)
+		if (strncmp(c_name->name, "lampara_suelo", 13) != 0) {
+			PxRigidBodyExt::updateMassAndInertia(*rigidBody, density);
+		}
 
 	}
 	else {

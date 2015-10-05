@@ -50,7 +50,7 @@
 	</entity>
 	<entity   materialTag = "wood">
 <name name="ornamento_02_9.0" />
-<transform position="-13.9281 22.6293 -43.3658" rotation="0.0 1.0 0.0 2.19782e-005" scale="1.72593 1.0 0.879421"/>
+<transform position="-13.9281 22.6293 -43.3658" rotation="0.0 1.0 0.0 2.20974e-005" scale="1.72593 1.0 0.879421"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="ornamento_02" sub_mesh="0" mat="ornamentos_02"/>
 </render>
@@ -1538,7 +1538,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.559033 -0.0259157 -0.54752" max="0.558358 0.0259156 0.54748"/>
+<aabb min="-0.559041 -0.0259157 -0.54752" max="0.55835 0.0259156 0.547479"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "wood">
@@ -1566,7 +1566,7 @@
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.194895 -0.135501 -0.131956" max="0.195404 0.135499 0.131945"/>
+<aabb min="-0.194889 -0.135501 -0.131956" max="0.19541 0.135499 0.131945"/>
 <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "wood">
@@ -1869,7 +1869,7 @@
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.00701141 -0.0672995 -0.0651054" max="0.00718689 0.0673005 0.065094"/>
+<aabb min="-0.00700951 -0.0672995 -0.0651054" max="0.0071888 0.0673005 0.065094"/>
 <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -1888,7 +1888,7 @@
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.195145 -0.1355 -0.131866" max="0.195154 0.1355 0.132034"/>
+<aabb min="-0.195145 -0.1355 -0.131865" max="0.195154 0.1355 0.132036"/>
 <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "wood">
@@ -2173,7 +2173,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00104249 -0.346133 -0.323209" max="0.68063 0.0417762 0.0438738"/>
+<aabb min="0.00103867 -0.346133 -0.323209" max="0.680626 0.0417762 0.0438738"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
@@ -2196,7 +2196,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558556 -0.0259157 -0.547412" max="0.558835 0.0259156 0.547587"/>
+<aabb min="-0.558553 -0.0259157 -0.54741" max="0.558839 0.0259156 0.547589"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "wood">
@@ -2205,7 +2205,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00123215 -0.346133 -0.323265" max="0.68082 0.0417762 0.043818"/>
+<aabb min="0.00123274 -0.346133 -0.323266" max="0.68082 0.0417762 0.0438167"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
@@ -2228,7 +2228,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558744 -0.0259157 -0.547567" max="0.558647 0.0259156 0.547432"/>
+<aabb min="-0.558745 -0.0259157 -0.547569" max="0.558646 0.0259156 0.54743"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "wood">
@@ -2237,12 +2237,12 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00116873 -0.346133 -0.32326" max="0.680756 0.0417762 0.0438232"/>
+<aabb min="0.00116789 -0.346133 -0.323261" max="0.680756 0.0417762 0.043822"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "wood">
 <name name="tela_colgada_b_248.0" />
-<transform position="8.5459 21.9184 -56.7844" rotation="0.0 1.0 0.0 -5.28892e-006" scale="1.26122 1.26122 1.26122"/>
+<transform position="8.5459 21.9184 -56.7844" rotation="0.0 1.0 0.0 -5.40813e-006" scale="1.26122 1.26122 1.26122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_colgada_b" sub_mesh="0" mat="telas2"/>
 </render>
@@ -2467,7 +2467,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
 <name name="pasarela_metal_boss_270.0" />
-<transform position="-10.921 20.8523 -68.5457" rotation="0.0 1.0 0.0 9.81887e-006" scale="1.76051 1.76051 1.76051"/>
+<transform position="-10.921 20.8523 -68.5457" rotation="0.0 1.0 0.0 1.00573e-005" scale="1.76051 1.76051 1.76051"/>
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="pasarela_metal_boss" sub_mesh="0" mat="Material #25"/>
 </render>
@@ -3156,7 +3156,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
 <name name="pared_boss_c_342.0" />
-<transform position="-0.187376 -74.6268 0.30038" rotation="0.0 0.996193 0.0 0.0871773" scale="1.0387 1.02959 1.0387"/>
+<transform position="-0.187376 -74.6268 0.30038" rotation="0.0 0.996193 0.0 0.0871775" scale="1.0387 1.02959 1.0387"/>
 <render >
 <draw mesh="pared_boss_c" sub_mesh="0" mat="telas1"/>
 <draw mesh="pared_boss_c" sub_mesh="1" mat="modulo_inferior_boss"/>
@@ -3989,7 +3989,7 @@
 	<entity   materialTag = "wood">
 <name name="boss_spot_470.0" />
 <transform position="-0.104137 48.2854 -0.0889287" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-<shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true"/>
+<shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true" res="1"/>
 <camera fov="179.5" znear="0.1" zfar="50" width="30" height="30" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
@@ -4033,6 +4033,12 @@
 <name name="scb_trigger_block_control" />
 <transform position="1.06771 1.49243 -20.5464" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-30.9006 0.0 -4.70962" max="30.9006 6.38653 4.70962"/>
+<trigger botOnly="false" playerOnly="true" />
+	</entity>
+	<entity   materialTag = "wood">
+<name name="PitTrigger" />
+<transform position="0.0987473 -23.6209 2.06493" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<aabb min="-62.2219 0.0 -57.0161" max="62.2219 16.4653 57.0161"/>
 <trigger botOnly="false" playerOnly="true" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">

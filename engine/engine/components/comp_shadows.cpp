@@ -36,6 +36,12 @@ void TCompShadows::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 // This generates the depth map from the ligth source
 void TCompShadows::generate()  {
+	// NO shadows
+	if (resolution == 1) { 
+		rt->clearDepthBuffer(); 
+		return; 
+	}
+
 	CTraceScoped s("shadows");
 
 	// Activate the camera component which is the source of the light
@@ -53,9 +59,9 @@ void TCompShadows::generate()  {
 	activateCamera(*camera, 1);
 
 	// 
+	
 	render_techniques_manager.getByName("gen_shadows")->activate();
-
-	render_manager.renderShadowsCasters(camera, character_camera);
+	render_manager.renderShadowsCasters(camera, character_camera);	
 
 	activateRSConfig(RSCFG_DEFAULT);
 

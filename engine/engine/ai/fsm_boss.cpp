@@ -1317,7 +1317,7 @@ int fsm_boss::CalculateAttack() {
 		next_attack = 0;
 	}
 	else{
-		return 4;
+		//return 4;
 		/**/
 		// Comprobamos si el patron es nulo, si lo es elegimos uno aleatorio
 		if (pattern_current < 0){

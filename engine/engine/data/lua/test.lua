@@ -19,9 +19,18 @@ clearCoroutines()
 ----------------------------------------------------------
 
 function onSceneLoad_my_file()
+	onSceneLoad_scene_final_boss()
+	onSceneLoad_scene_4()
+	onSceneLoad_scene_3()
+	onSceneLoad_scene_2()
+	onSceneLoad_scene_1()	
+end
+
+function onSceneLoad_scene_final_boss()
 
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
+	respawnPos = player:getPos();
 	
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -29,7 +38,7 @@ function onSceneLoad_my_file()
 		if who == "Player" then
 			--logicManager:pushPlayerLegsState("fbp_WakeUp");
 			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
-			player:teleportToPos(initPos);
+			player:teleportToPos(respawnPos);
 		end
 
 	end
@@ -52,6 +61,7 @@ function onSceneLoad_my_file()
 		logicManager:releaseCameraLock()
 		logicManager:resetPlayerCamera()
 
+		respawnPos = player:getPos();
 	end
 
 	function onTriggerFirstEnter_scb_trigger_block_control(who)
@@ -125,11 +135,6 @@ function onSceneLoad_my_file()
 		waitTime(1)
 		logicManager:stopShakeCamera()
 	end
-
-	onSceneLoad_scene_4()
-	onSceneLoad_scene_3()
-	onSceneLoad_scene_2()
-	onSceneLoad_scene_1()
 end
 
 
