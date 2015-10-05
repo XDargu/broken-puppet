@@ -36,6 +36,9 @@ function onSceneLoad_my_file()
 
 	function onTriggerFirstEnter_scb_trigger_bandas(who)
 		logicManager:setBands(true)
+
+		-- Bajar luz ambiental
+		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
 	end
 
 	function onTimerEnd_boss_init_animation()
@@ -59,7 +62,11 @@ function onSceneLoad_my_file()
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
 		logicManager:setTimer("boss_init_animation", 21)
 	end
-	
+
+	onSceneLoad_scene_4()
+	onSceneLoad_scene_3()
+	onSceneLoad_scene_2()
+	onSceneLoad_scene_1()
 end
 
 
@@ -69,6 +76,13 @@ function onSceneLoad_scene_1()
 	initPos = player:getPos();
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
+
+	-- Iluminación inicial
+	logicManager:changeAmbientLight(0.6, 0.6, 0.6, 1);
+
+	function onTriggerEnter_sc1_trigger_change_light(who)
+		logicManager:changeAmbientLight(1, 1, 1, 0.75);
+	end
 
 	-- Machacaabuelas
 	local crasher = logicManager:getPrismaticJoint("scene1_grandmacrasher_joint1");
@@ -237,6 +251,7 @@ function onSceneLoad_scene_2()
 	local sc2_hinge_caida5 = logicManager:getHingeJoint("sc2_hinge_caida5");
 	local sc2_hinge_caida6 = logicManager:getHingeJoint("sc2_hinge_caida6");
 	local sc2_hinge_caida7 = logicManager:getHingeJoint("sc2_hinge_caida7");
+	local sc2_hinge_caida8 = logicManager:getHingeJoint("sc2_hinge_caida8");
 	
 	-- Limitar cadenas al inicio
 	sc2_hinge_caida1:setLimit(0.1)
@@ -246,6 +261,7 @@ function onSceneLoad_scene_2()
 	sc2_hinge_caida5:setLimit(0.1)
 	sc2_hinge_caida6:setLimit(0.1)
 	sc2_hinge_caida7:setLimit(0.1)
+	sc2_hinge_caida8:setLimit(0.1)
 
 	-- Caída
 	function onTriggerFirstEnter_trigger_caida(who)
@@ -257,6 +273,7 @@ function onSceneLoad_scene_2()
 		sc2_hinge_caida5:setLimit(90)
 		sc2_hinge_caida6:setLimit(90)
 		sc2_hinge_caida7:setLimit(90)
+		sc2_hinge_caida8:setLimit(90)
 
 		-- Romper fixed joints
 		local sc2_fixed_1 = logicManager:getFixedJoint("sc2_fixed_caida1");
@@ -266,17 +283,18 @@ function onSceneLoad_scene_2()
 		sc2_fixed_2:breakJoint();
 
 		-- Quitar luces
-		logicManager:changeAmbientLight(0.2,0.2,0.2,0.95);
+		logicManager:changeAmbientLight(0.4,0.4,0.4,0.95);
 	end
 
 	-- Plataforma elevadora
 	local sc2_plataforma_elevadora = logicManager:getObject("sc2_plataforma_elevadora")
 	local sc2_plataforma_elevadora_orig = sc2_plataforma_elevadora:getPos()
+	sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
 
 	function onSwitchPressed_sc2_int_pelev(who)
 
 		print(tostring(who) .. " Interruptor subir plataforma");
-		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
+		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
 		sc2_cable:setEmissive(true)
 
 	end
@@ -284,7 +302,7 @@ function onSceneLoad_scene_2()
 	function onSwitchReleased_sc2_int_pelev(who)
 
 		print(tostring(who) .. " Interruptor bajar plataforma");
-		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
+		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
 		sc2_cable:setEmissive(false)
 	end
 	
@@ -397,6 +415,7 @@ function onSceneLoad_scene_3()
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 3 ********
 end
+
 
 function onSceneLoad_scene_4()
 
@@ -589,6 +608,70 @@ function onSceneLoad_scene_4()
 	function onTriggerFirstEnter_sc4_trigger_narr_2(who)
 		
 	end
+
+	-- Machacaabuelas del crematorio
+	-- Obtener los joints
+	sc4_prismatic_crasher_1 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_1");
+	sc4_prismatic_crasher_2 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_2");
+	sc4_prismatic_crasher_3 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_3");
+	sc4_prismatic_crasher_4 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_4");
+
+	-- Activar sus límites
+	sc4_prismatic_crasher_1:setLinearLimit(0.1, 10000000, 10000000);
+	sc4_prismatic_crasher_2:setLinearLimit(0.1, 10000000, 10000000);
+	sc4_prismatic_crasher_3:setLinearLimit(0.1, 10000000, 10000000);
+	sc4_prismatic_crasher_4:setLinearLimit(0.1, 10000000, 10000000);
+
+	-- Activar sus temporizadores
+	logicManager:setTimer("scene_4_crasher_1_down", 1)
+	logicManager:setTimer("scene_4_crasher_2_down", 2)
+	logicManager:setTimer("scene_4_crasher_3_down", 3)
+	logicManager:setTimer("scene_4_crasher_4_down", 4)
+
+	-- Crasher 1
+	function onTimerEnd_scene_4_crasher_1_up()
+		sc4_prismatic_crasher_1:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_1_down", 4)
+	end
+
+	function onTimerEnd_scene_4_crasher_1_down()
+		sc4_prismatic_crasher_1:setLinearLimit(1000, 0, 0);
+		logicManager:setTimer("scene_4_crasher_1_up", 2)
+	end
+
+	-- Crasher 2 (roto)
+	function onTimerEnd_scene_4_crasher_2_up()
+		sc4_prismatic_crasher_2:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_2_down", 3)
+	end
+
+	function onTimerEnd_scene_4_crasher_2_down()
+		sc4_prismatic_crasher_2:setLinearLimit(3, 0, 0);
+		logicManager:setTimer("scene_4_crasher_2_up", 2)
+	end
+
+	-- Crasher 3
+	function onTimerEnd_scene_4_crasher_3_up()
+		sc4_prismatic_crasher_3:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_3_down", 3.4)
+	end
+
+	function onTimerEnd_scene_4_crasher_3_down()
+		sc4_prismatic_crasher_3:setLinearLimit(1000, 0, 0);
+		logicManager:setTimer("scene_4_crasher_3_up", 1.6)
+	end
+
+	-- Crasher 4
+	function onTimerEnd_scene_4_crasher_4_up()
+		sc4_prismatic_crasher_4:setLinearLimit(0.1, 10000000, 10000000);
+		logicManager:setTimer("scene_4_crasher_4_down", 2.8)
+	end
+
+	function onTimerEnd_scene_4_crasher_4_down()
+		sc4_prismatic_crasher_4:setLinearLimit(1000, 0, 0);
+		logicManager:setTimer("scene_4_crasher_4_up", 2)
+	end
+
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 4 ********
 end

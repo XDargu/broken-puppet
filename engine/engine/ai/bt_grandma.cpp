@@ -21,7 +21,7 @@ const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
 const float distance_change_way_point = 0.38f;
 const float force_large_impact = 60000.f;
-const float force_medium_impact = 40000.f;
+const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
@@ -173,55 +173,57 @@ int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
-	stopAllAnimations();
+	if (on_enter) {
+		stopAllAnimations();
 
-	if (!m_ragdoll->isRagdollActive()) {
-		m_ragdoll->setActive(true);
+		if (!m_ragdoll->isRagdollActive()) {
+			m_ragdoll->setActive(true);
 
-		TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
-		if (m_life->life <= 0) {
-			TCompRagdoll* m_ragdoll = enemy_ragdoll;
-			m_ragdoll->breakJoints();
-			TCompTransform* m_transform = own_transform;
-			TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-			XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
-			XMVECTOR max = XMVectorSet(50, 50, 50, 0);
+			TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
+			if (m_life->life <= 0) {
+				TCompRagdoll* m_ragdoll = enemy_ragdoll;
+				m_ragdoll->breakJoints();
+				TCompTransform* m_transform = own_transform;
+				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
+				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
+				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
-			//Si esta atada, eliminamos el hilo antes de matar al enemigo
-			/*if (((TCompSensorTied*)tied_sensor)->getTiedState()){
-				if (ropeRef.isValid())
+				//Si esta atada, eliminamos el hilo antes de matar al enemigo
+				/*if (((TCompSensorTied*)tied_sensor)->getTiedState()){
+					if (ropeRef.isValid())
 					CEntityManager::get().remove(CHandle(ropeRef).getOwner());
-			}*/
+					}*/
 
-			//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
-			if (this->getRol() == role::ATTACKER)
-				aimanager::get().RemoveEnemyAttacker(this);
-			else
-				aimanager::get().RemoveEnemyTaunt(this);
+				//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+				if (this->getRol() == role::ATTACKER)
+					aimanager::get().RemoveEnemyAttacker(this);
+				else
+					aimanager::get().RemoveEnemyTaunt(this);
 
-			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-			//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
-			ragdoll_aabb->setIdentityMinMax(min, max);
+				CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
+				ragdoll_aabb->setIdentityMinMax(min, max);
 
-			aimanager::get().removeBot(this->getId());
-			//aimanager::get().removeGrandma(this->getId());
+				aimanager::get().removeBot(this->getId());
+				//aimanager::get().removeGrandma(this->getId());
 
-			CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
+				CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtGrandma>());
 
-			TCompTransform* p_transform = player_transform;
-			if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
-				CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
-				TCompTransform* c_transform = camera->get<TCompTransform>();
-				TCompCamera* c_camera = camera->get<TCompCamera>();
-				if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-					CApp::get().slowMotion(3);
+				TCompTransform* p_transform = player_transform;
+				if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
+					CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
+					TCompTransform* c_transform = camera->get<TCompTransform>();
+					TCompCamera* c_camera = camera->get<TCompCamera>();
+					if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
+						CApp::get().slowMotion(3);
+					}
 				}
+
 			}
 
 		}
-
 	}
 
 	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
@@ -493,10 +495,11 @@ int bt_grandma::actionCutRope()
 		XMVECTOR dir = XMVector3Normalize(n_transform->position - m_transform->position);
 		mov_direction = PxVec3(0, 0, 0);
 		look_direction = Physics.XMVECTORToPxVec3(dir);
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+
+		stopMovement();
 
 		// Exe the logic of cut the rope
-		if ((state_time >= duration_cut * 0.7f) && (!cut)){
+		if ((state_time >= getAnimationDuration(9) * 0.7f) && (!cut)){
 			CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
 			if (target_rope.isValid()){
 				CRope_manager::get().removeString(target_rope);
@@ -506,7 +509,7 @@ int bt_grandma::actionCutRope()
 		}
 
 		// Finish the animation
-		if (state_time >= duration_cut) {
+		if (state_time >= getAnimationDuration(9)) {
 			if (!take_animation_done){
 				stopAllAnimations();
 				resetTimeAnimation();
@@ -515,7 +518,7 @@ int bt_grandma::actionCutRope()
 			}
 
 			// Exe the logic of taking a needle
-			if ((state_time >= ((duration_cut + duration_get_needle)*0.6f))){ //&& !animation_done){			
+			if ((state_time >= ((getAnimationDuration(9) + getAnimationDuration(8))*0.6f))){ //&& !animation_done){			
 				//CHandle target_needle = ((TCompSensorNeedles*)m_sensor)->getNeedleAsociatedSensor(entity);
 				//if (target_needle.isValid()){
 					((TCompSensorNeedles*)m_sensor)->removeNeedleRope(target_needle);
@@ -527,7 +530,7 @@ int bt_grandma::actionCutRope()
 			}
 
 			// When the animation finish, leave state and clean bools
-			if (state_time >= duration_cut + duration_get_needle) {
+			if (state_time >= getAnimationDuration(9) + getAnimationDuration(8)) {
 				needle_to_take = false;
 				needle_is_valid = false;
 				cut = false;
@@ -555,9 +558,10 @@ int bt_grandma::actionTakeNeedle()
 		TCompTransform* n_transform = ((CEntity*)target_needle.getOwner())->get<TCompTransform>();
 		TCompTransform* m_transform = own_transform;
 		XMVECTOR dir = XMVector3Normalize(n_transform->position - m_transform->position);
-		mov_direction = PxVec3(0, 0, 0);
+		
 		look_direction = Physics.XMVECTORToPxVec3(dir);
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
+
+		stopMovement();
 
 		if (state_time >= getAnimationDuration(8)) {
 

@@ -17,8 +17,8 @@ const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 2.8f;
 const float distance_change_way_point = 0.55f;
-const float force_large_impact = 60000.f;
-const float force_medium_impact = 40000.f;
+const float force_large_impact = 40000.f;
+const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
@@ -37,7 +37,7 @@ void bt_soldier::create(string s)
 	name = s;
 	createRoot("Root", PRIORITY, NULL, NULL);
 	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_soldier::conditionis_ragdoll, NULL);
-	addChild("Ragdoll", "ActionRagdoll1", ACTION, NULL, (btaction)&bt_soldier::actionRagdoll);
+	addChild("Ragdoll", "ActionRagdoll1", ACTION, INTERNAL, NULL, (btaction)&bt_soldier::actionRagdoll);
 	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, INTERNAL, (btcondition)&bt_soldier::conditiontied_event, NULL);
 	addChild("Awake", "GroundedTied", PRIORITY, NULL, NULL);
@@ -71,8 +71,12 @@ void bt_soldier::create(string s)
 	addChild("Angry", "TryAttack", SEQUENCE, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("TryAttack", "SelectRole15", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionSelectRole);
 	addChild("TryAttack", "ExecuteRole", PRIORITY, EXTERNAL, NULL, NULL);
+
 	addChild("ExecuteRole", "AttackRoutine", PRIORITY, EXTERNAL, (btcondition)&bt_soldier::conditionis_attacker, NULL);
-	addChild("AttackRoutine", "InitialAttack16", ACTION, INTERNAL, (btcondition)&bt_soldier::conditioninitial_attack, (btaction)&bt_soldier::actionInitialAttack);
+	addChild("AttackRoutine", "InitialAttackSeq", SEQUENCE, EXTERNAL, (btcondition)&bt_soldier::conditioninitial_attack, NULL);
+	addChild("InitialAttackSeq", "InitialAttack16", ACTION, INTERNAL, NULL, (btaction)&bt_soldier::actionInitialAttack);
+	addChild("InitialAttackSeq", "InitialAttack17", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionIdleWarDelay);
+
 	addChild("AttackRoutine", "NormalAttack17", ACTION, INTERNAL, (btcondition)&bt_soldier::conditionnormal_attack, (btaction)&bt_soldier::actionNormalAttack);
 	addChild("AttackRoutine", "Situate18", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditionfar_from_target_pos, (btaction)&bt_soldier::actionSituate);
 	addChild("AttackRoutine", "IdleWa19r", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionIdleWar);
@@ -145,54 +149,57 @@ int bt_soldier::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
 
-	stopAllAnimations();
+	if (on_enter) {
+		stopAllAnimations();
 
-	if (m_ragdoll) {
 
-		if (!m_ragdoll->isRagdollActive()) {
-			m_ragdoll->setActive(true);
+		if (m_ragdoll) {
 
-			TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
-			if (m_life->life <= 0) {
-				TCompRagdoll* m_ragdoll = enemy_ragdoll;
-				m_ragdoll->breakJoints();
-				TCompTransform* m_transform = own_transform;
-				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
-				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
+			if (!m_ragdoll->isRagdollActive()) {
+				m_ragdoll->setActive(true);
 
-				//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
-				if (this->getRol() == role::ATTACKER)
-					aimanager::get().RemoveEnemyAttacker(this);
-				else
-					aimanager::get().RemoveEnemyTaunt(this);
+				TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
+				if (m_life->life <= 0) {
+					TCompRagdoll* m_ragdoll = enemy_ragdoll;
+					m_ragdoll->breakJoints();
+					TCompTransform* m_transform = own_transform;
+					TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
+					//XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
+					//XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
-				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+					//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+					if (this->getRol() == role::ATTACKER)
+						aimanager::get().RemoveEnemyAttacker(this);
+					else
+						aimanager::get().RemoveEnemyTaunt(this);
 
-				CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
-				ragdoll_aabb->setIdentityMinMax(min, max);
+					//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+					//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 
-				aimanager::get().removeBot(this->getId());
+					CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
+					//ragdoll_aabb->setIdentityMinMax(min, max);
 
-				CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
+					aimanager::get().removeBot(this->getId());
 
-				TCompTransform* p_transform = player_transform;
-				if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
-					CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
-					TCompTransform* c_transform = camera->get<TCompTransform>();
-					TCompCamera* c_camera = camera->get<TCompCamera>();
-					if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
-						CApp::get().slowMotion(1.5f);
+					CEntityManager::get().remove(((CEntity*)entity)->get<TCompBtSoldier>());
+
+					TCompTransform* p_transform = player_transform;
+					if (V3DISTANCE(p_transform->position, m_transform->position) < 10) {
+						CEntity* camera = CEntityManager::get().getByName("PlayerCamera");
+						TCompTransform* c_transform = camera->get<TCompTransform>();
+						TCompCamera* c_camera = camera->get<TCompCamera>();
+						if (c_transform->isInFov(m_transform->position, c_camera->getFov())) {
+							CApp::get().slowMotion(1.5f);
+						}
 					}
+
 				}
 
 			}
-
 		}
 	}
 
-	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
+	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(17);
 
 	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
 	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
@@ -227,7 +234,7 @@ int bt_soldier::actionWakeUp()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
-	if (state_time > getAnimationDuration(20)) {
+	if (state_time > 3.9f) {
 		playAnimationIfNotPlaying(0);
 		return LEAVE;
 	}
@@ -441,7 +448,7 @@ int bt_soldier::actionLookingFor(){
 	if (on_enter) {
 		stopAllAnimations();
 		resetTimeAnimation();
-		playAnimationIfNotPlaying(21);
+		playAnimationIfNotPlaying(22);
 	}
 
 	time_searching_player += CApp::get().delta_time;
@@ -519,22 +526,31 @@ int bt_soldier::actionSelectRole()
 	see_player = false;
 
 	time_searching_player = 0;
-	if ((V3DISTANCE(m_transform->position, p_transform->position))<7.5f){
-		aimanager::get().setEnemyRol(this);
-		if (rol == role::ATTACKER){
-			if (slot == attacker_slots::NORTH){
-				slot_position = front * max_distance_to_attack;
+	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
+	if (path.size() > 0) {
+		float distance_x = abs(XMVectorGetX(path[path.size() - 1]) - XMVectorGetX(path[0]));
+		float distance_y = abs(XMVectorGetY(path[path.size() - 1]) - XMVectorGetY(path[0]));
+		float distance_z = abs(XMVectorGetZ(path[path.size() - 1]) - XMVectorGetZ(path[0]));
+		if ((distance_x <= 7.5f) && (distance_z <= 7.5f) && (distance_y <= 1.5f)){
+			if ((V3DISTANCE(m_transform->position, p_transform->position)) < 7.5f){
+				aimanager::get().setEnemyRol(this);
+				if (rol == role::ATTACKER){
+					if (slot == attacker_slots::NORTH){
+						slot_position = front * max_distance_to_attack;
+					}
+					else if (slot == attacker_slots::EAST){
+						slot_position = left * max_distance_to_attack;
+					}
+					else if (slot == attacker_slots::WEST){
+						slot_position = right * max_distance_to_attack;
+					}
+				}
+				else if (rol == role::TAUNTER){
+					slot_position = -(p_transform->position - m_transform->position);
+					slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
+				}
 			}
-			else if (slot == attacker_slots::EAST){
-				slot_position = left * max_distance_to_attack;
-			}
-			else if (slot == attacker_slots::WEST){
-				slot_position = right * max_distance_to_attack;
-			}
-		}
-		else if (rol == role::TAUNTER){
-			slot_position = -(p_transform->position - m_transform->position);
-			slot_position = XMVector3Normalize(slot_position)*max_distance_taunter;
+			return LEAVE;
 		}
 	}
 	return LEAVE;
@@ -581,6 +597,15 @@ int bt_soldier::actionChaseRoleDistance()
 	float distance = V3DISTANCE(m_transform->position, p_transform->position);
 	if (distance < 7.5f) {
 		return LEAVE;
+	}
+
+	if (path.size() > 0){
+		float distance_x = abs(XMVectorGetX(path[path.size() - 1]) - XMVectorGetX(path[0]));
+		float distance_y = abs(XMVectorGetY(path[path.size() - 1]) - XMVectorGetY(path[0]));
+		float distance_z = abs(XMVectorGetZ(path[path.size() - 1]) - XMVectorGetZ(path[0]));
+		if ((distance_x <= 2.f) && (distance_z <= 2.f) && (distance_y >= 1.5f)){
+			return LEAVE;
+		}
 	}
 
 	if (path.size() > 0){
@@ -668,11 +693,13 @@ int bt_soldier::actionSituate()
 		}
 	}
 
-	float distance_path = V3DISTANCE(wander_target, path[path.size() - 1]);
-	if (distance_path >= 2.0f){
-		player_out_navMesh = true;
-		playAnimationIfNotPlaying(0);
-		return LEAVE;
+	if (path.size() > 0){
+		float distance_path = V3DISTANCE(wander_target, path[path.size() - 1]);
+		if (distance_path >= 2.0f){
+			player_out_navMesh = true;
+			playAnimationIfNotPlaying(0);
+			return LEAVE;
+		}
 	}
 
 	m_char_controller->moveSpeedMultiplier = run_angry_speed;
@@ -686,6 +713,13 @@ int bt_soldier::actionSituate()
 		if (distance < 1.5f){
 			return LEAVE;
 		}
+	}
+
+	float distance_x = abs(XMVectorGetX(path[path.size() - 1]) - XMVectorGetX(path[0]));
+	float distance_y = abs(XMVectorGetY(path[path.size() - 1]) - XMVectorGetY(path[0]));
+	float distance_z = abs(XMVectorGetZ(path[path.size() - 1]) - XMVectorGetZ(path[0]));
+	if ((distance_x <= 2.f) && (distance_z <= 2.f) && (distance_y >= 1.5f)){
+		return LEAVE;
 	}
 
 	CNav_mesh_manager::get().findPath(m_transform->position, wander_target, path);
@@ -762,6 +796,26 @@ int bt_soldier::actionIdleWar()
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 	look_direction = Physics.XMVECTORToPxVec3(dir);
+	stopMovement();
+
+	if (state_time > getAnimationDuration(18))
+		return LEAVE;
+	else
+		return STAY;
+}
+
+int bt_soldier::actionIdleWarDelay()
+{
+	if (on_enter) {
+		stopAllAnimations();
+		resetTimeAnimation();
+		playAnimationIfNotPlaying(18);
+	}
+
+	/*TCompTransform* p_transform = player_transform;
+	TCompTransform* m_transform = own_transform;
+	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+	look_direction = Physics.XMVECTORToPxVec3(dir);*/
 	stopMovement();
 
 	if (state_time > getAnimationDuration(18))
@@ -1045,9 +1099,9 @@ int bt_soldier::conditioninitial_attack()
 	if (path.size() > 0){
 		float distance_path = V3DISTANCE(p_transform->position, path[path.size() - 1]);
 		float distance_path_enemy = V3DISTANCE(m_transform->position, path[path.size() - 1]);
-		if ((!initial_attack) && (distance < 7.5f) && (distance_path<1.0f)){
+		if ((!initial_attack) && (distance_path_enemy < 7.5f) && (distance_path<1.0f)){
 			if ((angle_deg < 30.f) && (angle_deg_path<30.f)){
-				if (distance_path_enemy < 7.5f){
+				if (distance < 7.5f){
 					XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
 					return true;
 				}else{
@@ -1124,13 +1178,11 @@ void bt_soldier::hurtSensor(float damage){
 	if (damage >= force_large_impact){
 		TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 		life->life = 0;
-		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
-		stopAllAnimations();
 		is_ragdoll = true;
 		setCurrent(NULL);
 	}

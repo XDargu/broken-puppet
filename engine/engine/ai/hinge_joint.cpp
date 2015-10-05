@@ -46,6 +46,8 @@ void CHingeJoint::setMotor(float velocity, float force_limit){
 void CHingeJoint::setLimit(float angle_limit){
 	if (!entity.isValid())
 		return;
+	XASSERT(angle_limit < 180, "Hinge limit must be lower than 180 degrees");
+	XASSERT(angle_limit > -180, "Hinge limit must be more than -180 degrees");
 	TCompJointHinge* joint = ((CEntity*)entity)->get<TCompJointHinge>();
 	if (joint)
 	{
@@ -82,6 +84,10 @@ void CHingeJoint::setLimit(float angle_limit){
 void CHingeJoint::setLimit(float angle_lower_limit, float angle_upper_limit) {
 	if (!entity.isValid())
 		return;
+	XASSERT(angle_lower_limit < 180, "Hinge limit must be lower than 180 degrees");
+	XASSERT(angle_lower_limit > -180, "Hinge limit must be more than -180 degrees");
+	XASSERT(angle_upper_limit < 180, "Hinge limit must be lower than 180 degrees");
+	XASSERT(angle_upper_limit > -180, "Hinge limit must be more than -180 degrees");
 	TCompJointHinge* joint = ((CEntity*)entity)->get<TCompJointHinge>();
 	if (joint)
 	{

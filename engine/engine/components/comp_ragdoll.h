@@ -7,6 +7,7 @@
 
 struct TCompRagdoll : TBaseComponent {
 private:
+	CHandle h_aabb;
 	CHandle skeleton;
 	CCoreRagdoll* ragdoll;
 
