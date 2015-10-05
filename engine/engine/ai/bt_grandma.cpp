@@ -19,7 +19,7 @@ const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
-const float distance_change_way_point = 0.38f;
+const float distance_change_way_point = 0.42f;
 const float force_large_impact = 60000.f;
 const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
@@ -634,7 +634,7 @@ int bt_grandma::actionWander()
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = walk_speed;
-		((TCompCharacterController*)character_controller)->lerpRotation = 0.1f;
+		((TCompCharacterController*)character_controller)->lerpRotation = 0.11f;
 		//m_char_controller->airSpeed = walk_speed * 0.8f;
 
 	}
