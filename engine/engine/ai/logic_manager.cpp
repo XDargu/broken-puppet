@@ -84,7 +84,7 @@ void CLogicManager::init()
 	scene_to_load = "";
 
 	shake_cam = false;
-	shake_amount = 0.2f;
+	shake_amount = 0;
 
 	//triggers.clear();
 	timers.clear();
