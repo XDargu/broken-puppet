@@ -64,6 +64,7 @@ CSoundManager            &sm = CSoundManager::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
+std::mutex	preLoadMutex;
 
 // Video
 TheoraVideoManager *mgr;
@@ -88,7 +89,9 @@ CApp::CApp()
 	, yres(480)
 	, time_modifier(1)
 	, slow_motion_counter(0)
-{ }
+{
+	bar = nullptr;
+}
 
 void CApp::loadConfig() {
 	// Parse xml file...
@@ -358,6 +361,19 @@ void initManagers() {
 
 }
 
+void CApp::preLoad(){
+	XDEBUG("First load");
+	preLoadMutex.lock();
+	CImporterResourceLoader loader;
+	loader.xmlParseFile("data/scenes/scene_final_boss.xml");
+	loader.xmlParseFile("data/scenes/scene_4.xml");
+	loader.xmlParseFile("data/scenes/scene_3.xml");
+	loader.xmlParseFile("data/scenes/scene_2.xml");
+	loader.xmlParseFile("data/scenes/scene_1.xml");	
+	preLoadMutex.unlock();
+	XDEBUG("First load ended");
+}
+
 bool CApp::create() {
 	CErrorContext ec("Creating", "app");
 
@@ -424,13 +440,8 @@ bool CApp::create() {
 	physics_manager.init();
 	
 	// Preload scenes
-	/*XDEBUG("First load");
-	CImporterResourceLoader loader;
-	loader.xmlParseFile("data/scenes/scene_1.xml");
-	loader.xmlParseFile("data/scenes/scene_2.xml");
-	loader.xmlParseFile("data/scenes/scene_3.xml");
-	loader.xmlParseFile("data/scenes/scene_4.xml");
-	XDEBUG("First load ended");*/
+	bar = new std::thread(&CApp::preLoad, this);
+	
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
@@ -583,6 +594,7 @@ void CApp::update(float elapsed) {
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		CNav_mesh_manager::get().setNeedNavMesh(false);
+		CNav_mesh_manager::get().generate_nav_mesh = false;
 		destroy();
 		exit(0);
 	}	
@@ -845,6 +857,11 @@ void CApp::render() {
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
 			loadScene(first_scene);
+			if (bar->joinable()){
+				bar->join();
+				delete bar;
+				bar = nullptr;
+			}
 		}
 		return;
 	}

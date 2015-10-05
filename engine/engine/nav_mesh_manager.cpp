@@ -400,7 +400,9 @@ CNav_mesh_manager::CNav_mesh_manager()
 CNav_mesh_manager::~CNav_mesh_manager()
 {
 	if (AiThread != nullptr){
-		TerminateThread(AiThread, 0);
+		//TerminateThread(AiThread, 0);
+		if(AiThread->joinable())
+			AiThread->join();
 	}
 }
 
