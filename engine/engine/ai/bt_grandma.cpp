@@ -19,7 +19,7 @@ const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
-const float distance_change_way_point = 0.42f;
+const float distance_change_way_point = 0.35f;
 const float force_large_impact = 60000.f;
 const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
@@ -29,6 +29,8 @@ const float walk_speed = 0.8f;
 const float run_speed = 2.2f;
 const float run_angry_speed = 4.f;
 const float sensor_delay = 1.f;
+const string particle_name_dismemberment = "ps_wood_hit";
+const string particle_name_initial_hit = "ps_attack2";
 
 
 void bt_grandma::create(string s)
@@ -148,6 +150,7 @@ void bt_grandma::create(string s)
 
 	null_node = false;
 	player_out_navMesh=false;
+	cut = false;
 
 	ropeRef = CHandle();
 	player_detected_pos = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -162,6 +165,8 @@ void bt_grandma::create(string s)
 	currentNumNeedlesViewed = 0;
 	sensor_acum = 0.f;
 	sensor_const = 1.f;
+	attacked = false;
+	is_reacheable = false;
 
 	((TCompCharacterController*)character_controller)->lerpRotation = 0.08f;
 
@@ -172,6 +177,7 @@ void bt_grandma::create(string s)
 int bt_grandma::actionRagdoll()
 {
 	TCompRagdoll* m_ragdoll = enemy_ragdoll;
+	TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
 
 	if (on_enter) {
 		stopAllAnimations();
@@ -179,11 +185,10 @@ int bt_grandma::actionRagdoll()
 		if (!m_ragdoll->isRagdollActive()) {
 			m_ragdoll->setActive(true);
 
-			TCompLife* m_life = ((CEntity*)entity)->get<TCompLife>();
 			if (m_life->life <= 0) {
 				TCompRagdoll* m_ragdoll = enemy_ragdoll;
-				m_ragdoll->breakJoints();
 				TCompTransform* m_transform = own_transform;
+				m_ragdoll->breakJoints();
 				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
 				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
 				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
@@ -230,6 +235,10 @@ int bt_grandma::actionRagdoll()
 
 	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
 	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+
+	//if (m_life->life <= 0) {
+		//pos_final = XMVectorSet(10000, 10000, 10000, 0);
+	//}
 
 	((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
 		physx::PxTransform(
@@ -463,7 +472,6 @@ int bt_grandma::actionSelectNeedleToTake()
 
 }
 
-bool cut = false;
 //Cut the needles rope
 int bt_grandma::actionCutRope()
 {
@@ -849,7 +857,7 @@ int bt_grandma::actionSelectRole()
 	return LEAVE;
 }
 
-bool is_reacheable = false;
+
 //Go to his position
 int bt_grandma::actionChaseRoleDistance()
 {
@@ -913,7 +921,7 @@ int bt_grandma::actionChaseRoleDistance()
 	}
 }
 
-bool attacked = false;
+
 //First attack
 int bt_grandma::actionInitialAttack()
 {
@@ -930,32 +938,46 @@ int bt_grandma::actionInitialAttack()
 		playAnimationIfNotPlaying(20);
 		attacked = false;
 		mov_direction = Physics.XMVECTORToPxVec3(dir);
-		/*dir = XMVectorSet(0.f, XMVectorGetY(dir), 0.f, 0.f);
-		XMVECTOR orig_rot = m_transform->rotation;
-		m_transform->rotation = XMQuaternionMultiply(m_transform->rotation, dir);
-		m_transform->rotation = XMQuaternionSlerp(orig_rot, m_transform->rotation, clamp(0.25f, 0, 1));*/
 		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
 	}
 
-	if (state_time > getAnimationDuration(20)/3.f) {
-		// Check if the attack reach the player
-		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
-		if ((distance <= max_distance_to_attack * 2) && (!attacked))
-		{
+	float attack_time = 0.466;
+	float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+
+	// Check if the attack reach the player at the given time
+	if (state_time > attack_time && attacked == false && distance <= 2.1f) {
+		
+		XMVECTOR attack_direction_path = (p_transform->position - m_transform->position);
+		attack_direction_path = XMVector3Normalize(attack_direction_path);
+		XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+		XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+		float rads_path = XMVectorGetX(dir_path);
+		float angle_deg_path = rad2deg(rads_path);
+		if (angle_deg_path < 40.f){
+			XMVECTOR particles_pos = p_transform->position - attack_direction_path * 0.5f + XMVectorSet(0, 1, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
 			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
-		}
 
-		if (state_time >= getAnimationDuration(20)){
-				last_time = timer;
-			return LEAVE;
-		}else{
-			return STAY;
+			// Sound
+			CSoundManager::get().playEvent("GRANDMA_HIT", m_transform->position);
 		}
+		else{
+			last_time = timer;
+			attacked = true;
 
+			// MISS
+			CSoundManager::get().playEvent("GRANDMA_MISS", m_transform->position);
+			attacked = true;
+		}
+			
+	}
+
+	if (state_time >= getAnimationDuration(20)){
+		last_time = timer;
+		return LEAVE;
 	}
 	else{
-		attacked = false;
 		return STAY;
 	}
 }
@@ -1038,10 +1060,9 @@ int bt_grandma::actionSituate()
 //
 int bt_grandma::actionNormalAttack()
 {
-	int anim = 4;
 	if (on_enter) {
 		attacked = false;
-		anim = getRandomNumber(5, 7);
+		int anim = getRandomNumber(5, 7);
 		stopAllAnimations();
 		resetTimeAnimation();
 		playAnimationIfNotPlaying(anim);
@@ -1055,23 +1076,39 @@ int bt_grandma::actionNormalAttack()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time >= getAnimationDuration(anim) / 5) {
+	// Anim attack 1 & 2 has the first attack at 0.5 seconds, the attack 3 animation at 0.33
+	float attack_time = 0.5f;
+	if (last_anim_id == 7)
+		attack_time = 0.33f;
+
+	if (state_time >= attack_time && attacked == false) {
+
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
-		if ((distance <= max_distance_to_attack * 2) && (!attacked))
+		if (distance <= max_distance_to_attack)
 		{
+			// Impact particle
+			XMVECTOR particles_pos = p_transform->position - dir * 0.5f + XMVectorSet(0, 1, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
+
 			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
-		}
 
-		if (state_time >= getAnimationDuration(anim)){
-			return LEAVE;
-		}else{
-			return STAY;
+			// Sound
+			CSoundManager::get().playEvent("GRANDMA_HIT", m_transform->position);
 		}
+		else {
+			// MISS
+			CSoundManager::get().playEvent("GRANDMA_MISS", m_transform->position);
+			attacked = true;
+		}
+	}
 
-	}else{
+	if (state_time >= getAnimationDuration(last_anim_id)){
 		attacked = false;
+		return LEAVE;
+	}
+	else{
 		return STAY;
 	}
 }
@@ -1521,24 +1558,29 @@ int bt_grandma::conditioninitial_attack()
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
 
-	XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
-	attack_direction_path = XMVector3Normalize(attack_direction_path);
-	XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
-	XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
-	float rads_path = XMVectorGetX(dir_path);
-	float angle_deg_path = rad2deg(rads_path);
+	if (path.size() > 0) {
 
-	float distance = V3DISTANCE(m_transform->position, p_transform->position);
-	if ((!initial_attack) && ((distance < 3.4f))){
-		if (angle_deg_path < 30.f)
-			return true;
+		XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
+		attack_direction_path = XMVector3Normalize(attack_direction_path);
+		XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+		XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+		float rads_path = XMVectorGetX(dir_path);
+		float angle_deg_path = rad2deg(rads_path);
+
+		float distance = V3DISTANCE(m_transform->position, p_transform->position);
+		if ((!initial_attack) && ((distance < 3.4f))){
+			if (angle_deg_path < 30.f)
+				return true;
+			else{
+				initial_attack = true;
+				return false;
+			}
+		}
 		else{
-			initial_attack = true;
 			return false;
 		}
-	}else{
-		return false;
 	}
+	return false;
 }
 
 //Check if it is too far from the target position
@@ -1641,6 +1683,10 @@ void bt_grandma::hurtSensor(float damage){
 		life->life = 0;
 		stopAllAnimations();
 		is_ragdoll = true;
+		TCompTransform* m_transform = own_transform;
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name_dismemberment, m_transform->position, m_transform->rotation);
+		TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
+		pg->destroy_on_death = true;
 		setCurrent(NULL);
 		((TCompSensorNeedles*)m_sensor)->desAsociateNeedle(entity);
 	}

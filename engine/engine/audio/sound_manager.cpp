@@ -53,7 +53,7 @@ CSoundManager::CSoundManager()
 	ERRCHECK(system->getLowLevelSystem(&lowLevelSystem));
 	ERRCHECK(lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_5POINT1, 0));
 	
-	ERRCHECK(system->initialize(32, FMOD_STUDIO_INIT_NORMAL | FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, extraDriverData));
+	ERRCHECK(system->initialize(1024, FMOD_STUDIO_INIT_NORMAL | FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, extraDriverData));
 	
 	ERRCHECK(FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_WARNING, FMOD_DEBUG_MODE_TTY, 0, "fmod_log.txt"));
 
@@ -139,7 +139,7 @@ void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, 
 		// The event doesn't exists		
 		// Load the event description
 		event_descriptions[path] = NULL;
-		system->getEvent(path.c_str(), &event_descriptions[path]);
+		ERRCHECK(system->getEvent(path.c_str(), &event_descriptions[path]));
 
 		// The event doesn't exists
 		if (event_descriptions[path] == NULL) {
@@ -368,7 +368,7 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 
 	if (CApp::get().total_time < 2.5f) { return; }
 
-	float material_type = getMaterialTagValue(material);
+	int material_type = getMaterialTagValue(material);
 
 	//float f = force * 8;
 	/*loadScene("data/scenes/scene_1_noenemy.xml");*/
@@ -378,11 +378,22 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 	CSoundManager::SoundParameter params[] = {
 		{ "force", force },
 		{ "mass", mass },
-		{ "material", material_type }
 	};
 
 	//CSoundManager::get().playEvent("event:/Enviroment/impact", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
-	playEvent("HIT_WOOD", ((TCompTransform*)transform)->position);
+	switch (material_type)
+	{
+	case 0:	playEvent("HIT_WOOD", ((TCompTransform*)transform)->position); break;
+	case 2:	playEvent("HIT_METAL", ((TCompTransform*)transform)->position); break;
+	case 11: playEvent("HIT_RATTLE", ((TCompTransform*)transform)->position); break;
+	case 12: playEvent("HIT_BOOK", ((TCompTransform*)transform)->position); break;
+	case 13: playEvent("HIT_PIANO", ((TCompTransform*)transform)->position); break;
+	case 14: playEvent("HIT_BALL", ((TCompTransform*)transform)->position); break;
+	
+	default:
+		playEvent("HIT_WOOD", ((TCompTransform*)transform)->position);
+		break;
+	}
 }
 
 void CSoundManager::activateSlowMo(){
@@ -435,18 +446,22 @@ bool CSoundManager::getSlow(){
 }
 
 
-float CSoundManager::getMaterialTagValue(std::string material) {
+int CSoundManager::getMaterialTagValue(std::string material) {
 	if (material == "wood") { return 0; }
-	if (material == "metal") { return 1; }
-	if (material == "ceramics") { return 2; }
-	if (material == "cloth") { return 3; }
-	if (material == "wicker") { return 4; }
-	if (material == "leather") { return 5; }
-	if (material == "book") { return 6; }
-	if (material == "rattle") { return 7; }
-	if (material == "glass") { return 8; }
-	if (material == "plastic") { return 9; }
-	if (material == "piano") { return 10; }
+	if (material == "wood_old") { return 1; }
+	if (material == "metal") { return 2; }
+	if (material == "metal_floor") { return 3; }
+	if (material == "ceramics") { return 4; }
+	if (material == "stone") { return 5; }
+	if (material == "cloth") { return 6; }
+	if (material == "wicker") { return 7; }
+	if (material == "leather") { return 8; }
+	if (material == "glass") { return 9; }
+	if (material == "plastic") { return 10; }
+	if (material == "rattle") { return 11; }
+	if (material == "book") { return 12; }
+	if (material == "piano") { return 13; }
+	if (material == "ball") { return 14; }
 	// Default: Wood
 	return 0;
 }

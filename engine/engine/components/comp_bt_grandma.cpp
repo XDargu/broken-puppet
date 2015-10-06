@@ -122,5 +122,6 @@ void TCompBtGrandma::onNeedleHit(const TMsgNeedleHit& msg) {
 void TCompBtGrandma::renderDebug3D() {
 	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();
 	font.print3D(m_transform->position + XMVectorSet(0, 1, 0, 0), m_ai_controller->getCurrentNode().c_str());
+	font.print3D(m_transform->position + XMVectorSet(0, 1.15f, 0, 0), std::to_string(m_ai_controller->state_time).c_str());
 	m_ai_controller->drawdebug();
 }

@@ -7,6 +7,8 @@
   <event id="KATH_WAKEUP" path="" />
   <event id="KATH_HIT" path="" />
   
+  <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
+  
   <!-- Strings & needles -->
   <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" />
   <event id="STRING_GRAB" path="event:/Expresion/Katherine/Tirar" />
@@ -22,14 +24,45 @@
   
   <!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
+  <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
+  <event id="HIT_RATTLE" path="event:/Colisiones/Colision Cascabel" />
+  <event id="HIT_PIANO" path="event:/Colisiones/Colision Piano" />
+  <event id="HIT_BALL" path="event:/Colisiones/Colision Pelota" />
+  <event id="HIT_BOOK" path="event:/Colisiones/Colision Libro" />
+
+  <!-- Impactos -->
+  <event id="GRANDMA_HIT" path="event:/Impactos/sword_swing" />
+  <event id="GRANDMA_MISS" path="event:/Impactos/sword_miss" />
+
+  <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" />
+  <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" />
   
   <!-- Ambient -->
   
-  <event id="CURRENT_ROOM" path="event:/TestRoom" />
-  
-  <event id="BUZZING" path="" />
-  
-  
+  IDs de habitaciones:
+  - Escena 3:
+   + 0: Salita inicial + sala de las abuelas
+   + 1: Pasillo doble + Sala de subir el agua
+   + 2: Pasillo tras ventilador + caída
+   + 3: Sala final
+   + 4: Sala del desagüe
+  <event id="CURRENT_ROOM" path="event:/Sala Actual" />
+
+  <event id="BUZZING" path="event:/Ambiente/buzz" /> Zumbido eléctrico
+  <event id="BOILER" path="event:/Ambiente/boiler" /> Calderas (vibración + vapor)
+  <event id="BIGFAN" path="event:/Ambiente/big fan" /> Ventiladores gigantes
+  <event id="WATERPIPES" path="event:/Ambiente/water_pipes" /> Agua por tuberías
+  <event id="SPARKS1" path="event:/Ambiente/sparks1" /> Agua por tuberías
+  <event id="RUNNINGWATER" path="event:/Ambiente/running_water" /> Agua que sale al destaponar
+  <event id="PLANETARIUM" path="event:/Ambiente/planetarium" /> Atrezzos de planetario
+  <event id="JUKEBOX_LOOP" path="event:/Ambiente/gramola_loop" /> Disco vacío en la gramola
+  <event id="GEARS_LOOP_1" path="event:/Ambiente/mecanismos_1" /> Mecanismos pequeños
+  <event id="ELEVATOR" path="event:/Ambiente/elevator" /> Ascensor completo
+  <event id="WOODEN_DOOR" path="event:/Ambiente/wood_door_open" /> Puerta de madera al abrirse
+  <event id="LIGHT_ON" path="event:/Mecanismos/Interruptores/light_switch_on" /> Cables al activar la luz
+  <event id="LIGHT_OFF" path="event:/Mecanismos/Interruptores/light_switch_off" /> Cables al desactivar la luz
+
+
   <!-- Mixer -->
   <event id="UNDERWATER" path="event:/Mixer/Underwater" />
 

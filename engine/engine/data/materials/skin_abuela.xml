@@ -1,4 +1,7 @@
 <std_material name="skin_abuela"
               tech="skin_basic"
               diffuse="abuela_difuso"
-			  normal="abuela_normal"/>
+			  normal="abuela_normal"
+			  specular="abuela_specular"
+			glossiness="abuela_gloss"
+			  />

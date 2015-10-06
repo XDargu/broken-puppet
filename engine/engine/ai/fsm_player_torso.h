@@ -25,6 +25,7 @@ private:
 	XMVECTOR standard_camera_offset;
 	XMVECTOR golden_needle_point;
 	bool looking_at_pointer;
+	bool first_blood;
 public:
 
 	bool first_throw;

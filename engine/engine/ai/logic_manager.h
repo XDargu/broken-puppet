@@ -103,7 +103,7 @@ public:
 	void addSubtitle(std::string guid, Subtitle subtitle);
 
 	CHandle instantiateParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
-
+	CHandle instantiateParticleGroupOneShot(std::string pg_name, CVector position, CQuaterion rotation = XMQuaternionIdentity());
 
 	void startPathMovement(const char* name);
 
@@ -164,6 +164,8 @@ public:
 
 	// PARTICLES
 	void createParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
+	// OBJECTS
+	void createPrefab(std::string name, CVector position, CQuaterion rotation);
 
 	// STRING EVENTS
 	void stringThrown();

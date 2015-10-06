@@ -13,6 +13,7 @@
 #include "components\comp_zone_aabb.h"
 #include "components\comp_hfx_zone.h"
 #include "components\comp_audio_source.h"
+#include "components\comp_particle_group.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -410,14 +411,42 @@ CHandle CLogicManager::instantiateParticleGroup(std::string pg_name, CVector pos
 	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
 	if (entity.isValid()) {
 		TCompName* name = ((CEntity*)entity)->get<TCompName>();
-		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
-		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
-		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
-		std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
-		std::strcpy(name->name, n_pg_name.c_str());
-		particle_group_counter++;
-		particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+		if (name) {
+			TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+			if (transform) {
+				transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+				transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+				std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
+				std::strcpy(name->name, n_pg_name.c_str());
+				particle_group_counter++;
+				particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+			}
+		}
+		return entity;
+	}
 
+	return CHandle();
+}
+
+CHandle CLogicManager::instantiateParticleGroupOneShot(std::string pg_name, CVector position, CQuaterion rotation){
+	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
+	if (entity.isValid()) {
+		TCompName* name = ((CEntity*)entity)->get<TCompName>();
+		if (name) {
+			TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+			if (transform) {
+				transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+				transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+				std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
+				std::strcpy(name->name, n_pg_name.c_str());
+				particle_group_counter++;
+				particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+				TCompParticleGroup* pg = ((CEntity*)entity)->get<TCompParticleGroup>();
+				if (pg) {
+					pg->destroy_on_death = true;
+				}
+			}
+		}
 		return entity;
 	}
 
@@ -576,6 +605,7 @@ void CLogicManager::bootLUA() {
 		.set("setCanMove", &CLogicManager::setCanMove)
 		.set("shakeCamera", &CLogicManager::shakeCamera)
 		.set("stopShakeCamera", &CLogicManager::stopShakeCamera)
+		.set("createPrefab", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createPrefab)
 	;
 
 	// Register the bot class
@@ -1034,4 +1064,19 @@ void CLogicManager::shakeCamera(float amount) {
 
 void CLogicManager::stopShakeCamera() {
 	shake_cam = false;
+}
+
+void CLogicManager::createPrefab(std::string name, CVector position, CQuaterion rotation) {
+	CHandle entity = prefabs_manager.getInstanceByName(name.c_str());
+	if (entity.isValid()) {
+		XDEBUG("Created prefab: %s at x: %f, y: %f, z: %f", name, position.x, position.y, position.z);
+		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+		transform->init();
+		TCompAudioSource* audio = ((CEntity*)entity)->get<TCompAudioSource>();
+		audio->init();
+		TCompParticleGroup* particle = ((CEntity*)entity)->get<TCompParticleGroup>();
+		particle->init();
+	}
 }

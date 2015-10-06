@@ -242,6 +242,7 @@ void PSGBuffer(
   // Save the normal
 
   bool test = length(in_tangent) < 2;
+  test = true;
   float3 m_norm = test ? wnormal_per_pixel : in_normal;
   normal = (float4(m_norm, 1) + 1.) * 0.5;
   
