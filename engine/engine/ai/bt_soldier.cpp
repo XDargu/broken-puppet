@@ -11,7 +11,7 @@
 const int max_bf_posibilities = 7;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
-const float max_distance_to_attack = 1.f;
+const float max_distance_to_attack = 1.5f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
@@ -29,7 +29,9 @@ const float run_angry_speed = 5.2f;
 
 // Sensor
 const float sensor_delay = 1.f;
-float sensor_acum_soldier = 0.f;
+
+const string particle_name_dismemberment = "ps_wood_hit";
+const string particle_name_initial_hit = "ps_attack2";
 
 
 void bt_soldier::create(string s)
@@ -651,25 +653,43 @@ int bt_soldier::actionInitialAttack()
 		attacked = false;
 	}
 
-	if ((state_time >= getAnimationDuration(4) / 2) && (!attacked)) {
+	float attack_time = 0.857f;
+	float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+
+	if (state_time > attack_time && attacked == false && distance <= 1.8f){
 		// Check if the attack reach the player
-		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
-		if (distance <= 1.5f * 2)
-		{
+		XMVECTOR attack_direction_path = (p_transform->position - m_transform->position);
+		attack_direction_path = XMVector3Normalize(attack_direction_path);
+		XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+		XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+		float rads_path = XMVectorGetX(dir_path);
+		float angle_deg_path = rad2deg(rads_path);
+		if (angle_deg_path < 40.f){
+			XMVECTOR particles_pos = p_transform->position - attack_direction_path * 0.5f + XMVectorSet(0, 1.7f, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
 			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 101000.f, false));
 			attacked = true;
-		}
 
-		if (state_time >= getAnimationDuration(4)){
-			last_time = timer;
-			return LEAVE;
+			// Sound
+			CSoundManager::get().playEvent("SOLDIER_HIT", m_transform->position);
 		}
+		else{
+			last_time = timer;
+			attacked = true;
+
+			// MISS
+			CSoundManager::get().playEvent("SOLDIER_MISS", m_transform->position);
+			attacked = true;
+		}
+	}
+
+	if (state_time >= getAnimationDuration(19)){
+		last_time = timer;
+		return LEAVE;
 	}
 	else{
-		attacked = false;
 		return STAY;
 	}
-	return LEAVE;
 }
 
 //Move step by step to the roll position (leave on reach or lost)
@@ -767,24 +787,35 @@ int bt_soldier::actionNormalAttack()
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if ((state_time >= getAnimationDuration(4) / 5) && (!attacked)) {
+	float attack_time = 0.966f;
+
+	if (state_time >= attack_time && attacked == false) {
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
-		if (distance <= max_distance_to_attack * 2)
+		if (distance <= max_distance_to_attack)
 		{
+			XMVECTOR particles_pos = p_transform->position - dir * 0.5f + XMVectorSet(0, 1.7f, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
 			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
+			// Sound
+			CSoundManager::get().playEvent("SOLDIER_HIT", m_transform->position);
 		}
+		else {
+			// MISS
+			CSoundManager::get().playEvent("SOLDIER_MISS", m_transform->position);
+			attacked = true;
+		}
+	}
 
-		if (state_time >= getAnimationDuration(4)){
-			return LEAVE;
-		}
+	if (state_time >= getAnimationDuration(last_anim_id)){
+		attacked = false;
+		return LEAVE;
 	}
 	else{
-		attacked = false;
 		return STAY;
 	}
-	return LEAVE;
+
 }
 
 //Play a Idle war animation
@@ -1183,6 +1214,8 @@ void bt_soldier::hurtSensor(float damage){
 		TCompLife* life = ((CEntity*)entity)->get<TCompLife>();
 		life->life = 0;
 		is_ragdoll = true;
+		TCompTransform* m_transform = own_transform;
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name_dismemberment, m_transform->position, m_transform->rotation);
 		setCurrent(NULL);
 
 	}
@@ -1211,14 +1244,6 @@ void bt_soldier::PlayerFoundSensor(){
 void bt_soldier::update(float elapsed){
 
 	if (active){
-		sensor_acum_soldier += elapsed;
-
-		if (sensor_delay <= sensor_acum_soldier)
-		{
-			sensor_acum_soldier = 0;
-		}
-
-
 		playerViewedSensor();
 		findLostPlayer();
 		if (findPlayer()){

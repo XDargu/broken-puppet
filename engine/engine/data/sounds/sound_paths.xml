@@ -7,6 +7,8 @@
   <event id="KATH_WAKEUP" path="" />
   <event id="KATH_HIT" path="" />
   
+  <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
+  
   <!-- Strings & needles -->
   <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" />
   <event id="STRING_GRAB" path="event:/Expresion/Katherine/Tirar" />
@@ -23,7 +25,13 @@
   <!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
   <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
-  
+
+  <!-- Impactos -->
+  <event id="GRANDMA_HIT" path="event:/Impactos/sword_swing" />
+  <event id="GRANDMA_MISS" path="event:/Impactos/sword_miss" />
+
+  <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" />
+  <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" />
   <!-- Ambient -->
   
   IDs de habitaciones:
