@@ -71,6 +71,7 @@ fsm_boss::fsm_boss()
 	attack_pattern_list.push_back(ap4);
 	/**/
 							  
+	boss_out = false;
 }
 
 fsm_boss::~fsm_boss()
@@ -219,20 +220,40 @@ void fsm_boss::RiseUp(){
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
 
-		// Hacer desaparecer silla
-		CHandle m_silla = m_entity_manager->getByName("silla");
-		if (m_silla.isValid()){
-			((TCompRender*)((CEntity*)m_silla)->get<TCompRender>())->active = false;		
-		}
-
 		// Move to the initial position
 		trans->position = original_pos;
-
 	}
+
+	if ((state_time >= 6.79f) && (!boss_out)){
+		boss_out = true;
+		// Make the floor disapear
+		CHandle floor = m_entity_manager->getByName("tapa_hueco_boss");
+		if (floor.isValid()){
+			TCompTransform* floor_trans = ((CEntity*)floor)->get<TCompTransform>();
+
+			// Generate the broken floor prefab
+			CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota");
+			//CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota_2");
+
+			if (broken_floor.isValid() && (floor_trans)){
+				TCompTransform* broken_floor_trans = ((CEntity*)broken_floor)->get<TCompTransform>();
+
+				// Follow
+				if (broken_floor_trans){
+					broken_floor_trans->setType(0);
+					broken_floor_trans->position = floor_trans->position;
+
+					TCompRender* floor_render = ((CEntity*)floor)->get<TCompRender>();
+					if (floor_render)
+						floor_render->active = false;
+				}
+			}
+		}
+	}
+
 	if (state_time >= 20.9f){
 		ChangeState("fbp_Idle1");
-	}
-	
+	}	
 }
 
 void fsm_boss::Idle1(float elapsed){
@@ -254,11 +275,9 @@ void fsm_boss::Idle1(float elapsed){
 	last_attack += elapsed;
 	
 	CIOStatus& io = CIOStatus::get();
-	/**/
+	/**
 	if (last_attack > 3){
 		int attack = CalculateAttack();
-		//XDEBUG("switch de attack");
-		//int attack = 1;
 		switch (attack)
 		{
 		case 0:
@@ -287,54 +306,6 @@ void fsm_boss::Idle1(float elapsed){
 	/**/
 
 	// Update input
-	/**
-	if (CIOStatus::get().becomesPressed(CIOStatus::P)){
-		ChangeState("fbp_Ball1Initial");
-	}
-	// Bajar defensas y ataque simple
-	if (CIOStatus::get().becomesPressed(CIOStatus::O)){
-		ChangeState("fbp_Shoot1DownDef");
-	}
-	// Rain de objetos
-	if (CIOStatus::get().becomesPressed(CIOStatus::I)){
-		ChangeState("fbp_Rain1Prepare");
-	}
-	// Girar golpe de objeto en cabeza
-	if (CIOStatus::get().becomesPressed(CIOStatus::U)){
-		ChangeState("fbp_Hit1");
-	}
-	// Leche de proximidad
-	if (CIOStatus::get().becomesPressed(CIOStatus::L)){
-		ChangeState("fbp_Proximity");
-	}
-	// Girar cosas a la Derecha
-	if (CIOStatus::get().becomesPressed(CIOStatus::M)){
-		ChangeState("fbp_WaveRight");
-	}
-	// Girar cosas a la izquierda
-	if (CIOStatus::get().becomesPressed(CIOStatus::N)){
-		ChangeState("fbp_WaveLeft");
-	}
-	// Muerte
-	if (CIOStatus::get().becomesPressed(CIOStatus::H)){
-		ChangeState("fbp_Death");
-	}
-	// Hacer danio a la izquierda
-	if (CIOStatus::get().becomesPressed(CIOStatus::V)){
-		EvaluateHit(0);
-	}
-	// Hacer danio a la derecha
-	if (CIOStatus::get().becomesPressed(CIOStatus::B)){
-		EvaluateHit(1);
-	}
-	// Hacer danio a la izquierda final
-	if (CIOStatus::get().becomesPressed(CIOStatus::K)){
-		EvaluateHit(2);
-	}
-	// Hacer danio a la derecha final
-	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
-		EvaluateHit(3);
-	}
 	/**/
 }
 
@@ -502,7 +473,6 @@ void fsm_boss::Ball1Initial(float elapsed){
 		float aux_ball_size = 0;
 
 		// Get obj till mass
-
 		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
 			CEntity* e = m_entity_manager->rigid_list[i];
 			if (!e->hasTag("player")){
@@ -541,7 +511,6 @@ void fsm_boss::Ball1Loop(float elapsed){
 	TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
 	PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 
-
 	// Calculate direction player enemy
 	PxVec3 player_boss_dir = (player_pos - enemy_pos);
 	player_boss_dir.y = 0;
@@ -557,7 +526,6 @@ void fsm_boss::Ball1Loop(float elapsed){
 				if (((CHandle)rigid).isValid()){
 
 					PxRigidDynamic*  px_rigid = rigid->rigidBody;
-
 					PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
 					px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
 					px_rigid->setLinearDamping(0.05f);
@@ -584,27 +552,70 @@ void fsm_boss::Ball1Launch(float elapsed){
 		stopAllAnimations();
 		skeleton->playAnimation(18);
 		last_anim_id = -1;
+		ball_lauched = false;
 	}
 
-	if (on_enter){
-		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
-		PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+	// Getting player position
+	TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+	PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+	
+	// Getting enemy position
+	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+	PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
+	// Calculate direction player enemy
+	PxVec3 player_boss_dir = (player_pos - enemy_pos);
+	player_boss_dir.y = 0;
+	player_boss_dir = player_boss_dir.getNormalized();
+
+	PxVec3	point_to_go = enemy_pos + point_offset + (player_boss_dir * distance_to_point);
+
+	if (state_time < 1.8){
 		for (int i = 0; i < ball_list.size(); ++i){
 			CEntity* e = ball_list[i];
 			if (((CHandle)e).isValid()){
 				TCompRigidBody* rigid = e->get<TCompRigidBody>();
 				if (((CHandle)rigid).isValid()){
-					TCompRigidBody* rigid = e->get<TCompRigidBody>();
+
 					PxRigidDynamic*  px_rigid = rigid->rigidBody;
-					PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
-					px_rigid->addForce(force_dir * force * 2, PxForceMode::eVELOCITY_CHANGE, true);
+					PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
+					px_rigid->addForce(force_dir * force, PxForceMode::eACCELERATION, true);
 					px_rigid->setLinearDamping(0.05f);
 					px_rigid->setAngularDamping(0.05f);
+
+					float aux_dist = (px_rigid->getGlobalPose().p - point_to_go).magnitude();
+					if (aux_dist < 4){
+						px_rigid->setLinearDamping(1);
+						px_rigid->setAngularDamping(0.5f);
+					}
 				}
 			}
 		}
 	}
+	else if(!ball_lauched) {
+		ball_lauched = true;
+
+		for (int i = 0; i < ball_list.size(); ++i){
+			CEntity* e = ball_list[i];
+
+			if (((CHandle)e).isValid()){
+
+				TCompRigidBody* rigid = e->get<TCompRigidBody>();
+				if (((CHandle)rigid).isValid()){
+
+					TCompRigidBody* rigid = e->get<TCompRigidBody>();
+					PxRigidDynamic*  px_rigid = rigid->rigidBody;
+					PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
+
+					px_rigid->addForce(force_dir * force * 2, PxForceMode::eVELOCITY_CHANGE, true);
+					px_rigid->setLinearDamping(0.05f);
+					px_rigid->setAngularDamping(0.05f);
+
+				}
+			}
+		}
+	}
+
 	if (state_time >= 2.3f){
 		ChangeState("fbp_Idle1");
 	}
@@ -1291,7 +1302,7 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 			}
 			has_left = false;
 			hurt_state += 1;
-		}		
+		}
 	}
 	// 1 right arm
 	if (arm_damaged == 1){
@@ -1317,7 +1328,7 @@ int fsm_boss::CalculateAttack() {
 		next_attack = 0;
 	}
 	else{
-		//return 4;
+		//return 2;
 		/**/
 		// Comprobamos si el patron es nulo, si lo es elegimos uno aleatorio
 		if (pattern_current < 0){

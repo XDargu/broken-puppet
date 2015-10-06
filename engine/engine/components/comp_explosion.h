@@ -10,12 +10,15 @@ private:
 
 	CHandle mEntity;
 	CHandle comp_trans;
+	CHandle boss_entity;
+	CHandle boss_trans;
 	float damage;
 	float radius;
 	float force_threshold;
 	bool bomb_active;
 	bool just_boss;
 	float count_down;
+	bool auto_stun;
 
 public:
 	TCompExplosion();

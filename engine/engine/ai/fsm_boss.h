@@ -66,6 +66,7 @@ private:
 
 	float ball_size;
 	vector<CHandle> ball_list;
+	bool ball_lauched;
 	
 	int times_stunned;
 
@@ -88,6 +89,7 @@ private:
 	void destroyBombs();
 	
 	bool appear;
+	bool boss_out;
 
 public:
 	fsm_boss();

@@ -8,6 +8,7 @@
 #include "comp_ragdoll.h"
 #include "comp_render.h"
 #include "comp_rope.h"
+#include "comp_explosion.h"
 #include "comp_distance_joint.h"
 #include "comp_point_light.h"
 #include "item_manager.h"
@@ -30,6 +31,7 @@ void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){
 	death_time = false;
 	proximity_distance = 14.f;
 	calculate_break_point = false;
+	heart_opened = false;
 };
 
 void TCompAiBoss::init(){
@@ -222,6 +224,9 @@ void TCompAiBoss::update(float elapsed){
 	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
 		m_fsm_boss->HeartHit();
 	}
+	if (CIOStatus::get().becomesPressed(CIOStatus::L)){
+		objToStun();
+	}
 
 
 	if (m_fsm_boss->can_proximity && (mBoss.isValid()) && (mPlayer.isValid())){
@@ -325,17 +330,19 @@ void TCompAiBoss::update(float elapsed){
 		TCompTransform* L_hitch_trans = ((CEntity*)L_hitch)->get<TCompTransform>();
 		if (L_hitch_trans) L_hitch_trans->setType(0);
 	}
-	else if ((m_fsm_boss->getState() == "fbp_FinalState") && (!death_time)) {
-		death_time = true;
-		openHeart();
-		TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
-		if (H_hitch_trans) H_hitch_trans->setType(1);
+	else if (m_fsm_boss->getState() == "fbp_FinalState"){
+		openHeart(elapsed);
+
+		if (!death_time) {
+			death_time = true;
+			TCompTransform* H_hitch_trans = ((CEntity*)H_hitch)->get<TCompTransform>();
+			if (H_hitch_trans) H_hitch_trans->setType(1);
+		}
 	}
 
 	// Check the hitch
 	if (m_fsm_boss->getState() == "fbp_Stunned1")
 	{
-
 		openLight(elapsed);
 	}
 	else{
@@ -377,7 +384,6 @@ void TCompAiBoss::stun(){
 	if (m_fsm_boss->HeadHit()){
 		TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
 		if (R_light_trans){
-			openedTime = 0.f;
 			R_light_trans->scale = XMVectorSetX(R_light_trans->scale, 0.01f);
 		}
 	}
@@ -385,58 +391,55 @@ void TCompAiBoss::stun(){
 
 bool TCompAiBoss::openLight(float elapsed){
 
-	float scale_target = 0.4f;
+	float scale_target = 0.3f;
 
-	openedTime += elapsed;
 	TCompTransform* R_light_trans = ((CEntity*)R_hitch_light)->get<TCompTransform>();
 	TCompTransform* L_light_trans = ((CEntity*)L_hitch_light)->get<TCompTransform>();
 
 	if (!hitchs_opened){
-		if ((m_fsm_boss->has_right) && (R_hitch_light.isValid())){
+		if ((R_hitch_light.isValid()) && (R_hitch_light.isValid())){
 			
-			if (R_light_trans){
-				R_light_trans->setType(0);
-			}
 			TCompPointLight* R_point_light = ((CEntity*)R_hitch_light)->get<TCompPointLight>();
-			if (R_point_light){
-				R_point_light->radius = 3.f;
-			}
+			TCompPointLight* L_point_light = ((CEntity*)L_hitch_light)->get<TCompPointLight>();
 
-			if (m_fsm_boss->has_left){
+			TCompRender* R_point_render = ((CEntity*)R_hitch_light)->get<TCompRender>();
+			TCompRender* L_point_render = ((CEntity*)L_hitch_light)->get<TCompRender>();
 
-				float aux_actual_scale = 0;
-				float aux_new_scale = 0;
-				if (L_light_trans){
+			if (    (R_light_trans) && (L_light_trans)
+				&& (R_point_render) && (L_point_render))
+			{
+				if (m_fsm_boss->has_right){
+					R_light_trans->scale = XMVectorSetX(R_light_trans->scale, 0);
+					((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = true;
+					R_light_trans->setType(0);
+					R_point_light->radius = 3.f;
+				}
+				if (m_fsm_boss->has_left){
+					L_light_trans->scale = XMVectorSetX(L_light_trans->scale, 0);
+					((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = true;
 					L_light_trans->setType(0);
-					if (L_hitch_light.isValid()){
-						((TCompRender*)((CEntity*)L_hitch_light)->get<TCompRender>())->active = true;
-
-					}
-				}
-				TCompPointLight* L_point_light = ((CEntity*)L_hitch_light)->get<TCompPointLight>();
-				if (L_point_light){
 					L_point_light->radius = 3.f;
-				}
+				}								
 			}
 		}
-
 	}
 
 	float aux_actual_scale = 0;
 	float aux_new_scale = 0;
 
-	((TCompRender*)((CEntity*)R_hitch_light)->get<TCompRender>())->active = true;
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(R_light_trans->scale);
-	aux_new_scale = lerp(aux_actual_scale, scale_target, 0.8) * elapsed;
-	R_light_trans->scale = XMVectorSetX(R_light_trans->scale, aux_new_scale + aux_actual_scale);
-	// Color Lerp
-
+	if ((aux_actual_scale <= scale_target) && (m_fsm_boss->has_right)){
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2) * elapsed;
+		R_light_trans->scale = XMVectorSetX(R_light_trans->scale, aux_new_scale + aux_actual_scale);
+	}
+	
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(L_light_trans->scale);
-	aux_new_scale = lerp(aux_actual_scale, scale_target, 0.5) * elapsed;
-	L_light_trans->scale = XMVectorSetX(L_light_trans->scale, aux_new_scale + aux_actual_scale);
-	// Color lerp
+	if ((aux_actual_scale <= scale_target) && (m_fsm_boss->has_left)){
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2) * elapsed;
+		L_light_trans->scale = XMVectorSetX(L_light_trans->scale, aux_new_scale + aux_actual_scale);
+	}
 
 	hitchs_opened = true;
 	return true;
@@ -463,18 +466,41 @@ void TCompAiBoss::closeLight(){
 	}
 }
 
-void TCompAiBoss::openHeart(){
-	// Hacerlas visibles
-	if (H_hitch_light.isValid()){
+void TCompAiBoss::openHeart(float elapsed){
 
-		((TCompRender*)((CEntity*)H_hitch_light)->get<TCompRender>())->active = true;
-		TCompPointLight* H_point_light = ((CEntity*)H_hitch_light)->get<TCompPointLight>();
+	float scale_target = 1.f;
 
-		if (H_point_light){
-			H_point_light->radius = 4.f;
+	TCompTransform* H_light_trans = ((CEntity*)H_hitch_light)->get<TCompTransform>();
+
+	if (!heart_opened){
+		if ((H_hitch_light.isValid())){
+
+			TCompPointLight* H_point_light = ((CEntity*)H_hitch_light)->get<TCompPointLight>();
+			TCompRender* H_point_render = ((CEntity*)H_hitch_light)->get<TCompRender>();
+
+			if ((H_light_trans)
+				&& (H_point_render))
+			{
+				H_light_trans->scale = XMVectorSetX(H_light_trans->scale, 0);
+				((TCompRender*)((CEntity*)H_hitch_light)->get<TCompRender>())->active = true;
+				H_light_trans->setType(0);
+				H_point_light->radius = 3.f;
+
+			}
 		}
 	}
 
+	float aux_actual_scale = 0;
+	float aux_new_scale = 0;
+
+	// Scale lerp
+	aux_actual_scale = XMVectorGetX(H_light_trans->scale);
+	if ((aux_actual_scale <= scale_target)){
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.02) * elapsed;
+		H_light_trans->scale = XMVectorSetX(H_light_trans->scale, aux_new_scale + aux_actual_scale);
+	}
+
+	heart_opened = true;
 }
 
 /**
@@ -486,6 +512,37 @@ NOS MIMIMOS Y PUNTO ¬¬
 void TCompAiBoss::initBoss(){
 	// Change the state to: RiseUp
 	m_fsm_boss->lua_boss_init = true;
+}
+
+CHandle TCompAiBoss::objToStun(){	
+
+	CHandle first_bomb = prefabs_manager.getInstanceByName("boss/first_bomb");
+
+	if (first_bomb.isValid()){
+		TCompTransform* first_bomb_trans = ((CEntity*)first_bomb)->get<TCompTransform>();
+		TCompRigidBody* first_bomb_rigid = ((CEntity*)first_bomb)->get<TCompRigidBody>();
+		TCompExplosion* first_bomb_exp = ((CEntity*)first_bomb)->get<TCompExplosion>();
+		TCompTransform* boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+		
+		XMVECTOR boss_front = XMVectorSet(0, 0, 1, 0);
+		if (boss_trans)
+			boss_front = boss_trans->getFront() * 5;
+
+		if (first_bomb_exp)
+			first_bomb_exp->init();
+
+		if (mBoss.isValid()){
+			TCompTransform* aux_boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+
+			if (aux_boss_trans){
+				PxTransform aux_bomb_pose = first_bomb_rigid->rigidBody->getGlobalPose();
+				aux_bomb_pose.p = Physics.XMVECTORToPxVec3(XMVectorSetY(aux_boss_trans->position + boss_front 
+					, (XMVectorGetY(aux_boss_trans->position) + 50)));
+				first_bomb_rigid->rigidBody->setGlobalPose(aux_bomb_pose);
+			}
+		}
+	}	
+	return first_bomb;
 }
 
 void TCompAiBoss::brokeHeart(){

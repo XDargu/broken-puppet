@@ -17,6 +17,7 @@ private:
 	CHandle comp_skeleton;
 
 	bool hitchs_opened;
+	bool heart_opened;
 
 	CHandle R_hitch;
 	PxFixedJoint* R_hitch_joint;
@@ -24,7 +25,6 @@ private:
 	
 
 	XMVECTOR original_ligh_color;
-	float openedTime;
 	bool openLight(float elapsed);
 	void closeLight();
 
@@ -71,13 +71,14 @@ public:
 
 	void breakHitch(CHandle m_hitch);	
 	void stun();
-	void openHeart();
+	void openHeart( float elapsed);
 
 	bool can_break_hitch;
 
 	void initBoss();
 
-	
+	CHandle objToStun();	
+	void saveRain(){};
 };
 
 #endif

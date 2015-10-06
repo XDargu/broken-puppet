@@ -42,19 +42,18 @@ void TCompBossPrefab::update(float elapsed) {
 
 					if (actor1)	{
 						if (m_entity == CHandle(actor1->userData)){
-							//rope_manager.removeString(string);
 							remove = false;
 						}
 					}
 					if (actor2){
 						if (m_entity == CHandle(actor2->userData)){
-							//rope_manager.removeString(string);
 							remove = false;
 						}
 					}
 				}
 			}
 		}
+
 		if (remove){
 			CEntityManager::get().remove(m_entity);
 		}

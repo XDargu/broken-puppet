@@ -6,11 +6,14 @@
 #include "comp_rope.h"
 #include "comp_distance_joint.h"
 #include "comp_particle_group.h"
+#include "comp_skeleton.h"
+#include "comp_ai_boss.h"
 #include "comp_ai_boss.h"
 #include "comp_needle.h"
 #include "ai\logic_manager.h"
 #include "item_manager.h"
 #include "rope_manager.h"
+#include "entity_manager.h"
 #include "audio\sound_manager.h"
 
 TCompExplosion::TCompExplosion(){}
@@ -18,12 +21,17 @@ TCompExplosion::~TCompExplosion(){}
 
 void TCompExplosion::init(){
 	mEntity = ((CEntity*)CHandle(this).getOwner());
+	boss_entity = CEntityManager::get().getByName("Boss");
+
+	if (boss_entity.isValid())
+		boss_trans = ((CEntity*)boss_entity)->get<TCompTransform>();
+
 	const char *mName = ((CEntity*)mEntity)->getName();
 	comp_trans = assertRequiredComponent<TCompTransform>(this);
 
 	force_threshold = 10;
 	count_down = 0;
-	
+
 }
 
 void TCompExplosion::loadFromAtts(const std::string& elem, MKeyValue &atts) {
@@ -31,6 +39,7 @@ void TCompExplosion::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	radius = atts.getFloat("radius", 6);
 	bomb_active = atts.getBool("active", false);
 	just_boss = atts.getBool("just_boss", false);
+	auto_stun = atts.getBool("auto_stun", false);
 }
 
 void TCompExplosion::update(float elapsed){
@@ -39,6 +48,39 @@ void TCompExplosion::update(float elapsed){
 		if (count_down >= 10.f){
 			bomb_active = true;
 		}
+	}
+	// auto bomb, follow in plane, when is near head explote and stun;
+	if (auto_stun){
+		/**/
+		if (boss_entity.isValid() && boss_trans.isValid() && comp_trans.isValid()){
+
+			// check head position: Bone 06
+			TCompSkeleton* skeleton = ((CEntity*)boss_entity)->get<TCompSkeleton>();
+			if (skeleton){
+				// Follow in plane				
+				XMVECTOR bomb_pos = ((TCompTransform*)comp_trans)->position;
+				XMVECTOR boss_front = ((TCompTransform*)boss_trans)->getFront();
+				XMVECTOR head_pos = skeleton->getPositionOfBone(6) + boss_front * 10;
+				XMVECTOR aux_head_pos = XMVectorSetY(head_pos, XMVectorGetY(bomb_pos));												
+
+				//((TCompTransform*)comp_trans)->position = aux_head_pos;
+
+				float bomb_pos_y = XMVectorGetY(bomb_pos);
+				float head_pos_y = XMVectorGetY(head_pos);
+				
+				// is near the head
+				if (bomb_pos_y <= head_pos_y){
+					// make the bomb explode	
+					Explote(true);
+					// make a head hit
+					CHandle comp_ai_boss = ((CEntity*)boss_entity)->get<TCompAiBoss>();
+					if (comp_ai_boss.isValid()){
+						((TCompAiBoss*)comp_ai_boss)->stun();
+					}
+				}				
+			}
+		}
+		/**/
 	}
 }
 
@@ -55,7 +97,6 @@ void TCompExplosion::onDetonate(const TMsgOnDetonate& msg){
 		}
 
 		if ((boss_check)){
-			//XDEBUG("bomb force: %f", msg.impact_force);
 			Explote(false);
 		}
 
