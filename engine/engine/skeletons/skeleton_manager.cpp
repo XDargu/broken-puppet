@@ -154,7 +154,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
     XMFLOAT3 pos;
     XMFLOAT2 uv;
     XMFLOAT3 normal;
-	XMFLOAT3 tangent;
+	XMFLOAT4 tangent;
     unsigned char bone_ids[4];    // Bones influencing this vertex
     unsigned char weights[4];     // How much the influence is
   };
@@ -210,7 +210,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
     auto& all_tex_coords = sm->getVectorVectorTextureCoordinate();
 	auto& all_tangent = sm->getVectorVectorTangentSpace();
     //assert(!all_tex_coords.empty());
-
+	
     // Vertices
     int nvertexs = sm->getVertexCount();
 
@@ -229,6 +229,64 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
 		assert(tangent->size() == nvertexs);
 	}
 
+	// CALCULATE TANGENT
+	std::vector<XMFLOAT3> tan1;
+	std::vector<XMFLOAT3> tan2;
+	tan1.resize(nvertexs * 2, XMFLOAT3(0, 0, 0));
+	tan2.resize(nvertexs * 2, XMFLOAT3(0, 0, 0));
+
+	if (tex_coords0) {
+		auto a = 0;
+		while (a < skin_idxs.size()) {
+			// Get the indices of each triangle
+			auto i1 = skin_idxs[a];
+			auto i2 = skin_idxs[a + 1];
+			auto i3 = skin_idxs[a + 2];
+
+			//vtx - i is the original array of floats #(pos, uv, N ...)		
+			auto vtx1 = sm->getVectorVertex()[i1];
+			auto vtx2 = sm->getVectorVertex()[i2];
+			auto vtx3 = sm->getVectorVertex()[i3];
+
+			// The positions are the 3 first floats in each array
+			XMFLOAT3 v1 = XMFLOAT3(vtx1.position.x, vtx1.position.y, vtx1.position.z);
+			XMFLOAT3 v2 = XMFLOAT3(vtx2.position.x, vtx2.position.y, vtx2.position.z);
+			XMFLOAT3 v3 = XMFLOAT3(vtx3.position.x, vtx3.position.y, vtx3.position.z);
+
+			// Then the tex coords
+			XMFLOAT2 w1 = XMFLOAT2((*tex_coords0)[i1].u, (*tex_coords0)[i1].v);
+			XMFLOAT2 w2 = XMFLOAT2((*tex_coords0)[i2].u, (*tex_coords0)[i2].v);
+			XMFLOAT2 w3 = XMFLOAT2((*tex_coords0)[i3].u, (*tex_coords0)[i3].v);
+
+			float x1 = v2.x - v1.x;
+			float x2 = v3.x - v1.x;
+			float y1 = v2.y - v1.y;
+			float y2 = v3.y - v1.y;
+			float z1 = v2.z - v1.z;
+			float z2 = v3.z - v1.z;
+
+			float s1 = w2.x - w1.x;
+			float s2 = w3.x - w1.x;
+			float t1 = w2.y - w1.y;
+			float t2 = w3.y - w1.y;
+
+			float r = 1.0F / (s1 * t2 - s2 * t1);
+			XMFLOAT3 sdir = XMFLOAT3((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
+			XMFLOAT3 tdir = XMFLOAT3((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
+
+			tan1[i1] = XMFLOAT3(tan1[i1].x + sdir.x, tan1[i1].y + sdir.y, tan1[i1].z + sdir.z);
+			tan1[i2] = XMFLOAT3(tan1[i2].x + sdir.x, tan1[i2].y + sdir.y, tan1[i2].z + sdir.z);
+			tan1[i3] = XMFLOAT3(tan1[i3].x + sdir.x, tan1[i3].y + sdir.y, tan1[i3].z + sdir.z);
+
+			tan2[i1] = XMFLOAT3(tan2[i1].x + tdir.x, tan2[i1].y + tdir.y, tan2[i1].z + tdir.z);
+			tan2[i2] = XMFLOAT3(tan2[i2].x + tdir.x, tan2[i2].y + tdir.y, tan2[i2].z + tdir.z);
+			tan2[i3] = XMFLOAT3(tan2[i3].x + tdir.x, tan2[i3].y + tdir.y, tan2[i3].z + tdir.z);
+
+			// Next triangle
+			a = a + 3;
+		}
+	}
+
     // For each cal3d vertex
     int cal_vtx_idx = 0;
     for (auto& vit : sm->getVectorVertex()) {
@@ -242,9 +300,25 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
 	  
       if (tex_coords0)
         sv.uv = XMFLOAT2((*tex_coords0)[cal_vtx_idx].u, (*tex_coords0)[cal_vtx_idx].v);
+	  
+	  /*if (tangent)
+		  sv.tangent = XMFLOAT3((*tangent)[cal_vtx_idx].tangent.x, (*tangent)[cal_vtx_idx].tangent.y, (*tangent)[cal_vtx_idx].tangent.z);*/
 
-	  if (tangent)
-		  sv.tangent = XMFLOAT3((*tangent)[cal_vtx_idx].tangent.x, (*tangent)[cal_vtx_idx].tangent.y, (*tangent)[cal_vtx_idx].tangent.z);
+	  // Calculated tangent
+	  // Gram-Schmidt orthogonalize
+	  XMVECTOR t = XMLoadFloat3(&tan1[cal_vtx_idx]);
+	  XMVECTOR t2 = XMLoadFloat3(&tan2[cal_vtx_idx]);
+	  XMVECTOR n = XMLoadFloat3(&sv.normal);
+	  XMVECTOR v_tangent = XMVector3Normalize(t - n * XMVector3Dot(t, n));
+
+	  // Calculate handedness
+	  
+	  float head = XMVectorGetX(XMVector3Dot(XMVector3Cross(n, t), t2));
+	  v_tangent = XMVectorSetW(v_tangent, head < 0 ? -1 : 1);
+	  XMStoreFloat4(&sv.tangent, v_tangent);
+	  
+	  // Calculate handedness
+	  //tangent[a].w = (Dot(Cross(n, t), tan2[a]) < 0.0F) ? -1.0F : 1.0F;
 
       assert(vit.vectorInfluence.size() <= 4);
       int idx = 0;
@@ -300,4 +374,3 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
 
   return mds.saveToFile(outfile);
 }
-

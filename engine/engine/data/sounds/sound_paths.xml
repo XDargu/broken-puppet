@@ -22,17 +22,25 @@
   
   <!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
+  <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
   
   <!-- Ambient -->
   
-  <event id="CURRENT_ROOM" path="event:/TestRoom" />
+  IDs de habitaciones:
+  - Escena 3:
+   + 0: Salita inicial + sala de las abuelas
+   + 1: Pasillo doble + Sala de subir el agua
+   + 2: Pasillo tras ventilador + caída
+   + 3: Sala final
+   + 4: Sala del desagüe
+  <event id="CURRENT_ROOM" path="event:/Sala Actual" />
 
-  <event id="BUZZING" path="event:/buzz" /> Zumbido eléctrico
-  <event id="BOILER" path="event:/boiler" /> Calderas (vibración + vapor)
-  <event id="BIGFAN" path="event:/big fan" /> Ventiladores gigantes
-  <event id="WATERPIPES" path="event:/water_pipes" /> Agua por tuberías
-  <event id="SPARKS1" path="event:/sparks1" /> Agua por tuberías
-  <event id="RUNNINGWATER" path="event:/running_water" /> Agua que sale al destaponar
+  <event id="BUZZING" path="event:/Ambiente/buzz" /> Zumbido eléctrico
+  <event id="BOILER" path="event:/Ambiente/boiler" /> Calderas (vibración + vapor)
+  <event id="BIGFAN" path="event:/Ambiente/big fan" /> Ventiladores gigantes
+  <event id="WATERPIPES" path="event:/Ambiente/water_pipes" /> Agua por tuberías
+  <event id="SPARKS1" path="event:/Ambiente/sparks1" /> Agua por tuberías
+  <event id="RUNNINGWATER" path="event:/Ambiente/running_water" /> Agua que sale al destaponar
   
 
   <!-- Mixer -->

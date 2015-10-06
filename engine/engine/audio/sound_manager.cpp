@@ -437,16 +437,20 @@ bool CSoundManager::getSlow(){
 
 float CSoundManager::getMaterialTagValue(std::string material) {
 	if (material == "wood") { return 0; }
-	if (material == "metal") { return 1; }
-	if (material == "ceramics") { return 2; }
-	if (material == "cloth") { return 3; }
-	if (material == "wicker") { return 4; }
-	if (material == "leather") { return 5; }
-	if (material == "book") { return 6; }
-	if (material == "rattle") { return 7; }
-	if (material == "glass") { return 8; }
-	if (material == "plastic") { return 9; }
-	if (material == "piano") { return 10; }
+	if (material == "wood_old") { return 1; }
+	if (material == "metal") { return 2; }
+	if (material == "metal_floor") { return 3; }
+	if (material == "ceramics") { return 4; }
+	if (material == "stone") { return 5; }
+	if (material == "cloth") { return 6; }
+	if (material == "wicker") { return 7; }
+	if (material == "leather") { return 8; }
+	if (material == "glass") { return 9; }
+	if (material == "plastic") { return 10; }
+	if (material == "rattle") { return 11; }
+	if (material == "book") { return 12; }
+	if (material == "piano") { return 13; }
+	if (material == "ball") { return 14; }
 	// Default: Wood
 	return 0;
 }

@@ -246,10 +246,10 @@ void TCompPlayerController::update(float elapsed) {
 	// Footsteps sound
 
 	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+	float surface_value = surface_tag;
 
-	bool moving = c_controller->OnGround() && rigid->rigidBody->getLinearVelocity().magnitudeSquared() > 0.4f;
-	float surface_value = moving ? (surface_tag + 1) : 0;
-	bool running_value = io.isPressed(CIOStatus::RUN);
+	bool moving = fsm_player_legs->isMoving();	
+	bool running_value = fsm_player_legs->isRunning();
 
 	if (moving) {
 		footstep_counter += elapsed;
@@ -258,7 +258,11 @@ void TCompPlayerController::update(float elapsed) {
 		float time_modifier = (running_value ? 0.75f : 1) * (1 / water_multiplier);
 
 		if (footstep_counter >= base_step * time_modifier) {
-			CSoundManager::get().playEvent("STEPS_KATH", trans->position);
+			CSoundManager::SoundParameter params[] = {
+				{ "Material", surface_value }
+			};
+
+			CSoundManager::get().playEvent("STEPS_KATH", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
 			footstep_counter = 0.0f;
 		}
 	}

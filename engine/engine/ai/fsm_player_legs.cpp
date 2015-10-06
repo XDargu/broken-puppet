@@ -15,6 +15,14 @@ FSMPlayerLegs::~FSMPlayerLegs()
 {
 }
 
+bool FSMPlayerLegs::isMoving() {
+	return ((getState() == "fbp_Walk") || (getState() == "fbp_Run"));
+}
+
+bool FSMPlayerLegs::isRunning() {
+	return getState() == "fbp_Run";
+}
+
 void FSMPlayerLegs::Init()
 {
 	// insert all states in the map
@@ -223,7 +231,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_walk");
 	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
 	((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier = walk_speed;
-	if (!CIOStatus::get().isPressed(CIOStatus::RUN)){
+	if (CIOStatus::get().isPressed(CIOStatus::RUN)){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
@@ -327,7 +335,7 @@ void FSMPlayerLegs::Run(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_run");
 	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
 	((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier = run_speed;
-	if (CIOStatus::get().isPressed(CIOStatus::RUN)){
+	if (!CIOStatus::get().isPressed(CIOStatus::RUN)){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
