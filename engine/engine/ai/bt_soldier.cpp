@@ -1121,17 +1121,16 @@ int bt_soldier::conditioninitial_attack()
 	float angle_deg = rad2deg(rads);
 
 	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
-
-	XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
-	attack_direction_path = XMVector3Normalize(attack_direction_path);
-	XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
-	XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
-	float rads_path = XMVectorGetX(dir_path);
-	float angle_deg_path = rad2deg(rads_path);
-
-	float distance = V3DISTANCE(m_transform->position, p_transform->position);
-	
 	if (path.size() > 0){
+		XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
+		attack_direction_path = XMVector3Normalize(attack_direction_path);
+		XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+		XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+		float rads_path = XMVectorGetX(dir_path);
+		float angle_deg_path = rad2deg(rads_path);
+
+		float distance = V3DISTANCE(m_transform->position, p_transform->position);	
+	
 		float distance_path = V3DISTANCE(p_transform->position, path[path.size() - 1]);
 		float distance_path_enemy = V3DISTANCE(m_transform->position, path[path.size() - 1]);
 		if ((!initial_attack) && (distance_path_enemy < 7.5f) && (distance_path<1.0f)){
@@ -1436,7 +1435,7 @@ void bt_soldier::stopAnimation(int id) {
 
 float bt_soldier::getAnimationDuration(int id) {
 	TCompSkeleton* m_skeleton = enemy_skeleton;
-	float dur = m_skeleton->model->getMixer()->getAnimationVector()[id]->getCoreAnimation()->getDuration();
+	//float dur = m_skeleton->model->getMixer()->getAnimationVector()[id]->getCoreAnimation()->getDuration();
 	float res = m_skeleton->model->getMixer()->getAnimationDuration();
 	return res;
 }
