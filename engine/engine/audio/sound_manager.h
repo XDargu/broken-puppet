@@ -94,7 +94,7 @@ public:
 	void activateSlowMo();
 	void desactivateSlowMo();
 
-	float getMaterialTagValue(std::string material);
+	int getMaterialTagValue(std::string material);
 
 	void ERRCHECK(FMOD_RESULT result);
 

@@ -139,7 +139,7 @@ void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, 
 		// The event doesn't exists		
 		// Load the event description
 		event_descriptions[path] = NULL;
-		system->getEvent(path.c_str(), &event_descriptions[path]);
+		ERRCHECK(system->getEvent(path.c_str(), &event_descriptions[path]));
 
 		// The event doesn't exists
 		if (event_descriptions[path] == NULL) {
@@ -368,7 +368,7 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 
 	if (CApp::get().total_time < 2.5f) { return; }
 
-	float material_type = getMaterialTagValue(material);
+	int material_type = getMaterialTagValue(material);
 
 	//float f = force * 8;
 	/*loadScene("data/scenes/scene_1_noenemy.xml");*/
@@ -378,11 +378,22 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 	CSoundManager::SoundParameter params[] = {
 		{ "force", force },
 		{ "mass", mass },
-		{ "material", material_type }
 	};
 
 	//CSoundManager::get().playEvent("event:/Enviroment/impact", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
-	playEvent("HIT_WOOD", ((TCompTransform*)transform)->position);
+	switch (material_type)
+	{
+	case 0:	playEvent("HIT_WOOD", ((TCompTransform*)transform)->position); break;
+	case 2:	playEvent("HIT_METAL", ((TCompTransform*)transform)->position); break;
+	case 11: playEvent("HIT_RATTLE", ((TCompTransform*)transform)->position); break;
+	case 12: playEvent("HIT_BOOK", ((TCompTransform*)transform)->position); break;
+	case 13: playEvent("HIT_PIANO", ((TCompTransform*)transform)->position); break;
+	case 14: playEvent("HIT_BALL", ((TCompTransform*)transform)->position); break;
+	
+	default:
+		playEvent("HIT_WOOD", ((TCompTransform*)transform)->position);
+		break;
+	}
 }
 
 void CSoundManager::activateSlowMo(){
@@ -435,7 +446,7 @@ bool CSoundManager::getSlow(){
 }
 
 
-float CSoundManager::getMaterialTagValue(std::string material) {
+int CSoundManager::getMaterialTagValue(std::string material) {
 	if (material == "wood") { return 0; }
 	if (material == "wood_old") { return 1; }
 	if (material == "metal") { return 2; }

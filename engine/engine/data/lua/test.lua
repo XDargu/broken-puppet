@@ -139,7 +139,6 @@ end
 
 
 function onSceneLoad_scene_1()
-
 	player = logicManager:getBot("Player");
 	initPos = player:getPos();
 
@@ -184,9 +183,25 @@ function onSceneLoad_scene_1()
 	function onSwitchPressed_int_sc1_door(who)
 		-- Encender cable
 		sc1_cable:setEmissive(true)
+		local o_cable = logicManager:getObject("sc1_cable");
+		logicManager:playEventAtPosition("LIGHT_ON", o_cable:getPos());
+
 		-- Abrir puerta
 		sc1_door:setLimit(90)
 		sc1_door:setMotor(-1.55, 2000000);
+		local door = logicManager:getObject("sc1_hinge_door");
+		logicManager:playEventAtPosition("WOODEN_DOOR", door:getPos());
+	end
+
+	function onSwitchReleased_int_sc1_door(who)
+		-- Apagar cable
+		sc1_cable:setEmissive(false)
+		local o_cable = logicManager:getObject("sc1_cable");
+		logicManager:playEventAtPosition("LIGHT_OFF", o_cable:getPos());
+
+		-- Cerrar puerta
+		sc1_door:setMotor(0, 0);
+		sc1_door:setLimit(0.1)
 	end
 
 	-- *** Ascensor *** 
@@ -218,6 +233,7 @@ function onSceneLoad_scene_1()
 
 				sc1_hinge_asc1:setMotor(1.55, 3000);
 				sc1_hinge_asc2:setMotor(-1.55, 3000);
+
 				int_ascensor_pulsado = true
 			end
 		end
@@ -274,6 +290,9 @@ function onSceneLoad_scene_1()
 
 				sc1_hinge_asc1:setMotor(0,0);
 				sc1_hinge_asc2:setMotor(0,0);
+
+				-- Sonido de ascensor
+				logicManager:playEvent("ELEVATOR")
 			end
 
 		end
