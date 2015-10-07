@@ -14,7 +14,7 @@ const float max_dist_to_needle = 2.25f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
 const float max_time_tied = 2.f;
-const float max_distance_to_attack = 1.5f;
+const float max_distance_to_attack = 1.7f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
@@ -189,9 +189,8 @@ int bt_grandma::actionRagdoll()
 				TCompRagdoll* m_ragdoll = enemy_ragdoll;
 				TCompTransform* m_transform = own_transform;
 				m_ragdoll->breakJoints();
-				TCompAABB* ragdoll_aabb = (TCompAABB*)((CEntity*)entity)->get<TCompAABB>();
-				XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
-				XMVECTOR max = XMVectorSet(50, 50, 50, 0);
+				
+				//CRope_manager::get().removeJointTiedToObject(entity);
 
 				//Si esta atada, eliminamos el hilo antes de matar al enemigo
 				/*if (((TCompSensorTied*)tied_sensor)->getTiedState()){
@@ -199,17 +198,16 @@ int bt_grandma::actionRagdoll()
 					CEntityManager::get().remove(CHandle(ropeRef).getOwner());
 					}*/
 
-				//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
 				if (this->getRol() == role::ATTACKER)
 					aimanager::get().RemoveEnemyAttacker(this);
 				else
 					aimanager::get().RemoveEnemyTaunt(this);
 
-				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-				//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+				CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+				CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+				CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
 
 				CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
-				ragdoll_aabb->setIdentityMinMax(min, max);
 
 				aimanager::get().removeBot(this->getId());
 				//aimanager::get().removeGrandma(this->getId());
@@ -231,22 +229,24 @@ int bt_grandma::actionRagdoll()
 		}
 	}
 
-	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
+	if (m_life->life > 0) {
 
-	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
-	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+		XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(3);
 
-	//if (m_life->life <= 0) {
+		XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
+		XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+
+		//if (m_life->life <= 0) {
 		//pos_final = XMVectorSet(10000, 10000, 10000, 0);
-	//}
+		//}
 
-	((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
-		physx::PxTransform(
-		Physics.XMVECTORToPxVec3(pos_final),
-		((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().q
-		)
-		);
-
+		((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
+			physx::PxTransform(
+			Physics.XMVECTORToPxVec3(pos_final),
+			((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().q
+			)
+			);
+	}
 	if (state_time < max_time_ragdoll){
 		return STAY;
 	}
@@ -931,7 +931,6 @@ int bt_grandma::actionInitialAttack()
 	//m_char_controller->airSpeed = run_angry_speed * 0.8f;
 
 	if (on_enter) {
-		((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 2.7f;
 		initial_attack = true;
 		stopAllAnimations();
 		resetTimeAnimation();
@@ -939,6 +938,17 @@ int bt_grandma::actionInitialAttack()
 		attacked = false;
 		mov_direction = Physics.XMVECTORToPxVec3(dir);
 		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
+	}
+
+	float stop_time = 0.55f;
+	if (state_time <= stop_time){
+		XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+		((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 3.2f;
+		mov_direction = Physics.XMVECTORToPxVec3(dir);
+		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
+	}
+	else{
+		stopMovement();
 	}
 
 	float attack_time = 0.466;
@@ -953,6 +963,7 @@ int bt_grandma::actionInitialAttack()
 		XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
 		float rads_path = XMVectorGetX(dir_path);
 		float angle_deg_path = rad2deg(rads_path);
+		TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
 		if (angle_deg_path < 40.f){
 			XMVECTOR particles_pos = p_transform->position - attack_direction_path * 0.5f + XMVectorSet(0, 1, 0, 0);
 			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
@@ -1030,7 +1041,7 @@ int bt_grandma::actionSituate()
 			return LEAVE;
 		}
 	}else{
-		if (distance < 1.5f){
+		if (distance < 1.6f){
 			return LEAVE;
 		}
 	}
@@ -1085,6 +1096,7 @@ int bt_grandma::actionNormalAttack()
 
 		// Check if the attack reach the player
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
+		TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
 		if (distance <= max_distance_to_attack)
 		{
 			// Impact particle
@@ -1468,7 +1480,8 @@ int bt_grandma::conditionnormal_attack()
 	TCompTransform* p_transform = player_transform;
 
 	float random_time_attack = getRandomNumber(delta_time_close_attack - 2.8f, delta_time_close_attack);
-	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= random_time_attack)){
+	TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
+	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= random_time_attack) && (player_controller->canReceiveDamage())){
 		last_time = timer;
 		return true;
 	}
@@ -1568,7 +1581,8 @@ int bt_grandma::conditioninitial_attack()
 		float angle_deg_path = rad2deg(rads_path);
 
 		float distance = V3DISTANCE(m_transform->position, p_transform->position);
-		if ((!initial_attack) && ((distance < 3.4f))){
+		TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
+		if ((!initial_attack) && (distance < 3.4f) && (player_controller->canReceiveDamage())){
 			if (angle_deg_path < 30.f)
 				return true;
 			else{

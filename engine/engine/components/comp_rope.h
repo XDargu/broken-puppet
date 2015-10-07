@@ -49,6 +49,8 @@ public:
 	bool getStaticPosition(XMVECTOR& position);
 
 	void tenseRope();
+
+	void releaseJoint();
 };
 
 #endif

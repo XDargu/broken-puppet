@@ -49,6 +49,8 @@ public:
 	void onAttackDamage(const TMsgAttackDamage& msg);
 
 	bool canThrow();
+	
+	bool canReceiveDamage();
 };
 
 #endif

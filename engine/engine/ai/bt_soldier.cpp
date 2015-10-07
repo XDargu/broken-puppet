@@ -169,15 +169,16 @@ int bt_soldier::actionRagdoll()
 					//XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
 					//XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
-					//CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+					
 					if (this->getRol() == role::ATTACKER)
 						aimanager::get().RemoveEnemyAttacker(this);
 					else
 						aimanager::get().RemoveEnemyTaunt(this);
 
-					//CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
-					//CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
-
+					CNav_mesh_manager::get().removeCapsule(((CEntity*)entity)->get<TCompColliderCapsule>());
+					CEntityManager::get().remove(((CEntity*)entity)->get<TCompRigidBody>());
+					CEntityManager::get().remove(((CEntity*)entity)->get<TCompColliderCapsule>());
+					
 					CEntityManager::get().remove(((CEntity*)entity)->get<TCompCharacterController>());
 					//ragdoll_aabb->setIdentityMinMax(min, max);
 
@@ -201,21 +202,23 @@ int bt_soldier::actionRagdoll()
 		}
 	}
 
-	XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(17);
+	if (m_life->life > 0) {
+		XMVECTOR spine_pos = ((TCompSkeleton*)enemy_skeleton)->getPositionOfBone(17);
 
-	XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
-	XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
-	
-	if (m_life->life <= 0) {
-		pos_final = XMVectorSet(10000, 10000, 10000, 0);
+		XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().p);
+		XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+
+		if (m_life->life <= 0) {
+			pos_final = XMVectorSet(10000, 10000, 10000, 0);
+		}
+
+		((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
+			physx::PxTransform(
+			Physics.XMVECTORToPxVec3(pos_final),
+			((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().q
+			)
+			);
 	}
-
-	((TCompRigidBody*)enemy_rigid)->rigidBody->setGlobalPose(
-		physx::PxTransform(
-		Physics.XMVECTORToPxVec3(pos_final),
-		((TCompRigidBody*)enemy_rigid)->rigidBody->getGlobalPose().q
-		)
-		);
 
 	if (state_time < max_time_ragdoll){
 		return STAY;
@@ -617,7 +620,7 @@ int bt_soldier::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.10f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.15f)){
 				ind_path++;
 				return STAY;
 			}
@@ -646,11 +649,17 @@ int bt_soldier::actionInitialAttack()
 		stopAllAnimations();
 		resetTimeAnimation();
 		playAnimationIfNotPlaying(19);
+		attacked = false;
+	}
+
+	float stop_time = 1.30f;
+	if (state_time <= stop_time){
 		XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
 		((TCompCharacterController*)character_controller)->moveSpeedMultiplier = 5.f;
 		mov_direction = Physics.XMVECTORToPxVec3(dir);
 		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
-		attacked = false;
+	}else{
+		stopMovement();
 	}
 
 	float attack_time = 0.857f;
@@ -1058,7 +1067,8 @@ int bt_soldier::conditionnormal_attack()
 	TCompTransform* p_transform = player_transform;
 
 	float random_time_attack = getRandomNumber(delta_time_close_attack - 1.5f, delta_time_close_attack);
-	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= random_time_attack)){
+	TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
+	if (((V3DISTANCE(m_transform->position, p_transform->position) < 2.5f) && (timer - last_time) >= random_time_attack) && (player_controller->canReceiveDamage())){
 		last_time = timer;
 		return true;
 	}
@@ -1133,7 +1143,8 @@ int bt_soldier::conditioninitial_attack()
 	
 		float distance_path = V3DISTANCE(p_transform->position, path[path.size() - 1]);
 		float distance_path_enemy = V3DISTANCE(m_transform->position, path[path.size() - 1]);
-		if ((!initial_attack) && (distance_path_enemy < 7.5f) && (distance_path<1.0f)){
+		TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
+		if ((!initial_attack) && (distance_path_enemy < 7.5f) && (distance_path<1.0f) && (player_controller->canReceiveDamage())){
 			if ((angle_deg < 30.f) && (angle_deg_path<30.f)){
 				if (distance < 7.5f){
 					XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
@@ -1291,7 +1302,8 @@ void bt_soldier::chasePoint(TCompTransform* own_position, XMVECTOR chase_point){
 		}
 	}
 	mov_direction = Physics.XMVECTORToPxVec3(own_position->getFront());
-	look_direction = Physics.XMVECTORToPxVec3(chase_point - own_position->position);
+	XMVECTOR m_dir = XMVector3Normalize(chase_point - own_position->position);
+	look_direction = Physics.XMVECTORToPxVec3(m_dir);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 }
 

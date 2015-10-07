@@ -25,7 +25,6 @@ private:
 	bool need_navmesh;
 	int recast_aabb_index;
 	CHandle player;
-	bool builded;
 public:
 	bool first_build;
 	bool generate_nav_mesh;
@@ -39,6 +38,7 @@ public:
 	std::vector<CHandle> recastAABBs;
 	bool keep_updating_navmesh;
 	std::thread* AiThread;
+	bool builded;
 public:
 	CNav_mesh_manager();
 	~CNav_mesh_manager();

@@ -500,3 +500,11 @@ void TCompRope::createParticle(std::string material, XMVECTOR position, XMVECTOR
 		CLogicManager::get().p_group_counter++;
 	}
 }
+
+void TCompRope::releaseJoint() {
+	if (joint.isValid()) {
+		CEntityManager::get().remove(joint);
+	}
+	/*TCompDistanceJoint* m_joint = joint;
+	m_joint->joint->release();*/
+}

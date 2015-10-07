@@ -30,6 +30,7 @@ class CApp {
 public:
 	std::string current_scene_name;
 	std::string first_scene;
+	std::string menu_scene;
 	// Timer and stats
 	CDBGTimer load_timer;
 	CDBGTimer aux_timer;
@@ -84,6 +85,7 @@ public:
 
 	bool renderVideo();
 	void loadVideo(const char* name);
+	void playFinalVideo();
 	unsigned int getMaxNumNeedles();
 };
 

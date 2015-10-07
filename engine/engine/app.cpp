@@ -391,7 +391,9 @@ bool CApp::create() {
 
 	game_state = TGameState::INITIAL_VIDEO;
 #ifndef _DEBUG
-	loadVideo("bunny.ogg");
+	//CSoundManager::get().playEvent("INITIAL_VIDEO");
+	//CSoundManager::get().update(1.f / 60.f);
+	loadVideo("intro_BP.ogv");
 #endif
 
 #ifdef _DEBUG
@@ -440,6 +442,7 @@ bool CApp::create() {
 	// Preload scenes
 	bar = new std::thread(&CApp::preLoad, this);
 	
+	menu_scene = "data/scenes/empty_scene.xml";
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
@@ -579,6 +582,14 @@ void CApp::update(float elapsed) {
 		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
 			loadScene(first_scene);
+		}
+		return;
+	}
+
+	if (game_state == TGameState::FINAL_VIDEO) {
+		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+			game_state = TGameState::MAIN_MENU;
+			loadScene(menu_scene);
 		}
 		return;
 	}
@@ -855,7 +866,21 @@ void CApp::render() {
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
 			loadScene(first_scene);
-			if (bar->joinable()){
+			if (bar && bar->joinable()){
+				bar->join();
+				delete bar;
+				bar = nullptr;
+			}
+		}
+		return;
+	}
+
+	if (game_state == TGameState::FINAL_VIDEO) {
+		bool playVideo = renderVideo();
+		if (!playVideo) {
+			game_state = TGameState::MAIN_MENU;
+			loadScene(menu_scene);
+			if (bar && bar->joinable()){
 				bar->join();
 				delete bar;
 				bar = nullptr;
@@ -1487,6 +1512,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	bool is_ok = true;
 	pause = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
 
 	load_timer.reset();
 	aux_timer.reset();
@@ -1495,16 +1521,14 @@ void CApp::loadScene(std::string scene_name) {
 	load_skel_time = 0;
 	load_ragdoll_time = 0;
 
-	CNav_mesh_manager::get().clearNavMesh();
 	Citem_manager::get().clear();
 	CImporterParser p;
 	aimanager::get().clear();
-	dbg("lock:%b", CNav_mesh_manager::get().getLock());
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	while (CNav_mesh_manager::get().getLock()){
-		dbg("Dentro bucle");
-		continue;
+		std::string prueba = "1";
 	}
-	dbg("Pasado bucle");
+	CNav_mesh_manager::get().clearNavMesh();
 
 	/*deferred.destroy();
 	sharpen.destroy();
@@ -1580,11 +1604,9 @@ void CApp::loadScene(std::string scene_name) {
 		CNav_mesh_manager::get().setNavMeshClimb(0);
 	}
 	// Navmesh initialization
-	CNav_mesh_manager::get().setNeedNavMesh(true);
 	//Check the scene and change the climb atributte from the navmesh 
 
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
-
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");	
 	//XASSERT(CHandle(e).isValid(), "Camera not valid");
@@ -1813,4 +1835,10 @@ bool CApp::renderVideo()
 
 unsigned int CApp::getMaxNumNeedles(){
 	return max_num_needles;
+}
+
+void CApp::playFinalVideo() {
+	loadVideo("final_BP.ogv");
+	CSoundManager::get().playEvent("FINAL_VIDEO");
+	game_state = TGameState::FINAL_VIDEO;
 }

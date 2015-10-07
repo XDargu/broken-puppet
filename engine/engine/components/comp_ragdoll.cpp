@@ -16,6 +16,7 @@ TCompRagdoll::~TCompRagdoll() {
 void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	skeleton = assertRequiredComponent<TCompSkeleton>(this);
 	h_aabb = assertRequiredComponent<TCompAABB>(this);
+	h_trans = assertRequiredComponent<TCompTransform>(this);
 
 	std::string ragdoll_name = atts["name"];
 
@@ -63,6 +64,7 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 
 	else {
 		TCompAABB* aabb = h_aabb;
+		TCompTransform* transform = h_trans;
 		// AABB Min max
 		XMFLOAT3 aabb_min = XMFLOAT3(1000000, 1000000, 1000000);
 		XMFLOAT3 aabb_max = XMFLOAT3(-1000000, -1000000, -1000000);
@@ -79,12 +81,14 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			aabb_max.z = max(aabb_max.z, pos.z + 10);
 		}				
 		aabb->min = XMLoadFloat3(&aabb_min);
-		aabb->min = XMLoadFloat3(&aabb_max);
+		aabb->max = XMLoadFloat3(&aabb_max);
 	}
 }
 
 void TCompRagdoll::setActive(bool active) {
 	ragdoll_active = active;
+	TCompAABB* aabb = h_aabb;
+	aabb->auto_update = !active;
 
 	// Call the skeleton to save the ragdoll bone positions
 	if (!active) {
@@ -369,7 +373,6 @@ void TCompRagdoll::breakJoints() {
 		joint->getBreakForce(force, torque);
 		if (force == 10000000) {
 			joint->setBreakForce(0, 0);
-			joint->setConstraintFlag(PxConstraintFlag::eBROKEN, true);
 		}
 	}
 }

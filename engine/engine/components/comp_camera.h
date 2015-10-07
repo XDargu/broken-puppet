@@ -21,6 +21,10 @@ public:
 		float height = atts.getFloat("height", (float)CApp::get().yres);
 		
 		transform = assertRequiredComponent<TCompTransform>(this);
+
+		TCompTransform* m_trans = transform;
+		m_trans->lookAt(m_trans->position - m_trans->getUp(), m_trans->getUp());
+
 		setViewport(0, 0, width, height);
 
 		updateViewProjection();
