@@ -1494,7 +1494,6 @@ void CApp::loadScene(std::string scene_name) {
 	load_skel_time = 0;
 	load_ragdoll_time = 0;
 
-	CNav_mesh_manager::get().clearNavMesh();
 	Citem_manager::get().clear();
 	CImporterParser p;
 	aimanager::get().clear();
@@ -1504,6 +1503,7 @@ void CApp::loadScene(std::string scene_name) {
 		continue;
 	}
 	dbg("Pasado bucle");
+	CNav_mesh_manager::get().clearNavMesh();
 
 	/*deferred.destroy();
 	sharpen.destroy();
