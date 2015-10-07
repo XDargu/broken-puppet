@@ -9,21 +9,26 @@ TCompBossPrefab::TCompBossPrefab(){}
 TCompBossPrefab::~TCompBossPrefab(){}
 
 void TCompBossPrefab::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	removing_deep = atts.getFloat("removing_deep", -10.f);
+	removing_deep = atts.getFloat("removing_deep", -30.f);
 
 	m_trans = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();
 	m_entity = CHandle(this).getOwner();
 }
 
 void TCompBossPrefab::init(){
-	int a = 2;
+	m_boss = CEntityManager::get().getByName("Boss");
 }
 
 void TCompBossPrefab::update(float elapsed) {
 
-
 	float aux_deep = XMVectorGetY(((TCompTransform*)m_trans)->position);
 	
+	if (m_boss.isValid()){
+		TCompTransform* aux_m_boss_trans = ((CEntity*)m_boss)->get<TCompTransform>();
+		if (aux_m_boss_trans)
+			removing_deep = XMVectorGetY(aux_m_boss_trans->position) + removing_deep;
+	}
+
 	if (aux_deep <= removing_deep){
 		bool remove = true;
 

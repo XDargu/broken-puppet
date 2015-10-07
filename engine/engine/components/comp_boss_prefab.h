@@ -9,6 +9,7 @@ struct TCompBossPrefab : TBaseComponent {
 private:
 	CHandle m_trans;
 	CHandle m_entity;
+	CHandle m_boss;
 	float removing_deep;
 
 public:

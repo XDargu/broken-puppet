@@ -6,7 +6,7 @@
       <draw mesh="enganche_iz" sub_mesh="0" mat="Standardmaterial"/>
     </render>
     <aabb min="-4.80403 -5.36852 -1.12098" max="4.804 5.36852 1.12098"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.409551" boxY="0.457675" boxZ="0.0955658"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5"  boxX="3" boxY="3" boxZ="3"/>
     <rigidbody density="50.0"  />
     <bossHitch/>
   </entity>
