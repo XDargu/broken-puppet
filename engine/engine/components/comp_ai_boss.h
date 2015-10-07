@@ -59,6 +59,14 @@ private:
 
 	void brokeHeart();
 
+	float boss_creation_delay;
+	XMVECTOR last_created_pos;
+	XMVECTOR last_random_pos;
+	
+	bool save_raining;
+	bool saveRain(float elapsed, int debris_amount);
+	int save_debris_amount;
+
 public:
 
 	TCompAiBoss();
@@ -77,8 +85,12 @@ public:
 
 	void initBoss();
 
-	CHandle objToStun();	
-	void saveRain(){};
+
+	// Publicar en LUA
+	CHandle objToStun();		
+	void initialRain(int debris_amount);
+
 };
+
 
 #endif

@@ -11,7 +11,7 @@
 const int max_bf_posibilities = 7;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
-const float max_distance_to_attack = 1.5f;
+const float max_distance_to_attack = 2.15f;
 const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
@@ -662,10 +662,10 @@ int bt_soldier::actionInitialAttack()
 		stopMovement();
 	}
 
-	float attack_time = 0.857f;
+	float attack_time = 0.92f;
 	float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 
-	if (state_time > attack_time && attacked == false && distance <= 1.8f){
+	if (state_time > attack_time && attacked == false && distance <= 1.55f){
 		// Check if the attack reach the player
 		XMVECTOR attack_direction_path = (p_transform->position - m_transform->position);
 		attack_direction_path = XMVector3Normalize(attack_direction_path);
@@ -743,7 +743,7 @@ int bt_soldier::actionSituate()
 		}
 	}
 	else{
-		if (distance < 1.5f){
+		if (distance < 2.0f){
 			return LEAVE;
 		}
 	}
@@ -803,7 +803,7 @@ int bt_soldier::actionNormalAttack()
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 		if (distance <= max_distance_to_attack)
 		{
-			XMVECTOR particles_pos = p_transform->position - dir * 0.5f + XMVectorSet(0, 1.7f, 0, 0);
+			XMVECTOR particles_pos = p_transform->position - dir * 0.5f + XMVectorSet(0, 1.55f, 0, 0);
 			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
 			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
 			attacked = true;
@@ -1130,7 +1130,7 @@ int bt_soldier::conditioninitial_attack()
 	float rads = XMVectorGetX(dir);
 	float angle_deg = rad2deg(rads);
 
-	CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
+	//CNav_mesh_manager::get().findPath(m_transform->position, p_transform->position, path);
 	if (path.size() > 0){
 		XMVECTOR attack_direction_path = (path[path.size() - 1] - m_transform->position);
 		attack_direction_path = XMVector3Normalize(attack_direction_path);

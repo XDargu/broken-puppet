@@ -32,11 +32,20 @@ void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){
 	proximity_distance = 14.f;
 	calculate_break_point = false;
 	heart_opened = false;
+	boss_creation_delay = 0.f;
+	last_created_pos = XMVectorSet(0, 0, 0, 0);
+	last_random_pos = XMVectorSet(0, 0, 0, 0);
+	save_raining = false;
+	save_debris_amount = 0;
 };
 
 void TCompAiBoss::init(){
 
 	mPlayer = CEntityManager::get().getByName("Player");
+	if (mPlayer.isValid()){
+		player_trans = ((CEntity*)mPlayer)->get<TCompTransform>();
+	}
+
 	mBoss = CEntityManager::get().getByName("Boss");
 
 	point_offset = PxVec3(0, -6, 0);
@@ -113,8 +122,6 @@ void TCompAiBoss::init(){
 		R_point_light->radius = 0.00001f;
 	}
 
-
-
 	/**********************************************************
 	LEFT ARM, HITCH, LITH
 	/**********************************************************/
@@ -161,7 +168,6 @@ void TCompAiBoss::init(){
 	if (L_point_light){
 		L_point_light->radius = 0.00001f;
 	}
-
 
 	/**********************************************************
 	HEART
@@ -210,7 +216,6 @@ void TCompAiBoss::init(){
 		original_ligh_color = H_point_light->color;
 	}
 
-	
 }
 
 void TCompAiBoss::update(float elapsed){
@@ -227,11 +232,17 @@ void TCompAiBoss::update(float elapsed){
 	if (CIOStatus::get().becomesPressed(CIOStatus::L)){
 		objToStun();
 	}
+	if (CIOStatus::get().becomesPressed(CIOStatus::K)){
+		save_raining = true;
+		save_debris_amount = 20;
+	}
 
+	if (save_raining){
+		save_raining = saveRain(elapsed, save_debris_amount);
+	}
 
 	if (m_fsm_boss->can_proximity && (mBoss.isValid()) && (mPlayer.isValid())){
-		player_trans = ((CEntity*)mBoss)->get<TCompTransform>();
-		boss_trans = ((CEntity*)mPlayer)->get<TCompTransform>();
+		boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
 
 		if ((boss_trans.isValid()) && (player_trans.isValid())){
 			if (V3DISTANCE(((TCompTransform*)boss_trans)->position, ((TCompTransform*)player_trans)->position) < proximity_distance){
@@ -512,6 +523,88 @@ NOS MIMIMOS Y PUNTO ¬¬
 void TCompAiBoss::initBoss(){
 	// Change the state to: RiseUp
 	m_fsm_boss->lua_boss_init = true;
+}
+
+void TCompAiBoss::initialRain(int debris_amount){
+	save_raining = true;
+	save_debris_amount = debris_amount;
+}
+
+bool TCompAiBoss::saveRain(float elapsed,int debris_amount){
+
+	float debris_respawn_time = 0.05f;
+	float bomb_respawn_time = 1.f;
+	bool active = true;
+
+	if (debris_created <= debris_amount){
+
+		debris_creation_delay += elapsed;
+
+		if (debris_creation_delay >= debris_respawn_time){
+			debris_creation_delay = 0;
+
+			TCompTransform* enemy_comp_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+
+			XMVECTOR aux_boss_pos = enemy_comp_trans->position;
+		
+			XMVECTOR create_position;
+			XMVECTOR random_point = getRandomVector3(
+														XMVectorGetX(aux_boss_pos) - 17
+														, XMVectorGetY(aux_boss_pos) + 60
+														, XMVectorGetZ(aux_boss_pos) - 10
+														, XMVectorGetX(aux_boss_pos) + 17
+														, XMVectorGetY(aux_boss_pos) + 61
+														, XMVectorGetZ(aux_boss_pos) + 10);
+
+			bool equal = (Physics.XMVECTORToPxVec3(random_point) == Physics.XMVECTORToPxVec3(last_random_pos));
+			if (equal){
+				// Calculate a new pos
+				PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+
+				PxVec3 obj_boss_dir = Physics.XMVECTORToPxVec3(last_created_pos) - m_boss_pos;
+				PxVec3 aux_up = PxVec3(0, 0.01f, 0);
+				PxVec3 m_force = (obj_boss_dir.cross(PxVec3(0, 1, 0)).getNormalized());
+
+				create_position = last_created_pos + Physics.PxVec3ToXMVECTOR(m_force * 6);
+			}
+			else{
+				create_position = random_point;
+			}
+
+			// Check if is far from the player
+			
+			if (player_trans.isValid()){
+				XMVECTOR aux_create_position = XMVectorSetY(create_position, XMVectorGetY(((TCompTransform*)player_trans)->position));
+				float aux_distance = XMVectorGetX(XMVector3Length(aux_create_position - ((TCompTransform*)player_trans)->position));
+				if (aux_distance >= 15){
+					last_created_pos = create_position;
+					last_random_pos = random_point;
+
+					std::string name = "";
+
+					// Debris
+					int rnd = getRandomNumber(1, 20);
+					name = "boss/debris_0" + std::to_string(rnd);
+
+					CEntity* prefab_entity = prefabs_manager.getInstanceByName(name.c_str());
+
+					TCompTransform* prefab_t = prefab_entity->get<TCompTransform>();
+					if (prefab_t){
+						prefab_t->init();
+						prefab_t->teleport(create_position);
+					}
+
+					debris_created++;
+				}
+			}
+		}
+	}
+	else{
+		debris_created = 0;
+		active = false;
+	}
+	return active;
+
 }
 
 CHandle TCompAiBoss::objToStun(){	

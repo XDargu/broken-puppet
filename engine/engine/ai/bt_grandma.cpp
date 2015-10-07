@@ -928,7 +928,6 @@ int bt_grandma::actionInitialAttack()
 	TCompTransform* p_transform = player_transform;
 	TCompTransform* m_transform = own_transform;
 	XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
-	//m_char_controller->airSpeed = run_angry_speed * 0.8f;
 
 	if (on_enter) {
 		initial_attack = true;
@@ -937,7 +936,6 @@ int bt_grandma::actionInitialAttack()
 		playAnimationIfNotPlaying(20);
 		attacked = false;
 		mov_direction = Physics.XMVECTORToPxVec3(dir);
-		((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, mov_direction);
 	}
 
 	float stop_time = 0.55f;

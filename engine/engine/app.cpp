@@ -1528,6 +1528,7 @@ void CApp::loadScene(std::string scene_name) {
 	while (CNav_mesh_manager::get().getLock()){
 		std::string prueba = "1";
 	}
+
 	CNav_mesh_manager::get().clearNavMesh();
 
 	/*deferred.destroy();
