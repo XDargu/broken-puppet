@@ -11,6 +11,8 @@
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
 
+const string particles_hit_name = "ps_porcelain_hit";
+
 TCompPlayerController::TCompPlayerController() : old_target_transform(CHandle()) {
 	fsm_player_legs = new FSMPlayerLegs;
 	fsm_player_torso = new FSMPlayerTorso;
@@ -75,6 +77,9 @@ void TCompPlayerController::init() {
 
 	CSoundManager::get().addFX2DTrack("string_grab_9.ogg", "string_player_grab", "pull");
 	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_player_grab2", "pull");*/
+
+	entity_player = (CHandle(this).getOwner());
+	player_trans = (((CEntity*)entity_player)->get<TCompTransform>());
 
 	fsm_player_legs->Init();
 	fsm_player_torso->Init();
@@ -308,6 +313,10 @@ void TCompPlayerController::actorHit(const TActorHit& msg) {
 			dbg("Force recieved is  %f\n", msg.damage);
 			fsm_player_legs->EvaluateHit(msg.damage);
 			time_since_last_hit = 0;
+
+			//Porcelain hit when player is hurt		
+			XMVECTOR particles_pos = ((TCompTransform*)player_trans)->position  + XMVectorSet(0, 1.2f, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particles_hit_name, particles_pos);
 
 			// Boss
 			if (msg.is_boss){
