@@ -61,6 +61,11 @@
   <event id="WOODEN_DOOR" path="event:/Ambiente/wood_door_open" /> Puerta de madera al abrirse
   <event id="LIGHT_ON" path="event:/Mecanismos/Interruptores/light_switch_on" /> Cables al activar la luz
   <event id="LIGHT_OFF" path="event:/Mecanismos/Interruptores/light_switch_off" /> Cables al desactivar la luz
+  <event id="TICTAC" path="event:/Mecanismos/TicTac" /> Tic tac del reloj
+  <event id="FACTORY_AMBIENT" path="event:/Ambiente/factory_ambient" /> Ruido de ambiente del crematorio
+  <event id="COMPRESOR_1" path="event:/Ambiente/compresor_1" /> Machacaabuelas 1 del crematorio
+  <event id="COMPRESOR_3" path="event:/Ambiente/compresor_3" /> Machacaabuelas 3 del crematorio
+  <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
 
   <!-- Narración -->
   

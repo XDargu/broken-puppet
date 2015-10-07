@@ -613,7 +613,7 @@ void CLogicManager::bootLUA() {
 		.set("getLife", &CBot::getLife)
 		.set("setLife", &CBot::setLife)
 		.set("hurt", &CBot::hurt)
-		.set("getPos", &CBot::getPos)
+		.set("getPosition", &CBot::getPos)
 		.set("teleport", (void (CBot::*)(float, float, float)) &CBot::teleport)
 		.set("teleportToPos", (void (CBot::*)(CVector)) &CBot::teleport)
 		.set("help", &CBot::help)
