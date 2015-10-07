@@ -1225,7 +1225,7 @@ void bt_soldier::hurtSensor(float damage){
 		life->life = 0;
 		is_ragdoll = true;
 		TCompTransform* m_transform = own_transform;
-		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup(particle_name_dismemberment, m_transform->position, m_transform->rotation);
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_dismemberment, m_transform->position);
 		setCurrent(NULL);
 
 	}

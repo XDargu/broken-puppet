@@ -35,8 +35,8 @@ void TCompAiBoss::loadFromAtts(const std::string& elem, MKeyValue &atts){
 	boss_creation_delay = 0.f;
 	last_created_pos = XMVectorSet(0, 0, 0, 0);
 	last_random_pos = XMVectorSet(0, 0, 0, 0);
-	save_raining = false;
-	save_debris_amount = 0;
+	safe_raining = false;
+	safe_debris_amount = 0;
 };
 
 void TCompAiBoss::init(){
@@ -233,12 +233,12 @@ void TCompAiBoss::update(float elapsed){
 		objToStun();
 	}
 	if (CIOStatus::get().becomesPressed(CIOStatus::K)){
-		save_raining = true;
-		save_debris_amount = 20;
+		safe_raining = true;
+		safe_debris_amount = 20;
 	}
 
-	if (save_raining){
-		save_raining = saveRain(elapsed, save_debris_amount);
+	if (safe_raining){
+		safe_raining = safeRain(elapsed, safe_debris_amount);
 	}
 
 	if (m_fsm_boss->can_proximity && (mBoss.isValid()) && (mPlayer.isValid())){
@@ -526,11 +526,11 @@ void TCompAiBoss::initBoss(){
 }
 
 void TCompAiBoss::initialRain(int debris_amount){
-	save_raining = true;
-	save_debris_amount = debris_amount;
+	safe_raining = true;
+	safe_debris_amount = debris_amount;
 }
 
-bool TCompAiBoss::saveRain(float elapsed,int debris_amount){
+bool TCompAiBoss::safeRain(float elapsed,int debris_amount){
 
 	float debris_respawn_time = 0.05f;
 	float bomb_respawn_time = 1.f;

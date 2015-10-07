@@ -63,9 +63,9 @@ private:
 	XMVECTOR last_created_pos;
 	XMVECTOR last_random_pos;
 	
-	bool save_raining;
-	bool saveRain(float elapsed, int debris_amount);
-	int save_debris_amount;
+	bool safe_raining;
+	bool safeRain(float elapsed, int debris_amount);
+	int safe_debris_amount;
 
 public:
 

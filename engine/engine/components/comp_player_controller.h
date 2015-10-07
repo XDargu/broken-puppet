@@ -9,9 +9,12 @@
 
 struct TCompPlayerController : TBaseComponent {
 
+	CHandle entity_player;
+	CHandle player_trans;
 	CHandle old_target_transform;
 	CHandle needle_back1;
 	CHandle needle_back2;
+	CHandle entity;
 	XMVECTOR offset_needle_back1;
 	XMVECTOR offset_needle_back2;
 	XMVECTOR offset_rot_needle_back1;
