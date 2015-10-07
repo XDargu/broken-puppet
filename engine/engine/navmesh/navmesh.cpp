@@ -6,6 +6,7 @@
 #include "RecastDump.h"
 #include "DetourDebugDraw.h"
 #include "render/render_utils.h"
+#include "nav_mesh_manager.h"
 
 CNavmesh::CNavmesh()
 	: m_navMesh(nullptr)
@@ -20,6 +21,7 @@ void CNavmesh::setClimb(int Climb){
 }
 
 void CNavmesh::build() {
+	//CNav_mesh_manager::get().builded = false;
 	destroy();
 	m_ctx->resetLog();
 
@@ -60,6 +62,7 @@ void CNavmesh::build() {
 		prepareQueries();
 
 	dumpLog();
+	//CNav_mesh_manager::get().builded = true;
 }
 
 dtNavMesh* CNavmesh::create(const rcConfig& cfg) {

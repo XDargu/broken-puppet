@@ -62,6 +62,11 @@
   <event id="LIGHT_ON" path="event:/Mecanismos/Interruptores/light_switch_on" /> Cables al activar la luz
   <event id="LIGHT_OFF" path="event:/Mecanismos/Interruptores/light_switch_off" /> Cables al desactivar la luz
 
+  <!-- Narración -->
+  
+  <!-- Video -->
+  <event id="INITIAL_VIDEO" path="event:/intro_BP_sound" /> Video inicial
+  <event id="FINAL_VIDEO" path="event:/final_BP_sound" /> Video final
 
   <!-- Mixer -->
   <event id="UNDERWATER" path="event:/Mixer/Underwater" />

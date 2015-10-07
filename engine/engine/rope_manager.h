@@ -23,6 +23,9 @@ public:
 	int getRopeCount() { return (int)strings.size(); }
 
 	std::deque<CHandle> getStrings() { return strings; }
+
+	void removeRopesTiedToObject(CHandle entity);
+	void removeJointTiedToObject(CHandle entity);
 };
 #endif
 

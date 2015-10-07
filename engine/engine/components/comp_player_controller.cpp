@@ -11,6 +11,8 @@
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
 
+const string particles_hit_name = "ps_porcelain_hit";
+
 TCompPlayerController::TCompPlayerController() : old_target_transform(CHandle()) {
 	fsm_player_legs = new FSMPlayerLegs;
 	fsm_player_torso = new FSMPlayerTorso;
@@ -33,7 +35,7 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	fsm_player_legs->torso = fsm_player_torso;
 	fsm_player_torso->legs = fsm_player_legs;
 
-	hit_cool_down = 1;
+	hit_cool_down = 0.5f;
 	time_since_last_hit = 0;
 
 	//55000.f
@@ -76,6 +78,9 @@ void TCompPlayerController::init() {
 	CSoundManager::get().addFX2DTrack("string_grab_9.ogg", "string_player_grab", "pull");
 	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_player_grab2", "pull");*/
 
+	entity_player = (CHandle(this).getOwner());
+	player_trans = (((CEntity*)entity_player)->get<TCompTransform>());
+
 	fsm_player_legs->Init();
 	fsm_player_torso->Init();
 	
@@ -102,7 +107,15 @@ void TCompPlayerController::init() {
 }
 
 void TCompPlayerController::update(float elapsed) {
-	time_since_last_hit += elapsed;
+	CHandle player_handle = CHandle(this).getOwner();
+	CEntity* player_entity = (CEntity*)player_handle;
+	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
+
+	bool can_receive_hit = canReceiveDamage();
+
+	if (can_receive_hit) {
+		time_since_last_hit += elapsed;
+	}
 
 	fsm_player_torso->update(elapsed);
 
@@ -111,10 +124,10 @@ void TCompPlayerController::update(float elapsed) {
 		fsm_player_legs->ChangeState("fbp_Ragdoll");
 	}	
 
-	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
-	TCompRigidBody* rigid = assertRequiredComponent<TCompRigidBody>(this);
-	TCompCharacterController* c_controller = assertRequiredComponent<TCompCharacterController>(this);
-	TCompSkeleton* skeleton = assertRequiredComponent<TCompSkeleton>(this);
+	TCompTransform* trans = player_entity->get<TCompTransform>();
+	TCompRigidBody* rigid = player_entity->get<TCompRigidBody>();
+	TCompCharacterController* c_controller = player_entity->get<TCompCharacterController>();
+	TCompSkeleton* skeleton = player_entity->get<TCompSkeleton>();
 
 	/*dbg((
 		"X:" + std::to_string(XMVectorGetX(trans->position)) + ", "
@@ -210,7 +223,7 @@ void TCompPlayerController::update(float elapsed) {
 
 	// Back needles
 	if (needle_back1.isValid() && needle_back2.isValid()) {
-		TCompSkeleton* skel = assertRequiredComponent<TCompSkeleton>(this);
+		TCompSkeleton* skel = player_entity->get<TCompSkeleton>();
 		XMVECTOR back_pos = skel->getPositionOfBone(58);
 		XMVECTOR back_rot = skel->getRotationOfBone(58);
 
@@ -293,14 +306,17 @@ void TCompPlayerController::fixedUpdate(float elapsed) {
 //}
 
 void TCompPlayerController::actorHit(const TActorHit& msg) {
-	CHandle player_handle = CHandle(this).getOwner();
-	CEntity* player_entity = (CEntity*)player_handle;
-	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
-	if ((!(p_ragdoll->isRagdollActive()) || (fsm_player_legs->getCurrentNode() == "fbp_WakeUp"))){
+	bool can_receive_hit = canReceiveDamage();
+
+	if (can_receive_hit){
 		if (time_since_last_hit >= hit_cool_down){
 			dbg("Force recieved is  %f\n", msg.damage);
 			fsm_player_legs->EvaluateHit(msg.damage);
 			time_since_last_hit = 0;
+
+			//Porcelain hit when player is hurt		
+			XMVECTOR particles_pos = ((TCompTransform*)player_trans)->position  + XMVectorSet(0, 1.2f, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particles_hit_name, particles_pos);
 
 			// Boss
 			if (msg.is_boss){
@@ -313,12 +329,6 @@ void TCompPlayerController::actorHit(const TActorHit& msg) {
 }
 
 void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
-	if (time_since_last_hit >= hit_cool_down){
-		dbg("Damage recieved is  %f\n", msg.damage);
-		//fsm_player_legs.last_hit = 2;
-		fsm_player_legs->EvaluateHit(msg.damage);
-		time_since_last_hit = 0;
-	}
 }
 
 
@@ -350,4 +360,18 @@ void TCompPlayerController::bossImpact(CHandle boss){
 	}
 	// hurt the player
 	/**/
+}
+
+bool TCompPlayerController::canReceiveDamage() {
+	CHandle player_handle = CHandle(this).getOwner();
+	CEntity* player_entity = (CEntity*)player_handle;
+	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
+
+	bool can_receive_hit = !p_ragdoll->isRagdollActive();
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_WakeUp";
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_Hurt";
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_WakeUpTeleport";
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_Dead";
+
+	return can_receive_hit;
 }

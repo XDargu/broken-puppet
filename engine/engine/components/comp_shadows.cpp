@@ -27,10 +27,10 @@ void TCompShadows::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	character_camera = atts.getBool("characterLight", false);
 
 	// TODO: Para que funcione desde max, es necesario rotarlas 90 grados, cambiar el exportador de max más adelante
-	if (atts.has("correction")) {
+	/*if (atts.has("correction")) {
 		TCompTransform* m_trans = getSibling<TCompTransform>(this);
 		m_trans->lookAt(m_trans->position - m_trans->getUp(), m_trans->getUp());
-	}
+	}*/
 
 }
 

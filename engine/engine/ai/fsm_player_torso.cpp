@@ -495,8 +495,12 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 								PxVec3 pos = bone->getGlobalPose().q.rotate(aux_offset) + bone->getGlobalPose().p;
 
-								if (hit_actor != bone) {
+								/*if (hit_actor != bone) {
 									aux_joint->create(bone, hit_actor, 1, bone->getGlobalPose().p, hit_position, physx::PxTransform(aux_offset), physx::PxTransform(offset_2));
+									aux_e->add(aux_joint);
+								}*/
+								if (first_actor != bone) {
+									aux_joint->create(bone, first_actor, 1, bone->getGlobalPose().p, first_position, physx::PxTransform(aux_offset), physx::PxTransform(first_offset));
 									aux_e->add(aux_joint);
 								}
 								else {
