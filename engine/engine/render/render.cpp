@@ -77,7 +77,7 @@ bool CRender::createDevice() {
 	hr = swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 	if (FAILED(hr))
 		return false;
-
+	
 	hr = device->CreateRenderTargetView(pBackBuffer, NULL, &render_target_view);
 	pBackBuffer->Release();
 	if (FAILED(hr))
@@ -148,8 +148,9 @@ void CRender::destroyDevice() {
 	ID3D11Debug *d3dDebug = nullptr;
 	::render.device->QueryInterface(__uuidof(ID3D11Debug), (void**)(&d3dDebug));
 	d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY | D3D11_RLDO_DETAIL);
+	SAFE_RELEASE(d3dDebug);
 #endif
-	//SAFE_RELEASE(device); // ¿Por qué falla?
+	SAFE_RELEASE(device); // ¿Por qué falla?
 }
 
 //--------------------------------------------------------------------------------------

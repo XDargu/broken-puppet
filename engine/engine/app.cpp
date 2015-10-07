@@ -1402,7 +1402,9 @@ void CApp::activateDebugMode(bool active) {
 }
 
 void CApp::destroy() {
+#ifdef _DEBUG
 	TwTerminate();
+#endif
 	deferred.destroy();
 
 	sharpen.destroy();
@@ -1445,8 +1447,7 @@ void CApp::destroy() {
 		mgr->destroyVideoClip(clip);
 		videoTexture->destroy();
 		delete mgr;
-		tex->Release();
-		m_shaderResourceView->Release();
+		delete videoTexture;
 	}
 	::render.destroyDevice();
 	
@@ -1755,6 +1756,8 @@ void CApp::loadVideo(const char* name)
 	videoTexture = new CTexture();
 	endframe = int(clip->getDuration() * clip->getFPS());
 	::render.device->CreateShaderResourceView(tex, 0, &m_shaderResourceView);
+	setDbgName(tex, "Video texture");
+	setDbgName(m_shaderResourceView, "Video resource view");
 	clip->play();
 #endif
 }
@@ -1790,14 +1793,7 @@ bool CApp::renderVideo()
 		::render.ctx->Unmap(tex, 0);
 		clip->popFrame();
 		if (frame->getFrameNumber() >= (endframe - 1)){
-			clip->stop();
-			mgr->destroyVideoClip(clip);
-			clip = nullptr;
-			delete mgr;
-			mgr = nullptr;
-			videoTexture->destroy();
-			tex->Release();
-			m_shaderResourceView->Release();
+			clip->stop();			
 			return false;
 		}
 	}
