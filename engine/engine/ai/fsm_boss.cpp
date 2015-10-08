@@ -2,6 +2,7 @@
 #include "fsm_boss.h"
 #include "../components/all_components.h"
 #include "components\comp_skeleton.h"
+#include "components\comp_player_controller.h"
 #include "components\comp_skeleton_lookat.h"
 #include "handle\prefabs_manager.h"
 #include "io\iostatus.h"
@@ -151,7 +152,10 @@ void fsm_boss::Init()
 	
 	m_entity_manager = &CEntityManager::get();
 
-	m_player = m_entity_manager->getByName("Player");
+	m_player = m_entity_manager->getByName("Player"); 
+
+	if (m_player.isValid())
+		m_player_controller = ((CEntity*)m_player)->get<TCompPlayerController>();
 
 	obj_distance = 0;
 	obj_selected = CHandle();
@@ -293,8 +297,15 @@ void fsm_boss::Idle1(float elapsed){
 		can_proximity_hit = true;		
 	}
 
+	bool can_attack = true;
+	if (m_player_controller.isValid())
+		can_attack = ((TCompPlayerController*)m_player_controller)->canReceiveDamage();
+
 	Reorientate(elapsed, false);
 	last_attack += elapsed;
+
+	if (!can_attack)
+		last_attack = 0;
 	
 	CIOStatus& io = CIOStatus::get();
 	/**/
@@ -627,12 +638,15 @@ void fsm_boss::Ball1Launch(float elapsed){
 
 					TCompRigidBody* rigid = e->get<TCompRigidBody>();
 					PxRigidDynamic*  px_rigid = rigid->rigidBody;
-					PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
+					
+					float aux_distance = (point_to_go - px_rigid->getGlobalPose().p).magnitude();
 
-					px_rigid->addForce(force_dir * force * 2, PxForceMode::eVELOCITY_CHANGE, true);
-					px_rigid->setLinearDamping(0.05f);
-					px_rigid->setAngularDamping(0.05f);
-
+					if (aux_distance <= 6){
+						PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
+						px_rigid->addForce(force_dir * force * 2, PxForceMode::eVELOCITY_CHANGE, true);
+						px_rigid->setLinearDamping(0.05f);
+						px_rigid->setAngularDamping(0.05f);
+					}
 				}
 			}
 		}
@@ -713,6 +727,11 @@ void fsm_boss::Shoot1Reload(float elapsed){
 		SelectObjToShoot();
 	}
 
+	// Check if can attack
+	bool can_attack = true;
+	if (m_player_controller.isValid())
+		can_attack = ((TCompPlayerController*)m_player_controller)->canReceiveDamage();
+
 	if (has_left && has_right){
 
 		TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
@@ -735,60 +754,66 @@ void fsm_boss::Shoot1Reload(float elapsed){
 		Reorientate(elapsed, false);
 	}
 
-	if (obj_to_shoot.isValid()){
-		if (shoots_amount <= 2){
-			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+	if (can_attack){
+		if (obj_to_shoot.isValid()){
+			if (shoots_amount <= 2){
+				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 
-			// Get the enemy position
-			PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
-			TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
-			PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
-			TCompSkeleton* skeleton = comp_skeleton;
+				// Get the enemy position
+				PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
+				TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
+				PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
+				TCompSkeleton* skeleton = comp_skeleton;
 
-			// Calculate direction player enemy
-			PxVec3 player_boss_dir = (player_pos - enemy_pos);
-			player_boss_dir.y = 0;
-			player_boss_dir = player_boss_dir.getNormalized();
+				// Calculate direction player enemy
+				PxVec3 player_boss_dir = (player_pos - enemy_pos);
+				player_boss_dir.y = 0;
+				player_boss_dir = player_boss_dir.getNormalized();
 
-			PxVec3	point_to_go = PxVec3(0, 0, 0);
-			if (has_right)	{
-				point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * (distance_to_hand));
+				PxVec3	point_to_go = PxVec3(0, 0, 0);
+				if (has_right)	{
+					point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(40)) + (player_boss_dir * (distance_to_hand));
+				}
+				else{
+					point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(15)) + (player_boss_dir * (distance_to_hand));
+				}
+
+				CEntity* m_e = obj_to_shoot;
+				TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
+
+				const char *name = m_e->getName();
+				PxRigidBody*  px_rigid = rigid->rigidBody;
+				PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
+				float dist = (point_to_go - px_rigid->getGlobalPose().p).magnitude();
+
+				if (dist > 10) {
+					px_rigid->addForce(force_dir * 2, PxForceMode::eVELOCITY_CHANGE, true);
+				}
+				else {
+					px_rigid->setLinearVelocity(force_dir * clamp(dist * 2, 0, 12));
+				}
+
+				if ((state_time >= 2.f) && (dist<3)){
+					ChangeState("fbp_Shoot1Shoot");
+				}
+				else if (state_time >= 4.f) {
+					state_time = 0;
+					shoots_amount++;
+					SelectObjToShoot();
+				}
 			}
-			else{
-				point_to_go = Physics.XMVECTORToPxVec3(skeleton->getPositionOfBone(15)) + (player_boss_dir * (distance_to_hand));
-			}
-			
-			CEntity* m_e = obj_to_shoot;
-			TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
-
-			const char *name = m_e->getName();
-			PxRigidBody*  px_rigid = rigid->rigidBody;
-			PxVec3 force_dir = (point_to_go - px_rigid->getGlobalPose().p).getNormalized();
-			float dist = (point_to_go - px_rigid->getGlobalPose().p).magnitude();
-
-			if (dist > 10) {
-				px_rigid->addForce(force_dir * 2, PxForceMode::eVELOCITY_CHANGE, true);
-			}
-			else {
-				px_rigid->setLinearVelocity(force_dir * clamp(dist * 2, 0, 12));
-			}
-
-			if ((state_time >= 4.f)&&(dist<3)){
-				ChangeState("fbp_Shoot1Shoot");
-			}
-			else if (state_time >= 5.f) {
-				state_time = 0;
-				shoots_amount++;
-				SelectObjToShoot();
+			else if (state_time >= 2.f){
+				ChangeState("fbp_Shoot1ReleaseDef");
 			}
 		}
 		else if (state_time >= 2.f){
 			ChangeState("fbp_Shoot1ReleaseDef");
 		}
 	}
-	else if (state_time >= 2.f){
-		ChangeState("fbp_Shoot1ReleaseDef");
+	else{
+		state_time = 0.f;
 	}
+	
 }
 
 //Shoot
@@ -1154,7 +1179,7 @@ void fsm_boss::Damaged1LeftFinal(){
 		destroyBombs();
 	}
 
-	if (state_time >= 1.f){
+	if (state_time >= 0.9f){
 		ChangeState("fbp_FinalState");
 	}
 }
@@ -1179,7 +1204,7 @@ void fsm_boss::Damaged1RightFinal(){
 	if (state_time >= 0.5f){
 		destroyBombs();
 	}
-	if (state_time >= 1.f){
+	if (state_time >= 0.9f){
 		ChangeState("fbp_FinalState");
 	}
 }
@@ -1346,7 +1371,7 @@ int fsm_boss::CalculateAttack() {
 
 	int next_attack = 0;
 	last_attack = 0.f;
-	if (m_entity_manager->rigid_list.size() < 130){
+	if (m_entity_manager->rigid_list.size() < 150){
 		next_attack = 0;
 	}
 	else{

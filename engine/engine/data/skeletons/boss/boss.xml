@@ -1,31 +1,31 @@
 <skeleton>
     <mesh name="boss"/>
   
-  <anim name="idle" blend="0.3" blend_out="0"/>0
-  <anim name="hit" blend="0.5" blend_out="0.5"/>1
-  <anim name="stunned" blend="0.5" blend_out="0.5"/>2
-  <anim name="recover" blend="0.5" blend_out="0.5"/>3
-  <anim name="proximity" blend="0.5" blend_out="0.5"/>4
-  <anim name="wave_left" blend="0.5" blend_out="0.5"/>5
-  <anim name="wave_right" blend="0.5" blend_out="0.5"/>6
-  <anim name="damaged_left" blend="0.5" blend_out="0.5"/>7
-  <anim name="damaged_right" blend="0.5" blend_out="0.5"/>8
-  <anim name="damaged_Left_final" blend="0.5" blend_out="0.5"/>9
-  <anim name="damaged_right_final" blend="0.5" blend_out="0.5"/>10
-  <anim name="Rain_Prepare" blend="0" blend_out="0.1"/>11
-  <anim name="rain_loop" blend="0.1" blend_out="0.1"/>12
-  <anim name="rain_recover" blend="0.1" blend_out="0.1"/>13
-  <anim name="defense_down" blend="0.5" blend_out="0.5"/>14
-  <anim name="defense_down_reload" blend="0.5" blend_out="0.5"/>15
-  <anim name="defense_down_recover" blend="0.5" blend_out="0.5"/>16
-  <anim name="Ball_initial" blend="0.5" blend_out="0.5"/>17
-  <anim name="ball_launch" blend="0.5" blend_out="0.5"/>18
-  <anim name="ball_loop" blend="0.5" blend_out="0.5"/>19
-  <anim name="death" blend="0.5" blend_out="0.5"/>20
-  <anim name="damaged_left" blend="0.5" blend_out="0.5"/>21
-  <anim name="damaged_left_final" blend="0.5" blend_out="0.5"/>22
-  <anim name="damaged_right" blend="0.5" blend_out="0.5"/>23
-  <anim name="damaged_right_final" blend="0.5" blend_out="0.5"/>24
+  <anim name="idle" blend="0.3" blend_out="0.3"/>0
+  <anim name="hit" blend="0.2" blend_out="0"/>1
+  <anim name="stunned" blend="0" blend_out="0.5"/>2
+  <anim name="recover" blend="0" blend_out="0"/>3
+  <anim name="proximity" blend="0.2" blend_out="0"/>4
+  <anim name="wave_left" blend="0" blend_out="0"/>5
+  <anim name="wave_right" blend="0" blend_out="0"/>6
+  <anim name="damaged_left" blend="0" blend_out="0"/>7
+  <anim name="damaged_right" blend="0" blend_out="0"/>8
+  <anim name="damaged_Left_final" blend="0" blend_out="0"/>9
+  <anim name="damaged_right_final" blend="0" blend_out="0"/>10
+  <anim name="Rain_Prepare" blend="0" blend_out="0"/>11
+  <anim name="rain_loop" blend="0" blend_out="0.2"/>12
+  <anim name="rain_recover" blend="0" blend_out="0"/>13
+  <anim name="defense_down" blend="0" blend_out="0"/>14
+  <anim name="defense_down_reload" blend="0" blend_out="0.5"/>15
+  <anim name="defense_down_recover" blend="0" blend_out="0"/>16
+  <anim name="Ball_initial" blend="0" blend_out="0"/>17
+  <anim name="ball_launch" blend="0" blend_out="0"/>18
+  <anim name="ball_loop" blend="0" blend_out="0.3"/>19
+  <anim name="death" blend="0" blend_out="0"/>20
+  <anim name="damaged_left" blend="0" blend_out="0"/>21
+  <anim name="damaged_left_final" blend="0" blend_out="0"/>22
+  <anim name="damaged_right" blend="0" blend_out="0"/>23
+  <anim name="damaged_right_final" blend="0" blend_out="0"/>24
   <anim name="defense_down_loop" blend="0.5" blend_out="0.5"/>25
   <anim name="final_state" blend="0.5" blend_out="0.5"/>26
   <anim name="Defense_Down_Left"/>27
