@@ -78,6 +78,23 @@ void CSoundManager::init(){
 	scene_id = 0;
 }
 
+void CSoundManager::clear() {
+	std::map<std::string, FMOD::Studio::EventDescription*>::iterator it;
+	for (it = event_descriptions.begin(); it != event_descriptions.end(); ++it){
+		int size = 0;
+		it->second->getInstanceCount(&size);
+		for (int i = 0; i < size; ++i){
+			FMOD::Studio::EventInstance* instace_array[1024];
+			int count = 0;
+			it->second->getInstanceList(instace_array, size, &count);
+			for (int j = 0; j < count; ++j) {
+				instace_array[j]->stop(FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
+				instace_array[j]->release();
+			}
+		}
+	}
+}
+
 void CSoundManager::createMixerEvent(std::string sound_id, MixerInstanceType type, CHandle hfx_zone) {
 	std::string path = sound_events[sound_id];
 
@@ -119,17 +136,17 @@ float CSoundManager::getMixerEventParamValue(std::string sound_id, std::string p
 	return prev_value;
 }
 
-void CSoundManager::playEvent(std::string sound_id) {
-	playEvent(sound_id, 0, 0, invalidPosition);
+FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string sound_id, std::string name) {
+	return playEvent(sound_id, 0, 0, invalidPosition, name);
 }
 
-void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, int nparameters) {
+FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, std::string name) {
 		
-	playEvent(sound_id, parameters, nparameters, invalidPosition);
+	return playEvent(sound_id, parameters, nparameters, invalidPosition, name);
 }
 
-void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos) {
-	if (sound_id == "") { return; }
+FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name) {
+	if (sound_id == "") { return nullptr; }
 
 	std::string path = sound_events[sound_id];
 	if (event_descriptions.count(path)) {
@@ -144,7 +161,7 @@ void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, 
 		// The event doesn't exists
 		if (event_descriptions[path] == NULL) {
 			event_descriptions.erase(path);
-			return;
+			return nullptr;
 		}
 	}
 
@@ -177,6 +194,13 @@ void CSoundManager::playEvent(std::string sound_id, SoundParameter* parameters, 
 
 	// Release will clean up the instance when it completes
 	ERRCHECK(eventInstance->release());
+
+	// Set the instance name
+	if (name != "") {
+		named_instances[name] = eventInstance;
+	}
+
+	return eventInstance;
 }
 
 FMOD::Studio::EventInstance* CSoundManager::getInstance(std::string sound_id) {
@@ -244,15 +268,16 @@ bool CSoundManager::setInstancePos(FMOD::Studio::EventInstance* eventInstance, T
 	return false;
 }
 
-void CSoundManager::playEvent(std::string path, XMVECTOR pos) {
+FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string path, XMVECTOR pos, std::string name) {
 	TCompCamera* cam = render_manager.activeCamera;
 	if (cam) {
 		XMVECTOR camera_position = cam->getPosition();
 		float distance_to_listener = V3DISTANCE(camera_position, pos);
 		if (distance_to_listener <= max_dist_events){
-			playEvent(path, 0, 0, pos);
+			return playEvent(path, 0, 0, pos, name);
 		}
 	}
+	return nullptr;
 }
 
 void CSoundManager::setListenerTransform(TTransform listener) {
@@ -485,4 +510,53 @@ CHandle CSoundManager::listenerInsideHFXZone(XMVECTOR cam_pos){
 		}
 	}
 	return CHandle();
+}
+
+void CSoundManager::stopNamedInstance(std::string name, FMOD_STUDIO_STOP_MODE mode) {
+	if (name == "") { return; }
+
+	if (named_instances.count(name)) {
+		// The instance exists
+		if (named_instances[name]->isValid()) {
+			named_instances[name]->stop(mode);
+			named_instances[name]->release();
+		}
+	}
+}
+
+void CSoundManager::positionNamedInstance(std::string name, XMVECTOR position) {
+	if (name == "") { return; }
+
+	if (named_instances.count(name)) {
+		// The instance exists
+		FMOD_3D_ATTRIBUTES attributes = { { 0 } };
+		attributes.position = XMVECTORtoFmod(position);
+		ERRCHECK(named_instances[name]->set3DAttributes(&attributes));
+	}
+}
+
+FMOD::Studio::EventInstance* CSoundManager::getNamedInstance(std::string name) {
+	if (name == "") { return nullptr; }
+
+	if (named_instances.count(name)) {
+		// The instance exists
+		return named_instances[name];
+	}
+
+	return nullptr;
+}
+
+FMOD_STUDIO_PLAYBACK_STATE CSoundManager::getNamedInstanceState(std::string name) {
+	if (name == "") { return FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_STOPPED; }
+
+	if (named_instances.count(name)) {
+		// The instance exists
+		if (named_instances[name]->isValid()) {
+			FMOD_STUDIO_PLAYBACK_STATE state;
+			named_instances[name]->getPlaybackState(&state);
+			return state;
+		}
+	}
+
+	return FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_STOPPED;
 }

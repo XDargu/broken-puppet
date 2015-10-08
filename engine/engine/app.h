@@ -26,6 +26,7 @@ class CApp {
 	float slow_motion_counter;
 
 	std::thread* bar;
+	bool video_sound_played;
 
 public:
 	std::string current_scene_name;

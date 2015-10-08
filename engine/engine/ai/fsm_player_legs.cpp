@@ -103,7 +103,8 @@ void FSMPlayerLegs::Idle(float elapsed){
 	int animation = torso->up_animation ? 8 : 0;
 
 	if (animation != current_animation_id) {
-		skeleton->stopAnimation(current_animation_id);
+		//skeleton->stopAnimation(current_animation_id);
+		stopAllAnimations();
 		skeleton->loopAnimation(animation);
 		current_animation_id = animation;
 	}	
@@ -416,6 +417,21 @@ void FSMPlayerLegs::Jump(float elapsed){
 	if (on_enter) {
 		//skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
+
+		/*
+		Lanzar sonido no prioritario
+		CSoundManager& sm = CSoundManager::get();
+		if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sm.playEvent("KATH_JUMP", "kath_expr");
+		}
+
+		Lanzar sonido prioritario
+		CSoundManager& sm = CSoundManager::get();
+		if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+			sm.playEvent("KATH_JUMP", "kath_expr_p");
+		}*/
+
 		CSoundManager::get().playEvent("KATH_JUMP");
 	}
 
@@ -1081,7 +1097,7 @@ void stopAnimation(int id);
 void FSMPlayerLegs::stopAllAnimations() {
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 50; ++i) {
 		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
 	}
 }

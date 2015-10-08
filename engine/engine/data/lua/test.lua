@@ -811,6 +811,11 @@ function onSceneLoad_scene_4()
 		logicManager:playEventAtPosition("COMPRESOR_4", o_crasher:getPos());
 	end
 
+	-- Salir de la escena
+	function onTriggerEnter_sc4_trigger_end(who)
+		logicManager:loadScene("data/scenes/scene_final_boss.xml");		
+	end
+
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 4 ********
 end
