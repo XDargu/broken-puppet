@@ -15,7 +15,7 @@
 <transform position="-6.00034 2.0 82.9997" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
 	</entity>
 	<entity  prefab="PlayerCamera">
-<transform position="0.922956 -24.7458 18.5668"/>
+<transform position="-2.39844 -25.4246 18.4802"/>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="Omni004_7.0" />
@@ -288,7 +288,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="ascensor_desvan_jaula_63.0" />
-<transform position="17.0053 -23.9978 21.9361" rotation="0.0 1.0 0.0 2.29319e-005" scale="1.0 1.0 1.0"/>
+<transform position="17.0053 -23.9978 21.9361" rotation="0.0 1.0 0.0 2.48392e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="ascensor_desvan_jaula" sub_mesh="0" mat="ascensor_exterior_a"/>
 <draw mesh="ascensor_desvan_jaula" sub_mesh="1" mat="ascensor_interior_a"/>
@@ -403,7 +403,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_73.0" />
-<transform position="10.9808 -23.9943 -21.9289" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 1.0 1.0"/>
+<transform position="10.9808 -23.9943 -21.9289" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 1.0 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -411,7 +411,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_74.0" />
-<transform position="10.9808 -23.9943 -13.9276" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 1.0 1.0"/>
+<transform position="10.9808 -23.9943 -13.9276" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 1.0 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -419,7 +419,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_75.0" />
-<transform position="10.9808 -23.9943 -5.9274" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 1.0 1.0"/>
+<transform position="10.9808 -23.9943 -5.9274" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 1.0 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -427,7 +427,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_76.0" />
-<transform position="10.9808 -23.9943 2.07241" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 1.0 1.0"/>
+<transform position="10.9808 -23.9943 2.07241" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 1.0 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -540,7 +540,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="puertaIzda" sub_mesh="0" mat="exterior_mat"/>
 </render>
-<aabb min="-1.80525 -1.26183 -0.163266" max="1.80525 1.2612 0.163126"/>
+<aabb min="-1.80525 -1.26185 -0.163282" max="1.80525 1.26118 0.16311"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.80525" boxY="1.26152" boxZ="0.163195"/>
 <rigidbody density="500.0"  />
 	</entity>
@@ -559,7 +559,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="puertaDcha" sub_mesh="0" mat="exterior_mat"/>
 </render>
-<aabb min="-1.80525 -1.2612 -0.163266" max="1.80525 1.26183 0.163125"/>
+<aabb min="-1.80525 -1.26118 -0.163282" max="1.80525 1.26185 0.163109"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.80525" boxY="1.26152" boxZ="0.163195"/>
 <rigidbody density="500.0"  />
 	</entity>
@@ -633,7 +633,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_102.0" />
-<transform position="-18.4241 -32.0538 -11.7309" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 0.96229 1.0"/>
+<transform position="-18.4241 -32.0538 -11.7309" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 0.96229 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -641,7 +641,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_103.0" />
-<transform position="-18.4241 -32.0538 -19.7322" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 0.96229 1.0"/>
+<transform position="-18.4241 -32.0538 -19.7322" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 0.96229 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -649,7 +649,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_104.0" />
-<transform position="-18.4241 -24.3561 -11.7309" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 0.96229 1.0"/>
+<transform position="-18.4241 -24.3561 -11.7309" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 0.96229 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -657,7 +657,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="verja_normal_105.0" />
-<transform position="-18.4241 -24.3561 -19.7322" rotation="0.0 1.0 0.0 1.13686e-005" scale="1.0 0.96229 1.0"/>
+<transform position="-18.4241 -24.3561 -19.7322" rotation="0.0 1.0 0.0 1.23223e-005" scale="1.0 0.96229 1.0"/>
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="verja_normal" sub_mesh="0" mat="ascensor_interior_a"/>
 </render>
@@ -700,7 +700,7 @@
 <render >
 <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
 </render>
-<aabb min="-0.0231334 -0.382945 -0.388875" max="0.0228369 0.382945 0.388542"/>
+<aabb min="-0.0231487 -0.382945 -0.38889" max="0.0228216 0.382945 0.388526"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
 	</entity>
 	<entity   materialTag = "stone">
@@ -709,7 +709,7 @@
 <render >
 <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
 </render>
-<aabb min="-0.0230585 -0.382945 -0.388728" max="0.0229118 0.382945 0.388688"/>
+<aabb min="-0.0230661 -0.382945 -0.388728" max="0.0229042 0.382945 0.388688"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
 	</entity>
 	<entity   materialTag = "stone">
@@ -718,7 +718,7 @@
 <render >
 <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
 </render>
-<aabb min="-0.0230597 -0.382945 -0.388707" max="0.0229106 0.382945 0.388709"/>
+<aabb min="-0.0230673 -0.382945 -0.388707" max="0.022903 0.382945 0.388709"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
 	</entity>
 	<entity   materialTag = "stone">
@@ -811,7 +811,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
 <name name="plataforma_colgante_122.0" />
-<transform position="-13.0721 -22.7936 -7.88876" rotation="0.0 0.99807 0.0 0.0620998" scale="1.0 1.0 1.0"/>
+<transform position="-13.0721 -22.7936 -7.88876" rotation="0.0 0.99807 0.0 0.0621017" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="plataforma_colgante" sub_mesh="0" mat="plataforma_railes"/>
 <draw mesh="plataforma_colgante" sub_mesh="1" mat="mecanismo_mat"/>
@@ -895,20 +895,23 @@
 	</entity>
 	<entity   materialTag = "metal">
 <name name="caja_organillo_engranaje_a_135.0" />
-<transform position="-27.077 -30.9953 -16.7479" rotation="0.0 -0.00932626 0.0 0.999956" scale="1.49342 1.49341 1.49342" parent="caja_organillo_base_134.0"/>
+<transform position="-27.077 -30.9953 -16.7479" rotation="0.0 -0.00932625 0.0 0.999956" scale="1.49342 1.49341 1.49342" parent="caja_organillo_base_134.0"/>
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.195148 -0.135504 -0.131824" max="0.19515 0.135496 0.132076"/>
+<aabb min="-0.195148 -0.135504 -0.131809" max="0.19515 0.135496 0.132092"/>
+<audioSource sound="GEARS_LOOP_1" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
 <name name="caja_organillo_engranaje_b_136.0" />
-<transform position="-27.1452 -31.1667 -16.9634" rotation="0.0 -0.00932626 0.0 0.999956" scale="1.49342 1.49341 1.49342" parent="caja_organillo_base_134.0"/>
+<transform position="-27.1452 -31.1667 -16.9634" rotation="0.0 -0.00932625 0.0 0.999956" scale="1.49342 1.49341 1.49342" parent="caja_organillo_base_134.0"/>
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.00697327 -0.0673038 -0.0650978" max="0.00722504 0.0672962 0.0651016"/>
+<aabb min="-0.00695801 -0.0673038 -0.0650978" max="0.0072403 0.0672962 0.0651016"/>
 <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -927,7 +930,10 @@
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.195148 -0.135582 -0.131948" max="0.19515 0.135418 0.131952"/>
+<aabb min="-0.195148 -0.135592 -0.131948" max="0.19515 0.135408 0.131952"/>
+<audioSource sound="GEARS_LOOP_1" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -979,7 +985,10 @@
 	<shape posOffset="-0.163286 2.65446 0.171137" rotOffset="-0.216686 0.0 0.0 0.976241" type="BOX" length="1.72985" width="1.55794" height="1.67928"/>
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
-<rigidbody density="34.3053"  />
+<rigidbody density="148.656"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_145.0" />
@@ -996,7 +1005,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00118876 -0.346133 -0.323151" max="0.680777 0.0417762 0.043932"/>
+<aabb min="0.00118637 -0.346133 -0.323144" max="0.680774 0.0417762 0.0439393"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
@@ -1023,7 +1032,7 @@
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
 <name name="mesita_01_148.0" />
-<transform position="-19.9923 -31.996 1.45469" rotation="0.0 1.0 0.0 1.62562e-005" scale="1.0 1.0 1.0"/>
+<transform position="-19.9923 -31.996 1.45469" rotation="0.0 1.0 0.0 1.81635e-005" scale="1.0 1.0 1.0"/>
 <render  color = "0.45098 0.45098 0.45098">
 <draw mesh="mesita_01" sub_mesh="0" mat="mesa_sofa"/>
 </render>
@@ -1466,6 +1475,9 @@
 	<shape posOffset="-0.0299958 0.883981 -0.203601" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.376783" width="0.888451" height="0.102941"/>
 </colliderMulti>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_pared_omni_199.0" />
@@ -1474,7 +1486,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="lampara_pared_01_200.0" />
-<transform position="0.947907 -27.6092 1.20645" rotation="0.0 0.999027 0.0 0.0440914" scale="1.0 1.0 1.0"/>
+<transform position="0.947907 -27.6092 1.20645" rotation="0.0 0.999027 0.0 0.0440933" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="lampara_pared_01" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
@@ -1487,7 +1499,7 @@
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_pared_omni001_201.0" />
-<transform position="0.937509 -27.914 1.01892" rotation="0.0 -0.737597 0.0 0.675242" scale="1.0 1.0 1.0" parent="lampara_pared_01_200.0"/>
+<transform position="0.93751 -27.914 1.01892" rotation="0.0 -0.737598 0.0 0.67524" scale="1.0 1.0 1.0" parent="lampara_pared_01_200.0"/>
 <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
 	</entity>
 	<entity   materialTag = "metal">
@@ -1497,6 +1509,9 @@
 <draw mesh="lampara_techo_g" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.630975 2.36161e-007 -0.615343" max="0.630975 6.50564 0.615343"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_pared_omni006_203.0" />
@@ -1510,6 +1525,9 @@
 <draw mesh="lampara_techo_g" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.630975 2.36161e-007 -0.615343" max="0.630975 6.50564 0.615343"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_pared_omni002_205.0" />
@@ -1523,6 +1541,9 @@
 <draw mesh="lampara_techo_c" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.261445 2.36161e-007 -0.278465" max="0.261445 5.41855 0.278465"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_techo_e_207.0" />
@@ -1598,6 +1619,9 @@
 <aabb min="-3.62552 -1.98924 -0.39298" max="3.23286 2.6625 0.0526573"/>
 <colliderConvex path="letras_puppetshow_S" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="3.78119"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_steam_verde_omni_219.0" />
@@ -1734,6 +1758,9 @@
 <aabb min="-0.816408 -2.93385 -2.83257" max="0.749677 2.93385 2.83257"/>
 <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.3089"/>
 <staticbody/>
+<audioSource sound="PLANETARIUM" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="planetario_b_aro_d_234.0" />
@@ -1813,7 +1840,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="cuerda_planetario" sub_mesh="0" mat="flechas"/>
 </render>
-<aabb min="-0.0234496 -4.81088 -0.0234797" max="0.0233815 4.81086 0.0233545"/>
+<aabb min="-0.0234537 -4.81088 -0.0234862" max="0.0233774 4.81086 0.0233481"/>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="atrezzo_luna_cesar_243.0" />
@@ -1911,6 +1938,9 @@
 <aabb min="-0.499033 -0.997515 -0.2237" max="0.499033 0.997515 0.2237"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.840121" boxY="1.8454" boxZ="0.413844"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
 <name name="cartel_littletheatre_253.0" />
@@ -1937,7 +1967,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="engaranje_basico_g" sub_mesh="0" mat="engranajes_basicos"/>
 </render>
-<aabb min="-0.460162 -0.453536 -0.0272099" max="0.460162 0.453143 0.027211"/>
+<aabb min="-0.460162 -0.45356 -0.0272099" max="0.460162 0.453119 0.027211"/>
 <localRotation speed="-2.0" axis="0" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
@@ -1961,6 +1991,9 @@
 <aabb min="-0.609424 -0.819562 -0.186694" max="0.609423 0.819563 0.186693"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.609424" boxY="0.819562" boxZ="0.186693"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="O_258.0" />
@@ -2194,7 +2227,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "cloth">
 <name name="saco_monton_b_290.0" />
-<transform position="-7.13189 -31.5939 6.62414" rotation="0.02529 0.991939 -0.0649108 0.105849" scale="1.0 1.0 1.0"/>
+<transform position="-7.13189 -31.5939 6.62414" rotation="0.0252902 0.991939 -0.0649108 0.105851" scale="1.0 1.0 1.0"/>
 <render  color = "0.694118 0.109804 0.584314">
 <draw mesh="saco_monton_b" sub_mesh="0" mat="contrapeso"/>
 </render>
@@ -2221,6 +2254,9 @@
 <aabb min="-2.09924 -0.389241 -2.42525" max="1.25241 0.97885 0.571366"/>
 <colliderConvex path="monton_focos" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.16192"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="puerta_armario_a_der_monton_293.0" />
@@ -2239,6 +2275,9 @@
 <aabb min="-2.09924 -0.389241 -2.42525" max="1.25241 0.97885 0.571366"/>
 <colliderConvex path="monton_focos" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.16192"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="puerta_armario_a_der_monton_295.0" />
@@ -2267,6 +2306,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_298.0" />
@@ -2277,6 +2319,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_299.0" />
@@ -2307,6 +2352,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <rigidbody density="500.0"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_302.0" />
@@ -2357,6 +2405,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_d_307.0" />
@@ -2367,6 +2418,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <rigidbody density="500.0"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_308.0" />
@@ -2377,6 +2431,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_309.0" />
@@ -2397,6 +2454,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_311.0" />
@@ -2417,6 +2477,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_313.0" />
@@ -2437,6 +2500,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_315.0" />
@@ -2447,6 +2513,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_316.0" />
@@ -2467,6 +2536,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_basico_d_318.0" />
@@ -2487,6 +2559,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_pared_omni003_320.0" />
@@ -2522,6 +2597,9 @@
 <aabb min="-0.22792 -0.266108 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <rigidbody density="500.0"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
 <name name="baul_b_m_325.0" />
@@ -2551,7 +2629,7 @@
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_328.0" />
-<transform position="-4.25839 -28.6543 -15.7351" rotation="0.996612 0.0675451 -0.0439606 -0.0164386" scale="1.0 1.0 1.0"/>
+<transform position="-4.25839 -28.6543 -15.7351" rotation="0.996612 0.067545 -0.0439607 -0.0164405" scale="1.0 1.0 1.0"/>
 <render  color = "0.333333 0.109804 0.694118">
 <draw mesh="foco_basico_c" sub_mesh="0" mat="focos_basicos"/>
 </render>
@@ -2562,6 +2640,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_329.0" />
@@ -2576,6 +2657,9 @@
 	<shape posOffset="-0.0291572 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_330.0" />
@@ -2590,6 +2674,9 @@
 	<shape posOffset="-0.0291567 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_331.0" />
@@ -2604,6 +2691,9 @@
 	<shape posOffset="-0.0291572 0.214681 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_suelo_a_332.0" />
@@ -2772,6 +2862,9 @@
 <aabb min="-2.09924 -0.389241 -2.42525" max="1.25241 0.97885 0.571366"/>
 <colliderConvex path="monton_focos" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.16192"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_354.0" />
@@ -2786,6 +2879,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_355.0" />
@@ -2800,6 +2896,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_356.0" />
@@ -2814,6 +2913,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_357.0" />
@@ -2828,6 +2930,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_358.0" />
@@ -2842,6 +2947,9 @@
 	<shape posOffset="-0.0291572 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="lampara_pared_01_359.0" />
@@ -3459,6 +3567,9 @@
 	<shape posOffset="-0.0291572 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_452.0" />
@@ -3473,6 +3584,9 @@
 	<shape posOffset="-0.0291572 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_453.0" />
@@ -3487,6 +3601,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_454.0" />
@@ -3501,6 +3618,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_455.0" />
@@ -3515,6 +3635,9 @@
 	<shape posOffset="-0.0291567 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_456.0" />
@@ -3529,6 +3652,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_457.0" />
@@ -3543,6 +3669,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_d_458.0" />
@@ -3553,6 +3682,9 @@
 <aabb min="-0.22792 -0.266109 -1.52139" max="0.22792 1.19828 0.34614"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.375663" boxY="0.337911" boxZ="0.461715"/>
 <rigidbody density="500.0"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_459.0" />
@@ -3567,6 +3699,9 @@
 	<shape posOffset="-0.0291576 0.214679 0.22853" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_suelo_omni_460.0" />
@@ -3586,6 +3721,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_c_462.0" />
@@ -3600,6 +3738,9 @@
 	<shape posOffset="0.0341066 0.219602 0.0739639" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.864373" width="0.894059" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="454.989"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_463.0" />
@@ -3614,6 +3755,9 @@
 	<shape posOffset="-0.0291557 0.214679 0.228528" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="crematorio_e_M_464.0" />
@@ -3741,6 +3885,9 @@
 <aabb min="-1.57101 -0.461392 -0.211383" max="1.57101 0.461392 0.211382"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.57101" boxY="0.461392" boxZ="0.211382"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="flecha_dech_479.0" />
@@ -3751,10 +3898,13 @@
 <aabb min="-1.57101 -0.461392 -0.211383" max="1.57101 0.461392 0.211382"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.57101" boxY="0.461392" boxZ="0.211382"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="flecha_dech_480.0" />
-<transform position="-22.8942 -28.2392 1.6879" rotation="0.0739069 0.997265 -1.21861e-006 -1.58551e-005" scale="1.0 1.0 1.0"/>
+<transform position="-22.8942 -28.2392 1.6879" rotation="0.0739069 0.997265 -1.35957e-006 -1.77572e-005" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="flecha_dech" sub_mesh="0" mat="flechas"/>
 </render>
@@ -3771,6 +3921,9 @@
 <aabb min="-2.09924 -0.389241 -2.42525" max="1.25241 0.97885 0.571366"/>
 <colliderConvex path="monton_focos" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.16192"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_482.0" />
@@ -3785,6 +3938,9 @@
 	<shape posOffset="-0.0291572 0.214679 0.228529" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "wood">
 <name name="plataforma_atrezzo_a_483.0" />
@@ -3862,6 +4018,9 @@
 	<shape posOffset="-4.80848 12.2095 -0.0827841" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.20978" width="1.2113" height="13.6838"/>
 </colliderMulti>
 <staticbody/>
+<audioSource sound="BOILER" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <vibration amount="0.01" frequency="100.0" />
 	</entity>
 	<entity   materialTag = "stone">
@@ -3900,6 +4059,9 @@
 	<shape posOffset="-4.80788 9.98612 -0.0902636" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.2219" width="1.2113" height="8.68423"/>
 </colliderMulti>
 <staticbody/>
+<audioSource sound="BOILER" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <vibration amount="0.01" frequency="100.0" />
 	</entity>
 	<entity   materialTag = "stone">
@@ -3923,7 +4085,7 @@
 <render  color = "0.0901961 0.0901961 0.0901961">
 <draw mesh="caldera_01_rueda" sub_mesh="0" mat="caldera_01"/>
 </render>
-<aabb min="-0.846042 -0.83319 -0.0762502" max="0.846044 0.83319 0.0763037"/>
+<aabb min="-0.846042 -0.83319 -0.0762469" max="0.846044 0.83319 0.076307"/>
 <localRotation speed="2.0" axis="0" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
@@ -3938,6 +4100,9 @@
 	<shape posOffset="1.94199 4.29585 -1.87778e-007" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.668845" width="0.798362" height="3.84458"/>
 </colliderMulti>
 <staticbody/>
+<audioSource sound="BOILER" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <vibration amount="0.01" frequency="100.0" />
 	</entity>
 	<entity   materialTag = "stone">
@@ -3974,6 +4139,9 @@
 <aabb min="-0.562419 -0.998035 -0.222818" max="0.562419 0.998035 0.222819"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.562419" boxY="0.998035" boxZ="0.222819"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="H_507.0" />
@@ -3996,6 +4164,9 @@
 <aabb min="-0.519959 -0.872086 -0.186694" max="0.519959 0.872086 0.186693"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.426367" boxY="0.584298" boxZ="0.186693"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="W_509.0" />
@@ -4006,7 +4177,10 @@
 </render>
 <aabb min="-0.757177 -0.754444 -0.186693" max="0.757177 0.754444 0.186694"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.567883" boxY="0.586731" boxZ="0.186693"/>
-<rigidbody density="500.0"  />
+<rigidbody density="1406.63"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="and_510.0" />
@@ -4018,6 +4192,9 @@
 <aabb min="-0.848904 -0.897265 -0.205651" max="0.848904 0.897265 0.205651"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.848904" boxY="0.897265" boxZ="0.205651"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="P_511.0" />
@@ -4029,6 +4206,9 @@
 <aabb min="-0.597862 -0.96989 -0.199529" max="0.597862 0.96989 0.199529"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.597862" boxY="0.96989" boxZ="0.199529"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="T_512.0" />
@@ -4040,6 +4220,9 @@
 <aabb min="-0.571445 -0.754227 -0.165835" max="0.571445 0.754227 0.165835"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.571445" boxY="0.754227" boxZ="0.165835"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="U_513.0" />
@@ -4051,6 +4234,9 @@
 <aabb min="-0.470452 -0.723395 -0.165836" max="0.470452 0.723395 0.165835"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.470452" boxY="0.723395" boxZ="0.165835"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="P_514.0" />
@@ -4062,6 +4248,9 @@
 <aabb min="-0.597862 -0.96989 -0.199529" max="0.597862 0.96989 0.199529"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.597862" boxY="0.96989" boxZ="0.199529"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "stone">
 <name name="tablon_largo_d_515.0" />
@@ -4113,6 +4302,9 @@
 <aabb min="-0.562419 -0.998035 -0.222818" max="0.562419 0.998035 0.222819"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.562419" boxY="0.998035" boxZ="0.222819"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="W_520.0" />
@@ -4124,6 +4316,9 @@
 <aabb min="-0.757177 -0.754444 -0.186693" max="0.757177 0.754444 0.186694"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.567883" boxY="0.586731" boxZ="0.186693"/>
 <rigidbody density="500.0"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "stone">
 <name name="H_521.0" />
@@ -4165,14 +4360,6 @@
 <aabb min="-0.551966 -2.60382e-007 -0.399514" max="0.552022 1.81885 0.398996"/>
 <colliderConvex path="escalerilla_s" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="1.12377"/>
 <rigidbody density="500.0"  />
-	</entity>
-	<entity   materialTag = "stone">
-<name name="base_525.0" />
-<transform position="22.3954 -31.6916 -7.81081" rotation="0.0 0.0 0.0 1.0" scale="1.51494 1.51494 1.51494"/>
-<render  color = "0.0 0.0 0.0">
-<draw mesh="base" sub_mesh="0" mat="machacabuelas_map"/>
-</render>
-<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="sc4_tuerca_526.0" />
@@ -4328,7 +4515,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="crematorio_c_M_544.0" />
-<transform position="26.1304 -8.92944 10.1608" rotation="0.0 1.0 0.0 7.67311e-006" scale="2.18895 2.18895 2.18895"/>
+<transform position="26.1304 -8.92944 10.1608" rotation="0.0 1.0 0.0 8.62678e-006" scale="2.18895 2.18895 2.18895"/>
 <render >
 <draw mesh="crematorio_c_M" sub_mesh="0" mat="crematorio"/>
 <draw mesh="crematorio_c_M" sub_mesh="1" mat="InterruptorTirar_mat"/>
@@ -4448,14 +4635,6 @@
 <staticbody/>
 	</entity>
 	<entity   materialTag = "stone">
-<name name="base_557.0" />
-<transform position="24.7941 -31.6916 -0.148903" rotation="0.0 1.0 0.0 0.0" scale="1.51494 1.51494 1.51494"/>
-<render  color = "0.0 0.0 0.0">
-<draw mesh="base" sub_mesh="0" mat="machacabuelas_map"/>
-</render>
-<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
-	</entity>
-	<entity   materialTag = "stone">
 <name name="sc4_tuerca_558.0" />
 <transform position="24.7386 -16.2382 -0.0421506" rotation="0.0 0.25186 0.0 0.967764" scale="1.51494 1.51494 1.51494" parent="sc4_machacabuelas_1099.0"/>
 <render  color = "0.0 0.0 0.0">
@@ -4471,14 +4650,6 @@
 <draw mesh="eje_machacabuelas" sub_mesh="0" mat="machacabuelas_map"/>
 </render>
 <aabb min="-1.45741 -3.21461 -0.697509" max="1.45741 3.21461 0.697509"/>
-	</entity>
-	<entity   materialTag = "stone">
-<name name="base_560.0" />
-<transform position="17.3295 -31.6916 5.27542" rotation="0.0 0.707107 0.0 0.707107" scale="1.51494 1.51494 1.51494"/>
-<render  color = "0.0 0.0 0.0">
-<draw mesh="base" sub_mesh="0" mat="machacabuelas_map"/>
-</render>
-<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="eje_machacabuelas_561.0" />
@@ -4508,14 +4679,6 @@
 <rigidbody density="500.0"  />
 	</entity>
 	<entity   materialTag = "stone">
-<name name="base_564.0" />
-<transform position="16.1859 -31.6916 -13.9933" rotation="0.0 -0.707107 0.0 0.707107" scale="1.51494 1.51494 1.51494"/>
-<render  color = "0.0 0.0 0.0">
-<draw mesh="base" sub_mesh="0" mat="machacabuelas_map"/>
-</render>
-<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
-	</entity>
-	<entity   materialTag = "stone">
 <name name="eje_machacabuelas_565.0" />
 <transform position="16.2597 -14.0083 -13.9381" rotation="0.0 0.707107 0.0 0.707107" scale="1.51494 1.51494 1.51494"/>
 <render  color = "0.0 0.0 0.0">
@@ -4539,6 +4702,9 @@
 <draw mesh="lampara_techo_h" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.932218 2.36161e-007 -0.886592" max="0.932218 6.03035 0.886592"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="lampara_techo_g_568.0" />
@@ -4612,7 +4778,7 @@
 <render  color = "0.882353 0.776471 0.341176">
 <draw mesh="plataforma_atrezzo_plat" sub_mesh="0" mat="plataforma_atrezzo_01"/>
 </render>
-<aabb min="-2.69207 -0.554964 -1.62049" max="2.6919 0.519048 2.11016"/>
+<aabb min="-2.69207 -0.554968 -1.62048" max="2.6919 0.519044 2.11017"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.11449" boxY="0.157212" boxZ="1.60504"/>
 <rigidbody density="11713.9"  />
 	</entity>
@@ -4648,7 +4814,7 @@
 <render  color = "0.882353 0.776471 0.341176">
 <draw mesh="plataforma_atrezzo_plat" sub_mesh="0" mat="plataforma_atrezzo_01"/>
 </render>
-<aabb min="-2.69214 -0.555047 -1.62039" max="2.69183 0.518966 2.11026"/>
+<aabb min="-2.69215 -0.555065 -1.62037" max="2.69183 0.518947 2.11028"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.11449" boxY="0.157212" boxZ="1.60504"/>
 <rigidbody density="11713.9"  />
 	</entity>
@@ -4684,7 +4850,7 @@
 <render  color = "0.882353 0.776471 0.341176">
 <draw mesh="plataforma_atrezzo_plat" sub_mesh="0" mat="plataforma_atrezzo_01"/>
 </render>
-<aabb min="-2.69121 -0.554973 -1.62048" max="2.69277 0.519039 2.11017"/>
+<aabb min="-2.69109 -0.554978 -1.62047" max="2.69289 0.519035 2.11018"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.11449" boxY="0.157212" boxZ="1.60504"/>
 <rigidbody density="500.0"  />
 	</entity>
@@ -5160,6 +5326,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_622.0" />
@@ -5167,7 +5336,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558691 -0.0259157 -0.5477" max="0.5587 0.0259156 0.547299"/>
+<aabb min="-0.55869 -0.0259157 -0.547732" max="0.558701 0.0259156 0.547267"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5176,7 +5345,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00120956 -0.346133 -0.32341" max="0.680797 0.0417762 0.0436732"/>
+<aabb min="0.00121003 -0.346133 -0.323441" max="0.680798 0.0417762 0.0436417"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -5192,6 +5361,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_625.0" />
@@ -5199,7 +5371,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558659 -0.0259157 -0.547726" max="0.558733 0.0259156 0.547273"/>
+<aabb min="-0.558653 -0.0259157 -0.547756" max="0.558738 0.0259156 0.547243"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5208,7 +5380,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00123465 -0.346133 -0.323206" max="0.680822 0.0417762 0.0438771"/>
+<aabb min="0.00123847 -0.346133 -0.323205" max="0.680826 0.0417762 0.0438776"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -5224,6 +5396,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_628.0" />
@@ -5231,7 +5406,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558666 -0.0259157 -0.547489" max="0.558725 0.0259156 0.547511"/>
+<aabb min="-0.558663 -0.0259157 -0.547488" max="0.558729 0.0259156 0.547511"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5240,7 +5415,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00120699 -0.346133 -0.322971" max="0.680795 0.0417762 0.0441121"/>
+<aabb min="0.00120699 -0.346133 -0.32294" max="0.680795 0.0417762 0.0441429"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity  prefab="violin_pref">
@@ -5343,7 +5518,10 @@
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.195148 -0.1355 -0.132063" max="0.19515 0.1355 0.131838"/>
+<aabb min="-0.195148 -0.1355 -0.132078" max="0.19515 0.1355 0.131823"/>
+<audioSource sound="GEARS_LOOP_1" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5352,7 +5530,7 @@
 <render  color = "0.878431 0.337255 0.337255">
 <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
 </render>
-<aabb min="-0.00709915 -0.0673 -0.0652122" max="0.00709915 0.0673 0.0649872"/>
+<aabb min="-0.00709915 -0.0673 -0.0652275" max="0.00709915 0.0673 0.0649719"/>
 <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -5368,6 +5546,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_642.0" />
@@ -5375,7 +5556,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558784 -0.0259157 -0.547561" max="0.558607 0.0259156 0.547438"/>
+<aabb min="-0.558797 -0.0259157 -0.547569" max="0.558595 0.0259156 0.54743"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5384,7 +5565,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00115705 -0.346133 -0.323244" max="0.680745 0.0417762 0.0438389"/>
+<aabb min="0.00115085 -0.346133 -0.323248" max="0.680739 0.0417762 0.0438346"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -5400,6 +5581,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_645.0" />
@@ -5416,7 +5600,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00133789 -0.346133 -0.323318" max="0.680926 0.0417762 0.0437647"/>
+<aabb min="0.00135553 -0.346133 -0.323333" max="0.680943 0.0417762 0.0437502"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -5537,6 +5721,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_657.0" />
@@ -5544,7 +5731,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558855 -0.0259157 -0.547933" max="0.558536 0.0259156 0.547066"/>
+<aabb min="-0.558876 -0.0259157 -0.547991" max="0.558515 0.0259156 0.547008"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5553,7 +5740,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00112236 -0.346133 -0.32319" max="0.68071 0.0417762 0.0438926"/>
+<aabb min="0.00111139 -0.346133 -0.323188" max="0.680699 0.0417762 0.0438951"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity  prefab="violin_pref">
@@ -5632,6 +5819,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_666.0" />
@@ -5639,7 +5829,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558673 -0.0259157 -0.547632" max="0.558718 0.0259156 0.547367"/>
+<aabb min="-0.558669 -0.0259157 -0.547649" max="0.558722 0.0259156 0.54735"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5648,7 +5838,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.00120044 -0.346133 -0.32323" max="0.680788 0.0417762 0.0438532"/>
+<aabb min="0.00120091 -0.346133 -0.323232" max="0.680789 0.0417762 0.0438505"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity  prefab="violin_pref">
@@ -5727,6 +5917,9 @@
 	<shape posOffset="-0.17532 1.48436 -0.81064" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.543094" width="0.436791" height="1.71501"/>
 </colliderMulti>
 <rigidbody density="137.221"  />
+<audioSource sound="JUKEBOX_LOOP" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="gramola_disco_675.0" />
@@ -5734,7 +5927,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="-0.558708 -0.0256864 -0.547012" max="0.558683 0.0261452 0.547987"/>
+<aabb min="-0.55871 -0.0256559 -0.546947" max="0.558681 0.0261757 0.548051"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -5743,7 +5936,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
 </render>
-<aabb min="0.0012933 -0.346008 -0.322904" max="0.680881 0.0419021 0.0441787"/>
+<aabb min="0.00130475 -0.345991 -0.322863" max="0.680892 0.0419187 0.0442193"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
@@ -5830,6 +6023,9 @@
 <aabb min="-2.09924 -0.389241 -2.42525" max="1.25241 0.97885 0.571366"/>
 <colliderConvex path="monton_focos" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.16192"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "cloth">
 <name name="saco_monton_b_684.0" />
@@ -5870,6 +6066,9 @@
 <aabb min="-2.09924 -0.389241 -2.42525" max="1.25241 0.97885 0.571366"/>
 <colliderConvex path="monton_focos" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.16192"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_688.0" />
@@ -5884,6 +6083,9 @@
 	<shape posOffset="-0.0291586 0.214675 0.228531" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
 <name name="foco_basico_a_689.0" />
@@ -5898,6 +6100,9 @@
 	<shape posOffset="-0.0291581 0.214683 0.228528" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
 </colliderMulti>
 <rigidbody density="4275.91"  />
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "cloth">
 <name name="alfombra_reloj_agujero_690.0" />
@@ -6282,6 +6487,9 @@
 <aabb min="-0.816408 -2.93385 -2.83257" max="0.749677 2.93385 2.83257"/>
 <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.3089"/>
 <staticbody/>
+<audioSource sound="PLANETARIUM" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "metal">
 <name name="planetario_b_aro_d_738.0" />
@@ -6380,6 +6588,9 @@
 <aabb min="-3.37741 -3.00441 -3.24198" max="3.24623 0.911957 3.24196"/>
 <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="2.27134"/>
 <staticbody/>
+<audioSource sound="PLANETARIUM" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -6504,6 +6715,9 @@
 <aabb min="-3.62552 -1.98924 -0.39298" max="3.23286 2.6625 0.052658"/>
 <colliderConvex path="letras_puppetshow_S" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="3.78119"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="foco_suelo_a_764.0" />
@@ -7150,6 +7364,9 @@
 <draw mesh="lampara_techo_c" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.261445 2.36161e-007 -0.278465" max="0.261445 5.41855 0.278465"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "stone">
 <name name="florero_a_05_s_857.0" />
@@ -7250,6 +7467,9 @@
 <aabb min="-3.37741 -3.00441 -3.24198" max="3.24623 0.911957 3.24196"/>
 <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="5.63292"/>
 <staticbody/>
+<audioSource sound="PLANETARIUM" autoplay="true" >
+<paramEnd/>
+</audioSource>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -7258,7 +7478,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="planeta_a_aro_f" sub_mesh="0" mat="atrezzos"/>
 </render>
-<aabb min="-0.978507 -2.35544 -1.02468" max="1.02375 1.80819 0.977582"/>
+<aabb min="-0.978502 -2.35544 -1.02468" max="1.02376 1.80819 0.977582"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -7276,7 +7496,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="planeta_a_aro_c" sub_mesh="0" mat="atrezzos"/>
 </render>
-<aabb min="-1.77524 -1.7505 -0.959495" max="1.77528 1.7505 0.959495"/>
+<aabb min="-1.77523 -1.7505 -0.959495" max="1.77528 1.7505 0.959495"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -7285,7 +7505,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="planeta_a_aro_a" sub_mesh="0" mat="atrezzos"/>
 </render>
-<aabb min="-2.37788 -1.29159 -2.23046" max="2.37794 1.29159 2.23046"/>
+<aabb min="-2.37788 -1.29159 -2.23046" max="2.37795 1.29159 2.23046"/>
 <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -7294,7 +7514,7 @@
 <render  color = "0.0 0.0 0.0">
 <draw mesh="planeta_a_aro_b" sub_mesh="0" mat="atrezzos"/>
 </render>
-<aabb min="-1.917 -0.345909 -1.91621" max="1.91705 0.345909 1.91621"/>
+<aabb min="-1.91699 -0.345909 -1.91621" max="1.91706 0.345909 1.91621"/>
 <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
 	</entity>
 	<entity   materialTag = "metal">
@@ -7869,6 +8089,9 @@
 <aabb min="-1.57101 -0.461392 -0.211383" max="1.57101 0.461392 0.211382"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.57101" boxY="0.461392" boxZ="0.211382"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "metal">
 <name name="flecha_dech_956.0" />
@@ -7879,6 +8102,9 @@
 <aabb min="-1.57101 -0.461392 -0.211383" max="1.57101 0.461392 0.211382"/>
 <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.57101" boxY="0.461392" boxZ="0.211382"/>
 <staticbody/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "ceramics">
 <name name="maceta_baja_ramo_05_S_957.0" />
@@ -7960,7 +8186,7 @@
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "stone">
 <name name="rosa_maceta_a_S_966.0" />
-<transform position="5.14537 0.349218 83.0139" rotation="0.0 0.656896 0.0 0.753981" scale="1.0 1.0 1.0"/>
+<transform position="4.50574 0.349218 82.4356" rotation="0.0 0.656896 0.0 0.753981" scale="1.0 1.0 1.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="rosa_maceta_a_S" sub_mesh="0" mat="herramientas"/>
 </render>
@@ -8100,7 +8326,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_980.0" />
-<transform position="-17.9827 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="-17.9827 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8108,7 +8334,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_981.0" />
-<transform position="-14.0107 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="-14.0107 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8116,7 +8342,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_982.0" />
-<transform position="-9.98331 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="-9.98331 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8124,7 +8350,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_983.0" />
-<transform position="-5.97559 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="-5.97559 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8132,7 +8358,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_984.0" />
-<transform position="-1.99251 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="-1.99251 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8140,7 +8366,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_985.0" />
-<transform position="2.00592 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="2.00592 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8148,7 +8374,7 @@
 	</entity>
 	<entity   materialTag = "stone">
 <name name="tela_techo_curvo_a_986.0" />
-<transform position="5.96601 0.435359 59.7283" rotation="0.0246048 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
+<transform position="5.96601 0.435359 59.7283" rotation="0.0246047 -0.053813 0.00132638 0.998247" scale="0.336535 0.596214 0.399122"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="tela_techo_curvo_a" sub_mesh="0" mat="telas2"/>
 </render>
@@ -8265,6 +8491,9 @@
 <draw mesh="lampara_techo_c" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.261445 2.36161e-007 -0.278465" max="0.261445 5.41855 0.278465"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "stone">
 <name name="sc4_reverb_zone_1_1001.0" />
@@ -8516,11 +8745,10 @@
 <name name="sc4_merged_room_3_glass_1034.0" />
 <transform position="1.09563 14.6875 73.1005" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <render >
-<draw mesh="sc4_merged_room_3_glass" sub_mesh="0" mat="suelo_esc3"/>
-<draw mesh="sc4_merged_room_3_glass" sub_mesh="1" mat="techo_cristalera"/>
-<draw mesh="sc4_merged_room_3_glass" sub_mesh="2" mat="CubemapMaterial"/>
+<draw mesh="sc4_merged_room_3_glass" sub_mesh="0" mat="techo_cristalera"/>
+<draw mesh="sc4_merged_room_3_glass" sub_mesh="1" mat="CubemapMaterial"/>
 </render>
-<aabb min="-20.096 -14.6875 -31.1008" max="20.096 14.6875 31.1008"/>
+<aabb min="-20.096 -6.73763 -31.1008" max="20.096 14.6875 31.1008"/>
 <colliderMesh path="sc4_merged_room_3_glass" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
@@ -8537,7 +8765,7 @@
 <draw mesh="sc4_merged_room_3_wood" sub_mesh="7" mat="barandillas_01"/>
 <draw mesh="sc4_merged_room_3_wood" sub_mesh="8" mat="techo2"/>
 </render>
-<aabb min="-24.5 -12.2481 -27.2222" max="24.5 12.2481 27.2222"/>
+<aabb min="-24.5 -12.2481 -36.7778" max="24.5 12.2481 27.2222"/>
 <colliderMesh path="sc4_merged_room_3_wood" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" /><staticbody/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
@@ -8576,7 +8804,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level" materialTag = "wood">
 <name name="int_ascensor_1042.0" />
-<transform position="19.7714 -23.3459 17.818" rotation="0.0 1.0 0.0 1.07725e-005" scale="1.0 1.0 1.0"/>
+<transform position="19.7714 -23.3459 17.818" rotation="0.0 1.0 0.0 1.26799e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="int_ascensor" sub_mesh="0" mat="ascensor_exterior_a"/>
 <draw mesh="int_ascensor" sub_mesh="1" mat="ascensor_interior_a"/>
@@ -8766,6 +8994,9 @@
 <draw mesh="lampara_techo_h" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.932218 2.36161e-007 -0.886592" max="0.932218 6.03035 0.886592"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "wood">
 <name name="lampara_techo_omni_1083.0" />
@@ -8779,6 +9010,9 @@
 <draw mesh="lampara_techo_h" sub_mesh="0" mat="lampara_techo_01"/>
 </render>
 <aabb min="-0.932218 2.36161e-007 -0.886592" max="0.932218 6.03035 0.886592"/>
+<audioSource sound="BUZZING" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "wood">
 <name name="lampara_techo_omni_1085.0" />
@@ -8789,6 +9023,9 @@
 <name name="sc4_sparks_crasher_1090.0" />
 <transform position="21.9607 -16.8302 -7.7219" rotation="-0.154335 -0.577397 -0.112254 0.793847" scale="1.0 1.0 1.0"/>
 <particleGroup name="ps_sparks" />
+<audioSource sound="SPARKS1" autoplay="true" >
+<paramEnd/>
+</audioSource>
 	</entity>
 	<entity   materialTag = "wood">
 <name name="sc4_crasher_wheel_1_1091.0" />
@@ -8848,7 +9085,7 @@
 	</entity>
 	<entity   materialTag = "wood">
 <name name="sc4_crasher_wheel_1_1097.0" />
-<transform position="21.3207 -18.7617 -7.30024" rotation="0.0 1.0 0.0 -3.61999e-006" scale="1.51494 1.51494 1.51494" parent="sc4_machacabuelas_1096.0"/>
+<transform position="21.3207 -18.7617 -7.30024" rotation="0.0 1.0 0.0 -4.57366e-006" scale="1.51494 1.51494 1.51494" parent="sc4_machacabuelas_1096.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="sc4_crasher_wheel_1" sub_mesh="0" mat="machacabuelas_map"/>
 </render>
@@ -8857,7 +9094,7 @@
 	</entity>
 	<entity   materialTag = "wood">
 <name name="sc4_crasher_wheel_2_1098.0" />
-<transform position="23.3168 -18.8808 -7.85751" rotation="0.0 1.0 0.0 -3.7392e-006" scale="1.51494 1.51494 1.51494" parent="sc4_machacabuelas_1096.0"/>
+<transform position="23.3168 -18.8808 -7.85751" rotation="0.0 1.0 0.0 -4.69287e-006" scale="1.51494 1.51494 1.51494" parent="sc4_machacabuelas_1096.0"/>
 <render  color = "0.0 0.0 0.0">
 <draw mesh="sc4_crasher_wheel_2" sub_mesh="0" mat="machacabuelas_map"/>
 </render>
@@ -9118,6 +9355,48 @@
 <transform position="-16.0723 -26.7019 0.950535" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <pointLight radius="2.0412" intensity="1.0" color="1.0 0.87451 0.282353 1"/>
 	</entity>
+	<entity   materialTag = "wood">
+<name name="audio_water_pipe_1147.0" />
+<transform position="12.0747 -26.3835 -17.2094" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<audioSource sound="WATERPIPES" autoplay="true" >
+<paramEnd/>
+</audioSource>
+	</entity>
+	<entity   materialTag = "wood">
+<name name="audio_water_pipe002_1148.0" />
+<transform position="12.0747 -28.5418 1.17835" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<audioSource sound="WATERPIPES" autoplay="true" >
+<paramEnd/>
+</audioSource>
+	</entity>
+	<entity   materialTag = "wood">
+<name name="audio_water_pipe003_1149.0" />
+<transform position="7.81323 -21.518 -5.40484" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<audioSource sound="WATERPIPES" autoplay="true" >
+<paramEnd/>
+</audioSource>
+	</entity>
+	<entity   materialTag = "wood">
+<name name="audio_water_pipe004_1150.0" />
+<transform position="7.81323 -21.518 5.40725" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<audioSource sound="WATERPIPES" autoplay="true" >
+<paramEnd/>
+</audioSource>
+	</entity>
+	<entity   materialTag = "wood">
+<name name="audio_water_pipe005_1151.0" />
+<transform position="7.81323 -20.5683 15.4656" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<audioSource sound="WATERPIPES" autoplay="true" >
+<paramEnd/>
+</audioSource>
+	</entity>
+	<entity   materialTag = "wood">
+<name name="audio_ambient_industrial_1152.0" />
+<transform position="18.0692 -21.518 -5.40484" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<audioSource sound="FACTORY_AMBIENT" autoplay="true" >
+<paramEnd/>
+</audioSource>
+	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
 <name name="ascensor_crematorio_cabina" />
 <transform position="17.0053 -23.9978 26.078" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -9164,6 +9443,38 @@
 <rigidbody density="1773.91"  />
 	</entity>
 	<entity   materialTag = "stone">
+<name name="sc4_base_2" />
+<transform position="22.3954 -31.6916 -7.81081" rotation="0.0 0.0 0.0 1.0" scale="1.51494 1.51494 1.51494"/>
+<render  color = "0.0 0.0 0.0">
+<draw mesh="sc4_base_2" sub_mesh="0" mat="machacabuelas_map"/>
+</render>
+<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
+	</entity>
+	<entity   materialTag = "stone">
+<name name="sc4_base_3" />
+<transform position="24.7941 -31.6916 -0.148903" rotation="0.0 1.0 0.0 0.0" scale="1.51494 1.51494 1.51494"/>
+<render  color = "0.0 0.0 0.0">
+<draw mesh="sc4_base_3" sub_mesh="0" mat="machacabuelas_map"/>
+</render>
+<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
+	</entity>
+	<entity   materialTag = "stone">
+<name name="sc4_base_4" />
+<transform position="17.3295 -31.6916 5.27542" rotation="0.0 0.707107 0.0 0.707107" scale="1.51494 1.51494 1.51494"/>
+<render  color = "0.0 0.0 0.0">
+<draw mesh="sc4_base_4" sub_mesh="0" mat="machacabuelas_map"/>
+</render>
+<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
+	</entity>
+	<entity   materialTag = "stone">
+<name name="sc4_base_1" />
+<transform position="16.1859 -31.6916 -13.9933" rotation="0.0 -0.707107 0.0 0.707107" scale="1.51494 1.51494 1.51494"/>
+<render  color = "0.0 0.0 0.0">
+<draw mesh="sc4_base_1" sub_mesh="0" mat="machacabuelas_map"/>
+</render>
+<aabb min="-1.85485 -0.0989033 -1.66563" max="1.85485 0.0989033 1.66563"/>
+	</entity>
+	<entity   materialTag = "stone">
 <name name="sc4_room_0" />
 <transform position="-15.7673 -35.5172 -1.55589" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-21.9271 0.0 -17.5926" max="21.9271 34.5297 17.5926"/>
@@ -9205,7 +9516,7 @@
 	</entity>
 	<entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
 <name name="sc4_int_ascensor_brazo" />
-<transform position="19.7443 -22.6335 17.4934" rotation="-4.12247e-006 0.92388 0.382683 9.95254e-006" scale="1.0 1.0 1.0"/>
+<transform position="19.7443 -22.6335 17.4934" rotation="-4.85239e-006 0.92388 0.382683 1.17147e-005" scale="1.0 1.0 1.0"/>
 <render >
 <draw mesh="sc4_int_ascensor_brazo" sub_mesh="0" mat="ascensor_interior_a"/>
 <draw mesh="sc4_int_ascensor_brazo" sub_mesh="1" mat="engranajes_basicos"/>
@@ -9242,7 +9553,7 @@
 	</entity>
 	<entity   materialTag = "wood">
 <name name="sc4_trigger_aguja_alto" />
-<transform position="-17.5632 8.5908 85.9588" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-17.5632 8.5908 85.9303" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-0.21835 0.0 -0.390064" max="0.21835 0.411262 0.390064"/>
 <trigger botOnly="false" playerOnly="false" />
 	</entity>
@@ -9257,6 +9568,14 @@
 <transform position="-30.9572 2.75368e-006 62.9968" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-1.92885 0.0 -2.22067" max="1.92885 5.6167 2.22067"/>
 <trigger botOnly="false" playerOnly="true" />
+	</entity>
+	<entity   materialTag = "wood">
+<name name="sc4_cable_reloj" />
+<transform position="-12.0719 0.0319942 83.461" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+<render >
+<draw mesh="sc4_cable_reloj" sub_mesh="0" mat="barandillas_02"/>
+</render>
+<aabb min="-3.06806 -0.0782552 -24.3485" max="2.05631 4.15632 6.56079"/>
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="sc4_hinge_asc_4" />
@@ -9296,7 +9615,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="HingeConstraint005_127.0" />
-<jointHinge actor1 = "atrezzo_estrella_colgante_puzzle3_126.0"  jointRelativePosition0="0.122941 -0.0217228 5.59693" jointRelativeRotation0="0.5 0.5 -0.5 0.5" actor2 = "plataforma_colgante_122.0"  jointRelativePosition1="0.435117 3.59469 6.65944" jointRelativeRotation1="-0.5548 0.438403 0.5548 0.438403"  jointPosition="-13.9494 -16.1342 -4.37573" jointRotation="0.47201 -0.47201 -0.526504 0.526504" linearPosition="100.0" linearRestitution="0.0" swingAngle="100.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+<jointHinge actor1 = "atrezzo_estrella_colgante_puzzle3_126.0"  jointRelativePosition0="0.122941 -0.0217228 5.59693" jointRelativeRotation0="0.5 0.5 -0.5 0.5" actor2 = "plataforma_colgante_122.0"  jointRelativePosition1="0.435103 3.59469 6.65944" jointRelativeRotation1="-0.554801 0.438402 0.554801 0.438402"  jointPosition="-13.9494 -16.1342 -4.37573" jointRotation="0.47201 -0.47201 -0.526504 0.526504" linearPosition="100.0" linearRestitution="0.0" swingAngle="100.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="HingeMinutero" />
@@ -9377,7 +9696,7 @@
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="sc4_hinge_ascensor_brazo" />
-<jointHinge actor1 = "int_ascensor_1042.0"  jointRelativePosition0="0.0 0.0103683 0.378162" jointRelativeRotation0="0.270605 -0.653278 -0.270591 0.653284" actor2 = "sc4_int_ascensor_brazo"  jointRelativePosition1="-0.0270805 0.47323 0.00045681" jointRelativeRotation1="0.500008 -0.5 -0.499992 0.5"  jointPosition="19.7714 -22.9678 17.8283" jointRotation="0.653281 0.653281 -0.270598 0.270598" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
+<jointHinge actor1 = "int_ascensor_1042.0"  jointRelativePosition0="0.0 0.0103683 0.378162" jointRelativeRotation0="0.270607 -0.653278 -0.27059 0.653285" actor2 = "sc4_int_ascensor_brazo"  jointRelativePosition1="-0.0270805 0.47323 0.00045681" jointRelativeRotation1="0.500009 -0.5 -0.499991 0.5"  jointPosition="19.7714 -22.9678 17.8283" jointRotation="0.653281 0.653281 -0.270598 0.270598" linearPosition="100.0" linearRestitution="0.0" swingAngle="45.0" posSpring="0.0" posDamping="0.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" />
 	</entity>
 	<entity tag = "level" collisionTag = "Level">
 <name name="sc4_hinge_eje_1" />

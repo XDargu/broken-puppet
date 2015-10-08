@@ -191,8 +191,18 @@ void fsm_boss::Hidden(float elapsed){
 	if (CIOStatus::get().becomesPressed(CIOStatus::V) || lua_boss_init){
 		// Emitir particula
 		XMVECTOR aux_rot = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
-		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_entry", XMVectorSet(0, 1, 0, 0), aux_rot);
-				
+		
+		XMVECTOR aux_pos = XMVectorSet(0, 1, 0, 0);
+
+		CHandle tapa_suelo = CEntityManager::get().getByName("tapa_hueco_boss");
+		if (tapa_suelo.isValid()){
+			TCompTransform* tapa_suelo_trans = ((CEntity*)tapa_suelo)->get<TCompTransform>();
+			if (tapa_suelo_trans)
+				aux_pos = tapa_suelo_trans->position;
+		}
+
+		aux_pos = XMVectorSet(0, 1, 0, 0);
+		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_entry", aux_pos, aux_rot);
 		appear = true;
 		state_time = 0;
 		lua_boss_init = false;
@@ -222,6 +232,18 @@ void fsm_boss::RiseUp(){
 
 		// Move to the initial position
 		trans->position = original_pos;
+		
+		/**/
+		CHandle puente = CEntityManager::get().getByName("pasarela_boss");
+		if (puente.isValid()){
+			TCompTransform* puente_trans = ((CEntity*)puente)->get<TCompTransform>();
+			if (puente_trans){
+				puente_trans->teleport(XMVectorSet(1000, 1000, 1000, 1000));
+			}
+		}
+		
+
+		/**/
 	}
 
 	if ((state_time >= 6.79f) && (!boss_out)){
@@ -234,11 +256,10 @@ void fsm_boss::RiseUp(){
 			// Generate the broken floor prefab
 			CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota");
 			//CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota_2");
-
+			/**/
 			if (broken_floor.isValid() && (floor_trans)){
 				TCompTransform* broken_floor_trans = ((CEntity*)broken_floor)->get<TCompTransform>();
 
-				// Follow
 				if (broken_floor_trans){
 					broken_floor_trans->setType(0);
 					broken_floor_trans->position = floor_trans->position;
@@ -248,6 +269,7 @@ void fsm_boss::RiseUp(){
 						floor_render->active = false;
 				}
 			}
+			/**/
 		}
 	}
 
@@ -275,7 +297,7 @@ void fsm_boss::Idle1(float elapsed){
 	last_attack += elapsed;
 	
 	CIOStatus& io = CIOStatus::get();
-	/**
+	/**/
 	if (last_attack > 3){
 		int attack = CalculateAttack();
 		switch (attack)
@@ -570,7 +592,7 @@ void fsm_boss::Ball1Launch(float elapsed){
 
 	PxVec3	point_to_go = enemy_pos + point_offset + (player_boss_dir * distance_to_point);
 
-	if (state_time < 1.8){
+	if (state_time < 1.3){
 		for (int i = 0; i < ball_list.size(); ++i){
 			CEntity* e = ball_list[i];
 			if (((CHandle)e).isValid()){
@@ -751,10 +773,10 @@ void fsm_boss::Shoot1Reload(float elapsed){
 				px_rigid->setLinearVelocity(force_dir * clamp(dist * 2, 0, 12));
 			}
 
-			if ((state_time >= 2.f)&&(dist<1)){
+			if ((state_time >= 4.f)&&(dist<3)){
 				ChangeState("fbp_Shoot1Shoot");
 			}
-			else if (state_time >= 4.f){
+			else if (state_time >= 5.f) {
 				state_time = 0;
 				shoots_amount++;
 				SelectObjToShoot();
@@ -1182,6 +1204,7 @@ void fsm_boss::Death(){
 	}
 	
 	if (state_time >= 7.f){
+		CApp::get().playFinalVideo();
 		TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->enableBoneTree(4);
 		ragdoll->enableBoneTree(36);
@@ -1394,13 +1417,23 @@ bool fsm_boss::RainDebris(float elapsed){
 		if (debris_creation_delay >= debris_respawn_time){
 			debris_creation_delay = 0;
 
+			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+
+			XMVECTOR aux_boss_pos = enemy_comp_trans->position;
+
 			XMVECTOR create_position;
-			XMVECTOR random_point = getRandomVector3(-17, 60, -10, 17, 61, 30);	
+			XMVECTOR random_point = getRandomVector3(
+				XMVectorGetX(aux_boss_pos) - 17
+				, XMVectorGetY(aux_boss_pos) + 60
+				, XMVectorGetZ(aux_boss_pos) - 10
+				, XMVectorGetX(aux_boss_pos) + 17
+				, XMVectorGetY(aux_boss_pos) + 61
+				, XMVectorGetZ(aux_boss_pos) + 10);
 			
 			bool equal =(Physics.XMVECTORToPxVec3(random_point) == Physics.XMVECTORToPxVec3(last_random_pos));
+
 			if (equal){
 				// Calculate a new pos
-				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 				PxVec3 m_boss_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
 				PxVec3 obj_boss_dir = Physics.XMVECTORToPxVec3(last_created_pos) - m_boss_pos;
@@ -1447,6 +1480,10 @@ bool fsm_boss::RainDebris(float elapsed){
 			TCompExplosion* prefab_E = prefab_entity->get<TCompExplosion>();
 			if (prefab_E)
 				prefab_E->init();
+
+			TCompBossPrefab* prefab_BP = prefab_entity->get<TCompBossPrefab>();
+			if (prefab_BP)
+				prefab_BP->init();
 
 			debris_created++;
 		}

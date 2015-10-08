@@ -390,9 +390,8 @@ bool CApp::create() {
 	createManagers();	
 
 	game_state = TGameState::INITIAL_VIDEO;
+	video_sound_played = false;
 #ifndef _DEBUG
-	//CSoundManager::get().playEvent("INITIAL_VIDEO");
-	//CSoundManager::get().update(1.f / 60.f);
 	loadVideo("intro_BP.ogv");
 #endif
 
@@ -579,16 +578,31 @@ void CApp::doFrame() {
 void CApp::update(float elapsed) {
 
 	if (game_state == TGameState::INITIAL_VIDEO) {
+		if (!video_sound_played) {
+			CSoundManager::get().playEvent("INITIAL_VIDEO", "video_sound");
+			CSoundManager::get().update(elapsed);
+			video_sound_played = true;
+		}
+
 		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
+			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+			CSoundManager::get().update(elapsed);
 			loadScene(first_scene);
 		}
 		return;
 	}
 
 	if (game_state == TGameState::FINAL_VIDEO) {
+		if (!video_sound_played) {
+			CSoundManager::get().playEvent("FINAL_VIDEO", "video_sound");
+			CSoundManager::get().update(elapsed);
+			video_sound_played = true;
+		}
 		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 			game_state = TGameState::MAIN_MENU;
+			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+			CSoundManager::get().update(elapsed);
 			loadScene(menu_scene);
 		}
 		return;
@@ -1839,7 +1853,8 @@ unsigned int CApp::getMaxNumNeedles(){
 }
 
 void CApp::playFinalVideo() {
+	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("final_BP.ogv");
-	CSoundManager::get().playEvent("FINAL_VIDEO");
+	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
 }
