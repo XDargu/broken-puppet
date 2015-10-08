@@ -6,6 +6,8 @@
 #include "components\comp_skeleton_ik.h"
 #include "ai\logic_manager.h"
 
+CSoundManager& sound_manager = CSoundManager::get();
+
 FSMPlayerLegs::FSMPlayerLegs()
 {
 	can_move = true;
@@ -59,6 +61,7 @@ void FSMPlayerLegs::Init()
 	comp_skeleton_ik = ((CEntity*)entity)->get<TCompSkeletonIK>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	comp_player_controller = ((CEntity*)entity)->get<TCompPlayerController>();
+	player_transform = ((CEntity*)entity)->get<TCompTransform>();
 	comp_player_pivot_transform = ((CEntity*)(CEntityManager::get().getByName("PlayerPivot")))->get<TCompTransform>();
 	entity_camera = CEntityManager::get().getByName("PlayerCamera");
 
@@ -417,7 +420,6 @@ void FSMPlayerLegs::Jump(float elapsed){
 	if (on_enter) {
 		//skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
-
 		/*
 		Lanzar sonido no prioritario
 		CSoundManager& sm = CSoundManager::get();
@@ -432,7 +434,10 @@ void FSMPlayerLegs::Jump(float elapsed){
 			sm.playEvent("KATH_JUMP", "kath_expr_p");
 		}*/
 
-		CSoundManager::get().playEvent("KATH_JUMP");
+		//CSoundManager::get().playEvent("KATH_JUMP");
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_JUMP", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 	}
 
 	if (state_time > 0.5) {		
@@ -489,7 +494,11 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 			CSoundManager::SoundParameter params[] = {
 				{ "TargetDist", dist }
 			};
+			//Throw movement sound. 
 			CSoundManager::get().playEvent("STRING_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+				sound_manager.playEvent("KATH_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+			}
 		}
 	
 	}
@@ -537,7 +546,11 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 			CSoundManager::SoundParameter params[] = {
 				{ "TargetDist", dist }
 			};
+			//Throw movement sound. 
 			CSoundManager::get().playEvent("STRING_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+				sound_manager.playEvent("KATH_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+			}
 		}
 	
 	}
@@ -641,7 +654,12 @@ void FSMPlayerLegs::Land(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 0 }
 		};
-		CSoundManager::get().playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Context Land sound
+		CSoundManager::get().playEvent("LANDING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Kath landing expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		// Jump particle
 		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
@@ -719,7 +737,12 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 1 }
 		};
-		CSoundManager::get().playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("WRONG_LANDING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Context Wrong Land sound
+		//Kath wrong landing expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_WRONG_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 	}
 
 	if (state_time > 0.2f) {
@@ -777,7 +800,10 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 	if (on_enter) {
 
-		CSoundManager::get().playEvent("KATH_RAGDOLL");
+		//Kath ragdoll expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_RAGDOLL", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
 		stopAllAnimations();
@@ -887,7 +913,11 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
-		CSoundManager::get().playEvent("KATH_WAKEUP");
+
+		//Kath ragdoll expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_WAKEUP", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -919,7 +949,10 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 
 	if (on_enter) {
 
-		CSoundManager::get().playEvent("KATH_WAKEUP");
+		//Kath ragdoll expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_WAKEUP", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -1061,7 +1094,10 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 		CSoundManager::SoundParameter params[] = {
 			{ "damage", damage }
 		};
-		CSoundManager::get().playEvent("KATH_HIT", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Kath hit expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_HIT", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		if (damage > 100000.f){ // Damage needed for ragdoll state
 			real_damage = 20;

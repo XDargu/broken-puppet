@@ -8,10 +8,6 @@
 #include "components\comp_skeleton_lookat.h"
 #include "utils.h"
 
-
-//Const with possibilities of make a random comment when she kills an enemy
-const int random_possibilities = 8;
-
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
 	, comp_transform(CHandle())
@@ -880,27 +876,41 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 						CEntity* actor_entity = (CEntity*)CHandle(a1->userData);
 						TCompBtGrandma* grandma = actor_entity->get<TCompBtGrandma>();
 						TCompBtSoldier* soldier = actor_entity->get<TCompBtSoldier>();
+						CHandle player_handle = ((CHandle)entity).getOwner();
+						TCompTransform* player_trans = ((CEntity*)player_handle)->get<TCompTransform>();
+						CSoundManager& sm = CSoundManager::get();
+
 						if (djoint->joint->getDistance() >= 12 * 12){
 							if (grandma || soldier){
 								if (!first_blood){
 									//First dismemberment
 									//Check if is the enemy really dead and play the sound
-									CSoundManager::get().playEvent("KATH_KILL_LAUGH");
-									XDEBUG("logitud joint: %f", djoint->joint->getDistance());
-									first_blood = true;
+									//Play priority sound 
+									if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+										sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+										sm.playEvent("KATH_KILL_LAUGH", player_trans->position, "kath_expr_p");
+										//XDEBUG("logitud joint: %f", djoint->joint->getDistance());
+										first_blood = true;
+									}
 								}
 								else{
 									//Not first blood so play random comments
-									int dice = getRandomNumber(1, 10);
-									if (dice > random_possibilities){
+									aimanager& aiManager = aimanager::get();
+									if (aiManager.bots.size()<=1){
 										//check what tipe of enemy we just killed
 										if (grandma){
 											//We killed a grandma
-											CSoundManager::get().playEvent("KATH_GRANDMA_KILLED");
+											if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+												sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+												sm.playEvent("KATH_GRANDMA_KILLED", player_trans->position, "kath_expr_p");
+											}
 										}
 										else if (soldier){
 											//We killed a soldier
-											CSoundManager::get().playEvent("KATH_SOLDIER_KILLED");
+											if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+												sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+												sm.playEvent("KATH_SOLDIER_KILLED", player_trans->position, "kath_expr_p");
+											}
 										}
 									}
 								}
@@ -917,27 +927,40 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 						CEntity* actor_entity = (CEntity*)CHandle(a2->userData);
 						TCompBtGrandma* grandma = actor_entity->get<TCompBtGrandma>();
 						TCompBtSoldier* soldier = actor_entity->get<TCompBtSoldier>();
+						CHandle player_handle = ((CHandle)entity).getOwner();
+						TCompTransform* player_trans = ((CEntity*)player_handle)->get<TCompTransform>();
+						CSoundManager& sm = CSoundManager::get();
 						if (djoint->joint->getDistance() >= 12 * 12){
 							if (grandma || soldier){
 								if (!first_blood){
 								//First dismemberment
 									//Check if is the enemy really dead and play the sound
-									CSoundManager::get().playEvent("KATH_KILL_LAUGH");
-									XDEBUG("logitud joint: %f", djoint->joint->getDistance());
-									first_blood = true;
+									//Play priority sound 
+									if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+										sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+										sm.playEvent("KATH_KILL_LAUGH", player_trans->position, "kath_expr_p");
+										//XDEBUG("logitud joint: %f", djoint->joint->getDistance());
+										first_blood = true;
+									}
 								}
 								else{
 									//Not first blood so play random comments
-									int dice = getRandomNumber(1, 10);
-									if (dice > random_possibilities){
+									aimanager& aiManager = aimanager::get();
+									if (aiManager.bots.size() <= 1){
 										//check what tipe of enemy we just killed
 										if (grandma){
 											//We killed a grandma
-											CSoundManager::get().playEvent("KATH_GRANDMA_KILLED");
+											if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+												sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+												sm.playEvent("KATH_GRANDMA_KILLED", player_trans->position, "kath_expr_p");
+											}
 										}
 										else if (soldier){
 											//We killed a soldier
-											CSoundManager::get().playEvent("KATH_SOLDIER_KILLED");
+											if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+												sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+												sm.playEvent("KATH_SOLDIER_KILLED", player_trans->position, "kath_expr_p");
+											}
 										}
 									}
 								}
