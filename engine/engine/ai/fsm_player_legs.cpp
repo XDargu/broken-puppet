@@ -737,11 +737,11 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 1 }
 		};
-		CSoundManager::get().playEvent("WRONG_LANDING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("LANDING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		//Context Wrong Land sound
 		//Kath wrong landing expression
 		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
-			sound_manager.playEvent("KATH_WRONG_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+			sound_manager.playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
 		}
 	}
 
