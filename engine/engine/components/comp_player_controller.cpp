@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_player_controller.h"
 #include "comp_life.h"
+#include "comp_name.h"
 #include "comp_transform.h"
 #include "comp_collider_capsule.h"
 #include "comp_rigid_body.h"
@@ -10,6 +11,7 @@
 #include "../audio/sound_manager.h"
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
+#include "handle\prefabs_manager.h"
 
 const string particles_hit_name = "ps_porcelain_hit";
 
@@ -90,11 +92,24 @@ void TCompPlayerController::init() {
 	displacement = 0;
 	counter = 0;*/
 
+	// Create back needles
+	CHandle pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete1");
+		}
+	}
+	pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete2");
+		}
+	}
+
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
-
-	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
-
 
 	float offset_size = 0.05f;
 	float offset_rot_size = 0.2f;
@@ -104,6 +119,18 @@ void TCompPlayerController::init() {
 
 	offset_rot_needle_back1 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
 	offset_rot_needle_back2 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
+
+	// Create jump particle prefab
+	CHandle pref_entity = prefabs_manager.getInstanceByName("player_jump_pref");
+	if (pref_entity.isValid()) {
+		TCompTransform* pref_trans = ((CEntity*)pref_entity)->get<TCompTransform>();
+		if (pref_trans) {
+			pref_trans->position = trans->position;
+			pref_trans->init();
+		}
+	}
+
+	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
 }
 
 void TCompPlayerController::update(float elapsed) {

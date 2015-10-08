@@ -441,7 +441,7 @@ bool CApp::create() {
 	// Preload scenes
 	bar = new std::thread(&CApp::preLoad, this);
 	
-	menu_scene = "data/scenes/empty_scene.xml";
+	menu_scene = "data/scenes/scene_1.xml";
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;

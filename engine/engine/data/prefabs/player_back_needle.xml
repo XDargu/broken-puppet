@@ -1,0 +1,10 @@
+<prefab>
+	<entity >
+		<name name="NeedleCarrete1" />
+		<transform position="0 0 0" rotation="0 0 0 1" scale="0.5 0.5 0.5"/>
+		<render>
+		  <draw mesh="aguja_back" sub_mesh="0" mat="needle"/>
+		</render>
+		<aabb min="-0.2 0 -0.2" max="0.2 1 0.2"/>
+	</entity>
+</prefab>

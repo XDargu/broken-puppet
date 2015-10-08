@@ -1205,12 +1205,12 @@ void fsm_boss::Death(){
 	
 	if (state_time >= 7.f){
 		CApp::get().playFinalVideo();
-		TCompRagdoll* ragdoll = comp_ragdoll;
+		/*TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->enableBoneTree(4);
 		ragdoll->enableBoneTree(36);
-		ragdoll->enableBoneTree(11);
+		ragdoll->enableBoneTree(11);*/
 		// Cambiar a video
-		//ChangeState("fbp_Idle1");
+		ChangeState("fbp_Idle1");
 	}
 }
 
