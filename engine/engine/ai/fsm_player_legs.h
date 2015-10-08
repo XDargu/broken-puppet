@@ -23,6 +23,7 @@ public:
 	CHandle comp_player_controller;
 	CHandle comp_player_pivot_transform;
 	CHandle entity_camera;
+	CHandle player_transform;
 	FSMPlayerTorso* torso;
 
 	CHandle life;

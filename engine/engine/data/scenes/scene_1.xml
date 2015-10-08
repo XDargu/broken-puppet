@@ -25,7 +25,7 @@
 <pointLight radius="12.0" intensity="1.0" color="0.984314 0.764706 0.478431 1"/>
 	</entity>
 	<entity tag = "player" prefab="Player">
-<transform position="-0.605739 8.92029 -12.6231" rotation="0.0 -0.142818 0.0 0.989749" scale="1.0 1.0 1.0"/>
+<transform position="-9.08492 37.3149 -82.8948" rotation="0.0 -0.142818 0.0 0.989749" scale="1.0 1.0 1.0"/>
 <ragdoll name="prota"/>
 	</entity>
 	<entity  prefab="PlayerPivot">

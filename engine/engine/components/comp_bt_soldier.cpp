@@ -103,10 +103,13 @@ void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
 	float damage = 0.f;
 	if (msg.sqrRopeDistance < 12 * 12) {
 		damage = 35000.f;
+		XDEBUG("damage camino menor: %f", msg.sqrRopeDistance);
+
 		//m_ai_controller->setRagdoll();
 	}
 	else {
 		damage = 100000.f;
+		XDEBUG("damage camino mayor o igual: %f", msg.sqrRopeDistance);
 	}
 	m_ai_controller->hurtSensor(damage);
 	//m_ai_controller->setRagdoll();

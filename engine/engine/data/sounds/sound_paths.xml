@@ -3,10 +3,13 @@
   <!-- Katherine -->
   <event id="KATH_JUMP" path="event:/Expresion/Katherine/Salto" />
   <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />
+  <event id="KATH_WRONG_LAND" path="" />
   <event id="KATH_RAGDOLL" path="" />
   <event id="KATH_WAKEUP" path="" />
   <event id="KATH_HIT" path="" />
-  
+  <event id="KATH_GRANDMA_KILLED" path="" />
+  <event id="KATH_SOLDIER_KILLED" path="" />
+  <event id="KATH_THROW" path="" />
   <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
   
   <!-- Strings & needles -->
@@ -16,6 +19,10 @@
   <event id="STRING_TENSE" path="event:/Expresion/Katherine/Tensar" />
   
   <event id="NEEDLE_HIT" path="event:/Aguja/Aguja" />
+
+  <!-- Action sounds -->
+  <event id="LANDING" path="" />
+  <event id="WRONG_LANDING" path="" />
   
   <!-- Steps -->
   <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" />
