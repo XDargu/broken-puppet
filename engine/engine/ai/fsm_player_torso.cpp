@@ -6,6 +6,11 @@
 #include "components\comp_skeleton.h"
 #include "ai\logic_manager.h"
 #include "components\comp_skeleton_lookat.h"
+#include "utils.h"
+
+
+//Const with possibilities of make a random comment when she kills an enemy
+const int random_possibilities = 8;
 
 FSMPlayerTorso::FSMPlayerTorso()
 	: can_move(true)
@@ -871,26 +876,71 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 							((physx::PxRigidDynamic*)a1)->wakeUp();
 						}
 
-						//First dismemberment
-						if (!first_blood){
-							if (djoint->joint->getDistance() > 12 * 12){
-								CSoundManager::get().playEvent("STRING_TENSE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
-								first_blood = true;
+
+						CEntity* actor_entity = (CEntity*)CHandle(a1->userData);
+						TCompBtGrandma* grandma = actor_entity->get<TCompBtGrandma>();
+						TCompBtSoldier* soldier = actor_entity->get<TCompBtSoldier>();
+						if (djoint->joint->getDistance() >= 12 * 12){
+							if (grandma || soldier){
+								if (!first_blood){
+									//First dismemberment
+									//Check if is the enemy really dead and play the sound
+									CSoundManager::get().playEvent("KATH_KILL_LAUGH");
+									XDEBUG("logitud joint: %f", djoint->joint->getDistance());
+									first_blood = true;
+								}
+								else{
+									//Not first blood so play random comments
+									int dice = getRandomNumber(1, 10);
+									if (dice > random_possibilities){
+										//check what tipe of enemy we just killed
+										if (grandma){
+											//We killed a grandma
+											CSoundManager::get().playEvent("KATH_GRANDMA_KILLED");
+										}
+										else if (soldier){
+											//We killed a soldier
+											CSoundManager::get().playEvent("KATH_SOLDIER_KILLED");
+										}
+									}
+								}
 							}
 						}
 						((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 
-						//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+					//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 					}
 					if (a2 && a2->isRigidDynamic()) {
 						if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
 							((physx::PxRigidDynamic*)a2)->wakeUp();
 						}
-						//First dismemberment
-						if (!first_blood){
-							if (djoint->joint->getDistance() > 12 * 12){
-								CSoundManager::get().playEvent("STRING_TENSE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
-								first_blood = true;
+						CEntity* actor_entity = (CEntity*)CHandle(a2->userData);
+						TCompBtGrandma* grandma = actor_entity->get<TCompBtGrandma>();
+						TCompBtSoldier* soldier = actor_entity->get<TCompBtSoldier>();
+						if (djoint->joint->getDistance() >= 12 * 12){
+							if (grandma || soldier){
+								if (!first_blood){
+								//First dismemberment
+									//Check if is the enemy really dead and play the sound
+									CSoundManager::get().playEvent("KATH_KILL_LAUGH");
+									XDEBUG("logitud joint: %f", djoint->joint->getDistance());
+									first_blood = true;
+								}
+								else{
+									//Not first blood so play random comments
+									int dice = getRandomNumber(1, 10);
+									if (dice > random_possibilities){
+										//check what tipe of enemy we just killed
+										if (grandma){
+											//We killed a grandma
+											CSoundManager::get().playEvent("KATH_GRANDMA_KILLED");
+										}
+										else if (soldier){
+											//We killed a soldier
+											CSoundManager::get().playEvent("KATH_SOLDIER_KILLED");
+										}
+									}
+								}
 							}
 						}
 						((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));

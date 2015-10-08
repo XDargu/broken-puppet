@@ -6,7 +6,8 @@
   <event id="KATH_RAGDOLL" path="" />
   <event id="KATH_WAKEUP" path="" />
   <event id="KATH_HIT" path="" />
-  
+  <event id="KATH_GRANDMA_KILLED" path="" />
+  <event id="KATH_SOLDIER_KILLED" path="" />
   <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
   
   <!-- Strings & needles -->
