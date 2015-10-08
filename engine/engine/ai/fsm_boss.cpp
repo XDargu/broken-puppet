@@ -1339,17 +1339,20 @@ float fsm_boss::getAnimationDuration(int id) {
 
 bool fsm_boss::EvaluateHit(int arm_damaged) {
 	
+	bool damaged = false;
 	// 0 left arm
 	if (arm_damaged == 0){
 		if (has_left){
 			if (hurt_state == 0){
 				ChangeState("fbp_Damaged1Left");
+				
 			}
 			else{
 				ChangeState("fbp_Damaged1LeftFinal");
 			}
 			has_left = false;
 			hurt_state += 1;
+			damaged = true;
 		}
 	}
 	// 1 right arm
@@ -1357,15 +1360,17 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 		if (has_right){
 			if (hurt_state == 0){
 				ChangeState("fbp_Damaged1Right");
+				
 			}
 			else{
 				ChangeState("fbp_Damaged1RightFinal");
 			}
 			has_right = false;
 			hurt_state += 1;
+			damaged = true;
 		}
 	}
-	return false;
+	return damaged;
 }
 
 int fsm_boss::CalculateAttack() {
