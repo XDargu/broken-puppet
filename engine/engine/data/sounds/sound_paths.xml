@@ -57,6 +57,7 @@
   <event id="PLANETARIUM" path="event:/Ambiente/planetarium" /> Atrezzos de planetario
   <event id="JUKEBOX_LOOP" path="event:/Ambiente/gramola_loop" /> Disco vacío en la gramola
   <event id="GEARS_LOOP_1" path="event:/Ambiente/mecanismos_1" /> Mecanismos pequeños
+  <event id="GEAR_BIG" path="event:/Ambiente/mecanismos_2" /> Mecanismos grandes (reloj)  
   <event id="ELEVATOR" path="event:/Ambiente/elevator" /> Ascensor completo
   <event id="WOODEN_DOOR" path="event:/Ambiente/wood_door_open" /> Puerta de madera al abrirse
   <event id="LIGHT_ON" path="event:/Mecanismos/Interruptores/light_switch_on" /> Cables al activar la luz

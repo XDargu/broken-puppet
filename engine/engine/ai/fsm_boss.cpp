@@ -1204,6 +1204,7 @@ void fsm_boss::Death(){
 	}
 	
 	if (state_time >= 7.f){
+		CApp::get().playFinalVideo();
 		TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->enableBoneTree(4);
 		ragdoll->enableBoneTree(36);
