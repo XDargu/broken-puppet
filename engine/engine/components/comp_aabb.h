@@ -58,6 +58,7 @@ public:
 
 		recalcMinMax();
 		counter = 0;
+		auto_update = true;
 	}
 
 	void init() {
