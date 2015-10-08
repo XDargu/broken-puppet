@@ -619,14 +619,14 @@
   </particleGroup>
   <particleGroup name="ps_lava">
     <particleSystem>
-      <emitter use_physx="true" type="cone" radius="0.010000" angle="30.000000" rate="0.000100" minLifeTime="0.500000" maxLifeTime="4.000000" fillInitial="0" limit="100" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="true" />
-      <updater type="movement" speed="1.000000" />
+      <emitter use_physx="true" type="cone" radius="0.010000" angle="30.000000" rate="0.000100" minLifeTime="2.00000" maxLifeTime="8.000000" fillInitial="0" limit="100" burstTime="0.000000" burstAmount="100" delay="0.000000" loop="true" randomRotation="true" />
+      <updater type="movement" speed="6.000000" />
       <updater type="rotation" angular_speed="0.400000" />
       <updater type="gravity" gravity="0.001000" constant="false" />
       <updater type="color" initialColor="0.964706 0.403922 0.000000" finalColor="0.415686 0.015686 0.000000" curveVal="2.000000" curveType="linear" />
       <updater type="physx" />
       <updater type="lifeTime" />
-      <updater type="size" initialSize="0.250000" finalSize="0.400000" />
+      <updater type="size" initialSize="1" finalSize="2" />
       <renderer texture="particles/part_flare_dff" aditive="true" distorsion="false" distorsionAmount="0.500000" n_anim_x="1" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="billboard" animationMode="1" />
     </particleSystem>
   </particleGroup>
