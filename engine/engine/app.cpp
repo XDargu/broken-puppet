@@ -1325,6 +1325,8 @@ void CApp::renderEntities() {
 		CNav_mesh_manager::get().pathRender();
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
+	getObjManager<TCompBtGrandma>()->renderDebug3D();
+
 }
 
 void CApp::renderDebugEntities() {
@@ -1578,6 +1580,7 @@ void CApp::loadScene(std::string scene_name) {
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
+	CSoundManager::get().clear();
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
 	

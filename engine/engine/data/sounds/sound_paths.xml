@@ -4,9 +4,9 @@
   <event id="KATH_JUMP" path="event:/Expresion/Katherine/Saltar" />
   <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />
   <event id="KATH_THROW" path="event:/Expresion/Katherine/Lanzar_Expresion" />
-  <event id="KATH_RAGDOLL" path="event:/Expresion/Katherine/RecibirDañoRagdoll" />
+  <event id="KATH_RAGDOLL" path="event:/Expresion/Katherine/RecibirDanoRagdoll" />
   <event id="KATH_WAKEUP" path="event:/Expresion/Katherine/Levantarse" />
-  <event id="KATH_HIT" path="event:/Expresion/Katherine/Recibir Daño" />
+  <event id="KATH_HIT" path="event:/Expresion/Katherine/Recibir Dano" />
 
   <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
   <event id="KATH_GRANDMA_KILLED" path="event:/Expresion/Katherine/AbuelaMatada" />
@@ -26,8 +26,8 @@
   
   <!-- Steps -->
   <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" />
-  <event id="STEPS_GRANDMA" path="" />
-  <event id="STEPS_SOLDIER" path="" />
+  <event id="STEPS_GRANDMA" path="event:/Pasos/Pasos Abuela" />
+  <event id="STEPS_SOLDIER" path="event:/Pasos/Pasos Soldado" />
   
   <!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />

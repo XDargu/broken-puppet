@@ -83,6 +83,9 @@ void TCompPlayerController::init() {
 	entity_player = (CHandle(this).getOwner());
 	player_trans = (((CEntity*)entity_player)->get<TCompTransform>());
 
+	fsm_player_legs->SetEntity(entity_player);
+	fsm_player_torso->SetEntity(entity_player);
+
 	fsm_player_legs->Init();
 	fsm_player_torso->Init();
 	
@@ -210,43 +213,6 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 
-	/*
-	PxRaycastBuffer hit;
-	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
-
-	if (hit.hasBlock) {
-		CHandle target_entity(hit.block.actor->userData);
-		if (target_entity.isValid()) {
-			if (!(((CEntity*)target_entity)->hasTag("player"))) {
-				TCompTransform* target_transform = ((CEntity*)target_entity)->get<TCompTransform>();
-				if (!(CHandle(target_transform) == old_target_transform)) {
-					if (old_target_transform.isValid()) {
-						TCompTransform* old_t_transform = old_target_transform;
-						if (old_t_transform->getType() == 80)
-							old_t_transform->setType(1);
-						if (((TCompTransform*)old_target_transform)->getType() == 90)
-							((TCompTransform*)old_target_transform)->setType(0.95f);
-					}
-				}
-				if (target_transform->getType() == 100) {
-					target_transform->setType(0.8f);
-					old_target_transform = target_transform;
-				}
-				if (target_transform->getType() == 95) {
-					target_transform->setType(0.9f);
-					old_target_transform = target_transform;
-				}
-			}
-		}
-	}*/
-	/*displacement += V3DISTANCE(prev_pos, trans->position);
-	counter += elapsed;
-	if (counter >= 1) {
-		XDEBUG("Displacement: %f", displacement);
-		displacement = 0;
-		counter = 0;
-	}
-	prev_pos = trans->position;*/
 
 	// Back needles
 	if (needle_back1.isValid() && needle_back2.isValid()) {
@@ -284,7 +250,6 @@ void TCompPlayerController::update(float elapsed) {
 	}*/
 
 	// Footsteps sound
-
 	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
 	float surface_value = surface_tag;
 
@@ -307,21 +272,6 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 	
-	
-	
-	/*FMOD::Studio::ParameterInstance* surface = NULL;
-	footsteps->getParameter("surface", &surface);
-	FMOD_RESULT r = surface->setValue(surface_value);
-
-	float running_value = io.isPressed(CIOStatus::RUN);
-	FMOD::Studio::ParameterInstance* running = NULL;
-	footsteps->getParameter("running", &running);
-	r = running->setValue(running_value);
-
-	// 3D Attributes
-	FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-	attributes.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
-	r = footsteps->set3DAttributes(&attributes);*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

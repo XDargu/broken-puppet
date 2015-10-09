@@ -9,4 +9,12 @@
   <subtitle guid="SCENE202_1" next="" size="24" color="0xff88ff00" time="4" sound="event:/VO/EN/KATH201" text="No es posible... ¡Es todo culpa tuya!" />
   <subtitle guid="SCENE203" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE202" text="Y cayó..." />
   <subtitle guid="SCENE204" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE203" text="...al más profundo de los abismos del teatro. Al inexplorado foso" />
+  
+  <!-- Expresiones -->
+  <subtitle guid="EXPR00-0" next="" size="24" color="0xff88ff00" time="3" sound="" text="Una más para mi colección" />
+  <subtitle guid="EXPR00-1" next="" size="24" color="0xff88ff00" time="3" sound="" text="Esa ha sido tu última marcha" />
+
+  <subtitle guid="EXPR01" next="" size="24" color="0xff88ff00" time="3" sound="" text="¡Ja! Podría acostumbrarme a esto..." />
+  <subtitle guid="EXPR02" next="" size="24" color="0xff88ff00" time="4" sound="" text="¿No dais para más? ¡Qué vergüenza!" />
+
 </subtitles>

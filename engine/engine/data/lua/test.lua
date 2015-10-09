@@ -62,6 +62,7 @@ function onSceneLoad_scene_final_boss()
 		logicManager:resetPlayerCamera()
 
 		respawnPos = player:getPosition();
+		initPos = respawnPos;
 	end
 
 	function onTriggerFirstEnter_scb_trigger_block_control(who)

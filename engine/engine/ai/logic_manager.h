@@ -27,6 +27,7 @@ public:
 		std::string next;
 	};
 	unsigned int p_group_counter;
+	bool first_blood;
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;

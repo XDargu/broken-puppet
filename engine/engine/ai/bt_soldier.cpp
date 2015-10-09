@@ -1489,3 +1489,35 @@ void bt_soldier::resetBot(){
 	//mov_direction = PxVec3(0, 0, 0);
 	//((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }
+
+bool bt_soldier::isMoving() {
+	return ((getCurrentNode() == "LookAround14") || (getCurrentNode() == "Situate18") ||
+		(getCurrentNode() == "Situate20") || (getCurrentNode() == "ChaseRoleDistance22") ||
+		(getCurrentNode() == "ActionWander"));
+}
+
+float bt_soldier::getRunSpeedModifier() {
+	float speed = 0.3f;
+
+	TCompCharacterController* m_char_controller = character_controller;
+
+	if (m_char_controller->moveSpeedMultiplier < 1)
+		speed = 0.26f;
+	else if (m_char_controller->moveSpeedMultiplier < 3)
+		speed = 0.24f;
+	else
+		speed = 0.1f;
+
+
+	/*if ((getCurrentNode() == "Situate20") || (getCurrentNode() == "Situate18") || (getCurrentNode() == "ChaseRoleDistance22")) {
+	speed = 0.05f;
+	}
+	if ((getCurrentNode() == "ChaseNeedlePosition28") || (getCurrentNode() == "LookAround14")) {
+	speed = 0.24f;
+	}
+	if (getCurrentNode() == "ActionWander") {
+	speed = 0.26f;
+	}*/
+
+	return speed;
+}

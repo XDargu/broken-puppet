@@ -88,7 +88,7 @@ void CSoundManager::clear() {
 			int count = 0;
 			it->second->getInstanceList(instace_array, size, &count);
 			for (int j = 0; j < count; ++j) {
-				instace_array[j]->stop(FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_ALLOWFADEOUT);
+				instace_array[j]->stop(FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
 				instace_array[j]->release();
 			}
 		}
