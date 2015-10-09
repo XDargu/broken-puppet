@@ -489,6 +489,8 @@ void TParticleSystem::loadDefaultPS() {
 
 void TParticleSystem::restart() {
 	particles.clear();
+	if (psx)
+		psx->releaseAllParticles();
 	emitter_generation->restart();
 }
 
@@ -509,6 +511,9 @@ std::string TParticleSystem::getXMLDefinition() {
 
 	def += emitter_generation->getXMLDefinition();
 
+	if (updater_physx != nullptr) {
+		def += updater_physx->getXMLDefinition();
+	}
 	if (updater_movement != nullptr) {
 		def += updater_movement->getXMLDefinition();
 	}

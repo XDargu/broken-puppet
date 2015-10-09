@@ -714,6 +714,7 @@ void CApp::update(float elapsed) {
 		underwater.amount = 0;
 	}
 
+
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
 	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
@@ -756,6 +757,7 @@ void CApp::update(float elapsed) {
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
 	ctes_global.get()->elapsed = elapsed;
+	ctes_global.get()->global_water_level = water_level;
 
 	int needle_count = 0;
 	for (auto& string : CRope_manager::get().getStrings()) {

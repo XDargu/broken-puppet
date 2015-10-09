@@ -114,6 +114,7 @@ void CPhysicsParticleSystem::addParticle(PxU32 numNewParticles, PxVec3 positions
 
 	if ((numParticlesStored + numNewParticles) > maxParticles)
 		numNewParticles = maxParticles - numParticlesStored;
+	if (numNewParticles == 0) { return; }
 
 	std::vector<PxU32> newIndexBuffer;
 	std::vector<PxVec3> newPositionBuffer;
@@ -149,6 +150,10 @@ void CPhysicsParticleSystem::setParticlesGravity(bool gravity){
 		ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
 	else
 		ps->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+}
+
+bool CPhysicsParticleSystem::getParticlesGravity(){
+	return !ps->getActorFlags().isSet(PxActorFlag::eDISABLE_GRAVITY);
 }
 
 void CPhysicsParticleSystem::setParticlesSystemMass(PxReal mass){
@@ -230,7 +235,7 @@ void CPhysicsParticleSystem::releaseAllParticles(){
 	numParticlesStored = 0;
 	myIndexBuffer.clear();
 	myParticlesForces.clear();
-	indexPool->release();
+	indexPool->freeIndices();
 	ps->releaseParticles();
 }
 
@@ -238,6 +243,12 @@ void CPhysicsParticleSystem::setParticlesFilterCollision(){
 	PxFilterData filterData;
 	filterData.word0 = FilterGroup::ePARTICLES;
 	ps->setSimulationFilterData(filterData);
+}
+
+void CPhysicsParticleSystem::destroy() {
+	releaseAllParticles();
+	ps->release();
+	indexPool->release();
 }
 
 PxVec3 CPhysicsManager::XMVECTORToPxVec3(XMVECTOR vector) {

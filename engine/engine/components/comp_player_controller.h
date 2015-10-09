@@ -21,9 +21,12 @@ struct TCompPlayerController : TBaseComponent {
 	XMVECTOR offset_rot_needle_back2;
 
 	CHandle entity_jump_dust;
+	CHandle entity_drops;
 
 	FMOD::Studio::EventInstance* footsteps;
 	float footstep_counter;
+
+	float last_time_in_water;
 
 	void bossImpact(CHandle boss);
 public:

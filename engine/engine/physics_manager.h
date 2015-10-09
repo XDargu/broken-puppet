@@ -49,9 +49,11 @@ public:
 	void releaseAllParticles();
 	void setParticlesFilterCollision();
 	void setParticlesGravity(bool gravity);
+	bool getParticlesGravity();
 	void setParticlesSystemMass(PxReal mass);
 	void setParticlesSystemDamping(PxReal damping);
 	void releaseParticleFromBuffer(int index);
+	void destroy();
 };
 
 class CPhysicsManager

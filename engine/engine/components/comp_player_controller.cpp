@@ -134,6 +134,26 @@ void TCompPlayerController::init() {
 	}
 
 	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
+
+	// Create drops particle prefab
+	pref_entity = prefabs_manager.getInstanceByName("player_drops_pref");
+	if (pref_entity.isValid()) {
+		TCompTransform* pref_trans = ((CEntity*)pref_entity)->get<TCompTransform>();
+		if (pref_trans) {
+			pref_trans->position = trans->position + XMVectorSet(0, 1.5f, 0, 0);
+			pref_trans->init();
+		}
+		TCompParticleGroup* pref_pg = ((CEntity*)pref_entity)->get<TCompParticleGroup>();
+		if (pref_pg) {
+			if (pref_pg->particle_systems->size() > 0)
+			{
+				(*pref_pg->particle_systems)[0].updater_size->initial_size = 0;
+				(*pref_pg->particle_systems)[0].updater_size->final_size = 0;
+			}
+		}
+	}
+
+	entity_drops = CEntityManager::get().getByName("PlayerParticleDrops");
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -168,6 +188,31 @@ void TCompPlayerController::update(float elapsed) {
 	float water_level = CApp::get().water_level;
 	float atten = 0.2f;
 	float water_multiplier = 1;
+	
+	float drops_size = 0;
+	float drops_size_final = 0;
+
+	if ((rigid->rigidBody->getGlobalPose().p.y + 1.7f) < water_level)  {
+		last_time_in_water = 0.f;
+	}
+	else {
+		last_time_in_water += elapsed;
+		if (last_time_in_water < 8) {
+			drops_size = 0.1f;
+			drops_size_final = 0.2f;
+		}
+	}
+
+	if (entity_drops.isValid()) {
+		TCompParticleGroup* pref_pg = ((CEntity*)entity_drops)->get<TCompParticleGroup>();
+		if (pref_pg) {
+			if (pref_pg->particle_systems->size() > 0)
+			{
+				(*pref_pg->particle_systems)[0].updater_size->initial_size = drops_size;
+				(*pref_pg->particle_systems)[0].updater_size->final_size = drops_size_final;
+			}
+		}
+	}
 
 	if (rigid->rigidBody->getGlobalPose().p.y < water_level - atten)  {
 		float proportion = min(1, (water_level - rigid->rigidBody->getGlobalPose().p.y) / atten);
