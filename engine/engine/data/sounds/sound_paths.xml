@@ -156,6 +156,9 @@
   <event id="KATHSC402" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 13 So thats why there were machines" /> Por eso había máquinas...
   <event id="KATHSC403" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 14 Clock doing here" /> ¿Qué hace aquí el reloj?
   
+  <!--  Diálogos Sustitua-->
+  <event id="SUSTSC201" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_01 Good Work!" /> ¡Buen trabajo!  
+  <event id="SUSTSC2LOOP" path="event:/Dialogos/Dialogos Sustituta/Loop scene 2 sust" /> Loop de la escena 2
   
 
 </fmodEvents>

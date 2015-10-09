@@ -254,7 +254,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				// ************************ Aux Joint *************************
 				// Get the ragdoll
 				TCompRagdoll* ragdoll = firstActorEntity->get<TCompRagdoll>();
-				if (ragdoll) {
+				if (ragdoll && !firstActorEntity->hasTagBoss("")) {
 					// Get the bone 
 					PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(first_position), camera_transform->getFront());
 					if (bone != nullptr)
@@ -434,7 +434,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 
 							// Get the ragdoll
 							TCompRagdoll* ragdoll = secondActorEntity->get<TCompRagdoll>();
-							if (ragdoll) {
+							if (ragdoll && !secondActorEntity->hasTagBoss("")) {
 								// Get the bone 
 								PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(hit_position), camera_transform->getFront());
 								if (bone != nullptr)
@@ -466,7 +466,7 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 						// Second actor is an enemy, but first one is a wall
 						// Get the ragdoll
 						TCompRagdoll* ragdoll = secondActorEntity->get<TCompRagdoll>();
-						if (ragdoll) {
+						if (ragdoll && !secondActorEntity->hasTagBoss("")) {
 							// Get the bone 
 							PxRigidDynamic* bone = ragdoll->getBoneRigidRaycast(Physics.PxVec3ToXMVECTOR(hit_position), camera_transform->getFront());
 							if (bone != nullptr)
