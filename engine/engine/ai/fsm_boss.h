@@ -35,6 +35,7 @@ private:
 	CHandle comp_skeleton_lookat;
 	CHandle comp_ragdoll;
 	CHandle m_player;
+	CHandle m_player_controller;
 
 	void Reorientate(float elapsed, bool just_look);
 	void Release_def();
