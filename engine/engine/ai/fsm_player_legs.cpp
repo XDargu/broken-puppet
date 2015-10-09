@@ -688,7 +688,7 @@ void FSMPlayerLegs::Land(float elapsed){
 			ChangeState("fbp_Idle");
 		}
 		else {
-			if (state_time >= 0.5f){
+			if (state_time >= 0.45f){
 				//skeleton->stopAnimation(7);
 				ChangeState("fbp_Idle");
 			}

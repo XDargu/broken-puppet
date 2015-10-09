@@ -1021,7 +1021,7 @@ bool FSMPlayerTorso::canThrow() {
 	comp_lookat->target = XMVectorLerp(comp_lookat->target, target, 0.03f);
 
 	if (legs->getState() == "fbp_Idle")
-		comp_lookat->active = true;
+		comp_lookat->active = false;
 	else
 		comp_lookat->active = false;
 
