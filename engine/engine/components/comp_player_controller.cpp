@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_player_controller.h"
 #include "comp_life.h"
+#include "comp_name.h"
 #include "comp_transform.h"
 #include "comp_collider_capsule.h"
 #include "comp_rigid_body.h"
@@ -10,6 +11,7 @@
 #include "../audio/sound_manager.h"
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
+#include "handle\prefabs_manager.h"
 
 const string particles_hit_name = "ps_porcelain_hit";
 
@@ -81,6 +83,9 @@ void TCompPlayerController::init() {
 	entity_player = (CHandle(this).getOwner());
 	player_trans = (((CEntity*)entity_player)->get<TCompTransform>());
 
+	fsm_player_legs->SetEntity(entity_player);
+	fsm_player_torso->SetEntity(entity_player);
+
 	fsm_player_legs->Init();
 	fsm_player_torso->Init();
 	
@@ -90,11 +95,24 @@ void TCompPlayerController::init() {
 	displacement = 0;
 	counter = 0;*/
 
+	// Create back needles
+	CHandle pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete1");
+		}
+	}
+	pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete2");
+		}
+	}
+
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
-
-	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
-
 
 	float offset_size = 0.05f;
 	float offset_rot_size = 0.2f;
@@ -104,6 +122,18 @@ void TCompPlayerController::init() {
 
 	offset_rot_needle_back1 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
 	offset_rot_needle_back2 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
+
+	// Create jump particle prefab
+	CHandle pref_entity = prefabs_manager.getInstanceByName("player_jump_pref");
+	if (pref_entity.isValid()) {
+		TCompTransform* pref_trans = ((CEntity*)pref_entity)->get<TCompTransform>();
+		if (pref_trans) {
+			pref_trans->position = trans->position;
+			pref_trans->init();
+		}
+	}
+
+	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -183,43 +213,6 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 
-	/*
-	PxRaycastBuffer hit;
-	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
-
-	if (hit.hasBlock) {
-		CHandle target_entity(hit.block.actor->userData);
-		if (target_entity.isValid()) {
-			if (!(((CEntity*)target_entity)->hasTag("player"))) {
-				TCompTransform* target_transform = ((CEntity*)target_entity)->get<TCompTransform>();
-				if (!(CHandle(target_transform) == old_target_transform)) {
-					if (old_target_transform.isValid()) {
-						TCompTransform* old_t_transform = old_target_transform;
-						if (old_t_transform->getType() == 80)
-							old_t_transform->setType(1);
-						if (((TCompTransform*)old_target_transform)->getType() == 90)
-							((TCompTransform*)old_target_transform)->setType(0.95f);
-					}
-				}
-				if (target_transform->getType() == 100) {
-					target_transform->setType(0.8f);
-					old_target_transform = target_transform;
-				}
-				if (target_transform->getType() == 95) {
-					target_transform->setType(0.9f);
-					old_target_transform = target_transform;
-				}
-			}
-		}
-	}*/
-	/*displacement += V3DISTANCE(prev_pos, trans->position);
-	counter += elapsed;
-	if (counter >= 1) {
-		XDEBUG("Displacement: %f", displacement);
-		displacement = 0;
-		counter = 0;
-	}
-	prev_pos = trans->position;*/
 
 	// Back needles
 	if (needle_back1.isValid() && needle_back2.isValid()) {
@@ -257,7 +250,6 @@ void TCompPlayerController::update(float elapsed) {
 	}*/
 
 	// Footsteps sound
-
 	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
 	float surface_value = surface_tag;
 
@@ -280,21 +272,6 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 	
-	
-	
-	/*FMOD::Studio::ParameterInstance* surface = NULL;
-	footsteps->getParameter("surface", &surface);
-	FMOD_RESULT r = surface->setValue(surface_value);
-
-	float running_value = io.isPressed(CIOStatus::RUN);
-	FMOD::Studio::ParameterInstance* running = NULL;
-	footsteps->getParameter("running", &running);
-	r = running->setValue(running_value);
-
-	// 3D Attributes
-	FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-	attributes.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
-	r = footsteps->set3DAttributes(&attributes);*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

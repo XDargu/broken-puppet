@@ -441,7 +441,7 @@ bool CApp::create() {
 	// Preload scenes
 	bar = new std::thread(&CApp::preLoad, this);
 	
-	menu_scene = "data/scenes/empty_scene.xml";
+	menu_scene = "data/scenes/scene_1.xml";
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
@@ -1120,13 +1120,23 @@ void CApp::render() {
 	CTraceScoped scope_gui("GUI");
 	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-		life_val /= 20;
-		int leng = 100;
+		life_val /= 10;
+		int leng = 50;
+		int spearation = 12;
 		activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
 		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
-		for (int i = 0; i < life_val; ++i) {			
-			//drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
-		}		
+		int life_count = 0;
+		int counter = 0;
+		// Life val is over 10
+		while (life_count < life_val) {
+			// for each 2 of live, draw a full heart, if only one remains, draw a half heart
+			if (life_val - life_count == 1)
+				drawTexture2D(35 + (leng + spearation)* counter, 30, leng, leng, texture_manager.getByName("life_half"));
+			else 
+				drawTexture2D(35 + (leng + spearation)* counter, 30, leng, leng, texture_manager.getByName("life_full"));
+			life_count += 2;
+			counter++;
+		}	
 			
 		bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
 		if (can_throw) {
@@ -1135,6 +1145,7 @@ void CApp::render() {
 		else {
 			drawTexture2D(xres / 2.f - 16, yres / 2.f - 16, 32, 32, texture_manager.getByName("crosshair_cant"));
 		}
+
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);
 		activateBlendConfig(BLEND_CFG_DEFAULT);
@@ -1152,18 +1163,16 @@ void CApp::render() {
 		activateBlendConfig(BLEND_CFG_DEFAULT);*/
 
 		//const CTexture *cross = texture_manager.getByName("crosshair_can");
+
+		//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+		//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+		//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+		//activateBlendConfig(BLEND_CFG_DEFAULT);		
 	}
 
-	//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
-	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	//activateBlendConfig(BLEND_CFG_DEFAULT);
-
-	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
-	font.print(15, 15, life_text.c_str());*/
+	
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
@@ -1325,6 +1334,8 @@ void CApp::renderEntities() {
 		CNav_mesh_manager::get().pathRender();
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
+	getObjManager<TCompBtGrandma>()->renderDebug3D();
+
 }
 
 void CApp::renderDebugEntities() {
@@ -1578,6 +1589,7 @@ void CApp::loadScene(std::string scene_name) {
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
+	CSoundManager::get().clear();
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
 	

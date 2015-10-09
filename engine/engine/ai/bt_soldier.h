@@ -216,6 +216,10 @@ public:
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
 
+	bool isMoving();
+
+	float getRunSpeedModifier();
+
 };
 
 #endif

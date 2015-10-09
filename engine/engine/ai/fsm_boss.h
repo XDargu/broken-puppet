@@ -83,14 +83,14 @@ private:
 	float l_hand_pos_y;
 	bool l_hand_change;
 
-	//bool extrem_need_bombs; // When we need bombs but there are too much objs in the scene. Not implemented
-	bool need_bombs;
-
 	bool bombs_destroyed;
 	void destroyBombs();
 	
 	bool appear;
 	bool boss_out;
+
+	int turns_without_bombs;
+	bool need_bombs;
 
 public:
 	fsm_boss();
@@ -138,6 +138,8 @@ public:
 	void FinalState(float elapsed);
 
 	void Death();
+
+	void Ended();
 
 	bool EvaluateHit(int arm_damaged);
 	bool HeartHit();

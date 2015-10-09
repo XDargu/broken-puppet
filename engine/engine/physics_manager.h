@@ -26,7 +26,9 @@ struct FilterGroup
 		eBOSSRAGDOLL = (1 << 11),
 		eBOSSPARTS = (1 << 12),
 		eBOSSHEAD = (1 << 13),
-		eBOMB = (1 << 14)
+		eBOMB = (1 << 14),
+		eBOMBSPECIAL = (1 << 15),
+		ePLAYERINACTIVE = (1 << 16)
 	};
 };
 

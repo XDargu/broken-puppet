@@ -256,6 +256,9 @@ public:
 	void findLostPlayer();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
+
+	bool isMoving();
+	float getRunSpeedModifier();
 };
 
 #endif

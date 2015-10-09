@@ -107,7 +107,8 @@ void fsm_boss::Init()
 	AddState("fbp_Damaged1RightFinal", (statehandler)&fsm_boss::Damaged1RightFinal);
 	AddState("fbp_FinalState", (statehandler)&fsm_boss::FinalState);
 	AddState("fbp_Death", (statehandler)&fsm_boss::Death);
-
+	AddState("fbp_Ended", (statehandler)&fsm_boss::Ended);
+	
 
 	// reset the state
 	ChangeState("fbp_Hidden");
@@ -182,6 +183,8 @@ void fsm_boss::Init()
 	
 	appear = false;
 	lua_boss_init = false;
+
+	turns_without_bombs = 0;
 }
 
 void fsm_boss::Hidden(float elapsed){
@@ -294,7 +297,17 @@ void fsm_boss::Idle1(float elapsed){
 		shoots_amount = 0;
 		last_attack = 0.f;
 		can_proximity = true;
-		can_proximity_hit = true;		
+		can_proximity_hit = true;	
+
+		if (need_bombs){
+			if (turns_without_bombs >= 2){
+				// Rain bombs
+				rainJustBombs();
+			}
+			else{
+				turns_without_bombs++;
+			}
+		}
 	}
 
 	bool can_attack = true;
@@ -307,6 +320,7 @@ void fsm_boss::Idle1(float elapsed){
 	if (!can_attack)
 		last_attack = 0;
 	
+
 	CIOStatus& io = CIOStatus::get();
 	/**/
 	if (last_attack > 3){
@@ -335,11 +349,6 @@ void fsm_boss::Idle1(float elapsed){
 			break;
 		}
 	}
-
-	/**/
-
-	// Update input
-	/**/
 }
 
 void fsm_boss::Hit1(float elapsed){
@@ -402,7 +411,6 @@ void fsm_boss::Recover(float elapsed){
 	
 }
 
-
 void fsm_boss::Rain1Prepare(){
 	Reorientate(0, true);
 	if (on_enter){
@@ -419,7 +427,6 @@ void fsm_boss::Rain1Prepare(){
 void fsm_boss::Rain1Loop(float elapsed){
 	if (on_enter){
 		
-
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		loopAnimationIfNotPlaying(12, true);
@@ -429,18 +436,11 @@ void fsm_boss::Rain1Loop(float elapsed){
 		bomb_creation_delay = 0;
 		debris_creation_delay = 0;
 		debris_created = 0;
-		
-		/**
-		r_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(40));
-		l_hand_pos_y = XMVectorGetY(skeleton->getPositionOfBone(21));
-		/**/
 
 		FistParticles(elapsed);
 	}
 	FistParticles(elapsed);
 	
-
-
 	if (!RainDebris(elapsed)){
 		ChangeState("fbp_Rain1Recover");
 	}
@@ -471,8 +471,7 @@ void fsm_boss::Proximity(float elapsed){
 		skeleton->playAnimation(4);
 		last_anim_id = -1;
 		can_proximity = false;
-
-		
+	
 		FistParticles(elapsed);
 	}
 
@@ -643,7 +642,7 @@ void fsm_boss::Ball1Launch(float elapsed){
 
 					if (aux_distance <= 6){
 						PxVec3 force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
-						px_rigid->addForce(force_dir * force * 2, PxForceMode::eVELOCITY_CHANGE, true);
+						px_rigid->addForce(force_dir * force * 1.1f, PxForceMode::eVELOCITY_CHANGE, true);
 						px_rigid->setLinearDamping(0.05f);
 						px_rigid->setAngularDamping(0.05f);
 					}
@@ -656,6 +655,7 @@ void fsm_boss::Ball1Launch(float elapsed){
 		ChangeState("fbp_Idle1");
 	}
 }
+
 //Shoot1
 void fsm_boss::Shoot1DownDef(){
 	Reorientate(0.f, true);
@@ -701,7 +701,6 @@ void fsm_boss::Shoot1DownDef(){
 	if (state_time >= 2.3f){
 		ChangeState("fbp_Shoot1Reload");
 	}
-	
 }
 
 void fsm_boss::Shoot1Reload(float elapsed){
@@ -858,10 +857,8 @@ void fsm_boss::Shoot1Shoot(float elapsed){
 	if ((m_e)&&(state_time < 0.4f)) {
 		TCompRigidBody* rigid = m_e->get<TCompRigidBody>();
 		if (rigid) {
-			PxRigidBody*  px_rigid = rigid->rigidBody;
-
-			//px_rigid->addForce(force_dir, PxForceMode::eVELOCITY_CHANGE, true);
-			px_rigid->setLinearVelocity(force_dir * 70);
+			PxRigidBody*  px_rigid = rigid->rigidBody;		
+			px_rigid->setLinearVelocity(force_dir * 55);
 		}
 	}
 	// Set Down protections
@@ -980,10 +977,8 @@ void fsm_boss::WaveLeft(float elapsed){
 				}
 			}
 		}
-
 		ChangeState("fbp_Idle1");
 	}
-
 }
 
 //WaveRight
@@ -1230,14 +1225,26 @@ void fsm_boss::Death(){
 	
 	if (state_time >= 7.f){
 		CApp::get().playFinalVideo();
-		TCompRagdoll* ragdoll = comp_ragdoll;
+		/*TCompRagdoll* ragdoll = comp_ragdoll;
 		ragdoll->enableBoneTree(4);
 		ragdoll->enableBoneTree(36);
-		ragdoll->enableBoneTree(11);
+		ragdoll->enableBoneTree(11);*/
 		// Cambiar a video
-		//ChangeState("fbp_Idle1");
+		ChangeState("fbp_Ended");
 	}
 }
+
+void fsm_boss::Ended(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		loopAnimationIfNotPlaying(36, true);
+		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
+		skeleton_lookat->active = false;
+	}
+
+}
+
 
 //Reorientate: this method handle the look at player and the reorientation
 void fsm_boss::Reorientate(float elapsed, bool just_look){
@@ -1380,8 +1387,7 @@ int fsm_boss::CalculateAttack() {
 	if (m_entity_manager->rigid_list.size() < 150){
 		next_attack = 0;
 	}
-	else{
-		//return 2;
+	else{		
 		/**/
 		// Comprobamos si el patron es nulo, si lo es elegimos uno aleatorio
 		if (pattern_current < 0){
@@ -1407,6 +1413,8 @@ int fsm_boss::CalculateAttack() {
 				need_bombs = true;
 				bombs_destroyed = false;
 			}
+			//Let the need bombs check here to show more attacks of the boss
+			/*
 			else{
 				int aux_bomb_number = 0;
 				for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
@@ -1417,12 +1425,23 @@ int fsm_boss::CalculateAttack() {
 							aux_bomb_number++;
 						}
 					}
-				}
-				need_bombs = aux_bomb_number < 0;							
+				}				
+				need_bombs = aux_bomb_number < 0;						
 			}
-			
+			/**/			
+		}	
+
+		int aux_bomb_number = 0;
+		for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
+			CEntity* e = m_entity_manager->rigid_list[i];
+			if (!e->hasTag("player")){
+				TCompExplosion* comp_explo = e->get<TCompExplosion>();
+				if (comp_explo){
+					aux_bomb_number++;
+				}
+			}
 		}
-		/**/
+		need_bombs = aux_bomb_number < 3;
 	}
 	//XDEBUG("devolviendo estado: %d", next_attack);
 
@@ -1434,7 +1453,6 @@ bool fsm_boss::RainDebris(float elapsed){
 
 	// Cargar un prefab
 	int debris_amount = 200;
-	//int debris_amount = 2000000000;
 	float debris_respawn_time = 0.05f;
 	float bomb_respawn_time = 1.f;
 	bool active = true;
@@ -1485,14 +1503,12 @@ bool fsm_boss::RainDebris(float elapsed){
 			// Bombs
 			if ((bomb_creation_delay >= bomb_respawn_time)){
 				bomb_creation_delay = 0;
-				name = "boss/bomb";
-				
+				name = "boss/bomb";				
 			}
 			// Debris
 			else{				
 				int rnd = getRandomNumber(1, 20);
-				name = "boss/debris_0" + std::to_string(rnd);
-				
+				name = "boss/debris_0" + std::to_string(rnd);				
 			}
 
 			CEntity* prefab_entity = prefabs_manager.getInstanceByName(name.c_str());
@@ -1687,11 +1703,18 @@ void fsm_boss::destroyBombs() {
 
 void fsm_boss::rainJustBombs(){
 
+	turns_without_bombs = 0;
+	need_bombs = false;
+
+	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+
+	XMVECTOR aux_boss_pos = enemy_comp_trans->position;
+
 	std::vector<XMVECTOR>aux_positions;
-	aux_positions.push_back(XMVectorSet( 15, 60,  15, 0));
-	aux_positions.push_back(XMVectorSet(-15, 60,  15, 0)); 
-	aux_positions.push_back(XMVectorSet( 15, 60, -15, 0));
-	aux_positions.push_back(XMVectorSet(-15, 60, -15, 0));
+	aux_positions.push_back(XMVectorSet(XMVectorGetX(aux_boss_pos) + 15, XMVectorGetY(aux_boss_pos) + 60, XMVectorGetZ(aux_boss_pos) + 15, 0));
+	aux_positions.push_back(XMVectorSet(XMVectorGetX(aux_boss_pos) - 15, XMVectorGetY(aux_boss_pos) + 60, XMVectorGetZ(aux_boss_pos) + 15, 0));
+	aux_positions.push_back(XMVectorSet(XMVectorGetX(aux_boss_pos) + 15, XMVectorGetY(aux_boss_pos) + 60, XMVectorGetZ(aux_boss_pos) - 15, 0));
+	aux_positions.push_back(XMVectorSet(XMVectorGetX(aux_boss_pos) - 15, XMVectorGetY(aux_boss_pos) + 60, XMVectorGetZ(aux_boss_pos) - 15, 0));
 
 	for (int i = 0; i < aux_positions.size(); i++){
 		CEntity* prefab_entity = prefabs_manager.getInstanceByName("boss/bomb");
@@ -1712,4 +1735,3 @@ void fsm_boss::rainJustBombs(){
 	}
 
 }
-

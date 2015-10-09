@@ -19,7 +19,8 @@ const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
-const float distance_change_way_point = 0.35f;
+const float distance_change_way_point = 0.566f;
+const float distance_chase = 0.33f;
 const float force_large_impact = 60000.f;
 const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
@@ -642,7 +643,7 @@ int bt_grandma::actionWander()
 		TCompCharacterController* m_char_controller = character_controller;
 
 		m_char_controller->moveSpeedMultiplier = walk_speed;
-		((TCompCharacterController*)character_controller)->lerpRotation = 0.11f;
+		((TCompCharacterController*)character_controller)->lerpRotation = 0.125f;
 		//m_char_controller->airSpeed = walk_speed * 0.8f;
 
 	}
@@ -903,7 +904,7 @@ int bt_grandma::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.4f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < distance_chase)){
 				ind_path++;
 				return STAY;
 			}
@@ -965,7 +966,7 @@ int bt_grandma::actionInitialAttack()
 		if (angle_deg_path < 40.f){
 			XMVECTOR particles_pos = p_transform->position - attack_direction_path * 0.5f + XMVectorSet(0, 1, 0, 0);
 			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 40000.f, false));
 			attacked = true;
 
 			// Sound
@@ -1049,7 +1050,7 @@ int bt_grandma::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 1.3f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < distance_chase)){
 				ind_path++;
 				return STAY;
 			}
@@ -1101,7 +1102,7 @@ int bt_grandma::actionNormalAttack()
 			XMVECTOR particles_pos = p_transform->position - dir * 0.5f + XMVectorSet(0, 1, 0, 0);
 			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
 
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 35100.f, false));
 			attacked = true;
 
 			// Sound
@@ -1990,4 +1991,36 @@ void bt_grandma::resetBot(){
 	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
+}
+
+bool bt_grandma::isMoving() {
+	return ((getCurrentNode() == "LookAround14") || (getCurrentNode() == "Situate18") || 
+			(getCurrentNode() == "Situate20") || (getCurrentNode() == "ChaseRoleDistance22") || 
+			(getCurrentNode() == "ChaseNeedlePosition28") || (getCurrentNode() == "ActionWander"));
+}
+
+float bt_grandma::getRunSpeedModifier() {
+	float speed = 0.3f;
+
+	TCompCharacterController* m_char_controller = character_controller;
+
+	if (m_char_controller->moveSpeedMultiplier < 1)
+		speed = 0.26f;
+	else if (m_char_controller->moveSpeedMultiplier < 3)
+		speed = 0.24f;
+	else
+		speed = 0.1f;
+	
+
+	/*if ((getCurrentNode() == "Situate20") || (getCurrentNode() == "Situate18") || (getCurrentNode() == "ChaseRoleDistance22")) {
+		speed = 0.05f;
+	}
+	if ((getCurrentNode() == "ChaseNeedlePosition28") || (getCurrentNode() == "LookAround14")) {
+		speed = 0.24f;
+	}
+	if (getCurrentNode() == "ActionWander") {
+		speed = 0.26f;
+	}*/
+
+	return speed;
 }

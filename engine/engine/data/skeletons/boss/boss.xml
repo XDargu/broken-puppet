@@ -37,6 +37,7 @@
   <anim name="defense_down_recover_right"/>33
   <anim name="defense_down_loop_right"/>34
   <anim name="Enter" blend="0" blend_out="0" />35
+  <anim name="muerto" blend="0" blend_out="0" />36
 
   <bone_correction bone="Bip001 Head" local_dir="0 1 0" amount="1" render="0"/>
   

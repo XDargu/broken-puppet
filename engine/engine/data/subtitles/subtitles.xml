@@ -1,12 +1,31 @@
 <subtitles>
-  <subtitle guid="SCENE101" next="SCENE102" size="24" color="0xffffffff" time="9" sound="event:/VO/EN/SCENE101" text="Había llegado el momento de escapar de aquel lugar. Comprobó si podía moverse pulsando las teclas de dirección" />
-  <subtitle guid="SCENE102" next="" size="24" color="0xffffffff" time="11" sound="event:/VO/EN/SCENE102" text="Decidió probar sus nuevas herramientas usando click izquierdo para lanzar agujas y click derecho para tensar los hilos" />
-  <subtitle guid="SCENE103" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE103" text="La desolación del desván la sobrecogió. Debía seguir avanzando" />
-  <subtitle guid="SCENE104" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE104" text="Soldados. Los hostiles guardianes del teatro. Ahora Katherine era una intrusa..." />
+  <subtitle guid="NARRSC101" next="NARRSC102" size="24" color="0xffffffff" time="9" sound="NARRSC101" text="Había llegado el momento de escapar de aquel lugar. Comprobó si podía moverse pulsando las teclas de dirección" />
+  <subtitle guid="NARRSC102" next="" size="24" color="0xffffffff" time="11" sound="NARRSC102" text="Decidió probar sus nuevas herramientas usando click izquierdo para lanzar agujas y click derecho para tensar los hilos" />
+  <subtitle guid="NARRSC103" next="" size="24" color="0xffffffff" time="7" sound="NARRSC103" text="La desolación del desván la sobrecogió. Debía seguir avanzando" />
+  <subtitle guid="NARRSC104" next="" size="24" color="0xffffffff" time="8" sound="NARRSC104" text="Soldados. Los hostiles guardianes del teatro. Ahora Katherine era una intrusa..." />
 
-  <subtitle guid="SCENE201" next="" size="24" color="0xffffffff" time="9" sound="event:/VO/EN/SCENE200" text="Ya estaba cerca de su amado camerino" />
-  <subtitle guid="SCENE202" next="SCENE202_1" size="24" color="0xffffffff" time="5" sound="event:/VO/EN/SCENE201" text="Ya no quedaba nada. Cualquier rastro suyo había sido eliminado" />
-  <subtitle guid="SCENE202_1" next="" size="24" color="0xff88ff00" time="4" sound="event:/VO/EN/KATH201" text="No es posible... ¡Es todo culpa tuya!" />
-  <subtitle guid="SCENE203" next="" size="24" color="0xffffffff" time="7" sound="event:/VO/EN/SCENE202" text="Y cayó..." />
-  <subtitle guid="SCENE204" next="" size="24" color="0xffffffff" time="8" sound="event:/VO/EN/SCENE203" text="...al más profundo de los abismos del teatro. Al inexplorado foso" />
+  <subtitle guid="NARRSC201" next="" size="24" color="0xffffffff" time="9" sound="NARRSC201" text="Ya estaba cerca de su amado camerino" />
+  <subtitle guid="NARRSC202" next="KATHSC201" size="24" color="0xffffffff" time="6" sound="NARRSC202" text="Ya no quedaba nada. Cualquier rastro suyo había sido eliminado" />
+  <subtitle guid="KATHSC201" next="" size="24" color="0xff88ff00" time="4" sound="KATHSC201" text="No es posible... ¡Es todo culpa tuya!" />
+  <subtitle guid="NARRSC203" next="" size="24" color="0xffffffff" time="4" sound="NARRSC203" text="Y cayó..." />
+  <subtitle guid="NARRSC204" next="" size="24" color="0xffffffff" time="8" sound="NARRSC204" text="...al más profundo de los abismos del teatro. Al inexplorado foso" />
+
+  <subtitle guid="NARRSC301" next="" size="24" color="0xffffffff" time="7" sound="NARRSC301" text="“Las Costureras”, siempre sumidas en una obsesiva búsqueda de agujas." />
+  <subtitle guid="KATHSC301" next="" size="24" color="0xff88ff00" time="4" sound="KATHSC301" text="¡Buf! Espero no oxidarme." />
+
+
+  <subtitle guid="KATHSC401" next="NARRSC401" size="24" color="0xff88ff00" time="3" sound="KATHSC401" text="¿Pero qué...?" />
+  <subtitle guid="NARRSC401" next="" size="24" color="0xffffffff" time="10" sound="NARRSC401" text="Nunca habría podido imaginar que la energía utilizada por el teatro procedía de las cenizas de sus compañeros." />
+  <subtitle guid="KATHSC402" next="" size="24" color="0xff88ff00" time="5" sound="KATHSC402" text="Así que por eso había máquinas para destruirnos..." />
+  <subtitle guid="NARRSC402" next="KATHSC403" size="24" color="0xffffffff" time="7" sound="NARRSC402" text="Aquel reloj se había descolgado, destrozándose. El tiempo pasaba para todos." />
+  <subtitle guid="KATHSC403" next="" size="24" color="0xff88ff00" time="5" sound="KATHSC403" text="¿Qué hace este reloj aquí? Alguien debería tirarlo." />
+
+
+  <!-- Expresiones -->
+  <subtitle guid="EXPR00-0" next="" size="24" color="0xff88ff00" time="3" sound="" text="Una más para mi colección" />
+  <subtitle guid="EXPR00-1" next="" size="24" color="0xff88ff00" time="3" sound="" text="Esa ha sido tu última marcha" />
+
+  <subtitle guid="EXPR01" next="" size="24" color="0xff88ff00" time="3" sound="" text="¡Ja! Podría acostumbrarme a esto..." />
+  <subtitle guid="EXPR02" next="" size="24" color="0xff88ff00" time="4" sound="" text="¿No dais para más? ¡Qué vergüenza!" />
+
 </subtitles>

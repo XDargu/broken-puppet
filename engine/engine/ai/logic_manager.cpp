@@ -40,6 +40,7 @@ CLogicManager& CLogicManager::get() {
 }
 
 CLogicManager::CLogicManager() {
+	first_blood = false;
 }
 
 void CLogicManager::init()

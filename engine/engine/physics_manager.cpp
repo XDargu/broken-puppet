@@ -397,6 +397,10 @@ PxU32 convertStrInCollisionFilter(std::string name){
 		result = FilterGroup::eBOMB;
 	}else if (name == "Actor_non_collision"){
 		result = FilterGroup::eACTOR_NON_COLLISION;
+	}else if (name == "Special_bomb"){
+		result = FilterGroup::eBOMBSPECIAL;
+	}else if (name == "Player_inactive"){
+		result = FilterGroup::ePLAYERINACTIVE;
 	}else{
 		result = FilterGroup::eUNDEFINED;
 	}
