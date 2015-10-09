@@ -329,6 +329,8 @@ function onSceneLoad_scene_2()
 	initPos = player:getPosition();
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
+	-- Hacer que al empezar el player mire al sitio correcto
+	logicManager:cameraLookAtPosition(Vector(initPos.x, initPos.y + 1.7, initPos.z - 1))
 
 	-- Apagar cable
 	local sc2_cable = logicManager:getObject("sc2_cable_plat")	
@@ -403,7 +405,7 @@ function onSceneLoad_scene_2()
 	end
 
 	-- Narrador
-	function onTriggerFirstEnter_scene2_trigger_narr(who)
+	function onTriggerFirstEnter_scene2_trigger_narr1(who)
 		logicManager:playSubtitles("NARRSC201");
 	end
 

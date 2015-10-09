@@ -4,7 +4,7 @@
   <subtitle guid="NARRSC103" next="" size="24" color="0xffffffff" time="7" sound="NARRSC103" text="La desolación del desván la sobrecogió. Debía seguir avanzando" />
   <subtitle guid="NARRSC104" next="" size="24" color="0xffffffff" time="8" sound="NARRSC104" text="Soldados. Los hostiles guardianes del teatro. Ahora Katherine era una intrusa..." />
 
-  <subtitle guid="NARRSC201" next="" size="24" color="0xffffffff" time="9" sound="NARRSC201" text="Ya estaba cerca de su amado camerino" />
+  <subtitle guid="NARRSC201" next="" size="24" color="0xffffffff" time="4" sound="NARRSC201" text="Ya estaba cerca de su amado camerino" />
   <subtitle guid="NARRSC202" next="KATHSC201" size="24" color="0xffffffff" time="6" sound="NARRSC202" text="Ya no quedaba nada. Cualquier rastro suyo había sido eliminado" />
   <subtitle guid="KATHSC201" next="" size="24" color="0xff88ff00" time="4" sound="KATHSC201" text="No es posible... ¡Es todo culpa tuya!" />
   <subtitle guid="NARRSC203" next="" size="24" color="0xffffffff" time="4" sound="NARRSC203" text="Y cayó..." />
