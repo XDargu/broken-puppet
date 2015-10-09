@@ -143,6 +143,9 @@ function onSceneLoad_scene_1()
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
+	-- Diálogo inicial
+	logicManager:playSubtitles("NARRSC101");
+
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 1 **********
 
 	-- Iluminación inicial
@@ -309,11 +312,11 @@ function onSceneLoad_scene_1()
 	-- Narrador 
 
 	function onTriggerFirstEnter_scene1_trigger_narr1(who)
-		logicManager:playSubtitles("SCENE103");
+		logicManager:playSubtitles("NARRSC103");
 	end
 
 	function onTriggerFirstEnter_scene1_trigger_narr2(who)
-		logicManager:playSubtitles("SCENE104");
+		logicManager:playSubtitles("NARRSC104");
 	end
 	
 
@@ -400,13 +403,16 @@ function onSceneLoad_scene_2()
 	end
 
 	-- Narrador
+	function onTriggerFirstEnter_scene2_trigger_narr(who)
+		logicManager:playSubtitles("NARRSC201");
+	end
 
 	function onTriggerFirstEnter_scene2_trigger_narr2(who)
-		logicManager:playSubtitles("SCENE202");
+		logicManager:playSubtitles("NARRSC202");
 	end
 
 	function onTriggerFirstEnter_scene2_trigger_narr3(who)
-		logicManager:playSubtitles("SCENE203");
+		logicManager:playSubtitles("NARRSC203");
 	end
 
 	function onTriggerFirstEnter_scene2_trigger_narr4(who)
@@ -414,7 +420,7 @@ function onSceneLoad_scene_2()
 	end
 
 	function onTimerEnd_timerSc2Narr4()
-		logicManager:playSubtitles("SCENE204");
+		logicManager:playSubtitles("NARRSC204");
 	end
 
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 2 ********
@@ -449,6 +455,7 @@ function onSceneLoad_scene_3()
 	
 		if who == "tapa_desague_puzle" then
 			logicManager:changeWaterLevel(-3.3, 0.25);
+			logicManager:setTimer("sc3_timer_kath_dialog", 5)
 		end
 	
 	end
@@ -495,6 +502,15 @@ function onSceneLoad_scene_3()
 	function onTriggerEnter_sc3_trigger_close_door(who)
 		
 	end	
+
+	-- Narrador
+	function onTriggerFirstEnter_sc3_trigger_narr_1(who)
+		logicManager:playSubtitles("NARRSC301");
+	end
+
+	function onTimerEnd_sc3_timer_kath_dialog(who)
+		logicManager:playSubtitles("KATHSC301");
+	end
 
 	-- Salir de la escena
 	function onTriggerEnter_sc3_trigger_fin(who)
@@ -594,6 +610,9 @@ function onSceneLoad_scene_4()
 
 		-- Sonido de ascensor
 		logicManager:playEvent("ELEVATOR")
+
+		-- Narración
+		logicManager:playSubtitles("KATHSC402");
 	end
 
 
@@ -727,16 +746,6 @@ function onSceneLoad_scene_4()
 		end
 	end
 
-	-- Narrador
-
-	function onTriggerFirstEnter_sc4_trigger_narr_1(who)
-		
-	end
-
-	function onTriggerFirstEnter_sc4_trigger_narr_2(who)
-		
-	end
-
 	-- Machacaabuelas del crematorio
 	-- Obtener los joints
 	sc4_prismatic_crasher_1 = logicManager:getPrismaticJoint("sc4_prismatic_crasher_1");
@@ -810,6 +819,16 @@ function onSceneLoad_scene_4()
 		-- Sonido
 		local o_crasher = logicManager:getObject("sc4_base_4");
 		logicManager:playEventAtPosition("COMPRESOR_4", o_crasher:getPos());
+	end
+
+	-- Narrador
+
+	function onTriggerFirstEnter_sc4_trigger_narr_1(who)
+		logicManager:playSubtitles("KATHSC401");		
+	end
+
+	function onTriggerFirstEnter_sc4_trigger_narr_2(who)
+		logicManager:playSubtitles("NARRSC402");		
 	end
 
 	-- Salir de la escena
