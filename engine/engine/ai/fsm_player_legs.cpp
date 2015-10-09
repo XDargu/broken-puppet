@@ -1099,12 +1099,12 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 			sound_manager.playEvent("KATH_HIT", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
 		}
 
-		if (damage > 100000.f){ // Damage needed for ragdoll state
+		if (damage > 50000.f){ // Damage needed for ragdoll state
 			real_damage = 20;
 			CApp::get().slowMotion(2);
 			ChangeState("fbp_Ragdoll");
 		}
-		else if ((getCurrentNode() != "fbp_Ragdoll") && (damage>60000)){
+		else if ((getCurrentNode() != "fbp_Ragdoll") && (damage>30000)){
 			real_damage = 10;
 			ChangeState("fbp_Hurt");
 		}

@@ -39,7 +39,7 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	time_since_last_hit = 0;
 
 	//55000.f
-	physx::PxReal threshold = 55000.f;
+	physx::PxReal threshold = 30000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
 	footsteps = CSoundManager::get().getInstance("STEPS_KATH");
