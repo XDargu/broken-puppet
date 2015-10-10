@@ -23,7 +23,7 @@ public:
 	void setEmissive(bool active);
 	void applyForce(CVector force);
 	void riseUpBoss();
-	CHandle firstBombBoss();
+	CMCVObject firstBombBoss();
 	void initialRain(int amount);
 };
 

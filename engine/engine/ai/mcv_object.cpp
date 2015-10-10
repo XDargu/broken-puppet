@@ -86,13 +86,15 @@ void CMCVObject::riseUpBoss() {
 }
 
 
-CHandle CMCVObject::firstBombBoss() {
+CMCVObject CMCVObject::firstBombBoss() {
 	if (!entity.isValid())
-		return NULL;
+		return CMCVObject(CHandle());
 	TCompAiBoss* boss = ((CEntity*)entity)->get<TCompAiBoss>();
 	if (boss) {
-		return(boss->objToStun());
+		return CMCVObject(boss->objToStun());
 	}
+
+	return CMCVObject(CHandle());
 }
 
 

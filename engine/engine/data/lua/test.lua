@@ -78,7 +78,7 @@ function onSceneLoad_scene_final_boss()
 		logicManager:pushPlayerLegsState("fbp_Idle");
 		local boss = logicManager:getBot("Boss")
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
-		logicManager:setTimer("boss_init_animation", 21)
+		logicManager:setTimer("boss_init_animation", 28)
 		
 		startCoroutine("bossShake", bossShake)
 		startCoroutine(" bossInitialRain",  bossInitialRain)
@@ -188,9 +188,11 @@ function onSceneLoad_scene_final_boss()
 		waitTime(0.5)
 
 
-		waitTime(0.4)
+		waitTime(1.8)
+		local objToLook = mBoss:firstBombBoss();
 
-		mBoss:firstBombBoss();
+		waitTime(1.6)
+		logicManager:lockCameraOnObject(objToLook);
 	end
 
 end
