@@ -34,7 +34,7 @@ public:
 		XMVECTOR pos;
 		std::string name;
 		bool talked;
-		SoundParameter* parameters;
+		SoundParameter parameters[5];
 		int nparameters;
 		std::string guid;
 	};
@@ -91,7 +91,7 @@ public:
 	void playTalkEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name = "", std::string guid="");
 	void playTalkEvent(std::string path, XMVECTOR pos, std::string name = "", std::string guid = "");
 
-	FMOD::Studio::EventInstance* checkIfCanTalk();
+	void checkIfCanTalk();
 
 	FMOD::Studio::EventInstance* getInstance(std::string sound_id);
 	bool setInstanceParams(FMOD::Studio::EventInstance* eventInstance, SoundParameter* parameters, int nparameters);

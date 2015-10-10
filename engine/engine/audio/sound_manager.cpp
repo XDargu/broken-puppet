@@ -283,60 +283,41 @@ FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string path, XMVECTOR
 }
 
 void CSoundManager::playTalkEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name, std::string guid){
-	if (!CApp::get().isSlowMotion()){
-		TCompCamera* cam = render_manager.activeCamera;
-		if (cam) {
-			XMVECTOR camera_position = cam->getPosition();
-			float distance_to_listener = V3DISTANCE(camera_position, pos);
-			if (distance_to_listener <= max_dist_events){
-				phrase.path = path;
-				phrase.pos = pos;
-				phrase.nparameters = nparameters;
-				phrase.parameters = parameters;
-				phrase.name = name;
-				phrase.talked = false;
-				phrase.guid = guid;
-				//return playEvent(path, 0, 0, pos, name);
-			}
-		}
+	phrase.path = path;
+	phrase.pos = pos;
+	phrase.nparameters = nparameters;
+	for (int i = 0; i < phrase.nparameters; ++i) {
+		phrase.parameters[i] = parameters[i];
 	}
+	phrase.name = name;
+	phrase.talked = false;
+	phrase.guid = guid;
 }
 
 void CSoundManager::playTalkEvent(std::string path, XMVECTOR pos, std::string name, std::string guid){
-	if (!CApp::get().isSlowMotion()){
-		TCompCamera* cam = render_manager.activeCamera;
-		if (cam) {
-			XMVECTOR camera_position = cam->getPosition();
-			float distance_to_listener = V3DISTANCE(camera_position, pos);
-			if (distance_to_listener <= max_dist_events){
-				phrase.path = path;
-				phrase.pos = pos;
-				phrase.nparameters = 0;
-				phrase.parameters = 0;
-				phrase.name = name;
-				phrase.talked = false;
-				phrase.guid = guid;
-				//return playEvent(path, 0, 0, pos, name);
-			}
-		}
-	}
-	//return nullptr;
-
+	phrase.path = path;
+	phrase.pos = pos;
+	phrase.nparameters = 0;
+	phrase.name = name;
+	phrase.talked = false;
+	phrase.guid = guid;
 }
 
-FMOD::Studio::EventInstance* CSoundManager::checkIfCanTalk(){
+void CSoundManager::checkIfCanTalk(){
 	if (!CApp::get().isSlowMotion()){
 		if (!phrase.talked){
 			phrase.talked = true;
 			if (phrase.nparameters > 0){
-				if (phrase.guid!="")
+				if (phrase.guid != ""){
 					CLogicManager::get().playSubtitles(phrase.guid);
-				return playEvent(phrase.path, phrase.parameters, phrase.nparameters, phrase.pos, phrase.name);
+				}				
+				playEvent(phrase.path, phrase.parameters, phrase.nparameters, phrase.pos, phrase.name);				
 			}
 			else{
-				if (phrase.guid != "")
+				if (phrase.guid != ""){
 					CLogicManager::get().playSubtitles(phrase.guid);
-				return playEvent(phrase.path, 0, 0, phrase.pos, phrase.name);
+				}
+				playEvent(phrase.path, 0, 0, phrase.pos, phrase.name);
 			}
 		}
 	}
