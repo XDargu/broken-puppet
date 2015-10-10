@@ -3,7 +3,8 @@
     <name name="bomb" />
     <transform position="-1.58365 12.4581 26.568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
-      <draw mesh="bomb" sub_mesh="0" mat="Standardmaterial"/>
+      <draw mesh="bomba_boss" sub_mesh="0" mat="bomba"/>
+      <draw mesh="bomba_boss" sub_mesh="1" mat="glass"/>
     </render>
     <aabb min="-0.786767 -0.786767 -0.786767" max="0.786767 0.786767 0.786767"/>
     <colliderSphere staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="0.786767"/>

@@ -10,6 +10,6 @@
       <shape posOffset="0.266182 2.91671 -0.557397" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.319182" width="0.2797" height="0.477999"/>
     </colliderMulti>
     staticbody/>
-    <rigidbody density="49.56"  />
+    <rigidbody density="490.56"  />
   </entity>
 </prefab>

@@ -115,8 +115,7 @@ void TCompPlayerController::init() {
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
 
 	float offset_size = 0.05f;
-	float offset_rot_size = 0.2f;
-	float offset_rot_size2 = 3.14f;
+	float offset_rot_size = 0.0f;
 	offset_needle_back1 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
 	offset_needle_back2 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
 
