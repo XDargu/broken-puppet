@@ -84,3 +84,23 @@ void CMCVObject::riseUpBoss() {
 		boss->initBoss();
 	}
 }
+
+
+CHandle CMCVObject::firstBombBoss() {
+	if (!entity.isValid())
+		return NULL;
+	TCompAiBoss* boss = ((CEntity*)entity)->get<TCompAiBoss>();
+	if (boss) {
+		return(boss->objToStun());
+	}
+}
+
+
+void CMCVObject::initialRain(int amount) {
+	if (!entity.isValid())
+		return;
+	TCompAiBoss* boss = ((CEntity*)entity)->get<TCompAiBoss>();
+	if (boss) {
+		boss->initialRain(amount);
+	}
+}
