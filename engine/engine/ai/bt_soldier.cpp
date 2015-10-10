@@ -422,7 +422,7 @@ int bt_soldier::actionPlayerAlert()
 	look_direction = Physics.XMVECTORToPxVec3(dir);
 	((TCompCharacterController*)character_controller)->Move(mov_direction, false, jump, look_direction);
 
-	if (state_time > getAnimationDuration(18)) {
+	if (state_time > getAnimationDuration(21)) {
 		//Call the iaManager method for warning the rest of the grandmas
 		aimanager::get().warningPlayerFound(this);
 		return LEAVE;

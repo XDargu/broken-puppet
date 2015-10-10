@@ -150,7 +150,7 @@ void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
 			//Play priority sound 
 			if (sound_m.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
 				sound_m.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
-				sound_m.playEvent("KATH_KILL_LAUGH", ((TCompTransform*)player_transform)->position, "kath_expr_p");
+				sound_m.playTalkEvent("KATH_KILL_LAUGH", ((TCompTransform*)player_transform)->position, "kath_expr_p");
 				//XDEBUG("logitud joint: %f", djoint->joint->getDistance());
 				CLogicManager::get().first_blood = true;
 			}
@@ -169,14 +169,12 @@ void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
 					CSoundManager::SoundParameter params[] = {
 						{ "frase", rand }
 					};
-					//Throw movement sound. 
-					CSoundManager::get().playEvent("KATH_SOLDIER_KILLED", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr_p");
-
 					// Subtítulos
 					std::string guid = "EXPR00-1";
 					if (rand == 1) { guid = "EXPR01"; }
 					if (rand == 2) { guid = "EXPR02"; }
-					CLogicManager::get().playSubtitles(guid);
+					//Throw movement sound. 
+					CSoundManager::get().playTalkEvent("KATH_SOLDIER_KILLED", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr_p", guid);
 				}
 			}
 		}
