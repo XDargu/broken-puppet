@@ -31,6 +31,7 @@ function onSceneLoad_scene_final_boss()
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 	respawnPos = player:getPosition();
+	mBoss = logicManager:getObject("Boss");
 	
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -77,9 +78,10 @@ function onSceneLoad_scene_final_boss()
 		logicManager:pushPlayerLegsState("fbp_Idle");
 		local boss = logicManager:getBot("Boss")
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
-		logicManager:setTimer("boss_init_animation", 21)
+		logicManager:setTimer("boss_init_animation", 28)
 		
 		startCoroutine("bossShake", bossShake)
+		startCoroutine(" bossInitialRain",  bossInitialRain)
 	end
 
 	function bossShake()
@@ -93,7 +95,7 @@ function onSceneLoad_scene_final_boss()
 
 		local elapsed = 0
 
-		logicManager:shakeCamera(0.03)
+		logicManager:shakeCamera(0.03)		
 		waitTime(first_arm)
 		elapsed = first_arm
 
@@ -136,6 +138,63 @@ function onSceneLoad_scene_final_boss()
 		waitTime(1)
 		logicManager:stopShakeCamera()
 	end
+
+
+	function bossInitialRain()
+		-- Tiempos
+		local first_arm = 0.72
+		local second_arm = 4.79
+		local get_up = 7.8
+		local first_arm_2 = 12.1
+		local second_arm_2 = 12.8
+		local scream = 18.44
+
+		local elapsed = 0
+		
+		waitTime(first_arm)
+		elapsed = first_arm
+		mBoss:initialRain(15);	
+		waitTime(0.5)
+
+		elapsed = elapsed + 0.5
+		waitTime(second_arm - elapsed)
+		elapsed = second_arm
+		mBoss:initialRain(20);	
+		waitTime(0.5)
+		
+		elapsed = elapsed + 0.5
+		waitTime(get_up - elapsed)
+		elapsed = get_up
+		--mBoss:initialRain(30);	
+		waitTime(0.5)
+
+		elapsed = elapsed + 0.5
+		waitTime(first_arm_2 - elapsed)
+		elapsed = first_arm_2
+		mBoss:initialRain(1);	
+		waitTime(0.5)
+
+		elapsed = elapsed + 0.5
+		waitTime(second_arm_2 - elapsed)
+		elapsed = second_arm_2
+		mBoss:initialRain(1);	
+		waitTime(0.5)
+
+		waitTime(0.5)
+		elapsed = elapsed + 0.5
+		waitTime(scream - elapsed)
+		elapsed = scream
+		mBoss:initialRain(50);	
+		waitTime(0.5)
+
+
+		waitTime(1.8)
+		local objToLook = mBoss:firstBombBoss();
+
+		waitTime(1.6)
+		logicManager:lockCameraOnObject(objToLook);
+	end
+
 end
 
 

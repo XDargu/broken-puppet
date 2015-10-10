@@ -629,6 +629,8 @@ void CLogicManager::bootLUA() {
 		.set("setEmissive", &CMCVObject::setEmissive)
 		.set("applyForce", (void (CMCVObject::*)(CVector)) &CMCVObject::applyForce)
 		.set("riseUpBoss", &CMCVObject::riseUpBoss)
+		.set("initialRain", &CMCVObject::initialRain)
+		.set("firstBombBoss", &CMCVObject::firstBombBoss)
 		;
 
 	SLB::Class<CVector>("Vector")
