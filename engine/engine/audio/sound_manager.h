@@ -28,6 +28,17 @@ public:
 		MixerInstanceType type;
 		CHandle hfz_zone;
 	};
+
+	struct TalkPhrase{
+		std::string path;
+		XMVECTOR pos;
+		std::string name;
+		bool talked;
+		SoundParameter* parameters;
+		int nparameters;
+		std::string guid;
+	};
+
 private:
 	FMOD::Studio::Bank* masterBank;
 	FMOD::Studio::Bank* stringsBank;
@@ -45,6 +56,8 @@ private:
 	XMVECTOR invalidPosition;
 
 	bool slowed;
+
+	TalkPhrase phrase;
 
 	FMOD::Studio::EventInstance* underwater_mixer;
 
@@ -74,6 +87,11 @@ public:
 
 	FMOD::Studio::EventInstance* playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name = "");
 	FMOD::Studio::EventInstance* playEvent(std::string path, XMVECTOR pos, std::string name = "");
+
+	void playTalkEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name = "", std::string guid="");
+	void playTalkEvent(std::string path, XMVECTOR pos, std::string name = "", std::string guid = "");
+
+	FMOD::Studio::EventInstance* checkIfCanTalk();
 
 	FMOD::Studio::EventInstance* getInstance(std::string sound_id);
 	bool setInstanceParams(FMOD::Studio::EventInstance* eventInstance, SoundParameter* parameters, int nparameters);
