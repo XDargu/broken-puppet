@@ -757,7 +757,7 @@ void CApp::update(float elapsed) {
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
 	ctes_global.get()->elapsed = elapsed;
-	ctes_global.get()->global_water_level = water_level;
+	ctes_global.get()->global_water_level = max(ctes_global.get()->global_water_level, water_level);
 
 	int needle_count = 0;
 	for (auto& string : CRope_manager::get().getStrings()) {
@@ -1700,6 +1700,8 @@ void CApp::loadScene(std::string scene_name) {
 		TCompTransform* water_t = water->get<TCompTransform>();
 		water_level = XMVectorGetY(water_t->position);
 	}
+
+	ctes_global.get()->global_water_level = water_level;
 
 	render_manager.init();
 	ctes_global.get()->use_lightmaps = 0;

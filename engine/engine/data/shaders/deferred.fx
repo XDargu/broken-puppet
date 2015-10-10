@@ -233,8 +233,9 @@ void PSGBuffer(
   else {
 	  atten = 2 + (1 - min(2, max(0, input.wPos.y - global_water_level) ));
   }
+  //specular = saturate(specular * atten);
   gloss = saturate(gloss * atten);
-  //gloss = atten / 3;
+  //gloss = atten - 1;
   float3   in_normal = normalize(input.wNormal);
   float3   in_tangent = normalize(input.wTangent.xyz);
   float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;
@@ -729,7 +730,7 @@ float4 PSResolve(
 	}*/
 	
 	
-	float4 base_color = albedo * (1 - gloss*0.5) + env * gloss * 0.5;
+	float4 base_color = albedo * (1 - gloss*0.2) + env * gloss * 0.2;
 	base_color = base_color * diffuse + saturate(specular);
 	/*return 
 		(base_color)* (1 - ambient_val)
