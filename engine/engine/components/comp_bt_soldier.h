@@ -9,6 +9,9 @@ struct TCompBtSoldier : TBaseComponent {
 
 	bt_soldier* m_ai_controller;
 	CHandle m_aabb;
+	CHandle player_entity;
+	CHandle player_transform;
+	float footstep_counter;
 
 	TCompBtSoldier();
 	~TCompBtSoldier();

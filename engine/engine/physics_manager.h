@@ -26,7 +26,9 @@ struct FilterGroup
 		eBOSSRAGDOLL = (1 << 11),
 		eBOSSPARTS = (1 << 12),
 		eBOSSHEAD = (1 << 13),
-		eBOMB = (1 << 14)
+		eBOMB = (1 << 14),
+		eBOMBSPECIAL = (1 << 15),
+		ePLAYERINACTIVE = (1 << 16)
 	};
 };
 
@@ -47,9 +49,11 @@ public:
 	void releaseAllParticles();
 	void setParticlesFilterCollision();
 	void setParticlesGravity(bool gravity);
+	bool getParticlesGravity();
 	void setParticlesSystemMass(PxReal mass);
 	void setParticlesSystemDamping(PxReal damping);
 	void releaseParticleFromBuffer(int index);
+	void destroy();
 };
 
 class CPhysicsManager

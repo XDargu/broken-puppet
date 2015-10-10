@@ -38,6 +38,8 @@ private:
 
 	std::map<std::string, std::string> sound_events;
 
+	std::map<std::string, FMOD::Studio::EventInstance*> named_instances;
+
 	std::vector<CHandle> HFXZones;
 
 	XMVECTOR invalidPosition;
@@ -65,16 +67,18 @@ public:
 
 	void init();
 
-	void playEvent(std::string sound_id, SoundParameter* parameters, int nparameters);
-	void playEvent(std::string sound_id);
+	void clear();
 
-	void playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos);
+	FMOD::Studio::EventInstance* playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, std::string name = "");
+	FMOD::Studio::EventInstance* playEvent(std::string sound_id, std::string name = "");
+
+	FMOD::Studio::EventInstance* playEvent(std::string sound_id, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name = "");
+	FMOD::Studio::EventInstance* playEvent(std::string path, XMVECTOR pos, std::string name = "");
 
 	FMOD::Studio::EventInstance* getInstance(std::string sound_id);
 	bool setInstanceParams(FMOD::Studio::EventInstance* eventInstance, SoundParameter* parameters, int nparameters);
 	bool setInstancePos(FMOD::Studio::EventInstance* eventInstance, TTransform trans);
 
-	void playEvent(std::string path, XMVECTOR pos);
 
 	void setListenerTransform(TTransform listener);
 
@@ -94,7 +98,7 @@ public:
 	void activateSlowMo();
 	void desactivateSlowMo();
 
-	float getMaterialTagValue(std::string material);
+	int getMaterialTagValue(std::string material);
 
 	void ERRCHECK(FMOD_RESULT result);
 
@@ -103,6 +107,14 @@ public:
 	void setCurrentPresetEvent(std::string event_path);
 
 	void setSceneID(int id) { scene_id = id; }
+
+	void stopNamedInstance(std::string name, FMOD_STUDIO_STOP_MODE mode);
+
+	void positionNamedInstance(std::string name, XMVECTOR position);
+
+	FMOD::Studio::EventInstance* getNamedInstance(std::string name);
+
+	FMOD_STUDIO_PLAYBACK_STATE getNamedInstanceState(std::string name);
 };
 
 

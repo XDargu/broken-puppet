@@ -1,8 +1,11 @@
 #include "mcv_platform.h"
 #include "rope_manager.h"
 #include "components\comp_rope.h"
+#include "components\comp_needle.h"
+#include "components\comp_distance_joint.h"
 #include "ai\logic_manager.h"
 #include "audio\sound_manager.h"
+#include "item_manager.h"
 
 static CRope_manager the_rope_manager;
 
@@ -117,4 +120,108 @@ void CRope_manager::clearStrings(){
 
 CRope_manager& CRope_manager::get() {
 	return the_rope_manager;
+}
+
+
+void CRope_manager::removeRopesTiedToObject(CHandle entity) {
+	// Remove rope
+	TCompDistanceJoint* mJoint = nullptr;
+	PxDistanceJoint* px_joint = nullptr;
+	PxRigidActor* actor1 = nullptr;
+	PxRigidActor* actor2 = nullptr;
+	TCompRope* rope = nullptr;
+
+	std::vector<CHandle> target_ropes;
+
+	for (auto& string : strings) {
+		rope = string;
+		if (rope) {
+			mJoint = rope->joint;
+
+			if (mJoint){
+				px_joint = mJoint->joint;
+				px_joint->getActors(actor1, actor2);
+
+				if (actor1)	{
+					if (entity == CHandle(actor1->userData)){
+						target_ropes.push_back(CHandle(rope));
+					}
+				}
+
+				if (actor2){
+					if (entity == CHandle(actor2->userData)){
+						target_ropes.push_back(CHandle(rope));
+					}
+				}
+			}
+		}
+	}
+
+	for (auto& it : target_ropes) {
+		if (it.isValid()) {
+			rope = it;
+			removeString(it);
+
+			// Remove needles
+			CHandle needle1 = rope->transform_1_aux;
+			if (needle1.isValid()) {
+				CEntity* e1 = CHandle(needle1).getOwner();
+				if (e1) {
+					CHandle c_needle1 = e1->get<TCompNeedle>();
+
+					if (c_needle1.isValid()){
+						Citem_manager::get().removeNeedleFromVector(c_needle1);
+						Citem_manager::get().removeNeedle(c_needle1);
+						CEntityManager::get().remove(CHandle(needle1).getOwner());
+					}
+				}
+			}
+
+			CHandle needle2 = rope->transform_2_aux;
+			if (needle2.isValid()){
+				CEntity* e2 = CHandle(needle2).getOwner();
+				if (e2) {
+					CHandle c_needle2 = e2->get<TCompNeedle>();
+					if (c_needle2.isValid()){
+						Citem_manager::get().removeNeedleFromVector(c_needle2);
+						Citem_manager::get().removeNeedle(c_needle2);
+						CEntityManager::get().remove(CHandle(needle2).getOwner());
+					}
+				}
+			}
+		}
+	}
+}
+
+void CRope_manager::removeJointTiedToObject(CHandle entity) {
+	// Remove rope
+	TCompDistanceJoint* mJoint = nullptr;
+	PxDistanceJoint* px_joint = nullptr;
+	PxRigidActor* actor1 = nullptr;
+	PxRigidActor* actor2 = nullptr;
+	TCompRope* rope = nullptr;
+
+	for (auto& string : strings) {
+		rope = string;
+		if (rope) {
+			mJoint = rope->joint;
+
+			if (mJoint){
+				px_joint = mJoint->joint;
+				px_joint->getActors(actor1, actor2);
+
+				if (actor1)	{
+					if (entity == CHandle(actor1->userData)){
+						rope->releaseJoint();
+					}
+				}
+
+				if (actor2){
+					if (entity == CHandle(actor2->userData)){
+						rope->releaseJoint();
+					}
+				}
+			}
+		}
+	}
 }

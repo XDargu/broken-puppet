@@ -133,6 +133,7 @@ struct TParticleUpdaterPhysx {
 	TParticleUpdaterPhysx(TParticleSystem* the_ps) : ps(the_ps) {}
 
 	void update(TParticle* particle, float elapsed);
+	std::string getXMLDefinition();
 };
 
 struct TParticleUpdaterRotation {

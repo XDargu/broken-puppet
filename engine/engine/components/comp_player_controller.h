@@ -9,18 +9,24 @@
 
 struct TCompPlayerController : TBaseComponent {
 
+	CHandle entity_player;
+	CHandle player_trans;
 	CHandle old_target_transform;
 	CHandle needle_back1;
 	CHandle needle_back2;
+	CHandle entity;
 	XMVECTOR offset_needle_back1;
 	XMVECTOR offset_needle_back2;
 	XMVECTOR offset_rot_needle_back1;
 	XMVECTOR offset_rot_needle_back2;
 
 	CHandle entity_jump_dust;
+	CHandle entity_drops;
 
 	FMOD::Studio::EventInstance* footsteps;
 	float footstep_counter;
+
+	float last_time_in_water;
 
 	void bossImpact(CHandle boss);
 public:
@@ -49,6 +55,8 @@ public:
 	void onAttackDamage(const TMsgAttackDamage& msg);
 
 	bool canThrow();
+	
+	bool canReceiveDamage();
 };
 
 #endif

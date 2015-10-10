@@ -20,6 +20,7 @@ public:
 	void update(float elapsed);
 
 	void pointAt(XMVECTOR target);
+	void aimAt(XMVECTOR target, float t);
 };
 
 #endif

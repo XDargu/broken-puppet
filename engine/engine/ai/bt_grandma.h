@@ -56,6 +56,10 @@ private:
 	bool needle_hit;
 	bool lost_player;
 
+	bool attacked;
+	bool is_reacheable;
+	bool cut;
+
 	int last_anim_id;
 
 	bool player_previously_lost;
@@ -81,6 +85,7 @@ private:
 	attacker_slots slot;
 
 public:
+
 	void create(string);
 
 	//Se mantiene en modo ragdoll durante un tiempo
@@ -251,6 +256,9 @@ public:
 	void findLostPlayer();
 
 	void setRagdoll() { is_ragdoll = true; setCurrent(NULL); }
+
+	bool isMoving();
+	float getRunSpeedModifier();
 };
 
 #endif

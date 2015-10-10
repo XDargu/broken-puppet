@@ -1,11 +1,16 @@
 <fmodEvents>
   
   <!-- Katherine -->
-  <event id="KATH_JUMP" path="event:/Expresion/Katherine/Salto" />
+  <event id="KATH_JUMP" path="event:/Expresion/Katherine/Saltar" />
   <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />
-  <event id="KATH_RAGDOLL" path="" />
-  <event id="KATH_WAKEUP" path="" />
-  <event id="KATH_HIT" path="" />
+  <event id="KATH_THROW" path="event:/Expresion/Katherine/Lanzar_Expresion" />
+  <event id="KATH_RAGDOLL" path="event:/Expresion/Katherine/RecibirDanoRagdoll" />
+  <event id="KATH_WAKEUP" path="event:/Expresion/Katherine/Levantarse" />
+  <event id="KATH_HIT" path="event:/Expresion/Katherine/Recibir Dano" />
+
+  <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
+  <event id="KATH_GRANDMA_KILLED" path="event:/Expresion/Katherine/AbuelaMatada" />
+  <event id="KATH_SOLDIER_KILLED" path="event:/Expresion/Katherine/SoldadoMatado" />
   
   <!-- Strings & needles -->
   <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" />
@@ -14,22 +19,68 @@
   <event id="STRING_TENSE" path="event:/Expresion/Katherine/Tensar" />
   
   <event id="NEEDLE_HIT" path="event:/Aguja/Aguja" />
+
+  <!-- Action sounds -->
+  <event id="LANDING" path="" />
+  <event id="WRONG_LANDING" path="" />
   
   <!-- Steps -->
   <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" />
-  <event id="STEPS_GRANDMA" path="" />
-  <event id="STEPS_SOLDIER" path="" />
+  <event id="STEPS_GRANDMA" path="event:/Pasos/Pasos Abuela" />
+  <event id="STEPS_SOLDIER" path="event:/Pasos/Pasos Soldado" />
   
   <!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
+  <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
+  <event id="HIT_RATTLE" path="event:/Colisiones/Colision Cascabel" />
+  <event id="HIT_PIANO" path="event:/Colisiones/Colision Piano" />
+  <event id="HIT_BALL" path="event:/Colisiones/Colision Pelota" />
+  <event id="HIT_BOOK" path="event:/Colisiones/Colision Libro" />
+
+  <!-- Impactos -->
+  <event id="GRANDMA_HIT" path="event:/Impactos/sword_swing" />
+  <event id="GRANDMA_MISS" path="event:/Impactos/sword_miss" />
+
+  <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" />
+  <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" />
   
   <!-- Ambient -->
   
-  <event id="CURRENT_ROOM" path="event:/TestRoom" />
+  IDs de habitaciones:
+  - Escena 3:
+   + 0: Salita inicial + sala de las abuelas
+   + 1: Pasillo doble + Sala de subir el agua
+   + 2: Pasillo tras ventilador + caída
+   + 3: Sala final
+   + 4: Sala del desagüe
+  <event id="CURRENT_ROOM" path="event:/Sala Actual" />
+
+  <event id="BUZZING" path="event:/Ambiente/buzz" /> Zumbido eléctrico
+  <event id="BOILER" path="event:/Ambiente/boiler" /> Calderas (vibración + vapor)
+  <event id="BIGFAN" path="event:/Ambiente/big fan" /> Ventiladores gigantes
+  <event id="WATERPIPES" path="event:/Ambiente/water_pipes" /> Agua por tuberías
+  <event id="SPARKS1" path="event:/Ambiente/sparks1" /> Agua por tuberías
+  <event id="RUNNINGWATER" path="event:/Ambiente/running_water" /> Agua que sale al destaponar
+  <event id="PLANETARIUM" path="event:/Ambiente/planetarium" /> Atrezzos de planetario
+  <event id="JUKEBOX_LOOP" path="event:/Ambiente/gramola_loop" /> Disco vacío en la gramola
+  <event id="GEARS_LOOP_1" path="event:/Ambiente/mecanismos_1" /> Mecanismos pequeños
+  <event id="GEAR_BIG" path="event:/Ambiente/mecanismos_2" /> Mecanismos grandes (reloj)  
+  <event id="ELEVATOR" path="event:/Ambiente/elevator" /> Ascensor completo
+  <event id="WOODEN_DOOR" path="event:/Ambiente/wood_door_open" /> Puerta de madera al abrirse
+  <event id="LIGHT_ON" path="event:/Mecanismos/Interruptores/light_switch_on" /> Cables al activar la luz
+  <event id="LIGHT_OFF" path="event:/Mecanismos/Interruptores/light_switch_off" /> Cables al desactivar la luz
+  <event id="TICTAC" path="event:/Mecanismos/TicTac" /> Tic tac del reloj
+  <event id="FACTORY_AMBIENT" path="event:/Ambiente/factory_ambient" /> Ruido de ambiente del crematorio
+  <event id="COMPRESOR_1" path="event:/Ambiente/compresor_1" /> Machacaabuelas 1 del crematorio
+  <event id="COMPRESOR_3" path="event:/Ambiente/compresor_3" /> Machacaabuelas 3 del crematorio
+  <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
+
+  <!-- Narración -->
   
-  <event id="BUZZING" path="" />
-  
-  
+  <!-- Video -->
+  <event id="INITIAL_VIDEO" path="event:/intro_BP_sound" /> Video inicial
+  <event id="FINAL_VIDEO" path="event:/final_BP_sound" /> Video final
+
   <!-- Mixer -->
   <event id="UNDERWATER" path="event:/Mixer/Underwater" />
 
@@ -67,11 +118,47 @@
   <event id="SC3ROOM10" path="event:/Mixer/reverbTest1" /> Salita final
   
   <event id="SC4ROOM1" path="event:/Mixer/reverbTest1" /> Salita inicio
-  <event id="SC4ROOM2" path="event:/Mixer/reverbTest1" />
-  <event id="SC4ROOM3" path="event:/Mixer/reverbTest1" />
-  <event id="SC4ROOM4" path="event:/Mixer/reverbTest1" />
-  <event id="SC4ROOM5" path="event:/Mixer/reverbTest1" />
-  <event id="SC4ROOM6" path="event:/Mixer/reverbTest1" />
-  <event id="SC4ROOM7" path="event:/Mixer/reverbTest1" />
+  <event id="SC4ROOM2" path="event:/Mixer/reverbTest1" /> Sala atrezzos
+  <event id="SC4ROOM3" path="event:/Mixer/reverbTest1" /> Crematorio
+  <event id="SC4ROOM4" path="event:/Mixer/reverbTest1" /> Subida y pasillo
+  <event id="SC4ROOM5" path="event:/Mixer/reverbTest1" /> Sala reloj
+  <event id="SC4ROOM6" path="event:/Mixer/reverbTest1" /> Lateral de sala reloj
+  <event id="SC4ROOM7" path="event:/Mixer/reverbTest1" /> Dentro de reloj
+  
+
+  <!-- Narración -->
+  <event id="NARRSC101" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena1 01" /> Controles 1
+  <event id="NARRSC102" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena1 02" /> Controles 2
+  <event id="NARRSC103" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena1 03" /> Seguir adelante
+  <event id="NARRSC104" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena1 04 (Soldados)" /> Soldados
+  
+  <event id="NARRSC201" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena2 01" /> Camerino 1
+  <event id="NARRSC202" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena2 02" /> Camerino 2
+  <event id="NARRSC203" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena2 03" /> Caída 1
+  <event id="NARRSC204" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena2 06" /> Caída 2
+  
+  <event id="NARRSC301" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Escena3 01 (Abuelas)" /> Abuelas
+
+  <event id="NARRSC401" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena4 01" /> Energía del teatro
+  <event id="NARRSC402" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena4 03" /> Reloj
+
+  <event id="NARRSC501" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena5 01" /> En el ascenso al boss
+  <event id="NARRSC502" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena5 03" /> Loop del narrador
+  
+  <event id="NARRKILL" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Muertes Katherine" /> Muerte de Katherine
+  
+  <!--  Diálogos Katherine-->
+  <event id="KATHSC201" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 09 This can not be this is all your fault" /> ¡Es todo culpa tuya!
+  
+  <event id="KATHSC301" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 11 I hope i dont rust" /> Espero no oxidarme
+  
+  <event id="KATHSC401" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 12 What the hell" /> ¿Pero qué...?
+  <event id="KATHSC402" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 13 So thats why there were machines" /> Por eso había máquinas...
+  <event id="KATHSC403" path="event:/Dialogos/Dialogos Kath/Katherine Dialogo_ 14 Clock doing here" /> ¿Qué hace aquí el reloj?
+  
+  <!--  Diálogos Sustitua-->
+  <event id="SUSTSC201" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_01 Good Work!" /> ¡Buen trabajo!  
+  <event id="SUSTSC2LOOP" path="event:/Dialogos/Dialogos Sustituta/Loop scene 2 sust" /> Loop de la escena 2
+  
 
 </fmodEvents>

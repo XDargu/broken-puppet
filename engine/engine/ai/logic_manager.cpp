@@ -13,6 +13,7 @@
 #include "components\comp_zone_aabb.h"
 #include "components\comp_hfx_zone.h"
 #include "components\comp_audio_source.h"
+#include "components\comp_particle_group.h"
 #include "ai\fsm_player_legs.h"
 #include "components\comp_platform_path.h"
 #include "entity_manager.h"
@@ -39,6 +40,7 @@ CLogicManager& CLogicManager::get() {
 }
 
 CLogicManager::CLogicManager() {
+	first_blood = false;
 }
 
 void CLogicManager::init()
@@ -82,6 +84,9 @@ void CLogicManager::init()
 	lock_on_position = XMVectorSet(0, 0, 0, -1);
 
 	scene_to_load = "";
+
+	shake_cam = false;
+	shake_amount = 0;
 
 	//triggers.clear();
 	timers.clear();
@@ -176,58 +181,22 @@ void CLogicManager::update(float elapsed) {
 
 	}
 
-	/*CErrorContext ce2("Updating keyframes", "");
-	// Update the keyframes
-	for (auto& it : current_keyframes) {
-		// Check if the keyframe has reached the limit
-		if (it.update(elapsed)) {
-			XDEBUG("Keyframe has reached the time limit");
-			keyframes_to_delete.push_back(it);
-		}
-	};
-
-	// Remove keyframes that has reached the limit
-	for (auto& it : keyframes_to_delete) {
-	
-		// Find if there is another keyframe in the queue with the same target transform, and add it to the current keyframe list
-		for (auto& it2 : keyframe_queue) {
-			// Check if the keyframe has reached the limit
-			if (it2.target_transform == it.target_transform) {
-				current_keyframes.push_back(it2);
-				
-				// Erase the keyframe
-				auto it3 = std::find(keyframe_queue.begin(), keyframe_queue.end(), it);
-				if (it3 != keyframe_queue.end())
-					keyframe_queue.erase(it3);
-				break;
-			}
-		};
-
-		// Erase the keyframe
-		auto it3 = std::find(current_keyframes.begin(), current_keyframes.end(), it);
-		if (it3 != current_keyframes.end())
-			current_keyframes.erase(it3);		
-	};
-
-	// Clear the delete vector, if needed
-	if (keyframes_to_delete.size() > 0)
-		keyframes_to_delete.clear();
-	*/
-
 	// Update lock on
 	if (lock_on_target.isValid()) {
 		CEntity* lock_on_entity = lock_on_target;
 		if (lock_on_entity) {
 			TCompTransform* transform = lock_on_entity->get<TCompTransform>();
 			if (transform) {
-				if (player_pivot.isValid() && camera_pivot.isValid()) {
+				if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
 					CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
 					CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+					CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
 
-					if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+					if (player_pivot_c.isValid() && camera_pivot_c.isValid() && camera_c.isValid()) {
 						XMVECTOR aux_pos = transform->position + XMVectorSet(0, 1.5f, 0, 0);
 						((TCompPlayerPivotController*)player_pivot_c)->pointAt(aux_pos);
 						((TCompCameraPivotController*)camera_pivot_c)->pointAt(aux_pos);
+						((TCompCamera*)camera_c)->update(elapsed);
 					}
 				}
 			}
@@ -235,13 +204,32 @@ void CLogicManager::update(float elapsed) {
 	}
 
 	if (XMVectorGetW(lock_on_position) != -1) {
-		if (player_pivot.isValid() && camera_pivot.isValid()) {
+		if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
 			CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
 			CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+			CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
 
-			if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
-				((TCompPlayerPivotController*)player_pivot_c)->pointAt(lock_on_position);
-				((TCompCameraPivotController*)camera_pivot_c)->pointAt(lock_on_position);
+			if (player_pivot_c.isValid() && camera_pivot_c.isValid() && camera_c.isValid()) {
+				((TCompPlayerPivotController*)player_pivot_c)->aimAt(lock_on_position, 3 * elapsed);
+				((TCompCameraPivotController*)camera_pivot_c)->aimAt(lock_on_position, 3 * elapsed);
+				((TCompCamera*)camera_c)->update(elapsed);
+			}
+		}
+	}
+
+	if (shake_amount > 0) {
+		if (!shake_cam) {
+			shake_amount = lerp(shake_amount, 0, 3 * elapsed);
+		}
+		CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
+
+		if (camera_c.isValid()) {
+			// Apply shake to the camera
+			TCompTransform* tmx = ((CEntity*)camera_c.getOwner())->get<TCompTransform>();
+			if (tmx) {
+				XMVECTOR rng = getRandomVector3(XMFLOAT3(-shake_amount, -shake_amount, -shake_amount), XMFLOAT3(shake_amount, shake_amount, shake_amount));
+				tmx->position += rng;
+				((TCompCamera*)camera_c)->update(elapsed);
 			}
 		}
 	}
@@ -424,14 +412,42 @@ CHandle CLogicManager::instantiateParticleGroup(std::string pg_name, CVector pos
 	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
 	if (entity.isValid()) {
 		TCompName* name = ((CEntity*)entity)->get<TCompName>();
-		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
-		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
-		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
-		std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
-		std::strcpy(name->name, n_pg_name.c_str());
-		particle_group_counter++;
-		particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+		if (name) {
+			TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+			if (transform) {
+				transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+				transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+				std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
+				std::strcpy(name->name, n_pg_name.c_str());
+				particle_group_counter++;
+				particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+			}
+		}
+		return entity;
+	}
 
+	return CHandle();
+}
+
+CHandle CLogicManager::instantiateParticleGroupOneShot(std::string pg_name, CVector position, CQuaterion rotation){
+	CHandle entity = prefabs_manager.getInstanceByName("EmptyEntity");
+	if (entity.isValid()) {
+		TCompName* name = ((CEntity*)entity)->get<TCompName>();
+		if (name) {
+			TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+			if (transform) {
+				transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+				transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+				std::string n_pg_name = "created_pg_" + std::to_string(particle_group_counter);
+				std::strcpy(name->name, n_pg_name.c_str());
+				particle_group_counter++;
+				particle_groups_manager.addParticleGroupToEntity(entity, pg_name);
+				TCompParticleGroup* pg = ((CEntity*)entity)->get<TCompParticleGroup>();
+				if (pg) {
+					pg->destroy_on_death = true;
+				}
+			}
+		}
 		return entity;
 	}
 
@@ -588,6 +604,9 @@ void CLogicManager::bootLUA() {
 		.set("setCanCancel", &CLogicManager::setCanCancel)
 		.set("setCanPull", &CLogicManager::setCanPull)
 		.set("setCanMove", &CLogicManager::setCanMove)
+		.set("shakeCamera", &CLogicManager::shakeCamera)
+		.set("stopShakeCamera", &CLogicManager::stopShakeCamera)
+		.set("createPrefab", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createPrefab)
 	;
 
 	// Register the bot class
@@ -595,7 +614,7 @@ void CLogicManager::bootLUA() {
 		.set("getLife", &CBot::getLife)
 		.set("setLife", &CBot::setLife)
 		.set("hurt", &CBot::hurt)
-		.set("getPos", &CBot::getPos)
+		.set("getPosition", &CBot::getPos)
 		.set("teleport", (void (CBot::*)(float, float, float)) &CBot::teleport)
 		.set("teleportToPos", (void (CBot::*)(CVector)) &CBot::teleport)
 		.set("help", &CBot::help)
@@ -608,6 +627,7 @@ void CLogicManager::bootLUA() {
 		.set("move", (void (CMCVObject::*)(CVector, float)) &CMCVObject::moveToPosition)
 		.set("setEmissive", &CMCVObject::setEmissive)
 		.set("applyForce", (void (CMCVObject::*)(CVector)) &CMCVObject::applyForce)
+		.set("riseUpBoss", &CMCVObject::riseUpBoss)
 		;
 
 	SLB::Class<CVector>("Vector")
@@ -934,15 +954,45 @@ void CLogicManager::resetPlayerCamera() {
 
 void CLogicManager::lockOnBot(CBot bot) {
 	lock_on_target = bot.getEntityHandle();
+
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			((TCompPlayerPivotController*)player_pivot_c)->active = false;
+			((TCompCameraPivotController*)camera_pivot_c)->active = false;
+		}
+	}
 }
 
 void CLogicManager::lockOnPosition(CVector position) {
 	lock_on_position = XMVectorSet(position.x, position.y, position.z, 0);
+
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			((TCompPlayerPivotController*)player_pivot_c)->active = false;
+			((TCompCameraPivotController*)camera_pivot_c)->active = false;
+		}
+	}
 }
 
 void CLogicManager::releaseCameraLock() {
 	lock_on_target = CHandle();
 	lock_on_position = XMVectorSetW(lock_on_position, -1);
+
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			((TCompPlayerPivotController*)player_pivot_c)->active = true;
+			((TCompCameraPivotController*)camera_pivot_c)->active = true;
+		}
+	}
 }
 
 void CLogicManager::playAnimation(std::string name, CMCVObject target_object) {
@@ -1005,5 +1055,29 @@ void CLogicManager::setCanMove(bool active) {
 		if (player_controller) {
 			player_controller->fsm_player_legs->can_move = active;
 		}
+	}
+}
+
+void CLogicManager::shakeCamera(float amount) {
+	shake_cam = true;
+	shake_amount = amount;
+}
+
+void CLogicManager::stopShakeCamera() {
+	shake_cam = false;
+}
+
+void CLogicManager::createPrefab(std::string name, CVector position, CQuaterion rotation) {
+	CHandle entity = prefabs_manager.getInstanceByName(name.c_str());
+	if (entity.isValid()) {
+		XDEBUG("Created prefab: %s at x: %f, y: %f, z: %f", name, position.x, position.y, position.z);
+		TCompTransform* transform = ((CEntity*)entity)->get<TCompTransform>();
+		transform->position = XMVectorSet(position.x, position.y, position.z, 0);
+		transform->rotation = XMVectorSet(rotation.x, rotation.y, rotation.z, rotation.w);
+		transform->init();
+		TCompAudioSource* audio = ((CEntity*)entity)->get<TCompAudioSource>();
+		audio->init();
+		TCompParticleGroup* particle = ((CEntity*)entity)->get<TCompParticleGroup>();
+		particle->init();
 	}
 }

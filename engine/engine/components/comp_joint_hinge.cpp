@@ -138,6 +138,8 @@ void TCompJointHinge::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	
 	if (angle_limit != 0)
 	{
+		XASSERT(angle_limit < 180, "Hinge limit must be lower than 180 degrees");
+		XASSERT(angle_limit > -180, "Hinge limit must be more than -180 degrees");
 		PxJointAngularLimitPair limit = PxJointAngularLimitPair(deg2rad(-1 * angle_limit), deg2rad(angle_limit));
 		mJoint->setLimit(limit);
 		mJoint->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);

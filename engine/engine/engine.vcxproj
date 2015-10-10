@@ -680,7 +680,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\GoogleDrive\UPF Studio 1.0\Artistas\Animaciones\Boss - Guardian del Desvan\Death\CAL\death.CAF" />
     <None Include="data\lua\scheduler.lua" />
     <None Include="data\lua\test.lua" />
   </ItemGroup>

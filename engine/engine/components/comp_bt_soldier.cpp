@@ -11,6 +11,8 @@
 #include "nav_mesh_manager.h"
 #include "../ai/aimanager.h"
 #include "font\font.h"
+#include "../audio/sound_manager.h"
+#include "entity_manager.h"
 
 TCompBtSoldier::TCompBtSoldier(){ }
 
@@ -66,10 +68,41 @@ void TCompBtSoldier::init(){
 	int ind_recast_aabb = CNav_mesh_manager::get().getIndexMyRecastAABB(m_aabb);
 	m_ai_controller->setIndRecastAABB(ind_recast_aabb);
 
+	player_entity = CEntityManager::get().getByName("Player");
+	player_transform = ((CEntity*)player_entity)->get<TCompTransform>();
+
+	footstep_counter = 0;
+
 }
 
 void TCompBtSoldier::update(float elapsed){
 	m_ai_controller->update(elapsed);
+
+	TCompTransform* trans = getSibling<TCompTransform>(this);
+	TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);
+
+	// Footsteps sound
+	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+	float surface_value = surface_tag;
+
+	bool moving = m_ai_controller->isMoving();
+	bool run_speed_modifier = m_ai_controller->getRunSpeedModifier();
+
+	if (moving) {
+		footstep_counter += elapsed;
+
+		float base_step = 1.f;
+		float time_modifier = run_speed_modifier * 0.5f; //* (1 / water_multiplier);
+
+		if (footstep_counter >= time_modifier) {
+			CSoundManager::SoundParameter params[] = {
+				{ "Material", surface_value }
+			};
+
+			CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
+			footstep_counter = 0.0f;
+		}
+	}
 }
 
 void TCompBtSoldier::actorHit(const TActorHit& msg) {
@@ -103,17 +136,57 @@ void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
 	float damage = 0.f;
 	if (msg.sqrRopeDistance < 12 * 12) {
 		damage = 30000.f;
+		XDEBUG("damage camino menor: %f", msg.sqrRopeDistance);
+
 		//m_ai_controller->setRagdoll();
 	}
 	else {
 		damage = 100000.f;
+		CSoundManager& sound_m = CSoundManager::get();
+		XDEBUG("damage camino mayor o igual: %f", msg.sqrRopeDistance);
+		if (!CLogicManager::get().first_blood){
+			//First dismemberment
+			//Check if is the enemy really dead and play the sound
+			//Play priority sound 
+			if (sound_m.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+				sound_m.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+				sound_m.playEvent("KATH_KILL_LAUGH", ((TCompTransform*)player_transform)->position, "kath_expr_p");
+				//XDEBUG("logitud joint: %f", djoint->joint->getDistance());
+				CLogicManager::get().first_blood = true;
+			}
+		}
+		else{
+			//Not first blood so play random comments
+			aimanager& aiManager = aimanager::get();
+			if (aiManager.bots.size() <= 1){
+				//check what tipe of enemy we just killed
+				//We killed a soldier
+				if (sound_m.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+					sound_m.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+
+					int rand = floor(getRandomNumber(0.0f, 2.99f));
+
+					CSoundManager::SoundParameter params[] = {
+						{ "frase", rand }
+					};
+					//Throw movement sound. 
+					CSoundManager::get().playEvent("KATH_SOLDIER_KILLED", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr_p");
+
+					// Subtítulos
+					std::string guid = "EXPR00-1";
+					if (rand == 1) { guid = "EXPR01"; }
+					if (rand == 2) { guid = "EXPR02"; }
+					CLogicManager::get().playSubtitles(guid);
+				}
+			}
+		}
 	}
 	m_ai_controller->hurtSensor(damage);
 	//m_ai_controller->setRagdoll();
 }
 
 void TCompBtSoldier::onNeedleHit(const TMsgNeedleHit& msg) {
-	m_ai_controller->needleHitSensor();
+	//m_ai_controller->needleHitSensor();
 }
 
 

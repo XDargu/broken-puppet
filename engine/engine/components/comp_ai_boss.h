@@ -17,12 +17,15 @@ private:
 	CHandle comp_skeleton;
 
 	bool hitchs_opened;
+	bool heart_opened;
 
 	CHandle R_hitch;
 	PxFixedJoint* R_hitch_joint;
 	CHandle R_hitch_light;
 	
-	void openLight();
+
+	XMVECTOR original_ligh_color;
+	bool openLight(float elapsed);
 	void closeLight();
 
 	CHandle L_hitch;
@@ -51,6 +54,18 @@ private:
 
 	bool is_death;
 	bool death_time;
+	bool calculate_break_point;
+	XMVECTOR break_point;
+
+	void brokeHeart();
+
+	float boss_creation_delay;
+	XMVECTOR last_created_pos;
+	XMVECTOR last_random_pos;
+	
+	bool safe_raining;
+	bool safeRain(float elapsed, int debris_amount);
+	int safe_debris_amount;
 
 public:
 
@@ -64,13 +79,18 @@ public:
 
 	void breakHitch(CHandle m_hitch);	
 	void stun();
-	void openHeart();
+	void openHeart( float elapsed);
 
 	bool can_break_hitch;
 
 	void initBoss();
 
-	
+
+	// Publicar en LUA
+	CHandle objToStun();		
+	void initialRain(int debris_amount);
+
 };
+
 
 #endif

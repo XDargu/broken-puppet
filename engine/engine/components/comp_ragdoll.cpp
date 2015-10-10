@@ -1,9 +1,11 @@
 #include "mcv_platform.h"
 #include "comp_ragdoll.h"
 #include "comp_skeleton.h"
+#include "comp_aabb.h"
 #include "comp_name.h"
 #include "skeletons/skeleton_manager.h"
 #include "io\iostatus.h"
+#include "comp_collider_capsule.h"
 
 TCompRagdoll::TCompRagdoll() {
 	ragdoll_active = false;
@@ -14,6 +16,8 @@ TCompRagdoll::~TCompRagdoll() {
 
 void TCompRagdoll::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	skeleton = assertRequiredComponent<TCompSkeleton>(this);
+	h_aabb = assertRequiredComponent<TCompAABB>(this);
+	h_trans = assertRequiredComponent<TCompTransform>(this);
 
 	std::string ragdoll_name = atts["name"];
 
@@ -58,10 +62,34 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			it.second->setLinearVelocity(targetVel);*/
 		}
 	}
+
+	else {
+		TCompAABB* aabb = h_aabb;
+		TCompTransform* transform = h_trans;
+		// AABB Min max
+		XMFLOAT3 aabb_min = XMFLOAT3(1000000, 1000000, 1000000);
+		XMFLOAT3 aabb_max = XMFLOAT3(-1000000, -1000000, -1000000);
+		PxVec3 pos;
+		for (auto& it : ragdoll->bone_map) {
+			
+			pos = it.second->getGlobalPose().p;
+			aabb_min.x = min(aabb_min.x, pos.x - 10);
+			aabb_min.y = min(aabb_min.y, pos.y - 10);
+			aabb_min.z = min(aabb_min.z, pos.z - 10);
+
+			aabb_max.x = max(aabb_max.x, pos.x + 10);
+			aabb_max.y = max(aabb_max.y, pos.y + 10);
+			aabb_max.z = max(aabb_max.z, pos.z + 10);
+		}				
+		aabb->min = XMLoadFloat3(&aabb_min);
+		aabb->max = XMLoadFloat3(&aabb_max);
+	}
 }
 
 void TCompRagdoll::setActive(bool active) {
 	ragdoll_active = active;
+	TCompAABB* aabb = h_aabb;
+	aabb->auto_update = !active;
 
 	// Call the skeleton to save the ragdoll bone positions
 	if (!active) {
@@ -107,6 +135,10 @@ void TCompRagdoll::setCollisonPlayer(bool active){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
 		PxU32 notCollide = FilterGroup::ePLAYER;
 		PxShape* collider;
+		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
+		PxU32 myMaskCapsule = FilterGroup::ePLAYERINACTIVE;
+		PxU32 notCollideCapsule = FilterGroup::eACTOR | FilterGroup::ePLAYER_RG;
+		setupFiltering(capsule->collider, myMaskCapsule, notCollideCapsule);
 		for (auto& it : ragdoll->bone_map) {
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
 			it.second->getShapes(&collider, 1);
@@ -123,6 +155,10 @@ void TCompRagdoll::setCollisonPlayer(bool active){
 			| FilterGroup::eLEVEL
 			| FilterGroup::eNON_COLLISION;
 		PxShape* collider;
+		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
+		PxU32 myMaskCapsule = FilterGroup::ePLAYER;
+		PxU32 notCollideCapsule = FilterGroup::ePLAYER_RG;
+		setupFiltering(capsule->collider, myMaskCapsule, notCollideCapsule);
 		for (auto& it : ragdoll->bone_map) {
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			it.second->getShapes(&collider, 1);
@@ -135,7 +171,7 @@ void TCompRagdoll::setCollisonBoss(bool active){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::eBOSSRAGDOLL;
-		PxU32 notCollide = 0;// FilterGroup::eUNDEFINED;
+		PxU32 notCollide = FilterGroup::eBOMBSPECIAL;// FilterGroup::eUNDEFINED;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
@@ -147,13 +183,14 @@ void TCompRagdoll::setCollisonBoss(bool active){
 		PxU32 myMask = FilterGroup::eBOSSRAGDOLL;
 		PxU32 notCollide = FilterGroup::eLEVEL
 			| FilterGroup::eBOSSHEAD
+			| FilterGroup::eBOMBSPECIAL
 			| FilterGroup::eBOSSPARTS;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {			
 			it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			it.second->getShapes(&collider, 1);
 			if (it.first == 6){
-				setupFiltering(collider, FilterGroup::eBOSSHEAD, FilterGroup::eBOSSRAGDOLL);
+				setupFiltering(collider, FilterGroup::eBOSSHEAD, FilterGroup::eBOSSRAGDOLL | FilterGroup::eBOMBSPECIAL);
 			}
 			else {
 				setupFiltering(collider, myMask, notCollide);
@@ -197,6 +234,10 @@ void TCompRagdoll::setCollisonPlayerBone(bool active, int bone_id){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
 		PxU32 notCollide = FilterGroup::ePLAYER;
 		PxShape* collider;
+		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
+		PxU32 myMaskCapsule = FilterGroup::ePLAYERINACTIVE;
+		PxU32 notCollideCapsule = FilterGroup::eACTOR | FilterGroup::ePLAYER_RG;
+		setupFiltering(capsule->collider, myMaskCapsule, notCollideCapsule);
 		for (auto& it : ragdoll->bone_map) {
 			if (it.first == bone_id) {
 				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
@@ -215,6 +256,10 @@ void TCompRagdoll::setCollisonPlayerBone(bool active, int bone_id){
 			| FilterGroup::eLEVEL
 			| FilterGroup::eNON_COLLISION;
 		PxShape* collider;
+		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
+		PxU32 myMaskCapsule = FilterGroup::ePLAYER;
+		PxU32 notCollideCapsule = FilterGroup::ePLAYER_RG;
+		setupFiltering(capsule->collider, myMaskCapsule, notCollideCapsule);
 		for (auto& it : ragdoll->bone_map) {
 			if (it.first == bone_id) {
 				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
@@ -229,7 +274,7 @@ void TCompRagdoll::setCollisonBossBone(bool active, int bone_id){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::eBOSSRAGDOLL;
-		PxU32 notCollide = FilterGroup::eUNDEFINED;
+		PxU32 notCollide = FilterGroup::eBOMBSPECIAL;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
 			if (it.first == bone_id) {
@@ -243,6 +288,7 @@ void TCompRagdoll::setCollisonBossBone(bool active, int bone_id){
 		PxU32 myMask = FilterGroup::eBOSSRAGDOLL;
 		PxU32 notCollide = FilterGroup::eLEVEL
 			| FilterGroup::eBOSSHEAD
+			| FilterGroup::eBOMBSPECIAL
 			| FilterGroup::eBOSSPARTS;
 		PxShape* collider;
 		for (auto& it : ragdoll->bone_map) {
@@ -250,7 +296,7 @@ void TCompRagdoll::setCollisonBossBone(bool active, int bone_id){
 				it.second->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 				it.second->getShapes(&collider, 1);
 				if (it.first == 6){
-					setupFiltering(collider, FilterGroup::eBOSSHEAD, FilterGroup::eBOSSRAGDOLL);
+					setupFiltering(collider, FilterGroup::eBOSSHEAD, FilterGroup::eBOSSRAGDOLL | FilterGroup::eBOMBSPECIAL);
 				}
 				else {
 					setupFiltering(collider, myMask, notCollide);
@@ -344,9 +390,8 @@ void TCompRagdoll::breakJoints() {
 	float torque;
 	for (PxD6Joint* joint : ragdoll->articulations) {
 		joint->getBreakForce(force, torque);
-		if (force == 10000) {
+		if (force == 10000000) {
 			joint->setBreakForce(0, 0);
-			joint->setConstraintFlag(PxConstraintFlag::eBROKEN, true);
 		}
 	}
 }

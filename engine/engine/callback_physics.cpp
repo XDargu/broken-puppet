@@ -40,8 +40,11 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					PxReal force = getForce(second_rigid->getMass(), pairs, i);
 					//float force_float = force;
 					XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", second_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
-					if (force > force_threshold)
+					if (force > force_threshold){
+						if (char_equal(secondActorEntity->getName(), "machacabuelas"))
+							force = force * 3;
 						firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
+					}
 				}
 			} else if((secondActorEntity->hasTag("player")) && (firstActorEntity->hasTag("actor"))){
 			//Colision entre player y actor
@@ -52,8 +55,11 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 					PxReal force = getForce(first_rigid->getMass(), pairs, i);
 					//float force_float = force;
 					XDEBUG("force impact player to actor: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
-					if (force > force_threshold)
+					if (force > force_threshold){	
+						if (char_equal(firstActorEntity->getName(), "machacabuelas"))
+							force = force * 3;
 						secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
+					}
 				}
 			}
 			else if ((secondActorEntity->hasTag("actor")) && (firstActorEntity->hasTag("enemy"))){
@@ -311,7 +317,7 @@ PxFilterFlags FilterShader(
 	//Si la colision se produce entre dos entities descartadas entre si, se anula dicha colision.
 	//Si no es así, se hacen las comprobaciones pertinentes y se deja la colision
 
-	if ((filterData1.word0 == FilterGroup::eNON_COLLISION)||(filterData0.word0 == FilterGroup::eNON_COLLISION))
+	if ((filterData1.word0 == FilterGroup::eNON_COLLISION) || (filterData0.word0 == FilterGroup::eNON_COLLISION) || (filterData1.word0 == FilterGroup::eBOMBSPECIAL) || (filterData0.word0 == FilterGroup::eBOMBSPECIAL))
 		return PxFilterFlag::eSUPPRESS;
 	else{
 
@@ -338,7 +344,7 @@ PxFilterFlags FilterShader(
 				}
 				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::ePLAYER)){
 					//Colisiones entre actores (cajas) y enemigos
-					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND  | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND  | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 					return PxFilterFlag::eDEFAULT;
 				}
 				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eLEVEL)){

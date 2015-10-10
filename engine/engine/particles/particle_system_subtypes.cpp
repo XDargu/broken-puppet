@@ -358,6 +358,10 @@ std::string TParticleEmitterGeneration::getXMLDefinition() {
 	def += (random_rotation ? "true" : "false");
 	def += "\" ";
 
+	def += "use_physx=\"";
+	def += (ps->use_physx ? "true" : "false");
+	def += "\" ";
+
 	def += "/>";
 
 	return def;
@@ -471,6 +475,19 @@ void TParticleUpdaterPhysx::update(TParticle* particle, float elapsed) {
 	particle->position.x = position.x;
 	particle->position.y = position.y;
 	particle->position.z = position.z;
+}
+
+std::string TParticleUpdaterPhysx::getXMLDefinition() {
+	std::string def = "";
+
+	def += "<updater type=\"physx\" ";
+
+	def += "gravity=\"";
+	def += std::string(ps->psx->getParticlesGravity() ? "true" : "false" ) + "\" ";
+
+	def += "/>";
+
+	return def;
 }
 
 void TParticleUpdaterMovement::update(TParticle* particle, float elapsed) {

@@ -27,6 +27,7 @@ public:
 		std::string next;
 	};
 	unsigned int p_group_counter;
+	bool first_blood;
 private:
 	std::map<std::string, CTimer> timers;
 	std::vector<CHandle> triggers;
@@ -58,6 +59,10 @@ private:
 	// Lock on target
 	CHandle lock_on_target;
 	XMVECTOR lock_on_position;
+
+	// Shakecam
+	bool shake_cam;
+	float shake_amount;
 
 	std::string scene_to_load;
 
@@ -99,7 +104,7 @@ public:
 	void addSubtitle(std::string guid, Subtitle subtitle);
 
 	CHandle instantiateParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
-
+	CHandle instantiateParticleGroupOneShot(std::string pg_name, CVector position, CQuaterion rotation = XMQuaternionIdentity());
 
 	void startPathMovement(const char* name);
 
@@ -160,6 +165,8 @@ public:
 
 	// PARTICLES
 	void createParticleGroup(std::string pg_name, CVector position, CQuaterion rotation);
+	// OBJECTS
+	void createPrefab(std::string name, CVector position, CQuaterion rotation);
 
 	// STRING EVENTS
 	void stringThrown();
@@ -190,6 +197,8 @@ public:
 	void lockOnPosition(CVector position);
 	void releaseCameraLock();
 	void playAnimation(std::string name, CMCVObject target_object);
+	void shakeCamera(float amount);
+	void stopShakeCamera();
 
 	// MISC
 	void print(std::string text);

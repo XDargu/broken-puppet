@@ -2,7 +2,8 @@
 #define INC_APP_H_
 
 #include "utils.h"
-
+#include <thread>
+#include <mutex>
 class CEntity;
 
 class CApp {
@@ -23,10 +24,14 @@ class CApp {
 	void renderDebugEntities();
 	void activateDebugMode(bool active);
 	float slow_motion_counter;
-public:
 
+	std::thread* bar;
+	bool video_sound_played;
+
+public:
 	std::string current_scene_name;
 	std::string first_scene;
+	std::string menu_scene;
 	// Timer and stats
 	CDBGTimer load_timer;
 	CDBGTimer aux_timer;
@@ -63,6 +68,7 @@ public:
 
 	CApp();
 	void loadConfig();
+	void preLoad();
 	bool create();
 	void doFrame();
 	void destroy();
@@ -80,6 +86,7 @@ public:
 
 	bool renderVideo();
 	void loadVideo(const char* name);
+	void playFinalVideo();
 	unsigned int getMaxNumNeedles();
 };
 

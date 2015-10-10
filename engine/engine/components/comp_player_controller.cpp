@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_player_controller.h"
 #include "comp_life.h"
+#include "comp_name.h"
 #include "comp_transform.h"
 #include "comp_collider_capsule.h"
 #include "comp_rigid_body.h"
@@ -10,6 +11,9 @@
 #include "../audio/sound_manager.h"
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
+#include "handle\prefabs_manager.h"
+
+const string particles_hit_name = "ps_porcelain_hit";
 
 TCompPlayerController::TCompPlayerController() : old_target_transform(CHandle()) {
 	fsm_player_legs = new FSMPlayerLegs;
@@ -33,11 +37,11 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	fsm_player_legs->torso = fsm_player_torso;
 	fsm_player_torso->legs = fsm_player_legs;
 
-	hit_cool_down = 1;
+	hit_cool_down = 0.5f;
 	time_since_last_hit = 0;
 
 	//55000.f
-	physx::PxReal threshold = 55000.f;
+	physx::PxReal threshold = 30000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
 	footsteps = CSoundManager::get().getInstance("STEPS_KATH");
@@ -76,6 +80,12 @@ void TCompPlayerController::init() {
 	CSoundManager::get().addFX2DTrack("string_grab_9.ogg", "string_player_grab", "pull");
 	CSoundManager::get().addFX2DTrack("string_grab_7.ogg", "string_player_grab2", "pull");*/
 
+	entity_player = (CHandle(this).getOwner());
+	player_trans = (((CEntity*)entity_player)->get<TCompTransform>());
+
+	fsm_player_legs->SetEntity(entity_player);
+	fsm_player_torso->SetEntity(entity_player);
+
 	fsm_player_legs->Init();
 	fsm_player_torso->Init();
 	
@@ -85,11 +95,24 @@ void TCompPlayerController::init() {
 	displacement = 0;
 	counter = 0;*/
 
+	// Create back needles
+	CHandle pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete1");
+		}
+	}
+	pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete2");
+		}
+	}
+
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
-
-	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
-
 
 	float offset_size = 0.05f;
 	float offset_rot_size = 0.2f;
@@ -99,10 +122,50 @@ void TCompPlayerController::init() {
 
 	offset_rot_needle_back1 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
 	offset_rot_needle_back2 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
+
+	// Create jump particle prefab
+	CHandle pref_entity = prefabs_manager.getInstanceByName("player_jump_pref");
+	if (pref_entity.isValid()) {
+		TCompTransform* pref_trans = ((CEntity*)pref_entity)->get<TCompTransform>();
+		if (pref_trans) {
+			pref_trans->position = trans->position;
+			pref_trans->init();
+		}
+	}
+
+	entity_jump_dust = CEntityManager::get().getByName("PlayerParticleJumpDust");
+
+	// Create drops particle prefab
+	pref_entity = prefabs_manager.getInstanceByName("player_drops_pref");
+	if (pref_entity.isValid()) {
+		TCompTransform* pref_trans = ((CEntity*)pref_entity)->get<TCompTransform>();
+		if (pref_trans) {
+			pref_trans->position = trans->position + XMVectorSet(0, 1.5f, 0, 0);
+			pref_trans->init();
+		}
+		TCompParticleGroup* pref_pg = ((CEntity*)pref_entity)->get<TCompParticleGroup>();
+		if (pref_pg) {
+			if (pref_pg->particle_systems->size() > 0)
+			{
+				(*pref_pg->particle_systems)[0].updater_size->initial_size = 0;
+				(*pref_pg->particle_systems)[0].updater_size->final_size = 0;
+			}
+		}
+	}
+
+	entity_drops = CEntityManager::get().getByName("PlayerParticleDrops");
 }
 
 void TCompPlayerController::update(float elapsed) {
-	time_since_last_hit += elapsed;
+	CHandle player_handle = CHandle(this).getOwner();
+	CEntity* player_entity = (CEntity*)player_handle;
+	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
+
+	bool can_receive_hit = canReceiveDamage();
+
+	if (can_receive_hit) {
+		time_since_last_hit += elapsed;
+	}
 
 	fsm_player_torso->update(elapsed);
 
@@ -111,10 +174,10 @@ void TCompPlayerController::update(float elapsed) {
 		fsm_player_legs->ChangeState("fbp_Ragdoll");
 	}	
 
-	TCompTransform* trans = assertRequiredComponent<TCompTransform>(this);
-	TCompRigidBody* rigid = assertRequiredComponent<TCompRigidBody>(this);
-	TCompCharacterController* c_controller = assertRequiredComponent<TCompCharacterController>(this);
-	TCompSkeleton* skeleton = assertRequiredComponent<TCompSkeleton>(this);
+	TCompTransform* trans = player_entity->get<TCompTransform>();
+	TCompRigidBody* rigid = player_entity->get<TCompRigidBody>();
+	TCompCharacterController* c_controller = player_entity->get<TCompCharacterController>();
+	TCompSkeleton* skeleton = player_entity->get<TCompSkeleton>();
 
 	/*dbg((
 		"X:" + std::to_string(XMVectorGetX(trans->position)) + ", "
@@ -125,6 +188,31 @@ void TCompPlayerController::update(float elapsed) {
 	float water_level = CApp::get().water_level;
 	float atten = 0.2f;
 	float water_multiplier = 1;
+	
+	float drops_size = 0;
+	float drops_size_final = 0;
+
+	if ((rigid->rigidBody->getGlobalPose().p.y + 1.7f) < water_level)  {
+		last_time_in_water = 0.f;
+	}
+	else {
+		last_time_in_water += elapsed;
+		if (last_time_in_water < 8) {
+			drops_size = 0.1f;
+			drops_size_final = 0.2f;
+		}
+	}
+
+	if (entity_drops.isValid()) {
+		TCompParticleGroup* pref_pg = ((CEntity*)entity_drops)->get<TCompParticleGroup>();
+		if (pref_pg) {
+			if (pref_pg->particle_systems->size() > 0)
+			{
+				(*pref_pg->particle_systems)[0].updater_size->initial_size = drops_size;
+				(*pref_pg->particle_systems)[0].updater_size->final_size = drops_size_final;
+			}
+		}
+	}
 
 	if (rigid->rigidBody->getGlobalPose().p.y < water_level - atten)  {
 		float proportion = min(1, (water_level - rigid->rigidBody->getGlobalPose().p.y) / atten);
@@ -170,47 +258,10 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 
-	/*
-	PxRaycastBuffer hit;
-	Physics.raycast(camera_transform->position, camera_transform->getFront(), 1000, hit);
-
-	if (hit.hasBlock) {
-		CHandle target_entity(hit.block.actor->userData);
-		if (target_entity.isValid()) {
-			if (!(((CEntity*)target_entity)->hasTag("player"))) {
-				TCompTransform* target_transform = ((CEntity*)target_entity)->get<TCompTransform>();
-				if (!(CHandle(target_transform) == old_target_transform)) {
-					if (old_target_transform.isValid()) {
-						TCompTransform* old_t_transform = old_target_transform;
-						if (old_t_transform->getType() == 80)
-							old_t_transform->setType(1);
-						if (((TCompTransform*)old_target_transform)->getType() == 90)
-							((TCompTransform*)old_target_transform)->setType(0.95f);
-					}
-				}
-				if (target_transform->getType() == 100) {
-					target_transform->setType(0.8f);
-					old_target_transform = target_transform;
-				}
-				if (target_transform->getType() == 95) {
-					target_transform->setType(0.9f);
-					old_target_transform = target_transform;
-				}
-			}
-		}
-	}*/
-	/*displacement += V3DISTANCE(prev_pos, trans->position);
-	counter += elapsed;
-	if (counter >= 1) {
-		XDEBUG("Displacement: %f", displacement);
-		displacement = 0;
-		counter = 0;
-	}
-	prev_pos = trans->position;*/
 
 	// Back needles
 	if (needle_back1.isValid() && needle_back2.isValid()) {
-		TCompSkeleton* skel = assertRequiredComponent<TCompSkeleton>(this);
+		TCompSkeleton* skel = player_entity->get<TCompSkeleton>();
 		XMVECTOR back_pos = skel->getPositionOfBone(58);
 		XMVECTOR back_rot = skel->getRotationOfBone(58);
 
@@ -244,12 +295,11 @@ void TCompPlayerController::update(float elapsed) {
 	}*/
 
 	// Footsteps sound
-
 	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+	float surface_value = surface_tag;
 
-	bool moving = c_controller->OnGround() && rigid->rigidBody->getLinearVelocity().magnitudeSquared() > 0.4f;
-	float surface_value = moving ? (surface_tag + 1) : 0;
-	bool running_value = io.isPressed(CIOStatus::RUN);
+	bool moving = fsm_player_legs->isMoving();	
+	bool running_value = fsm_player_legs->isRunning();
 
 	if (moving) {
 		footstep_counter += elapsed;
@@ -258,26 +308,15 @@ void TCompPlayerController::update(float elapsed) {
 		float time_modifier = (running_value ? 0.75f : 1) * (1 / water_multiplier);
 
 		if (footstep_counter >= base_step * time_modifier) {
-			CSoundManager::get().playEvent("STEPS_KATH", trans->position);
+			CSoundManager::SoundParameter params[] = {
+				{ "Material", surface_value }
+			};
+
+			CSoundManager::get().playEvent("STEPS_KATH", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
 			footstep_counter = 0.0f;
 		}
 	}
 	
-	
-	
-	/*FMOD::Studio::ParameterInstance* surface = NULL;
-	footsteps->getParameter("surface", &surface);
-	FMOD_RESULT r = surface->setValue(surface_value);
-
-	float running_value = io.isPressed(CIOStatus::RUN);
-	FMOD::Studio::ParameterInstance* running = NULL;
-	footsteps->getParameter("running", &running);
-	r = running->setValue(running_value);
-
-	// 3D Attributes
-	FMOD_3D_ATTRIBUTES attributes = { { 0 } };
-	attributes.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
-	r = footsteps->set3DAttributes(&attributes);*/
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {
@@ -289,14 +328,17 @@ void TCompPlayerController::fixedUpdate(float elapsed) {
 //}
 
 void TCompPlayerController::actorHit(const TActorHit& msg) {
-	CHandle player_handle = CHandle(this).getOwner();
-	CEntity* player_entity = (CEntity*)player_handle;
-	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
-	if ((!(p_ragdoll->isRagdollActive()) || (fsm_player_legs->getCurrentNode() == "fbp_WakeUp"))){
+	bool can_receive_hit = canReceiveDamage();
+
+	if (can_receive_hit){
 		if (time_since_last_hit >= hit_cool_down){
 			dbg("Force recieved is  %f\n", msg.damage);
 			fsm_player_legs->EvaluateHit(msg.damage);
 			time_since_last_hit = 0;
+
+			//Porcelain hit when player is hurt		
+			XMVECTOR particles_pos = ((TCompTransform*)player_trans)->position  + XMVectorSet(0, 1.2f, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particles_hit_name, particles_pos);
 
 			// Boss
 			if (msg.is_boss){
@@ -309,12 +351,6 @@ void TCompPlayerController::actorHit(const TActorHit& msg) {
 }
 
 void TCompPlayerController::onAttackDamage(const TMsgAttackDamage& msg) {
-	if (time_since_last_hit >= hit_cool_down){
-		dbg("Damage recieved is  %f\n", msg.damage);
-		//fsm_player_legs.last_hit = 2;
-		fsm_player_legs->EvaluateHit(msg.damage);
-		time_since_last_hit = 0;
-	}
 }
 
 
@@ -346,4 +382,18 @@ void TCompPlayerController::bossImpact(CHandle boss){
 	}
 	// hurt the player
 	/**/
+}
+
+bool TCompPlayerController::canReceiveDamage() {
+	CHandle player_handle = CHandle(this).getOwner();
+	CEntity* player_entity = (CEntity*)player_handle;
+	TCompRagdoll* p_ragdoll = player_entity->get<TCompRagdoll>();
+
+	bool can_receive_hit = !p_ragdoll->isRagdollActive();
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_WakeUp";
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_Hurt";
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_WakeUpTeleport";
+	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_Dead";
+
+	return can_receive_hit;
 }

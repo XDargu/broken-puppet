@@ -64,6 +64,7 @@ CSoundManager            &sm = CSoundManager::get();
 
 CEntityManager &entity_manager = CEntityManager::get();
 CPhysicsManager &physics_manager = CPhysicsManager::get();
+std::mutex	preLoadMutex;
 
 // Video
 TheoraVideoManager *mgr;
@@ -88,7 +89,9 @@ CApp::CApp()
 	, yres(480)
 	, time_modifier(1)
 	, slow_motion_counter(0)
-{ }
+{
+	bar = nullptr;
+}
 
 void CApp::loadConfig() {
 	// Parse xml file...
@@ -358,6 +361,17 @@ void initManagers() {
 
 }
 
+void CApp::preLoad(){
+	preLoadMutex.lock();
+	/*CImporterResourceLoader loader;
+	loader.xmlParseFile("data/scenes/scene_final_boss.xml");
+	loader.xmlParseFile("data/scenes/scene_4.xml");
+	loader.xmlParseFile("data/scenes/scene_3.xml");
+	loader.xmlParseFile("data/scenes/scene_2.xml");
+	loader.xmlParseFile("data/scenes/scene_1.xml");	*/
+	preLoadMutex.unlock();
+}
+
 bool CApp::create() {
 	CErrorContext ec("Creating", "app");
 
@@ -376,8 +390,9 @@ bool CApp::create() {
 	createManagers();	
 
 	game_state = TGameState::INITIAL_VIDEO;
+	video_sound_played = false;
 #ifndef _DEBUG
-	loadVideo("bunny.ogg");
+	loadVideo("intro_BP.ogv");
 #endif
 
 #ifdef _DEBUG
@@ -424,13 +439,9 @@ bool CApp::create() {
 	physics_manager.init();
 	
 	// Preload scenes
-	/*XDEBUG("First load");
-	CImporterResourceLoader loader;
-	loader.xmlParseFile("data/scenes/scene_1.xml");
-	loader.xmlParseFile("data/scenes/scene_2.xml");
-	loader.xmlParseFile("data/scenes/scene_3.xml");
-	loader.xmlParseFile("data/scenes/scene_4.xml");
-	XDEBUG("First load ended");*/
+	bar = new std::thread(&CApp::preLoad, this);
+	
+	menu_scene = "data/scenes/scene_1.xml";
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
@@ -567,9 +578,32 @@ void CApp::doFrame() {
 void CApp::update(float elapsed) {
 
 	if (game_state == TGameState::INITIAL_VIDEO) {
+		if (!video_sound_played) {
+			CSoundManager::get().playEvent("INITIAL_VIDEO", "video_sound");
+			CSoundManager::get().update(elapsed);
+			video_sound_played = true;
+		}
+
 		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
+			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+			CSoundManager::get().update(elapsed);
 			loadScene(first_scene);
+		}
+		return;
+	}
+
+	if (game_state == TGameState::FINAL_VIDEO) {
+		if (!video_sound_played) {
+			CSoundManager::get().playEvent("FINAL_VIDEO", "video_sound");
+			CSoundManager::get().update(elapsed);
+			video_sound_played = true;
+		}
+		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+			game_state = TGameState::MAIN_MENU;
+			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+			CSoundManager::get().update(elapsed);
+			loadScene(menu_scene);
 		}
 		return;
 	}
@@ -583,6 +617,7 @@ void CApp::update(float elapsed) {
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
 		CNav_mesh_manager::get().keep_updating_navmesh = false;
 		CNav_mesh_manager::get().setNeedNavMesh(false);
+		CNav_mesh_manager::get().generate_nav_mesh = false;
 		destroy();
 		exit(0);
 	}	
@@ -679,6 +714,7 @@ void CApp::update(float elapsed) {
 		underwater.amount = 0;
 	}
 
+
 	//----------------------- PRUEBAS NAVMESH/DETOUR ------------------------------------------
 	/*XMVECTOR ini = XMVectorSet(0, 0, 0, 0);
 	XMVECTOR fin = XMVectorSet(-8.05f, 0.10f, -27.60f, 0.f);
@@ -721,6 +757,7 @@ void CApp::update(float elapsed) {
 	// Update ---------------------
 	ctes_global.get()->world_time += elapsed;
 	ctes_global.get()->elapsed = elapsed;
+	ctes_global.get()->global_water_level = max(ctes_global.get()->global_water_level, water_level);
 
 	int needle_count = 0;
 	for (auto& string : CRope_manager::get().getStrings()) {
@@ -845,6 +882,25 @@ void CApp::render() {
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
 			loadScene(first_scene);
+			if (bar && bar->joinable()){
+				bar->join();
+				delete bar;
+				bar = nullptr;
+			}
+		}
+		return;
+	}
+
+	if (game_state == TGameState::FINAL_VIDEO) {
+		bool playVideo = renderVideo();
+		if (!playVideo) {
+			game_state = TGameState::MAIN_MENU;
+			loadScene(menu_scene);
+			if (bar && bar->joinable()){
+				bar->join();
+				delete bar;
+				bar = nullptr;
+			}
 		}
 		return;
 	}
@@ -1066,13 +1122,23 @@ void CApp::render() {
 	CTraceScoped scope_gui("GUI");
 	if (h_player.isValid()) {
 		int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-		life_val /= 20;
-		int leng = 100;
+		life_val /= 10;
+		int leng = 50;
+		int spearation = 12;
 		activateBlendConfig(BLEND_CFG_BY_SRC_ALPHA);
 		activateZConfig(ZConfig::ZCFG_DISABLE_ALL);
-		for (int i = 0; i < life_val; ++i) {			
-			//drawTexture2D(20 + (leng + 2)* i, 20, leng, leng, texture_manager.getByName("vida"));
-		}		
+		int life_count = 0;
+		int counter = 0;
+		// Life val is over 10
+		while (life_count < life_val) {
+			// for each 2 of live, draw a full heart, if only one remains, draw a half heart
+			if (life_val - life_count == 1)
+				drawTexture2D(35 + (leng + spearation)* counter, 30, leng, leng, texture_manager.getByName("life_half"));
+			else 
+				drawTexture2D(35 + (leng + spearation)* counter, 30, leng, leng, texture_manager.getByName("life_full"));
+			life_count += 2;
+			counter++;
+		}	
 			
 		bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
 		if (can_throw) {
@@ -1081,6 +1147,7 @@ void CApp::render() {
 		else {
 			drawTexture2D(xres / 2.f - 16, yres / 2.f - 16, 32, 32, texture_manager.getByName("crosshair_cant"));
 		}
+
 
 		activateZConfig(ZConfig::ZCFG_DEFAULT);
 		activateBlendConfig(BLEND_CFG_DEFAULT);
@@ -1098,18 +1165,16 @@ void CApp::render() {
 		activateBlendConfig(BLEND_CFG_DEFAULT);*/
 
 		//const CTexture *cross = texture_manager.getByName("crosshair_can");
+
+		//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
+		//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
+		//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+		//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
+		//activateBlendConfig(BLEND_CFG_DEFAULT);		
 	}
 
-	//activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
-	//drawDialogBox3DDynamic(camera, XMVectorSet(3, 3, 0, 0), 3000, 1500, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-	//drawDialogBox3D(camera, XMVectorSet(0, 3, 0, 0), 300, 150, texture_manager.getByName("gui_test1"), "gui_dialog_box");
-	//drawTexture3DDynamic(camera, XMVectorSet(0, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	//drawTexture3D(camera, XMVectorSet(3, 3, 0, 0), 200, 80, texture_manager.getByName("smoke"));
-	//activateBlendConfig(BLEND_CFG_DEFAULT);
-
-	/*int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
-	std::string life_text = "Life: " + std::to_string((int)(life_val / 10)) + "/10";
-	font.print(15, 15, life_text.c_str());*/
+	
 
 	/*std::string strings_text = "Ropes: " + std::to_string(numStrings()) + "/4";
 	font.print(15, 35, strings_text.c_str());*/
@@ -1271,6 +1336,8 @@ void CApp::renderEntities() {
 		CNav_mesh_manager::get().pathRender();
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
+	getObjManager<TCompBtGrandma>()->renderDebug3D();
+
 }
 
 void CApp::renderDebugEntities() {
@@ -1387,7 +1454,9 @@ void CApp::activateDebugMode(bool active) {
 }
 
 void CApp::destroy() {
+#ifdef _DEBUG
 	TwTerminate();
+#endif
 	deferred.destroy();
 
 	sharpen.destroy();
@@ -1430,11 +1499,10 @@ void CApp::destroy() {
 		mgr->destroyVideoClip(clip);
 		videoTexture->destroy();
 		delete mgr;
-		tex->Release();
-		m_shaderResourceView->Release();
+		delete videoTexture;
 	}
 	::render.destroyDevice();
-
+	
 	// Destro navmesh
 	CNav_mesh_manager().get().~CNav_mesh_manager();
 }
@@ -1471,6 +1539,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	bool is_ok = true;
 	pause = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
 
 	load_timer.reset();
 	aux_timer.reset();
@@ -1479,16 +1548,15 @@ void CApp::loadScene(std::string scene_name) {
 	load_skel_time = 0;
 	load_ragdoll_time = 0;
 
-	CNav_mesh_manager::get().clearNavMesh();
 	Citem_manager::get().clear();
 	CImporterParser p;
 	aimanager::get().clear();
-	dbg("lock:%b", CNav_mesh_manager::get().getLock());
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
 	while (CNav_mesh_manager::get().getLock()){
-		dbg("Dentro bucle");
-		continue;
+		std::string prueba = "1";
 	}
-	dbg("Pasado bucle");
+
+	CNav_mesh_manager::get().clearNavMesh();
 
 	/*deferred.destroy();
 	sharpen.destroy();
@@ -1523,6 +1591,7 @@ void CApp::loadScene(std::string scene_name) {
 	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
 	//physics_manager.init();
+	CSoundManager::get().clear();
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
 	
@@ -1564,11 +1633,9 @@ void CApp::loadScene(std::string scene_name) {
 		CNav_mesh_manager::get().setNavMeshClimb(0);
 	}
 	// Navmesh initialization
-	CNav_mesh_manager::get().setNeedNavMesh(true);
 	//Check the scene and change the climb atributte from the navmesh 
 
 	bool valid = CNav_mesh_manager::get().build_nav_mesh();
-
 
 	CEntity* e = entity_manager.getByName("PlayerCamera");	
 	//XASSERT(CHandle(e).isValid(), "Camera not valid");
@@ -1634,6 +1701,8 @@ void CApp::loadScene(std::string scene_name) {
 		water_level = XMVectorGetY(water_t->position);
 	}
 
+	ctes_global.get()->global_water_level = water_level;
+
 	render_manager.init();
 	ctes_global.get()->use_lightmaps = 0;
 
@@ -1687,8 +1756,8 @@ void CApp::loadScene(std::string scene_name) {
 	}
 	else if (scene_name == "data/scenes/scene_final_boss.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(65.f);
-		ctes_global.get()->use_lightmaps = 5;
+		cam->changeZFar(150.0f);
+		ctes_global.get()->use_lightmaps = 0;
 	}
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());
@@ -1740,6 +1809,8 @@ void CApp::loadVideo(const char* name)
 	videoTexture = new CTexture();
 	endframe = int(clip->getDuration() * clip->getFPS());
 	::render.device->CreateShaderResourceView(tex, 0, &m_shaderResourceView);
+	setDbgName(tex, "Video texture");
+	setDbgName(m_shaderResourceView, "Video resource view");
 	clip->play();
 #endif
 }
@@ -1775,14 +1846,7 @@ bool CApp::renderVideo()
 		::render.ctx->Unmap(tex, 0);
 		clip->popFrame();
 		if (frame->getFrameNumber() >= (endframe - 1)){
-			clip->stop();
-			mgr->destroyVideoClip(clip);
-			clip = nullptr;
-			delete mgr;
-			mgr = nullptr;
-			videoTexture->destroy();
-			tex->Release();
-			m_shaderResourceView->Release();
+			clip->stop();			
 			return false;
 		}
 	}
@@ -1802,4 +1866,11 @@ bool CApp::renderVideo()
 
 unsigned int CApp::getMaxNumNeedles(){
 	return max_num_needles;
+}
+
+void CApp::playFinalVideo() {
+	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
+	loadVideo("final_BP.ogv");
+	video_sound_played = false;
+	game_state = TGameState::FINAL_VIDEO;
 }

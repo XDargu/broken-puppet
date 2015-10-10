@@ -69,7 +69,7 @@ public:
 		SAFE_DELETE(emitter_generation);
 
 		SAFE_DELETE(renderer);
-		if (psx != nullptr) { psx->releaseAllParticles(); }		
+		if (psx != nullptr) { psx->destroy(); }
 		SAFE_DELETE(psx);
 
 		if (instances_data) {

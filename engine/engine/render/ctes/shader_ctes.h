@@ -84,8 +84,8 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
   float4 static_needles[4];
   float  world_time;
   float use_lightmaps;
-  float elapsed, dummy_global1;
-  
+  float elapsed;
+  float global_water_level;
   // Aligned to 16 bytes  
 };
 

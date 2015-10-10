@@ -6,6 +6,8 @@
 #include "components\comp_skeleton_ik.h"
 #include "ai\logic_manager.h"
 
+CSoundManager& sound_manager = CSoundManager::get();
+
 FSMPlayerLegs::FSMPlayerLegs()
 {
 	can_move = true;
@@ -13,6 +15,14 @@ FSMPlayerLegs::FSMPlayerLegs()
 
 FSMPlayerLegs::~FSMPlayerLegs()
 {
+}
+
+bool FSMPlayerLegs::isMoving() {
+	return ((getState() == "fbp_Walk") || (getState() == "fbp_Run"));
+}
+
+bool FSMPlayerLegs::isRunning() {
+	return getState() == "fbp_Run";
 }
 
 void FSMPlayerLegs::Init()
@@ -51,6 +61,7 @@ void FSMPlayerLegs::Init()
 	comp_skeleton_ik = ((CEntity*)entity)->get<TCompSkeletonIK>();
 	comp_character_controller = ((CEntity*)entity)->get<TCompCharacterController>();
 	comp_player_controller = ((CEntity*)entity)->get<TCompPlayerController>();
+	player_transform = ((CEntity*)entity)->get<TCompTransform>();
 	comp_player_pivot_transform = ((CEntity*)(CEntityManager::get().getByName("PlayerPivot")))->get<TCompTransform>();
 	entity_camera = CEntityManager::get().getByName("PlayerCamera");
 
@@ -95,7 +106,8 @@ void FSMPlayerLegs::Idle(float elapsed){
 	int animation = torso->up_animation ? 8 : 0;
 
 	if (animation != current_animation_id) {
-		skeleton->stopAnimation(current_animation_id);
+		//skeleton->stopAnimation(current_animation_id);
+		stopAllAnimations();
 		skeleton->loopAnimation(animation);
 		current_animation_id = animation;
 	}	
@@ -223,7 +235,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_walk");
 	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
 	((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier = walk_speed;
-	if (!CIOStatus::get().isPressed(CIOStatus::RUN)){
+	if (CIOStatus::get().isPressed(CIOStatus::RUN)){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(9);
 			skeleton->stopAnimation(1);
@@ -327,7 +339,7 @@ void FSMPlayerLegs::Run(float elapsed){
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_run");
 	//((TCompUnityCharacterController*)comp_unity_controller)->Move(physx::PxVec3(0, 0, 1), false, false, physx::PxVec3(0, 0, 1));
 	((TCompCharacterController*)comp_character_controller)->moveSpeedMultiplier = run_speed;
-	if (CIOStatus::get().isPressed(CIOStatus::RUN)){
+	if (!CIOStatus::get().isPressed(CIOStatus::RUN)){
 		if (((TCompCharacterController*)comp_character_controller)->IsJumping()){
 			skeleton->stopAnimation(10);
 			skeleton->stopAnimation(2);
@@ -408,7 +420,24 @@ void FSMPlayerLegs::Jump(float elapsed){
 	if (on_enter) {
 		//skeleton->loopAnimation(6);
 		skeleton->playAnimation(5);
-		CSoundManager::get().playEvent("KATH_JUMP");
+		/*
+		Lanzar sonido no prioritario
+		CSoundManager& sm = CSoundManager::get();
+		if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sm.playEvent("KATH_JUMP", "kath_expr");
+		}
+
+		Lanzar sonido prioritario
+		CSoundManager& sm = CSoundManager::get();
+		if (sm.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sm.stopNamedInstance("kath_expr", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+			sm.playEvent("KATH_JUMP", "kath_expr_p");
+		}*/
+
+		//CSoundManager::get().playEvent("KATH_JUMP");
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_JUMP", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 	}
 
 	if (state_time > 0.5) {		
@@ -455,6 +484,10 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 		PxVec3 actor_position;
 		PxVec3 actor_normal;
 		
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_THROW", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
+
 		if (hit_actor != nullptr) {
 
 			torso->getThrowingData(hit_actor, actor_position, actor_normal);
@@ -465,6 +498,7 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 			CSoundManager::SoundParameter params[] = {
 				{ "TargetDist", dist }
 			};
+			//Throw movement sound. 
 			CSoundManager::get().playEvent("STRING_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		}
 	
@@ -503,6 +537,10 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 		PxVec3 actor_position;
 		PxVec3 actor_normal;
 
+ 		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_THROW", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
+
 		if (hit_actor != nullptr) {
 
 			torso->getThrowingData(hit_actor, actor_position, actor_normal);
@@ -513,6 +551,7 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 			CSoundManager::SoundParameter params[] = {
 				{ "TargetDist", dist }
 			};
+			//Throw movement sound. 
 			CSoundManager::get().playEvent("STRING_THROW", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 		}
 	
@@ -617,7 +656,12 @@ void FSMPlayerLegs::Land(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 0 }
 		};
-		CSoundManager::get().playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Context Land sound
+		CSoundManager::get().playEvent("LANDING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Kath landing expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		// Jump particle
 		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
@@ -644,7 +688,7 @@ void FSMPlayerLegs::Land(float elapsed){
 			ChangeState("fbp_Idle");
 		}
 		else {
-			if (state_time >= 0.5f){
+			if (state_time >= 0.45f){
 				//skeleton->stopAnimation(7);
 				ChangeState("fbp_Idle");
 			}
@@ -695,7 +739,12 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		CSoundManager::SoundParameter params[] = {
 			{ "force", 1 }
 		};
-		CSoundManager::get().playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		CSoundManager::get().playEvent("LANDING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+		//Context Wrong Land sound
+		//Kath wrong landing expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 	}
 
 	if (state_time > 0.2f) {
@@ -721,6 +770,11 @@ void FSMPlayerLegs::Hurt(float elapsed){
 
 	if (on_enter) {
 		skeleton->loopAnimation(28);
+
+		//Kath hit expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_HIT", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 	}
 
 	canThrow = false;
@@ -753,7 +807,10 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 	if (on_enter) {
 
-		CSoundManager::get().playEvent("KATH_RAGDOLL");
+		//Kath ragdoll expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_RAGDOLL", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
 		stopAllAnimations();
@@ -814,10 +871,10 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		// Recolocar la cápsula donde el ragdoll, para que la cámara lo siga
 		if (m_ragdoll) {
 			// Bone 003: Spine
-			XMVECTOR spine_pos = m_skeleton->getPositionOfBone(3);
+			XMVECTOR spine_pos = m_skeleton->getPositionOfBone(3) + XMVectorSet(0, 1, 0, 0);
 
 			XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(rigidbody->rigidBody->getGlobalPose().p);
-			XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 0.1f);
+			XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 1.f);
 			
 			/*((TCompCharacterController*)comp_character_controller)->Move(
 				Physics.XMVECTORToPxVec3(pos_final - pos_orig)
@@ -863,7 +920,11 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
 	if (on_enter) {
-		CSoundManager::get().playEvent("KATH_WAKEUP");
+
+		//Kath ragdoll expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_WAKEUP", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -895,7 +956,10 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 
 	if (on_enter) {
 
-		CSoundManager::get().playEvent("KATH_WAKEUP");
+		//Kath ragdoll expression
+		if (sound_manager.getNamedInstanceState("kath_expr_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			sound_manager.playEvent("KATH_WAKEUP", ((TCompTransform*)player_transform)->position, "kath_expr");
+		}
 
 		stopAllAnimations();
 		m_skeleton->playAnimation(18);
@@ -1034,17 +1098,12 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 
 	if (getCurrentNode() != "fbp_Dead") {		
 
-		CSoundManager::SoundParameter params[] = {
-			{ "damage", damage }
-		};
-		CSoundManager::get().playEvent("KATH_HIT", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
-
-		if (damage > 100000.f){ // Damage needed for ragdoll state
+		if (damage > 50000.f){ // Damage needed for ragdoll state
 			real_damage = 20;
 			CApp::get().slowMotion(2);
 			ChangeState("fbp_Ragdoll");
 		}
-		else if ((getCurrentNode() != "fbp_Ragdoll") && (damage>60000)){
+		else if ((getCurrentNode() != "fbp_Ragdoll") && (damage>30000)){
 			real_damage = 10;
 			ChangeState("fbp_Hurt");
 		}
@@ -1073,7 +1132,7 @@ void stopAnimation(int id);
 void FSMPlayerLegs::stopAllAnimations() {
 	TCompSkeleton* m_skeleton = comp_skeleton;
 
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 50; ++i) {
 		m_skeleton->model->getMixer()->clearCycle(i, 0.3f);
 	}
 }

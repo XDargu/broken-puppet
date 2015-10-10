@@ -896,4 +896,14 @@
     <aabb min="-53.4667 -12.2965 -48.0102" max="53.4667 12.2965 48.0102"/>
     <trigger botOnly="false" playerOnly="true" />
   </entity>
+
+  <!--
+  <entity>
+    <name name="Sustituta" />
+    <transform position="0.629135 2 -68.6347" rotation="0.0 0.0 -1 0" scale="1.0 1.0 1.0"/>
+    <skeleton name="sustituta"/> 
+    <aabb min="-0.5 0 -0.5" max="0.5 2 0.5"/>   
+  </entity>
+  -->
+  
 </scene>

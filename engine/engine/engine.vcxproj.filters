@@ -1200,6 +1200,5 @@
     <None Include="data\lua\scheduler.lua">
       <Filter>lua</Filter>
     </None>
-    <None Include="..\..\..\..\..\..\GoogleDrive\UPF Studio 1.0\Artistas\Animaciones\Boss - Guardian del Desvan\Death\CAL\death.CAF" />
   </ItemGroup>
 </Project>

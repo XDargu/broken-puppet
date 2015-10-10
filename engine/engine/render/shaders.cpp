@@ -37,7 +37,8 @@ bool CVertexShader::compile(
 	pVSBlob->Release();
 	if (FAILED(hr))
 		return false;
-
+	setDbgName(vs, szFileName);
+	setDbgName(vtx_layout, szFileName);
 	return true;
 }
 
@@ -77,7 +78,7 @@ bool CPixelShader::compile(const char* szFileName, const char* szEntryPoint) {
 		pVSBlob->Release();
 		return false;
 	}
-
+	setDbgName(ps, szFileName);
 	pVSBlob->Release();
 	return true;
 }

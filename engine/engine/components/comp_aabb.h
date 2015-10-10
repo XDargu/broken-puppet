@@ -44,6 +44,7 @@ private:
 		max = ((TCompTransform*)transform)->position + maxValue;
 	}
 public:
+	bool		auto_update;
 
 	TCompAABB() : AABB() {}
 
@@ -57,6 +58,7 @@ public:
 
 		recalcMinMax();
 		counter = 0;
+		auto_update = true;
 	}
 
 	void init() {
@@ -65,19 +67,24 @@ public:
 
 	// Updates the min and max variables, if needed
 	void update(float elapsed) {
-		TCompTransform* trans = (TCompTransform*)transform;
+		if (auto_update) {
+			TCompTransform* trans = (TCompTransform*)transform;
 
-		/*bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, trans->position)) && XMVectorGetY(XMVectorEqual(prev_position, trans->position)) && XMVectorGetZ(XMVectorEqual(prev_position, trans->position));
-		bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, trans->rotation));
-		bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, trans->scale));*/
-		
-		counter += elapsed;
-		if (trans->transformChanged()) {
-			recalcMinMax();
-			if (counter > 1) {
-				((TCompTransform*)transform)->room_id = CLogicManager::get().getPointZoneID(((TCompTransform*)transform)->position);
-				counter = 0;
+			/*bool posEqual = XMVectorGetX(XMVectorEqual(prev_position, trans->position)) && XMVectorGetY(XMVectorEqual(prev_position, trans->position)) && XMVectorGetZ(XMVectorEqual(prev_position, trans->position));
+			bool rotEqual = XMVectorGetX(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetY(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetZ(XMVectorEqual(prev_rotation, trans->rotation)) && XMVectorGetW(XMVectorEqual(prev_rotation, trans->rotation));
+			bool sclEqual = XMVectorGetX(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetY(XMVectorEqual(prev_scale, trans->scale)) && XMVectorGetZ(XMVectorEqual(prev_scale, trans->scale));*/
+
+			counter += elapsed;
+			if (trans->transformChanged()) {
+				recalcMinMax();
+				if (counter > 1) {
+					((TCompTransform*)transform)->room_id = CLogicManager::get().getPointZoneID(((TCompTransform*)transform)->position);
+					counter = 0;
+				}
 			}
+		}
+		else {
+			counter = 0;
 		}
 	}
 

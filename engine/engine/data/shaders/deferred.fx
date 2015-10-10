@@ -225,7 +225,17 @@ void PSGBuffer(
   specular = txSpecular.Sample(samWrapLinear, input.UV);
   gloss = txGloss.Sample(samWrapLinear, input.UV);
   acc_light = float4(0, 0, 0, 0);
-  
+
+  float atten = 1;
+  if (input.wPos.y < global_water_level) {
+	  atten = 3;
+  }
+  else {
+	  atten = 2 + (1 - min(2, max(0, input.wPos.y - global_water_level) ));
+  }
+  //specular = saturate(specular * atten);
+  gloss = saturate(gloss * atten);
+  //gloss = atten - 1;
   float3   in_normal = normalize(input.wNormal);
   float3   in_tangent = normalize(input.wTangent.xyz);
   float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;
@@ -242,6 +252,7 @@ void PSGBuffer(
   // Save the normal
 
   bool test = length(in_tangent) < 2;
+  test = true;
   float3 m_norm = test ? wnormal_per_pixel : in_normal;
   normal = (float4(m_norm, 1) + 1.) * 0.5;
   
@@ -672,12 +683,13 @@ float4 PSResolve(
   ) :SV_Target0{
 
 	int3 ss_load_coords = uint3(iPosition.xy, 0);
-	float4 albedo = txDiffuse.Load(ss_load_coords);
+	float4 albedo = txDiffuse.Load(ss_load_coords);	
 	float4 specular_color = txSpecular.Load(ss_load_coords);
 	float4 gloss = txGloss.Load(ss_load_coords);
 	float depth = txDepth.Load(ss_load_coords).x;
 	float3 N = normalize(txNormal.Load(ss_load_coords).xyz * 2 - 1.);
 	float4 diffuse = txAccLight.Load(ss_load_coords);
+	//albedo = albedo * 0.2 + diffuse * 0.8;
 
 	int mip_level = 7;
 	float2 uv = iPosition.xy / float2(cameraHalfXRes * 2, cameraHalfYRes * 2);
@@ -718,7 +730,7 @@ float4 PSResolve(
 	}*/
 	
 	
-	float4 base_color = albedo * (1 - gloss*0.5) + env * gloss * 0.5;
+	float4 base_color = albedo * (1 - gloss*0.2) + env * gloss * 0.2;
 	base_color = base_color * diffuse + saturate(specular);
 	/*return 
 		(base_color)* (1 - ambient_val)
