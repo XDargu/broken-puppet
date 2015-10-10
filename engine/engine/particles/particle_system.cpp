@@ -349,7 +349,8 @@ void TParticleSystem::update(float elapsed) {
 
 	if (instances_data != nullptr && particles.size() > 0) {
 		instances_data->updateFromCPU(data, particles.size() * sizeof(TParticle));
-	}
+	}	
+
 }
 
 void TParticleSystem::render(bool distorsion) {

@@ -140,7 +140,7 @@ void TCompPlayerController::init() {
 	if (pref_entity.isValid()) {
 		TCompTransform* pref_trans = ((CEntity*)pref_entity)->get<TCompTransform>();
 		if (pref_trans) {
-			pref_trans->position = trans->position + XMVectorSet(0, 1.5f, 0, 0);
+			pref_trans->position = trans->position + XMVectorSet(0, 1.2f, 0, 0);
 			pref_trans->init();
 		}
 		TCompParticleGroup* pref_pg = ((CEntity*)pref_entity)->get<TCompParticleGroup>();
@@ -154,6 +154,8 @@ void TCompPlayerController::init() {
 	}
 
 	entity_drops = CEntityManager::get().getByName("PlayerParticleDrops");
+
+	last_time_in_water = 1000;
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -197,7 +199,7 @@ void TCompPlayerController::update(float elapsed) {
 	}
 	else {
 		last_time_in_water += elapsed;
-		if (last_time_in_water < 8) {
+		if (last_time_in_water < 15) {
 			drops_size = 0.1f;
 			drops_size_final = 0.2f;
 		}

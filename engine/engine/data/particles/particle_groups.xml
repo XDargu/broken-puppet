@@ -621,7 +621,7 @@
     <particleSystem>
       <emitter angle="30.000000" burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="100" loop="true" maxLifeTime="8.000000" minLifeTime="2.000000" radius="0.010000" randomRotation="true" rate="0.000100" type="cone" use_physx="true"></emitter>
       <updater gravity="true" type="physx"></updater>
-      <updater speed="6.000000" type="movement"></updater>
+      <updater speed="5.000000" type="movement"></updater>
       <updater angular_speed="0.400000" type="rotation"></updater>
       <updater constant="false" gravity="0.001000" type="gravity"></updater>
       <updater curveType="linear" curveVal="2.000000" finalColor="0.415686 0.015686 0.000000" initialColor="0.964706 0.403922 0.000000" type="color"></updater>
@@ -636,7 +636,7 @@
       <updater type="gravity" gravity="0.000500" constant="false" />
       <updater type="lifeTime" />
       <updater type="color" initialColor="1 1 1" finalColor="1 1 1" curveVal="2.000000" curveType="linear" />
-      <updater type="size" initialSize="0.100000" finalSize="0.200000" />
+      <updater type="size" initialSize="0.00000" finalSize="0.00000" />
       <renderer texture="particles/part_rain" aditive="false" distorsion="false" distorsionAmount="0.500000" n_anim_x="3" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="v_billboard" animationMode="1" />
     </particleSystem>
   </particleGroup>

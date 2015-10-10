@@ -226,16 +226,18 @@ void PSGBuffer(
   gloss = txGloss.Sample(samWrapLinear, input.UV);
   acc_light = float4(0, 0, 0, 0);
 
+  float level = t_type.x == 0.2 ? water_level : global_water_level;
   float atten = 1;
-  if (input.wPos.y < global_water_level) {
+  if (input.wPos.y < level) {
 	  atten = 3;
   }
   else {
-	  atten = 2 + (1 - min(2, max(0, input.wPos.y - global_water_level) ));
+	  atten = 2 + (1 - min(2, max(0, input.wPos.y - level)));
   }
   //specular = saturate(specular * atten);
   gloss = saturate(gloss * atten);
   //gloss = atten - 1;
+
   float3   in_normal = normalize(input.wNormal);
   float3   in_tangent = normalize(input.wTangent.xyz);
   float3   in_binormal = cross(in_normal, in_tangent) * input.wTangent.w;

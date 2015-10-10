@@ -597,6 +597,7 @@ void CLogicManager::bootLUA() {
 		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
 		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
 		.set("lockCameraOnPosition", &CLogicManager::lockOnPosition)
+		.set("lockCameraOnObject", &CLogicManager::lockOnObject)
 		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
 		.set("playAnimation", &CLogicManager::playAnimation)
 		.set("setCanThrow", &CLogicManager::setCanThrow)
@@ -956,6 +957,20 @@ void CLogicManager::resetPlayerCamera() {
 
 void CLogicManager::lockOnBot(CBot bot) {
 	lock_on_target = bot.getEntityHandle();
+
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			((TCompPlayerPivotController*)player_pivot_c)->active = false;
+			((TCompCameraPivotController*)camera_pivot_c)->active = false;
+		}
+	}
+}
+
+void CLogicManager::lockOnObject(CMCVObject object) {
+	lock_on_target = object.getEntity();
 
 	if (player_pivot.isValid() && camera_pivot.isValid()) {
 		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();

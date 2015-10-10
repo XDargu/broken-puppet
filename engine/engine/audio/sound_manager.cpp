@@ -269,16 +269,64 @@ bool CSoundManager::setInstancePos(FMOD::Studio::EventInstance* eventInstance, T
 }
 
 FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string path, XMVECTOR pos, std::string name) {
-	TCompCamera* cam = render_manager.activeCamera;
-	if (cam) {
-		XMVECTOR camera_position = cam->getPosition();
-		float distance_to_listener = V3DISTANCE(camera_position, pos);
-		if (distance_to_listener <= max_dist_events){
-			return playEvent(path, 0, 0, pos, name);
+	if (!CApp::get().isSlowMotion()){
+		TCompCamera* cam = render_manager.activeCamera;
+		if (cam) {
+			XMVECTOR camera_position = cam->getPosition();
+			float distance_to_listener = V3DISTANCE(camera_position, pos);
+			if (distance_to_listener <= max_dist_events){
+				return playEvent(path, 0, 0, pos, name);
+			}
 		}
 	}
 	return nullptr;
 }
+
+void CSoundManager::playTalkEvent(std::string path, SoundParameter* parameters, int nparameters, XMVECTOR pos, std::string name, std::string guid){
+	phrase.path = path;
+	phrase.pos = pos;
+	phrase.nparameters = nparameters;
+	for (int i = 0; i < phrase.nparameters; ++i) {
+		phrase.parameters[i] = parameters[i];
+	}
+	phrase.name = name;
+	phrase.talked = false;
+	phrase.guid = guid;
+}
+
+void CSoundManager::playTalkEvent(std::string path, XMVECTOR pos, std::string name, std::string guid){
+	phrase.path = path;
+	phrase.pos = pos;
+	phrase.nparameters = 0;
+	phrase.name = name;
+	phrase.talked = false;
+	phrase.guid = guid;
+}
+
+void CSoundManager::checkIfCanTalk(){
+	if (!CApp::get().isSlowMotion()){
+		if (!phrase.talked){
+			phrase.talked = true;
+			if (phrase.nparameters > 0){
+				if (phrase.guid != ""){
+					CLogicManager::get().playSubtitles(phrase.guid);
+				}				
+				playEvent(phrase.path, phrase.parameters, phrase.nparameters, phrase.pos, phrase.name);				
+			}
+			else{
+				if (phrase.guid != ""){
+					CLogicManager::get().playSubtitles(phrase.guid);
+				}
+				playEvent(phrase.path, 0, 0, phrase.pos, phrase.name);
+			}
+		}
+	}
+	else{
+		int probando = 1;
+		std::string ojete = "probando!!";
+	}
+}
+
 
 void CSoundManager::setListenerTransform(TTransform listener) {
 	FMOD_3D_ATTRIBUTES attributes = { { 0 } };
@@ -320,6 +368,7 @@ void CSoundManager::update(float elapsed) {
 		}
 	}
 
+	checkIfCanTalk();
 	system->update();
 }
 

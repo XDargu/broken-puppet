@@ -195,6 +195,7 @@ public:
 	void resetPlayerCamera();
 	void lockOnBot(CBot bot);
 	void lockOnPosition(CVector position);
+	void lockOnObject(CMCVObject object);
 	void releaseCameraLock();
 	void playAnimation(std::string name, CMCVObject target_object);
 	void shakeCamera(float amount);
