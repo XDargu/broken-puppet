@@ -636,7 +636,7 @@
       <updater type="gravity" gravity="0.000500" constant="false" />
       <updater type="lifeTime" />
       <updater type="color" initialColor="1 1 1" finalColor="1 1 1" curveVal="2.000000" curveType="linear" />
-      <updater type="size" initialSize="0.100000" finalSize="0.200000" />
+      <updater type="size" initialSize="0.00000" finalSize="0.00000" />
       <renderer texture="particles/part_rain" aditive="false" distorsion="false" distorsionAmount="0.500000" n_anim_x="3" n_anim_y="1" stretch="2.000000" stretchMode="0" render_mode="v_billboard" animationMode="1" />
     </particleSystem>
   </particleGroup>

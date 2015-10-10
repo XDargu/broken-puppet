@@ -6,7 +6,7 @@
 #include "particles\particle_system.h"
 
 struct TCompParticleGroup : TBaseComponent {
-	
+	CHandle h_transform;
 	std::vector<TParticleSystem>* particle_systems;
 public:
 	enum flag{

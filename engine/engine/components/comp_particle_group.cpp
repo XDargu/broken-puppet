@@ -18,7 +18,7 @@ TCompParticleGroup::~TCompParticleGroup() {
 }
 
 void TCompParticleGroup::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	CHandle h_transform = assertRequiredComponent<TCompTransform>(this);
+	h_transform = assertRequiredComponent<TCompTransform>(this);
 	TCompTransform* m_transform = h_transform;
 
 	if (elem == "particleGroup") {
@@ -65,6 +65,15 @@ void TCompParticleGroup::update(float elapsed) {
 		ps.visible = render_manager.planes_active_camera.isVisible(&ps.aabb);
 		ps.update(elapsed);
 		all_dirty &= ps.dirty_destroy_group;
+	}
+
+	// Check if its on fire, and the particle is underwater, and destroy it
+	if (char_equal(def_name, "ps_candle")) {
+		TCompTransform* m_transform = h_transform;
+		if (CApp::get().water_level > XMVectorGetY(m_transform->position)) {
+			destroy_on_death = true;
+			all_dirty = true;
+		}
 	}
 
 	if (destroy_on_death && all_dirty) {

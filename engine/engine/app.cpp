@@ -998,14 +998,10 @@ void CApp::render() {
 		{
 			CTraceScoped scope_post3("Chromatic aberration");
 			chromatic_aberration.apply(sharpen.getOutput());
-		}
-		{
-			CTraceScoped scope_post4("Underwater");
-			underwater.apply(chromatic_aberration.getOutput());
-		}
+		}		
 		{
 			CTraceScoped scope_post5("Depth of field");
-			blur.apply(underwater.getOutput());
+			blur.apply(chromatic_aberration.getOutput());
 		}
 		{
 			CTraceScoped scope_post6("Motion blur");
@@ -1020,6 +1016,10 @@ void CApp::render() {
 		{
 			CTraceScoped scope_post8("Glow");
 			glow.apply(silouette.getOutput());
+		}
+		{
+			CTraceScoped scope_post4("Underwater");
+			underwater.apply(glow.getOutput());
 		}
 	}
 
@@ -1039,7 +1039,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_lights"));
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
-	drawTexture2D(0, 0, xres, yres, glow.getOutput());
+	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
 
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
