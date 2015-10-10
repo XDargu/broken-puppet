@@ -621,7 +621,7 @@
     <particleSystem>
       <emitter angle="30.000000" burstAmount="100" burstTime="0.000000" delay="0.000000" fillInitial="0" limit="100" loop="true" maxLifeTime="8.000000" minLifeTime="2.000000" radius="0.010000" randomRotation="true" rate="0.000100" type="cone" use_physx="true"></emitter>
       <updater gravity="true" type="physx"></updater>
-      <updater speed="6.000000" type="movement"></updater>
+      <updater speed="5.000000" type="movement"></updater>
       <updater angular_speed="0.400000" type="rotation"></updater>
       <updater constant="false" gravity="0.001000" type="gravity"></updater>
       <updater curveType="linear" curveVal="2.000000" finalColor="0.415686 0.015686 0.000000" initialColor="0.964706 0.403922 0.000000" type="color"></updater>
