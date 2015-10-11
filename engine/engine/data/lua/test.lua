@@ -184,7 +184,7 @@ function onSceneLoad_scene_final_boss()
 		elapsed = elapsed + 0.5
 		waitTime(scream - elapsed)
 		elapsed = scream
-		mBoss:initialRain(50);	
+		mBoss:initialRain(120);	
 		waitTime(0.5)
 
 

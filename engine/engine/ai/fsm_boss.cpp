@@ -185,6 +185,8 @@ void fsm_boss::Init()
 	lua_boss_init = false;
 
 	turns_without_bombs = 0;
+
+	fist_particle_time = 0;
 }
 
 void fsm_boss::Hidden(float elapsed){
@@ -435,11 +437,11 @@ void fsm_boss::Rain1Loop(float elapsed){
 		skeleton_lookat->active = false;
 		bomb_creation_delay = 0;
 		debris_creation_delay = 0;
-		debris_created = 0;
-
-		FistParticles(elapsed);
+		debris_created = 0; 
+		fist_particle_time = 0;
 	}
-	FistParticles(elapsed);
+
+	FistParticles(elapsed, 0.f, 0.f);
 	
 	if (!RainDebris(elapsed)){
 		ChangeState("fbp_Rain1Recover");
@@ -465,25 +467,24 @@ void fsm_boss::Rain1Recover(){
 
 
 void fsm_boss::Proximity(float elapsed){
+	
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		skeleton->playAnimation(4);
 		last_anim_id = -1;
 		can_proximity = false;
-	
-		FistParticles(elapsed);
+		fist_particle_time = 0;
 	}
 
-	FistParticles(elapsed);
+	FistParticles(elapsed, 0.6f, 1.f);
 
 	if ((state_time >= 0.6f)&&(can_proximity_hit)){
 
 		can_proximity_hit = false;
 		((CEntity*)m_player)->sendMsg(TActorHit(entity, 110000.f, true));
 
-	}
-	
+	}	
 
 	if (state_time >= 1.49f){
 		ChangeState("fbp_Idle1");
@@ -591,14 +592,25 @@ void fsm_boss::Ball1Launch(float elapsed){
 	TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
 	PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 	
+	// player pos + player linear velocity
+	PxVec3 player_linear_velocity = PxVec3(0, 0, 0);
+
+	// Getting player velocity	
+	TCompRigidBody* player_comp_rigid = (((CEntity*)m_player)->get<TCompRigidBody>());
+	if (player_comp_rigid)
+		player_linear_velocity = player_comp_rigid->rigidBody->getLinearVelocity();
+
+	PxVec3 next_player_pos = player_pos + player_linear_velocity;
+
 	// Getting enemy position
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 	PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
 	// Calculate direction player enemy
-	PxVec3 player_boss_dir = (player_pos - enemy_pos);
+	PxVec3 player_boss_dir = (next_player_pos - enemy_pos);
 	player_boss_dir.y = 0;
 	player_boss_dir = player_boss_dir.getNormalized();
+
 
 	PxVec3	point_to_go = enemy_pos + point_offset + (player_boss_dir * distance_to_point);
 
@@ -1384,7 +1396,7 @@ int fsm_boss::CalculateAttack() {
 
 	int next_attack = 0;
 	last_attack = 0.f;
-	if (m_entity_manager->rigid_list.size() < 150){
+	if (m_entity_manager->rigid_list.size() < 200){
 		next_attack = 0;
 	}
 	else{		
@@ -1620,20 +1632,21 @@ void fsm_boss::SelectObjToShoot() {
 	}
 }
 
-void fsm_boss::FistParticles(float elapsed) {
+void fsm_boss::FistParticles(float elapsed, float init, float end) {
 
+	bool fractionated = init != end;
 	TCompSkeleton* skeleton = comp_skeleton;
 
-	if (has_right){
+	fist_particle_time += elapsed;
+
+	if ((has_right) && ((!fractionated) || (fist_particle_time > init) && (fist_particle_time < end))){
 		XMVECTOR r_hand_pos = skeleton->getPositionOfBone(40);
 		XMVECTOR r_hand_rot = skeleton->getRotationOfBone(40);
 
 		if ((r_hand_change) && (r_hand_pos_y < XMVectorGetY(r_hand_pos)))
 		{
 			// Adding particle sistem
-			/**/
-
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_punch", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
 
 			if (particle_entity.isValid()) {
 				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
@@ -1655,15 +1668,14 @@ void fsm_boss::FistParticles(float elapsed) {
 	}
 
 
-	if (has_left){
+	if ((has_left) && ((!fractionated) || (fist_particle_time > init) && (fist_particle_time < end))){
 		XMVECTOR l_hand_pos = skeleton->getPositionOfBone(21);
 		XMVECTOR l_hand_rot = skeleton->getRotationOfBone(21);
 
 		if ((l_hand_change) && (l_hand_pos_y < XMVectorGetY(l_hand_pos)))
 		{
 			// Adding particle sistem
-			/**/
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_punch", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
 
 			if (particle_entity.isValid()) {
 				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
