@@ -64,7 +64,7 @@ float counter;
 XMVECTOR prev_pos;*/
 
 void TCompPlayerController::init() {
-
+	
 	/*
 		Load sounds
 	*/

@@ -1,8 +1,11 @@
 <fmodEvents>
+  <!-- MUSICA -->
+  <event id="MUSIC_MENU" path="event:/Musica/CANCION" />
+
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" />
   <event id="BUTTON_CLICK" path="event:/GUI/button_click" />
-
+  
   <!-- Katherine -->
   <event id="KATH_JUMP" path="event:/Expresion/Katherine/Saltar" />
   <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />

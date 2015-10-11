@@ -1529,7 +1529,7 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
-	ShowCursor(FALSE);
+	while (ShowCursor(FALSE) >= 0);
 	// Load picture
 	/*renderUtilsDestroy();
 	renderUtilsCreate();*/
@@ -1768,6 +1768,8 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());
+
+	
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

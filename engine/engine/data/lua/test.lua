@@ -18,7 +18,7 @@ function onSceneLoad_my_file()
 	onSceneLoad_scene_4()
 	onSceneLoad_scene_3()
 	onSceneLoad_scene_2()
-	onSceneLoad_scene_1()	
+	--onSceneLoad_scene_1()	
 end
 
 

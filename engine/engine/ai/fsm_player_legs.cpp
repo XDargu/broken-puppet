@@ -488,9 +488,8 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 			sound_manager.playEvent("KATH_THROW", ((TCompTransform*)player_transform)->position, "kath_expr");
 		}
 
-		if (hit_actor != nullptr) {
-
-			torso->getThrowingData(hit_actor, actor_position, actor_normal);
+		torso->getThrowingData(hit_actor, actor_position, actor_normal);
+		if (hit_actor != nullptr) {			
 
 			XMVECTOR actor_pos = Physics.PxVec3ToXMVECTOR(actor_position);
 			float dist = V3DISTANCE(camera_transform->position, actor_pos);
@@ -541,9 +540,8 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 			sound_manager.playEvent("KATH_THROW", ((TCompTransform*)player_transform)->position, "kath_expr");
 		}
 
+		torso->getThrowingData(hit_actor, actor_position, actor_normal);
 		if (hit_actor != nullptr) {
-
-			torso->getThrowingData(hit_actor, actor_position, actor_normal);
 
 			XMVECTOR actor_pos = Physics.PxVec3ToXMVECTOR(actor_position);
 			float dist = V3DISTANCE(camera_transform->position, actor_pos);

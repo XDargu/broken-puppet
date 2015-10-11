@@ -80,7 +80,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.cbWndExtra		= 0;
 	wcex.hInstance		= hInstance;
 	wcex.hIcon = 0; // LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ENGINE));
-	wcex.hCursor = NULL;
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);;
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
 	wcex.lpszMenuName = 0; // MAKEINTRESOURCE(IDC_ENGINE);
 	wcex.lpszClassName	= "MCVClass";

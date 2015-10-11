@@ -8408,7 +8408,7 @@
 	</entity>
 	<entity   materialTag = "wood">
 <name name="scene1_room2" />
-<transform position="-32.7158 8.10858e-007 18.5503" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+<transform position="-32.7158 8.10858e-007 18.148" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
 <aabb min="-19.0587 0.0 -9.03611" max="19.0587 22.097 9.03611"/>
 <zoneAABB id="2" />
 	</entity>
