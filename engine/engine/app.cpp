@@ -570,9 +570,11 @@ void CApp::update(float elapsed) {
 	if (game_state == TGameState::INITIAL_VIDEO) {
 		if (!video_sound_played) {
 			CSoundManager::get().playEvent("INITIAL_VIDEO", "video_sound");
-			CSoundManager::get().update(elapsed);
+			logic_manager.playSubtitles("INITIAL_VIDEO");
 			video_sound_played = true;
 		}
+		CSoundManager::get().update(elapsed);
+		logic_manager.update(elapsed);
 
 		if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
@@ -590,9 +592,12 @@ void CApp::update(float elapsed) {
 	if (game_state == TGameState::FINAL_VIDEO) {
 		if (!video_sound_played) {
 			CSoundManager::get().playEvent("FINAL_VIDEO", "video_sound");
-			CSoundManager::get().update(elapsed);
+			logic_manager.playSubtitles("FINAL_VIDEO");
 			video_sound_played = true;
 		}
+		CSoundManager::get().update(elapsed);
+		logic_manager.update(elapsed);
+
 		if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 			game_state = TGameState::MAIN_MENU;
 			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
@@ -880,13 +885,15 @@ void CApp::render() {
 		bool playVideo = renderVideo();
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
-			loadScene(first_scene);
+			loadScene("data/scenes/scene_1.xml");
 			if (bar && bar->joinable()){
 				bar->join();
 				delete bar;
 				bar = nullptr;
 			}
 		}
+		logic_manager.draw();
+		::render.swap_chain->Present(0, 0);
 		return;
 	}
 
@@ -901,6 +908,8 @@ void CApp::render() {
 				bar = nullptr;
 			}
 		}
+		logic_manager.draw();
+		::render.swap_chain->Present(0, 0);
 		return;
 	}
 
@@ -1856,9 +1865,7 @@ bool CApp::renderVideo()
 	
 	videoTexture->setResource(tex);
 	videoTexture->setResourceView(m_shaderResourceView);
-	drawTexture2D(0, 0, xres, yres, videoTexture);
-
-	::render.swap_chain->Present(0, 0);
+	drawTexture2D(0, 0, xres, yres, videoTexture);	
 
 	//dbg("elaps: %f\n", elaps);
 	mgr->update(delta_time);
