@@ -15,7 +15,9 @@ void TCompButton::loadFromAtts(const std::string& elem, MKeyValue& atts) {
 	if (elem == "actionExit") {
 		exit_action = true;
 	}
-
+	if (elem == "actionStartGame") {
+		start_game_action = true;
+	}
 	hovering = false;
 }
 
@@ -70,6 +72,15 @@ void TCompButton::update(float elapsed) {
 					// Exit
 					if (exit_action) {
 						CLogicManager::get().exitGame();
+					}
+
+					// Start game
+					if (start_game_action) {
+#ifdef _DEBUG
+						CLogicManager::get().loadScene("data/scenes/scene_1.xml");
+#else
+						CApp::get().playInitialVideo();
+#endif
 					}
 				}
 

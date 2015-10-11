@@ -389,12 +389,6 @@ bool CApp::create() {
 
 	createManagers();	
 
-	game_state = TGameState::INITIAL_VIDEO;
-	video_sound_played = false;
-#ifndef _DEBUG
-	loadVideo("intro_BP.ogv");
-#endif
-
 #ifdef _DEBUG
 	// Init AntTweakBar
 	TwInit(TW_DIRECT3D11, ::render.device);
@@ -443,12 +437,8 @@ bool CApp::create() {
 	
 	menu_scene = "data/scenes/scene_menu.xml";
 
-#ifdef _DEBUG
-	game_state = TGameState::GAMEPLAY;
+	game_state = TGameState::MAIN_MENU;
 	loadScene(first_scene);
-#else
-	loadScene("data/scenes/empty_scene.xml");
-#endif;
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -584,11 +574,15 @@ void CApp::update(float elapsed) {
 			video_sound_played = true;
 		}
 
-		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
 			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
 			CSoundManager::get().update(elapsed);
-			loadScene(first_scene);
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			videoTexture->destroy();
+			delete videoTexture;
+			loadScene("data/scenes/scene_1.xml");
 		}
 		return;
 	}
@@ -599,10 +593,14 @@ void CApp::update(float elapsed) {
 			CSoundManager::get().update(elapsed);
 			video_sound_played = true;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 			game_state = TGameState::MAIN_MENU;
 			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
 			CSoundManager::get().update(elapsed);
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			videoTexture->destroy();
+			delete videoTexture;
 			loadScene(menu_scene);
 		}
 		return;
@@ -1498,10 +1496,7 @@ void CApp::destroy() {
 	//rt_base->destroy();
 	// Video
 	if (mgr != nullptr) {
-		mgr->destroyVideoClip(clip);
-		videoTexture->destroy();
 		delete mgr;
-		delete videoTexture;
 	}
 	::render.destroyDevice();
 	
@@ -1779,7 +1774,9 @@ void CApp::slowMotion(float time) {
 void CApp::loadVideo(const char* name)
 {
 #ifndef _DEBUG
-	mgr = new TheoraVideoManager();
+	if (mgr == nullptr) {
+		mgr = new TheoraVideoManager();
+	}
 	char full_name[MAX_PATH];
 	::sprintf(full_name, "data/videos/%s", name);
 	clip = mgr->createVideoClip(full_name, TheoraOutputMode::TH_RGBX, 16);
@@ -1848,7 +1845,10 @@ bool CApp::renderVideo()
 		::render.ctx->Unmap(tex, 0);
 		clip->popFrame();
 		if (frame->getFrameNumber() >= (endframe - 1)){
-			clip->stop();			
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			videoTexture->destroy();
+			delete videoTexture;
 			return false;
 		}
 	}
@@ -1875,6 +1875,13 @@ void CApp::playFinalVideo() {
 	loadVideo("final_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
+}
+
+void CApp::playInitialVideo() {
+	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
+	loadVideo("intro_BP.ogv");
+	video_sound_played = false;
+	game_state = TGameState::INITIAL_VIDEO;
 }
 
 void CApp::exitApp() {
