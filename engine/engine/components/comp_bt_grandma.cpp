@@ -82,17 +82,17 @@ void TCompBtGrandma::update(float elapsed){
 	TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);	
 
 	// Footsteps sound
-	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+	float surface_tag = (float)CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
 	float surface_value = surface_tag;
 
 	bool moving = m_ai_controller->isMoving();
-	bool run_speed_modifier = m_ai_controller->getRunSpeedModifier();
+	float run_speed_modifier = m_ai_controller->getRunSpeedModifier();
 
 	if (moving) {
 		footstep_counter += elapsed;
 
 		float base_step = 1.f;
-		float time_modifier = run_speed_modifier * 0.5f; //* (1 / water_multiplier);
+		float time_modifier = run_speed_modifier * 1.f; //* (1 / water_multiplier);
 
 		if (footstep_counter >= time_modifier) {
 			CSoundManager::SoundParameter params[] = {

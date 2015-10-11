@@ -13,7 +13,7 @@
 #include "comp_point_light.h"
 #include "item_manager.h"
 #include "io\iostatus.h"
-#include "handle\prefabs_manager.h"¡
+#include "handle\prefabs_manager.h"
 #include "rope_manager.h"
 
 TCompAiBoss::TCompAiBoss() {
@@ -454,14 +454,14 @@ bool TCompAiBoss::openLight(float elapsed){
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(R_light_trans->scale);
 	if ((aux_actual_scale <= scale_target) && (m_fsm_boss->has_right)){
-		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2) * elapsed;
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2f) * elapsed;
 		R_light_trans->scale = XMVectorSetX(R_light_trans->scale, aux_new_scale + aux_actual_scale);
 	}
 	
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(L_light_trans->scale);
 	if ((aux_actual_scale <= scale_target) && (m_fsm_boss->has_left)){
-		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2) * elapsed;
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2f) * elapsed;
 		L_light_trans->scale = XMVectorSetX(L_light_trans->scale, aux_new_scale + aux_actual_scale);
 	}
 
@@ -520,7 +520,7 @@ void TCompAiBoss::openHeart(float elapsed){
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(H_light_trans->scale);
 	if ((aux_actual_scale <= scale_target)){
-		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.02) * elapsed;
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.02f) * elapsed;
 		H_light_trans->scale = XMVectorSetX(H_light_trans->scale, aux_new_scale + aux_actual_scale);
 	}
 

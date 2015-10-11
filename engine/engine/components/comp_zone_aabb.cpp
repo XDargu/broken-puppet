@@ -36,6 +36,7 @@ bool TCompZoneAABB::isPlayerInside(){
 		else
 			return false;
 	}
+	return false;
 }
 
 bool TCompZoneAABB::isPointInside(XMVECTOR point){

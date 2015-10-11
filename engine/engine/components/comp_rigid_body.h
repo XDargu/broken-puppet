@@ -11,6 +11,7 @@ private:
 	CHandle transform;
 	physx::PxD6Joint* block_joint;
 	float density;
+	bool underwater;
 public:
 	physx::PxRigidDynamic* rigidBody;
 	double impact_timestamp;
@@ -30,7 +31,8 @@ public:
 	TCompRigidBody() :
 		rigidBody(nullptr),
 		auto_translate_transform(true),
-		auto_rotate_transform(true)
+		auto_rotate_transform(true),
+		underwater(false)
 	{}
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }
