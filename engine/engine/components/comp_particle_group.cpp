@@ -43,6 +43,11 @@ void TCompParticleGroup::init() {
 		particle_groups_manager.addParticleGroupToEntity(m_entity, std::string(def_name));
 	}
 
+	CHandle player = CEntityManager::get().getByName("Player");
+	if (player.isValid()) {
+		h_player_trans = ((CEntity*)player)->get<TCompTransform>();
+	}
+
 	for (auto& ps : *particle_systems) {
 		ps.init();
 	}
@@ -61,8 +66,12 @@ void TCompParticleGroup::update(float elapsed) {
 	}*/
 
 	bool all_dirty = true;
+	bool near_player = false;
 	for (auto& ps : *particle_systems) {
-		ps.visible = render_manager.planes_active_camera.isVisible(&ps.aabb);
+		if (h_player_trans.isValid()) {
+			near_player = V3DISTANCE(((TCompTransform*)h_player_trans)->position, ((TCompTransform*)h_transform)->position) < 15;
+		}
+		ps.visible = render_manager.planes_active_camera.isVisible(&ps.aabb) || near_player;
 		ps.update(elapsed);
 		all_dirty &= ps.dirty_destroy_group;
 	}
