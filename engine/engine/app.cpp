@@ -614,7 +614,7 @@ void CApp::update(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 
-	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+	if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 		if (game_state == TGameState::MAIN_MENU) {
 			logic_manager.exitGame(); 
 		}
