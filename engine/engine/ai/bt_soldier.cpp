@@ -620,7 +620,7 @@ int bt_soldier::actionChaseRoleDistance()
 	if (path.size() > 0){
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.15f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.13f)){
 				ind_path++;
 				return STAY;
 			}
@@ -760,7 +760,7 @@ int bt_soldier::actionSituate()
 		if (ind_path < path.size()){
 			chasePoint(m_transform, path[ind_path]);
 			XMVECTOR prueba = m_transform->position;
-			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.2f)){
+			if ((V3DISTANCE(m_transform->position, path[ind_path]) < 0.13f)){
 				ind_path++;
 				return STAY;
 			}
