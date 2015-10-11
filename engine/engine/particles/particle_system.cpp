@@ -510,14 +510,16 @@ std::string TParticleSystem::getXMLDefinition() {
 
 	def += "<particleSystem>";
 
+	if (updater_movement != nullptr) {
+		def += updater_movement->getXMLDefinition();
+	}
+
 	def += emitter_generation->getXMLDefinition();
 
 	if (updater_physx != nullptr) {
 		def += updater_physx->getXMLDefinition();
 	}
-	if (updater_movement != nullptr) {
-		def += updater_movement->getXMLDefinition();
-	}
+	
 	if (updater_rotation != nullptr) {
 		def += updater_rotation->getXMLDefinition();
 	}

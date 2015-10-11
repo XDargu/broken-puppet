@@ -22,6 +22,7 @@ void CRenderManager::init() {
 	technique_gen_shadows = render_techniques_manager.getByName("gen_shadows");
 	technique_gen_shadows_skel = render_techniques_manager.getByName("gen_shadows_skel");
 	prev_it_emissive_on = false;
+	prev_it_swap_textures = false;
 }
 
 bool CRenderManager::sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2) {
@@ -118,6 +119,7 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 	auto prev_it = keys.begin();
 	auto it = keys.begin();
 	prev_it_emissive_on = false;
+	prev_it_swap_textures = false;
 
 	bool culling = true;
 	int render_count = 0;
@@ -221,9 +223,9 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 				
 				// Activar shader y material de it
 				if (is_render)
-					it->material->activateTextures(render->emissive_on); 
+					it->material->activateTextures(render->emissive_on, render->swap_textures); 
 				else
-					it->material->activateTextures(true);
+					it->material->activateTextures(true, false);
 			}
 			else {
 				// No need to change the material and techinique, but maybe the emissive
@@ -231,10 +233,14 @@ void CRenderManager::renderAll(const CCamera* camera, TTransform* camera_transfo
 					if (prev_it_emissive_on != render->emissive_on) {
 						it->material->activateEmissive(render->emissive_on);
 					}
+					if (prev_it_swap_textures != render->swap_textures) {
+						it->material->activateTextures(render->emissive_on, render->swap_textures);
+					}
 				}
 			}
 			if (is_render) {
 				prev_it_emissive_on = render->emissive_on;
+				prev_it_swap_textures = render->swap_textures;
 			}
 
 			if (it->mesh != prev_it->mesh || is_first) {

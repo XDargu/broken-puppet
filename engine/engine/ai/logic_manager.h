@@ -65,6 +65,7 @@ private:
 	float shake_amount;
 
 	std::string scene_to_load;
+	bool exit_next_frame;
 
 	// Subtitles
 	Subtitle current_subtitle;
@@ -127,6 +128,8 @@ public:
 	bool playerInsideGNZone(XMVECTOR& vector, CHandle& logicGN);
 
 	CHandle getPlayerHandle() { return player; }
+
+	void exitGame();
 
 	// LUA
 	void execute(std::string text);

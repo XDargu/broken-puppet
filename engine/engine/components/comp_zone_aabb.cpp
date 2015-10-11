@@ -29,23 +29,27 @@ CHandle TCompZoneAABB::getZoneName(){
 }
 
 bool TCompZoneAABB::isPlayerInside(){
-	TCompTransform* p_transform = (TCompTransform*)player_transform;	
-	if (((TCompAABB*)m_aabb)->containts(p_transform->position))
-		return true;
-	else
-		return false;
+	TCompTransform* p_transform = (TCompTransform*)player_transform;
+	if (p_transform) {
+		if (((TCompAABB*)m_aabb)->containts(p_transform->position))
+			return true;
+		else
+			return false;
+	}
 }
 
 bool TCompZoneAABB::isPointInside(XMVECTOR point){
-	TCompTransform* p_transform = (TCompTransform*)player_transform;
 	if (((TCompAABB*)m_aabb)->containts(point))
 		return true;
 	else
 		return false;
+	
 }
 
 void TCompZoneAABB::init() {
 	player = CEntityManager::get().getByName("Player");
-	player_transform = ((CEntity*)player)->get<TCompTransform>();
+	if (player.isValid()) {
+		player_transform = ((CEntity*)player)->get<TCompTransform>();
+	}
 }
 

@@ -389,12 +389,6 @@ bool CApp::create() {
 
 	createManagers();	
 
-	game_state = TGameState::INITIAL_VIDEO;
-	video_sound_played = false;
-#ifndef _DEBUG
-	loadVideo("intro_BP.ogv");
-#endif
-
 #ifdef _DEBUG
 	// Init AntTweakBar
 	TwInit(TW_DIRECT3D11, ::render.device);
@@ -441,14 +435,10 @@ bool CApp::create() {
 	// Preload scenes
 	bar = new std::thread(&CApp::preLoad, this);
 	
-	menu_scene = "data/scenes/scene_1.xml";
+	menu_scene = "data/scenes/scene_menu.xml";
 
-#ifdef _DEBUG
-	game_state = TGameState::GAMEPLAY;
+	game_state = TGameState::MAIN_MENU;
 	loadScene(first_scene);
-#else
-	loadScene("data/scenes/empty_scene.xml");
-#endif;
 
 	// Create debug meshes	
 	is_ok = createUnitWiredCube(wiredCube, XMFLOAT4(1.f, 1.f, 1.f, 1.f));
@@ -580,15 +570,21 @@ void CApp::update(float elapsed) {
 	if (game_state == TGameState::INITIAL_VIDEO) {
 		if (!video_sound_played) {
 			CSoundManager::get().playEvent("INITIAL_VIDEO", "video_sound");
-			CSoundManager::get().update(elapsed);
+			logic_manager.playSubtitles("INITIAL_VIDEO");
 			video_sound_played = true;
 		}
+		CSoundManager::get().update(elapsed);
+		logic_manager.update(elapsed);
 
-		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 			game_state = TGameState::GAMEPLAY;
 			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
 			CSoundManager::get().update(elapsed);
-			loadScene(first_scene);
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			videoTexture->destroy();
+			delete videoTexture;
+			loadScene("data/scenes/scene_1.xml");
 		}
 		return;
 	}
@@ -596,13 +592,20 @@ void CApp::update(float elapsed) {
 	if (game_state == TGameState::FINAL_VIDEO) {
 		if (!video_sound_played) {
 			CSoundManager::get().playEvent("FINAL_VIDEO", "video_sound");
-			CSoundManager::get().update(elapsed);
+			logic_manager.playSubtitles("FINAL_VIDEO");
 			video_sound_played = true;
 		}
-		if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
+		CSoundManager::get().update(elapsed);
+		logic_manager.update(elapsed);
+
+		if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
 			game_state = TGameState::MAIN_MENU;
 			CSoundManager::get().stopNamedInstance("video_sound", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
 			CSoundManager::get().update(elapsed);
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			videoTexture->destroy();
+			delete videoTexture;
 			loadScene(menu_scene);
 		}
 		return;
@@ -614,12 +617,14 @@ void CApp::update(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 	// Update input
 
-	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
-		CNav_mesh_manager::get().keep_updating_navmesh = false;
-		CNav_mesh_manager::get().setNeedNavMesh(false);
-		CNav_mesh_manager::get().generate_nav_mesh = false;
-		destroy();
-		exit(0);
+	if (CIOStatus::get().becomesReleased(CIOStatus::EXIT)){
+		if (game_state == TGameState::MAIN_MENU) {
+			logic_manager.exitGame(); 
+		}
+		else {
+			game_state = TGameState::MAIN_MENU;
+			logic_manager.loadScene(menu_scene);
+		}
 	}	
 
 	if (io.isPressed(CIOStatus::EXTRA)) {
@@ -829,8 +834,6 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompVibration>()->update(elapsed);
 	getObjManager<TCompLocalRotation>()->update(elapsed);
 
-	logic_manager.update(elapsed);
-
 #ifdef _DEBUG
 	entity_inspector.update();
 	entity_lister.update();
@@ -844,6 +847,7 @@ void CApp::update(float elapsed) {
 	CNav_mesh_manager::get().checkDistaceToEnemies();
 	//-----------------------------------------------------------------------------------------
 
+	logic_manager.update(elapsed);
 }
 
 // Physics update
@@ -881,13 +885,15 @@ void CApp::render() {
 		bool playVideo = renderVideo();
 		if (!playVideo) {
 			game_state = TGameState::GAMEPLAY;
-			loadScene(first_scene);
+			loadScene("data/scenes/scene_1.xml");
 			if (bar && bar->joinable()){
 				bar->join();
 				delete bar;
 				bar = nullptr;
 			}
 		}
+		logic_manager.draw();
+		::render.swap_chain->Present(0, 0);
 		return;
 	}
 
@@ -902,6 +908,8 @@ void CApp::render() {
 				bar = nullptr;
 			}
 		}
+		logic_manager.draw();
+		::render.swap_chain->Present(0, 0);
 		return;
 	}
 
@@ -1337,6 +1345,7 @@ void CApp::renderEntities() {
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
+	getObjManager<TCompPlayerController>()->renderDebug3D();
 
 }
 
@@ -1496,10 +1505,7 @@ void CApp::destroy() {
 	//rt_base->destroy();
 	// Video
 	if (mgr != nullptr) {
-		mgr->destroyVideoClip(clip);
-		videoTexture->destroy();
 		delete mgr;
-		delete videoTexture;
 	}
 	::render.destroyDevice();
 	
@@ -1523,7 +1529,7 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
-
+	while (ShowCursor(FALSE) >= 0);
 	// Load picture
 	/*renderUtilsDestroy();
 	renderUtilsCreate();*/
@@ -1762,6 +1768,8 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());
+
+	
 }
 
 void CApp::loadPrefab(std::string prefab_name) {
@@ -1777,7 +1785,9 @@ void CApp::slowMotion(float time) {
 void CApp::loadVideo(const char* name)
 {
 #ifndef _DEBUG
-	mgr = new TheoraVideoManager();
+	if (mgr == nullptr) {
+		mgr = new TheoraVideoManager();
+	}
 	char full_name[MAX_PATH];
 	::sprintf(full_name, "data/videos/%s", name);
 	clip = mgr->createVideoClip(full_name, TheoraOutputMode::TH_RGBX, 16);
@@ -1846,7 +1856,10 @@ bool CApp::renderVideo()
 		::render.ctx->Unmap(tex, 0);
 		clip->popFrame();
 		if (frame->getFrameNumber() >= (endframe - 1)){
-			clip->stop();			
+			clip->stop();
+			mgr->destroyVideoClip(clip);
+			videoTexture->destroy();
+			delete videoTexture;
 			return false;
 		}
 	}
@@ -1854,9 +1867,7 @@ bool CApp::renderVideo()
 	
 	videoTexture->setResource(tex);
 	videoTexture->setResourceView(m_shaderResourceView);
-	drawTexture2D(0, 0, xres, yres, videoTexture);
-
-	::render.swap_chain->Present(0, 0);
+	drawTexture2D(0, 0, xres, yres, videoTexture);	
 
 	//dbg("elaps: %f\n", elaps);
 	mgr->update(delta_time);
@@ -1873,4 +1884,19 @@ void CApp::playFinalVideo() {
 	loadVideo("final_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
+}
+
+void CApp::playInitialVideo() {
+	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
+	loadVideo("intro_BP.ogv");
+	video_sound_played = false;
+	game_state = TGameState::INITIAL_VIDEO;
+}
+
+void CApp::exitApp() {
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
+	CNav_mesh_manager::get().generate_nav_mesh = false;
+	destroy();
+	exit(0);
 }

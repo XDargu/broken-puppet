@@ -53,6 +53,7 @@ class CRenderManager {
 
 	bool  sort_required;
 	bool  prev_it_emissive_on;
+	bool prev_it_swap_textures;
 
 	static bool sort_by_material_then_mesh(const CRenderManager::TKey& k1, const CRenderManager::TKey& k2);
 

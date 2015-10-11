@@ -3,7 +3,7 @@
 #include "comp_transform.h"
 #include "comp_render.h"
 
-TCompRender::TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr), emissive_on(true) {
+TCompRender::TCompRender() : mesh(nullptr), submesh_id(0), mat(nullptr), emissive_on(true), swap_textures(false) {
 	keys = new std::vector< RKey >();
 }
 

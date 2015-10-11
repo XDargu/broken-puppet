@@ -84,6 +84,7 @@ void CLogicManager::init()
 	lock_on_position = XMVectorSet(0, 0, 0, -1);
 
 	scene_to_load = "";
+	exit_next_frame = false;
 
 	shake_cam = false;
 	shake_amount = 0;
@@ -257,6 +258,10 @@ void CLogicManager::update(float elapsed) {
 
 	if (scene_to_load != "") {
 		CApp::get().loadScene(scene_to_load);
+	}
+
+	if (exit_next_frame) {
+		CApp::get().exitApp();
 	}
 }
 
@@ -1097,4 +1102,8 @@ void CLogicManager::createPrefab(std::string name, CVector position, CQuaterion 
 		TCompParticleGroup* particle = ((CEntity*)entity)->get<TCompParticleGroup>();
 		particle->init();
 	}
+}
+
+void CLogicManager::exitGame() {
+	exit_next_frame = true;
 }

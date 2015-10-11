@@ -13,19 +13,47 @@ end
 _print = print
 clearCoroutines()
 
-----------------------------------------------------------
--- scene_boss --- scene scene_boss --- scene scene_boss --
-----------------------------------------------------------
-----------------------------------------------------------
-
 function onSceneLoad_my_file()
 	onSceneLoad_scene_final_boss()
 	onSceneLoad_scene_4()
 	onSceneLoad_scene_3()
 	onSceneLoad_scene_2()
-	onSceneLoad_scene_1()	
+	--onSceneLoad_scene_1()	
 end
 
+
+-- Escena del menú principal
+function onSceneLoad_scene_menu()
+	-- Parpadeo de la lámpara
+	logicManager:setTimer("menu_lamp_parp", 5)
+end
+
+function onTimerEnd_menu_lamp_parp()
+	startCoroutine("lamp_parp", lamp_parp)	
+end
+
+function lamp_parp()
+	local parp_time = 0.02
+	local lamp_parp = logicManager:getObject("lampara_menu_parpadeo");
+
+	lamp_parp:setEmissive(false)
+	waitTime(parp_time)
+	lamp_parp:setEmissive(true)
+
+	waitTime(0.5)
+	lamp_parp:setEmissive(false)
+	waitTime(parp_time)
+	lamp_parp:setEmissive(true)
+	waitTime(parp_time)
+	lamp_parp:setEmissive(false)
+	waitTime(parp_time)
+	lamp_parp:setEmissive(true)
+	
+	logicManager:setTimer("menu_lamp_parp", 15)
+end
+
+
+-- Escena del boss
 function onSceneLoad_scene_final_boss()
 
 	player = logicManager:getBot("Player");
