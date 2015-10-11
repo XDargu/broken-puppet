@@ -6,16 +6,8 @@
 #include <mutex>
 class CEntity;
 
-class CApp {
+class CApp {	
 
-	enum TGameState {
-		INITIAL_VIDEO,
-		MAIN_MENU,
-		GAMEPLAY,
-		FINAL_VIDEO
-	};
-
-	TGameState game_state;
 
 	void update(float elapsed);
 	void fixedUpdate(float elapsed); // Physx update
@@ -29,6 +21,14 @@ class CApp {
 	bool video_sound_played;
 
 public:
+	enum TGameState {
+		INITIAL_VIDEO,
+		MAIN_MENU,
+		GAMEPLAY,
+		FINAL_VIDEO
+	};
+	TGameState game_state;
+
 	std::string current_scene_name;
 	std::string first_scene;
 	std::string menu_scene;
@@ -88,6 +88,8 @@ public:
 	void loadVideo(const char* name);
 	void playFinalVideo();
 	unsigned int getMaxNumNeedles();
+
+	void exitApp();
 };
 
 #endif

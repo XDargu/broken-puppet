@@ -16,6 +16,7 @@ struct TCompRender : TBaseComponent {
 	unsigned			submesh_id;
 	const CMaterial*	mat;
 	bool emissive_on;
+	bool swap_textures;
 
 	XMVECTOR color;
 

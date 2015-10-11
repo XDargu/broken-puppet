@@ -7,6 +7,7 @@ struct TCompButton : TBaseComponent {
 private:
 	char scene_change_name[128];
 	bool exit_action;
+	bool hovering;
 public:
 
 	TCompButton(){

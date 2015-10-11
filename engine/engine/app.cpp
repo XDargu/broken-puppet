@@ -441,7 +441,7 @@ bool CApp::create() {
 	// Preload scenes
 	bar = new std::thread(&CApp::preLoad, this);
 	
-	menu_scene = "data/scenes/scene_1.xml";
+	menu_scene = "data/scenes/scene_menu.xml";
 
 #ifdef _DEBUG
 	game_state = TGameState::GAMEPLAY;
@@ -615,11 +615,13 @@ void CApp::update(float elapsed) {
 	// Update input
 
 	if (CIOStatus::get().isPressed(CIOStatus::EXIT)){
-		CNav_mesh_manager::get().keep_updating_navmesh = false;
-		CNav_mesh_manager::get().setNeedNavMesh(false);
-		CNav_mesh_manager::get().generate_nav_mesh = false;
-		destroy();
-		exit(0);
+		if (game_state == TGameState::MAIN_MENU) {
+			logic_manager.exitGame(); 
+		}
+		else {
+			game_state = TGameState::MAIN_MENU;
+			logic_manager.loadScene(menu_scene);
+		}
 	}	
 
 	if (io.isPressed(CIOStatus::EXTRA)) {
@@ -829,8 +831,6 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompVibration>()->update(elapsed);
 	getObjManager<TCompLocalRotation>()->update(elapsed);
 
-	logic_manager.update(elapsed);
-
 #ifdef _DEBUG
 	entity_inspector.update();
 	entity_lister.update();
@@ -844,6 +844,7 @@ void CApp::update(float elapsed) {
 	CNav_mesh_manager::get().checkDistaceToEnemies();
 	//-----------------------------------------------------------------------------------------
 
+	logic_manager.update(elapsed);
 }
 
 // Physics update
@@ -1337,6 +1338,7 @@ void CApp::renderEntities() {
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
+	getObjManager<TCompPlayerController>()->renderDebug3D();
 
 }
 
@@ -1523,7 +1525,7 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
-
+	ShowCursor(FALSE);
 	// Load picture
 	/*renderUtilsDestroy();
 	renderUtilsCreate();*/
@@ -1873,4 +1875,12 @@ void CApp::playFinalVideo() {
 	loadVideo("final_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
+}
+
+void CApp::exitApp() {
+	CNav_mesh_manager::get().keep_updating_navmesh = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
+	CNav_mesh_manager::get().generate_nav_mesh = false;
+	destroy();
+	exit(0);
 }

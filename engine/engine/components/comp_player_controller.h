@@ -57,6 +57,8 @@ public:
 	bool canThrow();
 	
 	bool canReceiveDamage();
+
+	void renderDebug3D();
 };
 
 #endif

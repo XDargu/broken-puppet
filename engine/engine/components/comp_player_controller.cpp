@@ -12,6 +12,7 @@
 #include "io\iostatus.h"
 #include "components\comp_particle_group.h"
 #include "handle\prefabs_manager.h"
+#include "font\font.h"
 
 const string particles_hit_name = "ps_porcelain_hit";
 
@@ -179,6 +180,8 @@ void TCompPlayerController::update(float elapsed) {
 	TCompRigidBody* rigid = player_entity->get<TCompRigidBody>();
 	TCompCharacterController* c_controller = player_entity->get<TCompCharacterController>();
 	TCompSkeleton* skeleton = player_entity->get<TCompSkeleton>();
+
+	trans->room_id = CLogicManager::get().getPointZoneID(trans->position);
 
 	/*dbg((
 		"X:" + std::to_string(XMVectorGetX(trans->position)) + ", "
@@ -397,4 +400,9 @@ bool TCompPlayerController::canReceiveDamage() {
 	can_receive_hit &= fsm_player_legs->getCurrentNode() != "fbp_Dead";
 
 	return can_receive_hit;
+}
+
+void TCompPlayerController::renderDebug3D() {
+	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();
+	font.print3D(m_transform->position + XMVectorSet(0, 1.9f, 0, 0), fsm_player_legs->getCurrentNode().c_str());
 }

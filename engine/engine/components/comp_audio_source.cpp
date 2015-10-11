@@ -59,7 +59,9 @@ void TCompAudioSource::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
 void TCompAudioSource::init() {
 	player = CEntityManager::get().getByName("Player");
-	player_transform = ((CEntity*)player)->get<TCompTransform>();
+	if (player.isValid()) {
+		player_transform = ((CEntity*)player)->get<TCompTransform>();
+	}
 	if (autoPlay)
 		play();
 }

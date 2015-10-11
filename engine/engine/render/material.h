@@ -32,13 +32,15 @@ public:
 	}
 	void destroy();
 	const std::string& getName() const { return name; }
-	void activateTextures(bool emissive_on) const;
+	void activateTextures(bool emissive_on, bool swap_diffuse) const;
 	void activateEmissive(bool emissive_on) const;
 	const CRenderTechnique* getTech() const { return tech; }
 	bool castsShadows() const { return casts_shadows; }
 	bool isSolid() const { return solid; }
 	bool isDoubleSided() const { return double_sided; }
 	BlendConfig getBlendMode() const { return blend_mode; }
+
+	void setButtonHoverTextures(bool is_hovering);
 
 };
 
