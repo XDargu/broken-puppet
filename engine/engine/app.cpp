@@ -1713,7 +1713,7 @@ void CApp::loadScene(std::string scene_name) {
 	underwater.destroy();
 	ssrr.destroy();*/
 
-	water_level = -1000;
+	water_level = -100000;
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
 		TCompTransform* water_t = water->get<TCompTransform>();
