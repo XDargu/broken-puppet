@@ -1067,6 +1067,8 @@ void fsm_boss::WaveRight(){
 
 //FinalState
 void fsm_boss::FinalState(float elapsed){
+
+	int obj_limit = 100;
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -1081,11 +1083,10 @@ void fsm_boss::FinalState(float elapsed){
 				if (((CHandle)rigid).isValid()){
 					bool bossAccess = rigid->boss_level == 0;
 					if (bossAccess){
-
-						ball_list.push_back(e);
+						if (obj_limit >= ball_list.size())
+							ball_list.push_back(e);
 					}
 				}
-
 			}
 		}
 	}
@@ -1131,7 +1132,6 @@ void fsm_boss::Damaged1Left(float elapsed){
 	if (state_time >= 2.f){
 		destroyBombs();
 	}
-
 	if (state_time >= 2.6f){
 		ChangeState("fbp_Idle1");
 	}
@@ -1185,7 +1185,6 @@ void fsm_boss::Damaged1LeftFinal(){
 	if (state_time >= 0.5f){
 		destroyBombs();
 	}
-
 	if (state_time >= 0.9f){
 		ChangeState("fbp_FinalState");
 	}
@@ -1227,22 +1226,12 @@ void fsm_boss::Death(){
 		last_anim_id = -1;
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
-
-		/*
-		// Prueba: desactivar árbol base (para que el ragdoll esté activo, pero solo la parte superior)
-		TCompRagdoll* ragdoll = comp_ragdoll;
-		ragdoll->disableBoneTree(4);
-		/**/
 	}
 	
 	if (state_time >= 7.f){
-		CApp::get().playFinalVideo();
-		/*TCompRagdoll* ragdoll = comp_ragdoll;
-		ragdoll->enableBoneTree(4);
-		ragdoll->enableBoneTree(36);
-		ragdoll->enableBoneTree(11);*/
-		// Cambiar a video
 		ChangeState("fbp_Ended");
+		// Cambiar a video
+		CApp::get().playFinalVideo();				
 	}
 }
 
@@ -1291,8 +1280,8 @@ void fsm_boss::Reorientate(float elapsed, bool just_look){
 		if (need_reorientate){
 			XMVECTOR aux_pos = player_comp_trans->position;
 			aux_pos = XMVectorSetY(aux_pos, XMVectorGetY(enemy_comp_trans->position));
-
 			enemy_comp_trans->aimAt(aux_pos, enemy_comp_trans->getUp(), 0.8f * elapsed);
+
 			if (angle >= no_reorientate_angle){
 				need_reorientate = false;
 			}
@@ -1363,8 +1352,7 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 	if (arm_damaged == 0){
 		if (has_left){
 			if (hurt_state == 0){
-				ChangeState("fbp_Damaged1Left");
-				
+				ChangeState("fbp_Damaged1Left");				
 			}
 			else{
 				ChangeState("fbp_Damaged1LeftFinal");
@@ -1424,23 +1412,7 @@ int fsm_boss::CalculateAttack() {
 			if (bombs_destroyed){
 				need_bombs = true;
 				bombs_destroyed = false;
-			}
-			//Let the need bombs check here to show more attacks of the boss
-			/*
-			else{
-				int aux_bomb_number = 0;
-				for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
-					CEntity* e = m_entity_manager->rigid_list[i];
-					if (!e->hasTag("player")){
-						TCompExplosion* comp_explo = e->get<TCompExplosion>();
-						if (comp_explo){
-							aux_bomb_number++;
-						}
-					}
-				}				
-				need_bombs = aux_bomb_number < 0;						
-			}
-			/**/			
+			}		
 		}	
 
 		int aux_bomb_number = 0;
@@ -1455,7 +1427,6 @@ int fsm_boss::CalculateAttack() {
 		}
 		need_bombs = aux_bomb_number < 3;
 	}
-	//XDEBUG("devolviendo estado: %d", next_attack);
 
 	ball_list.clear();
 	return next_attack;
