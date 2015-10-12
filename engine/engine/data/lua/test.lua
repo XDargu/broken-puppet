@@ -68,6 +68,10 @@ function onSceneLoad_scene_final_boss()
 			--logicManager:pushPlayerLegsState("fbp_WakeUp");
 			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
 			player:teleportToPos(respawnPos);
+
+			if (player:getLife(0) <= 0) then
+				player:setLife(100);
+			end
 		end
 
 	end

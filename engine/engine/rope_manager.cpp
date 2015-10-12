@@ -20,6 +20,10 @@ CRope_manager::~CRope_manager()
 }
 
 void CRope_manager::addString(CHandle string){
+
+	// Check if the string is attached to the substitute
+
+
 	strings.push_back(CHandle(string));
 	if (strings.size() > max_strings){
 		removeString();

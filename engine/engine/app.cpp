@@ -1542,7 +1542,10 @@ void CApp::loadScene(std::string scene_name) {
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DISABLE_ALL);
 
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("loading_screen"));
+	float load_h = yres;
+	float load_w = (1920.0f * load_h) / 1080.f;
+	float init_offset = (xres - load_w) * 0.5f;
+	drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen"));
 	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;
@@ -1666,6 +1669,9 @@ void CApp::loadScene(std::string scene_name) {
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	
 	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	if (current_scene_name == "scene_menu") {
+		ctes_global.get()->added_ambient_color = XMVectorSet(0.7f, 0.5f, 0.5f, 1);
+	}
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	
 
