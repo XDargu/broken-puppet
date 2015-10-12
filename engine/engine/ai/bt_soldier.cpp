@@ -40,18 +40,19 @@ void bt_soldier::create(string s)
 	createRoot("Root", PRIORITY, NULL, NULL);
 	addChild("Root", "Ragdoll", SEQUENCE, (btcondition)&bt_soldier::conditionis_ragdoll, NULL);
 	addChild("Ragdoll", "ActionRagdoll1", ACTION, INTERNAL, NULL, (btaction)&bt_soldier::actionRagdoll);
-	addChild("Ragdoll", "Awake", PRIORITY, NULL, NULL);
+	addChild("Ragdoll", "Awake", PRIORITY, INTERNAL, NULL, NULL);
 	addChild("Awake", "WakeUp", SEQUENCE, INTERNAL, (btcondition)&bt_soldier::conditiontied_event, NULL);
-	addChild("Awake", "GroundedTied", PRIORITY, NULL, NULL);
+	addChild("Awake", "GroundedTied", PRIORITY, INTERNAL, NULL, NULL);
 	addChild("GroundedTied", "ActionWakeUp2", ACTION, INTERNAL, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 
 	addChild("Awake", "Grounded", PRIORITY, (btcondition)&bt_soldier::conditiontrue, NULL);
 	addChild("Grounded", "ActionWakeUp4", ACTION, (btcondition)&bt_soldier::conditionis_grounded, (btaction)&bt_soldier::actionWakeUp);
 	addChild("Grounded", "Leave5", ACTION, (btcondition)&bt_soldier::conditiontrue, (btaction)&bt_soldier::actionLeave);
 
-	addChild("Root", "events", PRIORITY, (btcondition)&bt_soldier::conditionare_events, NULL);
+	addChild("Root", "events", PRIORITY, INTERNAL, (btcondition)&bt_soldier::conditionare_events, NULL);
 	addChild("events", "HurtEvent7", ACTION, EXTERNAL, (btcondition)&bt_soldier::conditionhurt_event, (btaction)&bt_soldier::actionHurtEvent);
-	addChild("events", "TiedEvent9", SEQUENCE, (btcondition)&bt_soldier::conditiontied_event, NULL);
+
+	addChild("events", "TiedEvent9", SEQUENCE, EXTERNAL, (btcondition)&bt_soldier::conditiontied_event, NULL);
 	addChild("TiedEvent9", "TiedHit", ACTION, EXTERNAL, NULL, (btaction)&bt_soldier::actionHurtEvent);
 
 
@@ -910,7 +911,7 @@ int bt_soldier::actionHurtEvent()
 		aimanager::get().warningPlayerFound(this);
 		event_detected = false;
 		tied_event = false;
-
+		hurt_event = false;
 		return LEAVE;
 	}
 	else
@@ -1144,9 +1145,9 @@ int bt_soldier::conditioninitial_attack()
 		float distance_path = V3DISTANCE(p_transform->position, path[path.size() - 1]);
 		float distance_path_enemy = V3DISTANCE(m_transform->position, path[path.size() - 1]);
 		TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
-		if ((!initial_attack) && (distance_path_enemy < 7.5f) && (distance_path<1.0f) && (player_controller->canReceiveDamage())){
+		if ((!initial_attack) && (distance_path_enemy < 7.5f) && (distance_path<1.0f)){
 			if ((angle_deg < 30.f) && (angle_deg_path<30.f)){
-				if (distance < 7.5f){
+				if ((distance < 7.5f)&& (player_controller->canReceiveDamage())){
 					XDEBUG("First attack angle: %f, attack_dir.x=%f, attack_dir.y=%f, attack_dir.z=%f, front.x=%f, front.y=%f, front.z=%f, angle_deg_path=%f", +angle_deg, XMVectorGetX(attack_direction), XMVectorGetY(attack_direction), XMVectorGetZ(attack_direction), XMVectorGetX(front), XMVectorGetY(front), XMVectorGetZ(front), angle_deg_path);
 					return true;
 				}else{
@@ -1226,15 +1227,20 @@ void bt_soldier::hurtSensor(float damage){
 		is_ragdoll = true;
 		TCompTransform* m_transform = own_transform;
 		CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_dismemberment, m_transform->position);
-		setCurrent(NULL);
+		if (current!=NULL)
+			setCurrent(NULL);
 
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		is_ragdoll = true;
-		setCurrent(NULL);
+		if (current != NULL)
+			setCurrent(NULL);
 	}
 	else if (damage < force_medium_impact){
 		hurt_event = true;
+		event_detected = true;
+		if (current != NULL)
+		 setCurrent(NULL);
 	}
 }
 
@@ -1242,13 +1248,15 @@ void bt_soldier::WarWarningSensor(XMVECTOR player_position){
 	is_angry = true;
 	have_to_warcry = false;
 	player_detected_pos = player_position;
-	setCurrent(NULL);
+	if (current != NULL)
+		setCurrent(NULL);
 }
 
 void bt_soldier::PlayerFoundSensor(){
 	last_time_player_saw = 0;
 	lost_player = false;
-	setCurrent(NULL);
+	if (current != NULL)
+		setCurrent(NULL);
 }
 
 void bt_soldier::update(float elapsed){
@@ -1316,7 +1324,8 @@ void bt_soldier::findLostPlayer(){
 		if (findPlayer()){
 			lost_player = false;
 			player_previously_lost = true;
-			setCurrent(NULL);
+			if (current != NULL)
+				setCurrent(NULL);
 		}
 	}
 }
@@ -1462,9 +1471,9 @@ void bt_soldier::setActive(bool act){
 }
 
 void bt_soldier::needleHitSensor(){
-	if ((current) && ((current->getTypeInter() == EXTERNAL))){
+	if ((current!=NULL) && ((current->getTypeInter() == EXTERNAL))){
 		setCurrent(NULL);
-		tied_event = true;
+		hurt_event = true;
 		event_detected = true;
 	}
 }
@@ -1483,9 +1492,11 @@ void bt_soldier::stopMovement(){
 }
 
 void bt_soldier::resetBot(){
-	setCurrent(NULL);
-	playAnimationIfNotPlaying(10);
-	stopMovement();
+	if (current != NULL){
+		setCurrent(NULL);
+	}
+		playAnimationIfNotPlaying(10);
+		stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//((TCompCharacterController*)character_controller)->Move(mov_direction, false, false, look_direction);
 }

@@ -10,7 +10,7 @@
     <life life="100"/>
     <sensorTied/>
     <sensorPlayerPos/>
-    <sensorDistPlayer/>
+    <!--<sensorDistPlayer/>-->
     <!--<audioSource/>-->
     <btSoldier/>
   </entity>

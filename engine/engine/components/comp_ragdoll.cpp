@@ -397,7 +397,7 @@ void TCompRagdoll::breakJoints() {
 }
 
 void TCompRagdoll::breakJoint(int id) {
-	ragdoll->articulations[id]->setBreakForce(0.05f, 0.05f);
+	ragdoll->articulations[id]->setBreakForce(0.08f, 0.08f);
 }
 
 PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir) {

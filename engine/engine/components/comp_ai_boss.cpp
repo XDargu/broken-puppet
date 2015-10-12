@@ -216,6 +216,14 @@ void TCompAiBoss::init(){
 		original_ligh_color = H_point_light->color;
 	}
 
+	// Creating a collider to avoid problems in the initial rain	
+	CHandle anti_rain = prefabs_manager.getInstanceByName("boss/collider_anti_rain");
+	if (anti_rain.isValid()){
+		TCompTransform* anti_rain_trans = ((CEntity*)anti_rain)->get<TCompTransform>();
+		if (anti_rain_trans)
+			anti_rain_trans->teleport(XMVectorSet(10000, 10000, 10000, 10000));		
+	}
+
 }
 
 void TCompAiBoss::update(float elapsed){

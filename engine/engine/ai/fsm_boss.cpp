@@ -1650,12 +1650,14 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 
 			if (particle_entity.isValid()) {
 				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-				pg->destroy_on_death = true;
-				if (pg->particle_systems->size() > 0)
-				{
-					(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
-					(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
-				}
+				if (pg){
+					pg->destroy_on_death = true;
+					if (pg->particle_systems->size() > 0)
+					{
+						(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+						(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+					}
+				}				
 			}
 			/**/
 		}
@@ -1679,12 +1681,14 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 
 			if (particle_entity.isValid()) {
 				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-				pg->destroy_on_death = true;
-				if (pg->particle_systems->size() > 0)
-				{
-					(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
-					(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
-				}
+				if (pg){
+					pg->destroy_on_death = true;
+					if (pg->particle_systems->size() > 0)
+					{
+						(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+						(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+					}
+				}				
 			}
 			/**/
 		}

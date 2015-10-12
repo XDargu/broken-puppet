@@ -85,7 +85,7 @@ void btnode::recalc(bt *tree)
 {
 	// activate the next line to debug
 	//tree->checkIfStateChanged();
-	printf("recalcing node %s\n", name.c_str());
+	dbg("recalcing node %s\n", name.c_str());
 	switch (type)
 	{
 	case ACTION:
