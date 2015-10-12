@@ -35,7 +35,7 @@ void TCompBtSoldier::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	assertRequiredComponent<TCompCharacterController>(this);
 	//assertRequiredComponent<TCompSensorNeedles>(this);
 	assertRequiredComponent<TCompPlayerPosSensor>(this);
-	assertRequiredComponent<TCompSensorDistPlayer>(this);
+	//assertRequiredComponent<TCompSensorDistPlayer>(this);
 	assertRequiredComponent<TCompSensorTied>(this);
 	assertRequiredComponent<TCompSkeleton>(this);
 	m_aabb = assertRequiredComponent<TCompAABB>(this);
@@ -58,7 +58,7 @@ void TCompBtSoldier::init(){
 	//Asignación de la fuerza minima para hacer hacer saltar el callback de collisiones
 	TCompRigidBody* rigidBody = getSibling<TCompRigidBody>(this);
 
-	physx::PxReal threshold = 35000.f;
+	physx::PxReal threshold = 10000.f;
 	rigidBody->rigidBody->setContactReportThreshold(threshold);
 
 	TCompTransform* pos = assertRequiredComponent<TCompTransform>(this);
@@ -76,31 +76,33 @@ void TCompBtSoldier::init(){
 }
 
 void TCompBtSoldier::update(float elapsed){
-	m_ai_controller->update(elapsed);
+	if (m_ai_controller){
+		m_ai_controller->update(elapsed);
 
-	TCompTransform* trans = getSibling<TCompTransform>(this);
-	TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);
+		TCompTransform* trans = getSibling<TCompTransform>(this);
+		TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);
 
-	// Footsteps sound
-	float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
-	float surface_value = surface_tag;
+		// Footsteps sound
+		float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+		float surface_value = surface_tag;
 
-	bool moving = m_ai_controller->isMoving();
-	float run_speed_modifier = m_ai_controller->getRunSpeedModifier();
+		bool moving = m_ai_controller->isMoving();
+		float run_speed_modifier = m_ai_controller->getRunSpeedModifier();
 
-	if (moving) {
-		footstep_counter += elapsed;
+		if (moving) {
+			footstep_counter += elapsed;
 
 		float base_step = 1.f;
 		float time_modifier = run_speed_modifier * 1.f; //* (1 / water_multiplier);
 
-		if (footstep_counter >= time_modifier) {
-			CSoundManager::SoundParameter params[] = {
-				{ "Material", surface_value }
-			};
+			if (footstep_counter >= time_modifier) {
+				CSoundManager::SoundParameter params[] = {
+					{ "Material", surface_value }
+				};
 
-			CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
-			footstep_counter = 0.0f;
+				CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
+				footstep_counter = 0.0f;
+			}
 		}
 	}
 }
@@ -179,17 +181,20 @@ void TCompBtSoldier::onRopeTensed(const TMsgRopeTensed& msg) {
 			}
 		}
 	}
-	m_ai_controller->hurtSensor(damage);
+	if (m_ai_controller)
+		m_ai_controller->hurtSensor(damage);
 	//m_ai_controller->setRagdoll();
 }
 
 void TCompBtSoldier::onNeedleHit(const TMsgNeedleHit& msg) {
-	//m_ai_controller->needleHitSensor();
+	if (m_ai_controller)
+		m_ai_controller->needleHitSensor();
 }
 
 
 void TCompBtSoldier::renderDebug3D() {
 	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();
 	font.print3D(m_transform->position + XMVectorSet(0, 1, 0, 0), m_ai_controller->getCurrentNode().c_str());
-	m_ai_controller->drawdebug();
+	if (m_ai_controller)
+		m_ai_controller->drawdebug();
 }

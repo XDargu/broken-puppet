@@ -67,6 +67,8 @@ private:
 
 	bool null_node;
 	bool player_out_navMesh;
+	bool hurting;
+	bool cutting_own;
 
 	CHandle ropeRef;
 	CHandle m_sensor;

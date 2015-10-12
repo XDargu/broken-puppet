@@ -76,10 +76,11 @@ void TCompBtGrandma::init(){
 }
 
 void TCompBtGrandma::update(float elapsed){
-	m_ai_controller->update(elapsed);
+	if (m_ai_controller){
+		m_ai_controller->update(elapsed);
 
-	TCompTransform* trans = getSibling<TCompTransform>(this);
-	TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);	
+		TCompTransform* trans = getSibling<TCompTransform>(this);
+		TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);
 
 	// Footsteps sound
 	float surface_tag = (float)CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
@@ -88,8 +89,8 @@ void TCompBtGrandma::update(float elapsed){
 	bool moving = m_ai_controller->isMoving();
 	float run_speed_modifier = m_ai_controller->getRunSpeedModifier();
 
-	if (moving) {
-		footstep_counter += elapsed;
+		if (moving) {
+			footstep_counter += elapsed;
 
 		float base_step = 1.f;
 		float time_modifier = run_speed_modifier * 1.f; //* (1 / water_multiplier);
@@ -101,6 +102,8 @@ void TCompBtGrandma::update(float elapsed){
 
 			CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
 			footstep_counter = 0.0f;
+
+			}
 		}
 	}
 }
@@ -187,6 +190,6 @@ void TCompBtGrandma::onNeedleHit(const TMsgNeedleHit& msg) {
 void TCompBtGrandma::renderDebug3D() {
 	TCompTransform* m_transform = ((CEntity*)CHandle(this).getOwner())->get<TCompTransform>();
 	font.print3D(m_transform->position + XMVectorSet(0, 1, 0, 0), m_ai_controller->getCurrentNode().c_str());
-	font.print3D(m_transform->position + XMVectorSet(0, 1.15f, 0, 0), std::to_string(m_ai_controller->getRunSpeedModifier()).c_str());
+	font.print3D(m_transform->position + XMVectorSet(0, 1.15f, 0, 0), std::to_string(m_ai_controller->state_time).c_str());
 	m_ai_controller->drawdebug();
 }

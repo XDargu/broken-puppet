@@ -102,6 +102,10 @@ function onSceneLoad_scene_final_boss()
 		local boss = logicManager:getObject("Boss")	
 		boss:riseUpBoss()
 
+		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
+		local playerPos = player:getPosition();
+		antiRain:setPos(playerPos);
+
 		logicManager:setCanMove(false)
 		logicManager:setCanThrow(false)
 		logicManager:setCanPull(false)
@@ -113,7 +117,9 @@ function onSceneLoad_scene_final_boss()
 		logicManager:setTimer("boss_init_animation", 28)
 		
 		startCoroutine("bossShake", bossShake)
-		startCoroutine(" bossInitialRain",  bossInitialRain)
+		startCoroutine("bossInitialRain",  bossInitialRain)
+
+		antiRain:setPos(Vector(5000, 5000, 5000));
 	end
 
 	function bossShake()
@@ -216,7 +222,7 @@ function onSceneLoad_scene_final_boss()
 		elapsed = elapsed + 0.5
 		waitTime(scream - elapsed)
 		elapsed = scream
-		mBoss:initialRain(50);	
+		mBoss:initialRain(120);	
 		waitTime(0.5)
 
 

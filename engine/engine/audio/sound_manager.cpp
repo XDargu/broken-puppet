@@ -269,14 +269,12 @@ bool CSoundManager::setInstancePos(FMOD::Studio::EventInstance* eventInstance, T
 }
 
 FMOD::Studio::EventInstance* CSoundManager::playEvent(std::string path, XMVECTOR pos, std::string name) {
-	if (!CApp::get().isSlowMotion()){
-		TCompCamera* cam = render_manager.activeCamera;
-		if (cam) {
-			XMVECTOR camera_position = cam->getPosition();
-			float distance_to_listener = V3DISTANCE(camera_position, pos);
-			if (distance_to_listener <= max_dist_events){
-				return playEvent(path, 0, 0, pos, name);
-			}
+	TCompCamera* cam = render_manager.activeCamera;
+	if (cam) {
+		XMVECTOR camera_position = cam->getPosition();
+		float distance_to_listener = V3DISTANCE(camera_position, pos);
+		if (distance_to_listener <= max_dist_events){
+			return playEvent(path, 0, 0, pos, name);
 		}
 	}
 	return nullptr;

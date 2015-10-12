@@ -131,7 +131,6 @@ void TCompExplosion::Explote(bool force_explosion){
 			}
 		}
 
-
 		// Remove rope
 		CRope_manager& rope_manager = CRope_manager::get();
 
