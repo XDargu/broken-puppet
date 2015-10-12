@@ -175,6 +175,9 @@ void TCompPlayerController::update(float elapsed) {
 	if (io.becomesReleased(CIOStatus::R)) {
 		fsm_player_legs->ChangeState("fbp_Ragdoll");
 	}	
+	if (io.becomesReleased(CIOStatus::F4_KEY)) {
+		actorHit(TActorHit(CHandle(this).getOwner(), 150000.f, false));
+	}
 
 	TCompTransform* trans = player_entity->get<TCompTransform>();
 	TCompRigidBody* rigid = player_entity->get<TCompRigidBody>();
@@ -224,7 +227,7 @@ void TCompPlayerController::update(float elapsed) {
 	}
 
 	//c_controller->jumpPower = 10.2 / water_multiplier;
-	c_controller->gravityMultiplier = 48 * water_multiplier;
+	c_controller->gravityMultiplier = 48 * water_multiplier * water_multiplier;
 	skeleton->model->getMixer()->setTimeFactor(water_multiplier);
 
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");

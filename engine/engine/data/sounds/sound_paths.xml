@@ -49,7 +49,9 @@
 
   <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" />
   <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" />
-  
+
+  <event id="ENEMY_BREAKING" path="event:/Impactos/enemy_breaking" />
+
   <!-- Ambient -->
   
   IDs de habitaciones:
@@ -82,7 +84,8 @@
   <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
 
   <!-- Narración -->
-  
+  <event id="NARR_DEATH" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Muertes Katherine" /> Video inicial
+
   <!-- Video -->
   <event id="INITIAL_VIDEO" path="event:/intro_BP_sound" /> Video inicial
   <event id="FINAL_VIDEO" path="event:/final_BP_sound" /> Video final

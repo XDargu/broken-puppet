@@ -798,8 +798,9 @@ void CLogicManager::cameraLookAtPosition(CVector target){
 	}
 }
 
-void CLogicManager::playerDead() {
-	execute("onPlayerDead()");
+void CLogicManager::playerDead(float phrase, std::string subtitle_guid, float time) {
+	std::string message = "onPlayerDead(" + std::to_string(phrase) + ", \"" + subtitle_guid + "\", " + std::to_string(time) + ")";
+	execute(message);
 }
 
 void CLogicManager::pushPlayerLegsState(std::string state_name) {

@@ -99,6 +99,8 @@ void FSMPlayerLegs::Idle(float elapsed){
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompSkeletonIK* skeleton_ik = comp_skeleton_ik;
 
+	
+
 	canThrow = true;
 
 	skeleton_ik->active = false;// state_time > 0.3f;
@@ -113,6 +115,16 @@ void FSMPlayerLegs::Idle(float elapsed){
 	}	
 
 	if (on_enter) {
+		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
+		TCompRagdoll* m_ragdoll = comp_ragdoll;
+
+		if (m_ragdoll) {
+			if (m_ragdoll->isRagdollActive()) {
+				m_ragdoll->setActive(false);
+				m_transform->rotation = XMQuaternionIdentity();
+			}
+		}		
+
 		skeleton->loopAnimation(animation);
 	}
 
@@ -820,14 +832,13 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 
 		if (m_ragdoll) { m_ragdoll->setActive(true); }
 		stopAllAnimations();
-		collider->setMaterialProperties(1, 0.7f, 0.7f);
+		//collider->setMaterialProperties(1, 0.7f, 0.7f);
 		torso->CancelGrabString();
 
 		// Add pendant foce
 		m_ragdoll->cancelLinearVelocity();
 		m_ragdoll->addForce(ragdoll_force, PxForceMode::eVELOCITY_CHANGE);
-		ragdoll_force = PxVec3(0, 0, 0);
-		
+		ragdoll_force = PxVec3(0, 0, 0);		
 
 
 		/*rigidbody->setLockXRot(false);
@@ -837,10 +848,11 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 		rigidbody->auto_rotate_transform = true;
 		rigidbody->auto_translate_transform = true;*/
 	}
+
+
 	if (((state_time >= 1.5f && rigidbody->rigidBody->getLinearVelocity().magnitude() < 0.1f))
 		|| (state_time >= 4))
 	{
-		if (m_ragdoll) { m_ragdoll->setActive(false); }
 
 		/*rigidbody->setLockXRot(true);
 		rigidbody->setLockYRot(true);
@@ -857,16 +869,13 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 			)
 		);*/
 
-		collider->setMaterialProperties(0, 0, 0);
+		//collider->setMaterialProperties(0, 0, 0);
 
 		if (((TCompLife*)life)->life <= 0){
-			if (m_ragdoll) { m_ragdoll->setActive(false); }
-			m_transform->rotation = XMQuaternionIdentity();
 			ChangeState("fbp_Dead");
 		}
 		else{
 			if (m_ragdoll) { m_ragdoll->setActive(false); }
-			TCompSkeleton* m_skeleton = comp_skeleton;
 			ChangeState("fbp_WakeUp");
 		}
 	}
@@ -882,9 +891,6 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 			XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(rigidbody->rigidBody->getGlobalPose().p);
 			XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 1.f);
 			
-			/*((TCompCharacterController*)comp_character_controller)->Move(
-				Physics.XMVECTORToPxVec3(pos_final - pos_orig)
-				, false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()), elapsed);*/
 			rigidbody->rigidBody->setGlobalPose(
 				physx::PxTransform(
 					Physics.XMVECTORToPxVec3(pos_final),
@@ -901,14 +907,51 @@ void FSMPlayerLegs::Dead(float elapsed){
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->getFront()),elapsed);
 	dead_counter += elapsed;
 
-	if (dead_counter >= 4){
-		dead_counter = 0.f;
-		CLogicManager::get().playerDead();
-		((TCompLife*)life)->life = 100;
-		ChangeState("fbp_Idle");		
+	if (on_enter) {
+		// Narrator message, not in final scene
+		if (CApp::get().current_scene_name != "scene_final_boss") {
+			int phrase = getRandomNumber(0, 4);
+			float time = 7.f;
+			std::string subtitle_guid = "DEATH05";
+			if (phrase == 0) { subtitle_guid = "DEATH01"; time = 9.f; }
+			if (phrase == 1) { subtitle_guid = "DEATH02"; time = 8.f; }
+			if (phrase == 2) { subtitle_guid = "DEATH03"; time = 6.f; }
+			if (phrase == 3) { subtitle_guid = "DEATH04"; time = 11.f; }
+			if (phrase == 4) { subtitle_guid = "DEATH05"; time = 7.f; }
+
+			CLogicManager::get().playerDead((float)phrase, subtitle_guid, time);
+		}
+		else {
+			CLogicManager::get().playerDead(-1, "DEATH05", 0);
+		}
 	}
 
+	if (dead_counter >= 4){
+		dead_counter = 0.f;
+		
+		/*((TCompLife*)life)->life = 100;
+		ChangeState("fbp_Idle");*/		
+	}
 
+	TCompRigidBody* rigidbody = (TCompRigidBody*)comp_rigidbody;
+	TCompRagdoll* m_ragdoll = comp_ragdoll;
+	TCompSkeleton* m_skeleton = comp_skeleton;
+
+	// Recolocar la cápsula donde el ragdoll, para que la cámara lo siga
+	if (m_ragdoll) {
+		// Bone 003: Spine
+		XMVECTOR spine_pos = m_skeleton->getPositionOfBone(3) + XMVectorSet(0, 1, 0, 0);
+
+		XMVECTOR pos_orig = Physics.PxVec3ToXMVECTOR(rigidbody->rigidBody->getGlobalPose().p);
+		XMVECTOR pos_final = XMVectorLerp(pos_orig, spine_pos, 1.f);
+
+		rigidbody->rigidBody->setGlobalPose(
+			physx::PxTransform(
+			Physics.XMVECTORToPxVec3(pos_final),
+			rigidbody->rigidBody->getGlobalPose().q
+			)
+			);
+	}
 }
 
 void FSMPlayerLegs::ReevaluatePriorities(){
@@ -1113,9 +1156,10 @@ void FSMPlayerLegs::EvaluateHit(float damage){
 			real_damage = 10;
 			ChangeState("fbp_Hurt");
 		}
-	}
 
-	EvaluateLiveToLose(real_damage);
+		EvaluateLiveToLose(real_damage);
+	}
+	
 	
 }
 

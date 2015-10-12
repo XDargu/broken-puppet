@@ -133,7 +133,7 @@ void TCompRagdoll::setCollisonPlayer(bool active){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
-		PxU32 notCollide = FilterGroup::ePLAYER;
+		PxU32 notCollide = FilterGroup::ePLAYER | FilterGroup::ePLAYERINACTIVE;
 		PxShape* collider;
 		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
 		PxU32 myMaskCapsule = FilterGroup::ePLAYERINACTIVE;
@@ -232,7 +232,7 @@ void TCompRagdoll::setCollisonPlayerBone(bool active, int bone_id){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
-		PxU32 notCollide = FilterGroup::ePLAYER;
+		PxU32 notCollide = FilterGroup::ePLAYER | FilterGroup::ePLAYERINACTIVE;
 		PxShape* collider;
 		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
 		PxU32 myMaskCapsule = FilterGroup::ePLAYERINACTIVE;

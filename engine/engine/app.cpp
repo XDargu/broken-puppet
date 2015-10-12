@@ -666,7 +666,7 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F4_KEY)) {
-		CLogicManager::get().setBand(true);
+		
 	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {

@@ -28,6 +28,15 @@
   <subtitle guid="EXPR01" next="" size="24" color="0xff88ff00" time="3" sound="" text="¡Ja! Podría acostumbrarme a esto..." />
   <subtitle guid="EXPR02" next="" size="24" color="0xff88ff00" time="4" sound="" text="¿No dais para más? ¡Qué vergüenza!" />
 
+  <!-- Mensajes de muerte -->
+  <subtitle guid="DEATH01" next="" size="24" color="0xffffffff" time="9" sound="" text="Ese fue su fin... no, espera. No recuerdo que la historia terminase así. Empezaré otra vez esta parte..." />
+  <subtitle guid="DEATH02" next="" size="24" color="0xffffffff" time="8" sound="" text="Y Katherine cayó, pero aún le quedaba hilo para rato. Volveré a contar esta parte." />
+  <subtitle guid="DEATH03" next="" size="24" color="0xffffffff" time="6" sound="" text="Espera, espera, esta parte era algo distinta, recuperaré el hilo de la historia." />
+  <subtitle guid="DEATH04" next="" size="24" color="0xffffffff" time="11" sound="" text="Katherine había disparado su última aguja. Aunque bien pensado no recuerdo que fuera así. Volvamos a esta parte." />
+  <subtitle guid="DEATH05" next="" size="24" color="0xffffffff" time="7" sound="" text="Aún no ha caído el telón en esta historia. Comencemos de nuevo este acto." />
+
+
+
   <!-- Vídeos -->
   <subtitle guid="INITIAL_VIDEO"   next="INITIAL_VIDEO2"  size="36" color="0xffffffff" time="5" sound="" text="Aquel prestigioso teatro se abarrotaba cada noche" />
   <subtitle guid="INITIAL_VIDEO2"  next="INITIAL_VIDEO3"  size="36" color="0xffffffff" time="5" sound="" text="El público ansiaba ver actuar a su estrella..." />

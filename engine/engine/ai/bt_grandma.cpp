@@ -190,6 +190,8 @@ int bt_grandma::actionRagdoll()
 				TCompRagdoll* m_ragdoll = enemy_ragdoll;
 				TCompTransform* m_transform = own_transform;
 				m_ragdoll->breakJoints();
+
+				CSoundManager::get().playEvent("ENEMY_BREAKING", m_transform->position);
 				
 				//CRope_manager::get().removeJointTiedToObject(entity);
 

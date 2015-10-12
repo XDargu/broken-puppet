@@ -169,6 +169,7 @@ int bt_soldier::actionRagdoll()
 					//XMVECTOR min = XMVectorSet(-50, -50, -50, 0);
 					//XMVECTOR max = XMVectorSet(50, 50, 50, 0);
 
+					CSoundManager::get().playEvent("ENEMY_BREAKING", m_transform->position);
 					
 					if (this->getRol() == role::ATTACKER)
 						aimanager::get().RemoveEnemyAttacker(this);
