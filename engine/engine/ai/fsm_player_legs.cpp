@@ -646,6 +646,7 @@ void FSMPlayerLegs::Land(float elapsed){
 
 	TCompSkeleton* skeleton = comp_skeleton;
 	TCompTransform* camera_transform = ((CEntity*)entity_camera)->get<TCompTransform>();	
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
 	if (on_enter) {
 		skeleton->playAnimation(7);
@@ -661,11 +662,18 @@ void FSMPlayerLegs::Land(float elapsed){
 			sound_manager.playEvent("KATH_LAND", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_expr");
 		}
 
-		// Jump particle
-		CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
-		if (e) {
-			TCompParticleGroup* pg = ((CEntity*)e)->get<TCompParticleGroup>();
-			pg->restart();
+		// Jump particle, only if not underwater
+		if (CApp::get().water_level > XMVectorGetY(m_transform->position)) {
+			CLogicManager::get().instantiateParticleGroupOneShot("ps_bubble_one_shot", m_transform->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
+		}
+		else {
+			CEntity* e = CEntityManager::get().getByName("PlayerParticleJumpDust");
+			if (e) {
+				TCompParticleGroup* pg = ((CEntity*)e)->get<TCompParticleGroup>();
+				if (pg) {
+					pg->restart();
+				}
+			}
 		}
 	}
 	bool is_moving = false;

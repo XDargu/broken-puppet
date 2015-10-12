@@ -952,7 +952,7 @@ int bt_grandma::actionInitialAttack()
 		stopMovement();
 	}
 
-	float attack_time = 0.466;
+	float attack_time = 0.466f;
 	float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 
 	// Check if the attack reach the player at the given time

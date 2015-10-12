@@ -314,7 +314,7 @@ bool CCoreModel::convertCMF(int mesh_id, const char* outfile) {
 	  // Calculate handedness
 	  
 	  float head = XMVectorGetX(XMVector3Dot(XMVector3Cross(n, t), t2));
-	  v_tangent = XMVectorSetW(v_tangent, head < 0 ? -1 : 1);
+	  v_tangent = XMVectorSetW(v_tangent, head < 0 ? -1.f : 1.f);
 	  XMStoreFloat4(&sv.tangent, v_tangent);
 	  
 	  // Calculate handedness

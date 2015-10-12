@@ -82,26 +82,27 @@ void TCompBtGrandma::update(float elapsed){
 		TCompTransform* trans = getSibling<TCompTransform>(this);
 		TCompCharacterController* c_controller = getSibling<TCompCharacterController>(this);
 
-		// Footsteps sound
-		float surface_tag = CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
-		float surface_value = surface_tag;
+	// Footsteps sound
+	float surface_tag = (float)CSoundManager::get().getMaterialTagValue(c_controller->last_material_tag);
+	float surface_value = surface_tag;
 
-		bool moving = m_ai_controller->isMoving();
-		bool run_speed_modifier = m_ai_controller->getRunSpeedModifier();
+	bool moving = m_ai_controller->isMoving();
+	float run_speed_modifier = m_ai_controller->getRunSpeedModifier();
 
 		if (moving) {
 			footstep_counter += elapsed;
 
-			float base_step = 1.f;
-			float time_modifier = run_speed_modifier * 0.5f; //* (1 / water_multiplier);
+		float base_step = 1.f;
+		float time_modifier = run_speed_modifier * 1.f; //* (1 / water_multiplier);
 
-			if (footstep_counter >= time_modifier) {
-				CSoundManager::SoundParameter params[] = {
-					{ "Material", surface_value }
-				};
+		if (footstep_counter >= time_modifier) {
+			CSoundManager::SoundParameter params[] = {
+				{ "Material", surface_value }
+			};
 
-				CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
-				footstep_counter = 0.0f;
+			CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
+			footstep_counter = 0.0f;
+
 			}
 		}
 	}

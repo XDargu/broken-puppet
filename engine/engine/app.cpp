@@ -1529,7 +1529,9 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
+#ifndef _DEBUG
 	while (ShowCursor(FALSE) >= 0);
+#endif
 	// Load picture
 	/*renderUtilsDestroy();
 	renderUtilsCreate();*/

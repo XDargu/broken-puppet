@@ -205,11 +205,13 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 
 	if (kinematic) { return; }
 	if (!e->hasTag("player") && (boss_level > 3)) {
+		bool now_underwater = false;
 		float water_level = CApp::get().water_level;
 		float atten = 0.2f;
 		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
 
 		if (rigidBody->getGlobalPose().p.y < water_level) {
+			now_underwater = true;
 			float volume = rigidBody->getMass() / density;
 			float water_density = 500;
 
@@ -221,6 +223,12 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 			rigidBody->setLinearDamping(0.05f);
 			rigidBody->setAngularDamping(0.05f);
 		}
+
+		if (now_underwater != underwater) {
+			CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
+		}
+
+		underwater = now_underwater;
 	}
 
 }
