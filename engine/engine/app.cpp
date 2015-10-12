@@ -590,7 +590,7 @@ void CApp::update(float elapsed) {
 		return;
 	}
 
-	if (game_state == TGameState::FINAL_VIDEO) {
+	if (game_state == TGameState::FINAL_VIDEO && current_scene_name == "empty_scene") {
 		if (!video_sound_played) {
 			CSoundManager::get().playEvent("FINAL_VIDEO", "video_sound");
 			logic_manager.playSubtitles("FINAL_VIDEO");
@@ -1340,19 +1340,20 @@ void CApp::renderEntities() {
 			}
 		}
 	}
-	renderNavMesh = true;
+	
+	/*renderNavMesh = true;
 	if (renderNavMesh){
 		CNav_mesh_manager::get().render_nav_mesh();
 		CNav_mesh_manager::get().pathRender();
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
-	getObjManager<TCompPlayerController>()->renderDebug3D();
-
+	getObjManager<TCompPlayerController>()->renderDebug3D();*/
+	
 }
 
 void CApp::renderDebugEntities() {
-
+	
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(500, 30, s_fps.c_str());
 

@@ -205,7 +205,7 @@ void TCompExplosion::Explote(bool force_explosion){
 		CEntityManager::get().remove(mEntity);
 
 		// Play Explosion sound
-		CSoundManager::get().playEvent("event:/test_event", m_pos);
+		CSoundManager::get().playEvent("BOMB_EXPLOSION", m_pos);
 
 		// Adding particle sistem
 		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_explosion_bomb_big", m_pos, m_rot);

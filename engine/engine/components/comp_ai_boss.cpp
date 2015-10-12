@@ -385,21 +385,12 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 void TCompAiBoss::breakHitch(CHandle m_hitch){
 	if ((m_hitch == R_hitch) && (can_break_hitch)) {
 		if (m_fsm_boss->EvaluateHit(1)){
-			/**
-			if (R_hitch_joint){
-				((PxFixedJoint*)R_hitch_joint)->release();
-			}
-			CEntityManager::get().remove(R_hitch_light);
-			CEntityManager::get().remove(R_hitch);
-			/**/
+			//CApp::get().slowMotion(1.0f);
 		}
 	}
 	if ((m_hitch == L_hitch) && (can_break_hitch)) {
 		if (m_fsm_boss->EvaluateHit(0)){
-			/**
-			CEntityManager::get().remove(L_hitch_light);
-			CEntityManager::get().remove(L_hitch);
-			/**/
+			//CApp::get().slowMotion(1.0f);
 		}
 	}
 	if ((m_hitch == H_hitch)) {
