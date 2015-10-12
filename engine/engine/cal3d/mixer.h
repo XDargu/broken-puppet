@@ -99,7 +99,7 @@ class CalAnimationCycle;
 class CAL3D_API CalAbstractMixer
 {
 public:
-  CalAbstractMixer() {}
+	CalAbstractMixer() {}
   virtual ~CalAbstractMixer() {}
 
   /*****************************************************************************/
@@ -173,7 +173,8 @@ public:
   std::vector<CalAnimation *> &getAnimationVector();
   std::list<CalAnimationAction *> &getAnimationActionList();
   std::list<CalAnimationCycle *> &getAnimationCycle();  
-  
+  bool update_logic_translation;
+
 protected:
   CalModel *m_pModel;
   std::vector<CalAnimation *> m_vectorAnimation;

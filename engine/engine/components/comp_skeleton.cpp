@@ -133,13 +133,13 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   }
 
   time_since_last_ragdoll = 5000;
-
+  follow_animation = false;
+  model->getMixer()->update_logic_translation = true;
 }
 
 void TCompSkeleton::init() {
 	h_ragdoll = getSibling<TCompRagdoll>(this);
 	h_rigidbody = getSibling<TCompRigidBody>(this);
-	follow_animation = false;
 }
 
 

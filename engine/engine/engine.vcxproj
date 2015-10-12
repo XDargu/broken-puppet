@@ -179,6 +179,7 @@
     <ClInclude Include="ai\fsm_boss.h" />
     <ClInclude Include="ai\fsm_player_legs.h" />
     <ClInclude Include="ai\fsm_player_torso.h" />
+    <ClInclude Include="ai\fsm_substitute.h" />
     <ClInclude Include="ai\hinge_joint.h" />
     <ClInclude Include="ai\key_frame.h" />
     <ClInclude Include="ai\logic_manager.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="ai\lua_vector.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="audio\bass.h" />
+    <ClInclude Include="components\comp_ai_substitute.h" />
     <ClInclude Include="importer_resource_loader.h" />
     <ClInclude Include="audio\sound.h" />
     <ClInclude Include="audio\sound_events_parser.h" />
@@ -387,6 +389,7 @@
     <ClCompile Include="ai\fsm_boss.cpp" />
     <ClCompile Include="ai\fsm_player_legs.cpp" />
     <ClCompile Include="ai\fsm_player_torso.cpp" />
+    <ClCompile Include="ai\fsm_substitute.cpp" />
     <ClCompile Include="ai\hinge_joint.cpp" />
     <ClCompile Include="ai\key_frame.cpp" />
     <ClCompile Include="ai\logic_manager.cpp" />
@@ -402,6 +405,7 @@
     <ClCompile Include="callback_controllers.cpp" />
     <ClCompile Include="callback_physics.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="components\comp_ai_substitute.cpp" />
     <ClCompile Include="components\comp_boss_prefab.cpp" />
     <ClCompile Include="components\comp_hitch.cpp" />
     <ClCompile Include="importer_resource_loader.cpp" />
