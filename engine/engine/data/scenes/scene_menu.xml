@@ -221,21 +221,8 @@
     </render>
     <aabb min="-0.633501 -2.9623 -0.627484" max="0.622847 2.9623 0.63139"/>
   </entity>
-  <entity   materialTag = "metal">
-    <name name="lampara_steam_verde_S2_menu_33.0" />
-    <transform position="-11.6331 49.179 -107.895" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render  color = "0.721569 0.607843 0.898039">
-      <draw mesh="lampara_steam_verde_S2_menu" sub_mesh="0" mat="lampara_steam_verde_01"/>
-    </render>
-    <aabb min="-1.27868 -5.26695 -1.54161" max="1.68104 1.92055 1.47478"/>
-  </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_steam_verde_omni_34.0" />
-    <transform position="-12.0752 43.0487 -107.846" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S2_menu_33.0"/>
-    <pointLight radius="7.92" intensity="1.0" color="0.309804 0.737255 0.431373 1"/>
-  </entity>
-  <entity   materialTag = "wood">
-    <name name="cabezaRosa_s_menu_36.0" />
+    <name name="cabezaRosa_s_menu_33.0" />
     <transform position="-17.1052 42.8266 -96.9884" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="cabezaRosa_s_menu" sub_mesh="0" mat="cabeza_rosa"/>
@@ -243,7 +230,7 @@
     <aabb min="-0.830652 -1.43173 -0.43448" max="0.777555 1.28774 0.758143"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_s_menu_37.0" />
+    <name name="caja_rosa_s_menu_34.0" />
     <transform position="-17.6202 41.6812 -97.0344" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_s_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -251,7 +238,7 @@
     <aabb min="-1.30426 -0.456278 -0.559358" max="0.534018 1.15425 0.819229"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="carreta_S_menu_38.0" />
+    <name name="carreta_S_menu_35.0" />
     <transform position="2.04857 40.0543 -95.1913" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="carreta_S_menu" sub_mesh="0" mat="triciclo"/>
@@ -259,7 +246,7 @@
     <aabb min="-0.961105 0.142782 -1.41343" max="1.1108 0.871288 1.15102"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Rueda_S_menu_39.0" />
+    <name name="Rueda_S_menu_36.0" />
     <transform position="1.10642 40.2434 -95.0575" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="Rueda_S_menu" sub_mesh="0" mat="triciclo"/>
@@ -267,7 +254,7 @@
     <aabb min="-0.11033 -0.183937 -0.176513" max="0.108054 0.183937 0.175332"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Rueda001_S_menu_40.0" />
+    <name name="Rueda001_S_menu_37.0" />
     <transform position="1.8128 40.2434 -96.4198" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="Rueda001_S_menu" sub_mesh="0" mat="triciclo"/>
@@ -275,7 +262,7 @@
     <aabb min="-0.112725 -0.189135 -0.181126" max="0.11045 0.189135 0.179945"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Rueda002_S_menu_41.0" />
+    <name name="Rueda002_S_menu_38.0" />
     <transform position="3.18823 40.2434 -95.7056" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="Rueda002_S_menu" sub_mesh="0" mat="triciclo"/>
@@ -283,7 +270,7 @@
     <aabb min="-0.108054 -0.183937 -0.175331" max="0.110329 0.183937 0.176513"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Rueda003_S_menu_42.0" />
+    <name name="Rueda003_S_menu_39.0" />
     <transform position="2.48184 40.2434 -94.3432" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="Rueda003_S_menu" sub_mesh="0" mat="triciclo"/>
@@ -291,7 +278,7 @@
     <aabb min="-0.11045 -0.189135 -0.179944" max="0.112725 0.189135 0.181126"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Manillar_S_menu_43.0" />
+    <name name="Manillar_S_menu_40.0" />
     <transform position="1.62699 41.1633 -94.377" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="Manillar_S_menu" sub_mesh="0" mat="triciclo"/>
@@ -299,7 +286,7 @@
     <aabb min="-0.189874 -0.624077 -0.42856" max="0.367039 0.639892 0.332926"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="falso_arbol_a_menu_44.0" />
+    <name name="falso_arbol_a_menu_41.0" />
     <transform position="3.29189 40.1178 -93.8303" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0901961 0.0901961 0.0901961">
       <draw mesh="falso_arbol_a_menu" sub_mesh="0" mat="falso_arbol"/>
@@ -307,7 +294,7 @@
     <aabb min="-0.451202 0.00463112 -1.69069" max="0.452588 3.89529 1.69299"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="falso_bus_small_menu_45.0" />
+    <name name="falso_bus_small_menu_42.0" />
     <transform position="2.08638 40.7329 -91.9256" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0901961 0.0901961 0.0901961">
       <draw mesh="falso_bus_small_menu" sub_mesh="0" mat="falso_bus"/>
@@ -315,7 +302,7 @@
     <aabb min="-0.740038 -0.64737 -1.35975" max="0.73606 0.64737 1.1912"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="cajonera_a_S_menu_46.0" />
+    <name name="cajonera_a_S_menu_43.0" />
     <transform position="1.89316 40.9899 -100.419" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="cajonera_a_S_menu" sub_mesh="0" mat="cajonera_01"/>
@@ -324,7 +311,7 @@
     <aabb min="-0.930296 -0.871384 -1.37719" max="1.01767 0.871384 1.35466"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="caja_organillo_base_menu_47.0" />
+    <name name="caja_organillo_base_menu_44.0" />
     <transform position="2.55076 40.7833 -98.0466" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.878431 0.337255 0.337255">
       <draw mesh="caja_organillo_base_menu" sub_mesh="0" mat="caja_organillo"/>
@@ -332,8 +319,8 @@
     <aabb min="-0.702965 -0.691377 -0.716511" max="0.720928 0.691385 0.789303"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_organillo_engranaje_a_menu_48.0" />
-    <transform position="2.98088 40.9559 -98.0966" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="caja_organillo_base_menu_47.0"/>
+    <name name="caja_organillo_engranaje_a_menu_45.0" />
+    <transform position="2.98088 40.9559 -98.0966" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="caja_organillo_base_menu_44.0"/>
     <render  color = "0.878431 0.337255 0.337255">
       <draw mesh="caja_organillo_engranaje_a_menu" sub_mesh="0" mat="caja_organillo"/>
     </render>
@@ -344,8 +331,8 @@
     <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_organillo_engranaje_b_menu_49.0" />
-    <transform position="2.93253 40.8411 -98.2401" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="caja_organillo_base_menu_47.0"/>
+    <name name="caja_organillo_engranaje_b_menu_46.0" />
+    <transform position="2.93253 40.8411 -98.2401" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="caja_organillo_base_menu_44.0"/>
     <render  color = "0.878431 0.337255 0.337255">
       <draw mesh="caja_organillo_engranaje_b_menu" sub_mesh="0" mat="caja_organillo"/>
     </render>
@@ -353,7 +340,7 @@
     <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="florero_a_05_s_menu_50.0" />
+    <name name="florero_a_05_s_menu_47.0" />
     <transform position="2.6723 41.9295 -97.9818" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="florero_a_05_s_menu" sub_mesh="0" mat="herramientas"/>
@@ -361,7 +348,7 @@
     <aabb min="-0.280635 -0.427695 -0.176458" max="0.33129 1.16339 0.356706"/>
   </entity>
   <entity   materialTag = "glass">
-    <name name="Canica_a_menu_51.0" />
+    <name name="Canica_a_menu_48.0" />
     <transform position="-15.4683 41.8909 -75.1342" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="Canica_a_menu" sub_mesh="0" mat="glass"/>
@@ -370,7 +357,7 @@
     <aabb min="-0.390718 -0.395543 -0.381656" max="0.390718 0.395543 0.381656"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="quecoA_superior_menu_52.0" />
+    <name name="quecoA_superior_menu_49.0" />
     <transform position="2.12428 41.4887 -95.3339" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="quecoA_superior_menu" sub_mesh="0" mat="peonzas"/>
@@ -378,7 +365,7 @@
     <aabb min="-0.345846 -0.366106 -0.340825" max="0.345846 0.366106 0.340825"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="quecoA_inferior_menu_53.0" />
+    <name name="quecoA_inferior_menu_50.0" />
     <transform position="2.12428 40.892 -95.3339" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="quecoA_inferior_menu" sub_mesh="0" mat="peonzas"/>
@@ -386,7 +373,7 @@
     <aabb min="-0.339633 -0.274101 -0.334703" max="0.339633 0.2741 0.334703"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="peonza_a_m_menu_54.0" />
+    <name name="peonza_a_m_menu_51.0" />
     <transform position="0.798603 40.026 -74.2884" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="peonza_a_m_menu" sub_mesh="0" mat="peonzas"/>
@@ -394,7 +381,7 @@
     <aabb min="-0.531327 0.0 -0.205549" max="0.0194288 0.55745 0.446805"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_close_menu_55.0" />
+    <name name="caja_rosa_close_menu_52.0" />
     <transform position="-4.36037 40.5875 -75.2578" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_close_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -402,7 +389,7 @@
     <aabb min="-0.628329 -0.513955 -0.636653" max="0.607671 0.513955 0.601435"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="manivela_a_menu_56.0" />
+    <name name="manivela_a_menu_53.0" />
     <transform position="-4.00516 40.7122 -75.4719" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="manivela_a_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -410,7 +397,7 @@
     <aabb min="-0.0438074 -0.0464632 -0.301674" max="0.339579 0.331246 0.0505253"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_close_menu_57.0" />
+    <name name="caja_rosa_close_menu_54.0" />
     <transform position="-5.2199 40.5119 -74.4913" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_close_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -418,7 +405,7 @@
     <aabb min="-0.680928 -0.473057 -0.667788" max="0.680928 0.473057 0.667788"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="manivela_a_menu_58.0" />
+    <name name="manivela_a_menu_55.0" />
     <transform position="-5.56481 40.507 -74.7532" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="manivela_a_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -426,7 +413,7 @@
     <aabb min="-0.486635 -0.133261 -0.200334" max="0.0510868 0.0450503 0.0463688"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_close_menu_59.0" />
+    <name name="caja_rosa_close_menu_56.0" />
     <transform position="-4.48489 41.6025 -74.6303" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_close_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -434,7 +421,7 @@
     <aabb min="-0.578318 -0.451843 -0.554194" max="0.589647 0.451843 0.514019"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="manivela_a_menu_60.0" />
+    <name name="manivela_a_menu_57.0" />
     <transform position="-4.60249 42.1079 -74.617" rotation="-6.51683e-007 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="manivela_a_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -442,7 +429,7 @@
     <aabb min="-0.330964 -0.0232246 -0.0470656" max="0.0458989 0.412557 0.134094"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_roja_close_menu_61.0" />
+    <name name="caja_roja_close_menu_58.0" />
     <transform position="-3.9129 40.574 -74.1386" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_roja_close_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -450,7 +437,7 @@
     <aabb min="-0.523666 -0.51323 -0.527207" max="0.544909 0.51323 0.520819"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="manivela_a_menu_62.0" />
+    <name name="manivela_a_menu_59.0" />
     <transform position="-3.83748 40.7122 -73.7255" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="manivela_a_menu" sub_mesh="0" mat="cajas_juguete"/>
@@ -458,7 +445,7 @@
     <aabb min="-0.0483893 -0.0464631 -0.0310475" max="0.196109 0.331246 0.395388"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caballete_cartel_midL_L_menu_63.0" />
+    <name name="caballete_cartel_midL_L_menu_60.0" />
     <transform position="-3.6818 40.81 -111.862" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.341176 0.878431 0.776471">
       <draw mesh="caballete_cartel_midL_L_menu" sub_mesh="0" mat="papelera_cartel"/>
@@ -466,28 +453,15 @@
     <aabb min="-0.489846 -0.709327 -0.47359" max="0.477666 0.699521 0.484268"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caballete_cartel_midR_L_menu_64.0" />
+    <name name="caballete_cartel_midR_L_menu_61.0" />
     <transform position="-3.30613 40.7969 -112.225" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.341176 0.878431 0.776471">
       <draw mesh="caballete_cartel_midR_L_menu" sub_mesh="0" mat="papelera_cartel"/>
     </render>
     <aabb min="-0.490684 -0.686298 -0.493606" max="0.490684 0.686298 0.493606"/>
   </entity>
-  <entity   materialTag = "metal">
-    <name name="lampara_steam_verde_S_menu_65.0" />
-    <transform position="-3.69359 49.179 -107.895" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render  color = "0.721569 0.607843 0.898039">
-      <draw mesh="lampara_steam_verde_S_menu" sub_mesh="0" mat="lampara_steam_verde_01"/>
-    </render>
-    <aabb min="-1.27868 -5.26695 -1.54161" max="1.68104 1.92055 1.47478"/>
-  </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_steam_verde_omni_66.0" />
-    <transform position="-4.13567 43.0487 -107.846" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_menu_65.0"/>
-    <pointLight radius="7.315" intensity="1.0" color="0.309804 0.737255 0.356863 1"/>
-  </entity>
-  <entity   materialTag = "wood">
-    <name name="baul_a_s_menu_68.0" />
+    <name name="baul_a_s_menu_62.0" />
     <transform position="1.80072 42.251 -100.419" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.341176 0.878431 0.776471">
       <draw mesh="baul_a_s_menu" sub_mesh="0" mat="Material #2280"/>
@@ -495,7 +469,7 @@
     <aabb min="-0.792068 -0.358147 -0.955135" max="0.811176 0.358153 0.947981"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="baul_a_tapa_s_menu_69.0" />
+    <name name="baul_a_tapa_s_menu_63.0" />
     <transform position="2.39892 43.1723 -100.643" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.341176 0.878431 0.776471">
       <draw mesh="baul_a_tapa_s_menu" sub_mesh="0" mat="Material #2280"/>
@@ -503,12 +477,12 @@
     <aabb min="-0.526024 -0.57357 -0.807428" max="0.449669 0.531836 0.848454"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_pared_omni001_71.0" />
+    <name name="lampara_pared_omni001_65.0" />
     <transform position="2.70823 44.151 -82.7707" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0" parent="lampara_menu_parpadeo"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="papelera_a_s_menu_72.0" />
+    <name name="papelera_a_s_menu_66.0" />
     <transform position="-1.00876 40.7222 -113.22" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.341176 0.878431 0.776471">
       <draw mesh="papelera_a_s_menu" sub_mesh="0" mat="papelera_cartel"/>
@@ -516,7 +490,7 @@
     <aabb min="-0.275546 -0.669364 -0.26976" max="0.276042 0.669364 0.269789"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="cuadro_d_menu_73.0" />
+    <name name="cuadro_d_menu_67.0" />
     <transform position="-11.5439 43.631 -113.927" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.341176 0.882353 0.341176">
       <draw mesh="cuadro_d_menu" sub_mesh="0" mat="cuadros_01"/>
@@ -524,7 +498,7 @@
     <aabb min="-0.707578 -0.743959 -0.0397664" max="0.707578 0.743958 0.0397657"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="lampara_pared_004_menu_74.0" />
+    <name name="lampara_pared_004_menu_68.0" />
     <transform position="-11.5587 44.3473 -113.235" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="lampara_pared_004_menu" sub_mesh="0" mat="lampara_techo_01"/>
@@ -532,12 +506,12 @@
     <aabb min="-0.609875 2.54592e-007 -0.785813" max="0.610195 1.27022 0.785477"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_pared_omni003_75.0" />
-    <transform position="-11.8429 44.0425 -113.049" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0" parent="lampara_pared_004_menu_74.0"/>
+    <name name="lampara_pared_omni003_69.0" />
+    <transform position="-11.8429 44.0425 -113.049" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0" parent="lampara_pared_004_menu_68.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "glass">
-    <name name="Canica_c_menu_76.0" />
+    <name name="Canica_c_menu_70.0" />
     <transform position="-14.1502 37.3995 -82.2838" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="Canica_c_menu" sub_mesh="0" mat="glass"/>
@@ -546,7 +520,7 @@
     <aabb min="-0.358631 -0.361009 -0.374614" max="0.358631 0.361009 0.374614"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="rosa_jarron_b_s_menu_77.0" />
+    <name name="rosa_jarron_b_s_menu_71.0" />
     <transform position="3.34208 44.8846 -78.478" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="rosa_jarron_b_s_menu" sub_mesh="0" mat="herramientas"/>
@@ -554,7 +528,7 @@
     <aabb min="-0.122861 -0.475076 -0.184636" max="0.24169 1.04981 0.179915"/>
   </entity>
   <entity   materialTag = "ceramics">
-    <name name="florero_a_02_menu_78.0" />
+    <name name="florero_a_02_menu_72.0" />
     <transform position="3.49184 44.8412 -79.1767" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="florero_a_02_menu" sub_mesh="0" mat="herramientas"/>
@@ -562,7 +536,7 @@
     <aabb min="-0.424564 -0.437919 -0.302123" max="0.288372 1.03694 0.340143"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="rosa_jarron_b_s_menu_79.0" />
+    <name name="rosa_jarron_b_s_menu_73.0" />
     <transform position="3.36511 44.8846 -81.4804" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="rosa_jarron_b_s_menu" sub_mesh="0" mat="herramientas"/>
@@ -570,7 +544,7 @@
     <aabb min="-0.122861 -0.475076 -0.184636" max="0.24169 1.04981 0.179915"/>
   </entity>
   <entity   materialTag = "ceramics">
-    <name name="maceta_alta_S_02_menu_80.0" />
+    <name name="maceta_alta_S_02_menu_74.0" />
     <transform position="-11.8444 40.3781 -113.392" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="maceta_alta_S_02_menu" sub_mesh="0" mat="herramientas"/>
@@ -578,7 +552,7 @@
     <aabb min="-0.269793 -0.327988 -0.224994" max="0.30434 1.0043 0.372426"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="rosa_maceta_a_S001_menu_81.0" />
+    <name name="rosa_maceta_a_S001_menu_75.0" />
     <transform position="-13.7486 40.3793 -113.456" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="rosa_maceta_a_S001_menu" sub_mesh="0" mat="herramientas"/>
@@ -586,7 +560,7 @@
     <aabb min="-0.333215 -0.335408 -0.199411" max="0.226362 0.961613 0.220918"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="rosa_maceta_a_S_menu_82.0" />
+    <name name="rosa_maceta_a_S_menu_76.0" />
     <transform position="-10.2774 40.3793 -113.456" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="rosa_maceta_a_S_menu" sub_mesh="0" mat="herramientas"/>
@@ -594,7 +568,7 @@
     <aabb min="-0.333007 -0.335408 -0.222199" max="0.25416 0.961613 0.20101"/>
   </entity>
   <entity   materialTag = "ceramics">
-    <name name="maceta_alta_S_02_menu_83.0" />
+    <name name="maceta_alta_S_02_menu_77.0" />
     <transform position="3.51379 40.3781 -108.089" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="maceta_alta_S_02_menu" sub_mesh="0" mat="herramientas"/>
@@ -602,7 +576,7 @@
     <aabb min="-0.334308 -0.327988 -0.293539" max="0.227597 1.0043 0.388465"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="rosa_maceta_a_S_menu_84.0" />
+    <name name="rosa_maceta_a_S_menu_78.0" />
     <transform position="3.38626 40.3793 -109.299" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="rosa_maceta_a_S_menu" sub_mesh="0" mat="herramientas"/>
@@ -610,7 +584,7 @@
     <aabb min="-0.258379 -0.335408 -0.305728" max="0.212121 0.961613 0.185833"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="rosa_maceta_a_S_menu_85.0" />
+    <name name="rosa_maceta_a_S_menu_79.0" />
     <transform position="3.2923 40.3793 -106.568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="rosa_maceta_a_S_menu" sub_mesh="0" mat="herramientas"/>
@@ -618,7 +592,7 @@
     <aabb min="-0.186872 -0.335408 -0.321713" max="0.22459 0.961613 0.249156"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="puerta_esc1_menu_86.0" />
+    <name name="puerta_esc1_menu_80.0" />
     <transform position="-5.57214 41.4869 -116.142" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0901961 0.0901961 0.0901961">
       <draw mesh="puerta_esc1_menu" sub_mesh="0" mat="puertas_basicas_01"/>
@@ -626,7 +600,7 @@
     <aabb min="-0.784762 -1.36956 -0.0295473" max="0.784762 1.36956 0.0295473"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="sc1_merged_room7_wood_menu_87.0" />
+    <name name="sc1_merged_room7_wood_menu_81.0" />
     <transform position="-7.59853 42.6647 -98.5003" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="sc1_merged_room7_wood_menu" sub_mesh="0" mat="pilares_sueltos_02"/>
@@ -643,7 +617,7 @@
     <aabb min="-12.0 -10.6567 -31.5" max="12.0 10.7182 31.5"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="sc1_baran_room7_menu_88.0" />
+    <name name="sc1_baran_room7_menu_82.0" />
     <transform position="-7.59643 39.4547 -99.0018" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="sc1_baran_room7_menu" sub_mesh="0" mat="barandillas_02"/>
@@ -651,7 +625,7 @@
     <aabb min="-8.08217 -2.44724 -9.08274" max="8.08217 2.44723 9.08274"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="sc1_merged_room7_metal_menu_89.0" />
+    <name name="sc1_merged_room7_metal_menu_83.0" />
     <transform position="-7.59853 42.6647 -98.5003" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="sc1_merged_room7_metal_menu" sub_mesh="0" mat="pilares_sueltos_02"/>
@@ -660,7 +634,7 @@
     <aabb min="-8.88179 -10.7182 -18.2025" max="8.88186 5.40015 27.3818"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="bola_nieve_cuerda_menu_90.0" />
+    <name name="bola_nieve_cuerda_menu_84.0" />
     <transform position="-13.3678 37.74 -91.5726" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="bola_nieve_cuerda_menu" sub_mesh="0" mat="peana"/>
@@ -669,12 +643,12 @@
     <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni_91.0" />
+    <name name="lampara_mesita_omni_85.0" />
     <transform position="-3.59641 42.9767 -71.8547" rotation="0.0 0.106843 0.0 0.994276" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.0" intensity="2.0" color="0.937255 0.74902 0.545098 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_play_92.0" />
+    <name name="button_play_86.0" />
     <transform position="-2.89132 43.1462 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_play" sub_mesh="0" mat="button_play_on"/>
@@ -687,7 +661,7 @@
     </button>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_exit_93.0" />
+    <name name="button_exit_87.0" />
     <transform position="-2.89073 42.9181 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_exit" sub_mesh="0" mat="button_exit_on"/>
@@ -700,7 +674,7 @@
     </button>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_act1_94.0" />
+    <name name="button_act1_88.0" />
     <transform position="-3.23869 42.4365 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_act1" sub_mesh="0" mat="button_act1"/>
@@ -713,7 +687,7 @@
     </button>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_act2_95.0" />
+    <name name="button_act2_89.0" />
     <transform position="-2.57924 42.4365 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_act2" sub_mesh="0" mat="button_act2"/>
@@ -726,7 +700,7 @@
     </button>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_act4_96.0" />
+    <name name="button_act4_90.0" />
     <transform position="-2.57924 42.2715 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_act4" sub_mesh="0" mat="button_act4"/>
@@ -739,7 +713,7 @@
     </button>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_act3_97.0" />
+    <name name="button_act3_91.0" />
     <transform position="-3.23649 42.2715 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_act3" sub_mesh="0" mat="button_act3"/>
@@ -752,7 +726,7 @@
     </button>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="button_boss_98.0" />
+    <name name="button_boss_92.0" />
     <transform position="-2.90908 42.1041 -73.6131" rotation="0.707107 0.0 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0235294 0.529412 0.443137">
       <draw mesh="button_boss" sub_mesh="0" mat="button_boss"/>
@@ -765,7 +739,7 @@
     </button>
   </entity>
   <entity   materialTag = "wood">
-    <name name="estanteria_a_99.0" />
+    <name name="estanteria_a_93.0" />
     <transform position="3.49875 40.0434 -81.9563" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="estanteria_a" sub_mesh="0" mat="estanteria"/>
@@ -773,7 +747,7 @@
     <aabb min="-1.33122 0.0 -0.25" max="1.33122 4.33017 0.564773"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_100.0" />
+    <name name="libro_f_94.0" />
     <transform position="3.43554 41.71 -82.0956" rotation="0.887011 -2.74786e-007 0.461748 2.13797e-007" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -781,7 +755,7 @@
     <aabb min="-0.320862 -0.0781133 -0.243061" max="0.320861 0.0781133 0.243061"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_b_101.0" />
+    <name name="libro_b_95.0" />
     <transform position="3.48769 43.048 -81.4404" rotation="-0.5 -0.5 0.5 0.5" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_b" sub_mesh="0" mat="libros_vela"/>
@@ -789,7 +763,7 @@
     <aabb min="-0.320862 -0.0781133 -0.243061" max="0.320861 0.0781133 0.243061"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_102.0" />
+    <name name="libro_d_96.0" />
     <transform position="3.48769 43.048 -81.7213" rotation="-0.5 -0.5 0.5 0.5" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -797,7 +771,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_103.0" />
+    <name name="libro_e_97.0" />
     <transform position="3.48769 43.0457 -81.8501" rotation="-0.477714 -0.521334 0.477714 0.521334" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -805,15 +779,15 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_104.0" />
-    <transform position="3.48769 43.0407 -82.0059" rotation="-0.430459 -0.560985 0.430459 0.560986" scale="0.725802 0.725802 0.725802"/>
+    <name name="libro_f_98.0" />
+    <transform position="3.48769 43.0407 -82.0059" rotation="-0.430459 -0.560985 0.43046 0.560987" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
     </render>
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_a_105.0" />
+    <name name="libro_a_99.0" />
     <transform position="3.48769 43.0553 -81.3165" rotation="-0.5 -0.5 0.5 0.5" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_a" sub_mesh="0" mat="libros_vela"/>
@@ -821,7 +795,7 @@
     <aabb min="-0.321576 -0.0792564 -0.243697" max="0.321574 0.0792564 0.243697"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_106.0" />
+    <name name="libro_c_100.0" />
     <transform position="3.48769 43.0475 -81.592" rotation="0.471172 -0.471172 -0.527254 0.527254" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -829,7 +803,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_a_107.0" />
+    <name name="libro_a_101.0" />
     <transform position="2.5786 40.1908 -81.6917" rotation="-0.0784896 -0.315063 0.133225 0.93639" scale="0.531905 0.531905 0.531905"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_a" sub_mesh="0" mat="libros_vela"/>
@@ -837,7 +811,7 @@
     <aabb min="-0.321576 -0.0792564 -0.243697" max="0.321574 0.0792564 0.243697"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_108.0" />
+    <name name="libro_c_102.0" />
     <transform position="2.76819 40.0944 -81.5775" rotation="0.0 0.480179 0.0 0.877171" scale="0.531905 0.531905 0.531905"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -845,7 +819,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_109.0" />
+    <name name="libro_c_103.0" />
     <transform position="2.65355 40.0944 -81.1678" rotation="0.0 0.480179 0.0 0.877171" scale="0.531905 0.531905 0.531905"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -853,7 +827,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_a_110.0" />
+    <name name="libro_a_104.0" />
     <transform position="3.50172 42.3442 -81.9918" rotation="-0.704416 0.0616282 0.704416 -0.0616287" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_a" sub_mesh="0" mat="libros_vela"/>
@@ -861,7 +835,7 @@
     <aabb min="-0.321576 -0.0792564 -0.243697" max="0.321574 0.0792564 0.243697"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_111.0" />
+    <name name="libro_f_105.0" />
     <transform position="3.47218 41.1614 -81.7099" rotation="0.0 -0.793353 0.0 0.608761" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -869,7 +843,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_112.0" />
+    <name name="libro_f_106.0" />
     <transform position="3.47212 43.7683 -81.93" rotation="0.0 -0.707107 0.0 0.707107" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -877,7 +851,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_a_113.0" />
+    <name name="libro_a_107.0" />
     <transform position="3.47949 41.8577 -81.2584" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_a" sub_mesh="0" mat="libros_vela"/>
@@ -885,7 +859,7 @@
     <aabb min="-0.320187 -0.077185 -0.24239" max="0.320188 0.077185 0.24239"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_g_114.0" />
+    <name name="libro_g_108.0" />
     <transform position="3.47218 42.3709 -81.2599" rotation="-0.45452 -0.541675 0.45452 0.541675" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_g" sub_mesh="0" mat="libros_vela"/>
@@ -893,7 +867,7 @@
     <aabb min="-0.321576 -0.0792564 -0.243697" max="0.321574 0.0792564 0.243697"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_115.0" />
+    <name name="libro_c_109.0" />
     <transform position="3.47218 41.2629 -81.6655" rotation="0.0 -0.608761 0.0 0.793353" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -901,7 +875,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_116.0" />
+    <name name="libro_e_110.0" />
     <transform position="3.47218 41.0557 -81.7851" rotation="-0.707107 0.0 0.707107 -3.45607e-007" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -909,7 +883,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_a_117.0" />
+    <name name="libro_a_111.0" />
     <transform position="3.47218 41.2023 -82.2113" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_a" sub_mesh="0" mat="libros_vela"/>
@@ -917,7 +891,7 @@
     <aabb min="-0.320187 -0.077185 -0.24239" max="0.320188 0.077185 0.24239"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_g_118.0" />
+    <name name="libro_g_112.0" />
     <transform position="3.47218 41.2016 -82.3815" rotation="-0.353553 -0.612372 0.353554 0.612373" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_g" sub_mesh="0" mat="libros_vela"/>
@@ -925,15 +899,15 @@
     <aabb min="-0.321576 -0.0792564 -0.243697" max="0.321574 0.0792564 0.243697"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_b_119.0" />
-    <transform position="3.43141 42.2535 -81.6498" rotation="-0.706434 -0.0308393 0.706434 0.0308388" scale="0.62295 0.62295 0.62295"/>
+    <name name="libro_b_113.0" />
+    <transform position="3.43141 42.2535 -81.6498" rotation="-0.706434 -0.0308389 0.706434 0.0308385" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_b" sub_mesh="0" mat="libros_vela"/>
     </render>
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_120.0" />
+    <name name="libro_d_114.0" />
     <transform position="3.47218 41.2065 -82.1055" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -941,7 +915,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_121.0" />
+    <name name="libro_c_115.0" />
     <transform position="2.12395 40.0944 -81.2449" rotation="0.0 0.480179 0.0 0.877171" scale="0.531905 0.531905 0.531905"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -949,7 +923,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_b_122.0" />
+    <name name="libro_b_116.0" />
     <transform position="3.48583 41.8574 -81.4408" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_b" sub_mesh="0" mat="libros_vela"/>
@@ -957,7 +931,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_123.0" />
+    <name name="libro_e_117.0" />
     <transform position="3.48583 41.8616 -81.5744" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -965,7 +939,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_124.0" />
+    <name name="libro_d_118.0" />
     <transform position="3.40041 43.5433 -81.9246" rotation="0.0 -0.730732 0.0 0.682664" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -973,7 +947,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_125.0" />
+    <name name="libro_e_119.0" />
     <transform position="3.47212 43.6527 -81.9137" rotation="0.0 -0.104529 0.0 0.994522" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -981,7 +955,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="estanteria_a_126.0" />
+    <name name="estanteria_a_120.0" />
     <transform position="3.49831 40.0455 -79.1091" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="estanteria_a" sub_mesh="0" mat="estanteria"/>
@@ -989,7 +963,7 @@
     <aabb min="-1.33122 0.0 -0.25" max="1.33122 4.33017 0.564773"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_g_127.0" />
+    <name name="libro_g_121.0" />
     <transform position="3.38699 43.5353 -78.8023" rotation="-0.422618 -1.86843e-007 0.906308 -2.85363e-007" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_g" sub_mesh="0" mat="libros_vela"/>
@@ -997,7 +971,7 @@
     <aabb min="-0.320187 -0.077185 -0.24239" max="0.320188 0.0771851 0.24239"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_128.0" />
+    <name name="libro_e_122.0" />
     <transform position="3.41771 43.3211 -79.2198" rotation="0.0 -0.649448 0.0 0.760406" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -1005,7 +979,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_g_129.0" />
+    <name name="libro_g_123.0" />
     <transform position="3.41771 43.1993 -79.2331" rotation="0.0 -0.75852 0.0 0.651649" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_g" sub_mesh="0" mat="libros_vela"/>
@@ -1013,7 +987,7 @@
     <aabb min="-0.320187 -0.077185 -0.24239" max="0.320188 0.077185 0.24239"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_130.0" />
+    <name name="libro_f_124.0" />
     <transform position="3.41771 43.0823 -79.1826" rotation="0.0 -0.707107 0.0 0.707107" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -1021,7 +995,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_131.0" />
+    <name name="libro_f_125.0" />
     <transform position="3.51788 43.0317 -78.8396" rotation="0.3948 -0.594977 -0.384828 0.584844" scale="0.695989 0.695988 0.695989"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -1029,7 +1003,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_132.0" />
+    <name name="libro_e_126.0" />
     <transform position="3.41771 42.9667 -79.1663" rotation="0.0 -0.104529 0.0 0.994522" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -1037,7 +1011,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_133.0" />
+    <name name="libro_d_127.0" />
     <transform position="3.4426 42.8573 -79.1772" rotation="0.0 -0.730732 0.0 0.682664" scale="0.695988 0.695988 0.695988"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -1045,7 +1019,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_134.0" />
+    <name name="libro_f_128.0" />
     <transform position="3.44551 42.4521 -79.3826" rotation="-0.231588 -0.668107 0.231588 0.668107" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -1053,7 +1027,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_135.0" />
+    <name name="libro_d_129.0" />
     <transform position="3.49831 41.8772 -79.2309" rotation="0.606205 0.364028 -0.606204 -0.364028" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -1061,7 +1035,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_136.0" />
+    <name name="libro_f_130.0" />
     <transform position="3.44551 42.4718 -79.1205" rotation="-0.395623 -0.586074 0.395623 0.586073" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -1069,7 +1043,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_137.0" />
+    <name name="libro_e_131.0" />
     <transform position="3.44551 42.4654 -78.9652" rotation="-0.445198 -0.549363 0.445197 0.549362" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -1077,7 +1051,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_138.0" />
+    <name name="libro_d_132.0" />
     <transform position="3.44551 42.4521 -78.8371" rotation="-0.468738 -0.529421 0.468736 0.529419" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -1085,7 +1059,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_139.0" />
+    <name name="libro_c_133.0" />
     <transform position="3.44551 42.4464 -78.7076" rotation="-0.5023 0.438307 0.554876 -0.497689" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -1093,7 +1067,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_b_140.0" />
+    <name name="libro_b_134.0" />
     <transform position="3.44551 42.418 -78.5583" rotation="-0.468738 -0.529421 0.468736 0.529419" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_b" sub_mesh="0" mat="libros_vela"/>
@@ -1101,7 +1075,7 @@
     <aabb min="-0.320862 -0.0781133 -0.243061" max="0.320861 0.0781133 0.243061"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_a_141.0" />
+    <name name="libro_a_135.0" />
     <transform position="3.44551 42.4103 -78.4343" rotation="-0.468738 -0.529421 0.468736 0.529419" scale="0.725802 0.725802 0.725802"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_a" sub_mesh="0" mat="libros_vela"/>
@@ -1109,7 +1083,7 @@
     <aabb min="-0.321576 -0.0792564 -0.243697" max="0.321574 0.0792564 0.243697"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_142.0" />
+    <name name="libro_d_136.0" />
     <transform position="3.49831 41.8704 -78.4772" rotation="-0.382369 -0.594806 0.382369 0.594806" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -1117,7 +1091,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_d_143.0" />
+    <name name="libro_d_137.0" />
     <transform position="3.49831 41.878 -79.3973" rotation="0.558313 0.433921 -0.558312 -0.43392" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_d" sub_mesh="0" mat="libros_vela"/>
@@ -1125,7 +1099,7 @@
     <aabb min="-0.319765 -0.0771667 -0.241832" max="0.319764 0.0771667 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_b_144.0" />
+    <name name="libro_b_138.0" />
     <transform position="3.49831 41.8791 -79.5684" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_b" sub_mesh="0" mat="libros_vela"/>
@@ -1133,7 +1107,7 @@
     <aabb min="-0.320299 -0.0794136 -0.241832" max="0.320299 0.0794136 0.241832"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_145.0" />
+    <name name="libro_e_139.0" />
     <transform position="3.49831 41.8832 -79.702" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -1141,7 +1115,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_146.0" />
+    <name name="libro_c_140.0" />
     <transform position="3.50273 41.0428 -78.596" rotation="0.737277 0.0 -0.67559 3.50303e-007" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -1149,7 +1123,7 @@
     <aabb min="-0.32097 -0.0796126 -0.242726" max="0.320969 0.0796126 0.242726"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_e_147.0" />
+    <name name="libro_e_141.0" />
     <transform position="3.53225 41.2002 -79.0785" rotation="0.541677 0.454517 -0.541677 -0.454517" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_e" sub_mesh="0" mat="libros_vela"/>
@@ -1157,7 +1131,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_f_148.0" />
+    <name name="libro_f_142.0" />
     <transform position="3.53469 41.195 -79.3553" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_f" sub_mesh="0" mat="libros_vela"/>
@@ -1165,7 +1139,7 @@
     <aabb min="-0.320862 -0.0781133 -0.243061" max="0.320861 0.0781133 0.243061"/>
   </entity>
   <entity   materialTag = "book">
-    <name name="libro_c_149.0" />
+    <name name="libro_c_143.0" />
     <transform position="3.55911 41.1859 -79.23" rotation="-0.5 -0.5 0.5 0.5" scale="0.62295 0.62295 0.62295"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="libro_c" sub_mesh="0" mat="libros_vela"/>
@@ -1173,7 +1147,7 @@
     <aabb min="-0.321884 -0.0773527 -0.244613" max="0.321885 0.0773527 0.244613"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="lampara_suelo_150.0" />
+    <name name="lampara_suelo_144.0" />
     <transform position="1.07786 42.1388 -75.4458" rotation="0.0 -0.681684 0.0 0.731646" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="lampara_suelo" sub_mesh="0" mat="lamparas_mesita"/>
@@ -1181,12 +1155,12 @@
     <aabb min="-0.856077 -2.06927 -0.473753" max="0.856077 2.06927 0.473753"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_suelo_omni_151.0" />
-    <transform position="0.820891 42.5469 -76.2644" rotation="0.0 -0.681684 0.0 0.731646" scale="1.0 1.0 1.0" parent="lampara_suelo_150.0"/>
+    <name name="lampara_suelo_omni_145.0" />
+    <transform position="0.820891 42.5469 -76.2644" rotation="0.0 -0.681684 0.0 0.731646" scale="1.0 1.0 1.0" parent="lampara_suelo_144.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.952941 0.0470588 0.0705882 1"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="S_152.0" />
+    <name name="S_146.0" />
     <transform position="-18.8249 44.4585 -94.1407" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="S" sub_mesh="0" mat="letras"/>
@@ -1195,7 +1169,7 @@
     <aabb min="-0.562419 -0.998035 -0.222818" max="0.562419 0.998035 0.222819"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="H_153.0" />
+    <name name="H_147.0" />
     <transform position="-18.8143 44.1512 -95.421" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="H" sub_mesh="0" mat="letras"/>
@@ -1204,7 +1178,7 @@
     <aabb min="-0.609424 -0.819562 -0.186694" max="0.609423 0.819563 0.186693"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="O_154.0" />
+    <name name="O_148.0" />
     <transform position="-18.8143 44.365 -96.5914" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="O" sub_mesh="0" mat="letras"/>
@@ -1213,7 +1187,7 @@
     <aabb min="-0.519959 -0.872086 -0.186694" max="0.519959 0.872086 0.186693"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="W_155.0" />
+    <name name="W_149.0" />
     <transform position="-18.8088 43.1409 -98.043" rotation="0.653281 -0.270598 0.653282 -0.270598" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="W" sub_mesh="0" mat="letras"/>
@@ -1222,7 +1196,7 @@
     <aabb min="-0.757177 -0.754444 -0.186693" max="0.757177 0.754444 0.186694"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="S_156.0" />
+    <name name="S_150.0" />
     <transform position="3.63223 44.9112 -98.1601" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="S" sub_mesh="0" mat="letras"/>
@@ -1231,7 +1205,7 @@
     <aabb min="-0.562419 -0.998035 -0.222818" max="0.562419 0.998035 0.222819"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="H_157.0" />
+    <name name="H_151.0" />
     <transform position="3.62162 44.6039 -96.8797" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="H" sub_mesh="0" mat="letras"/>
@@ -1240,7 +1214,7 @@
     <aabb min="-0.609424 -0.819562 -0.186694" max="0.609423 0.819563 0.186693"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="O_158.0" />
+    <name name="O_152.0" />
     <transform position="3.62162 44.8177 -95.7093" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="O" sub_mesh="0" mat="letras"/>
@@ -1249,7 +1223,7 @@
     <aabb min="-0.519959 -0.872086 -0.186694" max="0.519959 0.872086 0.186693"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="W_159.0" />
+    <name name="W_153.0" />
     <transform position="3.61612 43.5936 -94.2578" rotation="-0.653281 0.270598 0.653282 -0.270598" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="W" sub_mesh="0" mat="letras"/>
@@ -1258,7 +1232,7 @@
     <aabb min="-0.757177 -0.754445 -0.186694" max="0.757177 0.754445 0.186694"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="carpaza_menu_160.0" />
+    <name name="carpaza_menu_154.0" />
     <transform position="-7.56695 49.8575 -80.2318" rotation="0.0 0.0218032 0.0 0.999762" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="carpaza_menu" sub_mesh="0" mat="telas2"/>
@@ -1266,7 +1240,7 @@
     <aabb min="-7.89628 -7.93369 -8.36036" max="8.53403 0.328128 7.67964"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="lampara_suelo_161.0" />
+    <name name="lampara_suelo_155.0" />
     <transform position="1.2555 42.1388 -85.9695" rotation="0.0 0.729351 0.0 0.68414" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="lampara_suelo" sub_mesh="0" mat="lamparas_mesita"/>
@@ -1274,12 +1248,12 @@
     <aabb min="-0.856077 -2.06927 -0.473753" max="0.856077 2.06927 0.473753"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_suelo_omni_162.0" />
+    <name name="lampara_suelo_omni_156.0" />
     <transform position="0.902241 42.6829 -84.9178" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.952941 0.0470588 0.0705882 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_vintage_163.0" />
+    <name name="caja_vintage_157.0" />
     <transform position="-17.6556 40.6504 -97.0503" rotation="0.0 0.58026 0.0 0.814431" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>
@@ -1287,7 +1261,7 @@
     <aabb min="-1.04616 -0.554932 -0.602041" max="1.04616 0.554932 0.602041"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="gramola_base_164.0" />
+    <name name="gramola_base_158.0" />
     <transform position="1.33227 40.0216 -84.7295" rotation="0.0 -0.41866 0.0 0.908143" scale="0.678392 0.678392 0.678392"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="gramola_base" sub_mesh="0" mat="gramola"/>
@@ -1295,33 +1269,33 @@
     <aabb min="-1.1956 0.0 -1.09198" max="0.815861 3.57293 1.09198"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="gramola_disco_165.0" />
-    <transform position="1.30895 40.8551 -84.8564" rotation="0.0 -0.41866 0.0 0.908143" scale="0.678392 0.678392 0.678392" parent="gramola_base_164.0"/>
+    <name name="gramola_disco_159.0" />
+    <transform position="1.30895 40.8551 -84.8564" rotation="0.0 -0.41866 0.0 0.908143" scale="0.678392 0.678392 0.678392" parent="gramola_base_158.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
     </render>
-    <aabb min="-0.558667 -0.0259119 -0.547545" max="0.558724 0.0259194 0.547454"/>
+    <aabb min="-0.558663 -0.0259119 -0.547549" max="0.558728 0.0259194 0.54745"/>
     <audioSource sound="MUSIC_MENU" autoplay="true" >
       <paramEnd/>
     </audioSource>
     <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="gramola_manivela_166.0" />
-    <transform position="1.45684 40.56 -84.3766" rotation="0.0 -0.41866 0.0 0.908143" scale="0.678392 0.678392 0.678392" parent="gramola_base_164.0"/>
+    <name name="gramola_manivela_160.0" />
+    <transform position="1.45684 40.56 -84.3766" rotation="0.0 -0.41866 0.0 0.908143" scale="0.678392 0.678392 0.678392" parent="gramola_base_158.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
     </render>
-    <aabb min="0.00112647 -0.34613 -0.323128" max="0.680714 0.04178 0.0439552"/>
+    <aabb min="0.00111979 -0.34613 -0.32312" max="0.680708 0.04178 0.043963"/>
     <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="ps_dust_167.0" />
+    <name name="ps_dust_161.0" />
     <transform position="-3.71597 41.8334 -79.5522" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <particleGroup name="ps_dust" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="cartel_onstage_168.0" />
+    <name name="cartel_onstage_162.0" />
     <transform position="0.6862 45.8713 -77.9716" rotation="0.604785 -0.0955055 0.366381 0.700627" scale="0.220077 0.182724 0.204964"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="cartel_onstage" sub_mesh="0" mat="flechas"/>
@@ -1329,7 +1303,7 @@
     <aabb min="-7.84421 -1.40103 -3.5448" max="7.42437 1.40103 6.97488"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="cuerdas_menu_169.0" />
+    <name name="cuerdas_menu_163.0" />
     <transform position="0.134784 52.6937 -79.1115" rotation="0.0 0.964306 0.0 0.264791" scale="2.33254 2.33254 2.33254"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="cuerdas_menu" sub_mesh="0" mat="flechas"/>
@@ -1337,7 +1311,7 @@
     <aabb min="-0.0438461 -2.91726 -0.0134417" max="0.041337 3.01107 0.0133647"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="cuerdas_menu_170.0" />
+    <name name="cuerdas_menu_164.0" />
     <transform position="1.83912 52.3858 -77.6405" rotation="0.0 0.964306 0.0 0.264791" scale="2.33254 2.33254 2.33254"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="cuerdas_menu" sub_mesh="0" mat="flechas"/>
@@ -1345,15 +1319,15 @@
     <aabb min="-0.0438461 -2.91726 -0.0134417" max="0.041337 3.01107 0.0133647"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="cuerdas_menu_171.0" />
-    <transform position="-2.091 49.1589 -77.6783" rotation="0.40333 -7.63581e-007 0.915055 3.54195e-007" scale="1.27882 1.27882 1.27882"/>
+    <name name="cuerdas_menu_165.0" />
+    <transform position="-2.091 49.1589 -77.6783" rotation="0.40333 -9.81747e-007 0.915055 4.50356e-007" scale="1.27882 1.27882 1.27882"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="cuerdas_menu" sub_mesh="0" mat="flechas"/>
     </render>
     <aabb min="-0.0438461 -2.91726 -0.0134423" max="0.041337 3.01107 0.0133652"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="cartel_show_menu_172.0" />
+    <name name="cartel_show_menu_166.0" />
     <transform position="3.39913 44.471 -76.9887" rotation="0.0 -0.15626 0.0 0.987716" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="cartel_show_menu" sub_mesh="0" mat="flechas"/>
@@ -1361,12 +1335,12 @@
     <aabb min="-0.257848 -0.997515 -0.2237" max="0.732841 0.997515 0.235886"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_pared_omni002_173.0" />
+    <name name="lampara_pared_omni002_167.0" />
     <transform position="3.28911 44.5417 -76.5834" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_roja_close_174.0" />
+    <name name="caja_roja_close_168.0" />
     <transform position="-0.639099 37.4431 -91.8893" rotation="0.0 0.729125 0.0 0.684381" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_roja_close" sub_mesh="0" mat="cajas_juguete"/>
@@ -1374,7 +1348,7 @@
     <aabb min="-0.451973 -0.51323 -0.473892" max="0.451974 0.513231 0.473892"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_close_175.0" />
+    <name name="caja_rosa_close_169.0" />
     <transform position="-1.84511 37.4565 -92.0769" rotation="0.653282 -0.270598 0.270598 0.653281" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_close" sub_mesh="0" mat="cajas_juguete"/>
@@ -1382,7 +1356,7 @@
     <aabb min="-0.451843 -0.513955 -0.473057" max="0.451843 0.513955 0.473057"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_close_176.0" />
+    <name name="caja_rosa_close_170.0" />
     <transform position="-1.14275 37.4565 -92.9948" rotation="0.0 0.969263 0.0 -0.246028" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_close" sub_mesh="0" mat="cajas_juguete"/>
@@ -1390,15 +1364,15 @@
     <aabb min="-0.451843 -0.513955 -0.473057" max="0.451843 0.513955 0.473057"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="caja_rosa_close_177.0" />
-    <transform position="-1.14275 38.3926 -92.3773" rotation="0.0814262 0.0814263 0.702403 0.702403" scale="1.0 1.0 1.0"/>
+    <name name="caja_rosa_close_171.0" />
+    <transform position="-1.14275 38.3926 -92.3773" rotation="0.0814267 0.0814268 0.702403 0.702403" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="caja_rosa_close" sub_mesh="0" mat="cajas_juguete"/>
     </render>
     <aabb min="-0.451843 -0.513955 -0.473057" max="0.451843 0.513955 0.473057"/>
   </entity>
   <entity   materialTag = "metal">
-    <name name="atrezzo_planeta_a_178.0" />
+    <name name="atrezzo_planeta_a_172.0" />
     <transform position="-2.08555 45.1383 -77.7002" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="atrezzo_planeta_a" sub_mesh="0" mat="atrezzos"/>
@@ -1407,8 +1381,8 @@
     <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="planeta_a_aro_f_179.0" />
-    <transform position="-2.08451 45.0764 -77.6973" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_178.0"/>
+    <name name="planeta_a_aro_f_173.0" />
+    <transform position="-2.08451 45.0764 -77.6973" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_172.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="planeta_a_aro_f" sub_mesh="0" mat="atrezzos"/>
     </render>
@@ -1416,8 +1390,8 @@
     <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="planeta_a_aro_e_180.0" />
-    <transform position="-2.07625 45.1371 -77.6792" rotation="0.0 0.0 -0.168664 0.985674" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_178.0"/>
+    <name name="planeta_a_aro_e_174.0" />
+    <transform position="-2.07625 45.1371 -77.6792" rotation="0.0 0.0 -0.168664 0.985674" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_172.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="planeta_a_aro_e" sub_mesh="0" mat="atrezzos"/>
     </render>
@@ -1425,8 +1399,8 @@
     <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="planeta_a_aro_c_181.0" />
-    <transform position="-2.07624 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_178.0"/>
+    <name name="planeta_a_aro_c_175.0" />
+    <transform position="-2.07624 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_172.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="planeta_a_aro_c" sub_mesh="0" mat="atrezzos"/>
     </render>
@@ -1434,8 +1408,8 @@
     <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="planeta_a_aro_a_182.0" />
-    <transform position="-2.07624 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_178.0"/>
+    <name name="planeta_a_aro_a_176.0" />
+    <transform position="-2.07624 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_172.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="planeta_a_aro_a" sub_mesh="0" mat="atrezzos"/>
     </render>
@@ -1443,8 +1417,8 @@
     <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="planeta_a_aro_b_183.0" />
-    <transform position="-2.07624 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_178.0"/>
+    <name name="planeta_a_aro_b_177.0" />
+    <transform position="-2.07624 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_172.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="planeta_a_aro_b" sub_mesh="0" mat="atrezzos"/>
     </render>
@@ -1452,8 +1426,8 @@
     <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="planeta_a_aro_d_184.0" />
-    <transform position="-2.07625 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_178.0"/>
+    <name name="planeta_a_aro_d_178.0" />
+    <transform position="-2.07625 45.1371 -77.6792" rotation="0.0 0.0 0.0 1.0" scale="0.45 0.45 0.45" parent="atrezzo_planeta_a_172.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="planeta_a_aro_d" sub_mesh="0" mat="atrezzos"/>
     </render>
@@ -1461,7 +1435,7 @@
     <localRotation speed="2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="aguja_menu_185.0" />
+    <name name="aguja_menu_179.0" />
     <transform position="-2.06004 41.7038 -73.1878" rotation="0.0 0.88917 0.0 0.457576" scale="1.27686 1.27686 1.27686"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="aguja_menu" sub_mesh="0" mat="agujas_llave"/>
@@ -1469,7 +1443,7 @@
     <aabb min="-0.285355 -0.0497096 -0.0136832" max="0.488921 0.0497095 0.0136832"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="aguja_menu_186.0" />
+    <name name="aguja_menu_180.0" />
     <transform position="-3.51698 43.089 -73.3594" rotation="0.0333812 0.513236 -0.286588 0.808296" scale="1.2709 1.2709 1.2709"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="aguja_menu" sub_mesh="0" mat="agujas_llave"/>
@@ -1477,14 +1451,14 @@
     <aabb min="-0.285355 -0.0497096 -0.0136832" max="0.488921 0.0497095 0.0136832"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_pared_omni005_187.0" />
+    <name name="lampara_pared_omni005_181.0" />
     <transform position="-0.801569 45.5869 -77.6635" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0" parent="lampara_menu_parpadeo"/>
     <pointLight radius="1.84619" intensity="0.8" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_pared_omni004_188.0" />
-    <transform position="0.246469 45.4702 -77.285" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0" parent="lampara_menu_parpadeo"/>
-    <pointLight radius="1.84619" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
+    <name name="lampara_pared_omni004_182.0" />
+    <transform position="0.38229 45.4702 -77.4451" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0" parent="lampara_menu_parpadeo"/>
+    <pointLight radius="1.84619" intensity="1.0" color="0.905882 0.560784 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="scene1_room6_menu" />
@@ -1496,6 +1470,7 @@
     <name name="camera_menu" />
     <transform position="-1.93 42.8288 -70.5" rotation="0.707104 -0.00185118 0.00185119 0.707104" scale="1.0 1.0 1.0"/>
     <camera  fov="60.0" znear="0.1" zfar="50.0"/>
+    <audioListener/>
   </entity>
   <entity   materialTag = "wood">
     <name name="machacabuelas_menu" />

@@ -20,6 +20,8 @@ public:
 
 	CalModel*  model;
 
+	bool follow_animation;
+
 	TCompSkeleton() : model(nullptr) { }
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();

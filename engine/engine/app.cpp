@@ -1669,8 +1669,10 @@ void CApp::loadScene(std::string scene_name) {
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	
 	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	ctes_global.get()->vignette = 4.0f;
 	if (current_scene_name == "scene_menu") {
 		ctes_global.get()->added_ambient_color = XMVectorSet(0.7f, 0.5f, 0.5f, 1);
+		ctes_global.get()->vignette = 7.0f;
 	}
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	
