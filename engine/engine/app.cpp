@@ -162,6 +162,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
 	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
+	SUBSCRIBE(TCompSubstituteBoss, TMsgRopeTensed, onRopeTensed);
 
 	SUBSCRIBE(TCompBtSoldier, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtSoldier, TWarWarning, warWarning);

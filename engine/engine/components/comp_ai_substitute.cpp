@@ -1,6 +1,7 @@
 #include "mcv_platform.h"
 #include "comp_ai_substitute.h"
-
+#include "comp_skeleton.h"
+#include "comp_ragdoll.h"
 
 TCompSubstituteBoss::TCompSubstituteBoss() {
 	m_fsm_substitute = new fsm_substitute;
@@ -21,4 +22,9 @@ void TCompSubstituteBoss::init(){
 
 void TCompSubstituteBoss::update(float elapsed){
 	m_fsm_substitute->update(elapsed);
+}
+
+void TCompSubstituteBoss::onRopeTensed(const TMsgRopeTensed& msg) {
+	TCompRagdoll* comp_ragdoll = getSibling<TCompRagdoll>(this);
+	comp_ragdoll->setActive(true);
 }

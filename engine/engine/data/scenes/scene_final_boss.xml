@@ -4474,6 +4474,7 @@
     skeleton_lookat target="0 0 0"/>
     <aabb min="-10.5 0 -10.5" max="10.5 12 10.5"/>
     <bossSubstitute/>
+    <ragdoll name="sustituta#1"/>
   </entity>
   
   
