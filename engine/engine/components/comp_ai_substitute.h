@@ -4,6 +4,7 @@
 #include "base_component.h"
 #include "physics_manager.h"
 #include "../ai/fsm_substitute.h"
+#include "handle\app_msgs.h"
 
 struct TCompSubstituteBoss : TBaseComponent {
 private:
@@ -17,6 +18,8 @@ public:
 	void update(float elapsed);
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
+
+	void onRopeTensed(const TMsgRopeTensed& msg);
 };
 
 
