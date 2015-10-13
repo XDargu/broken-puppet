@@ -1,4 +1,4 @@
 <settings>
-   <resolution xres="1280" yres="1024" fullscreen="true" />
+   <resolution xres="1280" yres="1024" fullscreen="false" />
    <first_scene name="scene_menu"/>
 </settings>

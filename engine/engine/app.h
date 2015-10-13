@@ -87,6 +87,7 @@ public:
 	bool renderVideo();
 	void loadVideo(const char* name);
 	void playFinalVideo();
+	void playInitialVideo();
 	unsigned int getMaxNumNeedles();
 
 	void exitApp();
