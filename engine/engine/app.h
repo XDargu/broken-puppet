@@ -1,3 +1,5 @@
+//#define FINAL_RELEASE
+
 #ifndef INC_APP_H_
 #define INC_APP_H_
 

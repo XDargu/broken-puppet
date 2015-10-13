@@ -50,7 +50,6 @@ using namespace physx;
 #include "theoraplayer/TheoraDataSource.h"
 #include "theoraplayer/TheoraVideoManager.h"
 
-
 static CApp the_app;
 
 CLogicManager			 &logic_manager = CLogicManager::get();
@@ -626,7 +625,7 @@ void CApp::update(float elapsed) {
 			logic_manager.loadScene(menu_scene);
 		}
 	}	
-
+#ifndef FINAL_RELEASE
 	if (io.isPressed(CIOStatus::EXTRA)) {
 	}
 
@@ -700,7 +699,7 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("underwater");		
 		//render_techniques_manager.reload("deferred_point_lights");
 	}
-
+#endif
 	// Water level
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {

@@ -15,6 +15,7 @@
 #include "io\iostatus.h"
 #include "handle\prefabs_manager.h"
 #include "rope_manager.h"
+#include "audio\sound_manager.h"
 
 TCompAiBoss::TCompAiBoss() {
 	m_fsm_boss = new fsm_boss;
@@ -385,11 +386,15 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 void TCompAiBoss::breakHitch(CHandle m_hitch){
 	if ((m_hitch == R_hitch) && (can_break_hitch)) {
 		if (m_fsm_boss->EvaluateHit(1)){
+			TCompTransform* boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+			CSoundManager::get().playEvent("BOSS_ARM", boss_trans->position);
 			//CApp::get().slowMotion(1.0f);
 		}
 	}
 	if ((m_hitch == L_hitch) && (can_break_hitch)) {
 		if (m_fsm_boss->EvaluateHit(0)){
+			TCompTransform* boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+			CSoundManager::get().playEvent("BOSS_ARM", boss_trans->position);
 			//CApp::get().slowMotion(1.0f);
 		}
 	}
@@ -533,6 +538,17 @@ NOS MIMIMOS Y PUNTO ¬¬
 /**/
 
 void TCompAiBoss::initBoss(){
+	XMVECTOR aux_pos = XMVectorSet(0, 1, 0, 0);
+
+	CHandle tapa_suelo = CEntityManager::get().getByName("tapa_hueco_boss");
+	if (tapa_suelo.isValid()){
+		TCompTransform* tapa_suelo_trans = ((CEntity*)tapa_suelo)->get<TCompTransform>();
+		if (tapa_suelo_trans)
+			aux_pos = tapa_suelo_trans->position;
+	}
+
+	CSoundManager::get().playEvent("BOSS_RISE_UP", aux_pos);
+
 	// Change the state to: RiseUp
 	m_fsm_boss->lua_boss_init = true;
 }

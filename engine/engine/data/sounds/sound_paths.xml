@@ -37,6 +37,8 @@
 
   <!-- Boss -->
   <event id="BOMB_EXPLOSION" path="event:/Impactos/bomb_exposion" />
+  <event id="BOSS_RISE_UP" path="event:/Ambiente/boss_rise_up" />
+  <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" />
 
 
 <!-- Collisions -->
