@@ -86,6 +86,8 @@ cbuffer TCtesGlobal SHADER_REGISTER(b2)
   float use_lightmaps;
   float elapsed;
   float global_water_level;
+  float vignette;
+  float global_dummy1, global_dummy2, global_dummy3;
   // Aligned to 16 bytes  
 };
 

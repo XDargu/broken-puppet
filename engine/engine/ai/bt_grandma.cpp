@@ -148,6 +148,8 @@ void bt_grandma::create(string s)
 	take_animation_done = false;
 	active = false;
 	lost_player = false;
+	hurting = false;
+	cutting_own = false;
 
 	null_node = false;
 	player_out_navMesh=false;
@@ -190,6 +192,8 @@ int bt_grandma::actionRagdoll()
 				TCompRagdoll* m_ragdoll = enemy_ragdoll;
 				TCompTransform* m_transform = own_transform;
 				m_ragdoll->breakJoints();
+
+				CSoundManager::get().playEvent("ENEMY_BREAKING", m_transform->position);
 				
 				//CRope_manager::get().removeJointTiedToObject(entity);
 
@@ -965,7 +969,7 @@ int bt_grandma::actionInitialAttack()
 		stopMovement();
 	}
 
-	float attack_time = 0.466;
+	float attack_time = 0.466f;
 	float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 
 	// Check if the attack reach the player at the given time
@@ -1189,18 +1193,22 @@ int bt_grandma::actionTaunter()
 //Calculate if hurts or ragdoll, if ragdoll then clean all events (los events solo tocan su flag, excepto el ragdoll)
 int bt_grandma::actionHurtEvent()
 {
-if (on_enter) {
+	if (on_enter) {
 		playAnimationIfNotPlaying(10);
+		hurting = true;
 	}
 
 	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = Physics.XMVECTORToPxVec3(dir);
 
-	if (state_time > getAnimationDuration(10)) {
+	if (state_time > 1.0f) {
 		//Call the iaManager method for warning the rest of the grandmas
+		BeAngry();
 		aimanager::get().warningPlayerFound(this);
 		event_detected = false;
+		hurt_event = false;
+		hurting = false;
 		return LEAVE;
 	}
 	else
@@ -1257,63 +1265,51 @@ int bt_grandma::actionNeedleAppearsEvent()
 int bt_grandma::actionTiedEvent()
 {
 
-	//mov_direction = PxVec3(0, 0, 0);
-	//look_direction = last_look_direction;
-	stopMovement();
-
 	if (on_enter) {
-
+		cutting_own = false;
 		if (!ropeRef.isValid()){
 			tied_event = false;
 			event_detected = false;
 			return LEAVE;
 		}
 		else{
-			//Plays the cut own string animation
-			//int dice = getRandomNumber(0, 10);
-			//if (dice < max_bf_posibilities){
-				// Ninja animation
 			stopAllAnimations();
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(12);
-				//tied_event = false;
-				//event_detected = false;
-			/*}
-			else{
-				tied_event = false;
-				event_detected = false;
-				tied_succesfull = true;
-				return LEAVE;*/
-			//}
 		}
 
 	}
 
-	if (state_time >= getAnimationDuration(12)/5){
+	stopMovement();
+
+	if (state_time >= getAnimationDuration(12)/5 && !cutting_own){
 		if (ropeRef.isValid()){
 			TCompRope* rope = (TCompRope*)ropeRef;
 			CRope_manager::get().removeString(ropeRef);
 		}
+		cutting_own = true;
+	}
 
-		if (state_time >= getAnimationDuration(12)){
-			tied_event = false;
-			event_detected = false;
-			if (!is_angry){
-				is_angry = true;
-				have_to_warcry = true;
-			}
-			else{
-				is_angry = true;
-				have_to_warcry = false;
-			}
-			return LEAVE;
-		}else{
-			return STAY;
+	if (state_time >= getAnimationDuration(12)){
+		cutting_own = false;
+		tied_event = false;
+		event_detected = false;
+		if (!is_angry){
+			is_angry = true;
+			have_to_warcry = true;
 		}
+		else{
+			is_angry = true;
+			have_to_warcry = false;
+		}
+		return LEAVE;
 	}
 	else{
+		tied_event = true;
+		event_detected = true;
 		return STAY;
 	}
+
 }
 
 //Keeps in falling state till ti
@@ -1514,6 +1510,7 @@ int bt_grandma::conditionare_events()
 //Check if is a hurt event
 int bt_grandma::conditionhurt_event()
 {
+	//return hurt_event;
 	return hurt_event;
 }
 
@@ -1584,6 +1581,7 @@ int bt_grandma::conditioninitial_attack()
 {
 	TCompTransform* m_transform = own_transform;
 	TCompTransform* p_transform = player_transform;
+	CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, p_transform->position, path);
 
 	if (path.size() > 0) {
 
@@ -1596,8 +1594,8 @@ int bt_grandma::conditioninitial_attack()
 
 		float distance = V3DISTANCE(m_transform->position, p_transform->position);
 		TCompPlayerController* player_controller = ((CEntity*)player)->get<TCompPlayerController>();
-		if ((!initial_attack) && (distance < 3.4f) && (player_controller->canReceiveDamage())){
-			if (angle_deg_path < 30.f)
+		if ((!initial_attack) && (distance < 3.4f)){
+			if ((angle_deg_path) < 30.f && (player_controller->canReceiveDamage()))
 				return true;
 			else{
 				initial_attack = true;
@@ -1679,8 +1677,8 @@ void bt_grandma::needleViewedSensor(){
 				//needle_to_take = true;
 				setCurrent(NULL);
 			}
-		}else{
-			setCurrent(NULL);
+		//}else{
+			//setCurrent(NULL);
 		}
 	}
 	lastNumNeedlesViewed = currentNumNeedlesViewed;
@@ -1694,7 +1692,7 @@ void bt_grandma::tiedSensor(){
 		if (!tied_event){
 			if (((TCompSensorTied*)tied_sensor)->getTiedState()){
 				ropeRef = (TCompRope*)((TCompSensorTied*)tied_sensor)->getRopeRef();
-				if ((current) && ((current->getTypeInter() == EXTERNAL))){
+				if ((current!=NULL) && ((current->getTypeInter() == EXTERNAL))){
 					setCurrent(NULL);
 					tied_event = true;
 					event_detected = true;
@@ -1715,18 +1713,22 @@ void bt_grandma::hurtSensor(float damage){
 		CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_dismemberment, m_transform->position);
 		TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
 		pg->destroy_on_death = true;
-		setCurrent(NULL);
+		if (current!=NULL)
+			setCurrent(NULL);
 		((TCompSensorNeedles*)m_sensor)->desAsociateNeedle(entity);
 	}
 	else if ((damage >= force_medium_impact) && (damage < force_large_impact)){
 		stopAllAnimations();
 		is_ragdoll = true;
-		setCurrent(NULL);
+		if (current != NULL)
+			setCurrent(NULL);
 		BeAngry();
 	}
-	else if (damage < force_medium_impact){
+	else if ((damage < force_medium_impact)&&(!hurting)){
+		event_detected = true;
 		hurt_event = true;
-		BeAngry();
+		if (current != NULL)
+			setCurrent(NULL);
 	}
 }
 
@@ -1743,7 +1745,8 @@ void bt_grandma::WarWarningSensor(XMVECTOR player_position){
 	last_time_player_saw = 0;
 	lost_player = false;
 	player_detected_pos = player_position;
-	setCurrent(NULL);
+	if (current != NULL)
+		setCurrent(NULL);
 }
 
 void bt_grandma::PlayerFoundSensor(){
@@ -1751,7 +1754,8 @@ void bt_grandma::PlayerFoundSensor(){
 	last_time_player_saw = 0;
 	lost_player = false;
 	//is_angry = true;
-	setCurrent(NULL);
+	if (current != NULL)
+		setCurrent(NULL);
 }
 /*void bt_grandma::PlayerTouchSensor(bool touch){
 	player_touch = touch;
@@ -1842,7 +1846,8 @@ void bt_grandma::findLostPlayer(){
 		if (findPlayer()){
 			lost_player = false;
 			player_previously_lost = true;
-			setCurrent(NULL);
+			if (current != NULL)
+				setCurrent(NULL);
 		}
 	}
 }
@@ -2001,7 +2006,8 @@ void bt_grandma::stopMovement(){
 }
 
 void bt_grandma::resetBot(){
-	setCurrent(NULL);
+	if (current != NULL)
+		setCurrent(NULL);
 	playAnimationIfNotPlaying(0);
 	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);

@@ -7,6 +7,7 @@
 
 struct TCompParticleGroup : TBaseComponent {
 	CHandle h_transform;
+	CHandle h_player_trans;
 	std::vector<TParticleSystem>* particle_systems;
 public:
 	enum flag{

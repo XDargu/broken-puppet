@@ -57,7 +57,7 @@ private:
 
 	bool RainDebris(float elapsed);
 	void rainJustBombs();
-	void FistParticles(float elapsed);
+	void FistParticles(float elapsed, float init, float end);
 	int debris_created;
 	float debris_creation_delay;
 	float bomb_creation_delay;
@@ -91,6 +91,8 @@ private:
 
 	int turns_without_bombs;
 	bool need_bombs;
+
+	float fist_particle_time;
 
 public:
 	fsm_boss();

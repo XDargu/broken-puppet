@@ -75,6 +75,19 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 						firstActorEntity->sendMsg(TActorHit(firstActorEntity, force, false));
 				}
 			}
+			else if ((secondActorEntity->hasTag("enemy")) && (firstActorEntity->hasTag("actor"))){
+				//Colision entre actor y enemigo
+				TCompRigidBody* second_rigid = secondActorEntity->get<TCompRigidBody>();
+				TCompRigidBody* first_rigid = firstActorEntity->get<TCompRigidBody>();
+				if (second_rigid){
+					PxReal force_threshold = second_rigid->rigidBody->getContactReportThreshold();
+					PxReal force = getForce(first_rigid->getMass(), pairs, i);
+					//float force_float = force;
+					XDEBUG("force impact actor to enemy: mass=%f,  force=%f, actor_name=%s, threshold=%f", first_rigid->getMass(), force, firstActorEntity->getName(), force_threshold);
+					if (force > force_threshold)
+						secondActorEntity->sendMsg(TActorHit(secondActorEntity, force, false));
+				}
+			}
 			else if ((secondActorEntity->hasTag("bomb")) && (firstActorEntity->hasTag("enemy"))){
 				//Colision entre actor y enemigo
 				XDEBUG("Boss head collision actor_name=%s", secondActorEntity->getName());

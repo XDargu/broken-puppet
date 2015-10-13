@@ -13,8 +13,9 @@
 #include "comp_point_light.h"
 #include "item_manager.h"
 #include "io\iostatus.h"
-#include "handle\prefabs_manager.h"¡
+#include "handle\prefabs_manager.h"
 #include "rope_manager.h"
+#include "audio\sound_manager.h"
 
 TCompAiBoss::TCompAiBoss() {
 	m_fsm_boss = new fsm_boss;
@@ -216,6 +217,14 @@ void TCompAiBoss::init(){
 		original_ligh_color = H_point_light->color;
 	}
 
+	// Creating a collider to avoid problems in the initial rain	
+	CHandle anti_rain = prefabs_manager.getInstanceByName("boss/collider_anti_rain");
+	if (anti_rain.isValid()){
+		TCompTransform* anti_rain_trans = ((CEntity*)anti_rain)->get<TCompTransform>();
+		if (anti_rain_trans)
+			anti_rain_trans->teleport(XMVectorSet(10000, 10000, 10000, 10000));		
+	}
+
 }
 
 void TCompAiBoss::update(float elapsed){
@@ -377,21 +386,16 @@ void TCompAiBoss::fixedUpdate(float elapsed){
 void TCompAiBoss::breakHitch(CHandle m_hitch){
 	if ((m_hitch == R_hitch) && (can_break_hitch)) {
 		if (m_fsm_boss->EvaluateHit(1)){
-			/**
-			if (R_hitch_joint){
-				((PxFixedJoint*)R_hitch_joint)->release();
-			}
-			CEntityManager::get().remove(R_hitch_light);
-			CEntityManager::get().remove(R_hitch);
-			/**/
+			TCompTransform* boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+			CSoundManager::get().playEvent("BOSS_ARM", boss_trans->position);
+			//CApp::get().slowMotion(1.0f);
 		}
 	}
 	if ((m_hitch == L_hitch) && (can_break_hitch)) {
 		if (m_fsm_boss->EvaluateHit(0)){
-			/**
-			CEntityManager::get().remove(L_hitch_light);
-			CEntityManager::get().remove(L_hitch);
-			/**/
+			TCompTransform* boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+			CSoundManager::get().playEvent("BOSS_ARM", boss_trans->position);
+			//CApp::get().slowMotion(1.0f);
 		}
 	}
 	if ((m_hitch == H_hitch)) {
@@ -454,14 +458,14 @@ bool TCompAiBoss::openLight(float elapsed){
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(R_light_trans->scale);
 	if ((aux_actual_scale <= scale_target) && (m_fsm_boss->has_right)){
-		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2) * elapsed;
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2f) * elapsed;
 		R_light_trans->scale = XMVectorSetX(R_light_trans->scale, aux_new_scale + aux_actual_scale);
 	}
 	
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(L_light_trans->scale);
 	if ((aux_actual_scale <= scale_target) && (m_fsm_boss->has_left)){
-		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2) * elapsed;
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.2f) * elapsed;
 		L_light_trans->scale = XMVectorSetX(L_light_trans->scale, aux_new_scale + aux_actual_scale);
 	}
 
@@ -520,7 +524,7 @@ void TCompAiBoss::openHeart(float elapsed){
 	// Scale lerp
 	aux_actual_scale = XMVectorGetX(H_light_trans->scale);
 	if ((aux_actual_scale <= scale_target)){
-		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.02) * elapsed;
+		aux_new_scale = lerp(aux_actual_scale, scale_target, 0.02f) * elapsed;
 		H_light_trans->scale = XMVectorSetX(H_light_trans->scale, aux_new_scale + aux_actual_scale);
 	}
 
@@ -534,6 +538,17 @@ NOS MIMIMOS Y PUNTO ¬¬
 /**/
 
 void TCompAiBoss::initBoss(){
+	XMVECTOR aux_pos = XMVectorSet(0, 1, 0, 0);
+
+	CHandle tapa_suelo = CEntityManager::get().getByName("tapa_hueco_boss");
+	if (tapa_suelo.isValid()){
+		TCompTransform* tapa_suelo_trans = ((CEntity*)tapa_suelo)->get<TCompTransform>();
+		if (tapa_suelo_trans)
+			aux_pos = tapa_suelo_trans->position;
+	}
+
+	CSoundManager::get().playEvent("BOSS_RISE_UP", aux_pos);
+
 	// Change the state to: RiseUp
 	m_fsm_boss->lua_boss_init = true;
 }

@@ -1,8 +1,11 @@
 <fmodEvents>
+  <!-- MUSICA -->
+  <event id="MUSIC_MENU" path="event:/Musica/CANCION" />
+
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" />
   <event id="BUTTON_CLICK" path="event:/GUI/button_click" />
-
+  
   <!-- Katherine -->
   <event id="KATH_JUMP" path="event:/Expresion/Katherine/Saltar" />
   <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />
@@ -31,8 +34,14 @@
   <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" />
   <event id="STEPS_GRANDMA" path="event:/Pasos/Pasos Abuela" />
   <event id="STEPS_SOLDIER" path="event:/Pasos/Pasos Soldado" />
-  
-  <!-- Collisions -->
+
+  <!-- Boss -->
+  <event id="BOMB_EXPLOSION" path="event:/Impactos/bomb_exposion" />
+  <event id="BOSS_RISE_UP" path="event:/Ambiente/boss_rise_up" />
+  <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" />
+
+
+<!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
   <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
   <event id="HIT_RATTLE" path="event:/Colisiones/Colision Cascabel" />
@@ -46,7 +55,9 @@
 
   <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" />
   <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" />
-  
+
+  <event id="ENEMY_BREAKING" path="event:/Impactos/enemy_breaking" />
+
   <!-- Ambient -->
   
   IDs de habitaciones:
@@ -79,7 +90,8 @@
   <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
 
   <!-- Narración -->
-  
+  <event id="NARR_DEATH" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Muertes Katherine" /> Video inicial
+
   <!-- Video -->
   <event id="INITIAL_VIDEO" path="event:/intro_BP_sound" /> Video inicial
   <event id="FINAL_VIDEO" path="event:/final_BP_sound" /> Video final

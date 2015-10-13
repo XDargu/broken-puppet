@@ -254,7 +254,7 @@ void PSGBuffer(
   // Save the normal
 
   bool test = length(in_tangent) < 2;
-  test = true;
+  //test = true;
   float3 m_norm = test ? wnormal_per_pixel : in_normal;
   normal = (float4(m_norm, 1) + 1.) * 0.5;
   
@@ -743,8 +743,8 @@ float4 PSResolve(
 	//return final_color;
 	float exposure = 1.7;
 	float2 vtc = float2(uv - 0.5);
-	float vignette = pow(1 - (dot(vtc, vtc) * 1.0), 4.0);
-	return 1.0 - pow(2.71, -(vignette * final_color * exposure));
+	float f_vignette = pow(1.0 - (dot(vtc, vtc) * 1.0), vignette);
+	return 1.0 - pow(2.71, -(f_vignette * final_color * exposure));
 }
 
 

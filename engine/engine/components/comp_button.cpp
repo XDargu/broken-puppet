@@ -25,7 +25,7 @@ void TCompButton::init() {
 	CIOStatus& io = CIOStatus::get();
 
 	io.setMousePointer(false);
-	ShowCursor(TRUE);
+	while (ShowCursor(TRUE) <= 0);
 }
 
 void TCompButton::update(float elapsed) {

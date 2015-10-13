@@ -148,7 +148,7 @@ public:
 	void cameraLookAtPosition(CVector target);
 	void cameraLookAt(XMVECTOR target);
 
-	void playerDead();
+	void playerDead(float phrase, std::string subtitle_guid, float time);
 	
 
 	// SOUND & MUSIC

@@ -64,15 +64,22 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 	}
 
 	else {
+
+		TCompSkeleton* skel = skeleton;
 		TCompAABB* aabb = h_aabb;
 		TCompTransform* transform = h_trans;
 		// AABB Min max
 		XMFLOAT3 aabb_min = XMFLOAT3(1000000, 1000000, 1000000);
 		XMFLOAT3 aabb_max = XMFLOAT3(-1000000, -1000000, -1000000);
-		PxVec3 pos;
-		for (auto& it : ragdoll->bone_map) {
-			
-			pos = it.second->getGlobalPose().p;
+
+		auto& cal_bones = skel->model->getSkeleton()->getVectorBone();
+		CalVector pos;
+		CalBone* bone;
+
+		for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+			bone = cal_bones[bone_idx];
+			pos = bone->getTranslationAbsolute();
+
 			aabb_min.x = min(aabb_min.x, pos.x - 10);
 			aabb_min.y = min(aabb_min.y, pos.y - 10);
 			aabb_min.z = min(aabb_min.z, pos.z - 10);
@@ -80,15 +87,44 @@ void TCompRagdoll::fixedUpdate(float elapsed) {
 			aabb_max.x = max(aabb_max.x, pos.x + 10);
 			aabb_max.y = max(aabb_max.y, pos.y + 10);
 			aabb_max.z = max(aabb_max.z, pos.z + 10);
-		}				
+		}
+
 		aabb->min = XMLoadFloat3(&aabb_min);
 		aabb->max = XMLoadFloat3(&aabb_max);
+
+		// Old AABB update
+		/*TCompAABB* aabb = h_aabb;
+		TCompTransform* transform = h_trans;
+		// AABB Min max
+		XMFLOAT3 aabb_min = XMFLOAT3(1000000, 1000000, 1000000);
+		XMFLOAT3 aabb_max = XMFLOAT3(-1000000, -1000000, -1000000);
+		PxVec3 pos;
+		PxShape* shape;
+		PxCapsuleGeometry geom;
+		float size = 10;
+		for (auto& it : ragdoll->bone_map) {
+			it.second->getShapes(&shape, 1);
+			shape->getCapsuleGeometry(geom);
+			size = geom.halfHeight + geom.radius + 2;
+
+			pos = it.second->getGlobalPose().p;
+			aabb_min.x = min(aabb_min.x, pos.x - size);
+			aabb_min.y = min(aabb_min.y, pos.y - size);
+			aabb_min.z = min(aabb_min.z, pos.z - size);
+
+			aabb_max.x = max(aabb_max.x, pos.x + size);
+			aabb_max.y = max(aabb_max.y, pos.y + size);
+			aabb_max.z = max(aabb_max.z, pos.z + size);
+		}				
+		aabb->min = XMLoadFloat3(&aabb_min);
+		aabb->max = XMLoadFloat3(&aabb_max);*/
 	}
 }
 
 void TCompRagdoll::setActive(bool active) {
 	ragdoll_active = active;
 	TCompAABB* aabb = h_aabb;
+	CEntity* m_entity = CHandle(aabb).getOwner();
 	aabb->auto_update = !active;
 
 	// Call the skeleton to save the ragdoll bone positions
@@ -133,7 +169,7 @@ void TCompRagdoll::setCollisonPlayer(bool active){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
-		PxU32 notCollide = FilterGroup::ePLAYER;
+		PxU32 notCollide = FilterGroup::ePLAYER | FilterGroup::ePLAYERINACTIVE;
 		PxShape* collider;
 		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
 		PxU32 myMaskCapsule = FilterGroup::ePLAYERINACTIVE;
@@ -232,7 +268,7 @@ void TCompRagdoll::setCollisonPlayerBone(bool active, int bone_id){
 	CEntity* e = (CEntity*)CHandle(this).getOwner();
 	if (active){
 		PxU32 myMask = FilterGroup::ePLAYER_RG;
-		PxU32 notCollide = FilterGroup::ePLAYER;
+		PxU32 notCollide = FilterGroup::ePLAYER | FilterGroup::ePLAYERINACTIVE;
 		PxShape* collider;
 		TCompColliderCapsule* capsule = e->get<TCompColliderCapsule>();
 		PxU32 myMaskCapsule = FilterGroup::ePLAYERINACTIVE;
@@ -397,7 +433,7 @@ void TCompRagdoll::breakJoints() {
 }
 
 void TCompRagdoll::breakJoint(int id) {
-	ragdoll->articulations[id]->setBreakForce(0.05f, 0.05f);
+	ragdoll->articulations[id]->setBreakForce(0.08f, 0.08f);
 }
 
 PxRigidDynamic* TCompRagdoll::getBoneRigidRaycast(XMVECTOR origin, XMVECTOR dir) {

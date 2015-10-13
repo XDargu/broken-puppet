@@ -50,7 +50,6 @@ using namespace physx;
 #include "theoraplayer/TheoraDataSource.h"
 #include "theoraplayer/TheoraVideoManager.h"
 
-
 static CApp the_app;
 
 CLogicManager			 &logic_manager = CLogicManager::get();
@@ -248,6 +247,7 @@ void createManagers() {
 	getObjManager<TCompBtGrandma>()->init(64);
 	getObjManager<TCompBtSoldier>()->init(64);
 	getObjManager<TCompAiBoss>()->init(1);
+	getObjManager<TCompSubstituteBoss>()->init(1);
 	
 	getObjManager<TCompHitch>()->init(4);
 
@@ -322,7 +322,7 @@ void initManagers() {
 	getObjManager<TCompExplosion>()->initHandlers();
 	getObjManager<TCompBossPrefab>()->initHandlers();
 	getObjManager<TCompHitch>()->initHandlers();
-	
+	getObjManager<TCompSubstituteBoss>()->initHandlers();	
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();
@@ -589,7 +589,7 @@ void CApp::update(float elapsed) {
 		return;
 	}
 
-	if (game_state == TGameState::FINAL_VIDEO) {
+	if (game_state == TGameState::FINAL_VIDEO && current_scene_name == "empty_scene") {
 		if (!video_sound_played) {
 			CSoundManager::get().playEvent("FINAL_VIDEO", "video_sound");
 			logic_manager.playSubtitles("FINAL_VIDEO");
@@ -626,7 +626,7 @@ void CApp::update(float elapsed) {
 			logic_manager.loadScene(menu_scene);
 		}
 	}	
-
+#ifndef FINAL_RELEASE
 	if (io.isPressed(CIOStatus::EXTRA)) {
 	}
 
@@ -666,7 +666,7 @@ void CApp::update(float elapsed) {
 	}*/
 
 	if (io.becomesReleased(CIOStatus::F4_KEY)) {
-		CLogicManager::get().setBand(true);
+		
 	}
 
 	if (io.becomesReleased(CIOStatus::F8_KEY)) {
@@ -700,7 +700,7 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("underwater");		
 		//render_techniques_manager.reload("deferred_point_lights");
 	}
-
+#endif
 	// Water level
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
@@ -801,6 +801,7 @@ void CApp::update(float elapsed) {
 	// OTHER
 	getObjManager<TCompBossPrefab>()->update(elapsed);
 	getObjManager<TCompExplosion>()->update(elapsed);
+	getObjManager<TCompSubstituteBoss>()->update(elapsed);
 
 	// AI
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
@@ -1338,19 +1339,20 @@ void CApp::renderEntities() {
 			}
 		}
 	}
-	renderNavMesh = true;
+	
+	/*renderNavMesh = true;
 	if (renderNavMesh){
 		CNav_mesh_manager::get().render_nav_mesh();
 		CNav_mesh_manager::get().pathRender();
 	}
 	getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
-	getObjManager<TCompPlayerController>()->renderDebug3D();
-
+	getObjManager<TCompPlayerController>()->renderDebug3D();*/
+	
 }
 
 void CApp::renderDebugEntities() {
-
+	
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(500, 30, s_fps.c_str());
 
@@ -1529,7 +1531,9 @@ void CApp::activateVictory(){
 }
 
 void CApp::loadScene(std::string scene_name) {
-	ShowCursor(FALSE);
+#ifndef _DEBUG
+	while (ShowCursor(FALSE) >= 0);
+#endif
 	// Load picture
 	/*renderUtilsDestroy();
 	renderUtilsCreate();*/
@@ -1540,7 +1544,10 @@ void CApp::loadScene(std::string scene_name) {
 	activateRSConfig(RSCFG_DEFAULT);
 	activateZConfig(ZCFG_DISABLE_ALL);
 
-	drawTexture2D(0, 0, xres, yres, texture_manager.getByName("loading_screen"));
+	float load_h = yres;
+	float load_w = (1920.0f * load_h) / 1080.f;
+	float init_offset = (xres - load_w) * 0.5f;
+	drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen"));
 	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;
@@ -1664,6 +1671,11 @@ void CApp::loadScene(std::string scene_name) {
 	//ctes_global.world_time = XMVectorSet(0, 0, 0, 0);
 	
 	ctes_global.get()->added_ambient_color = XMVectorSet(1, 1, 1, 1);
+	ctes_global.get()->vignette = 4.0f;
+	if (current_scene_name == "scene_menu") {
+		ctes_global.get()->added_ambient_color = XMVectorSet(0.7f, 0.5f, 0.5f, 1);
+		ctes_global.get()->vignette = 7.0f;
+	}
 	ctes_global.get()->world_time = 0.f; // XMVectorSet(0, 0, 0, 0);
 	
 
@@ -1700,7 +1712,7 @@ void CApp::loadScene(std::string scene_name) {
 	underwater.destroy();
 	ssrr.destroy();*/
 
-	water_level = -1000;
+	water_level = -100000;
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
 		TCompTransform* water_t = water->get<TCompTransform>();
@@ -1768,6 +1780,8 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.uploadToGPU();
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());
+
+	
 }
 
 void CApp::loadPrefab(std::string prefab_name) {

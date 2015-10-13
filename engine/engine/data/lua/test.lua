@@ -18,7 +18,7 @@ function onSceneLoad_my_file()
 	onSceneLoad_scene_4()
 	onSceneLoad_scene_3()
 	onSceneLoad_scene_2()
-	onSceneLoad_scene_1()	
+	--onSceneLoad_scene_1()	
 end
 
 
@@ -68,6 +68,10 @@ function onSceneLoad_scene_final_boss()
 			--logicManager:pushPlayerLegsState("fbp_WakeUp");
 			logicManager:pushPlayerLegsState("fbp_WakeUpTeleport");
 			player:teleportToPos(respawnPos);
+
+			if (player:getLife(0) <= 0) then
+				player:setLife(100);
+			end
 		end
 
 	end
@@ -98,6 +102,10 @@ function onSceneLoad_scene_final_boss()
 		local boss = logicManager:getObject("Boss")	
 		boss:riseUpBoss()
 
+		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
+		local playerPos = player:getPosition();
+		antiRain:setPos(playerPos);
+
 		logicManager:setCanMove(false)
 		logicManager:setCanThrow(false)
 		logicManager:setCanPull(false)
@@ -109,7 +117,9 @@ function onSceneLoad_scene_final_boss()
 		logicManager:setTimer("boss_init_animation", 28)
 		
 		startCoroutine("bossShake", bossShake)
-		startCoroutine(" bossInitialRain",  bossInitialRain)
+		startCoroutine("bossInitialRain",  bossInitialRain)
+
+		antiRain:setPos(Vector(5000, 5000, 5000));
 	end
 
 	function bossShake()
@@ -212,7 +222,7 @@ function onSceneLoad_scene_final_boss()
 		elapsed = elapsed + 0.5
 		waitTime(scream - elapsed)
 		elapsed = scream
-		mBoss:initialRain(50);	
+		mBoss:initialRain(120);	
 		waitTime(0.5)
 
 
@@ -545,6 +555,10 @@ function onSceneLoad_scene_3()
 		if who == "tapa_desague_puzle" then
 			logicManager:changeWaterLevel(-3.3, 0.25);
 			logicManager:setTimer("sc3_timer_kath_dialog", 5)
+
+			-- Partícula de desagüe
+			logicManager:createParticleGroup("ps_twister", Vector(-0.0129995, -3.188, 83.822), Quaternion(-0.71, 0, 0, 0.71))
+			
 		end
 	
 	end
@@ -931,9 +945,24 @@ end
 
                      -- DEAD --
 
-function onPlayerDead()
-	local player = logicManager:getBot("Player");
-	player:teleportToPos(initPos);
+function onPlayerDead(phrase, subtitle_guid, time)
+	if (phrase >= 0) then
+		logicManager:setTimer("resetPlayerPos", time)	
+		logicManager:playSubtitles(subtitle_guid);		
+		logicManager:playEventParameter("NARR_DEATH", "phrase", phrase);
+	else
+		local bot_player = logicManager:getBot("Player");
+		bot_player:setLife(100);
+		bot_player:teleportToPos(initPos);
+		logicManager:pushPlayerLegsState("fbp_Idle");
+	end
+end
+
+function onTimerEnd_resetPlayerPos()
+	local bot_player = logicManager:getBot("Player");
+	bot_player:setLife(100);
+	bot_player:teleportToPos(initPos);
+	logicManager:pushPlayerLegsState("fbp_Idle");
 end
 
 					-- VICTORY --

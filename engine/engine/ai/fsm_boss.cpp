@@ -185,6 +185,8 @@ void fsm_boss::Init()
 	lua_boss_init = false;
 
 	turns_without_bombs = 0;
+
+	fist_particle_time = 0;
 }
 
 void fsm_boss::Hidden(float elapsed){
@@ -435,11 +437,11 @@ void fsm_boss::Rain1Loop(float elapsed){
 		skeleton_lookat->active = false;
 		bomb_creation_delay = 0;
 		debris_creation_delay = 0;
-		debris_created = 0;
-
-		FistParticles(elapsed);
+		debris_created = 0; 
+		fist_particle_time = 0;
 	}
-	FistParticles(elapsed);
+
+	FistParticles(elapsed, 0.f, 0.f);
 	
 	if (!RainDebris(elapsed)){
 		ChangeState("fbp_Rain1Recover");
@@ -465,25 +467,24 @@ void fsm_boss::Rain1Recover(){
 
 
 void fsm_boss::Proximity(float elapsed){
+	
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		skeleton->playAnimation(4);
 		last_anim_id = -1;
 		can_proximity = false;
-	
-		FistParticles(elapsed);
+		fist_particle_time = 0;
 	}
 
-	FistParticles(elapsed);
+	FistParticles(elapsed, 0.6f, 1.f);
 
 	if ((state_time >= 0.6f)&&(can_proximity_hit)){
 
 		can_proximity_hit = false;
 		((CEntity*)m_player)->sendMsg(TActorHit(entity, 110000.f, true));
 
-	}
-	
+	}	
 
 	if (state_time >= 1.49f){
 		ChangeState("fbp_Idle1");
@@ -591,14 +592,25 @@ void fsm_boss::Ball1Launch(float elapsed){
 	TCompTransform* player_comp_trans = (((CEntity*)m_player)->get<TCompTransform>());
 	PxVec3 player_pos = Physics.XMVECTORToPxVec3(player_comp_trans->position);
 	
+	// player pos + player linear velocity
+	PxVec3 player_linear_velocity = PxVec3(0, 0, 0);
+
+	// Getting player velocity	
+	TCompRigidBody* player_comp_rigid = (((CEntity*)m_player)->get<TCompRigidBody>());
+	if (player_comp_rigid)
+		player_linear_velocity = player_comp_rigid->rigidBody->getLinearVelocity();
+
+	PxVec3 next_player_pos = player_pos + player_linear_velocity;
+
 	// Getting enemy position
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 	PxVec3 enemy_pos = Physics.XMVECTORToPxVec3(enemy_comp_trans->position);
 
 	// Calculate direction player enemy
-	PxVec3 player_boss_dir = (player_pos - enemy_pos);
+	PxVec3 player_boss_dir = (next_player_pos - enemy_pos);
 	player_boss_dir.y = 0;
 	player_boss_dir = player_boss_dir.getNormalized();
+
 
 	PxVec3	point_to_go = enemy_pos + point_offset + (player_boss_dir * distance_to_point);
 
@@ -1055,6 +1067,8 @@ void fsm_boss::WaveRight(){
 
 //FinalState
 void fsm_boss::FinalState(float elapsed){
+
+	int obj_limit = 100;
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
@@ -1069,11 +1083,10 @@ void fsm_boss::FinalState(float elapsed){
 				if (((CHandle)rigid).isValid()){
 					bool bossAccess = rigid->boss_level == 0;
 					if (bossAccess){
-
-						ball_list.push_back(e);
+						if (obj_limit >= ball_list.size())
+							ball_list.push_back(e);
 					}
 				}
-
 			}
 		}
 	}
@@ -1119,7 +1132,6 @@ void fsm_boss::Damaged1Left(float elapsed){
 	if (state_time >= 2.f){
 		destroyBombs();
 	}
-
 	if (state_time >= 2.6f){
 		ChangeState("fbp_Idle1");
 	}
@@ -1173,7 +1185,6 @@ void fsm_boss::Damaged1LeftFinal(){
 	if (state_time >= 0.5f){
 		destroyBombs();
 	}
-
 	if (state_time >= 0.9f){
 		ChangeState("fbp_FinalState");
 	}
@@ -1215,22 +1226,12 @@ void fsm_boss::Death(){
 		last_anim_id = -1;
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
-
-		/*
-		// Prueba: desactivar árbol base (para que el ragdoll esté activo, pero solo la parte superior)
-		TCompRagdoll* ragdoll = comp_ragdoll;
-		ragdoll->disableBoneTree(4);
-		/**/
 	}
 	
 	if (state_time >= 7.f){
-		CApp::get().playFinalVideo();
-		/*TCompRagdoll* ragdoll = comp_ragdoll;
-		ragdoll->enableBoneTree(4);
-		ragdoll->enableBoneTree(36);
-		ragdoll->enableBoneTree(11);*/
-		// Cambiar a video
 		ChangeState("fbp_Ended");
+		// Cambiar a video
+		CApp::get().playFinalVideo();				
 	}
 }
 
@@ -1279,8 +1280,8 @@ void fsm_boss::Reorientate(float elapsed, bool just_look){
 		if (need_reorientate){
 			XMVECTOR aux_pos = player_comp_trans->position;
 			aux_pos = XMVectorSetY(aux_pos, XMVectorGetY(enemy_comp_trans->position));
-
 			enemy_comp_trans->aimAt(aux_pos, enemy_comp_trans->getUp(), 0.8f * elapsed);
+
 			if (angle >= no_reorientate_angle){
 				need_reorientate = false;
 			}
@@ -1351,8 +1352,7 @@ bool fsm_boss::EvaluateHit(int arm_damaged) {
 	if (arm_damaged == 0){
 		if (has_left){
 			if (hurt_state == 0){
-				ChangeState("fbp_Damaged1Left");
-				
+				ChangeState("fbp_Damaged1Left");				
 			}
 			else{
 				ChangeState("fbp_Damaged1LeftFinal");
@@ -1384,7 +1384,7 @@ int fsm_boss::CalculateAttack() {
 
 	int next_attack = 0;
 	last_attack = 0.f;
-	if (m_entity_manager->rigid_list.size() < 150){
+	if (m_entity_manager->rigid_list.size() < 200){
 		next_attack = 0;
 	}
 	else{		
@@ -1412,23 +1412,7 @@ int fsm_boss::CalculateAttack() {
 			if (bombs_destroyed){
 				need_bombs = true;
 				bombs_destroyed = false;
-			}
-			//Let the need bombs check here to show more attacks of the boss
-			/*
-			else{
-				int aux_bomb_number = 0;
-				for (int i = 0; i < m_entity_manager->rigid_list.size(); ++i){
-					CEntity* e = m_entity_manager->rigid_list[i];
-					if (!e->hasTag("player")){
-						TCompExplosion* comp_explo = e->get<TCompExplosion>();
-						if (comp_explo){
-							aux_bomb_number++;
-						}
-					}
-				}				
-				need_bombs = aux_bomb_number < 0;						
-			}
-			/**/			
+			}		
 		}	
 
 		int aux_bomb_number = 0;
@@ -1443,7 +1427,6 @@ int fsm_boss::CalculateAttack() {
 		}
 		need_bombs = aux_bomb_number < 3;
 	}
-	//XDEBUG("devolviendo estado: %d", next_attack);
 
 	ball_list.clear();
 	return next_attack;
@@ -1620,29 +1603,32 @@ void fsm_boss::SelectObjToShoot() {
 	}
 }
 
-void fsm_boss::FistParticles(float elapsed) {
+void fsm_boss::FistParticles(float elapsed, float init, float end) {
 
+	bool fractionated = init != end;
 	TCompSkeleton* skeleton = comp_skeleton;
 
-	if (has_right){
+	fist_particle_time += elapsed;
+
+	if ((has_right) && ((!fractionated) || (fist_particle_time > init) && (fist_particle_time < end))){
 		XMVECTOR r_hand_pos = skeleton->getPositionOfBone(40);
 		XMVECTOR r_hand_rot = skeleton->getRotationOfBone(40);
 
 		if ((r_hand_change) && (r_hand_pos_y < XMVectorGetY(r_hand_pos)))
 		{
 			// Adding particle sistem
-			/**/
-
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_punch", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
 
 			if (particle_entity.isValid()) {
 				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-				pg->destroy_on_death = true;
-				if (pg->particle_systems->size() > 0)
-				{
-					(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
-					(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
-				}
+				if (pg){
+					pg->destroy_on_death = true;
+					if (pg->particle_systems->size() > 0)
+					{
+						(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+						(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+					}
+				}				
 			}
 			/**/
 		}
@@ -1655,24 +1641,25 @@ void fsm_boss::FistParticles(float elapsed) {
 	}
 
 
-	if (has_left){
+	if ((has_left) && ((!fractionated) || (fist_particle_time > init) && (fist_particle_time < end))){
 		XMVECTOR l_hand_pos = skeleton->getPositionOfBone(21);
 		XMVECTOR l_hand_rot = skeleton->getRotationOfBone(21);
 
 		if ((l_hand_change) && (l_hand_pos_y < XMVectorGetY(l_hand_pos)))
 		{
 			// Adding particle sistem
-			/**/
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_metal_hit", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_punch", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
 
 			if (particle_entity.isValid()) {
 				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-				pg->destroy_on_death = true;
-				if (pg->particle_systems->size() > 0)
-				{
-					(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
-					(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
-				}
+				if (pg){
+					pg->destroy_on_death = true;
+					if (pg->particle_systems->size() > 0)
+					{
+						(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
+						(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
+					}
+				}				
 			}
 			/**/
 		}

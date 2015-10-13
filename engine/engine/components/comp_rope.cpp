@@ -256,7 +256,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 								XDEBUG("Needle shot to %s", name);
 								std::string material = target_entity->material_tag;
 
-								createParticle(material, pos_1, normal_dir, trans_1->rotation);
+								createParticle(material, pos_1, normal_dir, XMQuaternionInverse(trans_1->rotation));
 							}
 						}
 					}
@@ -317,7 +317,7 @@ void TCompRope::fixedUpdate(float elapsed) {
 								XDEBUG("Needle shot to %s", name.c_str());
 								std::string material = target_entity->material_tag;
 
-								createParticle(material, pos_2, normal_dir, trans_2->rotation);
+								createParticle(material, pos_2, normal_dir, XMQuaternionInverse(trans_2->rotation));
 							}
 						}
 					}
@@ -492,11 +492,6 @@ void TCompRope::createParticle(std::string material, XMVECTOR position, XMVECTOR
 		TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
 		pg->kind = TCompParticleGroup::flag::IMPACT;
 		pg->destroy_on_death = true;
-		if (pg->particle_systems->size() > 0)
-		{
-			(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.0f / 2.f;
-			(*pg->particle_systems)[0].emitter_generation->radius = 1.0f;
-		}
 		CLogicManager::get().p_group_counter++;
 	}
 }

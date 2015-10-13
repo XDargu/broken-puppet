@@ -133,13 +133,13 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   }
 
   time_since_last_ragdoll = 5000;
-
+  follow_animation = false;
+  model->getMixer()->update_logic_translation = true;
 }
 
 void TCompSkeleton::init() {
 	h_ragdoll = getSibling<TCompRagdoll>(this);
 	h_rigidbody = getSibling<TCompRigidBody>(this);
-
 }
 
 
@@ -366,20 +366,22 @@ void TCompSkeleton::update(float elapsed) {
 
 	  CalVector delta_logic_trans = model->getMixer()->getAndClearLogicTranslation();
 
-	  if (delta_logic_trans.length() > 0) {
-		  /*if (u) {
-			  PxTransform u_transform = u->enemy_rigidbody->getGlobalPose();
-			  u_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
-			  u->enemy_rigidbody->setGlobalPose(u_transform);
+	  if (follow_animation) {
+		  if (delta_logic_trans.length() > 0) {
+			  if (u) {
+				  PxTransform u_transform = u->enemy_rigidbody->getGlobalPose();
+				  u_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
+				  u->enemy_rigidbody->setGlobalPose(u_transform);
 			  }
 			  else if (r) {
-			  PxTransform r_transform = r->rigidBody->getGlobalPose();
-			  r_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
-			  r->rigidBody->setGlobalPose(r_transform);
+				  PxTransform r_transform = r->rigidBody->getGlobalPose();
+				  r_transform.p += Physics.XMVECTORToPxVec3(Cal2DX(delta_logic_trans));
+				  r->rigidBody->setGlobalPose(r_transform);
 			  }
 			  else {
-			  t->position += Cal2DX(delta_logic_trans);
-			  }*/
+				  t->position += Cal2DX(delta_logic_trans);
+			  }
+		  }
 	  }
   }
 }

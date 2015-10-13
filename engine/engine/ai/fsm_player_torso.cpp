@@ -828,11 +828,13 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 
 		// TODO: ¡Se están tensado TODOS los distance joint, no los que dependan de ropes!
 		skeleton->playAnimation(32);
+
+		CRope_manager& m_rope_manager = CRope_manager::get();
 		
-		for (int i = 0; i < entity_manager.getEntities().size(); ++i)
+		for (int i = 0; i < m_rope_manager.getStrings().size(); ++i)
 		{
-			TCompRope* rope = ((CEntity*)entity_manager.getEntities()[i])->get<TCompRope>();			
-			TCompDistanceJoint* djoint = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceJoint>();
+			TCompRope* rope = m_rope_manager.getStrings()[i];			
+			TCompDistanceJoint* djoint = rope->joint;
 
 			if (rope && djoint) {
 				if (!rope->tensed) {
@@ -873,14 +875,12 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 						}
 						((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 
-					//((CEntity*)entity_manager.getByName(a1->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 					}
 					if (a2 && a2->isRigidDynamic()) {
 						if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
 							((physx::PxRigidDynamic*)a2)->wakeUp();
 						}
 						((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-						//((CEntity*)entity_manager.getByName(a2->getName()))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 					}
 				}
 			}

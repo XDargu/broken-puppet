@@ -1,5 +1,6 @@
 <skeleton>
     <mesh name="sustituta"/>
-	
-	<anim name="prueba"/>0
+  
+  <anim name="monologo"/>1
+
 </skeleton>

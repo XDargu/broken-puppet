@@ -64,7 +64,7 @@ float counter;
 XMVECTOR prev_pos;*/
 
 void TCompPlayerController::init() {
-
+	
 	/*
 		Load sounds
 	*/
@@ -172,9 +172,16 @@ void TCompPlayerController::update(float elapsed) {
 	fsm_player_torso->update(elapsed);
 
 	CIOStatus& io = CIOStatus::get();
+
+#ifndef FINAL_RELEASE
+
 	if (io.becomesReleased(CIOStatus::R)) {
 		fsm_player_legs->ChangeState("fbp_Ragdoll");
 	}	
+	if (io.becomesReleased(CIOStatus::F4_KEY)) {
+		actorHit(TActorHit(CHandle(this).getOwner(), 150000.f, false));
+	}
+#endif
 
 	TCompTransform* trans = player_entity->get<TCompTransform>();
 	TCompRigidBody* rigid = player_entity->get<TCompRigidBody>();
@@ -224,7 +231,7 @@ void TCompPlayerController::update(float elapsed) {
 	}
 
 	//c_controller->jumpPower = 10.2 / water_multiplier;
-	c_controller->gravityMultiplier = 48 * water_multiplier;
+	c_controller->gravityMultiplier = 48 * water_multiplier * water_multiplier;
 	skeleton->model->getMixer()->setTimeFactor(water_multiplier);
 
 	CEntity* camera_entity = CEntityManager::get().getByName("PlayerCamera");
