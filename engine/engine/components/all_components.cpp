@@ -80,3 +80,4 @@ DECL_OBJ_MANAGER(TCompLocalRotation, "localRotation");
 DECL_OBJ_MANAGER(TCompExplosion, "explosion");
 DECL_OBJ_MANAGER(TCompBossPrefab, "bossPrefab");
 DECL_OBJ_MANAGER(TCompHitch, "bossHitch");
+DECL_OBJ_MANAGER(TCompSubstituteBoss, "bossSubstitute");

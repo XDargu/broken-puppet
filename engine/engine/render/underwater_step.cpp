@@ -5,7 +5,7 @@
 
 bool TUnderwaterEffect::create(const char* name, int axres, int ayres, int afactor) {
 
-
+	water_level = -10000;
 	amount = 1;
 
 	factor = afactor;

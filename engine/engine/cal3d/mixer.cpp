@@ -55,6 +55,7 @@ CalMixer::CalMixer(CalModel* pModel)
   m_animationTime = 0.0f;
   m_animationDuration = 0.0f;
   m_timeFactor = 1.0f;
+  update_logic_translation = false;
 }
 
  /*****************************************************************************/
@@ -510,17 +511,19 @@ void CalMixer::updateSkeleton()
 
 		// TODO: ¿Hacer que se aplique traslación?
         // Get real delta since last update
-        /*logic_delta_translation = translation - logic_prev_translation;
-        logic_delta_translation *= (*iteratorAnimationAction)->getWeight();
+		if (update_logic_translation) {
+			logic_delta_translation = translation - logic_prev_translation;
+			logic_delta_translation *= (*iteratorAnimationAction)->getWeight();
 
-        //dbg("logic_delta_translation is %f %f\n", logic_delta_translation.x, logic_delta_translation.z);
+			// For the next update
+			logic_prev_translation = translation;
 
-        // For the next update
-        logic_prev_translation = translation;
-       
-        // Remove local translation from the animation in the XZ
-        translation.x = translation.z = 0.f;*/
-        logic_delta_translation.y = 0.f;
+			// Remove local translation from the animation in the XZ
+			translation.x = translation.z = 0.f;
+		}
+		else {
+			logic_delta_translation.y = 0.f;
+		}
       }
 
       // blend the bone state with the new state
@@ -584,9 +587,13 @@ void CalMixer::updateSkeleton()
   /// MCV -----------------------------------
 
   // Pasar el desplazamiento a mundo
-  logic_delta_translation *= root_rotation;
-  //root_translation += logic_delta_translation;
-
+  if (update_logic_translation) {
+	  logic_delta_translation *= root_rotation;
+	  root_translation += logic_delta_translation;
+  }
+  else {
+	  logic_delta_translation *= root_rotation;
+  }
   // calculate all bone states of the skeleton
   std::vector<int>& listRootCoreBoneId = pSkeleton->getCoreSkeleton()->getVectorRootCoreBoneId();
   std::vector<int>::iterator iteratorRootBoneId;

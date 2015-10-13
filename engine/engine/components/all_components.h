@@ -71,6 +71,7 @@ using namespace DirectX;
 #include "comp_recast_aabb.h"
 #include "comp_ai_boss.h"
 #include "comp_hitch.h"
+#include "comp_ai_substitute.h"
 
 // Logic
 #include "comp_platform_path.h"

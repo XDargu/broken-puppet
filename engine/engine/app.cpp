@@ -247,6 +247,7 @@ void createManagers() {
 	getObjManager<TCompBtGrandma>()->init(64);
 	getObjManager<TCompBtSoldier>()->init(64);
 	getObjManager<TCompAiBoss>()->init(1);
+	getObjManager<TCompSubstituteBoss>()->init(1);
 	
 	getObjManager<TCompHitch>()->init(4);
 
@@ -321,7 +322,7 @@ void initManagers() {
 	getObjManager<TCompExplosion>()->initHandlers();
 	getObjManager<TCompBossPrefab>()->initHandlers();
 	getObjManager<TCompHitch>()->initHandlers();
-	
+	getObjManager<TCompSubstituteBoss>()->initHandlers();	
 
 	// PLATFORMS
 	getObjManager<TCompPlatformPath>()->initHandlers();
@@ -800,6 +801,7 @@ void CApp::update(float elapsed) {
 	// OTHER
 	getObjManager<TCompBossPrefab>()->update(elapsed);
 	getObjManager<TCompExplosion>()->update(elapsed);
+	getObjManager<TCompSubstituteBoss>()->update(elapsed);
 
 	// AI
 	getObjManager<TCompAiFsmBasic>()->update(elapsed);
@@ -1710,7 +1712,7 @@ void CApp::loadScene(std::string scene_name) {
 	underwater.destroy();
 	ssrr.destroy();*/
 
-	water_level = -1000;
+	water_level = -100000;
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
 		TCompTransform* water_t = water->get<TCompTransform>();
