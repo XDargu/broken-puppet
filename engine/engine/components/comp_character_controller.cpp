@@ -396,13 +396,7 @@ void TCompCharacterController::HandleGroundedVelocities()
 	//bool animationGrounded = animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded");
 	bool animationGrounded = true;
 	bool okToRepeatJump = CApp::get().total_time > lastAirTime + jumpRepeatDelayTime;
-	if (jumpInput) {
-			CApp::get().total_time,
-			lastAirTime,
-			jumpRepeatDelayTime
-			);
-
-	}
+	
 	if (jumpInput && !crouchInput && okToRepeatJump && animationGrounded)
 	{
 		// jump!
