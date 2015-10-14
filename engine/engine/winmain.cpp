@@ -247,7 +247,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//SetCursor(NULL);
 		EndPaint(hWnd, &ps);
 		break;
+	case WM_CLOSE:
+		DestroyWindow(hWnd);
+		break;
 	case WM_DESTROY:
+		app.exitApp();
 		PostQuitMessage(0);
 		break;
 	/*case WM_LBUTTONUP:

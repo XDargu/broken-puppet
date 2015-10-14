@@ -251,3 +251,9 @@ PxTransform CCoreRagdoll::getAnchorConfiguration(PxTransform body_transform, PxV
 
 	return anchor;
 }
+
+void CCoreRagdoll::destroy() {
+	for (auto& it : bone_map) {
+		Physics.gScene->removeActor(*it.second);
+	}
+}

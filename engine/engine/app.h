@@ -1,4 +1,5 @@
 //#define FINAL_RELEASE
+#define NO_VIDEO
 
 #ifndef INC_APP_H_
 #define INC_APP_H_
@@ -6,6 +7,7 @@
 #include "utils.h"
 #include <thread>
 #include <mutex>
+#include <deque>
 class CEntity;
 
 class CApp {	
@@ -21,6 +23,10 @@ class CApp {
 
 	std::thread* bar;
 	bool video_sound_played;
+
+	std::deque<float> frames_d;
+	float time_since_last_update;
+	double TIME_ACCUM;
 
 public:
 	enum TGameState {

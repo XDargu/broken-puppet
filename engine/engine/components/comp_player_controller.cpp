@@ -112,13 +112,25 @@ void TCompPlayerController::init() {
 		}
 	}
 
+	pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleHand");
+		}
+	}
+
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
+	needle_hand = CEntityManager::get().getByName("NeedleHand");
 
 	float offset_size = 0.05f;
 	float offset_rot_size = 0.0f;
-	offset_needle_back1 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
-	offset_needle_back2 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
+	//offset_needle_back1 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
+	//offset_needle_back2 = XMVectorSet(getRandomNumber(-offset_size, offset_size), getRandomNumber(-offset_size, offset_size), 0, 0);
+
+	offset_needle_back1 = XMVectorSet(0.02f, 0.03f, 0, 0);
+	offset_needle_back2 = XMVectorSet(-0.03f, -0.015f, 0, 0);
 
 	offset_rot_needle_back1 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
 	offset_rot_needle_back2 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
@@ -170,7 +182,7 @@ void TCompPlayerController::update(float elapsed) {
 	}
 
 	fsm_player_torso->update(elapsed);
-
+	fsm_player_legs->update(elapsed);
 	CIOStatus& io = CIOStatus::get();
 
 #ifndef FINAL_RELEASE
@@ -269,6 +281,18 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 
+	// Hand needle
+	if (needle_hand.isValid()) {
+		CEntity* needle_hand_entity = needle_hand;
+
+		TCompTransform* needle_hand_t = needle_hand_entity->get<TCompTransform>();
+		TCompSkeleton* skel = player_entity->get<TCompSkeleton>();
+
+		TTransform bone_hand_trans = TTransform(skel->getPositionOfBone(28), skel->getRotationOfBone(28), XMVectorSet(1, 1, 1, 0));
+
+		needle_hand_t->position = skel->getPositionOfBone(28) + bone_hand_trans.getLeft() * 0.1f;
+		needle_hand_t->rotation = skel->getRotationOfBone(89);
+	}
 
 	// Back needles
 	if (needle_back1.isValid() && needle_back2.isValid()) {
@@ -331,7 +355,7 @@ void TCompPlayerController::update(float elapsed) {
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {
-	fsm_player_legs->update(elapsed);
+	
 }
 
 //unsigned int TCompPlayerController::getStringCount() {

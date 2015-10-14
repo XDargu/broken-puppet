@@ -118,6 +118,9 @@ const CRenderTechnique* ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
+/*CMesh		 rope2;
+CMesh		 rope3;
+CMesh		 rope4;*/
 
 CHandle		 life;
 CHandle		 h_player;
@@ -374,8 +377,9 @@ void CApp::preLoad(){
 }
 
 bool CApp::create() {
-	CErrorContext ec("Creating", "app");
 
+	CErrorContext ec("Creating", "app");
+	
 	// Log file configuration
 	FILE* log = fopen("log.txt", "w");
 	FILELog::ReportingLevel() = logERROR;
@@ -493,6 +497,9 @@ bool CApp::create() {
 	//Runs the ai thread
 	CNav_mesh_manager::get().nav_mesh_init();
 
+	TIME_ACCUM = 0;
+	time_since_last_update = 0;
+
 	return true;
 }
 
@@ -511,59 +518,89 @@ void CApp::doFrame() {
 	//delta_ticks.QuadPart /= freq.QuadPart;
 	//double delta_secs = delta_ticks.QuadPart * 1e-6;
 	float delta_secs = delta_ticks.QuadPart * (1.0f / freq.LowPart);
-
-	fps = 1.0f / delta_secs;
+	
+	
 	float pxStep = physics_manager.timeStep;
 	before = now;
 
+	const int FRAME_LIMIT = 60;
+	const double TIME_PER_FRAME = 1.0f / FRAME_LIMIT;
+
+	
+	
+
+	fps = 0.0f;
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
+		time_since_last_update += delta_secs;
+		TIME_ACCUM += delta_secs;
 
-		delta_time = delta_secs;
-		total_time += delta_secs;
 		CIOStatus& io = CIOStatus::get();
-		// Update input
-		io.update(delta_secs);
+		
 
-		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
-			pause = !pause;
-		}
+		if (TIME_ACCUM >= 0) {
 
-		if (slow_motion_counter > 0) {
-			slow_motion_counter -= delta_secs;
-			if (slow_motion_counter <= 0) {
-				CSoundManager::get().desactivateSlowMo();
-				time_modifier = 1;
-				slow_motion_counter = 0;
+			fps = (float)(1.0f / time_since_last_update);
+			frames_d.push_front(fps);
+			if (frames_d.size() > xres) {
+				frames_d.pop_back();
 			}
+
+			delta_time = time_since_last_update;
+			total_time += delta_time;
+
+			// Update input
+			io.update(delta_time);
+			//io.gameUpdate(delta_time);
+
+			// Pause
+			if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+				pause = !pause;
+			}
+
+			// Slow motion
+			if (slow_motion_counter > 0) {
+				slow_motion_counter -= delta_time;
+				if (slow_motion_counter <= 0) {
+					CSoundManager::get().desactivateSlowMo();
+					time_modifier = 1;
+					slow_motion_counter = 0;
+				}
+			}
+
+			delta_time *= time_modifier;
+			pxStep *= time_modifier;
+
+			// Fixed update
+			if (total_time > 0.5) {
+				fixedUpdateCounter += delta_time;
+
+				//while (fixedUpdateCounter > pxStep) {
+				//if (fixedUpdateCounter > pxStep) {
+				//fixedUpdateCounter -= pxStep;
+				//fixedUpdateCounter = 0;
+				fixedUpdate(delta_time);
+				//}
+
+
+				/*while (fixedUpdateCounter > pxStep) {
+					fixedUpdateCounter -= pxStep;
+					fixedUpdate(pxStep);
+					}*/
+			}
+
+			update(delta_time);
+			entity_manager.destroyRemovedHandles();
+
+			time_since_last_update = 0;
+			//TIME_ACCUM = 0;
+			TIME_ACCUM -= TIME_PER_FRAME;
+
+			//io.cleanKeys();
+			render();
+
 		}
-
-		delta_secs *= time_modifier;
-		pxStep *= time_modifier;
-
-		// Fixed update
-		if (total_time > 0.5) {
-			fixedUpdateCounter += delta_secs;
-
-			//while (fixedUpdateCounter > pxStep) {
-			//if (fixedUpdateCounter > pxStep) {
-			//fixedUpdateCounter -= pxStep;
-			//fixedUpdateCounter = 0;
-			fixedUpdate(delta_secs);
-			//}
-
-
-			/*while (fixedUpdateCounter > pxStep) {
-				fixedUpdateCounter -= pxStep;
-				fixedUpdate(pxStep);
-			}*/			
-		}
-
-		update(delta_secs);
 	}
-
-	entity_manager.destroyRemovedHandles();
-	render();
 }
 
 void CApp::update(float elapsed) {
@@ -682,7 +719,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("skin_basic");
-		render_techniques_manager.reload("cubemap");
+		render_techniques_manager.reload("underwater");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -1128,6 +1165,8 @@ void CApp::render() {
 
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(500, 30, s_fps.c_str());*/
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(xres - 200, 50, s_fps.c_str());
 	// Test GUI
 	CTraceScoped scope_gui("GUI");
 	if (h_player.isValid()) {
@@ -1191,6 +1230,16 @@ void CApp::render() {
 
 	logic_manager.draw();
 
+	int x = 0;
+	float h = 0;
+
+	for (auto fps : frames_d) {
+		ctes_global.get()->frame_list[x] = XMVectorSetX(XMVectorZero(), fps);
+		h = fps;
+		//drawTexture2D(x, yres - h, 1, h, texture_manager.getByName("whitepx"));
+		x++;
+	}
+
 	::render.swap_chain->Present(0, 0);
 }
 
@@ -1200,8 +1249,8 @@ void CApp::renderEntities() {
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	debugTech->activate();
-	const CTexture *tex = texture_manager.getByName("grass");
-	tex->activate(0);
+	const CTexture* rope_tex = texture_manager.getByName("grass");
+	rope_tex->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -1209,6 +1258,13 @@ void CApp::renderEntities() {
 	activateTint(0);
 
 	// Render entities
+	int rope_count = 0;
+
+	/*rope.destroy();
+	rope2.destroy();
+	rope3.destroy();
+	rope4.destroy();*/
+
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
 		TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
@@ -1220,8 +1276,10 @@ void CApp::renderEntities() {
 
 
 		// Draw the joints
+
 		if (c_rope) {
-			tex->activate(0);
+			rope_count++;
+			rope_tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
@@ -1280,7 +1338,15 @@ void CApp::renderEntities() {
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 			tension = maxDist < 0.2f ? 0.f : 1.f;
 
-			rope.destroy();
+			/*CMesh* m = &rope;
+			if (rope_count == 1)
+				m = &rope2;
+			if (rope_count == 2)
+				m = &rope3;
+			if (rope_count == 3)
+				m = &rope4;*/
+			
+
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
 			ropeTech->activate();
@@ -1290,16 +1356,26 @@ void CApp::renderEntities() {
 				setTint(XMVectorSet(0.46f, 0.075f, 0.075f, 1));
 			else
 				setTint(XMVectorSet(0.45f, 0.8f, 0.63f, 1));
+
+			/*font.printf(60, 150 + 30 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
+				XMVectorGetX(initialPos),
+				XMVectorGetY(initialPos),
+				XMVectorGetZ(initialPos),
+				XMVectorGetX(finalPos),
+				XMVectorGetY(finalPos),
+				XMVectorGetZ(finalPos)
+				);*/
+
 			/*float color_tension = min(dist / maxDist * 0.25f, 1);
 			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));*/
 			setWorldMatrix(XMMatrixIdentity());
 			rope.activateAndRender();
 
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+			/*setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
 			wiredCube.activateAndRender();
 
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
-			wiredCube.activateAndRender();
+			wiredCube.activateAndRender();*/
 			debugTech->activate();
 		}
 
@@ -1498,6 +1574,8 @@ void CApp::destroy() {
 	particle_groups_manager.destroy();
 	logic_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
+	CNav_mesh_manager::get().generate_nav_mesh = false;
 
 	// Destroy app resources
 	wiredCube.destroy();
@@ -1513,7 +1591,7 @@ void CApp::destroy() {
 	::render.destroyDevice();
 	
 	// Destro navmesh
-	CNav_mesh_manager().get().~CNav_mesh_manager();
+	CNav_mesh_manager().get().destroy();
 }
 
 unsigned int CApp::numStrings(){
@@ -1597,6 +1675,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	render_manager.destroyAllKeys();
 	render_manager.clearOcclusionPlanes();
+	ragdoll_manager.destroyAll();
 	//ctes_global.destroy();
 	//renderUtilsDestroy();
 	entity_lister.resetEventCount();
@@ -1893,23 +1972,30 @@ unsigned int CApp::getMaxNumNeedles(){
 }
 
 void CApp::playFinalVideo() {
+#ifdef NO_VIDEO
+	CLogicManager::get().loadScene(menu_scene);
+	game_state = TGameState::MAIN_MENU;
+#else
 	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("final_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
+#endif
 }
 
 void CApp::playInitialVideo() {
+#ifdef NO_VIDEO
+	CLogicManager::get().loadScene("data/scenes/scene_1.xml");
+	game_state = TGameState::GAMEPLAY;
+#else
 	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("intro_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::INITIAL_VIDEO;
+#endif
 }
 
 void CApp::exitApp() {
-	CNav_mesh_manager::get().keep_updating_navmesh = false;
-	CNav_mesh_manager::get().setNeedNavMesh(false);
-	CNav_mesh_manager::get().generate_nav_mesh = false;
 	destroy();
 	exit(0);
 }

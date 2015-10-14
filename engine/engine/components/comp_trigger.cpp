@@ -9,7 +9,9 @@
 
 TCompTrigger::~TCompTrigger() {
 	CLogicManager::get().unregisterTrigger(CHandle(this));
+	inside->clear();
 	delete inside;
+	inside = nullptr;
 }
 
 TCompTrigger::TCompTrigger() : m_transform(CHandle()), m_aabb(CHandle()), player_only(false), bots_only(false) {
@@ -101,19 +103,21 @@ bool TCompTrigger::onEnter(){
 		for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
 			TCompAABB* aabb = (TCompAABB*)m_aabb;
 			CEntity* e = entity_manager.rigid_list[i];
-			if (e->has<TCompAABB>()){
-				if (!checkIfInside(e)){
-					TCompAABB* i_aabb = e->get<TCompAABB>();
-					CEntity* own = CHandle(this).getOwner();
-					if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
-						inside->push_back(e);
-						CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
-						//XDEBUG("On enter: %s", e->getName());
-						if (!first_enter) {
-							CLogicManager::get().onTriggerFirstEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
-							first_enter = true;
+			if (!e->hasTag("enemy")){
+				if (e->has<TCompAABB>()){
+					if (!checkIfInside(e)){
+						TCompAABB* i_aabb = e->get<TCompAABB>();
+						CEntity* own = CHandle(this).getOwner();
+						if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
+							inside->push_back(e);
+							CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
+							//XDEBUG("On enter: %s", e->getName());
+							if (!first_enter) {
+								CLogicManager::get().onTriggerFirstEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
+								first_enter = true;
+							}
+							return true;
 						}
-						return true;
 					}
 				}
 			}
@@ -124,26 +128,28 @@ bool TCompTrigger::onEnter(){
 
 bool TCompTrigger::onExit(){
 	if (inside->size() > 0){
-		for (std::vector<CEntity*>::size_type i = 0; i != inside->size(); i++) {
+		auto it = inside->begin();
+		while (it!=inside->end()) {
 			TCompAABB* aabb = (TCompAABB*)m_aabb;
-			CEntity* e = (*inside)[i];
+			CEntity* e = *it;
 			if (e->has<TCompAABB>()){
 				TCompAABB* i_aabb = e->get<TCompAABB>();
 				CEntity* own = CHandle(this).getOwner();
 				if ((e != own) && (!aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
-					remove(*inside, i);
+					it = inside->erase(it);
 					CLogicManager::get().onTriggerExit(CHandle(CHandle(this).getOwner()), CHandle(e));
 					//XDEBUG("On exit: %s", e->getName());
 					return true;
 				}
 			}
+			it++;
 		}
 	}
 	return false;
 }
 
 bool TCompTrigger::checkIfInside(CHandle entity){
-	for (std::vector<CEntity*>::size_type i = 0; i != inside->size(); ++i) {
+	for (auto i = 0; i != inside->size(); ++i) {
 		if ((*inside)[i] == entity) {
 			return true;
 		}
@@ -162,7 +168,7 @@ void TCompTrigger::remove(std::vector<CHandle>& vec, size_t pos)
 
 void TCompTrigger::renderDebug3D() {
 	std::string a = "";
-	for (std::vector<CHandle>::size_type i = 0; i < inside->size(); i++) {
+	for (auto i = 0; i < inside->size(); i++) {
 		CEntity* e = (CEntity*)(*inside)[i];
 		a += e->getName();
 		a += "\n";

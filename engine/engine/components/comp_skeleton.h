@@ -23,6 +23,8 @@ public:
 	CalModel*  model;
 
 	TCompSkeleton() : model(nullptr) { }
+	~TCompSkeleton();
+
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void update(float elapsed);

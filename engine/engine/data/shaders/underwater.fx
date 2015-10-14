@@ -58,8 +58,35 @@ float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input)
 		float4 color = txDiffuse.Sample(samClampLinear, input.UV + (sinoffset*sinsign));
 		return color + float4(0, 0.0, 0.05, 1);
 	}
+
+	// ÑAPA de render de frames
+	float4 res = float4(0, 0, 0, 0);
 	if ((input.UV.y < cameraCinematicBands) || (input.UV.y >(1 - cameraCinematicBands)))
-		return float4(0, 0, 0, 0);
+		return res;
 	else
-		return txDiffuse.Sample(samClampLinear, input.UV);
+		res = txDiffuse.Sample(samClampLinear, input.UV);
+
+	int3 screenCoords = uint3(iPosition.xy, 0);
+	
+	int yres = cameraHalfYRes * 2;
+	int xres = cameraHalfXRes * 2;
+	int xpos = input.UV.x * xres;
+	int ypos = input.UV.y * yres;
+	float fps = 0;
+	fps = frame_list[xpos].x;
+
+	if (yres - ypos == 60) {
+		return float4(1, 0, 0, 1);
+	}
+
+	if (yres - ypos == 60) {
+		return float4(0, 0, 1, 1);
+	}
+
+	if (yres - ypos < fps) {
+		return float4(1, 1, 1, 1);
+	}
+
+
+	return res;
 }
