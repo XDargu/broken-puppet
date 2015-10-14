@@ -1065,7 +1065,31 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 	bool is_moving = false;
 	bool jump = false;
 
-	if (isKeyPressed('W')){
+	CIOStatus& io = CIOStatus::get();
+
+	if (io.isPressed(CIOStatus::DIGITAL_UP)){
+		movement_vector += physx::PxVec3(0, 0, 1);
+		is_moving = true;
+	}
+	else if (io.isPressed(CIOStatus::DIGITAL_DOWN)){
+		movement_vector += physx::PxVec3(0, 0, -1);
+		is_moving = true;
+	}
+	if (io.isPressed(CIOStatus::DIGITAL_LEFT)){
+		movement_vector += physx::PxVec3(1, 0, 0);
+		is_moving = true;
+	}
+	else if (io.isPressed(CIOStatus::DIGITAL_RIGHT)){
+		movement_vector += physx::PxVec3(-1, 0, 0);
+		is_moving = true;
+	}
+	if (io.isPressed(CIOStatus::SPACEBAR)){
+		std::string h = "pe";
+		jump = true;
+		XDEBUG("Saltando");
+	}
+
+	/*if (isKeyPressed('W')){
 		movement_vector += physx::PxVec3(0, 0, 1);
 		is_moving = true;
 	}	
@@ -1083,7 +1107,7 @@ bool FSMPlayerLegs::EvaluateMovement(bool lookAtCamera, float elapsed){
 	}
 	if (isKeyPressed(' ')){
 		jump = true;
-	}
+	}*/
 
 	// Movement correction
 	movement_dir = movement_vector;

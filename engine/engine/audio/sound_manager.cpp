@@ -69,6 +69,13 @@ CSoundManager::CSoundManager()
 	// Underwater mixer effect
 	createMixerEvent("UNDERWATER", MixerInstanceType::UNDERWATER);
 	createMixerEvent("CURRENT_ROOM", MixerInstanceType::ROOM);
+
+	phrase.talked = false;
+	phrase.name = "";
+	phrase.nparameters = 0;
+	phrase.path = "";
+	phrase.pos = XMVectorZero();
+	phrase.guid = "";
 }
 
 void CSoundManager::init(){
@@ -304,7 +311,6 @@ void CSoundManager::playTalkEvent(std::string path, XMVECTOR pos, std::string na
 void CSoundManager::checkIfCanTalk(){
 	if (!CApp::get().isSlowMotion()){
 		if (!phrase.talked){
-			phrase.talked = true;
 			if (phrase.nparameters > 0){
 				if (phrase.guid != ""){
 					CLogicManager::get().playSubtitles(phrase.guid);
@@ -318,10 +324,7 @@ void CSoundManager::checkIfCanTalk(){
 				playEvent(phrase.path, 0, 0, phrase.pos, phrase.name);
 			}
 		}
-	}
-	else{
-		int probando = 1;
-		std::string ojete = "probando!!";
+		phrase.talked = true;
 	}
 }
 

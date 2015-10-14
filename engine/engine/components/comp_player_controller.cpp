@@ -182,7 +182,7 @@ void TCompPlayerController::update(float elapsed) {
 	}
 
 	fsm_player_torso->update(elapsed);
-
+	fsm_player_legs->update(elapsed);
 	CIOStatus& io = CIOStatus::get();
 
 #ifndef FINAL_RELEASE
@@ -355,7 +355,7 @@ void TCompPlayerController::update(float elapsed) {
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {
-	fsm_player_legs->update(elapsed);
+	
 }
 
 //unsigned int TCompPlayerController::getStringCount() {

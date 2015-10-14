@@ -4002,7 +4002,7 @@
   <entity   materialTag = "wood">
     <name name="boss_spot_468.0" />
     <transform position="-0.104137 48.2854 -0.0889287" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true"/>
+    <shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true" res="1"/>
     <camera fov="179.5" znear="0.1" zfar="50" width="30" height="30" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">

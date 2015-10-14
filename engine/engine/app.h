@@ -25,6 +25,8 @@ class CApp {
 	bool video_sound_played;
 
 	std::deque<float> frames_d;
+	float time_since_last_update;
+	double TIME_ACCUM;
 
 public:
 	enum TGameState {

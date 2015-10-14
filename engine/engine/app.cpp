@@ -497,6 +497,9 @@ bool CApp::create() {
 	//Runs the ai thread
 	CNav_mesh_manager::get().nav_mesh_init();
 
+	TIME_ACCUM = 0;
+	time_since_last_update = 0;
+
 	return true;
 }
 
@@ -520,66 +523,84 @@ void CApp::doFrame() {
 	float pxStep = physics_manager.timeStep;
 	before = now;
 
-	// To avoid the fist huge delta time
-	if (delta_secs < 0.5) {
-
-
-		fps = 1.0f / delta_secs;
-		frames_d.push_front(fps);
-		if (frames_d.size() > xres) {
-			frames_d.pop_back();
-		}
-
-		delta_time = delta_secs;
-		total_time += delta_secs;
-		CIOStatus& io = CIOStatus::get();
-
-		// Update input
-		io.update(delta_secs);
-
-		// Pause
-		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
-			pause = !pause;
-		}
-
-		// Slow motion
-		if (slow_motion_counter > 0) {
-			slow_motion_counter -= delta_secs;
-			if (slow_motion_counter <= 0) {
-				CSoundManager::get().desactivateSlowMo();
-				time_modifier = 1;
-				slow_motion_counter = 0;
-			}
-		}
-
-		delta_secs *= time_modifier;
-		pxStep *= time_modifier;
-
-		// Fixed update
-		if (total_time > 0.5) {
-			fixedUpdateCounter += delta_secs;
-
-			//while (fixedUpdateCounter > pxStep) {
-			//if (fixedUpdateCounter > pxStep) {
-			//fixedUpdateCounter -= pxStep;
-			//fixedUpdateCounter = 0;
-			fixedUpdate(delta_secs);
-			//}
-
-
-			/*while (fixedUpdateCounter > pxStep) {
-				fixedUpdateCounter -= pxStep;
-				fixedUpdate(pxStep);
-				}*/
-		}
-
-		update(delta_secs);
-		entity_manager.destroyRemovedHandles();
-
-	}
+	const int FRAME_LIMIT = 60;
+	const double TIME_PER_FRAME = 1.0f / FRAME_LIMIT;
 
 	
-	render();
+	
+
+	fps = 0.0f;
+	// To avoid the fist huge delta time
+	if (delta_secs < 0.5) {
+		time_since_last_update += delta_secs;
+		TIME_ACCUM += delta_secs;
+
+		CIOStatus& io = CIOStatus::get();
+		
+
+		if (TIME_ACCUM >= 0) {
+
+			fps = (float)(1.0f / time_since_last_update);
+			frames_d.push_front(fps);
+			if (frames_d.size() > xres) {
+				frames_d.pop_back();
+			}
+
+			delta_time = time_since_last_update;
+			total_time += delta_time;
+
+			// Update input
+			io.update(delta_time);
+			//io.gameUpdate(delta_time);
+
+			// Pause
+			if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+				pause = !pause;
+			}
+
+			// Slow motion
+			if (slow_motion_counter > 0) {
+				slow_motion_counter -= delta_time;
+				if (slow_motion_counter <= 0) {
+					CSoundManager::get().desactivateSlowMo();
+					time_modifier = 1;
+					slow_motion_counter = 0;
+				}
+			}
+
+			delta_time *= time_modifier;
+			pxStep *= time_modifier;
+
+			// Fixed update
+			if (total_time > 0.5) {
+				fixedUpdateCounter += delta_time;
+
+				//while (fixedUpdateCounter > pxStep) {
+				//if (fixedUpdateCounter > pxStep) {
+				//fixedUpdateCounter -= pxStep;
+				//fixedUpdateCounter = 0;
+				fixedUpdate(delta_time);
+				//}
+
+
+				/*while (fixedUpdateCounter > pxStep) {
+					fixedUpdateCounter -= pxStep;
+					fixedUpdate(pxStep);
+					}*/
+			}
+
+			update(delta_time);
+			entity_manager.destroyRemovedHandles();
+
+			time_since_last_update = 0;
+			//TIME_ACCUM = 0;
+			TIME_ACCUM -= TIME_PER_FRAME;
+
+			//io.cleanKeys();
+			render();
+
+		}
+	}
 }
 
 void CApp::update(float elapsed) {
@@ -1336,25 +1357,25 @@ void CApp::renderEntities() {
 			else
 				setTint(XMVectorSet(0.45f, 0.8f, 0.63f, 1));
 
-			font.printf(60, 150 + 30 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
+			/*font.printf(60, 150 + 30 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
 				XMVectorGetX(initialPos),
 				XMVectorGetY(initialPos),
 				XMVectorGetZ(initialPos),
 				XMVectorGetX(finalPos),
 				XMVectorGetY(finalPos),
 				XMVectorGetZ(finalPos)
-				);
+				);*/
 
 			/*float color_tension = min(dist / maxDist * 0.25f, 1);
 			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));*/
 			setWorldMatrix(XMMatrixIdentity());
 			rope.activateAndRender();
 
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+			/*setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
 			wiredCube.activateAndRender();
 
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
-			wiredCube.activateAndRender();
+			wiredCube.activateAndRender();*/
 			debugTech->activate();
 		}
 
