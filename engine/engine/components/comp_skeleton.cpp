@@ -137,6 +137,16 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
   model->getMixer()->update_logic_translation = true;
 }
 
+TCompSkeleton::~TCompSkeleton() {
+	CalSkeleton* skel = model->getSkeleton();
+	auto& cal_bones = skel->getVectorBone();
+
+	int size = (int)cal_bones.size();
+	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+		cal_bones[bone_idx]->getCoreBone()->setUserData(0);
+	}
+}
+
 void TCompSkeleton::init() {
 	h_ragdoll = getSibling<TCompRagdoll>(this);
 	h_rigidbody = getSibling<TCompRigidBody>(this);

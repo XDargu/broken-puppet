@@ -1294,7 +1294,7 @@ void CApp::renderEntities() {
 			else
 				setTint(XMVectorSet(0.45f, 0.8f, 0.63f, 1));
 
-			font.printf(60, 150 + 50 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
+			font.printf(60, 150 + 30 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
 				XMVectorGetX(initialPos),
 				XMVectorGetY(initialPos),
 				XMVectorGetZ(initialPos),
@@ -1610,6 +1610,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	render_manager.destroyAllKeys();
 	render_manager.clearOcclusionPlanes();
+	ragdoll_manager.destroyAll();
 	//ctes_global.destroy();
 	//renderUtilsDestroy();
 	entity_lister.resetEventCount();

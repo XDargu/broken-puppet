@@ -23,6 +23,8 @@ public:
 	bool follow_animation;
 
 	TCompSkeleton() : model(nullptr) { }
+	~TCompSkeleton();
+
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void update(float elapsed);

@@ -37,7 +37,7 @@ public:
 	}
 	const std::string& getName() const { return name; }
 
-	void destroy() {}
+	void destroy();
 };
 
 typedef CItemsByName< CCoreRagdoll > CRagdollManager;
