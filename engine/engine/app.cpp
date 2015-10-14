@@ -377,8 +377,9 @@ void CApp::preLoad(){
 }
 
 bool CApp::create() {
-	CErrorContext ec("Creating", "app");
 
+	CErrorContext ec("Creating", "app");
+	
 	// Log file configuration
 	FILE* log = fopen("log.txt", "w");
 	FILELog::ReportingLevel() = logERROR;
@@ -514,24 +515,30 @@ void CApp::doFrame() {
 	//delta_ticks.QuadPart /= freq.QuadPart;
 	//double delta_secs = delta_ticks.QuadPart * 1e-6;
 	float delta_secs = delta_ticks.QuadPart * (1.0f / freq.LowPart);
-
-	fps = 1.0f / delta_secs;
+	
+	
 	float pxStep = physics_manager.timeStep;
 	before = now;
 
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
 
+
+		fps = 1.0f / delta_secs;
+
 		delta_time = delta_secs;
 		total_time += delta_secs;
 		CIOStatus& io = CIOStatus::get();
+
 		// Update input
 		io.update(delta_secs);
 
+		// Pause
 		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
 			pause = !pause;
 		}
 
+		// Slow motion
 		if (slow_motion_counter > 0) {
 			slow_motion_counter -= delta_secs;
 			if (slow_motion_counter <= 0) {
@@ -559,13 +566,15 @@ void CApp::doFrame() {
 			/*while (fixedUpdateCounter > pxStep) {
 				fixedUpdateCounter -= pxStep;
 				fixedUpdate(pxStep);
-			}*/			
+				}*/
 		}
 
 		update(delta_secs);
+		entity_manager.destroyRemovedHandles();
+
 	}
 
-	entity_manager.destroyRemovedHandles();
+	
 	render();
 }
 
@@ -1131,6 +1140,8 @@ void CApp::render() {
 
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(500, 30, s_fps.c_str());*/
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(xres - 200, 50, s_fps.c_str());
 	// Test GUI
 	CTraceScoped scope_gui("GUI");
 	if (h_player.isValid()) {
@@ -1926,17 +1937,27 @@ unsigned int CApp::getMaxNumNeedles(){
 }
 
 void CApp::playFinalVideo() {
+#ifdef NO_VIDEO
+	CLogicManager::get().loadScene(menu_scene);
+	game_state = TGameState::MAIN_MENU;
+#else
 	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("final_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
+#endif
 }
 
 void CApp::playInitialVideo() {
+#ifdef NO_VIDEO
+	CLogicManager::get().loadScene("data/scenes/scene_1.xml");
+	game_state = TGameState::GAMEPLAY;
+#else
 	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("intro_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::INITIAL_VIDEO;
+#endif
 }
 
 void CApp::exitApp() {
