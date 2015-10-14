@@ -235,6 +235,24 @@ void CLogicManager::update(float elapsed) {
 		}
 	}
 
+
+	// Quitar, ñapa, peligro
+	CHandle a_camera = render_manager.activeCamera;
+	if (a_camera.isValid()) {
+		CEntity* a_entity = a_camera.getOwner();
+		if (a_entity) {
+			if (char_equal(a_entity->getName(), "camera_sustituta")) {
+				CEntity* subs = CEntityManager::get().getByName("Substitute");
+				if (subs) {
+					TCompTransform* subs_t = subs->get<TCompTransform>();
+					TCompTransform* cam_t = a_entity->get<TCompTransform>();
+
+					cam_t->aimAt(subs_t->position + XMVectorSet(0, 1, 0, 0), XMVectorSet(0, 1, 0, 0), 0.05f);
+				}
+			}
+		}
+	}
+
 	// Update band height
 	band_heigth = lerp(band_heigth, band_heigth_dest, lerp_bands);
 	setCinematicBands(band_heigth);

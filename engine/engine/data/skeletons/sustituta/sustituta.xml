@@ -1,6 +1,8 @@
 <skeleton>
     <mesh name="sustituta"/>
   
-  <anim name="monologo"/>1
+  <anim name="monologo" blend="0" blend_out="0"/>0
+  <anim name="idle_loop" blend="0" blend_out="0"/>1
+  <anim name="sit_loop" blend="0" blend_out="0"/>2
 
 </skeleton>

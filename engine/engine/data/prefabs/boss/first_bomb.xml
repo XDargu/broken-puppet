@@ -1,7 +1,7 @@
 <prefab>
   <entity tag = "bomb" collisionTag = "Special_bomb" materialTag = "metal">
     <name name="bomb" />
-    <transform position="-1.58365 12.4581 26.568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="-1.58365 12.4581 26.568" rotation="0.0 0.0 0.0 1.0" scale="2.0 2.0 2.0"/>
     <render >
       <draw mesh="bomba_boss" sub_mesh="0" mat="bomba"/>
       <draw mesh="bomba_boss" sub_mesh="1" mat="glass"/>

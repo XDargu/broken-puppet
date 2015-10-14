@@ -9,6 +9,7 @@ struct TCompAiBoss : TBaseComponent {
 private:
 	fsm_boss* m_fsm_boss;
 
+	CHandle substitute;
 	CHandle mPlayer;
 	CHandle player_trans;
 	CHandle mBoss;

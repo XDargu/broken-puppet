@@ -82,6 +82,13 @@ function onSceneLoad_scene_final_boss()
 
 		-- Bajar luz ambiental
 		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
+
+		-- Evitar que pueda trastear con cuerdas
+
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
 	end
 
 	function onTimerEnd_boss_init_animation()
@@ -98,28 +105,56 @@ function onSceneLoad_scene_final_boss()
 		initPos = respawnPos;
 	end
 
-	function onTriggerFirstEnter_scb_trigger_block_control(who)
-		local boss = logicManager:getObject("Boss")	
-		boss:riseUpBoss()
 
-		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
-		local playerPos = player:getPosition();
-		antiRain:setPos(playerPos);
+	function onTimerEnd_end_speak()
+		-- Reactivamos cuerdas
+		logicManager:setCanThrow(true)
+		--logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
 
-		logicManager:setCanMove(false)
-		logicManager:setCanThrow(false)
-		logicManager:setCanPull(false)
-		logicManager:setCanCancel(false)
-		logicManager:setCanTense(false)
-		logicManager:pushPlayerLegsState("fbp_Idle");
-		local boss = logicManager:getBot("Boss")
-		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
-		logicManager:setTimer("boss_init_animation", 28)
+		-- Obtenemos la posición de la sustituta y le apuntamos
+		local substitute = logicManager:getObject("Substitute");
+		local substitutePos = substitute:getPos();
+		logicManager:changeCamera("PlayerCamera");
+
+		-- Añadir aquí offset si fuera necesario, para apuntarle al pecho
+		local aux_pos = Vector(substitutePos.x, substitutePos.y, substitutePos.z);
+		print(tostring(aux_pos.x) .. "posición");
+		print(tostring(aux_pos.y) .. "posición");
+		print(tostring(aux_pos.z) .. "posición");
+
+		logicManager:lockCameraOnPosition(aux_pos);
+		--logicManager:changeCamera("camera_sustituta");
 		
-		startCoroutine("bossShake", bossShake)
-		startCoroutine("bossInitialRain",  bossInitialRain)
+	end
 
-		antiRain:setPos(Vector(5000, 5000, 5000));
+	function onTriggerFirstEnter_scb_trigger_block_control(who)
+
+		logicManager:changeCamera("camera_sustituta")
+		logicManager:setCanMove(false)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+
+		logicManager:setTimer("end_speak", 58)
+
+	end
+
+	function onSubstituteHanged()
+		--local boss = logicManager:getObject("Boss")	
+		--boss:riseUpBoss()
+		--
+		--local antiRain = logicManager:getObject("anti_rain_collider_boss");		
+		--local playerPos = player:getPosition();
+		--antiRain:setPos(playerPos);
+		--
+		--local boss = logicManager:getBot("Boss")
+		--logicManager:lockCameraOnPosition(Vector(0, 8, 0))
+		--logicManager:setTimer("boss_init_animation", 28)
+		--
+		--startCoroutine("bossShake", bossShake)
+		--startCoroutine("bossInitialRain",  bossInitialRain)
+		--
+		--antiRain:setPos(Vector(5000, 5000, 5000));
 	end
 
 	function bossShake()
