@@ -7,6 +7,7 @@
 #include "utils.h"
 #include <thread>
 #include <mutex>
+#include <deque>
 class CEntity;
 
 class CApp {	
@@ -22,6 +23,8 @@ class CApp {
 
 	std::thread* bar;
 	bool video_sound_played;
+
+	std::deque<float> frames_d;
 
 public:
 	enum TGameState {

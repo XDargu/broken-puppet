@@ -525,6 +525,10 @@ void CApp::doFrame() {
 
 
 		fps = 1.0f / delta_secs;
+		frames_d.push_front(fps);
+		if (frames_d.size() > xres) {
+			frames_d.pop_back();
+		}
 
 		delta_time = delta_secs;
 		total_time += delta_secs;
@@ -694,7 +698,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("skin_basic");
-		render_techniques_manager.reload("cubemap");
+		render_techniques_manager.reload("underwater");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -1204,6 +1208,16 @@ void CApp::render() {
 	font.print(15, 35, strings_text.c_str());*/
 
 	logic_manager.draw();
+
+	int x = 0;
+	float h = 0;
+
+	for (auto fps : frames_d) {
+		ctes_global.get()->frame_list[x] = XMVectorSetX(XMVectorZero(), fps);
+		h = fps;
+		//drawTexture2D(x, yres - h, 1, h, texture_manager.getByName("whitepx"));
+		x++;
+	}
 
 	::render.swap_chain->Present(0, 0);
 }
