@@ -118,6 +118,9 @@ const CRenderTechnique* ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
+/*CMesh		 rope2;
+CMesh		 rope3;
+CMesh		 rope4;*/
 
 CHandle		 life;
 CHandle		 h_player;
@@ -1210,6 +1213,12 @@ void CApp::renderEntities() {
 
 	// Render entities
 	int rope_count = 0;
+
+	/*rope.destroy();
+	rope2.destroy();
+	rope3.destroy();
+	rope4.destroy();*/
+
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
 		TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
@@ -1283,7 +1292,15 @@ void CApp::renderEntities() {
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 			tension = maxDist < 0.2f ? 0.f : 1.f;
 
-			rope.destroy();
+			/*CMesh* m = &rope;
+			if (rope_count == 1)
+				m = &rope2;
+			if (rope_count == 2)
+				m = &rope3;
+			if (rope_count == 3)
+				m = &rope4;*/
+			
+
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
 			ropeTech->activate();
@@ -1511,6 +1528,8 @@ void CApp::destroy() {
 	particle_groups_manager.destroy();
 	logic_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
+	CNav_mesh_manager::get().generate_nav_mesh = false;
 
 	// Destroy app resources
 	wiredCube.destroy();
@@ -1526,7 +1545,7 @@ void CApp::destroy() {
 	::render.destroyDevice();
 	
 	// Destro navmesh
-	CNav_mesh_manager().get().~CNav_mesh_manager();
+	CNav_mesh_manager().get().destroy();
 }
 
 unsigned int CApp::numStrings(){
@@ -1921,9 +1940,6 @@ void CApp::playInitialVideo() {
 }
 
 void CApp::exitApp() {
-	CNav_mesh_manager::get().keep_updating_navmesh = false;
-	CNav_mesh_manager::get().setNeedNavMesh(false);
-	CNav_mesh_manager::get().generate_nav_mesh = false;
 	destroy();
 	exit(0);
 }

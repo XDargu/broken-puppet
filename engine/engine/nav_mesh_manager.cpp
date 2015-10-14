@@ -197,6 +197,7 @@ void CNav_mesh_manager::updateNavmesh() {
 			lock = false;
 		}
 	}
+	return;
 }
 
 void CNav_mesh_manager::render_nav_mesh(){
@@ -402,11 +403,7 @@ CNav_mesh_manager::CNav_mesh_manager()
 
 CNav_mesh_manager::~CNav_mesh_manager()
 {
-	if (AiThread != nullptr){
-		//TerminateThread(AiThread, 0);
-		if(AiThread->joinable())
-			AiThread->join();
-	}
+	
 }
 
 bool CNav_mesh_manager::getLock(){
@@ -416,4 +413,16 @@ bool CNav_mesh_manager::getLock(){
 void CNav_mesh_manager::setNavMeshClimb(int climb){
 	nav_A.setClimb(climb);
 	nav_B.setClimb(climb);
+}
+
+
+void CNav_mesh_manager::destroy() {
+	if (AiThread != nullptr){
+		//TerminateThread(AiThread, 0);
+
+		if (AiThread->joinable()) {
+			AiThread->join();
+
+		}
+	}
 }
