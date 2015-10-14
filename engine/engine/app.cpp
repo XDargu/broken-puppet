@@ -1200,8 +1200,8 @@ void CApp::renderEntities() {
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	debugTech->activate();
-	const CTexture *tex = texture_manager.getByName("grass");
-	tex->activate(0);
+	const CTexture* rope_tex = texture_manager.getByName("grass");
+	rope_tex->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -1209,6 +1209,7 @@ void CApp::renderEntities() {
 	activateTint(0);
 
 	// Render entities
+	int rope_count = 0;
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
 		TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
@@ -1220,8 +1221,10 @@ void CApp::renderEntities() {
 
 
 		// Draw the joints
+
 		if (c_rope) {
-			tex->activate(0);
+			rope_count++;
+			rope_tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
@@ -1290,6 +1293,16 @@ void CApp::renderEntities() {
 				setTint(XMVectorSet(0.46f, 0.075f, 0.075f, 1));
 			else
 				setTint(XMVectorSet(0.45f, 0.8f, 0.63f, 1));
+
+			font.printf(60, 150 + 50 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
+				XMVectorGetX(initialPos),
+				XMVectorGetY(initialPos),
+				XMVectorGetZ(initialPos),
+				XMVectorGetX(finalPos),
+				XMVectorGetY(finalPos),
+				XMVectorGetZ(finalPos)
+				);
+
 			/*float color_tension = min(dist / maxDist * 0.25f, 1);
 			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));*/
 			setWorldMatrix(XMMatrixIdentity());

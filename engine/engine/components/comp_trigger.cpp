@@ -9,7 +9,9 @@
 
 TCompTrigger::~TCompTrigger() {
 	CLogicManager::get().unregisterTrigger(CHandle(this));
+	inside->clear();
 	delete inside;
+	inside = nullptr;
 }
 
 TCompTrigger::TCompTrigger() : m_transform(CHandle()), m_aabb(CHandle()), player_only(false), bots_only(false) {
@@ -108,7 +110,7 @@ bool TCompTrigger::onEnter(){
 					if ((e != own) && (aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
 						inside->push_back(e);
 						CLogicManager::get().onTriggerEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
-						//XDEBUG("On enter: %s", e->getName());
+						XDEBUG("On enter: %s", e->getName());
 						if (!first_enter) {
 							CLogicManager::get().onTriggerFirstEnter(CHandle(CHandle(this).getOwner()), CHandle(e));
 							first_enter = true;
@@ -133,7 +135,7 @@ bool TCompTrigger::onExit(){
 				if ((e != own) && (!aabb->intersects(i_aabb) && (std::strcmp(e->tag, "level") != 0))){
 					remove(*inside, i);
 					CLogicManager::get().onTriggerExit(CHandle(CHandle(this).getOwner()), CHandle(e));
-					//XDEBUG("On exit: %s", e->getName());
+					XDEBUG("On exit: %s", e->getName());
 					return true;
 				}
 			}
