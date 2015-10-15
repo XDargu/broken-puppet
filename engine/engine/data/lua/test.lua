@@ -62,6 +62,12 @@ function onSceneLoad_scene_final_boss()
 	initPos = player:getPosition();
 	respawnPos = player:getPosition();
 	mBoss = logicManager:getObject("Boss");
+
+	logicManager:playEventAtPosition("SUBS_RAGDOLL", player:getPosition());
+
+	-- Colocar collider del escenario
+	local scene_collider = logicManager:getObject("escenario_pared_collider");		
+	scene_collider:setPos(Vector(1000, 1000, 1000));
 	
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -103,6 +109,9 @@ function onSceneLoad_scene_final_boss()
 		logicManager:setBands(false)
 		logicManager:releaseCameraLock()
 		logicManager:resetPlayerCamera()
+
+		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
+		antiRain:setPos(Vector(5000, 5000, 5000));
 
 		respawnPos = player:getPosition();
 		initPos = respawnPos;
@@ -193,10 +202,14 @@ function onSceneLoad_scene_final_boss()
 		logicManager:setMediumShotActive(true)
 		logicManager:changeCamera("PlayerCamera");
 
-		
+		-- Colocar anti rain collider
 		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
 		local playerPos = player:getPosition();
 		antiRain:setPos(playerPos);
+
+		-- Colocar collider del escenario
+		local scene_collider = logicManager:getObject("escenario_pared_collider");		
+		scene_collider:setPos(Vector(0, 0, 0));
 		
 		local boss = logicManager:getBot("Boss")
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
@@ -205,7 +218,6 @@ function onSceneLoad_scene_final_boss()
 		startCoroutine("bossShake", bossShake)
 		startCoroutine("bossInitialRain",  bossInitialRain)
 		
-		antiRain:setPos(Vector(5000, 5000, 5000));
 	end
 
 	function bossShake()
@@ -1069,7 +1081,7 @@ end
 function onTimerEnd_wait_for_lanch()
 	logicManager:setCanThrow(true)
 	-- debemos llamar a una funcion que apunte a la sustituta
-	logicManager:lockCameraOnPosition(Vector(0, 300, -100))		
+	logicManager:lockCameraOnPosition(Vector(0, 300, -200))		
 end
 
 function onBossRopeThrow()
