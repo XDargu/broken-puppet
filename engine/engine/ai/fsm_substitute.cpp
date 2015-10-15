@@ -58,6 +58,8 @@ void fsm_substitute::Idle(float elapsed){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		loopAnimation(1, true);		
+		if (skeleton)
+			skeleton->setFollowAnimation(false);
 	}
 
 	last_loop_delay += elapsed;
@@ -85,14 +87,18 @@ void fsm_substitute::LittleTalk(float elapsed){
 	if (on_enter){
 		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
 		TCompSkeleton* skeleton = comp_skeleton;
-
 		// Little Talk animation
 		stopAllAnimations();
 		skeleton->playAnimation(0);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		CSoundManager::get().playEvent("SUBS_SPEECH", sound_pos);
 	}
-	if (state_time >= 27.9f){
-		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+	if (state_time >= 29.15f){	
 		ChangeState("fbp_Idle");
 	}		
 }
@@ -106,6 +112,12 @@ void fsm_substitute::LoopTalk8(){
 		stopAllAnimations();
 		skeleton->playAnimation(3);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_8", sound_pos);
 	}
 	if (state_time >= 1.9){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
@@ -122,6 +134,13 @@ void fsm_substitute::LoopTalk9(){
 		stopAllAnimations();
 		skeleton->playAnimation(4);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_9", sound_pos);
+
 	}
 	if (state_time >= 1.9){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
