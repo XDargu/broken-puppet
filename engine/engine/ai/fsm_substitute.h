@@ -38,6 +38,7 @@ public:
 	void LoopTalk9();
 
 	void JustHanged();
+	void CallingBoss();
 	void Hanged(float elapsed);
 };
 

@@ -695,6 +695,7 @@ void CLogicManager::bootLUA() {
 		.set("move", (void (CMCVObject::*)(CVector, float)) &CMCVObject::moveToPosition)
 		.set("setEmissive", &CMCVObject::setEmissive)
 		.set("applyForce", (void (CMCVObject::*)(CVector)) &CMCVObject::applyForce)
+		.set("setRender", (void (CMCVObject::*)(bool)) &CMCVObject::setRender)
 		.set("riseUpBoss", &CMCVObject::riseUpBoss)
 		.set("initLittleTalk", &CMCVObject::initLittleTalk)
 		.set("initialRain", &CMCVObject::initialRain)

@@ -115,3 +115,11 @@ void CMCVObject::initialRain(int amount) {
 		boss->initialRain(amount);
 	}
 }
+void CMCVObject::setRender(bool active){
+	if (!entity.isValid())
+		return;
+	TCompRender* render = ((CEntity*)entity)->get<TCompRender>();
+	if (render) {
+		render->active = active;
+	}
+}

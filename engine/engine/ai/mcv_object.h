@@ -22,6 +22,7 @@ public:
 	void moveToPosition(CVector position, float speed);
 	void setEmissive(bool active);
 	void applyForce(CVector force);
+	void setRender(bool active);
 	void riseUpBoss();
 	void initLittleTalk();
 	CMCVObject firstBombBoss();

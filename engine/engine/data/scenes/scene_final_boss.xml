@@ -4002,7 +4002,7 @@
   <entity   materialTag = "wood">
     <name name="boss_spot_468.0" />
     <transform position="-0.104137 48.2854 -0.0889287" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true" res="1"/>
+    <shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true"/>
     <camera fov="179.5" znear="0.1" zfar="50" width="30" height="30" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
@@ -4357,7 +4357,6 @@
   </entity>
   <entity tag = "enemy" prefab="Boss" tagBoss="true">
     <transform position="0.0 0.0 0.0" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>
-    <ragdoll name="boss#1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="scb_trigger_bandas" />
@@ -4387,7 +4386,7 @@
   </entity>
   <entity   materialTag = "tz">
     <name name="boss_trono_sustituta" />
-    <transform position="0.0 -0.468723 0.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
+    <transform position="0.0 -0.468724 -5.0" rotation="0.0 1.0 0.0 0.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="boss_trono_sustituta" sub_mesh="0" mat="silla_sillon_reposapies_taburete"/>
       <draw mesh="boss_trono_sustituta" sub_mesh="1" mat="agujas_llave"/>
@@ -4395,9 +4394,21 @@
     <aabb min="-0.659484 0.0 -0.70192" max="0.659484 2.78283 0.70192"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="camera_sustituta" />
-    <transform position="1.83771 0.439925 -32.3105" rotation="-0.0344539 -0.700448 0.712066 -0.0338918" scale="1.0 1.0 1.0"/>
-    <camera  fov="5.28" znear="0.1" zfar="170.0"/>
+    <name name="Camera01" />
+    <transform position="0.0370697 2.04814 -20.9721" rotation="0.0 0.763232 -0.646124 0.0" scale="1.0 1.0 1.0"/>
+    <camera  fov="16.347" znear="0.1" zfar="250.0"/>
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="Camera002" />
+    <transform position="-3.42572 2.04814 -20.9721" rotation="0.0 0.763232 -0.646124 0.0" scale="1.0 1.0 1.0"/>
+    <camera  fov="4.163" znear="0.1" zfar="250.0"/>
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="player_cinematic_place" />
+    <transform position="-0.0050199 -0.418841 -23.0099" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <audioSource sound="BUZZING" autoplay="false" >
+      <paramEnd/>
+    </audioSource>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="HingeConstraint43_87.0" />
@@ -4492,7 +4503,7 @@
     <transform position="0.0 -0.468723 0.0" rotation="0.0 0.0 0.0 1.0" scale="0.01 0.01 0.01"/>
     <skeleton name="sustituta"/>
     skeleton_lookat target="0 0 0"/>
-    <aabb min="-10.5 -12 -10.5" max="10.5 12 10.5"/>
+    <aabb min="-1000 -1000 -1000" max="1000 1000 1000"/>
     <bossSubstitute/>
     <ragdoll name="sustituta#1"/>
   </entity>

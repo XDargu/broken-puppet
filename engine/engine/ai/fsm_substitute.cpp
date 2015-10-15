@@ -40,8 +40,8 @@ void fsm_substitute::init()
 	AddState("fbp_LoopTalk8", (statehandler)&fsm_substitute::LoopTalk8);
 	AddState("fbp_LoopTalk9", (statehandler)&fsm_substitute::LoopTalk9);
 	AddState("fbp_JustHanged", (statehandler)&fsm_substitute::JustHanged);
-	AddState("fbp_Hanged", (statehandler)&fsm_substitute::Hanged);
-	
+	AddState("fbp_CallingBoss", (statehandler)&fsm_substitute::CallingBoss);
+	AddState("fbp_Hanged", (statehandler)&fsm_substitute::Hanged);	
 	
 
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
@@ -111,6 +111,7 @@ void fsm_substitute::LittleTalk(float elapsed){
 			sound_pos = trans->position;
 
 		CSoundManager::get().playEvent("SUBS_SPEECH", sound_pos);
+		CLogicManager::get().playSubtitles("SUBS_SPEECH");
 	}
 	if (state_time >= 29.15f){	
 		ChangeState("fbp_Idle");
@@ -132,6 +133,7 @@ void fsm_substitute::LoopTalk8(){
 			sound_pos = trans->position;
 
 		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_8", sound_pos);
+		CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_8");
 	}
 	if (state_time >= 1.9){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
@@ -154,6 +156,7 @@ void fsm_substitute::LoopTalk9(){
 			sound_pos = trans->position;
 
 		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_9", sound_pos);
+		CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_9");
 
 	}
 	if (state_time >= 1.9){
@@ -169,9 +172,9 @@ void fsm_substitute::JustHanged(){
 		if (audio_source)
 			audio_source->play();
 	}	
-	if (state_time >= 3){
+	if (state_time >= 1.f){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
-		ChangeState("fbp_Hanged");
+		ChangeState("fbp_CallingBoss");
 	}
 }
 
@@ -196,9 +199,26 @@ void fsm_substitute::Hanged(float elapsed){
 		CSoundManager::get().playEvent(conversation_list[conversation], sound_pos);
 		CLogicManager::get().playSubtitles(conversation_list[conversation]);
 	}
-	
-
 }
+
+void fsm_substitute::CallingBoss(){
+
+	if (on_enter){
+		// Taking sound position
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+		CSoundManager::get().playEvent("SUBS_PRE_BOSS", sound_pos);
+		CLogicManager::get().playSubtitles("SUBS_PRE_BOSS");
+		CLogicManager::get().onSubstituteHang();
+	}
+	if (state_time >= 3){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Hanged");
+	}
+}
+
 
 int fsm_substitute::calculateConversation() {
 
