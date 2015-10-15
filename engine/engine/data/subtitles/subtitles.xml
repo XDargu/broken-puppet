@@ -35,6 +35,49 @@
   <subtitle guid="DEATH04" next="" size="24" color="0xffffffff" time="11" sound="" text="Katherine había disparado su última aguja. Aunque bien pensado no recuerdo que fuera así. Volvamos a esta parte." />
   <subtitle guid="DEATH05" next="" size="24" color="0xffffffff" time="7" sound="" text="Aún no ha caído el telón en esta historia. Comencemos de nuevo este acto." />
 
+  <!-- Sustituta -->
+  <subtitle guid="SUBS_SPEECH" next="SUBS_SPEECH2" size="24" color="0xffff8800" time="7" sound="" text="¡Oh! ¿Qué hace ésta aquí?, ¿Vienes a ayudar a los tramoyistas?" />
+  <subtitle guid="SUBS_SPEECH2" next="SUBS_SPEECH3" size="24" color="0xffff8800" time="5" sound="" text="¿Te crees con derecho a venir aquí a robarme el papel?" />
+  <subtitle guid="SUBS_SPEECH3" next="SUBS_SPEECH4" size="24" color="0xffff8800" time="2" sound="" text="¡¿Pero tú te has visto?!" />14s
+  <subtitle guid="SUBS_SPEECH4" next="SUBS_SPEECH5" size="24" color="0xffff8800" time="5.5" sound="" text="¿Acaso piensas que el público estaría dispuesto a pagar por ver a una marioneta rota?" />19.5s
+  <subtitle guid="SUBS_SPEECH5" next="SUBS_SPEECH6" size="24" color="0xffff8800" time="5.5" sound="" text="No deberías culparme a mí de tu desgracia. La culpa es solo del tiempo, querida." />25s
+  <subtitle guid="SUBS_SPEECH6" next="" size="24" color="0xffff8800" time="4" sound="" text="¡Así que lárgate de aquí! ¡En el escenario ya no pintas nada!" />25s
+
+  Esperando
+  <subtitle guid="SUBS_WAIT_LOOP_7" next="" size="24" color="0xffff8800" time="3" sound="" text="¡Nunca debiste salir del desván!" />
+  <subtitle guid="SUBS_WAIT_LOOP_8" next="" size="24" color="0xffff8800" time="4" sound="" text="¿Escuchas esas ovaciones? ¡Son para mí!" />
+  <subtitle guid="SUBS_WAIT_LOOP_9" next="" size="24" color="0xffff8800" time="3" sound="" text="¿Piensas quedarte ahí todo el día?" />
+  <subtitle guid="SUBS_WAIT_LOOP_10" next="" size="24" color="0xffff8800" time="6" sound="" text="Me encanta tu estilo, aunque ir vestida con harapos está un tanto pasado de moda." />
+  <subtitle guid="SUBS_WAIT_LOOP_11" next="SUBS_WAIT_LOOP_11_2" size="24" color="0xffff8800" time="3" sound="" text="¿Pero acaso no te das cuenta de tu deplorable estado?" />
+  <subtitle guid="SUBS_WAIT_LOOP_11_2" next="" size="24" color="0xffff8800" time="5" sound="" text="¿Es que no te has visto en los espejos que había en MI camerino?" />
+  <subtitle guid="SUBS_WAIT_LOOP_12" next="SUBS_WAIT_LOOP_12_2" size="24" color="0xffff8800" time="4" sound="" text="En el fondo me das lástima. El tiempo se ha cebado contigo... " />
+  <subtitle guid="SUBS_WAIT_LOOP_12_2" next="" size="24" color="0xffff8800" time="5" sound="" text="Bromeaba, en realidad me encanta!" />  
+  <subtitle guid="SUBS_WAIT_LOOP_13" next="" size="24" color="0xffff8800" time="3" sound="" text="¿Piensas quedarte ahí todo el día?" />
+
+  Colgada
+  <subtitle guid="SUBS_HANGED_16" next="" size="24" color="0xffff8800" time="2" sound="" text="¡Mátala! ¡Mátala!" />
+  <subtitle guid="SUBS_HANGED_17" next="" size="24" color="0xffff8800" time="2" sound="" text="¡Acaba con ella!" />
+  <subtitle guid="SUBS_HANGED_18" next="" size="24" color="0xffff8800" time="3.5" sound="" text="¡Arráncale la cabeza! ¡La usaremos como attrezzo!" />
+  <subtitle guid="SUBS_HANGED_19" next="" size="24" color="0xffff8800" time="2" sound="" text="¡Termina de hacerla pedazos!" />
+  <subtitle guid="SUBS_HANGED_20" next="" size="24" color="0xffff8800" time="2.5" sound="" text="¡No eres más que una antigualla!" />
+  <subtitle guid="SUBS_HANGED_21" next="" size="24" color="0xffff8800" time="1.5" sound="" text="¡Llévatela contigo!" />
+  <subtitle guid="SUBS_HANGED_22" next="" size="24" color="0xffff8800" time="4" sound="" text="Ya estas muerta, el público ya ni siquiera te recuerda." />
+  <subtitle guid="SUBS_HANGED_23" next="" size="24" color="0xffff8800" time="3" sound="" text="¡Te vamos a arrancar el poco pelo que te queda!" />
+
+  Al golpearte
+  <subtitle guid="SUBS_HIT_24" next="" size="24" color="0xffff8800" time="4" sound="" text="" />
+  <subtitle guid="SUBS_HIT_25" next="" size="24" color="0xffff8800" time="3.5" sound="" text="¡Quédate en el suelo, es el lugar que te mereces!" />
+  <subtitle guid="SUBS_HIT_26" next="" size="24" color="0xffff8800" time="2.5" sound="" text="¡Maldita marioneta inútil!" />
+  <subtitle guid="SUBS_HIT_27" next="" size="24" color="0xffff8800" time="2" sound="" text="¡Acaba con esto de una vez!" />
+  <subtitle guid="SUBS_HIT_28" next="" size="24" color="0xffff8800" time="2" sound="" text="¡No eres más que una andrajosa!" />
+  <subtitle guid="SUBS_HIT_29" next="" size="24" color="0xffff8800" time="3" sound="" text="¡No me llegas ni a la suela de los botines!" />
+  <subtitle guid="SUBS_HIT_30" next="" size="24" color="0xffff8800" time="3.5" sound="" text="Maldita marioneta rota. ¡No vales para nada!" />
+  <subtitle guid="SUBS_HIT_31" next="" size="24" color="0xffff8800" time="3" sound="" text="No seas necia, tu tiempo ya pasó." />
+
+  Al hacer daño al boss
+  <subtitle guid="SUBS_BOSS_HIT_32" next="" size="24" color="0xffff8800" time="4" sound="" text="¿¡Cómo te atreves!? ¡No le hagas daño!" />
+  <subtitle guid="SUBS_BOSS_HIT_33" next="" size="24" color="0xffff8800" time="4" sound="" text="¡No! ¡Por favor! ¡No tienes ni idea de lo que estás haciendo!" />
+  <subtitle guid="SUBS_BOSS_HIT_34" next="" size="24" color="0xffff8800" time="5" sound="" text="¡NOOOOOOOOOOOOO!¿¡Qué has hecho!? ¡Estás completamente desquiciada!" />
 
 
   <!-- Vídeos -->
