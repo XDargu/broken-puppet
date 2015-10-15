@@ -36,7 +36,8 @@
   <subtitle guid="DEATH05" next="" size="24" color="0xffffffff" time="7" sound="" text="Aún no ha caído el telón en esta historia. Comencemos de nuevo este acto." />
 
   <!-- Sustituta -->
-  <subtitle guid="SUBS_SPEECH" next="SUBS_SPEECH2" size="24" color="0xffff8800" time="7" sound="" text="¡Oh! ¿Qué hace ésta aquí?, ¿Vienes a ayudar a los tramoyistas?" />
+  <subtitle guid="SUBS_SPEECH" next="SUBS_SPEECH1" size="24" color="0xffff8800" time="1" sound="" text="" />
+  <subtitle guid="SUBS_SPEECH1" next="SUBS_SPEECH2" size="24" color="0xffff8800" time="6" sound="" text="¡Oh! ¿Qué hace ésta aquí?, ¿Vienes a ayudar a los tramoyistas?" />
   <subtitle guid="SUBS_SPEECH2" next="SUBS_SPEECH3" size="24" color="0xffff8800" time="5" sound="" text="¿Te crees con derecho a venir aquí a robarme el papel?" />
   <subtitle guid="SUBS_SPEECH3" next="SUBS_SPEECH4" size="24" color="0xffff8800" time="2" sound="" text="¡¿Pero tú te has visto?!" />14s
   <subtitle guid="SUBS_SPEECH4" next="SUBS_SPEECH5" size="24" color="0xffff8800" time="5.5" sound="" text="¿Acaso piensas que el público estaría dispuesto a pagar por ver a una marioneta rota?" />19.5s
