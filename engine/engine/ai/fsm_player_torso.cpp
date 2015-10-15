@@ -109,6 +109,9 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 			{*/
 		if (hit_actor != nullptr) {
 
+			// TODO llamar al evento de lanzar cuerda de LUA
+			CLogicManager::get().onBossRopeThrow();
+
 			// First throw
 			if (first_actor == nullptr) {
 				CLogicManager::get().stringThrown();

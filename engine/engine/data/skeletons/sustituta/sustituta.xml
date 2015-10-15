@@ -1,6 +1,10 @@
 <skeleton>
     <mesh name="sustituta"/>
   
-  <anim name="monologo"/>1
+  <anim name="monologo" blend="0" blend_out="0"/>0
+  <anim name="idle_loop" blend="0" blend_out="0"/>1
+  <anim name="sit_loop" blend="0" blend_out="0"/>2
+  <anim name="loop_dialogo8" blend="0" blend_out="0"/>3
+  <anim name="loop_dialogo9" blend="0" blend_out="0"/>4
 
 </skeleton>

@@ -9,12 +9,17 @@ class fsm_substitute : public aifsmcontroller
 {
 private:
 	CHandle comp_skeleton;
-	int last_anim_id;
+	CHandle comp_ragdoll;
 
 	void stopAllAnimations();
-	void loopAnimationIfNotPlaying(int id, bool restart);
+	void loopAnimation(int id, bool restart);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	
+	float last_loop_delay;
+	int last_loop;
+
+	int calculateLoop();
 
 public:
 	fsm_substitute();
@@ -22,9 +27,12 @@ public:
 
 	void init();
 
+	void IdleSit(float elapsed);
 	void Idle(float elapsed);
 	void LittleTalk(float elapsed);
-
+	
+	void LoopTalk8();
+	void LoopTalk9();
 };
 
 

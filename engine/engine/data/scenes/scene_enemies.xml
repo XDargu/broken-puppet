@@ -7,11 +7,13 @@
 <entity prefab="enemy_level0">
     <transform rotation="0.0 0.0 0.0 1.0" position="-15.0 0.0 0.0" scale="1 1 1"/>
 </entity>
+  
 <entity>
   <name name="PlayerCamera" />
   <transform position="-15 25 30"/>
   <camera target="0 0 0" fov="75.0" znear="0.1" zfar="1000.0"/>
 </entity>
+  
   <entity>
     <name name="Dir" />
     <transform position="0 0 0" rotation="0.570941508 0.167518795 0.167518765 0.786066592" scale="1 1 1"/>

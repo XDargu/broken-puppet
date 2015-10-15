@@ -520,6 +520,7 @@ void CalMixer::updateSkeleton()
 
 			// Remove local translation from the animation in the XZ
 			translation.x = translation.z = 0.f;
+			logic_delta_translation.y = 0.f;
 		}
 		else {
 			logic_delta_translation.y = 0.f;

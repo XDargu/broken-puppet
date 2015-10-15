@@ -49,6 +49,16 @@ void TCompPlayerPivotController::update(float elapsed) {
 void TCompPlayerPivotController::pointAt(XMVECTOR target) {
 	TCompTransform* transform = (TCompTransform*)m_transform;
 
+	// Offset correction
+	CEntity* player_camera = CEntityManager::get().getByName("PlayerCamera");
+	if (player_camera) {
+		TCompTransform* player_camera_transform = player_camera->get<TCompTransform>();
+		if (player_camera_transform) {
+			XMVECTOR offset = player_camera_transform->position - transform->position;
+			target -= offset;
+		}
+	}
+
 	transform->lookAt(target, transform->getUp());
 
 	// Get only the Y axis rotation from yaw
@@ -61,6 +71,16 @@ void TCompPlayerPivotController::pointAt(XMVECTOR target) {
 
 void TCompPlayerPivotController::aimAt(XMVECTOR target, float t) {
 	TCompTransform* transform = (TCompTransform*)m_transform;
+
+	// Offset correction
+	CEntity* player_camera = CEntityManager::get().getByName("PlayerCamera");
+	if (player_camera) {
+		TCompTransform* player_camera_transform = player_camera->get<TCompTransform>();
+		if (player_camera_transform) {
+			XMVECTOR offset = player_camera_transform->position - transform->position;
+			target -= offset;
+		}
+	}
 
 	transform->aimAt(target, transform->getUp(), t);
 

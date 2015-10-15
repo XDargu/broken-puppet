@@ -64,6 +64,10 @@ private:
 	bool shake_cam;
 	float shake_amount;
 
+	// FOV
+	float target_fov;
+	float fov_lerp;
+
 	std::string scene_to_load;
 	bool exit_next_frame;
 
@@ -196,17 +200,25 @@ public:
 	void setPlayerCameraMediumShotActive(bool active);
 	void setPlayerCameraLongShotActive(bool active);
 	void resetPlayerCamera();
-	void lockOnBot(CBot bot);
+	void lockOnBot(CBot bot, CVector offset);
+	void lockOnBotBone(CBot bot, int bone);
 	void lockOnPosition(CVector position);
 	void lockOnObject(CMCVObject object);
 	void releaseCameraLock();
 	void playAnimation(std::string name, CMCVObject target_object);
 	void shakeCamera(float amount);
 	void stopShakeCamera();
+	void changeFov(float fov, float lerp);
+	void stopFovChange();
 
 	// MISC
 	void print(std::string text);
 	void help();
+
+	// BOSS
+
+	void onBossRopeThrow();
+	void onSubstituteHang();
 };
 
 #endif
