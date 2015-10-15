@@ -42,12 +42,21 @@ void TCompShadows::generate()  {
 		return; 
 	}
 
-	CTraceScoped s("shadows");
+	int current_player_zone = CLogicManager::get().getPlayerZoneID();
+	CEntity* owner = CHandle(this).getOwner();
+	TCompTransform* t = owner->get<TCompTransform>();
+
+	if (!(abs(current_player_zone - t->room_id) <= 1)) {
+		rt->clearDepthBuffer();
+		return;
+	}
 
 	// Activate the camera component which is the source of the light
 	CEntity* e = CHandle(this).getOwner();
 	TCompCamera* camera = e->get<TCompCamera>();
 	assert(camera || fatal("TCompShadows requieres a TCompCamera component"));
+	
+	CTraceScoped s(e->getName());
 
 	activateRSConfig(RSCFG_SHADOWS);
 

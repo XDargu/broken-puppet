@@ -79,6 +79,11 @@ const unsigned int max_num_needles = 512;
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
 
+#ifndef FINAL_RELEASE
+	#include "windows.h"
+	#include "psapi.h"
+#endif
+
 CApp& CApp::get() {
 	return the_app;
 }
@@ -399,6 +404,10 @@ bool CApp::create() {
 	TwInit(TW_DIRECT3D11, ::render.device);
 	TwWindowSize(xres, yres);
 #endif
+#ifndef FINAL_RELEASE
+	rope_thrown = false;
+	physx_clamp = false;
+#endif
 
 	bool is_ok = true;
 
@@ -525,9 +534,7 @@ void CApp::doFrame() {
 
 	const int FRAME_LIMIT = 60;
 	const double TIME_PER_FRAME = 1.0f / FRAME_LIMIT;
-
-	
-	
+	const float MIN_PHYSX_DELTA = TIME_PER_FRAME * 0.0f;
 
 	fps = 0.0f;
 	// To avoid the fist huge delta time
@@ -541,10 +548,14 @@ void CApp::doFrame() {
 		if (TIME_ACCUM >= 0) {
 
 			fps = (float)(1.0f / time_since_last_update);
-			frames_d.push_front(fps);
+#ifndef FINAL_RELEASE
+			TFrame f;
+			f.fps = fps;
+			frames_d.push_front(f);
 			if (frames_d.size() > xres) {
 				frames_d.pop_back();
 			}
+#endif
 
 			delta_time = time_since_last_update;
 			total_time += delta_time;
@@ -579,7 +590,16 @@ void CApp::doFrame() {
 				//if (fixedUpdateCounter > pxStep) {
 				//fixedUpdateCounter -= pxStep;
 				//fixedUpdateCounter = 0;
-				fixedUpdate(delta_time);
+				if (delta_time < MIN_PHYSX_DELTA) {
+#ifndef FINAL_RELEASE
+					physx_clamp = true;
+#endif
+					fixedUpdate(MIN_PHYSX_DELTA);
+				}
+				else {
+					fixedUpdate(delta_time);
+				}
+
 				//}
 
 
@@ -1230,15 +1250,32 @@ void CApp::render() {
 
 	logic_manager.draw();
 
-	int x = 0;
-	float h = 0;
+#ifndef FINAL_RELEASE
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+	SIZE_T virtualMemUsedByMe = pmc.WorkingSetSize;
+	float mem = (virtualMemUsedByMe / 1024.f) / 1024.f;
 
-	for (auto fps : frames_d) {
-		ctes_global.get()->frame_list[x] = XMVectorSetX(XMVectorZero(), fps);
+	bool alt_pressed = CIOStatus::get().isPressed(CIOStatus::ALT);
+
+	frames_d.front().clamp_physx = physx_clamp;
+	frames_d.front().rope_thrown = rope_thrown;
+	frames_d.front().ram = mem / 10.f; // 10 MB = 1 pixel
+	int x = 0;
+	float h = 0.f;
+	for (auto frame : frames_d) {
+		ctes_global.get()->frame_list[x] = XMVectorSet(alt_pressed ? frame.ram : frame.fps, (frame.rope_thrown ? 1.f : 0.f), (frame.clamp_physx ? 1.f : 0.f), 0);
 		h = fps;
 		//drawTexture2D(x, yres - h, 1, h, texture_manager.getByName("whitepx"));
 		x++;
 	}
+
+	rope_thrown = false;
+	physx_clamp = false;
+
+	
+	font.printf(500, 60, "Memory use: %f MB", mem);
+#endif
 
 	::render.swap_chain->Present(0, 0);
 }
@@ -1807,20 +1844,20 @@ void CApp::loadScene(std::string scene_name) {
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_1.xml"){
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(60.f);
+		cam->changeZFar(70.f);
 		//sm.playTrack("ambient_orquestal.ogg", true);
 		ctes_global.get()->use_lightmaps = 0;
 		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_1_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(60.f);
+		cam->changeZFar(70.f);
 		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(1);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(77.f);
+		cam->changeZFar(90.f);
 		ctes_global.get()->use_lightmaps = 0;		
 		CSoundManager::get().setSceneID(2);
 	}
@@ -1833,7 +1870,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_3_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
-		ctes_global.get()->use_lightmaps = 1;
+		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(3);
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
@@ -1854,7 +1891,7 @@ void CApp::loadScene(std::string scene_name) {
 	}
 	else if (scene_name == "data/scenes/scene_final_boss.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(150.0f);
+		cam->changeZFar(250.0f);
 		ctes_global.get()->use_lightmaps = 0;
 	}
 	ctes_global.uploadToGPU();

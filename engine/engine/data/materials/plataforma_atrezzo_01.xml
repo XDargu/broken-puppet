@@ -1,1 +1,1 @@
-<std_material name="plataforma_atrezzo_01" diffuse="atrezzo_difusse" normal="atrezzo_normal" specular="atrezzo_specular" glossiness="atrezzo_gloss" emissive="" emissive_off="" />
+<std_material name="plataforma_atrezzo_01" diffuse="plataforma_atrezzo_difusse" normal="plataforma_atrezzo_normal" specular="plataforma_atrezzo_specular" glossiness="plataforma_atrezzo_gloss" emissive="" emissive_off="" />
