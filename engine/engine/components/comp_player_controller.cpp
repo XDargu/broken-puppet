@@ -111,6 +111,13 @@ void TCompPlayerController::init() {
 			strcpy(name_needle->name, "NeedleCarrete2");
 		}
 	}
+	pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
+	if (pref_needle.isValid()) {
+		TCompName* name_needle = ((CEntity*)pref_needle)->get<TCompName>();
+		if (name_needle) {
+			strcpy(name_needle->name, "NeedleCarrete3");
+		}
+	}
 
 	pref_needle = prefabs_manager.getInstanceByName("player_back_needle");
 	if (pref_needle.isValid()) {
@@ -120,8 +127,10 @@ void TCompPlayerController::init() {
 		}
 	}
 
+
 	needle_back1 = CEntityManager::get().getByName("NeedleCarrete1");
 	needle_back2 = CEntityManager::get().getByName("NeedleCarrete2");
+	needle_back3 = CEntityManager::get().getByName("NeedleCarrete3");
 	needle_hand = CEntityManager::get().getByName("NeedleHand");
 
 	float offset_size = 0.05f;
@@ -131,9 +140,11 @@ void TCompPlayerController::init() {
 
 	offset_needle_back1 = XMVectorSet(0.02f, 0.03f, 0, 0);
 	offset_needle_back2 = XMVectorSet(-0.03f, -0.015f, 0, 0);
+	offset_needle_back3 = XMVectorSet(-0.01f, -0.00f, 0, 0);
 
-	offset_rot_needle_back1 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
-	offset_rot_needle_back2 = XMVectorSet(getRandomNumber(-offset_rot_size, offset_rot_size), getRandomNumber(-offset_rot_size, offset_rot_size), 0, 0);
+	offset_rot_needle_back1 = XMVectorSet(0, 0, 0, 0);
+	offset_rot_needle_back2 = XMVectorSet(0, 0, 0, 0);
+	offset_rot_needle_back3 = XMVectorSet(0, 0, 0, 0);
 
 	// Create jump particle prefab
 	CHandle pref_entity = prefabs_manager.getInstanceByName("player_jump_pref");
@@ -302,9 +313,11 @@ void TCompPlayerController::update(float elapsed) {
 
 		CEntity* needle_back1_entity = needle_back1;
 		CEntity* needle_back2_entity = needle_back2;
+		CEntity* needle_back3_entity = needle_back3;
 
 		TCompTransform* needle_back1_t = needle_back1_entity->get<TCompTransform>();
 		TCompTransform* needle_back2_t = needle_back2_entity->get<TCompTransform>();
+		TCompTransform* needle_back3_t = needle_back3_entity->get<TCompTransform>();
 
 		// Bone transform
 		TTransform bone_trans = TTransform(back_pos, back_rot, XMVectorSet(1, 1, 1, 0));
@@ -315,11 +328,13 @@ void TCompPlayerController::update(float elapsed) {
 		// Here we have the bone_trans transform with the neutral position of a needle
 		// Now, add some random rotation/poasition to the needles
 
-		needle_back1_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getLeft(), XMVectorGetX(offset_rot_needle_back1)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back1)), bone_trans.rotation));
-		needle_back2_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getLeft(), XMVectorGetX(offset_rot_needle_back2)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back2)), bone_trans.rotation));
+		needle_back1_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getUp(), XMVectorGetX(offset_rot_needle_back1)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back1)), bone_trans.rotation));
+		needle_back2_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getUp(), XMVectorGetX(offset_rot_needle_back2)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back2)), bone_trans.rotation));
+		needle_back3_t->rotation = XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getUp(), XMVectorGetX(offset_rot_needle_back3)), XMQuaternionMultiply(XMQuaternionRotationAxis(bone_trans.getFront(), XMVectorGetY(offset_rot_needle_back3)), bone_trans.rotation));
 
 		needle_back1_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back1) + bone_trans.getUp() * XMVectorGetY(offset_needle_back1);
 		needle_back2_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back2) + bone_trans.getUp() * XMVectorGetY(offset_needle_back2);
+		needle_back3_t->position = bone_trans.position + bone_trans.getLeft() * XMVectorGetX(offset_needle_back3) + bone_trans.getUp() * XMVectorGetY(offset_needle_back3);
 	}
 	
 	// Particles
