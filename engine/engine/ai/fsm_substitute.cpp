@@ -12,6 +12,8 @@ using namespace DirectX;
 
 fsm_substitute::fsm_substitute()
 {
+	last_loop = 0;
+	last_loop_delay = 0.f;
 }
 
 fsm_substitute::~fsm_substitute()
@@ -24,6 +26,8 @@ void fsm_substitute::init()
 	AddState("fbp_IdleSit", (statehandler)&fsm_substitute::IdleSit);
 	AddState("fbp_Idle", (statehandler)&fsm_substitute::Idle);
 	AddState("fbp_LittleTalk", (statehandler)&fsm_substitute::LittleTalk);
+	AddState("fbp_LoopTalk8", (statehandler)&fsm_substitute::LoopTalk8);
+	AddState("fbp_LoopTalk9", (statehandler)&fsm_substitute::LoopTalk9);
 	
 
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
@@ -53,14 +57,27 @@ void fsm_substitute::Idle(float elapsed){
 	if (on_enter){
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
-		loopAnimation(1, true);
-		
+		loopAnimation(1, true);		
 	}
 
-	if (CIOStatus::get().becomesPressed(CIOStatus::P)){
-		TCompRagdoll* ragdoll = comp_ragdoll;
-		ragdoll->setActive(false);
-		ChangeState("fbp_LittleTalk");
+	last_loop_delay += elapsed;
+	if (last_loop_delay > 3){
+		last_loop_delay = 0;
+
+		int loop = calculateLoop();
+		switch (loop)
+		{
+		case 0:
+			ChangeState("fbp_LoopTalk8");
+			break;
+
+		case 1:
+			ChangeState("fbp_LoopTalk9");
+			break;
+
+		default:
+			break;
+		}
 	}
 }
 
@@ -74,12 +91,55 @@ void fsm_substitute::LittleTalk(float elapsed){
 		skeleton->playAnimation(0);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
 	}
-	if (state_time >= 27.9f)
+	if (state_time >= 27.9f){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
 		ChangeState("fbp_Idle");
+	}		
 }
 
+void fsm_substitute::LoopTalk8(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
 
+		// Little Talk animation
+		stopAllAnimations();
+		skeleton->playAnimation(3);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+	}
+	if (state_time >= 1.9){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Idle");
+	}
+}
+
+void fsm_substitute::LoopTalk9(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
+
+		// Little Talk animation
+		stopAllAnimations();
+		skeleton->playAnimation(4);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+	}
+	if (state_time >= 1.9){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Idle");
+	}
+}
+
+int fsm_substitute::calculateLoop() {
+	
+	int next_loop = last_loop;
+	last_loop++;
+
+	if (last_loop >= 2){		
+		last_loop = 0;
+	}
+		
+	return next_loop;
+}
 
 /*********************************
 			ANIMACIONES

@@ -2,6 +2,7 @@
 #include "logic_manager.h"
 #include "components\comp_trigger.h"
 #include "components\comp_transform.h"
+#include "components\comp_skeleton.h"
 #include "components\comp_rigid_body.h"
 #include "components\comp_name.h"
 #include "components\comp_player_controller.h"
@@ -88,6 +89,9 @@ void CLogicManager::init()
 
 	shake_cam = false;
 	shake_amount = 0;
+
+	target_fov = 60.0f;
+	fov_lerp = -1;
 
 	//triggers.clear();
 	timers.clear();
@@ -182,29 +186,64 @@ void CLogicManager::update(float elapsed) {
 
 	}
 
+	// Update FOV
+	if (fov_lerp > 0) {
+		if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
+			CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
+
+			if (camera_c.isValid()) {
+				float current_fov = ((TCompCamera*)camera_c)->getFov();
+				float fov_new = lerp(current_fov, deg2rad(target_fov), fov_lerp * elapsed);
+				((TCompCamera*)camera_c)->setFov(fov_new);
+				((TCompCamera*)camera_c)->update(elapsed);
+
+			}
+		}
+	}
 	// Update lock on
 	if (lock_on_target.isValid()) {
 		CEntity* lock_on_entity = lock_on_target;
 		if (lock_on_entity) {
-			TCompTransform* transform = lock_on_entity->get<TCompTransform>();
-			if (transform) {
-				if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
-					CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
-					CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
-					CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
 
-					if (player_pivot_c.isValid() && camera_pivot_c.isValid() && camera_c.isValid()) {
-						XMVECTOR aux_pos = transform->position + XMVectorSet(0, 1.5f, 0, 0);
-						((TCompPlayerPivotController*)player_pivot_c)->pointAt(aux_pos);
-						((TCompCameraPivotController*)camera_pivot_c)->pointAt(aux_pos);
-						((TCompCamera*)camera_c)->update(elapsed);
+			if (XMVectorGetW(lock_on_position) == -2) {
+				TCompSkeleton* skeleton = lock_on_entity->get<TCompSkeleton>();
+				if (skeleton) {
+					if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
+						CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+						CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+						CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
+						CHandle camera_controller = ((CEntity*)camera)->get<TCompThirdPersonCameraController>();
+
+						if (player_pivot_c.isValid() && camera_pivot_c.isValid() && camera_c.isValid() && camera_controller.isValid()) {
+							XMVECTOR aux_pos = skeleton->getPositionOfBone(XMVectorGetX(lock_on_position));
+							((TCompPlayerPivotController*)player_pivot_c)->aimAt(aux_pos, 10 * elapsed);
+							((TCompCameraPivotController*)camera_pivot_c)->aimAt(aux_pos, 10 * elapsed);
+							((TCompCamera*)camera_c)->update(elapsed);
+						}
+					}
+				}
+			}
+			else {
+				TCompTransform* transform = lock_on_entity->get<TCompTransform>();
+				if (transform) {
+					if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
+						CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+						CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+						CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
+
+						if (player_pivot_c.isValid() && camera_pivot_c.isValid() && camera_c.isValid()) {
+							XMVECTOR aux_pos = transform->position + lock_on_position;
+							((TCompPlayerPivotController*)player_pivot_c)->pointAt(aux_pos);
+							((TCompCameraPivotController*)camera_pivot_c)->pointAt(aux_pos);
+							((TCompCamera*)camera_c)->update(elapsed);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	if (XMVectorGetW(lock_on_position) != -1) {
+	if (XMVectorGetW(lock_on_position) == 0) {
 		if (player_pivot.isValid() && camera_pivot.isValid() && camera.isValid()) {
 			CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
 			CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
@@ -222,22 +261,24 @@ void CLogicManager::update(float elapsed) {
 		if (!shake_cam) {
 			shake_amount = lerp(shake_amount, 0, 3 * elapsed);
 		}
-		CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
+		if (camera.isValid()) {
+			CHandle camera_c = ((CEntity*)camera)->get<TCompCamera>();
 
-		if (camera_c.isValid()) {
-			// Apply shake to the camera
-			TCompTransform* tmx = ((CEntity*)camera_c.getOwner())->get<TCompTransform>();
-			if (tmx) {
-				XMVECTOR rng = getRandomVector3(XMFLOAT3(-shake_amount, -shake_amount, -shake_amount), XMFLOAT3(shake_amount, shake_amount, shake_amount));
-				tmx->position += rng;
-				((TCompCamera*)camera_c)->update(elapsed);
+			if (camera_c.isValid()) {
+				// Apply shake to the camera
+				TCompTransform* tmx = ((CEntity*)camera_c.getOwner())->get<TCompTransform>();
+				if (tmx) {
+					XMVECTOR rng = getRandomVector3(XMFLOAT3(-shake_amount, -shake_amount, -shake_amount), XMFLOAT3(shake_amount, shake_amount, shake_amount));
+					tmx->position += rng;
+					((TCompCamera*)camera_c)->update(elapsed);
+				}
 			}
 		}
 	}
 
 
 	// Quitar, ñapa, peligro
-	CHandle a_camera = render_manager.activeCamera;
+	/*CHandle a_camera = render_manager.activeCamera;
 	if (a_camera.isValid()) {
 		CEntity* a_entity = a_camera.getOwner();
 		if (a_entity) {
@@ -251,7 +292,7 @@ void CLogicManager::update(float elapsed) {
 				}
 			}
 		}
-	}
+	}*/
 
 	// Update band height
 	band_heigth = lerp(band_heigth, band_heigth_dest, lerp_bands);
@@ -619,6 +660,7 @@ void CLogicManager::bootLUA() {
 		.set("setLongShotActive", &CLogicManager::setPlayerCameraLongShotActive)
 		.set("resetPlayerCamera", &CLogicManager::resetPlayerCamera)
 		.set("lockCameraOnBot", &CLogicManager::lockOnBot)
+		.set("lockCameraOnBotBone", &CLogicManager::lockOnBotBone)
 		.set("lockCameraOnPosition", &CLogicManager::lockOnPosition)
 		.set("lockCameraOnObject", &CLogicManager::lockOnObject)
 		.set("releaseCameraLock", &CLogicManager::releaseCameraLock)
@@ -630,6 +672,8 @@ void CLogicManager::bootLUA() {
 		.set("setCanMove", &CLogicManager::setCanMove)
 		.set("shakeCamera", &CLogicManager::shakeCamera)
 		.set("stopShakeCamera", &CLogicManager::stopShakeCamera)
+		.set("changeFov", &CLogicManager::changeFov)
+		.set("stopFovChange", &CLogicManager::stopFovChange)
 		.set("createPrefab", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createPrefab)
 	;
 
@@ -652,6 +696,7 @@ void CLogicManager::bootLUA() {
 		.set("setEmissive", &CMCVObject::setEmissive)
 		.set("applyForce", (void (CMCVObject::*)(CVector)) &CMCVObject::applyForce)
 		.set("riseUpBoss", &CMCVObject::riseUpBoss)
+		.set("initLittleTalk", &CMCVObject::initLittleTalk)
 		.set("initialRain", &CMCVObject::initialRain)
 		.set("firstBombBoss", &CMCVObject::firstBombBoss)
 		;
@@ -979,8 +1024,26 @@ void CLogicManager::resetPlayerCamera() {
 	}
 }
 
-void CLogicManager::lockOnBot(CBot bot) {
+void CLogicManager::lockOnBot(CBot bot, CVector offset) {
 	lock_on_target = bot.getEntityHandle();
+
+	lock_on_position = XMVectorSet(offset.x, offset.y, offset.z, -1);
+
+	if (player_pivot.isValid() && camera_pivot.isValid()) {
+		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
+		CHandle camera_pivot_c = ((CEntity*)camera_pivot)->get<TCompCameraPivotController>();
+
+		if (player_pivot_c.isValid() && camera_pivot_c.isValid()) {
+			((TCompPlayerPivotController*)player_pivot_c)->active = false;
+			((TCompCameraPivotController*)camera_pivot_c)->active = false;
+		}
+	}
+}
+
+void CLogicManager::lockOnBotBone(CBot bot, int bone) {
+	lock_on_target = bot.getEntityHandle();
+
+	lock_on_position = XMVectorSet(bone, 0, 0, -2);
 
 	if (player_pivot.isValid() && camera_pivot.isValid()) {
 		CHandle player_pivot_c = ((CEntity*)player_pivot)->get<TCompPlayerPivotController>();
@@ -1125,4 +1188,21 @@ void CLogicManager::createPrefab(std::string name, CVector position, CQuaterion 
 
 void CLogicManager::exitGame() {
 	exit_next_frame = true;
+}
+
+void CLogicManager::onBossRopeThrow(){
+	execute("onBossRopeThrow()");
+}
+
+void CLogicManager::onSubstituteHang(){
+	execute("onSubstituteHanged()");
+}
+
+void CLogicManager::changeFov(float fov, float lerp) {
+	target_fov = fov;
+	fov_lerp = lerp;
+}
+
+void CLogicManager::stopFovChange() {
+	fov_lerp = -1;
 }

@@ -28,5 +28,8 @@ void TCompSubstituteBoss::update(float elapsed){
 void TCompSubstituteBoss::onRopeTensed(const TMsgRopeTensed& msg) {
 	TCompRagdoll* comp_ragdoll = getSibling<TCompRagdoll>(this);
 	comp_ragdoll->setActive(true);
-	CLogicManager::get().execute("onSubstituteHanged()");
+	CLogicManager::get().onSubstituteHang();
+}
+void TCompSubstituteBoss::initLittleTalk(){
+	m_fsm_substitute->ChangeState("fbp_LittleTalk");
 }

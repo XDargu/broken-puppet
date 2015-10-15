@@ -8,7 +8,8 @@ function error(s)
 	logicManager:print("ERROR: " .. tostring(s));
 end
 
-
+bossRopeTimesThrowed = 0;
+bossSecuence = false;
 
 _print = print
 clearCoroutines()
@@ -55,7 +56,7 @@ end
 
 -- Escena del boss
 function onSceneLoad_scene_final_boss()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 	respawnPos = player:getPosition();
@@ -92,6 +93,7 @@ function onSceneLoad_scene_final_boss()
 	end
 
 	function onTimerEnd_boss_init_animation()
+		bossSecuence = false;
 		logicManager:setCanMove(true)
 		logicManager:setCanThrow(true)
 		logicManager:setCanPull(true)
@@ -107,54 +109,54 @@ function onSceneLoad_scene_final_boss()
 
 
 	function onTimerEnd_end_speak()
+		
+		-- Reiniciamos cuerdas tiradas
+		bossRopeTimesThrowed = 0;
+		bossSecuence = true;
+
 		-- Reactivamos cuerdas
 		logicManager:setCanThrow(true)
 		--logicManager:setCanPull(true)
 		logicManager:setCanCancel(true)
-		logicManager:setCanTense(true)
-
-		-- Obtenemos la posición de la sustituta y le apuntamos
-		local substitute = logicManager:getObject("Substitute");
-		local substitutePos = substitute:getPos();
-		logicManager:changeCamera("PlayerCamera");
-
-		-- Añadir aquí offset si fuera necesario, para apuntarle al pecho
-		local aux_pos = Vector(substitutePos.x, substitutePos.y, substitutePos.z);
-		print(tostring(aux_pos.x) .. "posición");
-		print(tostring(aux_pos.y) .. "posición");
-		print(tostring(aux_pos.z) .. "posición");
-
-		logicManager:lockCameraOnPosition(aux_pos);
-		--logicManager:changeCamera("camera_sustituta");
+		logicManager:setCanTense(true)		
 		
 	end
 
 	function onTriggerFirstEnter_scb_trigger_block_control(who)
 
-		logicManager:changeCamera("camera_sustituta")
+		local substite = logicManager:getObject("Substitute")	
+		substite:initLittleTalk();
+
 		logicManager:setCanMove(false)
 		logicManager:pushPlayerLegsState("fbp_Idle");
+		
+		-- Obtenemos la posición de la sustituta y le apuntamos
+		local substitute = logicManager:getBot("Substitute");
+		
+		logicManager:lockCameraOnBotBone(substitute, 4);
+		logicManager:setTimer("end_speak", 21)
 
-		logicManager:setTimer("end_speak", 58)
+		-- Zoom in con FOV
+		logicManager:changeFov(6, 3);
 
 	end
 
 	function onSubstituteHanged()
-		--local boss = logicManager:getObject("Boss")	
-		--boss:riseUpBoss()
-		--
-		--local antiRain = logicManager:getObject("anti_rain_collider_boss");		
-		--local playerPos = player:getPosition();
-		--antiRain:setPos(playerPos);
-		--
-		--local boss = logicManager:getBot("Boss")
-		--logicManager:lockCameraOnPosition(Vector(0, 8, 0))
-		--logicManager:setTimer("boss_init_animation", 28)
-		--
-		--startCoroutine("bossShake", bossShake)
-		--startCoroutine("bossInitialRain",  bossInitialRain)
-		--
-		--antiRain:setPos(Vector(5000, 5000, 5000));
+		local boss = logicManager:getObject("Boss")	
+		boss:riseUpBoss()
+		
+		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
+		local playerPos = player:getPosition();
+		antiRain:setPos(playerPos);
+		
+		local boss = logicManager:getBot("Boss")
+		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
+		logicManager:setTimer("boss_init_animation", 28)
+		
+		startCoroutine("bossShake", bossShake)
+		startCoroutine("bossInitialRain",  bossInitialRain)
+		
+		antiRain:setPos(Vector(5000, 5000, 5000));
 	end
 
 	function bossShake()
@@ -272,6 +274,7 @@ end
 
 
 function onSceneLoad_scene_1()
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -456,7 +459,7 @@ function onSceneLoad_scene_1()
 end
 
 function onSceneLoad_scene_2()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -561,7 +564,7 @@ function onSceneLoad_scene_2()
 end
 
 function onSceneLoad_scene_3()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -660,7 +663,7 @@ end
 
 
 function onSceneLoad_scene_4()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -1006,5 +1009,34 @@ function onTriggerEnter_Trigger_Victory(who)
 	if who == "Player" then
 		print(tostring(who) .. " VICTORIAAAA!!!");
 		--logicManager:pushPlayerLegsState("fbp_Victory");
+	end
+end
+
+
+			--- Try Rope Substitute ---
+
+function onTimerEnd_wait_for_lanch()
+	logicManager:setCanThrow(true)
+end
+
+function onBossRopeThrow()
+	if bossSecuence == true then
+		if bossRopeTimesThrowed == 1 then
+			-- debemos llamar a una funcion que apunte a la sustituta
+			local substitute = logicManager:getBot("Substitute");		
+			logicManager:lockCameraOnBotBone(substitute, 4);
+			-- Linea a borrar en cuanto se asegure el impacto en la prota
+			--bossRopeTimesThrowed = 0
+		else
+			if bossRopeTimesThrowed == 0 then
+				-- Zoom out con FOV
+				logicManager:changeFov(60, 3);
+				logicManager:setCanThrow(false)
+				bossRopeTimesThrowed = 1
+				-- debemos llamar a una funcion que apunte al techo
+				logicManager:lockCameraOnPosition(Vector(0, 500, -100))		
+				logicManager:setTimer("wait_for_lanch", 1)		
+			end
+		end
 	end
 end

@@ -127,6 +127,16 @@ void TCompCameraPivotController::pointAt(XMVECTOR target) {
 	TCompTransform* transform = (TCompTransform*)m_transform;
 	TCompTransform* player_pivot_trans = (TCompTransform*)player_pivot_transform;
 
+	// Offset correction
+	CEntity* player_camera = CEntityManager::get().getByName("PlayerCamera");
+	if (player_camera) {
+		TCompTransform* player_camera_transform = player_camera->get<TCompTransform>();
+		if (player_camera_transform) {
+			XMVECTOR offset = player_camera_transform->position - transform->position;
+			target -= offset;
+		}
+	}
+
 	// Get player pivot Y rotation
 	float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());
 	XMVECTOR player_pivot_rot = XMQuaternionRotationAxis(player_pivot_trans->getUp(), player_pivot_yaw);
@@ -143,6 +153,16 @@ void TCompCameraPivotController::pointAt(XMVECTOR target) {
 void TCompCameraPivotController::aimAt(XMVECTOR target, float t) {
 	TCompTransform* transform = (TCompTransform*)m_transform;
 	TCompTransform* player_pivot_trans = (TCompTransform*)player_pivot_transform;
+
+	// Offset correction
+	CEntity* player_camera = CEntityManager::get().getByName("PlayerCamera");
+	if (player_camera) {
+		TCompTransform* player_camera_transform = player_camera->get<TCompTransform>();
+		if (player_camera_transform) {
+			XMVECTOR offset = player_camera_transform->position - transform->position;
+			target -= offset;
+		}
+	}
 
 	// Get player pivot Y rotation
 	float player_pivot_yaw = getYawFromVector(player_pivot_trans->getFront());

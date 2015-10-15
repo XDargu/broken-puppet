@@ -20,6 +20,8 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 
 	void onRopeTensed(const TMsgRopeTensed& msg);
+
+	void initLittleTalk();
 };
 
 

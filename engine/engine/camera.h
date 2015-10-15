@@ -40,6 +40,7 @@ public:
   float    getZNear() const { return znear; }
   float    getZFar() const { return zfar; }
 
+  void	   setFov(float fov_radians) { fov_in_radians = fov_radians; setPerspective(fov_in_radians, znear, zfar); }
   // 
   void setPerspective(float new_fov_in_rad, float new_znear, float new_zfar);
   void setViewport(float x0, float y0, float xmax, float ymax);

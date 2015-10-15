@@ -15,6 +15,11 @@ private:
 	void loopAnimation(int id, bool restart);
 	void stopAnimation(int id);
 	float getAnimationDuration(int id);
+	
+	float last_loop_delay;
+	int last_loop;
+
+	int calculateLoop();
 
 public:
 	fsm_substitute();
@@ -25,7 +30,9 @@ public:
 	void IdleSit(float elapsed);
 	void Idle(float elapsed);
 	void LittleTalk(float elapsed);
-
+	
+	void LoopTalk8();
+	void LoopTalk9();
 };
 
 
