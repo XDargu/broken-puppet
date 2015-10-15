@@ -1,0 +1,6 @@
+<technique 
+	fx="ssao.fx"
+	vs="VSSSAO"
+	vs_decl="vdcl_position_uv"
+	ps="PSSSAOBlur"
+	/>

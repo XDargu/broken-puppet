@@ -1,1 +1,1 @@
-<std_material name="crematorio" diffuse="crematorio_diffuse" normal="crematorio_normal" specular="crematorio_specular" glossiness="crematorio_gloss" emissive="" emissive_off="" />
+<std_material name="crematorio" diffuse="crematorio_diffuse" normal="crematorio_normal" specular="crematorio_specular" glossiness="crematorio_gloss" emissive="crematorio_emissive" emissive_off="" />

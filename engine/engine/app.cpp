@@ -428,7 +428,7 @@ bool CApp::create() {
 	is_ok &= deferred.create(xres, yres);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
-	is_ok &= ssao.create("ssao", xres, yres, 1);
+	is_ok &= ssao.create("ssao", xres, yres, 2);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
@@ -740,6 +740,8 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("skin_basic");
 		render_techniques_manager.reload("underwater");
+		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("ssao_blur");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -1054,6 +1056,10 @@ void CApp::render() {
 	{
 		CTraceScoped scope_post_all("Post procesado");
 		activateCamera(camera, 1);
+		/*{
+			CTraceScoped scope_post1("SSAO");
+			ssao.apply(rt_base);
+		}*/
 		{
 			CTraceScoped scope_post1("SSR");
 			ssrr.apply(rt_base);

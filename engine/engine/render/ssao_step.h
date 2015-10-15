@@ -7,6 +7,7 @@
 // --------------------------------
 struct TSSAOStep {
 	CRenderToTexture *rt_ssao;
+	CRenderToTexture *rt_ssao_blur;
 	char name[64];
 	int  factor;
 	int  xres;
@@ -19,7 +20,7 @@ struct TSSAOStep {
 
 	void apply(CTexture* in);
 
-	TSSAOStep() :rt_ssao(nullptr) {} 
+	TSSAOStep() :rt_ssao(nullptr), rt_ssao_blur(nullptr){}
 
 	CTexture* getOutput();
 };
