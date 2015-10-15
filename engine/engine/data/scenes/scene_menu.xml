@@ -1157,7 +1157,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_suelo_omni_145.0" />
     <transform position="0.820891 42.5469 -76.2644" rotation="0.0 -0.681684 0.0 0.731646" scale="1.0 1.0 1.0" parent="lampara_suelo_144.0"/>
-    <pointLight radius="3.0" intensity="1.0" color="0.952941 0.0470588 0.0705882 1"/>
+    <pointLight radius="3.0" intensity="2.0" color="0.952941 0.0470588 0.0705882 1"/>
   </entity>
   <entity   materialTag = "metal">
     <name name="S_146.0" />
@@ -1488,4 +1488,13 @@
     </render>
     <aabb min="-0.785477 2.54592e-007 -0.609875" max="0.785813 1.27022 0.610195"/>
   </entity>
+  
+  <entity>
+    <name name="lampara_menu_parpadeo_spot" />
+    <transform position="2.85362 44.4242 -82.9778" rotation="-0.0179156 0.0342624 -0.0133582 0.999163" scale="1.0 1.0 1.0" parent="lampara_menu_parpadeo"/>
+    <shadows intensity="1.0" color="0.905882 0.886275 0.309804 1" correction="true" res="512"/>
+    <camera fov="169.4" znear="0.1" zfar="7" width="30" height="30" />
+  </entity>
+  
+  
 </scene>

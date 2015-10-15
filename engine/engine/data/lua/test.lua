@@ -36,7 +36,7 @@ end
 function lamp_parp()
 	local parp_time = 0.02
 	local lamp_parp = logicManager:getObject("lampara_menu_parpadeo");
-
+	
 	lamp_parp:setEmissive(false)
 	waitTime(parp_time)
 	lamp_parp:setEmissive(true)

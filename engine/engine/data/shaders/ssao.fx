@@ -150,10 +150,10 @@ float4 PSSSAO(
 	viewPos = getViewSpace(input.UV * float2(cameraHalfXRes * 2, cameraHalfYRes * 2), depth);// mul(wPos, cameraView);*/
 
 	//float ssao_radius = 0.003;
-	float ssao_radius = 0.0006 / depth;
+	float ssao_radius = 0.0001 / depth;
 	float distanceThreshold = 0.2;
 	float AmbientOcclusionBias = 0.12;
-	float AmbientOcclusionIntensity = 1;
+	float AmbientOcclusionIntensity = 2.5;
 
 	/*float  randomSize = 64.0f;
 	float2 randomCoords = txRandom.Sample(samWrapLinear, iPosition.xy / 64).xy * 2.0f - 1.0f;
@@ -189,9 +189,8 @@ float4 PSSSAO(
 	}
 
 	
-	
-	float3 diffuse = txDiffuse.Sample(samClampLinear, input.UV).xyz;
-	return float4(diffuse, 0) * (1 - (ao / sample_count));
+	//float3 diffuse = txDiffuse.Sample(samClampLinear, input.UV).xyz;
+	//return float4(diffuse, 0) * (1 - (ao / sample_count));
 	return (1 - (ao / sample_count));
 	/*float2 uv0 = input.UV;
 
@@ -250,4 +249,52 @@ float4 PSSSAO(
 	
 	//return float4(diffuse, 0);// *(1 - ambientOcclusion);
 	return 1.0 - ambientOcclusion;*/
+}
+
+float4 PSSSAOBlur(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_Target
+{
+	float4 original = txDiffuse.Sample(samClampLinear, input.UV);
+	float4 ao = txRandom.Sample(samClampLinear, input.UV);
+	float4 depth = txDepth.Sample(samClampLinear, input.UV);
+	//return original;
+	//return txLuminance.Sample(samClampLinear, input.UV);
+	// Blur the glow image
+	float4 luminance = float4(0, 0, 0, 0);
+	
+
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * -1, ssao_delta.y * -1) * 3) * (1. / 16.);
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * -1, ssao_delta.y * 0)  * 3) * (1. / 8.);
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * -1, ssao_delta.y * 1)  * 3) * (1. / 16.);
+
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * 0, ssao_delta.y * -1)  * 3) * (1. / 8.);
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * 0, ssao_delta.y * 0)   * 3) * (1. / 4.);
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * 0, ssao_delta.y * 1)   * 3) * (1. / 8.);
+
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * 1, ssao_delta.y * -1)  * 3) * (1. / 16.);
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * 1, ssao_delta.y * 0)   * 3) * (1. / 8.);
+	luminance += txRandom.Sample(samClampLinear, input.UV + float2(ssao_delta.x * 1, ssao_delta.y * 1)   * 3) * (1. / 16.);
+
+	// Old loop
+	/*
+	//float2 delta = float2(0, 0);
+	//float factor = 1.f;
+	for (int i = 0; i < 5; i++) {
+	for (int j = 0; j < 5; j++) {
+	//factor = conv[i][j];
+	factor = 1.0 / 25.0;
+	delta = float2(glow_delta.x * (i - 1), glow_delta.y * (j - 1)) * 20;
+	luminance += txLuminance.SampleLevel(samClampLinear, input.UV + delta * 0.3, 9) * factor;
+	}
+	}*/
+
+	return (luminance * original);
+	//return original;
+	//return blurred;
+	//return luminance;
+	if (luminance.r > 0.1) {
+		float alfa = 0.8;
+		return original *(1 - alfa) + luminance * alfa;
+	}
+	return original;
+
 }
