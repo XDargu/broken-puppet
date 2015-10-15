@@ -5,6 +5,7 @@
 #include "components\comp_ragdoll.h"
 #include "components\comp_player_controller.h"
 #include "components\comp_skeleton_lookat.h"
+#include "components\comp_audio_source.h"
 #include "handle\prefabs_manager.h"
 #include "io\iostatus.h"
 
@@ -14,6 +15,16 @@ fsm_substitute::fsm_substitute()
 {
 	last_loop = 0;
 	last_loop_delay = 0.f;
+	last_conversation = 0;
+
+	conversation_list.push_back("SUBS_HANGED_16");
+	conversation_list.push_back("SUBS_HANGED_17");
+	conversation_list.push_back("SUBS_HANGED_18");
+	conversation_list.push_back("SUBS_HANGED_19");
+	conversation_list.push_back("SUBS_HANGED_20");
+	conversation_list.push_back("SUBS_HANGED_21");
+	conversation_list.push_back("SUBS_HANGED_22");
+	conversation_list.push_back("SUBS_HANGED_23");
 }
 
 fsm_substitute::~fsm_substitute()
@@ -28,6 +39,9 @@ void fsm_substitute::init()
 	AddState("fbp_LittleTalk", (statehandler)&fsm_substitute::LittleTalk);
 	AddState("fbp_LoopTalk8", (statehandler)&fsm_substitute::LoopTalk8);
 	AddState("fbp_LoopTalk9", (statehandler)&fsm_substitute::LoopTalk9);
+	AddState("fbp_JustHanged", (statehandler)&fsm_substitute::JustHanged);
+	AddState("fbp_Hanged", (statehandler)&fsm_substitute::Hanged);
+	
 	
 
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
@@ -146,6 +160,56 @@ void fsm_substitute::LoopTalk9(){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
 		ChangeState("fbp_Idle");
 	}
+}
+
+void fsm_substitute::JustHanged(){
+	if (on_enter){
+		// Get the audioSource and play sound
+		TCompAudioSource* audio_source = ((CEntity*)entity)->get<TCompAudioSource>();
+		if (audio_source)
+			audio_source->play();
+	}	
+	if (state_time >= 3){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Hanged");
+	}
+}
+
+void fsm_substitute::Hanged(float elapsed){
+
+	if (on_enter){
+		last_loop_delay = 0;
+	}
+
+	last_loop_delay += elapsed;
+	if (last_loop_delay > 6){
+		last_loop_delay = 0;
+
+		// Taking sound position
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+		
+		// Play conversation
+		int conversation = calculateConversation();
+		CSoundManager::get().playEvent(conversation_list[conversation], sound_pos);
+		CLogicManager::get().playSubtitles(conversation_list[conversation]);
+	}
+	
+
+}
+
+int fsm_substitute::calculateConversation() {
+
+	int next_conversation = last_conversation;
+	last_conversation++;
+
+	if (last_conversation >= conversation_list.size()){
+		last_conversation = 0;
+	}
+
+	return next_conversation;
 }
 
 int fsm_substitute::calculateLoop() {

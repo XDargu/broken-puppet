@@ -5,6 +5,9 @@
     <skeleton name="sustituta"/>
     skeleton_lookat target="0 0 0"/>
     <aabb min="-1000.5 -1000 -1000.5" max="1000.5 1000 1000.5"/>
+    <audioSource sound="SUBS_RAGDOLL" autoplay="false" >
+      <paramEnd/>
+    </audioSource>
     <bossSubstitute/>
   </entity>
 </prefab>

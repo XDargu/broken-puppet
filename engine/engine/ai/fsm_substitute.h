@@ -18,8 +18,11 @@ private:
 	
 	float last_loop_delay;
 	int last_loop;
-
 	int calculateLoop();
+
+	int last_conversation;
+	int calculateConversation();
+	vector<string> conversation_list;
 
 public:
 	fsm_substitute();
@@ -33,6 +36,9 @@ public:
 	
 	void LoopTalk8();
 	void LoopTalk9();
+
+	void JustHanged();
+	void Hanged(float elapsed);
 };
 
 
