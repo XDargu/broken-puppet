@@ -36,7 +36,7 @@ float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input)
 	float distortion = uw_amount;
 	float2 centerCoord = float2(0.5f, 0.5f);
 		
-		if (distortion > 0) {
+	if (distortion > 0) {
 		float2 distance = abs(input.UV - centerCoord);
 		float scalar = length(distance);
 
@@ -60,9 +60,10 @@ float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input)
 	}
 
 	// ÑAPA de render de frames
+	// ÑAPA de cinemáticas
 	float4 res = float4(0, 0, 0, 0);
 	if ((input.UV.y < cameraCinematicBands) || (input.UV.y >(1 - cameraCinematicBands)))
-		return res;
+		res = float4(0, 0, 0, 0);
 	else
 		res = txDiffuse.Sample(samClampLinear, input.UV);
 
@@ -71,22 +72,34 @@ float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input)
 	int yres = cameraHalfYRes * 2;
 	int xres = cameraHalfXRes * 2;
 	int xpos = input.UV.x * xres;
-	int ypos = input.UV.y * yres;
-	float fps = 0;
-	fps = frame_list[xpos].x;
+	int ypos = input.UV.y * yres;	
+	float fps = frame_list[xpos].x;
+	int rope_thrown = (int)frame_list[xpos].y;
+	int physx_clamp = (int)frame_list[xpos].z;
 
-	if (yres - ypos == 60) {
-		return float4(1, 0, 0, 1);
+	if (rope_thrown == 1) {
+		if (yres - ypos < 120) {
+			res = float4(0, 1, 0, 1);
+		}
 	}
 
-	if (yres - ypos == 60) {
-		return float4(0, 0, 1, 1);
+	if (physx_clamp == 1) {
+		if (yres - ypos < 150) {
+			res = float4(1, 0, 0, 1);
+		}
 	}
 
 	if (yres - ypos < fps) {
-		return float4(1, 1, 1, 1);
+		res = float4(1, 1, 1, 1);
 	}
 
+	if (yres - ypos == 60) {
+		res = float4(1, 0, 0, 1);
+	}
+
+	if (yres - ypos == 30) {
+		res = float4(0, 0, 1, 1);
+	}
 
 	return res;
 }

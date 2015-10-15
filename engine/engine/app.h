@@ -23,8 +23,6 @@ class CApp {
 
 	std::thread* bar;
 	bool video_sound_played;
-
-	std::deque<float> frames_d;
 	float time_since_last_update;
 	double TIME_ACCUM;
 
@@ -36,6 +34,19 @@ public:
 		FINAL_VIDEO
 	};
 	TGameState game_state;
+
+#ifndef FINAL_RELEASE
+	struct TFrame {
+		float fps;
+		float ram;
+		bool rope_thrown;
+		bool clamp_physx;
+	};
+	std::deque<TFrame> frames_d;
+
+	bool rope_thrown;
+	bool physx_clamp;
+#endif
 
 	std::string current_scene_name;
 	std::string first_scene;

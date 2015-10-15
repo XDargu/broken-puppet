@@ -5,7 +5,41 @@
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" />
   <event id="BUTTON_CLICK" path="event:/GUI/button_click" />
+
+  <!-- Sustituta -->
+  <event id="SUBS_SPEECH" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_06 Monologo" />
+  <event id="SUBS_WAIT_LOOP_7" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_07 You should had never" />
+  <event id="SUBS_WAIT_LOOP_8" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_08 Do you hear the people cheer" />
+  <event id="SUBS_WAIT_LOOP_9" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_09 Are you going to stay there all day" />
+  <event id="SUBS_WAIT_LOOP_10" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_10 I love your style" />
+  <event id="SUBS_WAIT_LOOP_11" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_11 MY dressing room" />
+  <event id="SUBS_WAIT_LOOP_12" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_12 I actually pity you" />
+  <event id="SUBS_WAIT_LOOP_13" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_13 QUIET dont you see im talking" />
+
+  <event id="SUBS_ROPE_THROWN" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_14 What are you doing Are you out of your mind" />
+  <event id="SUBS_PRE_BOSS" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_15 Do you here THAT. HE will come for you!" />
   
+  <event id="HANG_LOOP_16" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_16 Kill her, Kill her!" />
+  <event id="HANG_LOOP_17" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_17 Finish her!" />
+  <event id="HANG_LOOP_18" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_18 Rip her head off we'll use it as a prop" />
+  <event id="HANG_LOOP_19" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_19 Rip her apart" />
+  <event id="HANG_LOOP_20" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_20 you are nothing but old scrap" />
+  <event id="HANG_LOOP_21" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_21 Take her with you" />
+  <event id="HANG_LOOP_22" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_22 Youre already dead, the audience doesnt even remember you!" />
+  <event id="HANG_LOOP_23" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_23 We’regonna pull out the few hair you have left!" />
+  <event id="HANG_LOOP_24" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_24 Yeeah just like that" />
+  <event id="HANG_LOOP_25" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_25 Stay down, it’s what you deserve!" />
+  <event id="HANG_LOOP_26" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_26 Supid useless puppet" />
+  <event id="HANG_LOOP_27" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_27 Finish this for once" />
+  <event id="HANG_LOOP_28" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_28 Youre just ragged" />
+  <event id="HANG_LOOP_29" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_29 You are not even worth the dirt that i walk on" />
+  <event id="HANG_LOOP_30" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_30 Stupid broken puppet, you’re worthless!" />
+  <event id="HANG_LOOP_31" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_31 Dont be stubborn your time is over" />
+  <event id="HANG_LOOP_32" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_32 How dare you! Dont you hurt him" />
+  <event id="HANG_LOOP_33" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_33 No! Please! You have no idea of what you’re doing" />
+  <event id="HANG_LOOP_34" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_34 Noo What have you done... You are completely insane!" />
+
+
   <!-- Katherine -->
   <event id="KATH_JUMP" path="event:/Expresion/Katherine/Saltar" />
   <event id="KATH_LAND" path="event:/Expresion/Katherine/Aterrizaje" />
