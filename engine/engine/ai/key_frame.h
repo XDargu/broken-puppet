@@ -17,7 +17,7 @@ struct TKeyFrame {
 
 	TKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position, XMVECTOR the_target_rotation, float the_time);
 
-	bool update(float elapsed);
+	float update(float elapsed);
 
 	bool operator==(const TKeyFrame& kf) {
 		bool a = kf.target_transform == target_transform;

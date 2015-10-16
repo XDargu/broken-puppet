@@ -14,6 +14,7 @@ public:
 	CHandle target_kinematic;
 	int current_keyframe;
 	bool loop;
+	float time_accum_next_frame;
 
 	CRigidAnimation();
 	CRigidAnimation(CHandle the_target_transform);

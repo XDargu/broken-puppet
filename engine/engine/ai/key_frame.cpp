@@ -10,7 +10,7 @@ TKeyFrame::TKeyFrame(CHandle the_target_transform, XMVECTOR the_target_position,
 	elapsed_time = 0.f;
 }
 
-bool TKeyFrame::update(float elapsed) {
+float TKeyFrame::update(float elapsed) {
 	TCompTransform* transform = target_transform;
 
 	// In the first frame we store the initial position and rotation
@@ -20,10 +20,9 @@ bool TKeyFrame::update(float elapsed) {
 	}
 
 	// Update the position and rotation
-	XMVECTOR desired_pos = XMVectorLerp(XMLoadFloat3(&initial_position), XMLoadFloat3(&target_position), elapsed_time / time);
-	XMVECTOR desired_rot = XMQuaternionSlerp(XMLoadFloat4(&initial_rotation), XMLoadFloat4(&target_rotation), elapsed_time / time);
+	XMVECTOR desired_pos = XMVectorLerp(XMLoadFloat3(&initial_position), XMLoadFloat3(&target_position), min(1, elapsed_time / time));
+	XMVECTOR desired_rot = XMQuaternionSlerp(XMLoadFloat4(&initial_rotation), XMLoadFloat4(&target_rotation), min(1, elapsed_time / time));
 	elapsed_time += elapsed;
-
 	// Update the rigid position, if needed
 	if (target_kinematic.isValid()) {
 		TCompRigidBody* rigid = target_kinematic;
@@ -38,11 +37,12 @@ bool TKeyFrame::update(float elapsed) {
 		transform->rotation = desired_rot;
 	}
 
+	float res = time - elapsed_time;
+
 	// If the keyFrame has reached the destiny, then leave
 	if (elapsed_time >= time) {
 		elapsed_time = 0;
-		return true;
 	}
-
-	return false;
+	
+	return res;
 }
