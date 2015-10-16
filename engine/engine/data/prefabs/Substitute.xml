@@ -4,7 +4,10 @@
     <transform position="0 10 0" rotation="0.0 0.0 0.0 1.0" scale="0.01 0.01 0.01"/>
     <skeleton name="sustituta"/>
     skeleton_lookat target="0 0 0"/>
-    <aabb min="-10.5 0 -10.5" max="10.5 12 10.5"/>
+    <aabb min="-1000.5 -1000 -1000.5" max="1000.5 1000 1000.5"/>
+    <audioSource sound="SUBS_RAGDOLL" autoplay="false" >
+      <paramEnd/>
+    </audioSource>
     <bossSubstitute/>
   </entity>
 </prefab>

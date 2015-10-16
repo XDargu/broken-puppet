@@ -8,7 +8,8 @@ function error(s)
 	logicManager:print("ERROR: " .. tostring(s));
 end
 
-
+bossRopeTimesThrowed = 0;
+bossSecuence = false;
 
 _print = print
 clearCoroutines()
@@ -34,7 +35,7 @@ end
 
 function lamp_parp()
 	local parp_time = 0.02
-	local lamp_parp = logicManager:getObject("lampara_menu_parpadeo");
+	local lamp_parp = logicManager:getObject("lampara_menu_parpadeo");		
 
 	lamp_parp:setEmissive(false)
 	waitTime(parp_time)
@@ -56,10 +57,15 @@ end
 -- Escena del boss
 function onSceneLoad_scene_final_boss()
 
+	bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 	respawnPos = player:getPosition();
 	mBoss = logicManager:getObject("Boss");
+
+	-- Colocar collider del escenario
+	local scene_collider = logicManager:getObject("escenario_pared_collider");		
+	scene_collider:setPos(Vector(1000, 1000, 1000));
 	
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -77,14 +83,22 @@ function onSceneLoad_scene_final_boss()
 	end
 
 	function onTriggerFirstEnter_scb_trigger_bandas(who)
-		logicManager:setBands(true)
-		logicManager:setMediumShotActive(true)
+		--logicManager:setBands(true)
+		--logicManager:setMediumShotActive(true)
 
 		-- Bajar luz ambiental
 		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
+
+		-- Evitar que pueda trastear con cuerdas
+
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
 	end
 
 	function onTimerEnd_boss_init_animation()
+		bossSecuence = false;
 		logicManager:setCanMove(true)
 		logicManager:setCanThrow(true)
 		logicManager:setCanPull(true)
@@ -94,32 +108,109 @@ function onSceneLoad_scene_final_boss()
 		logicManager:releaseCameraLock()
 		logicManager:resetPlayerCamera()
 
+		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
+		antiRain:setPos(Vector(5000, 5000, 5000));
+
 		respawnPos = player:getPosition();
 		initPos = respawnPos;
 	end
 
+
+	function end_speak()
+		-- Reiniciamos cuerdas tiradas
+		bossRopeTimesThrowed = 0;
+		bossSecuence = true;
+
+		local substitute = logicManager:getBot("Substitute");		
+		logicManager:lockCameraOnBotBone(substitute, 4);
+
+		-- Reactivamos cuerdas
+		logicManager:setCanThrow(true)
+		--logicManager:setCanPull(true)
+		--logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)			
+	end
+
 	function onTriggerFirstEnter_scb_trigger_block_control(who)
+	bossSecuence = false;
+		local substite = logicManager:getObject("Substitute")	
+		substite:initLittleTalk();
+
+		logicManager:setCanMove(false)
+		logicManager:pushPlayerLegsState("fbp_Idle");
+		
+		startCoroutine("playCinematic", playCinematic);
+		
+		
+		-- Obtenemos la posición de la sustituta y le apuntamos
+		--local substitute = logicManager:getBot("Substitute");
+		
+		--logicManager:lockCameraOnBotBone(substitute, 4);
+
+		-- Zoom in con FOV
+		--logicManager:changeFov(6, 3);
+
+	end
+
+	function playCinematic()
+		-- Bandas cinemáticas
+		logicManager:setBands(true)
+
+		local player_start_pos = player:getPosition();
+		print("asdasd1\n")
+		local player_cinematic_pos_obj = logicManager:getObject("player_cinematic_place")
+		print("asdasd2\n")
+		local cinematic_pos = player_cinematic_pos_obj:getPos();
+		print("asdasd3\n")
+
+		local Camera01 = logicManager:getObject("Camera01");
+		local Camera002 = logicManager:getObject("Camera002");
+		logicManager:playAnimation("Camera_01_sustituta", Camera01)
+		logicManager:playAnimation("Camera_002_sustituta", Camera002)
+
+		waitTime(1)
+		-- Iniciar cinemática en dos cámaras		
+						
+		logicManager:changeCamera("Camera01")				
+		player:teleportToPos(cinematic_pos);
+		waitTime(6)
+
+		logicManager:changeCamera("Camera002")
+
+		waitTime(7)
+
+		logicManager:changeCamera("Camera01")
+
+		waitTime(15.77)
+		--player:teleportToPos(player_start_pos);
+
+		-- Fin cinemática
+		end_speak()
+
+	end
+
+	function onSubstituteHanged()
 		local boss = logicManager:getObject("Boss")	
 		boss:riseUpBoss()
+		logicManager:setMediumShotActive(true)
+		logicManager:changeCamera("PlayerCamera");
 
+		-- Colocar anti rain collider
 		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
 		local playerPos = player:getPosition();
 		antiRain:setPos(playerPos);
 
-		logicManager:setCanMove(false)
-		logicManager:setCanThrow(false)
-		logicManager:setCanPull(false)
-		logicManager:setCanCancel(false)
-		logicManager:setCanTense(false)
-		logicManager:pushPlayerLegsState("fbp_Idle");
+		-- Colocar collider del escenario
+		local scene_collider = logicManager:getObject("escenario_pared_collider");		
+		scene_collider:setPos(Vector(0, 0, 0));
+		
 		local boss = logicManager:getBot("Boss")
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
 		logicManager:setTimer("boss_init_animation", 28)
 		
 		startCoroutine("bossShake", bossShake)
 		startCoroutine("bossInitialRain",  bossInitialRain)
-
-		antiRain:setPos(Vector(5000, 5000, 5000));
+		
 	end
 
 	function bossShake()
@@ -141,6 +232,8 @@ function onSceneLoad_scene_final_boss()
 		waitTime(0.5)
 		elapsed = elapsed + 0.5
 		logicManager:shakeCamera(0.03)
+		local trono = logicManager:getObject("boss_trono_sustituta"); -- eliminar trono
+		trono:setRender(false);
 		waitTime(second_arm - elapsed)
 		elapsed = second_arm
 
@@ -237,6 +330,7 @@ end
 
 
 function onSceneLoad_scene_1()
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -421,7 +515,7 @@ function onSceneLoad_scene_1()
 end
 
 function onSceneLoad_scene_2()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -526,7 +620,7 @@ function onSceneLoad_scene_2()
 end
 
 function onSceneLoad_scene_3()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -625,7 +719,7 @@ end
 
 
 function onSceneLoad_scene_4()
-
+bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
 
@@ -971,5 +1065,37 @@ function onTriggerEnter_Trigger_Victory(who)
 	if who == "Player" then
 		print(tostring(who) .. " VICTORIAAAA!!!");
 		--logicManager:pushPlayerLegsState("fbp_Victory");
+	end
+end
+
+
+			--- Try Rope Substitute ---
+
+function onTimerEnd_wait_for_lanch()
+	logicManager:setCanThrow(true)
+	-- debemos llamar a una funcion que apunte a la sustituta
+	logicManager:lockCameraOnPosition(Vector(0, 300, -200))		
+end
+
+function onBossRopeThrow()
+	if bossSecuence == true then
+		if bossRopeTimesThrowed == 1 then			
+			-- Linea a borrar en cuanto se asegure el impacto en la prota
+			--local substitute = logicManager:getBot("Substitute");		
+			--logicManager:lockCameraOnBotBone(substitute, 4);
+			bossSecuence = false
+			logicManager:setCanThrow(false)
+		else
+			if bossRopeTimesThrowed == 0 then						
+				bossRopeTimesThrowed = 1
+				-- debemos llamar a una funcion que apunte al techo
+				
+				-- obtenemos a la sustitute
+				local mSubstitute = logicManager:getObject("Substitute");		
+				mSubstitute:hitSubstitute();
+				logicManager:setTimer("wait_for_lanch", 1)		
+				logicManager:setCanThrow(false)
+			end
+		end
 	end
 end

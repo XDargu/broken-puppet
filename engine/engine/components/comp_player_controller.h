@@ -14,11 +14,15 @@ struct TCompPlayerController : TBaseComponent {
 	CHandle old_target_transform;
 	CHandle needle_back1;
 	CHandle needle_back2;
+	CHandle needle_back3;
+	CHandle needle_hand;
 	CHandle entity;
 	XMVECTOR offset_needle_back1;
 	XMVECTOR offset_needle_back2;
+	XMVECTOR offset_needle_back3;
 	XMVECTOR offset_rot_needle_back1;
 	XMVECTOR offset_rot_needle_back2;
+	XMVECTOR offset_rot_needle_back3;
 
 	CHandle entity_jump_dust;
 	CHandle entity_drops;

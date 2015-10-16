@@ -1509,16 +1509,16 @@ bool bt_soldier::isMoving() {
 }
 
 float bt_soldier::getRunSpeedModifier() {
-	float speed = 0.3f;
+	float speed = 0.6f;
 
 	TCompCharacterController* m_char_controller = character_controller;
 
 	if (m_char_controller->moveSpeedMultiplier < 1)
-		speed = 0.26f;
+		speed = 0.52f;
 	else if (m_char_controller->moveSpeedMultiplier < 3)
-		speed = 0.24f;
+		speed = 0.48f;
 	else
-		speed = 0.1f;
+		speed = 0.2f;
 
 
 	/*if ((getCurrentNode() == "Situate20") || (getCurrentNode() == "Situate18") || (getCurrentNode() == "ChaseRoleDistance22")) {

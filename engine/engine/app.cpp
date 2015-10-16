@@ -79,6 +79,11 @@ const unsigned int max_num_needles = 512;
 #include "ai\ai_basic_patroller.h"
 #include "io\iostatus.h"
 
+#ifndef FINAL_RELEASE
+	#include "windows.h"
+	#include "psapi.h"
+#endif
+
 CApp& CApp::get() {
 	return the_app;
 }
@@ -118,6 +123,9 @@ const CRenderTechnique* ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
+/*CMesh		 rope2;
+CMesh		 rope3;
+CMesh		 rope4;*/
 
 CHandle		 life;
 CHandle		 h_player;
@@ -162,6 +170,7 @@ void registerAllComponentMsgs() {
 	SUBSCRIBE(TCompBtGrandma, TPlayerFound, notifyPlayerFound);
 	//SUBSCRIBE(TCompBtGrandma, TPlayerTouch, notifyPlayerTouch);
 	SUBSCRIBE(TCompBtGrandma, TMsgRopeTensed, onRopeTensed);
+	SUBSCRIBE(TCompSubstituteBoss, TMsgRopeTensed, onRopeTensed);
 
 	SUBSCRIBE(TCompBtSoldier, TActorHit, actorHit);
 	SUBSCRIBE(TCompBtSoldier, TWarWarning, warWarning);
@@ -373,8 +382,9 @@ void CApp::preLoad(){
 }
 
 bool CApp::create() {
-	CErrorContext ec("Creating", "app");
 
+	CErrorContext ec("Creating", "app");
+	
 	// Log file configuration
 	FILE* log = fopen("log.txt", "w");
 	FILELog::ReportingLevel() = logERROR;
@@ -393,6 +403,10 @@ bool CApp::create() {
 	// Init AntTweakBar
 	TwInit(TW_DIRECT3D11, ::render.device);
 	TwWindowSize(xres, yres);
+#endif
+#ifndef FINAL_RELEASE
+	rope_thrown = false;
+	physx_clamp = false;
 #endif
 
 	bool is_ok = true;
@@ -414,7 +428,7 @@ bool CApp::create() {
 	is_ok &= deferred.create(xres, yres);
 
 	is_ok &= sharpen.create("sharpen", xres, yres, 1);
-	is_ok &= ssao.create("ssao", xres, yres, 1);
+	is_ok &= ssao.create("ssao", xres, yres, 2);
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
@@ -492,6 +506,9 @@ bool CApp::create() {
 	//Runs the ai thread
 	CNav_mesh_manager::get().nav_mesh_init();
 
+	TIME_ACCUM = 0;
+	time_since_last_update = 0;
+
 	return true;
 }
 
@@ -510,59 +527,100 @@ void CApp::doFrame() {
 	//delta_ticks.QuadPart /= freq.QuadPart;
 	//double delta_secs = delta_ticks.QuadPart * 1e-6;
 	float delta_secs = delta_ticks.QuadPart * (1.0f / freq.LowPart);
-
-	fps = 1.0f / delta_secs;
+	
+	
 	float pxStep = physics_manager.timeStep;
 	before = now;
 
+	const int FRAME_LIMIT = 60;
+	const double TIME_PER_FRAME = 1.0f / FRAME_LIMIT;
+	const float MIN_PHYSX_DELTA = TIME_PER_FRAME * 0.0f;
+
+	fps = 0.0f;
 	// To avoid the fist huge delta time
 	if (delta_secs < 0.5) {
+		time_since_last_update += delta_secs;
+		TIME_ACCUM += delta_secs;
 
-		delta_time = delta_secs;
-		total_time += delta_secs;
 		CIOStatus& io = CIOStatus::get();
-		// Update input
-		io.update(delta_secs);
+		
 
-		if (CIOStatus::get().becomesReleased(CIOStatus::E)){
-			pause = !pause;
-		}
+		if (TIME_ACCUM >= 0) {
 
-		if (slow_motion_counter > 0) {
-			slow_motion_counter -= delta_secs;
-			if (slow_motion_counter <= 0) {
-				CSoundManager::get().desactivateSlowMo();
-				time_modifier = 1;
-				slow_motion_counter = 0;
+			fps = (float)(1.0f / time_since_last_update);
+#ifndef FINAL_RELEASE
+			TFrame f;
+			f.fps = fps;
+			frames_d.push_front(f);
+			if (frames_d.size() > xres) {
+				frames_d.pop_back();
 			}
+#endif
+
+			delta_time = time_since_last_update;
+			total_time += delta_time;
+
+			// Update input
+			io.update(delta_time);
+			//io.gameUpdate(delta_time);
+
+			// Pause
+			if (CIOStatus::get().becomesReleased(CIOStatus::E)){
+				pause = !pause;
+			}
+
+			// Slow motion
+			if (slow_motion_counter > 0) {
+				slow_motion_counter -= delta_time;
+				if (slow_motion_counter <= 0) {
+					CSoundManager::get().desactivateSlowMo();
+					time_modifier = 1;
+					slow_motion_counter = 0;
+				}
+			}
+
+			delta_time *= time_modifier;
+			pxStep *= time_modifier;
+
+			// Fixed update
+			if (total_time > 0.5) {
+				fixedUpdateCounter += delta_time;
+
+				//while (fixedUpdateCounter > pxStep) {
+				//if (fixedUpdateCounter > pxStep) {
+				//fixedUpdateCounter -= pxStep;
+				//fixedUpdateCounter = 0;
+				if (delta_time < MIN_PHYSX_DELTA) {
+#ifndef FINAL_RELEASE
+					physx_clamp = true;
+#endif
+					fixedUpdate(MIN_PHYSX_DELTA);
+				}
+				else {
+					fixedUpdate(delta_time);
+				}
+
+				//}
+
+
+				/*while (fixedUpdateCounter > pxStep) {
+					fixedUpdateCounter -= pxStep;
+					fixedUpdate(pxStep);
+					}*/
+			}
+
+			update(delta_time);
+			entity_manager.destroyRemovedHandles();
+
+			time_since_last_update = 0;
+			//TIME_ACCUM = 0;
+			TIME_ACCUM -= TIME_PER_FRAME;
+
+			//io.cleanKeys();
+			render();
+
 		}
-
-		delta_secs *= time_modifier;
-		pxStep *= time_modifier;
-
-		// Fixed update
-		if (total_time > 0.5) {
-			fixedUpdateCounter += delta_secs;
-
-			//while (fixedUpdateCounter > pxStep) {
-			//if (fixedUpdateCounter > pxStep) {
-			//fixedUpdateCounter -= pxStep;
-			//fixedUpdateCounter = 0;
-			fixedUpdate(delta_secs);
-			//}
-
-
-			/*while (fixedUpdateCounter > pxStep) {
-				fixedUpdateCounter -= pxStep;
-				fixedUpdate(pxStep);
-			}*/			
-		}
-
-		update(delta_secs);
 	}
-
-	entity_manager.destroyRemovedHandles();
-	render();
 }
 
 void CApp::update(float elapsed) {
@@ -681,7 +739,9 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("deferred_gbuffer");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("skin_basic");
-		render_techniques_manager.reload("cubemap");
+		render_techniques_manager.reload("underwater");
+		render_techniques_manager.reload("ssao");
+		render_techniques_manager.reload("ssao_blur");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -996,6 +1056,10 @@ void CApp::render() {
 	{
 		CTraceScoped scope_post_all("Post procesado");
 		activateCamera(camera, 1);
+		/*{
+			CTraceScoped scope_post1("SSAO");
+			ssao.apply(rt_base);
+		}*/
 		{
 			CTraceScoped scope_post1("SSR");
 			ssrr.apply(rt_base);
@@ -1127,6 +1191,8 @@ void CApp::render() {
 
 	std::string s_fps = "FPS: " + std::to_string(fps);
 	font.print(500, 30, s_fps.c_str());*/
+	std::string s_fps = "FPS: " + std::to_string(fps);
+	font.print(xres - 200, 50, s_fps.c_str());
 	// Test GUI
 	CTraceScoped scope_gui("GUI");
 	if (h_player.isValid()) {
@@ -1190,6 +1256,33 @@ void CApp::render() {
 
 	logic_manager.draw();
 
+#ifndef FINAL_RELEASE
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+	SIZE_T virtualMemUsedByMe = pmc.WorkingSetSize;
+	float mem = (virtualMemUsedByMe / 1024.f) / 1024.f;
+
+	bool alt_pressed = CIOStatus::get().isPressed(CIOStatus::ALT);
+
+	frames_d.front().clamp_physx = physx_clamp;
+	frames_d.front().rope_thrown = rope_thrown;
+	frames_d.front().ram = mem / 10.f; // 10 MB = 1 pixel
+	int x = 0;
+	float h = 0.f;
+	for (auto frame : frames_d) {
+		ctes_global.get()->frame_list[x] = XMVectorSet(alt_pressed ? frame.ram : frame.fps, (frame.rope_thrown ? 1.f : 0.f), (frame.clamp_physx ? 1.f : 0.f), 0);
+		h = fps;
+		//drawTexture2D(x, yres - h, 1, h, texture_manager.getByName("whitepx"));
+		x++;
+	}
+
+	rope_thrown = false;
+	physx_clamp = false;
+
+	
+	font.printf(500, 60, "Memory use: %f MB", mem);
+#endif
+
 	::render.swap_chain->Present(0, 0);
 }
 
@@ -1199,8 +1292,8 @@ void CApp::renderEntities() {
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
 	debugTech->activate();
-	const CTexture *tex = texture_manager.getByName("grass");
-	tex->activate(0);
+	const CTexture* rope_tex = texture_manager.getByName("grass");
+	rope_tex->activate(0);
 
 	//ctes_global.activateInVS(2);
 
@@ -1208,6 +1301,13 @@ void CApp::renderEntities() {
 	activateTint(0);
 
 	// Render entities
+	int rope_count = 0;
+
+	/*rope.destroy();
+	rope2.destroy();
+	rope3.destroy();
+	rope4.destroy();*/
+
 	for (int i = 0; i < entity_manager.getEntities().size(); ++i)
 	{
 		TCompTransform* t = ((CEntity*)entity_manager.getEntities()[i])->get<TCompTransform>();
@@ -1219,8 +1319,10 @@ void CApp::renderEntities() {
 
 
 		// Draw the joints
+
 		if (c_rope) {
-			tex->activate(0);
+			rope_count++;
+			rope_tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
 			PxRigidActor* a2 = nullptr;
 
@@ -1279,7 +1381,15 @@ void CApp::renderEntities() {
 			float tension = 1 - (min(dist, maxDist) / (maxDist * 1.2f));
 			tension = maxDist < 0.2f ? 0.f : 1.f;
 
-			rope.destroy();
+			/*CMesh* m = &rope;
+			if (rope_count == 1)
+				m = &rope2;
+			if (rope_count == 2)
+				m = &rope3;
+			if (rope_count == 3)
+				m = &rope4;*/
+			
+
 			createFullString(rope, initialPos, finalPos, tension, c_rope->width);
 
 			ropeTech->activate();
@@ -1289,16 +1399,26 @@ void CApp::renderEntities() {
 				setTint(XMVectorSet(0.46f, 0.075f, 0.075f, 1));
 			else
 				setTint(XMVectorSet(0.45f, 0.8f, 0.63f, 1));
+
+			/*font.printf(60, 150 + 30 * rope_count, "Rope %u: tensed: %u, initPos: (%f, %f, %f), finalPos: (%f, %f, %f)", rope_count, (tensed ? 1 : 0),
+				XMVectorGetX(initialPos),
+				XMVectorGetY(initialPos),
+				XMVectorGetZ(initialPos),
+				XMVectorGetX(finalPos),
+				XMVectorGetY(finalPos),
+				XMVectorGetZ(finalPos)
+				);*/
+
 			/*float color_tension = min(dist / maxDist * 0.25f, 1);
 			setTint(XMVectorSet(color_tension * 3, (1 - color_tension) * 3, 0, 1));*/
 			setWorldMatrix(XMMatrixIdentity());
 			rope.activateAndRender();
 
-			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
+			/*setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot1, initialPos));
 			wiredCube.activateAndRender();
 
 			setWorldMatrix(XMMatrixAffineTransformation(XMVectorSet(0.1f, 0.1f, 0.1f, 0.1f), XMVectorZero(), rot2, finalPos));
-			wiredCube.activateAndRender();
+			wiredCube.activateAndRender();*/
 			debugTech->activate();
 		}
 
@@ -1497,6 +1617,8 @@ void CApp::destroy() {
 	particle_groups_manager.destroy();
 	logic_manager.destroy();
 	CNav_mesh_manager::get().keep_updating_navmesh = false;
+	CNav_mesh_manager::get().setNeedNavMesh(false);
+	CNav_mesh_manager::get().generate_nav_mesh = false;
 
 	// Destroy app resources
 	wiredCube.destroy();
@@ -1512,7 +1634,7 @@ void CApp::destroy() {
 	::render.destroyDevice();
 	
 	// Destro navmesh
-	CNav_mesh_manager().get().~CNav_mesh_manager();
+	CNav_mesh_manager().get().destroy();
 }
 
 unsigned int CApp::numStrings(){
@@ -1596,6 +1718,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	render_manager.destroyAllKeys();
 	render_manager.clearOcclusionPlanes();
+	ragdoll_manager.destroyAll();
 	//ctes_global.destroy();
 	//renderUtilsDestroy();
 	entity_lister.resetEventCount();
@@ -1727,20 +1850,20 @@ void CApp::loadScene(std::string scene_name) {
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_1.xml"){
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(60.f);
+		cam->changeZFar(70.f);
 		//sm.playTrack("ambient_orquestal.ogg", true);
 		ctes_global.get()->use_lightmaps = 0;
 		//sm.playFXTrack("ambiental_orq", true);
 	}
 	else if (scene_name == "data/scenes/scene_1_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(60.f);
+		cam->changeZFar(70.f);
 		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(1);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(77.f);
+		cam->changeZFar(90.f);
 		ctes_global.get()->use_lightmaps = 0;		
 		CSoundManager::get().setSceneID(2);
 	}
@@ -1753,7 +1876,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_3_noenemy.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
-		ctes_global.get()->use_lightmaps = 1;
+		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(3);
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
@@ -1774,7 +1897,7 @@ void CApp::loadScene(std::string scene_name) {
 	}
 	else if (scene_name == "data/scenes/scene_final_boss.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(150.0f);
+		cam->changeZFar(250.0f);
 		ctes_global.get()->use_lightmaps = 0;
 	}
 	ctes_global.uploadToGPU();
@@ -1892,23 +2015,30 @@ unsigned int CApp::getMaxNumNeedles(){
 }
 
 void CApp::playFinalVideo() {
+#ifdef NO_VIDEO
+	CLogicManager::get().loadScene(menu_scene);
+	game_state = TGameState::MAIN_MENU;
+#else
 	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("final_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::FINAL_VIDEO;
+#endif
 }
 
 void CApp::playInitialVideo() {
+#ifdef NO_VIDEO
+	CLogicManager::get().loadScene("data/scenes/scene_1.xml");
+	game_state = TGameState::GAMEPLAY;
+#else
 	CLogicManager::get().loadScene("data/scenes/empty_scene.xml");
 	loadVideo("intro_BP.ogv");
 	video_sound_played = false;
 	game_state = TGameState::INITIAL_VIDEO;
+#endif
 }
 
 void CApp::exitApp() {
-	CNav_mesh_manager::get().keep_updating_navmesh = false;
-	CNav_mesh_manager::get().setNeedNavMesh(false);
-	CNav_mesh_manager::get().generate_nav_mesh = false;
 	destroy();
 	exit(0);
 }

@@ -71,6 +71,7 @@ public:
 	void nav_mesh_init();
 	bool getLock();
 	void setNavMeshClimb(int climb);
+	void destroy();
 	//std::vector<TCompColliderCapsule*>  colCapsules;
 };
 #endif

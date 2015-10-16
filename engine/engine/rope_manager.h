@@ -8,7 +8,7 @@
 class CRope_manager
 {
 private:
-	CHandle extra_string;
+	//CHandle extra_string;
 	std::deque<CHandle> strings;
 	static const int max_strings = 4;
 public:

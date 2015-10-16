@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "comp_ai_boss.h"
+#include "comp_ai_substitute.h"
 #include "entity_manager.h"
 #include "comp_rigid_body.h"
 #include "comp_transform.h"
@@ -224,6 +225,44 @@ void TCompAiBoss::init(){
 		if (anti_rain_trans)
 			anti_rain_trans->teleport(XMVectorSet(10000, 10000, 10000, 10000));		
 	}
+
+
+
+	/***********************************************************
+	/***************** Creating the substitute *****************
+	************************************************************/
+
+	substitute = CEntityManager::get().getByName("Substitute");
+	if (substitute.isValid()){
+		TCompTransform* substitute_trans = ((CEntity*)substitute)->get<TCompTransform>();
+		TCompRigidBody* substitute_rigid = ((CEntity*)substitute)->get<TCompRigidBody>();
+
+		// Get an initial posisition
+		XMVECTOR chair_pos = XMVectorSet(0, 0, 0, 0);
+		XMVECTOR chair_rotation = XMVectorSet(0, 0, 0, 1);
+
+		// Get the chair position
+		CHandle chair = CEntityManager::get().getByName("boss_trono_sustituta");
+		if (chair.isValid()){
+			TCompTransform* chair_trans = ((CEntity*)chair)->get<TCompTransform>();			
+			
+			if (chair_trans){
+				chair_pos = chair_trans->position;
+				chair_rotation = chair_trans->rotation;
+			}
+			if (substitute_rigid){
+				PxTransform aux_pose = substitute_rigid->rigidBody->getGlobalPose();
+				aux_pose.q = Physics.XMVECTORToPxQuat(chair_rotation);
+				substitute_rigid->rigidBody->setGlobalPose(aux_pose);
+			}
+		}
+		
+		if (substitute_trans){
+			substitute_trans->teleport(chair_pos);
+			substitute_trans->rotation = chair_rotation;
+		}
+			
+	}		
 
 }
 

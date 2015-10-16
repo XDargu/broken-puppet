@@ -4,6 +4,7 @@
 #include "components\comp_render.h"
 #include "components\comp_rigid_body.h"
 #include "components\comp_ai_boss.h"
+#include "components\comp_ai_substitute.h"
 #include "rigid_animation.h"
 #include "logic_manager.h"
 
@@ -97,6 +98,24 @@ CMCVObject CMCVObject::firstBombBoss() {
 	return CMCVObject(CHandle());
 }
 
+void CMCVObject::hitSubstitute() {
+	if (!entity.isValid())
+		return;
+	TCompSubstituteBoss* substitute = ((CEntity*)entity)->get<TCompSubstituteBoss>();
+	if (substitute) {
+		substitute->hitSubstitute();
+	}
+}
+
+
+void CMCVObject::initLittleTalk() {
+	if (!entity.isValid())
+		return;
+	TCompSubstituteBoss* substitute = ((CEntity*)entity)->get<TCompSubstituteBoss>();
+	if (substitute) {
+		substitute->initLittleTalk();
+	}
+}
 
 void CMCVObject::initialRain(int amount) {
 	if (!entity.isValid())
@@ -104,5 +123,13 @@ void CMCVObject::initialRain(int amount) {
 	TCompAiBoss* boss = ((CEntity*)entity)->get<TCompAiBoss>();
 	if (boss) {
 		boss->initialRain(amount);
+	}
+}
+void CMCVObject::setRender(bool active){
+	if (!entity.isValid())
+		return;
+	TCompRender* render = ((CEntity*)entity)->get<TCompRender>();
+	if (render) {
+		render->active = active;
 	}
 }

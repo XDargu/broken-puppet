@@ -23,7 +23,9 @@ void CRope_manager::addString(CHandle string){
 
 	// Check if the string is attached to the substitute
 
-
+#ifndef FINAL_RELEASE
+	CApp::get().rope_thrown = true;
+#endif
 	strings.push_back(CHandle(string));
 	if (strings.size() > max_strings){
 		removeString();

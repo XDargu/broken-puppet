@@ -295,9 +295,9 @@ void PSGBuffer(
 	  
   //if (true)
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y || use_lightmaps == 0)
-	  acc_light += float4(0.88, 0.85, 0.85, 0) * 0.35;//acc_light += float4(0.98, 0.85, 0.8, 0) * 0.35;
+	  acc_light += float4(0.88, 0.85, 0.85, 0) * 0.15;//acc_light += float4(0.98, 0.85, 0.8, 0) * 0.35;
   else
-	  acc_light = float4(lightmap.xyz * 1, 0) - float4(1,1,1,1) * 0.2;
+	  acc_light = float4(lightmap.xyz * 1, 0) - float4(1,1,1,1) * 0.15;
   
   acc_light *= added_ambient_color;
   
@@ -741,7 +741,7 @@ float4 PSResolve(
 		+ (base_color * ambient_color * ambient_val);
 
 	//return final_color;
-	float exposure = 1.7;
+	float exposure = 2.5;// 1.7;
 	float2 vtc = float2(uv - 0.5);
 	float f_vignette = pow(1.0 - (dot(vtc, vtc) * 1.0), vignette);
 	return 1.0 - pow(2.71, -(f_vignette * final_color * exposure));

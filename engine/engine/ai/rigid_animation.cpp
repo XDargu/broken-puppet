@@ -46,6 +46,8 @@ void CRigidAnimation::setTargetTransfrom(CHandle transform) {
 		target_kinematic = r;
 	else
 		target_kinematic = CHandle();
+
+	time_accum_next_frame = 0;
 }
 
 void CRigidAnimation::update(float elapsed) {
@@ -53,16 +55,20 @@ void CRigidAnimation::update(float elapsed) {
 	// Play the animation backwards
 	if (reverted) {
 		if (current_keyframe > 0) {
-			if (keyframes[current_keyframe].update(elapsed) == true) {
+			/*if (keyframes[current_keyframe].update(elapsed) == true) {
 				current_keyframe--;
-			}
+			}*/
 		}
 	}
 	// Play the animation normally
 	else {
 		if (current_keyframe < keyframes.size()) {
-			if (keyframes[current_keyframe].update(elapsed) == true) {
+
+			float res = keyframes[current_keyframe].update(elapsed);
+
+			while (res < 0 && current_keyframe < keyframes.size() - 1) {
 				current_keyframe++;
+				res = keyframes[current_keyframe].update(-res);
 			}
 		}
 		else {

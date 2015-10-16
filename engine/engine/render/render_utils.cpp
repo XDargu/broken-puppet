@@ -1118,8 +1118,16 @@ bool createFullString(CMesh& mesh, XMVECTOR initialPos, XMVECTOR finalPos, float
 	}
 
 	XMFLOAT3 a = ropeVertices[epsilon - 1].Pos;
-
-	return mesh.create(epsilon * sizes, ropeVertices, (epsilon - 1) * sizes * 6, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal, false);
+	int nvertices = epsilon * sizes;
+	
+	if (!mesh.isValid()) {
+		return mesh.create(nvertices, ropeVertices, (epsilon - 1) * sizes * 6, ropeIndices, CMesh::TRIANGLE_LIST, &vdcl_position_uv_normal, true);
+	}
+	else {
+		mesh.updateFromCPU(ropeVertices, sizeof(CVertexPosUVNormal) * nvertices);
+		return true;
+	}
+	
 	//return mesh.create(epsilon * sizes, ropeVertices, 0, NULL, CMesh::LINE_LIST_ADJ, &vdcl_position_color);
 }
 

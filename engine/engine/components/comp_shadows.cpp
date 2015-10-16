@@ -2,6 +2,7 @@
 #include "render/render_utils.h"
 #include "handle/handle.h"
 #include "comp_shadows.h"
+#include "comp_render.h"
 #include "ai/logic_manager.h"
 
 using namespace DirectX;
@@ -42,12 +43,21 @@ void TCompShadows::generate()  {
 		return; 
 	}
 
-	CTraceScoped s("shadows");
+	int current_player_zone = CLogicManager::get().getPlayerZoneID();
+	CEntity* owner = CHandle(this).getOwner();
+	TCompTransform* t = owner->get<TCompTransform>();
+
+	if (!(abs(current_player_zone - t->room_id) <= 1)) {
+		rt->clearDepthBuffer();
+		return;
+	}
 
 	// Activate the camera component which is the source of the light
 	CEntity* e = CHandle(this).getOwner();
 	TCompCamera* camera = e->get<TCompCamera>();
 	assert(camera || fatal("TCompShadows requieres a TCompCamera component"));
+	
+	CTraceScoped s(e->getName());
 
 	activateRSConfig(RSCFG_SHADOWS);
 
@@ -80,10 +90,22 @@ void TCompShadows::draw() {
 
 	bool culling = true;// planes_active_camera.isVisible(m_aabb);
 
+	bool parent_emissive_on = true;
+
+	if (t->hasParent()) {
+		CEntity* parent = t->getParent().getOwner();
+		if (parent) {
+			TCompRender* render = parent->get<TCompRender>();
+			if (render) {
+				parent_emissive_on = render->emissive_on;
+			}
+		}
+	}
+
 	// Draw the light only if it is in the same zone as the player
 	culling &= abs(current_player_zone - t->room_id) <= 1;
 
-	if (culling) {
+	if (culling && parent_emissive_on) {
 
 		XMVECTOR det;
 		XMMATRIX inv_view_proj = XMMatrixInverse(&det, c->getViewProjection());

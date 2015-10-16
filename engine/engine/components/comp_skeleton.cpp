@@ -134,7 +134,17 @@ void TCompSkeleton::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 
   time_since_last_ragdoll = 5000;
   follow_animation = false;
-  model->getMixer()->update_logic_translation = true;
+  model->getMixer()->update_logic_translation = follow_animation;
+}
+
+TCompSkeleton::~TCompSkeleton() {
+	CalSkeleton* skel = model->getSkeleton();
+	auto& cal_bones = skel->getVectorBone();
+
+	int size = (int)cal_bones.size();
+	for (size_t bone_idx = 0; bone_idx < cal_bones.size(); ++bone_idx) {
+		cal_bones[bone_idx]->getCoreBone()->setUserData(0);
+	}
 }
 
 void TCompSkeleton::init() {
@@ -612,4 +622,9 @@ void TCompSkeleton::setBoneRagdoll(int id, bool active) {
 	CalSkeleton* skel = model->getSkeleton();
 	auto& cal_bones = skel->getVectorBone();
 	cal_bones[id]->getCoreBone()->setUserData((void*)active);
+}
+
+void TCompSkeleton::setFollowAnimation(bool active) {
+	follow_animation = active;
+	model->getMixer()->update_logic_translation = active;
 }

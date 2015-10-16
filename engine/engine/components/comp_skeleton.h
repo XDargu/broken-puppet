@@ -14,15 +14,17 @@ private:
 	CalTransform* bone_ragdoll_transforms;
 	CCoreModel* core_model;
 	float time_since_last_ragdoll;
+	bool follow_animation;
+
 public:
 	CHandle h_transform;
 	CHandle h_rigidbody;
 
 	CalModel*  model;
 
-	bool follow_animation;
-
 	TCompSkeleton() : model(nullptr) { }
+	~TCompSkeleton();
+
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void init();
 	void update(float elapsed);
@@ -48,6 +50,9 @@ public:
 	float getCancelTime(int id);
 
 	void setBoneRagdoll(int id, bool active);
+
+	void setFollowAnimation(bool active);
+	bool isFollowingAnimation() { return follow_animation; }
 };
 
 #endif
