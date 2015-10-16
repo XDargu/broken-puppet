@@ -148,6 +148,10 @@ void TCompColliderCapsule::addInputNavMesh(){
 			, max.x - borders, max.y, max.z - borders
 		};
 
+		if (m_v)
+			delete[] m_v;
+		if (t_v)
+			delete[] t_v;
 		m_v = new float[n_vertex * 3];
 		memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
 

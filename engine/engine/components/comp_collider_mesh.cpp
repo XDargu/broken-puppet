@@ -78,6 +78,10 @@ void TCompColliderMesh::addInputNavMesh(){
 			//const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
 			if (c_m){
 				unsigned n_vertex = c_m->nvertexs;
+				if (m_v)
+					delete[] m_v;
+				if (t_v)
+					delete[] t_v;
 				m_v = new float[n_vertex * 8];
 				memcpy(m_v, c_m->vertex_floats, n_vertex * 8 * sizeof(float));
 
