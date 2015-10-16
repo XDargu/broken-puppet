@@ -264,6 +264,29 @@ void TCompAiBoss::init(){
 			
 	}		
 
+	/***********************************************************
+	***************** Creating the broken floor ****************
+	************************************************************/
+
+	// Make the floor disapear
+	CHandle floor = CEntityManager::get().getByName("tapa_hueco_boss");
+	if (floor.isValid()){
+		TCompTransform* floor_trans = ((CEntity*)floor)->get<TCompTransform>();
+		CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota");
+		if (broken_floor.isValid() && (floor_trans)){
+			TCompTransform* broken_floor_trans = ((CEntity*)broken_floor)->get<TCompTransform>();
+
+			if (broken_floor_trans){
+				broken_floor_trans->setType(0);
+				broken_floor_trans->position = floor_trans->position;
+
+				TCompRender* floor_broken_render = ((CEntity*)broken_floor)->get<TCompRender>();
+				if (floor_broken_render)
+					floor_broken_render->active = false;
+			}
+		}
+	}
+
 }
 
 void TCompAiBoss::update(float elapsed){

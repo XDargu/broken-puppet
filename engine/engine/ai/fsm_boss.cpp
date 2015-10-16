@@ -242,7 +242,6 @@ void fsm_boss::RiseUp(){
 		// Move to the initial position
 		trans->position = original_pos;
 		
-		/**/
 		CHandle puente = CEntityManager::get().getByName("pasarela_boss");
 		if (puente.isValid()){
 			TCompTransform* puente_trans = ((CEntity*)puente)->get<TCompTransform>();
@@ -251,34 +250,17 @@ void fsm_boss::RiseUp(){
 			}
 		}
 		
-
-		/**/
 	}
 
 	if ((state_time >= 6.79f) && (!boss_out)){
 		boss_out = true;
 		// Make the floor disapear
-		CHandle floor = m_entity_manager->getByName("tapa_hueco_boss");
-		if (floor.isValid()){
-			TCompTransform* floor_trans = ((CEntity*)floor)->get<TCompTransform>();
+		CHandle floor_broken = m_entity_manager->getByName("tapa_boss_rota");
+		if (floor_broken.isValid()){
 
-			// Generate the broken floor prefab
-			CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota");
-			//CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota_2");
-			/**/
-			if (broken_floor.isValid() && (floor_trans)){
-				TCompTransform* broken_floor_trans = ((CEntity*)broken_floor)->get<TCompTransform>();
-
-				if (broken_floor_trans){
-					broken_floor_trans->setType(0);
-					broken_floor_trans->position = floor_trans->position;
-
-					TCompRender* floor_render = ((CEntity*)floor)->get<TCompRender>();
-					if (floor_render)
-						floor_render->active = false;
-				}
-			}
-			/**/
+			TCompRender* floor_broken_render = ((CEntity*)floor_broken)->get<TCompRender>();
+			if (floor_broken_render)
+				floor_broken_render->active = true;
 		}
 	}
 
