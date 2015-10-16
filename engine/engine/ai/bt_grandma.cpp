@@ -19,7 +19,7 @@ const float max_time_player_search = 7.f;
 const float max_range_role = 7.f;
 const float max_distance_taunter = 4.f;
 const float delta_time_close_attack = 3.5f;
-const float distance_change_way_point = 0.566f;
+const float distance_change_way_point = 0.666f;
 const float distance_chase = 0.33f;
 const float force_large_impact = 60000.f;
 const float force_medium_impact = 25000.f;
@@ -363,22 +363,37 @@ int bt_grandma::actionTooCloseAttack()
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(4);
 		}
+		attacked = false;
 
 	}
 
+	stopMovement();
 	//mov_direction = PxVec3(0, 0, 0);
 	//look_direction = last_look_direction;
 
-	if (state_time >= getAnimationDuration(3)) {
+	if (state_time >= getAnimationDuration(3)/2.f && attacked == false) {
 		float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
-		if (distance <= max_distance_to_attack * 2){
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 61000.f, false));
+		if (distance <= max_distance_to_attack){
+			XMVECTOR dir = XMVector3Normalize(p_transform->position - m_transform->position);
+			XMVECTOR particles_pos = p_transform->position - dir * 0.5f + XMVectorSet(0, 1, 0, 0);
+			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
+
+			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 35100.f, false));
+			attacked = true;
+
+			// Sound
+			CSoundManager::get().playEvent("GRANDMA_HIT", m_transform->position);
 		}
-		return LEAVE;
 	}
 	else
 	{
-		return STAY;
+		if (state_time >= getAnimationDuration(3)){
+			attacked = false;
+			return LEAVE;
+		}
+		else{
+			return STAY;
+		}
 	}
 
 }
