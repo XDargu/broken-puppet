@@ -700,6 +700,7 @@ void CLogicManager::bootLUA() {
 		.set("initLittleTalk", &CMCVObject::initLittleTalk)
 		.set("initialRain", &CMCVObject::initialRain)
 		.set("firstBombBoss", &CMCVObject::firstBombBoss)
+		.set("hitSubstitute", &CMCVObject::hitSubstitute)
 		;
 
 	SLB::Class<CVector>("Vector")

@@ -400,6 +400,16 @@ PxFilterFlags FilterShader(
 					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
 					return PxFilterFlag::eDEFAULT;
 				}
+				else if ((filterData0.word0 == FilterGroup::eACTOR) && (filterData1.word0 == FilterGroup::eBOMB)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
+				else if ((filterData0.word0 == FilterGroup::eBOMB) && (filterData1.word0 == FilterGroup::eACTOR)){
+					//Colisiones entre actores (cajas) y enemigos
+					pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_CONTACT_POINTS | PxPairFlag::eDETECT_CCD_CONTACT;
+					return PxFilterFlag::eDEFAULT;
+				}
 				else{
 					return PxFilterFlag::eDEFAULT;
 				}

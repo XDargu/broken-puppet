@@ -34,3 +34,7 @@ void TCompSubstituteBoss::onRopeTensed(const TMsgRopeTensed& msg) {
 void TCompSubstituteBoss::initLittleTalk(){
 	m_fsm_substitute->ChangeState("fbp_LittleTalk");
 }
+
+void TCompSubstituteBoss::hitSubstitute(){
+	m_fsm_substitute->ChangeState("fbp_JustTied");
+}

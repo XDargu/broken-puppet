@@ -40,6 +40,10 @@ public:
 	void JustHanged();
 	void CallingBoss();
 	void Hanged(float elapsed);
+
+
+	void JustTied();
+	void TiedLoop();
 };
 
 

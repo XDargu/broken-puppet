@@ -25,6 +25,7 @@ public:
 	void setRender(bool active);
 	void riseUpBoss();
 	void initLittleTalk();
+	void hitSubstitute();
 	CMCVObject firstBombBoss();
 	void initialRain(int amount);
 };
