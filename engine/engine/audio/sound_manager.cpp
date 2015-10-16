@@ -52,10 +52,14 @@ CSoundManager::CSoundManager()
 	FMOD::System* lowLevelSystem = NULL;
 	ERRCHECK(system->getLowLevelSystem(&lowLevelSystem));
 	ERRCHECK(lowLevelSystem->setSoftwareFormat(0, FMOD_SPEAKERMODE_5POINT1, 0));
-	
+#ifdef FINAL_RELEASE
+	ERRCHECK(system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, extraDriverData));
+	ERRCHECK(FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_ERROR, FMOD_DEBUG_MODE_FILE, 0, "fmod_log.txt"));
+#else
 	ERRCHECK(system->initialize(1024, FMOD_STUDIO_INIT_NORMAL | FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_NORMAL | FMOD_INIT_3D_RIGHTHANDED, extraDriverData));
+	ERRCHECK(FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_WARNING, FMOD_DEBUG_MODE_FILE, 0, "fmod_log.txt"));
+#endif
 	
-	ERRCHECK(FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_WARNING, FMOD_DEBUG_MODE_TTY, 0, "fmod_log.txt"));
 
 	// Load sound bnaks
 	masterBank = NULL;

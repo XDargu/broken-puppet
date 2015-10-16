@@ -54,6 +54,7 @@ void CPhysicsManager::init() {
 
 		gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, PxTolerancesScale());
 
+#ifndef FINAL_RELEASE
 		physx::PxVisualDebuggerConnectionFlags flags =
 			physx::PxVisualDebuggerConnectionFlag::eDEBUG
 			| physx::PxVisualDebuggerConnectionFlag::ePROFILE
@@ -69,7 +70,7 @@ void CPhysicsManager::init() {
 			gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONSTRAINTS, true);
 			gPhysicsSDK->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_SCENEQUERIES, true);
 		}
-
+#endif
 		PxInitExtensions(*gPhysicsSDK);
 
 		PxSceneDesc sceneDesc(gPhysicsSDK->getTolerancesScale());

@@ -84,7 +84,7 @@ void TCompAudioSource::setInstance(std::string event_desc_name){
 		CSoundManager::get().ERRCHECK(asociated_sound->release());
 	}
 	asociated_sound = CSoundManager::get().getInstance(event_desc_name);
-	XASSERT(asociated_sound != nullptr, "Error: invalid event in audio source");
+	//XASSERT(asociated_sound != nullptr, "Error: invalid event in audio source");
 }
 
 

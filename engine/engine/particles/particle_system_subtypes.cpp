@@ -101,15 +101,21 @@ void TParticleEmitterGeneration::addParticle() {
 	XMFLOAT3 direction;
 
 	bool inside_condition;
+	// Break statement
+	int while_break = 15;
+	int while_counter = 0;
+	if (radius == 0) { radius = 0.1f; }
+	if (inner_radius >= radius) { radius = inner_radius + 0.1f; }
 
 	switch (shape)
 	{
 	case TParticleEmitterShape::SPHERE:
 		XMStoreFloat3(&pos, getRandomVector3(-radius, radius));
 		inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
-		while (!inside_condition) {
+		while (!inside_condition && while_counter < while_break) {
 			XMStoreFloat3(&pos, getRandomVector3(-radius, radius));
 			inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
+			while_counter++;
 		}
 		XMStoreFloat3(&pos, m_transform->position + XMLoadFloat3(&pos));
 		break;
@@ -119,10 +125,11 @@ void TParticleEmitterGeneration::addParticle() {
 		inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 		inside_condition &= m_transform->isInFront(XMLoadFloat3(&pos) + m_transform->position);
 
-		while (!inside_condition) {
+		while (!inside_condition && while_counter < while_break) {
 			XMStoreFloat3(&pos, getRandomVector3(-radius, radius));
 			inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 			inside_condition &= m_transform->isInFront(XMLoadFloat3(&pos) + m_transform->position);
+			while_counter++;
 		}
 		XMStoreFloat3(&pos, m_transform->position + XMLoadFloat3(&pos));
 		break;
@@ -132,10 +139,11 @@ void TParticleEmitterGeneration::addParticle() {
 		inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 		inside_condition &= m_transform->isInFov(XMLoadFloat3(&pos) + m_transform->position, angle);
 
-		while (!inside_condition) {
+		while (!inside_condition && while_counter < while_break) {
 			XMStoreFloat3(&pos, getRandomVector3(-radius, radius));
 			inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 			inside_condition &= m_transform->isInFov(XMLoadFloat3(&pos) + m_transform->position, angle);
+			while_counter++;
 		}
 		XMStoreFloat3(&pos, m_transform->position + XMLoadFloat3(&pos));
 		break;
@@ -145,10 +153,11 @@ void TParticleEmitterGeneration::addParticle() {
 		inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 		inside_condition &= ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) > (inner_radius*inner_radius));
 
-		while (!inside_condition) {
+		while (!inside_condition && while_counter < while_break) {
 			XMStoreFloat3(&pos, m_transform->getUp() * getRandomNumber(-radius, radius) + m_transform->getLeft() * getRandomNumber(-radius, radius));
 			inside_condition = ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) < (radius*radius));
 			inside_condition &= ((pos.x*pos.x + pos.y*pos.y + pos.z*pos.z) > (inner_radius*inner_radius));
+			while_counter++;
 		}
 		XMStoreFloat3(&pos, m_transform->position + XMLoadFloat3(&pos));
 		break;
