@@ -127,6 +127,7 @@
   <event id="COMPRESOR_3" path="event:/Ambiente/compresor_3" /> Machacaabuelas 3 del crematorio
   <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
   <event id="VIOLINCLASSIC" path="event:/Ambiente/violin_tunning" /> Violín clásico
+  <event id="WATER_SPLASH" path="event:/Agua/Splash Agua" /> Salpicaduras
 
   <!-- Narración -->
   <event id="NARR_DEATH" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Muertes Katherine" /> Video inicial

@@ -847,7 +847,9 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 			TenseString(m_rope_manager.getStrings()[i]);
 		}
 
-		TenseString(m_rope_manager.extra_rope);
+		if (m_rope_manager.extra_rope.isValid()) {
+			TenseString(m_rope_manager.extra_rope);
+		}
 	}
 
 	// Waits for the player to throw
