@@ -163,21 +163,16 @@ function onSceneLoad_scene_final_boss()
 		local cinematic_pos = player_cinematic_pos_obj:getPos();
 		print("asdasd3\n")
 
-		waitTime(1)
-		-- Iniciar cinemática en dos cámaras		
-
 		local Camera01 = logicManager:getObject("Camera01");
 		local Camera002 = logicManager:getObject("Camera002");
-
-		print("asdasd4\n")
 		logicManager:playAnimation("Camera_01_sustituta", Camera01)
-		print("asdasd5\n")
 		logicManager:playAnimation("Camera_002_sustituta", Camera002)
-		print("asdasd6\n")
+
+		waitTime(1)
+		-- Iniciar cinemática en dos cámaras		
+						
 		logicManager:changeCamera("Camera01")				
-		print("asdasd7\n")
 		player:teleportToPos(cinematic_pos);
-		print("asdasd8\n")
 		waitTime(6)
 
 		logicManager:changeCamera("Camera002")

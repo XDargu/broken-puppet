@@ -225,9 +225,15 @@ void fsm_substitute::JustTied(){
 	if (on_enter){
 		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
 		TCompSkeleton* skeleton = comp_skeleton;
-		// Little Talk animation
+		// Tied Talk animation
 		stopAllAnimations();
 		skeleton->playAnimation(5);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+		CSoundManager::get().playEvent("SUBS_ROPE_THROWN", sound_pos);
+		CLogicManager::get().playSubtitles("SUBS_ROPE_THROWN");
 	}
 	if (state_time >= 3.9){
 		ChangeState("fbp_TiedLoop");
