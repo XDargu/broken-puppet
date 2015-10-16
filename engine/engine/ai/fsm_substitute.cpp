@@ -172,7 +172,7 @@ void fsm_substitute::JustHanged(){
 		if (audio_source)
 			audio_source->play();
 	}	
-	if (state_time >= 1.f){
+	if (state_time >= 2.5f){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
 		ChangeState("fbp_CallingBoss");
 	}

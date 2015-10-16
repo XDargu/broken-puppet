@@ -63,8 +63,6 @@ function onSceneLoad_scene_final_boss()
 	respawnPos = player:getPosition();
 	mBoss = logicManager:getObject("Boss");
 
-	logicManager:playEventAtPosition("SUBS_RAGDOLL", player:getPosition());
-
 	-- Colocar collider del escenario
 	local scene_collider = logicManager:getObject("escenario_pared_collider");		
 	scene_collider:setPos(Vector(1000, 1000, 1000));
