@@ -66,6 +66,10 @@ function onSceneLoad_scene_final_boss()
 	-- Colocar collider del escenario
 	local scene_collider = logicManager:getObject("escenario_pared_collider");		
 	scene_collider:setPos(Vector(1000, 1000, 1000));
+
+	function onTriggerEnter_sc5_trigger_narr1(who)
+		logicManager:playSubtitles("NARRSC501");
+	end
 	
 	function onTriggerEnter_PitTrigger(who)
 		print(tostring(who) .. "Entrado en el trigger");
@@ -107,6 +111,9 @@ function onSceneLoad_scene_final_boss()
 		logicManager:setBands(false)
 		logicManager:releaseCameraLock()
 		logicManager:resetPlayerCamera()
+
+		-- Activar GUI
+		logicManager:drawGUI(true)
 
 		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
 		antiRain:setPos(Vector(5000, 5000, 5000));
@@ -155,6 +162,9 @@ function onSceneLoad_scene_final_boss()
 	function playCinematic()
 		-- Bandas cinemáticas
 		logicManager:setBands(true)
+
+		-- Desactivar GUI
+		logicManager:drawGUI(false)
 
 		local player_start_pos = player:getPosition();
 		print("asdasd1\n")
@@ -205,7 +215,7 @@ function onSceneLoad_scene_final_boss()
 		scene_collider:setPos(Vector(0, 0, 0));
 		
 		local boss = logicManager:getBot("Boss")
-		logicManager:lockCameraOnPosition(Vector(0, 8, 0))
+		logicManager:lockCameraOnPosition(Vector(0, 8, 0), true)
 		logicManager:setTimer("boss_init_animation", 28)
 		
 		startCoroutine("bossShake", bossShake)
@@ -643,15 +653,20 @@ bossSecuence = false;
 	end
 
 	-- Bajar el nivel del agua
+	local water_level_down = false
 	function onTriggerExit_sc3_trigger_desag(who)
 		print(tostring(who) .. " ha dejado en el trigger de desag");
 	
 		if who == "tapa_desague_puzle" then
-			logicManager:changeWaterLevel(-3.3, 0.25);
-			logicManager:setTimer("sc3_timer_kath_dialog", 5)
+			if water_level_down == true then
+				logicManager:changeWaterLevel(-3.3, 0.25);
+				logicManager:setTimer("sc3_timer_kath_dialog", 5)
 
-			-- Partícula de desagüe
-			logicManager:createParticleGroup("ps_twister", Vector(-0.0129995, -3.188, 83.822), Quaternion(-0.71, 0, 0, 0.71))
+				-- Partícula de desagüe
+				logicManager:createParticleGroup("ps_twister", Vector(-0.0129995, -3.188, 83.822), Quaternion(-0.71, 0, 0, 0.71))
+
+				water_level_down = true
+			end
 			
 		end
 	
@@ -1074,7 +1089,8 @@ end
 function onTimerEnd_wait_for_lanch()
 	logicManager:setCanThrow(true)
 	-- debemos llamar a una funcion que apunte a la sustituta
-	logicManager:lockCameraOnPosition(Vector(0, 300, -200))		
+	local hang_place = logicManager:getObject("substitute_hang_place")
+	logicManager:lockCameraOnPosition(hang_place:getPos(), false)		
 end
 
 function onBossRopeThrow()

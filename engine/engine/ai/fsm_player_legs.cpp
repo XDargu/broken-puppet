@@ -162,8 +162,12 @@ void FSMPlayerLegs::Idle(float elapsed){
 	}
 	else {
 		// Don't move
+		
 		TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
-		((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
+		if (CApp::get().current_scene_name == "scene_final_boss")
+			((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
+		else
+			((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 	}
 	if (CIOStatus::get().isPressed(CIOStatus::THROW_STRING) && canPlayerThrow() && torso->can_throw){
 		skeleton->stopAnimation(8);

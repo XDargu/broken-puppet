@@ -59,6 +59,7 @@ private:
 	// Lock on target
 	CHandle lock_on_target;
 	XMVECTOR lock_on_position;
+	bool lock_player_view;
 
 	// Shakecam
 	bool shake_cam;
@@ -202,7 +203,7 @@ public:
 	void resetPlayerCamera();
 	void lockOnBot(CBot bot, CVector offset);
 	void lockOnBotBone(CBot bot, int bone);
-	void lockOnPosition(CVector position);
+	void lockOnPosition(CVector position, bool lock_player_view_active);
 	void lockOnObject(CMCVObject object);
 	void releaseCameraLock();
 	void playAnimation(std::string name, CMCVObject target_object);
@@ -210,6 +211,9 @@ public:
 	void stopShakeCamera();
 	void changeFov(float fov, float lerp);
 	void stopFovChange();
+
+	// GUI
+	void setDrawGUI(bool active);
 
 	// MISC
 	void print(std::string text);

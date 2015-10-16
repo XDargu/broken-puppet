@@ -71,6 +71,7 @@ public:
 	bool renderGrid;
 	bool renderNames;
 	bool renderNavMesh;
+	bool draw_gui;
 
 	int debug_map; // 0: Nothing, 1: Albedo, 2: Normals, 3: Specular, 4: Gloss, 5: Lights, 6: Depth
 	bool renderWireframe;

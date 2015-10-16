@@ -102,7 +102,7 @@ void TParticleEmitterGeneration::addParticle() {
 
 	bool inside_condition;
 	// Break statement
-	int while_break = 15;
+	int while_break = 2500;
 	int while_counter = 0;
 	if (radius == 0) { radius = 0.1f; }
 	if (inner_radius >= radius) { radius = inner_radius + 0.1f; }

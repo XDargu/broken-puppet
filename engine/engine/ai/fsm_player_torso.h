@@ -60,6 +60,7 @@ public:
 
 	void CancelGrabString();
 
+	void TenseString(CHandle string);
 };
 
 #endif

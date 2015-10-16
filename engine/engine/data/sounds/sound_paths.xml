@@ -126,6 +126,7 @@
   <event id="COMPRESOR_1" path="event:/Ambiente/compresor_1" /> Machacaabuelas 1 del crematorio
   <event id="COMPRESOR_3" path="event:/Ambiente/compresor_3" /> Machacaabuelas 3 del crematorio
   <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
+  <event id="VIOLINCLASSIC" path="event:/Ambiente/violin_tunning" /> Violín clásico
 
   <!-- Narración -->
   <event id="NARR_DEATH" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Muertes Katherine" /> Video inicial
@@ -177,6 +178,10 @@
   <event id="SC4ROOM5" path="event:/Mixer/Rev_LongHall" /> Sala reloj
   <event id="SC4ROOM6" path="eevent:/Mixer/Rev_SmallRoom" /> Lateral de sala reloj
   <event id="SC4ROOM7" path="event:/Mixer/Rev_SmallRoom" /> Dentro de reloj
+
+  <event id="SC5ROOM1" path="event:/Mixer/Rev_SmallRoom" /> Sala del payaso
+  <event id="SC5ROOM2" path="event:/Mixer/Rev_LongHall" /> Pasillo
+  <event id="SC5ROOM3" path="event:/Mixer/Rev_LongHall" /> Escenario
   
 
   <!-- Narración -->

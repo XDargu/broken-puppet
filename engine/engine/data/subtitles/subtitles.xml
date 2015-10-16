@@ -20,7 +20,10 @@
   <subtitle guid="NARRSC402" next="KATHSC403" size="24" color="0xffffffff" time="7" sound="NARRSC402" text="Aquel reloj se había descolgado, destrozándose. El tiempo pasaba para todos." />
   <subtitle guid="KATHSC403" next="" size="24" color="0xff88ff00" time="5" sound="KATHSC403" text="¿Qué hace este reloj aquí? Alguien debería tirarlo." />
 
+  <subtitle guid="NARRSC501" next="NARRSC501_2" size="24" color="0xffffffff" time="8.5" sound="NARRSC501" text="Katherine ya podía deleitarse con la luz de los focos y &#xD;el murmullo impaciente del público, rememorando su triunfal entrada." />
+  <subtitle guid="NARRSC501_2" next="" size="24" color="0xffffffff" time="4.5" sound="" text="Ya vislumbraba a la usurpadora destrozada por sus hilos..." />
 
+  
   <!-- Expresiones -->
   <subtitle guid="EXPR00-0" next="" size="24" color="0xff88ff00" time="3" sound="" text="Una más para mi colección" />
   <subtitle guid="EXPR00-1" next="" size="24" color="0xff88ff00" time="3" sound="" text="Esa ha sido tu última marcha" />

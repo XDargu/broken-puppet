@@ -1,5 +1,6 @@
 <skeleton>
     <mesh name="violin"/>
 	
-	<anim name="idle"/>
+	<anim name="classic"/>
+	<anim name="metal"/>
 </skeleton>

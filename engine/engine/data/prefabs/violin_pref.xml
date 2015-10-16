@@ -11,5 +11,8 @@
     </colliderMulti>
     staticbody/>
     <rigidbody density="490.56"  />
+    <audioSource sound="VIOLINCLASSIC" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
   </entity>
 </prefab>

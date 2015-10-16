@@ -227,8 +227,16 @@ void FSMPlayerTorso::ThrowString(float elapsed) {
 				current_rope_entity = new_e;
 
 				// Add the string to the strings vector
-				//strings.push_back(CHandle(new_e_r));
-				CRope_manager::get().addString(new_e_r);
+				// The substitute rope is not registered
+				CEntity* f_entity = CHandle(first_actor->userData);
+				if (f_entity) {
+					if (!char_equal(f_entity->getName(), "Substitute")) {
+						CRope_manager::get().addString(new_e_r);
+					}
+					else {
+						CRope_manager::get().setExtraString(new_e_r);
+					}
+				}				
 
 				entitycount++;
 
@@ -833,61 +841,13 @@ void FSMPlayerTorso::Inactive(float elapsed) {
 		skeleton->playAnimation(32);
 
 		CRope_manager& m_rope_manager = CRope_manager::get();
-		
+
 		for (int i = 0; i < m_rope_manager.getStrings().size(); ++i)
 		{
-			TCompRope* rope = m_rope_manager.getStrings()[i];			
-			TCompDistanceJoint* djoint = rope->joint;
-
-			if (rope && djoint) {
-				if (!rope->tensed) {
-					//CSoundManager::SoundParameter params[] = {
-						//{ "type", 1 }
-					//};
-
-					//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
-					//Sound with distance --------------------------------------------------------------------------------------------------------
-					float distance = 0.f;
-					if (rope){
-						distance = V3DISTANCE(rope->pos_1, rope->pos_2);
-					}
-
-					CSoundManager::SoundParameter params[] = {
-						{ "LongCuerda", distance }
-					};
-
-					CSoundManager::get().playEvent("STRING_TENSE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
-					//----------------------------------------------------------------------------------------------------------------------------
-					
-					rope->tensed = true;
-					djoint->joint->setMaxDistance(0.1f);
-					PxRigidActor* a1 = nullptr;
-					PxRigidActor* a2 = nullptr;
-
-					if (rope->joint_aux.isValid()) {
-						TCompDistanceJoint* joint2 = rope->joint_aux;
-						joint2->joint->setMaxDistance(0.1f);
-						joint2->awakeActors();
-					}
-
-					djoint->joint->getActors(a1, a2);
-					// Wake up the actors, if dynamic
-					if (a1 && a1->isRigidDynamic()) {
-						if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
-							((physx::PxRigidDynamic*)a1)->wakeUp();
-						}
-						((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-
-					}
-					if (a2 && a2->isRigidDynamic()) {
-						if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
-							((physx::PxRigidDynamic*)a2)->wakeUp();
-						}
-						((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-					}
-				}
-			}
+			TenseString(m_rope_manager.getStrings()[i]);
 		}
+
+		TenseString(m_rope_manager.extra_rope);
 	}
 
 	// Waits for the player to throw
@@ -1055,4 +1015,58 @@ void FSMPlayerTorso::CancelGrabString() {
 	entitycount++;
 
 	up_animation = false;
+}
+
+void FSMPlayerTorso::TenseString(CHandle string) {
+	TCompRope* rope = string;
+	TCompDistanceJoint* djoint = rope->joint;
+
+	if (rope && djoint) {
+		if (!rope->tensed) {
+			//CSoundManager::SoundParameter params[] = {
+			//{ "type", 1 }
+			//};
+
+			//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			//Sound with distance --------------------------------------------------------------------------------------------------------
+			float distance = 0.f;
+			if (rope){
+				distance = V3DISTANCE(rope->pos_1, rope->pos_2);
+			}
+
+			CSoundManager::SoundParameter params[] = {
+				{ "LongCuerda", distance }
+			};
+
+			CSoundManager::get().playEvent("STRING_TENSE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+			//----------------------------------------------------------------------------------------------------------------------------
+
+			rope->tensed = true;
+			djoint->joint->setMaxDistance(0.1f);
+			PxRigidActor* a1 = nullptr;
+			PxRigidActor* a2 = nullptr;
+
+			if (rope->joint_aux.isValid()) {
+				TCompDistanceJoint* joint2 = rope->joint_aux;
+				joint2->joint->setMaxDistance(0.1f);
+				joint2->awakeActors();
+			}
+
+			djoint->joint->getActors(a1, a2);
+			// Wake up the actors, if dynamic
+			if (a1 && a1->isRigidDynamic()) {
+				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
+					((physx::PxRigidDynamic*)a1)->wakeUp();
+				}
+				((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+
+			}
+			if (a2 && a2->isRigidDynamic()) {
+				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
+					((physx::PxRigidDynamic*)a2)->wakeUp();
+				}
+				((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+			}
+		}
+	}
 }

@@ -129,7 +129,7 @@ void fsm_substitute::LoopTalk8(){
 		stopAllAnimations();
 		loopAnimation(3, true);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
-
+		
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
 		if (trans)
 			sound_pos = trans->position;
@@ -137,7 +137,7 @@ void fsm_substitute::LoopTalk8(){
 		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_8", sound_pos);
 		CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_8");
 	}
-	if (state_time >= 1.9){
+	if (state_time >= 3.9){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
 		ChangeState("fbp_Idle");
 	}

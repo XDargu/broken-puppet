@@ -92,15 +92,15 @@ void TCompBtSoldier::update(float elapsed){
 		if (moving) {
 			footstep_counter += elapsed;
 
-		float base_step = 1.f;
-		float time_modifier = run_speed_modifier * 1.f; //* (1 / water_multiplier);
+		//float base_step = 0.5f;
+		float time_modifier = run_speed_modifier; //* 1.f; //* (1 / water_multiplier);
 
-			if (footstep_counter >= time_modifier) {
+		if (footstep_counter >= time_modifier) {
 				CSoundManager::SoundParameter params[] = {
 					{ "Material", surface_value }
 				};
 
-				CSoundManager::get().playEvent("STEPS_GRANDMA", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
+				CSoundManager::get().playEvent("STEPS_SOLDIER", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);
 				footstep_counter = 0.0f;
 			}
 		}

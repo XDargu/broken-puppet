@@ -384,6 +384,11 @@ int bt_grandma::actionTooCloseAttack()
 			// Sound
 			CSoundManager::get().playEvent("GRANDMA_HIT", m_transform->position);
 		}
+		else {
+			// MISS
+			CSoundManager::get().playEvent("GRANDMA_MISS", m_transform->position);
+			attacked = true;
+		}
 	}
 	else
 	{

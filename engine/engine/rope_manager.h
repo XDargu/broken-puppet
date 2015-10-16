@@ -12,6 +12,8 @@ private:
 	std::deque<CHandle> strings;
 	static const int max_strings = 4;
 public:
+	CHandle extra_rope;
+
 	CRope_manager();
 	~CRope_manager();
 	void addString(CHandle string);
@@ -27,6 +29,9 @@ public:
 
 	void removeRopesTiedToObject(CHandle entity);
 	void removeJointTiedToObject(CHandle entity);
+
+	void setExtraString(CHandle string) { extra_rope = string; }
+
 };
 #endif
 

@@ -9570,7 +9570,7 @@
     </colliderMulti>
     <rigidbody density="500.0"  />
   </entity>
-  <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
+  <entity tag = "actor_no_col" collisionTag = "Actor" materialTag = "wood">
     <name name="ascensor_crematorio_cabina" />
     <transform position="17.0053 -23.9978 26.078" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render >
