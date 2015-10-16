@@ -35,7 +35,7 @@ void TCompExplosion::init(){
 }
 
 void TCompExplosion::loadFromAtts(const std::string& elem, MKeyValue &atts) {
-	damage = atts.getFloat("damage", 20);
+	damage = atts.getFloat("damage", 200);
 	radius = atts.getFloat("radius", 6);
 	bomb_active = atts.getBool("active", false);
 	just_boss = atts.getBool("just_boss", false);

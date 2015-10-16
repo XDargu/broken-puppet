@@ -4357,6 +4357,7 @@
   </entity>
   <entity tag = "enemy" prefab="Boss" tagBoss="true">
     <transform position="0.0 0.0 0.0" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>
+    <ragdoll name="boss#1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="scb_trigger_bandas" />

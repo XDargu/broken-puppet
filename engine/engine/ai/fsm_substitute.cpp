@@ -42,6 +42,8 @@ void fsm_substitute::init()
 	AddState("fbp_JustHanged", (statehandler)&fsm_substitute::JustHanged);
 	AddState("fbp_CallingBoss", (statehandler)&fsm_substitute::CallingBoss);
 	AddState("fbp_Hanged", (statehandler)&fsm_substitute::Hanged);	
+	AddState("fbp_JustTied", (statehandler)&fsm_substitute::JustTied);
+	AddState("fbp_TiedLoop", (statehandler)&fsm_substitute::TiedLoop);
 	
 
 	comp_skeleton = ((CEntity*)entity)->get<TCompSkeleton>();
@@ -219,6 +221,26 @@ void fsm_substitute::CallingBoss(){
 	}
 }
 
+void fsm_substitute::JustTied(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
+		// Little Talk animation
+		stopAllAnimations();
+		skeleton->playAnimation(5);
+	}
+	if (state_time >= 3.9){
+		ChangeState("fbp_TiedLoop");
+	}
+}
+
+void fsm_substitute::TiedLoop(){
+	if (on_enter){
+		TCompSkeleton* skeleton = comp_skeleton;
+		stopAllAnimations();
+		loopAnimation(6, true);
+	}
+}
 
 int fsm_substitute::calculateConversation() {
 

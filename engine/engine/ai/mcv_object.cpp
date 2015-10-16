@@ -98,6 +98,16 @@ CMCVObject CMCVObject::firstBombBoss() {
 	return CMCVObject(CHandle());
 }
 
+void CMCVObject::hitSubstitute() {
+	if (!entity.isValid())
+		return;
+	TCompSubstituteBoss* substitute = ((CEntity*)entity)->get<TCompSubstituteBoss>();
+	if (substitute) {
+		substitute->hitSubstitute();
+	}
+}
+
+
 void CMCVObject::initLittleTalk() {
 	if (!entity.isValid())
 		return;

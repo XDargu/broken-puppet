@@ -9001,10 +9001,12 @@
       <paramEnd/>
     </audioSource>
   </entity>
-  <entity   materialTag = "wood" prefab="bomb_sc3">
+  
+  <entity tag="bomb"  materialTag = "wood" prefab="bomb_regular">
     <name name="bomb_placeholder_1145.0" />
     <transform position="19.8581 10.7384 82.3009" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
   </entity>
+  
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="caja_vintage_1146.0" />
     <transform position="16.3441 17.1089 104.821" rotation="0.0 0.0 0.996241 -0.0866298" scale="1.0 1.0 1.0"/>

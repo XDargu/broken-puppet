@@ -22,6 +22,7 @@ public:
 	void onRopeTensed(const TMsgRopeTensed& msg);
 
 	void initLittleTalk();
+	void hitSubstitute();
 };
 
 

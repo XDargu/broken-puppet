@@ -1094,7 +1094,10 @@ function onBossRopeThrow()
 			if bossRopeTimesThrowed == 0 then						
 				bossRopeTimesThrowed = 1
 				-- debemos llamar a una funcion que apunte al techo
-			
+				
+				-- obtenemos a la sustitute
+				local mSubstitute = logicManager:getObject("Substitute");		
+				mSubstitute:hitSubstitute();
 				logicManager:setTimer("wait_for_lanch", 1)		
 				logicManager:setCanThrow(false)
 			end
