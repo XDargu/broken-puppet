@@ -42,7 +42,7 @@ public:
 	void Hanged(float elapsed);
 
 
-	void JustTied();
+	void JustTied(float elapsed);
 	void TiedLoop();
 };
 

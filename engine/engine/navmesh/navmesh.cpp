@@ -430,6 +430,9 @@ void CNavmesh::buildAllTiles()
 	m_ctx->stopTimer(RC_TIMER_TEMP);
 
 	m_totalBuildTimeMs = m_ctx->getAccumulatedTime(RC_TIMER_TEMP) / 1000.0f;
+
+	delete[] input_bmin;
+	delete[] input_bmax;
 }
 
 unsigned char* CNavmesh::buildTileMesh(const int tx, const int ty, const float* bmin, const float* bmax, int& dataSize)
