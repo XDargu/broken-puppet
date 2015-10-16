@@ -1,6 +1,6 @@
 <scene>
   <entity tag = "player" prefab="Player">
-    <transform position="-4.9951 0.198482 19.599" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="-4.9951 0.38482 19.599" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <ragdoll name="prota"/>
   </entity>
   <entity  prefab="PlayerPivot">
