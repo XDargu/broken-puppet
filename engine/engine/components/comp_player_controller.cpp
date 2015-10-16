@@ -356,10 +356,12 @@ void TCompPlayerController::update(float elapsed) {
 
 		float base_step = 0.5f;
 		float time_modifier = (running_value ? 0.75f : 1) * (1 / water_multiplier);
+		float deepness = water_level - XMVectorGetY(trans->position);
 
 		if (footstep_counter >= base_step * time_modifier) {
 			CSoundManager::SoundParameter params[] = {
-				{ "Material", surface_value }
+				{ "Material", surface_value },
+				{ "Deepness", deepness }
 			};
 
 			CSoundManager::get().playEvent("STEPS_KATH", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), trans->position);

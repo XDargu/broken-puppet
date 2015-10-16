@@ -204,14 +204,30 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	}
 
 	if (kinematic) { return; }
+	
+	// Underwater
+	bool now_underwater = false;
+	float water_level = CApp::get().water_level;
+
+	if (rigidBody->getGlobalPose().p.y < water_level) {
+		now_underwater = true;			
+	}
+
+	// Particles
+	if (now_underwater != underwater) {
+		CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
+	}
+
+	// Sounds
+	if (now_underwater && !underwater) {
+		CSoundManager::get().playEvent("WATER_SPLASH", trans->position);
+	}
+
 	if (!e->hasTag("player") && (boss_level > 3)) {
-		bool now_underwater = false;
-		float water_level = CApp::get().water_level;
+		// Apply forces
 		float atten = 0.2f;
 		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
-
-		if (rigidBody->getGlobalPose().p.y < water_level) {
-			now_underwater = true;
+		if (now_underwater) {
 			float volume = rigidBody->getMass() / density;
 			float water_density = 500;
 
@@ -222,14 +238,10 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 		else {
 			rigidBody->setLinearDamping(0.05f);
 			rigidBody->setAngularDamping(0.05f);
-		}
-
-		if (now_underwater != underwater) {
-			CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
-		}
-
-		underwater = now_underwater;
+		}		
 	}
+
+	underwater = now_underwater;
 
 }
 
