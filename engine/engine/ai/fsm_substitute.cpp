@@ -115,7 +115,7 @@ void fsm_substitute::LittleTalk(float elapsed){
 		CSoundManager::get().playEvent("SUBS_SPEECH", sound_pos);
 		CLogicManager::get().playSubtitles("SUBS_SPEECH");
 	}
-	if (state_time >= 29.15f){	
+	if (state_time >= 29.167f){
 		ChangeState("fbp_Idle");
 	}		
 }
@@ -127,7 +127,7 @@ void fsm_substitute::LoopTalk8(){
 
 		// Little Talk animation
 		stopAllAnimations();
-		skeleton->playAnimation(3);
+		loopAnimation(3, true);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
 
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
@@ -150,7 +150,7 @@ void fsm_substitute::LoopTalk9(){
 
 		// Little Talk animation
 		stopAllAnimations();
-		skeleton->playAnimation(4);
+		loopAnimation(4, true);
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
 
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
@@ -221,13 +221,14 @@ void fsm_substitute::CallingBoss(){
 	}
 }
 
-void fsm_substitute::JustTied(){
+void fsm_substitute::JustTied(float elapsed){
 	if (on_enter){
 		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
 		TCompSkeleton* skeleton = comp_skeleton;
 		// Tied Talk animation
 		stopAllAnimations();
 		skeleton->playAnimation(5);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
 
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
 		if (trans)
@@ -235,7 +236,7 @@ void fsm_substitute::JustTied(){
 		CSoundManager::get().playEvent("SUBS_ROPE_THROWN", sound_pos);
 		CLogicManager::get().playSubtitles("SUBS_ROPE_THROWN");
 	}
-	if (state_time >= 3.9){
+	if (state_time + elapsed >= 3.99){
 		ChangeState("fbp_TiedLoop");
 	}
 }
