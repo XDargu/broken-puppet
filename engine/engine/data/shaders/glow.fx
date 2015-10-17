@@ -66,7 +66,7 @@ float4 PSGlowLights(VS_TEXTURED_OUTPUT input) : SV_Target
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV);
 	float luminance = txAccLight.SampleLevel(samClampLinear, input.UV, 3).x;
 	return color * (luminance - 1);
-	if (luminance > 3) {
+	if (luminance > 2) {
 		return color;
 	}
 	else {
@@ -86,17 +86,17 @@ float4 PSGlow(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_
   // Blur the glow image
   float4 luminance = float4(0, 0, 0, 0);
 
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * -1) * 6) * (1. / 16.);
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * 0)  * 6) * (1. / 8.);
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * 1)  * 6) * (1. / 16.);
-																											  
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * -1)  * 6) * (1. / 8.);
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * 0)   * 6) * (1. / 4.);
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * 1)   * 6) * (1. / 8.);
-																											  
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * -1)  * 6) * (1. / 16.);
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * 0)   * 6) * (1. / 8.);
-  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * 1)   * 6) * (1. / 16.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * -1) * 8) * (1. / 16.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * 0)  * 8) * (1. / 8.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * -1, glow_delta.y * 1)  * 8) * (1. / 16.);
+																											
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * -1)  * 8) * (1. / 8.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * 0)   * 8) * (1. / 4.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 0, glow_delta.y * 1)   * 8) * (1. / 8.);
+																											
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * -1)  * 8) * (1. / 16.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * 0)   * 8) * (1. / 8.);
+  luminance += txLuminance.Sample(samClampLinear, input.UV + float2(glow_delta.x * 1, glow_delta.y * 1)   * 8) * (1. / 16.);
 
   // Old loop
   /*

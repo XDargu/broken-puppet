@@ -302,7 +302,7 @@ void PSGBuffer(
   acc_light *= added_ambient_color;
   
   float4 emis = txEmissive.Sample(samWrapLinear, input.UV);
-  acc_light += float4(emis.xyz * 5, 0);
+  acc_light += float4(emis.xyz * 3, 0);
   
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);

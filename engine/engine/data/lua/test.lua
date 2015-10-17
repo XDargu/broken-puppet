@@ -658,7 +658,7 @@ bossSecuence = false;
 		print(tostring(who) .. " ha dejado en el trigger de desag");
 	
 		if who == "tapa_desague_puzle" then
-			if water_level_down == true then
+			if water_level_down == false then
 				logicManager:changeWaterLevel(-3.3, 0.25);
 				logicManager:setTimer("sc3_timer_kath_dialog", 5)
 

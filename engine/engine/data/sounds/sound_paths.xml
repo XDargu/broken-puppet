@@ -79,7 +79,7 @@
   <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" />
 
 
-<!-- Collisions -->
+  <!-- Collisions -->
   <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
   <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
   <event id="HIT_RATTLE" path="event:/Colisiones/Colision Cascabel" />

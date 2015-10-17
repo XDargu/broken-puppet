@@ -8695,16 +8695,6 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="caja_vintage_1094.0" />
-    <transform position="18.2367 13.0918 100.702" rotation="-0.169658 -0.304144 0.0840541 0.933621" scale="1.0 1.0 1.0"/>
-    <render  color = "0.45098 0.45098 0.45098">
-      <draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>
-    </render>
-    <aabb min="-1.04616 -0.554932 -0.602041" max="1.04616 0.554932 0.602041"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.04616" boxY="0.554932" boxZ="0.602041"/>
-    <rigidbody density="125.175"  />
-  </entity>
-  <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="caja_vintage_1095.0" />
     <transform position="21.2588 15.2026 105.205" rotation="0.0381688 0.0381688 0.706076 0.706076" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>
@@ -8714,87 +8704,87 @@
     <rigidbody density="125.175"  />
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni001_1096.0" />
+    <name name="lampara_mesita_omni001_1095.0" />
     <transform position="8.21762 10.4324 17.9889" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni002_1097.0" />
+    <name name="lampara_mesita_omni002_1096.0" />
     <transform position="8.21762 11.7037 10.0323" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni003_1098.0" />
+    <name name="lampara_mesita_omni003_1097.0" />
     <transform position="0.416708 17.0287 5.91882" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="4.29" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni004_1099.0" />
+    <name name="lampara_mesita_omni004_1098.0" />
     <transform position="-4.52986 16.3423 3.28086" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.3891" intensity="1.0" color="0.905882 0.717647 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni005_1100.0" />
+    <name name="lampara_mesita_omni005_1099.0" />
     <transform position="-8.27898 13.7979 8.90455" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.3891" intensity="1.0" color="0.905882 0.631373 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni006_1101.0" />
+    <name name="lampara_mesita_omni006_1100.0" />
     <transform position="4.85374 16.181 22.4092" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.3891" intensity="1.0" color="0.905882 0.631373 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni007_1102.0" />
+    <name name="lampara_mesita_omni007_1101.0" />
     <transform position="4.85374 16.4687 12.9974" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="4.11911" intensity="2.0" color="0.117647 0.658824 0.423529 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni008_1103.0" />
+    <name name="lampara_mesita_omni008_1102.0" />
     <transform position="4.40594 14.3713 53.8643" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.3891" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Omni018_1104.0" />
+    <name name="Omni018_1103.0" />
     <transform position="-2.46103 11.4186 106.743" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.39389" intensity="1.2" color="0.258824 0.854902 0.509804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni009_1105.0" />
+    <name name="lampara_mesita_omni009_1104.0" />
     <transform position="-5.04112 8.04465 20.974" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.33848" intensity="1.0" color="0.905882 0.631373 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni010_1106.0" />
+    <name name="lampara_mesita_omni010_1105.0" />
     <transform position="4.9935 14.3713 88.7263" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="5.93093" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni011_1107.0" />
+    <name name="lampara_mesita_omni011_1106.0" />
     <transform position="-3.76841 14.1646 84.5214" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="5.93093" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni012_1108.0" />
+    <name name="lampara_mesita_omni012_1107.0" />
     <transform position="17.7958 7.0037 107.272" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.96546" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni013_1109.0" />
+    <name name="lampara_mesita_omni013_1108.0" />
     <transform position="5.93727 5.073 107.304" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.96546" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni014_1110.0" />
+    <name name="lampara_mesita_omni014_1109.0" />
     <transform position="-8.92985 3.30347 111.509" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.96546" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni015_1111.0" />
+    <name name="lampara_mesita_omni015_1110.0" />
     <transform position="5.81927 5.17219 124.925" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.96546" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="lampara_steam_verde_S_1112.0" />
+    <name name="lampara_steam_verde_S_1111.0" />
     <transform position="18.1556 16.4558 85.9874" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.721569 0.607843 0.898039">
       <draw mesh="lampara_steam_verde_S" sub_mesh="0" mat="lampara_steam_verde_01"/>
@@ -8807,12 +8797,12 @@
     <staticbody/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_steam_verde_omni_1113.0" />
-    <transform position="18.0246 12.2613 86.0369" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_1112.0"/>
+    <name name="lampara_steam_verde_omni_1112.0" />
+    <transform position="18.0246 12.2613 86.0369" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_1111.0"/>
     <pointLight radius="4.0" intensity="1.0" color="0.309804 0.737255 0.729412 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="lampara_steam_verde_S_1115.0" />
+    <name name="lampara_steam_verde_S_1114.0" />
     <transform position="17.9855 18.1293 94.7375" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.721569 0.607843 0.898039">
       <draw mesh="lampara_steam_verde_S" sub_mesh="0" mat="lampara_steam_verde_01"/>
@@ -8825,37 +8815,37 @@
     <staticbody/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_steam_verde_omni_1116.0" />
-    <transform position="17.8545 13.9348 94.7871" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_1115.0"/>
+    <name name="lampara_steam_verde_omni_1115.0" />
+    <transform position="17.8545 13.9348 94.7871" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_1114.0"/>
     <pointLight radius="4.0" intensity="1.0" color="0.309804 0.737255 0.729412 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni016_1118.0" />
+    <name name="lampara_mesita_omni016_1117.0" />
     <transform position="3.62545 9.21459 108.907" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.68697" intensity="1.0" color="0.960784 0.262745 0.278431 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni017_1119.0" />
+    <name name="lampara_mesita_omni017_1118.0" />
     <transform position="8.03736 11.3946 5.96738" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.66924" intensity="1.0" color="0.921569 0.905882 0.435294 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni018_1120.0" />
+    <name name="lampara_mesita_omni018_1119.0" />
     <transform position="7.22463 11.6242 0.804845" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.66924" intensity="1.0" color="0.921569 0.905882 0.435294 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni019_1121.0" />
+    <name name="lampara_mesita_omni019_1120.0" />
     <transform position="2.02705 11.6242 0.408232" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.66924" intensity="1.0" color="0.921569 0.905882 0.435294 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni020_1122.0" />
+    <name name="lampara_mesita_omni020_1121.0" />
     <transform position="-2.01369 11.6242 -0.0267493" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.66924" intensity="1.0" color="0.921569 0.905882 0.435294 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="px_spark_Sc03_001_1123.0" />
+    <name name="px_spark_Sc03_001_1122.0" />
     <transform position="9.2448 12.9926 83.9741" rotation="-0.36195 0.583759 0.720303 0.0968537" scale="1.0 1.0 1.0"/>
     <particleGroup name="ps_sparks" />
     <audioSource sound="SPARKS1" autoplay="true" >
@@ -8863,152 +8853,150 @@
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="steam_Sc03_0024_1124.0" />
+    <name name="steam_Sc03_0024_1123.0" />
     <transform position="8.99487 9.72446 75.0" rotation="-0.110592 -0.698405 -0.110592 0.698405" scale="1.0 1.0 1.0"/>
     <particleGroup name="ps_steam_jet" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="steam_Sc03_026_1125.0" />
+    <name name="steam_Sc03_026_1124.0" />
     <transform position="9.56005 11.7425 75.6134" rotation="-0.379325 0.0704766 -0.0827353 0.918858" scale="1.0 1.0 1.0"/>
     <particleGroup name="ps_steam_jet" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="steam_Sc03_027_1126.0" />
+    <name name="steam_Sc03_027_1125.0" />
     <transform position="9.67009 9.99759 73.045" rotation="0.40976 0.739781 0.363122 -0.391106" scale="1.0 1.0 1.0"/>
     <particleGroup name="ps_steam_jet" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="chim_Sc03_024_1127.0" />
+    <name name="chim_Sc03_024_1126.0" />
     <transform position="8.11072 10.2175 72.6339" rotation="-0.710533 -0.00557863 0.00552436 0.70362" scale="1.0 1.0 1.0"/>
     <particleGroup name="ps_smoke_chim_02" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas_1128.0" />
+    <name name="audio_calderas_1127.0" />
     <transform position="1.78055 11.759 21.243" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas001_1129.0" />
+    <name name="audio_calderas001_1128.0" />
     <transform position="-9.31378 15.1608 14.5066" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas002_1130.0" />
+    <name name="audio_calderas002_1129.0" />
     <transform position="-9.31378 12.0643 2.79122" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas003_1131.0" />
+    <name name="audio_calderas003_1130.0" />
     <transform position="-2.62535 6.77106 9.19936" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas004_1132.0" />
+    <name name="audio_calderas004_1131.0" />
     <transform position="9.29767 9.02954 73.0473" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas005_1133.0" />
+    <name name="audio_calderas005_1132.0" />
     <transform position="-18.2846 12.2522 107.423" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas006_1134.0" />
+    <name name="audio_calderas006_1133.0" />
     <transform position="-2.23283 8.33676 21.243" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_calderas007_1135.0" />
+    <name name="audio_calderas007_1134.0" />
     <transform position="5.69427 14.2306 19.4567" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="BOILER" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes_1136.0" />
+    <name name="audio_waer_pipes_1135.0" />
     <transform position="0.944772 8.93612 21.243" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes001_1137.0" />
+    <name name="audio_waer_pipes001_1136.0" />
     <transform position="-9.04299 7.41171 3.96665" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes002_1138.0" />
+    <name name="audio_waer_pipes002_1137.0" />
     <transform position="9.51953 8.57248 71.1121" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes003_1139.0" />
+    <name name="audio_waer_pipes003_1138.0" />
     <transform position="8.48657 9.681 77.3697" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes004_1140.0" />
+    <name name="audio_waer_pipes004_1139.0" />
     <transform position="5.62066 2.87607 93.7106" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes005_1141.0" />
+    <name name="audio_waer_pipes005_1140.0" />
     <transform position="-8.44717 -0.338061 92.2072" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes006_1142.0" />
+    <name name="audio_waer_pipes006_1141.0" />
     <transform position="-4.56753 -0.338061 86.077" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes007_1143.0" />
+    <name name="audio_waer_pipes007_1142.0" />
     <transform position="18.0904 9.39082 116.349" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
   <entity   materialTag = "wood">
-    <name name="audio_waer_pipes008_1144.0" />
+    <name name="audio_waer_pipes008_1143.0" />
     <transform position="-7.47669 5.78853 108.495" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <audioSource sound="WATERPIPES" autoplay="true" >
       <paramEnd/>
     </audioSource>
   </entity>
-  
   <entity tag="bomb"  materialTag = "wood" prefab="bomb_regular">
     <name name="bomb_placeholder_1145.0" />
     <transform position="19.8581 10.7384 82.3009" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
   </entity>
-  
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="caja_vintage_1146.0" />
+    <name name="caja_vintage_1145.0" />
     <transform position="16.3441 17.1089 104.821" rotation="0.0 0.0 0.996241 -0.0866298" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>
@@ -9018,7 +9006,7 @@
     <rigidbody density="214.585"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="caja_vintage_1147.0" />
+    <name name="caja_vintage_1146.0" />
     <transform position="19.9195 16.0492 104.844" rotation="0.0 0.719486 0.0 0.694507" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>

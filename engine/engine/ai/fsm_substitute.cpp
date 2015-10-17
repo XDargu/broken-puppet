@@ -116,6 +116,11 @@ void fsm_substitute::LittleTalk(float elapsed){
 		CLogicManager::get().playSubtitles("SUBS_SPEECH");
 	}
 	if (state_time >= 29.167f){
+		stopAnimation(0);
+		loopAnimation(1, true);
+		TCompSkeleton* skeleton = comp_skeleton;
+		if (skeleton)
+			skeleton->setFollowAnimation(false);
 		ChangeState("fbp_Idle");
 	}		
 }

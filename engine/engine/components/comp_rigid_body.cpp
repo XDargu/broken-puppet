@@ -222,7 +222,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	if (now_underwater && !underwater) {
 		CSoundManager::get().playEvent("WATER_SPLASH", trans->position);
 	}
-
+	
 	if (!e->hasTag("player") && (boss_level > 3)) {
 		// Apply forces
 		float atten = 0.2f;
