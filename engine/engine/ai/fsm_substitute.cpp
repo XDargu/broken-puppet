@@ -187,7 +187,8 @@ void fsm_substitute::Hanged(float elapsed){
 	}
 
 	last_loop_delay += elapsed;
-	if (last_loop_delay > 6){
+
+	if (last_loop_delay > 12){
 		last_loop_delay = 0;
 
 		// Taking sound position

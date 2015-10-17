@@ -208,12 +208,6 @@ void TCompExplosion::Explote(bool force_explosion){
 		CSoundManager::get().playEvent("BOMB_EXPLOSION", m_pos);
 
 		// Adding particle sistem
-		CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_explosion_bomb_big", m_pos, m_rot);
-
-		if (particle_entity.isValid()) {
-			TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-			pg->destroy_on_death = true;
-			//pg->restart();
-		}
+		CLogicManager::get().instantiateParticleGroupOneShot("ps_explosion_bomb_big", m_pos, m_rot);
 	}	
 }

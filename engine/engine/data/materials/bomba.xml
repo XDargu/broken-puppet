@@ -1,1 +1,1 @@
-<std_material name="bomba" diffuse="gramola_albedo" normal="gramola_normal" specular="" glossiness="gramola_gloss" emissive="" emissive_off="" />
+<std_material name="bomba" diffuse="bomba_diffuse" normal="bomba_normal" specular="bomba_specular" glossiness="bomba_gloss" emissive="bomba_emissive" emissive_off="" />
