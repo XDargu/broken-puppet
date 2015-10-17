@@ -211,12 +211,7 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 
 	if (rigidBody->getGlobalPose().p.y < water_level) {
 		now_underwater = true;			
-	}
-
-	// Particles
-	if (now_underwater != underwater) {
-		CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
-	}
+	}	
 
 	// Sounds
 	if (now_underwater && !underwater) {
@@ -224,6 +219,11 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	}
 	
 	if (!e->hasTag("player") && (boss_level > 3)) {
+		// Particles
+		if (now_underwater != underwater) {
+			CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
+		}
+
 		// Apply forces
 		float atten = 0.2f;
 		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
