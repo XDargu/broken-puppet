@@ -249,23 +249,12 @@ void PSGBuffer(
   float3 normal_tangent_space = normalize(txNormal.Sample(samWrapLinear, input.UV).xyz * 2 - 1.);
   float3 wnormal_per_pixel = mul(normal_tangent_space, TBN);
 
-   //wnormal_per_pixel = in_tangent;
-
   // Save the normal
-
   bool test = length(in_tangent) < 2;
   //test = true;
   float3 m_norm = test ? wnormal_per_pixel : in_normal;
   normal = (float4(m_norm, 1) + 1.) * 0.5;
   
-  // Basic diffuse lighting
-  float3 L = LightWorldPos.xyz - input.wPos.xyz;
-  L = normalize(L);
-  float3 N = normalize(wnormal_per_pixel);
-  float  diffuse_amount = saturate(dot(N, L));
-  
-  float  diffuse_amount2 = saturate(dot(in_normal, L));
-
   depth.x = dot(input.wPos - cameraWorldPos, cameraWorldFront) / cameraZFar;
   depth.y = t_type.x;
 	if (t_type.x == 0.95 || t_type.x == 0.9) {
@@ -286,12 +275,6 @@ void PSGBuffer(
 		  }		  
 	  }
   }
-  //depth = dot(input.wPos.xyz - cameraWorldPos.xyz, cameraWorldFront.xyz) / cameraZFar;
-
-  // 
-  //acc_light = getShadowAt(input.wPos);
-
-  
 	  
   //if (true)
   if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y || use_lightmaps == 0)
@@ -306,6 +289,36 @@ void PSGBuffer(
   
   //acc_light *= diffuse_amount2;
   //albedo *= (0.2 + acc_light * 0.8);
+
+  /*float SUB_TEXTURE_SIZE = 2048.0;
+  float SUB_TEXTURE_MIPCOUNT = 10;
+
+  float2 dx = ddx(input.UV * SUB_TEXTURE_SIZE);
+  float2 dy = ddy(input.UV * SUB_TEXTURE_SIZE);
+  float d = max(dot(dx, dx), dot(dy, dy));
+
+  // Clamp the value to the max mip level counts
+  const float rangeClamp = pow(2, (SUB_TEXTURE_MIPCOUNT - 1) * 2);
+  d = clamp(d, 1.0, rangeClamp);
+
+  float mipLevel = 0.5 * log2(d);
+  mipLevel = floor(mipLevel);
+
+  if (mipLevel == 0)
+	albedo = float4(1, 0, 0, 0);
+  if (mipLevel == 1)
+	  albedo = float4(1, 0, 0, 0);
+  if (mipLevel == 2)
+	  albedo = float4(1, 1, 0, 0);
+  if (mipLevel == 3)
+	  albedo = float4(0, 1, 0, 0);
+  if (mipLevel == 4)
+	  albedo = float4(0, 1, 1, 0);
+  if (mipLevel == 5)
+	  albedo = float4(0, 0, 1, 0);
+  if (mipLevel > 5)
+	  albedo = float4(1, 1, 1, 0);*/
+
 }
 
 float3 getWorldCoords( float2 screen_coords, float depth ) {
