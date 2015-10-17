@@ -264,6 +264,29 @@ void TCompAiBoss::init(){
 			
 	}		
 
+	/***********************************************************
+	***************** Creating the broken floor ****************
+	************************************************************/
+
+	// Make the floor disapear
+	CHandle floor = CEntityManager::get().getByName("tapa_hueco_boss");
+	if (floor.isValid()){
+		TCompTransform* floor_trans = ((CEntity*)floor)->get<TCompTransform>();
+		CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota");
+		if (broken_floor.isValid() && (floor_trans)){
+			TCompTransform* broken_floor_trans = ((CEntity*)broken_floor)->get<TCompTransform>();
+
+			if (broken_floor_trans){
+				broken_floor_trans->setType(0);
+				broken_floor_trans->position = floor_trans->position;
+
+				TCompRender* floor_broken_render = ((CEntity*)broken_floor)->get<TCompRender>();
+				if (floor_broken_render)
+					floor_broken_render->active = false;
+			}
+		}
+	}
+
 }
 
 void TCompAiBoss::update(float elapsed){
@@ -613,6 +636,9 @@ bool TCompAiBoss::safeRain(float elapsed,int debris_amount){
 			TCompTransform* enemy_comp_trans = ((CEntity*)mBoss)->get<TCompTransform>();
 
 			XMVECTOR aux_boss_pos = enemy_comp_trans->position;
+			
+			int rnd_angle = getRandomNumber(1, 360);
+			XMVECTOR random_rotation = XMQuaternionRotationRollPitchYaw(rnd_angle, rnd_angle, rnd_angle);
 		
 			XMVECTOR create_position;
 			XMVECTOR random_point = getRandomVector3(
@@ -661,6 +687,14 @@ bool TCompAiBoss::safeRain(float elapsed,int debris_amount){
 						prefab_t->teleport(create_position);
 					}
 
+					TCompRigidBody* prefab_rb = prefab_entity->get<TCompRigidBody>();
+					if (prefab_rb){
+						prefab_rb->init();
+						PxTransform rigid_pose = prefab_rb->rigidBody->getGlobalPose();
+						rigid_pose.q = Physics.XMVECTORToPxQuat(random_rotation);
+						prefab_rb->rigidBody->setGlobalPose(rigid_pose);
+					}
+
 					debris_created++;
 				}
 			}
@@ -683,6 +717,10 @@ CHandle TCompAiBoss::objToStun(){
 		TCompRigidBody* first_bomb_rigid = ((CEntity*)first_bomb)->get<TCompRigidBody>();
 		TCompExplosion* first_bomb_exp = ((CEntity*)first_bomb)->get<TCompExplosion>();
 		TCompTransform* boss_trans = ((CEntity*)mBoss)->get<TCompTransform>();
+
+		// Calculate random rotation
+		int rnd_angle = getRandomNumber(1, 360);
+		XMVECTOR random_rotation = XMQuaternionRotationRollPitchYaw(rnd_angle, rnd_angle, rnd_angle);
 		
 		XMVECTOR boss_front = XMVectorSet(0, 0, 1, 0);
 		if (boss_trans)
@@ -698,6 +736,7 @@ CHandle TCompAiBoss::objToStun(){
 				PxTransform aux_bomb_pose = first_bomb_rigid->rigidBody->getGlobalPose();
 				aux_bomb_pose.p = Physics.XMVECTORToPxVec3(XMVectorSetY(aux_boss_trans->position + boss_front 
 					, (XMVectorGetY(aux_boss_trans->position) + 50)));
+				aux_bomb_pose.q = Physics.XMVECTORToPxQuat(random_rotation);
 				first_bomb_rigid->rigidBody->setGlobalPose(aux_bomb_pose);
 			}
 		}

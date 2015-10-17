@@ -242,7 +242,6 @@ void fsm_boss::RiseUp(){
 		// Move to the initial position
 		trans->position = original_pos;
 		
-		/**/
 		CHandle puente = CEntityManager::get().getByName("pasarela_boss");
 		if (puente.isValid()){
 			TCompTransform* puente_trans = ((CEntity*)puente)->get<TCompTransform>();
@@ -251,34 +250,17 @@ void fsm_boss::RiseUp(){
 			}
 		}
 		
-
-		/**/
 	}
 
 	if ((state_time >= 6.79f) && (!boss_out)){
 		boss_out = true;
 		// Make the floor disapear
-		CHandle floor = m_entity_manager->getByName("tapa_hueco_boss");
-		if (floor.isValid()){
-			TCompTransform* floor_trans = ((CEntity*)floor)->get<TCompTransform>();
+		CHandle floor_broken = m_entity_manager->getByName("tapa_boss_rota");
+		if (floor_broken.isValid()){
 
-			// Generate the broken floor prefab
-			CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota");
-			//CHandle broken_floor = prefabs_manager.getInstanceByName("boss/tapa_boss_rota_2");
-			/**/
-			if (broken_floor.isValid() && (floor_trans)){
-				TCompTransform* broken_floor_trans = ((CEntity*)broken_floor)->get<TCompTransform>();
-
-				if (broken_floor_trans){
-					broken_floor_trans->setType(0);
-					broken_floor_trans->position = floor_trans->position;
-
-					TCompRender* floor_render = ((CEntity*)floor)->get<TCompRender>();
-					if (floor_render)
-						floor_render->active = false;
-				}
-			}
-			/**/
+			TCompRender* floor_broken_render = ((CEntity*)floor_broken)->get<TCompRender>();
+			if (floor_broken_render)
+				floor_broken_render->active = true;
 		}
 	}
 
@@ -1452,6 +1434,9 @@ bool fsm_boss::RainDebris(float elapsed){
 
 			XMVECTOR aux_boss_pos = enemy_comp_trans->position;
 
+			int rnd_angle = getRandomNumber(1, 360);
+			XMVECTOR random_rotation = XMQuaternionRotationRollPitchYaw(rnd_angle, rnd_angle, rnd_angle);
+
 			XMVECTOR create_position;
 			XMVECTOR random_point = getRandomVector3(
 				XMVectorGetX(aux_boss_pos) - 17
@@ -1500,7 +1485,15 @@ bool fsm_boss::RainDebris(float elapsed){
 			if (prefab_t){
 				prefab_t->init();
 				prefab_t->teleport(create_position);
-			}				
+			}			
+
+			TCompRigidBody* prefab_rb = prefab_entity->get<TCompRigidBody>();
+			if (prefab_rb){
+				prefab_rb->init();
+				PxTransform rigid_pose = prefab_rb->rigidBody->getGlobalPose();
+				rigid_pose.q = Physics.XMVECTORToPxQuat(random_rotation);				
+				prefab_rb->rigidBody->setGlobalPose(rigid_pose);
+			}
 
 			TCompParticleGroup* prefab_pg = prefab_entity->get<TCompParticleGroup>();
 			if (prefab_pg)
@@ -1617,19 +1610,8 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 		if ((r_hand_change) && (r_hand_pos_y < XMVectorGetY(r_hand_pos)))
 		{
 			// Adding particle sistem
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_punch", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
+			CLogicManager::get().instantiateParticleGroupOneShot("ps_boss_punch", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
 
-			if (particle_entity.isValid()) {
-				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-				if (pg){
-					pg->destroy_on_death = true;
-					if (pg->particle_systems->size() > 0)
-					{
-						(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
-						(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
-					}
-				}				
-			}
 			/**/
 		}
 		// 
@@ -1648,19 +1630,7 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 		if ((l_hand_change) && (l_hand_pos_y < XMVectorGetY(l_hand_pos)))
 		{
 			// Adding particle sistem
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroup("ps_boss_punch", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
-
-			if (particle_entity.isValid()) {
-				TCompParticleGroup* pg = ((CEntity*)particle_entity)->get<TCompParticleGroup>();
-				if (pg){
-					pg->destroy_on_death = true;
-					if (pg->particle_systems->size() > 0)
-					{
-						(*pg->particle_systems)[0].emitter_generation->inner_radius = 1.f;
-						(*pg->particle_systems)[0].emitter_generation->radius = 3.f;
-					}
-				}				
-			}
+			CLogicManager::get().instantiateParticleGroupOneShot("ps_boss_punch", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
 			/**/
 		}
 		// 
@@ -1703,13 +1673,28 @@ void fsm_boss::rainJustBombs(){
 	aux_positions.push_back(XMVectorSet(XMVectorGetX(aux_boss_pos) + 15, XMVectorGetY(aux_boss_pos) + 60, XMVectorGetZ(aux_boss_pos) - 15, 0));
 	aux_positions.push_back(XMVectorSet(XMVectorGetX(aux_boss_pos) - 15, XMVectorGetY(aux_boss_pos) + 60, XMVectorGetZ(aux_boss_pos) - 15, 0));
 
+
+
 	for (int i = 0; i < aux_positions.size(); i++){
+
+		// Calculate random rotation
+		int rnd_angle = getRandomNumber(1, 360);
+		XMVECTOR random_rotation = XMQuaternionRotationRollPitchYaw(rnd_angle, rnd_angle, rnd_angle);
+
 		CEntity* prefab_entity = prefabs_manager.getInstanceByName("boss/bomb");
 
 		TCompTransform* prefab_t = prefab_entity->get<TCompTransform>();
 		if (prefab_t){
 			prefab_t->init();
 			prefab_t->teleport(aux_positions[i]);
+		}
+
+		TCompRigidBody* prefab_rb = prefab_entity->get<TCompRigidBody>();
+		if (prefab_rb){
+			prefab_rb->init();
+			PxTransform rigid_pose = prefab_rb->rigidBody->getGlobalPose();
+			rigid_pose.q = Physics.XMVECTORToPxQuat(random_rotation);
+			prefab_rb->rigidBody->setGlobalPose(rigid_pose);
 		}
 
 		TCompParticleGroup* prefab_pg = prefab_entity->get<TCompParticleGroup>();
