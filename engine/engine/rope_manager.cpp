@@ -93,10 +93,10 @@ void CRope_manager::removeString(CHandle rope){
 
 void CRope_manager::clearStrings(){
 	if (!strings.empty()){
-		strings.clear();
-		for (int i = 0; i < CEntityManager::get().getEntities().size(); ++i)
+		
+		for (auto string : strings)
 		{
-			TCompRope* rope = ((CEntity*)CEntityManager::get().getEntities()[i])->get<TCompRope>();
+			TCompRope* rope = string;
 			if (rope) {
 				TCompRope* m_rope = rope;
 				
@@ -119,6 +119,8 @@ void CRope_manager::clearStrings(){
 				//CSoundManager::get().playEvent("event:/Strings/stringEvents", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
 			}
 		}
+
+		strings.clear();
 	}
 }
 

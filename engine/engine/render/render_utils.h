@@ -121,6 +121,7 @@ extern  CShaderCte<TCtesGlobal> ctes_global;
 extern	CShaderCte<TCtesBlur> ctes_blur;
 extern	CShaderCte<TCtesBlurCamera> ctes_blur_camera;
 extern	CShaderCte<TCtesSharpen> ctes_sharpen;
+extern	CShaderCte<TCtesFog> ctes_fog;
 extern	CShaderCte<TCtesSSAO> ctes_ssao;
 extern  CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 extern  CShaderCte<TCtesGlow> ctes_glow;

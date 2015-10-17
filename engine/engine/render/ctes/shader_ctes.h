@@ -156,4 +156,14 @@ cbuffer TCtesSSRR SHADER_REGISTER(b3)
 	float dummy_ssrr, dummy_ssrr2;
 };
 
+cbuffer TCtesFog SHADER_REGISTER(b3)
+{
+	float4 fog_color;
+	float4 fog_delta;
+	float fog_amount;
+	float fog_level;
+	float fog_distance;
+	float dummy_fog3;
+};
+
 #endif

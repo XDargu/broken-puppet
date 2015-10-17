@@ -77,6 +77,17 @@
   <event id="BOMB_EXPLOSION" path="event:/Impactos/bomb_exposion" />
   <event id="BOSS_RISE_UP" path="event:/Ambiente/boss_rise_up" />
   <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" />
+  <event id="BOSS_STUN" path="event:/Ambiente/boss_stun" />
+  <event id="RECOVER" path="event:/Ambiente/boss_stun_ends" />
+  <event id="BOSS_DAMAGE" path="event:/Ambiente/boss_damage" />
+  <event id="BOSS_HEART" path="event:/Ambiente/boss_heart" />
+  <event id="BOSS_BALL_CREATE" path="event:/Ambiente/boss_ball_create" />
+  <event id="BOSS_BALL_THROW" path="event:/Ambiente/boss_ball_throw" />
+  <event id="BOSS_WAVE" path="event:/Ambiente/boss_wave" />
+  <event id="BOSS_KILLED" path="event:/Ambiente/boss_heart_killed" />
+  <event id="BOSS_SHOT" path="event:/Ambiente/boss_shot" />
+  <event id="BOSS_RAIN" path="event:/Ambiente/boss_rain" />
+  <event id="BOSS_THROW" path="event:/Ambiente/boss_throw" />
 
 
   <!-- Collisions -->

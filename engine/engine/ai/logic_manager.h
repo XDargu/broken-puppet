@@ -192,6 +192,7 @@ public:
 
 	// EFFECTS
 	void setBand(bool bands);
+	void setFogAttributes(float distance, float level);
 
 	// SUBTITLES
 	void playSubtitles(std::string guid);

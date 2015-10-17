@@ -346,6 +346,7 @@
     <ClInclude Include="render\ctes\shader_platform.h" />
     <ClInclude Include="render\culling.h" />
     <ClInclude Include="render\deferred_render.h" />
+    <ClInclude Include="render\fog_step.h" />
     <ClInclude Include="render\glow_step.h" />
     <ClInclude Include="render\material.h" />
     <ClInclude Include="render\mesh.h" />
@@ -636,6 +637,7 @@
     <ClCompile Include="render\culling.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\deferred_render.cpp" />
+    <ClCompile Include="render\fog_step.cpp" />
     <ClCompile Include="render\glow_step.cpp" />
     <ClCompile Include="render\material.cpp" />
     <ClCompile Include="render\mesh.cpp" />

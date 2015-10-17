@@ -123,9 +123,6 @@ const CRenderTechnique* ropeTech;
 CMesh		 wiredCube;
 CMesh		 intersectsWiredCube;
 CMesh		 rope;
-/*CMesh		 rope2;
-CMesh		 rope3;
-CMesh		 rope4;*/
 
 CHandle		 life;
 CHandle		 h_player;
@@ -149,6 +146,7 @@ TGlowStep glow;
 TSilouetteStep silouette;
 TUnderwaterEffect underwater;
 TSSRRStep ssrr;
+TFogStep fog;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -438,6 +436,7 @@ bool CApp::create() {
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 	is_ok &= silouette.create("silouette", xres, yres, 1);
+	is_ok &= fog.create("fog", xres, yres, 1);
 
 	// Create Debug Technique
 	debugTech = render_techniques_manager.getByName("basic");
@@ -744,6 +743,7 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("underwater");
 		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("ssao_blur");
+		render_techniques_manager.reload("fog");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -1067,8 +1067,12 @@ void CApp::render() {
 			ssrr.apply(rt_base);
 		}
 		{
+			CTraceScoped scope_post1("Fog");
+			fog.apply(ssrr.getOutput());
+		}
+		{
 			CTraceScoped scope_post2("Sharpen");
-			sharpen.apply(ssrr.getOutput());
+			sharpen.apply(fog.getOutput());
 		}
 		{
 			CTraceScoped scope_post3("Chromatic aberration");
@@ -1594,6 +1598,7 @@ void CApp::destroy() {
 	silouette.destroy();
 	underwater.destroy();
 	ssrr.destroy();
+	fog.destroy();
 	//rt_base->destroyl();
 
 	CRope_manager::get().clearStrings();
@@ -1687,18 +1692,6 @@ void CApp::loadScene(std::string scene_name) {
 	}
 
 	CNav_mesh_manager::get().clearNavMesh();
-
-	/*deferred.destroy();
-	sharpen.destroy();
-	ssao.destroy();
-	chromatic_aberration.destroy();
-	blur.destroy();
-	blur_camera.destroy();
-	glow.destroy();
-	silouette.destroy();
-	underwater.destroy();
-	ssrr.destroy();*/
-	//if (rt_base) { rt_base->destroyAll(); delete rt_base; rt_base = nullptr; }
 	
 
 	CRope_manager::get().clearStrings();
@@ -1714,14 +1707,9 @@ void CApp::loadScene(std::string scene_name) {
 	render_manager.destroyAllKeys();
 	render_manager.clearOcclusionPlanes();
 	ragdoll_manager.destroyAll();
-	//ctes_global.destroy();
-	//renderUtilsDestroy();
 	entity_lister.resetEventCount();
-	//logic_manager.clearKeyframes();
 	logic_manager.clearAnimations();
-	/*physics_manager.gScene->release();*/
 	physics_manager.loadCollisions();
-	//physics_manager.init();
 	CSoundManager::get().clear();
 
 	dbg("Init loads: %g\n", aux_timer.seconds());
@@ -1820,16 +1808,6 @@ void CApp::loadScene(std::string scene_name) {
 	//texture_manager.getByName("sunsetcube1024")->activate(8);
 	texture_manager.getByName("storm")->activate(8);
 
-	/*sharpen.destroy();
-	ssao.destroy();
-	chromatic_aberration.destroy();
-	blur.destroy();
-	blur_camera.destroy();
-	glow.destroy();
-	silouette.destroy();
-	underwater.destroy();
-	ssrr.destroy();*/
-
 	water_level = -100000;
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
@@ -1843,59 +1821,66 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.get()->use_lightmaps = 0;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
-	if (scene_name == "data/scenes/scene_1.xml"){
-		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(70.f);
-		//sm.playTrack("ambient_orquestal.ogg", true);
-		ctes_global.get()->use_lightmaps = 0;
-		//sm.playFXTrack("ambiental_orq", true);
-	}
-	else if (scene_name == "data/scenes/scene_1_noenemy.xml"){
+	if (scene_name == "data/scenes/scene_menu.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(70.f);
 		ctes_global.get()->use_lightmaps = 0;
+		CSoundManager::get().setSceneID(-1);
+
+		fog.fog_level = -1000;
+		fog.fog_distance = 1000;
+		fog.fog_color = XMVectorSet(0, 0, 0, 0);
+	}
+	else if (scene_name == "data/scenes/scene_1.xml"){
+		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
+		cam->changeZFar(70.f);
+		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(1);
+
+		fog.fog_level = -1000;
+		fog.fog_distance = 50;
+		fog.fog_color = XMVectorSet(0.3f, 0.3f, 0.3f, 0.3f);
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(90.f);
 		ctes_global.get()->use_lightmaps = 0;		
 		CSoundManager::get().setSceneID(2);
+
+		fog.fog_level = -1000;
+		fog.fog_distance = 1000;
 	}
 	else if (scene_name == "data/scenes/scene_3.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
 		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(3);
-	}
-	else if (scene_name == "data/scenes/scene_3_noenemy.xml"){
-		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(100.f);
-		ctes_global.get()->use_lightmaps = 0;
-		CSoundManager::get().setSceneID(3);
+
+		fog.fog_level = -1000;
+		fog.fog_distance = 1000;
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(90.f);
 		ctes_global.get()->use_lightmaps = 0;
 		CSoundManager::get().setSceneID(4);
-	}
-	else if (scene_name == "data/scenes/scene_5.xml"){
-		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(65.f);
-		ctes_global.get()->use_lightmaps = 0;
-	}
-	else if (scene_name == "data/scenes/scene_5_noenemy.xml"){
-		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
-		cam->changeZFar(65.f);
-		ctes_global.get()->use_lightmaps = 0;
+
+		fog.fog_level = -1000;
+		fog.fog_distance = 1000;
 	}
 	else if (scene_name == "data/scenes/scene_final_boss.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(250.0f);
 		ctes_global.get()->use_lightmaps = 0;
+		CSoundManager::get().setSceneID(5);
+
+		fog.fog_level = -1000;
+		fog.fog_distance = 1000;
+		fog.fog_color = XMVectorSet(0, 0, 0, 0);
 	}
+
 	ctes_global.uploadToGPU();
+
 	dbg("Misc loads: %g\n", aux_timer.seconds());
 	dbg("Total load time: %g\n", load_timer.seconds());
 
@@ -2036,4 +2021,9 @@ void CApp::playInitialVideo() {
 void CApp::exitApp() {
 	destroy();
 	exit(0);
+}
+
+void CApp::setFogAttributes(float level, float distance) {
+	fog.fog_distance = distance;
+	fog.fog_level = level;
 }

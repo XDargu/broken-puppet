@@ -360,6 +360,9 @@ void fsm_boss::Stunned1(){
 		stopAllAnimations();
 		loopAnimationIfNotPlaying(2, true);
 		times_stunned++;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_STUN", enemy_comp_trans->position);
 	}
 
 	// Hacer danio a la izquierda
@@ -388,6 +391,9 @@ void fsm_boss::Recover(float elapsed){
 		stopAllAnimations();
 		skeleton->playAnimation(3);
 		last_anim_id = -1;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("RECOVER", enemy_comp_trans->position);
 	}
 	if (state_time >= 3.9f){
 		ChangeState("fbp_Idle1");
@@ -513,9 +519,13 @@ void fsm_boss::Ball1Loop(float elapsed){
 	Reorientate(elapsed, false);
 
 	if (on_enter){
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		TCompSkeleton* skeleton = comp_skeleton;
 		stopAllAnimations();
 		loopAnimationIfNotPlaying(19, true);
+
+		CSoundManager::get().playEvent("BOSS_BALL_CREATE", enemy_comp_trans->position);
+
 	}
 
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
@@ -568,6 +578,9 @@ void fsm_boss::Ball1Launch(float elapsed){
 		skeleton->playAnimation(18);
 		last_anim_id = -1;
 		ball_lauched = false;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_BALL_THROW", enemy_comp_trans->position);
 	}
 
 	// Getting player position
@@ -671,6 +684,9 @@ void fsm_boss::Shoot1DownDef(){
 		}
 
 		last_anim_id = -1;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_SHOT", enemy_comp_trans->position);
 	}
 
 	if (on_enter){
@@ -845,6 +861,8 @@ void fsm_boss::Shoot1Shoot(float elapsed){
 
 		force_dir = (player_pos - px_rigid->getGlobalPose().p).getNormalized();
 
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_THROW", enemy_comp_trans->position);
 	}
 
 	CEntity* m_e = obj_to_shoot;
@@ -913,6 +931,9 @@ void fsm_boss::WaveLeft(float elapsed){
 		stopAllAnimations();
 		skeleton->playAnimation(5);
 		last_anim_id = -1;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_WAVE", enemy_comp_trans->position);
 	}	
 	
 	// Get boss pos
@@ -983,6 +1004,9 @@ void fsm_boss::WaveRight(){
 		stopAllAnimations();
 		skeleton->playAnimation(6);
 		last_anim_id = -1;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_WAVE", enemy_comp_trans->position);
 	}
 
 	if ((state_time >= 1.1f) && (state_time < 2.f)){
@@ -1071,6 +1095,9 @@ void fsm_boss::FinalState(float elapsed){
 				}
 			}
 		}
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_HEART", enemy_comp_trans->position);
 	}
 
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
@@ -1107,6 +1134,9 @@ void fsm_boss::Damaged1Left(float elapsed){
 		ragdoll->breakJoint(6);
 		times_stunned = 1;
 		pattern_current = -1;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_DAMAGE", enemy_comp_trans->position);
 	}
 	if (state_time >= 1.f){
 		Reorientate(elapsed, false);		
@@ -1134,6 +1164,9 @@ void fsm_boss::Damaged1Right(float elapsed){
 		ragdoll->breakJoint(4);
 		times_stunned = 1;
 		pattern_current = -1;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_DAMAGE", enemy_comp_trans->position);
 	}
 	if (state_time >= 1.f){
 		Reorientate(elapsed, false);
@@ -1208,6 +1241,9 @@ void fsm_boss::Death(){
 		last_anim_id = -1;
 		TCompSkeletonLookAt* skeleton_lookat = comp_skeleton_lookat;
 		skeleton_lookat->active = false;
+
+		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+		CSoundManager::get().playEvent("BOSS_KILLED", enemy_comp_trans->position);
 	}
 	
 	if (state_time >= 7.f){
@@ -1611,7 +1647,8 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 		{
 			// Adding particle sistem
 			CLogicManager::get().instantiateParticleGroupOneShot("ps_boss_punch", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
-
+			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+			CSoundManager::get().playEvent("BOSS_RAIN", enemy_comp_trans->position);
 			/**/
 		}
 		// 
@@ -1631,6 +1668,8 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 		{
 			// Adding particle sistem
 			CLogicManager::get().instantiateParticleGroupOneShot("ps_boss_punch", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
+			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+			CSoundManager::get().playEvent("BOSS_RAIN", enemy_comp_trans->position);
 			/**/
 		}
 		// 

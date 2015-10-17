@@ -29,6 +29,7 @@ CShaderCte<TCtesChromaticAberration> ctes_chromatic_aberration;
 CShaderCte<TCtesGlow> ctes_glow;
 CShaderCte<TCtesUnderwater> ctes_underwater;
 CShaderCte<TCtesSSRR> ctes_ssrr;
+CShaderCte<TCtesFog> ctes_fog;
 
 CMesh        wire_cube;
 CMesh        mesh_view_volume;
@@ -409,6 +410,7 @@ bool renderUtilsCreate() {
 	is_ok &= ctes_glow.create();
 	is_ok &= ctes_underwater.create();
 	is_ok &= ctes_ssrr.create();
+	is_ok &= ctes_fog.create();
 
 	is_ok &= createGrid(grid, 10);
 	is_ok &= createAxis(axis);
@@ -452,6 +454,7 @@ void renderUtilsDestroy() {
 	ctes_glow.destroy();
 	ctes_underwater.destroy();
 	ctes_ssrr.destroy();
+	ctes_fog.destroy();
 	
 	axis.destroy();
 	grid.destroy();

@@ -90,6 +90,8 @@ function onSceneLoad_scene_final_boss()
 		--logicManager:setBands(true)
 		--logicManager:setMediumShotActive(true)
 
+		logicManager:setFogAttributes(1000, -5);
+
 		-- Bajar luz ambiental
 		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
 
@@ -162,6 +164,8 @@ function onSceneLoad_scene_final_boss()
 	function playCinematic()
 		-- Bandas cinemáticas
 		logicManager:setBands(true)
+		-- Desactivar niebla
+		logicManager:setFogAttributes(1000, -1000);
 
 		-- Desactivar GUI
 		logicManager:drawGUI(false)
@@ -204,6 +208,9 @@ function onSceneLoad_scene_final_boss()
 		boss:riseUpBoss()
 		logicManager:setMediumShotActive(true)
 		logicManager:changeCamera("PlayerCamera");
+
+		-- Activar niebla
+		logicManager:setFogAttributes(1000, -5);
 
 		-- Colocar anti rain collider
 		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
@@ -480,6 +487,8 @@ bossSecuence = false;
 				local scene1_elevator = logicManager:getObject("ascensor_desvan_cabina");
 				local platform_pos = scene1_elevator:getPos();
 				scene1_elevator:move(Vector(platform_pos.x, (platform_pos.y + 23), platform_pos.z), 5);
+				
+				logicManager:setFogAttributes(1000, -1000);
 
 				logicManager:setCanMove(false)
 				logicManager:setCanThrow(false)

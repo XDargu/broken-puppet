@@ -10,5 +10,6 @@
 #include "underwater_step.h"
 #include "ssrr_step.h"
 #include "silouette_step.h"
+#include "fog_step.h"
 
 #endif

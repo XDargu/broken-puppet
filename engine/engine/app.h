@@ -110,6 +110,8 @@ public:
 	void playInitialVideo();
 	unsigned int getMaxNumNeedles();
 
+	void setFogAttributes(float level, float distance);
+
 	void exitApp();
 };
 

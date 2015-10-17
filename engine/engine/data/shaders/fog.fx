@@ -48,21 +48,23 @@ float3 getWorldCoords(float2 screen_coords, float depth) {
 float4 PSFog(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_Target
 {
   float4 original = txDiffuse.Sample(samClampLinear, input.UV);
-  float4 depth = txDepth.Sample(samClampLinear, input.UV);
+  float depth = txDepth.Sample(samClampLinear, input.UV).x;
   
   int3 screenCoords = uint3(iPosition.xy, 0);
   float3 wPos = getWorldCoords(screenCoords, depth.x);
   float3 I = wPos - cameraWorldPos.xyz;
 
-  float4 fogColor = float4(0.7, 0.7, 0.7, 0.7) * 0.4;
+  float4 fogColor = fog_color;
   float atten = 1;
-
+  atten = clamp((fog_distance / 50) - depth, 0, 1);
+  
   float noise = txNoise.Sample(samWrapLinear, wPos.xz * 0.1	 + world_time.xx*0.03) * 2 - 1;
-  float level = 0;
 
-  if (wPos.y < level + noise) {
-	  atten = saturate(wPos.y - level + 1) - noise;
-	}
-  return lerp(original, fogColor, min(1,0.8 * (1-atten)));
+  noise = 0;
+  if (wPos.y < fog_level + noise) {
+	  atten = saturate(wPos.y - fog_level + 1) - noise;
+	}  
+
+  return lerp(original, fogColor, min(1, (1-atten)));
 }
 

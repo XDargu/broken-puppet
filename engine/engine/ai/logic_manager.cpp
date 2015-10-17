@@ -688,7 +688,8 @@ void CLogicManager::bootLUA() {
 		.set("stopFovChange", &CLogicManager::stopFovChange)
 		.set("createPrefab", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createPrefab)
 		.set("drawGUI", &CLogicManager::setDrawGUI)
-	;
+		.set("setFogAttributes", &CLogicManager::setFogAttributes)
+		; 
 
 	// Register the bot class
 	SLB::Class< CBot >("Bot")
@@ -1227,4 +1228,8 @@ void CLogicManager::stopFovChange() {
 
 void CLogicManager::setDrawGUI(bool active) {
 	CApp::get().draw_gui = active;
+}
+
+void CLogicManager::setFogAttributes(float distance, float level) {
+	CApp::get().setFogAttributes(level, distance);
 }

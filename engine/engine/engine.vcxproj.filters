@@ -582,6 +582,9 @@
     <ClInclude Include="components\comp_ai_substitute.h">
       <Filter>components\ai\boss</Filter>
     </ClInclude>
+    <ClInclude Include="render\fog_step.h">
+      <Filter>render\postpro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1087,6 +1090,9 @@
     </ClCompile>
     <ClCompile Include="components\comp_ai_substitute.cpp">
       <Filter>components\ai\boss</Filter>
+    </ClCompile>
+    <ClCompile Include="render\fog_step.cpp">
+      <Filter>render\postpro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
