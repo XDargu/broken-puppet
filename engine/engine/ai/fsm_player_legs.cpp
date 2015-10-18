@@ -607,18 +607,19 @@ void FSMPlayerLegs::ThrowStringGolden(float elapsed){
 void FSMPlayerLegs::PullString(float elapsed){
 
 	TCompSkeleton* skeleton = comp_skeleton;
+	TCompTransform* m_transform = ((CEntity*)entity)->get<TCompTransform>();
 
-	canThrow = false;
+	canThrow = true;
 
 	if (on_enter) {
-		skeleton->loopAnimation(15);
 	}
 
-	TCompThirdPersonCameraController* camera_controller = ((CEntity*)entity_camera)->get<TCompThirdPersonCameraController>();
-	camera_controller->offset = XMVectorSet(0.5f, -0.22f, 1.07f, 0);
+	/*TCompThirdPersonCameraController* camera_controller = ((CEntity*)entity_camera)->get<TCompThirdPersonCameraController>();
+	camera_controller->offset = XMVectorSet(0.5f, -0.22f, 1.07f, 0);*/
+
+	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
 	
-	if (state_time > 2) {
-		skeleton->stopAnimation(15);
+	if (state_time > 1.5f) {
 		ChangeState("fbp_Idle");
 	}
 

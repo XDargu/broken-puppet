@@ -580,6 +580,9 @@ void FSMPlayerTorso::PullString(float elapsed) {
 	CIOStatus& io = CIOStatus::get();
 
 	if (on_enter) {
+
+		legs->ChangeState("fbp_PullString");
+
 		// -------------- Moves the camera to the shoulder
 		/*TCompThirdPersonCameraController* camera_controller = ((CEntity*)camera_entity)->get<TCompThirdPersonCameraController>();
 		camera_controller->offset = PxVec3(0.56f, -0.22f, 1.07f);*/
@@ -683,7 +686,11 @@ void FSMPlayerTorso::PullString(float elapsed) {
 		first_needle = CHandle();
 		entitycount++;
 
-		ChangeState("fbp_Inactive");		
+		TCompSkeleton* skeleton = comp_skeleton;
+		skeleton->stopAnimation(17);
+
+		ChangeState("fbp_Inactive");
+		legs->ChangeState("fbp_Idle");
 	}
 }
 
