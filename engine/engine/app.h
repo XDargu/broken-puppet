@@ -1,5 +1,5 @@
 #define FINAL_RELEASE
-#define NO_VIDEO
+//#define NO_VIDEO
 
 #ifndef INC_APP_H_
 #define INC_APP_H_

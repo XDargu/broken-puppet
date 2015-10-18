@@ -1954,7 +1954,7 @@ bool CApp::renderVideo()
 	UINT w = clip->getWidth();
 	UINT h = clip->getHeight();
 
-	const float RED[4] = { 1.f, 0.f, 0.f, 1.0 };
+	const float RED[4] = { 0.f, 0.f, 0.f, 1.0 };
 	::render.ctx->ClearRenderTargetView(::render.render_target_view, RED);
 	::render.ctx->ClearDepthStencilView(::render.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -1988,7 +1988,13 @@ bool CApp::renderVideo()
 	
 	videoTexture->setResource(tex);
 	videoTexture->setResourceView(m_shaderResourceView);
-	drawTexture2D(0, 0, xres, yres, videoTexture);	
+
+	// Bandas negras en los lados
+	float load_w = xres;
+	float load_h = (1080.0f * load_w) / 1920.f;
+	float video_h_offset = (yres - load_h) * 0.5f;
+
+	drawTexture2D(0, video_h_offset, load_w, load_h, videoTexture);
 
 	//dbg("elaps: %f\n", elaps);
 	mgr->update(delta_time);
