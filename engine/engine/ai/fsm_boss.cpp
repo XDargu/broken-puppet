@@ -1137,6 +1137,16 @@ void fsm_boss::Damaged1Left(float elapsed){
 
 		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		CSoundManager::get().playEvent("BOSS_DAMAGE", enemy_comp_trans->position);
+
+		CEntity* substitute = CEntityManager::get().getByName("Substitute");
+		if (substitute) {
+			TCompTransform* subs_trans = substitute->get<TCompTransform>();
+			if (subs_trans) {
+				CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+				CSoundManager::get().playEvent("SUBS_BOSS_HIT_32", subs_trans->position, "subs_p");
+				CLogicManager::get().playSubtitles("SUBS_BOSS_HIT_32");
+			}
+		}
 	}
 	if (state_time >= 1.f){
 		Reorientate(elapsed, false);		
@@ -1167,6 +1177,16 @@ void fsm_boss::Damaged1Right(float elapsed){
 
 		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		CSoundManager::get().playEvent("BOSS_DAMAGE", enemy_comp_trans->position);
+
+		CEntity* substitute = CEntityManager::get().getByName("Substitute");
+		if (substitute) {
+			TCompTransform* subs_trans = substitute->get<TCompTransform>();
+			if (subs_trans) {
+				CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+				CSoundManager::get().playEvent("SUBS_BOSS_HIT_32", subs_trans->position, "subs_p");
+				CLogicManager::get().playSubtitles("SUBS_BOSS_HIT_32");
+			}
+		}
 	}
 	if (state_time >= 1.f){
 		Reorientate(elapsed, false);
@@ -1195,6 +1215,17 @@ void fsm_boss::Damaged1LeftFinal(){
 		ragdoll->breakJoint(6);
 		times_stunned = 1;
 		pattern_current = -1;
+
+		CEntity* substitute = CEntityManager::get().getByName("Substitute");
+		if (substitute) {
+			TCompTransform* subs_trans = substitute->get<TCompTransform>();
+			if (subs_trans) {
+
+				CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);				
+				CSoundManager::get().playEvent("SUBS_BOSS_HIT_33", subs_trans->position, "subs_p");
+				CLogicManager::get().playSubtitles("SUBS_BOSS_HIT_33");
+			}
+		}
 	}
 
 	if (state_time >= 0.5f){
@@ -1221,6 +1252,17 @@ void fsm_boss::Damaged1RightFinal(){
 
 		times_stunned = 1;
 		pattern_current = -1;
+
+		CEntity* substitute = CEntityManager::get().getByName("Substitute");
+		if (substitute) {
+			TCompTransform* subs_trans = substitute->get<TCompTransform>();
+			if (subs_trans) {
+
+				CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+				CSoundManager::get().playEvent("SUBS_BOSS_HIT_33", subs_trans->position, "subs_p");
+				CLogicManager::get().playSubtitles("SUBS_BOSS_HIT_33");
+			}
+		}
 	}
 	if (state_time >= 0.5f){
 		destroyBombs();
@@ -1244,6 +1286,16 @@ void fsm_boss::Death(){
 
 		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		CSoundManager::get().playEvent("BOSS_KILLED", enemy_comp_trans->position);
+
+		CEntity* substitute = CEntityManager::get().getByName("Substitute");
+		if (substitute) {
+			TCompTransform* subs_trans = substitute->get<TCompTransform>();
+			if (subs_trans) {
+				CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+				CSoundManager::get().playEvent("SUBS_BOSS_HIT_34", subs_trans->position, "subs_p");
+				CLogicManager::get().playSubtitles("SUBS_BOSS_HIT_34");
+			}
+		}		
 	}
 	
 	if (state_time >= 7.f){

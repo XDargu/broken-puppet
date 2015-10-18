@@ -112,7 +112,8 @@ void fsm_substitute::LittleTalk(float elapsed){
 		if (trans)
 			sound_pos = trans->position;
 
-		CSoundManager::get().playEvent("SUBS_SPEECH", sound_pos);
+		CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+		CSoundManager::get().playEvent("SUBS_SPEECH", sound_pos, "subs_p");
 		CLogicManager::get().playSubtitles("SUBS_SPEECH");
 	}
 	if (state_time >= 29.167f){
@@ -138,9 +139,10 @@ void fsm_substitute::LoopTalk8(){
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
 		if (trans)
 			sound_pos = trans->position;
-
-		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_8", sound_pos);
-		CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_8");
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_8", sound_pos, "subs");
+			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_8");
+		}
 	}
 	if (state_time >= 3.9){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
@@ -162,8 +164,10 @@ void fsm_substitute::LoopTalk9(){
 		if (trans)
 			sound_pos = trans->position;
 
-		CSoundManager::get().playEvent("SUBS_WAIT_LOOP_9", sound_pos);
-		CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_9");
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_9", sound_pos, "subs");
+			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_9");
+		}
 
 	}
 	if (state_time >= 1.9){
@@ -204,8 +208,10 @@ void fsm_substitute::Hanged(float elapsed){
 		
 		// Play conversation
 		int conversation = calculateConversation();
-		CSoundManager::get().playEvent(conversation_list[conversation], sound_pos);
-		CLogicManager::get().playSubtitles(conversation_list[conversation]);
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent(conversation_list[conversation], sound_pos, "subs");
+			CLogicManager::get().playSubtitles(conversation_list[conversation]);
+		}
 	}
 }
 
@@ -217,7 +223,9 @@ void fsm_substitute::CallingBoss(){
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
 		if (trans)
 			sound_pos = trans->position;
-		CSoundManager::get().playEvent("SUBS_PRE_BOSS", sound_pos);
+
+		CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+		CSoundManager::get().playEvent("SUBS_PRE_BOSS", sound_pos, "subs_p");
 		CLogicManager::get().playSubtitles("SUBS_PRE_BOSS");
 		CLogicManager::get().onSubstituteHang();
 	}
@@ -239,7 +247,9 @@ void fsm_substitute::JustTied(float elapsed){
 		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
 		if (trans)
 			sound_pos = trans->position;
-		CSoundManager::get().playEvent("SUBS_ROPE_THROWN", sound_pos);
+
+		CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+		CSoundManager::get().playEvent("SUBS_ROPE_THROWN", sound_pos, "subs_p");
 		CLogicManager::get().playSubtitles("SUBS_ROPE_THROWN");
 	}
 	if (state_time + elapsed >= 3.99){

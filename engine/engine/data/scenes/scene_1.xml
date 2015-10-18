@@ -7913,14 +7913,15 @@
     <render >
       <draw mesh="sc1_merged_room7_wood" sub_mesh="0" mat="pilares_sueltos_02"/>
       <draw mesh="sc1_merged_room7_wood" sub_mesh="1" mat="techo_modernista"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="2" mat="pilares_sueltos_01"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="3" mat="suelo_esc3"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="4" mat="techo_basico_esc3"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="5" mat="pared_esc3"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="6" mat="tablones"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="7" mat="pared_esc1"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="8" mat="suelo_basico_esc1"/>
-      <draw mesh="sc1_merged_room7_wood" sub_mesh="9" mat="techo_esc1"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="2" mat="suelo3"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="3" mat="pilares_sueltos_01"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="4" mat="suelo_esc3"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="5" mat="techo_basico_esc3"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="6" mat="pared_esc3"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="7" mat="tablones"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="8" mat="pared_esc1"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="9" mat="suelo_basico_esc1"/>
+      <draw mesh="sc1_merged_room7_wood" sub_mesh="10" mat="techo_esc1"/>
     </render>
     <aabb min="-12.0 -10.6567 -31.5" max="12.0 10.7182 31.5"/>
     <colliderMesh path="sc1_merged_room7_wood" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />

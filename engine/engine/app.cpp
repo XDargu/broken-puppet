@@ -1840,6 +1840,8 @@ void CApp::loadScene(std::string scene_name) {
 		fog.fog_level = -1000;
 		fog.fog_distance = 50;
 		fog.fog_color = XMVectorSet(0.3f, 0.3f, 0.3f, 0.3f);
+
+		CSoundManager::get().playEvent("MUSIC_BASEMENT");
 	}
 	else if (scene_name == "data/scenes/scene_2.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
@@ -1849,6 +1851,8 @@ void CApp::loadScene(std::string scene_name) {
 
 		fog.fog_level = -1000;
 		fog.fog_distance = 1000;
+
+		CSoundManager::get().playEvent("MUSIC_ESC");
 	}
 	else if (scene_name == "data/scenes/scene_3.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
@@ -1858,6 +1862,8 @@ void CApp::loadScene(std::string scene_name) {
 
 		fog.fog_level = -1000;
 		fog.fog_distance = 1000;
+
+		CSoundManager::get().playEvent("MUSIC_PIT");
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;

@@ -1197,6 +1197,31 @@ void FSMPlayerLegs::EvaluateLiveToLose(float damage){
 	{
 		// Change state to ragdoll instead of death, for visual purposes
 		ChangeState("fbp_Ragdoll");
+
+		// Boss substitute talks
+		// Substitute sounds
+		if (CApp::get().current_scene_name == "scene_final_boss") {
+			CEntity* substitute = CEntityManager::get().getByName("Substitute");
+			if (substitute) {
+				TCompTransform* subs_trans = substitute->get<TCompTransform>();
+				if (subs_trans) {
+					int rand = floor(getRandomNumber(0.0f, 7.99f));
+					//Throw movement sound. 
+					// Subtítulos
+					std::string guid = "SUBS_HIT_24";
+					if (rand == 1) { guid = "SUBS_HIT_25"; }
+					if (rand == 2) { guid = "SUBS_HIT_26"; }
+					if (rand == 3) { guid = "SUBS_HIT_27"; }
+					if (rand == 4) { guid = "SUBS_HIT_28"; }
+					if (rand == 5) { guid = "SUBS_HIT_29"; }
+					if (rand == 6) { guid = "SUBS_HIT_30"; }
+					if (rand == 7) { guid = "SUBS_HIT_31"; }
+
+					CSoundManager::get().stopNamedInstance("subs", FMOD_STUDIO_STOP_MODE::FMOD_STUDIO_STOP_IMMEDIATE);
+					CSoundManager::get().playTalkEvent(guid, subs_trans->position, "subs_p", guid);
+				}
+			}
+		}
 	}
 }
 

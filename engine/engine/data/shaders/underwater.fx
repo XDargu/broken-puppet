@@ -67,7 +67,7 @@ float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input)
 	else
 		res = txDiffuse.Sample(samClampLinear, input.UV);
 
-	int3 screenCoords = uint3(iPosition.xy, 0);
+	/*int3 screenCoords = uint3(iPosition.xy, 0);
 	
 	int yres = cameraHalfYRes * 2;
 	int xres = cameraHalfXRes * 2;
@@ -99,7 +99,7 @@ float4 PSUnderwater(in float4 iPosition : SV_Position, VS_TEXTURED_OUTPUT input)
 
 	if (yres - ypos == 30) {
 		res = float4(0, 0, 1, 1);
-	}
+	}*/
 
 	return res;
 }

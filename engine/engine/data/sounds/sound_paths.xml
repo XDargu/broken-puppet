@@ -1,6 +1,9 @@
 <fmodEvents>
   <!-- MUSICA -->
   <event id="MUSIC_MENU" path="event:/Musica/CANCION" />
+  <event id="MUSIC_BASEMENT" path="event:/Musica/PRUEBA PROVISIONAL" />
+  <event id="MUSIC_ESC" path="event:/Musica/PROPUESTA 1" />
+  <event id="MUSIC_PIT" path="event:/Musica/Propuesta de Rollo 1 (Sin voz)" />
 
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" />
@@ -40,7 +43,7 @@
   <event id="SUBS_HIT_31" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_31 Dont be stubborn your time is over" />
   
   <event id="SUBS_BOSS_HIT_32" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_32 How dare you! Dont you hurt him" />
-  <event id="SUBS_BOSS_HIT_33" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_33 No! Please! You have no idea of what you’re doing" />
+  <event id="SUBS_BOSS_HIT_33" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_33 No! Please! You have no idea of what you" />
   <event id="SUBS_BOSS_HIT_34" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_34 Noo What have you done... You are completely insane!" />
 
 

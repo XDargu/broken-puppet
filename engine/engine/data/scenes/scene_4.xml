@@ -8759,6 +8759,7 @@
       <draw mesh="sc4_merged_room_3_wood" sub_mesh="6" mat="arcos_01"/>
       <draw mesh="sc4_merged_room_3_wood" sub_mesh="7" mat="barandillas_01"/>
       <draw mesh="sc4_merged_room_3_wood" sub_mesh="8" mat="techo2"/>
+      <draw mesh="sc4_merged_room_3_wood" sub_mesh="9" mat="suelo3"/>
     </render>
     <aabb min="-24.5 -12.2481 -36.7778" max="24.5 12.2481 27.2222"/>
     <colliderMesh path="sc4_merged_room_3_wood" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />

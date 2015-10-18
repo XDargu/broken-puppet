@@ -834,6 +834,9 @@ bossSecuence = false;
 
 		-- Narración
 		logicManager:playSubtitles("KATHSC402");
+
+		-- Música
+		logicManager:playEvent("MUSIC_ESC")
 	end
 
 
