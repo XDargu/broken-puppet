@@ -203,6 +203,12 @@ void TCompSkeleton::update(float elapsed) {
 
 		  PxRigidDynamic* rigid_bone = ragdoll->getBoneRigid((int)bone_idx);
 
+		  /*if (bone_idx == 65) {
+			  CalBone* bone = cal_bones[bone_idx];
+			  bone->setTranslation(CalVector(-500, -500, -500));
+			  bone->calculateState();
+		  }*/
+
 		  if (rigid_bone) {
 			  CalBone* bone = cal_bones[bone_idx];
 			  
