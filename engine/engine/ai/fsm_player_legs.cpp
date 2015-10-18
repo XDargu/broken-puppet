@@ -1016,7 +1016,7 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 		}
 
 		stopAllAnimations();
-		m_skeleton->playAnimation(18);
+		m_skeleton->loopAnimation(6);
 
 		XMVECTOR head_pos = m_skeleton->getPositionOfBone(41);
 		XMVectorSetY(head_pos, XMVectorGetY(m_transform->position));
@@ -1034,7 +1034,7 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 	dir.normalize();
 	((TCompCharacterController*)comp_character_controller)->Move(physx::PxVec3(0, 0, 0), false, false, dir, elapsed);
 
-	if (state_time >= 3.3f){
+	if (state_time >= 0.1f){
 		stopAllAnimations();
 		ChangeState("fbp_Idle");
 	}
