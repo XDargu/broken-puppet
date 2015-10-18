@@ -63,7 +63,8 @@ private:
 	float bomb_creation_delay;
 	XMVECTOR last_random_pos;
 	XMVECTOR last_created_pos;
-	
+	float punch_counter;
+	float punch_delay;
 
 	float ball_size;
 	vector<CHandle> ball_list;

@@ -4476,6 +4476,13 @@
     <bossSubstitute/>
     <ragdoll name="sustituta#1"/>
   </entity>
+  
+  <!--<entity   materialTag = "wood">
+    <name name="substitute_light" />
+    <transform position="0.0 1.068723 -2.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="Substitute" />
+    <pointLight radius="5" intensity="1.0" color="1 1 1 1"/>
+  </entity>-->
+  
   <entity   materialTag = "wood">
     <name name="sc5_trigger_narr1" />
     <transform position="4.11188 -16.6441 -128.662" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>

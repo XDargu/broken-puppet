@@ -689,6 +689,7 @@ void CLogicManager::bootLUA() {
 		.set("createPrefab", (void (CLogicManager::*)(std::string, CVector, CQuaterion)) &CLogicManager::createPrefab)
 		.set("drawGUI", &CLogicManager::setDrawGUI)
 		.set("setFogAttributes", &CLogicManager::setFogAttributes)
+		.set("cancelAllStrings", &CLogicManager::cancelAllStrings)
 		; 
 
 	// Register the bot class
@@ -1232,4 +1233,8 @@ void CLogicManager::setDrawGUI(bool active) {
 
 void CLogicManager::setFogAttributes(float distance, float level) {
 	CApp::get().setFogAttributes(level, distance);
+}
+
+void CLogicManager::cancelAllStrings() {
+	CRope_manager::get().clearStrings();
 }

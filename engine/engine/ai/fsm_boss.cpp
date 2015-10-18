@@ -73,6 +73,9 @@ fsm_boss::fsm_boss()
 	/**/
 							  
 	boss_out = false;
+
+	punch_counter = 0;
+	punch_delay = 0.4f;
 }
 
 fsm_boss::~fsm_boss()
@@ -428,7 +431,7 @@ void fsm_boss::Rain1Loop(float elapsed){
 		debris_created = 0; 
 		fist_particle_time = 0;
 	}
-
+	
 	FistParticles(elapsed, 0.f, 0.f);
 	
 	if (!RainDebris(elapsed)){
@@ -1689,6 +1692,8 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 	bool fractionated = init != end;
 	TCompSkeleton* skeleton = comp_skeleton;
 
+	punch_counter += elapsed;
+	
 	fist_particle_time += elapsed;
 
 	if ((has_right) && ((!fractionated) || (fist_particle_time > init) && (fist_particle_time < end))){
@@ -1699,8 +1704,11 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 		{
 			// Adding particle sistem
 			CLogicManager::get().instantiateParticleGroupOneShot("ps_boss_punch", XMVectorSetY(r_hand_pos, 0), r_hand_rot);
-			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
-			CSoundManager::get().playEvent("BOSS_RAIN", enemy_comp_trans->position);
+			if (punch_counter >= punch_delay) {
+				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+				CSoundManager::get().playEvent("BOSS_RAIN", r_hand_pos);
+				punch_counter = 0.f;
+			}
 			/**/
 		}
 		// 
@@ -1720,8 +1728,11 @@ void fsm_boss::FistParticles(float elapsed, float init, float end) {
 		{
 			// Adding particle sistem
 			CLogicManager::get().instantiateParticleGroupOneShot("ps_boss_punch", XMVectorSetY(l_hand_pos, 0), l_hand_rot);
-			TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
-			CSoundManager::get().playEvent("BOSS_RAIN", enemy_comp_trans->position);
+			if (punch_counter >= punch_delay) {
+				TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
+				CSoundManager::get().playEvent("BOSS_RAIN", l_hand_pos);
+				punch_counter = 0.f;
+			}
 			/**/
 		}
 		// 

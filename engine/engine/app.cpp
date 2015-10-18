@@ -564,12 +564,13 @@ void CApp::doFrame() {
 			// Update input
 			io.update(delta_time);
 			//io.gameUpdate(delta_time);
+#ifndef FINAL_RELEASE
 
 			// Pause
 			if (CIOStatus::get().becomesReleased(CIOStatus::E)){
 				pause = !pause;
 			}
-
+#endif
 			// Slow motion
 			if (slow_motion_counter > 0) {
 				slow_motion_counter -= delta_time;

@@ -67,7 +67,7 @@ function onSceneLoad_scene_final_boss()
 	local scene_collider = logicManager:getObject("escenario_pared_collider");		
 	scene_collider:setPos(Vector(1000, 1000, 1000));
 
-	function onTriggerEnter_sc5_trigger_narr1(who)
+	function onTriggerFirstEnter_sc5_trigger_narr1(who)
 		logicManager:playSubtitles("NARRSC501");
 	end
 	
@@ -167,6 +167,9 @@ function onSceneLoad_scene_final_boss()
 		-- Desactivar niebla
 		logicManager:setFogAttributes(1000, -1000);
 
+		-- Cancelar cuerdas
+		logicManager:cancelAllStrings()
+
 		-- Desactivar GUI
 		logicManager:drawGUI(false)
 
@@ -216,10 +219,6 @@ function onSceneLoad_scene_final_boss()
 		local antiRain = logicManager:getObject("anti_rain_collider_boss");		
 		local playerPos = player:getPosition();
 		antiRain:setPos(playerPos);
-
-		-- Colocar collider del escenario
-		local scene_collider = logicManager:getObject("escenario_pared_collider");		
-		scene_collider:setPos(Vector(0, 0, 0));
 		
 		local boss = logicManager:getBot("Boss")
 		logicManager:lockCameraOnPosition(Vector(0, 8, 0), true)
@@ -285,6 +284,10 @@ function onSceneLoad_scene_final_boss()
 		logicManager:shakeCamera(0.15) -- Grito
 		waitTime(1)
 		logicManager:stopShakeCamera()
+
+		-- Colocar collider del escenario
+		local scene_collider = logicManager:getObject("escenario_pared_collider");		
+		scene_collider:setPos(Vector(0, 0, 0));
 	end
 
 

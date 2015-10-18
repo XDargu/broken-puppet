@@ -182,6 +182,7 @@ public:
 	void stringPulled();
 	void stringCancelled();
 	void stringAllCancelled();
+	void cancelAllStrings();
 
 	// PLAYER
 	void setCanThrow(bool active);
