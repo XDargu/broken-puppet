@@ -5,8 +5,6 @@
 #include "physics_manager.h"
 #include "entity_manager.h"
 
-// ----------------------------------------
-/**/
 struct TPattern{
 	int attack;
 	float wait_time;
@@ -15,7 +13,6 @@ struct TPattern{
 struct TAttackPattern {
 	vector<TPattern> pattern;
 };
-/**/
 
 
 class fsm_boss : public aifsmcontroller
@@ -162,9 +159,7 @@ public:
 
 	bool lua_boss_init;
 
-	/**/
 	std::vector<TAttackPattern> attack_pattern_list;
-	/**/
 };
 
 

@@ -1,1 +1,1 @@
-<std_material name="herramientas" diffuse="herramientas_diffuse" normal="herramientas_normal" specular="herramientas_specular" glossiness="herramientas_gloss" emissive="herramientas_emissive" emissive_off="" />
+<std_material name="herramientas" diffuse="herramientas_diffuse" normal="herramientas_normal" specular="herramientas_specular" glossiness="herramientas_gloss" emissive="" emissive_off="" />

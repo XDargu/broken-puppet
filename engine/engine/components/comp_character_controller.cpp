@@ -275,6 +275,19 @@ void TCompCharacterController::GroundCheck(float elapsed)
 				std::strcpy(last_material_tag, actor_e->material_tag);
 			}
 
+			if (ground_actor->isRigidBody())
+			{
+				// Aply weight force
+				if (rigid->rigidBody != (PxRigidBody*)ground_actor)
+				{
+					if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+						PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 10;
+																
+						PxRigidBodyExt::addForceAtPos(*(PxRigidBody*)ground_actor, down_force, ground_position, PxForceMode::eFORCE, true);							
+					}
+				}
+			}
+
 			if (velocity.y <= 0)
 			{
 
@@ -300,16 +313,6 @@ void TCompCharacterController::GroundCheck(float elapsed)
 					PxVec3 diff = last_platform_speed - ground_velocity;
 					rigid->rigidBody->addForce(ground_velocity - diff, PxForceMode::eVELOCITY_CHANGE, true);
 					last_platform_speed = ground_velocity;
-
-					// Aply weight force
-
-					if (rigid->rigidBody != (PxRigidBody*)ground_actor)
-					{
-						if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
-							PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 4;
-							((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
-						}
-					}
 
 
 				}

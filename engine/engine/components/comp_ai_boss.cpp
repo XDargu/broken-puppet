@@ -295,7 +295,6 @@ void TCompAiBoss::update(float elapsed){
 
 	if (CIOStatus::get().becomesPressed(CIOStatus::H)){
 		stun();
-		// Pruebas a eliminar cambiar scale de transform		
 	}
 	if (CIOStatus::get().becomesPressed(CIOStatus::J)){
 		m_fsm_boss->HeartHit();
@@ -593,12 +592,6 @@ void TCompAiBoss::openHeart(float elapsed){
 	heart_opened = true;
 }
 
-/**
-LOS HOMBRES DE VERDAD NO DECIMOS: ME VOY A MIMIR
-
-NOS MIMIMOS Y PUNTO ¬¬
-/**/
-
 void TCompAiBoss::initBoss(){
 	XMVECTOR aux_pos = XMVectorSet(0, 1, 0, 0);
 
@@ -754,7 +747,7 @@ void TCompAiBoss::brokeHeart(){
 			break_point = H_hitch_trans->position;
 		}
 
-		// Obtenemos la distancia entre el heart y el punto de arranque del heart
+		// Calculate distance between the heart and his hitch
 		float aux_dist = 0;
 
 		if (H_hitch_trans){
@@ -869,8 +862,6 @@ void TCompAiBoss::brokeHeart(){
 				((PxRigidDynamic*)(heart_piece_rigid5->rigidBody))->setGlobalPose(Physics.transformToPxTransform(h_transform->getPrevTransform()));
 				((PxRigidDynamic*)(heart_piece_rigid6->rigidBody))->setGlobalPose(Physics.transformToPxTransform(h_transform->getPrevTransform()));
 			}
-
 		}
 	}
-
 }

@@ -39,27 +39,27 @@ fsm_boss::fsm_boss()
 	p5.attack = 5; // Random
 	p5.wait_time = 3.f;
 
-	// Basic "El de toda la vida"
+	// Basic 
 	TAttackPattern ap1;
 	ap1.pattern.push_back(p2);
 	ap1.pattern.push_back(p1);
 	ap1.pattern.push_back(p3);
 	ap1.pattern.push_back(p4);
 
-	// SemiBasic "Busca refugio madafaca"
+	// SemiBasic
 	TAttackPattern ap2;
 	ap2.pattern.push_back(p1);
 	ap2.pattern.push_back(p2);
 	ap2.pattern.push_back(p3);
 
-	// Fully ground "El meneito"
+	// Fully ground 
 	TAttackPattern ap3;
 	ap3.pattern.push_back(p4);
 	ap3.pattern.push_back(p2);
 	ap3.pattern.push_back(p1);
 	ap3.pattern.push_back(p3);
 
-	// Big Bang "Correeee, que noooo"
+	// Big Bang 
 	TAttackPattern ap4;
 	ap4.pattern.push_back(p2);
 	ap4.pattern.push_back(p1);
@@ -85,25 +85,25 @@ fsm_boss::~fsm_boss()
 void fsm_boss::Init()
 {
 	// insert all states in the map
-	AddState("fbp_Proximity", (statehandler)&fsm_boss::Proximity);//
+	AddState("fbp_Proximity", (statehandler)&fsm_boss::Proximity);
 	AddState("fbp_Hidden", (statehandler)&fsm_boss::Hidden);
 	AddState("fbp_RiseUp", (statehandler)&fsm_boss::RiseUp);
-	AddState("fbp_Idle1", (statehandler)&fsm_boss::Idle1);//
+	AddState("fbp_Idle1", (statehandler)&fsm_boss::Idle1);
 	AddState("fbp_Hit1", (statehandler)&fsm_boss::Hit1);
 	AddState("fbp_Stunned1", (statehandler)&fsm_boss::Stunned1);	
 	AddState("fbp_Recover", (statehandler)&fsm_boss::Recover);
-	AddState("fbp_WaveRight", (statehandler)&fsm_boss::WaveRight);//
-	AddState("fbp_WaveLeft", (statehandler)&fsm_boss::WaveLeft);//
-	AddState("fbp_Rain1Prepare", (statehandler)&fsm_boss::Rain1Prepare);//
-	AddState("fbp_Rain1Loop", (statehandler)&fsm_boss::Rain1Loop);//
-	AddState("fbp_Rain1Recover", (statehandler)&fsm_boss::Rain1Recover);//
-	AddState("fbp_Ball1Initial", (statehandler)&fsm_boss::Ball1Initial);//
-	AddState("fbp_Ball1Loop", (statehandler)&fsm_boss::Ball1Loop);//
-	AddState("fbp_Ball1Launch", (statehandler)&fsm_boss::Ball1Launch);//
-	AddState("fbp_Shoot1DownDef", (statehandler)&fsm_boss::Shoot1DownDef);//
-	AddState("fbp_Shoot1Shoot", (statehandler)&fsm_boss::Shoot1Shoot);//
-	AddState("fbp_Shoot1Reload", (statehandler)&fsm_boss::Shoot1Reload);//
-	AddState("fbp_Shoot1ReleaseDef", (statehandler)&fsm_boss::Shoot1ReleaseDef);//
+	AddState("fbp_WaveRight", (statehandler)&fsm_boss::WaveRight);
+	AddState("fbp_WaveLeft", (statehandler)&fsm_boss::WaveLeft);
+	AddState("fbp_Rain1Prepare", (statehandler)&fsm_boss::Rain1Prepare);
+	AddState("fbp_Rain1Loop", (statehandler)&fsm_boss::Rain1Loop);
+	AddState("fbp_Rain1Recover", (statehandler)&fsm_boss::Rain1Recover);
+	AddState("fbp_Ball1Initial", (statehandler)&fsm_boss::Ball1Initial);
+	AddState("fbp_Ball1Loop", (statehandler)&fsm_boss::Ball1Loop);
+	AddState("fbp_Ball1Launch", (statehandler)&fsm_boss::Ball1Launch);
+	AddState("fbp_Shoot1DownDef", (statehandler)&fsm_boss::Shoot1DownDef);
+	AddState("fbp_Shoot1Shoot", (statehandler)&fsm_boss::Shoot1Shoot);
+	AddState("fbp_Shoot1Reload", (statehandler)&fsm_boss::Shoot1Reload);
+	AddState("fbp_Shoot1ReleaseDef", (statehandler)&fsm_boss::Shoot1ReleaseDef);
 	AddState("fbp_Damaged1Left", (statehandler)&fsm_boss::Damaged1Left);
 	AddState("fbp_Damaged1Right", (statehandler)&fsm_boss::Damaged1Right);
 	AddState("fbp_Damaged1LeftFinal", (statehandler)&fsm_boss::Damaged1LeftFinal);
@@ -200,8 +200,9 @@ void fsm_boss::Hidden(float elapsed){
 		((TCompTransform*)((CEntity*)entity)->get<TCompTransform>())->position = XMVectorSetY(aux_pos, -500);
 	}
 
-	if (CIOStatus::get().becomesPressed(CIOStatus::V) || lua_boss_init){
-		// Emitir particula
+	if (lua_boss_init){
+		
+		// Make particle
 		XMVECTOR aux_rot = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), deg2rad(-90));
 		
 		XMVECTOR aux_pos = XMVectorSet(0, 1, 0, 0);
@@ -307,8 +308,6 @@ void fsm_boss::Idle1(float elapsed){
 	if (!can_attack)
 		last_attack = 0;
 	
-
-	CIOStatus& io = CIOStatus::get();
 	/**/
 	if (last_attack > 3){
 		int attack = CalculateAttack();
@@ -368,11 +367,11 @@ void fsm_boss::Stunned1(){
 		CSoundManager::get().playEvent("BOSS_STUN", enemy_comp_trans->position);
 	}
 
-	// Hacer danio a la izquierda
+	// Removing left arm
 	if (CIOStatus::get().becomesPressed(CIOStatus::V)){
 		EvaluateHit(0);
 	}
-	// Hacer danio a la derecha
+	// Removing right arm
 	if (CIOStatus::get().becomesPressed(CIOStatus::B)){
 		EvaluateHit(1);
 	}
