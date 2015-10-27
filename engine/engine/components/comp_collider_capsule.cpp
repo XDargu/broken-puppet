@@ -113,65 +113,66 @@ float TCompColliderCapsule::getRadius() {
 
 void TCompColliderCapsule::addInputNavMesh(){
 	//--- NAVMESH OBSTACLES --------------------------------------------------------------------------------------------------
+	if (this){
+		TCompAABB* aabb_module = getSibling<TCompAABB>(this);
+		TCompTransform* trans = getSibling<TCompTransform>(this);
 
-	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
-	TCompTransform* trans = getSibling<TCompTransform>(this);
+		if ((aabb_module) && (trans)){
 
-	if ((aabb_module) && (trans)){
+			TTransform* t = trans;
+			t_previous = trans->position;
+			XMFLOAT3 min;
+			XMStoreFloat3(&min, aabb_module->min);
+			XMFLOAT3 max;
+			XMStoreFloat3(&max, aabb_module->max);
+			int n_vertex = 8;
+			int n_triangles = 24;
+			float borders = 0.f;
 
-		TTransform* t = trans;
-		t_previous = trans->position;
-		XMFLOAT3 min;
-		XMStoreFloat3(&min, aabb_module->min);
-		XMFLOAT3 max;
-		XMStoreFloat3(&max, aabb_module->max);
-		int n_vertex = 8;
-		int n_triangles = 24;
-		float borders = 0.f;
+			CEntity* my_entity = CHandle(this).getOwner();
 
-		CEntity* my_entity = CHandle(this).getOwner();
-
-		bool is_player = my_entity->hasTag("player");
-		if (is_player)
-			borders = 0.6f;
-		//else if (my_entity->hasTag("enemy"))
+			bool is_player = my_entity->hasTag("player");
+			if (is_player)
+				borders = 0.6f;
+			//else if (my_entity->hasTag("enemy"))
 			//borders = 0.6f;
 
-		const float vertex[24] = {
-			  min.x + borders, min.y, min.z + borders
-			, max.x - borders, min.y, min.z + borders
-			, min.x + borders, max.y, min.z + borders
-			, max.x - borders, max.y, min.z + borders
-			, min.x + borders, min.y, max.z - borders
-			, max.x - borders, min.y, max.z - borders
-			, min.x + borders, max.y, max.z - borders
-			, max.x - borders, max.y, max.z - borders
-		};
+			const float vertex[24] = {
+				min.x + borders, min.y, min.z + borders
+				, max.x - borders, min.y, min.z + borders
+				, min.x + borders, max.y, min.z + borders
+				, max.x - borders, max.y, min.z + borders
+				, min.x + borders, min.y, max.z - borders
+				, max.x - borders, min.y, max.z - borders
+				, min.x + borders, max.y, max.z - borders
+				, max.x - borders, max.y, max.z - borders
+			};
 
-		if (m_v)
-			delete[] m_v;
-		if (t_v)
-			delete[] t_v;
-		m_v = new float[n_vertex * 3];
-		memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
+			if (m_v)
+				delete[] m_v;
+			if (t_v)
+				delete[] t_v;
+			m_v = new float[n_vertex * 3];
+			memcpy(m_v, vertex, n_vertex * 3 * sizeof(float));
 
-		const int indices[] = {
-			0, 1, 2, 3, 4, 5, 6, 7
-			, 0, 2, 1, 3, 4, 6, 5, 7
-			, 0, 4, 1, 5, 2, 6, 3, 7
-		};
-		t_v = new int[n_triangles];
-		memcpy(t_v, indices, n_triangles * sizeof(int));
+			const int indices[] = {
+				0, 1, 2, 3, 4, 5, 6, 7
+				, 0, 2, 1, 3, 4, 6, 5, 7
+				, 0, 4, 1, 5, 2, 6, 3, 7
+			};
+			t_v = new int[n_triangles];
+			memcpy(t_v, indices, n_triangles * sizeof(int));
 
-		CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
-		//------------------------------------------------------------------------------------------------------------------------
-	}
-	else{
-		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
-		if (!aabb_module)
-			XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
-		if (!trans)
-			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+			CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.OBSTACLE);
+			//------------------------------------------------------------------------------------------------------------------------
+		}
+		else{
+			std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+			if (!aabb_module)
+				XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
+			if (!trans)
+				XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+		}
 	}
 }
 

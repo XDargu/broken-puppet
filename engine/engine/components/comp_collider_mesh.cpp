@@ -58,45 +58,48 @@ void TCompColliderMesh::init() {
 }
 
 void TCompColliderMesh::addInputNavMesh(){
-	TCompAABB* aabb_module = getSibling<TCompAABB>(this);
-	TCompTransform* trans = getSibling<TCompTransform>(this);
+	if (this){
+		TCompAABB* aabb_module = getSibling<TCompAABB>(this);
+		TCompTransform* trans = getSibling<TCompTransform>(this);
 
-	std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
+		std::string name = ((CEntity*)CHandle(this).getOwner())->getName();
 
-	if ((aabb_module) && (trans)){
+		if ((aabb_module) && (trans)){
 
-		TTransform* t = trans;
-		//t->transformPoint()
-		XMFLOAT3 min;
-		XMStoreFloat3(&min, aabb_module->min);
-		XMFLOAT3 max;
-		XMStoreFloat3(&max, aabb_module->max);
+			TTransform* t = trans;
+			//t->transformPoint()
+			XMFLOAT3 min;
+			XMStoreFloat3(&min, aabb_module->min);
+			XMFLOAT3 max;
+			XMStoreFloat3(&max, aabb_module->max);
 
-		const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
+			const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
 
-		if (path){
-			//const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
-			if (c_m){
-				unsigned n_vertex = c_m->nvertexs;
-				if (m_v)
-					delete[] m_v;
-				if (t_v)
-					delete[] t_v;
-				m_v = new float[n_vertex * 8];
-				memcpy(m_v, c_m->vertex_floats, n_vertex * 8 * sizeof(float));
+			if (path){
+				//const CCollision_Mesh* c_m = mesh_collision_manager.getByName(path);
+				if (c_m){
+					unsigned n_vertex = c_m->nvertexs;
+					if (m_v)
+						delete[] m_v;
+					if (t_v)
+						delete[] t_v;
+					m_v = new float[n_vertex * 8];
+					memcpy(m_v, c_m->vertex_floats, n_vertex * 8 * sizeof(float));
 
-				unsigned n_triangles = c_m->nindices;
-				t_v = new int[n_triangles];
-				memcpy(t_v, c_m->index_int, n_triangles * sizeof(int));
+					unsigned n_triangles = c_m->nindices;
+					t_v = new int[n_triangles];
+					memcpy(t_v, c_m->index_int, n_triangles * sizeof(int));
 
-				CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.MODULE);
+					CNav_mesh_manager::get().nav_mesh_input.addInput(min, max, m_v, t_v, n_vertex, n_triangles, t, CNav_mesh_manager::get().nav_mesh_input.MODULE);
+				}
 			}
 		}
-	}else{
-		if (!aabb_module)
-			XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
-		if (!trans)
-			XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+		else{
+			if (!aabb_module)
+				XASSERT(aabb_module, "Error getting aabb from entity %s", name.c_str());
+			if (!trans)
+				XASSERT(trans, "Error getting transform from entity %s", name.c_str());
+		}
 	}
 }
 
