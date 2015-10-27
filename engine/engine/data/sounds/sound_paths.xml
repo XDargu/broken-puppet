@@ -1,16 +1,16 @@
 <fmodEvents>
   <!-- MUSICA -->
-  <event id="MUSIC_MENU" path="event:/Musica/CANCION" />
-  <event id="MUSIC_BASEMENT" path="event:/Musica/PRUEBA PROVISIONAL" />
+  <event id="MUSIC_MENU" path="event:/Musica/CANCION" /> <!-- Musica del menu principal-->
+  <event id="MUSIC_BASEMENT" path="event:/Musica/PRUEBA PROVISIONAL" /> <!-- Musica de la ambientacion "Desvan"-->
   <event id="MUSIC_ESC" path="event:/Musica/PROPUESTA 1" />
-  <event id="MUSIC_PIT" path="event:/Musica/Propuesta de Rollo 1 (Sin voz)" />
+  <event id="MUSIC_PIT" path="event:/Musica/Propuesta de Rollo 1 (Sin voz)" /> <!-- Musica de la ambientacion "Foso"-->
 
   <!-- GUI -->
-  <event id="BUTTON_HOVER" path="event:/GUI/button_hover" />
-  <event id="BUTTON_CLICK" path="event:/GUI/button_click" />
+  <event id="BUTTON_HOVER" path="event:/GUI/button_hover" /> <!-- Sonido cuando cursor ratón esta encima boton (Menu principal)-->
+  <event id="BUTTON_CLICK" path="event:/GUI/button_click" /> <!-- Sonido click en un boton (Menu principal)-->
 
   <!-- Sustituta -->
-  <event id="SUBS_SPEECH" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_06 Monologo" />
+  <event id="SUBS_SPEECH" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_06 Monologo" /> 
   <event id="SUBS_RAGDOLL" path="event:/Dialogos/Dialogos Sustituta/Sustituta Expresion_Alzamiento 02" />
   
   <event id="SUBS_WAIT_LOOP_7" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_07 You should had never" />
@@ -60,55 +60,55 @@
   <event id="KATH_SOLDIER_KILLED" path="event:/Expresion/Katherine/SoldadoMatado" />
   
   <!-- Strings & needles -->
-  <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" />
-  <event id="STRING_GRAB" path="event:/Expresion/Katherine/Tirar" />
-  <event id="STRING_CANCEL" path="event:/Expresion/Katherine/Cancelar" />
-  <event id="STRING_TENSE" path="event:/Expresion/Katherine/Tensar" />
+  <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" /> <!-- Evento de lanzamiento de hilos (Gameplay)-->
+  <event id="STRING_GRAB" path="event:/Expresion/Katherine/Tirar" /> <!-- Evento correspondiente a la mecanica de "tirar" (Gameplay)-->
+  <event id="STRING_CANCEL" path="event:/Expresion/Katherine/Cancelar" /> <!-- Evento correspodiente a la cancelacion de hilos (Gameplay)-->
+  <event id="STRING_TENSE" path="event:/Expresion/Katherine/Tensar" /> <!-- Evento correspodiente a la mecanica de "tensar" (Gameplay)-->
   
-  <event id="NEEDLE_HIT" path="event:/Aguja/Aguja" />
+  <event id="NEEDLE_HIT" path="event:/Aguja/Aguja" /> <!-- Evento correspodiente al sonido de impacto de las agujas (Gameplay)-->
 
   <!-- Action sounds -->
-  <event id="LANDING" path="" />
-  <event id="WRONG_LANDING" path="" />
+  <event id="LANDING" path="" /> <!-- Evento correspodiente al aterrizaje tras salto (Gameplay)-->
+  <event id="WRONG_LANDING" path="" /> <!-- Evento correspodiente al aterrizaje fuerte tras salto muy alto (Gameplay)-->
   
   <!-- Steps -->
-  <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" />
-  <event id="STEPS_GRANDMA" path="event:/Pasos/Pasos Abuela" />
-  <event id="STEPS_SOLDIER" path="event:/Pasos/Pasos Soldado" />
+  <event id="STEPS_KATH" path="event:/Pasos/Pasos Kath" /> <!-- Evento correspodiente a los pasos de Katherine(Gameplay) -->
+  <event id="STEPS_GRANDMA" path="event:/Pasos/Pasos Abuela" /> <!-- Evento correspodiente a los pasos del tipo de enemigo "Costureras" (Gameplay) -->
+  <event id="STEPS_SOLDIER" path="event:/Pasos/Pasos Soldado" /> <!-- Evento correspodiente a los pasos del tipo de enemigo "Soldados" (Gameplay) -->
 
   <!-- Boss -->
-  <event id="BOMB_EXPLOSION" path="event:/Impactos/bomb_exposion" />
-  <event id="BOSS_RISE_UP" path="event:/Ambiente/boss_rise_up" />
-  <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" />
-  <event id="BOSS_STUN" path="event:/Ambiente/boss_stun" />
-  <event id="RECOVER" path="event:/Ambiente/boss_stun_ends" />
-  <event id="BOSS_DAMAGE" path="event:/Ambiente/boss_damage" />
-  <event id="BOSS_HEART" path="event:/Ambiente/boss_heart" />
-  <event id="BOSS_BALL_CREATE" path="event:/Ambiente/boss_ball_create" />
-  <event id="BOSS_BALL_THROW" path="event:/Ambiente/boss_ball_throw" />
-  <event id="BOSS_WAVE" path="event:/Ambiente/boss_wave" />
-  <event id="BOSS_KILLED" path="event:/Ambiente/boss_heart_killed" />
-  <event id="BOSS_SHOT" path="event:/Ambiente/boss_shot" />
-  <event id="BOSS_RAIN" path="event:/Ambiente/boss_rain" />
-  <event id="BOSS_THROW" path="event:/Ambiente/boss_throw" />
+  <event id="BOMB_EXPLOSION" path="event:/Impactos/bomb_exposion" /> <!-- Evento correspodiente a las explosiones provocadas por bombas (Gameplay) -->
+  <event id="BOSS_RISE_UP" path="event:/Ambiente/boss_rise_up" /> <!-- Evento correspodiente a los sonidos en la escena de aparición del final Boss (Gameplay) -->
+  <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando le arrancan un brazo (Gameplay) -->
+  <event id="BOSS_STUN" path="event:/Ambiente/boss_stun" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando es golpeado por una bomba y queda mareado (Gameplay) -->
+  <event id="RECOVER" path="event:/Ambiente/boss_stun_ends" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando se le pasa el mareo (Gameplay) -->
+  <event id="BOSS_DAMAGE" path="event:/Ambiente/boss_damage" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando recibe daño (Gameplay) -->
+  <event id="BOSS_HEART" path="event:/Ambiente/boss_heart" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando su corazon queda expuesto (Gameplay) -->
+  <event id="BOSS_BALL_CREATE" path="event:/Ambiente/boss_ball_create" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta formando la bola de basura para atacar (Gameplay) -->
+  <event id="BOSS_BALL_THROW" path="event:/Ambiente/boss_ball_throw" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando lanza la bola de basura (Gameplay) -->
+  <event id="BOSS_WAVE" path="event:/Ambiente/boss_wave" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta usa el ataque "ola lateral" (Gameplay) -->
+  <event id="BOSS_KILLED" path="event:/Ambiente/boss_heart_killed" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando le arrancan el corazón y finalmente muere (Gameplay) -->
+  <event id="BOSS_SHOT" path="event:/Ambiente/boss_shot" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando atrae props para realizar disparos individuales (Gameplay) -->
+  <event id="BOSS_RAIN" path="event:/Ambiente/boss_rain" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta haciendo llover basura (Gameplay) -->
+  <event id="BOSS_THROW" path="event:/Ambiente/boss_throw" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando dispara props individuales (Gameplay) -->
 
 
   <!-- Collisions -->
-  <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" />
-  <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" />
-  <event id="HIT_RATTLE" path="event:/Colisiones/Colision Cascabel" />
-  <event id="HIT_PIANO" path="event:/Colisiones/Colision Piano" />
-  <event id="HIT_BALL" path="event:/Colisiones/Colision Pelota" />
-  <event id="HIT_BOOK" path="event:/Colisiones/Colision Libro" />
+  <event id="HIT_WOOD" path="event:/Colisiones/Colision Madera" /> <!-- Evento correspodiente a los sonidos de colision con madera (Gameplay) -->
+  <event id="HIT_METAL" path="event:/Colisiones/Colision Metal" /> <!-- Evento correspodiente a los sonidos de colision con metal (Gameplay) -->
+  <event id="HIT_RATTLE" path="event:/Colisiones/Colision Cascabel" /> <!-- Evento correspodiente a los sonidos de colision del prop "cascabel" (Gameplay) -->
+  <event id="HIT_PIANO" path="event:/Colisiones/Colision Piano" /> <!-- Evento correspodiente a los sonidos de colision del prop "piano" (Gameplay) -->
+  <event id="HIT_BALL" path="event:/Colisiones/Colision Pelota" /> <!-- Evento correspodiente a los sonidos de colision del prop "pelota de juguete" (Gameplay) -->
+  <event id="HIT_BOOK" path="event:/Colisiones/Colision Libro" /> <!-- Evento correspodiente a los sonidos de colision del prop "libro" (Gameplay) -->
 
   <!-- Impactos -->
-  <event id="GRANDMA_HIT" path="event:/Impactos/sword_swing" />
-  <event id="GRANDMA_MISS" path="event:/Impactos/sword_miss" />
+  <event id="GRANDMA_HIT" path="event:/Impactos/sword_swing" /> <!-- Evento correspodiente a los sonidos que hacen los enemigos "Costureras" al atacar atacando con sus "espadas" (Gameplay) -->
+  <event id="GRANDMA_MISS" path="event:/Impactos/sword_miss" /> <!-- Evento correspodiente a los sonidos que hacen los enemigos "Costureras" al fallar un ataque con sus "espadas" (Gameplay) -->
 
-  <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" />
-  <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" />
+  <event id="SOLDIER_HIT" path="event:/Impactos/wood_swing" /> <!-- Evento correspodiente a los sonidos que hacen los enemigos "Soldados" al atacar con sus "palos de madera" (Gameplay) -->
+  <event id="SOLDIER_MISS" path="event:/Impactos/sword_miss" /> <!-- Evento correspodiente a los sonidos que hacen los enemigos "Soldados" al fallar un ataque con sus "palos de madera" (Gameplay) -->
 
-  <event id="ENEMY_BREAKING" path="event:/Impactos/enemy_breaking" />
+  <event id="ENEMY_BREAKING" path="event:/Impactos/enemy_breaking" /> <!-- Evento correspodiente a los sonidos que hacen los enemigos al romperse en pedazos (Gameplay) -->
 
   <!-- Ambient -->
   
