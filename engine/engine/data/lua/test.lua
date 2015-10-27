@@ -15,10 +15,13 @@ _print = print
 clearCoroutines()
 
 function onSceneLoad_my_file()
-	onSceneLoad_scene_final_boss()
-	onSceneLoad_scene_4()
+
+logicManager:setFogAttributes(1000, -10000);
+
+	--onSceneLoad_scene_final_boss()
+	--onSceneLoad_scene_4()
 	onSceneLoad_scene_3()
-	onSceneLoad_scene_2()
+	--onSceneLoad_scene_2()
 	--onSceneLoad_scene_1()	
 end
 
@@ -543,7 +546,7 @@ bossSecuence = false;
 
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 2 **********
 	-- Hacer que al empezar el player mire al sitio correcto
-	logicManager:cameraLookAtPosition(Vector(initPos.x, initPos.y + 1.7, initPos.z - 1))
+	logicManager:cameraLookAtPosition(Vector(initPos.x, initPos.y + 1.7, initPos.z - 100))
 
 	-- Apagar cable
 	local sc2_cable = logicManager:getObject("sc2_cable_plat")	

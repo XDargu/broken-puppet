@@ -147,6 +147,7 @@ TSilouetteStep silouette;
 TUnderwaterEffect underwater;
 TSSRRStep ssrr;
 TFogStep fog;
+TLensFlareStep lens_flare;
 
 //---------------------------------------------------
 //CNavmesh nav_prueba;
@@ -407,6 +408,7 @@ bool CApp::create() {
 #ifndef FINAL_RELEASE
 	rope_thrown = false;
 	physx_clamp = false;
+	draw_lights = true;
 #endif
 
 	draw_gui = true;
@@ -434,10 +436,11 @@ bool CApp::create() {
 	is_ok &= chromatic_aberration.create("chromatic_aberration", xres, yres, 1);
 	is_ok &= blur.create("blur", xres, yres, 1);
 	is_ok &= blur_camera.create("blur_camera", xres, yres, 1);
-	is_ok &= glow.create("glow", xres, yres, 2);
+	is_ok &= glow.create("glow", xres, yres, 4);
 	is_ok &= underwater.create("underwater", xres, yres, 1);
 	is_ok &= ssrr.create("ssrr", xres, yres, 1);
 	is_ok &= silouette.create("silouette", xres, yres, 1);
+	is_ok &= lens_flare.create("lens_flare", xres, yres, 1);
 	is_ok &= fog.create("fog", xres, yres, 1);
 
 	// Create Debug Technique
@@ -687,10 +690,13 @@ void CApp::update(float elapsed) {
 			game_state = TGameState::MAIN_MENU;
 			logic_manager.loadScene(menu_scene);
 		}
-	}	
+	}
+
 #ifndef FINAL_RELEASE
 	if (io.isPressed(CIOStatus::EXTRA)) {
 	}
+
+	draw_lights = !io.isPressed(CIOStatus::ALT);
 
 	// Slow motion
 	if (io.becomesReleased(CIOStatus::Q)) {
@@ -741,12 +747,14 @@ void CApp::update(float elapsed) {
 		render_techniques_manager.reload("silouette_type");
 		render_techniques_manager.reload("silouette_glow");
 		render_techniques_manager.reload("deferred_gbuffer");
+		render_techniques_manager.reload("deferred_gbuffer_cloth");
 		render_techniques_manager.reload("deferred_resolve");
 		render_techniques_manager.reload("skin_basic");
 		render_techniques_manager.reload("underwater");
 		render_techniques_manager.reload("ssao");
 		render_techniques_manager.reload("ssao_blur");
 		render_techniques_manager.reload("fog");
+		render_techniques_manager.reload("lens_flare");
 		/*render_techniques_manager.reload("deferred_point_lights");
 		render_techniques_manager.reload("deferred_dir_lights");
 		render_techniques_manager.reload("deferred_resolve");
@@ -914,6 +922,17 @@ void CApp::update(float elapsed) {
 	CNav_mesh_manager::get().checkDistaceToEnemies();
 	//-----------------------------------------------------------------------------------------
 
+	// Camera menu test
+	CEntity* e = entity_manager.getByName("camera_menu");
+	if (CHandle(e).isValid()) {
+		TCompTransform* cam_trans = e->get<TCompTransform>();
+		XMVECTOR quat2 = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), io.getMouse().dx * elapsed * -0.0005f);
+		XMVECTOR quat1 = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), io.getMouse().dy * elapsed * -0.0005f);
+		cam_trans->rotation = XMQuaternionMultiply(cam_trans->rotation, quat1);
+		cam_trans->rotation = XMQuaternionMultiply(cam_trans->rotation, quat2);
+		
+	}
+
 	logic_manager.update(elapsed);
 }
 
@@ -944,7 +963,6 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
 	getObjManager<TCompPlayerRope>()->fixedUpdate(elapsed);
-
 }
 
 void CApp::render() {
@@ -1230,7 +1248,12 @@ void CApp::render() {
 
 			bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
 			if (can_throw) {
-				drawTexture2D(xres / 2.f - 24, yres / 2.f - 24, 48, 48, texture_manager.getByName("crosshair_can"));
+				if (CIOStatus::get().isPressed(CIOStatus::MOUSE_LEFT)) {
+					drawTexture2D(xres / 2.f - 24, yres / 2.f - 24, 48, 48, texture_manager.getByName("crosshair_can"));
+				}
+				else {
+					drawTexture2D(xres / 2.f - 28, yres / 2.f - 28, 56, 56, texture_manager.getByName("crosshair_can"));
+				}
 			}
 			else {
 				drawTexture2D(xres / 2.f - 16, yres / 2.f - 16, 32, 32, texture_manager.getByName("crosshair_cant"));
@@ -1468,8 +1491,8 @@ void CApp::renderEntities() {
 	if (renderNavMesh){
 		CNav_mesh_manager::get().render_nav_mesh();
 		CNav_mesh_manager::get().pathRender();
-	}
-	getObjManager<TCompBtSoldier>()->renderDebug3D();
+	}*/
+	/*getObjManager<TCompBtSoldier>()->renderDebug3D();
 	getObjManager<TCompBtGrandma>()->renderDebug3D();
 	getObjManager<TCompPlayerController>()->renderDebug3D();*/
 	
@@ -1601,6 +1624,7 @@ void CApp::destroy() {
 	blur_camera.destroy();
 	glow.destroy();
 	silouette.destroy();
+	lens_flare.destroy();
 	underwater.destroy();
 	ssrr.destroy();
 	fog.destroy();
@@ -1823,7 +1847,7 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.get()->global_water_level = water_level;
 
 	render_manager.init();
-	ctes_global.get()->use_lightmaps = 0;
+	ctes_global.get()->use_lightmaps = 1;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_menu.xml"){
@@ -1839,7 +1863,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_1.xml"){
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(70.f);
-		ctes_global.get()->use_lightmaps = 0;
+		ctes_global.get()->use_lightmaps = 1;
 		CSoundManager::get().setSceneID(1);
 
 		fog.fog_level = -1000;

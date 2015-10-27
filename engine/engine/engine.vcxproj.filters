@@ -585,9 +585,10 @@
     <ClInclude Include="render\fog_step.h">
       <Filter>render\postpro</Filter>
     </ClInclude>
-    <ClInclude Include="components\comp_player_rope.h">
-      <Filter>components\misc</Filter>
+    <ClInclude Include="render\lens_flare_step.h">
+      <Filter>render\postpro</Filter>
     </ClInclude>
+    <ClInclude Include="components\comp_player_rope.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1097,9 +1098,10 @@
     <ClCompile Include="render\fog_step.cpp">
       <Filter>render\postpro</Filter>
     </ClCompile>
-    <ClCompile Include="components\comp_player_rope.cpp">
-      <Filter>components\misc</Filter>
+    <ClCompile Include="render\lens_flare_step.cpp">
+      <Filter>render\postpro</Filter>
     </ClCompile>
+    <ClCompile Include="components\comp_player_rope.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

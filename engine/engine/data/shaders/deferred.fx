@@ -57,7 +57,17 @@ VS_TEXTURED_OUTPUT VS(
   )
 {
   VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+
+  /*float3 wpos = mul(Pos, World);
+  float3 dir = mul(float3(0, 1, 0), World);
+  float distCamera = distance(wpos, cameraWorldPos.xyz);
+  float3 camera_dir = cameraWorldPos.xyz - wpos;
+  float3 mWos = wpos.xyz + float3(0, 3, 0) * (pow(max(0, distCamera - 4), 2) * 0.0095);*/
+  
+
   float4 world_pos = mul(Pos, World);
+  //world_pos = float4(mWos.xyz, Pos.w * 1);
+
   output.Pos = mul(world_pos, ViewProjection);
   output.wNormal = mul(Normal, (float3x3)World);
   output.UV = UV * 1;
@@ -67,6 +77,30 @@ VS_TEXTURED_OUTPUT VS(
   output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
   output.wTangent.w = Tangent.w;
   return output;
+}
+
+//--------------------------------------------------------------------------------------
+// Vertex Shader Cloth
+//--------------------------------------------------------------------------------------
+VS_TEXTURED_OUTPUT VSCloth(
+	float4 Pos : POSITION
+	, float2 UV : TEXCOORD0
+	, float3 Normal : NORMAL
+	, float2 UVL : TEXCOORD1
+	, float4 Tangent : TANGENT
+	)
+{
+	VS_TEXTURED_OUTPUT output = (VS_TEXTURED_OUTPUT)0;
+	float4 world_pos = mul(Pos, World);
+		output.Pos = mul(world_pos, ViewProjection);
+	output.wNormal = mul(Normal, (float3x3)World);
+	output.UV = UV * 1;
+	output.UVL = UVL;
+	output.wPos = world_pos;
+	// Rotate the tangent and keep the w value
+	output.wTangent.xyz = mul(Tangent.xyz, (float3x3)World);
+	output.wTangent.w = Tangent.w;
+	return output;
 }
 
 void VSGenShadowsSkel(
@@ -277,10 +311,10 @@ void PSGBuffer(
   }
 	  
   //if (true)
-  if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y || use_lightmaps == 0)
+  if (input.UV.x == input.UVL.x && input.UV.y == input.UVL.y || use_lightmaps == 0 || depth.y > 0)
 	  acc_light += float4(0.88, 0.85, 0.85, 0) * 0.15;//acc_light += float4(0.98, 0.85, 0.8, 0) * 0.35;
   else
-	  acc_light = float4(lightmap.xyz * 1, 0) - float4(1,1,1,1) * 0.15;
+	  acc_light = float4(pow(lightmap.xyz, 2) * 1, 0) - float4(1,1,1,1) * 0.00;
   
   acc_light *= added_ambient_color;
   

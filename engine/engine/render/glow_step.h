@@ -8,6 +8,7 @@
 struct TGlowStep {
 	CRenderToTexture *rt_lights;
 	CRenderToTexture *rt_glow;
+	CRenderToTexture *rt_lens;
 	char name_lights[64];
 	char name_glow[64];
 	int  factor;

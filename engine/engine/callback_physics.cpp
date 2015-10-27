@@ -1,5 +1,6 @@
 #include "mcv_platform.h"
 #include "entity_manager.h"
+#include "handle\prefabs_manager.h"
 #include "callback_physics.h"
 #include "physics_manager.h"
 #include "components\all_components.h"
@@ -215,7 +216,22 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 							createParticle(firstActorEntity, position, normal, firstActorEntity->material_tag);
 						}
 					}
+
+					/*if (force > 200 && char_equal(firstActorEntity->material_tag, "glass")) {
+						CLogicManager::get().instantiateParticleGroupOneShot("ps_glass_hit", position);
+						CEntityManager::get().remove(CHandle(firstActorEntity));
+						TCompTransform* canica_t = firstActorEntity->get<TCompTransform>();
+
+						CEntity* rota_e = prefabs_manager.getInstanceByName("canica_rota");
+						if (rota_e) {
+							TCompTransform* rota_t = rota_e->get<TCompTransform>();
+							rota_t->position = canica_t->position;
+							rota_t->rotation = canica_t->rotation;
+						}
+					}*/
 				}
+
+				
 
 			}else if ((firstActorEntity->hasTag("level")) && (secondActorEntity->hasTag("actor"))){
 				
@@ -245,7 +261,21 @@ void CCallbacks_physx::onContact(const PxContactPairHeader& pairHeader, const Px
 							createParticle(firstActorEntity, position, normal, secondActorEntity->material_tag);
 						}
 					}
+
+					/*if (force > 200 && char_equal(secondActorEntity->material_tag, "glass")) {
+						CLogicManager::get().instantiateParticleGroupOneShot("ps_glass_hit", position);
+						CEntityManager::get().remove(CHandle(secondActorEntity));
+						TCompTransform* canica_t = secondActorEntity->get<TCompTransform>();
+
+						CEntity* rota_e = prefabs_manager.getInstanceByName("canica_rota");
+						if (rota_e) {
+							TCompTransform* rota_t = rota_e->get<TCompTransform>();
+							rota_t->position = canica_t->position;
+							rota_t->rotation = canica_t->rotation;
+						}
+					}*/
 				}
+
 
 			}else if ((firstActorEntity->hasTag("actor")) && (secondActorEntity->hasTag("actor"))){
 				TCompRigidBody* rigid = firstActorEntity->get<TCompRigidBody>();

@@ -12,6 +12,7 @@ class CEntity;
 
 class CApp {	
 
+
 	void update(float elapsed);
 	void fixedUpdate(float elapsed); // Physx update
 	void render();
@@ -45,6 +46,7 @@ public:
 
 	bool rope_thrown;
 	bool physx_clamp;
+	bool draw_lights;
 #endif
 
 	std::string current_scene_name;

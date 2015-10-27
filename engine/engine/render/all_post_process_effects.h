@@ -11,5 +11,6 @@
 #include "ssrr_step.h"
 #include "silouette_step.h"
 #include "fog_step.h"
+#include "lens_flare_step.h"
 
 #endif

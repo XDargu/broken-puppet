@@ -89,13 +89,17 @@ void CDeferredRender::generateLightBuffer() {
 	activateZConfig(ZCFG_INVERSE_TEST_NO_WRITE);
 	activateBlendConfig(BLEND_CFG_ADDITIVE);
 
-	if (1) {
+	bool draw_l = true;
+#ifndef FINAL_RELEASE
+	draw_l = CApp::get().draw_lights;
+#endif
+	if (draw_l) {
 		CTraceScoped scope("point_lights");
 		technique_deferred_point_lights->activate();
 		getObjManager<TCompPointLight>()->onAll(&TCompPointLight::draw);
 	}
 	
-	if (1) {
+	if (draw_l) {
 		CTraceScoped scope("dir_lights");
 		technique_deferred_dir_lights->activate();
 		getObjManager<TCompShadows>()->onAll(&TCompShadows::draw);

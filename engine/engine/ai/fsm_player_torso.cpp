@@ -899,8 +899,7 @@ void FSMPlayerTorso::getThrowingData(PxActor* &the_hit_actor, PxVec3 &the_actor_
 
 	for (int i = 0; i < (int)buf.nbTouches; i++)
 	{
-		CEntity* e = CHandle(buf.touches[i].actor->userData);
-		if (e && !e->hasTag("player") && !e->hasTag("rope")) {
+		if (std::strcmp(buf.touches[i].actor->getName(), "Player") != 0) {
 			// Reset variables
 			is_priority_entity = false;
 			entity = nullptr;

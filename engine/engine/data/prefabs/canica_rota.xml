@@ -1,0 +1,12 @@
+<prefab>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "glass">
+    <name name="canica_rota_1.0" />
+    <transform position="0.0 0.0 0.0" rotation="0.868272 0.176154 0.0947189 0.453984" scale="1.0 1.0 1.0"/>
+    <render >
+      <draw mesh="canica_rota" sub_mesh="0" mat="peonzas"/>
+    </render>
+    <aabb min="-0.344908 -0.147806 -0.0930171" max="0.350899 0.116788 0.0958533"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.347903" boxY="0.132297" boxZ="0.0944352"/>
+    <rigidbody density="6199.06"  />
+  </entity>
+</prefab>

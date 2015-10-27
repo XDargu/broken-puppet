@@ -1,0 +1,6 @@
+<technique 
+	fx="lens_flare.fx"
+	vs="VSLensFlare"
+	vs_decl="vdcl_position_uv"
+	ps="PSLensFlare"
+	/>

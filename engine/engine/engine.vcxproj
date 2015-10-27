@@ -349,6 +349,7 @@
     <ClInclude Include="render\deferred_render.h" />
     <ClInclude Include="render\fog_step.h" />
     <ClInclude Include="render\glow_step.h" />
+    <ClInclude Include="render\lens_flare_step.h" />
     <ClInclude Include="render\material.h" />
     <ClInclude Include="render\mesh.h" />
     <ClInclude Include="render\render.h" />
@@ -641,6 +642,7 @@
     <ClCompile Include="render\deferred_render.cpp" />
     <ClCompile Include="render\fog_step.cpp" />
     <ClCompile Include="render\glow_step.cpp" />
+    <ClCompile Include="render\lens_flare_step.cpp" />
     <ClCompile Include="render\material.cpp" />
     <ClCompile Include="render\mesh.cpp" />
     <ClCompile Include="render\render.cpp" />
