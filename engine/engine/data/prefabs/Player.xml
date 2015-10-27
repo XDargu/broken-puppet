@@ -30,5 +30,6 @@
     <characterController/>
 	<life life="100"/>
 	<playerController/>
- </entity>
+  <playerRope/>
+</entity>
 </prefab>

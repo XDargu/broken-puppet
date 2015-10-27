@@ -206,9 +206,12 @@ void TCompCharacterController::GroundCheck(float elapsed)
 		{
 			if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 				if (buf.touches[i].position.y > max_y) {
-					max_y = buf.touches[i].position.y;
-					ground_actor = buf.touches[i].actor;
-					ground_position = buf.touches[i].position;
+					CEntity* e = CHandle(buf.touches[i].actor->userData);
+					if (e && !e->hasTag("rope")) {
+						max_y = buf.touches[i].position.y;
+						ground_actor = buf.touches[i].actor;
+						ground_position = buf.touches[i].position;
+					}
 				}
 			}
 		}
@@ -229,9 +232,12 @@ void TCompCharacterController::GroundCheck(float elapsed)
 			{
 				if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 					if (buf.touches[i].position.y > max_y) {
-						max_y = buf.touches[i].position.y;
-						ground_actor = buf.touches[i].actor;
-						ground_position = buf.touches[i].position;
+						CEntity* e = CHandle(buf.touches[i].actor->userData);
+						if (e && !e->hasTag("rope")) {
+							max_y = buf.touches[i].position.y;
+							ground_actor = buf.touches[i].actor;
+							ground_position = buf.touches[i].position;
+						}
 					}
 				}
 			}
@@ -252,9 +258,12 @@ void TCompCharacterController::GroundCheck(float elapsed)
 			{
 				if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 					if (buf.touches[i].position.y > max_y) {
-						max_y = buf.touches[i].position.y;
-						ground_actor = buf.touches[i].actor;
-						ground_position = buf.touches[i].position;
+						CEntity* e = CHandle(buf.touches[i].actor->userData);
+						if (e && !e->hasTag("rope")) {
+							max_y = buf.touches[i].position.y;
+							ground_actor = buf.touches[i].actor;
+							ground_position = buf.touches[i].position;
+						}
 					}
 				}
 			}
@@ -273,6 +282,19 @@ void TCompCharacterController::GroundCheck(float elapsed)
 			CEntity* actor_e = CHandle(ground_actor->userData);
 			if (actor_e) {
 				std::strcpy(last_material_tag, actor_e->material_tag);
+			}
+
+			if (ground_actor->isRigidBody())
+			{
+				// Aply weight force
+				if (rigid->rigidBody != (PxRigidBody*)ground_actor)
+				{
+					if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+						PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 10;
+																
+						PxRigidBodyExt::addForceAtPos(*(PxRigidBody*)ground_actor, down_force, ground_position, PxForceMode::eFORCE, true);							
+					}
+				}
 			}
 
 			if (velocity.y <= 0)
@@ -300,16 +322,6 @@ void TCompCharacterController::GroundCheck(float elapsed)
 					PxVec3 diff = last_platform_speed - ground_velocity;
 					rigid->rigidBody->addForce(ground_velocity - diff, PxForceMode::eVELOCITY_CHANGE, true);
 					last_platform_speed = ground_velocity;
-
-					// Aply weight force
-
-					if (rigid->rigidBody != (PxRigidBody*)ground_actor)
-					{
-						if (!((PxRigidBody*)ground_actor)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
-							PxVec3 down_force = Physics.gScene->getGravity() * rigid->rigidBody->getMass() * 4;
-							((PxRigidBody*)ground_actor)->addForce(down_force, PxForceMode::eFORCE, true);
-						}
-					}
 
 
 				}

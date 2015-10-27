@@ -192,6 +192,7 @@
     <ClInclude Include="app.h" />
     <ClInclude Include="audio\bass.h" />
     <ClInclude Include="components\comp_ai_substitute.h" />
+    <ClInclude Include="components\comp_player_rope.h" />
     <ClInclude Include="importer_resource_loader.h" />
     <ClInclude Include="audio\sound.h" />
     <ClInclude Include="audio\sound_events_parser.h" />
@@ -409,6 +410,7 @@
     <ClCompile Include="components\comp_ai_substitute.cpp" />
     <ClCompile Include="components\comp_boss_prefab.cpp" />
     <ClCompile Include="components\comp_hitch.cpp" />
+    <ClCompile Include="components\comp_player_rope.cpp" />
     <ClCompile Include="importer_resource_loader.cpp" />
     <ClCompile Include="localization_parser.cpp" />
     <ClCompile Include="components\comp_collider_convex.cpp" />

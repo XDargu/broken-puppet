@@ -99,7 +99,7 @@ using namespace DirectX;
 #include "comp_hfx_zone.h"
 #include "comp_explosion.h"
 #include "comp_boss_prefab.h"
-
+#include "comp_player_rope.h"
 
 // Animation
 #include "comp_vibration.h"

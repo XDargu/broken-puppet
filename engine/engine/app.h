@@ -1,4 +1,4 @@
-#define FINAL_RELEASE
+//#define FINAL_RELEASE
 //#define NO_VIDEO
 
 #ifndef INC_APP_H_
@@ -11,7 +11,6 @@
 class CEntity;
 
 class CApp {	
-
 
 	void update(float elapsed);
 	void fixedUpdate(float elapsed); // Physx update
