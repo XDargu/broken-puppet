@@ -221,7 +221,7 @@ void createManagers() {
 	getObjManager<TCompJointHinge>()->init(256);
 	getObjManager<TCompJointD6>()->init(512);
 	getObjManager<TCompJointFixed>()->init(512);
-	getObjManager<TCompRope>()->init(32);
+	getObjManager<TCompRope>()->init(128);
 	getObjManager<TCompNeedle>()->init(max_num_needles);
 	getObjManager<TCompPlayerPosSensor>()->init(64);
 	getObjManager<TCompSensorNeedles>()->init(64);
@@ -234,6 +234,7 @@ void createManagers() {
 	// Otros
 	getObjManager<TCompExplosion>()->init(64);
 	getObjManager<TCompBossPrefab>()->init(512);
+	getObjManager<TCompPlayerRope>()->init(2);
 
 	// Interruptores
 	getObjManager<TCompSwitchController>()->init(32);
@@ -355,6 +356,7 @@ void initManagers() {
 	getObjManager<TCompParticleGroup>()->initHandlers();
 	getObjManager<TCompParticleEditor>()->initHandlers();
 	getObjManager<TCompAnimEditor>()->initHandlers();
+	getObjManager<TCompPlayerRope>()->initHandlers();
 
 	//AUDIO
 	getObjManager<TCompAudioListener>()->initHandlers();
@@ -897,6 +899,7 @@ void CApp::update(float elapsed) {
 	// ANIMATION
 	getObjManager<TCompVibration>()->update(elapsed);
 	getObjManager<TCompLocalRotation>()->update(elapsed);
+	getObjManager<TCompPlayerRope>()->update(elapsed);
 
 #ifdef _DEBUG
 	entity_inspector.update();
@@ -940,6 +943,7 @@ void CApp::fixedUpdate(float elapsed) {
 	getObjManager<TCompRagdoll>()->fixedUpdate(elapsed);
 	getObjManager<TCompParticleGroup>()->fixedUpdate(elapsed);
 	getObjManager<TCompAiBoss>()->fixedUpdate(elapsed);
+	getObjManager<TCompPlayerRope>()->fixedUpdate(elapsed);
 
 }
 

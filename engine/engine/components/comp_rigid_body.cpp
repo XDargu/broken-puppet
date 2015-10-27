@@ -222,6 +222,18 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 		// Particles
 		if (now_underwater != underwater) {
 			CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
+
+			// Change damping
+			if (water_damping) {
+				if (now_underwater) {
+					rigidBody->setLinearDamping(1);
+					rigidBody->setAngularDamping(0.5f);
+				}
+				else {
+					rigidBody->setLinearDamping(0.05f);
+					rigidBody->setAngularDamping(0.05f);
+				}
+			}
 		}
 
 		// Apply forces
@@ -230,15 +242,9 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 		if (now_underwater) {
 			float volume = rigidBody->getMass() / density;
 			float water_density = 500;
-
 			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
-			rigidBody->setLinearDamping(1);
-			rigidBody->setAngularDamping(0.5f);
-		}
-		else {
-			rigidBody->setLinearDamping(0.05f);
-			rigidBody->setAngularDamping(0.05f);
-		}		
+			
+		}	
 	}
 
 	underwater = now_underwater;

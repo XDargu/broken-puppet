@@ -12,7 +12,6 @@ class CEntity;
 
 class CApp {	
 
-
 	void update(float elapsed);
 	void fixedUpdate(float elapsed); // Physx update
 	void render();

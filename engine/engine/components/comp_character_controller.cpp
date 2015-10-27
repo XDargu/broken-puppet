@@ -206,9 +206,12 @@ void TCompCharacterController::GroundCheck(float elapsed)
 		{
 			if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 				if (buf.touches[i].position.y > max_y) {
-					max_y = buf.touches[i].position.y;
-					ground_actor = buf.touches[i].actor;
-					ground_position = buf.touches[i].position;
+					CEntity* e = CHandle(buf.touches[i].actor->userData);
+					if (e && !e->hasTag("rope")) {
+						max_y = buf.touches[i].position.y;
+						ground_actor = buf.touches[i].actor;
+						ground_position = buf.touches[i].position;
+					}
 				}
 			}
 		}
@@ -229,9 +232,12 @@ void TCompCharacterController::GroundCheck(float elapsed)
 			{
 				if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 					if (buf.touches[i].position.y > max_y) {
-						max_y = buf.touches[i].position.y;
-						ground_actor = buf.touches[i].actor;
-						ground_position = buf.touches[i].position;
+						CEntity* e = CHandle(buf.touches[i].actor->userData);
+						if (e && !e->hasTag("rope")) {
+							max_y = buf.touches[i].position.y;
+							ground_actor = buf.touches[i].actor;
+							ground_position = buf.touches[i].position;
+						}
 					}
 				}
 			}
@@ -252,9 +258,12 @@ void TCompCharacterController::GroundCheck(float elapsed)
 			{
 				if (buf.touches[i].actor->userData != rigid->rigidBody->userData) {
 					if (buf.touches[i].position.y > max_y) {
-						max_y = buf.touches[i].position.y;
-						ground_actor = buf.touches[i].actor;
-						ground_position = buf.touches[i].position;
+						CEntity* e = CHandle(buf.touches[i].actor->userData);
+						if (e && !e->hasTag("rope")) {
+							max_y = buf.touches[i].position.y;
+							ground_actor = buf.touches[i].actor;
+							ground_position = buf.touches[i].position;
+						}
 					}
 				}
 			}

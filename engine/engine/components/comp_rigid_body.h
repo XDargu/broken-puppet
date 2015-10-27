@@ -17,6 +17,7 @@ public:
 	double impact_timestamp;
 	bool auto_translate_transform;
 	bool auto_rotate_transform;
+	bool water_damping;
 	int boss_level;
 	enum colliderType {
 		BOX,
@@ -32,6 +33,7 @@ public:
 		rigidBody(nullptr),
 		auto_translate_transform(true),
 		auto_rotate_transform(true),
+		water_damping(true),
 		underwater(false)
 	{}
 
