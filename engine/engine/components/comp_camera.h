@@ -46,7 +46,18 @@ public:
 	void updateViewProjection() {
 		TCompTransform* trans = (TCompTransform*)transform;
 
-		view = XMMatrixLookAtRH(trans->position, trans->position + trans->getFront(), XMVectorSet(0, 1, 0, 1));
+		XMVECTOR mUp = XMVectorSet(0, 1, 0, 0);
+		XMVECTOR mRight = XMVector3Cross(trans->getFront(), mUp);
+		XMVECTOR fUp = XMVector3Cross(mRight, trans->getFront());
+		
+		trans->lookAt(trans->position + trans->getFront(), mUp);
+		/*position = trans->position;
+		front = trans->getFront();
+		right = mRight;
+		up = fUp;*/
+
+
+		view = XMMatrixLookAtRH(trans->position, trans->position + trans->getFront(), mUp);
 
 		TTransform prev_trans = trans->getPrevTransform();
 

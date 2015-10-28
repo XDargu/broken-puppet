@@ -774,6 +774,9 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("deferred_point_lights");
 	}
 #endif
+	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+		logic_manager.execute("onExtraButtonPressed()");
+	}
 	// Water level
 	CEntity* water = entity_manager.getByName("water");
 	if (water) {
@@ -1225,7 +1228,7 @@ void CApp::render() {
 
 	// DRAW GUI
 	CTraceScoped scope_gui("GUI");
-	if (draw_gui) {
+	if (draw_gui && false) {
 		if (h_player.isValid()) {
 			int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 			life_val /= 10;
@@ -1248,7 +1251,7 @@ void CApp::render() {
 
 			bool can_throw = ((TCompPlayerController*)((CEntity*)h_player)->get<TCompPlayerController>())->canThrow();
 			if (can_throw) {
-				if (CIOStatus::get().isPressed(CIOStatus::MOUSE_LEFT)) {
+				if (!CIOStatus::get().isPressed(CIOStatus::MOUSE_LEFT)) {
 					drawTexture2D(xres / 2.f - 24, yres / 2.f - 24, 48, 48, texture_manager.getByName("crosshair_can"));
 				}
 				else {
@@ -1319,7 +1322,7 @@ void CApp::render() {
 }
 
 void CApp::renderEntities() {
-
+	
 	CTraceScoped t0("Render entities");
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
 
@@ -1847,7 +1850,7 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.get()->global_water_level = water_level;
 
 	render_manager.init();
-	ctes_global.get()->use_lightmaps = 1;
+	ctes_global.get()->use_lightmaps = 0;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_menu.xml"){

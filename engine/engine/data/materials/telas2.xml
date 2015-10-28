@@ -1,1 +1,1 @@
-<std_material name="telas2" diffuse="telas2_diffuse" normal="telas2_normal" specular="telas2_specular" glossiness="telas2_gloss" emissive="" emissive_off="" tech="deferred_gbuffer_cloth"/>
+<std_material name="telas2" diffuse="telas2_diffuse" normal="telas2_normal" specular="telas2_specular" glossiness="telas2_gloss" emissive="" emissive_off=""/>

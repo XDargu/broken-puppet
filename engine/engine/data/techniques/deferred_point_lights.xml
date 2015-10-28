@@ -1,6 +1,6 @@
 <technique 
 	fx="deferred.fx"
 	vs="VSCommon"
-	vs_decl="vdcl_position_uv"
+	vs_decl="vdcl_position"
 	ps="PSPointLights"
 	/>

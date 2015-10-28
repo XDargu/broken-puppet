@@ -16,11 +16,11 @@ clearCoroutines()
 
 function onSceneLoad_my_file()
 
-logicManager:setFogAttributes(1000, -10000);
+	logicManager:setFogAttributes(1000, -10000);
 
 	--onSceneLoad_scene_final_boss()
 	--onSceneLoad_scene_4()
-	onSceneLoad_scene_3()
+	--onSceneLoad_scene_3()
 	--onSceneLoad_scene_2()
 	--onSceneLoad_scene_1()	
 end
@@ -90,7 +90,6 @@ function onSceneLoad_scene_final_boss()
 	end
 
 	function onTriggerFirstEnter_scb_trigger_bandas(who)
-		--logicManager:setBands(true)
 		--logicManager:setMediumShotActive(true)
 
 		logicManager:setFogAttributes(1000, -5);
@@ -166,7 +165,7 @@ function onSceneLoad_scene_final_boss()
 
 	function playCinematic()
 		-- Bandas cinemáticas
-		logicManager:setBands(true)
+		--logicManager:setBands(true)
 		-- Desactivar niebla
 		logicManager:setFogAttributes(1000, -1000);
 
@@ -1132,4 +1131,34 @@ function onBossRopeThrow()
 			end
 		end
 	end
+end
+
+function onExtraButtonPressed()
+	startCoroutine("extraCoroutine", extraCoroutine);
+end
+
+cam_val = 0
+function extraCoroutine()
+	
+	if (cam_val == 0) then
+		local camera = logicManager:getObject("Camara_Trailer");
+	
+		logicManager:changeCamera("Camara_Trailer")
+		waitTime(2)
+		logicManager:playAnimation("sc1_cinematica_trailer1", camera)
+		waitTime(10)
+		logicManager:changeCamera("PlayerCamera")
+	end
+	if (cam_val == 1) then
+		local camera = logicManager:getObject("Camara_Trailer");
+	
+		logicManager:changeCamera("Camara_Trailer")
+		waitTime(2)
+		logicManager:playAnimation("sc1_cinematica_trailer2", camera)
+		waitTime(10)
+		logicManager:changeCamera("PlayerCamera")
+		cam_val = -1
+	end
+	cam_val = cam_val + 1
+
 end
