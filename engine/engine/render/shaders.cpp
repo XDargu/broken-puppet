@@ -121,6 +121,8 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 		const CVertexDecl* decl = nullptr;
 		if (vs_decl_name == "vdcl_position_color")
 			decl = &vdcl_position_color;
+		else if (vs_decl_name == "vdcl_position")
+			decl = &vdcl_position;
 		else if (vs_decl_name == "vdcl_position_uv")
 			decl = &vdcl_position_uv;
 		else if (vs_decl_name == "vdcl_position_uv_normal")
@@ -129,6 +131,8 @@ void CRenderTechnique::onStartElement(const std::string &elem, MKeyValue &atts) 
 			decl = &vdcl_position_uv_normal_skin;
 		else if (vs_decl_name == "vdcl_position_uv_normal_tangent")
 			decl = &vdcl_position_uv_normal_tangent;
+		else if (vs_decl_name == "vdcl_position_uv_normal_tangent_uvl")
+			decl = &vdcl_position_uv_normal_tangent_uvl;
 		else if (vs_decl_name == "vdcl_position_uv_normal_skin_tangent")
 			decl = &vdcl_position_uv_normal_skin_tangent;
 		else if (vs_decl_name == "vdcl_instanced_position_uv")
