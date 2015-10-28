@@ -1,6 +1,6 @@
 <scene>
   <entity tag = "player" prefab="Player">
-    <transform position="1.66783 6.55778 -9.68188" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="17.5944 12.3461 98.1753" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <ragdoll name="prota"/>
   </entity>
   <entity  prefab="PlayerPivot">
@@ -15,12 +15,12 @@
   <entity   materialTag = "wood">
     <name name="Omni001_6.0" />
     <transform position="1.32611 12.8355 13.8214" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="16.416" intensity="1.0" color="0.941177 1.0 0.862745 1"/>
+    <pointLight radius="13.297" intensity="1.0" color="0.278431 0.313726 0.223529 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni002_7.0" />
-    <transform position="3.88568 15.504 38.2982" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="9.16" intensity="1.0" color="0.54902 0.996078 1.0 1"/>
+    <transform position="3.88568 15.3693 38.2982" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="4.32059" intensity="0.4" color="0.54902 0.996078 1.0 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni003_8.0" />
@@ -39,38 +39,38 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni006_11.0" />
-    <transform position="17.0772 15.3636 114.679" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+    <transform position="17.0772 15.1476 115.07" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="5.00778" intensity="0.5" color="0.203922 0.784314 0.976471 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni007_12.0" />
     <transform position="17.0772 4.69234 114.679" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+    <pointLight radius="7.36439" intensity="0.5" color="0.203922 0.784314 0.976471 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni008_13.0" />
-    <transform position="-1.35923 1.04536 101.477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+    <transform position="-1.35923 3.81579 101.477" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="7.36439" intensity="0.5" color="0.203922 0.784314 0.976471 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni009_14.0" />
     <transform position="-0.656109 1.04536 86.9127" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="7.36439" intensity="1.0" color="0.203922 0.784314 0.976471 1"/>
+    <pointLight radius="7.36439" intensity="0.4" color="0.203922 0.784314 0.976471 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni010_15.0" />
-    <transform position="4.86652 9.68805 70.0568" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="12.5603" intensity="1.0" color="0.54902 1.0 0.592157 1"/>
+    <transform position="4.86351 9.68805 69.7079" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="9.16903" intensity="0.7" color="0.54902 1.0 0.592157 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni011_16.0" />
     <transform position="-18.0268 12.2141 112.234" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="9.61347" intensity="1.0" color="0.85098 0.913726 0.439216 1"/>
+    <pointLight radius="9.61347" intensity="0.4" color="0.85098 0.913726 0.439216 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni012_17.0" />
     <transform position="-5.53315 10.8988 112.234" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="11.1202" intensity="1.0" color="0.792157 0.878431 0.203922 1"/>
+    <pointLight radius="0.0" intensity="0.6" color="0.792157 0.878431 0.203922 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni013_18.0" />
@@ -79,8 +79,8 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="Omni014_19.0" />
-    <transform position="1.9986 15.504 51.1848" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="9.16" intensity="1.0" color="0.54902 0.996078 1.0 1"/>
+    <transform position="1.9986 14.7142 51.1848" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="6.2288" intensity="0.5" color="0.54902 0.996078 1.0 1"/>
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="plataforma_monorail_mini_20.0" />
@@ -102,7 +102,7 @@
     <render >
       <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.0229853 -0.382945 -0.388772" max="0.022985 0.382945 0.388644"/>
+    <aabb min="-0.0229853 -0.382929 -0.388796" max="0.022985 0.38296 0.38862"/>
     <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
   </entity>
   <entity   materialTag = "wood">
@@ -111,7 +111,7 @@
     <render >
       <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.0229853 -0.383016 -0.38878" max="0.022985 0.382873 0.388636"/>
+    <aabb min="-0.0229853 -0.383013 -0.388805" max="0.022985 0.382877 0.388611"/>
     <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
   </entity>
   <entity   materialTag = "wood">
@@ -120,7 +120,7 @@
     <render >
       <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.0229847 -0.382952 -0.388709" max="0.0229855 0.382938 0.388707"/>
+    <aabb min="-0.0229847 -0.38294 -0.388709" max="0.0229855 0.38295 0.388707"/>
     <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
   </entity>
   <entity   materialTag = "wood">
@@ -129,7 +129,7 @@
     <render >
       <draw mesh="monorail_engranaje_a" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.0229847 -0.382952 -0.388709" max="0.0229855 0.382938 0.388707"/>
+    <aabb min="-0.0229847 -0.38294 -0.388709" max="0.0229855 0.38295 0.388707"/>
     <localRotation speed="2.0" axis="1" moveSpeedParent="true" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
@@ -220,7 +220,7 @@
     <render  color = "0.0901961 0.0901961 0.0901961">
       <draw mesh="caldera_01_rueda" sub_mesh="0" mat="caldera_01"/>
     </render>
-    <aabb min="-0.846043 -0.83319 -0.0762694" max="0.846043 0.83319 0.0762842"/>
+    <aabb min="-0.846043 -0.83319 -0.0762679" max="0.846043 0.83319 0.0762858"/>
     <localRotation speed="2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -465,7 +465,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_e_71.0" />
-    <transform position="-4.55645 5.36681 9.19914" rotation="0.929849 0.110283 0.35074 0.0141357" scale="1.0 1.0 1.0"/>
+    <transform position="-4.55645 5.36681 9.19914" rotation="0.92985 0.110277 0.35074 0.0141335" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_e" sub_mesh="0" mat="flechas"/>
     </render>
@@ -485,7 +485,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_largo_b_73.0" />
-    <transform position="-4.46694 5.25845 4.2472" rotation="0.823931 0.0234918 0.566033 -0.0138987" scale="1.0 1.0 1.0"/>
+    <transform position="-4.46694 5.25845 4.2472" rotation="0.823931 0.0234867 0.566033 -0.0139022" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_largo_b" sub_mesh="0" mat="flechas"/>
     </render>
@@ -533,7 +533,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="tela_colgada_b_78.0" />
-    <transform position="5.98738 8.35104 17.6032" rotation="0.0 1.0 0.0 -6.12338e-006" scale="0.387372 0.387372 0.387372"/>
+    <transform position="5.98738 8.35104 17.6032" rotation="0.0 1.0 0.0 -7.67311e-006" scale="0.387372 0.387372 0.387372"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tela_colgada_b" sub_mesh="0" mat="telas2"/>
     </render>
@@ -541,7 +541,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
     <name name="llave_S_79.0" />
-    <transform position="6.1532 9.86215 19.1328" rotation="0.0 1.0 0.0 -1.18454e-005" scale="1.0 1.0 1.0"/>
+    <transform position="6.1532 9.86215 19.1328" rotation="0.0 1.0 0.0 -1.49449e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="llave_S" sub_mesh="0" mat="agujas"/>
     </render>
@@ -575,7 +575,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="tela_colgada_B_83.0" />
-    <transform position="6.11348 8.82418 19.443" rotation="0.0 1.0 0.0 -6.12338e-006" scale="0.28756 0.28756 0.28756"/>
+    <transform position="6.11348 8.82418 19.443" rotation="0.0 1.0 0.0 -7.67311e-006" scale="0.28756 0.28756 0.28756"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tela_colgada_B" sub_mesh="0" mat="telas2"/>
     </render>
@@ -583,7 +583,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="taladro_s_84.0" />
-    <transform position="-2.9565 5.05022 17.5759" rotation="0.0618292 -0.704397 0.7044 0.0618288" scale="0.00817979 0.00817979 0.00817979"/>
+    <transform position="-2.9565 5.05022 17.5759" rotation="0.0618314 -0.704396 0.704401 0.0618309" scale="0.00817979 0.00817979 0.00817979"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="taladro_s" sub_mesh="0" mat="herramientas"/>
     </render>
@@ -959,7 +959,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="tela_colgada_b_123.0" />
-    <transform position="6.00975 8.1787 4.85851" rotation="0.021912 0.99976 -1.77877e-007 -6.12191e-006" scale="0.407469 0.424775 0.428732"/>
+    <transform position="6.00975 8.1787 4.85851" rotation="0.021912 0.99976 -2.11835e-007 -7.67126e-006" scale="0.407469 0.424775 0.428732"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tela_colgada_b" sub_mesh="0" mat="telas2"/>
     </render>
@@ -988,7 +988,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="tela_colgada_b_126.0" />
-    <transform position="4.95328 12.6756 8.42284" rotation="0.0 1.0 0.0 -6.12339e-006" scale="0.641107 0.641107 0.641107"/>
+    <transform position="4.95328 12.6756 8.42284" rotation="0.0 1.0 0.0 -7.6731e-006" scale="0.641107 0.641107 0.641107"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tela_colgada_b" sub_mesh="0" mat="telas2"/>
     </render>
@@ -1081,7 +1081,7 @@
     <render  color = "0.0 0.0 0.0">
       <draw mesh="gramola_disco" sub_mesh="0" mat="gramola"/>
     </render>
-    <aabb min="-0.558697 -0.0259292 -0.547512" max="0.558695 0.0259025 0.547487"/>
+    <aabb min="-0.558697 -0.0259339 -0.547515" max="0.558695 0.0258979 0.547484"/>
     <localRotation speed="2.0" axis="2" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1090,7 +1090,7 @@
     <render  color = "0.0 0.0 0.0">
       <draw mesh="gramola_manivela" sub_mesh="0" mat="gramola"/>
     </render>
-    <aabb min="0.00120556 -0.346267 -0.323293" max="0.680793 0.0416428 0.0437897"/>
+    <aabb min="0.00120556 -0.346304 -0.323316" max="0.680793 0.0416057 0.0437668"/>
     <localRotation speed="2.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
@@ -1119,7 +1119,7 @@
     <render  color = "0.0 0.0 0.0">
       <draw mesh="engranaje_basico_c" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.459756 -0.44994 -0.0131864" max="0.460726 0.456558 0.0518317"/>
+    <aabb min="-0.459625 -0.44994 -0.0130735" max="0.460858 0.456558 0.0519447"/>
     <localRotation speed="2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1128,7 +1128,7 @@
     <render  color = "0.0 0.0 0.0">
       <draw mesh="engaranje_basico_g" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.460255 -0.45334 -0.026802" max="0.460069 0.45334 0.0276188"/>
+    <aabb min="-0.460284 -0.45334 -0.0266892" max="0.460041 0.45334 0.0277316"/>
     <localRotation speed="-2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
@@ -1156,7 +1156,7 @@
     <render  color = "0.0 0.0 0.0">
       <draw mesh="engranaje_basico_c001" sub_mesh="0" mat="engranajes_basicos"/>
     </render>
-    <aabb min="-0.460256 -0.44994 -0.0135304" max="0.460226 0.456558 0.0514879"/>
+    <aabb min="-0.460258 -0.44994 -0.0135111" max="0.460224 0.456558 0.0515071"/>
     <localRotation speed="2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
@@ -1241,7 +1241,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_e_155.0" />
-    <transform position="-6.37013 6.70943 71.0134" rotation="0.929849 0.110284 0.35074 0.0141359" scale="1.0 1.0 1.0"/>
+    <transform position="-6.37013 6.70943 71.0134" rotation="0.92985 0.110278 0.35074 0.0141337" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_e" sub_mesh="0" mat="flechas"/>
     </render>
@@ -1271,7 +1271,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_largo_b_158.0" />
-    <transform position="-7.03832 6.60106 70.4222" rotation="0.703381 0.025679 0.710289 -0.00925417" scale="1.0 1.0 1.0"/>
+    <transform position="-7.03832 6.60106 70.4222" rotation="0.703381 0.0256746 0.710289 -0.00925858" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_largo_b" sub_mesh="0" mat="flechas"/>
     </render>
@@ -1635,7 +1635,7 @@
     <render  color = "0.878431 0.337255 0.337255">
       <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
     </render>
-    <aabb min="-0.195145 -0.135533 -0.131948" max="0.195154 0.135467 0.131952"/>
+    <aabb min="-0.195145 -0.135542 -0.131948" max="0.195154 0.135458 0.131952"/>
     <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1644,7 +1644,7 @@
     <render  color = "0.878431 0.337255 0.337255">
       <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
     </render>
-    <aabb min="-0.00709534 -0.0673334 -0.0650978" max="0.00710297 0.0672666 0.0651016"/>
+    <aabb min="-0.00709534 -0.0673419 -0.0650978" max="0.00710297 0.0672581 0.0651016"/>
     <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "ceramics">
@@ -1709,7 +1709,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_e_202.0" />
-    <transform position="0.902419 8.81929 115.104" rotation="0.929849 0.110284 0.35074 0.0141359" scale="1.0 1.0 1.0"/>
+    <transform position="0.902419 8.81929 115.104" rotation="0.92985 0.110278 0.35074 0.0141337" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_e" sub_mesh="0" mat="flechas"/>
     </render>
@@ -1729,7 +1729,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_largo_b_204.0" />
-    <transform position="0.234228 8.71093 114.513" rotation="0.703381 0.025679 0.710289 -0.00925417" scale="1.0 1.0 1.0"/>
+    <transform position="0.234228 8.71093 114.513" rotation="0.703381 0.0256746 0.710289 -0.00925858" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_largo_b" sub_mesh="0" mat="flechas"/>
     </render>
@@ -2132,8 +2132,8 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_steam_verde_omni_246.0" />
-    <transform position="-1.55766 8.30831 115.605" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S2_245.0"/>
-    <pointLight radius="5.5" intensity="1.0" color="0.309804 0.737255 0.729412 1"/>
+    <transform position="-1.55766 4.94185 115.605" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S2_245.0"/>
+    <pointLight radius="6.875" intensity="0.5" color="0.309804 0.737255 0.729412 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="lampara_steam_verde_S_248.0" />
@@ -2151,7 +2151,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_steam_verde_omni_249.0" />
     <transform position="-12.7496 11.8683 113.898" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_248.0"/>
-    <pointLight radius="4.0" intensity="1.0" color="0.309804 0.737255 0.729412 1"/>
+    <pointLight radius="4.0" intensity="0.4" color="0.309804 0.737255 0.729412 1"/>
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "ceramics">
     <name name="maceta_alta_S_01_251.0" />
@@ -2172,6 +2172,7 @@
     <aabb min="-3.22701 -3.21522 -0.641312" max="3.22701 3.21522 0.641311"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.58123" boxY="1.57546" boxZ="0.314243"/>
     <staticbody/>
+    <localRotation speed="-2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="engranaje_6_radios_M_253.0" />
@@ -2182,6 +2183,7 @@
     <aabb min="-3.22701 -3.21522 -0.641312" max="3.22701 3.21522 0.641311"/>
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.58123" boxY="1.57546" boxZ="0.314243"/>
     <staticbody/>
+    <localRotation speed="2.0" axis="0" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
     <name name="alfombra_grande_verde_rota_254.0" />
@@ -2253,7 +2255,7 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tablon_largo_b_261.0" />
-    <transform position="-8.15203 6.60106 64.815" rotation="0.703381 0.025679 0.710289 -0.00925417" scale="1.0 1.0 1.0"/>
+    <transform position="-8.15203 6.60106 64.815" rotation="0.703381 0.0256746 0.710289 -0.00925858" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="tablon_largo_b" sub_mesh="0" mat="flechas"/>
     </render>
@@ -2396,15 +2398,15 @@
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="foco_basico_a_275.0" />
-    <transform position="-4.1997 12.1791 40.3673" rotation="0.264432 0.958991 -0.100654 0.0167349" scale="1.64823 1.64823 1.64823"/>
+    <transform position="-4.1997 12.1791 40.3673" rotation="0.264432 0.958991 -0.100654 0.0167378" scale="1.64823 1.64823 1.64823"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="foco_basico_a" sub_mesh="0" mat="focos_basicos"/>
     </render>
     <aabb min="-0.442627 0.00926816 -0.728103" max="0.442626 1.74082 0.728103"/>
     <colliderMulti staticFriction="0.3" dynamicFriction="0.3" restitution="0.5">
-      <shape posOffset="-0.00421929 1.21272 0.180193" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.161157" width="0.136152" height="2.22349"/>
-      <shape posOffset="-0.0303164 1.57546 0.236225" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.499753" width="0.832373" height="0.568315"/>
-      <shape posOffset="-0.0291574 0.214679 0.22853" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
+      <shape posOffset="-0.00421906 1.21272 0.180191" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.161157" width="0.136152" height="2.22349"/>
+      <shape posOffset="-0.0303161 1.57546 0.236223" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.499753" width="0.832373" height="0.568315"/>
+      <shape posOffset="-0.0291572 0.214679 0.228528" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="1.32078" width="1.15875" height="0.246944"/>
     </colliderMulti>
     <rigidbody density="4275.91"  />
     <audioSource sound="BUZZING" autoplay="true" >
@@ -2509,7 +2511,12 @@
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="foco_suelo_b_288.0" />
+    <name name="foco_suelo_omni180_288.0" />
+    <transform position="0.0697439 6.09641 14.2362" rotation="0.0 -0.382683 0.0 0.92388" scale="1.0 1.0 1.0" parent="foco_suelo_b_286.0"/>
+    <pointLight radius="1.644" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="foco_suelo_b_289.0" />
     <transform position="0.74731 5.03231 13.3291" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
@@ -2517,12 +2524,12 @@
     <aabb min="-0.194005 0.0 -0.184502" max="0.193991 0.100205 0.184502"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="foco_suelo_omni_289.0" />
-    <transform position="0.748159 5.31913 13.3263" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0" parent="foco_suelo_b_288.0"/>
+    <name name="foco_suelo_omni_290.0" />
+    <transform position="0.748159 5.31913 13.3263" rotation="0.0 0.382683 0.0 0.92388" scale="1.0 1.0 1.0" parent="foco_suelo_b_289.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_h_290.0" />
+    <name name="crematorio_h_291.0" />
     <transform position="-9.26803 11.1211 2.5061" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_h" sub_mesh="0" mat="crematorio"/>
@@ -2538,7 +2545,7 @@
     <vibration amount="0.004" frequency="50.0" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_e_291.0" />
+    <name name="crematorio_e_292.0" />
     <transform position="-9.29805 16.1933 12.9276" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_e" sub_mesh="0" mat="crematorio"/>
@@ -2554,7 +2561,7 @@
     <staticbody/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="Object084_292.0" />
+    <name name="Object084_293.0" />
     <transform position="-9.28414 15.9683 13.346" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="Object084" sub_mesh="0" mat="InterruptorTirar_mat"/>
@@ -2562,7 +2569,7 @@
     <aabb min="-0.705088 -0.0810432 -0.708079" max="0.702167 0.0511603 0.708079"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="sc3_reloj_caldera_293.0" />
+    <name name="sc3_reloj_caldera_294.0" />
     <transform position="-8.43066 16.8319 13.2963" rotation="0.0 0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="sc3_reloj_caldera" sub_mesh="0" mat="InterruptorTirar_mat"/>
@@ -2570,7 +2577,7 @@
     <aabb min="-0.337743 -0.32121 -0.108054" max="0.337743 0.32121 0.108053"/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="sc3_luz_caldera_294.0" />
+    <name name="sc3_luz_caldera_295.0" />
     <transform position="-9.3657 18.7179 16.1755" rotation="0.0 0.707107 0.0 0.707107" scale="4.0573 4.0573 4.0573"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="sc3_luz_caldera" sub_mesh="0" mat="InterruptorTirar_mat"/>
@@ -2578,7 +2585,7 @@
     <aabb min="-0.0703113 -0.0707957 -0.0703113" max="0.0703112 0.0707954 0.0703113"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_a_295.0" />
+    <name name="crematorio_a_296.0" />
     <transform position="-10.5448 13.7785 14.6447" rotation="-0.707107 1.46111e-007 0.0 0.707107" scale="1.0276 1.0276 1.0276"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_a" sub_mesh="0" mat="crematorio"/>
@@ -2592,7 +2599,7 @@
     <staticbody/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_c_296.0" />
+    <name name="crematorio_c_297.0" />
     <transform position="-9.75428 13.7921 9.13223" rotation="0.0 0.767393 0.0 0.641177" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_c" sub_mesh="0" mat="crematorio"/>
@@ -2602,7 +2609,7 @@
     <staticbody/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="sc3_aro_L_297.0" />
+    <name name="sc3_aro_L_298.0" />
     <transform position="-9.55327 13.7891 9.07884" rotation="0.0 0.767393 0.0 0.641177" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="sc3_aro_L" sub_mesh="0" mat="InterruptorTirar_mat"/>
@@ -2610,7 +2617,7 @@
     <aabb min="-1.02265 -1.02023 -0.0622238" max="1.02265 1.02023 0.0622238"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_b_298.0" />
+    <name name="crematorio_b_299.0" />
     <transform position="-8.74351 16.6108 8.53748" rotation="0.653282 0.270598 -0.270598 0.653281" scale="1.12702 1.12702 1.12702"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_b" sub_mesh="0" mat="crematorio"/>
@@ -2620,7 +2627,7 @@
     <staticbody/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_b_299.0" />
+    <name name="crematorio_b_300.0" />
     <transform position="-9.23481 12.2695 3.62029" rotation="0.5 0.5 -0.5 0.5" scale="1.12702 1.12702 1.12702"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_b" sub_mesh="0" mat="crematorio"/>
@@ -2631,7 +2638,7 @@
     <vibration amount="0.01" frequency="100.0" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
-    <name name="crematorio_h_300.0" />
+    <name name="crematorio_h_301.0" />
     <transform position="5.53361 14.598 19.2275" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_h" sub_mesh="0" mat="crematorio"/>
@@ -2647,8 +2654,8 @@
     <vibration amount="0.01" frequency="100.0" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="llave_S_301.0" />
-    <transform position="6.1532 9.86215 14.4104" rotation="0.0 1.0 0.0 -1.18454e-005" scale="1.0 1.0 1.0"/>
+    <name name="llave_S_302.0" />
+    <transform position="6.1532 9.86215 14.4104" rotation="0.0 1.0 0.0 -1.49449e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="llave_S" sub_mesh="0" mat="agujas"/>
     </render>
@@ -2657,8 +2664,8 @@
     <staticbody/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="llave_S_302.0" />
-    <transform position="6.1059 9.86215 9.6784" rotation="0.0 1.0 0.0 -1.18454e-005" scale="1.0 1.0 1.0"/>
+    <name name="llave_S_303.0" />
+    <transform position="6.1059 9.86215 9.6784" rotation="0.0 1.0 0.0 -1.49449e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="llave_S" sub_mesh="0" mat="agujas"/>
     </render>
@@ -2667,8 +2674,8 @@
     <staticbody/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="llave_S_303.0" />
-    <transform position="6.1532 9.86215 4.99638" rotation="0.0 1.0 0.0 -1.18454e-005" scale="1.0 1.0 1.0"/>
+    <name name="llave_S_304.0" />
+    <transform position="6.1532 9.86215 4.99638" rotation="0.0 1.0 0.0 -1.49449e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="llave_S" sub_mesh="0" mat="agujas"/>
     </render>
@@ -2677,15 +2684,15 @@
     <staticbody/>
   </entity>
   <entity   materialTag = "wood">
-    <name name="banderolas_a_304.0" />
+    <name name="banderolas_a_big_305.0" />
     <transform position="6.15145 8.49712 14.4245" rotation="0.0370133 0.101694 -0.0150626 0.994013" scale="0.490787 0.490787 0.490788"/>
     <render  color = "0.580392 0.694118 0.105882">
-      <draw mesh="banderolas_a" sub_mesh="0" mat="vigas_01"/>
+      <draw mesh="banderolas_a_big" sub_mesh="0" mat="vigas_01"/>
     </render>
     <aabb min="-4.41298 -5.80293 -5.36512" max="4.41297 5.80293 5.36512"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="llave_S_305.0" />
+    <name name="llave_S_306.0" />
     <transform position="3.0307 9.86215 1.96689" rotation="0.0 -0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="llave_S" sub_mesh="0" mat="agujas"/>
@@ -2695,7 +2702,7 @@
     <staticbody/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="llave_S_306.0" />
+    <name name="llave_S_307.0" />
     <transform position="-1.64772 9.86215 1.96689" rotation="0.0 -0.707106 0.0 0.707108" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="llave_S" sub_mesh="0" mat="agujas"/>
@@ -2705,7 +2712,7 @@
     <staticbody/>
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="mesita_b_s_307.0" />
+    <name name="mesita_b_s_308.0" />
     <transform position="-8.07048 5.62986 19.855" rotation="0.0 -0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="mesita_b_s" sub_mesh="0" mat="lamparas_mesita"/>
@@ -2715,7 +2722,7 @@
     <rigidbody density="500.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="vela_a_dinamic_308.0" />
+    <name name="vela_a_dinamic_309.0" />
     <transform position="-8.07991 6.78446 19.8707" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="vela_a_dinamic" sub_mesh="0" mat="libros_vela"/>
@@ -2725,12 +2732,12 @@
     <rigidbody density="500.0"  />
   </entity>
   <entity   materialTag = "wood">
-    <name name="vela_a_fire_309.0" />
-    <transform position="-8.07992 7.32513 19.8705" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="vela_a_dinamic_308.0"/>
+    <name name="vela_a_fire_310.0" />
+    <transform position="-8.07992 7.32513 19.8705" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="vela_a_dinamic_309.0"/>
     <particleGroup name="ps_candle" />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="mesita_b_s_310.0" />
+    <name name="mesita_b_s_311.0" />
     <transform position="6.02118 5.62986 12.9151" rotation="0.0 -0.382683 0.0 0.92388" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="mesita_b_s" sub_mesh="0" mat="lamparas_mesita"/>
@@ -2740,7 +2747,7 @@
     <rigidbody density="500.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="vela_a_dinamic_311.0" />
+    <name name="vela_a_dinamic_312.0" />
     <transform position="6.01175 6.78446 12.9308" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="vela_a_dinamic" sub_mesh="0" mat="libros_vela"/>
@@ -2750,17 +2757,17 @@
     <rigidbody density="500.0"  />
   </entity>
   <entity   materialTag = "wood">
-    <name name="vela_a_fire_312.0" />
-    <transform position="6.01173 7.32513 12.9306" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="vela_a_dinamic_311.0"/>
+    <name name="vela_a_fire_313.0" />
+    <transform position="6.01173 7.32513 12.9306" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="vela_a_dinamic_312.0"/>
     <particleGroup name="ps_candle" />
   </entity>
   <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni_313.0" />
+    <name name="lampara_mesita_omni_314.0" />
     <transform position="8.05345 10.4324 14.0111" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="caja_vintage_314.0" />
+    <name name="caja_vintage_315.0" />
     <transform position="8.08526 6.13139 20.214" rotation="-0.234417 0.234417 -0.667119 0.66712" scale="1.0 1.0 1.0"/>
     <render  color = "0.45098 0.45098 0.45098">
       <draw mesh="caja_vintage" sub_mesh="0" mat="caja_vintage"/>
@@ -2770,7 +2777,7 @@
     <rigidbody density="500.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="vela_a_dinamic_315.0" />
+    <name name="vela_a_dinamic_316.0" />
     <transform position="5.20688 6.6909 19.1716" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="vela_a_dinamic" sub_mesh="0" mat="libros_vela"/>
@@ -2780,14 +2787,9 @@
     <rigidbody density="500.0"  />
   </entity>
   <entity   materialTag = "wood">
-    <name name="vela_a_fire_316.0" />
-    <transform position="5.20686 7.23157 19.1714" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="vela_a_dinamic_315.0"/>
+    <name name="vela_a_fire_317.0" />
+    <transform position="5.20686 7.23157 19.1714" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="vela_a_dinamic_316.0"/>
     <particleGroup name="ps_candle" />
-  </entity>
-  <entity   materialTag = "wood">
-    <name name="lampara_mesita_omni_317.0" />
-    <transform position="-0.213903 11.7328 14.6367" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="13.1985" intensity="1.0" color="0.0705882 0.611765 0.0980392 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
     <name name="monton_focos_318.0" />
@@ -3045,7 +3047,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="lampara_pared_01_343.0" />
-    <transform position="1.93849 18.1147 29.1911" rotation="0.0 0.999028 0.0 0.0440866" scale="1.0 1.0 1.0"/>
+    <transform position="1.93849 18.1147 29.1911" rotation="0.0 0.999028 0.0 0.0440897" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="lampara_pared_01" sub_mesh="0" mat="lampara_techo_01"/>
     </render>
@@ -3058,7 +3060,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_pared_omni_344.0" />
-    <transform position="1.92809 17.8099 29.0036" rotation="0.0 -0.737593 0.0 0.675245" scale="1.0 1.0 1.0" parent="lampara_pared_01_343.0"/>
+    <transform position="1.92809 17.8099 29.0036" rotation="0.0 -0.737595 0.0 0.675243" scale="1.0 1.0 1.0" parent="lampara_pared_01_343.0"/>
     <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
@@ -3205,7 +3207,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
     <name name="tubo_bomba_361.0" />
-    <transform position="18.0 16.0 84.0" rotation="-1.13686e-005 -1.13249e-005 1.0 0.0" scale="1.0 1.0 1.0"/>
+    <transform position="18.0 16.0 84.0" rotation="-1.4468e-005 -1.44243e-005 1.0 0.0" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="tubo_bomba" sub_mesh="0" mat="suelo_metal"/>
       <draw mesh="tubo_bomba" sub_mesh="1" mat="alcantarillas"/>
@@ -3532,7 +3534,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="marioneta_020_392.0" />
-    <transform position="4.99925 13.4232 42.0872" rotation="-0.0630463 0.995987 0.0562686 -0.029464" scale="2.925 2.925 2.925"/>
+    <transform position="4.99925 13.4232 42.0872" rotation="-0.0630462 0.995987 0.0562687 -0.0294655" scale="2.925 2.925 2.925"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="marioneta_020" sub_mesh="0" mat="montones"/>
     </render>
@@ -3596,7 +3598,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni_398.0" />
     <transform position="4.94162 14.6959 34.9083" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_mesita_a_397.0"/>
-    <pointLight radius="3.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
+    <pointLight radius="3.0" intensity="0.8" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="alfombra_grande_verde_rota_399.0" />
@@ -3864,7 +3866,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="cartel_curvo_a_428.0" />
-    <transform position="-20.909 10.723 108.466" rotation="-0.00278517 0.464355 0.00163526 0.885644" scale="1.0 1.0 0.588866"/>
+    <transform position="-21.0064 10.723 108.359" rotation="-0.00278517 0.464355 0.00163526 0.885643" scale="1.0 1.0 0.588866"/>
     <render  color = "0.341176 0.882353 0.776471">
       <draw mesh="cartel_curvo_a" sub_mesh="0" mat="cartel_4"/>
     </render>
@@ -4001,7 +4003,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_techo_omni_442.0" />
     <transform position="-17.3084 13.2964 108.745" rotation="0.0 0.0 0.0 1.0" scale="0.610296 0.610296 0.610296" parent="lampara_techo_h_441.0"/>
-    <pointLight radius="4.0" intensity="1.0" color="0.905882 0.886275 0.309804 1"/>
+    <pointLight radius="4.0" intensity="0.5" color="0.905882 0.886275 0.309804 1"/>
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="marioneta_028_443.0" />
@@ -4262,7 +4264,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
     <name name="rejilla_alcantarilla_469.0" />
-    <transform position="-0.519717 13.7522 34.2585" rotation="-0.5 0.5 0.5 -0.5" scale="1.0 1.0 1.0"/>
+    <transform position="-0.519717 13.7522 34.0603" rotation="-0.5 0.5 0.5 -0.5" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="rejilla_alcantarilla" sub_mesh="0" mat="respiraderos"/>
     </render>
@@ -4382,7 +4384,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
     <name name="rejilla_alcantarilla_481.0" />
-    <transform position="15.2434 10.4477 78.0035" rotation="-0.500014 0.500014 0.499986 -0.499986" scale="1.0 1.0 1.0"/>
+    <transform position="15.2434 10.4477 78.0035" rotation="-0.500018 0.500018 0.499982 -0.499982" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="rejilla_alcantarilla" sub_mesh="0" mat="respiraderos"/>
     </render>
@@ -4623,7 +4625,7 @@
       <shape posOffset="0.620712 0.278633 -0.0707265" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.307275" width="0.336338" height="1.41714"/>
     </colliderMulti>
     <staticbody/>
-    <vibration amount="0.06" frequency="90.0" />
+    <vibration amount="0.04" frequency="90.0" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="crematorio_d_505.0" />
@@ -4641,7 +4643,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="crematorio_h_506.0" />
-    <transform position="9.64736 11.6064 69.9878" rotation="0.0 1.0 0.0 1.05341e-005" scale="1.0 1.0 1.0"/>
+    <transform position="9.64736 11.6064 69.9878" rotation="0.0 1.0 0.0 1.36336e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_h" sub_mesh="0" mat="crematorio"/>
     </render>
@@ -5724,7 +5726,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_c_672.0" />
-    <transform position="8.49235 9.42224 89.9942" rotation="-3.73983e-006 -0.707107 0.707107 -3.73983e-006" scale="1.0 1.0 1.0"/>
+    <transform position="8.49235 9.42224 89.9942" rotation="-4.83565e-006 -0.707107 0.707107 -4.83565e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_c" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -5732,12 +5734,12 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni075_673.0" />
-    <transform position="8.48772 9.43537 89.7074" rotation="-3.82413e-006 -0.707107 0.707107 -3.82413e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_672.0"/>
+    <transform position="8.48772 9.43537 89.7074" rotation="-4.91994e-006 -0.707107 0.707107 -4.91994e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_672.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_c_674.0" />
-    <transform position="6.25859 9.42224 89.9942" rotation="-3.73983e-006 -0.707107 0.707107 -3.73983e-006" scale="1.0 1.0 1.0"/>
+    <transform position="6.25859 9.42224 89.9942" rotation="-4.83565e-006 -0.707107 0.707107 -4.83565e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_c" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -5745,12 +5747,12 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni076_675.0" />
-    <transform position="6.25396 9.43537 89.7074" rotation="-3.82413e-006 -0.707107 0.707107 -3.82413e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_674.0"/>
+    <transform position="6.25396 9.43537 89.7074" rotation="-4.91994e-006 -0.707107 0.707107 -4.91994e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_674.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_c_676.0" />
-    <transform position="4.02482 9.42224 89.9942" rotation="-3.73983e-006 -0.707107 0.707107 -3.73983e-006" scale="1.0 1.0 1.0"/>
+    <transform position="4.02482 9.42224 89.9942" rotation="-4.83565e-006 -0.707107 0.707107 -4.83565e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_c" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -5758,12 +5760,12 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni077_677.0" />
-    <transform position="4.02019 9.43537 89.7074" rotation="-3.82413e-006 -0.707107 0.707107 -3.82413e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_676.0"/>
+    <transform position="4.0202 9.43537 89.7074" rotation="-4.91994e-006 -0.707107 0.707107 -4.91994e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_676.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_c_678.0" />
-    <transform position="1.79106 9.42224 89.9942" rotation="-3.73983e-006 -0.707107 0.707107 -3.73983e-006" scale="1.0 1.0 1.0"/>
+    <transform position="1.79106 9.42224 89.9942" rotation="-4.83565e-006 -0.707107 0.707107 -4.83565e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_c" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -5771,12 +5773,12 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni078_679.0" />
-    <transform position="1.78643 9.43537 89.7074" rotation="-3.82413e-006 -0.707107 0.707107 -3.82413e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_678.0"/>
+    <transform position="1.78643 9.43537 89.7074" rotation="-4.91994e-006 -0.707107 0.707107 -4.91994e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_678.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_c_680.0" />
-    <transform position="-0.241099 9.42224 89.9942" rotation="-3.73983e-006 -0.707107 0.707107 -3.73983e-006" scale="1.0 1.0 1.0"/>
+    <transform position="-0.241099 9.42224 89.9942" rotation="-4.83565e-006 -0.707107 0.707107 -4.83565e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_c" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -5784,7 +5786,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni079_681.0" />
-    <transform position="-0.245729 9.43537 89.7074" rotation="-3.82413e-006 -0.707107 0.707107 -3.82413e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_680.0"/>
+    <transform position="-0.245728 9.43537 89.7074" rotation="-4.91994e-006 -0.707107 0.707107 -4.91994e-006" scale="1.0 1.0 1.0" parent="foco_suelo_c_680.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -6061,7 +6063,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni100_723.0" />
-    <transform position="9.66207 0.4208 119.941" rotation="0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0" parent="foco_suelo_c_722.0"/>
+    <transform position="9.66207 0.4208 119.941" rotation="-0.5 0.5 -0.5 -0.5" scale="1.0 1.0 1.0" parent="foco_suelo_c_722.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -6074,7 +6076,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni101_725.0" />
-    <transform position="8.68569 0.420801 122.003" rotation="0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0" parent="foco_suelo_c_724.0"/>
+    <transform position="8.68569 0.420801 122.003" rotation="-0.5 0.5 -0.5 -0.5" scale="1.0 1.0 1.0" parent="foco_suelo_c_724.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -6087,7 +6089,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni102_727.0" />
-    <transform position="9.65658 0.420801 124.284" rotation="0.5 -0.5 0.5 0.5" scale="1.0 1.0 1.0" parent="foco_suelo_c_726.0"/>
+    <transform position="9.65658 0.420801 124.284" rotation="-0.5 0.5 -0.5 -0.5" scale="1.0 1.0 1.0" parent="foco_suelo_c_726.0"/>
     <pointLight radius="1.5" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -6618,7 +6620,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_808.0" />
-    <transform position="-10.4308 3.01217 125.721" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-10.4308 3.01217 125.721" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -6626,12 +6628,12 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni141_809.0" />
-    <transform position="-10.4147 3.29856 125.72" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_808.0"/>
+    <transform position="-10.4147 3.29856 125.72" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_808.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_810.0" />
-    <transform position="-12.497 3.01217 125.721" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-12.497 3.01217 125.721" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -6639,12 +6641,12 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni142_811.0" />
-    <transform position="-12.4809 3.29856 125.72" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_810.0"/>
+    <transform position="-12.4809 3.29856 125.72" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_810.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_812.0" />
-    <transform position="-10.4308 3.01217 122.421" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-10.4308 3.01217 122.421" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -6652,7 +6654,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni143_813.0" />
-    <transform position="-10.4147 3.29856 122.419" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_812.0"/>
+    <transform position="-10.4147 3.29856 122.419" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_812.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -6826,7 +6828,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_840.0" />
-    <transform position="-13.618 3.06503 122.296" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-13.618 3.06503 122.296" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -6834,7 +6836,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni158_841.0" />
-    <transform position="-13.6019 3.35142 122.295" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_840.0"/>
+    <transform position="-13.6019 3.35142 122.295" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_840.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -6982,7 +6984,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_864.0" />
-    <transform position="-10.4308 8.00041 108.824" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-10.4308 8.00041 108.824" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -6990,22 +6992,22 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni171_865.0" />
-    <transform position="-10.4147 8.28679 108.823" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_864.0"/>
+    <transform position="-10.4147 8.28679 108.823" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_864.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni172_866.0" />
-    <transform position="-10.4147 8.28679 106.516" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_864.0"/>
+    <transform position="-10.4147 8.28679 106.516" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_864.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_omni173_867.0" />
-    <transform position="-12.7906 8.2868 106.516" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_864.0"/>
+    <transform position="-12.7906 8.2868 106.516" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0" parent="foco_suelo_b_864.0"/>
     <pointLight radius="1.2" intensity="1.0" color="0.905882 0.643137 0.184314 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_868.0" />
-    <transform position="-10.4308 8.00041 106.452" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-10.4308 8.00041 106.452" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -7013,7 +7015,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="foco_suelo_b_869.0" />
-    <transform position="-13.013 8.00041 106.452" rotation="0.0 0.0 -0.0235588 0.999722" scale="1.0 1.0 1.0"/>
+    <transform position="-13.013 8.00041 106.452" rotation="0.0 0.0 -0.0235589 0.999722" scale="1.0 1.0 1.0"/>
     <render  color = "0.694118 0.109804 0.584314">
       <draw mesh="foco_suelo_b" sub_mesh="0" mat="focos_suelo"/>
     </render>
@@ -7263,7 +7265,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="crematorio_c_901.0" />
-    <transform position="5.01056 14.4457 90.1347" rotation="0.0 1.0 0.0 1.05341e-005" scale="1.0 1.0 1.0"/>
+    <transform position="5.01056 14.4457 90.1347" rotation="0.0 1.0 0.0 1.36336e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_c" sub_mesh="0" mat="crematorio"/>
     </render>
@@ -7273,7 +7275,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="sc3_aro_L_902.0" />
-    <transform position="4.99376 14.4428 89.9274" rotation="0.0 1.0 0.0 5.28892e-006" scale="1.0 1.0 1.0"/>
+    <transform position="4.99376 14.4428 89.9274" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="sc3_aro_L" sub_mesh="0" mat="InterruptorTirar_mat"/>
     </render>
@@ -7281,7 +7283,7 @@
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="crematorio_c_903.0" />
-    <transform position="-3.62814 14.4457 86.0163" rotation="0.0 1.0 0.0 1.05341e-005" scale="1.0 1.0 1.0"/>
+    <transform position="-3.62814 14.4457 86.0163" rotation="0.0 1.0 0.0 1.36336e-005" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="crematorio_c" sub_mesh="0" mat="crematorio"/>
     </render>
@@ -7291,7 +7293,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="sc3_aro_L_904.0" />
-    <transform position="-3.64493 14.4428 85.809" rotation="0.0 1.0 0.0 5.28892e-006" scale="1.0 1.0 1.0"/>
+    <transform position="-3.64493 14.4428 85.809" rotation="0.0 1.0 0.0 6.83864e-006" scale="1.0 1.0 1.0"/>
     <render  color = "0.0 0.0 0.0">
       <draw mesh="sc3_aro_L" sub_mesh="0" mat="InterruptorTirar_mat"/>
     </render>
@@ -7656,7 +7658,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="sc3_fan_942.0" />
-    <transform position="-4.22196 11.9572 124.189" rotation="0.0 1.0 0.0 5.0505e-006" scale="1.0 1.0 1.0"/>
+    <transform position="-4.22196 11.9572 124.189" rotation="0.0 1.0 0.0 6.60022e-006" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="sc3_fan" sub_mesh="0" mat="alcantarillas"/>
     </render>
@@ -7668,7 +7670,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="sc3_fan_943.0" />
-    <transform position="-12.0904 11.9572 124.189" rotation="0.0 1.0 0.0 5.0505e-006" scale="1.0 1.0 1.0"/>
+    <transform position="-12.0904 11.9572 124.189" rotation="0.0 1.0 0.0 6.60022e-006" scale="1.0 1.0 1.0"/>
     <render >
       <draw mesh="sc3_fan" sub_mesh="0" mat="alcantarillas"/>
     </render>
@@ -8370,13 +8372,13 @@
   <entity   materialTag = "wood">
     <name name="Fspot007_1018.0" />
     <transform position="-4.82022 11.8837 126.81" rotation="0.737733 -0.00676469 0.0137913 0.674917" scale="1.0 1.0 1.0"/>
-    <shadows intensity="1.0" color="0.0 0.337255 0.2 1" correction="true"/>
+    <shadows intensity="0.5" color="0.0 0.337255 0.2 1" correction="true"/>
     <camera fov="90.0" znear="2.0" zfar="50" width="30" height="30" />
   </entity>
   <entity   materialTag = "wood">
     <name name="Fspot008_1019.0" />
     <transform position="-12.7438 11.8837 126.81" rotation="0.737733 -0.00676469 0.0137913 0.674917" scale="1.0 1.0 1.0"/>
-    <shadows intensity="1.0" color="0.0 0.337255 0.2 1" correction="true"/>
+    <shadows intensity="0.5" color="0.0 0.337255 0.2 1" correction="true"/>
     <camera fov="90.0" znear="2.0" zfar="50" width="30" height="30" />
   </entity>
   <entity   materialTag = "wood">
@@ -8591,7 +8593,7 @@
   <entity   materialTag = "wood">
     <name name="chim03_Sc03_005_1077.0" />
     <transform position="1.98814 14.484 26.0178" rotation="-0.710811 0.0 0.0 0.703383" scale="1.0 1.0 1.0"/>
-    <particleGroup name="ps_smoke_chim_03" />
+    <particleGroup name="ps_smoke_chim01" />
   </entity>
   <entity   materialTag = "wood">
     <name name="CalderaFire_1078.0" />
@@ -8726,7 +8728,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni005_1099.0" />
     <transform position="-8.27898 13.7979 8.90455" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="3.3891" intensity="1.0" color="0.905882 0.631373 0.309804 1"/>
+    <pointLight radius="3.3891" intensity="1.0" color="0.164706 0.588235 0.427451 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni006_1100.0" />
@@ -8756,17 +8758,17 @@
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni010_1105.0" />
     <transform position="4.9935 14.3713 88.7263" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="5.93093" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
+    <pointLight radius="5.93093" intensity="1.0" color="0.360784 0.670588 0.588235 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni011_1106.0" />
     <transform position="-3.76841 14.1646 84.5214" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="5.93093" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
+    <pointLight radius="5.93093" intensity="1.0" color="0.356863 0.662745 0.572549 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni012_1107.0" />
     <transform position="17.7958 7.0037 107.272" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <pointLight radius="2.96546" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
+    <pointLight radius="2.96546" intensity="1.0" color="0.309804 0.709804 0.811765 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni013_1108.0" />
@@ -8775,7 +8777,7 @@
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni014_1109.0" />
-    <transform position="-8.92985 3.30347 111.509" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <transform position="-8.72667 3.30347 111.509" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <pointLight radius="2.96546" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
   </entity>
   <entity   materialTag = "wood">
@@ -8799,7 +8801,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_steam_verde_omni_1112.0" />
     <transform position="18.0246 12.2613 86.0369" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_1111.0"/>
-    <pointLight radius="4.0" intensity="1.0" color="0.309804 0.737255 0.729412 1"/>
+    <pointLight radius="4.0" intensity="0.5" color="0.309804 0.737255 0.729412 1"/>
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "metal">
     <name name="lampara_steam_verde_S_1114.0" />
@@ -8817,7 +8819,7 @@
   <entity   materialTag = "wood">
     <name name="lampara_steam_verde_omni_1115.0" />
     <transform position="17.8545 13.9348 94.7871" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="lampara_steam_verde_S_1114.0"/>
-    <pointLight radius="4.0" intensity="1.0" color="0.309804 0.737255 0.729412 1"/>
+    <pointLight radius="4.0" intensity="0.5" color="0.309804 0.737255 0.729412 1"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="lampara_mesita_omni016_1117.0" />
@@ -9015,6 +9017,16 @@
     <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.04616" boxY="0.554932" boxZ="0.602041"/>
     <rigidbody density="125.175"  />
   </entity>
+  <entity   materialTag = "wood">
+    <name name="lampara_mesita_omni021_1147.0" />
+    <transform position="-8.70651 0.79339 110.196" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <pointLight radius="1.77928" intensity="1.0" color="0.905882 0.588235 0.309804 1"/>
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="Sky001_1149.0" />
+    <transform position="12.6885 1.75061e-006 40.0493" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <ambientLight intensity="1.0" color="0.356863 0.356863 0.356863 1"/>
+  </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="tapa_agua_puzle" />
     <transform position="-16.2253 11.135 69.9094" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -9063,7 +9075,7 @@
     <render  color = "0.65098 0.898039 0.898039">
       <draw mesh="water" sub_mesh="0" mat="distorsion"/>
     </render>
-    <aabb min="-26.3089 0.0 -32.5492" max="26.3089 0.0001 32.5492"/>
+    <aabb min="-26.3089 0.0 -37.7571" max="26.3089 0.0001 37.7571"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="sc3_room_0" />
@@ -9173,6 +9185,17 @@
     <transform position="18.0439 1.4275 113.447" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-3.90644 0.0 -7.95612" max="3.90644 2.33719 7.95612"/>
     <trigger botOnly="false" playerOnly="true" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc3_trigger_cinematica" />
+    <transform position="12.0894 3.0595 114.093" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <aabb min="-1.91111 0.0 -1.75403" max="1.91111 2.65722 1.75403"/>
+    <trigger botOnly="true" playerOnly="true" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc3_camera_cinematica" />
+    <transform position="15.6386 5.26738 114.114" rotation="-0.5 -0.5 0.5 -0.5" scale="1.0 1.0 1.0"/>
+    <camera  fov="45.0" znear="0.0" zfar="100.0"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="sc3_int_prismatic_inicio" />

@@ -15,7 +15,7 @@ _print = print
 clearCoroutines()
 
 function onSceneLoad_my_file()
-
+logicManager:changeCamera("sc3_camera_cinematica")
 logicManager:setFogAttributes(1000, -10000);
 
 	--onSceneLoad_scene_final_boss()
