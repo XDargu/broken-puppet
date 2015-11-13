@@ -144,6 +144,8 @@ void bt_soldier::create(string s)
 
 	((TCompCharacterController*)character_controller)->lerpRotation = 0.23f;
 
+	((TCompSkeleton*)enemy_skeleton)->setPropBone(65);
+
 	resetBot();
 }
 
