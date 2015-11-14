@@ -152,7 +152,6 @@ function onSceneLoad_scene_final_boss()
 		
 		startCoroutine("playCinematic", playCinematic);
 		
-		
 		-- Obtenemos la posición de la sustituta y le apuntamos
 		--local substitute = logicManager:getBot("Substitute");
 		
