@@ -614,3 +614,9 @@ FMOD_STUDIO_PLAYBACK_STATE CSoundManager::getNamedInstanceState(std::string name
 
 	return FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_STOPPED;
 }
+
+void CSoundManager::setEventInstaceCue(const char* name_cue, FMOD::Studio::EventInstance* event_instance){
+	FMOD::Studio::CueInstance* cue_aux;
+	event_instance->getCue(name_cue, &cue_aux);
+	cue_aux->trigger();
+}

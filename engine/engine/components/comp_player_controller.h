@@ -31,6 +31,7 @@ struct TCompPlayerController : TBaseComponent {
 	float footstep_counter;
 
 	float last_time_in_water;
+	bool out_water_played;
 
 	void bossImpact(CHandle boss);
 public:

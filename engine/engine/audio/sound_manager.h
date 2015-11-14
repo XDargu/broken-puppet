@@ -133,6 +133,8 @@ public:
 	FMOD::Studio::EventInstance* getNamedInstance(std::string name);
 
 	FMOD_STUDIO_PLAYBACK_STATE getNamedInstanceState(std::string name);
+
+	void setEventInstaceCue(const char* name_cue, FMOD::Studio::EventInstance* event_instance);
 };
 
 

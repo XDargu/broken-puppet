@@ -38,6 +38,8 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	fsm_player_legs->torso = fsm_player_torso;
 	fsm_player_torso->legs = fsm_player_legs;
 
+	out_water_played = false;
+
 	hit_cool_down = 0.5f;
 	time_since_last_hit = 0;
 
@@ -249,12 +251,18 @@ void TCompPlayerController::update(float elapsed) {
 
 	if ((rigid->rigidBody->getGlobalPose().p.y + 1.7f) < water_level)  {
 		last_time_in_water = 0.f;
+		out_water_played = false;
 	}
 	else {
 		last_time_in_water += elapsed;
 		if (last_time_in_water < 15) {
 			drops_size = 0.1f;
 			drops_size_final = 0.2f;
+			if (!out_water_played){
+				//Play WATER_PLINKING event
+				CSoundManager::get().playEvent("WATER_PLINKING", trans->position);
+				out_water_played = true;
+			}
 		}
 	}
 
