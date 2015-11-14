@@ -9196,7 +9196,7 @@
   <entity   materialTag = "wood">
     <name name="sc3_camera_cinematica" />
     <transform position="13.0516 4.38878 114.114" rotation="-0.5 -0.5 0.5 -0.5" scale="1.0 1.0 1.0"/>
-    <camera  fov="75.1782" znear="0.0" zfar="100.0"/>
+    <camera  fov="60" znear="0.1" zfar="100.0"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="sc3_int_prismatic_inicio" />

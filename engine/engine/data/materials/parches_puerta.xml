@@ -1,1 +1,1 @@
-<std_material name="parches_puerta" diffuse="parches_puerta_diffuse" normal="parches_puerta_normal" specular="parches_puerta_specular" glossiness="parches_puerta_gloss" emissive="" emissive_off="" />
+<std_material name="parches_puerta" diffuse="parches_puerta_diffuse" normal="parches_puerta_normal" specular="parches_puerta_specular" glossiness="parches_puerta_gloss" emissive="parches_puerta_emissive" emissive_off="" />

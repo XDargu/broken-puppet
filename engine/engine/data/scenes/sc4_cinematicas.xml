@@ -9754,7 +9754,7 @@
   <entity   materialTag = "wood">
     <name name="sc4_camera_cinematica" />
     <transform position="17.123 1.81339 28.946" rotation="0.0 -0.707107 0.707107 0.0" scale="1.0 1.0 1.0"/>
-    <camera  fov="75.1782" znear="0.0" zfar="1000.0"/>
+    <camera  fov="60" znear="0.1" zfar="150.0"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="sc4_hinge_asc_4" />

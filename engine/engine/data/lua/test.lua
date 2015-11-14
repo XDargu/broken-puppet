@@ -15,9 +15,9 @@ _print = print
 clearCoroutines()
 
 function onSceneLoad_my_file()
-
+	
 	logicManager:setFogAttributes(1000, -10000);
-
+	--logicManager:changeWaterLevel(7.58, 0.25);
 	--onSceneLoad_scene_final_boss()
 	--onSceneLoad_scene_4()
 	--onSceneLoad_scene_3()
@@ -152,7 +152,6 @@ function onSceneLoad_scene_final_boss()
 		
 		startCoroutine("playCinematic", playCinematic);
 		
-		
 		-- Obtenemos la posición de la sustituta y le apuntamos
 		--local substitute = logicManager:getBot("Substitute");
 		
@@ -165,7 +164,7 @@ function onSceneLoad_scene_final_boss()
 
 	function playCinematic()
 		-- Bandas cinemáticas
-		--logicManager:setBands(true)
+		logicManager:setBands(true)
 		-- Desactivar niebla
 		logicManager:setFogAttributes(1000, -1000);
 
@@ -751,7 +750,7 @@ function onSceneLoad_scene_4()
 bossSecuence = false;
 	player = logicManager:getBot("Player");
 	initPos = player:getPosition();
-
+	
 	-- ******** PRUEBA PUZZLES FINALES ESCENA 4 **********
 
 
@@ -1145,8 +1144,8 @@ function extraCoroutine()
 	
 		logicManager:changeCamera("Camara_Trailer")
 		waitTime(2)
-		logicManager:playAnimation("sc1_cinematica_trailer1", camera)
-		waitTime(10)
+		logicManager:playAnimation("sc2_cinematica_trailer1", camera)
+		waitTime(17)
 		logicManager:changeCamera("PlayerCamera")
 	end
 	if (cam_val == 1) then
@@ -1154,8 +1153,8 @@ function extraCoroutine()
 	
 		logicManager:changeCamera("Camara_Trailer")
 		waitTime(2)
-		logicManager:playAnimation("sc1_cinematica_trailer2", camera)
-		waitTime(10)
+		logicManager:playAnimation("sc2_cinematica_trailer2", camera)
+		waitTime(14)
 		logicManager:changeCamera("PlayerCamera")
 		cam_val = -1
 	end

@@ -774,7 +774,7 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("deferred_point_lights");
 	}
 #endif
-	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+	if (io.becomesReleased(CIOStatus::F4_KEY)) {
 		logic_manager.execute("onExtraButtonPressed()");
 	}
 	// Water level
@@ -1228,7 +1228,7 @@ void CApp::render() {
 
 	// DRAW GUI
 	CTraceScoped scope_gui("GUI");
-	if (draw_gui && false) {
+	if (draw_gui) {
 		if (h_player.isValid()) {
 			int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 			life_val /= 10;
@@ -1850,7 +1850,7 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.get()->global_water_level = water_level;
 
 	render_manager.init();
-	ctes_global.get()->use_lightmaps = 0;
+	ctes_global.get()->use_lightmaps = 1;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_menu.xml"){
@@ -1889,7 +1889,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_3.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
-		ctes_global.get()->use_lightmaps = 0;
+		ctes_global.get()->use_lightmaps = 1;
 		CSoundManager::get().setSceneID(3);
 
 		fog.fog_level = -1000;

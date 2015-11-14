@@ -12417,7 +12417,7 @@
   <entity   materialTag = "wood">
     <name name="Camara_Trailer" />
     <transform position="24.0639 2.49956 3.98021" rotation="-0.326506 -0.627211 0.627211 -0.326506" scale="1.0 1.0 1.0"/>
-    <camera  fov="90.0" znear="0.0" zfar="1000.0"/>
+    <camera  fov="60.0" znear="0.1" zfar="130.0"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="HingeConstraint43_107.0" />
