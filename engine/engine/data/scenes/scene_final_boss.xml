@@ -4314,7 +4314,7 @@
     <name name="boss_room_2" />
     <transform position="-0.741495 -93.8157 0.536404" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-70.0552 0.0 -63.7974" max="70.0552 202.464 63.7974"/>
-    <zoneAABB id="0" />
+    <zoneAABB id="1" />
   </entity>
   <entity tag = "enemy" prefab="Boss" tagBoss="true">
     <transform position="0.0 0.0 0.0" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>
@@ -4480,7 +4480,7 @@
   <entity   materialTag = "wood">
     <name name="substitute_light" />
     <transform position="0.0 2.068723 1.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="Substitute" />
-    <pointLight radius="2" intensity="1.0" color="0.7 1 1 1"/>
+    <pointLight radius="2" intensity="1.0" color="0.8 0.5 0.3 1"/>
   </entity>
   
   <entity   materialTag = "wood">

@@ -1900,7 +1900,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(90.f);
-		ctes_global.get()->use_lightmaps = 0;
+		ctes_global.get()->use_lightmaps = 1;
 		CSoundManager::get().setSceneID(4);
 
 		fog.fog_level = -1000;

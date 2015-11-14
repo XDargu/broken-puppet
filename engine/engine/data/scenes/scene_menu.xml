@@ -62,20 +62,20 @@
     </render>
     <aabb min="-1.85485 -0.0989034 -1.66563" max="1.85485 0.0989034 1.66563"/>
   </entity>
-  <entity   materialTag = "wood">
-    <name name="violin_pref_menu_12.0" />
-    <transform position="2.863 40.0976 -83.7474" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render  color = "0.0 0.0 0.0">
-      <draw mesh="violin_pref_menu" sub_mesh="0" mat="violin"/>
-    </render>
+  <entity   materialTag = "wood" prefab="violin_pref_static">
+    <name name="violin_pref_menu_12.0" prefab="pref_violin_static" />
+    <transform position="2.863 40.0976 -83.7474" rotation="-0.0544179 -0.185505 -0.0419834 0.980237" scale="1.0 1.0 1.0"/>
+    render  color = "0.0 0.0 0.0">
+      draw mesh="violin_pref_menu" sub_mesh="0" mat="violin"/>
+    /render>
     <aabb min="-1.05403 -0.00217404 -1.07703" max="1.08261 2.96947 0.270427"/>
   </entity>
-  <entity   materialTag = "piano">
+  <entity   materialTag = "piano" prefab="piano_menu">
     <name name="piano_maquinaescribir_menu_13.0" />
-    <transform position="0.804014 40.0086 -76.1573" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <render  color = "0.0313726 0.431373 0.529412">
+    <transform position="-1.004014 40.0086 -76.1573" rotation="0 -1 0 0" scale="1.0 1.0 1.0"/>
+    <!--<render  color = "0.0313726 0.431373 0.529412">
       <draw mesh="piano_maquinaescribir_menu" sub_mesh="0" mat="piano_maquinaescribir"/>
-    </render>
+    </render>-->
     <aabb min="-1.09369 0.00858267 -1.62118" max="1.53859 2.44543 1.19377"/>
   </entity>
   <entity   materialTag = "leather">

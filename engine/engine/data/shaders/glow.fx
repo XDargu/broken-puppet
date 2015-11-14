@@ -66,12 +66,6 @@ float4 PSGlowLights(VS_TEXTURED_OUTPUT input) : SV_Target
 	float4 color = txDiffuse.Sample(samClampLinear, input.UV);
 	float luminance = txAccLight.SampleLevel(samClampLinear, input.UV, 3).x;
 	return color * (luminance - 1);
-	if (luminance > 2) {
-		return color;
-	}
-	else {
-		return float4(0, 0, 0, 0);
-	}
 }
 
 //--------------------------------------------------------------------------------------
@@ -110,8 +104,7 @@ float4 PSGlow(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_
 		  luminance += txLuminance.SampleLevel(samClampLinear, input.UV + delta * 0.3, 9) * factor;
 	  }
   }*/
-    
-  return (original + luminance * 0.5);
+  return (original + luminance * 0.75);
   //return original;
   //return blurred;
   //return luminance;

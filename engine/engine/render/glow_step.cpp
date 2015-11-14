@@ -45,15 +45,15 @@ void TGlowStep::apply(CTexture* in) {
 	((CTexture*)rt_lights)->activate(1);
 	drawTexture2D(0, 0, render.xres, render.yres, in, "glow");
 
-	rt_lens->activate();
+	/*rt_lens->activate();
 	((CTexture*)rt_glow)->activate(0);
 	texture_manager.getByName("lens_flare_mascara")->activate(9);
 	texture_manager.getByName("lens_flare_suciedad")->activate(10);
-	drawTexture2D(0, 0, render.xres, render.yres, in, "lens_flare");
+	drawTexture2D(0, 0, render.xres, render.yres, in, "lens_flare");*/
 }
 
 CTexture* TGlowStep::getOutput() {
-	return rt_lens;
+	return rt_glow;
 }
 
 void TGlowStep::destroy() {
