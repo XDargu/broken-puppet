@@ -1851,6 +1851,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	render_manager.init();
 	ctes_global.get()->use_lightmaps = 1;
+	ctes_global.get()->exposure = 2.5f;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_menu.xml"){
@@ -1890,10 +1891,14 @@ void CApp::loadScene(std::string scene_name) {
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
 		ctes_global.get()->use_lightmaps = 1;
+		ctes_global.get()->exposure = 1.5f;
 		CSoundManager::get().setSceneID(3);
 
 		fog.fog_level = -1000;
 		fog.fog_distance = 1000;
+
+		fog.fog_distance = 50;
+		fog.fog_color = XMVectorSet(0.3f, 0.45f, 0.3f, 0.3f);
 
 		CSoundManager::get().playEvent("MUSIC_PIT");
 	}
