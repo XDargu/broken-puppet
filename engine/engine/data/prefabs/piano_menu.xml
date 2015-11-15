@@ -1,0 +1,8 @@
+<prefab>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "piano">
+    <name name="piano_menu" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <skeleton name="piano"/>
+    <aabb min="-0.451676 0.0 -0.736906" max="1.35907 3.17499 0.799245"/>
+  </entity>
+</prefab>

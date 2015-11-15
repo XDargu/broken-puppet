@@ -125,7 +125,7 @@ float4 PSLensFlare(VS_TEXTURED_OUTPUT input) : SV_Target
 	color *= float4(dirt, 1);
 	color = float4(color.xyz*0.1f, 1);
 	
-	return txDiffuse.Sample(samClampLinear, input.UV) + color;
+	return txDiffuse.Sample(samClampLinear, input.UV);// +color;
     
 
 

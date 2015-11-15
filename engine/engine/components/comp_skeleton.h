@@ -15,6 +15,7 @@ private:
 	CCoreModel* core_model;
 	float time_since_last_ragdoll;
 	bool follow_animation;
+	int prop_bone;
 
 public:
 	CHandle h_transform;
@@ -22,7 +23,7 @@ public:
 
 	CalModel*  model;
 
-	TCompSkeleton() : model(nullptr) { }
+	TCompSkeleton() : model(nullptr), prop_bone(-1){}
 	~TCompSkeleton();
 
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
@@ -53,6 +54,8 @@ public:
 
 	void setFollowAnimation(bool active);
 	bool isFollowingAnimation() { return follow_animation; }
+
+	void setPropBone(int id) { prop_bone = id; }
 };
 
 #endif

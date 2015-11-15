@@ -783,7 +783,7 @@ void CApp::update(float elapsed) {
 		//render_techniques_manager.reload("deferred_point_lights");
 	}
 #endif
-	if (io.becomesReleased(CIOStatus::F8_KEY)) {
+	if (io.becomesReleased(CIOStatus::F4_KEY)) {
 		logic_manager.execute("onExtraButtonPressed()");
 	}
 	// Water level
@@ -1486,7 +1486,7 @@ void CApp::renderEntities() {
 
 				XMVECTOR edges = font.measureString(c_text->text);
 				float x, y;
-				float offset = 15;
+				float offset = 30;
 				if (camera.getScreenCoords(t->position, &x, &y)) {
 					activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 					drawDialogBox(x, y, XMVectorGetZ(edges) + offset * 2, XMVectorGetW(edges) + offset * 2, texture_manager.getByName("gui_test1"), "gui_dialog_box");
@@ -1861,7 +1861,7 @@ void CApp::loadScene(std::string scene_name) {
 	ctes_global.get()->global_water_level = water_level;
 
 	render_manager.init();
-	ctes_global.get()->use_lightmaps = 0;
+	ctes_global.get()->use_lightmaps = 1;
 
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_menu.xml"){
@@ -1900,7 +1900,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_3.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
-		ctes_global.get()->use_lightmaps = 0;
+		ctes_global.get()->use_lightmaps = 1;
 		CSoundManager::get().setSceneID(3);
 
 		fog.fog_level = -1000;
@@ -1911,7 +1911,7 @@ void CApp::loadScene(std::string scene_name) {
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(90.f);
-		ctes_global.get()->use_lightmaps = 0;
+		ctes_global.get()->use_lightmaps = 1;
 		CSoundManager::get().setSceneID(4);
 
 		fog.fog_level = -1000;

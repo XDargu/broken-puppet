@@ -173,6 +173,8 @@ void bt_grandma::create(string s)
 
 	((TCompCharacterController*)character_controller)->lerpRotation = 0.08f;
 
+	((TCompSkeleton*)enemy_skeleton)->setPropBone(71);
+
 	resetBot();
 }
 
