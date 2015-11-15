@@ -100,6 +100,8 @@ using namespace DirectX;
 #include "comp_explosion.h"
 #include "comp_boss_prefab.h"
 #include "comp_player_rope.h"
+#include "comp_bomb_generator.h"
+#include "comp_prefab_generator.h"
 
 
 // Animation

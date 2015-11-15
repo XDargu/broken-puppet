@@ -36,6 +36,10 @@ public:
 	
 	void LoopTalk8();
 	void LoopTalk9();
+	void LoopTalk10();
+	void LoopTalk11();
+	void LoopTalk12();
+	void LoopTalk13();
 
 	void JustHanged();
 	void CallingBoss();

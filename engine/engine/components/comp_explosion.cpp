@@ -43,9 +43,13 @@ void TCompExplosion::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 }
 
 void TCompExplosion::update(float elapsed){
+	float active_count = 10;
+	CEntity* m_generator_entity = generator_entity;
+	active_count = (m_generator_entity) ? 2 : active_count;
+
 	if (!bomb_active){
 		count_down += elapsed;
-		if (count_down >= 10.f){
+		if (count_down >= active_count){
 			bomb_active = true;
 		}
 	}
@@ -108,27 +112,32 @@ void TCompExplosion::Explote(bool force_explosion){
 		XMVECTOR m_pos = ((TCompTransform*)comp_trans)->position;
 		CQuaterion m_rot = ((TCompTransform*)comp_trans)->rotation;
 		CEntityManager& entity_manager = CEntityManager::get();
-
+		dbg("Explota");
 		for (int i = 0; i < entity_manager.rigid_list.size(); ++i){
 			CEntity* e = entity_manager.rigid_list[i];
 
-			if ((e != ((CEntity*)mEntity)) && (!e->hasTag("player")) && (e->has<TCompTransform>())){
-				XMVECTOR pos_e = ((TCompTransform*)e->get<TCompTransform>())->position;
+			if (e)
+			{
+				if ((e != ((CEntity*)mEntity)) && (!e->hasTag("player")) && (e->has<TCompTransform>())){
+					XMVECTOR pos_e = ((TCompTransform*)e->get<TCompTransform>())->position;
 
-				XMVECTOR v_distance = pos_e - m_pos;
-				float distance = XMVectorGetX(XMVector3Length(v_distance));
+					XMVECTOR v_distance = pos_e - m_pos;
+					float distance = XMVectorGetX(XMVector3Length(v_distance));
 
-				if (distance < radius){
-					e->sendMsg(TMsgExplosion(m_pos, distance, damage));
-				}
-				CHandle m_boss = entity_manager.getByName("Boss");
-				if (m_boss.isValid()){
-					CHandle comp_boss = ((CEntity*)m_boss)->get<TCompAiBoss>();
-					if (comp_boss.isValid()){
-						((TCompAiBoss*)comp_boss)->stun();
+					if (distance < radius){
+						e->sendMsg(TMsgExplosion(m_pos, distance, damage));
+					}
+					CHandle m_boss = entity_manager.getByName("Boss");
+					if (m_boss.isValid()){
+						CHandle comp_boss = ((CEntity*)m_boss)->get<TCompAiBoss>();
+						if (comp_boss.isValid()){
+							((TCompAiBoss*)comp_boss)->stun();
+						}
 					}
 				}
 			}
+			dbg("fuerzas aplicadas");
+			
 		}
 
 		// Remove rope
@@ -165,6 +174,7 @@ void TCompExplosion::Explote(bool force_explosion){
 				}
 			}
 		}
+		dbg("Eliminadas las cuerdas");
 
 		for (auto& it : target_ropes) {
 			if (it.isValid()) {
@@ -172,7 +182,35 @@ void TCompExplosion::Explote(bool force_explosion){
 				rope_manager.removeString(it);
 
 				// Remove needles
-				CHandle needle1 = rope->transform_1_aux;
+				CHandle needle1_aux = rope->transform_1_aux;
+				if (needle1_aux.isValid()) {
+					CEntity* e1 = CHandle(needle1_aux).getOwner();
+					if (e1) {
+						CHandle c_needle1 = e1->get<TCompNeedle>();
+
+						if (c_needle1.isValid()){
+							Citem_manager::get().removeNeedleFromVector(c_needle1);
+							Citem_manager::get().removeNeedle(c_needle1);
+							CEntityManager::get().remove(CHandle(needle1_aux).getOwner());
+						}
+					}
+				}
+
+				CHandle needle2_aux = rope->transform_2_aux;
+				if (needle2_aux.isValid()){
+					CEntity* e2 = CHandle(needle2_aux).getOwner();
+					if (e2) {
+						CHandle c_needle2 = e2->get<TCompNeedle>();
+						if (c_needle2.isValid()){
+							Citem_manager::get().removeNeedleFromVector(c_needle2);
+							Citem_manager::get().removeNeedle(c_needle2);
+							CEntityManager::get().remove(CHandle(needle2_aux).getOwner());
+						}
+					}
+				}
+
+				// Remove needles
+				CHandle needle1 = rope->transform_1;
 				if (needle1.isValid()) {
 					CEntity* e1 = CHandle(needle1).getOwner();
 					if (e1) {
@@ -186,7 +224,7 @@ void TCompExplosion::Explote(bool force_explosion){
 					}
 				}
 
-				CHandle needle2 = rope->transform_2_aux;
+				CHandle needle2 = rope->transform_2;
 				if (needle2.isValid()){
 					CEntity* e2 = CHandle(needle2).getOwner();
 					if (e2) {
@@ -201,13 +239,37 @@ void TCompExplosion::Explote(bool force_explosion){
 			}
 		}
 
+		dbg("Se quitan agujas");
+
 		// Remove Entity
 		CEntityManager::get().remove(mEntity);
 
+		dbg("elimina entidad");
+
 		// Play Explosion sound
 		CSoundManager::get().playEvent("BOMB_EXPLOSION", m_pos);
+		dbg("sonido de bomba");
 
 		// Adding particle sistem
 		CLogicManager::get().instantiateParticleGroupOneShot("ps_explosion_bomb_big", m_pos, m_rot);
+
+		dbg("añade sistema de particulas");
+
+
+		dbg("va a enviar un mensaje");
+		// Send Msg to generator
+		if (generator_entity.isValid()){
+			CEntity* m_generator_entity = (CEntity*)generator_entity;
+			if (m_generator_entity){
+				m_generator_entity->sendMsg(TMsgGenerateBomb());
+			}
+		}
+		dbg("mensaje enviado");
+		
 	}	
+}
+
+
+void TCompExplosion::setGenerator(CHandle generator){
+	generator_entity = generator;
 }

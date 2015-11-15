@@ -6,8 +6,7 @@
 
 struct TCompRope : TBaseComponent {
 private:
-	CHandle transform_1;
-	CHandle transform_2;
+
 
 	float remove_counter;
 
@@ -18,6 +17,8 @@ private:
 public:
 	CHandle joint;
 
+	CHandle transform_1;
+	CHandle transform_2;
 	CHandle transform_1_aux;
 	CHandle transform_2_aux;
 	CHandle joint_aux;

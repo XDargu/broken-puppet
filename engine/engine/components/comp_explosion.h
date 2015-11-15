@@ -9,6 +9,7 @@ struct TCompExplosion : TBaseComponent {
 private:
 
 	CHandle mEntity;
+	CHandle generator_entity;
 	CHandle comp_trans;
 	CHandle boss_entity;
 	CHandle boss_trans;
@@ -20,6 +21,7 @@ private:
 	float count_down;
 	bool auto_stun;
 
+
 public:
 	TCompExplosion();
 	~TCompExplosion();
@@ -29,6 +31,7 @@ public:
 	void loadFromAtts(const std::string& elem, MKeyValue &atts);
 	void onDetonate(const TMsgOnDetonate& msg);
 	void Explote(bool force_explosion);
+	void setGenerator(CHandle);
 	
 };
 
