@@ -1,9 +1,14 @@
 <fmodEvents>
   <!-- MUSICA -->
-  <event id="MUSIC_MENU" path="event:/Musica/CANCION" /> <!-- Musica del menu principal-->
+  <event id="MUSIC_MENU" path="event:/Musica/Diegetica/Musica Menu" /> <!-- Musica del menu principal-->
   <event id="MUSIC_BASEMENT" path="event:/Musica/PRUEBA PROVISIONAL" /> <!-- Musica de la ambientacion "Desvan"-->
   <event id="MUSIC_ESC" path="event:/Musica/PROPUESTA 1" />
   <event id="MUSIC_PIT" path="event:/Musica/Propuesta de Rollo 1 (Sin voz)" /> <!-- Musica de la ambientacion "Foso"-->
+  <event id="MUSIC_GRAMOLA" path="event:/Musica/Diegetica/Gramolas Musica1" /> <!-- Musica diegetica para gramolas"-->
+  <event id="MUSIC_ESCENA1" path="event:/Musica/Escenarios/Musica Escena1" /> <!-- Musica extradiegetica para escena1"-->
+
+  
+
 
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" /> <!-- Sonido cuando cursor ratón esta encima boton (Menu principal)-->
@@ -46,6 +51,9 @@
   <event id="SUBS_BOSS_HIT_33" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_33 No! Please! You have no idea of what you" />
   <event id="SUBS_BOSS_HIT_34" path="event:/Dialogos/Dialogos Sustituta/Sustituta Dialogos_34 Noo What have you done... You are completely insane!" />
 
+  <!-- Slow Motion -->
+  <event id="SLOW_MOTION_IN" path="event:/Mixer/Slow_Motion_IN" />
+  <event id="SLOW_MOTION_OUT" path="event:/Mixer/Slow_Motion_OUT" />
 
   <!-- Katherine -->
   <event id="KATH_JUMP" path="event:/Expresion/Katherine/Saltar" />
@@ -58,7 +66,10 @@
   <event id="KATH_KILL_LAUGH" path="event:/Dialogos/Dialogos Kath/RisaKillEnemy" />
   <event id="KATH_GRANDMA_KILLED" path="event:/Expresion/Katherine/AbuelaMatada" />
   <event id="KATH_SOLDIER_KILLED" path="event:/Expresion/Katherine/SoldadoMatado" />
+  <event id="KATH_TIRED" path="event:/Expresion/Katherine/Cansancio" />
+  <event id="KATH_RUNNING" path="event:/Expresion/Katherine/Correr" />
   
+
   <!-- Strings & needles -->
   <event id="STRING_THROW" path="event:/Expresion/Katherine/Lanzar" /> <!-- Evento de lanzamiento de hilos (Gameplay)-->
   <event id="STRING_GRAB" path="event:/Expresion/Katherine/Tirar" /> <!-- Evento correspondiente a la mecanica de "tirar" (Gameplay)-->
@@ -78,19 +89,19 @@
 
   <!-- Boss -->
   <event id="BOMB_EXPLOSION" path="event:/Impactos/bomb_exposion" /> <!-- Evento correspodiente a las explosiones provocadas por bombas (Gameplay) -->
-  <event id="BOSS_RISE_UP" path="event:/Ambiente/boss_rise_up" /> <!-- Evento correspodiente a los sonidos en la escena de aparición del final Boss (Gameplay) -->
-  <event id="BOSS_ARM" path="event:/Ambiente/boss_arm" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando le arrancan un brazo (Gameplay) -->
-  <event id="BOSS_STUN" path="event:/Ambiente/boss_stun" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando es golpeado por una bomba y queda mareado (Gameplay) -->
-  <event id="RECOVER" path="event:/Ambiente/boss_stun_ends" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando se le pasa el mareo (Gameplay) -->
-  <event id="BOSS_DAMAGE" path="event:/Ambiente/boss_damage" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando recibe daño (Gameplay) -->
-  <event id="BOSS_HEART" path="event:/Ambiente/boss_heart" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando su corazon queda expuesto (Gameplay) -->
-  <event id="BOSS_BALL_CREATE" path="event:/Ambiente/boss_ball_create" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta formando la bola de basura para atacar (Gameplay) -->
-  <event id="BOSS_BALL_THROW" path="event:/Ambiente/boss_ball_throw" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando lanza la bola de basura (Gameplay) -->
-  <event id="BOSS_WAVE" path="event:/Ambiente/boss_wave" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta usa el ataque "ola lateral" (Gameplay) -->
-  <event id="BOSS_KILLED" path="event:/Ambiente/boss_heart_killed" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando le arrancan el corazón y finalmente muere (Gameplay) -->
-  <event id="BOSS_SHOT" path="event:/Ambiente/boss_shot" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando atrae props para realizar disparos individuales (Gameplay) -->
-  <event id="BOSS_RAIN" path="event:/Ambiente/boss_rain" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta haciendo llover basura (Gameplay) -->
-  <event id="BOSS_THROW" path="event:/Ambiente/boss_throw" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando dispara props individuales (Gameplay) -->
+  <event id="BOSS_RISE_UP" path="event:/Boss/boss_rise_up" /> <!-- Evento correspodiente a los sonidos en la escena de aparición del final Boss (Gameplay) -->
+  <event id="BOSS_ARM" path="event:/Boss/boss_arm" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando le arrancan un brazo (Gameplay) -->
+  <event id="BOSS_STUN" path="event:/Boss/boss_stun" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando es golpeado por una bomba y queda mareado (Gameplay) -->
+  <event id="RECOVER" path="event:/Boss/boss_stun_ends" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando se le pasa el mareo (Gameplay) -->
+  <event id="BOSS_DAMAGE" path="event:/Boss/boss_damage" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando recibe daño (Gameplay) -->
+  <event id="BOSS_HEART" path="event:/Boss/boss_heart" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando su corazon queda expuesto (Gameplay) -->
+  <event id="BOSS_BALL_CREATE" path="event:/Boss/boss_ball_create" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta formando la bola de basura para atacar (Gameplay) -->
+  <event id="BOSS_BALL_THROW" path="event:/Boss/boss_ball_throw" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando lanza la bola de basura (Gameplay) -->
+  <event id="BOSS_WAVE" path="event:/Boss/boss_wave" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta usa el ataque "ola lateral" (Gameplay) -->
+  <event id="BOSS_KILLED" path="event:/Boss/boss_heart_killed" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando le arrancan el corazón y finalmente muere (Gameplay) -->
+  <event id="BOSS_SHOT" path="event:/Boss/boss_shot" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando atrae props para realizar disparos individuales (Gameplay) -->
+  <event id="BOSS_RAIN" path="event:/Boss/boss_rain" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando esta haciendo llover basura (Gameplay) -->
+  <event id="BOSS_THROW" path="event:/Boss/boss_throw" /> <!-- Evento correspodiente a los sonidos que hace el final boss cuando dispara props individuales (Gameplay) -->
 
 
   <!-- Collisions -->
@@ -121,83 +132,89 @@
    + 4: Sala del desagüe
   <event id="CURRENT_ROOM" path="event:/Sala Actual" />
 
-  <event id="BUZZING" path="event:/Ambiente/buzz" /> Zumbido eléctrico
-  <event id="BOILER" path="event:/Ambiente/boiler" /> Calderas (vibración + vapor)
-  <event id="BIGFAN" path="event:/Ambiente/big fan" /> Ventiladores gigantes
-  <event id="WATERPIPES" path="event:/Ambiente/water_pipes" /> Agua por tuberías
-  <event id="SPARKS1" path="event:/Ambiente/sparks1" /> Agua por tuberías
-  <event id="RUNNINGWATER" path="event:/Ambiente/running_water" /> Agua que sale al destaponar
-  <event id="PLANETARIUM" path="event:/Ambiente/planetarium" /> Atrezzos de planetario
-  <event id="JUKEBOX_LOOP" path="event:/Ambiente/gramola_loop" /> Disco vacío en la gramola
-  <event id="GEARS_LOOP_1" path="event:/Ambiente/mecanismos_1" /> Mecanismos pequeños
-  <event id="GEAR_BIG" path="event:/Ambiente/mecanismos_2" /> Mecanismos grandes (reloj)  
-  <event id="ELEVATOR" path="event:/Ambiente/elevator" /> Ascensor completo
-  <event id="WOODEN_DOOR" path="event:/Ambiente/wood_door_open" /> Puerta de madera al abrirse
+  <event id="BUZZING" path="event:/Ambiente/Circunstanciales/buzz" /> Zumbido eléctrico
+  <event id="BOILER" path="event:/Ambiente/Circunstanciales/boiler" /> Calderas (vibración + vapor)
+  <event id="BIGFAN" path="event:/Ambiente/Circunstanciales/big fan" /> Ventiladores gigantes
+  <event id="WATERPIPES" path="event:/Agua/water_pipes" /> Agua por tuberías
+  <event id="SPARKS1" path="event:/Ambiente/Circunstanciales/sparks1" /> Chispas
+  <event id="RUNNINGWATER" path="event:/Agua/running_water" /> Agua que sale al destaponar
+  <event id="PLANETARIUM" path="event:/Mecanismos/planetarium" /> Atrezzos de planetario
+  <event id="JUKEBOX_LOOP" path="event:/Musica/Diegetica/gramola_loop" /> Disco vacío en la gramola
+  <event id="GEARS_LOOP_1" path="event:/Mecanismos/mecanismos_1" /> Mecanismos pequeños
+  <event id="GEAR_BIG" path="event:/Mecanismos/mecanismos_2" /> Mecanismos grandes (reloj)  
+  <event id="ELEVATOR" path="event:/Ambiente/Circunstanciales/elevator" /> Ascensor completo
+  <event id="WOODEN_DOOR" path="event:/Ambiente/Circunstanciales/wood_door_open" /> Puerta de madera al abrirse
   <event id="LIGHT_ON" path="event:/Mecanismos/Interruptores/light_switch_on" /> Cables al activar la luz
   <event id="LIGHT_OFF" path="event:/Mecanismos/Interruptores/light_switch_off" /> Cables al desactivar la luz
   <event id="TICTAC" path="event:/Mecanismos/TicTac" /> Tic tac del reloj
-  <event id="FACTORY_AMBIENT" path="event:/Ambiente/factory_ambient" /> Ruido de ambiente del crematorio
-  <event id="COMPRESOR_1" path="event:/Ambiente/compresor_1" /> Machacaabuelas 1 del crematorio
-  <event id="COMPRESOR_3" path="event:/Ambiente/compresor_3" /> Machacaabuelas 3 del crematorio
-  <event id="COMPRESOR_4" path="event:/Ambiente/compresor_4" /> Machacaabuelas 4 del crematorio
-  <event id="VIOLINCLASSIC" path="event:/Ambiente/violin_tunning" /> Violín clásico
+  <event id="FACTORY_AMBIENT" path="event:/Ambiente/Circunstanciales/factory_ambient" /> Ruido de ambiente del crematorio
+  <event id="COMPRESOR_1" path="event:/Ambiente/Circunstanciales/MachacaAbuelas/compresor_1" /> Machacaabuelas 1 del crematorio
+  <event id="COMPRESOR_3" path="event:/Ambiente/Circunstanciales/MachacaAbuelas/compresor_3" /> Machacaabuelas 3 del crematorio
+  <event id="COMPRESOR_4" path="event:/Ambiente/Circunstanciales/MachacaAbuelas/compresor_4" /> Machacaabuelas 4 del crematorio
+  <event id="VIOLINCLASSIC" path="event:/Musica/Diegetica/violin_tunning" /> Violín clásico
   <event id="WATER_SPLASH" path="event:/Agua/Splash Agua" /> Salpicaduras
+  <event id="WATER_PLINKING" path="event:/Agua/Salir del agua" /> Goteo tras salir del agua
+  <event id="MACHACAABUELAS" path="event:/Ambiente/Circunstanciales/MachacaAbuelas/Machacabuelas" /> Evento para machaabuelas in game
+  <event id="FIRE" path="event:/Ambiente/Circunstanciales/fuego" /> Evento ambiente para crematorio
+  <event id="KATHERINE_GEAR" path="event:/Mecanismos/Mecanismo Katherine" /> Evento de mecanismo de Katherine
+  <event id="MACHACA_DOWN" path="event:/Ambiente/Circunstanciales/MachacaAbuelas/Machacabuelas_Bajar" /> Evento de machacaabuelas bajando
+  <event id="MACHACA_UP" path="event:/Ambiente/Circunstanciales/MachacaAbuelas/Machacabuelas_Subir" /> Evento de machacaabuelas subiendo
+
 
   <!-- Narración -->
   <event id="NARR_DEATH" path="event:/Dialogos/Dialogos Narrador/Narrador+Fx_ Muertes Katherine" /> Video inicial
 
   <!-- Video -->
-  <event id="INITIAL_VIDEO" path="event:/intro_BP_sound" /> Video inicial
-  <event id="FINAL_VIDEO" path="event:/final_BP_sound" /> Video final
+  <event id="INITIAL_VIDEO" path="event:/Cinematicas/intro_BP_sound" /> Video inicial
+  <event id="FINAL_VIDEO" path="event:/Cinematicas/final_BP_sound" /> Video final
 
   <!-- Mixer -->
   <event id="UNDERWATER" path="event:/Mixer/Underwater" />
 
   <!-- Reverb zones -->
-  <event id="SC1ROOM1" path="event:/Mixer/Rev_SmallRoom" /> Primera sala
-  <event id="SC1ROOM2" path="event:/Mixer/Rev_SmallRoom" /> Sala de los juguetes
-  <event id="SC1ROOM3" path="event:/Mixer/Rev_SmallRoom" /> Sala te dejar caer la caja
-  <event id="SC1ROOM4" path="event:/Mixer/Rev_LongHall" /> Sala grande
-  <event id="SC1ROOM5" path="event:/Mixer/Rev_SmallRoom" /> Sala de taller de herramientas
-  <event id="SC1ROOM6" path="event:/Mixer/Rev_SmallRoom" /> Subida en ascensor
-  <event id="SC1ROOM7" path="event:/Mixer/Rev_LongHall" /> Sala de los soldados
-  <event id="SC1ROOM8" path="event:/Mixer/Rev_SmallRoom" /> Salita final
-  
-  <event id="SC2ROOM1" path="event:/Mixer/Rev_SmallRoom" /> Salita inicio
-  <event id="SC2ROOM2" path="event:/Mixer/Rev_SmallRoom" /> Pasillo inicial
-  <event id="SC2ROOM3" path="event:/Mixer/Rev_SmallRoom" /> Camerino
-  <event id="SC2ROOM4" path="event:/Mixer/Rev_LongHall" /> Sala de la cajonera
-  <event id="SC2ROOM5" path="eevent:/Mixer/Rev_SmallRoom" /> Sala de la plataforma que sube
-  <event id="SC2ROOM6" path="event:/Mixer/Rev_SmallRoom" /> Sala del violín
-  <event id="SC2ROOM7" path="eevent:/Mixer/Rev_SmallRoom" /> Sala antes de caída
-  <event id="SC2ROOM8" path="eevent:/Mixer/Rev_SmallRoom" /> Caída
-  <event id="SC2ROOM9" path="event:/Mixer/Rev_SmallRoom" /> Pasillo final
-  <event id="SC2ROOM10" path="event:/Mixer/Rev_SmallRoom" /> Salita final
-  
-  <event id="SC3ROOM0" path="event:/Mixer/Rev_SmallRoom" /> Salita inicio
-  <event id="SC3ROOM1" path="event:/Mixer/Rev_LongHall" /> Habitación de las abuelas
-  <event id="SC3ROOM2" path="event:/Mixer/Rev_SmallRoom" /> Pasillo doble
-  <event id="SC3ROOM3" path="event:/Mixer/Rev_SmallRoom" /> Habitación de subida del agua
-  <event id="SC3ROOM4" path="event:/Mixer/Rev_SmallRoom" /> Túnel del ventilador
-  <event id="SC3ROOM5" path="event:/Mixer/Rev_SmallRoom" /> Habitación de antes de la caída
-  <event id="SC3ROOM6" path="event:/Mixer/Rev_SmallRoom" /> Caída
-  <event id="SC3ROOM7" path="event:/Mixer/Rev_LongHall" /> Habitación grande del final
-  <event id="SC3ROOM8" path="eevent:/Mixer/Rev_SmallRoom" /> Pasillo hacia la habitación del desagüe
-  <event id="SC3ROOM9" path="event:/Mixer/Rev_SmallRoom" /> Habitación del desagüe
-  <event id="SC3ROOM10" path="event:/Mixer/Rev_SmallRoom" /> Salita final
-  
-  <event id="SC4ROOM1" path="event:/Mixer/Rev_SmallRoom" /> Salita inicio
-  <event id="SC4ROOM2" path="eevent:/Mixer/Rev_SmallRoom" /> Sala atrezzos
-  <event id="SC4ROOM3" path="event:/Mixer/Rev_SmallRoom" /> Crematorio
-  <event id="SC4ROOM4" path="event:/Mixer/Rev_SmallRoom" /> Subida y pasillo
-  <event id="SC4ROOM5" path="event:/Mixer/Rev_LongHall" /> Sala reloj
-  <event id="SC4ROOM6" path="eevent:/Mixer/Rev_SmallRoom" /> Lateral de sala reloj
-  <event id="SC4ROOM7" path="event:/Mixer/Rev_SmallRoom" /> Dentro de reloj
+  <event id="SC1ROOM1" path="event:/Mixer/Rev_SotanoSmall" /> Primera sala
+  <event id="SC1ROOM2" path="event:/Mixer/Rev_SotanoSmall" /> Sala de los juguetes
+  <event id="SC1ROOM3" path="event:/Mixer/Rev_SotanoSmall" /> Sala te dejar caer la caja
+  <event id="SC1ROOM4" path="event:/Mixer/Rev_SotanoGrande" /> Sala grande
+  <event id="SC1ROOM5" path="event:/Mixer/Rev_SotanoSmall" /> Sala de taller de herramientas
+  <event id="SC1ROOM6" path="event:/Mixer/Rev_SotanoSmall" /> Subida en ascensor
+  <event id="SC1ROOM7" path="event:/Mixer/Rev_SotanoGrande" /> Sala de los soldados
+  <event id="SC1ROOM8" path="event:/Mixer/Rev_SotanoSmall" /> Salita final
 
-  <event id="SC5ROOM1" path="event:/Mixer/Rev_SmallRoom" /> Sala del payaso
-  <event id="SC5ROOM2" path="event:/Mixer/Rev_LongHall" /> Pasillo
-  <event id="SC5ROOM3" path="event:/Mixer/Rev_LongHall" /> Escenario
-  
+  <event id="SC2ROOM1" path="event:/Mixer/Rev_SotanoSmall" /> Salita inicio
+  <event id="SC2ROOM2" path="event:/Mixer/Rev_SotanoSmall" /> Pasillo inicial
+  <event id="SC2ROOM3" path="event:/Mixer/Rev_SotanoSmall" /> Camerino
+  <event id="SC2ROOM4" path="event:/Mixer/Rev_SotanoGrande" /> Sala de la cajonera
+  <event id="SC2ROOM5" path="eevent:/Mixer/Rev_SotanoSmall" /> Sala de la plataforma que sube
+  <event id="SC2ROOM6" path="event:/Mixer/Rev_SotanoSmall" /> Sala del violín
+  <event id="SC2ROOM7" path="eevent:/Mixer/Rev_SotanoSmall" /> Sala antes de caída
+  <event id="SC2ROOM8" path="eevent:/Mixer/Rev_SotanoSmall" /> Caída
+  <event id="SC2ROOM9" path="event:/Mixer/Rev_SotanoSmall" /> Pasillo final
+  <event id="SC2ROOM10" path="event:/Mixer/Rev_SotanoSmall" /> Salita final
+
+  <event id="SC3ROOM0" path="event:/Mixer/Rev_SotanoSmall" /> Salita inicio
+  <event id="SC3ROOM1" path="event:/Mixer/Rev_AguaGrande" /> Habitación de las abuelas
+  <event id="SC3ROOM2" path="event:/Mixer/Rev_AguaSmall" /> Pasillo doble
+  <event id="SC3ROOM3" path="event:/Mixer/Rev_AguaGrande" /> Habitación de subida del agua
+  <event id="SC3ROOM4" path="event:/Mixer/Rev_AguaSmall" /> Túnel del ventilador
+  <event id="SC3ROOM5" path="event:/Mixer/Rev_SotanoSmall" /> Habitación de antes de la caída
+  <event id="SC3ROOM6" path="event:/Mixer/Rev_SotanoSmall" /> Caída
+  <event id="SC3ROOM7" path="event:/Mixer/Rev_AguaGrande" /> Habitación grande del final
+  <event id="SC3ROOM8" path="eevent:/Mixer/Rev_AguaSmall" /> Pasillo hacia la habitación del desagüe
+  <event id="SC3ROOM9" path="event:/Mixer/Rev_AguaGrande" /> Habitación del desagüe
+  <event id="SC3ROOM10" path="event:/Mixer/Rev_AguaSmall" /> Salita final
+
+  <event id="SC4ROOM1" path="event:/Mixer/Rev_SotanoSmall" /> Salita inicio
+  <event id="SC4ROOM2" path="eevent:/Mixer/Rev_SotanoGrande" /> Sala atrezzos
+  <event id="SC4ROOM3" path="event:/Mixer/Rev_SotanoGrande" /> Crematorio
+  <event id="SC4ROOM4" path="event:/Mixer/Rev_SotanoSmall" /> Subida y pasillo
+  <event id="SC4ROOM5" path="event:/Mixer/Rev_FueraRelojGrande" /> Sala reloj
+  <event id="SC4ROOM6" path="eevent:/Mixer/Rev_FueraRelojSmall" /> Lateral de sala reloj
+  <event id="SC4ROOM7" path="event:/Mixer/Rev_RelojDentro" /> Dentro de reloj
+
+  <event id="SC5ROOM1" path="event:/Mixer/Rev_AuditorioSmall" /> Sala del payaso
+  <event id="SC5ROOM2" path="event:/Mixer/Rev_AuditorioSmall" /> Pasillo
+  <event id="SC5ROOM3" path="event:/Mixer/Rev_AuditorioGrande" /> Escenario
 
   <!-- Narración -->
   <event id="NARRSC101" path="event:/Dialogos/Dialogos Narrador/Narrador+FX_ Escena1 01" /> Controles 1

@@ -71,6 +71,8 @@ void FSMPlayerLegs::Init()
 	canThrow = false;
 	dead_counter = 0.f;
 	idle_var_count = 0.f;
+	tiredness = 0.f;
+	last_time = 0.f;
 
 	ragdoll_force = PxVec3(0, 0, 0);
 
@@ -92,6 +94,12 @@ void FSMPlayerLegs::Init()
 	current_animation_id = -1;
 
 	life = ((CEntity*)entity)->get<TCompLife>();
+
+	CSoundManager::SoundParameter params[] = {
+		{ "Corriendo", 0 },
+	};
+
+	CSoundManager::get().playEvent("KATH_RUNNING", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_running");
 
 }
 
@@ -126,6 +134,13 @@ void FSMPlayerLegs::Idle(float elapsed){
 		}		
 
 		skeleton->loopAnimation(animation);
+
+		CSoundManager::SoundParameter params[] = {
+			{ "Esfuerzo", tiredness },
+		};
+
+		CSoundManager::get().playEvent("KATH_TIRED", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_tired");
+		clearTiredNess();
 	}
 
 	/*if (!torso->up_animation) {
@@ -196,6 +211,7 @@ void FSMPlayerLegs::Idle(float elapsed){
 		skeleton_ik->active = false;
 		ChangeState("fbp_Fall");
 	}
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::IdleElevator(float elapsed){
@@ -217,6 +233,7 @@ void FSMPlayerLegs::IdleElevator(float elapsed){
 	}
 
 	((TCompCharacterController*)comp_character_controller)->Move(PxVec3(0, 0, 0.01f), false, false, Physics.XMVECTORToPxVec3(m_transform->getFront()));
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Walk(float elapsed){
@@ -246,6 +263,13 @@ void FSMPlayerLegs::Walk(float elapsed){
 
 	if (on_enter) {
 		skeleton->loopAnimation(animation);
+
+		CSoundManager::SoundParameter params[] = {
+			{ "Esfuerzo", tiredness },
+		};
+
+		CSoundManager::get().playEvent("KATH_TIRED", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)player_transform)->position, "kath_tired");
+		clearTiredNess();
 	}
 
 	//((TCompMesh*)comp_mesh)->mesh = mesh_manager.getByName("prota_walk");
@@ -321,6 +345,7 @@ void FSMPlayerLegs::Walk(float elapsed){
 		skeleton->stopAnimation(16);
 		ChangeState("fbp_Run");
 	}
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Run(float elapsed){
@@ -426,6 +451,9 @@ void FSMPlayerLegs::Run(float elapsed){
 		ChangeState("fbp_Walk");
 	}
 
+	addTiredNess(elapsed);
+	updateRunning(1);
+
 }
 
 void FSMPlayerLegs::Jump(float elapsed){
@@ -476,6 +504,9 @@ void FSMPlayerLegs::Jump(float elapsed){
 		ChangeState("fbp_Fall");
 		skeleton->stopAnimation(6);
 	}
+
+	addTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::ThrowString(float elapsed){
@@ -528,6 +559,9 @@ void FSMPlayerLegs::ThrowString(float elapsed){
 		//skeleton->stopAnimation(0);
 		ChangeState("fbp_Idle");
 	}
+
+	addTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::ThrowStringPartial(float elapsed){
@@ -579,6 +613,8 @@ void FSMPlayerLegs::ThrowStringPartial(float elapsed){
 	if (state_time >= 0.1f && !(CIOStatus::get().isPressed(CIOStatus::THROW_STRING))){
 		ChangeState("fbp_Idle");
 	}
+
+	addTiredNess(elapsed);
 }
 
 void FSMPlayerLegs::ThrowStringGolden(float elapsed){
@@ -628,6 +664,9 @@ void FSMPlayerLegs::PullString(float elapsed){
 	if (io.isReleased(CIOStatus::PULL_STRING)) {
 
 	}
+
+	addTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Fall(float elapsed){
@@ -655,6 +694,9 @@ void FSMPlayerLegs::Fall(float elapsed){
 			ChangeState("fbp_Land");
 			skeleton->stopAnimation(6);
 		}
+
+	subTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Land(float elapsed){
@@ -717,6 +759,9 @@ void FSMPlayerLegs::Land(float elapsed){
 			}
 		}
 	}
+
+	subTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::WrongFall(float elapsed){
@@ -746,6 +791,9 @@ void FSMPlayerLegs::WrongFall(float elapsed){
 			ChangeState("fbp_Land");
 		//ChangeState("fbp_Ragdoll");
 	}
+
+	subTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::WrongLand(float elapsed){
@@ -783,6 +831,9 @@ void FSMPlayerLegs::WrongLand(float elapsed){
 		skeleton->stopAnimation(30);
 		ChangeState("fbp_Idle");
 	}
+
+	subTiredNess(elapsed);
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::ProcessHit(float elapsed){}
@@ -812,6 +863,9 @@ void FSMPlayerLegs::Hurt(float elapsed){
 		skeleton->stopAnimation(28);
 		ChangeState("fbp_ReevaluatePriorities");
 	}
+
+	clearTiredNess();
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Ragdoll(float elapsed){
@@ -904,6 +958,9 @@ void FSMPlayerLegs::Ragdoll(float elapsed){
 				);
 		}
 	}
+
+	clearTiredNess();
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Dead(float elapsed){
@@ -957,6 +1014,9 @@ void FSMPlayerLegs::Dead(float elapsed){
 			)
 			);
 	}
+
+	clearTiredNess();
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::ReevaluatePriorities(){
@@ -1001,6 +1061,9 @@ void FSMPlayerLegs::WakeUp(float elapsed){
 		stopAllAnimations();
 		ChangeState("fbp_Idle");
 	}
+
+	clearTiredNess();
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::WakeUpTeleport(float elapsed){
@@ -1038,6 +1101,9 @@ void FSMPlayerLegs::WakeUpTeleport(float elapsed){
 		stopAllAnimations();
 		ChangeState("fbp_Idle");
 	}
+
+	clearTiredNess();
+	updateRunning(0);
 }
 
 void FSMPlayerLegs::Victory(float elapsed){
@@ -1256,4 +1322,32 @@ float FSMPlayerLegs::getAnimationDuration(int id) {
 bool FSMPlayerLegs::canPlayerThrow() {
 	TCompPlayerController* controller = comp_player_controller;
 	return controller->canThrow();
+}
+
+void FSMPlayerLegs::addTiredNess(float time){
+	tiredness += time*0.5f;
+	if (tiredness > 3.f){
+		tiredness=3.f;
+	}
+}
+
+void FSMPlayerLegs::subTiredNess(float time){
+	tiredness -= time*0.5f;
+	if (tiredness < 0.f){
+		tiredness = 0.f;
+	}
+}
+
+void FSMPlayerLegs::clearTiredNess(){
+	tiredness = 0.f;
+}
+
+void FSMPlayerLegs::updateRunning(int Corriendo_value){
+	FMOD::Studio::EventInstance* running_ins = CSoundManager::get().getNamedInstance("kath_running");
+	if (running_ins){
+		FMOD_3D_ATTRIBUTES attr;
+		attr.position = CSoundManager::get().XMVECTORtoFmod(((TCompTransform*)player_transform)->position);
+		running_ins->set3DAttributes(&attr);
+		running_ins->setParameterValue("Corriendo", Corriendo_value);
+	}
 }

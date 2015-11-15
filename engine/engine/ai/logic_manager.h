@@ -225,6 +225,7 @@ public:
 
 	void onBossRopeThrow();
 	void onSubstituteHang();
+
 };
 
 #endif

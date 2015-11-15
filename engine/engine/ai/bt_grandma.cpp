@@ -2033,11 +2033,11 @@ float bt_grandma::getRunSpeedModifier() {
 	TCompCharacterController* m_char_controller = character_controller;
 
 	if (m_char_controller->moveSpeedMultiplier < 1)
-		speed = 0.26f;
+		speed = 0.30f;
 	else if (m_char_controller->moveSpeedMultiplier < 3)
-		speed = 0.24f;
+		speed = 0.28f;
 	else
-		speed = 0.1f;
+		speed = 0.15f;
 	
 
 	/*if ((getCurrentNode() == "Situate20") || (getCurrentNode() == "Situate18") || (getCurrentNode() == "ChaseRoleDistance22")) {

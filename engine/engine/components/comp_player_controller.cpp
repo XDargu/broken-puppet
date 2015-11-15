@@ -38,6 +38,8 @@ void TCompPlayerController::loadFromAtts(const std::string& elem, MKeyValue &att
 	fsm_player_legs->torso = fsm_player_torso;
 	fsm_player_torso->legs = fsm_player_legs;
 
+	out_water_played = false;
+
 	hit_cool_down = 0.5f;
 	time_since_last_hit = 0;
 
@@ -200,6 +202,10 @@ void TCompPlayerController::init() {
 	entity_drops = CEntityManager::get().getByName("PlayerParticleDrops");
 
 	last_time_in_water = 1000;
+
+	//Katherine gear event
+	XMVECTOR y_offset = XMVectorSet(0.f, 0.88f, 0.f, 0.f);
+	CSoundManager::get().playEvent("KATHERINE_GEAR", trans->position + y_offset, "kath_gears");
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -249,12 +255,18 @@ void TCompPlayerController::update(float elapsed) {
 
 	if ((rigid->rigidBody->getGlobalPose().p.y + 1.7f) < water_level)  {
 		last_time_in_water = 0.f;
+		out_water_played = false;
 	}
 	else {
 		last_time_in_water += elapsed;
 		if (last_time_in_water < 15) {
 			drops_size = 0.1f;
 			drops_size_final = 0.2f;
+			if (!out_water_played){
+				//Play WATER_PLINKING event
+				CSoundManager::get().playEvent("WATER_PLINKING", trans->position);
+				out_water_played = true;
+			}
 		}
 	}
 
@@ -390,6 +402,23 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 	
+	//Katherine gear event
+	XMVECTOR y_offset = XMVectorSet(0.f, 0.88f, 0.f, 0.f);
+	FMOD::Studio::EventInstance* gears_instance = CSoundManager::get().getNamedInstance("kath_gears");
+	if (gears_instance){
+		FMOD_3D_ATTRIBUTES atrib;
+		XMVECTOR y_offset = XMVectorSet(0.f, 0.88f, 0.f, 0.f);
+		atrib.position = CSoundManager::get().XMVECTORtoFmod(trans->position + y_offset);
+		gears_instance->set3DAttributes(&atrib);
+	}
+	//CSoundManager::get().playEvent("KATHERINE_GEAR", trans->position + y_offset, "kath_gears");
+
+	FMOD::Studio::EventInstance* tired_instance=CSoundManager::get().getNamedInstance("kath_tired");
+	if (tired_instance){
+		FMOD_3D_ATTRIBUTES atrib;
+		atrib.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
+		tired_instance->set3DAttributes(&atrib);
+	}
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

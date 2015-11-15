@@ -20,6 +20,7 @@ public:
 		UNDERWATER,
 		REVERB,
 		ROOM,
+		SLOW_MOTION,
 		COUNT
 	};
 
@@ -62,6 +63,9 @@ private:
 	FMOD::Studio::EventInstance* underwater_mixer;
 
 	FMOD::Studio::EventInstance* current_event_instance;
+
+	FMOD::Studio::EventInstance* slowMoOnEvent;
+	FMOD::Studio::EventInstance* slowMoOffEvent;
 
 	CEntity* player;
 	TCompTransform* p_transform;
@@ -108,6 +112,8 @@ public:
 
 	void update(float elapsed);
 
+	void update_loading_scene();
+
 	void playImpactFX(float force, float mass, CHandle transform, std::string material);
 
 	FMOD_VECTOR XMVECTORtoFmod(XMVECTOR vector);
@@ -133,6 +139,8 @@ public:
 	FMOD::Studio::EventInstance* getNamedInstance(std::string name);
 
 	FMOD_STUDIO_PLAYBACK_STATE getNamedInstanceState(std::string name);
+
+	void setEventInstaceCue(const char* name_cue, FMOD::Studio::EventInstance* event_instance);
 };
 
 
