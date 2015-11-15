@@ -162,6 +162,9 @@ void registerAllComponentMsgs() {
 	// Boss Events
 	SUBSCRIBE(TCompExplosion, TMsgOnDetonate, onDetonate);
 	SUBSCRIBE(TCompHitch, TMsgRopeTensed, onRopeTensed);
+	
+	
+	SUBSCRIBE(TCompBombGenerator, TMsgGenerateBomb, onGenerateBomb);
 
 	//IA events
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
@@ -288,6 +291,9 @@ void createManagers() {
 	getObjManager<TCompVibration>()->init(256);
 	getObjManager<TCompLocalRotation>()->init(256);
 
+	getObjManager<TCompBombGenerator>()->init(1);
+	getObjManager<TCompPrefabGenerator>()->init(16);
+
 	registerAllComponentMsgs();
 }
 
@@ -365,6 +371,9 @@ void initManagers() {
 
 	//GUI
 	getObjManager<TCompButton>()->initHandlers();
+
+	getObjManager<TCompBombGenerator>()->initHandlers();
+	getObjManager<TCompPrefabGenerator>()->initHandlers();
 
 	// Animation
 	//getObjManager<TCompVibration>()->initHandlers();
@@ -912,6 +921,9 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompLocalRotation>()->update(elapsed);
 	getObjManager<TCompPlayerRope>()->update(elapsed);
 
+	getObjManager<TCompPrefabGenerator>()->update(elapsed);
+
+
 #ifdef _DEBUG
 	entity_inspector.update();
 	entity_lister.update();
@@ -1262,7 +1274,6 @@ void CApp::render() {
 				drawTexture2D(xres / 2.f - 16, yres / 2.f - 16, 32, 32, texture_manager.getByName("crosshair_cant"));
 			}
 
-
 			activateZConfig(ZConfig::ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);
 
@@ -1475,7 +1486,7 @@ void CApp::renderEntities() {
 
 				XMVECTOR edges = font.measureString(c_text->text);
 				float x, y;
-				float offset = 15;
+				float offset = 30;
 				if (camera.getScreenCoords(t->position, &x, &y)) {
 					activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 					drawDialogBox(x, y, XMVectorGetZ(edges) + offset * 2, XMVectorGetW(edges) + offset * 2, texture_manager.getByName("gui_test1"), "gui_dialog_box");
@@ -1852,6 +1863,7 @@ void CApp::loadScene(std::string scene_name) {
 
 	render_manager.init();
 	ctes_global.get()->use_lightmaps = 1;
+	ctes_global.get()->exposure = 2.5f;
 
 	FMOD::Studio::EventInstance* loading_music = CSoundManager().get().getNamedInstance("loading_screen_music");
 	if (loading_music){
@@ -1894,17 +1906,21 @@ void CApp::loadScene(std::string scene_name) {
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(100.f);
 		ctes_global.get()->use_lightmaps = 1;
+		ctes_global.get()->exposure = 1.5f;
 		CSoundManager::get().setSceneID(3);
 
 		fog.fog_level = -1000;
 		fog.fog_distance = 1000;
+
+		fog.fog_distance = 50;
+		fog.fog_color = XMVectorSet(0.3f, 0.45f, 0.3f, 0.3f);
 
 		CSoundManager::get().playEvent("MUSIC_PIT");
 	}
 	else if (scene_name == "data/scenes/scene_4.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
 		cam->changeZFar(90.f);
-		ctes_global.get()->use_lightmaps = 0;
+		ctes_global.get()->use_lightmaps = 1;
 		CSoundManager::get().setSceneID(4);
 
 		fog.fog_level = -1000;

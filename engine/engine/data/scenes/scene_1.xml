@@ -37,7 +37,7 @@
   <entity  prefab="PlayerCamera">
     <transform position="2.59953 11.9612 -9.84975"/>
   </entity>
-  
+
   <entity   materialTag = "wood">
     <name name="Omni013_15.0" />
     <transform position="-2.72642 8.5212 13.4754" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
@@ -8914,5 +8914,46 @@
   <entity tag = "level" collisionTag = "Level">
     <name name="RigidConstraint10_991.0" />
     <jointFixed actor1 = "sc1_merged_room7_wood_928.0" actor2 = "cuadro_d_751.0"  jointPosition="3.47893 43.623 -82.9082" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="15000.0" maxTorqueForce="15000.0" />
+  </entity>
+
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_01" />
+    <transform position="0.00121427 11.5499 0.0880122" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="armario_roto_71.0"/>
+    <distanceText text="primer lanzamiento" distance="12.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_002" />
+    <transform position="0.00121427 13.8502 -17.6008" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="segundo lanzamiento" distance="12.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_003" />
+    <transform position="-24.8672 13.8381 16.5978" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="techo" distance="18.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_004" />
+    <transform position="-37.9715 6.54877 16.5978" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="eliminar cuerda" distance="12.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_005" />
+    <transform position="-36.2399 11.4029 -13.729" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="sc1_caja_puzzle1_857.0"/>
+    <distanceText text="largas cuerdas" distance="17.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_006" />
+    <transform position="-6.40445 16.2892 -28.0192" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="int pulsar" distance="12.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_007" />
+    <transform position="-10.6376 18.1088 -53.4764" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="int_ascensor_brazo"/>
+    <distanceText text="pull int" distance="8.0" size="16.0" color="FFFFFFFF" />
+  </entity>
+  <entity   materialTag = "wood">
+    <name name="sc1_tuto_008" />
+    <transform position="1.19401 12.8238 -17.6008" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <distanceText text="tensar cuerdas" distance="12.0" size="16.0" color="FFFFFFFF" />
   </entity>
 </scene>

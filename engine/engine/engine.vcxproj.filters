@@ -589,6 +589,12 @@
       <Filter>render\postpro</Filter>
     </ClInclude>
     <ClInclude Include="components\comp_player_rope.h" />
+    <ClInclude Include="components\comp_bomb_generator.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="components\comp_prefab_generator.h">
+      <Filter>components\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1102,6 +1108,12 @@
       <Filter>render\postpro</Filter>
     </ClCompile>
     <ClCompile Include="components\comp_player_rope.cpp" />
+    <ClCompile Include="components\comp_bomb_generator.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="components\comp_prefab_generator.cpp">
+      <Filter>components\misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="render">

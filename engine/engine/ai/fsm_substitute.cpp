@@ -39,6 +39,10 @@ void fsm_substitute::init()
 	AddState("fbp_LittleTalk", (statehandler)&fsm_substitute::LittleTalk);
 	AddState("fbp_LoopTalk8", (statehandler)&fsm_substitute::LoopTalk8);
 	AddState("fbp_LoopTalk9", (statehandler)&fsm_substitute::LoopTalk9);
+	AddState("fbp_LoopTalk10", (statehandler)&fsm_substitute::LoopTalk10);
+	AddState("fbp_LoopTalk11", (statehandler)&fsm_substitute::LoopTalk11);
+	AddState("fbp_LoopTalk12", (statehandler)&fsm_substitute::LoopTalk12);
+	AddState("fbp_LoopTalk13", (statehandler)&fsm_substitute::LoopTalk13);
 	AddState("fbp_JustHanged", (statehandler)&fsm_substitute::JustHanged);
 	AddState("fbp_CallingBoss", (statehandler)&fsm_substitute::CallingBoss);
 	AddState("fbp_Hanged", (statehandler)&fsm_substitute::Hanged);	
@@ -91,6 +95,22 @@ void fsm_substitute::Idle(float elapsed){
 
 		case 1:
 			ChangeState("fbp_LoopTalk9");
+			break;
+
+		case 2:
+			ChangeState("fbp_LoopTalk10");
+			break;
+
+		case 3:
+			ChangeState("fbp_LoopTalk11");
+			break;
+
+		case 4:
+			ChangeState("fbp_LoopTalk12");
+			break;
+
+		case 5:
+			ChangeState("fbp_LoopTalk13");
 			break;
 
 		default:
@@ -171,6 +191,110 @@ void fsm_substitute::LoopTalk9(){
 
 	}
 	if (state_time >= 1.9){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Idle");
+	}
+}
+
+void fsm_substitute::LoopTalk10(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
+
+		// Little Talk animation
+		stopAllAnimations();
+		loopAnimation(7, true);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_10", sound_pos, "subs");
+			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_10");
+		}
+
+	}
+	if (state_time >= 5.6f){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Idle");
+	}
+}
+
+void fsm_substitute::LoopTalk11(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
+
+		// Little Talk animation
+		stopAllAnimations();
+		loopAnimation(8, true);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_11", sound_pos, "subs");
+			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_11");
+		}
+
+	}
+	if (state_time >= 8.6f){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Idle");
+	}
+}
+
+void fsm_substitute::LoopTalk12(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
+
+		// Little Talk animation
+		stopAllAnimations();
+		loopAnimation(9, true);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_12", sound_pos, "subs");
+			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_12");
+		}
+
+	}
+	if (state_time >= 9.5){
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
+		ChangeState("fbp_Idle");
+	}
+}
+
+void fsm_substitute::LoopTalk13(){
+	if (on_enter){
+		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
+		TCompSkeleton* skeleton = comp_skeleton;
+
+		// Little Talk animation
+		stopAllAnimations();
+		loopAnimation(10, true);
+		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(true);
+
+		XMVECTOR sound_pos = XMVectorSet(0, 0, 0, 0);
+		if (trans)
+			sound_pos = trans->position;
+
+		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_13", sound_pos, "subs");
+			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_13");
+		}
+
+	}
+	if (state_time >= 4.f){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
 		ChangeState("fbp_Idle");
 	}
@@ -282,7 +406,7 @@ int fsm_substitute::calculateLoop() {
 	int next_loop = last_loop;
 	last_loop++;
 
-	if (last_loop >= 2){		
+	if (last_loop >= 6){		
 		last_loop = 0;
 	}
 		

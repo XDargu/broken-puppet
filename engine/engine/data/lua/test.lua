@@ -92,7 +92,7 @@ function onSceneLoad_scene_final_boss()
 	function onTriggerFirstEnter_scb_trigger_bandas(who)
 		--logicManager:setMediumShotActive(true)
 
-		logicManager:setFogAttributes(1000, -5);
+		logicManager:setFogAttributes(1000, -10);
 
 		-- Bajar luz ambiental
 		logicManager:changeAmbientLight(0.7, 0.7, 0.7, 0.1);
@@ -848,7 +848,7 @@ bossSecuence = false;
 		logicManager:playSubtitles("KATHSC402");
 
 		-- Música
-		logicManager:playEvent("MUSIC_ESC")
+		logicManager:playEvent("MUSIC_ESC")	
 	end
 
 
@@ -905,6 +905,8 @@ bossSecuence = false;
 	function onSwitchPressed_sc4_int_reloj(who)
 		if (vuelta_completa == false) then
 			-- Abrir puertas
+			sc4_reloj_hinge_1:setLimit(25)
+			sc4_reloj_hinge_2:setLimit(60)
 			sc4_reloj_hinge_1:setMotor(1.55, 800000)
 			sc4_reloj_hinge_2:setMotor(-1.55, 800000)
 
@@ -957,6 +959,8 @@ bossSecuence = false;
 				sc4_atrezzo_hinge_3:setMotor(-1.55, 800000)
 
 				-- Volver a cerrar las puertas
+				sc4_reloj_hinge_1:setLimit(40)
+				sc4_reloj_hinge_2:setLimit(40)
 				sc4_reloj_hinge_1:setMotor(-1.55, 800000)
 				sc4_reloj_hinge_2:setMotor(1.55, 800000)
 
@@ -1060,7 +1064,9 @@ bossSecuence = false;
 	-- Narrador
 
 	function onTriggerFirstEnter_sc4_trigger_narr_1(who)
-		logicManager:playSubtitles("KATHSC401");		
+		logicManager:playSubtitles("KATHSC401");
+		local prefab_generator = logicManager:getObject("prefabGenerator");
+		prefab_generator:generatePrefabs(20);		
 	end
 
 	function onTriggerFirstEnter_sc4_trigger_narr_2(who)

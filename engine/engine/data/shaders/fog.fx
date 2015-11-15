@@ -62,9 +62,10 @@ float4 PSFog(VS_TEXTURED_OUTPUT input, in float4 iPosition : SV_Position) : SV_T
 
   noise = 0;
   if (wPos.y < fog_level + noise) {
-	  atten = saturate(wPos.y - fog_level + 1) - noise;
-	}  
-
+	  float dist = fog_level - wPos.y;
+	  atten = 1 - (dist / 15 - noise);
+  }  
+  //return original;
   return lerp(original, fogColor, min(1, (1-atten)));
 }
 

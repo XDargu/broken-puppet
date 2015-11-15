@@ -28,6 +28,7 @@ public:
 	void hitSubstitute();
 	CMCVObject firstBombBoss();
 	void initialRain(int amount);
+	void generatePrefabs(int amount);
 };
 
 #endif

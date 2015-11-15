@@ -716,6 +716,7 @@ void CLogicManager::bootLUA() {
 		.set("initialRain", &CMCVObject::initialRain)
 		.set("firstBombBoss", &CMCVObject::firstBombBoss)
 		.set("hitSubstitute", &CMCVObject::hitSubstitute)
+		.set("generatePrefabs", (void (CMCVObject::*)(int)) &CMCVObject::generatePrefabs)
 		;
 
 	SLB::Class<CVector>("Vector")

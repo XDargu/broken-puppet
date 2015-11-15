@@ -8,5 +8,9 @@
   <anim name="loop_dialogo9" blend="0" blend_out="0"/>4
   <anim name="hit" blend="0" blend_out="0"/>5
   <anim name="hit_loop" blend="0" blend_out="0"/>6
+  <anim name="loop_dialogo10" blend="0" blend_out="0"/>7
+  <anim name="loop_dialogo11" blend="0" blend_out="0"/>8
+  <anim name="loop_dialogo12" blend="0" blend_out="0"/>9
+  <anim name="loop_dialogo13" blend="0" blend_out="0"/>10
 
 </skeleton>

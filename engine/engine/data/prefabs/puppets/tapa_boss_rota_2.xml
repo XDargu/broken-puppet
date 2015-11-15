@@ -1,0 +1,14 @@
+<prefab>
+  <entity tag = "level" collisionTag = "Level" materialTag = "wood">
+    <name name="tapa_boss_rota_2" />
+    <transform position="0.868103 0.000133802 1.12248" rotation="0.0 3.03587e-006 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <render >
+      <draw mesh="tapa_boss_rota_2" sub_mesh="0" mat="parche_suelo_roto"/>
+      <draw mesh="tapa_boss_rota_2" sub_mesh="1" mat="techo_roto_boss"/>
+      <draw mesh="tapa_boss_rota_2" sub_mesh="2" mat="silla_sillon_reposapies_taburete"/>
+    </render>
+    <aabb min="-13.2794 -0.645996 -12.75" max="10.8041 3.73169 11.9055"/>
+    <colliderMesh path="tapa_boss_rota_2" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
+    <staticbody/>
+  </entity>
+</prefab>
