@@ -162,6 +162,9 @@ void registerAllComponentMsgs() {
 	// Boss Events
 	SUBSCRIBE(TCompExplosion, TMsgOnDetonate, onDetonate);
 	SUBSCRIBE(TCompHitch, TMsgRopeTensed, onRopeTensed);
+	
+	
+	SUBSCRIBE(TCompBombGenerator, TMsgGenerateBomb, onGenerateBomb);
 
 	//IA events
 	SUBSCRIBE(TCompBtGrandma, TActorHit, actorHit);
@@ -288,6 +291,9 @@ void createManagers() {
 	getObjManager<TCompVibration>()->init(256);
 	getObjManager<TCompLocalRotation>()->init(256);
 
+	getObjManager<TCompBombGenerator>()->init(1);
+	getObjManager<TCompPrefabGenerator>()->init(16);
+
 	registerAllComponentMsgs();
 }
 
@@ -365,6 +371,9 @@ void initManagers() {
 
 	//GUI
 	getObjManager<TCompButton>()->initHandlers();
+
+	getObjManager<TCompBombGenerator>()->initHandlers();
+	getObjManager<TCompPrefabGenerator>()->initHandlers();
 
 	// Animation
 	//getObjManager<TCompVibration>()->initHandlers();
@@ -912,6 +921,9 @@ void CApp::update(float elapsed) {
 	getObjManager<TCompLocalRotation>()->update(elapsed);
 	getObjManager<TCompPlayerRope>()->update(elapsed);
 
+	getObjManager<TCompPrefabGenerator>()->update(elapsed);
+
+
 #ifdef _DEBUG
 	entity_inspector.update();
 	entity_lister.update();
@@ -1228,7 +1240,7 @@ void CApp::render() {
 
 	// DRAW GUI
 	CTraceScoped scope_gui("GUI");
-	if (draw_gui && false) {
+	if (draw_gui) {
 		if (h_player.isValid()) {
 			int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 			life_val /= 10;
@@ -1261,7 +1273,6 @@ void CApp::render() {
 			else {
 				drawTexture2D(xres / 2.f - 16, yres / 2.f - 16, 32, 32, texture_manager.getByName("crosshair_cant"));
 			}
-
 
 			activateZConfig(ZConfig::ZCFG_DEFAULT);
 			activateBlendConfig(BLEND_CFG_DEFAULT);

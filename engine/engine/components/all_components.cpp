@@ -82,3 +82,5 @@ DECL_OBJ_MANAGER(TCompBossPrefab, "bossPrefab");
 DECL_OBJ_MANAGER(TCompHitch, "bossHitch");
 DECL_OBJ_MANAGER(TCompSubstituteBoss, "bossSubstitute");
 DECL_OBJ_MANAGER(TCompPlayerRope, "playerRope");
+DECL_OBJ_MANAGER(TCompBombGenerator, "bombGenerator");
+DECL_OBJ_MANAGER(TCompPrefabGenerator, "prefabGenerator");

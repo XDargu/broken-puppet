@@ -82,6 +82,11 @@ struct TMsgRopeTensed {
 	DECLARE_MSG_ID();
 };
 
+struct TMsgGenerateBomb {
+	TMsgGenerateBomb(){ }
+	DECLARE_MSG_ID();
+};
+
 struct TMsgNeedleHit {
 	CEntity* who;
 	TMsgNeedleHit(CEntity* awho) : who(awho) { }

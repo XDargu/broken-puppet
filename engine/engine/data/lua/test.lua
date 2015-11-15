@@ -841,7 +841,7 @@ bossSecuence = false;
 		logicManager:playSubtitles("KATHSC402");
 
 		-- Música
-		logicManager:playEvent("MUSIC_ESC")
+		logicManager:playEvent("MUSIC_ESC")	
 	end
 
 
@@ -1053,7 +1053,9 @@ bossSecuence = false;
 	-- Narrador
 
 	function onTriggerFirstEnter_sc4_trigger_narr_1(who)
-		logicManager:playSubtitles("KATHSC401");		
+		logicManager:playSubtitles("KATHSC401");
+		local prefab_generator = logicManager:getObject("prefabGenerator");
+		prefab_generator:generatePrefabs(20);		
 	end
 
 	function onTriggerFirstEnter_sc4_trigger_narr_2(who)

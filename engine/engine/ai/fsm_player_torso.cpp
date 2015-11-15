@@ -1064,17 +1064,33 @@ void FSMPlayerTorso::TenseString(CHandle string) {
 			djoint->joint->getActors(a1, a2);
 			// Wake up the actors, if dynamic
 			if (a1 && a1->isRigidDynamic()) {
-				if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
-					((physx::PxRigidDynamic*)a1)->wakeUp();
+				if (a1->getScene() != NULL) {
+					if (!((physx::PxRigidDynamic*)a1)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+						if (((PxRigidDynamic*)a1)->isSleeping())
+							((PxRigidDynamic*)a1)->wakeUp();
+					}
+					CEntity* se = CHandle(a1->userData);
+					if (se) {
+						if (djoint && djoint->joint) {
+							se->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+						}
+					}
 				}
-				((CEntity*)CHandle(a1->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
-
 			}
+
 			if (a2 && a2->isRigidDynamic()) {
-				if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))  {
-					((physx::PxRigidDynamic*)a2)->wakeUp();
+				if (a2->getScene() != NULL) {
+					if (!((physx::PxRigidDynamic*)a2)->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC)) {
+						if (((PxRigidDynamic*)a2)->isSleeping())
+							((PxRigidDynamic*)a2)->wakeUp();
+					}
+					CEntity* se = CHandle(a2->userData);
+					if (se) {
+						if (djoint && djoint->joint) {
+							se->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
+						}
+					}
 				}
-				((CEntity*)CHandle(a2->userData))->sendMsg(TMsgRopeTensed(djoint->joint->getDistance()));
 			}
 		}
 	}

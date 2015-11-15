@@ -305,17 +305,17 @@ physx::PxReal TCompRigidBody::getMass(){
 
 
 void TCompRigidBody::onExplosion(const TMsgExplosion& msg){
-
-	CEntity* e = CHandle(this).getOwner();
-
-	PxVec3 mpos = rigidBody->getGlobalPose().p;
-	PxVec3 opos = Physics.XMVECTORToPxVec3(msg.source);
-	PxVec3 dir = mpos - opos;
-	dir.x = dir.x + 7;
-	dir = dir.getNormalized();
-	PxVec3 aux_final_force = dir / msg.radius * msg.damage;
-	rigidBody->addForce(aux_final_force, PxForceMode::eVELOCITY_CHANGE, true);
-
+	
+	if (!isKinematic()){
+		CEntity* e = CHandle(this).getOwner();
+		PxVec3 mpos = rigidBody->getGlobalPose().p;
+		PxVec3 opos = Physics.XMVECTORToPxVec3(msg.source);
+		PxVec3 dir = mpos - opos;
+		dir.x = dir.x + 7;
+		dir = dir.getNormalized();
+		PxVec3 aux_final_force = dir / msg.radius * msg.damage;
+		rigidBody->addForce(aux_final_force, PxForceMode::eVELOCITY_CHANGE, true);
+	}	
 }
 
 void TCompRigidBody::checkIfInsideRecastAABB(){

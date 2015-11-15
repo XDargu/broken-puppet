@@ -1,0 +1,8 @@
+<prefab>
+  <entity tag = "level" collisionTag = "Level" materialTag = "wood">
+    <name name="tapa_hueco_boss" />
+    <transform position="0.868313 0.0 1.12199" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <colliderConvex path="tapa_hueco_boss" staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" radius="7.65612"/>
+    <staticbody/>
+  </entity>
+</prefab>

@@ -5,6 +5,7 @@
 #include "components\comp_rigid_body.h"
 #include "components\comp_ai_boss.h"
 #include "components\comp_ai_substitute.h"
+#include "components\comp_prefab_generator.h"
 #include "rigid_animation.h"
 #include "logic_manager.h"
 
@@ -104,6 +105,15 @@ void CMCVObject::hitSubstitute() {
 	TCompSubstituteBoss* substitute = ((CEntity*)entity)->get<TCompSubstituteBoss>();
 	if (substitute) {
 		substitute->hitSubstitute();
+	}
+}
+
+void CMCVObject::generatePrefabs(int amount) {
+	if (!entity.isValid())
+		return;
+	TCompPrefabGenerator* generator = ((CEntity*)entity)->get<TCompPrefabGenerator>();
+	if (generator) {
+		generator->generatePrefab(amount);
 	}
 }
 
