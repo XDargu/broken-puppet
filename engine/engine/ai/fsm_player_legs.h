@@ -34,6 +34,8 @@ public:
 	float walk_speed;
 	float run_speed;
 	float dead_counter;
+	float last_time;
+	float tiredness;
 
 	bool can_move;
 
@@ -81,6 +83,11 @@ public:
 
 	bool isMoving();
 	bool isRunning();
+
+	void addTiredNess(float time);
+	void subTiredNess(float time);
+	void clearTiredNess();
+	void updateRunning(int Corriendo_value);
 };
 
 #endif

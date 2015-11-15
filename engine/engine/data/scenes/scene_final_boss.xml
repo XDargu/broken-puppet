@@ -4308,13 +4308,13 @@
     <name name="boss_room_1" />
     <transform position="1.69261 -28.3864 -85.2645" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-29.8312 0.0 -22.9087" max="29.8312 66.9835 22.9087"/>
-    <zoneAABB id="0" />
+    <zoneAABB id="1" />
   </entity>
   <entity   materialTag = "wood">
     <name name="boss_room_2" />
     <transform position="-0.741495 -93.8157 0.536404" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-70.0552 0.0 -63.7974" max="70.0552 202.464 63.7974"/>
-    <zoneAABB id="0" />
+    <zoneAABB id="2" />
   </entity>
   <entity tag = "enemy" prefab="Boss" tagBoss="true">
     <transform position="0.0 0.0 0.0" rotation="0.0 -0.70494 0.0 0.709267" scale="1.0 1.0 1.0"/>

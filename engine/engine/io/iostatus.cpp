@@ -195,6 +195,9 @@ void CIOStatus::update(float elapsed) {
 
 			b.setPressed(now_is_pressed, elapsed);
 		}
+	}else{
+		mouse.dx = 0.f;
+		mouse.dy = 0.f;
 	}
 }
 

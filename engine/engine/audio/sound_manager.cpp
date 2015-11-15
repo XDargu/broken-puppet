@@ -72,7 +72,15 @@ CSoundManager::CSoundManager()
 
 	// Underwater mixer effect
 	createMixerEvent("UNDERWATER", MixerInstanceType::UNDERWATER);
+
 	createMixerEvent("CURRENT_ROOM", MixerInstanceType::ROOM);
+
+	// Slow motion mixer effect
+	createMixerEvent("SLOW_MOTION_IN", MixerInstanceType::SLOW_MOTION);
+	CSoundManager::SoundParameter slow_motion_param;
+	slow_motion_param.name = "Velocity";
+	slow_motion_param.value = 0.f;
+	setMixerEventParams("SLOW_MOTION_IN", slow_motion_param, 1);
 
 	phrase.talked = false;
 	phrase.name = "";
@@ -104,6 +112,9 @@ void CSoundManager::clear() {
 			}
 		}
 	}
+
+	CSoundManager::SoundParameter param3 = { "Room", 0 };
+	setMixerEventParams("CURRENT_ROOM", param3, 1);
 }
 
 void CSoundManager::createMixerEvent(std::string sound_id, MixerInstanceType type, CHandle hfx_zone) {
@@ -358,6 +369,9 @@ void CSoundManager::update(float elapsed) {
 		setMixerEventParams("UNDERWATER", param, 1);
 
 		int player_room = CLogicManager::get().getPointZoneID(camera_position);
+		int current_room = getMixerEventParamValue("CURRENT_ROOM", "Room");
+		player_room = max(current_room, player_room);
+
 		CSoundManager::SoundParameter param2 = { "Scene", scene_id };
 		setMixerEventParams("CURRENT_ROOM", param2, 1);
 		CSoundManager::SoundParameter param3 = { "Room", player_room };
@@ -375,6 +389,21 @@ void CSoundManager::update(float elapsed) {
 
 	checkIfCanTalk();
 	system->update();
+}
+
+void CSoundManager::update_loading_scene(){
+	FMOD::Studio::EventInstance* ins = CSoundManager::get().playEvent("SUBS_HANGED_16", "loading_screen_music");
+
+	FMOD_STUDIO_PLAYBACK_STATE state;
+	ins->getPlaybackState(&state);
+
+	long count = 0;
+	while ((state == FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_STARTING)&&(count<10000000))
+	{
+		system->update();
+		ins->getPlaybackState(&state);
+		count++;
+	}
 }
 
 void CSoundManager::setCurrentReverbEvent(std::string sound_id, TCompHfxZone* hfx_zone, XMVECTOR listener_pos) {
@@ -479,6 +508,7 @@ void CSoundManager::activateSlowMo(){
 	slowed = true;
 	
 	//play the slow motion transition sound
+	FMOD::Studio::EventInstance* instance = getNamedInstance("subtitle");
 
 	//set the pitch in all the events playing
 	std::map<std::string, FMOD::Studio::EventDescription*>::iterator it;
@@ -490,11 +520,16 @@ void CSoundManager::activateSlowMo(){
 			int count=0;
 			it->second->getInstanceList(instace_array, size, &count);
 			for (int j = 0; j < count; ++j) {
-				instace_array[j]->setPitch(0.25f);
+				if (instace_array[j] != instance) {
+					instace_array[j]->setPitch(0.25f);
+				}
 			}
 		}
-		
 	}
+	CSoundManager::SoundParameter params[] = {
+		{ "Velocity", 1.f },
+	};
+	setMixerEventParams("SLOW_MOTION_IN", params[0], 1);
 }
 
 void CSoundManager::desactivateSlowMo(){
@@ -517,7 +552,11 @@ void CSoundManager::desactivateSlowMo(){
 		}
 
 	}
-
+	CSoundManager::SoundParameter params[] = {
+		{ "Velocity", 0.f },
+	};
+	CSoundManager::get().playEvent("SLOW_MOTION_OUT", params, sizeof(params) / sizeof(CSoundManager::SoundParameter));
+	setMixerEventParams("SLOW_MOTION_IN", params[0], 1);
 }
 
 bool CSoundManager::getSlow(){

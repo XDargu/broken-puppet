@@ -20,6 +20,7 @@ public:
 		UNDERWATER,
 		REVERB,
 		ROOM,
+		SLOW_MOTION,
 		COUNT
 	};
 
@@ -62,6 +63,9 @@ private:
 	FMOD::Studio::EventInstance* underwater_mixer;
 
 	FMOD::Studio::EventInstance* current_event_instance;
+
+	FMOD::Studio::EventInstance* slowMoOnEvent;
+	FMOD::Studio::EventInstance* slowMoOffEvent;
 
 	CEntity* player;
 	TCompTransform* p_transform;
@@ -107,6 +111,8 @@ public:
 	CHandle listenerInsideHFXZone(XMVECTOR cam_pos);
 
 	void update(float elapsed);
+
+	void update_loading_scene();
 
 	void playImpactFX(float force, float mass, CHandle transform, std::string material);
 

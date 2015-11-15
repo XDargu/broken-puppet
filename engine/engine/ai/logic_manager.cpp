@@ -1001,7 +1001,7 @@ void CLogicManager::playSubtitles(std::string guid) {
 	if (subtitle_map.count(guid)) {
 		// The subtitle exists
 		Subtitle subtitle = subtitle_map[guid];
-		playEvent(subtitle.sound);
+		CSoundManager::get().playEvent(subtitle.sound, "subtitle");
 		current_subtitle = subtitle;
 	}	
 }

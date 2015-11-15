@@ -202,6 +202,10 @@ void TCompPlayerController::init() {
 	entity_drops = CEntityManager::get().getByName("PlayerParticleDrops");
 
 	last_time_in_water = 1000;
+
+	//Katherine gear event
+	XMVECTOR y_offset = XMVectorSet(0.f, 0.88f, 0.f, 0.f);
+	CSoundManager::get().playEvent("KATHERINE_GEAR", trans->position + y_offset, "kath_gears");
 }
 
 void TCompPlayerController::update(float elapsed) {
@@ -398,6 +402,23 @@ void TCompPlayerController::update(float elapsed) {
 		}
 	}
 	
+	//Katherine gear event
+	XMVECTOR y_offset = XMVectorSet(0.f, 0.88f, 0.f, 0.f);
+	FMOD::Studio::EventInstance* gears_instance = CSoundManager::get().getNamedInstance("kath_gears");
+	if (gears_instance){
+		FMOD_3D_ATTRIBUTES atrib;
+		XMVECTOR y_offset = XMVectorSet(0.f, 0.88f, 0.f, 0.f);
+		atrib.position = CSoundManager::get().XMVECTORtoFmod(trans->position + y_offset);
+		gears_instance->set3DAttributes(&atrib);
+	}
+	//CSoundManager::get().playEvent("KATHERINE_GEAR", trans->position + y_offset, "kath_gears");
+
+	FMOD::Studio::EventInstance* tired_instance=CSoundManager::get().getNamedInstance("kath_tired");
+	if (tired_instance){
+		FMOD_3D_ATTRIBUTES atrib;
+		atrib.position = CSoundManager::get().XMVECTORtoFmod(trans->position);
+		tired_instance->set3DAttributes(&atrib);
+	}
 }
 
 void TCompPlayerController::fixedUpdate(float elapsed) {

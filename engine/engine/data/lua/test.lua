@@ -374,6 +374,10 @@ bossSecuence = false;
 	function onTimerEnd_scene_1_grandma_crasher01Restore()
 		crasher:setLinearLimit(0.1, 10000000, 10000000)
 		print("Timer ends")
+
+		-- Sonido de subir
+		local crasherObj = logicManager:getObject("machacabuelas");
+		logicManager:playEventAtPosition("MACHACA_UP", crasherObj:getPos());
 	end
 
 
@@ -385,6 +389,10 @@ bossSecuence = false;
 		--crasher_body:applyForce(Vector(0, -10, 0))
 
 		logicManager:setTimer("scene_1_grandma_crasher01Restore", 3)
+
+		-- Sonido de bajar
+		local crasherObj = logicManager:getObject("machacabuelas");
+		logicManager:playEventAtPosition("MACHACA_DOWN", crasherObj:getPos());
 	end
 		
 
