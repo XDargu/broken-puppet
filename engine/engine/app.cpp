@@ -1475,7 +1475,7 @@ void CApp::renderEntities() {
 
 				XMVECTOR edges = font.measureString(c_text->text);
 				float x, y;
-				float offset = 15;
+				float offset = 30;
 				if (camera.getScreenCoords(t->position, &x, &y)) {
 					activateBlendConfig(BLEND_CFG_COMBINATIVE_BY_SRC_ALPHA);
 					drawDialogBox(x, y, XMVectorGetZ(edges) + offset * 2, XMVectorGetW(edges) + offset * 2, texture_manager.getByName("gui_test1"), "gui_dialog_box");
