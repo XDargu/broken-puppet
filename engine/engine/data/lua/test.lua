@@ -750,6 +750,34 @@ bossSecuence = false;
 		logicManager:loadScene("data/scenes/scene_4.xml");
 	end
 
+	-- Cinemática
+	function onTriggerFirstEnter_sc3_trigger_cinematica(who)
+		startCoroutine("sc3_cinematica", sc3_cinematica);
+	end
+
+	function sc3_cinematica()
+	
+		local camera = logicManager:getObject("sc3_camera_cinematica");
+
+		logicManager:setCanMove(false)
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
+	
+		logicManager:changeCamera("sc3_camera_cinematica")
+		logicManager:playAnimation("sc3_cinematica", camera)
+		waitTime(10)
+		logicManager:changeCamera("PlayerCamera")
+
+		logicManager:setCanMove(true)
+		logicManager:setCanThrow(true)
+		logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
+	
+	end
+
 	-- ****** FIN PRUEBA PUZZLES FINALES ESCENA 3 ********
 end
 
@@ -818,6 +846,9 @@ bossSecuence = false;
 
 		sc4_hinge_asc_3:setMotor(-1.55, 3000);
 		sc4_hinge_asc_4:setMotor(1.55, 3000);
+
+		-- Activar cinemática
+		startCoroutine("sc4_cinematica", sc4_cinematica);
 	end
 
 	function onTriggerFirstEnter_trigger_asc_crematorio(who)
@@ -1076,6 +1107,30 @@ bossSecuence = false;
 	-- Salir de la escena
 	function onTriggerEnter_sc4_trigger_end(who)
 		logicManager:loadScene("data/scenes/scene_final_boss.xml");		
+	end
+
+	-- Cinemática
+	function sc4_cinematica()
+	
+		local camera = logicManager:getObject("sc4_camera_cinematica");
+
+		logicManager:setCanMove(false)
+		logicManager:setCanThrow(false)
+		logicManager:setCanPull(false)
+		logicManager:setCanCancel(false)
+		logicManager:setCanTense(false)
+	
+		logicManager:changeCamera("sc4_camera_cinematica")
+		logicManager:playAnimation("sc4_cinematica_1", camera)
+		waitTime(17)
+		logicManager:changeCamera("PlayerCamera")
+
+		logicManager:setCanMove(true)
+		logicManager:setCanThrow(true)
+		logicManager:setCanPull(true)
+		logicManager:setCanCancel(true)
+		logicManager:setCanTense(true)
+	
 	end
 
 

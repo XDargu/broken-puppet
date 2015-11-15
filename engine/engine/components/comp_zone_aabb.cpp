@@ -4,8 +4,10 @@
 #include "comp_aabb.h"
 #include "comp_name.h"
 #include "entity_manager.h"
+#include "components\comp_camera.h"
 #include "aabb.h"
 #include "entity_manager.h"
+#include "render\render_manager.h"
 #include "ai\logic_manager.h"
 
 TCompZoneAABB::TCompZoneAABB() {
@@ -29,9 +31,10 @@ CHandle TCompZoneAABB::getZoneName(){
 }
 
 bool TCompZoneAABB::isPlayerInside(){
-	TCompTransform* p_transform = (TCompTransform*)player_transform;
-	if (p_transform) {
-		if (((TCompAABB*)m_aabb)->containts(p_transform->position))
+	TCompCamera* active_camera = render_manager.activeCamera;
+	//TCompTransform* p_transform = (TCompTransform*)player_transform;
+	if (active_camera) {
+		if (((TCompAABB*)m_aabb)->containts(active_camera->getPosition()))
 			return true;
 		else
 			return false;
