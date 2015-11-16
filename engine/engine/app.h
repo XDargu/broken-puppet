@@ -25,6 +25,7 @@ class CApp {
 	bool video_sound_played;
 	float time_since_last_update;
 	double TIME_ACCUM;
+	bool first_load;
 
 public:
 	enum TGameState {

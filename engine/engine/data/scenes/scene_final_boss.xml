@@ -5426,12 +5426,12 @@
   <entity   materialTag = "wood">
     <name name="Camera01" />
     <transform position="0.0370697 2.04814 -20.9721" rotation="0.0 0.763232 -0.646124 0.0" scale="1.0 1.0 1.0"/>
-    <camera  fov="21.6825" znear="0.1" zfar="250.0"/>
+    <camera  fov="15.347" znear="0.1" zfar="250.0"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="Camera002" />
     <transform position="-3.42572 2.04814 -20.9721" rotation="0.0 0.763232 -0.646124 0.0" scale="1.0 1.0 1.0"/>
-    <camera  fov="5.48617" znear="0.1" zfar="250.0"/>
+    <camera  fov="4.116" znear="0.1" zfar="250.0"/>
   </entity>
   <entity   materialTag = "wood">
     <name name="player_cinematic_place" />
