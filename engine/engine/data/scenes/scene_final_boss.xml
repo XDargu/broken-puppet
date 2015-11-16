@@ -5477,8 +5477,8 @@
 
   <entity   materialTag = "wood">
     <name name="substitute_light" />
-    <transform position="0.0 2.068723 1.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="Substitute" />
-    <pointLight radius="2" intensity="1.0" color="0.8 0.5 0.3 1"/>
+    <transform position="0.0 1.768723 1.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0" parent="Substitute" />
+    <pointLight radius="1.7" intensity="1.2" color="0.8 0.7 0.5 1"/>
   </entity>
 
   <entity tag = "level" collisionTag = "Level">
