@@ -1715,7 +1715,7 @@ void CApp::loadScene(std::string scene_name) {
 	float load_w = (1920.0f * load_h) / 1080.f;
 	float init_offset = (xres - load_w) * 0.5f;
 	if (first_load) {
-		drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("logo_screen"));
+		drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("logo_loading"));
 		first_load = false;
 	}
 	else {
