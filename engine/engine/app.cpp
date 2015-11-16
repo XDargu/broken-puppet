@@ -93,6 +93,7 @@ CApp::CApp()
 	, yres(480)
 	, time_modifier(1)
 	, slow_motion_counter(0)
+	, first_load(true)
 {
 	bar = nullptr;
 }
@@ -1081,7 +1082,7 @@ void CApp::render() {
 	getObjManager<TCompParticleGroup>()->onAll(&TCompParticleGroup::renderDistorsion);
 
 	activateBlendConfig(BLEND_CFG_DEFAULT);
-	renderEntities();
+	renderEntities(false);
 
 	setSlotNull(0);
 	{
@@ -1157,7 +1158,7 @@ void CApp::render() {
 	//drawTexture2D(0, 0, xres, yres, texture_manager.getByName("rt_depth")); 
 
 	drawTexture2D(0, 0, xres, yres, underwater.getOutput());
-
+	
 	/*
 	CHandle h_light = entity_manager.getByName("the_light");
 	CEntity* e_light = h_light;
@@ -1241,6 +1242,7 @@ void CApp::render() {
 	// DRAW GUI
 	CTraceScoped scope_gui("GUI");
 	if (draw_gui) {
+		renderEntities(true);
 		if (h_player.isValid()) {
 			int life_val = (int)((TCompLife*)((CEntity*)h_player)->get<TCompLife>())->life;
 			life_val /= 10;
@@ -1332,7 +1334,7 @@ void CApp::render() {
 	::render.swap_chain->Present(0, 0);
 }
 
-void CApp::renderEntities() {
+void CApp::renderEntities(bool draw_texts) {
 	
 	CTraceScoped t0("Render entities");
 	CCamera camera = *(TCompCamera*)render_manager.activeCamera;
@@ -1361,7 +1363,7 @@ void CApp::renderEntities() {
 
 		// Draw the joints
 
-		if (c_rope) {
+		if (c_rope && !draw_texts) {
 			rope_count++;
 			rope_tex->activate(0);
 			/*PxRigidActor* a1 = nullptr;
@@ -1477,7 +1479,7 @@ void CApp::renderEntities() {
 
 		// Draw texts
 		TCompDistanceText* c_text = ((CEntity*)entity_manager.getEntities()[i])->get<TCompDistanceText>();
-		if (c_text && t) {
+		if (c_text && t && draw_texts) {
 			if (c_text->in_range) {
 				float old_size = font.size;
 				font.size = c_text->size;
@@ -1712,7 +1714,13 @@ void CApp::loadScene(std::string scene_name) {
 	float load_h = yres;
 	float load_w = (1920.0f * load_h) / 1080.f;
 	float init_offset = (xres - load_w) * 0.5f;
-	drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen"));
+	if (first_load) {
+		drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("logo_screen"));
+		first_load = false;
+	}
+	else {
+		drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen"));		
+	}
 	::render.swap_chain->Present(0, 0);
 
 	bool is_ok = true;

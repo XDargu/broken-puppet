@@ -595,6 +595,7 @@
     <ClInclude Include="components\comp_prefab_generator.h">
       <Filter>components\misc</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="winmain.cpp" />
@@ -1238,5 +1239,12 @@
     <None Include="data\lua\scheduler.lua">
       <Filter>lua</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="bitmap1.bmp" />
+    <Image Include="bp.ico" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,0 @@
-<prefab>
-  <entity tag = "level" collisionTag = "Level" materialTag = "wood">
-    <name name="anti_rain_collider_boss" />
-    <transform position="0.145504 0.0 0.0139198" rotation="-0.353553 -0.146447 0.353553 0.853553" scale="1.0 1.0 1.0"/>
-    <aabb min="-7.02386 -5.69885 -5.69885" max="14.139 10.73 10.73"/>
-    <colliderMesh path="anti_rain_collider_boss" staticFriction="0.5" dynamicFriction="0.8" restitution="0.2" />
-    <staticbody/>
-  </entity>
-</prefab>

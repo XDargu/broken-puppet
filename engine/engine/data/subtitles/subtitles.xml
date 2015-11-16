@@ -22,7 +22,7 @@
 
   <subtitle guid="NARRSC501" next="NARRSC501_2" size="24" color="0xffffffff" time="8.5" sound="NARRSC501" text="Katherine ya podía deleitarse con la luz de los focos y &#xD;el murmullo impaciente del público, rememorando su triunfal entrada." />
   <subtitle guid="NARRSC501_2" next="" size="24" color="0xffffffff" time="4.5" sound="" text="Ya vislumbraba a la usurpadora destrozada por sus hilos..." />
-
+  <subtitle guid="NARRSC502" next="" size="24" color="0xffffffff" time="4" sound="NARRSC502" text="Katherine escuchaba aburrida a aquel largo monólo..." />
   
   <!-- Expresiones -->
   <subtitle guid="EXPR00-0" next="" size="24" color="0xff88ff00" time="3" sound="" text="Una más para mi colección" />
@@ -56,7 +56,7 @@
   <subtitle guid="SUBS_WAIT_LOOP_11_2" next="" size="24" color="0xffff8800" time="5" sound="" text="¿Es que no te has visto en los espejos que había en MI camerino?" />
   <subtitle guid="SUBS_WAIT_LOOP_12" next="SUBS_WAIT_LOOP_12_2" size="24" color="0xffff8800" time="4" sound="" text="En el fondo me das lástima. El tiempo se ha cebado contigo... " />
   <subtitle guid="SUBS_WAIT_LOOP_12_2" next="" size="24" color="0xffff8800" time="5" sound="" text="Bromeaba, en realidad me encanta!" />
-  <subtitle guid="SUBS_WAIT_LOOP_13" next="" size="24" color="0xffff8800" time="3" sound="" text="¿Piensas quedarte ahí todo el día?" />
+  <subtitle guid="SUBS_WAIT_LOOP_13" next="" size="24" color="0xffff8800" time="4" sound="" text="¡Silencio! ¿¡No ves que estoy hablando yo!? Qué grosero..." />
   
   <subtitle guid="SUBS_ROPE_THROWN" next="" size="24" color="0xffff8800" time="4" sound="" text="¿Qué estás haciendo? ¡¿Te has vuelto loca?!" />
   <subtitle guid="SUBS_PRE_BOSS" next="" size="24" color="0xffff8800" time="5" sound="" text="¿Oyes eso? ¡Si tu no vas al desván él irá a por ti!" />

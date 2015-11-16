@@ -1,4 +1,4 @@
-//#define FINAL_RELEASE
+#define FINAL_RELEASE
 //#define NO_VIDEO
 
 #ifndef INC_APP_H_
@@ -16,7 +16,7 @@ class CApp {
 	void update(float elapsed);
 	void fixedUpdate(float elapsed); // Physx update
 	void render();
-	void renderEntities();
+	void renderEntities(bool draw_texts);
 	void renderDebugEntities();
 	void activateDebugMode(bool active);
 	float slow_motion_counter;
@@ -25,6 +25,7 @@ class CApp {
 	bool video_sound_played;
 	float time_since_last_update;
 	double TIME_ACCUM;
+	bool first_load;
 
 public:
 	enum TGameState {

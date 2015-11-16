@@ -1636,6 +1636,9 @@
       <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.195145 -0.135543 -0.131948" max="0.195154 0.135458 0.131952"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1645,6 +1648,9 @@
       <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.00709534 -0.0673425 -0.0650978" max="0.00710297 0.0672575 0.0651016"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "ceramics">
@@ -8993,10 +8999,6 @@
       <paramEnd/>
     </audioSource>
   </entity>
-  <entity tag="bomb"  materialTag = "wood" prefab="bomb_regular">
-    <name name="bomb_placeholder_1145.0" />
-    <transform position="19.8581 10.7384 82.3009" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-  </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
     <name name="caja_vintage_1145.0" />
     <transform position="16.3441 17.1089 104.821" rotation="0.0 0.0 0.996241 -0.0866298" scale="1.0 1.0 1.0"/>
@@ -9195,7 +9197,7 @@
   <entity   materialTag = "wood">
     <name name="sc3_camera_cinematica" />
     <transform position="15.6386 5.26738 114.114" rotation="-0.5 -0.5 0.5 -0.5" scale="1.0 1.0 1.0"/>
-    <camera  fov="45.0" znear="0.0" zfar="100.0"/>
+    <camera  fov="60.0" znear="0.1" zfar="100.0"/>
   </entity>
   <entity tag = "level" collisionTag = "Level">
     <name name="sc3_int_prismatic_inicio" />
@@ -9322,5 +9324,10 @@
   <entity tag = "level" collisionTag = "Level">
     <name name="RigidConstraint26_1057.0" />
     <jointFixed actor1 = "sc3_merged_room_2_stone_931.0" actor2 = "cuadro_b_358.0"  jointPosition="21.774 9.45661 111.889" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="true" maxBreakForce="30000.0" maxTorqueForce="30000.0" />
+  </entity>
+  <entity tag="bomb"  materialTag = "wood">
+    <name name="bomb_generator" />
+    <transform position="19.8581 12.7384 82.3009" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <bombGenerator />
   </entity>
 </scene>

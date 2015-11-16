@@ -24,6 +24,8 @@ private:
 	int calculateConversation();
 	vector<string> conversation_list;
 
+	bool narator_finish_talk;
+
 public:
 	fsm_substitute();
 	~fsm_substitute();

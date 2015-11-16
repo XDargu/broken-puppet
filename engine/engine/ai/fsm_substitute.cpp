@@ -16,6 +16,7 @@ fsm_substitute::fsm_substitute()
 	last_loop = 0;
 	last_loop_delay = 0.f;
 	last_conversation = 0;
+	narator_finish_talk = false;
 
 	conversation_list.push_back("SUBS_HANGED_16");
 	conversation_list.push_back("SUBS_HANGED_17");
@@ -89,8 +90,9 @@ void fsm_substitute::Idle(float elapsed){
 		int loop = calculateLoop();
 		switch (loop)
 		{
+
 		case 0:
-			ChangeState("fbp_LoopTalk8");
+			ChangeState("fbp_LoopTalk13");
 			break;
 
 		case 1:
@@ -110,7 +112,7 @@ void fsm_substitute::Idle(float elapsed){
 			break;
 
 		case 5:
-			ChangeState("fbp_LoopTalk13");
+			ChangeState("fbp_LoopTalk8");
 			break;
 
 		default:
@@ -275,7 +277,16 @@ void fsm_substitute::LoopTalk12(){
 }
 
 void fsm_substitute::LoopTalk13(){
+
 	if (on_enter){
+		CLogicManager::get().playSubtitles("NARRSC502");	
+		narator_finish_talk = false;
+	}
+
+	if ((state_time >= 4.f) && (!narator_finish_talk))
+	{
+		narator_finish_talk = true;
+
 		TCompTransform* trans = ((CEntity*)entity)->get<TCompTransform>();
 		TCompSkeleton* skeleton = comp_skeleton;
 
@@ -291,12 +302,13 @@ void fsm_substitute::LoopTalk13(){
 		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
 			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_13", sound_pos, "subs");
 			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_13");
-		}
-
+		}		
 	}
-	if (state_time >= 4.f){
+
+	if (state_time >= 4.f + 4.f){
 		((TCompSkeleton*)comp_skeleton)->setFollowAnimation(false);
 		ChangeState("fbp_Idle");
+		
 	}
 }
 

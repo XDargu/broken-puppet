@@ -10,6 +10,7 @@
 #include <process.h> 
 #include "nav_mesh_manager.h"
 #include <stdio.h>
+#include "resource.h"
 
 // Global Variables:
 HINSTANCE hInst;								// current instance
@@ -78,8 +79,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.lpfnWndProc	= WndProc;
 	wcex.cbClsExtra		= 0;
 	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon = 0; // LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ENGINE));
+	wcex.hInstance = hInstance;
+	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);;
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
 	wcex.lpszMenuName = 0; // MAKEINTRESOURCE(IDC_ENGINE);

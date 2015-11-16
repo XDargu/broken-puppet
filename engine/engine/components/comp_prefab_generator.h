@@ -7,7 +7,7 @@ struct TCompPrefabGenerator : TBaseComponent {
 
 	int amount_to_generate;
 	int debris_created;
-	int prefab_creation_delay;
+	float prefab_creation_delay;
 	XMVECTOR last_random_pos;
 	XMVECTOR last_created_pos;
 

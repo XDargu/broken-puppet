@@ -1,15 +1,13 @@
 <prefab>
+
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="cuadro_c" />
-    <transform position="-19.9831 -1.75647e-007 -4.01834" rotation="0.0 0.0 0.0 1.0" scale="0.635724 0.635724 0.635724"/>
-    <render  color = "0.341176 0.882353 0.341176">
-      <draw mesh="cuadro_c" sub_mesh="0" mat="cuadros_01"/>
-      <draw mesh="cuadro_c" sub_mesh="1" mat="cuadros_01"/>
-      <draw mesh="cuadro_c" sub_mesh="2" mat="cuadros_01"/>
+    <name name="marioneta_02_2.0" />
+    <transform position="1.23349 -2.15327e-007 -4.92611" rotation="-0.707107 0.0 0.0 0.707107" scale="2.925 2.925 2.925"/>
+    <render  color = "0.0 0.0 0.0">
+      <draw mesh="marioneta_02" sub_mesh="0" mat="montones"/>
     </render>
-    <aabb min="-0.661276 -0.947006 -0.0622325" max="0.661276 0.947006 0.0622325"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.42039" boxY="0.602035" boxZ="0.0395627"/>
-    <rigidbody density="500.0"  bossLevel="0"/>
-    <bossPrefab/>
+    <aabb min="-0.100108 -0.130537 -0.117768" max="0.100109 0.130537 0.117768"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.292817" boxY="0.38182" boxZ="0.344471"/>
+    <rigidbody density="500.0" noWater="true" />
   </entity>
 </prefab>

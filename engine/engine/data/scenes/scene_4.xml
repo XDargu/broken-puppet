@@ -9908,4 +9908,18 @@
     <name name="sc4_prismatic_crasher_4" />
     <jointPrismatic actor1 = "sc4_merged_room_1_metal_1017.0"  jointRelativePosition0="2.18625 -2.7644 -10.9134" jointRelativeRotation0="0.0 0.0 0.0 1.0" actor2 = "sc4_machacabuelas_1088.0"  jointRelativePosition1="-0.00487137 -0.016674 2.06091" jointRelativeRotation1="0.0 0.0 -0.707107 0.707107"  jointPosition="17.1863 -22.983 5.2644" jointRotation="0.0 0.0 0.0 1.0" parentChildCollision="false" breakable="false" maxBreakForce="100.0" maxTorqueForce="10.0" linearModeX="2" linearModeY="1" linearModeZ="1" linearPosition="40.0" linearRestitution="0.0" posSpring="0.0" posDamping="0.0" parentCollition="false" />
   </entity>
+
+  <entity   materialTag = "wood">
+    <name name="sc4_camera_cinematica" />
+    <transform position="15.6386 5.26738 114.114" rotation="-0.5 -0.5 0.5 -0.5" scale="1.0 1.0 1.0"/>
+    <camera  fov="60.0" znear="0.1" zfar="150.0"/>
+  </entity>
+
+  <entity tag = "actor" >
+    <name name="prefabGenerator" />
+    <transform position="24.4506 -1.9749 -4.88462" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    transform position="0.89022 -30.3643 10.5824" rotation="0.0 -0.707107 0.0 0.707107" scale="1.0 1.0 1.0"/>
+    <prefabGenerator />
+  </entity>
+  
 </scene>
