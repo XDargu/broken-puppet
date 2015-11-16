@@ -135,7 +135,7 @@
    + 2: Pasillo tras ventilador + caída
    + 3: Sala final
    + 4: Sala del desagüe
-  <event id="CURRENT_ROOM" path="event:/Ambiente/Sala Actual" />
+  <event id="CURRENT_ROOM" path="event:/Musica/Escenarios/Musica Exploracion" />
 
   <event id="BUZZING" path="event:/Ambiente/Circunstanciales/buzz" /> Zumbido eléctrico
   <event id="BOILER" path="event:/Ambiente/Circunstanciales/boiler" /> Calderas (vibración + vapor)

@@ -392,7 +392,7 @@ void CSoundManager::update(float elapsed) {
 }
 
 void CSoundManager::update_loading_scene(){
-	FMOD::Studio::EventInstance* ins = CSoundManager::get().playEvent("SUBS_HANGED_16", "loading_screen_music");
+	FMOD::Studio::EventInstance* ins = CSoundManager::get().playEvent("MUSIC_ESC", "loading_screen_music");
 
 	FMOD_STUDIO_PLAYBACK_STATE state;
 	ins->getPlaybackState(&state);
