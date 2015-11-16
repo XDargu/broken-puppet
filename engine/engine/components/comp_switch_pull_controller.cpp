@@ -74,9 +74,15 @@ void TCompSwitchPullController::update(float elapsed) {
 }
 
 void TCompSwitchPullController::onPress() {
+	PxTransform Pos1 = px_actor1->getGlobalPose();
+
 	CLogicManager::get().onSwitchPressed(CHandle(this).getOwner());
+	CSoundManager::get().playEvent("PULL_SWITCH_ON", Physics.PxVec3ToXMVECTOR(Pos1.p));
 }
 
 void TCompSwitchPullController::onLeave() {
+	PxTransform Pos1 = px_actor1->getGlobalPose();
+
 	CLogicManager::get().onSwitchReleased(CHandle(this).getOwner());
+	CSoundManager::get().playEvent("PULL_SWITCH_OFF", Physics.PxVec3ToXMVECTOR(Pos1.p));
 }

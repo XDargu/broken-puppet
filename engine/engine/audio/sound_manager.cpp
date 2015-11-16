@@ -16,7 +16,7 @@ void CSoundManager::ERRCHECK(FMOD_RESULT result)	// this is an error handling fu
 {						// for FMOD errors
 	if (result != FMOD_OK)
 	{
-		printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+		dbg("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
 	}	
 }
 
@@ -491,15 +491,15 @@ void CSoundManager::playImpactFX(float force, float mass, CHandle transform, std
 	//CSoundManager::get().playEvent("event:/Enviroment/impact", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
 	switch (material_type)
 	{
-	case 0:	playEvent("HIT_WOOD", ((TCompTransform*)transform)->position); break;
-	case 2:	playEvent("HIT_METAL", ((TCompTransform*)transform)->position); break;
-	case 11: playEvent("HIT_RATTLE", ((TCompTransform*)transform)->position); break;
-	case 12: playEvent("HIT_BOOK", ((TCompTransform*)transform)->position); break;
-	case 13: playEvent("HIT_PIANO", ((TCompTransform*)transform)->position); break;
-	case 14: playEvent("HIT_BALL", ((TCompTransform*)transform)->position); break;
+	case 0:	playEvent("HIT_WOOD", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position); break;
+	case 2:	playEvent("HIT_METAL", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position); break;
+	case 11: playEvent("HIT_RATTLE", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position); break;
+	case 12: playEvent("HIT_BOOK", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position); break;
+	case 13: playEvent("HIT_PIANO", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position); break;
+	case 14: playEvent("HIT_BALL", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position); break;
 	
 	default:
-		playEvent("HIT_WOOD", ((TCompTransform*)transform)->position);
+		playEvent("HIT_WOOD", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), ((TCompTransform*)transform)->position);
 		break;
 	}
 }

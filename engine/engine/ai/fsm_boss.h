@@ -165,6 +165,8 @@ public:
 	/**/
 	std::vector<TAttackPattern> attack_pattern_list;
 	/**/
+
+	void updateBossMusic(int state);
 };
 
 

@@ -24,4 +24,5 @@
   <anim name="first_attack"/>20
   <anim name="looking_for"/>21
   <anim name="recuperar"/>22
+  <anim name="walkrun"/>23
 </skeleton>

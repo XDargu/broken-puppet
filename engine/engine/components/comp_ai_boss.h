@@ -86,7 +86,6 @@ public:
 
 	void initBoss();
 
-
 	// Publicar en LUA
 	CHandle objToStun();		
 	void initialRain(int debris_amount);

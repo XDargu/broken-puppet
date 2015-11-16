@@ -192,6 +192,12 @@ void fsm_boss::Init()
 	fist_particle_time = 0;
 }
 
+void fsm_boss::updateBossMusic(int state){
+	FMOD::Studio::EventInstance* boss_music = CSoundManager::get().getNamedInstance("boss_music");
+	if (boss_music)
+		boss_music->setParameterValue("sustituir por nombre parametro boss event", state);
+}
+
 void fsm_boss::Hidden(float elapsed){
 	Reorientate(elapsed,false);
 
@@ -269,6 +275,12 @@ void fsm_boss::RiseUp(){
 	}
 
 	if (state_time >= 20.9f){
+		CSoundManager::SoundParameter params[] = {
+			{ "sustituir por nombre parametro boss event", 0 },
+		};
+
+		CSoundManager::get().playEvent("MUSIC_BOSS", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), "boss_music");
+
 		ChangeState("fbp_Idle1");
 	}	
 }
@@ -365,6 +377,7 @@ void fsm_boss::Stunned1(){
 
 		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		CSoundManager::get().playEvent("BOSS_STUN", enemy_comp_trans->position);
+		updateBossMusic(1);
 	}
 
 	// Removing left arm
@@ -377,12 +390,15 @@ void fsm_boss::Stunned1(){
 	}
 
 	if ((state_time >= 2) && (times_stunned <= 1)){
+		updateBossMusic(0);
 		ChangeState("fbp_Recover");
 	}
 	else if ((state_time >= 6) && (times_stunned <= 2)){
+		updateBossMusic(0);
 		ChangeState("fbp_Recover");
 	}
 	if (state_time >= 10){
+		updateBossMusic(0);
 		ChangeState("fbp_Recover");		
 	}
 }
@@ -1100,6 +1116,8 @@ void fsm_boss::FinalState(float elapsed){
 
 		TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();
 		CSoundManager::get().playEvent("BOSS_HEART", enemy_comp_trans->position);
+
+		updateBossMusic(2);
 	}
 
 	TCompTransform* enemy_comp_trans = ((CEntity*)entity)->get<TCompTransform>();

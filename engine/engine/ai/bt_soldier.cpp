@@ -488,7 +488,7 @@ int bt_soldier::actionLookAround()
 		m_char_controller->moveSpeedMultiplier = run_speed;
 		m_char_controller->airSpeed = run_speed * 0.8f;
 
-		playAnimationIfNotPlaying(14);
+		playAnimationIfNotPlaying(24);
 
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;
@@ -669,22 +669,32 @@ int bt_soldier::actionInitialAttack()
 	float attack_time = 0.92f;
 	float distance = XMVectorGetX(XMVector3Length(p_transform->position - m_transform->position));
 
-	if (state_time > attack_time && attacked == false && distance <= 1.55f){
-		// Check if the attack reach the player
-		XMVECTOR attack_direction_path = (p_transform->position - m_transform->position);
-		attack_direction_path = XMVector3Normalize(attack_direction_path);
-		XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
-		XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
-		float rads_path = XMVectorGetX(dir_path);
-		float angle_deg_path = rad2deg(rads_path);
-		if (angle_deg_path < 40.f){
-			XMVECTOR particles_pos = p_transform->position - attack_direction_path * 0.5f + XMVectorSet(0, 1.7f, 0, 0);
-			CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
-			((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 55000.f, false));
-			attacked = true;
+	if (state_time > attack_time && attacked == false){
+		if (distance <= 1.55f){
+			// Check if the attack reach the player
+			XMVECTOR attack_direction_path = (p_transform->position - m_transform->position);
+			attack_direction_path = XMVector3Normalize(attack_direction_path);
+			XMVECTOR front_path = XMVector3Normalize(m_transform->getFront());
+			XMVECTOR dir_path = XMVector3AngleBetweenVectors(attack_direction_path, front_path);
+			float rads_path = XMVectorGetX(dir_path);
+			float angle_deg_path = rad2deg(rads_path);
+			if (angle_deg_path < 40.f){
+				XMVECTOR particles_pos = p_transform->position - attack_direction_path * 0.5f + XMVectorSet(0, 1.7f, 0, 0);
+				CHandle particle_entity = CLogicManager::get().instantiateParticleGroupOneShot(particle_name_initial_hit, particles_pos);
+				((CEntity*)player)->sendMsg(TActorHit(((CEntity*)player), 55000.f, false));
+				attacked = true;
 
-			// Sound
-			CSoundManager::get().playEvent("SOLDIER_HIT", m_transform->position);
+				// Sound
+				CSoundManager::get().playEvent("SOLDIER_HIT", m_transform->position);
+			}
+			else{
+				last_time = timer;
+				attacked = true;
+
+				// MISS
+				CSoundManager::get().playEvent("SOLDIER_MISS", m_transform->position);
+				attacked = true;
+			}
 		}
 		else{
 			last_time = timer;

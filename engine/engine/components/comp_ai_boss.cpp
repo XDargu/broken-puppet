@@ -286,7 +286,6 @@ void TCompAiBoss::init(){
 			}
 		}
 	}
-
 }
 
 void TCompAiBoss::update(float elapsed){

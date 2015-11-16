@@ -26,7 +26,7 @@ const float force_medium_impact = 25000.f;
 const float max_time_ragdoll = 3.f;
 const float radius = 7.f;
 
-const float walk_speed = 0.8f;
+const float walk_speed = 1.25f;
 const float run_speed = 2.2f;
 const float run_angry_speed = 4.f;
 const float sensor_delay = 1.f;
@@ -814,7 +814,7 @@ int bt_grandma::actionLookAround()
 		//m_char_controller->airSpeed = run_speed * 0.8f;
 		stopAllAnimations();
 		resetTimeAnimation();
-		playAnimationIfNotPlaying(15);
+		playAnimationIfNotPlaying(23);
 
 		CNav_mesh_manager::get().findPath(((TCompTransform*)own_transform)->position, rand_point, path);
 		find_path_time = state_time;

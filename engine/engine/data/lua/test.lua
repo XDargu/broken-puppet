@@ -607,11 +607,11 @@ bossSecuence = false;
 	sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
 
 	function onSwitchPressed_sc2_int_pelev(who)
-
+		--Interruptor levantado (platarforma sube)
 		print(tostring(who) .. " Interruptor subir plataforma");
 		sc2_plataforma_elevadora:move(sc2_plataforma_elevadora_orig, 3);
 		sc2_cable:setEmissive(true)
-
+		logicManager:playEventAtPosition("PLATFORM_SCENE2_UP", sc2_plataforma_elevadora:getPos());
 	end
 
 	function onSwitchReleased_sc2_int_pelev(who)
@@ -619,6 +619,7 @@ bossSecuence = false;
 		print(tostring(who) .. " Interruptor bajar plataforma");
 		sc2_plataforma_elevadora:move(Vector(sc2_plataforma_elevadora_orig.x, sc2_plataforma_elevadora_orig.y + 4.06, sc2_plataforma_elevadora_orig.z), 3);
 		sc2_cable:setEmissive(false)
+		logicManager:playEventAtPosition("PLATFORM_SCENE2_DOWN", sc2_plataforma_elevadora:getPos());
 	end
 	
 	-- Salir de la escena
