@@ -1,0 +1,17 @@
+<prefab>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
+    <name name="violin" />
+    <transform position="0.0 0.0 0.0" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
+    <skeleton name="violin"/>
+    <aabb min="-0.451676 0.0 -0.736906" max="1.35907 3.17499 0.799245"/>
+    <colliderMulti staticFriction="0.3" dynamicFriction="0.3" restitution="0.5">
+      <shape posOffset="0.0645213 1.15799 -0.242888" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.977804" width="0.797353" height="1.74625"/>
+      <shape posOffset="0.142148 2.36009 -0.344619" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.199182" width="0.1997" height="0.687999"/>
+      <shape posOffset="0.266182 2.91671 -0.557397" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.319182" width="0.2797" height="0.477999"/>
+    </colliderMulti>
+    <staticbody/>
+    <audioSource sound="MUSIC_CLOCK_3" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
+  </entity>
+</prefab>

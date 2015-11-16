@@ -195,7 +195,7 @@ void fsm_boss::Init()
 void fsm_boss::updateBossMusic(int state){
 	FMOD::Studio::EventInstance* boss_music = CSoundManager::get().getNamedInstance("boss_music");
 	if (boss_music)
-		boss_music->setParameterValue("sustituir por nombre parametro boss event", state);
+		boss_music->setParameterValue("Boss", state);
 }
 
 void fsm_boss::Hidden(float elapsed){
@@ -276,7 +276,7 @@ void fsm_boss::RiseUp(){
 
 	if (state_time >= 20.9f){
 		CSoundManager::SoundParameter params[] = {
-			{ "sustituir por nombre parametro boss event", 0 },
+			{ "Boss", 0 },
 		};
 
 		CSoundManager::get().playEvent("MUSIC_BOSS", params, sizeof(params) / sizeof(CSoundManager::SoundParameter), "boss_music");
