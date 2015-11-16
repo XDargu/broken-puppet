@@ -880,7 +880,7 @@ bossSecuence = false;
 		logicManager:playSubtitles("KATHSC402");
 
 		-- Música
-		logicManager:playEvent("MUSIC_ESC")	
+		--logicManager:playEvent("MUSIC_ESC")	
 	end
 
 

@@ -1877,7 +1877,7 @@ void CApp::loadScene(std::string scene_name) {
 	if (loading_music){
 		loading_music->stop(FMOD_STUDIO_STOP_IMMEDIATE);
 	}
-	CSoundManager::get().playEvent("MUSIC_BASEMENT");
+	
 	//TO DO: Quitar carga de ambientes por nombre de escena y meterlo en exportador
 	if (scene_name == "data/scenes/scene_menu.xml"){
 		TCompCamera*  cam = (TCompCamera*)render_manager.activeCamera;
@@ -1888,6 +1888,8 @@ void CApp::loadScene(std::string scene_name) {
 		fog.fog_level = -1000;
 		fog.fog_distance = 1000;
 		fog.fog_color = XMVectorSet(0, 0, 0, 0);
+
+		CSoundManager::get().playEvent("MUSIC_BASEMENT");
 	}
 	else if (scene_name == "data/scenes/scene_1.xml"){
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;

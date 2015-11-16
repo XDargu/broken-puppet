@@ -6,7 +6,14 @@
   <event id="MUSIC_PIT" path="event:/Musica/Propuesta de Rollo 1 (Sin voz)" /> <!-- Musica de la ambientacion "Foso"-->
   <event id="MUSIC_GRAMOLA" path="event:/Musica/Diegetica/Gramolas Musica1" /> <!-- Musica diegetica para gramolas"-->
   <event id="MUSIC_ESCENA1" path="event:/Musica/Escenarios/Musica Escena1" /> <!-- Musica extradiegetica para escena1"-->
-  <event id="MUSIC_BOSS" path="  event:/Musica/Escenarios/Musica Boss" /> <!-- Musica extradiegetica para la escena del boss"-->
+  <event id="MUSIC_BOSS" path="event:/Musica/Escenarios/Musica_Boss" /> <!-- Musica extradiegetica para la escena del boss"-->
+
+  <!-- MUSICA DIEGETICA -->
+  <event id="MUSIC_CLOCK_1" path="event:/Musica/Diegetica/Tema Reloj/Cellos" /> <!-- Musica diegetica de sala del reloj 1"-->
+  <event id="MUSIC_CLOCK_2" path="event:/Musica/Diegetica/Tema Reloj/ContraBajo1" /> <!-- Musica diegetica de sala del reloj 2"-->
+  <event id="MUSIC_CLOCK_3" path="event:/Musica/Diegetica/Tema Reloj/ContraBajo2" /> <!-- Musica diegetica de sala del reloj 3"-->
+  <event id="MUSIC_CLOCK_4" path="event:/Musica/Diegetica/Tema Reloj/Pianos" /> <!-- Musica diegetica de sala del reloj 4"-->
+
 
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" /> <!-- Sonido cuando cursor ratón esta encima boton (Menu principal)-->
