@@ -9,8 +9,8 @@
 
 //Constants
 const int max_bf_posibilities = 7;
-const float max_dist_reach_needle = 2.15f;
-const float max_dist_to_needle = 2.25f;
+const float max_dist_reach_needle = 2.50f;
+const float max_dist_to_needle = 2.65f;
 const float max_dist_close_attack = 1.7f;
 const float max_time_player_lost = 2.f;
 const float max_time_tied = 2.f;
