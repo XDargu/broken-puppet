@@ -1,13 +1,12 @@
 <prefab>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
-    <name name="tablon_largo_boss_d" />
-    <transform position="-10.9861 2.79961 14.2535" rotation="0.0 0.0 0.0 1.0" scale="1.5031 1.5031 1.5031"/>
+    <name name="marioneta_15_11.0" />
+    <transform position="0.191853 -2.53003e-007 -5.78804" rotation="-0.707107 0.0 0.0 0.707107" scale="3.17631 3.17631 3.17631"/>
     <render  color = "0.0 0.0 0.0">
-      <draw mesh="tablon_largo_boss_d" sub_mesh="0" mat="flechas"/>
+      <draw mesh="marioneta_15" sub_mesh="0" mat="montones"/>
     </render>
-    <aabb min="-1.79791 -0.152135 -0.175266" max="1.79791 0.152135 0.175266"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="2.70244" boxY="0.228675" boxZ="0.263442"/>
-    <rigidbody density="500.0" bossLevel="0" />
-    <bossPrefab/>
+    <aabb min="-0.0867133 -0.130268 -0.0888693" max="0.0867133 0.130268 0.0888693"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.275428" boxY="0.413772" boxZ="0.282276"/>
+    <rigidbody density="500.0" noWater="true" />
   </entity>
 </prefab>

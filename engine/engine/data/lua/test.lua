@@ -1097,7 +1097,7 @@ bossSecuence = false;
 	function onTriggerFirstEnter_sc4_trigger_narr_1(who)
 		logicManager:playSubtitles("KATHSC401");
 		local prefab_generator = logicManager:getObject("prefabGenerator");
-		prefab_generator:generatePrefabs(20);		
+		prefab_generator:generatePrefabs(100);		
 	end
 
 	function onTriggerFirstEnter_sc4_trigger_narr_2(who)

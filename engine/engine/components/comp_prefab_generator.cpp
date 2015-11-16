@@ -17,14 +17,19 @@ void TCompPrefabGenerator::loadFromAtts(const std::string& elem, MKeyValue &atts
 }
 
 void TCompPrefabGenerator::init(){
-
+	debris_created = 0;
+	amount_to_generate = 0;
+	prefab_creation_delay = 0;
+	last_random_pos = XMVectorSet(0, 0, 0, 0);
+	last_created_pos = XMVectorSet(0, 0, 0, 0);
+	generate = false;
 }
 
 void TCompPrefabGenerator::update(float elapsed){
 
 	if (generate){
 		if (!generatingPrefabs(amount_to_generate, elapsed)){
-			//generate = false;
+			generate = false;
 		}
 	}
 
@@ -38,9 +43,9 @@ void TCompPrefabGenerator::generatePrefab(int amount){
 /**/
 bool TCompPrefabGenerator::generatingPrefabs(int amount, float elapsed){
 
-	// Cargar un prefab
+		// Cargar un prefab
 	int debris_amount = amount;
-	float debris_respawn_time = 0.05f;
+	float debris_respawn_time = 0.30f;
 	bool active = true;
 
 	if (debris_created <= debris_amount){

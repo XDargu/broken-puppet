@@ -18,6 +18,7 @@ public:
 	bool auto_translate_transform;
 	bool auto_rotate_transform;
 	bool water_damping;
+	bool no_water;
 	int boss_level;
 	enum colliderType {
 		BOX,
@@ -34,7 +35,8 @@ public:
 		auto_translate_transform(true),
 		auto_rotate_transform(true),
 		water_damping(true),
-		underwater(false)
+		underwater(false),
+		no_water(false)
 	{}
 
 	~TCompRigidBody() { Physics.gScene->removeActor(*rigidBody); }

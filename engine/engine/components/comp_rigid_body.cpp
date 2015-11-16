@@ -72,6 +72,7 @@ void TCompRigidBody::loadFromAtts(const std::string& elem, MKeyValue &atts) {
 	bool temp_is_kinematic = atts.getBool("kinematic", false);
 	bool temp_use_gravity = atts.getBool("gravity", true);
 	boss_level = atts.getInt("bossLevel", 10);
+	no_water = atts.getBool("noWater", false);
 
 	CEntity* e = CHandle(this).getOwner();
 	transform = assertRequiredComponent<TCompTransform>(this);
@@ -206,48 +207,52 @@ void TCompRigidBody::fixedUpdate(float elapsed) {
 	if (kinematic) { return; }
 	
 	// Underwater
-	bool now_underwater = false;
-	float water_level = CApp::get().water_level;
+	if (!no_water) {
+		bool now_underwater = false;
+		float water_level = CApp::get().water_level;
 
-	if (rigidBody->getGlobalPose().p.y < water_level) {
-		now_underwater = true;			
-	}	
+		if (rigidBody->getGlobalPose().p.y < water_level) {
+			now_underwater = true;
+		}
 
-	// Sounds
-	if (now_underwater && !underwater) {
-		CSoundManager::get().playEvent("WATER_SPLASH", trans->position);
-	}
-	
-	if (!e->hasTag("player") && (boss_level > 3)) {
+		// Sounds	
+		if (now_underwater && !underwater) {
+			CSoundManager::get().playEvent("WATER_SPLASH", trans->position);
+		}
+
 		// Particles
 		if (now_underwater != underwater) {
 			CLogicManager::get().instantiateParticleGroupOneShot("ps_water_splash", trans->position, XMVectorSet(-0.71f, 0, 0, 0.71f));
+		}
 
-			// Change damping
-			if (water_damping) {
-				if (now_underwater) {
-					rigidBody->setLinearDamping(1);
-					rigidBody->setAngularDamping(0.5f);
+		if (!e->hasTag("player") && (boss_level > 3)) {
+			if (now_underwater != underwater) {
+				// Change damping
+				if (water_damping) {
+					if (now_underwater) {
+						rigidBody->setLinearDamping(1);
+						rigidBody->setAngularDamping(0.5f);
+					}
+					else {
+						rigidBody->setLinearDamping(0.05f);
+						rigidBody->setAngularDamping(0.05f);
+					}
 				}
-				else {
-					rigidBody->setLinearDamping(0.05f);
-					rigidBody->setAngularDamping(0.05f);
-				}
+			}
+
+			// Apply forces
+			float atten = 0.2f;
+			float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
+			if (now_underwater) {
+				float volume = rigidBody->getMass() / density;
+				float water_density = 500;
+				rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
+
 			}
 		}
 
-		// Apply forces
-		float atten = 0.2f;
-		float proportion = min(1, (water_level - rigidBody->getGlobalPose().p.y) / atten);
-		if (now_underwater) {
-			float volume = rigidBody->getMass() / density;
-			float water_density = 500;
-			rigidBody->addForce(PxVec3(0, 1, 0) * volume * water_density * 10 * proportion);
-			
-		}	
+		underwater = now_underwater;
 	}
-
-	underwater = now_underwater;
 
 }
 

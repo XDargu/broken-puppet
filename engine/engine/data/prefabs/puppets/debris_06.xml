@@ -1,13 +1,12 @@
 <prefab>
-  <entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
-    <name name="engranaje_4_radios_boss_M" />
-    <transform position="-13.6546 1.41669 -0.417745" rotation="0.0 0.0 0.0 1.0" scale="0.613259 0.613259 0.613259"/>
+  <entity tag = "actor" collisionTag = "Actor" materialTag = "wood">
+    <name name="marioneta_06_6.0" />
+    <transform position="3.62265 -2.38018e-007 -5.44522" rotation="-0.707107 0.0 0.0 0.707107" scale="1.95 1.95 1.95"/>
     <render  color = "0.0 0.0 0.0">
-      <draw mesh="engranaje_4_radios_boss_M" sub_mesh="0" mat="mecanismo_mat"/>
+      <draw mesh="marioneta_06" sub_mesh="0" mat="montones"/>
     </render>
-    <aabb min="-2.347 -2.35066 -0.465489" max="2.347 2.35066 0.465489"/>
-    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="1.43932" boxY="1.44156" boxZ="0.285466"/>
-    <rigidbody density="500.0" bossLevel="0" />
-    <bossPrefab/>
+    <aabb min="-0.141238 -0.315189 -0.098158" max="0.141238 0.315189 0.098158"/>
+    <collider staticFriction="0.3" dynamicFriction="0.3" restitution="0.5" boxX="0.275414" boxY="0.614619" boxZ="0.191408"/>
+    <rigidbody density="500.0" noWater="true" />
   </entity>
 </prefab>

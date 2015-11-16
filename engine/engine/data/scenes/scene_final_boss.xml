@@ -1639,6 +1639,9 @@
       <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.195156 -0.1355 -0.131935" max="0.195143 0.1355 0.131966"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1648,6 +1651,9 @@
       <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.00710106 -0.0673 -0.0650826" max="0.00709724 0.0673 0.0651169"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -1667,6 +1673,9 @@
       <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.19515 -0.135506 -0.131948" max="0.195148 0.135494 0.131952"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1676,6 +1685,9 @@
       <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.00692558 -0.0672995 -0.0650978" max="0.00727272 0.0673005 0.0651016"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "metal">
@@ -1695,6 +1707,9 @@
       <draw mesh="caja_organillo_engranaje_a" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.195145 -0.1355 -0.131754" max="0.195154 0.1355 0.132147"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="1.0" axis="1" moveSpeedParent="false" />
   </entity>
   <entity   materialTag = "wood">
@@ -1704,6 +1719,9 @@
       <draw mesh="caja_organillo_engranaje_b" sub_mesh="0" mat="caja_organillo"/>
     </render>
     <aabb min="-0.00709724 -0.0673 -0.0650978" max="0.00710106 0.0673 0.0651016"/>
+    <audioSource sound="GEARS_LOOP_1" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <localRotation speed="-1.8" axis="1" moveSpeedParent="false" />
   </entity>
   <entity  prefab="violin_pref">
@@ -3683,7 +3701,7 @@
   <entity   materialTag = "wood">
     <name name="boss_spot_435.0" />
     <transform position="-0.104137 48.2854 -0.0889287" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
-    <shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true"/>
+    <shadows intensity="1.0" color="0.658824 0.345098 0.133333 1" correction="true" res="1"/>
     <camera fov="179.5" znear="0.1" zfar="50" width="30" height="30" />
   </entity>
   <entity tag = "level" collisionTag = "Level" materialTag = "wood">
