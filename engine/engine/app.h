@@ -1,4 +1,4 @@
-#define FINAL_RELEASE
+//#define FINAL_RELEASE
 //#define NO_VIDEO
 
 #ifndef INC_APP_H_

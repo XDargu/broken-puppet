@@ -73,7 +73,10 @@ CSoundManager::CSoundManager()
 	// Underwater mixer effect
 	createMixerEvent("UNDERWATER", MixerInstanceType::UNDERWATER);
 
-	createMixerEvent("CURRENT_ROOM", MixerInstanceType::ROOM);
+	createMixerEvent("SCENE1_MUSIC", MixerInstanceType::ROOM);
+	createMixerEvent("SCENE2_MUSIC", MixerInstanceType::ROOM);
+	createMixerEvent("SCENE3_MUSIC", MixerInstanceType::ROOM);
+	createMixerEvent("SCENE4_MUSIC", MixerInstanceType::ROOM);
 
 	// Slow motion mixer effect
 	createMixerEvent("SLOW_MOTION_IN", MixerInstanceType::SLOW_MOTION);
@@ -113,8 +116,11 @@ void CSoundManager::clear() {
 		}
 	}
 
-	CSoundManager::SoundParameter param3 = { "Room", 0 };
-	setMixerEventParams("CURRENT_ROOM", param3, 1);
+	CSoundManager::SoundParameter param3 = { "Room", 10 }; // 10 = invalid
+	setMixerEventParams("SCENE1_MUSIC", param3, 1);
+	setMixerEventParams("SCENE2_MUSIC", param3, 1);
+	setMixerEventParams("SCENE3_MUSIC", param3, 1);
+	setMixerEventParams("SCENE4_MUSIC", param3, 1);
 }
 
 void CSoundManager::createMixerEvent(std::string sound_id, MixerInstanceType type, CHandle hfx_zone) {
@@ -368,15 +374,42 @@ void CSoundManager::update(float elapsed) {
 		CSoundManager::SoundParameter param = { "Deepness", deepness };
 		setMixerEventParams("UNDERWATER", param, 1);
 
-		int player_room = CLogicManager::get().getPointZoneID(camera_position);
-		int current_room = getMixerEventParamValue("CURRENT_ROOM", "Room");
-		player_room = max(current_room, player_room);
+		int player_room = CLogicManager::get().getPointZoneID(camera_position);		
 
-		CSoundManager::SoundParameter param2 = { "Scene", scene_id };
-		setMixerEventParams("CURRENT_ROOM", param2, 1);
-		CSoundManager::SoundParameter param3 = { "Room", player_room };
-		setMixerEventParams("CURRENT_ROOM", param3, 1);
-		
+
+		if (scene_id == 1) {
+			int current_room = getMixerEventParamValue("SCENE1_MUSIC", "Room");
+			//player_room = max(current_room, player_room);
+			//player_room = current_room;
+
+			CSoundManager::SoundParameter param3 = { "Room", player_room };
+			setMixerEventParams("SCENE1_MUSIC", param3, 1);
+		}
+		else if (scene_id == 2) {
+			int current_room = getMixerEventParamValue("SCENE2_MUSIC", "Room");
+			//player_room = max(current_room, player_room);
+			//player_room = current_room;
+
+			CSoundManager::SoundParameter param3 = { "Room", player_room };
+			setMixerEventParams("SCENE2_MUSIC", param3, 1);
+		}
+		else if (scene_id == 3) {
+			int current_room = getMixerEventParamValue("SCENE3_MUSIC", "Room");
+			//player_room = max(current_room, player_room);
+			//player_room = current_room;
+
+			CSoundManager::SoundParameter param3 = { "Room", player_room };
+			setMixerEventParams("SCENE3_MUSIC", param3, 1);
+		}
+		else if (scene_id == 4) {
+			int current_room = getMixerEventParamValue("SCENE4_MUSIC", "Room");
+			//player_room = max(current_room, player_room);
+			//player_room = current_room;
+
+			CSoundManager::SoundParameter param3 = { "Room", player_room };
+			setMixerEventParams("SCENE4_MUSIC", param3, 1);
+		}
+
 		// Reverb zones
 		TCompHfxZone* hfx_zone = listenerInsideHFXZone(cam->getPosition());
 		if (hfx_zone) {

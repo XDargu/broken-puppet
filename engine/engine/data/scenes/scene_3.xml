@@ -9192,7 +9192,7 @@
     <name name="sc3_trigger_cinematica" />
     <transform position="12.0894 3.0595 114.093" rotation="0.0 0.0 0.0 1.0" scale="1.0 1.0 1.0"/>
     <aabb min="-1.91111 0.0 -1.75403" max="1.91111 2.65722 1.75403"/>
-    <trigger botOnly="true" playerOnly="true" />
+    <trigger botOnly="false" playerOnly="true" />
   </entity>
   <entity   materialTag = "wood">
     <name name="sc3_camera_cinematica" />

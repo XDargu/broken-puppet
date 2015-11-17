@@ -1889,7 +1889,7 @@ void CApp::loadScene(std::string scene_name) {
 		fog.fog_distance = 1000;
 		fog.fog_color = XMVectorSet(0, 0, 0, 0);
 
-		CSoundManager::get().playEvent("MUSIC_BASEMENT");
+		//CSoundManager::get().playEvent("MUSIC_BASEMENT");
 	}
 	else if (scene_name == "data/scenes/scene_1.xml"){
 		TCompCamera*  cam=(TCompCamera*)render_manager.activeCamera;

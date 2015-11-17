@@ -7,13 +7,19 @@
   <event id="MUSIC_GRAMOLA" path="event:/Musica/Diegetica/Gramolas Musica1" /> <!-- Musica diegetica para gramolas"-->
   <event id="MUSIC_ESCENA1" path="event:/Musica/Escenarios/Musica Escena1" /> <!-- Musica extradiegetica para escena1"-->
   <event id="MUSIC_BOSS" path="event:/Musica/Escenarios/Musica_Boss" /> <!-- Musica extradiegetica para la escena del boss"-->
+  <event id="MUSIC_SCENE1" path="event:/Musica/Escenarios/Musica Acto1" /> <!-- Musica extradiegetica para la escena 1"-->
+ 
 
   <!-- MUSICA DIEGETICA -->
   <event id="MUSIC_CLOCK_1" path="event:/Musica/Diegetica/Tema Reloj/Cellos" /> <!-- Musica diegetica de sala del reloj 1"-->
   <event id="MUSIC_CLOCK_2" path="event:/Musica/Diegetica/Tema Reloj/ContraBajo1" /> <!-- Musica diegetica de sala del reloj 2"-->
   <event id="MUSIC_CLOCK_3" path="event:/Musica/Diegetica/Tema Reloj/ContraBajo2" /> <!-- Musica diegetica de sala del reloj 3"-->
   <event id="MUSIC_CLOCK_4" path="event:/Musica/Diegetica/Tema Reloj/Pianos" /> <!-- Musica diegetica de sala del reloj 4"-->
-
+  
+  <!-- Enemigos-->
+  <event id="GRANDMA_ATTACK" path="event:/Expresion/Abuela/Attack" />
+  <event id="GRANDMA_DEAD" path="event:/Expresion/Abuela/Dead" />
+  <event id="GRANDMA_WARCRY" path="event:/Expresion/Abuela/Warcry" />
 
   <!-- GUI -->
   <event id="BUTTON_HOVER" path="event:/GUI/button_hover" /> <!-- Sonido cuando cursor ratón esta encima boton (Menu principal)-->
@@ -127,15 +133,18 @@
   <event id="ENEMY_BREAKING" path="event:/Impactos/enemy_breaking" /> <!-- Evento correspodiente a los sonidos que hacen los enemigos al romperse en pedazos (Gameplay) -->
 
   <!-- Ambient -->
-  
+
   IDs de habitaciones:
   - Escena 3:
-   + 0: Salita inicial + sala de las abuelas
-   + 1: Pasillo doble + Sala de subir el agua
-   + 2: Pasillo tras ventilador + caída
-   + 3: Sala final
-   + 4: Sala del desagüe
-  <event id="CURRENT_ROOM" path="event:/Musica/Escenarios/Musica Exploracion" />
+  + 0: Salita inicial + sala de las abuelas
+  + 1: Pasillo doble + Sala de subir el agua
+  + 2: Pasillo tras ventilador + caída
+  + 3: Sala final
+  + 4: Sala del desagüe
+  <event id="SCENE1_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
+  <event id="SCENE2_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
+  <event id="SCENE3_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
+  <event id="SCENE4_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
 
   <event id="BUZZING" path="event:/Ambiente/Circunstanciales/buzz" /> Zumbido eléctrico
   <event id="BOILER" path="event:/Ambiente/Circunstanciales/boiler" /> Calderas (vibración + vapor)

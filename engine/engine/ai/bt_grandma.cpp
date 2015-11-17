@@ -191,6 +191,7 @@ int bt_grandma::actionRagdoll()
 			m_ragdoll->setActive(true);
 
 			if (m_life->life <= 0) {
+				CSoundManager::get().playEvent("GRANDMA_DEAD", ((TCompTransform*)own_transform)->position);
 				TCompRagdoll* m_ragdoll = enemy_ragdoll;
 				TCompTransform* m_transform = own_transform;
 				m_ragdoll->breakJoints();
@@ -318,7 +319,6 @@ int bt_grandma::actionCutOwn()
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(12);
 		}
-
 	}
 
 	if (state_time < getAnimationDuration(12)){
@@ -538,6 +538,8 @@ int bt_grandma::actionCutRope()
 			CHandle target_rope = ((TCompSensorNeedles*)m_sensor)->getRopeAsociatedSensor(entity);
 			if (target_rope.isValid()){
 				CRope_manager::get().removeString(target_rope);
+				// Sound
+				CSoundManager::get().playEvent("GRANDMA_HIT", ((TCompTransform*)own_transform)->position);
 				//CEntityManager::get().remove(CHandle(target_rope).getOwner());
 				cut = true;
 			}
@@ -716,6 +718,7 @@ int bt_grandma::actionWarcry()
 		stopAllAnimations();
 		resetTimeAnimation();
 		playAnimationIfNotPlaying(19);
+		CSoundManager::get().playEvent("GRANDMA_WARCRY", ((TCompTransform*)own_transform)->position);
 	}
 
 	//mov_direction = PxVec3(0, 0, 0);
@@ -1102,6 +1105,7 @@ int bt_grandma::actionNormalAttack()
 		stopAllAnimations();
 		resetTimeAnimation();
 		playAnimationIfNotPlaying(anim);
+		CSoundManager::get().playEvent("GRANDMA_ATTACK", ((TCompTransform*)own_transform)->position);
 	}
 
 	TCompTransform* p_transform = player_transform;
@@ -1280,6 +1284,8 @@ int bt_grandma::actionTiedEvent()
 			return LEAVE;
 		}
 		else{
+			// Sound
+			CSoundManager::get().playEvent("GRANDMA_HIT", ((TCompTransform*)own_transform)->position);
 			stopAllAnimations();
 			resetTimeAnimation();
 			playAnimationIfNotPlaying(12);
