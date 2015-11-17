@@ -22,7 +22,7 @@
 
   <subtitle guid="NARRSC501" next="NARRSC501_2" size="24" color="0xffffffff" time="8.5" sound="NARRSC501" text="Katherine ya podía deleitarse con la luz de los focos y &#xD;el murmullo impaciente del público, rememorando su triunfal entrada." />
   <subtitle guid="NARRSC501_2" next="" size="24" color="0xffffffff" time="4.5" sound="" text="Ya vislumbraba a la usurpadora destrozada por sus hilos..." />
-  <subtitle guid="NARRSC502" next="" size="24" color="0xffffffff" time="4" sound="NARRSC502" text="Katherine escuchaba aburrida a aquel largo monólo..." />
+  <subtitle guid="NARRSC502" next="" size="24" color="0xffffffff" time="3.7" sound="NARRSC502" text="Katherine escuchaba aburrida a aquel largo monólo..." />
   
   <!-- Expresiones -->
   <subtitle guid="EXPR00-0" next="" size="24" color="0xff88ff00" time="3" sound="" text="Una más para mi colección" />

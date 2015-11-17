@@ -96,7 +96,7 @@ void fsm_substitute::Idle(float elapsed){
 			break;
 
 		case 1:
-			ChangeState("fbp_LoopTalk9");
+			ChangeState("fbp_LoopTalk8");
 			break;
 
 		case 2:
@@ -112,7 +112,7 @@ void fsm_substitute::Idle(float elapsed){
 			break;
 
 		case 5:
-			ChangeState("fbp_LoopTalk8");
+			ChangeState("fbp_LoopTalk9");
 			break;
 
 		default:
@@ -300,8 +300,8 @@ void fsm_substitute::LoopTalk13(){
 			sound_pos = trans->position;
 
 		if (CSoundManager::get().getNamedInstanceState("subs_p") != FMOD_STUDIO_PLAYBACK_STATE::FMOD_STUDIO_PLAYBACK_PLAYING) {
-			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_13", sound_pos, "subs");
 			CLogicManager::get().playSubtitles("SUBS_WAIT_LOOP_13");
+			CSoundManager::get().playEvent("SUBS_WAIT_LOOP_13", sound_pos, "subs");			
 		}		
 	}
 
