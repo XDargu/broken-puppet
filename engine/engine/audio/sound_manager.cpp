@@ -77,6 +77,11 @@ CSoundManager::CSoundManager()
 	createMixerEvent("SCENE2_MUSIC", MixerInstanceType::ROOM);
 	createMixerEvent("SCENE3_MUSIC", MixerInstanceType::ROOM);
 	createMixerEvent("SCENE4_MUSIC", MixerInstanceType::ROOM);
+	CSoundManager::SoundParameter param3 = { "Room", 10 }; // 10 = invalid
+	setMixerEventParams("SCENE1_MUSIC", param3, 1);
+	setMixerEventParams("SCENE2_MUSIC", param3, 1);
+	setMixerEventParams("SCENE3_MUSIC", param3, 1);
+	setMixerEventParams("SCENE4_MUSIC", param3, 1);
 
 	// Slow motion mixer effect
 	createMixerEvent("SLOW_MOTION_IN", MixerInstanceType::SLOW_MOTION);
@@ -91,6 +96,8 @@ CSoundManager::CSoundManager()
 	phrase.path = "";
 	phrase.pos = XMVectorZero();
 	phrase.guid = "";
+
+	system->update();
 }
 
 void CSoundManager::init(){
