@@ -258,7 +258,7 @@ void TCompAiBoss::init(){
 		}
 		
 		if (substitute_trans){
-			substitute_trans->teleport(chair_pos);
+			substitute_trans->teleport(XMVectorSetY( chair_pos, XMVectorGetY(chair_pos) + 0.1f));
 			substitute_trans->rotation = chair_rotation;
 		}
 			
