@@ -2,11 +2,9 @@
 [ERR] system_release                           : Failed to call flushCommands during system release (Error code 43)
 [ERR] assert                                   : assertion: '!mBankLoader->isBusy()' failed
 [ERR] assert                                   : assertion: 'data->mHandleAllocatedCount == 0' failed
-[WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '216d00' due to event description {e2f0ce0d-89ba-44c7-a107-a8627eac18a5} unload
 [WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '202600' due to event description {d6f79b8b-30c1-4122-aff9-1c7443820ff4} unload
 [WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '201500' due to event description {bc48ec8b-2fe5-4a6b-b020-33fca5c9158a} unload
-[WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '20e000' due to event description {b7a5789e-576b-4da4-9bc9-40dd55f6f3e5} unload
-[WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '207f00' due to event description {b7a5789e-576b-4da4-9bc9-40dd55f6f3e5} unload
+[WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '227000' due to event description {127479a2-c7d6-432f-85d4-34e2a8c3636e} unload
 [WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '200400' due to event description {1e5a4da8-36d3-462a-ae1a-2c0960c9f342} unload
 [WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '200800' due to event description {da900df1-d749-41ac-959c-178403281bdd} unload
 [WRN] PlaybackSystem::onDestroyEvent           : Destroying event instance '200b00' due to event description {da900df1-d749-41ac-959c-178403281bdd} unload
