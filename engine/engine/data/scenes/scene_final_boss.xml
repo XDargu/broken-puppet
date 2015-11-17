@@ -890,6 +890,9 @@
       <shape posOffset="0.719723 0.476501 -0.742191" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.187795" height="0.913105"/>
       <shape posOffset="0.553706 0.591689 0.0260163" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.367795" height="0.913105"/>
     </colliderMulti>
+    <audioSource sound="MUSIC_CLOCK_4" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <rigidbody density="1000.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "leather">
@@ -1571,6 +1574,9 @@
       <shape posOffset="0.719723 0.476501 -0.742191" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.187795" height="0.913105"/>
       <shape posOffset="0.553706 0.591689 0.0260163" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.367795" height="0.913105"/>
     </colliderMulti>
+    <audioSource sound="MUSIC_CLOCK_4" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <rigidbody density="1000.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "leather">
@@ -1604,6 +1610,9 @@
       <shape posOffset="0.719723 0.476501 -0.742191" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.187795" height="0.913105"/>
       <shape posOffset="0.553706 0.591689 0.0260163" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.367795" height="0.913105"/>
     </colliderMulti>
+    <audioSource sound="MUSIC_CLOCK_4" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <rigidbody density="1000.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "leather">
@@ -4420,6 +4429,9 @@
       <shape posOffset="0.719723 0.476501 -0.742191" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.187795" height="0.913105"/>
       <shape posOffset="0.553706 0.591689 0.0260163" rotOffset="0.0 0.0 0.0 1.0" type="BOX" length="0.20137" width="0.367795" height="0.913105"/>
     </colliderMulti>
+    <audioSource sound="MUSIC_CLOCK_4" autoplay="true" >
+      <paramEnd/>
+    </audioSource>
     <rigidbody density="1000.0"  />
   </entity>
   <entity tag = "actor" collisionTag = "Actor" materialTag = "leather">

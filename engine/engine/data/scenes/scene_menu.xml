@@ -62,7 +62,7 @@
     </render>
     <aabb min="-1.85485 -0.0989034 -1.66563" max="1.85485 0.0989034 1.66563"/>
   </entity>
-  <entity   materialTag = "wood" prefab="violin_pref_static">
+  <entity   materialTag = "wood" prefab="violin_pref_static_menu">
     <name name="violin_pref_menu_12.0" prefab="pref_violin_static" />
     <transform position="2.863 40.0976 -83.7474" rotation="-0.0544179 -0.185505 -0.0419834 0.980237" scale="1.0 1.0 1.0"/>
     render  color = "0.0 0.0 0.0">

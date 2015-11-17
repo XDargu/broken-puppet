@@ -142,9 +142,9 @@
   + 3: Sala final
   + 4: Sala del desagüe
   <event id="SCENE1_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
-  <event id="SCENE2_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
-  <event id="SCENE3_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
-  <event id="SCENE4_MUSIC" path="event:/Musica/Escenarios/Musica Acto1" />
+  <event id="SCENE2_MUSIC" path="event:/Musica/Escenarios/Musica Acto2" />
+  <event id="SCENE3_MUSIC" path="event:/Musica/Escenarios/Musica Acto3" />
+  <event id="SCENE4_MUSIC" path="event:/Musica/Escenarios/Musica Acto4" />
 
   <event id="BUZZING" path="event:/Ambiente/Circunstanciales/buzz" /> Zumbido eléctrico
   <event id="BOILER" path="event:/Ambiente/Circunstanciales/boiler" /> Calderas (vibración + vapor)
