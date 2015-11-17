@@ -1719,7 +1719,28 @@ void CApp::loadScene(std::string scene_name) {
 		first_load = false;
 	}
 	else {
-		drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen"));		
+		if (scene_name == "data/scenes/scene_1.xml"){
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen_1"));
+		}
+		else if (scene_name == "data/scenes/scene_2.xml"){
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen_2"));
+		}
+		else if (scene_name == "data/scenes/scene_3.xml"){
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen_3"));
+		}
+		else if (scene_name == "data/scenes/scene_4.xml"){
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen_4"));
+		}
+		else if (scene_name == "data/scenes/scene_final_boss.xml"){
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen_5"));
+		}
+		else if (scene_name == "data/scenes/scene_menu.xml"){
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("logo_loading"));
+		}
+		else {
+			drawTexture2D(init_offset, 0, load_w, load_h, texture_manager.getByName("loading_screen"));
+		}
+		
 	}
 	::render.swap_chain->Present(0, 0);
 
